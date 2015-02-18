@@ -78,7 +78,7 @@ The file structure is:
 └── run_tournament.py
 ```
 
-To contribute a strategy you need to do 4 (optionally 5) things:
+To contribute a strategy you need to do 4 (optionally 5) things (all of which can actually be done right here using the github website):
 
 1. Fork this repository.
 2. Add a `<strategy>.py` file to the `strategies` directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
