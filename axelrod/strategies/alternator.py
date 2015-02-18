@@ -8,6 +8,8 @@ class Alternator(Player):
         """
         Alternate 'C' and 'D'
         """
+        if len(self.history) == 0:
+            return 'C'
         if self.history[-1] == 'C':
             return 'D'
         return 'C'
