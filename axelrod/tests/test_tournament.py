@@ -127,16 +127,56 @@ class Tournament(unittest.TestCase):
         tournament.reset_player_scores()
         self.assertEqual([0, 0],[player.score for player in tournament.players])
 
-    def test_calculate_score(self):
+    def test_calculate_score_for_mix(self):
         """
         Test that scores are calculated correctly
         """
-        P1 = Player()
+        P1 = axelrod.Player()
         P1.history = ['C', 'C', 'D']
-        P2 = Player()
+        P2 = axelrod.Player()
         P2.history = ['C', 'D', 'D']
-        tournament = axelrodAxelrod(P1, P2)
+        tournament = axelrod.Axelrod(P1, P2)
         self.assertEqual(tournament.calculate_scores(P1, P2), (11, 6))
+
+    def test_calculate_score_for_all_cooperate(self):
+        """
+        Test that scores are calculated correctly
+        """
+        P1 = axelrod.Player()
+        P1.history = ['C', 'C', 'C']
+        P2 = axelrod.Player()
+        P2.history = ['C', 'C', 'C']
+        tournament = axelrod.Axelrod(P1, P2)
+        self.assertEqual(tournament.calculate_scores(P1, P2), (6, 6))
+
+    def test_calculate_score_for_all_defect(self):
+        """
+        Test that scores are calculated correctly
+        """
+        P1 = axelrod.Player()
+        P1.history = ['D', 'D', 'D']
+        P2 = axelrod.Player()
+        P2.history = ['D', 'D', 'D']
+        tournament = axelrod.Axelrod(P1, P2)
+        self.assertEqual(tournament.calculate_scores(P1, P2), (12, 12))
+
+class TestPlayer(unittest.TestCase):
+
+    def test_initialisation(self):
+        """
+        Test that can initiate a player
+        """
+        P1 = axelrod.Player()
+        self.assertEqual((P1.history, P1.score), ([], 0))
+
+    def test_play(self):
+        """
+        Test that play method looks for attribute strategy (which does not exist)
+        """
+        P1, P2 = axelrod.Player(), axelrod.Player()
+        self.assertRaises(AttributeError, P1.play, P2)
+        self.assertRaises(AttributeError, P2.play, P1)
+
 
 if __name__ == '__main__':
     unittest.main()
