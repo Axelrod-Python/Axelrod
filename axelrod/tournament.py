@@ -4,7 +4,6 @@ Recreate Axelrod's tournament
 
 """
 import itertools
-import random
 
 class Axelrod:
     """

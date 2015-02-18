@@ -1,4 +1,5 @@
 from axelrod import Player
+import random
 
 class Random(Player):
     """
