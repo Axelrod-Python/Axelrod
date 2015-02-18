@@ -12,10 +12,6 @@ class Cooperator(Player):
 
     def __repr__(self):
         """
-i       The string method for the strategy:
-
-            >>> P1 = Cooperator()
-            >>> print P1
-            Cooperator
+        The string method for the strategy:
         """
         return 'Cooperator'

@@ -16,6 +16,6 @@ class GoByMajority(Player):
 
     def __repr__(self):
         """
-i       The string method for the strategy.
+        The string method for the strategy.
         """
         return 'Go By Majority'
