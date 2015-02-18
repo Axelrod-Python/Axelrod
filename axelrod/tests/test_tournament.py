@@ -1,3 +1,6 @@
+"""
+Tests for the main module.
+"""
 import unittest
 import axelrod
 import random
