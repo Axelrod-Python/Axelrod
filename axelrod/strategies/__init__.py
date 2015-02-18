@@ -4,7 +4,7 @@ from grudger import *
 from rand import *
 from titfortat import *
 from gobymajority import *
-from alternatory import *
+from alternator import *
 
 
 strategies = [
