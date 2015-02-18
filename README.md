@@ -87,6 +87,12 @@ To contribute a strategy you need to do 4 (optionally 5) things:
 
 If any of these steps sound complicated please just get in touch with me and I would be delighted to help.
 
+If you would like to write/run tests this is how to run them:
+
+```
+$ python -m unittest discover axelrod/tests/
+```
+
 All other contributions are of course welcome: if you can improve this in any way (from typos to better unit testing) please do :)
 
 Particular things I would like to include (a part from more strategies):
