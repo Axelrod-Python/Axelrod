@@ -73,6 +73,7 @@ The file structure is:
 │       └── titfortat.py
 │       └── gobymajority.py
 │   └── /tests/
+│       └── test_*.py
 └── README.md
 └── run_tournament.py
 ```
