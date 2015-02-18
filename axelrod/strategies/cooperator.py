@@ -7,19 +7,6 @@ class Cooperator(Player):
     def strategy(self, opponent):
         """
         Always returns 'C'
-
-            >>> P1 = Cooperator()
-            >>> P2 = Player()
-            >>> P1.strategy(P2)
-            'C'
-
-        This is not affect by the history of either player:
-
-            >>> P1.history = ['C', 'D', 'C']
-            >>> P2.history  = ['C', 'C', 'D']
-            >>> P1.strategy(P2)
-            'C'
-        >>>
         """
         return 'C'
 
