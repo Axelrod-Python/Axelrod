@@ -1,7 +1,7 @@
 from axelrod import Player
 import random
 
-class Average_Copier(Player):
+class AverageCopier(Player):
     """
     The player will cooperate with probability p if the opponent's cooperation ratio is p
     """
@@ -21,4 +21,4 @@ class Average_Copier(Player):
         """
         The string method for the strategy:
         """
-        return 'Average_Copier'
+        return 'Average Copier'

@@ -5,7 +5,7 @@ from rand import *
 from titfortat import *
 from gobymajority import *
 from alternator import *
-from average_copier import *
+from averagecopier import *
 
 
 strategies = [
@@ -16,5 +16,5 @@ strategies = [
         GoByMajority,
         Random,
         Alternator,
-        Average_Copier,
+        AverageCopier,
         ]
