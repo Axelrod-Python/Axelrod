@@ -127,5 +127,16 @@ class Tournament(unittest.TestCase):
         tournament.reset_player_scores()
         self.assertEqual([0, 0],[player.score for player in tournament.players])
 
+    def test_calculate_score(self):
+        """
+        Test that scores are calculated correctly
+        """
+        P1 = Player()
+        P1.history = ['C', 'C', 'D']
+        P2 = Player()
+        P2.history = ['C', 'D', 'D']
+        tournament = axelrodAxelrod(P1, P2)
+        self.assertEqual(tournament.calculate_scores(P1, P2), (11, 6))
+
 if __name__ == '__main__':
     unittest.main()
