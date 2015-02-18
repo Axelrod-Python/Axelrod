@@ -52,4 +52,8 @@ If any of these steps sound complicated please just get in touch with me and I w
 
 All other contributions are of course welcome: if you can improve this in any way (from typos to better unit testing) please do :)
 
-# License
+Particular things I would like to include (a part from more strategies):
+
+- Nice gh-pages page
+- More tests (including automated testing via travis)
+- Not sure I'm importing the `random` library in the right place...
