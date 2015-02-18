@@ -46,38 +46,6 @@ class Axelrod:
         Runs repetitions of the round robin (this is mainly to handle stochastic strategies).
 
         Returns a dictionary containing the scores for every repetition.
-
-            >>> random.seed(1)
-            >>> P1 = Defector()
-            >>> P2 = Cooperator()
-            >>> P3 = TitForTat()
-            >>> P4 = Grudger()
-            >>> P5 = GoByMajority()
-            >>> P6 = Random()
-            >>> axelrod = Axelrod(P1, P2, P3, P4, P5, P6)
-            >>> results = axelrod.tournament(turns=200, repetitions=10)
-            >>> type(results)
-            <type 'dict'>
-            >>> for player in sorted(results.keys()):
-            ...     print player, results[player]
-            Grudger [2414, 4788, 7230, 9652, 12108, 14510, 16912, 19316, 21726, 24132]
-            Defector [2784, 5572, 8340, 11104, 13924, 16684, 19468, 22204, 24960, 27720]
-            Go By Majority [2457, 5114, 7583, 10262, 12688, 15135, 17713, 20365, 22898, 25558]
-            Cooperator [2888, 5797, 8724, 11618, 14461, 17400, 20327, 23212, 26103, 29003]
-            Tit For Tat [2584, 5143, 7681, 10223, 12746, 15297, 17849, 20400, 22946, 25505]
-            Random [3456, 6282, 9600, 12370, 15762, 19125, 22192, 24999, 28129, 30918]
-
-        Let us take a look at the min, mean and max of the results:
-            >>> for player in sorted(results.keys()):
-            ...     print player, min(results[player]), sum(results[player]) / float(10), max(results[player])
-            Grudger 2414 13278.8 24132
-            Defector 2784 15276.0 27720
-            Go By Majority 2457 13977.3 25558
-            Cooperator 2888 15953.3 29003
-            Tit For Tat 2584 14037.4 25505
-            Random 3456 17283.3 30918
-
-        We get a similar conclusion to before with Grudger, Defect and Tit for Tat doing very well: in other words we see that cooperation is rewarded.
         """
         dic = {player:[] for player in self.players}
         for repetition in range(repetitions):
@@ -91,21 +59,6 @@ class Axelrod:
     def reset_player_history(self):
         """
         Resets all the player histories
-
-            >>> P1 = Defector()
-            >>> P1.history = ['C', 'D']
-            >>> P1.history
-            ['C', 'D']
-            >>> P2 = Cooperator()
-            >>> P2.history = ['D', 'D']
-            >>> P2.history
-            ['D', 'D']
-            >>> axelrod = Axelrod(P1, P2)
-            >>> axelrod.reset_player_history()
-            >>> P1.history
-            []
-            >>> P2.history
-            []
         """
         for player in self.players:
             player.history = []
@@ -113,21 +66,6 @@ class Axelrod:
     def reset_player_scores(self):
         """
         Resets all the player histories
-
-            >>> P1 = Defector()
-            >>> P1.score = 78
-            >>> P1.score
-            78
-            >>> P2 = Cooperator()
-            >>> P2.score = 55
-            >>> P2.score
-            55
-            >>> axelrod = Axelrod(P1, P2)
-            >>> axelrod.reset_player_scores()
-            >>> P1.score
-            0
-            >>> P2.score
-            0
         """
         for player in self.players:
             player.score = 0
