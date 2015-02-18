@@ -81,7 +81,7 @@ The file structure is:
 To contribute a strategy you need to do 4 (optionally 5) things:
 
 1. Fork this repository.
-2. Add a `<strategy>.py` file to the `strategies` directory.
+2. Add a `<strategy>.py` file to the `strategies` directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
 3. Update the `./axelrod/stragies/__init__.py` file (you need to write the `import` statement and add the strategy to the relevant python list).
 4. (This one is optional: write some unit tests in the `./axelrod/tests/` directory.
 5. Send me a pull request.
