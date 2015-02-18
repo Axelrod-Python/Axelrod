@@ -77,30 +77,6 @@ class Axelrod:
         - C vs C both get 2
         - D vs D both get 4
         - C vs D => C gets 5 and D gets 0
-
-            >>> P1 = Player()
-            >>> P1.history = ['C', 'C', 'D']
-            >>> P2 = Player()
-            >>> P2.history = ['C', 'D', 'D']
-            >>> axelrod = Axelrod(P1, P2)
-            >>> axelrod.calculate_scores(P1, P2)
-            (11, 6)
-
-            >>> P1 = Player()
-            >>> P1.history = ['C', 'C', 'C']
-            >>> P2 = Player()
-            >>> P2.history = ['C', 'C', 'C']
-            >>> axelrod = Axelrod(P1, P2)
-            >>> axelrod.calculate_scores(P1, P2)
-            (6, 6)
-
-            >>> P1 = Player()
-            >>> P1.history = ['D', 'D', 'D']
-            >>> P2 = Player()
-            >>> P2.history = ['D', 'D', 'D']
-            >>> axelrod = Axelrod(P1, P2)
-            >>> axelrod.calculate_scores(P1, P2)
-            (12, 12)
         """
         s1, s2 = 0, 0
         for pair in zip(p1.history, p2.history):
@@ -126,12 +102,6 @@ class Player:
     def __init__(self):
         """
         Initiates an empty history and 0 score for every player
-
-            >>> P1 = Player()
-            >>> P1.history
-            []
-            >>> P1.score
-            0
         """
         self.history = []
         self.score = 0
@@ -141,19 +111,6 @@ class Player:
         This pits two players against each other: note that this will raise
         an error if no strategy method is defined (which are defined through
         class inheritance).
-
-            >>> P1, P2 = Player(), Player()
-            >>> P1.play(P2)
-            Traceback (most recent call last):
-            ...
-            AttributeError: Player instance has no attribute 'strategy'
-
-        Also note that it does not matter which player plays the other:
-
-            >>> P2.play(P1)
-            Traceback (most recent call last):
-            ...
-            AttributeError: Player instance has no attribute 'strategy'
         """
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         self.history.append(s1)
