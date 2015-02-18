@@ -174,6 +174,7 @@ class Axelrod:
         dic = {player:[] for player in self.players}
         for repetition in range(repetitions):
             self.reset_player_history()
+            self.reset_player_scores()
             self.round_robin(turns=200)
             for player in self.players:
                 dic[player].append(player.score)
@@ -200,6 +201,28 @@ class Axelrod:
         """
         for player in self.players:
             player.history = []
+
+    def reset_player_scores(self):
+        """
+        Resets all the player histories
+
+            >>> P1 = Defector()
+            >>> P1.score = 78
+            >>> P1.score
+            78
+            >>> P2 = Cooperator()
+            >>> P2.score = 55
+            >>> P2.score
+            55
+            >>> axelrod = Axelrod(P1, P2)
+            >>> axelrod.reset_player_scores()
+            >>> P1.score
+            0
+            >>> P2.score
+            0
+        """
+        for player in self.players:
+            player.score = 0
 
     def calculate_scores(self, p1, p2):
         """
