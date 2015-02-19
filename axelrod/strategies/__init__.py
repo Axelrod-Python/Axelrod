@@ -6,6 +6,7 @@ from titfortat import *
 from gobymajority import *
 from alternator import *
 from averagecopier import *
+from grumpy import *
 
 
 strategies = [
@@ -17,4 +18,5 @@ strategies = [
         Random,
         Alternator,
         AverageCopier,
+        Grumpy,
         ]
