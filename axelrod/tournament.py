@@ -56,19 +56,12 @@ class Axelrod:
                 dic[player].append(player.score)
         return dic
 
-    def reset_player_history(self):
+    def reset_players(self):
         """
         Resets all the player histories
         """
         for player in self.players:
-            player.history = []
-
-    def reset_player_scores(self):
-        """
-        Resets all the player histories
-        """
-        for player in self.players:
-            player.score = 0
+            player.reset()
 
     def calculate_scores(self, p1, p2):
         """
