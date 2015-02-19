@@ -13,6 +13,7 @@ class Grumpy(Player):
         self.history = []
         self.score = 0
         self.state = starting_state
+        self.starting_state = starting_state
         self.grumpy_threshold = grumpy_threshold
         self.nice_threshold = nice_threshold
 
@@ -36,7 +37,16 @@ class Grumpy(Player):
                 self.state = 'Nice'
                 return 'C'
             return 'D'
-
+    
+    def reset(self):
+        """
+        Resets score, history and state for the next round of the tournement
+        """
+        
+        self.history = []
+        self.score = 0
+        self.state = self.starting_state
+    
     def __repr__(self):
         """
         The string method for the strategy:
