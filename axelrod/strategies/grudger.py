@@ -6,6 +6,7 @@ class Grudger(Player):
     """
     def strategy(self, opponent):
         """
+        Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D
         """
         if 'D' in opponent.history:
             return 'D'
