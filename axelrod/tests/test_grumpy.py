@@ -43,5 +43,22 @@ class TestGrumpy(unittest.TestCase):
         self.assertEqual(P1.strategy(P2), 'C')
 
     def test_representation(self):
+        """
+        Tests string representation of class
+        """
         P1 = axelrod.Grumpy()
         self.assertEqual(str(P1), 'Grumpy')
+
+    def test_reset_method(self):
+        """
+        tests the reset method
+        """
+        P1 = axelrod.Grumpy(starting_state = 'Grumpy')
+        P1.history = ['C', 'D', 'D', 'D']
+        P1.score = 5
+        P1.state = 'Nice'
+        P1.reset()
+        self.assertEqual(P1.history, [])
+        self.assertEqual(P1.score, 0)
+        self.assertEqual(P1.state, 'Grumpy')
+        
