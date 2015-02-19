@@ -49,8 +49,7 @@ class Axelrod:
         """
         dic = {player:[] for player in self.players}
         for repetition in range(repetitions):
-            self.reset_player_history()
-            self.reset_player_scores()
+            self.reset_players()
             self.round_robin(turns=200)
             for player in self.players:
                 dic[player].append(player.score)
@@ -108,3 +107,10 @@ class Player:
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         self.history.append(s1)
         opponent.history.append(s2)
+
+    def reset(self):
+        """
+        Resets scores and history
+        """
+        self.history = []
+        self.score = 0
