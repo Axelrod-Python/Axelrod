@@ -7,7 +7,7 @@ class GoByMajority(Player):
     def strategy(self, opponent):
         """
         This is affected by the history of the opponent:
-        As long as the opponent cooperates at least as often as they defect then the player will defect.
+        As long as the opponent cooperates at least as often as they defect then the player will cooperate.
         If at any point the opponent has more defections than cooperations the player defects.
         """
         if sum([s == 'D' for s in opponent.history]) > sum([s == 'C' for s in opponent.history]):
