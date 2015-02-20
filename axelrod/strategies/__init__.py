@@ -10,7 +10,6 @@ from mindreader import *
 from averagecopier import *
 from grumpy import *
 
-#These are strategies that follow the rules of Axelrods tournement, which can be found in the readme
 strategies = [
         Defector,
         Cooperator,
