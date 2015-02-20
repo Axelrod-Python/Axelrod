@@ -1,5 +1,5 @@
 """
-Test for the mind_reader strategy
+Test for the mindreader strategy
 """
 import unittest
 import axelrod
@@ -37,6 +37,15 @@ class TestMindReader(unittest.TestCase):
         P1 = axelrod.MindReader()
         P2 = axelrod.Grudger()
         self.assertEqual(P1.strategy(P2), 'C')
+
+    def test_simulate_matches(self):
+        """
+        Simulates a number of matches
+        """
+        P1 = axelrod.MindReader()
+        P2 = axelrod.Grudger()
+        P1.simulate_match(P2, 'C', 4)
+        self.assertEqual(P2.history, ['C', 'C', 'C', 'C'])
 
     def test_history_is_same(self):
         """
