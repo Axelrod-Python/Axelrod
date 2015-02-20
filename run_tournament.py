@@ -16,14 +16,14 @@ all_strategies = strategies + cheating_strategies
 
 results_to_gather = {'results':strategies, 'cheating_results':cheating_strategies, 'all_results':all_strategies}
 
-for plot in results_to_gather:
-    if len(results_to_gather[plot]) != 1:
+for result in results_to_gather:
+    if len(results_to_gather[result]) != 1:
 
-        axelrod_tournament = axelrod.Axelrod(*results_to_gather[plot])
+        axelrod_tournament = axelrod.Axelrod(*results_to_gather[result])
         results = axelrod_tournament.tournament(turns=turns, repetitions=repetitions)
         players = sorted(axelrod_tournament.players, key = lambda x: median(results[x]))
 
-        with open('%s.csv' % plot, 'w') as csv_file:
+        with open('%s.csv' % result, 'w') as csv_file:
             csv_writer = csv.DictWriter(csv_file, ['player', 'scores'])
             csv_writer.writeheader()
             for player in players:
@@ -32,5 +32,5 @@ for plot in results_to_gather:
         plt.boxplot([[score / (turns * (len(players) - 1)) for score in results[player]] for player in players])
         plt.xticks(range(1, len(axelrod_tournament.players) + 2), [str(p) for p in players], rotation=90)
         plt.title('Mean score per stage game over {} rounds repeated {} times'.format(turns, repetitions))
-        plt.savefig('%s.png' % plot, bbox_inches='tight')
+        plt.savefig('%s.png' % result, bbox_inches='tight')
         plt.clf()
