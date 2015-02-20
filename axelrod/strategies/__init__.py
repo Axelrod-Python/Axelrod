@@ -5,9 +5,10 @@ from rand import *
 from titfortat import *
 from gobymajority import *
 from alternator import *
+from grumpy import *
+from mindreader import *
 from averagecopier import *
 from grumpy import *
-
 
 strategies = [
         Defector,
@@ -17,6 +18,11 @@ strategies = [
         GoByMajority,
         Random,
         Alternator,
-        AverageCopier,
         Grumpy,
+        AverageCopier,
+        ]
+
+#These are strategies that do not follow the rules of Axelrods tournement.
+cheating_strategies = [
+        MindReader,
         ]
