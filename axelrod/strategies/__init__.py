@@ -8,6 +8,7 @@ from alternator import *
 from grumpy import *
 from mind_reader import *
 from averagecopier import *
+from grumpy import *
 
 
 strategies = [
@@ -21,4 +22,5 @@ strategies = [
         Grumpy,
         MindReader,
         AverageCopier,
+        Grumpy,
         ]
