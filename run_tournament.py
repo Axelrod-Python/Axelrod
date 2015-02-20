@@ -6,7 +6,7 @@ import axelrod
 import matplotlib.pyplot as plt
 from numpy import median
 
-turns = 1000  # Number of turns in the round robin tournament
+turns = 200  # Number of turns in the round robin tournament
 repetitions = 50  # Number of repetitions of the tournament
 
 strategies = [strategy() for strategy in axelrod.strategies]

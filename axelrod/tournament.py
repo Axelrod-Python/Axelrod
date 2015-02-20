@@ -49,7 +49,7 @@ class Axelrod:
         """
         dic = {player:[] for player in self.players}
         for repetition in range(repetitions):
-            self.round_robin(turns=200)
+            self.round_robin(turns=turns)
             for player in self.players:
                 dic[player].append(player.score)  # Record score
                 player.score = 0  # Reset score
