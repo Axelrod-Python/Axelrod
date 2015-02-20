@@ -6,7 +6,7 @@ from titfortat import *
 from gobymajority import *
 from alternator import *
 from grumpy import *
-from mind_reader import *
+from mindreader import *
 from averagecopier import *
 from grumpy import *
 

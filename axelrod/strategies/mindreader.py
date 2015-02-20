@@ -1,4 +1,4 @@
-from axelrod import Player
+from axelrod import Player, Axelrod
 import copy
 
 class MindReader(Player):
@@ -20,6 +20,7 @@ class MindReader(Player):
         Plays a number of rounds to determine the best strategy 
         """
         results = []
+        tournement = Axelrod()
 
         dummy_history_self = copy.copy(self.history)
         dummy_history_opponent = copy.copy(opponent.history)
@@ -30,7 +31,7 @@ class MindReader(Player):
             self.history.append(play_1)
             opponent.history.append(play_2)
 
-        results.append(self.calculate_score(self.history, opponent.history))
+        results.append(tournement.calculate_scores(self, opponent)[0])
 
         self.history = copy.copy(dummy_history_self)
         opponent.history = copy.copy(dummy_history_opponent)
@@ -42,30 +43,12 @@ class MindReader(Player):
             opponent.history.append(play_2)
 
 
-        results.append(self.calculate_score(self.history, opponent.history))
+        results.append(tournement.calculate_scores(self, opponent)[0])
 
         self.history = copy.copy(dummy_history_self)
         opponent.history = copy.copy(dummy_history_opponent)
 
         return results.index(min(results))
-
-    def calculate_score(self, history_1, history_2):
-        """
-        Calculates the score for the simulated rounds
-        """
-        
-        s1 = 0
-        for pair in zip(history_1, history_2):
-            if pair[0] == pair[1] == 'C':
-                s1 += 2
-            if pair[0] == pair[1] == 'D':
-                s1 += 4
-            if pair[0] == 'C' and  pair[1] == 'D':
-                s1 += 5
-            if pair[0] == 'D' and  pair[1] == 'C':
-                s1 += 0
-
-        return s1
 
     def __repr__(self):
         """
