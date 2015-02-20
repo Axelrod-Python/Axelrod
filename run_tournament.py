@@ -16,7 +16,7 @@ all_strategies = strategies + cheating_strategies
 graphs_to_plot = {'results.png':strategies, 'cheating_results.png':cheating_strategies, 'all_results':all_strategies}
 
 for plot in graphs_to_plot:
-    if not len(graphs_to_plot[plot]) == 1:
+    if len(graphs_to_plot[plot]) == 1:
         axelrod_tournament = axelrod.Axelrod(*graphs_to_plot[plot])
         results = axelrod_tournament.tournament(turns=turns, repetitions=repetitions)
         players = sorted(axelrod_tournament.players, key = lambda x: median(results[x]))
