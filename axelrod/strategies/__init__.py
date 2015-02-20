@@ -7,6 +7,7 @@ from gobymajority import *
 from alternator import *
 from averagecopier import *
 from qlearner import *
+from grumpy import *
 
 
 strategies = [
@@ -19,4 +20,5 @@ strategies = [
         Alternator,
         AverageCopier,
         QLearner,
+        Grumpy,
         ]
