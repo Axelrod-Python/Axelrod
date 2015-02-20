@@ -20,7 +20,6 @@ strategies = [
         Alternator,
         Grumpy,
         AverageCopier,
-        Grumpy,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
