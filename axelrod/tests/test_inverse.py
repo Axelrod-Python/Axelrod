@@ -1,5 +1,5 @@
 """
-Test for the average_copier strategy
+Test for the inverse strategy
 """
 import unittest
 import axelrod
