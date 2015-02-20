@@ -16,7 +16,7 @@ class TestMindReader(unittest.TestCase):
 
     def test_vs_defect(self):
         """
-        Will defect against strategies
+        Will defect against pure defecting strategies
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Defector()
