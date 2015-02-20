@@ -9,6 +9,7 @@ from grumpy import *
 from mindreader import *
 from averagecopier import *
 from grumpy import *
+from inverse import *
 
 strategies = [
         Defector,
@@ -19,6 +20,7 @@ strategies = [
         Random,
         Alternator,
         Grumpy,
+        Inverse,
         AverageCopier,
         ]
 
