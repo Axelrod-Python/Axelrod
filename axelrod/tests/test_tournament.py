@@ -106,21 +106,6 @@ class Tournament(unittest.TestCase):
        ('Grudger', [2001, 2001, 2001, 2001, 2001]),
        ('Go By Majority', [2001, 2001, 2001, 2001, 2001])]))
 
-    def test_reset_players(self):
-        """
-        Test that method to reset scores in between repetitions of tournament works
-        """
-        P1 = axelrod.Defector()
-        P1.score = 58
-        P1.history = ['C', 'C', 'D']
-        P2 = axelrod.Defector()
-        P2.score = 95
-        P2.history = ['C', 'D', 'D']
-        tournament = axelrod.Axelrod(P1, P2)
-        tournament.reset_players()
-        self.assertEqual([0, 0],[player.score for player in tournament.players])
-        self.assertEqual([[], []],[player.history for player in tournament.players])
-
     def test_calculate_score_for_mix(self):
         """
         Test that scores are calculated correctly
