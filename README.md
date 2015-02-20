@@ -87,6 +87,7 @@ To contribute a strategy you need to do 4 (optionally 5) things (all of which ca
 5. Send me a pull request.
 
 If any of these steps sound complicated please just get in touch with me and I would be delighted to help.
+There is a [video](https://www.youtube.com/watch?v=5kOUVdktxAo&feature=youtu.be) and a [blog post](http://goo.gl/zkgSkc) discussing showing how to contribute if this is helpful.
 
 If you would like to write/run tests this is how to run them:
 
