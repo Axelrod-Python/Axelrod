@@ -7,6 +7,7 @@ from gobymajority import *
 from alternator import *
 from grumpy import *
 from averagecopier import *
+from qlearner import *
 from grumpy import *
 from geller import *
 from inverse import *
@@ -19,6 +20,7 @@ strategies = [
         GoByMajority,
         Random,
         Alternator,
+        QLearner,
         Grumpy,
         Inverse,
         AverageCopier,
