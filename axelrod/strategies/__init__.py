@@ -10,7 +10,7 @@ from mindreader import *
 from averagecopier import *
 from grumpy import *
 
-
+#These are strategies that follow the rules of Axelrods tournement, which can be found in the readme
 strategies = [
         Defector,
         Cooperator,
@@ -20,7 +20,11 @@ strategies = [
         Random,
         Alternator,
         Grumpy,
-        MindReader,
         AverageCopier,
         Grumpy,
+        ]
+
+#These are strategies that do not follow the rules of Axelrods tournement.
+cheating_strategies = [
+        MindReader,
         ]
