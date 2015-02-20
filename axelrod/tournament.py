@@ -32,8 +32,8 @@ class Axelrod:
         """
         for p1, p2 in itertools.combinations(self.players, 2):
             turn = 0
-            p1.history = []
-            p2.history = []
+            p1.reset()
+            p2.reset()
             while turn < turns:
                 turn += 1
                 p1.play(p2)
@@ -49,18 +49,11 @@ class Axelrod:
         """
         dic = {player:[] for player in self.players}
         for repetition in range(repetitions):
-            self.reset_players()
             self.round_robin(turns=200)
             for player in self.players:
-                dic[player].append(player.score)
+                dic[player].append(player.score)  # Record score
+                player.score = 0  # Reset score
         return dic
-
-    def reset_players(self):
-        """
-        Resets all the player histories
-        """
-        for player in self.players:
-            player.reset()
 
     def calculate_scores(self, p1, p2):
         """
@@ -110,7 +103,7 @@ class Player:
 
     def reset(self):
         """
-        Resets scores and history
+        Resets history.
+        When creating strategies that create new attributes then this method should be re-written (in the inherited class) and should not only reset history but also rest all other attributes.
         """
         self.history = []
-        self.score = 0

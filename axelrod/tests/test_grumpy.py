@@ -55,10 +55,8 @@ class TestGrumpy(unittest.TestCase):
         """
         P1 = axelrod.Grumpy(starting_state = 'Grumpy')
         P1.history = ['C', 'D', 'D', 'D']
-        P1.score = 5
         P1.state = 'Nice'
         P1.reset()
         self.assertEqual(P1.history, [])
-        self.assertEqual(P1.score, 0)
         self.assertEqual(P1.state, 'Grumpy')
-        
+
