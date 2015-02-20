@@ -5,7 +5,6 @@
     <title>Axelrod</title>
     <style>
         html, body {
-            display: table;
             padding: 0px;
             margin: 0px;
             width: 100%;
@@ -15,12 +14,15 @@
         }
 
         #content {
-            width: 30%;
+            float: left;
+            width: 29%;
             height: 100%;
         }
 
         #vis {
-            width: 70%;
+            float: right;
+            display: table;
+            width: 69%;
             height: 100%;
         }
 
@@ -38,6 +40,9 @@
     </style>
 </head>
 <body>
+    <div id="content">
+        <p>Here's some stuff and we'll add some thing about contributing</p>
+    </div>
     <div id="vis"></div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script>
