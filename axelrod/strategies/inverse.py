@@ -1,32 +1,32 @@
-from axelrod import player
+from axelrod import Player
 import random
 
 class Inverse(Player):
-	"""
-	A player who defects with a probability that diminishes relative to how long ago the opponent defected
-	"""
+    """
+    A player who defects with a probability that diminishes relative to how long ago the opponent defected
+    """
 
-	def strategy(self, opponent):
-	"""
-	Looks at opponent history to see if they have defected. 
-	If so, player defection is inversely proportional to when this occurred.
-	"""
+    def strategy(self, opponent):
+        """
+        Looks at opponent history to see if they have defected.
+        If so, player defection is inversely proportional to when this occurred.
+        """
 
-	index = next((index for index,value in enumerate(opponent.history, start = 1) if value == 'D'), None)
+        index = next((index for index,value in enumerate(opponent.history, start = 1) if value == 'D'), None)
 
-	if index == None:
-		return 'C'
+        if index == None:
+            return 'C'
 
-	rnd_num = random.random()
+        rnd_num = random.random()
 
-	if rnd_num < 1/abs(index):
-		return 'D'
-	return 'C'
+        if rnd_num < 1/abs(index):
+            return 'D'
+        return 'C'
 
-	def __repr__(self):
-	"""
-	The string method for the strategy:
-	"""
+    def __repr__(self):
+        """
+        The string method for the strategy:
+        """
 
-		return 'Inverse'
-	
+        return 'Inverse'
+
