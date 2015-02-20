@@ -7,7 +7,7 @@ class GoByRecentMajority10(Player):
     def strategy(self, opponent):
         """
         This is affected by the history of the opponent:
-        As long as the opponent cooperates at least as often as they defect in the past 10 turns then the player will defect.
+        As long as the opponent cooperates at least as often as they defect in the past 10 turns then the player will cooperate.
         If at any point the opponent has more defections than cooperations the player defects.
         """
         recent10 = opponent.history[-10:]
