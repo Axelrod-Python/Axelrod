@@ -12,8 +12,7 @@ class MindReader(Player):
         
         best_strategy = self.look_ahead(opponent)
 
-        return ['C','D'][best_strategy]
-
+        return best_strategy
 
 
     def simulate_match(self, opponent, strategy, rounds = 50):
@@ -43,7 +42,7 @@ class MindReader(Player):
             self.history = copy.copy(dummy_history_self)
             opponent.history = copy.copy(dummy_history_opponent)
 
-        return results.index(min(results))
+        return strategies[results.index(min(results))]
 
     def __repr__(self):
         """
