@@ -4,23 +4,66 @@
     <meta charset="UTF-8">
     <title>Axelrod</title>
     <style>
-        html, body, #vis{
+        html, body {
+            display: table;
             padding: 0px;
             margin: 0px;
             width: 100%;
             height: 100%;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 0.8em;
         }
+
+        #content {
+            width: 30%;
+            height: 100%;
+        }
+
+        #vis {
+            width: 70%;
+            height: 100%;
+        }
+
+        .axis path,
+        .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+        /*
+        .x.axis path {
+          display: none;
+        }
+        */
     </style>
 </head>
 <body>
     <div id="vis"></div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script>
+
+        function iqr(d) {
+            var q1 = d3.quantile(d, 0.25);
+            var q3 = d3.quantile(d, 0.75);
+            var iqr = (q3 - q1) * 1.5;
+            console.log(q1, q3, iqr)
+            var i = -1;
+            var j = d.length;
+            while (d[++i] < (q1 - iqr));
+            while (d[--j] > (q3 + iqr));
+            return [i, j];
+        }
+
         var width = document.getElementById("vis").clientWidth;
         var height = document.getElementById("vis").clientHeight;
 
         console.log(width);
         console.log(height);
+
+        var padding_bottom = 100;
+        var padding_left = 80;
+        var padding_right = 40;
+        var padding_top = 40;
 
         d3.csv('results.csv', function(error, data){
 
@@ -29,12 +72,19 @@
                         .attr('width', width)
                         .attr('height', height);
 
+            var keys = data.map(function(d) {
+                return d.player;
+            });
+            console.log(keys)
+
             // coerce data into a proper format - array of numerical scores
             data.forEach(function(d){
                 var temp = d.scores.replace('[', '')
                 temp = temp.replace(']', ',')
                 scores = temp.split(',')
                 d.scores = scores.map(function(s) { return +s; });
+                d.scores.pop();
+                d.scores = scores.map(function(s) { return s/(200 * (keys.length-1)); });
                 d.scores.pop();
                 d.scores = d.scores.sort();
                 //d.scores = d.scores.filter(function(s){ return s !== 0; });
@@ -46,18 +96,22 @@
             console.log(max);
             console.log(min);
 
-            var keys = data.map(function(d) {
-                return d.player;
-            });
-            console.log(keys)
-
             var y_scale = d3.scale.linear()
-                            .range([height, 0])
-                            .domain([min, max]);
+                .range([height-padding_bottom, padding_top])
+                .domain([min, max]);
 
             var x_scale = d3.scale.ordinal()
-                            .rangeRoundBands([0, width], 0.1, 0.2)
-                            .domain(keys);
+                .rangeRoundBands([padding_left, width-padding_right], 0.5, 0.4)
+                .domain(keys);
+
+             var xAxis = d3.svg.axis()
+                .scale(x_scale)
+                .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+                .scale(y_scale)
+                .orient("left")
+                .tickFormat(d3.format(".2s"));           
 
             console.log(data);
 
@@ -81,31 +135,12 @@
                     var path = "M " + x_start + " " + y + " L " + " " + (x_start+band_width) + " " + y;
                     return path;
                 })
-                .attr('stroke', 'black')
+                .attr('stroke', 'red')
                 .attr('stroke-width', '2')
 
             boxes
                 .append('rect')
-                .attr('class', 'lower_quartile')
-                .attr('x', function(d) {
-                    return x_scale(d.player)
-                })
-                .attr('width', x_scale.rangeBand())
-                .attr('y', function(d){
-                    var median = d3.median(d.scores);
-                    return y_scale(median);
-                })
-                .attr('height', function(d) {
-                    var lower_quartile = d3.quantile(d.scores, 0.25);
-                    var median = d3.median(d.scores);
-                    return y_scale(lower_quartile)-y_scale(median);
-                })
-                .attr("fill", "none")
-                .attr("stroke", "black")
-
-            boxes
-                .append('rect')
-                .attr('class', 'upper_quartile')
+                .attr('class', 'quartiles')
                 .attr('x', function(d) {
                     return x_scale(d.player)
                 })
@@ -115,27 +150,66 @@
                     return y_scale(upper_quartile);
                 })
                 .attr('height', function(d) {
+                    var lower_quartile = d3.quantile(d.scores, 0.25);
                     var upper_quartile = d3.quantile(d.scores, 0.75);
-                    var median = d3.median(d.scores);
-                    return y_scale(median)-y_scale(upper_quartile);
+                    return y_scale(lower_quartile)-y_scale(upper_quartile);
                 })
                 .attr("fill", "none")
-                .attr("stroke", "black")              
-        });
+                .attr("stroke", "blue")
 
-        // Returns a function to compute the interquartile range.
-        function iqr(k) {
-          return function(d, i) {
-            var q1 = d.quartiles[0],
-                q3 = d.quartiles[2],
-                iqr = (q3 - q1) * k,
-                i = -1,
-                j = d.length;
-            while (d[++i] < q1 - iqr);
-            while (d[--j] > q3 + iqr);
-            return [i, j];
-          };
-        }
+            boxes
+                .append('path')
+                .attr('class', 'upper-whisker')
+                .attr('d', function(d) {
+                    var lower_quartile = d3.quantile(d.scores, 0.25);
+                    var upper_quartile = d3.quantile(d.scores, 0.75);
+                    var i = iqr(d.scores)
+                    var reach = d.scores[i[1]];
+                    var band_width = x_scale.rangeBand();
+                    var x_start = x_scale(d.player);
+                    var path = "M " + (x_start + (band_width/2)) + " " + y_scale(upper_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
+                    return path;
+                })
+                .attr('stroke', 'black')
+                .attr('fill', 'none');
+
+            boxes
+                .append('path')
+                .attr('class', 'lower-whisker')
+                .attr('d', function(d) {
+                    var lower_quartile = d3.quantile(d.scores, 0.25);
+                    var upper_quartile = d3.quantile(d.scores, 0.75);
+                    var i = iqr(d.scores)
+                    var reach = d.scores[i[0]];
+                    console.log(i);
+                    var band_width = x_scale.rangeBand();
+                    var x_start = x_scale(d.player);
+                    var path = "M " + (x_start + (band_width/2)) + " " + y_scale(lower_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
+                    return path;
+                })
+                .attr('stroke', 'black')
+                .attr('fill', 'none');
+
+            svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height-padding_bottom) + ")")
+              .call(xAxis);
+
+            svg.selectAll('.x.axis text')
+                .style("text-anchor", "end")
+                .attr("transform", "translate(-15,10)rotate(-90)")
+
+            svg.append("g")
+              .attr("class", "y axis")
+              .attr("transform", "translate(" + (padding_left) + ", " + "0)")
+              .call(yAxis)
+            .append("text")
+              .attr("transform", "translate(-45," + height/4 + ")rotate(-90)")
+              .style("text-anchor", "end")
+              .text("Mean score per game over 200 rounds repeated 50 times");
+            });
+
+
     </script>
 </body>
 </html>
