@@ -7,14 +7,13 @@ class MindReader(Player):
     """
     def strategy(self, opponent):
         """
+        Simulates the next 50 rounds and decides whether to cooperate or defect
         """
         
         best_strategy = self.look_ahead(opponent)
 
-        if best_strategy == 0:
-            return self.strategy_coop(opponent)
-        if best_strategy == 1:
-            return self.strategy_defect(opponent)
+        return ['C','D'][best_strategy]
+
 
     def look_ahead(self, opponent, rounds = 50):
         """
@@ -51,6 +50,9 @@ class MindReader(Player):
         return results.index(min(results))
 
     def calculate_score(self, history_1, history_2):
+        """
+        Calculates the score for the simulated rounds
+        """
         
         s1 = 0
         for pair in zip(history_1, history_2):
