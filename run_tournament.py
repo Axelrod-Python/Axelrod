@@ -10,11 +10,18 @@ turns = 1000  # Number of turns in the round robin tournament
 repetitions = 50  # Number of repetitions of the tournament
 
 strategies = [strategy() for strategy in axelrod.strategies]
-axelrod = axelrod.Axelrod(*strategies)
-results = axelrod.tournament(turns=turns, repetitions=repetitions)
-players = sorted(axelrod.players, key = lambda x: median(results[x]))
+cheating_strategies = [strategy() for strategy in axelrod.cheating_strategies]
+all_strategies = strategies + cheating_strategies
 
-plt.boxplot([[score / turns for score in results[player]] for player in players])
-plt.xticks(range(1, len(axelrod.players) + 2), [str(p) for p in players], rotation=90)
-plt.title('Mean score per stage game over {} rounds repeated {} times'.format(turns, repetitions))
-plt.savefig('results.png', bbox_inches='tight')
+graphs_to_plot = {'results.png':strategies, 'cheating_results.png':cheating_strategies, 'all_results':all_strategies}
+
+for plot in graphs_to_plot:
+    axelrod_tournament = axelrod.Axelrod(*graphs_to_plot[plot])
+    results = axelrod_tournament.tournament(turns=turns, repetitions=repetitions)
+    players = sorted(axelrod_tournament.players, key = lambda x: median(results[x]))
+
+    plt.boxplot([[score / turns for score in results[player]] for player in players])
+    plt.xticks(range(1, len(axelrod_tournament.players) + 2), [str(p) for p in players], rotation=90)
+    plt.title('Mean score per stage game over {} rounds repeated {} times'.format(turns, repetitions))
+    plt.savefig(plot, bbox_inches='tight')
+    plt.clf()
