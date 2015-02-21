@@ -30,10 +30,10 @@ strategies = [
         Grumpy,
         Inverse,
         AverageCopier,
-        QLearner,
-        QLearnerA,
-        QLearnerB,
-        QLearnerC,
+        RiskyQLearner,
+        ArrogantQLearner,
+        HesitantQLearner,
+        CautiousQLearner,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
