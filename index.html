@@ -14,15 +14,13 @@
         }
 
         #description {
-            float: left;
-            width: 29%;
-            height: 100%;
+            width: 100%;
+            height: 30%;
+            margin: 30px;
         }
 
         #content {
-            display: table;
-            float: right;
-            width: 69%;
+            width: 100%;
             height: 100%;
         }
 
@@ -32,7 +30,8 @@
         }
 
         #choice {
-            height: 10%;
+            margin-left: 50px;
+            margin-top: 50px; 
             width: 100%;
         }
 
@@ -42,16 +41,28 @@
           stroke: #000;
           shape-rendering: crispEdges;
         }
-        /*
-        .x.axis path {
-          display: none;
+
+        @media(min-width: 600px) {
+            #description {
+                float: left;
+                width: 25%;
+                height: 100%;
+                margin: 30px;
+            }
+
+            #content {
+                display: table;
+                float: right;
+                width: 69%;
+                height: 100%;
+            }
         }
-        */
+
     </style>
 </head>
 <body>
     <div id="description">
-        <p>Here's some stuff and we'll add some thing about contributing</p>
+        <p>Here's some stuff and we'll add something about contributing</p>
     </div>
     <div id="content">
         <form id="choice">
