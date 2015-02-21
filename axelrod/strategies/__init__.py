@@ -4,7 +4,6 @@ from grudger import *
 from rand import *
 from titfortat import *
 from gobymajority import *
-from gobyrecent import *
 from alternator import *
 from grumpy import *
 from averagecopier import *
@@ -18,7 +17,10 @@ strategies = [
         TitForTat,
         Grudger,
         GoByMajority,
-        GoByRecentMajority10,
+        GoByMajority5,
+        GoByMajority10,
+        GoByMajority20,
+        GoByMajority40,
         Random,
         Alternator,
         Grumpy,
