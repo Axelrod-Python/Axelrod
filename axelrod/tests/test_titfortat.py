@@ -1,5 +1,5 @@
 """
-Test for the grudger strategy
+Test for the tit for tat strategies
 """
 import unittest
 import axelrod
