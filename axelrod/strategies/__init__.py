@@ -15,6 +15,8 @@ strategies = [
         Defector,
         Cooperator,
         TitForTat,
+        TitFor2Tats,
+        TwoTitsForTat,
         Grudger,
         GoByMajority,
         GoByMajority5,
