@@ -87,3 +87,32 @@ class TestTwoTitsForTat(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.TwoTitsForTat()
         self.assertEqual(str(P1), 'Two Tits For Tat')
+
+class TestAntiTitForTat(unittest.TestCase):
+
+    def test_initial_strategy(self):
+        """Starts by defecting"""
+        P1 = axelrod.AntiTitForTat()
+        P2 = axelrod.Player()
+        self.assertEqual(P1.strategy(P2), 'D')
+
+    def test_affect_of_strategy(self):
+        """Will do opposite of what opponent does."""
+        P1 = axelrod.AntiTitForTat()
+        P2 = axelrod.Player()
+        P1.history = ['D']
+        P2.history = ['C']
+        self.assertEqual(P1.strategy(P2), 'D')
+        P1.history.append('D')
+        P2.history.append('D')
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history.append('C')
+        P2.history.append('D')
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history.append('C')
+        P2.history.append('C')
+        self.assertEqual(P1.strategy(P2), 'D')
+
+    def test_representation(self):
+        P1 = axelrod.AntiTitForTat()
+        self.assertEqual(str(P1), "Anti Tit For Tat")
