@@ -10,6 +10,7 @@ from averagecopier import *
 from grumpy import *
 from geller import *
 from inverse import *
+from appeaser import *
 
 strategies = [
         Defector,
@@ -29,6 +30,7 @@ strategies = [
         Grumpy,
         Inverse,
         AverageCopier,
+	Appeaser,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
