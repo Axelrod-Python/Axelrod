@@ -13,17 +13,27 @@
             font-size: 0.8em;
         }
 
-        #content {
+        #description {
             float: left;
             width: 29%;
             height: 100%;
         }
 
-        #vis {
-            float: right;
+        #content {
             display: table;
+            float: right;
             width: 69%;
             height: 100%;
+        }
+
+        #vis {
+            height: 90%;
+            width: 100%;
+        }
+
+        #choice {
+            height: 10%;
+            width: 100%;
         }
 
         .axis path,
@@ -40,13 +50,26 @@
     </style>
 </head>
 <body>
-    <div id="content">
+    <div id="description">
         <p>Here's some stuff and we'll add some thing about contributing</p>
     </div>
-    <div id="vis"></div>
+    <div id="content">
+        <form id="choice">
+            <label for="result_select">
+            Select Results: 
+            <select id="result_select">
+                <option value="results">No Cheaters</option>
+                <option selected value="all_results">All Results</option>
+            </select>
+        </label>
+        </form>
+        <div id="vis">
+        </div>
+    </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script>
 
+        // find the 
         function iqr(d) {
             var q1 = d3.quantile(d, 0.25);
             var q3 = d3.quantile(d, 0.75);
@@ -59,79 +82,137 @@
             return [i, j];
         }
 
+        var svg;
+
         var width = document.getElementById("vis").clientWidth;
         var height = document.getElementById("vis").clientHeight;
-
-        console.log(width);
-        console.log(height);
 
         var padding_bottom = 100;
         var padding_left = 80;
         var padding_right = 40;
         var padding_top = 40;
 
-        d3.csv('results.csv', function(error, data){
+        var y_scale = d3.scale.linear()
+            .range([height-padding_bottom, padding_top]);
 
-            var svg = d3.select('#vis')
-                        .append('svg')
-                        .attr('width', width)
-                        .attr('height', height);
+        var x_scale = d3.scale.ordinal()
+            .rangeRoundBands([padding_left, width-padding_right], 0.5, 0.4);
 
-            var keys = data.map(function(d) {
-                return d.player;
+        var x_axis = d3.svg.axis()
+            .scale(x_scale)
+            .orient("bottom");
+
+        var y_axis = d3.svg.axis()
+            .scale(y_scale)
+            .orient("left")
+            .tickFormat(d3.format(".2s"));
+
+        var results;
+        var keys;
+
+        var init_plot = function() {
+            svg = d3.select('#vis')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height-padding_bottom) + ")");
+
+            svg.selectAll('.x.axis text')
+                .style("text-anchor", "end")
+                .attr("transform", "translate(-15,10)rotate(-90)");
+
+            svg.append("g")
+              .attr("class", "y axis")
+              .attr("transform", "translate(" + (padding_left) + ", " + "0)")
+            .append("text")
+              .attr("transform", "translate(-45," + height/4 + ")rotate(-90)")
+              .style("text-anchor", "end")
+              .text("Mean score per game over 200 rounds repeated 50 times");
+        }
+
+        var load_results = function(results) {
+            
+            d3.csv(results + '.csv', function(error, data) {
+
+                // extract the list of players
+                keys = data.map(function(d) {
+                    return d.player;
+                });
+                console.log(keys);  
+
+                // coerce data into a proper format - array of numerical scores
+                data.forEach(function(d){
+                    var temp = d.scores.replace('[', '')
+                    temp = temp.replace(']', '')
+                    scores = temp.split(',')
+                    d.scores = scores.map(function(s) { return +s/(200 * (keys.length-1)); });
+                    d.scores = d.scores.sort();
+                });
+
+                results = data;
+
+                var max = d3.max(results, function(d){ return d3.max(d.scores); });
+                var min = d3.min(results, function(d){ return d3.min(d.scores); });
+
+                y_scale
+                    .domain([min, max]);
+
+                x_scale
+                    .domain(keys);
+
+                draw_plot(results);
             });
-            console.log(keys)
+        }
 
-            // coerce data into a proper format - array of numerical scores
-            data.forEach(function(d){
-                var temp = d.scores.replace('[', '')
-                temp = temp.replace(']', ',')
-                scores = temp.split(',')
-                d.scores = scores.map(function(s) { return +s; });
-                d.scores.pop();
-                d.scores = scores.map(function(s) { return s/(200 * (keys.length-1)); });
-                d.scores.pop();
-                d.scores = d.scores.sort();
-                //d.scores = d.scores.filter(function(s){ return s !== 0; });
-            })
-
-            var max = d3.max(data, function(d){ return d3.max(d.scores); });
-            var min = d3.min(data, function(d){ return d3.min(d.scores); });
-
-            console.log(max);
-            console.log(min);
-
-            var y_scale = d3.scale.linear()
-                .range([height-padding_bottom, padding_top])
-                .domain([min, max]);
-
-            var x_scale = d3.scale.ordinal()
-                .rangeRoundBands([padding_left, width-padding_right], 0.5, 0.4)
-                .domain(keys);
-
-             var xAxis = d3.svg.axis()
-                .scale(x_scale)
-                .orient("bottom");
-
-            var yAxis = d3.svg.axis()
-                .scale(y_scale)
-                .orient("left")
-                .tickFormat(d3.format(".2s"));           
-
-            console.log(data);
-
+        var draw_plot = function(results) {
+        
             var boxes = svg.selectAll('.box')
-                .data(data)
+                .data(results);
+
+            var box = boxes
                 .enter()
                 .append('g')
-                .attr('class', 'box')
-                .attr('data-median', function(d){ return d3.median(d.scores); })
-                .attr('data-first-quartile', function(d){ return d3.quantile(d.scores, 0.25); })
-                .attr('data-third-quartile', function(d){ return d3.quantile(d.scores, 0.75); })
-
-            boxes
+                .attr('class', function(d){ return "box " + d.player; })
+            box
                 .append('path')
                 .attr('class', 'median')
+                .attr('d', function(d) {
+                    var x_start = x_scale(d.player);
+                    var band_width = x_start + x_scale.rangeBand();
+                    return "M " + x_start + " 0 L " + band_width + " 0";
+                })
+                .attr('stroke', 'red')
+                .attr('stroke-width', '2')
+            box
+                .append('rect')
+                .attr('class', 'quartiles')
+                .attr('x', function(d){ return x_scale(d.player); })
+                .attr('width', x_scale.rangeBand())
+                .attr('y', 0)
+                .attr('height', 0)
+                .attr("fill", "none")
+                .attr("stroke", "blue")
+            box
+                .append('path')
+                .attr('class', 'upper-whisker')
+                .attr('stroke', 'black')
+                .attr('fill', 'none')
+                .style('opacity', 0)
+            box
+                .append('path')
+                .attr('class', 'lower-whisker')
+                .attr('stroke', 'black')
+                .attr('fill', 'none')
+                .style('opacity', 0);
+
+            console.log(boxes);
+            
+            boxes.selectAll('.median')
+                .transition()
+                .duration(1000)
                 .attr('d', function(d) {
                     var median = d3.median(d.scores);
                     var band_width = x_scale.rangeBand();
@@ -140,12 +221,10 @@
                     var path = "M " + x_start + " " + y + " L " + " " + (x_start+band_width) + " " + y;
                     return path;
                 })
-                .attr('stroke', 'red')
-                .attr('stroke-width', '2')
 
-            boxes
-                .append('rect')
-                .attr('class', 'quartiles')
+            boxes.selectAll('.quartiles')
+                .transition()
+                .duration(1000)
                 .attr('x', function(d) {
                     return x_scale(d.player)
                 })
@@ -159,12 +238,10 @@
                     var upper_quartile = d3.quantile(d.scores, 0.75);
                     return y_scale(lower_quartile)-y_scale(upper_quartile);
                 })
-                .attr("fill", "none")
-                .attr("stroke", "blue")
 
-            boxes
-                .append('path')
-                .attr('class', 'upper-whisker')
+            boxes.selectAll('.upper-whisker')
+                .transition()
+                .duration(1000)
                 .attr('d', function(d) {
                     var lower_quartile = d3.quantile(d.scores, 0.25);
                     var upper_quartile = d3.quantile(d.scores, 0.75);
@@ -175,12 +252,13 @@
                     var path = "M " + (x_start + (band_width/2)) + " " + y_scale(upper_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
                     return path;
                 })
-                .attr('stroke', 'black')
-                .attr('fill', 'none');
+                .transition()
+                .duration(1000)
+                .style('opacity', 1);
 
-            boxes
-                .append('path')
-                .attr('class', 'lower-whisker')
+            boxes.selectAll('.lower-whisker')
+                .transition()
+                .duration(1000)                
                 .attr('d', function(d) {
                     var lower_quartile = d3.quantile(d.scores, 0.25);
                     var upper_quartile = d3.quantile(d.scores, 0.75);
@@ -192,28 +270,41 @@
                     var path = "M " + (x_start + (band_width/2)) + " " + y_scale(lower_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
                     return path;
                 })
-                .attr('stroke', 'black')
-                .attr('fill', 'none');
+                .transition()
+                .duration(1000)
+                .style('opacity', 1);  
 
-            svg.append("g")
-              .attr("class", "x axis")
-              .attr("transform", "translate(0," + (height-padding_bottom) + ")")
-              .call(xAxis);
+            boxes
+                .exit()
+                .transition()
+                .duration(1000)
+                .style('opacity', 0)
+                .remove();
+              
 
-            svg.selectAll('.x.axis text')
-                .style("text-anchor", "end")
-                .attr("transform", "translate(-15,10)rotate(-90)")
+            svg.select('.x.axis')
+                .transition()
+                .duration(1000)
+                .call(x_axis);
 
-            svg.append("g")
-              .attr("class", "y axis")
-              .attr("transform", "translate(" + (padding_left) + ", " + "0)")
-              .call(yAxis)
-            .append("text")
-              .attr("transform", "translate(-45," + height/4 + ")rotate(-90)")
-              .style("text-anchor", "end")
-              .text("Mean score per game over 200 rounds repeated 50 times");
-            });
+            svg.select('.x.axis')
+                .selectAll('text')
+                .attr('transform', 'translate(-10, 20)rotate(-90)')
+                .style('text-anchor', 'end');
 
+            svg.select('.y.axis')
+                .transition()
+                .duration(1000)
+                .call(y_axis);
+        }
+
+        d3.select('#result_select')
+            .on('change', function() {
+                var selected = this.options[this.selectedIndex].value;
+                load_results(selected);
+            })
+        init_plot();
+        load_results('all_results');
 
     </script>
 </body>
