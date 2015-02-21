@@ -9,6 +9,8 @@ class RiskyQLearner(Player):
     """
     learning_rate = 0.9
     discount_rate = 0.9
+    action_selection_parameter = 0.1
+    memory_length = 12
     def __init__(self):
         """
         Initialises the player by picking a random strategy
@@ -18,8 +20,6 @@ class RiskyQLearner(Player):
         self.score = 0
         self.Qs = {'':{'C':0, 'D':0}}
         self.Vs = {'':0}
-        self.action_selection_parameter = 0.1
-        self.memory_length = 12
         self.prev_state = ''
 
 
@@ -114,8 +114,6 @@ class ArrogantQLearner(RiskyQLearner):
         self.score = 0
         self.Qs = {'':{'C':0, 'D':0}}
         self.Vs = {'':0}
-        self.action_selection_parameter = 0.1
-        self.memory_length = 12
         self.prev_state = ''
 
     def __repr__(self):
@@ -143,8 +141,6 @@ class HesitantQLearner(RiskyQLearner):
         self.score = 0
         self.Qs = {'':{'C':0, 'D':0}}
         self.Vs = {'':0}
-        self.action_selection_parameter = 0.1
-        self.memory_length = 12
         self.prev_state = ''
 
 
@@ -172,8 +168,6 @@ class CautiousQLearner(RiskyQLearner):
         self.score = 0
         self.Qs = {'':{'C':0, 'D':0}}
         self.Vs = {'':0}
-        self.action_selection_parameter = 0.1
-        self.memory_length = 12
         self.prev_state = ''
 
     def __repr__(self):
