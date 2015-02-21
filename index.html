@@ -87,7 +87,7 @@
         var width = document.getElementById("vis").clientWidth;
         var height = document.getElementById("vis").clientHeight;
 
-        var padding_bottom = 100;
+        var padding_bottom = 150;
         var padding_left = 80;
         var padding_right = 40;
         var padding_top = 40;
@@ -160,7 +160,6 @@
                 var min = d3.min(results, function(d){ return d3.min(d.scores); });
                 var medians = [];
                 results.forEach(function(d){ 
-                    console.log(d3.median(d.scores)); 
                     medians.push(d3.median(d.scores)); 
                 });
 
