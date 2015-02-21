@@ -3,7 +3,7 @@ import random
 
 class QLearner(Player):
     """
-    A player who learns the best strategies throught the q-learning algorithm
+    A player who learns the best strategies through the q-learning algorithm
     """
     def __init__(self):
         """
@@ -96,7 +96,7 @@ class QLearner(Player):
 
 class QLearnerA(QLearner):
     """
-    A player who learns the best strategies throught the q-learning algorithm
+    A player who learns the best strategies through the q-learning algorithm
     """
     def __init__(self):
         """
@@ -115,7 +115,7 @@ class QLearnerA(QLearner):
 
 class QLearnerB(QLearner):
     """
-    A player who learns the best strategies throught the q-learning algorithm
+    A player who learns the best strategies through the q-learning algorithm
     """
     def __init__(self):
         """
@@ -134,7 +134,7 @@ class QLearnerB(QLearner):
 
 class QLearnerC(QLearner):
     """
-    A player who learns the best strategies throught the q-learning algorithm
+    A player who learns the best strategies through the q-learning algorithm
     """
     def __init__(self):
         """
