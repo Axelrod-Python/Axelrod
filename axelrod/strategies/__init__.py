@@ -15,6 +15,7 @@ from inverse import *
 strategies = [
         Defector,
         Cooperator,
+        AntiTitForTat,
         TitForTat,
         TitFor2Tats,
         TwoTitsForTat,

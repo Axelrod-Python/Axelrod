@@ -88,6 +88,17 @@ class TestRoundRobin(unittest.TestCase):
 
 class Tournament(unittest.TestCase):
 
+    def test_full_tournament(self):
+        """
+        A test to check that tournament runs with all non cheating strategies
+        """
+        strategies = [strategy() for strategy in axelrod.strategies]
+        tournament = axelrod.Axelrod(*strategies)
+        output_of_tournament = tournament.tournament(turns=500, repetitions=2)
+        self.assertEqual(type(output_of_tournament), dict)
+        self.assertEqual(len(output_of_tournament), len(strategies))
+
+
     def test_tournament(self):
         """
         Test tournament
