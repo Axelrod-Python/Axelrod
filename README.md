@@ -100,10 +100,12 @@ If you would like to write/run tests this is how to run them:
 $ python -m unittest discover axelrod/tests/
 ```
 
+Note that this project is being taken care off by [travis-ci](https://travis-ci.org/), so tests will be run automatically when opening a pull request.
+You can see the latest build status [here](https://travis-ci.org/drvinceknight/Axelrod).
+
 All other contributions are of course welcome: if you can improve this in any way (from typos to better unit testing) please do :)
 
 Particular things I would like to include (a part from more strategies):
 
 - Nice gh-pages page
-- More tests (including automated testing via travis)
 - Not sure I'm importing the `random` library in the right place...
