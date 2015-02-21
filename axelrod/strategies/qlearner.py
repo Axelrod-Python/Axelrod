@@ -7,13 +7,6 @@ class RiskyQLearner(Player):
 
     This qlearner is quick to come to conclusions and doesn't care about the future
     """
-    history = []
-    score = 0
-    Qs = {'':{'C':0, 'D':0}}
-    Vs = {'':0}
-    action_selection_parameter = 0.1
-    memory_length = 12
-    prev_state = ''
     learning_rate = 0.9
     discount_rate = 0.9
     def __init__(self):
@@ -21,6 +14,13 @@ class RiskyQLearner(Player):
         Initialises the player by picking a random strategy
         """
         self.prev_action = random.choice(['C', 'D'])
+        self.history = []
+        self.score = 0
+        self.Qs = {'':{'C':0, 'D':0}}
+        self.Vs = {'':0}
+        self.action_selection_parameter = 0.1
+        self.memory_length = 12
+        self.prev_state = ''
 
 
     def strategy(self, opponent):
@@ -110,6 +110,13 @@ class ArrogantQLearner(RiskyQLearner):
         Initialises the player by picking a random strategy
         """
         self.prev_action = random.choice(['C', 'D'])
+        self.history = []
+        self.score = 0
+        self.Qs = {'':{'C':0, 'D':0}}
+        self.Vs = {'':0}
+        self.action_selection_parameter = 0.1
+        self.memory_length = 12
+        self.prev_state = ''
 
     def __repr__(self):
         """
@@ -132,6 +139,14 @@ class HesitantQLearner(RiskyQLearner):
         Initialises the player by picking a random strategy
         """
         self.prev_action = random.choice(['C', 'D'])
+        self.history = []
+        self.score = 0
+        self.Qs = {'':{'C':0, 'D':0}}
+        self.Vs = {'':0}
+        self.action_selection_parameter = 0.1
+        self.memory_length = 12
+        self.prev_state = ''
+
 
     def __repr__(self):
         """
@@ -153,6 +168,13 @@ class CautiousQLearner(RiskyQLearner):
         Initialises the player by picking a random strategy
         """
         self.prev_action = random.choice(['C', 'D'])
+        self.history = []
+        self.score = 0
+        self.Qs = {'':{'C':0, 'D':0}}
+        self.Vs = {'':0}
+        self.action_selection_parameter = 0.1
+        self.memory_length = 12
+        self.prev_state = ''
 
     def __repr__(self):
         """
