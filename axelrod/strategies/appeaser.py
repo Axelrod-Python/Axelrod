@@ -11,11 +11,12 @@ class Appeaser(Player):
         """
         if len(self.history) == 0:
 	    self.str = 'C'
-        if opponent.history[-1] == 'D':
-	    if self.str == 'C':
-		self.str = 'D'
- 	    else:
-		self.str = 'C'
+        if len(opponent.history) > 0:
+	    if opponent.history[-1] == 'D':
+		if self.str == 'C':
+		    self.str = 'D'
+ 	    	else:
+		    self.str = 'C'
         return self.str
 
     def __repr__(self):
