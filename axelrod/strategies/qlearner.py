@@ -1,23 +1,25 @@
 from axelrod import Player
 import random
 
-class QLearner(Player):
+class RiskyQLearner(Player):
     """
     A player who learns the best strategies through the q-learning algorithm
+
+    This qlearner is quick to come to conclusions and doesn't care about the future
     """
+    history = []
+    score = 0
+    Qs = {'':{'C':0, 'D':0}}
+    Vs = {'':0}
+    action_selection_parameter = 0.1
+    memory_length = 12
+    prev_state = ''
+    learning_rate = 0.9
+    discount_rate = 0.9
     def __init__(self):
         """
-        Initialises the player
+        Initialises the player by picking a random strategy
         """
-        self.history = []
-        self.score = 0
-        self.Qs = {'':{'C':0, 'D':0}}
-        self.Vs = {'':0}
-        self.learning_rate = 0.9
-        self.discount_rate = 0.9
-        self.action_selection_parameter = 0.1
-        self.memory_length = 12
-        self.prev_state = ''
         self.prev_action = random.choice(['C', 'D'])
 
 
@@ -91,62 +93,69 @@ class QLearner(Player):
         """
         The string method for the strategy:
         """
-        return 'QLearner (%i, %.2f, %.2f)' % (self.memory_length, self.learning_rate, self.discount_rate)
+        return 'Risky QLearner'
 
 
-class QLearnerA(QLearner):
+class ArrogantQLearner(RiskyQLearner):
     """
     A player who learns the best strategies through the q-learning algorithm
+
+    This Q learner jumps to quick conclusions and care about the future
     """
+    learning_rate = 0.9
+    discount_rate = 0.1
+
     def __init__(self):
         """
-        Initialises the player
+        Initialises the player by picking a random strategy
         """
-        self.history = []
-        self.score = 0
-        self.Qs = {'':{'C':0, 'D':0}}
-        self.Vs = {'':0}
-        self.learning_rate = 0.9
-        self.discount_rate = 0.1
-        self.action_selection_parameter = 0.1
-        self.memory_length = 12
-        self.prev_state = ''
         self.prev_action = random.choice(['C', 'D'])
 
-class QLearnerB(QLearner):
+    def __repr__(self):
+        """
+        The string method for the strategy:
+        """
+        return 'Arrogant QLearner'
+
+
+class HesitantQLearner(RiskyQLearner):
     """
     A player who learns the best strategies through the q-learning algorithm
+
+    This Q learner is slower to come to conclusions and does not look ahead much
     """
+    learning_rate = 0.1
+    discount_rate = 0.9
+
     def __init__(self):
         """
-        Initialises the player
+        Initialises the player by picking a random strategy
         """
-        self.history = []
-        self.score = 0
-        self.Qs = {'':{'C':0, 'D':0}}
-        self.Vs = {'':0}
-        self.learning_rate = 0.1
-        self.discount_rate = 0.9
-        self.action_selection_parameter = 0.1
-        self.memory_length = 12
-        self.prev_state = ''
         self.prev_action = random.choice(['C', 'D'])
 
-class QLearnerC(QLearner):
+    def __repr__(self):
+        """
+        The string method for the strategy:
+        """
+        return 'Hesitant QLearner'
+
+class CautiousQLearner(RiskyQLearner):
     """
     A player who learns the best strategies through the q-learning algorithm
+
+    This Q learner is slower to come to conclusions and wants to look ahead more
     """
+    learning_rate = 0.1
+    discount_rate = 0.1
+
     def __init__(self):
         """
-        Initialises the player
+        Initialises the player by picking a random strategy
         """
-        self.history = []
-        self.score = 0
-        self.Qs = {'':{'C':0, 'D':0}}
-        self.Vs = {'':0}
-        self.learning_rate = 0.1
-        self.discount_rate = 0.1
-        self.action_selection_parameter = 0.1
-        self.memory_length = 12
-        self.prev_state = ''
         self.prev_action = random.choice(['C', 'D'])
+
+    def __repr__(self):
+        """
+        The string method for the strategy:
+        """
+        return 'Cautious QLearner'
