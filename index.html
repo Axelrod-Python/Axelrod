@@ -67,6 +67,7 @@
         </div>
     </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="colorbrewer.js"></script>
     <script>
 
         // find the 
@@ -74,7 +75,6 @@
             var q1 = d3.quantile(d, 0.25);
             var q3 = d3.quantile(d, 0.75);
             var iqr = (q3 - q1) * 1.5;
-            console.log(q1, q3, iqr)
             var i = -1;
             var j = d.length;
             while (d[++i] < (q1 - iqr));
@@ -97,6 +97,9 @@
 
         var x_scale = d3.scale.ordinal()
             .rangeRoundBands([padding_left, width-padding_right], 0.5, 0.4);
+
+        var colour_scale = d3.scale.quantile()
+            .range(colorbrewer.Blues[9]);
 
         var x_axis = d3.svg.axis()
             .scale(x_scale)
@@ -141,7 +144,6 @@
                 keys = data.map(function(d) {
                     return d.player;
                 });
-                console.log(keys);  
 
                 // coerce data into a proper format - array of numerical scores
                 data.forEach(function(d){
@@ -156,6 +158,13 @@
 
                 var max = d3.max(results, function(d){ return d3.max(d.scores); });
                 var min = d3.min(results, function(d){ return d3.min(d.scores); });
+                var medians = [];
+                results.forEach(function(d){ 
+                    console.log(d3.median(d.scores)); 
+                    medians.push(d3.median(d.scores)); 
+                });
+
+                colour_scale.domain(medians);
 
                 y_scale
                     .domain([min, max]);
@@ -169,62 +178,21 @@
 
         var draw_plot = function(results) {
         
+            svg.selectAll('.box')
+                .style("opacity", 0)
+                .remove();
+
             var boxes = svg.selectAll('.box')
                 .data(results);
 
             var box = boxes
                 .enter()
                 .append('g')
-                .attr('class', function(d){ return "box " + d.player; })
-            box
-                .append('path')
-                .attr('class', 'median')
-                .attr('d', function(d) {
-                    var x_start = x_scale(d.player);
-                    var band_width = x_start + x_scale.rangeBand();
-                    return "M " + x_start + " 0 L " + band_width + " 0";
-                })
-                .attr('stroke', 'red')
-                .attr('stroke-width', '2')
+                .attr('class', function(d){ return "box " + d.player; });
+
             box
                 .append('rect')
                 .attr('class', 'quartiles')
-                .attr('x', function(d){ return x_scale(d.player); })
-                .attr('width', x_scale.rangeBand())
-                .attr('y', 0)
-                .attr('height', 0)
-                .attr("fill", "none")
-                .attr("stroke", "blue")
-            box
-                .append('path')
-                .attr('class', 'upper-whisker')
-                .attr('stroke', 'black')
-                .attr('fill', 'none')
-                .style('opacity', 0)
-            box
-                .append('path')
-                .attr('class', 'lower-whisker')
-                .attr('stroke', 'black')
-                .attr('fill', 'none')
-                .style('opacity', 0);
-
-            console.log(boxes);
-            
-            boxes.selectAll('.median')
-                .transition()
-                .duration(1000)
-                .attr('d', function(d) {
-                    var median = d3.median(d.scores);
-                    var band_width = x_scale.rangeBand();
-                    var x_start = x_scale(d.player);
-                    var y = y_scale(median);
-                    var path = "M " + x_start + " " + y + " L " + " " + (x_start+band_width) + " " + y;
-                    return path;
-                })
-
-            boxes.selectAll('.quartiles')
-                .transition()
-                .duration(1000)
                 .attr('x', function(d) {
                     return x_scale(d.player)
                 })
@@ -238,10 +206,30 @@
                     var upper_quartile = d3.quantile(d.scores, 0.75);
                     return y_scale(lower_quartile)-y_scale(upper_quartile);
                 })
+                .attr("fill", function(d) {
+                    return colour_scale(d3.median(d.scores));
+                })
+                .attr("stroke", "blue")
+                .style('opacity', 0);
+            
+            box
+                .append('path')
+                .attr('class', 'median')
+                .attr('d', function(d) {
+                    var median = d3.median(d.scores);
+                    var band_width = x_scale.rangeBand();
+                    var x_start = x_scale(d.player);
+                    var y = y_scale(median);
+                    var path = "M " + x_start + " " + y + " L " + " " + (x_start+band_width) + " " + y;
+                    return path;
+                })
+                .attr('stroke', 'red')
+                .attr('stroke-width', '2')
+                .style('opacity', 0);
 
-            boxes.selectAll('.upper-whisker')
-                .transition()
-                .duration(1000)
+            box
+                .append('path')
+                .attr('class', 'upper-whisker')
                 .attr('d', function(d) {
                     var lower_quartile = d3.quantile(d.scores, 0.25);
                     var upper_quartile = d3.quantile(d.scores, 0.75);
@@ -252,6 +240,38 @@
                     var path = "M " + (x_start + (band_width/2)) + " " + y_scale(upper_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
                     return path;
                 })
+                .attr('stroke', 'black')
+                .attr('fill', 'none')
+                .style('opacity', 0);
+
+            box
+                .append('path')
+                .attr('class', 'lower-whisker')
+                .attr('stroke', 'black')
+                .attr('fill', 'none')
+                .attr('d', function(d) {
+                    var lower_quartile = d3.quantile(d.scores, 0.25);
+                    var upper_quartile = d3.quantile(d.scores, 0.75);
+                    var i = iqr(d.scores)
+                    var reach = d.scores[i[0]];
+                    var band_width = x_scale.rangeBand();
+                    var x_start = x_scale(d.player);
+                    var path = "M " + (x_start + (band_width/2)) + " " + y_scale(lower_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
+                    return path;
+                })
+                .style('opacity', 0);
+            
+            boxes.selectAll('.median')
+                .transition()
+                .duration(1000)
+                .style('opacity', 1);
+
+            boxes.selectAll('.quartiles')
+                .transition()
+                .duration(1000)
+                .style('opacity', 1);
+
+            boxes.selectAll('.upper-whisker')
                 .transition()
                 .duration(1000)
                 .style('opacity', 1);
@@ -259,20 +279,7 @@
             boxes.selectAll('.lower-whisker')
                 .transition()
                 .duration(1000)                
-                .attr('d', function(d) {
-                    var lower_quartile = d3.quantile(d.scores, 0.25);
-                    var upper_quartile = d3.quantile(d.scores, 0.75);
-                    var i = iqr(d.scores)
-                    var reach = d.scores[i[0]];
-                    console.log(i);
-                    var band_width = x_scale.rangeBand();
-                    var x_start = x_scale(d.player);
-                    var path = "M " + (x_start + (band_width/2)) + " " + y_scale(lower_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
-                    return path;
-                })
-                .transition()
-                .duration(1000)
-                .style('opacity', 1);  
+                .style('opacity', 1);
 
             boxes
                 .exit()
