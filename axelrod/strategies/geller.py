@@ -17,23 +17,47 @@ see what it's going to play, and return a result based on that
 
 This is almost certainly cheating, and more than likely against the
 spirit of the 'competition' :-)
+
+This code will fall into infinite recursion when played against itself,
+a problem that can be alleviated by looking at the name of the function
+calling `strategy`. If it is also `strategy`, we should return some
+default value - for example 'C', 'D' or random.
 """
 
+import inspect
 import random
+
 from axelrod import Player
 
 
 class Geller(Player):
 
+    default = lambda self: 'C' if random.random() > 0.5 else 'D'
+
     def strategy(self, opponent):
         """
-        Look at what the opponent will play in the next round and choose strategy that gives the least jail time.
-        This is equivalent to playing the same strategy as that which the opponent will play.
+        Look at what the opponent will play in the next round and choose a strategy
+        that gives the least jail time, which is is equivalent to playing the same
+        strategy as that which the opponent will play.
         """
-        return opponent.strategy(self)
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        calname = calframe[1][3]
+        if calname == 'strategy':
+            return self.default()
+        else:
+            return opponent.strategy(self)
 
     def __repr__(self):
         """
         The string method for the strategy:
         """
         return 'Geller'
+
+class GellerCooperator(Geller):
+    default = lambda self: 'C'
+    __repr__ = lambda self: 'Geller Cooperator'
+
+class GellerDefector(Geller):
+    default = lambda self: 'D'
+    __repr__ = lambda self: 'Geller Defector'
