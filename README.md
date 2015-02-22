@@ -115,3 +115,4 @@ All other contributions are of course welcome: if you can improve this in any wa
 - [langner](https://github.com/langner)
 - [martinjc](https://github.com/martinjc)
 - [uglyfruitcake](https://github.com/uglyfruitcake)
+- [jomuel](https://github.com/jomuel)
