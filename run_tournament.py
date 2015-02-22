@@ -23,6 +23,6 @@ for plot in graphs_to_plot:
 
         plt.boxplot([[score / (turns * (len(players) - 1)) for score in results[player]] for player in players])
         plt.xticks(range(1, len(axelrod_tournament.players) + 2), [str(p) for p in players], rotation=90)
-        plt.title('Mean score per stage game over {} rounds repeated {} times'.format(turns, repetitions))
+        plt.title('Mean score per stage game over {} rounds repeated {} times ({} strategies)'.format(turns, repetitions, len(players)))
         plt.savefig(plot, bbox_inches='tight')
         plt.clf()
