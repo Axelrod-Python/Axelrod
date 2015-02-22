@@ -41,4 +41,6 @@ strategies = [
 #These are strategies that do not follow the rules of Axelrods tournement.
 cheating_strategies = [
         Geller,
+        GellerCooperator,
+        GellerDefector,
         ]
