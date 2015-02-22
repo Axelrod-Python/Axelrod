@@ -2,7 +2,7 @@ from axelrod import Player
 
 class ForgetfulGrudger(Player):
     """
-    A player starts by cooperating however will defect if at any point the opponent has defected, but forgets after 20 matches
+    A player starts by cooperating however will defect if at any point the opponent has defected, but forgets after meme_length matches
     """
 
     def __init__(self):
