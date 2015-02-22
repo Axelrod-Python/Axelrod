@@ -26,7 +26,7 @@ class TitFor2Tats(Player):
     """
     def strategy(self, opponent):
         """
-        Being by playing 'C':
+        Begins by playing 'C':
         Will defect whenever anopponent has defected twice
         """
         if opponent.history[-2:] == ['D', 'D']:
@@ -43,7 +43,7 @@ class TwoTitsForTat(Player):
     """
     def strategy(self, opponent):
         """
-        Being by playing 'C':
+        Begins by playing 'C':
         Will defect twice after each defection by opponent
         """
         if 'D' in opponent.history[-2:]:
@@ -53,3 +53,14 @@ class TwoTitsForTat(Player):
     def __repr__(self):
         """The string method for the strategy."""
         return "Two Tits For Tat"
+
+class AntiTitForTat(Player):
+    """
+    Starts by defecting and then does the opposite of opponent's previous move.
+    This the opposite of TIT FOR TAT, also sometimes called BULLY.
+    """
+    def strategy(self, opponent):
+        """Begins with D, then does opposite of what opponent does."""
+        return 'C' if opponent.history[-1:] == ['D'] else 'D'
+    def __repr__(self):
+        return "Anti Tit For Tat"

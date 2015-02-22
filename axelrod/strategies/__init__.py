@@ -7,6 +7,7 @@ from gobymajority import *
 from alternator import *
 from grumpy import *
 from averagecopier import *
+from qlearner import *
 from grumpy import *
 from geller import *
 from inverse import *
@@ -15,6 +16,7 @@ from forgiver import *
 strategies = [
         Defector,
         Cooperator,
+        AntiTitForTat,
         TitForTat,
         TitFor2Tats,
         TwoTitsForTat,
@@ -30,6 +32,10 @@ strategies = [
         Inverse,
         AverageCopier,
         Forgiver,
+        RiskyQLearner,
+        ArrogantQLearner,
+        HesitantQLearner,
+        CautiousQLearner,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
