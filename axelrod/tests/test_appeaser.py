@@ -12,7 +12,7 @@ class TestAppeaser(unittest.TestCase):
 	P1.str = 'C';
         self.assertEqual(P1.strategy(P2), 'C')
 	P1.history = ['C']
-	P1.history = ['C']
+	P2.history = ['C']
 	self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['C', 'D', 'C']
         P2.history = ['C', 'C', 'D']
