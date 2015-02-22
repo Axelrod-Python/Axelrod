@@ -59,4 +59,3 @@ class TestGrumpy(unittest.TestCase):
         P1.reset()
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.state, 'Grumpy')
-

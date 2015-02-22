@@ -7,13 +7,18 @@ from gobymajority import *
 from alternator import *
 from grumpy import *
 from averagecopier import *
+from qlearner import *
 from grumpy import *
 from geller import *
 from inverse import *
+from appeaser import *
+from forgiver import *
+from forgetfulgrudger import *
 
 strategies = [
         Defector,
         Cooperator,
+        AntiTitForTat,
         TitForTat,
         TitFor2Tats,
         TwoTitsForTat,
@@ -28,9 +33,18 @@ strategies = [
         Grumpy,
         Inverse,
         AverageCopier,
+	Appeaser,
+        Forgiver,
+        RiskyQLearner,
+        ArrogantQLearner,
+        HesitantQLearner,
+        CautiousQLearner,
+        ForgetfulGrudger
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
 cheating_strategies = [
         Geller,
+        GellerCooperator,
+        GellerDefector,
         ]
