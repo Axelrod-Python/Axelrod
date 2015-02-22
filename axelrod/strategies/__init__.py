@@ -33,16 +33,13 @@ strategies = [
         Grumpy,
         Inverse,
         AverageCopier,
-<<<<<<< HEAD
 	Appeaser,
-=======
         Forgiver,
         RiskyQLearner,
         ArrogantQLearner,
         HesitantQLearner,
         CautiousQLearner,
         ForgetfulGrudger
->>>>>>> upstream/master
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
