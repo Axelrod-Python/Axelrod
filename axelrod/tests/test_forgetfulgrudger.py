@@ -61,3 +61,17 @@ class TestForgetfulGrudger(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.ForgetfulGrudger()
         self.assertEqual(str(P1), 'Forgetful Grudger')
+
+
+    def test_reset_method(self):
+        """
+        tests the reset method
+        """
+        P1 = axelrod.ForgetfulGrudger()
+        P1.history = ['C', 'D', 'D', 'D']
+        P1.grudged = True
+        P1.grudge_memory = 4
+        P1.reset()
+        self.assertEqual(P1.history, [])
+        self.assertEqual(P1.grudged, False)
+        self.assertEqual(P1.grudge_memory, 0)
