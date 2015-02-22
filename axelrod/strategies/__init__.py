@@ -11,6 +11,7 @@ from qlearner import *
 from grumpy import *
 from geller import *
 from inverse import *
+from appeaser import *
 from forgiver import *
 from forgetfulgrudger import *
 
@@ -32,6 +33,7 @@ strategies = [
         Grumpy,
         Inverse,
         AverageCopier,
+	Appeaser,
         Forgiver,
         RiskyQLearner,
         ArrogantQLearner,
