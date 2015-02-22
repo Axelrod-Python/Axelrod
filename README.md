@@ -83,13 +83,14 @@ The file structure is:
 └── run_tournament.py
 ```
 
-To contribute a strategy you need to do 4 (optionally 5) things (all of which can actually be done right here using the github website):
+To contribute a strategy you need to do 4 (optionally 6) things (all of which can actually be done right here using the github website):
 
 1. Fork this repository.
 2. Add a `<strategy>.py` file to the `strategies` directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
 3. Update the `./axelrod/strategies/__init__.py` file (you need to write the `import` statement and add the strategy to the relevant python list).
-4. (This one is optional: write some unit tests in the `./axelrod/tests/` directory.
-5. Send me a pull request.
+4. (This one is optional: write some unit tests in the `./axelrod/tests/` directory).
+5. (This one is also optional: add your name to the contributors list down below. If you don't I'll try and do it myself).
+6. Send me a pull request.
 
 If any of these steps sound complicated please just get in touch with me and I would be delighted to help.
 There is a [video](https://www.youtube.com/watch?v=5kOUVdktxAo&feature=youtu.be) and a [blog post](http://goo.gl/zkgSkc) discussing showing how to contribute if this is helpful.
@@ -105,7 +106,12 @@ You can see the latest build status [here](https://travis-ci.org/drvinceknight/A
 
 All other contributions are of course welcome: if you can improve this in any way (from typos to better unit testing) please do :)
 
-Particular things I would like to include (a part from more strategies):
+# Contributors
 
-- Nice gh-pages page
-- Not sure I'm importing the `random` library in the right place...
+- [JasYoung314](https://github.com/JasYoung314)
+- [Karlos78](https://github.com/Karlos78)
+- [Me: Vince Knight](https://twitter.com/drvinceknight):
+- [geraintpalmer](https://github.com/geraintpalmer)
+- [langner](https://github.com/langner)
+- [martinjc](https://github.com/martinjc)
+- [uglyfruitcake](https://github.com/uglyfruitcake)
