@@ -108,6 +108,10 @@
             .style('opacity', 0);            
     }
 
+    var draw_whiskers = function(element, data) {
+
+    }
+
     // load results from the specified file
     var load_results = function(results) {
         
@@ -230,14 +234,15 @@
                 var reach = d.scores[i[1]];
                 var band_width = x_scale.rangeBand();
                 var x_start = x_scale(d.player);
+                var midpoint = x_start + (band_width/2);
 
                 if(i[1] < d.scores.length-1) {
                     for(var j = i[1]+1; j < d.scores.length; j++) {
-                        draw_outlier(box, (x_start + (band_width/2)), y_scale(d.scores[j]));
+                        draw_outlier(box, midpoint, y_scale(d.scores[j]));
                     }
                 }
 
-                var path = "M " + (x_start + (band_width/2)) + " " + y_scale(upper_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
+                var path = "M " + midpoint + " " + y_scale(upper_quartile) + " L " + midpoint + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
                 return path;
             })
             .attr('stroke', 'black')
@@ -257,14 +262,14 @@
                 var reach = d.scores[i[0]];
                 var band_width = x_scale.rangeBand();
                 var x_start = x_scale(d.player);
-
+                var midpoint = x_start + (band_width/2);
                 if(i[0] > 0) {
                     for(var j = 0; j < i[0]; j++) {
-                        draw_outlier(box, (x_start + (band_width/2)), y_scale(d.scores[j]));
+                        draw_outlier(box, midpoint, y_scale(d.scores[j]));
                     }
                 }
 
-                var path = "M " + (x_start + (band_width/2)) + " " + y_scale(lower_quartile) + " L " + (x_start + (band_width/2)) + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
+                var path = "M " + midpoint + " " + y_scale(lower_quartile) + " L " + midpoint + " " + y_scale(reach) + " " + (x_start + band_width) + " " + y_scale(reach) + " " + x_start + " " +  y_scale(reach);
                 return path;
             })
             .style('opacity', 0);
