@@ -17,6 +17,7 @@ from forgetfulgrudger import *
 
 strategies = [
         Defector,
+        TrickyDefector,
         Cooperator,
         AntiTitForTat,
         TitForTat,
@@ -33,7 +34,7 @@ strategies = [
         Grumpy,
         Inverse,
         AverageCopier,
-	Appeaser,
+        Appeaser,
         Forgiver,
         ForgivingTitForTat,
         RiskyQLearner,
