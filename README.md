@@ -61,7 +61,7 @@ Please do contribute :)
 
 ## Awesome visualisation
 
-[martinjc](https://github.com/martinjc) put together a pretty awesome visualisation of this using d3. Hosted on gh-pages it can be seen here: drvinceknight.github.io/Axelrod.
+[martinjc](https://github.com/martinjc) put together a pretty awesome visualisation of this using d3. Hosted on gh-pages it can be seen here: [drvinceknight.github.io/Axelrod](http://drvinceknight.github.io/Axelrod/).
 
 # Contributing
 
