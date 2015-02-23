@@ -284,7 +284,7 @@ This repository reproduces Axelrod's iterated prisoner's dilemma. Contributions 
                     var x_start = x_scale(d.player);
 
                     if(i[1] < d.scores.length-1) {
-                        for(var j = i[1]; j < d.scores.length; j++) {
+                        for(var j = i[1]+1; j < d.scores.length; j++) {
                             draw_outlier(box, (x_start + (band_width/2)), y_scale(d.scores[j]));
                         }
                     }
