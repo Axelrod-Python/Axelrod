@@ -110,7 +110,7 @@ All other contributions are of course welcome: if you can improve this in any wa
 
 - [JasYoung314](https://github.com/JasYoung314)
 - [Karlos78](https://github.com/Karlos78)
-- [Me: Vince Knight](https://twitter.com/drvinceknight):
+- [drvinceknight](https://twitter.com/drvinceknight)
 - [geraintpalmer](https://github.com/geraintpalmer)
 - [langner](https://github.com/langner)
 - [martinjc](https://github.com/martinjc)
