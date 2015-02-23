@@ -19,6 +19,7 @@ strategies = [
         Defector,
         TrickyDefector,
         Cooperator,
+        TrickyCooperator,
         AntiTitForTat,
         TitForTat,
         TitFor2Tats,
