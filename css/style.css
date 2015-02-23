@@ -30,6 +30,7 @@ header {
 }
 
 #choice {
+    text-align: right;
     padding: 10px 40px;
 }
 
@@ -46,11 +47,13 @@ header {
     }
 
     header {
+        padding-left: 20px;
         float: left;
         width: 28%;
     }
 
     #description {
+        padding-left: 20px;
         float: left;
         clear: left;
         width: 28%;
