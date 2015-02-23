@@ -36,6 +36,8 @@
     // scale from median value to colour
     var colour_scale = d3.scale.quantile()
         .range(colorbrewer.Blues[9]);
+    var cheater_scale = d3.scale.quantile()
+        .range(colorbrewer.Greens[9]);
 
     // axes
     var x_axis = d3.svg.axis()
@@ -49,10 +51,20 @@
     // data
     var results;
     // player names
-    var keys;
+    var players;
+    var cheaters;
 
     // initialise the visualisation
     var init_plot = function() {
+        
+        // read the cheaters names from the results file
+        d3.csv('cheating_results.csv', function(error, data) {
+            // extract the list of cheating players
+            cheaters = data.map(function(d) {
+                return d.player;
+            });
+        });
+
         // create the svg element to hold 
         // all the visualisation elements
         svg = d3.select('#vis')
@@ -102,7 +114,7 @@
         d3.csv(results + '.csv', function(error, data) {
 
             // extract the list of players
-            keys = data.map(function(d) {
+            players = data.map(function(d) {
                 return d.player;
             });
 
@@ -111,7 +123,7 @@
                 var temp = d.scores.replace('[', '')
                 temp = temp.replace(']', '')
                 scores = temp.split(',')
-                d.scores = scores.map(function(s) { return +s/(200 * (keys.length-1)); });
+                d.scores = scores.map(function(s) { return +s/(200 * (players.length-1)); });
                 d.scores = d.scores.sort();
             });
 
@@ -129,8 +141,9 @@
 
             // set the scale domain values 
             colour_scale.domain(medians);
+            cheater_scale.domain(medians);
             y_scale.domain([min, max]);
-            x_scale.domain(keys);
+            x_scale.domain(players);
 
             // draw the visualisation
             draw_plot(results);
@@ -175,9 +188,20 @@
                 return y_scale(lower_quartile)-y_scale(upper_quartile);
             })
             .attr("fill", function(d) {
-                return colour_scale(d3.median(d.scores));
+                if(cheaters.indexOf(d.player) == -1) {
+                    return colour_scale(d3.median(d.scores));    
+                } else {
+                    return cheater_scale(d3.median(d.scores));    
+                }
+                
             })
-            .attr("stroke", "blue")
+            .attr("stroke", function(d) {
+                if(cheaters.indexOf(d.player) == -1) {
+                    return "blue";
+                } else {
+                    return "green";
+                }
+            })
             .style('opacity', 0);
         
         // draw a line for the median for each player
