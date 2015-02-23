@@ -10,11 +10,13 @@ html, body {
 }
 
 header {
+    text-align: justify;
     width: 100%;
     padding: 10px;
 }
 
 #description {
+    text-align: justify;
     width: 100%;
     padding: 10px;
 }

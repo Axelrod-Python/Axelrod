@@ -203,7 +203,7 @@
             .attr('d', function(d) {
                 var lower_quartile = d3.quantile(d.scores, 0.25);
                 var upper_quartile = d3.quantile(d.scores, 0.75);
-                var i = whisker_reach(d.scores);
+                var i = whisker_reach(d.scores, 1.5);
                 var reach = d.scores[i[1]];
                 var band_width = x_scale.rangeBand();
                 var x_start = x_scale(d.player);
@@ -230,7 +230,7 @@
             .attr('d', function(d) {
                 var lower_quartile = d3.quantile(d.scores, 0.25);
                 var upper_quartile = d3.quantile(d.scores, 0.75);
-                var i = whisker_reach(d.scores);
+                var i = whisker_reach(d.scores, 1.5);
                 var reach = d.scores[i[0]];
                 var band_width = x_scale.rangeBand();
                 var x_start = x_scale(d.player);
