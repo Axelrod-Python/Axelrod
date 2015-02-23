@@ -1,0 +1,64 @@
+html, body {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    line-height: 1.5em;
+    font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color:#333;
+    font-weight:300;
+}
+
+header {
+    width: 100%;
+    padding: 10px;
+}
+
+#description {
+    width: 100%;
+    padding: 10px;
+}
+
+#content {
+    width: 100%;
+    height: 100%;
+}
+
+#vis {
+    height: 90%;
+    width: 100%;
+}
+
+#choice {
+    padding: 10px 40px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+@media(min-width: 800px) {
+    html, body {
+        font-size: 1.0em;
+    }
+
+    header {
+        float: left;
+        width: 28%;
+    }
+
+    #description {
+        float: left;
+        clear: left;
+        width: 28%;
+    }
+
+    #content {
+        float: right;
+        width: 68%;
+        height: 100%;
+    }
+}
