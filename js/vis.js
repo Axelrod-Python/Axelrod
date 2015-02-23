@@ -108,10 +108,6 @@
             .style('opacity', 0);            
     }
 
-    var draw_whiskers = function(element, data) {
-
-    }
-
     // load results from the specified file
     var load_results = function(results) {
         
