@@ -324,11 +324,10 @@
     }
 
     // register a listener on the <select> form element
-    d3.select('#result_select')
-        .on('change', function() {
-            var selected = this.options[this.selectedIndex].value;
-            load_results(selected);
-        });
+    d3.select('#result_select').on('change', function() {
+        var selected = this.options[this.selectedIndex].value;
+        load_results(selected);
+    });
 
     // initialise the plot and draw some results
     init_plot();
