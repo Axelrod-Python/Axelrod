@@ -23,7 +23,7 @@ for result in results_to_gather:
         results = axelrod_tournament.tournament(turns=turns, repetitions=repetitions)
         players = sorted(axelrod_tournament.players, key = lambda x: median(results[x]))
 
-        with open('%s.csv' % result, 'w') as csv_file:
+        with open('{}.csv'.format(result), 'w') as csv_file:
             csv_writer = csv.DictWriter(csv_file, ['player', 'scores'])
             csv_writer.writeheader()
             for player in players:
@@ -32,6 +32,5 @@ for result in results_to_gather:
         plt.boxplot([[score / (turns * (len(players) - 1)) for score in results[player]] for player in players])
         plt.xticks(range(1, len(axelrod_tournament.players) + 2), [str(p) for p in players], rotation=90)
         plt.title('Mean score per stage game over {} rounds repeated {} times ({} strategies)'.format(turns, repetitions, len(players)))
-        plt.savefig('%s.png' % result, bbox_inches='tight')
-        plt.savefig(plot, bbox_inches='tight')
+        plt.savefig('{}.png'.format(result), bbox_inches='tight')
         plt.clf()
