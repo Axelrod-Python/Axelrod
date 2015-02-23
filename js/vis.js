@@ -1,5 +1,10 @@
 (function() {
 
+    // function for handling zoom event
+    var zoom_handler = function() {
+        container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
+
     // find the indexes of the whisker reach values
     function whisker_reach(d, k) {
         var q1 = d3.quantile(d, 0.25);  // first quartile
@@ -14,6 +19,7 @@
 
     // the visualisation
     var svg;
+    var container;
 
     // get the size of the visualisation element
     var width = document.getElementById('vis').clientWidth;
@@ -46,13 +52,19 @@
 
     var y_axis = d3.svg.axis()
         .scale(y_scale)
-        .orient("left")
+        .orient("left");
+
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([0, 10])
+        .on("zoom", zoom_handler);
 
     // data
     var results;
     // player names
     var players;
     var cheaters;
+
+
 
     // initialise the visualisation
     var init_plot = function() {
@@ -70,20 +82,25 @@
         svg = d3.select('#vis')
             .append('svg')
             .attr('width', width)
-            .attr('height', height);
+            .attr('height', height)
+            .call(zoom);
+
+        container = svg.append('g')
+            .attr("class", "container")
+            .call(zoom);
 
         // add an x-axis element
-        svg.append("g")
+        container.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + (height-padding.bottom) + ")");
 
         // rotate the x-axis labels
-        svg.selectAll('.x.axis text')
+        container.selectAll('.x.axis text')
             .style("text-anchor", "end")
             .attr("transform", "translate(-15,10)rotate(-90)");
 
         // add a y-axis and label
-        svg.append("g")
+        container.append("g")
           .attr("class", "y axis")
           .attr("transform", "translate(" + (padding.left) + ", " + "0)")
         .append("text")
@@ -150,18 +167,18 @@
     }
 
     // function to draw a box_plot of the results
-    var draw_plot = function(results) {
+    var draw_plot = function(result_set) {
     
         // remove any existing box-and-whisker plots
-        svg.selectAll('.box')
+        container.selectAll('.box')
             .style("opacity", 0)
             .remove();
 
         // select all box-and-whisker plots
         // (there aren't any) and bind data
         // to them
-        var boxes = svg.selectAll('.box')
-            .data(results);
+        var boxes = container.selectAll('.box')
+            .data(result_set);
 
         // add a box for each of the results
         var box = boxes
@@ -307,21 +324,22 @@
             .remove();
           
         // update the axes
-        svg.select('.x.axis')
+        container.select('.x.axis')
             .transition()
             .duration(transition_duration)
             .call(x_axis);
 
-        svg.select('.x.axis')
+        container.select('.x.axis')
             .selectAll('text')
             .attr('transform', 'translate(-15, 15)rotate(-90)')
             .style('text-anchor', 'end');
 
-        svg.select('.y.axis')
+        container.select('.y.axis')
             .transition()
             .duration(transition_duration)
             .call(y_axis);
     }
+
 
     // register a listener on the <select> form element
     d3.select('#result_select').on('change', function() {
