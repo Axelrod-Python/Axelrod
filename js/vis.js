@@ -134,9 +134,8 @@
             var min = d3.min(results, function(d){ return d3.min(d.scores); });
 
             // calculate median score for each player
-            var medians = [];
-            results.forEach(function(d){ 
-                medians.push(d3.median(d.scores)); 
+            var medians = data.map(function(d) {
+                return d3.median(d.scores);
             });
 
             // set the scale domain values 
