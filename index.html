@@ -10,8 +10,9 @@
             width: 100%;
             height: 100%;
             line-height: 1.5em;
-            font-family: Helvetica, Arial, sans-serif;
-            font-size: 0.95em;
+            font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color:#333;
+            font-weight:300;
         }
 
         header {
@@ -35,8 +36,7 @@
         }
 
         #choice {
-            width: 100%;
-            padding: 10px 20px;
+            padding: 10px 40px;
         }
 
         .axis path,
@@ -46,25 +46,25 @@
           shape-rendering: crispEdges;
         }
 
-        @media(min-width: 600px) {
+        @media(min-width: 800px) {
             html, body {
                 font-size: 1.0em;
             }
 
             header {
                 float: left;
-                width: 29%;
+                width: 28%;
             }
 
             #description {
                 float: left;
                 clear: left;
-                width: 29%;
+                width: 28%;
             }
 
             #content {
                 float: right;
-                width: 69%;
+                width: 68%;
                 height: 100%;
             }
         }
@@ -74,11 +74,11 @@
 <body>
     <header>
         <h1>Axelrod</h1>
-        <p>
-This repository reproduces Axelrod's iterated prisoner's dilemma. Contributions are welcome via pull request.</p>
+        <p><a href="https://github.com/drvinceknight/Axelrod">This repository</a> reproduces Axelrod's iterated prisoner's dilemma tournament. Contributions are welcome via <a href="https://github.com/drvinceknight/Axelrod/pulls">pull request</a>.</p>
+        <small>View the repository on <a href="https://github.com/drvinceknight/Axelrod">Github</a></small>
 
-<h2>History of Axelrod's tournament</h2>
-<p>In the 1980s, professor of Political Science Robert Axelrod ran a tournament inviting strategies from collaborators all over the world for the Iterated Prisoner's Dilemma. You can read about this more here.</p>
+        <h2>History of Axelrod's tournament</h2>
+        <p>In the 1980s, professor of Political Science Robert Axelrod ran a tournament inviting strategies from collaborators all over the world for the Iterated Prisoner's Dilemma. You can read about this more <a href="http://en.wikipedia.org/wiki/The_Evolution_of_Cooperation#Axelrod.27s_tournaments">here</a>.</p>
     </header>
     <div id="content">
         <form id="choice">
@@ -96,7 +96,17 @@ This repository reproduces Axelrod's iterated prisoner's dilemma. Contributions 
     </div>
     <div id="description">
         <h2>Contributing</h2>
-        <p>This repository contains Python (2.7) code that reproduces the tournament. You can see the results from the latest run of the tournament here. All contributions are welcome: with a particular emphasis on contributing further strategies.</p>
+        <p>The repository contains Python (2.7) code that reproduces the tournament. You can see the results from the latest run of the tournament here. All contributions are welcome: with a particular emphasis on contributing further strategies.</p>
+        <p>To contribute a strategy you need to do 4 (optionally 6) things (all of which can actually be done using the <a href="https://github.com/drvinceknight/Axelrod">github website</a>)
+        <ol>
+            <li>Fork this repository</li>
+            <li>Add a <code>&lt;strategy&gt;.py</code> file to the `strategies` directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing)</li>
+            <li>Update the <code>./axelrod/strategies/__init__.py</code> file (you need to write the <code>import</code> statement and add the strategy to the relevant python list)</li>
+            <li>(This one is optional: write some unit tests in the <code>./axelrod/tests/` directory)</code></li>
+            <li>(This one is also optional: add your name to the contributors list in the readme)</li>
+            <li>Send a pull request</li>
+        </ol>
+     </p>
     </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src="colorbrewer.js"></script>
@@ -161,12 +171,25 @@ This repository reproduces Axelrod's iterated prisoner's dilemma. Contributions 
                 .style("text-anchor", "end")
                 .attr("transform", "translate(-15,10)rotate(-90)");
 
+// svg.append("text")
+//         .attr("transform", "rotate(-90)")
+//         .attr("y", 0 – margin.left)
+//         .attr("x",0 - (height / 2))
+//         .attr("dy", "1em")
+//         .style("text-anchor", "middle")
+//         .text("Value");
+
+
+
             svg.append("g")
               .attr("class", "y axis")
               .attr("transform", "translate(" + (padding_left) + ", " + "0)")
             .append("text")
-              .attr("transform", "translate(-60," + height/4 + ")rotate(-90)")
-              .style("text-anchor", "end")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 20 - padding_left)
+              .attr("x", 0 - (height/2))
+              .attr("dy", "1em")
+              .style("text-anchor", "middle")
               .text("Mean score per game over 200 rounds repeated 50 times");
         }
 
