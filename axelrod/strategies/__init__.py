@@ -32,6 +32,7 @@ strategies = [
         Inverse,
         AverageCopier,
         Forgiver,
+        ForgivingTitForTat,
         RiskyQLearner,
         ArrogantQLearner,
         HesitantQLearner,
