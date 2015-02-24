@@ -164,8 +164,8 @@ class TestPlayer(unittest.TestCase):
         Test that play method looks for attribute strategy (which does not exist)
         """
         P1, P2 = axelrod.Player(), axelrod.Player()
-        self.assertRaises(AttributeError, P1.play, P2)
-        self.assertRaises(AttributeError, P2.play, P1)
+        self.assertEquals(P1.play(P2), None)
+        self.assertEquals(P2.play(P1), None)
 
 
 if __name__ == '__main__':

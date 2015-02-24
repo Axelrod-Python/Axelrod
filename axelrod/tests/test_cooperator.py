@@ -21,6 +21,9 @@ class TestCooperator(unittest.TestCase):
         P1 = axelrod.Cooperator()
         self.assertEqual(str(P1), 'Cooperator')
 
+    def test_stochastic(self):
+        self.assertFalse(axelrod.Cooperator().stochastic)
+
 class TestTrickyCooperator(unittest.TestCase):
 
     def test_strategy(self):
@@ -37,3 +40,6 @@ class TestTrickyCooperator(unittest.TestCase):
         P1.history.extend(['C']*11)
         P2.history.extend(['D'] + ['C']*10)
         self.assertEqual(P1.strategy(P2), 'D')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.TrickyCooperator().stochastic)

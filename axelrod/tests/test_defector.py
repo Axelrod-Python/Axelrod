@@ -21,6 +21,9 @@ class TestDefector(unittest.TestCase):
         P1 = axelrod.Defector()
         self.assertEqual(str(P1), 'Defector')
 
+    def test_stochastic(self):
+        self.assertFalse(axelrod.Defector().stochastic)
+
 class TestTrickyDefector(unittest.TestCase):
 
     def test_strategy(self):
@@ -34,3 +37,6 @@ class TestTrickyDefector(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.TrickyDefector()
         self.assertEqual(str(P1), 'Tricky Defector')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.TrickyDefector().stochastic)
