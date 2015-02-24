@@ -26,3 +26,5 @@ class TestRandom(unittest.TestCase):
         P1 = axelrod.Random()
         self.assertEqual(str(P1), 'Random')
 
+    def test_stochastic(self):
+        self.assertTrue(axelrod.Random().stochastic)

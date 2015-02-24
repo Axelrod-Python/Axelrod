@@ -31,6 +31,9 @@ class TestGoByMajority(unittest.TestCase):
         P1 = axelrod.GoByMajority()
         self.assertEqual(str(P1), 'Go By Majority')
 
+    def test_stochastic(self):
+        self.assertFalse(axelrod.GoByMajority().stochastic)
+
 class TestGoByRecentMajority(unittest.TestCase):
 
     lengths = [5, 10, 20, 40]
@@ -63,3 +66,7 @@ class TestGoByRecentMajority(unittest.TestCase):
         for L in self.lengths:
             P1 = self.get_player(L)
             self.assertEqual(str(P1), 'Go By Majority/%i' % L)
+
+    def test_stochastic(self):
+        for L in self.lengths:
+            self.assertFalse(self.get_player(L).stochastic)

@@ -5,10 +5,13 @@ class ForgetfulGrudger(Player):
     A player starts by cooperating however will defect if at any point the opponent has defected, but forgets after meme_length matches
     """
 
+    name = 'Forgetful Grudger'
+
     def __init__(self):
         """
         Initialised the player
         """
+        super(ForgetfulGrudger, self).__init__()
         self.history = []
         self.score = 0
         self.mem_length = 10
@@ -38,9 +41,3 @@ class ForgetfulGrudger(Player):
         self.history = []
         self.grudged = False
         self.grudge_memory = 0
-
-    def __repr__(self):
-        """
-        The string method for the strategy.
-        """
-        return 'Forgetful Grudger'
