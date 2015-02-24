@@ -52,3 +52,6 @@ class TestAverageCopier(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.AverageCopier()
         self.assertEqual(str(P1), 'Average Copier')
+
+    def test_stochastic(self):
+        self.assertTrue(axelrod.AverageCopier().stochastic)

@@ -15,6 +15,7 @@ class RiskyQLearner(Player):
         """
         Initialises the player by picking a random strategy
         """
+        super(RiskyQLearner, self).__init__()
         self.prev_action = random.choice(['C', 'D'])
         self.history = []
         self.score = 0
@@ -109,6 +110,7 @@ class ArrogantQLearner(RiskyQLearner):
         """
         Initialises the player by picking a random strategy
         """
+        super(RiskyQLearner, self).__init__()
         self.prev_action = random.choice(['C', 'D'])
         self.history = []
         self.score = 0
@@ -136,6 +138,7 @@ class HesitantQLearner(RiskyQLearner):
         """
         Initialises the player by picking a random strategy
         """
+        super(RiskyQLearner, self).__init__()
         self.prev_action = random.choice(['C', 'D'])
         self.history = []
         self.score = 0
@@ -163,6 +166,7 @@ class CautiousQLearner(RiskyQLearner):
         """
         Initialises the player by picking a random strategy
         """
+        super(RiskyQLearner, self).__init__()
         self.prev_action = random.choice(['C', 'D'])
         self.history = []
         self.score = 0

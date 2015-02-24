@@ -9,6 +9,7 @@ class ForgetfulGrudger(Player):
         """
         Initialised the player
         """
+        super(ForgetfulGrudger, self).__init__()
         self.history = []
         self.score = 0
         self.mem_length = 10

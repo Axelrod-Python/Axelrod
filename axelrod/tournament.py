@@ -3,7 +3,10 @@ Recreate Axelrod's tournament
 
 
 """
+
+import inspect
 import itertools
+
 
 class Axelrod:
     """
@@ -80,7 +83,7 @@ class Axelrod:
         return s1, s2
 
 
-class Player:
+class Player(object):
     """
     A class for a player
     """
@@ -90,6 +93,7 @@ class Player:
         """
         self.history = []
         self.score = 0
+        self.stochastic = "random" in inspect.getsource(self.__class__)
 
     def play(self, opponent):
         """
@@ -107,3 +111,7 @@ class Player:
         When creating strategies that create new attributes then this method should be re-written (in the inherited class) and should not only reset history but also rest all other attributes.
         """
         self.history = []
+
+    def strategy(self, opponent):
+        """This is placeholder"""
+        return None

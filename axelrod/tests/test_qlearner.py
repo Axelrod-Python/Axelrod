@@ -93,6 +93,8 @@ class TestRiskyQLearner(unittest.TestCase):
         P1 = axelrod.RiskyQLearner()
         self.assertEqual(str(P1), 'Risky QLearner')
 
+    def test_stochastic(self):
+        self.assertTrue(axelrod.RiskyQLearner().stochastic)
 
 class TestArrogantQLearner(unittest.TestCase):
 
@@ -175,13 +177,15 @@ class TestArrogantQLearner(unittest.TestCase):
         self.assertEqual(P1.Vs, {'':0})
         self.assertEqual(P1.Qs, {'':{'C':0, 'D':0}})
 
-
     def test_representation(self):
         """
         Tests string representation of class
         """
         P1 = axelrod.ArrogantQLearner()
         self.assertEqual(str(P1), 'Arrogant QLearner')
+
+    def test_stochastic(self):
+        self.assertTrue(axelrod.ArrogantQLearner().stochastic)
 
 
 class TestHesitantQLearner(unittest.TestCase):
@@ -265,13 +269,15 @@ class TestHesitantQLearner(unittest.TestCase):
         self.assertEqual(P1.Vs, {'':0})
         self.assertEqual(P1.Qs, {'':{'C':0, 'D':0}})
 
-
     def test_representation(self):
         """
         Tests string representation of class
         """
         P1 = axelrod.HesitantQLearner()
         self.assertEqual(str(P1), 'Hesitant QLearner')
+
+    def test_stochastic(self):
+        self.assertTrue(axelrod.RiskyQLearner().stochastic)
 
 
 class TestCautiousQLearner(unittest.TestCase):
@@ -355,10 +361,12 @@ class TestCautiousQLearner(unittest.TestCase):
         self.assertEqual(P1.Vs, {'':0})
         self.assertEqual(P1.Qs, {'':{'C':0, 'D':0}})
 
-
     def test_representation(self):
         """
         Tests string representation of class
         """
         P1 = axelrod.CautiousQLearner()
         self.assertEqual(str(P1), 'Cautious QLearner')
+
+    def test_stochastic(self):
+        self.assertTrue(axelrod.RiskyQLearner().stochastic)
