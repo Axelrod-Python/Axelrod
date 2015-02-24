@@ -88,6 +88,17 @@ class TestRoundRobin(unittest.TestCase):
 
 class Tournament(unittest.TestCase):
 
+    def test_full_tournament(self):
+        """
+        A test to check that tournament runs with all non cheating strategies
+        """
+        strategies = [strategy() for strategy in axelrod.strategies]
+        tournament = axelrod.Axelrod(*strategies)
+        output_of_tournament = tournament.tournament(turns=500, repetitions=2)
+        self.assertEqual(type(output_of_tournament), dict)
+        self.assertEqual(len(output_of_tournament), len(strategies))
+
+
     def test_tournament(self):
         """
         Test tournament
@@ -153,8 +164,8 @@ class TestPlayer(unittest.TestCase):
         Test that play method looks for attribute strategy (which does not exist)
         """
         P1, P2 = axelrod.Player(), axelrod.Player()
-        self.assertRaises(AttributeError, P1.play, P2)
-        self.assertRaises(AttributeError, P2.play, P1)
+        self.assertEquals(P1.play(P2), None)
+        self.assertEquals(P2.play(P1), None)
 
 
 if __name__ == '__main__':

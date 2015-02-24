@@ -1,5 +1,5 @@
 """
-Test for the average_copier strategy
+Test for the inverse strategy
 """
 import unittest
 import axelrod
@@ -60,3 +60,6 @@ class TestInverse(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.Inverse()
         self.assertEqual(str(P1), 'Inverse')
+
+    def test_stochastic(self):
+        self.assertTrue(axelrod.Inverse().stochastic)
