@@ -4,6 +4,9 @@ class Alternator(Player):
     """
     A player who alternates between cooperating and defecting
     """
+
+    name = 'Alternator'
+
     def strategy(self, opponent):
         """
         Alternate 'C' and 'D'
@@ -13,9 +16,3 @@ class Alternator(Player):
         if self.history[-1] == 'C':
             return 'D'
         return 'C'
-
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-        return 'Alternator'

@@ -5,6 +5,9 @@ class MindReader(Player):
     """
     A player that looks ahead at what the opponent will do and decides what to do
     """
+
+    name = 'Mind Reader'
+
     def strategy(self, opponent):
         """
         Simulates the next 50 rounds and decides whether to cooperate or defect
@@ -13,7 +16,6 @@ class MindReader(Player):
         best_strategy = self.look_ahead(opponent)
 
         return best_strategy
-
 
     def simulate_match(self, opponent, strategy, rounds = 10):
         """
@@ -43,9 +45,3 @@ class MindReader(Player):
             opponent.history = copy.copy(dummy_history_opponent)
 
         return strategies[results.index(min(results))]
-
-    def __repr__(self):
-        """
-        The string method for the strategy.
-        """
-        return 'Mind Reader'

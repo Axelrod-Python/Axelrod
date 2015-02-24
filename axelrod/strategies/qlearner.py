@@ -7,10 +7,13 @@ class RiskyQLearner(Player):
 
     This qlearner is quick to come to conclusions and doesn't care about the future
     """
+
+    name = 'Risky QLearner'
     learning_rate = 0.9
     discount_rate = 0.9
     action_selection_parameter = 0.1
     memory_length = 12
+
     def __init__(self):
         """
         Initialises the player by picking a random strategy
@@ -90,12 +93,6 @@ class RiskyQLearner(Player):
         self.prev_state = ''
         self.prev_action = random.choice(['C', 'D'])
 
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-        return 'Risky QLearner'
-
 
 class ArrogantQLearner(RiskyQLearner):
     """
@@ -103,6 +100,8 @@ class ArrogantQLearner(RiskyQLearner):
 
     This Q learner jumps to quick conclusions and care about the future
     """
+
+    name = 'Arrogant QLearner'
     learning_rate = 0.9
     discount_rate = 0.1
 
@@ -118,12 +117,6 @@ class ArrogantQLearner(RiskyQLearner):
         self.Vs = {'':0}
         self.prev_state = ''
 
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-        return 'Arrogant QLearner'
-
 
 class HesitantQLearner(RiskyQLearner):
     """
@@ -131,6 +124,8 @@ class HesitantQLearner(RiskyQLearner):
 
     This Q learner is slower to come to conclusions and does not look ahead much
     """
+
+    name = 'Hesitant QLearner'
     learning_rate = 0.1
     discount_rate = 0.9
 
@@ -147,18 +142,14 @@ class HesitantQLearner(RiskyQLearner):
         self.prev_state = ''
 
 
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-        return 'Hesitant QLearner'
-
 class CautiousQLearner(RiskyQLearner):
     """
     A player who learns the best strategies through the q-learning algorithm
 
     This Q learner is slower to come to conclusions and wants to look ahead more
     """
+
+    name = 'Cautious QLearner'
     learning_rate = 0.1
     discount_rate = 0.1
 
@@ -173,9 +164,4 @@ class CautiousQLearner(RiskyQLearner):
         self.Qs = {'':{'C':0, 'D':0}}
         self.Vs = {'':0}
         self.prev_state = ''
-
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-        return 'Cautious QLearner'
+        return 

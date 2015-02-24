@@ -4,6 +4,9 @@ class TitForTat(Player):
     """
     A player starts by cooperating and then mimics previous move by opponent.
     """
+
+    name = 'Tit For Tat'
+
     def strategy(self, opponent):
         """
         Begins by playing 'C':
@@ -14,16 +17,13 @@ class TitForTat(Player):
         except IndexError:
             return 'C'
 
-    def __repr__(self):
-        """
-        The string method for the strategy.
-        """
-        return 'Tit For Tat'
-
 class TitFor2Tats(Player):
     """
     A player starts by cooperating and then defects only after two defects by opponent.
     """
+
+    name = "Tit For 2 Tats"
+
     def strategy(self, opponent):
         """
         Begins by playing 'C':
@@ -33,14 +33,13 @@ class TitFor2Tats(Player):
             return 'D'
         return 'C'
 
-    def __repr__(self):
-        """The string method for the strategy."""
-        return "Tit For 2 Tats"
-
 class TwoTitsForTat(Player):
     """
     A player starts by cooperating and replies to each defect by two defections.
     """
+
+    name = "Two Tits For Tat"
+
     def strategy(self, opponent):
         """
         Begins by playing 'C':
@@ -50,17 +49,14 @@ class TwoTitsForTat(Player):
             return 'D'
         return 'C'
 
-    def __repr__(self):
-        """The string method for the strategy."""
-        return "Two Tits For Tat"
-
 class AntiTitForTat(Player):
     """
     Starts by defecting and then does the opposite of opponent's previous move.
     This the opposite of TIT FOR TAT, also sometimes called BULLY.
     """
+
+    name = "Anti Tit For Tat"
+
     def strategy(self, opponent):
         """Begins with D, then does opposite of what opponent does."""
         return 'C' if opponent.history[-1:] == ['D'] else 'D'
-    def __repr__(self):
-        return "Anti Tit For Tat"

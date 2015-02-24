@@ -6,6 +6,8 @@ class Inverse(Player):
     A player who defects with a probability that diminishes relative to how long ago the opponent defected
     """
 
+    name = 'Inverse'
+
     def strategy(self, opponent):
         """
         Looks at opponent history to see if they have defected.
@@ -22,11 +24,3 @@ class Inverse(Player):
         if rnd_num < 1/abs(index):
             return 'D'
         return 'C'
-
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-
-        return 'Inverse'
-
