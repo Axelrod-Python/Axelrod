@@ -19,16 +19,16 @@ class TestGolden(unittest.TestCase):
         P2.history = ['C']
         self.assertEqual(P1.strategy(P2), 'D')
 
-    def test_when_greater_than_mean(self):
-        """tests that if the ratio of Cs to Ds is greater than the golden mean then strategy defects"""
+    def test_when_greater_than_golden_ratio(self):
+        """tests that if the ratio of Cs to Ds is greater than the golden ratio then strategy defects"""
         P1 = axelrod.Golden()
         P2 = axelrod.Player()
         P1.history = ['C','C','C','C']
         P2.history = ['C','C','D','D']
         self.assertEqual(P1.strategy(P2), 'D')
 
-    def test_when_greater_than_mean(self):
-        """tests that if the ratio of Cs to Ds is less than the golden mean then strategy co-operates"""
+    def test_when_greater_than_golder_ratio(self):
+        """tests that if the ratio of Cs to Ds is less than the golden ratio then strategy co-operates"""
         P1 = axelrod.Golden()
         P2 = axelrod.Player()
         P1.history = ['C','C','C','C']
