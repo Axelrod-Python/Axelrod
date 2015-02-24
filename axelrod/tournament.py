@@ -97,9 +97,10 @@ class Axelrod:
 
 
 class Player(object):
-    """
-    A class for a player
-    """
+    """An abstract class for a player"""
+
+    name = "Player"
+
     def __init__(self):
         """
         Initiates an empty history and 0 score for every player
@@ -126,5 +127,9 @@ class Player(object):
         self.history = []
 
     def strategy(self, opponent):
-        """This is placeholder"""
+        """This is a placeholder"""
         return None
+
+    def __repr__(self):
+        """The string method for the strategy."""
+        return self.name

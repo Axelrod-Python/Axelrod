@@ -7,20 +7,20 @@ class Defector(Player):
     """
     A player who only ever defects
     """
+
+    name = 'Defector'
+
     def strategy(self, opponent):
         """
         Always returns 'D'
         """
         return 'D'
 
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-        return 'Defector'
 
 class TrickyDefector(Player):
     """A defector that is trying to be tricky"""
+
+    name = "Tricky Defector"
 
     def strategy(self, opponent):
         """
@@ -31,6 +31,3 @@ class TrickyDefector(Player):
         if 'C' in opponent.history and opponent.history[-3:] == ['D']*3:
             return 'C'
         return 'D'
-
-    def __repr__(self):
-        return "Tricky Defector"

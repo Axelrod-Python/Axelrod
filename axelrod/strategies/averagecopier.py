@@ -5,6 +5,9 @@ class AverageCopier(Player):
     """
     The player will cooperate with probability p if the opponent's cooperation ratio is p
     """
+
+    name = 'Average Copier'
+
     def strategy(self, opponent):
         """
         Randomly picks a strategy (not affected by history)
@@ -16,9 +19,3 @@ class AverageCopier(Player):
         if rnd_num < p:
             return 'C'
         return 'D'
-
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-        return 'Average Copier'
