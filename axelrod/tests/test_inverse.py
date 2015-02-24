@@ -60,3 +60,6 @@ class TestInverse(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.Inverse()
         self.assertEqual(str(P1), 'Inverse')
+
+    def test_stochastic(self):
+        self.assertTrue(axelrod.Inverse().stochastic)

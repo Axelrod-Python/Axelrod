@@ -14,13 +14,15 @@ from inverse import *
 from appeaser import *
 from forgiver import *
 from forgetfulgrudger import *
-from proportionalgrudger import *
-from inverseproportionalgrudger import *
+from punisher import *
+from inversepunisher import *
 from oppositegrudger import *
 
 strategies = [
         Defector,
+        TrickyDefector,
         Cooperator,
+        TrickyCooperator,
         AntiTitForTat,
         TitForTat,
         TitFor2Tats,
@@ -36,15 +38,16 @@ strategies = [
         Grumpy,
         Inverse,
         AverageCopier,
-	Appeaser,
+        Appeaser,
         Forgiver,
+        ForgivingTitForTat,
         RiskyQLearner,
         ArrogantQLearner,
         HesitantQLearner,
         CautiousQLearner,
         ForgetfulGrudger,
-        ProportionalGrudger,
-        InverseProportionalGrudger,
+        Punisher,
+        InversePunisher,
         OppositeGrudger
         ]
 
