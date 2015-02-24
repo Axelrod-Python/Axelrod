@@ -277,7 +277,7 @@ class TestHesitantQLearner(unittest.TestCase):
         self.assertEqual(str(P1), 'Hesitant QLearner')
 
     def test_stochastic(self):
-        self.assertTrue(axelrod.RiskyQLearner().stochastic)
+        self.assertTrue(axelrod.HesitantQLearner().stochastic)
 
 
 class TestCautiousQLearner(unittest.TestCase):
@@ -369,4 +369,4 @@ class TestCautiousQLearner(unittest.TestCase):
         self.assertEqual(str(P1), 'Cautious QLearner')
 
     def test_stochastic(self):
-        self.assertTrue(axelrod.RiskyQLearner().stochastic)
+        self.assertTrue(axelrod.CautiousQLearner().stochastic)
