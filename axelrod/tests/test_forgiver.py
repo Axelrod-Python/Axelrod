@@ -34,6 +34,9 @@ class TestForgiver(unittest.TestCase):
         P1 = axelrod.Forgiver()
         self.assertEqual(str(P1), 'Forgiver')
 
+    def test_stochastic(self):
+        self.assertFalse(axelrod.Forgiver().stochastic)
+
 class TestForgivingTitForTat(unittest.TestCase):
 
     def test_initial_strategy(self):
@@ -66,3 +69,6 @@ class TestForgivingTitForTat(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.ForgivingTitForTat()
         self.assertEqual(str(P1), 'Forgiving Tit For Tat')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.ForgivingTitForTat().stochastic)

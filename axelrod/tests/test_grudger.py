@@ -30,3 +30,6 @@ class TestGrudger(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.Grudger()
         self.assertEqual(str(P1), 'Grudger')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.Grudger().stochastic)
