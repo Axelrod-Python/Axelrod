@@ -26,6 +26,9 @@ class OnceBitten(Player):
             self.grudge_memory = 0
             self.grudged = False
 
+        if len(opponent.history) < 2:
+            return 'C'
+
         if self.grudged:
             self.grudge_memory += 1
             return 'D'

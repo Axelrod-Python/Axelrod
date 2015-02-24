@@ -14,6 +14,7 @@ from inverse import *
 from appeaser import *
 from forgiver import *
 from forgetfulgrudger import *
+from oncebitten import *
 
 strategies = [
         Defector,
@@ -42,7 +43,8 @@ strategies = [
         ArrogantQLearner,
         HesitantQLearner,
         CautiousQLearner,
-        ForgetfulGrudger
+        ForgetfulGrudger,
+        OnceBitten,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
