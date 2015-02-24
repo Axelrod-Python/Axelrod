@@ -30,3 +30,6 @@ class TestOppositeGrudger(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.OppositeGrudger()
         self.assertEqual(str(P1), 'Opposite Grudger')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.ForgetfulGrudger().stochastic)

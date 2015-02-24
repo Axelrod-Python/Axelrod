@@ -30,3 +30,6 @@ class TestAlternator(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.Alternator()
         self.assertEqual(str(P1), 'Alternator')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.Alternator().stochastic)

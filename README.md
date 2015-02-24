@@ -59,6 +59,10 @@ You can see the results from the latest run of the tournament here with the chea
 
 Please do contribute :)
 
+## Awesome visualisation
+
+[martinjc](https://github.com/martinjc) put together a pretty awesome visualisation of this using d3. Hosted on gh-pages it can be seen here: [drvinceknight.github.io/Axelrod](http://drvinceknight.github.io/Axelrod/).
+
 # Contributing
 
 All contributions are welcome: with a particular emphasis on contributing further strategies.

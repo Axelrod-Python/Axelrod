@@ -29,6 +29,9 @@ class TestGeller(unittest.TestCase):
         P1 = self.player()
         self.assertEqual(str(P1), self.name)
 
+    def test_stochastic(self):
+        self.assertTrue(axelrod.Geller().stochastic)
+
 class TestGellerCooperator(TestGeller):
 
     name = "Geller Cooperator"
@@ -39,7 +42,10 @@ class TestGellerCooperator(TestGeller):
         P2 = self.player()
         self.assertEqual(P1.strategy(P2), 'C')
 
-class GellerDefector(TestGeller):
+    def test_stochastic(self):
+        self.assertFalse(axelrod.GellerCooperator().stochastic)
+
+class TestGellerDefector(TestGeller):
 
     name = "Geller Defector"
     player = axelrod.GellerDefector
@@ -48,3 +54,6 @@ class GellerDefector(TestGeller):
         P1 = self.player()
         P2 = self.player()
         self.assertEqual(P1.strategy(P2), 'D')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.GellerDefector().stochastic)

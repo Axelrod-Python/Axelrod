@@ -31,6 +31,9 @@ class TestTitForTat(unittest.TestCase):
         P1 = axelrod.TitForTat()
         self.assertEqual(str(P1), 'Tit For Tat')
 
+    def test_stochastic(self):
+        self.assertFalse(axelrod.TitForTat().stochastic)
+
 class TestTitFor2Tats(unittest.TestCase):
 
     def test_initial_strategy(self):
@@ -57,6 +60,9 @@ class TestTitFor2Tats(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.TitFor2Tats()
         self.assertEqual(str(P1), 'Tit For 2 Tats')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.TitFor2Tats().stochastic)
 
 class TestTwoTitsForTat(unittest.TestCase):
 
@@ -88,6 +94,9 @@ class TestTwoTitsForTat(unittest.TestCase):
         P1 = axelrod.TwoTitsForTat()
         self.assertEqual(str(P1), 'Two Tits For Tat')
 
+    def test_stochastic(self):
+        self.assertFalse(axelrod.TwoTitsForTat().stochastic)
+
 class TestAntiTitForTat(unittest.TestCase):
 
     def test_initial_strategy(self):
@@ -116,3 +125,6 @@ class TestAntiTitForTat(unittest.TestCase):
     def test_representation(self):
         P1 = axelrod.AntiTitForTat()
         self.assertEqual(str(P1), "Anti Tit For Tat")
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.AntiTitForTat().stochastic)

@@ -32,6 +32,7 @@ from axelrod import Player
 
 class Geller(Player):
 
+    name = 'Geller'
     default = lambda self: 'C' if random.random() > 0.5 else 'D'
 
     def strategy(self, opponent):
@@ -48,16 +49,10 @@ class Geller(Player):
         else:
             return opponent.strategy(self)
 
-    def __repr__(self):
-        """
-        The string method for the strategy:
-        """
-        return 'Geller'
-
 class GellerCooperator(Geller):
+    name = 'Geller Cooperator'
     default = lambda self: 'C'
-    __repr__ = lambda self: 'Geller Cooperator'
 
 class GellerDefector(Geller):
+    name = 'Geller Defector'
     default = lambda self: 'D'
-    __repr__ = lambda self: 'Geller Defector'
