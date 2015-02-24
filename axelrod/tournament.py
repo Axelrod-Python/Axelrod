@@ -28,19 +28,32 @@ class Axelrod:
         Initiate a tournament of players
         """
         self.players = list(args)
+        self.deterministic_cache = {}
 
     def round_robin(self, turns=200):
         """
         Plays a round robin where each match lasts turns.
+
+        We can cache scores for paris of deterministic strategies, since the outcome
+        will always be the same. There are many possible keys to cache by, but perhaps
+        the most versatile is a tuple with the classes of both players.
         """
         for p1, p2 in itertools.combinations(self.players, 2):
-            turn = 0
-            p1.reset()
-            p2.reset()
-            while turn < turns:
-                turn += 1
-                p1.play(p2)
-            scores = self.calculate_scores(p1, p2)
+            cl1 = p1.__class__
+            cl2 = p2.__class__
+            key = (cl1, cl2)
+            if p1.stochastic or p2.stochastic or key not in self.deterministic_cache:
+                turn = 0
+                p1.reset()
+                p2.reset()
+                while turn < turns:
+                    turn += 1
+                    p1.play(p2)
+                scores = self.calculate_scores(p1, p2)
+                if not (p1.stochastic or p2.stochastic):
+                    self.deterministic_cache[key] = scores
+            else:
+                scores = self.deterministic_cache[key]
             p1.score += scores[0]
             p2.score += scores[1]
 
