@@ -17,6 +17,9 @@ from forgetfulgrudger import *
 from punisher import *
 from inversepunisher import *
 from oppositegrudger import *
+from oncebitten import *
+from golden import *
+from retaliate import *
 
 strategies = [
         Defector,
@@ -48,7 +51,10 @@ strategies = [
         ForgetfulGrudger,
         Punisher,
         InversePunisher,
-        OppositeGrudger
+        OppositeGrudger,
+        OnceBitten,
+        Golden,
+        Retaliate,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
