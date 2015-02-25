@@ -25,13 +25,13 @@ class TestRetaliate(unittest.TestCase):
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['C', 'C', 'C', 'C', 'D']
         P2.history = ['C', 'C', 'C', 'D', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C']
-        P2.history = ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'D']
+        self.assertEqual(P1.strategy(P2), 'D')
+        P1.history = ['C', 'C', 'C', 'C', 'C', 'C']
+        P2.history = ['C', 'C', 'C', 'C', 'C', 'D']
         self.assertEqual(P1.strategy(P2), 'D')
 
     def test_representation(self):
-        P1 = axelrod.Forgiver()
+        P1 = axelrod.Retaliate()
         self.assertEqual(str(P1), 'Retaliate')
 
     def test_stochastic(self):
