@@ -16,6 +16,7 @@ from forgiver import *
 from forgetfulgrudger import *
 from oncebitten import *
 from golden import *
+from retaliate import *
 
 strategies = [
         Defector,
@@ -47,6 +48,7 @@ strategies = [
         ForgetfulGrudger,
         OnceBitten,
         Golden,
+        Retaliate,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
