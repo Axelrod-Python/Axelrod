@@ -1,16 +1,11 @@
-"""
-Recreate Axelrod's tournament
-
-
-"""
+"""Recreate Axelrod's tournament."""
 
 import inspect
 import itertools
 
 
 class Axelrod:
-    """
-    A class for an iterated prisoner's dilemma.
+    """A class for an iterated prisoner's dilemma.
 
     Take a list of players (see the Player class):
 
@@ -24,15 +19,12 @@ class Axelrod:
         Cooperator 50
     """
     def __init__(self, *args):
-        """
-        Initiate a tournament of players
-        """
+        """Initiate a tournament of players."""
         self.players = list(args)
         self.deterministic_cache = {}
 
     def round_robin(self, turns=200):
-        """
-        Plays a round robin where each match lasts turns.
+        """Plays a round robin where each match lasts turns.
 
         We can cache scores for paris of deterministic strategies, since the outcome
         will always be the same. There are many possible keys to cache by, but perhaps
@@ -58,8 +50,7 @@ class Axelrod:
             p2.score += scores[1]
 
     def tournament(self, turns=200, repetitions=10):
-        """
-        Runs repetitions of the round robin (this is mainly to handle stochastic strategies).
+        """Runs repetitions of the round robin (this is mainly to handle stochastic strategies).
 
         Returns a dictionary containing the scores for every repetition.
         """
@@ -72,8 +63,7 @@ class Axelrod:
         return dic
 
     def calculate_scores(self, p1, p2):
-        """
-        Calculates the score for two players based their history and on following:
+        """Calculates the score for two players based their history and on following:
 
         - C vs C both get 2
         - D vs D both get 4
@@ -96,37 +86,37 @@ class Axelrod:
 
 
 class Player(object):
-    """An abstract class for a player"""
+    """An class for a player in the tournament.
+
+    This is an abstract base class, not intended to be used directly.
+    """
 
     name = "Player"
 
     def __init__(self):
-        """
-        Initiates an empty history and 0 score for every player
-        """
+        """Initiates an empty history and 0 score for a player."""
         self.history = []
         self.score = 0
         self.stochastic = "random" in inspect.getsource(self.__class__)
 
     def play(self, opponent):
-        """
-        This pits two players against each other: note that this will raise
-        an error if no strategy method is defined (which are defined through
-        class inheritance).
+        """This pits two players against each other.
         """
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         self.history.append(s1)
         opponent.history.append(s2)
 
     def reset(self):
-        """
-        Resets history.
-        When creating strategies that create new attributes then this method should be re-written (in the inherited class) and should not only reset history but also rest all other attributes.
+        """Resets history.
+
+        When creating strategies that create new attributes then this method should be
+        re-written (in the inherited class) and should not only reset history but also
+        rest all other attributes.
         """
         self.history = []
 
     def strategy(self, opponent):
-        """This is a placeholder"""
+        """This is a placeholder strategy."""
         return None
 
     def __repr__(self):
