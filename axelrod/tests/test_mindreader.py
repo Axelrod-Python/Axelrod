@@ -65,3 +65,19 @@ class TestMindReader(unittest.TestCase):
         P2 = axelrod.Geller()
         P1.strategy(P2)
         P2.strategy(P1)
+
+    def test_stochastic(self):
+        """ Tests to see if the strategy is stochastic"""
+        self.assertFalse(axelrod.MindReader().stochastic)
+
+    def test_reset(self):
+        """ Tests to see if the class is reset correctly """
+        P1 = axelrod.MindReader()
+        P1.history = ['C', 'D', 'D', 'D']
+        P1.reset()
+        self.assertEqual(P1.history, [])
+
+    def test_representation(self):
+        """Tests that the string is correctly displayed"""
+        P1 = axelrod.MindReader()
+        self.assertEqual(str(P1), 'Mind Reader')
