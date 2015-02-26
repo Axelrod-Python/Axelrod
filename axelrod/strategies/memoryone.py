@@ -18,6 +18,7 @@ class SuspiciousTFT(Player):
             ('D','D'): 'D',
         }
         self._initial = initial
+        self.stochastic = False
     
     def strategy(self, opponent):
         """TFT but starts with D instead of C."""
@@ -40,6 +41,7 @@ class WinStayLoseShift(Player):
             ('D','D'): 'C',
         }
         self._initial = initial
+        self.stochastic = False
     
     def strategy(self, opponent):
         """Switches if it doesn't get the best payout, traditionally equivalent to a Memory one strategy of [1,0,0,1], but this implementation does not require random draws."""
@@ -49,7 +51,7 @@ class WinStayLoseShift(Player):
         return self.response_dict[last_round]
 
 class MemoryOnePlayer(Player):
-    """Uses a four-vector for strategies based on the last round of play, (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift ."""
+    """Uses a four-vector for strategies based on the last round of play, (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift. Intended to be used as an abstract base class or to at least be supplied with a initializing four_vector."""
 
     name = 'Generic Memory One Player'
 
@@ -57,6 +59,10 @@ class MemoryOnePlayer(Player):
         Player.__init__(self)
         self._four_vector = dict( zip(  [ ('C','C'), ('C','D'), ('D','C'), ('D','D')], map(float, four_vector) ) )
         self._initial = initial
+        self.stochastic = False
+        for x in set(four_vector):
+            if x != 0 and x!= 1:
+                self.stochastic = True
 
     def strategy(self, opponent):
         if not len(opponent.history):
@@ -117,7 +123,6 @@ class ZDChi(MemoryOnePlayer):
 
         four_vector = (p1, p2, p3, p4)
         super(self.__class__, self).__init__(four_vector)
-
 
 def zd_vector2(chi):
     """Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R). See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""
