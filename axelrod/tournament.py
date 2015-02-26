@@ -8,7 +8,7 @@ import inspect
 import itertools
 
 ## Press and Dyson values: R=3, S=0, T=5, P=1
-## Generally T > R > P > S
+## Often assumed that T > R > P > S
 
 def game_matrix(R=2, S=0, T=5, P=4):
     scores = {

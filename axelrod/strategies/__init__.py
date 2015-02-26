@@ -17,7 +17,8 @@ from forgetfulgrudger import *
 from oncebitten import *
 from golden import *
 from retaliate import *
-from memoryone import WinStayLoseShift, ZDChi, ZDGTFT2, SuspiciousTFT, StochasticCooperator, GTFT
+from memoryone import *
+#from memoryone import WinStayLoseShift, ZDChi, ZDGTFT2, SuspiciousTFT, StochasticCooperator, GTFT
 
 
 strategies = [
