@@ -8,7 +8,10 @@ class MindReader(Player):
     name = 'Mind Reader'
 
     def strategy(self, opponent):
-        """Simulates the next 50 rounds and decides whether to cooperate or defect."""
+        """Pretends to play the opponent 50 times before each match.
+        The primary purpose is to look far enough ahead to see if a defect will be punished by the opponent.
+        If the MindReader attempts to play itself (or another similar strategy), then it will cause a recursion loop, so this is also handeled in this method, by defecting if the method is called by strategy
+        """
         
         curframe = inspect.currentframe()
         calframe = inspect.getouterframes(curframe, 2)
