@@ -31,7 +31,25 @@ class TestMindControl(unittest.TestCase):
         self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P2.strategy(P1), 'C')
         
-    def test_string(self):
+    def test_stochastic(self):
+        """Test to see if the method is stochastic or not (Important for caching results)"""
+        self.assertFalse(axelrod.MindControl().stochastic)
+
+    def test_init(self):
+        """Test to make sure parameters are initialised correctly """
+
+        P1 = axelrod.MindControl()
+        self.assertEqual(P1.history, [])
+        self.assertEqual(P1.score, 0)
+
+    def test_reset(self):
+        """ test for the reset method """
+        P1 = axelrod.MindControl()
+        P1.history = ['C', 'D', 'D', 'D']
+        P1.reset()
+        self.assertEqual(P1.history, [])
+
+    def test_representation(self):
         """Tests that the string is correctly displayed"""
 
         P1 = axelrod.MindControl()
