@@ -1,5 +1,6 @@
 from axelrod import Player, Axelrod
 import copy
+import inspect
 
 class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
@@ -7,7 +8,17 @@ class MindReader(Player):
     name = 'Mind Reader'
 
     def strategy(self, opponent):
-        """Simulates the next 50 rounds and decides whether to cooperate or defect."""
+        """Pretends to play the opponent 50 times before each match.
+        The primary purpose is to look far enough ahead to see if a defect will be punished by the opponent.
+        If the MindReader attempts to play itself (or another similar strategy), then it will cause a recursion loop, so this is also handeled in this method, by defecting if the method is called by strategy
+        """
+        
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        calname = calframe[1][3]
+        
+        if calname == 'strategy':
+            return 'D'
 
         best_strategy = self.look_ahead(opponent)
 
