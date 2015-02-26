@@ -57,6 +57,8 @@ strategies = [
         SuspiciousTFT,
         StochasticCooperator,
         GTFT,
+        FoolMeOnce,
+        ForgetfulFoolMeOnce
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
