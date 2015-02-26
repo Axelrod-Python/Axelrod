@@ -59,6 +59,8 @@ You can see the results from the latest run of the tournament here with the chea
 
 Please do contribute :)
 
+(Note that you can run `python run_tournament.py -h` for further options available: for example, cheating strategies can be excluded for faster results)
+
 ## Awesome visualisation
 
 [martinjc](https://github.com/martinjc) put together a pretty awesome visualisation of this using d3. Hosted on gh-pages it can be seen here: [drvinceknight.github.io/Axelrod](http://drvinceknight.github.io/Axelrod/).
