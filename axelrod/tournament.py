@@ -7,6 +7,8 @@ Recreate Axelrod's tournament
 import inspect
 import itertools
 
+## Press and Dyson values: R=3, S=0, T=5, P=1
+
 def game_matrix(R=2, S=0, T=5, P=4):
     scores = {
         ('C', 'C'): (R, R),
