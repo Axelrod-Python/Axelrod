@@ -102,7 +102,10 @@ class Player(object):
     def play(self, opponent):
         """This pits two players against each other.
         """
-        s1, s2 = self.strategy(opponent), opponent.strategy(self)
+        if not (s1 in axelrod.cheating_strategies or s2 in axelrod.cheating_strategies):    
+            s1, s2 = self.strategy(MockPlayer(opponent)), opponent.strategy(MockPlayer(self))
+        else:
+            s1, s2 = self.strategy(opponent), opponent.strategy(self)
         self.history.append(s1)
         opponent.history.append(s2)
 
@@ -122,3 +125,11 @@ class Player(object):
     def __repr__(self):
         """The string method for the strategy."""
         return self.name
+
+class MockPlayer(object):
+    def __init__(self,player):
+        self.name = player.name
+        self.history = player.history[:]
+        self.score = player.score
+        self.stochastic = player.stochastic
+        self.strategy = player.strategy
