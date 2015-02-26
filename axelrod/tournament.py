@@ -19,6 +19,16 @@ def game_matrix(R=2, S=0, T=5, P=4):
     }
     return scores
 
+def RPTS():
+    """Return the values in the game matrix in the Press and Dyson notation."""
+    scores = game_matrix()
+    R = scores[('C', 'C')][0]
+    P = scores[('D', 'D')][0]
+    T = scores[('C', 'D')][0]
+    S = scores[('D', 'C')][0]
+    return (R, P, T, S)
+
+
 class Axelrod:
     """
     A class for an iterated prisoner's dilemma.
