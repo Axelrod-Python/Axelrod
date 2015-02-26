@@ -20,6 +20,7 @@ from oppositegrudger import *
 from oncebitten import *
 from golden import *
 from retaliate import *
+from mindcontrol import *
 from mindreader import *
 
 strategies = [
@@ -63,5 +64,6 @@ cheating_strategies = [
         Geller,
         GellerCooperator,
         GellerDefector,
+        MindControl,
         MindReader,
         ]
