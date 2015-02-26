@@ -59,7 +59,11 @@ You can see the results from the latest run of the tournament here with the chea
 
 Please do contribute :)
 
-(Note that you can run `python run_tournament.py -h` for further options available: for example, cheating strategies can be excluded for faster results)
+Note that you can run `python run_tournament.py -h` for further options available: for example, cheating strategies can be excluded for faster results by running:
+
+```
+$ python run_tournament.py --xc --xa
+```
 
 ## Awesome visualisation
 
