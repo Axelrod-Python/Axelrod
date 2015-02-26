@@ -1,6 +1,6 @@
 import random
 
-from axelrod import Player, game_matrix
+from axelrod import Player, RPTS
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
@@ -100,18 +100,23 @@ class StochasticCooperator(MemoryOnePlayer):
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super(self.__class__, self).__init__(four_vector)
 
+class StochasticWSLS(MemoryOnePlayer):
+    """Stochastic WSLS, similar to Generous TFT"""
+
+    name = 'Stochastic WSLS'
+
+    def __init__(self, ep=0.02):
+        four_vector = (1.-ep, ep, ep, 1.-ep)
+        super(self.__class__, self).__init__(four_vector)
+
 class ZDChi(MemoryOnePlayer):
-    """An Extortionate Zero Determinant Strategy. See the Press and Dyson paper for the original formula."""
+    """An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula."""
 
     name = 'ZDChi'
 
     def __init__(self, chi=2):
         chi = float(chi)
-        scores = game_matrix()
-        R = scores[('C', 'C')][0]
-        P = scores[('D', 'D')][0]
-        T = scores[('C', 'D')][0]
-        S = scores[('D', 'C')][0]
+        (R, P, T, S) = RPTS()
         
         phi_max = float(P-S) / ((P-S) + chi * (T-P))
         phi = phi_max / 2.
@@ -125,7 +130,7 @@ class ZDChi(MemoryOnePlayer):
         super(self.__class__, self).__init__(four_vector)
 
 def zd_vector2(chi):
-    """Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R). See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""
+    """Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R) but may not. See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""
     return (1., (chi - 1.)/(3. * chi + 2.), 1., 2.*(chi - 1.)/(3. * chi + 2.))
 
 class ZDGTFT2(MemoryOnePlayer):
