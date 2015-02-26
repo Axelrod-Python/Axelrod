@@ -6,6 +6,8 @@ import axelrod
 
 class TestMindControl(unittest.TestCase):
 
+    name = 'Mind Control'
+
     def test_vs_cooperator(self):
         """ Will always make opponent cooperate """
 
@@ -49,8 +51,6 @@ class TestMindControl(unittest.TestCase):
         P1.reset()
         self.assertEqual(P1.history, [])
 
-    def test_representation(self):
-        """Tests that the string is correctly displayed"""
+class TestMindWarp(unittest.TestCase):
 
-        P1 = axelrod.MindControl()
-        self.assertEqual(str(P1), 'Mind Control')
+    name = "Mind Warp"
