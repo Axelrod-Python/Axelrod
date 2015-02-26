@@ -1,9 +1,30 @@
 import random
 
 from axelrod import Player, game_matrix
-#from tournament import game_matrix
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
+
+class SuspiciousTFT(Player):
+    """Suspicious Tit-For-Tat Strategy, initial move is D rather than C."""
+
+    name = 'Suspicious Tit-For-Tat'
+
+    def __init__(self, initial='D'):
+        Player.__init__(self)        
+        self.response_dict = {
+            ('C','C'): 'C',
+            ('C','D'): 'D',            
+            ('D','C'): 'C',
+            ('D','D'): 'D',
+        }
+        self._initial = initial
+    
+    def strategy(self, opponent):
+        """TFT but starts with D instead of C."""
+        if not opponent.history:
+            return self._initial
+        last_round = (self.history[-1], opponent.history[-1])
+        return self.response_dict[last_round]
 
 class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
@@ -30,7 +51,7 @@ class WinStayLoseShift(Player):
 class MemoryOnePlayer(Player):
     """Uses a four-vector for strategies based on the last round of play, (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift ."""
 
-    name = 'Memory One Player'
+    name = 'Generic Memory One Player'
 
     def __init__(self, four_vector=[1,0,0,1], initial='C'):
         Player.__init__(self)
@@ -48,42 +69,33 @@ class MemoryOnePlayer(Player):
             return 'C'
         return 'D'
 
-def zd_vector1(chi):
-    return (1. - (2. * chi - 2.) / (4. * chi + 1.), 0.,
-            (chi + 4.) / (4. * chi + 1.), 0.)
+## Examples of strategies as Memory-One
+# tft = (1.,0.,1.,0.)
+# gtft = (1.-ep,ep.,1.-ep,ep)
+# wsls = (1.,0.,0.,1.)
+# alld = (0.,0.,0.,0.)
+# allc = (1.,1.,1.,1.)
 
+class GTFT(MemoryOnePlayer):
+    """Generous Tit-For-Tat Strategy."""
 
-def zd_vector2(chi):
-    return (1., (chi - 1.)/(3. * chi + 2.), 1., 2.*(chi - 1.)/(3. * chi + 2.))
+    name = 'Generous Tit-For-Tat'
 
+    def __init__(self, ep=0.05):
+        four_vector = [1-ep, ep, 1-ep, ep]
+        super(self.__class__, self).__init__(four_vector)
 
-#def press_dyson_determinant():
-    #pass
+class StochasticCooperator(MemoryOnePlayer):
+    """Stochastic Cooperator, http://www.nature.com/ncomms/2013/130801/ncomms3193/full/ncomms3193.html."""
 
+    name = 'Stochastic Cooperator'
 
-#def exact_stationary(p,q):
-    #"""Using the Press and Dyson Formula where p and q are the conditional probability vectors."""
-    #s = []
-    #c1 = [-1 + p[0]*q[0], p[1]*q[2], p[2]*q[1], p[3]*q[3]]
-    #c2 = [-1 + p[0], -1 + p[1], p[2], p[3]]
-    #c3 = [-1 + q[0], q[2], -1 + q[1], q[3]]
-    
-    #for i in range(4):
-        #f = numpy.zeros(4)
-        #f[i] = 1
-        #m = numpy.matrix([c1,c2,c3,f])
-        #d = linalg.det(m)
-        #s.append(d)
-    ## normalize
-    #n = sum(s)
-    #if n == 0.:
-        #raise ValueError('exact_stationary() cannot handle zeros')
-    #s = numpy.array(s) / n
-    #return s
-
+    def __init__(self):
+        four_vector = (0.935, 0.229, 0.266, 0.42)
+        super(self.__class__, self).__init__(four_vector)
 
 class ZDChi(MemoryOnePlayer):
-    """An Extortionate Zero Determinant Strategy."""
+    """An Extortionate Zero Determinant Strategy. See the Press and Dyson paper for the original formula."""
 
     name = 'ZDChi'
 
@@ -107,6 +119,10 @@ class ZDChi(MemoryOnePlayer):
         super(self.__class__, self).__init__(four_vector)
 
 
+def zd_vector2(chi):
+    """Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R). See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""
+    return (1., (chi - 1.)/(3. * chi + 2.), 1., 2.*(chi - 1.)/(3. * chi + 2.))
+
 class ZDGTFT2(MemoryOnePlayer):
     """A Generous Zero Determinant Strategy."""
 
@@ -115,37 +131,3 @@ class ZDGTFT2(MemoryOnePlayer):
     def __init__(self):
         four_vector = zd_vector2(2.)
         super(self.__class__, self).__init__(four_vector)
-
-class GTFT2(MemoryOnePlayer):
-    """Generous Tit-For-Tat Strategy."""
-
-    name = 'ZDGTFT2'
-
-    def __init__(self, ep=0.02):
-        four_vector = [1-ep, ep, 1-ep, ep]
-        super(self.__class__, self).__init__(four_vector)
-
-class StochasticCooperator(MemoryOnePlayer):
-    """Stochastic Cooperator, http://www.nature.com/ncomms/2013/130801/ncomms3193/full/ncomms3193.html."""
-
-    name = 'Stochastic Cooperator'
-
-    def __init__(self):
-        four_vector = (0.935, 0.229, 0.266, 0.42)
-        super(self.__class__, self).__init__(four_vector)
-
-
-class SuspiciousTFT(MemoryOnePlayer):
-    """Suspicious Tit-For-Tat Strategy, initial move is D rather than C."""
-
-    name = 'Suspicious TFT'
-
-    def __init__(self):
-        four_vector = (1.,0.,1.,0.)
-        super(self.__class__, self).__init__(four_vector, initial='D')
-
-# tft = (1.,0.,1.,0.)
-# wsls = (1.,0.,0.,1.)
-# alld = (0.,0.,0.,0.)
-# allc = (1.,1.,1.,1.)
-
