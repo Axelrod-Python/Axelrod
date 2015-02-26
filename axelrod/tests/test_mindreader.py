@@ -67,11 +67,17 @@ class TestMindReader(unittest.TestCase):
         P2.strategy(P1)
 
     def test_stochastic(self):
-        """ Tests to see if the strategy is stochastic"""
+        """Tests to see if the strategy is stochastic"""
         self.assertFalse(axelrod.MindReader().stochastic)
 
+    def test_init(self):
+        """Tests for init method """
+        P1 = axelrod.MindReader()
+        self.assertEqual(P1.history, [])
+        self.assertEqual(P1.score, 0)
+
     def test_reset(self):
-        """ Tests to see if the class is reset correctly """
+        """Tests to see if the class is reset correctly """
         P1 = axelrod.MindReader()
         P1.history = ['C', 'D', 'D', 'D']
         P1.reset()
