@@ -24,7 +24,7 @@ def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exc
         cheating_strategies = [strategy() for strategy in axelrod.cheating_strategies]
         graphs_to_plot['cheating_results.png'] = cheating_strategies
     if not exclude_all:
-        all_strategies = strategies + cheating_strategies
+        all_strategies = [strategy() for strategy in axelrod.strategies] + [strategy() for strategy in axelrod.cheating_strategies]
         graphs_to_plot['all_results'] = all_strategies
 
     for plot in graphs_to_plot:
