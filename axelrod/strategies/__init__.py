@@ -17,7 +17,7 @@ from forgetfulgrudger import *
 from oncebitten import *
 from golden import *
 from retaliate import *
-from memoryone import WinStayLoseShift, ZDChi, ZDGTFT2, SuspiciousTFT, StochasticCooperator
+from memoryone import WinStayLoseShift, ZDChi, ZDGTFT2, SuspiciousTFT, StochasticCooperator, GTFT
 
 
 strategies = [
@@ -56,6 +56,7 @@ strategies = [
         ZDGTFT2,
         SuspiciousTFT,
         StochasticCooperator,
+        GTFT,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
