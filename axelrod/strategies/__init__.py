@@ -65,5 +65,6 @@ cheating_strategies = [
         GellerCooperator,
         GellerDefector,
         MindControl,
+        MindWarp,
         MindReader,
         ]
