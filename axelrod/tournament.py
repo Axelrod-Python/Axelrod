@@ -114,7 +114,10 @@ class Player(object):
         an error if no strategy method is defined (which are defined through
         class inheritance).
         """
-        s1, s2 = self.strategy(MockPlayer(opponent)), opponent.strategy(MockPlayer(self))
+        if not (s1 in axelrod.cheating_strategies or s2 in axelrod.cheating_strategies):    
+            s1, s2 = self.strategy(MockPlayer(opponent)), opponent.strategy(MockPlayer(self))
+        else:
+            s1, s2 = self.strategy(opponent), opponent.strategy(self)
         self.history.append(s1)
         opponent.history.append(s2)
 
