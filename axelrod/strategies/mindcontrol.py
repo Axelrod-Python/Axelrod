@@ -1,16 +1,12 @@
 from axelrod import Player, Axelrod
 
 class MindControl(Player):
-    """
-    A player that changes the opponents strategy to cooperate
-    """
+    """ A player that changes the opponents strategy to cooperate """
     
     name = 'Mind Control'
 
     def strategy(self, opponent):
-        """
-        Simulates the next 50 rounds and decides whether to cooperate or defect
-        """
+        """Alters the opponents strategy method """
         
         opponent.strategy = lambda opponent: 'C'
 
