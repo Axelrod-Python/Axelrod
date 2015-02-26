@@ -7,6 +7,14 @@ Recreate Axelrod's tournament
 import inspect
 import itertools
 
+def game_matrix(R=2, S=0, T=5, P=4):
+    scores = {
+        ('C', 'C'): (R, R),
+        ('D', 'D'): (P, P),
+        ('C', 'D'): (T, S),
+        ('D', 'C'): (S, T),
+    }
+    return scores
 
 class Axelrod:
     """
@@ -80,12 +88,7 @@ class Axelrod:
         - C vs D => C gets 5 and D gets 0
         """
 
-        scores = {
-            ('C', 'C'): (2, 2),
-            ('D', 'D'): (4, 4),
-            ('C', 'D'): (5, 0),
-            ('D', 'C'): (0, 5),
-        }
+        scores = game_matrix()
         s1, s2 = 0, 0
 
         for pair in zip(p1.history, p2.history):
