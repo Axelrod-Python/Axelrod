@@ -1,3 +1,4 @@
+import random
 from axelrod import Player
 
 class OnceBitten(Player):
@@ -17,6 +18,7 @@ class OnceBitten(Player):
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0
+        self.stochastic = False
 
     def strategy(self, opponent):
         """
@@ -44,3 +46,54 @@ class OnceBitten(Player):
         self.history = []
         self.grudged = False
         self.grudge_memory = 0
+
+class FoolMeOnce(Player):
+    """
+    Forgives one D then retaliates forever on a second D.
+    """
+
+    name = 'Fool Me Once'
+
+    def __init__(self):
+        """
+        Initialised the player
+        """
+        super(FoolMeOnce, self).__init__()
+        self.D_count = 0
+        self._initial = 'C'
+        self.stochastic = False
+
+    def strategy(self, opponent):
+        if not opponent.history:
+            return self._initial
+        if opponent.history[-1] == 'D':
+            self.D_count += 1
+        if self.D_count > 1:
+            return 'D'
+        return 'C'
+
+class ForgetfulFoolMeOnce(Player):
+    """
+    Forgives one D then retaliates forever on a second D. Sometimes randomly forgets the defection count.
+    """
+
+    name = 'Fool Me Once'
+
+    def __init__(self, forget_probability=0.1):
+        super(ForgetfulFoolMeOnce, self).__init__()
+        self.D_count = 0
+        self._initial = 'C'
+        self.forget_probability = forget_probability
+        self.stochastic = True
+
+    def strategy(self, opponent):
+        r = random.random()
+        if not opponent.history:
+            return self._initial
+        if opponent.history[-1] == 'D':
+            self.D_count += 1
+        if r < self.forget_probability:
+            self.D_count = 0
+        if self.D_count > 1:
+            return 'D'
+        return 'C'

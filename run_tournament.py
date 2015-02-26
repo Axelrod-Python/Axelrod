@@ -10,7 +10,7 @@ import axelrod
 import matplotlib.pyplot as plt
 from numpy import median
 
-def run_tournament(turns=200, repetitions=50):
+def run_tournament(turns=200, repetitions=100):
 
     strategies = [strategy() for strategy in axelrod.strategies]
     cheating_strategies = [strategy() for strategy in axelrod.cheating_strategies]

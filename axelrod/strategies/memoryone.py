@@ -105,7 +105,7 @@ class StochasticWSLS(MemoryOnePlayer):
 
     name = 'Stochastic WSLS'
 
-    def __init__(self, ep=0.02):
+    def __init__(self, ep=0.05):
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
 
