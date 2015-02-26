@@ -14,6 +14,9 @@ from inverse import *
 from appeaser import *
 from forgiver import *
 from forgetfulgrudger import *
+from punisher import *
+from inversepunisher import *
+from oppositegrudger import *
 from oncebitten import *
 from golden import *
 from retaliate import *
@@ -46,6 +49,9 @@ strategies = [
         HesitantQLearner,
         CautiousQLearner,
         ForgetfulGrudger,
+        Punisher,
+        InversePunisher,
+        OppositeGrudger,
         OnceBitten,
         Golden,
         Retaliate,
