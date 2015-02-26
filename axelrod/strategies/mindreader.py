@@ -1,5 +1,6 @@
 from axelrod import Player, Axelrod
 import copy
+import inspect
 
 class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
@@ -8,6 +9,13 @@ class MindReader(Player):
 
     def strategy(self, opponent):
         """Simulates the next 50 rounds and decides whether to cooperate or defect."""
+        
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        calname = calframe[1][3]
+        
+        if calname == 'strategy':
+            return 'D'
 
         best_strategy = self.look_ahead(opponent)
 
