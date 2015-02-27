@@ -77,7 +77,7 @@ class ForgetfulFoolMeOnce(Player):
     Forgives one D then retaliates forever on a second D. Sometimes randomly forgets the defection count.
     """
 
-    name = 'Fool Me Once'
+    name = 'Forgetful Fool Me Once'
 
     def __init__(self, forget_probability=0.1):
         super(ForgetfulFoolMeOnce, self).__init__()
