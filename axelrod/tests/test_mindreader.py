@@ -65,6 +65,7 @@ class TestMindReader(unittest.TestCase):
         P2 = axelrod.Geller()
         P1.strategy(P2)
         P2.strategy(P1)
+        
     def tests_protected_mind_reader(self):
         """Ensures that no other player can alter its strategy """
 
