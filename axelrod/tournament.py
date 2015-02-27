@@ -2,6 +2,7 @@
 
 import inspect
 import itertools
+import numpy
 
 
 class Game:
@@ -39,7 +40,10 @@ class Axelrod:
     """
     def __init__(self, *args):
         """Initiate a tournament of players."""
+
         self.players = list(args)
+        self.nplayers = len(self.players)
+
         self.deterministic_cache = {}
         self.game = Game()
 
@@ -50,37 +54,47 @@ class Axelrod:
         will always be the same. There are many possible keys to cache by, but perhaps
         the most versatile is a tuple with the classes of both players.
         """
-        for p1, p2 in itertools.combinations(self.players, 2):
-            cl1 = p1.__class__
-            cl2 = p2.__class__
-            key = (cl1, cl2)
-            if p1.stochastic or p2.stochastic or key not in self.deterministic_cache:
-                turn = 0
-                p1.reset()
-                p2.reset()
-                while turn < turns:
-                    turn += 1
-                    p1.play(p2)
-                scores = self.calculate_scores(p1, p2)
-                if not (p1.stochastic or p2.stochastic):
-                    self.deterministic_cache[key] = scores
-            else:
-                scores = self.deterministic_cache[key]
-            p1.score += scores[0]
-            p2.score += scores[1]
+
+        for ip1 in range(self.nplayers):
+            for ip2 in range(ip1 + 1, self.nplayers):
+
+                p1 = self.players[ip1]
+                p2 = self.players[ip2]
+
+                cl1 = p1.__class__
+                cl2 = p2.__class__
+                key = (cl1, cl2)
+                if p1.stochastic or p2.stochastic or key not in self.deterministic_cache:
+                    turn = 0
+                    p1.reset()
+                    p2.reset()
+                    while turn < turns:
+                        turn += 1
+                        p1.play(p2)
+                    scores = self.calculate_scores(p1, p2)
+                    if not (p1.stochastic or p2.stochastic):
+                        self.deterministic_cache[key] = scores
+                else:
+                    scores = self.deterministic_cache[key]
+
+                self.payoffs[ip1, ip2, self.repetition] = scores[0]
+                self.payoffs[ip2, ip1, self.repetition] = scores[1]
 
     def tournament(self, turns=200, repetitions=10):
         """Runs repetitions of the round robin (this is mainly to handle stochastic strategies).
 
         Returns a dictionary containing the scores for every repetition.
         """
-        dic = {player:[] for player in self.players}
-        for repetition in range(repetitions):
+
+        # Initiate with zeros the payoff matrix, which contains the scores between each
+        # pair of players and for every repitition in the tournament.
+        self.payoffs = numpy.zeros((self.nplayers, self.nplayers, repetitions))
+
+        for self.repetition in range(repetitions):
             self.round_robin(turns=turns)
-            for player in self.players:
-                dic[player].append(player.score)  # Record score
-                player.score = 0  # Reset score
-        return dic
+
+        # Return total score for each player, which is used for plotting.
+        return self.payoffs.sum(axis=1)
 
     def calculate_scores(self, p1, p2):
         """Calculates the score for two players based their history and on following:
