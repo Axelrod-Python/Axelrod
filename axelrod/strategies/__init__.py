@@ -57,6 +57,7 @@ strategies = [
         OnceBitten,
         Golden,
         Retaliate,
+        RandomRetaliate,
         LimitedRetaliate,
         RandomLimitedRetaliate,
         Pi,
