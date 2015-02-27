@@ -53,12 +53,24 @@ class TestLimitedRetaliate(unittest.TestCase):
         P1.history = ['C', 'C', 'C', 'C']
         P2.history = ['C', 'C', 'C', 'C']
         self.assertEqual(P1.strategy(P2), 'C')
+        self.assertFalse(P1.retaliating)
+
         P1.history = ['C', 'C', 'C', 'C', 'D']
         P2.history = ['C', 'C', 'C', 'D', 'C']
         self.assertEqual(P1.strategy(P2), 'D')
+        self.assertTrue(P1.retaliating)
+
         P1.history = ['C', 'C', 'C', 'C', 'C', 'C']
         P2.history = ['C', 'C', 'C', 'C', 'C', 'D']
         self.assertEqual(P1.strategy(P2), 'D')
+        self.assertTrue(P1.retaliating)
+
+        P1.history = ['C', 'C', 'C', 'C', 'D']
+        P2.history = ['C', 'C', 'C', 'D', 'C']
+        P1.retaliation_count = 20
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertFalse(P1.retaliating)
+
 
     def test_representation(self):
         P1 = axelrod.LimitedRetaliate()
