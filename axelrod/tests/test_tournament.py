@@ -1,9 +1,12 @@
-"""
-Tests for the main module.
-"""
-import unittest
-import axelrod
+"""Tests for the main module."""
+
 import random
+import unittest
+
+import axelrod
+
+import numpy
+
 
 class TestInitialisation(unittest.TestCase):
 
@@ -27,8 +30,9 @@ class TestRoundRobin(unittest.TestCase):
         P1 = axelrod.Defector()
         P2 = axelrod.Cooperator()
         tournament = axelrod.Axelrod(P1, P2)
-        tournament.round_robin(turns=10)
-        self.assertEqual([(str(player), player.score) for player in sorted(tournament.players, key=lambda x: x.score)], [('Defector', 0), ('Cooperator', 50)])
+        payoffs = tournament.round_robin(turns=10)
+        scores = payoffs.sum(axis=1)
+        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Defector', 0), ('Cooperator', 50)])
 
     def test_round_robin_defector_v_titfortat(self):
         """
@@ -37,8 +41,9 @@ class TestRoundRobin(unittest.TestCase):
         P1 = axelrod.Defector()
         P2 = axelrod.TitForTat()
         tournament = axelrod.Axelrod(P1, P2)
-        tournament.round_robin(turns=10)
-        self.assertEqual([(str(player), player.score) for player in sorted(tournament.players, key=lambda x: x.score)], [('Defector', 36), ('Tit For Tat', 41)])
+        payoffs = tournament.round_robin(turns=10)
+        scores = payoffs.sum(axis=1)
+        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Defector', 36), ('Tit For Tat', 41)])
 
     def test_round_robin_cooperator_v_titfortat(self):
         """
@@ -47,8 +52,9 @@ class TestRoundRobin(unittest.TestCase):
         P1 = axelrod.Cooperator()
         P2 = axelrod.TitForTat()
         tournament = axelrod.Axelrod(P1, P2)
-        tournament.round_robin(turns=10)
-        self.assertEqual([(str(player), player.score) for player in sorted(tournament.players, key=lambda x: x.score)], [('Cooperator', 20), ('Tit For Tat', 20)])
+        payoff = tournament.round_robin(turns=10)
+        scores = payoff.sum(axis=1)
+        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Cooperator', 20), ('Tit For Tat', 20)])
 
     def test_round_robin_cooperator_v_titfortat_v_defector(self):
         """
@@ -58,8 +64,9 @@ class TestRoundRobin(unittest.TestCase):
         P2 = axelrod.TitForTat()
         P3 = axelrod.Defector()
         tournament = axelrod.Axelrod(P1, P2, P3)
-        tournament.round_robin(turns=10)
-        self.assertEqual([(str(player), player.score) for player in sorted(tournament.players, key=lambda x: x.score)], [('Defector', 36), ('Tit For Tat', 61), ('Cooperator', 70)])
+        payoff = tournament.round_robin(turns=10)
+        scores = payoff.sum(axis=1)
+        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Defector', 36), ('Tit For Tat', 61), ('Cooperator', 70)])
 
     def test_round_robin_cooperator_v_titfortat_v_defector_v_grudger(self):
         """
@@ -70,8 +77,9 @@ class TestRoundRobin(unittest.TestCase):
         P3 = axelrod.Defector()
         P4 = axelrod.Grudger()
         tournament = axelrod.Axelrod(P1, P2, P3, P4)
-        tournament.round_robin(turns=10)
-        self.assertEqual([(str(player), player.score) for player in sorted(tournament.players, key=lambda x: x.score)], [('Defector', 72), ('Tit For Tat', 81), ('Grudger', 81), ('Cooperator', 90)])
+        payoff = tournament.round_robin(turns=10)
+        scores = payoff.sum(axis=1)
+        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Defector', 72), ('Tit For Tat', 81), ('Grudger', 81), ('Cooperator', 90)])
 
     def test_round_robin_cooperator_v_titfortat_v_defector_v_grudger_v_go_by_majority(self):
         """
@@ -83,8 +91,9 @@ class TestRoundRobin(unittest.TestCase):
         P4 = axelrod.Grudger()
         P5 = axelrod.GoByMajority()
         tournament = axelrod.Axelrod(P1, P2, P3, P4, P5)
-        tournament.round_robin(turns=10)
-        self.assertEqual([(str(player), player.score) for player in sorted(tournament.players, key=lambda x: x.score)], [('Tit For Tat', 101), ('Grudger', 101), ('Go By Majority', 101), ('Defector', 108), ('Cooperator', 110)])
+        payoff = tournament.round_robin(turns=10)
+        scores = payoff.sum(axis=1)
+        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Tit For Tat', 101), ('Grudger', 101), ('Go By Majority', 101), ('Defector', 108), ('Cooperator', 110)])
 
 class Tournament(unittest.TestCase):
 
@@ -95,27 +104,33 @@ class Tournament(unittest.TestCase):
         strategies = [strategy() for strategy in axelrod.strategies]
         tournament = axelrod.Axelrod(*strategies)
         output_of_tournament = tournament.tournament(turns=500, repetitions=2)
-        self.assertEqual(type(output_of_tournament), dict)
+        self.assertEqual(type(output_of_tournament), numpy.ndarray)
         self.assertEqual(len(output_of_tournament), len(strategies))
 
 
     def test_tournament(self):
-        """
-        Test tournament
-        """
+        """Test tournament."""
+
+        outcome = [
+            ('Tit For Tat', [2001, 2001, 2001, 2001, 2001]),
+            ('Cooperator', [2200, 2200, 2200, 2200, 2200]),
+            ('Defector', [2388, 2388, 2388, 2388, 2388]),
+            ('Grudger', [2001, 2001, 2001, 2001, 2001]),
+            ('Go By Majority', [2001, 2001, 2001, 2001, 2001]),
+        ]
+        outcome.sort()
+
         P1 = axelrod.Cooperator()
         P2 = axelrod.TitForTat()
         P3 = axelrod.Defector()
         P4 = axelrod.Grudger()
         P5 = axelrod.GoByMajority()
         tournament = axelrod.Axelrod(P1, P2, P3, P4, P5)
+        names = [str(p) for p in tournament.players]
         results = tournament.tournament(turns=200, repetitions=5)
-        self.assertEqual(sorted([(str(player), results[player]) for player in sorted(results.keys())]), sorted([
-       ('Tit For Tat', [2001, 2001, 2001, 2001, 2001]),
-       ('Cooperator', [2200, 2200, 2200, 2200, 2200]),
-       ('Defector', [2388, 2388, 2388, 2388, 2388]),
-       ('Grudger', [2001, 2001, 2001, 2001, 2001]),
-       ('Go By Majority', [2001, 2001, 2001, 2001, 2001])]))
+        scores = results.sum(axis=1).tolist()
+
+        self.assertEqual(sorted(zip(names, scores)), outcome)
 
     def test_calculate_score_for_mix(self):
         """
@@ -157,7 +172,7 @@ class TestPlayer(unittest.TestCase):
         Test that can initiate a player
         """
         P1 = axelrod.Player()
-        self.assertEqual((P1.history, P1.score), ([], 0))
+        self.assertEqual(P1.history, [])
 
     def test_play(self):
         """

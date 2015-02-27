@@ -1,12 +1,12 @@
 """Recreate Axelrod's tournament."""
 
 import inspect
-import itertools
 import numpy
 
 
-class Game:
-    """A class to hold the game matrix and to score a game accordingly"""
+class Game(object):
+    """A class to hold the game matrix and to score a game accordingly."""
+
     def __init__(self, r=2, s=0, t=5, p=4):
         self.scores = {
             ('C', 'C'): (r, r),
@@ -16,7 +16,8 @@ class Game:
         }
 
     def score(self, pair):
-        """
+        """Return the appropriate score for decision pair.
+
         Returns the appropriate score (as a tuple) from the scores dictionary
         for a given pair of plays (passed in as a tuple).
         e.g. score(('C', 'C')) returns (2, 2)
@@ -24,7 +25,7 @@ class Game:
         return self.scores[pair]
 
 
-class Axelrod:
+class Axelrod(object):
     """A class for an iterated prisoner's dilemma.
 
     Take a list of players (see the Player class):
@@ -38,14 +39,33 @@ class Axelrod:
         Defector 0
         Cooperator 50
     """
+
     def __init__(self, *args):
         """Initiate a tournament of players."""
 
         self.players = list(args)
         self.nplayers = len(self.players)
+        self.names = [str(p) for p in self.players]
 
         self.deterministic_cache = {}
         self.game = Game()
+
+    def tournament(self, turns=200, repetitions=10):
+        """Runs repetitions of a round robin tournament.
+
+        The repetitions are mainly to handle stochastic strategies, so a cache
+        is used for pairs of deterministic strategies (result always the same).
+
+        Return the total payoff matrices for each repetition.
+        """
+
+        shape = (self.nplayers, self.nplayers, repetitions)
+        payoffs = numpy.zeros(shape, dtype='int')
+
+        for i in range(repetitions):
+            payoffs[:, :, i] = self.round_robin(turns=turns)
+
+        return payoffs
 
     def round_robin(self, turns=200):
         """Plays a round robin where each match lasts turns.
@@ -53,8 +73,11 @@ class Axelrod:
         We can cache scores for paris of deterministic strategies, since the outcome
         will always be the same. There are many possible keys to cache by, but perhaps
         the most versatile is a tuple with the classes of both players.
+
+        Returns the total payoff matrix.
         """
 
+        payoffs = numpy.zeros((self.nplayers, self.nplayers))
         for ip1 in range(self.nplayers):
             for ip2 in range(ip1 + 1, self.nplayers):
 
@@ -77,24 +100,10 @@ class Axelrod:
                 else:
                     scores = self.deterministic_cache[key]
 
-                self.payoffs[ip1, ip2, self.repetition] = scores[0]
-                self.payoffs[ip2, ip1, self.repetition] = scores[1]
+                payoffs[ip1, ip2] = scores[0]
+                payoffs[ip2, ip1] = scores[1]
 
-    def tournament(self, turns=200, repetitions=10):
-        """Runs repetitions of the round robin (this is mainly to handle stochastic strategies).
-
-        Returns a dictionary containing the scores for every repetition.
-        """
-
-        # Initiate with zeros the payoff matrix, which contains the scores between each
-        # pair of players and for every repitition in the tournament.
-        self.payoffs = numpy.zeros((self.nplayers, self.nplayers, repetitions), dtype='int')
-
-        for self.repetition in range(repetitions):
-            self.round_robin(turns=turns)
-
-        # Return total score for each player, which is used for plotting.
-        return self.payoffs.sum(axis=1)
+        return payoffs
 
     def calculate_scores(self, p1, p2):
         """Calculates the score for two players based their history and on following:
@@ -123,7 +132,6 @@ class Player(object):
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
-        self.score = 0
         self.stochastic = "random" in inspect.getsource(self.__class__)
 
     def play(self, opponent):
