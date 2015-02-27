@@ -57,7 +57,6 @@ strategies = [
         OnceBitten,
         Golden,
         Retaliate,
-        LimitedRetaliate,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
