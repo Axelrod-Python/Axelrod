@@ -6,12 +6,13 @@ import itertools
 
 class Game:
     """A class to hold the game matrix and to score a game accordingly"""
-    scores = {
-        ('C', 'C'): (2, 2),
-        ('D', 'D'): (4, 4),
-        ('C', 'D'): (5, 0),
-        ('D', 'C'): (0, 5),
-    }
+    def __init__(self, r=2, s=0, t=5, p=4):
+        self.scores = {
+            ('C', 'C'): (r, r),
+            ('D', 'D'): (p, p),
+            ('C', 'D'): (t, s),
+            ('D', 'C'): (s, t),
+        }
 
     def score(self, p1, p2):
         return self.scores[p1, p2]
