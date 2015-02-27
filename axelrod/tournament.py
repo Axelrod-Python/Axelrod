@@ -4,6 +4,25 @@ import inspect
 import itertools
 
 
+class Game:
+    """A class to hold the game matrix and to score a game accordingly"""
+    def __init__(self, r=2, s=0, t=5, p=4):
+        self.scores = {
+            ('C', 'C'): (r, r),
+            ('D', 'D'): (p, p),
+            ('C', 'D'): (t, s),
+            ('D', 'C'): (s, t),
+        }
+
+    def score(self, pair):
+        """
+        Returns the appropriate score (as a tuple) from the scores dictionary
+        for a given pair of plays (passed in as a tuple).
+        e.g. score(('C', 'C')) returns (2, 2)
+        """
+        return self.scores[pair]
+
+
 class Axelrod:
     """A class for an iterated prisoner's dilemma.
 
@@ -22,6 +41,7 @@ class Axelrod:
         """Initiate a tournament of players."""
         self.players = list(args)
         self.deterministic_cache = {}
+        self.game = Game()
 
     def round_robin(self, turns=200):
         """Plays a round robin where each match lasts turns.
@@ -69,17 +89,10 @@ class Axelrod:
         - D vs D both get 4
         - C vs D => C gets 5 and D gets 0
         """
-
-        scores = {
-            ('C', 'C'): (2, 2),
-            ('D', 'D'): (4, 4),
-            ('C', 'D'): (5, 0),
-            ('D', 'C'): (0, 5),
-        }
         s1, s2 = 0, 0
 
         for pair in zip(p1.history, p2.history):
-            score = scores[pair]
+            score = self.game.score(pair)
             s1 += score[0]
             s2 += score[1]
         return s1, s2

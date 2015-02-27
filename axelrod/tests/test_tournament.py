@@ -168,5 +168,15 @@ class TestPlayer(unittest.TestCase):
         self.assertEquals(P2.play(P1), None)
 
 
+class TestGame(unittest.TestCase):
+
+    def test_score(self):
+        g = axelrod.Game()
+        self.assertEquals(g.score(('C', 'C')), (2, 2))
+        self.assertEquals(g.score(('D', 'D')), (4, 4))
+        self.assertEquals(g.score(('C', 'D')), (5, 0))
+        self.assertEquals(g.score(('D', 'C')), (0, 5))
+
+
 if __name__ == '__main__':
     unittest.main()
