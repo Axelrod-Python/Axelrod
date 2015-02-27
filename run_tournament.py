@@ -8,7 +8,11 @@ from __future__ import division
 import argparse
 import time
 
+import numpy
+
+
 def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exclude_all):
+    """Main function for running Axelrod tournaments."""
 
     import axelrod
     import matplotlib.pyplot as plt
@@ -27,7 +31,7 @@ def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exc
         graphs_to_plot['cheating_results.png'] = cheating_strategies
     if not exclude_all:
         all_strategies = [strategy() for strategy in axelrod.strategies] + [strategy() for strategy in axelrod.cheating_strategies]
-        graphs_to_plot['all_results'] = all_strategies
+        graphs_to_plot['all_results.png'] = all_strategies
 
     for plot in graphs_to_plot:
         if len(graphs_to_plot[plot]) != 1:
@@ -41,13 +45,17 @@ def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exc
             ranking = sorted(range(axelrod_tournament.nplayers), key=lambda i: median(results[i]))
             rnames = [str(axelrod_tournament.players[i]) for i in ranking]
 
+            # Save the results from this tournament to a CSV file.
+            fname = plot.replace('.png', '.csv')
+            hdr = ", ".join(rnames)
+            numpy.savetxt(fname, results[ranking].transpose(), delimiter=", ", header=hdr, comments='', fmt='%i')
+
+            # Build and save the plot for this tournament.
             plt.clf()
             plt.boxplot([[score / (turns * (len(ranking) - 1)) for score in results[i]] for i in ranking])
             plt.xticks(range(1, len(rnames) + 2), rnames, rotation=90)
-
             tfmt = 'Mean score per stage game over {} rounds repeated {} times ({} strategies)'
             plt.title(tfmt.format(turns, repetitions, len(ranking)))
-
             plt.savefig(plot, bbox_inches='tight')
 
 if __name__ == "__main__":
