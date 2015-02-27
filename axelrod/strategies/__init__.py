@@ -59,6 +59,7 @@ strategies = [
         Retaliate,
         Pi,
         e,
+        LimitedRetaliate,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
