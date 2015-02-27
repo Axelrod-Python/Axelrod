@@ -24,13 +24,16 @@ class LimitedRetaliate(Player):
     10 times more often that it has lost or it reaches the retaliation limit (20 defections).
     """
     name = 'Limited Retaliate'
+    retaliation_limit = 20
+    retaliating = False
+    retaliation_count = 0
 
-    def __init__(self):
-        """Override the Player init method so we can hold some additional variables"""
-        super(LimitedRetaliate, self).__init__()
-        self.retaliation_limit = 20
-        self.retaliating = False
-        self.retaliation_count = 0
+    # def __init__(self):
+    #     """Override the Player init method so we can hold some additional variables"""
+    #     super(LimitedRetaliate, self).__init__()
+    #     self.retaliation_limit = 20
+    #     self.retaliating = False
+    #     self.retaliation_count = 0
 
     def strategy(self, opponent):
         history = zip(self.history, opponent.history)
