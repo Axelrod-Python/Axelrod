@@ -29,3 +29,12 @@ class MindWarp(Player):
     def strategy(self, opponent):
         opponent.strategy = lambda opponent: 'C'
         return 'D'
+
+class MindBend(MindWarp):
+    """A player that changes the opponent's strategy by modifying the internal dictionary."""
+
+    name = 'Mind Bend'
+
+    def strategy(self, opponent):
+        opponent.__dict__['strategy'] = lambda opponent: 'C'
+        return 'D'
