@@ -41,7 +41,6 @@ class TestMindController(unittest.TestCase):
 
         P1 = axelrod.MindController()
         self.assertEqual(P1.history, [])
-        self.assertEqual(P1.score, 0)
 
     def test_reset(self):
         """ test for the reset method """
