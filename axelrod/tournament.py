@@ -14,6 +14,10 @@ class Game:
             ('D', 'C'): (s, t),
         }
 
+    """
+    Returns the appropriate score from the scores dictionary for a given
+    pair of plays.
+    """
     def score(self, p1, p2):
         return self.scores[p1, p2]
 
