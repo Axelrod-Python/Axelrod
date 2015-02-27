@@ -5,6 +5,7 @@ import itertools
 
 
 class Game:
+    """A class to hold the game matrix and to score a game accordingly"""
     scores = {
         ('C', 'C'): (2, 2),
         ('D', 'D'): (4, 4),
