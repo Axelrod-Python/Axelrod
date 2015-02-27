@@ -28,13 +28,6 @@ class LimitedRetaliate(Player):
     retaliating = False
     retaliation_count = 0
 
-    # def __init__(self):
-    #     """Override the Player init method so we can hold some additional variables"""
-    #     super(LimitedRetaliate, self).__init__()
-    #     self.retaliation_limit = 20
-    #     self.retaliating = False
-    #     self.retaliation_count = 0
-
     def strategy(self, opponent):
         history = zip(self.history, opponent.history)
         if history.count(('C', 'D')) > history.count(('D', 'C')) * 0.1:
