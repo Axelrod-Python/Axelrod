@@ -4,8 +4,8 @@ from axelrod import Player
 class Retaliate(Player):
     """
     A player that co-operates unless the opponent defects and wins.
-    It will then retaliate by defecting and won't stop until it has beaten the opponent
-    10 times more often than it has lost.
+    It will then retaliate by defecting and won't stop until it has beaten
+    the opponent 10 times more often than it has lost.
     """
     name = "Retaliate"
 
@@ -20,8 +20,9 @@ class Retaliate(Player):
 class LimitedRetaliate(Player):
     """
     A player that co-operates unless the opponent defects and wins.
-    It will then retaliate by defecting. It stops when either, it has beaten the opponent
-    10 times more often that it has lost or it reaches the retaliation limit (20 defections).
+    It will then retaliate by defecting. It stops when either, it has beaten
+    the opponent 10 times more often that it has lost or it reaches the
+    retaliation limit (20 defections).
     """
     name = 'Limited Retaliate'
     retaliation_limit = 20
