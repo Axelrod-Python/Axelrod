@@ -128,3 +128,4 @@ All other contributions are of course welcome: if you can improve this in any wa
 - [jomuel](https://github.com/jomuel)
 - [meatballs](https://github.com/meatballs)
 - [hollymarissa](https://github.com/hollymarissa)
+- [timothyf1](https://github.com/timothyf1)
