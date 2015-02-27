@@ -58,6 +58,7 @@ strategies = [
         Golden,
         Retaliate,
         LimitedRetaliate,
+        RandomLimitedRetaliate,
         Pi,
         e,
         ]

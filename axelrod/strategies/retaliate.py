@@ -23,14 +23,21 @@ class LimitedRetaliate(Player):
     the opponent 10 times more often that it has lost or it reaches the
     retaliation limit (20 defections).
     """
-    name = 'Limited Retaliate'
     retaliation_limit = 20
+    retaliation_threshold = 0.1
     retaliating = False
     retaliation_count = 0
 
+    def __init__(self):
+        Player.__init__(self)
+        self.name = (
+            'Limited Retaliate (' +
+            str(self.retaliation_threshold) +
+            '/' + str(self.retaliation_limit) + ')')
+
     def strategy(self, opponent):
         history = zip(self.history, opponent.history)
-        if history.count(('C', 'D')) > history.count(('D', 'C')) * 0.1:
+        if history.count(('C', 'D')) > history.count(('D', 'C')) * self.retaliation_threshold:
             self.retaliating = True
         else:
             self.retaliating = False
@@ -47,6 +54,12 @@ class LimitedRetaliate(Player):
         return 'C'
 
     def reset(self):
-        super(LimitedRetaliate, self).reset()
+        Player.reset(self)
         self.retaliating = False
         self.retaliation_count = 0
+
+
+class RandomLimitedRetaliate(LimitedRetaliate):
+    import random
+    retaliation_limit = random.randint(10, 30)
+    retaliation_threshold = round(random.uniform(0.05, 0.15), 2)
