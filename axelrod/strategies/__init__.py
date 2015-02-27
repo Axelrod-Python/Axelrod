@@ -18,7 +18,7 @@ from punisher import *
 from inversepunisher import *
 from oppositegrudger import *
 from oncebitten import *
-from golden import *
+from mathematicalconstants import *
 from retaliate import *
 from mindcontrol import *
 from mindreader import *
@@ -57,6 +57,8 @@ strategies = [
         OnceBitten,
         Golden,
         Retaliate,
+        Pi,
+        e,
         ]
 
 #These are strategies that do not follow the rules of Axelrods tournement.
