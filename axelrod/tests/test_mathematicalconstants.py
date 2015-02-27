@@ -73,7 +73,7 @@ class TestPi(unittest.TestCase):
         P1 = axelrod.Pi()
         P2 = axelrod.Player()
         P1.history = ['C','C','C','C']
-        P2.history = ['D','D','D','D']
+        P2.history = ['C','C','D','D']
         self.assertEqual(P1.strategy(P2), 'C')
 
     def test_representation(self):
@@ -113,7 +113,7 @@ class e(unittest.TestCase):
         P1 = axelrod.e()
         P2 = axelrod.Player()
         P1.history = ['C','C','C','C']
-        P2.history = ['D','D','D','D']
+        P2.history = ['C','D','D','D']
         self.assertEqual(P1.strategy(P2), 'C')
 
     def test_representation(self):
