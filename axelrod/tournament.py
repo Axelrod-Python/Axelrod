@@ -4,6 +4,18 @@ import inspect
 import itertools
 
 
+class Game:
+    scores = {
+        ('C', 'C'): (2, 2),
+        ('D', 'D'): (4, 4),
+        ('C', 'D'): (5, 0),
+        ('D', 'C'): (0, 5),
+    }
+
+    def score(self, p1, p2):
+        return self.scores[p1, p2]
+
+
 class Axelrod:
     """A class for an iterated prisoner's dilemma.
 
