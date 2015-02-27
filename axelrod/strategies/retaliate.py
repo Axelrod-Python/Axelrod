@@ -6,14 +6,24 @@ class Retaliate(Player):
     A player starts by cooperating but will retaliate once the opponent
     has won more than 10 percent times the number of defections the player has.
     """
-    name = "Retaliate"
+    retaliation_threshold = 0.1
+
+    def __init__(self):
+        Player.__init__(self)
+        self.name = (
+            'Retaliate (' +
+            str(self.retaliation_threshold) + ')')
 
     def strategy(self, opponent):
         history = zip(self.history, opponent.history)
-        if history.count(('C', 'D')) > history.count(('D', 'C')) * 0.1:
+        if history.count(('C', 'D')) > history.count(('D', 'C')) * self.retaliation_threshold:
             return 'D'
-
         return 'C'
+
+
+class RandomRetaliate(Retaliate):
+    import random
+    retaliation_threshold = round(random.uniform(0.05, 0.15), 2)
 
 
 class LimitedRetaliate(Player):
