@@ -67,4 +67,5 @@ cheating_strategies = [
         MindControl,
         MindWarp,
         MindReader,
+        ProtectedMindReader,
         ]

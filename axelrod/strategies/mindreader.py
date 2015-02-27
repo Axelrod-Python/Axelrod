@@ -48,3 +48,17 @@ class MindReader(Player):
             opponent.history = copy.copy(dummy_history_opponent)
 
         return strategies[results.index(min(results))]
+
+class ProtectedMindReader(MindReader):
+    """A player that looks ahead at what the opponent will do and decides what to do.
+    It is also protected from mind control strategies"""
+
+    name = 'Protected Mind Reader'
+
+    def __setattr__(self, name, val):
+        """Stops any other strategy altering the methods of this class """
+
+        if name == 'strategy':
+            pass
+        else:
+            self.__dict__[name] = val

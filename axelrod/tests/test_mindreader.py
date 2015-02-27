@@ -65,6 +65,16 @@ class TestMindReader(unittest.TestCase):
         P2 = axelrod.Geller()
         P1.strategy(P2)
         P2.strategy(P1)
+        
+    def tests_protected_mind_reader(self):
+        """Ensures that no other player can alter its strategy """
+
+        P1 = axelrod.ProtectedMindReader()
+        P2 = axelrod.MindControl()
+        P3 = axelrod.Cooperator()
+        P2.strategy(P1)
+        self.assertEqual(P1.strategy(P3), 'D')
+        
 
     def test_stochastic(self):
         """Tests to see if the strategy is stochastic"""
