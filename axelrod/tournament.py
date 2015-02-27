@@ -81,17 +81,11 @@ class Axelrod:
         - D vs D both get 4
         - C vs D => C gets 5 and D gets 0
         """
-
-        scores = {
-            ('C', 'C'): (2, 2),
-            ('D', 'D'): (4, 4),
-            ('C', 'D'): (5, 0),
-            ('D', 'C'): (0, 5),
-        }
+        g = Game()
         s1, s2 = 0, 0
 
         for pair in zip(p1.history, p2.history):
-            score = scores[pair]
+            score = g.score(pair[0], pair[1])
             s1 += score[0]
             s2 += score[1]
         return s1, s2
