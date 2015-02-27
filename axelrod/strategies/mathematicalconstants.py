@@ -2,6 +2,7 @@ from axelrod import Player
 from math import sqrt, pi, e
 
 class CotoDeRatio(Player):
+    """The player will always aim to bring the ratio of co-operations to defections closer to the ratio as given in a sub class"""
 
     def strategy(self,opponent):
 
