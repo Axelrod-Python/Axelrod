@@ -1,6 +1,5 @@
-"""
-Test for the mindcontrol strategy
-"""
+"""Tests for mind controllers and other wizards."""
+
 import unittest
 import axelrod
 
@@ -51,6 +50,10 @@ class TestMindControl(unittest.TestCase):
         P1.reset()
         self.assertEqual(P1.history, [])
 
-class TestMindWarp(unittest.TestCase):
+class TestMindWarp(TestMindControl):
 
     name = "Mind Warp"
+
+class TestMindBend(TestMindControl):
+
+    name = "Mind Bend"

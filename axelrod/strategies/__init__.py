@@ -56,7 +56,7 @@ strategies = [
         OppositeGrudger,
         OnceBitten,
         Golden,
-        Retaliate,
+        Retaliate
         Pi,
         e,
         LimitedRetaliate,
@@ -69,6 +69,7 @@ cheating_strategies = [
         GellerDefector,
         MindControl,
         MindWarp,
+        MindBend,
         MindReader,
         ProtectedMindReader,
         ]
