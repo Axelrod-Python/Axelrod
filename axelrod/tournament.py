@@ -88,7 +88,7 @@ class Axelrod:
 
         # Initiate with zeros the payoff matrix, which contains the scores between each
         # pair of players and for every repitition in the tournament.
-        self.payoffs = numpy.zeros((self.nplayers, self.nplayers, repetitions))
+        self.payoffs = numpy.zeros((self.nplayers, self.nplayers, repetitions), dtype='int')
 
         for self.repetition in range(repetitions):
             self.round_robin(turns=turns)
