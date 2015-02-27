@@ -40,6 +40,7 @@ class Axelrod:
         """Initiate a tournament of players."""
         self.players = list(args)
         self.deterministic_cache = {}
+        self.game = Game()
 
     def round_robin(self, turns=200):
         """Plays a round robin where each match lasts turns.
@@ -87,11 +88,10 @@ class Axelrod:
         - D vs D both get 4
         - C vs D => C gets 5 and D gets 0
         """
-        g = Game()
         s1, s2 = 0, 0
 
         for pair in zip(p1.history, p2.history):
-            score = g.score(pair[0], pair[1])
+            score = self.game.score(pair[0], pair[1])
             s1 += score[0]
             s2 += score[1]
         return s1, s2
