@@ -1,9 +1,9 @@
 from axelrod import Player, Axelrod
 
-class MindControl(Player):
+class MindController(Player):
     """A player that changes the opponents strategy to cooperate."""
     
-    name = 'Mind Control'
+    name = 'Mind Controller'
 
     def strategy(self, opponent):
         """Alters the opponents strategy method to be a lambda function which always returns C
@@ -14,11 +14,10 @@ class MindControl(Player):
 
         return 'D' 
 
+class MindWarper(Player):
+    """A player that changes the opponent's strategy but blocks changes to it's own."""
 
-class MindWarp(Player):
-    """A player that changes the opponent's strategy but block changing it's own."""
-
-    name = 'Mind Warp'
+    name = 'Mind Warper'
 
     def __setattr__(self, name, val):
         if name == 'strategy':
@@ -30,10 +29,10 @@ class MindWarp(Player):
         opponent.strategy = lambda opponent: 'C'
         return 'D'
 
-class MindBend(MindWarp):
+class MindBender(MindWarper):
     """A player that changes the opponent's strategy by modifying the internal dictionary."""
 
-    name = 'Mind Bend'
+    name = 'Mind Bender'
 
     def strategy(self, opponent):
         opponent.__dict__['strategy'] = lambda opponent: 'C'
