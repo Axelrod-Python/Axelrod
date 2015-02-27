@@ -15,11 +15,11 @@ class Game:
         }
 
     """
-    Returns the appropriate score from the scores dictionary for a given
-    pair of plays.
+    Returns the appropriate score (as a tuple) from the scores dictionary for a given
+    pair of plays (passed in as a tuple).
     """
-    def score(self, p1, p2):
-        return self.scores[p1, p2]
+    def score(self, pair):
+        return self.scores[pair]
 
 
 class Axelrod:
@@ -91,7 +91,7 @@ class Axelrod:
         s1, s2 = 0, 0
 
         for pair in zip(p1.history, p2.history):
-            score = self.game.score(pair[0], pair[1])
+            score = self.game.score(pair)
             s1 += score[0]
             s2 += score[1]
         return s1, s2
