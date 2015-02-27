@@ -63,7 +63,7 @@ strategies = basic_strategies + [
     TrickyDefector,
     TwoTitsForTat,
     e,
-    ]
+]
 
 # These are strategies that do not follow the rules of Axelrods tournament
 cheating_strategies = [
