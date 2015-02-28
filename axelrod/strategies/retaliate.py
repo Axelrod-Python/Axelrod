@@ -25,6 +25,10 @@ class RandomRetaliate(Retaliate):
     import random
     retaliation_threshold = round(random.uniform(0.05, 0.15), 2)
 
+    def __init__(self):
+        super(RandomRetaliate, self).__init__()
+        self.stochastic = False
+
 
 class LimitedRetaliate(Player):
     """
@@ -73,3 +77,7 @@ class RandomLimitedRetaliate(LimitedRetaliate):
     import random
     retaliation_limit = random.randint(10, 30)
     retaliation_threshold = round(random.uniform(0.05, 0.15), 2)
+
+    def __init__(self):
+        super(RandomLimitedRetaliate, self).__init__()
+        self.stochastic = False
