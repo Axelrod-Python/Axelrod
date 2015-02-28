@@ -40,7 +40,7 @@ def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exc
             results = axelrod_tournament.tournament(turns=turns, repetitions=repetitions)
             results = numpy.array(results)
 
-            # This reduces the payoff matrices to score histories.
+            # This reduces the results to score histories.
             scores = results.sum(axis=1)
 
             # Sort player indices by their median scores.
@@ -53,6 +53,13 @@ def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exc
             with open(fname, 'w') as f:
                 f.write(hdr)
                 numpy.savetxt(f, scores[ranking].transpose(), delimiter=", ", fmt='%i')
+
+            # Save plots with the scores.
+            plt.boxplot([s / (turns * (len(ranking) - 1)) for s in scores[ranking]])
+            plt.xticks(range(1, len(rnames) + 2), [str(n) for n in rnames], rotation=90)
+            plt.title('Mean score per stage game over {} rounds repeated {} times ({} strategies)'.format(turns, repetitions, len(ranking)))
+            plt.savefig(plot, bbox_inches='tight')
+            plt.clf()
 
 
 if __name__ == "__main__":
