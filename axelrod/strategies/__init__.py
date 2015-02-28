@@ -73,3 +73,5 @@ cheating_strategies = [
         MindReader,
         ProtectedMindReader,
         ]
+
+all_strategies = strategies + cheating_strategies

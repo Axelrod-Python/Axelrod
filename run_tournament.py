@@ -11,7 +11,6 @@ import time
 import numpy
 
 import matplotlib.pyplot as plt
-from matplotlib.table import Table
 
 import axelrod
 
@@ -24,15 +23,13 @@ def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exc
     all_strategies = []
     graphs_to_plot = {}
 
+    init_strategies = lambda S: [s() for s in S]
     if not exclude_strategies:
-        strategies = [strategy() for strategy in axelrod.strategies]
-        graphs_to_plot['results.png'] = strategies
+        graphs_to_plot['results.png'] = init_strategies(axelrod.strategies)
     if not exclude_cheating:
-        cheating_strategies = [strategy() for strategy in axelrod.cheating_strategies]
-        graphs_to_plot['cheating_results.png'] = cheating_strategies
+        graphs_to_plot['cheating_results.png'] = init_strategies(axelrod.cheating_strategies)
     if not exclude_all:
-        all_strategies = [strategy() for strategy in axelrod.strategies] + [strategy() for strategy in axelrod.cheating_strategies]
-        graphs_to_plot['all_results.png'] = all_strategies
+        graphs_to_plot['all_results.png'] = init_strategies(axelrod.all_strategies)
 
     for plot in graphs_to_plot:
         if len(graphs_to_plot[plot]) != 1:
