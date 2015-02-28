@@ -84,7 +84,6 @@ class TestMindReader(unittest.TestCase):
         """Tests for init method """
         P1 = axelrod.MindReader()
         self.assertEqual(P1.history, [])
-        self.assertEqual(P1.score, 0)
 
     def test_reset(self):
         """Tests to see if the class is reset correctly """

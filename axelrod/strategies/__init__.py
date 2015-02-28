@@ -23,6 +23,14 @@ from retaliate import *
 from mindcontrol import *
 from mindreader import *
 
+basic_strategies = [
+        Defector,
+        Cooperator,
+        Random,
+        TitForTat,
+        Alternator,
+]
+
 strategies = [
         Defector,
         TrickyDefector,
@@ -73,3 +81,5 @@ cheating_strategies = [
         MindReader,
         ProtectedMindReader,
         ]
+
+all_strategies = strategies + cheating_strategies
