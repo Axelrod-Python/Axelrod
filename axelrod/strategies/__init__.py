@@ -1,85 +1,80 @@
+from alternator import *
+from appeaser import *
+from averagecopier import *
 from cooperator import *
 from defector import *
-from grudger import *
-from rand import *
-from titfortat import *
-from gobymajority import *
-from alternator import *
-from grumpy import *
-from averagecopier import *
-from qlearner import *
-from grumpy import *
-from geller import *
-from inverse import *
-from appeaser import *
-from forgiver import *
 from forgetfulgrudger import *
-from punisher import *
+from forgiver import *
+from geller import *
+from gobymajority import *
+from grudger import *
+from grumpy import *
+from grumpy import *
+from inverse import *
 from inversepunisher import *
-from oppositegrudger import *
-from oncebitten import *
 from mathematicalconstants import *
-from retaliate import *
 from mindcontrol import *
 from mindreader import *
+from oncebitten import *
+from oppositegrudger import *
+from punisher import *
+from qlearner import *
+from rand import *
+from retaliate import *
+from titfortat import *
 
 basic_strategies = [
-        Defector,
-        Cooperator,
-        Random,
-        TitForTat,
-        Alternator,
+    Alternator,
+    Cooperator,
+    Defector,
+    Random,
+    TitForTat,
 ]
 
-strategies = [
-        Defector,
-        TrickyDefector,
-        Cooperator,
-        TrickyCooperator,
-        AntiTitForTat,
-        TitForTat,
-        TitFor2Tats,
-        TwoTitsForTat,
-        Grudger,
-        GoByMajority,
-        GoByMajority5,
-        GoByMajority10,
-        GoByMajority20,
-        GoByMajority40,
-        Random,
-        Alternator,
-        Grumpy,
-        Inverse,
-        AverageCopier,
-        Appeaser,
-        Forgiver,
-        ForgivingTitForTat,
-        RiskyQLearner,
-        ArrogantQLearner,
-        HesitantQLearner,
-        CautiousQLearner,
-        ForgetfulGrudger,
-        Punisher,
-        InversePunisher,
-        OppositeGrudger,
-        OnceBitten,
-        Golden,
-        Retaliate,
-        LimitedRetaliate,
-        Pi,
-        e,
-        ]
+strategies = basic_strategies + [
+    AntiTitForTat,
+    Appeaser,
+    ArrogantQLearner,
+    AverageCopier,
+    CautiousQLearner,
+    ForgetfulGrudger,
+    Forgiver,
+    ForgivingTitForTat,
+    GoByMajority,
+    GoByMajority10,
+    GoByMajority20,
+    GoByMajority40,
+    GoByMajority5,
+    Golden,
+    Grudger,
+    Grumpy,
+    HesitantQLearner,
+    Inverse,
+    InversePunisher,
+    LimitedRetaliate,
+    OnceBitten,
+    OppositeGrudger,
+    Pi,
+    Punisher,
+    Retaliate,
+    RiskyQLearner,
+    TitFor2Tats,
+    TrickyCooperator,
+    TrickyDefector,
+    TwoTitsForTat,
+    e,
+    ]
 
-#These are strategies that do not follow the rules of Axelrods tournement.
+# These are strategies that do not follow the rules of Axelrods tournament
 cheating_strategies = [
-        Geller,
-        GellerCooperator,
-        GellerDefector,
-        MindController,
-        MindWarper,
-        MindBender,
-        MindReader,
-        ProtectedMindReader,
-        ]
+    Geller,
+    GellerCooperator,
+    GellerDefector,
+    MindBender,
+    MindController,
+    MindReader,
+    MindWarper,
+    ProtectedMindReader,
+    ]
 
 all_strategies = strategies + cheating_strategies
