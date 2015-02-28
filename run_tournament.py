@@ -15,15 +15,16 @@ import matplotlib.pyplot as plt
 import axelrod
 
 
-def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exclude_all):
+def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all):
     """Main function for running Axelrod tournaments."""
 
-    strategies = []
     cheating_strategies = []
     all_strategies = []
     graphs_to_plot = {}
 
     init_strategies = lambda S: [s() for s in S]
+    if not exclude_basic:
+        graphs_to_plot['basic_results.png'] = init_strategies(axelrod.basic_strategies)
     if not exclude_strategies:
         graphs_to_plot['results.png'] = init_strategies(axelrod.strategies)
     if not exclude_cheating:
@@ -68,6 +69,7 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--verbose', action='store_true', help='show verbose messages')
     parser.add_argument('-t', '--turns', type=int, default=200, help='turns per pair')
     parser.add_argument('-r', '--repetitions', type=int, default=50, help='round-robin repetitions')
+    parser.add_argument('--xb', action='store_true', help='exlude basic strategies plot')
     parser.add_argument('--xs', action='store_true', help='exlude ordinary strategies plot')
     parser.add_argument('--xc', action='store_true', help='exclude cheating strategies plot')
     parser.add_argument('--xa', action='store_true', help='exclude combined strategies plot')
@@ -77,10 +79,11 @@ if __name__ == "__main__":
 
     if args.verbose:
         print 'Starting tournament with ' + str(args.repetitions) + ' round robins of ' + str(args.turns) + ' turns per pair.'
+        print 'Basics strategies plot: ' + str(not args.xb)
         print 'Ordinary strategies plot: ' + str(not args.xs)
         print 'Cheating strategies plot: ' + str(not args.xc)
         print 'Combined strategies plot: ' + str(not args.xa)
-    run_tournament(args.turns, args.repetitions, args.xs, args.xc, args.xa)
+    run_tournament(args.turns, args.repetitions, args.xb, args.xs, args.xc, args.xa)
 
     dt = time.time() - t0
     print "Finished in %.1fs" % dt
