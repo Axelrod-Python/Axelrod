@@ -1,7 +1,6 @@
 """Recreate Axelrod's tournament."""
 
 import inspect
-import numpy
 
 
 class Game(object):
@@ -59,13 +58,19 @@ class Axelrod(object):
         Return the total payoff matrices for each repetition.
         """
 
-        shape = (self.nplayers, self.nplayers, repetitions)
-        payoffs = numpy.zeros(shape, dtype='int')
+        # Build the initial results containing just zeros. This is an embedded
+        # that could be made more efficient using a NumPy array.
+        plist = list(range(self.nplayers))
+        replist = list(range(repetitions))
+        results = [[[0 for irep in replist] for j in plist] for i in plist]
 
-        for i in range(repetitions):
-            payoffs[:, :, i] = self.round_robin(turns=turns)
+        for irep in replist:
+            payoffs = self.round_robin(turns=turns)
+            for i in plist:
+                for j in plist:
+                    results[i][j][irep] = payoffs[i][j]
 
-        return payoffs
+        return results
 
     def round_robin(self, turns=200):
         """Plays a round robin where each match lasts turns.
@@ -77,7 +82,8 @@ class Axelrod(object):
         Returns the total payoff matrix.
         """
 
-        payoffs = numpy.zeros((self.nplayers, self.nplayers))
+        payoffs = [[0 for j in range(self.nplayers)] for i in range(self.nplayers)]
+
         for ip1 in range(self.nplayers):
             for ip2 in range(ip1 + 1, self.nplayers):
 
@@ -100,8 +106,8 @@ class Axelrod(object):
                 else:
                     scores = self.deterministic_cache[key]
 
-                payoffs[ip1, ip2] = scores[0]
-                payoffs[ip2, ip1] = scores[1]
+                payoffs[ip1][ip2] = scores[0]
+                payoffs[ip2][ip1] = scores[1]
 
         return payoffs
 
