@@ -38,6 +38,7 @@ def run_tournament(turns, repetitions, exclude_strategies, exclude_cheating, exc
 
             # This is where the actual tournament takes place.
             results = axelrod_tournament.tournament(turns=turns, repetitions=repetitions)
+            results = numpy.array(results)
 
             # This reduces the payoff matrices to score histories.
             scores = results.sum(axis=1)
