@@ -9,9 +9,7 @@ import axelrod
 class TestInitialisation(unittest.TestCase):
 
     def test_initialisation(self):
-        """
-        Test that can initiate a tournament.
-        """
+        """Test that can initiate a tournament."""
         P1 = axelrod.Defector()
         P2 = axelrod.Defector()
         P3 = axelrod.Defector()
@@ -25,78 +23,58 @@ class TestRoundRobin(unittest.TestCase):
     def payoffs2scores(cls, payoffs):
         return [sum(p) for p in payoffs]
 
+    @classmethod
+    def get_test_outcome(cls, outcome, turns=10):
+
+        # Extract the name of players from the outcome tupples,
+        # and initiate the players by getting the classes from axelrod.
+        names = [out[0] for out in outcome]
+        players = [getattr(axelrod, n)() for n in names]
+
+        # Do the actual game and build the expected outcome tuples.
+        tournament = axelrod.Axelrod(*players)
+        payoffs = tournament.round_robin(turns=10)
+        scores = cls.payoffs2scores(payoffs)
+        outcome = zip(names, scores)
+
+        # The outcome is expected to be sort by score.
+        return sorted(outcome, key = lambda k: k[1])
+
     def test_round_robin_defector_v_cooperator(self):
-        """
-        Test round robin: the defector viciously punishes the cooperator
-        """
-        P1 = axelrod.Defector()
-        P2 = axelrod.Cooperator()
-        tournament = axelrod.Axelrod(P1, P2)
-        scores = self.payoffs2scores(tournament.round_robin(turns=10))
-        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Defector', 0), ('Cooperator', 50)])
+        """Test round robin: the defector viciously punishes the cooperator."""
+        outcome = [('Defector', 0), ('Cooperator', 50)]
+        self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_defector_v_titfortat(self):
-        """
-        Test round robin: the defector does well against tit for tat
-        """
-        P1 = axelrod.Defector()
-        P2 = axelrod.TitForTat()
-        tournament = axelrod.Axelrod(P1, P2)
-        scores = self.payoffs2scores(tournament.round_robin(turns=10))
-        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Defector', 36), ('Tit For Tat', 41)])
+        """Test round robin: the defector does well against tit for tat."""
+        outcome = [('Defector', 36), ('TitForTat', 41)]
+        self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_cooperator_v_titfortat(self):
-        """
-        Test round robin: the cooperator does very well WITH tit for tat
-        """
-        P1 = axelrod.Cooperator()
-        P2 = axelrod.TitForTat()
-        tournament = axelrod.Axelrod(P1, P2)
-        scores = self.payoffs2scores(tournament.round_robin(turns=10))
-        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Cooperator', 20), ('Tit For Tat', 20)])
+        """Test round robin: the cooperator does very well WITH tit for tat."""
+        outcome = [('Cooperator', 20), ('TitForTat', 20)]
+        self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_cooperator_v_titfortat_v_defector(self):
-        """
-        Test round robin: the defector seems to dominate in this small population
-        """
-        P1 = axelrod.Cooperator()
-        P2 = axelrod.TitForTat()
-        P3 = axelrod.Defector()
-        tournament = axelrod.Axelrod(P1, P2, P3)
-        scores = self.payoffs2scores(tournament.round_robin(turns=10))
-        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Defector', 36), ('Tit For Tat', 61), ('Cooperator', 70)])
+        """Test round robin: the defector seems to dominate in this small population."""
+        outcome = [('Defector', 36), ('TitForTat', 61), ('Cooperator', 70)]
+        self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_cooperator_v_titfortat_v_defector_v_grudger(self):
-        """
-        Test round robin: tit for tat does a lot better this time around
-        """
-        P1 = axelrod.Cooperator()
-        P2 = axelrod.TitForTat()
-        P3 = axelrod.Defector()
-        P4 = axelrod.Grudger()
-        tournament = axelrod.Axelrod(P1, P2, P3, P4)
-        scores = self.payoffs2scores(tournament.round_robin(turns=10))
-        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Defector', 72), ('Tit For Tat', 81), ('Grudger', 81), ('Cooperator', 90)])
+        """Test round robin: tit for tat does a lot better this time around."""
+        outcome = [('Defector', 72), ('TitForTat', 81), ('Grudger', 81), ('Cooperator', 90)]
+        self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_cooperator_v_titfortat_v_defector_v_grudger_v_go_by_majority(self):
-        """
-        Test round robin: Tit for tat now wins
-        """
-        P1 = axelrod.Cooperator()
-        P2 = axelrod.TitForTat()
-        P3 = axelrod.Defector()
-        P4 = axelrod.Grudger()
-        P5 = axelrod.GoByMajority()
-        tournament = axelrod.Axelrod(P1, P2, P3, P4, P5)
-        scores = self.payoffs2scores(tournament.round_robin(turns=10))
-        self.assertEqual(sorted(zip(tournament.names, scores), key = lambda k: k[1]), [('Tit For Tat', 101), ('Grudger', 101), ('Go By Majority', 101), ('Defector', 108), ('Cooperator', 110)])
+        """Test round robin: Tit for tat now wins."""
+        outcome = [('TitForTat', 101), ('Grudger', 101), ('GoByMajority', 101), ('Defector', 108), ('Cooperator', 110)]
+        self.assertEqual(self.get_test_outcome(outcome), outcome)
+
 
 class TestTournament(unittest.TestCase):
 
     def test_full_tournament(self):
-        """
-        A test to check that tournament runs with all non cheating strategies
-        """
+        """A test to check that tournament runs with all non cheating strategies."""
         strategies = [strategy() for strategy in axelrod.strategies]
         tournament = axelrod.Axelrod(*strategies)
         output_of_tournament = tournament.tournament(turns=500, repetitions=2)
@@ -129,9 +107,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(sorted(zip(names, scores)), outcome)
 
     def test_calculate_score_for_mix(self):
-        """
-        Test that scores are calculated correctly
-        """
+        """Test that scores are calculated correctly."""
         P1 = axelrod.Defector()
         P1.history = ['C', 'C', 'D']
         P2 = axelrod.Defector()
@@ -140,9 +116,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.calculate_scores(P1, P2), (11, 6))
 
     def test_calculate_score_for_all_cooperate(self):
-        """
-        Test that scores are calculated correctly
-        """
+        """Test that scores are calculated correctly."""
         P1 = axelrod.Player()
         P1.history = ['C', 'C', 'C']
         P2 = axelrod.Player()
@@ -151,9 +125,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.calculate_scores(P1, P2), (6, 6))
 
     def test_calculate_score_for_all_defect(self):
-        """
-        Test that scores are calculated correctly
-        """
+        """Test that scores are calculated correctly."""
         P1 = axelrod.Player()
         P1.history = ['D', 'D', 'D']
         P2 = axelrod.Player()
@@ -164,16 +136,12 @@ class TestTournament(unittest.TestCase):
 class TestPlayer(unittest.TestCase):
 
     def test_initialisation(self):
-        """
-        Test that can initiate a player
-        """
+        """Test that can initiate a player."""
         P1 = axelrod.Player()
         self.assertEqual(P1.history, [])
 
     def test_play(self):
-        """
-        Test that play method looks for attribute strategy (which does not exist)
-        """
+        """Test that play method looks for attribute strategy (which does not exist)."""
         P1, P2 = axelrod.Player(), axelrod.Player()
         self.assertEquals(P1.play(P2), None)
         self.assertEquals(P2.play(P1), None)
