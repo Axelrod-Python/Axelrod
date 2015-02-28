@@ -95,9 +95,9 @@ class TestLimitedRetaliate(unittest.TestCase):
 
 class TestRandomLimitedRetaliate(unittest.TestCase):
         def test_stochastic(self):
-            self.assertTrue(axelrod.RandomLimitedRetaliate().stochastic)
+            self.assertFalse(axelrod.RandomLimitedRetaliate().stochastic)
 
 
 class TestRandomRetaliate(unittest.TestCase):
         def test_stochastic(self):
-            self.assertTrue(axelrod.RandomRetaliate().stochastic)
+            self.assertFalse(axelrod.RandomRetaliate().stochastic)
