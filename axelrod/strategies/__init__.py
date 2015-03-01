@@ -52,18 +52,22 @@ strategies = basic_strategies + [
     Inverse,
     InversePunisher,
     LimitedRetaliate,
+    LimitedRetaliate2,
+    LimitedRetaliate3,
     OnceBitten,
     OppositeGrudger,
     Pi,
     Punisher,
     Retaliate,
+    Retaliate2,
+    Retaliate3,
     RiskyQLearner,
     TitFor2Tats,
     TrickyCooperator,
     TrickyDefector,
     TwoTitsForTat,
     e,
-    ]
+]
 
 # These are strategies that do not follow the rules of Axelrods tournament
 cheating_strategies = [
