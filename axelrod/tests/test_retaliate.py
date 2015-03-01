@@ -32,7 +32,7 @@ class TestRetaliate(unittest.TestCase):
 
     def test_representation(self):
         P1 = axelrod.Retaliate()
-        self.assertEqual(str(P1), 'Retaliate')
+        self.assertEqual(str(P1), 'Retaliate (0.1)')
 
     def test_stochastic(self):
         self.assertFalse(axelrod.Retaliate().stochastic)
@@ -87,7 +87,7 @@ class TestLimitedRetaliate(unittest.TestCase):
 
     def test_representation(self):
         P1 = axelrod.LimitedRetaliate()
-        self.assertEqual(str(P1), 'Limited Retaliate')
+        self.assertEqual(str(P1), 'Limited Retaliate (0.1/20)')
 
     def test_stochastic(self):
         self.assertFalse(axelrod.LimitedRetaliate().stochastic)
