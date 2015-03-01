@@ -9,12 +9,20 @@ class Retaliate(Player):
     retaliation_threshold = 0.1
 
     def __init__(self):
+        """
+        Uses the basic init from the Player class, but also set the name to
+        include the retaliation setting.
+        """
         Player.__init__(self)
         self.name = (
             'Retaliate (' +
             str(self.retaliation_threshold) + ')')
 
     def strategy(self, opponent):
+        """
+        If the opponent has played D to my C more often than x% of the time
+        that I've done the same to him, play D. Otherwise, play C.
+        """
         history = zip(self.history, opponent.history)
         if history.count(('C', 'D')) > (
            history.count(('D', 'C')) * self.retaliation_threshold):
@@ -43,6 +51,10 @@ class LimitedRetaliate(Player):
     retaliation_count = 0
 
     def __init__(self):
+        """
+        Uses the basic init from the Player class, but also set the name to
+        include the retaliation setting.
+        """
         Player.__init__(self)
         self.name = (
             'Limited Retaliate (' +
@@ -50,6 +62,11 @@ class LimitedRetaliate(Player):
             '/' + str(self.retaliation_limit) + ')')
 
     def strategy(self, opponent):
+        """
+        If the opponent has played D to my C more often than x% of the time
+        that I've done the same to him, retaliate by playing D but stop doing
+        so once I've hit the retaliation limit.
+        """
         history = zip(self.history, opponent.history)
         if history.count(('C', 'D')) > (
            history.count(('D', 'C')) * self.retaliation_threshold):
