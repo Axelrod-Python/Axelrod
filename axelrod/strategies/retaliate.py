@@ -80,5 +80,5 @@ class LimitedRetaliate2(LimitedRetaliate):
 
 
 class LimitedRetaliate3(LimitedRetaliate):
-    retaliation_limit = 15
-    retaliation_threshold = 0.1
+    retaliation_limit = 20
+    retaliation_threshold = 0.08
