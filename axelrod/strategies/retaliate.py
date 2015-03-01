@@ -16,18 +16,18 @@ class Retaliate(Player):
 
     def strategy(self, opponent):
         history = zip(self.history, opponent.history)
-        if history.count(('C', 'D')) > history.count(('D', 'C')) * self.retaliation_threshold:
+        if history.count(('C', 'D')) > (
+           history.count(('D', 'C')) * self.retaliation_threshold):
             return 'D'
         return 'C'
 
 
-class RandomRetaliate(Retaliate):
-    import random
-    retaliation_threshold = round(random.uniform(0.05, 0.15), 2)
+class Retaliate2(Retaliate):
+    retaliation_threshold = 0.08
 
-    def __init__(self):
-        super(RandomRetaliate, self).__init__()
-        self.stochastic = False
+
+class Retaliate3(Retaliate):
+    retaliation_threshold = 0.12
 
 
 class LimitedRetaliate(Player):
@@ -51,7 +51,8 @@ class LimitedRetaliate(Player):
 
     def strategy(self, opponent):
         history = zip(self.history, opponent.history)
-        if history.count(('C', 'D')) > history.count(('D', 'C')) * self.retaliation_threshold:
+        if history.count(('C', 'D')) > (
+           history.count(('D', 'C')) * self.retaliation_threshold):
             self.retaliating = True
         else:
             self.retaliating = False
@@ -73,11 +74,11 @@ class LimitedRetaliate(Player):
         self.retaliation_count = 0
 
 
-class RandomLimitedRetaliate(LimitedRetaliate):
-    import random
-    retaliation_limit = random.randint(10, 30)
-    retaliation_threshold = round(random.uniform(0.05, 0.15), 2)
+class LimitedRetaliate2(LimitedRetaliate):
+    retaliation_limit = 25
+    retaliation_threshold = 0.1
 
-    def __init__(self):
-        super(RandomLimitedRetaliate, self).__init__()
-        self.stochastic = False
+
+class LimitedRetaliate3(LimitedRetaliate):
+    retaliation_limit = 15
+    retaliation_threshold = 0.1
