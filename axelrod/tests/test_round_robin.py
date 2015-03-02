@@ -29,6 +29,14 @@ class TestRoundRobin(unittest.TestCase):
         # The outcome is expected to be sort by score.
         return sorted(outcome, key = lambda k: k[1])
 
+    def test_init(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        rr = axelrod.RoundRobin(players=[p1, p2], game=self.game, turns=20)
+        self.assertEquals(rr.players, [p1, p2])
+        self.assertEquals(rr.nplayers, 2)
+        self.assertEquals(rr.game.score(('C', 'C')), (2, 2))
+        self.assertEquals(rr.deterministic_cache, {})
+
     def test_calculate_score_for_mix(self):
         """Test that scores are calculated correctly."""
         P1 = axelrod.Defector()
