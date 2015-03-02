@@ -1,4 +1,4 @@
-from axelrod import Player, Axelrod
+from axelrod import Player, RoundRobin, Game
 import copy
 import inspect
 
@@ -12,11 +12,11 @@ class MindReader(Player):
         The primary purpose is to look far enough ahead to see if a defect will be punished by the opponent.
         If the MindReader attempts to play itself (or another similar strategy), then it will cause a recursion loop, so this is also handeled in this method, by defecting if the method is called by strategy
         """
-        
+
         curframe = inspect.currentframe()
         calframe = inspect.getouterframes(curframe, 2)
         calname = calframe[1][3]
-        
+
         if calname == 'strategy':
             return 'D'
 
@@ -34,7 +34,8 @@ class MindReader(Player):
     def look_ahead(self, opponent, rounds = 10):
         """Plays a number of rounds to determine the best strategy."""
         results = []
-        tournement = Axelrod()
+        game = Game()
+        round_robin = RoundRobin(players=[self, opponent], game=game, turns=rounds)
         strategies = ['C', 'D']
 
         dummy_history_self = copy.copy(self.history)
@@ -42,7 +43,7 @@ class MindReader(Player):
 
         for strategy in strategies:
             self.simulate_match(opponent, strategy, rounds)
-            results.append(tournement.calculate_scores(self, opponent)[0])
+            results.append(round_robin.calculate_scores(self, opponent)[0])
 
             self.history = copy.copy(dummy_history_self)
             opponent.history = copy.copy(dummy_history_opponent)

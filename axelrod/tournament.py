@@ -24,55 +24,27 @@ class Game(object):
         return self.scores[pair]
 
 
-class Axelrod(object):
-    """A class for an iterated prisoner's dilemma.
+class RoundRobin(object):
+    """A class to define play a round robin game of players"""
 
-    Take a list of players (see the Player class):
+    def __init__(self, players, game, turns, deterministic_cache={}):
+        """Initialise the players, game and deterministic cache"""
+        self.players = players
+        self.nplayers = len(players)
+        self.game = game
+        self.turns = turns
+        self.deterministic_cache = deterministic_cache
 
-        >>> P1 = Defector()
-        >>> P2 = Cooperator()
-        >>> axelrod = Axelrod(P1, P2)
-        >>> axelrod.round_robin(turns=10)
-        >>> for player in sorted(axelrod.players, key=lambda x: x.score):
-        ...     print player, player.score
-        Defector 0
-        Cooperator 50
-    """
+    def calculate_scores(self, p1, p2):
+        """Calculates the score for two players based their history"""
+        s1, s2 = 0, 0
+        for pair in zip(p1.history, p2.history):
+            score = self.game.score(pair)
+            s1 += score[0]
+            s2 += score[1]
+        return s1, s2
 
-    def __init__(self, *args):
-        """Initiate a tournament of players."""
-
-        self.players = list(args)
-        self.nplayers = len(self.players)
-        self.names = [str(p) for p in self.players]
-
-        self.deterministic_cache = {}
-        self.game = Game()
-
-    def tournament(self, turns=200, repetitions=10):
-        """Runs repetitions of a round robin tournament.
-
-        The repetitions are mainly to handle stochastic strategies, so a cache
-        is used for pairs of deterministic strategies (result always the same).
-
-        Return the total payoff matrices for each repetition.
-        """
-
-        # Build the initial results containing just zeros. This is an embedded
-        # that could be made more efficient using a NumPy array.
-        plist = list(range(self.nplayers))
-        replist = list(range(repetitions))
-        results = [[[0 for irep in replist] for j in plist] for i in plist]
-
-        for irep in replist:
-            payoffs = self.round_robin(turns=turns)
-            for i in plist:
-                for j in plist:
-                    results[i][j][irep] = payoffs[i][j]
-
-        return results
-
-    def round_robin(self, turns=200):
+    def play(self):
         """Plays a round robin where each match lasts turns.
 
         We can cache scores for paris of deterministic strategies, since the outcome
@@ -81,7 +53,6 @@ class Axelrod(object):
 
         Returns the total payoff matrix.
         """
-
         payoffs = [[0 for j in range(self.nplayers)] for i in range(self.nplayers)]
 
         for ip1 in range(self.nplayers):
@@ -93,11 +64,11 @@ class Axelrod(object):
                 cl1 = p1.__class__
                 cl2 = p2.__class__
                 key = (cl1, cl2)
-                if p1.stochastic or p2.stochastic or key not in self.deterministic_cache:
+                if (p1.stochastic or p2.stochastic or key not in self.deterministic_cache):
                     turn = 0
                     p1.reset()
                     p2.reset()
-                    while turn < turns:
+                    while turn < self.turns:
                         turn += 1
                         p1.play(p2)
                     scores = self.calculate_scores(p1, p2)
@@ -111,20 +82,42 @@ class Axelrod(object):
 
         return payoffs
 
-    def calculate_scores(self, p1, p2):
-        """Calculates the score for two players based their history and on following:
 
-        - C vs C both get 2
-        - D vs D both get 4
-        - C vs D => C gets 5 and D gets 0
+class Tournament(object):
+
+    def __init__(self, players, game=None, turns=200, repetitions=10):
+        """Initiate a tournmanent of players"""
+        self.players = players
+        self.nplayers = len(players)
+        self.plist = list(range(self.nplayers))
+        if game is None:
+            self.game = Game()
+        else:
+            self.game = game
+        self.turns = turns
+        self.replist = list(range(repetitions))
+        self.results = self.initialise_results()
+        self.deterministic_cache = {}
+
+    def initialise_results(self):
         """
-        s1, s2 = 0, 0
+        Build the initial results containing just zeros. This is an embedded
+        that could be made more efficient using a NumPy array.
+        """
+        results = [[[0 for irep in self.replist] for j in self.plist]
+                   for i in self.plist]
+        return results
 
-        for pair in zip(p1.history, p2.history):
-            score = self.game.score(pair)
-            s1 += score[0]
-            s2 += score[1]
-        return s1, s2
+    def play(self):
+        """Play the tournament with repetitions of round robin"""
+        round_robin = RoundRobin(self.players, self.game, self.turns, self.deterministic_cache)
+        for irep in self.replist:
+            payoffs = round_robin.play()
+            self.deterministic_cache = round_robin.deterministic_cache
+            for i in self.plist:
+                for j in self.plist:
+                    self.results[i][j][irep] = payoffs[i][j]
+        return self.results
 
 
 class Player(object):
