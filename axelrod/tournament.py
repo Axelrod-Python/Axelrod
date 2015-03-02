@@ -109,7 +109,7 @@ class Tournament(object):
         return results
 
     def play(self):
-        """Play the tournament with repetitions of round robin"""§§
+        """Play the tournament with repetitions of round robin"""
         round_robin = RoundRobin(self.players, self.game, self.turns, self.deterministic_cache)
         for irep in self.replist:
             payoffs, self.deterministic_cache = round_robin.play()
