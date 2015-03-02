@@ -5,6 +5,11 @@ import axelrod
 
 class TestInitialisation(unittest.TestCase):
 
+    def test_all_sorted(self):
+        """Dummy test to indicate whether I've finished properly or not on this branch"""
+        sorted = False
+        self.assertTrue(sorted)
+
     def test_initialisation(self):
         """Test that can initiate a tournament."""
         P1 = axelrod.Defector()
