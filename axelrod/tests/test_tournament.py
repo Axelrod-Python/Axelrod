@@ -1,8 +1,5 @@
 """Tests for the main module."""
-
-import random
 import unittest
-
 import axelrod
 
 
@@ -13,8 +10,13 @@ class TestInitialisation(unittest.TestCase):
         P1 = axelrod.Defector()
         P2 = axelrod.Defector()
         P3 = axelrod.Defector()
-        tournament = axelrod.Axelrod(P1, P2, P3)
+        tournament = axelrod.Tournament([P1, P2, P3])
         self.assertEqual([str(s) for s in tournament.players], ['Defector', 'Defector', 'Defector'])
+        self.assertEqual(tournament.nplayers, 3)
+        self.assertEqual(tournament.plist, [0, 1, 2])
+        self.assertEqual(tournament.game.score(('C','C')), (2,2))
+        self.assertEqual(tournament.turns, 200)
+        self.assertEqual(tournament.replist, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 
 class TestRoundRobin(unittest.TestCase):
