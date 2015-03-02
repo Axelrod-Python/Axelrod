@@ -14,3 +14,13 @@ class TestPlayer(unittest.TestCase):
         P1, P2 = axelrod.Player(), axelrod.Player()
         self.assertEquals(P1.play(P2), None)
         self.assertEquals(P2.play(P1), None)
+
+    def test_reset(self):
+        p = axelrod.Player()
+        p.history = ['C', 'C']
+        p.reset()
+        self.assertEquals(p.history, [])
+
+    def test_repr(self):
+        p = axelrod.Player()
+        self.assertEquals(str(p), 'Player')
