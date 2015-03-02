@@ -27,7 +27,7 @@ class Game(object):
 class RoundRobin(object):
     """A class to define play a round robin game of players"""
 
-    def __init__(self, players, game, turns, deterministic_cache):
+    def __init__(self, players, game, turns, deterministic_cache={}):
         """Initialise the players, game and deterministic cache"""
         self.players = players
         self.nplayers = len(players)
@@ -51,7 +51,7 @@ class RoundRobin(object):
         will always be the same. There are many possible keys to cache by, but perhaps
         the most versatile is a tuple with the classes of both players.
 
-        Returns the total payoff matrix and the deterministic cache.
+        Returns the total payoff matrix.
         """
         payoffs = [[0 for j in range(self.nplayers)] for i in range(self.nplayers)]
 
@@ -80,7 +80,7 @@ class RoundRobin(object):
                 payoffs[ip1][ip2] = scores[0]
                 payoffs[ip2][ip1] = scores[1]
 
-        return payoffs, self.deterministic_cache
+        return payoffs
 
 
 class Tournament(object):
@@ -112,7 +112,8 @@ class Tournament(object):
         """Play the tournament with repetitions of round robin"""
         round_robin = RoundRobin(self.players, self.game, self.turns, self.deterministic_cache)
         for irep in self.replist:
-            payoffs, self.deterministic_cache = round_robin.play()
+            payoffs = round_robin.play()
+            self.deterministic_cache = round_robin.deterministic_cache
             for i in self.plist:
                 for j in self.plist:
                     self.results[i][j][irep] = payoffs[i][j]
