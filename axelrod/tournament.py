@@ -24,30 +24,14 @@ class Game(object):
         return self.scores[pair]
 
 
-class Tournament(object):
+class RoundRobin(object):
 
-    def __init__(self, players, game=None, turns=200, repetitions=10):
-        """Initiate a tournmanent of players"""
+    def __init__(self, players, game, turns, deterministic_cache):
         self.players = players
         self.nplayers = len(players)
-        self.plist = list(range(self.nplayers))
-        if game is None:
-            self.game = Game()
-        else:
-            self.game = game
+        self.game = game
         self.turns = turns
-        self.replist = list(range(repetitions))
-        self.results = self.initialise_results()
-        self.deterministic_cache = {}
-
-    def initialise_results(self):
-        """
-        Build the initial results containing just zeros. This is an embedded
-        that could be made more efficient using a NumPy array.
-        """
-        results = [[[0 for irep in self.replist] for j in self.plist]
-                   for i in self.plist]
-        return results
+        self.deterministic_cache = deterministic_cache
 
     def calculate_scores(self, p1, p2):
         """Calculates the score for two players based their history"""
@@ -58,7 +42,7 @@ class Tournament(object):
             s2 += score[1]
         return s1, s2
 
-    def play_round_robin(self):
+    def play(self):
         """Plays a round robin where each match lasts turns.
 
         We can cache scores for paris of deterministic strategies, since the outcome
@@ -94,11 +78,38 @@ class Tournament(object):
                 payoffs[ip1][ip2] = scores[0]
                 payoffs[ip2][ip1] = scores[1]
 
-        return payoffs
+        return payoffs, self.deterministic_cache
+
+
+class Tournament(object):
+
+    def __init__(self, players, game=None, turns=200, repetitions=10):
+        """Initiate a tournmanent of players"""
+        self.players = players
+        self.nplayers = len(players)
+        self.plist = list(range(self.nplayers))
+        if game is None:
+            self.game = Game()
+        else:
+            self.game = game
+        self.turns = turns
+        self.replist = list(range(repetitions))
+        self.results = self.initialise_results()
+        self.deterministic_cache = {}
+
+    def initialise_results(self):
+        """
+        Build the initial results containing just zeros. This is an embedded
+        that could be made more efficient using a NumPy array.
+        """
+        results = [[[0 for irep in self.replist] for j in self.plist]
+                   for i in self.plist]
+        return results
 
     def play(self):
+        round_robin = RoundRobin(self.players, self.game, self.turns, self.deterministic_cache)
         for irep in self.replist:
-            payoffs = self.play_round_robin()
+            payoffs, self.deterministic_cache = round_robin.play()
             for i in self.plist:
                 for j in self.plist:
                     self.results[i][j][irep] = payoffs[i][j]
