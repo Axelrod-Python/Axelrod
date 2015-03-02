@@ -1,8 +1,5 @@
 """Tests for the main module."""
-
-import random
 import unittest
-
 import axelrod
 
 
@@ -13,11 +10,20 @@ class TestInitialisation(unittest.TestCase):
         P1 = axelrod.Defector()
         P2 = axelrod.Defector()
         P3 = axelrod.Defector()
-        tournament = axelrod.Axelrod(P1, P2, P3)
+        tournament = axelrod.Tournament([P1, P2, P3])
         self.assertEqual([str(s) for s in tournament.players], ['Defector', 'Defector', 'Defector'])
+        self.assertEqual(tournament.nplayers, 3)
+        self.assertEqual(tournament.plist, [0, 1, 2])
+        self.assertEqual(tournament.game.score(('C', 'C')), (2, 2))
+        self.assertEqual(tournament.turns, 200)
+        self.assertEqual(tournament.replist, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 
 class TestRoundRobin(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.game = axelrod.Game()
 
     @classmethod
     def payoffs2scores(cls, payoffs):
@@ -32,13 +38,40 @@ class TestRoundRobin(unittest.TestCase):
         players = [getattr(axelrod, n)() for n in names]
 
         # Do the actual game and build the expected outcome tuples.
-        tournament = axelrod.Axelrod(*players)
-        payoffs = tournament.round_robin(turns=10)
+        round_robin = axelrod.RoundRobin(players=players, game=cls.game, turns=turns)
+        payoffs = round_robin.play()
         scores = cls.payoffs2scores(payoffs)
         outcome = zip(names, scores)
 
         # The outcome is expected to be sort by score.
         return sorted(outcome, key = lambda k: k[1])
+
+    def test_calculate_score_for_mix(self):
+        """Test that scores are calculated correctly."""
+        P1 = axelrod.Defector()
+        P1.history = ['C', 'C', 'D']
+        P2 = axelrod.Defector()
+        P2.history = ['C', 'D', 'D']
+        round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
+        self.assertEqual(round_robin.calculate_scores(P1, P2), (11, 6))
+
+    def test_calculate_score_for_all_cooperate(self):
+        """Test that scores are calculated correctly."""
+        P1 = axelrod.Player()
+        P1.history = ['C', 'C', 'C']
+        P2 = axelrod.Player()
+        P2.history = ['C', 'C', 'C']
+        round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
+        self.assertEqual(round_robin.calculate_scores(P1, P2), (6, 6))
+
+    def test_calculate_score_for_all_defect(self):
+        """Test that scores are calculated correctly."""
+        P1 = axelrod.Player()
+        P1.history = ['D', 'D', 'D']
+        P2 = axelrod.Player()
+        P2.history = ['D', 'D', 'D']
+        round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
+        self.assertEqual(round_robin.calculate_scores(P1, P2), (12, 12))
 
     def test_round_robin_defector_v_cooperator(self):
         """Test round robin: the defector viciously punishes the cooperator."""
@@ -73,14 +106,17 @@ class TestRoundRobin(unittest.TestCase):
 
 class TestTournament(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.game = axelrod.Game()
+
     def test_full_tournament(self):
         """A test to check that tournament runs with all non cheating strategies."""
         strategies = [strategy() for strategy in axelrod.strategies]
-        tournament = axelrod.Axelrod(*strategies)
-        output_of_tournament = tournament.tournament(turns=500, repetitions=2)
+        tournament = axelrod.Tournament(players=strategies, game=self.game, turns=500, repetitions=2)
+        output_of_tournament = tournament.play()
         self.assertEqual(type(output_of_tournament), list)
         self.assertEqual(len(output_of_tournament), len(strategies))
-
 
     def test_tournament(self):
         """Test tournament."""
@@ -99,39 +135,12 @@ class TestTournament(unittest.TestCase):
         P3 = axelrod.Defector()
         P4 = axelrod.Grudger()
         P5 = axelrod.GoByMajority()
-        tournament = axelrod.Axelrod(P1, P2, P3, P4, P5)
+        tournament = axelrod.Tournament(players=[P1, P2, P3, P4, P5], game=self.game, turns=200, repetitions=5)
         names = [str(p) for p in tournament.players]
-        results = tournament.tournament(turns=200, repetitions=5)
-
+        results = tournament.play()
         scores = [[sum([r[i] for r in res]) for i in range(5)] for res in results]
         self.assertEqual(sorted(zip(names, scores)), outcome)
 
-    def test_calculate_score_for_mix(self):
-        """Test that scores are calculated correctly."""
-        P1 = axelrod.Defector()
-        P1.history = ['C', 'C', 'D']
-        P2 = axelrod.Defector()
-        P2.history = ['C', 'D', 'D']
-        tournament = axelrod.Axelrod(P1, P2)
-        self.assertEqual(tournament.calculate_scores(P1, P2), (11, 6))
-
-    def test_calculate_score_for_all_cooperate(self):
-        """Test that scores are calculated correctly."""
-        P1 = axelrod.Player()
-        P1.history = ['C', 'C', 'C']
-        P2 = axelrod.Player()
-        P2.history = ['C', 'C', 'C']
-        tournament = axelrod.Axelrod(P1, P2)
-        self.assertEqual(tournament.calculate_scores(P1, P2), (6, 6))
-
-    def test_calculate_score_for_all_defect(self):
-        """Test that scores are calculated correctly."""
-        P1 = axelrod.Player()
-        P1.history = ['D', 'D', 'D']
-        P2 = axelrod.Player()
-        P2.history = ['D', 'D', 'D']
-        tournament = axelrod.Axelrod(P1, P2)
-        self.assertEqual(tournament.calculate_scores(P1, P2), (12, 12))
 
 class TestPlayer(unittest.TestCase):
 
