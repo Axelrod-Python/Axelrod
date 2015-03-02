@@ -1,4 +1,4 @@
-from axelrod import Player, Tournament
+from axelrod import Player, RoundRobin, Game
 import copy
 import inspect
 
@@ -34,7 +34,8 @@ class MindReader(Player):
     def look_ahead(self, opponent, rounds = 10):
         """Plays a number of rounds to determine the best strategy."""
         results = []
-        tournement = Tournament()
+        game = Game()
+        round_robin = RoundRobin(players=[self, opponent], game=game, turns=rounds)
         strategies = ['C', 'D']
 
         dummy_history_self = copy.copy(self.history)
@@ -42,7 +43,7 @@ class MindReader(Player):
 
         for strategy in strategies:
             self.simulate_match(opponent, strategy, rounds)
-            results.append(tournement.calculate_scores(self, opponent)[0])
+            results.append(round_robin.calculate_scores(self, opponent)[0])
 
             self.history = copy.copy(dummy_history_self)
             opponent.history = copy.copy(dummy_history_opponent)
