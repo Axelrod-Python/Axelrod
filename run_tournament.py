@@ -35,10 +35,10 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
     for plot in graphs_to_plot:
         if len(graphs_to_plot[plot]) != 1:
 
-            axelrod_tournament = axelrod.Axelrod(*graphs_to_plot[plot])
+            axelrod_tournament = axelrod.Tournament(players=graphs_to_plot[plot], turns=turns, repetitions=repetitions)
 
             # This is where the actual tournament takes place.
-            results = axelrod_tournament.tournament(turns=turns, repetitions=repetitions)
+            results = axelrod_tournament.play()
             results = numpy.array(results)
 
             # This reduces the results to score histories.
