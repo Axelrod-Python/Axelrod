@@ -22,6 +22,15 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.turns, 200)
         self.assertEqual(tournament.replist, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 
+    def test_initialise_results(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        t = axelrod.Tournament([p1, p2])
+        expected_results = [[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+                            [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]]
+        self.assertEquals(t.results, expected_results)
+
     def test_full_tournament(self):
         """A test to check that tournament runs with all non cheating strategies."""
         strategies = [strategy() for strategy in axelrod.strategies]
