@@ -5,11 +5,6 @@ import axelrod
 
 class TestInitialisation(unittest.TestCase):
 
-    def test_all_sorted(self):
-        """Dummy test to indicate whether I've finished properly or not on this branch"""
-        sorted = False
-        self.assertTrue(sorted)
-
     def test_initialisation(self):
         """Test that can initiate a tournament."""
         P1 = axelrod.Defector()
@@ -19,7 +14,7 @@ class TestInitialisation(unittest.TestCase):
         self.assertEqual([str(s) for s in tournament.players], ['Defector', 'Defector', 'Defector'])
         self.assertEqual(tournament.nplayers, 3)
         self.assertEqual(tournament.plist, [0, 1, 2])
-        self.assertEqual(tournament.game.score(('C','C')), (2,2))
+        self.assertEqual(tournament.game.score(('C', 'C')), (2, 2))
         self.assertEqual(tournament.turns, 200)
         self.assertEqual(tournament.replist, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 
