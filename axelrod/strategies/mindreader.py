@@ -6,6 +6,7 @@ class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
 
     name = 'Mind Reader'
+    max_look_ahead = 200
 
     def strategy(self, opponent):
         """Pretends to play the opponent 50 times before each match.
@@ -17,7 +18,7 @@ class MindReader(Player):
         calframe = inspect.getouterframes(curframe, 2)
         calname = calframe[1][3]
 
-        if calname == 'strategy':
+        if calname in ('strategy', 'simulate_match'):
             return 'D'
 
         best_strategy = self.look_ahead(opponent)
