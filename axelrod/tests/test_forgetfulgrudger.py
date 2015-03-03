@@ -1,16 +1,20 @@
-"""
-Test for the grudger strategy
-"""
-import unittest
-import axelrod
+"""Test for the grudger strategy."""
+
 import random
 
-class TestForgetfulGrudger(unittest.TestCase):
+import axelrod
+
+from test_player import TestPlayer
+
+
+class TestForgetfulGrudger(TestPlayer):
+
+    name = "Forgetful Grudger"
+    player = axelrod.ForgetfulGrudger
+    stochastic = False
 
     def test_strategy(self):
-        """
-        Starts by cooperating
-        """
+
         P1 = axelrod.ForgetfulGrudger()
         P2 = axelrod.Player()
 
@@ -57,12 +61,6 @@ class TestForgetfulGrudger(unittest.TestCase):
         self.assertEqual(P1.grudged, False)
         P2.history.append('C')
 
-
-    def test_representation(self):
-        P1 = axelrod.ForgetfulGrudger()
-        self.assertEqual(str(P1), 'Forgetful Grudger')
-
-
     def test_reset_method(self):
         """
         tests the reset method
@@ -75,6 +73,3 @@ class TestForgetfulGrudger(unittest.TestCase):
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)
-
-    def test_stochastic(self):
-        self.assertFalse(axelrod.ForgetfulGrudger().stochastic)

@@ -1,10 +1,15 @@
-"""
-Test for the opposite grudger strategy
-"""
-import unittest
+"""Test for the opposite grudger strategy."""
+
 import axelrod
 
-class TestOppositeGrudger(unittest.TestCase):
+from test_player import TestPlayer
+
+
+class TestOppositeGrudger(TestPlayer):
+
+    name = 'Opposite Grudger'
+    player = axelrod.OppositeGrudger
+    stochastic = False
 
     def test_initial_strategy(self):
         """
@@ -14,7 +19,7 @@ class TestOppositeGrudger(unittest.TestCase):
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), 'D')
 
-    def test_effect_of_strategy(self):
+    def test_strategy(self):
         """
         If opponent cooperates at any point then the player will cooperate forever
         """
@@ -26,10 +31,3 @@ class TestOppositeGrudger(unittest.TestCase):
         P1.history = ['C', 'C', 'D', 'D', 'D']
         P2.history = ['C', 'D', 'C', 'C', 'C']
         self.assertEqual(P1.strategy(P2), 'C')
-
-    def test_representation(self):
-        P1 = axelrod.OppositeGrudger()
-        self.assertEqual(str(P1), 'Opposite Grudger')
-
-    def test_stochastic(self):
-        self.assertFalse(axelrod.ForgetfulGrudger().stochastic)
