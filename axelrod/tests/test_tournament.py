@@ -16,10 +16,9 @@ class TestTournament(unittest.TestCase):
         P3 = axelrod.Defector()
         tournament = axelrod.Tournament([P1, P2, P3])
         self.assertEqual([str(s) for s in tournament.players], ['Defector', 'Defector', 'Defector'])
-        self.assertEqual(tournament.plist, [0, 1, 2])
         self.assertEqual(tournament.game.score(('C', 'C')), (2, 2))
         self.assertEqual(tournament.turns, 200)
-        self.assertEqual(tournament.replist, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+        self.assertEqual(tournament.repetitions, 10)
 
     def test_full_tournament(self):
         """A test to check that tournament runs with all non cheating strategies."""
