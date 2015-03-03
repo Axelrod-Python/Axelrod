@@ -1,16 +1,20 @@
-"""
-Test for the inverse punisher strategy
-"""
-import unittest
-import axelrod
+"""Test for the inverse punisher strategy."""
+
 import random
 
-class TestInversePunisher(unittest.TestCase):
+import axelrod
+
+from test_player import TestPlayer
+
+
+class TestInversePunisher(TestPlayer):
+
+    name = "Inverse Punisher"
+    player = axelrod.InversePunisher
+    stochastic = False
 
     def test_init(self):
-        """
-        Tests for the __init__ method
-        """
+        """Tests for the __init__ method."""
         P1 = axelrod.InversePunisher()
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.score, 0)
@@ -20,9 +24,7 @@ class TestInversePunisher(unittest.TestCase):
 
 
     def test_strategy(self):
-        """
-        Starts by cooperating
-        """
+        """Starts by cooperating."""
 
         random.seed(4)
 
@@ -88,11 +90,6 @@ class TestInversePunisher(unittest.TestCase):
         self.assertEqual(P1.grudged, False)
         P2.history.append('C')
 
-    def test_representation(self):
-        P1 = axelrod.InversePunisher()
-        self.assertEqual(str(P1), 'Inverse Punisher')
-
-
     def test_reset_method(self):
         """
         tests the reset method
@@ -105,6 +102,3 @@ class TestInversePunisher(unittest.TestCase):
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)
-
-    def test_stochastic(self):
-        self.assertFalse(axelrod.InversePunisher().stochastic)

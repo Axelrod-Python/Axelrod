@@ -1,23 +1,23 @@
-"""
-Test for the once bitten strategy
-"""
-import unittest
+"""Test for the once bitten strategy."""
+
 import axelrod
 
-class TestOnceBitten(unittest.TestCase):
+from test_player import TestPlayer
+
+
+class TestOnceBitten(TestPlayer):
+
+    name = "Once Bitten"
+    player = axelrod.OnceBitten
 
     def test_initial_strategy(self):
-        """
-        Starts by cooperating
-        """
+        """Starts by cooperating."""
         P1 = axelrod.OnceBitten()
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), 'C')
 
-    def test_effect_of_strategy(self):
-        """
-        If opponent defects at any point then the player will defect forever
-        """
+    def test_strategy(self):
+        """If opponent defects at any point then the player will defect forever."""
         P1 = axelrod.OnceBitten()
         P2 = axelrod.Player()
         # Starts by playing C
@@ -53,10 +53,3 @@ class TestOnceBitten(unittest.TestCase):
         self.assertEqual(P1.grudge_memory, 10)
         self.assertEqual(P1.grudged, True)
         P2.history.append('C')
-
-    def test_representation(self):
-        P1 = axelrod.OnceBitten()
-        self.assertEqual(str(P1), 'Once Bitten')
-
-    def test_stochastic(self):
-        self.assertFalse(axelrod.OnceBitten().stochastic)
