@@ -1,10 +1,11 @@
 """
 Test suite for Reflex Axelrod PD player.
 """
-import unittest
 import axelrod
+from test_player import TestPlayer
 
-class Reflex_test(unittest.TestCase):
+
+class Reflex_test(TestPlayer):
 
     def test_initial_nice_strategy(self):
         """ First response should always be cooperation. """
