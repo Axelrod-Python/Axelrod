@@ -3,7 +3,6 @@ from appeaser import *
 from averagecopier import *
 from cooperator import *
 from defector import *
-from forgetfulgrudger import *
 from forgiver import *
 from geller import *
 from gobymajority import *
@@ -11,12 +10,10 @@ from grudger import *
 from grumpy import *
 from grumpy import *
 from inverse import *
-from inversepunisher import *
 from mathematicalconstants import *
 from mindcontrol import *
 from mindreader import *
 from oncebitten import *
-from oppositegrudger import *
 from punisher import *
 from qlearner import *
 from rand import *

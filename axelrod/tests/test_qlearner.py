@@ -1,16 +1,20 @@
-"""
-Test for the qlearner strategy
-"""
-import unittest
-import axelrod
+"""Test for the qlearner strategy."""
+
 import random
 
-class TestRiskyQLearner(unittest.TestCase):
+import axelrod
+
+from test_player import TestPlayer
+
+
+class TestRiskyQLearner(TestPlayer):
+
+    name = 'Risky QLearner'
+    player = axelrod.RiskyQLearner
+    stochastic = True
 
     def test_qs_update(self):
-        """
-        Test that the q and v values update
-        """
+        """Test that the q and v values update."""
         random.seed(5)
         p1 = axelrod.RiskyQLearner()
         p2 = axelrod.Cooperator()
@@ -24,9 +28,7 @@ class TestRiskyQLearner(unittest.TestCase):
         self.assertEqual(p1.Qs,{'': {'C': 0, 'D': -0.9}, '0.0': {'C': 0.9, 'D': 0}, 'C1.0': {'C': 0, 'D': 0}})
 
     def test_vs_update(self):
-        """
-        Test that the q and v values update
-        """
+        """Test that the q and v values update."""
         random.seed(5)
         p1 = axelrod.RiskyQLearner()
         p2 = axelrod.Cooperator()
@@ -40,9 +42,7 @@ class TestRiskyQLearner(unittest.TestCase):
         self.assertEqual(p1.Vs,{'': 0, '0.0': 0.9, 'C1.0': 0})
 
     def test_prev_state_updates(self):
-        """
-        Test that the q and v values update
-        """
+        """Test that the q and v values update."""
         random.seed(5)
         p1 = axelrod.RiskyQLearner()
         p2 = axelrod.Cooperator()
@@ -55,10 +55,8 @@ class TestRiskyQLearner(unittest.TestCase):
         p2.history.append(play_2)
         self.assertEqual(p1.prev_state, 'C1.0')
 
-    def test_choose_best_strategy(self):
-        """
-        Tests that it chooses the best strategy
-        """
+    def test_strategy(self):
+        """Tests that it chooses the best strategy."""
         random.seed(5)
         p1 = axelrod.RiskyQLearner()
         p1.state = 'CCDC'
@@ -86,17 +84,12 @@ class TestRiskyQLearner(unittest.TestCase):
         self.assertEqual(P1.Vs, {'':0})
         self.assertEqual(P1.Qs, {'':{'C':0, 'D':0}})
 
-    def test_representation(self):
-        """
-        Tests string representation of class
-        """
-        P1 = axelrod.RiskyQLearner()
-        self.assertEqual(str(P1), 'Risky QLearner')
 
-    def test_stochastic(self):
-        self.assertTrue(axelrod.RiskyQLearner().stochastic)
+class TestArrogantQLearner(TestPlayer):
 
-class TestArrogantQLearner(unittest.TestCase):
+    name = 'Arrogant QLearner'
+    player = axelrod.ArrogantQLearner
+    stochastic = True
 
     def test_qs_update(self):
         """
@@ -146,10 +139,8 @@ class TestArrogantQLearner(unittest.TestCase):
         p2.history.append(play_2)
         self.assertEqual(p1.prev_state, 'C1.0')
 
-    def test_choose_best_strategy(self):
-        """
-        Tests that it chooses the best strategy
-        """
+    def test_strategy(self):
+        """Tests that it chooses the best strategy."""
         random.seed(9)
         p1 = axelrod.ArrogantQLearner()
         p1.state = 'CCDC'
@@ -163,9 +154,7 @@ class TestArrogantQLearner(unittest.TestCase):
         self.assertEqual(p1.strategy(p2), 'D')
 
     def test_reset_method(self):
-        """
-        tests the reset method
-        """
+        """Tests the reset method."""
         P1 = axelrod.ArrogantQLearner()
         P1.Qs = {'': {'C': 0, 'D': -0.9}, '0.0': {'C': 0, 'D': 0}}
         P1.Vs = {'': 0, '0.0': 0}
@@ -177,23 +166,15 @@ class TestArrogantQLearner(unittest.TestCase):
         self.assertEqual(P1.Vs, {'':0})
         self.assertEqual(P1.Qs, {'':{'C':0, 'D':0}})
 
-    def test_representation(self):
-        """
-        Tests string representation of class
-        """
-        P1 = axelrod.ArrogantQLearner()
-        self.assertEqual(str(P1), 'Arrogant QLearner')
 
-    def test_stochastic(self):
-        self.assertTrue(axelrod.ArrogantQLearner().stochastic)
+class TestHesitantQLearner(TestPlayer):
 
-
-class TestHesitantQLearner(unittest.TestCase):
+    name = 'Hesitant QLearner'
+    player = axelrod.HesitantQLearner
+    stochastic = True
 
     def test_qs_update(self):
-        """
-        Test that the q and v values update
-        """
+        """Test that the q and v values update."""
         random.seed(5)
         p1 = axelrod.HesitantQLearner()
         p2 = axelrod.Cooperator()
@@ -238,10 +219,8 @@ class TestHesitantQLearner(unittest.TestCase):
         p2.history.append(play_2)
         self.assertEqual(p1.prev_state, 'C1.0')
 
-    def test_choose_best_strategy(self):
-        """
-        Tests that it chooses the best strategy
-        """
+    def test_strategy(self):
+        """Tests that it chooses the best strategy."""
         random.seed(9)
         p1 = axelrod.HesitantQLearner()
         p1.state = 'CCDC'
@@ -269,23 +248,15 @@ class TestHesitantQLearner(unittest.TestCase):
         self.assertEqual(P1.Vs, {'':0})
         self.assertEqual(P1.Qs, {'':{'C':0, 'D':0}})
 
-    def test_representation(self):
-        """
-        Tests string representation of class
-        """
-        P1 = axelrod.HesitantQLearner()
-        self.assertEqual(str(P1), 'Hesitant QLearner')
 
-    def test_stochastic(self):
-        self.assertTrue(axelrod.HesitantQLearner().stochastic)
+class TestCautiousQLearner(TestPlayer):
 
-
-class TestCautiousQLearner(unittest.TestCase):
+    name = 'Cautious QLearner'
+    player = axelrod.CautiousQLearner
+    stochastic = True
 
     def test_qs_update(self):
-        """
-        Test that the q and v values update
-        """
+        """Test that the q and v values update."""
         random.seed(5)
         p1 = axelrod.CautiousQLearner()
         p2 = axelrod.Cooperator()
@@ -299,9 +270,7 @@ class TestCautiousQLearner(unittest.TestCase):
         self.assertEqual(p1.Qs,{'': {'C': 0, 'D': -0.1}, '0.0': {'C': 0.1, 'D': 0}, 'C1.0': {'C': 0, 'D': 0}})
 
     def test_vs_update(self):
-        """
-        Test that the q and v values update
-        """
+        """Test that the q and v values update."""
         random.seed(5)
         p1 = axelrod.CautiousQLearner()
         p2 = axelrod.Cooperator()
@@ -315,9 +284,7 @@ class TestCautiousQLearner(unittest.TestCase):
         self.assertEqual(p1.Vs,{'': 0, '0.0': 0.1, 'C1.0': 0})
 
     def test_prev_state_updates(self):
-        """
-        Test that the q and v values update
-        """
+        """Test that the q and v values update."""
         random.seed(5)
         p1 = axelrod.CautiousQLearner()
         p2 = axelrod.Cooperator()
@@ -330,10 +297,8 @@ class TestCautiousQLearner(unittest.TestCase):
         p2.history.append(play_2)
         self.assertEqual(p1.prev_state, 'C1.0')
 
-    def test_choose_best_strategy(self):
-        """
-        Tests that it chooses the best strategy
-        """
+    def test_strategy(self):
+        """Tests that it chooses the best strategy."""
         random.seed(9)
         p1 = axelrod.CautiousQLearner()
         p1.state = 'CCDC'
@@ -347,9 +312,7 @@ class TestCautiousQLearner(unittest.TestCase):
         self.assertEqual(p1.strategy(p2), 'D')
 
     def test_reset_method(self):
-        """
-        tests the reset method
-        """
+        """Tests the reset method."""
         P1 = axelrod.CautiousQLearner()
         P1.Qs = {'': {'C': 0, 'D': -0.9}, '0.0': {'C': 0, 'D': 0}}
         P1.Vs = {'': 0, '0.0': 0}
@@ -360,13 +323,3 @@ class TestCautiousQLearner(unittest.TestCase):
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.Vs, {'':0})
         self.assertEqual(P1.Qs, {'':{'C':0, 'D':0}})
-
-    def test_representation(self):
-        """
-        Tests string representation of class
-        """
-        P1 = axelrod.CautiousQLearner()
-        self.assertEqual(str(P1), 'Cautious QLearner')
-
-    def test_stochastic(self):
-        self.assertTrue(axelrod.CautiousQLearner().stochastic)
