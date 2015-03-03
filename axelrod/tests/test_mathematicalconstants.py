@@ -1,10 +1,16 @@
-"""test for the golden strategy"""
-import unittest
+"""Test for the golden and other mathematical strategies."""
+
 import axelrod
 
-class TestGolden(unittest.TestCase):
+from test_player import TestPlayer
 
-    def test_initial_strategy(self):
+
+class TestGolden(TestPlayer):
+
+    name = "Golden"
+    player = axelrod.Golden
+
+    def test_strategy(self):
         """test initial strategy co-operates"""
         P1 = axelrod.Golden()
         P2 = axelrod.Player()
@@ -35,17 +41,13 @@ class TestGolden(unittest.TestCase):
         P2.history = ['D','D','D','D']
         self.assertEqual(P1.strategy(P2), 'C')
 
-    def test_representation(self):
-        P1 = axelrod.Golden()
-        self.assertEqual(str(P1), 'Golden')
 
-    def test_stochastic(self):
-        self.assertFalse(axelrod.Golden().stochastic)
+class TestPi(TestPlayer):
 
+    name = "Pi"
+    player = axelrod.Pi
 
-class TestPi(unittest.TestCase):
-
-    def test_initial_strategy(self):
+    def test_strategy(self):
         """test initial strategy co-operates"""
         P1 = axelrod.Pi()
         P2 = axelrod.Player()
@@ -76,16 +78,13 @@ class TestPi(unittest.TestCase):
         P2.history = ['C','C','D','D']
         self.assertEqual(P1.strategy(P2), 'C')
 
-    def test_representation(self):
-        P1 = axelrod.Pi()
-        self.assertEqual(str(P1), 'Pi')
 
-    def test_stochastic(self):
-        self.assertFalse(axelrod.Pi().stochastic)
+class e(TestPlayer):
 
-class e(unittest.TestCase):
+    name = "e"
+    player = axelrod.e
 
-    def test_initial_strategy(self):
+    def test_strategy(self):
         """test initial strategy co-operates"""
         P1 = axelrod.e()
         P2 = axelrod.Player()
@@ -115,10 +114,3 @@ class e(unittest.TestCase):
         P1.history = ['C','C','C','C']
         P2.history = ['C','D','D','D']
         self.assertEqual(P1.strategy(P2), 'C')
-
-    def test_representation(self):
-        P1 = axelrod.e()
-        self.assertEqual(str(P1), 'e')
-
-    def test_stochastic(self):
-        self.assertFalse(axelrod.e().stochastic)

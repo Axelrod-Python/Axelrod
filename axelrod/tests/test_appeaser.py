@@ -1,10 +1,14 @@
-"""
-Test for the appeaser strategy
-"""
-import unittest
+"""Test for the appeaser strategy."""
+
 import axelrod
 
-class TestAppeaser(unittest.TestCase):
+from test_player import TestPlayer
+
+
+class TestAppeaser(TestPlayer):
+
+    name = "Appeaser"
+    player = axelrod.Appeaser
 
     def test_strategy(self):
         P1 = axelrod.Appeaser()
@@ -17,10 +21,3 @@ class TestAppeaser(unittest.TestCase):
         P1.history = ['C', 'D', 'C']
         P2.history = ['C', 'C', 'D']
         self.assertEqual(P1.strategy(P2), 'D')
-
-    def test_representation(self):
-        P1 = axelrod.Appeaser()
-        self.assertEqual(str(P1), 'Appeaser')
-
-    def test_stochastic(self):
-        self.assertFalse(axelrod.Appeaser().stochastic)
