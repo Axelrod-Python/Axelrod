@@ -1,26 +1,30 @@
 import unittest
+
 import axelrod
 
 
 class TestPlayer(unittest.TestCase):
 
-    def test_initialisation(self):
-        """Test that can initiate a player."""
-        P1 = axelrod.Player()
-        self.assertEqual(P1.history, [])
+    name = "Player"
+    player = axelrod.Player
+    stochastic = False
 
-    def test_play(self):
-        """Test that play method looks for attribute strategy (which does not exist)."""
-        P1, P2 = axelrod.Player(), axelrod.Player()
-        self.assertEquals(P1.play(P2), None)
-        self.assertEquals(P2.play(P1), None)
+    def test_initialisation(self):
+        """Test that the player initiates correctly."""
+        self.assertEqual(self.player().history, [])
+        self.assertEqual(self.player().stochastic, self.stochastic)
+
+    def test_repr(self):
+        """Test that the representation is correct."""
+        self.assertEquals(str(self.player()), self.name)
+
+    def test_strategy(self):
+        """Test that strategy method."""
+        self.assertEquals(self.player().strategy(self.player()), None)
 
     def test_reset(self):
-        p = axelrod.Player()
+        """Make sure reseting works correctly."""
+        p = self.player()
         p.history = ['C', 'C']
         p.reset()
         self.assertEquals(p.history, [])
-
-    def test_repr(self):
-        p = axelrod.Player()
-        self.assertEquals(str(p), 'Player')

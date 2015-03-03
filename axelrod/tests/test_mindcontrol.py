@@ -1,13 +1,17 @@
 """Tests for mind controllers and other wizards."""
 
-import unittest
 import axelrod
 
-class TestMindController(unittest.TestCase):
+from test_player import TestPlayer
+
+
+class TestMindController(TestPlayer):
 
     name = 'Mind Controller'
+    player = axelrod.MindController
+    stochastic = False
 
-    def test_vs_cooperator(self):
+    def test_strategy(self):
         """ Will always make opponent cooperate """
 
         P1 = axelrod.MindController()
@@ -31,10 +35,6 @@ class TestMindController(unittest.TestCase):
         P1.history = ['D','D','D','D',]
         self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P2.strategy(P1), 'C')
-        
-    def test_stochastic(self):
-        """Test to see if the method is stochastic or not (Important for caching results)"""
-        self.assertFalse(axelrod.MindController().stochastic)
 
     def test_init(self):
         """Test to make sure parameters are initialised correctly """
@@ -52,7 +52,9 @@ class TestMindController(unittest.TestCase):
 class TestMindWarper(TestMindController):
 
     name = "Mind Warper"
+    player = axelrod.MindWarper
 
 class TestMindBender(TestMindController):
 
     name = "Mind Bender"
+    player = axelrod.MindBender

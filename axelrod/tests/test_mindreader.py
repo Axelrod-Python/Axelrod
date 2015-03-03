@@ -1,12 +1,17 @@
-"""
-Test for the mindreader strategy
-"""
-import unittest
+"""Test for the mindreader strategy."""
+
 import axelrod
 
-class TestMindReader(unittest.TestCase):
+from test_player import TestPlayer
 
-    def test_vs_cooperator(self):
+
+class TestMindReader(TestPlayer):
+
+    name = "Mind Reader"
+    player = axelrod.MindReader
+    stochastic = False
+
+    def test_strategy(self):
         """
         Will defect against nice strategies
         """
@@ -74,11 +79,6 @@ class TestMindReader(unittest.TestCase):
         P3 = axelrod.Cooperator()
         P2.strategy(P1)
         self.assertEqual(P1.strategy(P3), 'D')
-        
-
-    def test_stochastic(self):
-        """Tests to see if the strategy is stochastic"""
-        self.assertFalse(axelrod.MindReader().stochastic)
 
     def test_init(self):
         """Tests for init method """
@@ -91,8 +91,3 @@ class TestMindReader(unittest.TestCase):
         P1.history = ['C', 'D', 'D', 'D']
         P1.reset()
         self.assertEqual(P1.history, [])
-
-    def test_representation(self):
-        """Tests that the string is correctly displayed"""
-        P1 = axelrod.MindReader()
-        self.assertEqual(str(P1), 'Mind Reader')

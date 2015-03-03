@@ -1,15 +1,19 @@
-"""
-Test for the defector strategy
-"""
-import unittest
+"""Test for the defector strategy."""
+
 import axelrod
 
-class TestDefector(unittest.TestCase):
+from test_player import TestPlayer
+
+
+class TestDefector(TestPlayer):
+
+    name = "Defector"
+    player = axelrod.Defector
+    stoachastic = False
 
     def test_strategy(self):
-        """
-        Test that always defects
-        """
+        """Test that always defects."""
+
         P1 = axelrod.Defector()
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), 'D')
@@ -17,14 +21,12 @@ class TestDefector(unittest.TestCase):
         P2.history = ['C', 'C', 'D']
         self.assertEqual(P1.strategy(P2), 'D')
 
-    def test_representation(self):
-        P1 = axelrod.Defector()
-        self.assertEqual(str(P1), 'Defector')
 
-    def test_stochastic(self):
-        self.assertFalse(axelrod.Defector().stochastic)
+class TestTrickyDefector(TestPlayer):
 
-class TestTrickyDefector(unittest.TestCase):
+    name = "Tricky Defector"
+    player = axelrod.TrickyDefector
+    stochastic = False
 
     def test_strategy(self):
         """Test if it is trying to trick opponent."""
@@ -33,10 +35,3 @@ class TestTrickyDefector(unittest.TestCase):
         self.assertEqual(P1.strategy(P2), 'D')
         P1.history = ['D', 'D', 'D', 'D']
         P2.history = ['C', 'D', 'D', 'D']
-
-    def test_representation(self):
-        P1 = axelrod.TrickyDefector()
-        self.assertEqual(str(P1), 'Tricky Defector')
-
-    def test_stochastic(self):
-        self.assertFalse(axelrod.TrickyDefector().stochastic)
