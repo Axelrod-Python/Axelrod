@@ -22,6 +22,7 @@ from qlearner import *
 from rand import *
 from retaliate import *
 from titfortat import *
+from reflex import *
 
 basic_strategies = [
     Alternator,
@@ -67,6 +68,7 @@ strategies = basic_strategies + [
     TrickyDefector,
     TwoTitsForTat,
     e,
+    Reflex,
 ]
 
 # These are strategies that do not follow the rules of Axelrods tournament
