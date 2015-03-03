@@ -1,4 +1,5 @@
 import unittest
+import numpy
 import axelrod
 
 
@@ -20,10 +21,20 @@ class TestResultSet(unittest.TestCase):
             [[0, 0, 0, 0], [0, 0, 0, 0]],
             [[0, 0, 0, 0], [0, 0, 0, 0]]
         ]
+        self.assertEquals(rs.players, players)
         self.assertEquals(rs.results, expected_results)
+
+    def test_scores(self):
+        players = (axelrod.Player(), axelrod.Player())
+        rs = axelrod.ResultSet(players, 4)
+        expected_results = numpy.array([[0, 0, 0, 0], [0, 0, 0, 0]])
+        self.assertTrue(numpy.array_equal(rs.scores(), expected_results))
 
     def test_plot(self):
         pass
 
     def test_csv(self):
-        pass
+        players = (axelrod.Player(), axelrod.Player())
+        rs = axelrod.ResultSet(players, 4)
+        expected_results = 'Player, Player\n0, 0\n0, 0\n0, 0\n0, 0\n'
+        self.assertEquals(rs.csv(), expected_results)
