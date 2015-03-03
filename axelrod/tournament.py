@@ -6,12 +6,12 @@ from round_robin import *
 class Tournament(object):
     """Reproduce Prof. Axelrod's tournament"""
 
+    game = Game()
+
     def __init__(self, players, game=None, turns=200, repetitions=10):
         """Initiate a tournmanent of players"""
         self.players = players
-        if game is None:
-            self.game = Game()
-        else:
+        if game is not None:
             self.game = game
         self.turns = turns
         self.repetitions = repetitions
