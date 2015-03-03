@@ -1,5 +1,6 @@
 from axelrod import Player
 
+
 class MindController(Player):
     """A player that changes the opponents strategy to cooperate."""
 
