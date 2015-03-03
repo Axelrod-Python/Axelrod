@@ -1,5 +1,6 @@
 import unittest
 import numpy
+import matplotlib
 import axelrod
 
 
@@ -61,7 +62,10 @@ class TestResultSet(unittest.TestCase):
         self.assertEquals(rs.ranked_names, expected_names)
 
     def test_plot(self):
-        pass
+        players = (axelrod.Player(), axelrod.Player())
+        rs = axelrod.ResultSet(players, 10, 4)
+        p = rs.plot()
+        self.assertIsInstance(p, matplotlib.figure.Figure)
 
     def test_csv(self):
         players = (axelrod.Player(), axelrod.Player())
