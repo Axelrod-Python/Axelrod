@@ -33,13 +33,30 @@ class TestResultSet(unittest.TestCase):
         self.assertTrue(numpy.array_equal(rs.generate_scores(), expected_results))
 
     def test_generate_ranking(self):
-        pass
+        players = (axelrod.Player(), axelrod.Player())
+        rs = axelrod.ResultSet(players, 4)
+        scores = rs.generate_scores()
+        expected_results = [0, 1]
+        self.assertEquals(rs.generate_ranking(scores), expected_results)
 
     def test_generate_ranked_names(self):
-        pass
+        players = (axelrod.Player(), axelrod.Player())
+        rs = axelrod.ResultSet(players, 4)
+        scores = rs.generate_scores()
+        rankings = rs.generate_ranking(scores)
+        expected_results = ['Player', 'Player']
+        self.assertEquals(rs.ranked_names(rankings), expected_results)
 
     def test_init_output(self):
-        pass
+        players = (axelrod.Player(), axelrod.Player())
+        rs = axelrod.ResultSet(players, 4)
+        rs.init_output()
+        expected_scores = numpy.array([[0, 0, 0, 0], [0, 0, 0, 0]])
+        expected_ranking = [0, 1]
+        expected_names = ['Player', 'Player']
+        self.assertTrue(numpy.array_equal(rs.scores, expected_scores))
+        self.assertEquals(rs.ranking, expected_ranking)
+        self.assertEquals(rs.ranked_names, expected_names)
 
     def test_plot(self):
         pass
