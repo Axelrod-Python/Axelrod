@@ -2,7 +2,7 @@ import inspect
 
 
 class Player(object):
-    """An class for a player in the tournament.
+    """A class for a player in the tournament.
 
     This is an abstract base class, not intended to be used directly.
     """
@@ -13,10 +13,19 @@ class Player(object):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
         self.stochastic = "random" in inspect.getsource(self.__class__)
+        if self.name == "Player":
+            self.stochastic = False
+
+    def __repr__(self):
+        """The string method for the strategy."""
+        return self.name
+
+    def strategy(self, opponent):
+        """This is a placeholder strategy."""
+        return None
 
     def play(self, opponent):
-        """This pits two players against each other.
-        """
+        """This pits two players against each other."""
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         self.history.append(s1)
         opponent.history.append(s2)
@@ -29,11 +38,3 @@ class Player(object):
         rest all other attributes.
         """
         self.history = []
-
-    def strategy(self, opponent):
-        """This is a placeholder strategy."""
-        return None
-
-    def __repr__(self):
-        """The string method for the strategy."""
-        return self.name
