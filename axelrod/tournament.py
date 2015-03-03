@@ -17,6 +17,7 @@ class Tournament(object):
         self.repetitions = repetitions
         self.result_set = ResultSet(
             players=players,
+            turns=turns,
             repetitions=repetitions)
         self.deterministic_cache = {}
 
