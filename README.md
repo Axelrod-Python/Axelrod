@@ -8,6 +8,8 @@ A repository to reproduce Axelrod's iterated prisoner's dilemma.
 In the 1980s, professor of Political Science Robert Axelrod ran a tournament inviting strategies from collaborators all over the world for the **Iterated Prisoner's Dilemma**.
 You can read about this more [here](http://en.wikipedia.org/wiki/The_Evolution_of_Cooperation#Axelrod.27s_tournaments).
 
+Another nice write up of Axelrod's work and this tournament on github was put together by [Artem Kaznatcheev](https://plus.google.com/101780559173703781847/posts) [here](https://egtheory.wordpress.com/2015/03/02/ipd/).
+
 ## The Prisoner's Dilemma
 
 The [Prisoner's dilemma](http://en.wikipedia.org/wiki/Prisoner%27s_dilemma) is the simple two player game shown below:
