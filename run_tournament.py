@@ -17,9 +17,6 @@ import axelrod
 
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all):
     """Main function for running Axelrod tournaments."""
-
-    cheating_strategies = []
-    all_strategies = []
     graphs_to_plot = {}
 
     init_strategies = lambda S: [s() for s in S]
@@ -35,33 +32,24 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
     for plot in graphs_to_plot:
         if len(graphs_to_plot[plot]) != 1:
 
-            axelrod_tournament = axelrod.Tournament(players=graphs_to_plot[plot], turns=turns, repetitions=repetitions)
+            tournament = axelrod.Tournament(
+                players=graphs_to_plot[plot],
+                turns=turns,
+                repetitions=repetitions)
 
             # This is where the actual tournament takes place.
-            results = axelrod_tournament.play()
-            results = numpy.array(results)
+            results = tournament.play()
 
-            # This reduces the results to score histories.
-            scores = results.sum(axis=1)
-
-            # Sort player indices by their median scores.
-            ranking = sorted(range(axelrod_tournament.nplayers), key=lambda i: numpy.median(scores[i]))
-            rnames = [str(axelrod_tournament.players[i]) for i in ranking]
-
-            # Save the scores from this tournament to a CSV file.
+            # # Save the scores from this tournament to a CSV file.
+            csv = results.csv()
             fname = plot.replace('.png', '.csv')
-            hdr = ", ".join(rnames) + "\n"
             with open(fname, 'w') as f:
-                f.write(hdr)
-                numpy.savetxt(f, scores[ranking].transpose(), delimiter=", ", fmt='%i')
+                f.write(csv)
 
-            # Save plots with the scores.
-            plt.boxplot([s / (turns * (len(ranking) - 1)) for s in scores[ranking]])
-            plt.xticks(range(1, len(rnames) + 2), [str(n) for n in rnames], rotation=90)
-            plt.title('Mean score per stage game over {} rounds repeated {} times ({} strategies)'.format(turns, repetitions, len(ranking)))
-            plt.savefig(plot, bbox_inches='tight')
-            plt.clf()
-
+            # # Save plots with the scores.
+            figure = results.plot()
+            figure.savefig(plot, bbox_inches='tight')
+            figure.clf()
 
 if __name__ == "__main__":
 
