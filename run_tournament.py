@@ -46,10 +46,12 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
             with open(fname, 'w') as f:
                 f.write(csv)
 
-            # # Save plots with the scores.
-            figure = results.plot()
-            figure.savefig(plot, bbox_inches='tight')
-            figure.clf()
+            # Save plots with the scores.
+            plt.boxplot([s / (turns * (len(results.ranking) - 1)) for s in results.scores[results.ranking]])
+            plt.xticks(range(1, len(results.ranked_names) + 2), [str(n) for n in results.ranked_names], rotation=90)
+            plt.title('Mean score per stage game over {} rounds repeated {} times ({} strategies)'.format(turns, repetitions, len(results.ranking)))
+            plt.savefig(plot, bbox_inches='tight')
+            plt.clf()
 
 if __name__ == "__main__":
 
