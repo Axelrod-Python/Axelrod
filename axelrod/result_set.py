@@ -42,14 +42,6 @@ class ResultSet(object):
             self.ranked_names = self.generate_ranked_names(self.ranking)
             self.output_initialised = True
 
-    def plot(self):
-        self.init_output()
-        fig = plt.figure()
-        plt.boxplot([s / (self.turns * (len(self.ranking) - 1)) for s in self.scores[self.ranking]])
-        plt.xticks(range(1, len(self.ranked_names) + 2), [str(n) for n in self.ranked_names], rotation=90)
-        plt.title('Mean score per stage game over {} rounds repeated {} times ({} strategies)'.format(self.turns, self.repetitions, len(self.ranking)))
-        return fig
-
     def csv(self):
         self.init_output()
         csv_string = StringIO()
