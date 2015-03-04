@@ -37,4 +37,4 @@ class Tournament(object):
             for i in plist:
                 for j in plist:
                     self.result_set.results[i][j][irep] = payoffs[i][j]
-        return self.result_set.results
+        return self.result_set
