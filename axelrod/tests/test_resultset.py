@@ -1,6 +1,5 @@
 import unittest
 import numpy
-import matplotlib
 import axelrod
 
 
