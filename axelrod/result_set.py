@@ -1,6 +1,5 @@
 import numpy
 from StringIO import StringIO
-import matplotlib.pyplot as plt
 
 
 class ResultSet(object):
