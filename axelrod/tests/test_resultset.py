@@ -20,24 +20,39 @@ class TestResultSet(unittest.TestCase):
         self.assertFalse(rs.output_initialised)
 
     def test_generate_scores(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
-        expected_results = numpy.array([[0, 0, 0, 0], [0, 0, 0, 0]])
+        players = players = ('Player1', 'Player2', 'Player3')
+        rs = axelrod.ResultSet(players, 5, 2)
+        rs.results = [
+            [[0, 0], [10, 10], [21, 21]],
+            [[10, 8], [0, 0], [16, 20]],
+            [[16, 16], [16, 16], [0, 0]]]
+        expected_results = numpy.array(
+            [[31, 31],
+             [26, 28],
+             [32, 32]])
         self.assertTrue(numpy.array_equal(rs.generate_scores(), expected_results))
 
     def test_generate_ranking(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
+        players = ('Player1', 'Player2', 'Player3')
+        rs = axelrod.ResultSet(players, 5, 2)
+        rs.results = [
+            [[0, 0], [10, 10], [21, 21]],
+            [[10, 8], [0, 0], [16, 20]],
+            [[16, 16], [16, 16], [0, 0]]]
         scores = rs.generate_scores()
-        expected_results = [0, 1]
+        expected_results = [1, 0, 2]
         self.assertEquals(rs.generate_ranking(scores), expected_results)
 
     def test_generate_ranked_names(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
+        players = ('Player1', 'Player2', 'Player3')
+        rs = axelrod.ResultSet(players, 5, 2)
+        rs.results = [
+            [[0, 0], [10, 10], [21, 21]],
+            [[10, 8], [0, 0], [16, 20]],
+            [[16, 16], [16, 16], [0, 0]]]
         scores = rs.generate_scores()
         rankings = rs.generate_ranking(scores)
-        expected_results = ['Player', 'Player']
+        expected_results = ['Player2', 'Player1', 'Player3']
         self.assertEquals(rs.generate_ranked_names(rankings), expected_results)
 
     def test_init_output(self):
@@ -52,7 +67,14 @@ class TestResultSet(unittest.TestCase):
         self.assertEquals(rs.ranked_names, expected_names)
 
     def test_csv(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
-        expected_results = 'Player, Player\n0, 0\n0, 0\n0, 0\n0, 0\n'
+        players = ('Player1', 'Player2', 'Player3')
+        rs = axelrod.ResultSet(players, 5, 2)
+        rs.results = [
+            [[0, 0], [10, 10], [21, 21]],
+            [[10, 8], [0, 0], [16, 20]],
+            [[16, 16], [16, 16], [0, 0]]]
+        expected_results = 'Player2, Player1, Player3\n26, 31, 32\n28, 31, 32\n'
         self.assertEquals(rs.csv(), expected_results)
+
+if __name__ == '__main__':
+    unittest.main()
