@@ -35,7 +35,7 @@ class Retaliate2(Retaliate):
 
 
 class Retaliate3(Retaliate):
-    retaliation_threshold = 0.12
+    retaliation_threshold = 0.05
 
 
 class LimitedRetaliate(Player):
@@ -92,10 +92,10 @@ class LimitedRetaliate(Player):
 
 
 class LimitedRetaliate2(LimitedRetaliate):
-    retaliation_limit = 25
-    retaliation_threshold = 0.1
+    retaliation_limit = 15
+    retaliation_threshold = 0.08
 
 
 class LimitedRetaliate3(LimitedRetaliate):
     retaliation_limit = 20
-    retaliation_threshold = 0.08
+    retaliation_threshold = 0.05
