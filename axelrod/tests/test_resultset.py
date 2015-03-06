@@ -58,6 +58,7 @@ class TestResultSet(unittest.TestCase):
         self.assertTrue(numpy.array_equal(rs.scores, self.expected_scores))
         self.assertEquals(rs.ranking, self.expected_ranking)
         self.assertEquals(rs.ranked_names, self.expected_ranked_names)
+        self.assertTrue(rs.output_initialised)
 
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
