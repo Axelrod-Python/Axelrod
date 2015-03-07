@@ -8,6 +8,8 @@ A repository to reproduce Axelrod's iterated prisoner's dilemma.
 In the 1980s, professor of Political Science Robert Axelrod ran a tournament inviting strategies from collaborators all over the world for the **Iterated Prisoner's Dilemma**.
 You can read about this more [here](http://en.wikipedia.org/wiki/The_Evolution_of_Cooperation#Axelrod.27s_tournaments).
 
+Another nice write up of Axelrod's work and this tournament on github was put together by [Artem Kaznatcheev](https://plus.google.com/101780559173703781847/posts) [here](https://egtheory.wordpress.com/2015/03/02/ipd/).
+
 ## The Prisoner's Dilemma
 
 The [Prisoner's dilemma](http://en.wikipedia.org/wiki/Prisoner%27s_dilemma) is the simple two player game shown below:
@@ -49,15 +51,25 @@ $ python run_tournament.py
 This automatically outputs a `png` file with the results.
 You can see the results from the latest run of the tournament here:
 
-![](results.png)
+![](./assets/results.png)
 
 As you can see: the 'tit for tat' strategy has not won in this instance, that is mainly because more strategies are needed to get anywhere near Axelrod's tournament.
 
 You can see the results from the latest run of the tournament here with the cheating strategies (which manipulate/read what the opponent does):
 
-![](all_results.png)
+![](./assets/all_results.png)
 
 Please do contribute :)
+
+Note that you can run `python run_tournament.py -h` for further options available: for example, cheating strategies can be excluded for faster results by running:
+
+```
+$ python run_tournament.py --xc --xa
+```
+
+## Awesome visualisation
+
+[martinjc](https://github.com/martinjc) put together a pretty awesome visualisation of this using d3. Hosted on gh-pages it can be seen here: [drvinceknight.github.io/Axelrod](http://drvinceknight.github.io/Axelrod/).
 
 # Contributing
 
@@ -83,13 +95,14 @@ The file structure is:
 └── run_tournament.py
 ```
 
-To contribute a strategy you need to do 4 (optionally 5) things (all of which can actually be done right here using the github website):
+To contribute a strategy you need to do 4 (optionally 6) things (all of which can actually be done right here using the github website):
 
 1. Fork this repository.
 2. Add a `<strategy>.py` file to the `strategies` directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
 3. Update the `./axelrod/strategies/__init__.py` file (you need to write the `import` statement and add the strategy to the relevant python list).
-4. (This one is optional: write some unit tests in the `./axelrod/tests/` directory.
-5. Send me a pull request.
+4. (This one is optional: write some unit tests in the `./axelrod/tests/` directory).
+5. (This one is also optional: add your name to the contributors list down below. If you don't I'll try and do it myself).
+6. Send me a pull request.
 
 If any of these steps sound complicated please just get in touch with me and I would be delighted to help.
 There is a [video](https://www.youtube.com/watch?v=5kOUVdktxAo&feature=youtu.be) and a [blog post](http://goo.gl/zkgSkc) discussing showing how to contribute if this is helpful.
@@ -105,7 +118,16 @@ You can see the latest build status [here](https://travis-ci.org/drvinceknight/A
 
 All other contributions are of course welcome: if you can improve this in any way (from typos to better unit testing) please do :)
 
-Particular things I would like to include (a part from more strategies):
+# Contributors
 
-- Nice gh-pages page
-- Not sure I'm importing the `random` library in the right place...
+- [JasYoung314](https://github.com/JasYoung314)
+- [Karlos78](https://github.com/Karlos78)
+- [drvinceknight](https://twitter.com/drvinceknight)
+- [geraintpalmer](https://github.com/geraintpalmer)
+- [langner](https://github.com/langner)
+- [martinjc](https://github.com/martinjc)
+- [uglyfruitcake](https://github.com/uglyfruitcake)
+- [jomuel](https://github.com/jomuel)
+- [meatballs](https://github.com/meatballs)
+- [hollymarissa](https://github.com/hollymarissa)
+- [timothyf1](https://github.com/timothyf1)

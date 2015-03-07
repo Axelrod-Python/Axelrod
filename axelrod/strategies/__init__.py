@@ -1,36 +1,81 @@
+from alternator import *
+from appeaser import *
+from averagecopier import *
 from cooperator import *
 from defector import *
-from grudger import *
-from rand import *
-from titfortat import *
-from gobymajority import *
-from alternator import *
-from grumpy import *
-from averagecopier import *
-from grumpy import *
+from forgiver import *
 from geller import *
+from gobymajority import *
+from grudger import *
+from grumpy import *
+from grumpy import *
 from inverse import *
+from mathematicalconstants import *
+from mindcontrol import *
+from mindreader import *
+from oncebitten import *
+from punisher import *
+from qlearner import *
+from rand import *
+from retaliate import *
+from titfortat import *
 
-strategies = [
-        Defector,
-        Cooperator,
-        TitForTat,
-        TitFor2Tats,
-        TwoTitsForTat,
-        Grudger,
-        GoByMajority,
-        GoByMajority5,
-        GoByMajority10,
-        GoByMajority20,
-        GoByMajority40,
-        Random,
-        Alternator,
-        Grumpy,
-        Inverse,
-        AverageCopier,
-        ]
+basic_strategies = [
+    Alternator,
+    Cooperator,
+    Defector,
+    Random,
+    TitForTat,
+]
 
-#These are strategies that do not follow the rules of Axelrods tournement.
+strategies = basic_strategies + [
+    AntiTitForTat,
+    Appeaser,
+    ArrogantQLearner,
+    AverageCopier,
+    CautiousQLearner,
+    ForgetfulGrudger,
+    Forgiver,
+    ForgivingTitForTat,
+    GoByMajority,
+    GoByMajority10,
+    GoByMajority20,
+    GoByMajority40,
+    GoByMajority5,
+    Golden,
+    Grudger,
+    Grumpy,
+    HesitantQLearner,
+    Inverse,
+    InversePunisher,
+    LimitedRetaliate,
+    LimitedRetaliate2,
+    LimitedRetaliate3,
+    OnceBitten,
+    OppositeGrudger,
+    Pi,
+    Punisher,
+    Retaliate,
+    Retaliate2,
+    Retaliate3,
+    RiskyQLearner,
+    TitFor2Tats,
+    TrickyCooperator,
+    TrickyDefector,
+    TwoTitsForTat,
+    e,
+]
+
+# These are strategies that do not follow the rules of Axelrods tournament
 cheating_strategies = [
-        Geller,
-        ]
+    Geller,
+    GellerCooperator,
+    GellerDefector,
+    MindBender,
+    MindController,
+    MindReader,
+    MindWarper,
+    ProtectedMindReader,
+    ]
+
+all_strategies = strategies + cheating_strategies

@@ -1,10 +1,15 @@
-"""
-Test for the grudger strategy
-"""
-import unittest
+"""Test for the grumpy strategy."""
+
 import axelrod
 
-class TestGrumpy(unittest.TestCase):
+from test_player import TestPlayer
+
+
+class TestGrumpy(TestPlayer):
+
+    name = "Grumpy"
+    player = axelrod.Grumpy
+    stochastic = False
 
     def test_initial_nice_strategy(self):
         """
@@ -22,7 +27,7 @@ class TestGrumpy(unittest.TestCase):
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), 'D')
 
-    def test_effect_of_strategy(self):
+    def test_strategy(self):
         """
         Tests that grumpy will play c until threshold is ht at which point it will become grumpy.
         Player will then not become nice until lower nice threshold is hit.
@@ -42,13 +47,6 @@ class TestGrumpy(unittest.TestCase):
         P2.history = ['D', 'D', 'D', 'D', 'D', 'C', 'C', 'C', 'C', 'C', 'C']
         self.assertEqual(P1.strategy(P2), 'C')
 
-    def test_representation(self):
-        """
-        Tests string representation of class
-        """
-        P1 = axelrod.Grumpy()
-        self.assertEqual(str(P1), 'Grumpy')
-
     def test_reset_method(self):
         """
         tests the reset method
@@ -59,4 +57,3 @@ class TestGrumpy(unittest.TestCase):
         P1.reset()
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.state, 'Grumpy')
-
