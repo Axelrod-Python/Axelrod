@@ -5,54 +5,65 @@ import axelrod
 
 class TestResultSet(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.players = ('Player1', 'Player2', 'Player3')
+        cls.test_results = [
+            [[0, 0], [10, 10], [21, 21]],
+            [[10, 8], [0, 0], [16, 20]],
+            [[16, 16], [16, 16], [0, 0]]]
+        cls.expected_scores = numpy.array(
+            [[31, 31],
+             [26, 28],
+             [32, 32]])
+        cls.expected_ranking = [1, 0, 2]
+        cls.expected_ranked_names = ['Player2', 'Player1', 'Player3']
+        cls.expected_csv = 'Player2, Player1, Player3\n26, 31, 32\n28, 31, 32\n'
+
     def test_init(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
+        rs = axelrod.ResultSet(self.players, 5, 2)
         expected_results = [
-            [[0, 0, 0, 0], [0, 0, 0, 0]],
-            [[0, 0, 0, 0], [0, 0, 0, 0]]
-        ]
-        self.assertEquals(rs.nplayers, 2)
-        self.assertEquals(rs.players, players)
-        self.assertEquals(rs.turns, 10)
-        self.assertEquals(rs.repetitions, 4)
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]]]
+        self.assertEquals(rs.nplayers, 3)
+        self.assertEquals(rs.players, self.players)
+        self.assertEquals(rs.turns, 5)
+        self.assertEquals(rs.repetitions, 2)
         self.assertEquals(rs.results, expected_results)
         self.assertFalse(rs.output_initialised)
 
     def test_generate_scores(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
-        expected_results = numpy.array([[0, 0, 0, 0], [0, 0, 0, 0]])
-        self.assertTrue(numpy.array_equal(rs.generate_scores(), expected_results))
+        rs = axelrod.ResultSet(self.players, 5, 2)
+        rs.results = self.test_results
+        self.assertTrue(numpy.array_equal(rs.generate_scores(), self.expected_scores))
 
     def test_generate_ranking(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
+        rs = axelrod.ResultSet(self.players, 5, 2)
+        rs.results = self.test_results
         scores = rs.generate_scores()
-        expected_results = [0, 1]
-        self.assertEquals(rs.generate_ranking(scores), expected_results)
+        self.assertEquals(rs.generate_ranking(scores), self.expected_ranking)
 
     def test_generate_ranked_names(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
+        rs = axelrod.ResultSet(self.players, 5, 2)
+        rs.results = self.test_results
         scores = rs.generate_scores()
         rankings = rs.generate_ranking(scores)
-        expected_results = ['Player', 'Player']
-        self.assertEquals(rs.generate_ranked_names(rankings), expected_results)
+        self.assertEquals(rs.generate_ranked_names(rankings), self.expected_ranked_names)
 
     def test_init_output(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
+        rs = axelrod.ResultSet(self.players, 5, 2)
+        rs.results = self.test_results
         rs.init_output()
-        expected_scores = numpy.array([[0, 0, 0, 0], [0, 0, 0, 0]])
-        expected_ranking = [0, 1]
-        expected_names = ['Player', 'Player']
-        self.assertTrue(numpy.array_equal(rs.scores, expected_scores))
-        self.assertEquals(rs.ranking, expected_ranking)
-        self.assertEquals(rs.ranked_names, expected_names)
+        self.assertTrue(numpy.array_equal(rs.scores, self.expected_scores))
+        self.assertEquals(rs.ranking, self.expected_ranking)
+        self.assertEquals(rs.ranked_names, self.expected_ranked_names)
+        self.assertTrue(rs.output_initialised)
 
     def test_csv(self):
-        players = (axelrod.Player(), axelrod.Player())
-        rs = axelrod.ResultSet(players, 10, 4)
-        expected_results = 'Player, Player\n0, 0\n0, 0\n0, 0\n0, 0\n'
-        self.assertEquals(rs.csv(), expected_results)
+        rs = axelrod.ResultSet(self.players, 5, 2)
+        rs.results = self.test_results
+        self.assertEquals(rs.csv(), self.expected_csv)
+
+if __name__ == '__main__':
+    unittest.main()
