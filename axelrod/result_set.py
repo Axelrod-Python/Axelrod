@@ -1,6 +1,16 @@
+import csv
+
 from StringIO import StringIO
 
-import numpy
+
+def median(lst):
+    lst = sorted(lst)
+    if len(lst) < 1:
+            return None
+    if len(lst) %2 == 1:
+            return lst[((len(lst)+1)/2)-1]
+    if len(lst) %2 == 0:
+            return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
 
 
 class ResultSet(object):
@@ -10,19 +20,19 @@ class ResultSet(object):
 
         self.players = players
         self.nplayers = len(players)
-        player_list = list(range(len(players)))
 
         self.turns = turns
         self.repetitions = repetitions
-        repetition_list = list(range(repetitions))
 
-        self.results = numpy.zeros((self.nplayers, self.nplayers, self.repetitions))
+        plist = list(range(self.nplayers))
+        replist = list(range(repetitions))
+        self.results = [[[0 for r in replist ] for j in plist] for i in plist]
 
         self.output_initialised = False
 
     def generate_scores(self):
         """Returns a numpy array based on the results list"""
-        return self.results.sum(axis=1)
+        return [[sum([res[ip][irep] for ip in range(self.nplayers)]) for irep in range(self.repetitions)] for res in self.results]
 
     def generate_ranking(self, scores):
         """
@@ -32,7 +42,7 @@ class ResultSet(object):
         """
         ranking = sorted(
             range(self.nplayers),
-            key=lambda i: numpy.median(scores[i]))
+            key=lambda i: median(scores[i]))
         return ranking
 
     def generate_ranked_names(self, ranking):
@@ -44,7 +54,7 @@ class ResultSet(object):
 
     def generate_payoff_matrix(self):
         """Returns a per-turn averaged payoff matrix."""
-        return 1.0 * self.results.sum(axis=2) / self.turns / self.repetitions
+        return [[1.0 * sum(s) / self.turns / self.repetitions for s in r] for r in self.results]
 
     def init_output(self):
         """
@@ -63,11 +73,10 @@ class ResultSet(object):
         """Returns a string of csv formatted results"""
         self.init_output()
         csv_string = StringIO()
-        header = ", ".join(self.ranked_names) + "\n"
+        header = ",".join(self.ranked_names) + "\n"
         csv_string.write(header)
-        numpy.savetxt(
-            csv_string,
-            self.scores[self.ranking].transpose(),
-            delimiter=", ",
-            fmt='%i')
+        writer = csv.writer(csv_string, lineterminator="\n")
+        for irep in range(self.repetitions):
+            data = [self.scores[rank][irep] for rank in self.ranking]
+            writer.writerow(map(str, data))
         return csv_string.getvalue()
