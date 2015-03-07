@@ -1,4 +1,5 @@
 import unittest
+import numpy
 import axelrod
 
 
@@ -15,25 +16,26 @@ class TestBoxPlot(unittest.TestCase):
         cls.test_result_set.results = results
         cls.test_result_set.init_output()
 
-        cls.expected_dataset = 'dataset'
-        cls.expected_xticks = 'xticks'
-        cls.expected_title = 'title'
+        cls.expected_dataset = [[2, 2], [3, 3], [3, 3]]
+        cls.expected_xticks = ([1, 2, 3, 4], ['Player2', 'Player1', 'Player3'])
+        cls.expected_title = 'Mean score per stage game over 5 rounds repeated 2 times (3 strategies)'
 
     def test_init(self):
         bp = axelrod.BoxPlot(self.test_result_set)
-        self.assertEquals(bp.results_set, self.test_result_set)
+        self.assertEquals(bp.result_set, self.test_result_set)
 
     def test_dataset(self):
         bp = axelrod.BoxPlot(self.test_result_set)
-        self.assertEquals(bp.dataset, self.expected_dataset)
+        self.assertTrue(numpy.allclose(bp.dataset(), self.expected_dataset))
+        # self.assertEqual(bp.dataset(), self.expected_dataset)
 
     def test_xticks(self):
         bp = axelrod.BoxPlot(self.test_result_set)
-        self.assertEquals(bp.xticks, self.expected_xticks)
+        self.assertEquals(bp.xticks(), self.expected_xticks)
 
     def test_title(self):
         bp = axelrod.BoxPlot(self.test_result_set)
-        self.assertEquals(bp.title, self.expected_title)
+        self.assertEquals(bp.title(), self.expected_title)
 
 if __name__ == '__main__':
     unittest.main()
