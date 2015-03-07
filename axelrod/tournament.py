@@ -2,6 +2,8 @@ from game import *
 from result_set import *
 from round_robin import *
 
+import numpy
+
 
 class Tournament(object):
     """Reproduce Prof. Axelrod's tournament"""
@@ -36,5 +38,5 @@ class Tournament(object):
             self.deterministic_cache = round_robin.deterministic_cache
             for i in plist:
                 for j in plist:
-                    self.result_set.results[i][j][irep] = payoffs[i][j]
+                    self.result_set.results[:, :, irep] = payoffs
         return self.result_set

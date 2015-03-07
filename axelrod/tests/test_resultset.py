@@ -1,5 +1,7 @@
 import unittest
+
 import numpy
+
 import axelrod
 
 
@@ -8,10 +10,10 @@ class TestResultSet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.players = ('Player1', 'Player2', 'Player3')
-        cls.test_results = [
+        cls.test_results = numpy.array([
             [[0, 0], [10, 10], [21, 21]],
             [[10, 8], [0, 0], [16, 20]],
-            [[16, 16], [16, 16], [0, 0]]]
+            [[16, 16], [16, 16], [0, 0]]])
         cls.expected_scores = numpy.array(
             [[31, 31],
              [26, 28],
@@ -22,15 +24,12 @@ class TestResultSet(unittest.TestCase):
 
     def test_init(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
-        expected_results = [
-            [[0, 0], [0, 0], [0, 0]],
-            [[0, 0], [0, 0], [0, 0]],
-            [[0, 0], [0, 0], [0, 0]]]
+        expected_results = numpy.zeros((3, 3, 2))
         self.assertEquals(rs.nplayers, 3)
         self.assertEquals(rs.players, self.players)
         self.assertEquals(rs.turns, 5)
         self.assertEquals(rs.repetitions, 2)
-        self.assertEquals(rs.results, expected_results)
+        self.assertTrue((rs.results == expected_results).all())
         self.assertFalse(rs.output_initialised)
 
     def test_generate_scores(self):
