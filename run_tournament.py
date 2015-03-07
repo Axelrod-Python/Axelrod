@@ -9,7 +9,13 @@ import argparse
 import os
 import time
 
-import matplotlib.pyplot as plt
+matplotlib_installed = True
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    matplotlib_installed = False
+    print ("The matplotlib library is not installed. "
+           "Only .csv output will be produced.")
 
 import axelrod
 
@@ -33,7 +39,8 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
             tournament = axelrod.Tournament(
                 players=graphs_to_plot[plot],
                 turns=turns,
-                repetitions=repetitions)
+                repetitions=repetitions
+            )
 
             # This is where the actual tournament takes place.
             results = tournament.play()
@@ -44,14 +51,25 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
             with open(fname, 'w') as f:
                 f.write(csv)
 
+            if not matplotlib_installed:
+                continue
+
             boxplot = axelrod.BoxPlot(results)
-            if boxplot.matplotlib_installed:
-                figure = boxplot.figure()
-                figure.savefig(plot, bbox_inches='tight')
-                figure.clf()
-            else:
-                print ("The matplotlib library is not installed. "
-                       "Only .csv output will be produced.")
+            figure = boxplot.figure()
+            figure.savefig(plot, bbox_inches='tight')
+            figure.clf()
+            
+            # Save plot with average payoff matrix with winners at top.
+            pmatrix_ranked = [[results.payoff_matrix[r1][r2] for r2 in results.ranking] for r1 in results.ranking]
+            fig, ax = plt.subplots()
+            mat = ax.matshow(pmatrix_ranked)
+            plt.xticks(range(tournament.nplayers))
+            plt.yticks(range(tournament.nplayers))
+            ax.set_xticklabels(results.ranked_names, rotation=90)
+            ax.set_yticklabels(results.ranked_names)
+            fig.colorbar(mat)
+            plt.savefig(plot.replace('results', 'payoffs'), bbox_inches='tight')
+            plt.clf()
 
 
 if __name__ == "__main__":
