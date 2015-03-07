@@ -8,13 +8,8 @@ from __future__ import division
 import argparse
 import os
 import time
-
-import numpy
-
 import matplotlib.pyplot as plt
-
 import axelrod
-
 
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all, output_directory):
     """Main function for running Axelrod tournaments."""
@@ -48,9 +43,11 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
                 f.write(csv)
 
             # Save plots with the scores.
-            plt.boxplot([s / (turns * (len(results.ranking) - 1)) for s in results.scores[results.ranking]])
-            plt.xticks(range(1, len(results.ranked_names) + 2), [str(n) for n in results.ranked_names], rotation=90)
-            plt.title('Mean score per stage game over {} rounds repeated {} times ({} strategies)'.format(turns, repetitions, len(results.ranking)))
+            boxplot = axelrod.BoxPlot(results)
+            # plt.boxplot(boxplot.dataset())
+            plt.boxplot([s / (results.turns * (len(results.ranking) - 1)) for s in results.scores[results.ranking]])
+            plt.xticks(boxplot.xticks_locations(), boxplot.xticks_labels(), rotation=90)
+            plt.title(boxplot.title())
             plt.savefig(plot, bbox_inches='tight')
             plt.clf()
 

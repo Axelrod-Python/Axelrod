@@ -17,7 +17,8 @@ class TestBoxPlot(unittest.TestCase):
         cls.test_result_set.init_output()
 
         cls.expected_dataset = [[2, 2], [3, 3], [3, 3]]
-        cls.expected_xticks = ([1, 2, 3, 4], ['Player2', 'Player1', 'Player3'])
+        cls.expected_xticks_locations = [1, 2, 3, 4]
+        cls.expected_xticks_labels = ['Player2', 'Player1', 'Player3']
         cls.expected_title = 'Mean score per stage game over 5 rounds repeated 2 times (3 strategies)'
 
     def test_init(self):
@@ -27,11 +28,14 @@ class TestBoxPlot(unittest.TestCase):
     def test_dataset(self):
         bp = axelrod.BoxPlot(self.test_result_set)
         self.assertTrue(numpy.allclose(bp.dataset(), self.expected_dataset))
-        # self.assertEqual(bp.dataset(), self.expected_dataset)
 
-    def test_xticks(self):
+    def test_xticks_locations(self):
         bp = axelrod.BoxPlot(self.test_result_set)
-        self.assertEquals(bp.xticks(), self.expected_xticks)
+        self.assertEquals(bp.xticks_locations(), self.expected_xticks_locations)
+
+    def test_xticks_labels(self):
+        bp = axelrod.BoxPlot(self.test_result_set)
+        self.assertEquals(bp.xticks_labels(), self.expected_xticks_labels)
 
     def test_title(self):
         bp = axelrod.BoxPlot(self.test_result_set)

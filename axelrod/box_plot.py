@@ -8,8 +8,11 @@ class BoxPlot(object):
             s / (self.result_set.turns * (len(self.result_set.ranking) - 1))
             for s in self.result_set.scores[self.result_set.ranking]]
 
-    def xticks(self):
-        return range(1, len(self.result_set.ranked_names) + 2), [str(n) for n in self.result_set.ranked_names]
+    def xticks_locations(self):
+        return range(1, len(self.result_set.ranked_names) + 2)
+
+    def xticks_labels(self):
+        return [str(n) for n in self.result_set.ranked_names]
 
     def title(self):
         return 'Mean score per stage game over {} rounds repeated {} times ({} strategies)'.format(
