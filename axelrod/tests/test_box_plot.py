@@ -34,3 +34,6 @@ class TestBoxPlot(unittest.TestCase):
     def test_title(self):
         bp = axelrod.BoxPlot(self.test_result_set)
         self.assertEquals(bp.title, self.expected_title)
+
+if __name__ == '__main__':
+    unittest.main()
