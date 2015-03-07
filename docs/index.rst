@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Axelrod's documentation!
-===================================
+Welcome to the documentation for an implementation of Axelrod's tournament in Python
+====================================================================================
 
 This project is both:
 
