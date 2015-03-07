@@ -14,9 +14,9 @@ class TestResultSet(unittest.TestCase):
             [[16, 16], [16, 16], [0, 0]],
         ]
         cls.expected_scores = [
-            [31, 31],
-            [26, 28],
-            [32, 32],
+            [3.1, 3.1],
+            [2.6, 2.8],
+            [3.2, 3.2],
         ]
         cls.expected_payoffs = [
             [0.0, 2.0, 4.2],
@@ -25,7 +25,7 @@ class TestResultSet(unittest.TestCase):
         ]
         cls.expected_ranking = [1, 0, 2]
         cls.expected_ranked_names = ['Player2', 'Player1', 'Player3']
-        cls.expected_csv = 'Player2,Player1,Player3\n26,31,32\n28,31,32\n'
+        cls.expected_csv = 'Player2,Player1,Player3\n2.6,3.1,3.2\n2.8,3.1,3.2\n'
 
     def test_init(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
