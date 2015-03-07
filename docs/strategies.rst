@@ -1,18 +1,18 @@
+.. currentmodule:: axelrod.strategies
 Here is a list of strategies
 ============================
 
-Here are some of the basic strategies:
---------------------------------------
+Here are some of the basic strategies
+-------------------------------------
 
-.. currentmodule:: axelrod.strategies
 .. autoclass:: Alternator
 .. autoclass:: Cooperator
 .. autoclass:: Defector
 .. autoclass:: Random
 .. autoclass:: TitForTat
 
-A list of all further (honest) strategies:
-------------------------------------------
+A list of all further (honest) strategies
+-----------------------------------------
 
 .. autoclass:: AntiTitForTat
 .. autoclass:: Appeaser
@@ -50,8 +50,8 @@ A list of all further (honest) strategies:
 .. autoclass:: TwoTitsForTat
 .. autoclass:: e
 
-A list of the cheating strategies:
-----------------------------------
+A list of the cheating strategies
+---------------------------------
 
 .. autoclass:: Geller
 .. autoclass:: GellerCooperator
