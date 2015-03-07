@@ -1,5 +1,9 @@
-"""Tests for the main module."""
+"""Tests for the main tournament class."""
+
 import unittest
+
+import numpy
+
 import axelrod
 
 
@@ -25,7 +29,7 @@ class TestTournament(unittest.TestCase):
         strategies = [strategy() for strategy in axelrod.strategies]
         tournament = axelrod.Tournament(players=strategies, game=self.game, turns=500, repetitions=2)
         output_of_tournament = tournament.play().results
-        self.assertEqual(type(output_of_tournament), list)
+        self.assertEqual(type(output_of_tournament), numpy.ndarray)
         self.assertEqual(len(output_of_tournament), len(strategies))
 
     def test_tournament(self):
@@ -50,6 +54,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play().results
         scores = [[sum([r[i] for r in res]) for i in range(5)] for res in results]
         self.assertEqual(sorted(zip(names, scores)), outcome)
+
 
 if __name__ == '__main__':
     unittest.main()

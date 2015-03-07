@@ -1,30 +1,28 @@
-import numpy
 from StringIO import StringIO
+
+import numpy
 
 
 class ResultSet(object):
-    """
-    A class to hold the results of a tournament
-    and to return them as plots or csv files.
-    """
+    """A class to hold the results of a tournament."""
 
     def __init__(self, players, turns, repetitions):
-        """Initialise the object"""
+
         self.players = players
         self.nplayers = len(players)
         player_list = list(range(len(players)))
+
         self.turns = turns
         self.repetitions = repetitions
         repetition_list = list(range(repetitions))
-        self.results = [
-            [[0 for irep in repetition_list]
-                for j in player_list] for i in player_list]
+
+        self.results = numpy.zeros((self.nplayers, self.nplayers, self.repetitions))
+
         self.output_initialised = False
 
     def generate_scores(self):
         """Returns a numpy array based on the results list"""
-        numpy_array_results = numpy.array(self.results)
-        return numpy_array_results.sum(axis=1)
+        return self.results.sum(axis=1)
 
     def generate_ranking(self, scores):
         """
