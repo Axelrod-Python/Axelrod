@@ -42,6 +42,10 @@ class ResultSet(object):
         ranked_names = [str(self.players[i]) for i in ranking]
         return ranked_names
 
+    def generate_payoff_matrix(self):
+        """Returns a per-turn averaged payoff matrix."""
+        return 1.0 * self.results.sum(axis=2) / self.turns / self.repetitions
+
     def init_output(self):
         """
         Sets the scores, ranking and ranked_names properties.
@@ -52,6 +56,7 @@ class ResultSet(object):
             self.scores = self.generate_scores()
             self.ranking = self.generate_ranking(self.scores)
             self.ranked_names = self.generate_ranked_names(self.ranking)
+            self.payoff_matrix = self.generate_payoff_matrix()
             self.output_initialised = True
 
     def csv(self):
