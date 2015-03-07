@@ -2,8 +2,6 @@
 
 import unittest
 
-import numpy
-
 import axelrod
 
 
@@ -29,7 +27,7 @@ class TestTournament(unittest.TestCase):
         strategies = [strategy() for strategy in axelrod.strategies]
         tournament = axelrod.Tournament(players=strategies, game=self.game, turns=500, repetitions=2)
         output_of_tournament = tournament.play().results
-        self.assertEqual(type(output_of_tournament), numpy.ndarray)
+        self.assertEqual(type(output_of_tournament), list)
         self.assertEqual(len(output_of_tournament), len(strategies))
 
     def test_tournament(self):
