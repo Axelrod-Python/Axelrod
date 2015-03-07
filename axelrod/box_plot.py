@@ -35,6 +35,7 @@ class BoxPlot(object):
                 self.xticks_locations(),
                 self.xticks_labels(),
                 rotation=90)
+            plt.tick_params(axis='both', which='both', labelsize=8)
             plt.title(self.title())
             return figure
         else:
