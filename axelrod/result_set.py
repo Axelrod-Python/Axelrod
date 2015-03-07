@@ -31,8 +31,11 @@ class ResultSet(object):
         self.output_initialised = False
 
     def generate_scores(self):
-        """Returns a numpy array based on the results list"""
-        return [[sum([res[ip][irep] for ip in range(self.nplayers)]) for irep in range(self.repetitions)] for res in self.results]
+        """Return normalized scores based on the results"""
+        scores = [[sum([res[ip][irep] for ip in range(self.nplayers)]) for irep in range(self.repetitions)] for res in self.results]
+        normalization = self.turns * (self.nplayers - 1)
+        scores_normalized = [[1.0 * s / normalization for s in r] for r in scores]
+        return scores_normalized
 
     def generate_ranking(self, scores):
         """
@@ -46,9 +49,7 @@ class ResultSet(object):
         return ranking
 
     def generate_ranked_names(self, ranking):
-        """
-        Returns a list of players names sorted by their ranked order.
-        """
+        """Returns a list of players names sorted by their ranked order."""
         ranked_names = [str(self.players[i]) for i in ranking]
         return ranked_names
 
