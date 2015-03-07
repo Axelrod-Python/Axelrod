@@ -61,11 +61,3 @@ A list of the cheating strategies:
 .. autoclass:: MindReader
 .. autoclass:: MindWarper
 .. autoclass:: ProtectedMindReader
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
