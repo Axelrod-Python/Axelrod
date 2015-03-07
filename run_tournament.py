@@ -44,8 +44,7 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
 
             # Save plots with the scores.
             boxplot = axelrod.BoxPlot(results)
-            # plt.boxplot(boxplot.dataset())
-            plt.boxplot([s / (results.turns * (len(results.ranking) - 1)) for s in results.scores[results.ranking]])
+            plt.boxplot(boxplot.dataset())
             plt.xticks(boxplot.xticks_locations(), boxplot.xticks_labels(), rotation=90)
             plt.title(boxplot.title())
             plt.savefig(plot, bbox_inches='tight')

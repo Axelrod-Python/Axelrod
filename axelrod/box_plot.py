@@ -5,7 +5,7 @@ class BoxPlot(object):
 
     def dataset(self):
         return [
-            s / (self.result_set.turns * (len(self.result_set.ranking) - 1))
+            s / (self.result_set.turns * float((len(self.result_set.ranking) - 1)))
             for s in self.result_set.scores[self.result_set.ranking]]
 
     def xticks_locations(self):
