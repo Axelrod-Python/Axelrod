@@ -75,6 +75,19 @@ $ python run_tournament.py --xc --xa
 
 There is currently a very sparse set of documentation up here: [axelrod.readthedocs.org/](http://axelrod.readthedocs.org/).
 
+To write/render the documenation locally, you will need [sphinx](http://sphinx-doc.org/):
+
+```
+$ pip install sphinx sphinx-autobuild
+```
+
+Once you have sphinx:
+
+```
+$ cd docs
+$ make html
+```
+
 # Contributing
 
 All contributions are welcome: with a particular emphasis on contributing further strategies.
