@@ -1,27 +1,45 @@
-"""
-Test for the geller strategy
-"""
-import unittest
+"""Test for the geller strategy."""
+
 import axelrod
 
-class TestGrudger(unittest.TestCase):
+from test_player import TestPlayer
 
-    def test_will_cooperate_against_someone_who_is_about_to_cooperate(self):
-        """
-        Check that will cooperate against someone about to cooperate
-        """
-        P1 = axelrod.Geller()
+
+class TestGeller(TestPlayer):
+
+    name = "Geller"
+    player = axelrod.Geller
+    stochastic = True
+
+    def test_strategy(self):
+        """Should cooperate against cooperaters and defect against defectors."""
+
+        P1 = self.player()
         P2 = axelrod.Cooperator()
         self.assertEqual(P1.strategy(P2), 'C')
 
-    def test_will_defect_against_someone_who_is_about_to_defect(self):
-        """
-        Check that will defect against someone about to defect
-        """
-        P1 = axelrod.Geller()
+        P1 = self.player()
         P2 = axelrod.Defector()
         self.assertEqual(P1.strategy(P2), 'D')
 
-    def test_representation(self):
-        P1 = axelrod.Geller()
-        self.assertEqual(str(P1), 'Geller')
+class TestGellerCooperator(TestGeller):
+
+    name = "Geller Cooperator"
+    player = axelrod.GellerCooperator
+    stochastic = False
+
+    def test_against_self(self):
+        P1 = self.player()
+        P2 = self.player()
+        self.assertEqual(P1.strategy(P2), 'C')
+
+class TestGellerDefector(TestGeller):
+
+    name = "Geller Defector"
+    player = axelrod.GellerDefector
+    stochastic = False
+
+    def test_against_self(self):
+        P1 = self.player()
+        P2 = self.player()
+        self.assertEqual(P1.strategy(P2), 'D')

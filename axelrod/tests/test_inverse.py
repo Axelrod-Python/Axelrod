@@ -1,13 +1,19 @@
-"""
-Test for the inverse strategy
-"""
-import unittest
-import axelrod
+"""Test for the inverse strategy."""
+
 import random
 
-class TestInverse(unittest.TestCase):
+import axelrod
 
-    def test_initial_strategy(self):
+from test_player import TestPlayer
+
+
+class TestInverse(TestPlayer):
+
+    name = "Inverse"
+    player = axelrod.Inverse
+    stochastic = True
+
+    def test_strategy(self):
         """
         Test that initial strategy cooperates.
         """
@@ -56,7 +62,3 @@ class TestInverse(unittest.TestCase):
         self.assertEqual(P1.strategy(P2), 'D')
         random.seed(5)
         self.assertEqual(P1.strategy(P2), 'D')
-
-    def test_representation(self):
-        P1 = axelrod.Inverse()
-        self.assertEqual(str(P1), 'Inverse')
