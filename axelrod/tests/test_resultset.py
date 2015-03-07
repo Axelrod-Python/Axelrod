@@ -18,6 +18,11 @@ class TestResultSet(unittest.TestCase):
             [[31, 31],
              [26, 28],
              [32, 32]])
+        cls.expected_payoffs = numpy.array([
+            [0.0, 2.0, 4.2],
+            [1.8, 0.0, 3.6],
+            [3.2, 3.2, 0.0]
+        ])
         cls.expected_ranking = [1, 0, 2]
         cls.expected_ranked_names = ['Player2', 'Player1', 'Player3']
         cls.expected_csv = 'Player2, Player1, Player3\n26, 31, 32\n28, 31, 32\n'
@@ -49,6 +54,12 @@ class TestResultSet(unittest.TestCase):
         scores = rs.generate_scores()
         rankings = rs.generate_ranking(scores)
         self.assertEquals(rs.generate_ranked_names(rankings), self.expected_ranked_names)
+
+    def test_generate_payoff_matrix(self):
+        rs = axelrod.ResultSet(self.players, 5, 2)
+        rs.results = self.test_results
+        payoffs = rs.generate_payoff_matrix()
+        self.assertTrue((payoffs == self.expected_payoffs).all())
 
     def test_init_output(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
