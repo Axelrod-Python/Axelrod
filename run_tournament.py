@@ -67,6 +67,7 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
             plt.yticks(range(tournament.nplayers))
             ax.set_xticklabels(results.ranked_names, rotation=90)
             ax.set_yticklabels(results.ranked_names)
+            plt.tick_params(axis='both', which='both', labelsize=8)
             fig.colorbar(mat)
             plt.savefig(plot.replace('results', 'payoffs'), bbox_inches='tight')
             plt.clf()
