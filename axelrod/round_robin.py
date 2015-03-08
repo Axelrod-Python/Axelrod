@@ -21,22 +21,36 @@ class RoundRobin(object):
     def play(self):
         """Plays a round robin where each match lasts turns.
 
-        We can cache scores for paris of deterministic strategies, since the outcome
-        will always be the same. There are many possible keys to cache by, but perhaps
-        the most versatile is a tuple with the classes of both players.
+        We cache scores for pairs of deterministic strategies, since the outcome will
+        always be the same.
+
+        Notice also that we need to handle self-interactions with some special exceptions
+        due to the way gameplay is coded within Player.
 
         Returns the total payoff matrix.
         """
+
         payoffs = [[0 for j in range(self.nplayers)] for i in range(self.nplayers)]
 
         for ip1 in range(self.nplayers):
-            for ip2 in range(ip1 + 1, self.nplayers):
 
-                p1 = self.players[ip1]
-                p2 = self.players[ip2]
+            p1 = self.players[ip1]
+            cl1 = p1.__class__
 
-                cl1 = p1.__class__
-                cl2 = p2.__class__
+            for ip2 in range(ip1, self.nplayers):
+
+                # For self-interactions we need to create an additional object. otherwise
+                # the play method in Player will write twice to the same history, effectively
+                # doubling the score and causing historic schizophrenia.
+                if ip1 == ip2:
+                    p2 = cl1()
+                    cl2 = cl1
+                else:
+                    p2 = self.players[ip2]
+                    cl2 = p2.__class__
+
+                # There are many possible keys to cache by, but perhaps the
+                # most versatile is a tuple with the classes of both players.
                 key = (cl1, cl2)
                 if (p1.stochastic or p2.stochastic or key not in self.deterministic_cache):
                     turn = 0
@@ -51,7 +65,12 @@ class RoundRobin(object):
                 else:
                     scores = self.deterministic_cache[key]
 
-                payoffs[ip1][ip2] = scores[0]
-                payoffs[ip2][ip1] = scores[1]
+                # For self-interactions we can take the average of the two sides, which
+                # should improve the averaging a bit.
+                if ip1 == ip2:
+                    payoffs[ip1][ip2] = 0.5 * (scores[0] + scores[1])
+                else:
+                    payoffs[ip1][ip2] = scores[0]
+                    payoffs[ip2][ip1] = scores[1]
 
         return payoffs

@@ -31,10 +31,25 @@ class ResultSet(object):
         self.output_initialised = False
 
     def generate_scores(self):
-        """Return normalized scores based on the results"""
-        scores = [[sum([res[ip][irep] for ip in range(self.nplayers)]) for irep in range(self.repetitions)] for res in self.results]
+        """Return normalized scores based on the results.
+
+        Originally there were no self-interactions, so the code here was rewritten
+        to exclude those from the generated score. To include self-interactions,
+        remove the condition on ip and ires and fix the normalization factor.
+        """
+
+        scores = []
+        for ires, res in enumerate(self.results):
+            scores.append([])
+            for irep in range(self.repetitions):
+                scores[-1].append(0)
+                for ip in range(self.nplayers):
+                    if ip != ires:
+                        scores[-1][-1] += res[ip][irep]
+
         normalization = self.turns * (self.nplayers - 1)
         scores_normalized = [[1.0 * s / normalization for s in r] for r in scores]
+
         return scores_normalized
 
     def generate_ranking(self, scores):

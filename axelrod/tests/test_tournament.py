@@ -50,7 +50,7 @@ class TestTournament(unittest.TestCase):
         tournament = axelrod.Tournament(players=[P1, P2, P3, P4, P5], game=self.game, turns=200, repetitions=5)
         names = [str(p) for p in tournament.players]
         results = tournament.play().results
-        scores = [[sum([r[i] for r in res]) for i in range(5)] for res in results]
+        scores = [[sum([r[i] for ir,r in enumerate(res) if ir != ires]) for i in range(5)] for ires,res in enumerate(results)]
         self.assertEqual(sorted(zip(names, scores)), outcome)
 
 
