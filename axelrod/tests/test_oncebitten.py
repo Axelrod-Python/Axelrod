@@ -53,3 +53,44 @@ class TestOnceBitten(TestPlayer):
         self.assertEqual(P1.grudge_memory, 10)
         self.assertEqual(P1.grudged, True)
         P2.history.append('C')
+
+class TestFoolMeOnce(unittest.TestCase):
+
+    def test_initial(self):
+        P1 = axelrod.FoolMeOnce()
+        P2 = axelrod.Player()
+        self.assertEqual(P1.strategy(P2), P1._initial)
+
+    def test_strategy(self):
+        """
+        If opponent defects at any point then the player will defect forever
+        """
+        P1 = axelrod.FoolMeOnce()
+        P2 = axelrod.Defector()
+        P1.history = ['C']
+        P2.history = ['D']
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history = ['C']
+        P2.history = ['D']
+        self.assertEqual(P1.strategy(P2), 'D')
+
+    def test_representation(self):
+        P1 = axelrod.FoolMeOnce()
+        self.assertEqual(str(P1), 'Fool Me Once')
+
+    def test_stochastic(self):
+        self.assertFalse(axelrod.FoolMeOnce().stochastic)
+
+class TestForgetfulFoolMeOnce(unittest.TestCase):
+
+    def test_initial(self):
+        P1 = axelrod.ForgetfulFoolMeOnce()
+        P2 = axelrod.Player()
+        self.assertEqual(P1.strategy(P2), P1._initial)
+
+    def test_representation(self):
+        P1 = axelrod.ForgetfulFoolMeOnce()
+        self.assertEqual(str(P1), 'Forgetful Fool Me Once')
+
+    def test_stochastic(self):
+        self.assertTrue(axelrod.ForgetfulFoolMeOnce().stochastic)
