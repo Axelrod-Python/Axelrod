@@ -4,28 +4,6 @@ from axelrod import Player, RPTS
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
-class SuspiciousTFT(Player):
-    """Suspicious Tit-For-Tat Strategy, initial move is D rather than C."""
-
-    name = 'Suspicious Tit-For-Tat'
-
-    def __init__(self, initial='D'):
-        Player.__init__(self)        
-        self.response_dict = {
-            ('C','C'): 'C',
-            ('C','D'): 'D',            
-            ('D','C'): 'C',
-            ('D','D'): 'D',
-        }
-        self._initial = initial
-        self.stochastic = False
-    
-    def strategy(self, opponent):
-        """TFT but starts with D instead of C."""
-        if not opponent.history:
-            return self._initial
-        last_round = (self.history[-1], opponent.history[-1])
-        return self.response_dict[last_round]
 
 class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
@@ -33,16 +11,16 @@ class WinStayLoseShift(Player):
     name = 'Win-Stay Lose-Shift'
 
     def __init__(self, initial='C'):
-        Player.__init__(self)        
+        Player.__init__(self)
         self.response_dict = {
             ('C','C'): 'C',
-            ('C','D'): 'D',            
+            ('C','D'): 'D',
             ('D','C'): 'D',
             ('D','D'): 'C',
         }
         self._initial = initial
         self.stochastic = False
-    
+
     def strategy(self, opponent):
         """Switches if it doesn't get the best payout, traditionally equivalent to a Memory one strategy of [1,0,0,1], but this implementation does not require random draws."""
         if not opponent.history:
@@ -117,7 +95,7 @@ class ZDChi(MemoryOnePlayer):
     def __init__(self, chi=2):
         chi = float(chi)
         (R, P, T, S) = RPTS()
-        
+
         phi_max = float(P-S) / ((P-S) + chi * (T-P))
         phi = phi_max / 2.
 
