@@ -4,7 +4,7 @@ import axelrod
 
 matplotlib_installed = True
 try:
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot
 except ImportError:
     matplotlib_installed = False
 
@@ -26,7 +26,6 @@ class TestBoxPlot(unittest.TestCase):
         cls.expected_xticks_locations = [1, 2, 3, 4]
         cls.expected_xticks_labels = ['Player2', 'Player1', 'Player3']
         cls.expected_title = 'Mean score per stage game over 5 rounds repeated 2 times (3 strategies)'
-
 
     def test_init(self):
         bp = axelrod.BoxPlot(self.test_result_set)
@@ -51,7 +50,7 @@ class TestBoxPlot(unittest.TestCase):
     def test_figure(self):
         if matplotlib_installed:
             bp = axelrod.BoxPlot(self.test_result_set)
-            self.assertIsInstance(bp.figure(), plt.Figure)
+            self.assertIsInstance(bp.figure(), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 
