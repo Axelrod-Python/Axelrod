@@ -137,3 +137,54 @@ class TestStochasticCooperator(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P1.strategy(P2), 'D')
+
+class TestStochasticWSLS(TestPlayer):
+
+    name = "Stochastic WSLS"
+    player = axelrod.StochasticWSLS
+    stochastic = True
+
+    def test_strategy(self):
+        P1 = self.player()
+        P2 = axelrod.Player()
+        self.assertEqual(P1.strategy(P2), 'C')
+
+        P1.history = ['C']
+        P2.history = ['C']
+        random.seed(2)
+        # With probability .05 will defect
+        self.assertEqual(P1.strategy(P2), 'D')
+        # But otherwise will cooperate
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+
+        P1.history = ['C']
+        P2.history = ['D']
+        random.seed(31)
+        # With probability .05 will cooperate
+        self.assertEqual(P1.strategy(P2), 'C')
+        # But otherwise will defect
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+
+        P1.history = ['D']
+        P2.history = ['C']
+        random.seed(31)
+        # With probability .05 will cooperate
+        self.assertEqual(P1.strategy(P2), 'C')
+        # But otherwise will defect
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+
+        P1.history = ['D']
+        P2.history = ['D']
+        random.seed(2)
+        # With probability .05 will defect
+        self.assertEqual(P1.strategy(P2), 'D')
+        # But otherwise will defect
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
