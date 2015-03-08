@@ -19,3 +19,14 @@ class BoxPlot(object):
             self.result_set.turns,
             self.result_set.repetitions,
             len(self.result_set.ranking))
+
+    def figure(self):
+        import matplotlib.pyplot as plt
+        figure = plt.figure()
+        plt.boxplot(self.dataset())
+        plt.xticks(
+            self.xticks_locations(),
+            self.xticks_labels(),
+            rotation=90)
+        plt.title(self.title())
+        return figure
