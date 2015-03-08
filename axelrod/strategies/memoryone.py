@@ -1,6 +1,6 @@
 import random
 
-from axelrod import Player, RPTS
+from axelrod import Player, Game
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
@@ -94,7 +94,7 @@ class ZDChi(MemoryOnePlayer):
 
     def __init__(self, chi=2):
         chi = float(chi)
-        (R, P, T, S) = RPTS()
+        (R, P, T, S) = Game.RPTS()
 
         phi_max = float(P-S) / ((P-S) + chi * (T-P))
         phi = phi_max / 2.
