@@ -90,17 +90,17 @@ class TestTwoTitsForTat(TestPlayer):
 class TestSuspiciousTitForTat(TestPlayer):
 
     name = "Suspicious Tit For Tat"
-    player = axelrod.AntiTitForTat
+    player = axelrod.SuspiciousTitForTat
 
     def test_strategy(self):
         """Starts by defecting"""
-        P1 = axelrod.AntiTitForTat()
+        P1 = axelrod.SuspiciousTitForTat()
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), 'D')
 
     def test_affect_of_strategy(self):
         """Will do opposite of what opponent does."""
-        P1 = axelrod.AntiTitForTat()
+        P1 = axelrod.SuspiciousTitForTat()
         P2 = axelrod.Player()
         P1.history = ['D']
         P2.history = ['C']
