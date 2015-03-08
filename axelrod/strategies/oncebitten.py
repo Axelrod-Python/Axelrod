@@ -72,6 +72,10 @@ class FoolMeOnce(Player):
             return 'D'
         return 'C'
 
+    def reset(self):
+        self.D_count = 0
+        self.history = []
+
 class ForgetfulFoolMeOnce(Player):
     """
     Forgives one D then retaliates forever on a second D. Sometimes randomly forgets the defection count.
@@ -97,3 +101,7 @@ class ForgetfulFoolMeOnce(Player):
         if self.D_count > 1:
             return 'D'
         return 'C'
+
+    def reset(self):
+        self.D_count = 0
+        self.history = []
