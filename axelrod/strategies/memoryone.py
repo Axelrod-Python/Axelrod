@@ -87,9 +87,9 @@ class StochasticWSLS(MemoryOnePlayer):
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
 
-#######################################
-# Have commented out strategies below #
-#######################################
+###########################################################
+# Have commented out strategies below: see #102 on github #
+###########################################################
 
 #class ZDChi(MemoryOnePlayer):
     #"""An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula."""
