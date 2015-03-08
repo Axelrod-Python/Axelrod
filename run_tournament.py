@@ -8,7 +8,6 @@ from __future__ import division
 import argparse
 import os
 import time
-import matplotlib.pyplot as plt
 import axelrod
 
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all, output_directory):
@@ -43,13 +42,6 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
                 f.write(csv)
 
             # Save plots with the scores.
-            # boxplot = axelrod.BoxPlot(results)
-            # plt.boxplot(boxplot.dataset())
-            # plt.xticks(boxplot.xticks_locations(), boxplot.xticks_labels(), rotation=90)
-            # plt.title(boxplot.title())
-            # plt.savefig(plot, bbox_inches='tight')
-            # plt.clf()
-
             boxplot = axelrod.BoxPlot(results)
             figure = boxplot.figure()
             figure.savefig(plot, bbox_inches='tight')
