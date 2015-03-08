@@ -9,6 +9,7 @@ class BoxPlot(object):
 
     def __init__(self, result_set):
         self.result_set = result_set
+        self.matplotlib_installed = matplotlib_installed
 
     def dataset(self):
         return [
@@ -30,7 +31,7 @@ class BoxPlot(object):
             len(self.result_set.ranking))
 
     def figure(self):
-        if matplotlib_installed:
+        if self.matplotlib_installed:
             figure = plt.figure()
             plt.boxplot(self.dataset())
             plt.xticks(
