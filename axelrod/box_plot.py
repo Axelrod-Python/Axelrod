@@ -1,12 +1,14 @@
+matplotlib_installed = True
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    matplotlib_installed = False
+
+
 class BoxPlot(object):
 
     def __init__(self, result_set):
         self.result_set = result_set
-        self.matplotlib_installed = True
-        try:
-            import matplotlib.pyplot as plt
-        except ImportError:
-            self.matplotlib_installed = False
 
     def dataset(self):
         return [
@@ -28,7 +30,7 @@ class BoxPlot(object):
             len(self.result_set.ranking))
 
     def figure(self):
-        if self.matplotlib_installed:
+        if matplotlib_installed:
             figure = plt.figure()
             plt.boxplot(self.dataset())
             plt.xticks(
