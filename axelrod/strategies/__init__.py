@@ -8,9 +8,9 @@ from geller import *
 from gobymajority import *
 from grudger import *
 from grumpy import *
-from grumpy import *
 from inverse import *
 from mathematicalconstants import *
+from memoryone import *
 from mindcontrol import *
 from mindreader import *
 from oncebitten import *
