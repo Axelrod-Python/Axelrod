@@ -87,9 +87,9 @@ class TestTwoTitsForTat(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
 
 
-class TestAntiTitForTat(TestPlayer):
+class TestSuspiciousTitForTat(TestPlayer):
 
-    name = "Anti Tit For Tat"
+    name = "Suspicious Tit For Tat"
     player = axelrod.AntiTitForTat
 
     def test_strategy(self):
