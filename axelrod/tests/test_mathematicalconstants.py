@@ -7,7 +7,7 @@ from test_player import TestPlayer
 
 class TestGolden(TestPlayer):
 
-    name = "Golden"
+    name = '$\phi$'
     player = axelrod.Golden
 
     def test_strategy(self):
@@ -44,7 +44,7 @@ class TestGolden(TestPlayer):
 
 class TestPi(TestPlayer):
 
-    name = "Pi"
+    name = '$\pi$'
     player = axelrod.Pi
 
     def test_strategy(self):
@@ -81,7 +81,7 @@ class TestPi(TestPlayer):
 
 class e(TestPlayer):
 
-    name = "e"
+    name = '$e$'
     player = axelrod.e
 
     def test_strategy(self):

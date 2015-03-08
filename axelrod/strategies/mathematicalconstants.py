@@ -23,20 +23,19 @@ class CotoDeRatio(Player):
 class Golden(CotoDeRatio):
     """The player will always aim to bring the ratio of co-operations to defections closer to the golden mean"""
 
-    name = 'Golden'
+    name = '$\phi$'
     ratio = (1 + sqrt(5)) / 2
 
 
 class Pi(CotoDeRatio):
     """The player will always aim to bring the ratio of co-operations to defections closer to the pi"""
 
-    name = 'Pi'
+    name = '$\pi$'
     ratio = pi
 
 
 class e(CotoDeRatio):
     """The player will always aim to bring the ratio of co-operations to defections closer to the e"""
 
-    name = 'e'
+    name = '$e$'
     ratio = e
-
