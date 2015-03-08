@@ -8,9 +8,9 @@ from geller import *
 from gobymajority import *
 from grudger import *
 from grumpy import *
-from grumpy import *
 from inverse import *
 from mathematicalconstants import *
+from memoryone import *
 from mindcontrol import *
 from mindreader import *
 from oncebitten import *
@@ -29,14 +29,16 @@ basic_strategies = [
 ]
 
 strategies = basic_strategies + [
-    AntiTitForTat,
     Appeaser,
     ArrogantQLearner,
     AverageCopier,
     CautiousQLearner,
+    FoolMeOnce,
+    ForgetfulFoolMeOnce,
     ForgetfulGrudger,
     Forgiver,
     ForgivingTitForTat,
+    GTFT,
     GoByMajority,
     GoByMajority10,
     GoByMajority20,
@@ -59,10 +61,13 @@ strategies = basic_strategies + [
     Retaliate2,
     Retaliate3,
     RiskyQLearner,
+    StochasticWSLS,
+    SuspiciousTitForTat,
     TitFor2Tats,
     TrickyCooperator,
     TrickyDefector,
     TwoTitsForTat,
+    WinStayLoseShift,
     e,
 ]
 
