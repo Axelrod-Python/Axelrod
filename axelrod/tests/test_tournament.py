@@ -51,11 +51,5 @@ class TestTournament(unittest.TestCase):
         scores = [[sum([r[i] for r in res]) for i in range(5)] for res in results]
         self.assertEqual(sorted(zip(names, scores)), outcome)
 
-
-
-
-
-
-
 if __name__ == '__main__':
     unittest.main()
