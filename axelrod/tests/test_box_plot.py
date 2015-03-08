@@ -1,4 +1,5 @@
 import unittest
+import matplotlib.pyplot
 import numpy
 import axelrod
 
@@ -40,6 +41,10 @@ class TestBoxPlot(unittest.TestCase):
     def test_title(self):
         bp = axelrod.BoxPlot(self.test_result_set)
         self.assertEquals(bp.title(), self.expected_title)
+
+    def test_figure(self):
+        bp = axelrod.BoxPlot(self.test_result_set)
+        self.assertIsInstance(bp.figure(), matplotlib.pyplot.Figure)
 
 if __name__ == '__main__':
     unittest.main()
