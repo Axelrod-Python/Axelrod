@@ -29,7 +29,6 @@ basic_strategies = [
 ]
 
 strategies = basic_strategies + [
-    AntiTitForTat,
     Appeaser,
     ArrogantQLearner,
     AverageCopier,
@@ -59,6 +58,7 @@ strategies = basic_strategies + [
     Retaliate2,
     Retaliate3,
     RiskyQLearner,
+    SuspiciousTitForTat,
     TitFor2Tats,
     TrickyCooperator,
     TrickyDefector,
