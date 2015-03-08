@@ -16,7 +16,7 @@ class TestBoxPlot(unittest.TestCase):
         cls.test_result_set.results = results
         cls.test_result_set.init_output()
 
-        cls.expected_dataset = [[2, 2], [3, 3], [3, 3]]
+        cls.expected_dataset = [[2.6, 2.8], [3.1, 3.1], [3.2, 3.2]]
         cls.expected_xticks_locations = [1, 2, 3, 4]
         cls.expected_xticks_labels = ['Player2', 'Player1', 'Player3']
         cls.expected_title = 'Mean score per stage game over 5 rounds repeated 2 times (3 strategies)'
