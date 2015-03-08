@@ -41,11 +41,14 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclud
             with open(fname, 'w') as f:
                 f.write(csv)
 
-            # Save plots with the scores.
             boxplot = axelrod.BoxPlot(results)
-            figure = boxplot.figure()
-            figure.savefig(plot, bbox_inches='tight')
-            figure.clf()
+            if boxplot.matplotlib_installed:
+                figure = boxplot.figure()
+                figure.savefig(plot, bbox_inches='tight')
+                figure.clf()
+            else:
+                print ("The matplotlib library is not installed. "
+                       "Only .csv output will be produced.")
 
 if __name__ == "__main__":
 
