@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 class BoxPlot(object):
 
     def __init__(self, result_set):
@@ -21,7 +23,6 @@ class BoxPlot(object):
             len(self.result_set.ranking))
 
     def figure(self):
-        import matplotlib.pyplot as plt
         figure = plt.figure()
         plt.boxplot(self.dataset())
         plt.xticks(
