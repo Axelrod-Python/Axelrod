@@ -87,35 +87,39 @@ class StochasticWSLS(MemoryOnePlayer):
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
 
-class ZDChi(MemoryOnePlayer):
-    """An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula."""
+#######################################
+# Have commented out strategies below #
+#######################################
 
-    name = 'ZDChi'
+#class ZDChi(MemoryOnePlayer):
+    #"""An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula."""
 
-    def __init__(self, chi=2):
-        chi = float(chi)
-        (R, P, T, S) = Game.RPTS()
+    #name = 'ZDChi'
 
-        phi_max = float(P-S) / ((P-S) + chi * (T-P))
-        phi = phi_max / 2.
+    #def __init__(self, chi=2):
+        #chi = float(chi)
+        #(R, P, T, S) = Game.RPTS()
 
-        p1 = 1. - phi*(chi - 1) * float(R-P) / (P-S)
-        p2 = 1 - phi * (1 + chi * float(T-P) / (P-S))
-        p3 = phi * (chi + float(T-P)/(P-S))
-        p4 = 0
+        #phi_max = float(P-S) / ((P-S) + chi * (T-P))
+        #phi = phi_max / 2.
 
-        four_vector = (p1, p2, p3, p4)
-        super(self.__class__, self).__init__(four_vector)
+        #p1 = 1. - phi*(chi - 1) * float(R-P) / (P-S)
+        #p2 = 1 - phi * (1 + chi * float(T-P) / (P-S))
+        #p3 = phi * (chi + float(T-P)/(P-S))
+        #p4 = 0
 
-def zd_vector2(chi):
-    """Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R) but may not. See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""
-    return (1., (chi - 1.)/(3. * chi + 2.), 1., 2.*(chi - 1.)/(3. * chi + 2.))
+        #four_vector = (p1, p2, p3, p4)
+        #super(self.__class__, self).__init__(four_vector)
 
-class ZDGTFT2(MemoryOnePlayer):
-    """A Generous Zero Determinant Strategy."""
+#def zd_vector2(chi):
+    #"""Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R) but may not. See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""
+    #return (1., (chi - 1.)/(3. * chi + 2.), 1., 2.*(chi - 1.)/(3. * chi + 2.))
 
-    name = 'ZDGTFT2'
+#class ZDGTFT2(MemoryOnePlayer):
+    #"""A Generous Zero Determinant Strategy."""
 
-    def __init__(self):
-        four_vector = zd_vector2(2.)
-        super(self.__class__, self).__init__(four_vector)
+    #name = 'ZDGTFT2'
+
+    #def __init__(self):
+        #four_vector = zd_vector2(2.)
+        #super(self.__class__, self).__init__(four_vector)
