@@ -15,18 +15,22 @@ def strategies_list(strategies):
     return [strategy() for strategy in strategies]
 
 
+def output_file_path(output_directory, tournament_name, file_extension):
+    return os.path.join(output_directory, tournament_name + '.' + file_extension)
+
+
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all, output_directory):
     """Main function for running Axelrod tournaments."""
     tournaments = {}
 
     if not exclude_basic:
-        tournaments[os.path.join(output_directory, 'basic_results.png')] = strategies_list(axelrod.basic_strategies)
+        tournaments[output_file_path(output_directory, 'basic_results', 'png')] = strategies_list(axelrod.basic_strategies)
     if not exclude_strategies:
-        tournaments[os.path.join(output_directory, 'results.png')] = strategies_list(axelrod.strategies)
+        tournaments[output_file_path(output_directory, 'results', 'png')] = strategies_list(axelrod.strategies)
     if not exclude_cheating:
-        tournaments[os.path.join(output_directory, 'cheating_results.png')] = strategies_list(axelrod.cheating_strategies)
+        tournaments[output_file_path(output_directory, 'cheating_results', 'png')] = strategies_list(axelrod.cheating_strategies)
     if not exclude_all:
-        tournaments[os.path.join(output_directory, 'all_results.png')] = strategies_list(axelrod.all_strategies)
+        tournaments[output_file_path(output_directory, 'all_results', 'png')] = strategies_list(axelrod.all_strategies)
 
     for plot in tournaments:
         if len(tournaments[plot]) != 1:
