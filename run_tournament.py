@@ -16,10 +16,13 @@ def strategies_list(strategies):
 
 
 def output_file_path(output_directory, tournament_name, file_extension):
-    return os.path.join(output_directory, tournament_name + '.' + file_extension)
+    return os.path.join(
+        output_directory,
+        tournament_name + '.' + file_extension)
 
 
-def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all, output_directory):
+def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
+                   exclude_cheating, exclude_all, output_directory):
     """Main function for running Axelrod tournaments."""
     tournaments = {}
 
