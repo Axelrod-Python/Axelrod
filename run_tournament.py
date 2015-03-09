@@ -10,11 +10,16 @@ import os
 import time
 import axelrod
 
+
+def init_strategies(strategies):
+    return [strategy() for strategy in strategies]
+
+
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all, output_directory):
     """Main function for running Axelrod tournaments."""
     graphs_to_plot = {}
 
-    init_strategies = lambda S: [s() for s in S]
+    # init_strategies = lambda S: [s() for s in S]
     if not exclude_basic:
         graphs_to_plot[os.path.join(output_directory, 'basic_results.png')] = init_strategies(axelrod.basic_strategies)
     if not exclude_strategies:
