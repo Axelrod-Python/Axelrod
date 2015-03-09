@@ -17,23 +17,22 @@ def init_strategies(strategies):
 
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all, output_directory):
     """Main function for running Axelrod tournaments."""
-    graphs_to_plot = {}
+    tournaments = {}
 
-    # init_strategies = lambda S: [s() for s in S]
     if not exclude_basic:
-        graphs_to_plot[os.path.join(output_directory, 'basic_results.png')] = init_strategies(axelrod.basic_strategies)
+        tournaments[os.path.join(output_directory, 'basic_results.png')] = init_strategies(axelrod.basic_strategies)
     if not exclude_strategies:
-        graphs_to_plot[os.path.join(output_directory, 'results.png')] = init_strategies(axelrod.strategies)
+        tournaments[os.path.join(output_directory, 'results.png')] = init_strategies(axelrod.strategies)
     if not exclude_cheating:
-        graphs_to_plot[os.path.join(output_directory, 'cheating_results.png')] = init_strategies(axelrod.cheating_strategies)
+        tournaments[os.path.join(output_directory, 'cheating_results.png')] = init_strategies(axelrod.cheating_strategies)
     if not exclude_all:
-        graphs_to_plot[os.path.join(output_directory, 'all_results.png')] = init_strategies(axelrod.all_strategies)
+        tournaments[os.path.join(output_directory, 'all_results.png')] = init_strategies(axelrod.all_strategies)
 
-    for plot in graphs_to_plot:
-        if len(graphs_to_plot[plot]) != 1:
+    for plot in tournaments:
+        if len(tournaments[plot]) != 1:
 
             tournament = axelrod.Tournament(
-                players=graphs_to_plot[plot],
+                players=tournaments[plot],
                 turns=turns,
                 repetitions=repetitions)
 
