@@ -2,6 +2,7 @@ from alternator import *
 from appeaser import *
 from averagecopier import *
 from cooperator import *
+from darwin import *
 from defector import *
 from forgiver import *
 from geller import *
@@ -33,6 +34,7 @@ strategies = basic_strategies + [
     ArrogantQLearner,
     AverageCopier,
     CautiousQLearner,
+    Darwin,
     FoolMeOnce,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,
