@@ -12,10 +12,7 @@ class BoxPlot(object):
         self.matplotlib_installed = matplotlib_installed
 
     def dataset(self):
-        return [
-            s / (self.result_set.turns *
-                 float((len(self.result_set.ranking) - 1)))
-            for s in self.result_set.scores[self.result_set.ranking]]
+        return [self.result_set.scores[ir] for ir in self.result_set.ranking]
 
     def xticks_locations(self):
         return range(1, len(self.result_set.ranked_names) + 2)
@@ -38,6 +35,7 @@ class BoxPlot(object):
                 self.xticks_locations(),
                 self.xticks_labels(),
                 rotation=90)
+            plt.tick_params(axis='both', which='both', labelsize=8)
             plt.title(self.title())
             return figure
         else:

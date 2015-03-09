@@ -10,7 +10,7 @@ class TestRoundRobin(unittest.TestCase):
 
     @classmethod
     def payoffs2scores(cls, payoffs):
-        return [sum(p) for p in payoffs]
+        return [sum([pp for ipp,pp in enumerate(p) if ipp != ip]) for ip,p in enumerate(payoffs)]
 
     @classmethod
     def get_test_outcome(cls, outcome, turns=10):
