@@ -10,15 +10,20 @@ class Tournament(object):
 
     def __init__(self, players, game=None, turns=200, repetitions=10):
         """Initiate a tournmanent of players"""
+
         self.players = players
+        self.nplayers = len(self.players)
+
         if game is not None:
             self.game = game
         self.turns = turns
         self.repetitions = repetitions
+
         self.result_set = ResultSet(
             players=players,
             turns=turns,
             repetitions=repetitions)
+
         self.deterministic_cache = {}
 
     def play(self):

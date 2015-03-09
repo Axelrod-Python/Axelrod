@@ -1,30 +1,56 @@
-import numpy
+import csv
+
 from StringIO import StringIO
 
 
+def median(lst):
+    lst = sorted(lst)
+    if len(lst) < 1:
+            return None
+    if len(lst) %2 == 1:
+            return lst[((len(lst)+1)/2)-1]
+    if len(lst) %2 == 0:
+            return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
+
+
 class ResultSet(object):
-    """
-    A class to hold the results of a tournament
-    and to return them as plots or csv files.
-    """
+    """A class to hold the results of a tournament."""
 
     def __init__(self, players, turns, repetitions):
-        """Initialise the object"""
+
         self.players = players
         self.nplayers = len(players)
-        player_list = list(range(len(players)))
+
         self.turns = turns
         self.repetitions = repetitions
-        repetition_list = list(range(repetitions))
-        self.results = [
-            [[0 for irep in repetition_list]
-                for j in player_list] for i in player_list]
+
+        plist = list(range(self.nplayers))
+        replist = list(range(repetitions))
+        self.results = [[[0 for r in replist ] for j in plist] for i in plist]
+
         self.output_initialised = False
 
     def generate_scores(self):
-        """Returns a numpy array based on the results list"""
-        numpy_array_results = numpy.array(self.results)
-        return numpy_array_results.sum(axis=1)
+        """Return normalized scores based on the results.
+
+        Originally there were no self-interactions, so the code here was rewritten
+        to exclude those from the generated score. To include self-interactions,
+        remove the condition on ip and ires and fix the normalization factor.
+        """
+
+        scores = []
+        for ires, res in enumerate(self.results):
+            scores.append([])
+            for irep in range(self.repetitions):
+                scores[-1].append(0)
+                for ip in range(self.nplayers):
+                    if ip != ires:
+                        scores[-1][-1] += res[ip][irep]
+
+        normalization = self.turns * (self.nplayers - 1)
+        scores_normalized = [[1.0 * s / normalization for s in r] for r in scores]
+
+        return scores_normalized
 
     def generate_ranking(self, scores):
         """
@@ -34,15 +60,17 @@ class ResultSet(object):
         """
         ranking = sorted(
             range(self.nplayers),
-            key=lambda i: numpy.median(scores[i]))
+            key=lambda i: median(scores[i]))
         return ranking
 
     def generate_ranked_names(self, ranking):
-        """
-        Returns a list of players names sorted by their ranked order.
-        """
+        """Returns a list of players names sorted by their ranked order."""
         ranked_names = [str(self.players[i]) for i in ranking]
         return ranked_names
+
+    def generate_payoff_matrix(self):
+        """Returns a per-turn averaged payoff matrix."""
+        return [[1.0 * sum(s) / self.turns / self.repetitions for s in r] for r in self.results]
 
     def init_output(self):
         """
@@ -54,17 +82,17 @@ class ResultSet(object):
             self.scores = self.generate_scores()
             self.ranking = self.generate_ranking(self.scores)
             self.ranked_names = self.generate_ranked_names(self.ranking)
+            self.payoff_matrix = self.generate_payoff_matrix()
             self.output_initialised = True
 
     def csv(self):
         """Returns a string of csv formatted results"""
         self.init_output()
         csv_string = StringIO()
-        header = ", ".join(self.ranked_names) + "\n"
+        header = ",".join(self.ranked_names) + "\n"
         csv_string.write(header)
-        numpy.savetxt(
-            csv_string,
-            self.scores[self.ranking].transpose(),
-            delimiter=", ",
-            fmt='%i')
+        writer = csv.writer(csv_string, lineterminator="\n")
+        for irep in range(self.repetitions):
+            data = [self.scores[rank][irep] for rank in self.ranking]
+            writer.writerow(map(str, data))
         return csv_string.getvalue()
