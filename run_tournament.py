@@ -90,7 +90,7 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
             plt.tick_params(axis='both', which='both', labelsize=8)
             fig.colorbar(mat)
             file_name = output_file_path(
-                    output_directory, 'results', 'png')
+                    output_directory, tournament_name.replace('results', 'payoffs'), 'png')
             plt.savefig(file_name, bbox_inches='tight')
             plt.clf()
 
