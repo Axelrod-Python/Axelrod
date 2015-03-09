@@ -35,11 +35,11 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
     if not exclude_all:
         tournaments[output_file_path(output_directory, 'all_results', 'png')] = strategies_list(axelrod.all_strategies)
 
-    for plot in tournaments:
-        if len(tournaments[plot]) != 1:
+    for tournament_name in tournaments:
+        if len(tournaments[tournament_name]) != 1:
 
             tournament = axelrod.Tournament(
-                players=tournaments[plot],
+                players=tournaments[tournament_name],
                 turns=turns,
                 repetitions=repetitions)
 
@@ -48,14 +48,14 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
 
             # # Save the scores from this tournament to a CSV file.
             csv = results.csv()
-            fname = plot.replace('.png', '.csv')
+            fname = tournament_name.replace('.png', '.csv')
             with open(fname, 'w') as f:
                 f.write(csv)
 
             boxplot = axelrod.BoxPlot(results)
             if boxplot.matplotlib_installed:
                 figure = boxplot.figure()
-                figure.savefig(plot, bbox_inches='tight')
+                figure.savefig(tournament_name, bbox_inches='tight')
                 figure.clf()
             else:
                 print ("The matplotlib library is not installed. "
