@@ -27,13 +27,13 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
     tournaments = {}
 
     if not exclude_basic:
-        tournaments[output_file_path(output_directory, 'basic_results', 'png')] = strategies_list(axelrod.basic_strategies)
+        tournaments['basic_results'] = strategies_list(axelrod.basic_strategies)
     if not exclude_strategies:
-        tournaments[output_file_path(output_directory, 'results', 'png')] = strategies_list(axelrod.strategies)
+        tournaments['results'] = strategies_list(axelrod.strategies)
     if not exclude_cheating:
-        tournaments[output_file_path(output_directory, 'cheating_results', 'png')] = strategies_list(axelrod.cheating_strategies)
+        tournaments['cheating_results'] = strategies_list(axelrod.cheating_strategies)
     if not exclude_all:
-        tournaments[output_file_path(output_directory, 'all_results', 'png')] = strategies_list(axelrod.all_strategies)
+        tournaments['all_results'] = strategies_list(axelrod.all_strategies)
 
     for tournament_name in tournaments:
         if len(tournaments[tournament_name]) != 1:
@@ -48,14 +48,15 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
 
             # # Save the scores from this tournament to a CSV file.
             csv = results.csv()
-            fname = tournament_name.replace('.png', '.csv')
-            with open(fname, 'w') as f:
+            file_namename = output_file_path(output_directory, tournament_name, 'csv')
+            with open(file_namename, 'w') as f:
                 f.write(csv)
 
             boxplot = axelrod.BoxPlot(results)
             if boxplot.matplotlib_installed:
+                file_name = output_file_path(output_directory, tournament_name, 'png')
                 figure = boxplot.figure()
-                figure.savefig(tournament_name, bbox_inches='tight')
+                figure.savefig(file_name, bbox_inches='tight')
                 figure.clf()
             else:
                 print ("The matplotlib library is not installed. "
