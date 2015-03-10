@@ -9,7 +9,7 @@ except ImportError:
     matplotlib_installed = False
 
 
-class TestBoxPlot(unittest.TestCase):
+class TestPlot(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -28,28 +28,28 @@ class TestBoxPlot(unittest.TestCase):
         cls.expected_title = 'Mean score per stage game over 5 rounds repeated 2 times (3 strategies)'
 
     def test_init(self):
-        bp = axelrod.BoxPlot(self.test_result_set)
+        bp = axelrod.Plot(self.test_result_set)
         self.assertEquals(bp.result_set, self.test_result_set)
 
     def test_dataset(self):
-        bp = axelrod.BoxPlot(self.test_result_set)
+        bp = axelrod.Plot(self.test_result_set)
         self.assertTrue(numpy.allclose(bp.dataset(), self.expected_dataset))
 
     def test_xticks_locations(self):
-        bp = axelrod.BoxPlot(self.test_result_set)
+        bp = axelrod.Plot(self.test_result_set)
         self.assertEquals(bp.xticks_locations(), self.expected_xticks_locations)
 
     def test_xticks_labels(self):
-        bp = axelrod.BoxPlot(self.test_result_set)
+        bp = axelrod.Plot(self.test_result_set)
         self.assertEquals(bp.xticks_labels(), self.expected_xticks_labels)
 
     def test_title(self):
-        bp = axelrod.BoxPlot(self.test_result_set)
+        bp = axelrod.Plot(self.test_result_set)
         self.assertEquals(bp.title(), self.expected_title)
 
     def test_figure(self):
         if matplotlib_installed:
-            bp = axelrod.BoxPlot(self.test_result_set)
+            bp = axelrod.Plot(self.test_result_set)
             self.assertIsInstance(bp.figure(), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
