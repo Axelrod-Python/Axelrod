@@ -24,9 +24,13 @@ class TestPlot(unittest.TestCase):
         cls.expected_boxplot_dataset = [[2.6, 2.8], [3.1, 3.1], [3.2, 3.2]]
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]
         cls.expected_boxplot_xticks_labels = ['Player2', 'Player1', 'Player3']
-        cls.expected_boxplot_title = 'Mean score per stage game over 5 rounds repeated 2 times (3 strategies)'
+        cls.expected_boxplot_title = ('Mean score per stage game over 5 rounds'
+                                      ' repeated 2 times (3 strategies)')
 
-        cls.expected_payoff_dataset = [[0.0, 1.8, 3.6], [2.0, 0.0, 4.2], [3.2, 3.2, 0.0]]
+        cls.expected_payoff_dataset = [
+            [0.0, 1.8, 3.6],
+            [2.0, 0.0, 4.2],
+            [3.2, 3.2, 0.0]]
 
     def test_init(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -34,15 +38,21 @@ class TestPlot(unittest.TestCase):
 
     def test_boxplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertSequenceEqual(plot.boxplot_dataset(), self.expected_boxplot_dataset)
+        self.assertSequenceEqual(
+            plot.boxplot_dataset(),
+            self.expected_boxplot_dataset)
 
     def test_boxplot_xticks_locations(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertEquals(plot.boxplot_xticks_locations(), self.expected_boxplot_xticks_locations)
+        self.assertEquals(
+            plot.boxplot_xticks_locations(),
+            self.expected_boxplot_xticks_locations)
 
     def test_boxplot_xticks_labels(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertEquals(plot.boxplot_xticks_labels(), self.expected_boxplot_xticks_labels)
+        self.assertEquals(
+            plot.boxplot_xticks_labels(),
+            self.expected_boxplot_xticks_labels)
 
     def test_boxplot_title(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -57,7 +67,9 @@ class TestPlot(unittest.TestCase):
 
     def test_payoff_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertSequenceEqual(plot.payoff_dataset(), self.expected_payoff_dataset)
+        self.assertSequenceEqual(
+            plot.payoff_dataset(),
+            self.expected_payoff_dataset)
 
     def test_payoff(self):
         if matplotlib_installed:
@@ -65,7 +77,6 @@ class TestPlot(unittest.TestCase):
             self.assertIsInstance(plot.payoff(), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
-
 
 
 if __name__ == '__main__':
