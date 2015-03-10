@@ -51,13 +51,13 @@ $ python run_tournament.py
 This automatically outputs a `png` file with the results.
 You can see the results from the latest run of the tournament here:
 
-![](./assets/results.png)
+![](./assets/strategies_boxplot.png)
 
 As you can see: the 'tit for tat' strategy has not won in this instance, that is mainly because more strategies are needed to get anywhere near Axelrod's tournament.
 
 You can see the results from the latest run of the tournament here with the cheating strategies (which manipulate/read what the opponent does):
 
-![](./assets/all_results.png)
+![](./assets/all_strategies_boxplot.png)
 
 Please do contribute :)
 

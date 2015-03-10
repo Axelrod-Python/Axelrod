@@ -36,16 +36,16 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
     tournaments = {}
 
     if not exclude_basic:
-        tournaments['basic_results'] = strategies_list(
+        tournaments['basic_strategies'] = strategies_list(
             axelrod.basic_strategies)
     if not exclude_strategies:
-        tournaments['results'] = strategies_list(
+        tournaments['strategies'] = strategies_list(
             axelrod.strategies)
     if not exclude_cheating:
-        tournaments['cheating_results'] = strategies_list(
+        tournaments['cheating_strategies'] = strategies_list(
             axelrod.cheating_strategies)
     if not exclude_all:
-        tournaments['all_results'] = strategies_list(axelrod.all_strategies)
+        tournaments['all_strategies'] = strategies_list(axelrod.all_strategies)
 
     for tournament_name in tournaments:
         if len(tournaments[tournament_name]) != 1:
@@ -73,7 +73,7 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
             boxplot = axelrod.Plot(results)
             figure = boxplot.figure()
             file_name = output_file_path(
-                    output_directory, tournament_name, 'png')
+                    output_directory, tournament_name + '_boxplot', 'png')
             figure.savefig(file_name, bbox_inches='tight')
             figure.clf()
 
@@ -90,8 +90,7 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
             plt.tick_params(axis='both', which='both', labelsize=8)
             fig.colorbar(mat)
             file_name = output_file_path(
-                    output_directory,
-                    tournament_name.replace('results', 'payoffs'), 'png')
+                    output_directory, tournament_name + '_payoff', 'png')
             plt.savefig(file_name, bbox_inches='tight')
             plt.clf()
 
