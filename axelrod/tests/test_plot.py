@@ -34,7 +34,7 @@ class TestPlot(unittest.TestCase):
 
     def test_init(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertEquals(plot.result_set, self.test_result_set)
+        self.assertEqual(plot.result_set, self.test_result_set)
         self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
 
     def test_boxplot_dataset(self):
@@ -45,19 +45,19 @@ class TestPlot(unittest.TestCase):
 
     def test_boxplot_xticks_locations(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertEquals(
+        self.assertEqual(
             plot.boxplot_xticks_locations(),
             self.expected_boxplot_xticks_locations)
 
     def test_boxplot_xticks_labels(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertEquals(
+        self.assertEqual(
             plot.boxplot_xticks_labels(),
             self.expected_boxplot_xticks_labels)
 
     def test_boxplot_title(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertEquals(plot.boxplot_title(), self.expected_boxplot_title)
+        self.assertEqual(plot.boxplot_title(), self.expected_boxplot_title)
 
     def test_boxplot(self):
         if matplotlib_installed:
