@@ -1,5 +1,4 @@
 import unittest
-import numpy
 import axelrod
 
 matplotlib_installed = True
@@ -35,7 +34,7 @@ class TestPlot(unittest.TestCase):
 
     def test_boxplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertTrue(numpy.allclose(plot.boxplot_dataset(), self.expected_boxplot_dataset))
+        self.assertSequenceEqual(plot.boxplot_dataset(), self.expected_boxplot_dataset)
 
     def test_boxplot_xticks_locations(self):
         plot = axelrod.Plot(self.test_result_set)
