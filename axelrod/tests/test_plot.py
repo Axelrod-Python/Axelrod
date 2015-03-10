@@ -59,6 +59,14 @@ class TestPlot(unittest.TestCase):
         plot = axelrod.Plot(self.test_result_set)
         self.assertSequenceEqual(plot.payoff_dataset(), self.expected_payoff_dataset)
 
+    def test_payoff(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.payoff(), matplotlib.pyplot.Figure)
+        else:
+            self.skipTest('matplotlib not installed')
+
+
 
 if __name__ == '__main__':
     unittest.main()
