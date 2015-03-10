@@ -63,7 +63,7 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
             with open(file_namename, 'w') as f:
                 f.write(csv)
 
-            # Create a Plot instance and test whether matplotlib
+            # Create an axelrod.Plot object and test whether matplotlib
             # is installed before proceeding
             plot = axelrod.Plot(results)
             if not plot.matplotlib_installed:
@@ -71,7 +71,7 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
                        "Only .csv output will be produced.")
                 continue
 
-            # Save boxplots
+            # Save boxplot
             figure = plot.boxplot()
             file_name = output_file_path(
                     output_directory, tournament_name + '_boxplot', 'png')
