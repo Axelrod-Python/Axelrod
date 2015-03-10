@@ -48,7 +48,6 @@ class Plot(object):
 
     def payoff(self):
         if self.matplotlib_installed:
-            # figure = plt.figure()
             figure, ax = plt.subplots()
             mat = ax.matshow(self.payoff_dataset())
             plt.xticks(range(self.result_set.nplayers))
