@@ -9,14 +9,6 @@ import argparse
 import os
 import time
 
-matplotlib_installed = True
-try:
-    import matplotlib.pyplot as plt
-except ImportError:
-    matplotlib_installed = False
-    print ("The matplotlib library is not installed. "
-           "Only .csv output will be produced.")
-
 import axelrod
 
 
@@ -30,70 +22,66 @@ def output_file_path(output_directory, tournament_name, file_extension):
         tournament_name + '.' + file_extension)
 
 
+def save_plot(figure, file_name):
+    figure.savefig(file_name, bbox_inches='tight')
+    figure.clf()
+
+
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
                    exclude_cheating, exclude_all, output_directory):
     """Main function for running Axelrod tournaments."""
     tournaments = {}
 
     if not exclude_basic:
-        tournaments['basic_results'] = strategies_list(
+        tournaments['basic_strategies'] = strategies_list(
             axelrod.basic_strategies)
     if not exclude_strategies:
-        tournaments['results'] = strategies_list(
+        tournaments['strategies'] = strategies_list(
             axelrod.strategies)
     if not exclude_cheating:
-        tournaments['cheating_results'] = strategies_list(
+        tournaments['cheating_strategies'] = strategies_list(
             axelrod.cheating_strategies)
     if not exclude_all:
-        tournaments['all_results'] = strategies_list(axelrod.all_strategies)
+        tournaments['all_strategies'] = strategies_list(axelrod.all_strategies)
 
     for tournament_name in tournaments:
-        if len(tournaments[tournament_name]) != 1:
 
-            tournament = axelrod.Tournament(
-                players=tournaments[tournament_name],
-                turns=turns,
-                repetitions=repetitions
-            )
+        tournament = axelrod.Tournament(
+            players=tournaments[tournament_name],
+            turns=turns,
+            repetitions=repetitions
+        )
 
-            # This is where the actual tournament takes place.
-            results = tournament.play()
+        # This is where the actual tournament takes place.
+        results = tournament.play()
 
-            # # Save the scores from this tournament to a CSV file.
-            csv = results.csv()
-            file_namename = output_file_path(
-                output_directory, tournament_name, 'csv')
-            with open(file_namename, 'w') as f:
-                f.write(csv)
+        # # Save the scores from this tournament to a CSV file.
+        csv = results.csv()
+        file_namename = output_file_path(
+            output_directory, tournament_name, 'csv')
+        with open(file_namename, 'w') as f:
+            f.write(csv)
 
-            if not matplotlib_installed:
-                continue
+        # Create an axelrod.Plot object and test whether matplotlib
+        # is installed before proceeding
+        plot = axelrod.Plot(results)
+        if not plot.matplotlib_installed:
+            print ("The matplotlib library is not installed. "
+                   "Only .csv output will be produced.")
+            continue
 
-            # Save boxplots
-            boxplot = axelrod.BoxPlot(results)
-            figure = boxplot.figure()
-            file_name = output_file_path(
-                    output_directory, tournament_name, 'png')
-            figure.savefig(file_name, bbox_inches='tight')
-            figure.clf()
+        # Save boxplot
+        figure = plot.boxplot()
+        file_name = output_file_path(
+                output_directory, tournament_name + '_boxplot', 'png')
+        save_plot(figure, file_name)
 
-            # Save plot with average payoff matrix with winners at top.
-            pmatrix_ranked = [
-                [results.payoff_matrix[r1][r2] for r2 in results.ranking]
-                for r1 in results.ranking]
-            fig, ax = plt.subplots()
-            mat = ax.matshow(pmatrix_ranked)
-            plt.xticks(range(tournament.nplayers))
-            plt.yticks(range(tournament.nplayers))
-            ax.set_xticklabels(results.ranked_names, rotation=90)
-            ax.set_yticklabels(results.ranked_names)
-            plt.tick_params(axis='both', which='both', labelsize=8)
-            fig.colorbar(mat)
-            file_name = output_file_path(
-                    output_directory,
-                    tournament_name.replace('results', 'payoffs'), 'png')
-            plt.savefig(file_name, bbox_inches='tight')
-            plt.clf()
+        # Save plot with average payoff matrix with winners at top.
+        figure = plot.payoff()
+        file_name = output_file_path(
+                output_directory, tournament_name + '_payoff', 'png')
+        save_plot(figure, file_name)
+
 
 if __name__ == "__main__":
 
@@ -116,17 +104,21 @@ if __name__ == "__main__":
                         help='exclude combined strategies plot')
     args = parser.parse_args()
 
-    t0 = time.time()
+    if args.xb and args.xs and args.xc and args.xa:
+        print "You've excluded everything - nothing for me to do"
+    else:
 
-    if args.verbose:
-        print ('Starting tournament with ' + str(args.repetitions) +
-               ' round robins of ' + str(args.turns) + ' turns per pair.')
-        print 'Basics strategies plot: ' + str(not args.xb)
-        print 'Ordinary strategies plot: ' + str(not args.xs)
-        print 'Cheating strategies plot: ' + str(not args.xc)
-        print 'Combined strategies plot: ' + str(not args.xa)
-    run_tournament(args.turns, args.repetitions, args.xb, args.xs,
-                   args.xc, args.xa, args.output_directory)
+        t0 = time.time()
 
-    dt = time.time() - t0
-    print "Finished in %.1fs" % dt
+        if args.verbose:
+            print ('Starting tournament with ' + str(args.repetitions) +
+                   ' round robins of ' + str(args.turns) + ' turns per pair.')
+            print 'Basics strategies plot: ' + str(not args.xb)
+            print 'Ordinary strategies plot: ' + str(not args.xs)
+            print 'Cheating strategies plot: ' + str(not args.xc)
+            print 'Combined strategies plot: ' + str(not args.xa)
+        run_tournament(args.turns, args.repetitions, args.xb, args.xs,
+                       args.xc, args.xa, args.output_directory)
+
+        dt = time.time() - t0
+        print "Finished in %.1fs" % dt
