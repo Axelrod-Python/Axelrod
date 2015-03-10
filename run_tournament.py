@@ -8,70 +8,117 @@ from __future__ import division
 import argparse
 import os
 import time
+
 import axelrod
 
-def run_tournament(turns, repetitions, exclude_basic, exclude_strategies, exclude_cheating, exclude_all, output_directory):
+
+def strategies_list(strategies):
+    return [strategy() for strategy in strategies]
+
+
+def output_file_path(output_directory, tournament_name, file_extension):
+    return os.path.join(
+        output_directory,
+        tournament_name + '.' + file_extension)
+
+
+def save_plot(figure, file_name):
+    figure.savefig(file_name, bbox_inches='tight')
+    figure.clf()
+
+
+def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
+                   exclude_cheating, exclude_all, output_directory):
     """Main function for running Axelrod tournaments."""
-    graphs_to_plot = {}
+    tournaments = {}
 
-    init_strategies = lambda S: [s() for s in S]
     if not exclude_basic:
-        graphs_to_plot[os.path.join(output_directory, 'basic_results.png')] = init_strategies(axelrod.basic_strategies)
+        tournaments['basic_strategies'] = strategies_list(
+            axelrod.basic_strategies)
     if not exclude_strategies:
-        graphs_to_plot[os.path.join(output_directory, 'results.png')] = init_strategies(axelrod.strategies)
+        tournaments['strategies'] = strategies_list(
+            axelrod.strategies)
     if not exclude_cheating:
-        graphs_to_plot[os.path.join(output_directory, 'cheating_results.png')] = init_strategies(axelrod.cheating_strategies)
+        tournaments['cheating_strategies'] = strategies_list(
+            axelrod.cheating_strategies)
     if not exclude_all:
-        graphs_to_plot[os.path.join(output_directory, 'all_results.png')] = init_strategies(axelrod.all_strategies)
+        tournaments['all_strategies'] = strategies_list(axelrod.all_strategies)
 
-    for plot in graphs_to_plot:
-        if len(graphs_to_plot[plot]) != 1:
+    for tournament_name in tournaments:
 
-            tournament = axelrod.Tournament(
-                players=graphs_to_plot[plot],
-                turns=turns,
-                repetitions=repetitions)
+        tournament = axelrod.Tournament(
+            players=tournaments[tournament_name],
+            turns=turns,
+            repetitions=repetitions
+        )
 
-            # This is where the actual tournament takes place.
-            results = tournament.play()
+        # This is where the actual tournament takes place.
+        results = tournament.play()
 
-            # # Save the scores from this tournament to a CSV file.
-            csv = results.csv()
-            fname = plot.replace('.png', '.csv')
-            with open(fname, 'w') as f:
-                f.write(csv)
+        # # Save the scores from this tournament to a CSV file.
+        csv = results.csv()
+        file_namename = output_file_path(
+            output_directory, tournament_name, 'csv')
+        with open(file_namename, 'w') as f:
+            f.write(csv)
 
-            boxplot = axelrod.BoxPlot(results)
-            if boxplot.matplotlib_installed:
-                figure = boxplot.figure()
-                figure.savefig(plot, bbox_inches='tight')
-                figure.clf()
-            else:
-                print ("The matplotlib library is not installed. "
-                       "Only .csv output will be produced.")
+        # Create an axelrod.Plot object and test whether matplotlib
+        # is installed before proceeding
+        plot = axelrod.Plot(results)
+        if not plot.matplotlib_installed:
+            print ("The matplotlib library is not installed. "
+                   "Only .csv output will be produced.")
+            continue
+
+        # Save boxplot
+        figure = plot.boxplot()
+        file_name = output_file_path(
+                output_directory, tournament_name + '_boxplot', 'png')
+        save_plot(figure, file_name)
+
+        # Save plot with average payoff matrix with winners at top.
+        figure = plot.payoff()
+        file_name = output_file_path(
+                output_directory, tournament_name + '_payoff', 'png')
+        save_plot(figure, file_name)
+
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--verbose', action='store_true', help='show verbose messages')
-    parser.add_argument('-t', '--turns', type=int, default=200, help='turns per pair')
-    parser.add_argument('-r', '--repetitions', type=int, default=50, help='round-robin repetitions')
-    parser.add_argument('-o', '--output_directory', default='./assets/', help='output directory')
-    parser.add_argument('--xb', action='store_true', help='exlude basic strategies plot')
-    parser.add_argument('--xs', action='store_true', help='exlude ordinary strategies plot')
-    parser.add_argument('--xc', action='store_true', help='exclude cheating strategies plot')
-    parser.add_argument('--xa', action='store_true', help='exclude combined strategies plot')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='show verbose messages')
+    parser.add_argument('-t', '--turns', type=int, default=200,
+                        help='turns per pair')
+    parser.add_argument('-r', '--repetitions', type=int, default=50,
+                        help='round-robin repetitions')
+    parser.add_argument('-o', '--output_directory', default='./assets/',
+                        help='output directory')
+    parser.add_argument('--xb', action='store_true',
+                        help='exlude basic strategies plot')
+    parser.add_argument('--xs', action='store_true',
+                        help='exlude ordinary strategies plot')
+    parser.add_argument('--xc', action='store_true',
+                        help='exclude cheating strategies plot')
+    parser.add_argument('--xa', action='store_true',
+                        help='exclude combined strategies plot')
     args = parser.parse_args()
 
-    t0 = time.time()
+    if args.xb and args.xs and args.xc and args.xa:
+        print "You've excluded everything - nothing for me to do"
+    else:
 
-    if args.verbose:
-        print 'Starting tournament with ' + str(args.repetitions) + ' round robins of ' + str(args.turns) + ' turns per pair.'
-        print 'Basics strategies plot: ' + str(not args.xb)
-        print 'Ordinary strategies plot: ' + str(not args.xs)
-        print 'Cheating strategies plot: ' + str(not args.xc)
-        print 'Combined strategies plot: ' + str(not args.xa)
-    run_tournament(args.turns, args.repetitions, args.xb, args.xs, args.xc, args.xa, args.output_directory)
+        t0 = time.time()
 
-    dt = time.time() - t0
-    print "Finished in %.1fs" % dt
+        if args.verbose:
+            print ('Starting tournament with ' + str(args.repetitions) +
+                   ' round robins of ' + str(args.turns) + ' turns per pair.')
+            print 'Basics strategies plot: ' + str(not args.xb)
+            print 'Ordinary strategies plot: ' + str(not args.xs)
+            print 'Cheating strategies plot: ' + str(not args.xc)
+            print 'Combined strategies plot: ' + str(not args.xa)
+        run_tournament(args.turns, args.repetitions, args.xb, args.xs,
+                       args.xc, args.xa, args.output_directory)
+
+        dt = time.time() - t0
+        print "Finished in %.1fs" % dt
