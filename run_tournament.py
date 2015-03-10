@@ -70,7 +70,7 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
                 continue
 
             # Save boxplots
-            boxplot = axelrod.BoxPlot(results)
+            boxplot = axelrod.Plot(results)
             figure = boxplot.figure()
             file_name = output_file_path(
                     output_directory, tournament_name, 'png')
