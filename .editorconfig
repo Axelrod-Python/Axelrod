@@ -5,20 +5,19 @@
 # top-most EditorConfig file
 root = true
 
-# Settings which apply to all files
 [*]
-# Unix-style newlines with a newline ending every file
 end_of_line = lf
 insert_final_newline = true
 charset = utf-8
 trim_trailing_whitespace = true
-
-# Settings for .py files
-[*.py]
 indent_style = space
+
+[*.{py, md, rst}]
 indent_size = 4
 
-# Settings for .travis.yml
-[.travis.yml]
-indent_style = space
+[*.yml]
 indent_size = 2
+
+[Makefile]
+indent_style = tab
+indent_size = 8
