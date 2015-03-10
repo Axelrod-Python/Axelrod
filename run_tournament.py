@@ -22,6 +22,11 @@ def output_file_path(output_directory, tournament_name, file_extension):
         tournament_name + '.' + file_extension)
 
 
+def save_plot(figure, file_name):
+    figure.savefig(file_name, bbox_inches='tight')
+    figure.clf()
+
+
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
                    exclude_cheating, exclude_all, output_directory):
     """Main function for running Axelrod tournaments."""
@@ -67,18 +72,16 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
                 continue
 
             # Save boxplots
-            boxplot = plot.boxplot()
+            figure = plot.boxplot()
             file_name = output_file_path(
                     output_directory, tournament_name + '_boxplot', 'png')
-            boxplot.savefig(file_name, bbox_inches='tight')
-            boxplot.clf()
+            save_plot(figure, file_name)
 
             # Save plot with average payoff matrix with winners at top.
-            payoff = plot.payoff()
+            figure = plot.payoff()
             file_name = output_file_path(
                     output_directory, tournament_name + '_payoff', 'png')
-            payoff.savefig(file_name, bbox_inches='tight')
-            payoff.clf()
+            save_plot(figure, file_name)
 
 
 if __name__ == "__main__":
