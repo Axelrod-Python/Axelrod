@@ -104,6 +104,9 @@ if __name__ == "__main__":
                         help='exclude combined strategies plot')
     args = parser.parse_args()
 
+    if args.xb and args.xs and args.xc and args.xa:
+        print "You've excluded everything - nothing for me to do"
+
     t0 = time.time()
 
     if args.verbose:
