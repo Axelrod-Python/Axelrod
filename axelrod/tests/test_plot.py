@@ -27,6 +27,8 @@ class TestPlot(unittest.TestCase):
         cls.expected_boxplot_xticks_labels = ['Player2', 'Player1', 'Player3']
         cls.expected_boxplot_title = 'Mean score per stage game over 5 rounds repeated 2 times (3 strategies)'
 
+        cls.expected_payoff_dataset = [[0.0, 1.8, 3.6], [2.0, 0.0, 4.2], [3.2, 3.2, 0.0]]
+
     def test_init(self):
         bp = axelrod.Plot(self.test_result_set)
         self.assertEquals(bp.result_set, self.test_result_set)
@@ -53,6 +55,10 @@ class TestPlot(unittest.TestCase):
             self.assertIsInstance(bp.boxplot(), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
+
+    def test_payoff_dataset(self):
+        bp = axelrod.Plot(self.test_result_set)
+        self.assertSequenceEqual(bp.payoff_dataset(), self.expected_payoff_dataset)
 
 
 if __name__ == '__main__':
