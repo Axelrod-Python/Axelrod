@@ -3,10 +3,17 @@ from axelrod import Player
 
 
 class Darwin(Player):
+    """ A strategy which accumulates a record (the 'genome') of what the most
+        favourable response in the previous round should have been, and naively
+        assumes that this will remain the correct response at the same round of
+        future trials.  This 'genome' is preserved between opponents.
+        If no record yet exists, the opponent's response from the previous round
+        is returned.
+    """
 
     name = "Darwin"
     genome = ['C']
-    valid_callers = ["play"]
+    valid_callers = ["play"]    # What functions may invoke our strategy.
     outcomes = { ('C','C') : 1,
                  ('C','D') : -5,
                  ('D','C') : 5,
@@ -15,44 +22,42 @@ class Darwin(Player):
 
     def __init__(self):
         super(self.__class__, self).__init__()
-        self.trial = 0
         self.response = self.__class__.genome[0]
 
 
     def strategy(self, opponent):
-        # Frustrate psychics...
+        # Frustrate psychics and ensure that simulated rounds
+        # do not influence genome.
         if inspect.stack()[1][3] not in self.__class__.valid_callers:
             return 'C'
 
-        if self.trial > 0:
-            outcome = self.__class__.outcomes[(self.history[-1], opponent.history[-1])]
-            self.mutate(outcome)
-            self.__class__.genome[self.trial-1] = self.response
+        trial = len(self.history)
 
-        if self.trial < len(self.__class__.genome):
-            current = self.__class__.genome[self.trial]
+        if trial > 0:
+            outcome = self.__class__.outcomes[(self.history[-1], opponent.history[-1])]
+            self.mutate(outcome, trial)
+            # Update genome with selected response
+            self.__class__.genome[trial-1] = self.response
+
+        if trial < len(self.__class__.genome):
+            # Return response from genome where available...
+            current = self.__class__.genome[trial]
         else:
+            # ...otherwise use Tit-for-Tat
             self.__class__.genome.append(opponent.history[-1])
             current = opponent.history[-1]
 
-        self.trial += 1
         return current
 
 
     def reset(self):
-        """ 
-        print("C: {0}\tD: {1}".format(  self.__class__.genome.count('C'),
-                                        self.__class__.genome.count('D')
-                                      ))
-        """
+        """ Reset instance properties. """
         self.history = []
-        self.response = 'C'
-        self.trial = 0
-        self.__class__.genome[0] = 'C'
+        self.__class__.genome[0] = 'C' # Ensure initial Cooperate
 
 
-    def mutate(self, outcome):
-        """Modify genome if undesirable outcome"""
-        if outcome < 0:
-            self.response = 'D' if self.response == 'C' else 'C'
+    def mutate(self, outcome, trial):
+        """ Select response according to outcome. """
+        if outcome < 0 and (len(self.__class__.genome) >= trial):
+            self.response = 'D' if self.__class__.genome[trial-1] == 'C' else 'C'
 

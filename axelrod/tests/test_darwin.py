@@ -1,4 +1,7 @@
-import sys
+"""
+    Tests for the Darwin PD strategy.
+"""
+
 import axelrod
 from test_player import TestPlayer
 
@@ -12,8 +15,11 @@ class TestDarwin(TestPlayer):
         p2 = axelrod.Player()
         self.assertEqual(p1.strategy(p2), 'C') # Always cooperate first.
 
+
     def test_play(self):
+        self.assertTrue(len(self.player.valid_callers)>0)
         self.play()
+
 
     def play(self):
         """We need this to circumvent the agent's anti-inspection measure"""
@@ -29,7 +35,5 @@ class TestDarwin(TestPlayer):
         p1 = self.player()
         p1.reset()
         self.assertEqual(p1.history, [])
-        self.assertEqual(p1.response, 'C')
-        self.assertEqual(p1.trial, 0)
         self.assertEqual(p1.genome[0], 'C')
 
