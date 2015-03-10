@@ -70,12 +70,12 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
                 continue
 
             # Save boxplots
-            boxplot = axelrod.Plot(results)
-            figure = boxplot.figure()
+            plot = axelrod.Plot(results)
+            boxplot = plot.boxplot()
             file_name = output_file_path(
                     output_directory, tournament_name + '_boxplot', 'png')
-            figure.savefig(file_name, bbox_inches='tight')
-            figure.clf()
+            boxplot.savefig(file_name, bbox_inches='tight')
+            boxplot.clf()
 
             # Save plot with average payoff matrix with winners at top.
             pmatrix_ranked = [
