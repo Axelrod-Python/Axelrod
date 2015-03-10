@@ -45,43 +45,42 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
         tournaments['all_strategies'] = strategies_list(axelrod.all_strategies)
 
     for tournament_name in tournaments:
-        if len(tournaments[tournament_name]) != 1:
 
-            tournament = axelrod.Tournament(
-                players=tournaments[tournament_name],
-                turns=turns,
-                repetitions=repetitions
-            )
+        tournament = axelrod.Tournament(
+            players=tournaments[tournament_name],
+            turns=turns,
+            repetitions=repetitions
+        )
 
-            # This is where the actual tournament takes place.
-            results = tournament.play()
+        # This is where the actual tournament takes place.
+        results = tournament.play()
 
-            # # Save the scores from this tournament to a CSV file.
-            csv = results.csv()
-            file_namename = output_file_path(
-                output_directory, tournament_name, 'csv')
-            with open(file_namename, 'w') as f:
-                f.write(csv)
+        # # Save the scores from this tournament to a CSV file.
+        csv = results.csv()
+        file_namename = output_file_path(
+            output_directory, tournament_name, 'csv')
+        with open(file_namename, 'w') as f:
+            f.write(csv)
 
-            # Create an axelrod.Plot object and test whether matplotlib
-            # is installed before proceeding
-            plot = axelrod.Plot(results)
-            if not plot.matplotlib_installed:
-                print ("The matplotlib library is not installed. "
-                       "Only .csv output will be produced.")
-                continue
+        # Create an axelrod.Plot object and test whether matplotlib
+        # is installed before proceeding
+        plot = axelrod.Plot(results)
+        if not plot.matplotlib_installed:
+            print ("The matplotlib library is not installed. "
+                   "Only .csv output will be produced.")
+            continue
 
-            # Save boxplot
-            figure = plot.boxplot()
-            file_name = output_file_path(
-                    output_directory, tournament_name + '_boxplot', 'png')
-            save_plot(figure, file_name)
+        # Save boxplot
+        figure = plot.boxplot()
+        file_name = output_file_path(
+                output_directory, tournament_name + '_boxplot', 'png')
+        save_plot(figure, file_name)
 
-            # Save plot with average payoff matrix with winners at top.
-            figure = plot.payoff()
-            file_name = output_file_path(
-                    output_directory, tournament_name + '_payoff', 'png')
-            save_plot(figure, file_name)
+        # Save plot with average payoff matrix with winners at top.
+        figure = plot.payoff()
+        file_name = output_file_path(
+                output_directory, tournament_name + '_payoff', 'png')
+        save_plot(figure, file_name)
 
 
 if __name__ == "__main__":
