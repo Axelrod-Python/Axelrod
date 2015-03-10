@@ -30,35 +30,35 @@ class TestPlot(unittest.TestCase):
         cls.expected_payoff_dataset = [[0.0, 1.8, 3.6], [2.0, 0.0, 4.2], [3.2, 3.2, 0.0]]
 
     def test_init(self):
-        bp = axelrod.Plot(self.test_result_set)
-        self.assertEquals(bp.result_set, self.test_result_set)
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertEquals(plot.result_set, self.test_result_set)
 
     def test_boxplot_dataset(self):
-        bp = axelrod.Plot(self.test_result_set)
-        self.assertTrue(numpy.allclose(bp.boxplot_dataset(), self.expected_boxplot_dataset))
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertTrue(numpy.allclose(plot.boxplot_dataset(), self.expected_boxplot_dataset))
 
     def test_boxplot_xticks_locations(self):
-        bp = axelrod.Plot(self.test_result_set)
-        self.assertEquals(bp.boxplot_xticks_locations(), self.expected_boxplot_xticks_locations)
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertEquals(plot.boxplot_xticks_locations(), self.expected_boxplot_xticks_locations)
 
     def test_boxplot_xticks_labels(self):
-        bp = axelrod.Plot(self.test_result_set)
-        self.assertEquals(bp.boxplot_xticks_labels(), self.expected_boxplot_xticks_labels)
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertEquals(plot.boxplot_xticks_labels(), self.expected_boxplot_xticks_labels)
 
     def test_boxplot_title(self):
-        bp = axelrod.Plot(self.test_result_set)
-        self.assertEquals(bp.boxplot_title(), self.expected_boxplot_title)
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertEquals(plot.boxplot_title(), self.expected_boxplot_title)
 
     def test_boxplot(self):
         if matplotlib_installed:
-            bp = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(bp.boxplot(), matplotlib.pyplot.Figure)
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.boxplot(), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 
     def test_payoff_dataset(self):
-        bp = axelrod.Plot(self.test_result_set)
-        self.assertSequenceEqual(bp.payoff_dataset(), self.expected_payoff_dataset)
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertSequenceEqual(plot.payoff_dataset(), self.expected_payoff_dataset)
 
 
 if __name__ == '__main__':
