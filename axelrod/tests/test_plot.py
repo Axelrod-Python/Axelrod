@@ -35,6 +35,7 @@ class TestPlot(unittest.TestCase):
     def test_init(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEquals(plot.result_set, self.test_result_set)
+        self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
 
     def test_boxplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
