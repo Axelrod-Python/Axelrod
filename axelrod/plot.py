@@ -46,3 +46,17 @@ class Plot(object):
         else:
             return None
 
+    def payoff(self):
+        if self.matplotlib_installed:
+            # figure = plt.figure()
+            figure, ax = plt.subplots()
+            mat = ax.matshow(self.payoff_dataset())
+            plt.xticks(range(self.result_set.nplayers))
+            plt.yticks(range(self.result_set.nplayers))
+            ax.set_xticklabels(self.result_set.ranked_names, rotation=90)
+            ax.set_yticklabels(self.result_set.ranked_names)
+            plt.tick_params(axis='both', which='both', labelsize=8)
+            figure.colorbar(mat)
+            return figure
+        else:
+            return None

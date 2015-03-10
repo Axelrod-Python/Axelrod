@@ -9,14 +9,6 @@ import argparse
 import os
 import time
 
-matplotlib_installed = True
-try:
-    import matplotlib.pyplot as plt
-except ImportError:
-    matplotlib_installed = False
-    print ("The matplotlib library is not installed. "
-           "Only .csv output will be produced.")
-
 import axelrod
 
 
@@ -66,11 +58,15 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
             with open(file_namename, 'w') as f:
                 f.write(csv)
 
-            if not matplotlib_installed:
+            # Create a Plot instance and test whether matplotlib
+            # is installed before proceeding
+            plot = axelrod.Plot(results)
+            if not plot.matplotlib_installed:
+                print ("The matplotlib library is not installed. "
+                       "Only .csv output will be produced.")
                 continue
 
             # Save boxplots
-            plot = axelrod.Plot(results)
             boxplot = plot.boxplot()
             file_name = output_file_path(
                     output_directory, tournament_name + '_boxplot', 'png')
@@ -78,21 +74,29 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
             boxplot.clf()
 
             # Save plot with average payoff matrix with winners at top.
-            pmatrix_ranked = [
-                [results.payoff_matrix[r1][r2] for r2 in results.ranking]
-                for r1 in results.ranking]
-            fig, ax = plt.subplots()
-            mat = ax.matshow(pmatrix_ranked)
-            plt.xticks(range(tournament.nplayers))
-            plt.yticks(range(tournament.nplayers))
-            ax.set_xticklabels(results.ranked_names, rotation=90)
-            ax.set_yticklabels(results.ranked_names)
-            plt.tick_params(axis='both', which='both', labelsize=8)
-            fig.colorbar(mat)
+            payoff = plot.payoff()
             file_name = output_file_path(
                     output_directory, tournament_name + '_payoff', 'png')
-            plt.savefig(file_name, bbox_inches='tight')
-            plt.clf()
+            payoff.savefig(file_name, bbox_inches='tight')
+            payoff.clf()
+
+            # Save plot with average payoff matrix with winners at top.
+            # pmatrix_ranked = [
+            #     [results.payoff_matrix[r1][r2] for r2 in results.ranking]
+            #     for r1 in results.ranking]
+            # fig, ax = plt.subplots()
+            # mat = ax.matshow(pmatrix_ranked)
+            # plt.xticks(range(tournament.nplayers))
+            # plt.yticks(range(tournament.nplayers))
+            # ax.set_xticklabels(results.ranked_names, rotation=90)
+            # ax.set_yticklabels(results.ranked_names)
+            # plt.tick_params(axis='both', which='both', labelsize=8)
+            # fig.colorbar(mat)
+            # file_name = output_file_path(
+            #         output_directory, tournament_name + '_payoff', 'png')
+            # plt.savefig(file_name, bbox_inches='tight')
+            # plt.clf()
+
 
 if __name__ == "__main__":
 
