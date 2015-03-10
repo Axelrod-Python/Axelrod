@@ -106,18 +106,19 @@ if __name__ == "__main__":
 
     if args.xb and args.xs and args.xc and args.xa:
         print "You've excluded everything - nothing for me to do"
+    else:
 
-    t0 = time.time()
+        t0 = time.time()
 
-    if args.verbose:
-        print ('Starting tournament with ' + str(args.repetitions) +
-               ' round robins of ' + str(args.turns) + ' turns per pair.')
-        print 'Basics strategies plot: ' + str(not args.xb)
-        print 'Ordinary strategies plot: ' + str(not args.xs)
-        print 'Cheating strategies plot: ' + str(not args.xc)
-        print 'Combined strategies plot: ' + str(not args.xa)
-    run_tournament(args.turns, args.repetitions, args.xb, args.xs,
-                   args.xc, args.xa, args.output_directory)
+        if args.verbose:
+            print ('Starting tournament with ' + str(args.repetitions) +
+                   ' round robins of ' + str(args.turns) + ' turns per pair.')
+            print 'Basics strategies plot: ' + str(not args.xb)
+            print 'Ordinary strategies plot: ' + str(not args.xs)
+            print 'Cheating strategies plot: ' + str(not args.xc)
+            print 'Combined strategies plot: ' + str(not args.xa)
+        run_tournament(args.turns, args.repetitions, args.xb, args.xs,
+                       args.xc, args.xa, args.output_directory)
 
-    dt = time.time() - t0
-    print "Finished in %.1fs" % dt
+        dt = time.time() - t0
+        print "Finished in %.1fs" % dt
