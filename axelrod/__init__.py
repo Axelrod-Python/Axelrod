@@ -1,4 +1,4 @@
-from box_plot import *
+from plot import *
 from game import *
 from player import *
 from round_robin import *
