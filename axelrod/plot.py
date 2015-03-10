@@ -14,6 +14,11 @@ class Plot(object):
     def boxplot_dataset(self):
         return [self.result_set.scores[ir] for ir in self.result_set.ranking]
 
+    def payoff_dataset(self):
+        return [[self.result_set.payoff_matrix[r1][r2]
+                for r2 in self.result_set.ranking]
+                for r1 in self.result_set.ranking]
+
     def boxplot_xticks_locations(self):
         return range(1, len(self.result_set.ranked_names) + 2)
 
@@ -40,3 +45,4 @@ class Plot(object):
             return figure
         else:
             return None
+
