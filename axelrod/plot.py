@@ -5,7 +5,7 @@ except ImportError:
     matplotlib_installed = False
 
 
-class BoxPlot(object):
+class Plot(object):
 
     def __init__(self, result_set):
         self.result_set = result_set
