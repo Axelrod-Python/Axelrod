@@ -79,6 +79,15 @@ class TestPlot(unittest.TestCase):
         else:
             self.skipTest('matplotlib not installed')
 
+    def test_ecosystem(self):
+        if matplotlib_installed:
+            eco = axelrod.Ecosystem(self.test_result_set)
+            eco.reproduce(100)
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.stackplot(eco.population_sizes), matplotlib.pyplot.Figure)
+        else:
+            self.skipTest('matplotlib not installed')
+
 
 if __name__ == '__main__':
     unittest.main()
