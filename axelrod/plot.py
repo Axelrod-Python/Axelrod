@@ -35,60 +35,64 @@ class Plot(object):
             len(self.result_set.ranking))
 
     def boxplot(self):
-        if self.matplotlib_installed:
-            figure = plt.figure()
-            plt.boxplot(self.boxplot_dataset())
-            plt.xticks(
-                self.boxplot_xticks_locations(),
-                self.boxplot_xticks_labels(),
-                rotation=90)
-            plt.tick_params(axis='both', which='both', labelsize=8)
-            plt.title(self.boxplot_title())
-            return figure
-        else:
+
+        if not self.matplotlib_installed:
             return None
+
+        figure = plt.figure()
+        plt.boxplot(self.boxplot_dataset())
+        plt.xticks(
+            self.boxplot_xticks_locations(),
+            self.boxplot_xticks_labels(),
+            rotation=90)
+        plt.tick_params(axis='both', which='both', labelsize=8)
+        plt.title(self.boxplot_title())
+        return figure
 
     def payoff(self):
-        if self.matplotlib_installed:
-            figure, ax = plt.subplots()
-            mat = ax.matshow(self.payoff_dataset())
-            plt.xticks(range(self.result_set.nplayers))
-            plt.yticks(range(self.result_set.nplayers))
-            ax.set_xticklabels(self.result_set.ranked_names, rotation=90)
-            ax.set_yticklabels(self.result_set.ranked_names)
-            plt.tick_params(axis='both', which='both', labelsize=8)
-            figure.colorbar(mat)
-            return figure
-        else:
+
+        if not self.matplotlib_installed:
             return None
+
+        figure, ax = plt.subplots()
+        mat = ax.matshow(self.payoff_dataset())
+        plt.xticks(range(self.result_set.nplayers))
+        plt.yticks(range(self.result_set.nplayers))
+        ax.set_xticklabels(self.result_set.ranked_names, rotation=90)
+        ax.set_yticklabels(self.result_set.ranked_names)
+        plt.tick_params(axis='both', which='both', labelsize=8)
+        figure.colorbar(mat)
+        return figure
 
     def stackplot(self, populations):
-        if self.matplotlib_installed:
-            figure, ax = plt.subplots()
-            turns = range(len(populations))
-            pops = [[populations[iturn][ir] for iturn in turns] for ir in self.result_set.ranking]
-            ax.stackplot(turns, *pops)
 
-            ax.yaxis.tick_right()
-            ax.yaxis.set_label_position("right")
-            ax.yaxis.labelpad = 25.0
-            plt.ylim([0.0, 1.0])
-            plt.ylabel('Relative population size')
-            plt.xlabel('Turn')
-            plt.title("Strategy population dynamics based on average payoffs")
-            trans = transforms.blended_transform_factory(ax.transAxes, ax.transData)
-
-            ticks = []
-            for i, n in enumerate(self.result_set.ranked_names):
-                x = -0.02
-                y = (i + 0.5) * 1.0 / self.nplayers
-                ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False, va='center', ha='right', fontsize=8)
-                ticks.append(y)
-            ax2 = ax.twinx()
-            ax.set_yticks(ticks)
-            ax.tick_params(direction='out')
-            ax.set_yticklabels([])
-
-            return figure
-        else:
+        if not self.matplotlib_installed:
             return None
+
+        figure, ax = plt.subplots()
+        turns = range(len(populations))
+        pops = [[populations[iturn][ir] for iturn in turns] for ir in self.result_set.ranking]
+        ax.stackplot(turns, *pops)
+
+        ax.yaxis.tick_right()
+        ax.yaxis.set_label_position("right")
+        ax.yaxis.labelpad = 25.0
+
+        plt.ylim([0.0, 1.0])
+        plt.ylabel('Relative population size')
+        plt.xlabel('Turn')
+        plt.title("Strategy population dynamics based on average payoffs")
+
+        ax2 = ax.twinx()
+        trans = transforms.blended_transform_factory(ax.transAxes, ax.transData)
+        ticks = []
+        for i, n in enumerate(self.result_set.ranked_names):
+            x = -0.02
+            y = (i + 0.5) * 1.0 / self.nplayers
+            ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False, va='center', ha='right', fontsize=8)
+            ticks.append(y)
+        ax.set_yticks(ticks)
+        ax.tick_params(direction='out')
+        ax.set_yticklabels([])
+
+        return figure
