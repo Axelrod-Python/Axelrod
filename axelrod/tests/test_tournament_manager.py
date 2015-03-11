@@ -33,25 +33,9 @@ class TestTournamentManager(unittest.TestCase):
             self.test_file_name, self.test_file_extenstion)
         self.assertEqual(output_file_path, self.expected_output_file_path)
 
-    def test_save_plot(self):
-        # This probably needs to use the mock library
-        self.skipTest("Not yet implemented")
-
     def test_add_tournament(self):
         mgr = axelrod.TournamentManager(self.test_logger, self.test_output_directory)
         mgr.add_tournament(self.test_tournament_name, self.test_players)
         self.assertEqual(len(mgr.tournaments), 1)
         self.assertIsInstance(mgr.tournaments[0], axelrod.Tournament)
         self.assertEqual(mgr.tournaments[0].name, self.test_tournament_name)
-
-    def test_run_tournaments(self):
-        # This probably needs to use the mock library
-        self.skipTest("Not yet implemented")
-
-    def test_run_single_tournament(self):
-        # This probably needs to use the mock library
-        self.skipTest("Not yet implemented")
-
-    def test_save_plots(self):
-        # This probably needs to use the mock library
-        self.skipTest("Not yet implemented")
