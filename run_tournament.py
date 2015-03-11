@@ -28,7 +28,7 @@ def save_plot(figure, file_name):
 
 
 def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
-                   exclude_cheating, exclude_all, output_directory):
+                   exclude_cheating, exclude_all, no_eco, output_directory):
     """Main function for running Axelrod tournaments."""
     tournaments = {}
 
@@ -55,7 +55,18 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
         # This is where the actual tournament takes place.
         results = tournament.play()
 
-        # # Save the scores from this tournament to a CSV file.
+        # This is the "ecological" variant that uses the results of the above.
+        if not no_eco:
+            eco = axelrod.Ecosystem(results)
+            ecoturns = {
+                'basic_strategies': 100,
+                'cheating_strategies': 20,
+                'strategies': 200,
+                'all_strategies': 40,
+            }
+            eco.reproduce(ecoturns.get(tournament_name))
+
+        # Save the scores from this tournament to a CSV file.
         csv = results.csv()
         file_namename = output_file_path(
             output_directory, tournament_name, 'csv')
@@ -82,6 +93,13 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
                 output_directory, tournament_name + '_payoff', 'png')
         save_plot(figure, file_name)
 
+        # Save a stackplot with the population histories for all strategies.
+        if not no_eco:
+            figure = plot.stackplot(eco.population_sizes)
+            file_name = output_file_path(
+                    output_directory, tournament_name + '_reproduce', 'png')
+            save_plot(figure, file_name)
+
 
 if __name__ == "__main__":
 
@@ -102,6 +120,8 @@ if __name__ == "__main__":
                         help='exclude cheating strategies plot')
     parser.add_argument('--xa', action='store_true',
                         help='exclude combined strategies plot')
+    parser.add_argument('--ne', action='store_true',
+                        help='no ecological variant')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
@@ -118,7 +138,7 @@ if __name__ == "__main__":
             print 'Cheating strategies plot: ' + str(not args.xc)
             print 'Combined strategies plot: ' + str(not args.xa)
         run_tournament(args.turns, args.repetitions, args.xb, args.xs,
-                       args.xc, args.xa, args.output_directory)
+                       args.xc, args.xa, args.ne, args.output_directory)
 
         dt = time.time() - t0
         print "Finished in %.1fs" % dt
