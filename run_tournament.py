@@ -33,7 +33,7 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
             axelrod.ordinary_strategies +
             axelrod.cheating_strategies)
         players = manager.one_player_per_strategy(strategies)
-        manager.add_tournament('cheating_strategies', players)
+        manager.add_tournament('all_strategies', players)
 
     manager.run_tournaments()
 
