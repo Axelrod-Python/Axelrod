@@ -36,4 +36,3 @@ class TestDarwin(TestPlayer):
         p1.reset()
         self.assertEqual(p1.history, [])
         self.assertEqual(p1.genome[0], 'C')
-
