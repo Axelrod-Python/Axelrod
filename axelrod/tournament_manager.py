@@ -1,4 +1,5 @@
 import os
+import time
 from tournament import *
 from plot import *
 
@@ -32,14 +33,26 @@ class TournamentManager(object):
         self.tournaments.append(tournament)
 
     def run_tournaments(self):
+        t0 = time.time()
         for tournament in self.tournaments:
             self.run_single_tournament(tournament)
+        dt = time.time() - t0
+        self.logger.log(
+            "Finished all tournaments in %.1fs" % dt)
 
     def run_single_tournament(self, tournament):
+            self.logger.log(
+                'Starting ' + tournament.name + ' tournament with ' +
+                str(tournament.repetitions) + ' round robins of ' +
+                str(tournament.turns) + ' turns per pair.')
+            t0 = time.time()
             tournament.play()
             tournament.result_set.init_output()
             self.save_csv(tournament)
             self.save_plots(tournament)
+            dt = time.time() - t0
+            self.logger.log(
+                "Finished " + tournament.name + " tournament in %.1fs" % dt)
 
     def save_csv(self, tournament):
         csv = tournament.result_set.csv()

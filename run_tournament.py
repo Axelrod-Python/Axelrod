@@ -6,15 +6,17 @@ The code for strategies is present in `axelrod/strategies`.
 from __future__ import division
 
 import argparse
-import time
-
 import axelrod
 
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
-                    exclude_cheating, exclude_all, output_directory):
-
-    logger = axelrod.ConsoleLogger()
+                    exclude_cheating, exclude_all, output_directory, logging):
+    loggers = {
+        'console': axelrod.ConsoleLogger,
+        'none': axelrod.NullLogger,
+        'file': axelrod.FileLogger
+    }
+    logger = loggers[logging]()
     manager = axelrod.TournamentManager(logger, output_directory)
 
     if not exclude_basic:
@@ -41,8 +43,8 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--verbose', action='store_true',
-                        help='show verbose messages')
+    parser.add_argument('-l', '--logging', type=str, default='console',
+                        help='logging (none, console or file)')
     parser.add_argument('-t', '--turns', type=int, default=200,
                         help='turns per pair')
     parser.add_argument('-r', '--repetitions', type=int, default=50,
@@ -62,18 +64,5 @@ if __name__ == "__main__":
     if args.xb and args.xs and args.xc and args.xa:
         print "You've excluded everything - nothing for me to do"
     else:
-
-        t0 = time.time()
-
-        if args.verbose:
-            print ('Starting tournament with ' + str(args.repetitions) +
-                   ' round robins of ' + str(args.turns) + ' turns per pair.')
-            print 'Basics strategies plot: ' + str(not args.xb)
-            print 'Ordinary strategies plot: ' + str(not args.xs)
-            print 'Cheating strategies plot: ' + str(not args.xc)
-            print 'Combined strategies plot: ' + str(not args.xa)
         run_tournaments(args.turns, args.repetitions, args.xb, args.xs,
-                        args.xc, args.xa, args.output_directory)
-
-        dt = time.time() - t0
-        print "Finished in %.1fs" % dt
+                        args.xc, args.xa, args.output_directory, args.logging)
