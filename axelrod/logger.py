@@ -12,7 +12,7 @@ class ConsoleLogger(object):
 
 class FileLogger(object):
 
-    def __init__(self, log_file):
+    def __init__(self, log_file='./axelrod.log'):
         self.log_file = log_file
 
     def log(self, message):
