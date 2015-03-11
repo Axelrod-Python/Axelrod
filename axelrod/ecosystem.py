@@ -19,7 +19,7 @@ class Ecosystem(object):
         # and all population lists should be normalized to one.
         self.population_sizes = [[1.0 / self.nplayers for i in range(self.nplayers)]]
 
-        # This function is quite arbitrary and probably only influence the kinetics
+        # This function is quite arbitrary and probably only influences the kinetics
         # for the current code.
         if fitness:
             self.fitness = fitness
