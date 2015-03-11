@@ -71,7 +71,8 @@ class Plot(object):
 
             ax.yaxis.tick_right()
             ax.yaxis.set_label_position("right")
-            plt.ylim([0.0, 1.01])
+            ax.yaxis.labelpad = 25.0
+            plt.ylim([0.0, 1.0])
             plt.ylabel('Relative population size')
             plt.xlabel('Turn')
             plt.title("Strategy population dynamics based on average payoffs")
