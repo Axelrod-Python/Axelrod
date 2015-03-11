@@ -4,8 +4,9 @@ from tournament import *
 
 class TournamentManager(object):
 
-    def __init__(self, output_directory):
+    def __init__(self, logger, output_directory):
         self.tournaments = []
+        self.logger = logger
         self.output_directory = output_directory
 
     def one_player_per_strategy(self, strategies):
@@ -40,8 +41,8 @@ class TournamentManager(object):
     def save_plots(self, tournament):
         plot = axelrod.Plot(tournament.result_set)
         if not plot.matplotlib_installed:
-            print ("The matplotlib library is not installed. "
-                   "No plots will be produced")
+            self.logger.log("The matplotlib library is not installed. "
+                            "No plots will be produced")
             return
         for plot_type in ('boxplot', 'payoff'):
             figure = plot[plot_type]()
