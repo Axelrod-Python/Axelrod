@@ -20,8 +20,9 @@ class TournamentManager(object):
         figure.savefig(file_name, bbox_inches='tight')
         figure.clf()
 
-    def add_tournament(self, name, players, turns, repetitions):
-        tournament = axelrod.Tournament(
+    def add_tournament(self, name, players, game=None,
+                 turns=200, repetitions=10):
+        tournament = Tournament(
             name=name,
             players=players,
             turns=turns,
