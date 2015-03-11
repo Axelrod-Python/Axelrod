@@ -55,7 +55,17 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
         # This is where the actual tournament takes place.
         results = tournament.play()
 
-        # # Save the scores from this tournament to a CSV file.
+        # This is the "ecological" variant that uses the results of the above.
+        eco = axelrod.Ecosystem(results.payoff_matrix)
+        ecoturns = {
+            'basic_strategies': 300,
+            'cheating_strategies': 100,
+            'strategies': 2000,
+            'all_strategies': 1000,
+        }
+        eco.reproduce(ecoturns.get(tournament_name))
+
+        # Save the scores from this tournament to a CSV file.
         csv = results.csv()
         file_namename = output_file_path(
             output_directory, tournament_name, 'csv')
@@ -80,6 +90,12 @@ def run_tournament(turns, repetitions, exclude_basic, exclude_strategies,
         figure = plot.payoff()
         file_name = output_file_path(
                 output_directory, tournament_name + '_payoff', 'png')
+        save_plot(figure, file_name)
+
+        # Save a stackplot with the population histories for all strategies.
+        figure = plot.stackplot(eco.populations)
+        file_name = output_file_path(
+                output_directory, tournament_name + '_reproduce', 'png')
         save_plot(figure, file_name)
 
 

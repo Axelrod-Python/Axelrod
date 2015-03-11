@@ -1,6 +1,7 @@
 matplotlib_installed = True
 try:
     import matplotlib.pyplot as plt
+    import matplotlib.transforms as transforms
 except ImportError:
     matplotlib_installed = False
 
@@ -9,6 +10,7 @@ class Plot(object):
 
     def __init__(self, result_set):
         self.result_set = result_set
+        self.nplayers = self.result_set.nplayers
         self.matplotlib_installed = matplotlib_installed
 
     def boxplot_dataset(self):
@@ -56,6 +58,36 @@ class Plot(object):
             ax.set_yticklabels(self.result_set.ranked_names)
             plt.tick_params(axis='both', which='both', labelsize=8)
             figure.colorbar(mat)
+            return figure
+        else:
+            return None
+
+    def stackplot(self, populations):
+        if self.matplotlib_installed:
+            figure, ax = plt.subplots()
+            turns = range(len(populations))
+            pops = [[populations[iturn][ir] for iturn in turns] for ir in self.result_set.ranking]
+            ax.stackplot(turns, *pops)
+
+            ax.yaxis.tick_right()
+            ax.yaxis.set_label_position("right")
+            plt.ylim([0.0, 1.01])
+            plt.ylabel('Relative population size')
+            plt.xlabel('Turn')
+            plt.title("Strategy population dynamics based on average payoffs")
+            trans = transforms.blended_transform_factory(ax.transAxes, ax.transData)
+
+            ticks = []
+            for i, n in enumerate(self.result_set.ranked_names):
+                x = -0.02
+                y = (i + 0.5) * 1.0 / self.nplayers
+                ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False, va='center', ha='right', fontsize=8)
+                ticks.append(y)
+            ax2 = ax.twinx()
+            ax.set_yticks(ticks)
+            ax.tick_params(direction='out')
+            ax.set_yticklabels([])
+
             return figure
         else:
             return None
