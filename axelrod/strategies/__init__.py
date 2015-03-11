@@ -34,7 +34,6 @@ strategies = basic_strategies + [
     ArrogantQLearner,
     AverageCopier,
     CautiousQLearner,
-    Darwin,
     FoolMeOnce,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,
@@ -75,6 +74,7 @@ strategies = basic_strategies + [
 
 # These are strategies that do not follow the rules of Axelrods tournament
 cheating_strategies = [
+    Darwin,
     Geller,
     GellerCooperator,
     GellerDefector,
