@@ -17,7 +17,10 @@ class TestDarwin(TestPlayer):
 
 
     def test_play(self):
+        """valid_callers must contain at least one entry..."""
         self.assertTrue(len(self.player.valid_callers)>0)
+        """...and should allow round_robin.play to call"""
+        self.assertTrue("play" in self.player.valid_callers)
         self.play()
 
 
@@ -32,7 +35,15 @@ class TestDarwin(TestPlayer):
 
 
     def test_reset(self):
+        """Is instance correctly reset between rounds"""
         p1 = self.player()
         p1.reset()
         self.assertEqual(p1.history, [])
         self.assertEqual(p1.genome[0], 'C')
+
+
+    def test_unique_genome(self):
+        """Ensure genome remains unique class property"""
+        p1 = self.player()
+        p2 = self.player()
+        self.assertTrue(p1.genome is p2.genome)
