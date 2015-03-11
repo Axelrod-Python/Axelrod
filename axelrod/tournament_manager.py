@@ -1,3 +1,4 @@
+import os
 from tournament import *
 
 
@@ -10,10 +11,10 @@ class TournamentManager(object):
     def one_player_per_strategy(self, strategies):
         return [strategy() for strategy in strategies]
 
-    def output_file_path(self, tournament_name, file_extension):
+    def output_file_path(self, file_name, file_extension):
         return os.path.join(
             self.output_directory,
-            tournament_name + '.' + file_extension)
+            file_name + '.' + file_extension)
 
     def save_plot(self, figure, file_name):
         figure.savefig(file_name, bbox_inches='tight')
