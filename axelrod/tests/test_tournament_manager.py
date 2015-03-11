@@ -42,3 +42,12 @@ class TestTournamentManager(unittest.TestCase):
         self.assertIsInstance(mgr.tournaments[0], axelrod.Tournament)
         self.assertEqual(mgr.tournaments[0].name, self.test_tournament_name)
 
+    def test_run_tournaments(self):
+        self.skipTest("Not sure how to test this just yet")
+
+    def test_run_single_tournament(self):
+        self.skipTest("Not sure how to test this just yet")
+
+    def test_save_plots(self):
+        self.skipTest("Not sure how to test this just yet")
+
