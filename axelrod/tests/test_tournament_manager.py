@@ -8,10 +8,12 @@ class TestTournamentManager(unittest.TestCase):
     def setUpClass(cls):
         cls.test_output_directory = './assets/'
         cls.test_tournament_name = 'test_tournament'
+        cls.test_file_name = 'test_file_name'
         cls.test_file_extenstion = 'png'
         cls.test_strategies = [axelrod.Defector, axelrod.Cooperator]
+        cls.test_players = [axelrod.Defector(), axelrod.Cooperator()]
 
-        cls.expected_output_file_path = './assets/test_tournament.png'
+        cls.expected_output_file_path = './assets/test_file_name.png'
 
     def test_init(self):
         mgr = axelrod.TournamentManager(self.test_output_directory)
@@ -27,5 +29,16 @@ class TestTournamentManager(unittest.TestCase):
     def test_output_file_path(self):
         mgr = axelrod.TournamentManager(self.test_output_directory)
         output_file_path = mgr.output_file_path(
-            self.test_tournament_name, self.test_file_extenstion)
+            self.test_file_name, self.test_file_extenstion)
         self.assertEqual(output_file_path, self.expected_output_file_path)
+
+    def test_save_plot(self):
+        self.skipTest("Not sure how to test this just yet")
+
+    def test_add_tournament(self):
+        mgr = axelrod.TournamentManager(self.test_output_directory)
+        mgr.add_tournament(self.test_tournament_name, self.test_players)
+        self.assertEqual(len(mgr.tournaments), 1)
+        self.assertIsInstance(mgr.tournaments[0], axelrod.Tournament)
+        self.assertEqual(mgr.tournaments[0].name, self.test_tournament_name)
+
