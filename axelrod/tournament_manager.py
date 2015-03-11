@@ -3,7 +3,7 @@ from tournament import *
 
 class TournamentManager(object):
 
-    def __init__(self, output_directory,):
+    def __init__(self, output_directory):
         self.tournaments = []
         self.output_directory = output_directory
 
