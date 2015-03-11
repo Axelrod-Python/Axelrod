@@ -2,6 +2,7 @@ from alternator import *
 from appeaser import *
 from averagecopier import *
 from cooperator import *
+from darwin import *
 from defector import *
 from forgiver import *
 from geller import *
@@ -73,6 +74,7 @@ strategies = basic_strategies + [
 
 # These are strategies that do not follow the rules of Axelrods tournament
 cheating_strategies = [
+    Darwin,
     Geller,
     GellerCooperator,
     GellerDefector,
