@@ -3,6 +3,7 @@ class NullLogger(object):
     def log(self, message):
         pass
 
+
 class ConsoleLogger(object):
 
     def log(self, message):
@@ -17,4 +18,3 @@ class FileLogger(object):
     def log(self, message):
         with open(self.log_file, 'a') as file:
             file.write(message + '\n')
-
