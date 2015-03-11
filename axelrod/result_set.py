@@ -1,3 +1,4 @@
+import math
 import csv
 
 from StringIO import StringIO
@@ -69,8 +70,19 @@ class ResultSet(object):
         return ranked_names
 
     def generate_payoff_matrix(self):
-        """Returns a per-turn averaged payoff matrix."""
-        return [[1.0 * sum(s) / self.turns / self.repetitions for s in r] for r in self.results]
+        """Returns a per-turn averaged payoff matrix and its stddevs."""
+        averages = []
+        stddevs = []
+        for res in self.results:
+            averages.append([])
+            stddevs.append([])
+            for s in res:
+                perturn = [1.0 * rep / self.turns for rep in s]
+                avg = sum(perturn) / self.repetitions
+                dev = math.sqrt(sum([(avg - pt)**2 for pt in perturn]) / self.repetitions)
+                averages[-1].append(avg)
+                stddevs[-1].append(dev)
+        return averages, stddevs
 
     def init_output(self):
         """
@@ -82,7 +94,7 @@ class ResultSet(object):
             self.scores = self.generate_scores()
             self.ranking = self.generate_ranking(self.scores)
             self.ranked_names = self.generate_ranked_names(self.ranking)
-            self.payoff_matrix = self.generate_payoff_matrix()
+            self.payoff_matrix, self.payoff_stddevs = self.generate_payoff_matrix()
             self.output_initialised = True
 
     def csv(self):
