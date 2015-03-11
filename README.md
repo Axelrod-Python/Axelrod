@@ -153,3 +153,4 @@ All other contributions are of course welcome: if you can improve this in any wa
 - [meatballs](https://github.com/meatballs)
 - [timothyf1](https://github.com/timothyf1)
 - [uglyfruitcake](https://github.com/uglyfruitcake)
+- [pmslavin](https://github.com/pmslavin)
