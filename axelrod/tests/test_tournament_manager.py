@@ -8,6 +8,7 @@ class TestTournamentManager(unittest.TestCase):
     def setUpClass(cls):
         cls.test_logger = axelrod.NullLogger()
         cls.test_output_directory = './assets/'
+        cls.test_with_ecological = True
         cls.test_tournament_name = 'test_tournament'
         cls.test_file_name = 'test_file_name'
         cls.test_file_extenstion = 'png'
@@ -17,9 +18,12 @@ class TestTournamentManager(unittest.TestCase):
         cls.expected_output_file_path = './assets/test_file_name.png'
 
     def test_init(self):
-        mgr = axelrod.TournamentManager(self.test_logger, self.test_output_directory)
+        mgr = axelrod.TournamentManager(
+            self.test_logger, self.test_output_directory,
+            self.test_with_ecological)
         self.assertEqual(mgr.output_directory, self.test_output_directory)
         self.assertEqual(mgr.tournaments, [])
+        self.assertEqual(mgr.with_ecological, self.test_with_ecological)
 
     def test_one_player_per_strategy(self):
         mgr = axelrod.TournamentManager(self.test_logger, self.test_output_directory)
