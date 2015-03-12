@@ -6,10 +6,11 @@ from plot import *
 
 class TournamentManager(object):
 
-    def __init__(self, logger, output_directory):
+    def __init__(self, logger, output_directory, with_ecological):
         self.tournaments = []
         self.logger = logger
         self.output_directory = output_directory
+        self.with_ecological = with_ecological
 
     def one_player_per_strategy(self, strategies):
         return [strategy() for strategy in strategies]
