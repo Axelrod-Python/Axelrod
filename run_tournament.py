@@ -10,7 +10,8 @@ import axelrod
 
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
-                    exclude_cheating, exclude_all, output_directory, logging):
+                    exclude_cheating, exclude_all, no_eco, output_directory,
+                    logging):
     loggers = {
         'console': axelrod.ConsoleLogger,
         'none': axelrod.NullLogger,
@@ -39,6 +40,24 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
 
     manager.run_tournaments()
 
+    # This is the "ecological" variant that uses the results of the above.
+    # if not no_eco:
+    #     eco = axelrod.Ecosystem(results)
+    #     ecoturns = {
+    #         'basic_strategies': 100,
+    #         'cheating_strategies': 20,
+    #         'strategies': 200,
+    #         'all_strategies': 40,
+    #     }
+    #     eco.reproduce(ecoturns.get(tournament_name))
+
+    # # Save a stackplot with the population histories for all strategies.
+    # if not no_eco:
+    #     figure = plot.stackplot(eco.population_sizes)
+    #     file_name = output_file_path(
+    #             output_directory, tournament_name + '_reproduce', 'png')
+    #     save_plot(figure, file_name)
+
 
 if __name__ == "__main__":
 
@@ -59,10 +78,13 @@ if __name__ == "__main__":
                         help='exclude cheating strategies plot')
     parser.add_argument('--xa', action='store_true',
                         help='exclude combined strategies plot')
+    parser.add_argument('--ne', action='store_true',
+                        help='no ecological variant')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
         print "You've excluded everything - nothing for me to do"
     else:
         run_tournaments(args.turns, args.repetitions, args.xb, args.xs,
-                        args.xc, args.xa, args.output_directory, args.logging)
+                        args.xc, args.xa, args.ne, args.output_directory,
+                        args.logging)
