@@ -51,13 +51,12 @@ class TournamentManager(object):
             tournament.play()
             tournament.result_set.init_output()
             self.save_csv(tournament)
-            self.save_tournament_plots(tournament)
             if self.with_ecological:
                 ecosystem = axelrod.Ecosystem(tournament.results)
                 self.run_ecological_variant(tournament, ecosystem)
-                self.save_tournament_plots(tournament, ecosystem)
+                self.save_plots(tournament, ecosystem)
             else:
-                self.save_tournament_plots(tournament)
+                self.save_plots(tournament)
             dt = time.time() - t0
             self.logger.log(
                 "Finished " + tournament.name + " tournament in %.1fs" % dt)
@@ -85,7 +84,7 @@ class TournamentManager(object):
         with open(file_name, 'w') as f:
             f.write(csv)
 
-    def save_tournament_plots(self, tournament, ecosystem=None):
+    def save_plots(self, tournament, ecosystem=None):
         results = tournament.result_set
         plot = Plot(results)
         if not plot.matplotlib_installed:
