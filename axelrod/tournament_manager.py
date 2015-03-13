@@ -2,6 +2,7 @@ import os
 import time
 from tournament import *
 from plot import *
+from ecosystem import *
 
 
 class TournamentManager(object):
@@ -52,7 +53,7 @@ class TournamentManager(object):
             tournament.result_set.init_output()
             self.save_csv(tournament)
             if self.with_ecological:
-                ecosystem = axelrod.Ecosystem(tournament.results)
+                ecosystem = Ecosystem(tournament.result_set)
                 self.run_ecological_variant(tournament, ecosystem)
                 self.save_plots(tournament, ecosystem)
             else:
@@ -98,6 +99,6 @@ class TournamentManager(object):
             self.save_plot(figure, file_name)
         if ecosystem is not None:
             figure = plot.stackplot(ecosystem.population_sizes)
-            file_name = output_file_path(
-                    output_directory, tournament.name + '_reproduce', 'png')
-            save_plot(figure, file_name)
+            file_name = self.output_file_path(
+                    tournament.name + '_reproduce', 'png')
+            self.save_plot(figure, file_name)

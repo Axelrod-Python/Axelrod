@@ -18,7 +18,7 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
         'file': axelrod.FileLogger
     }
     logger = loggers[logging]()
-    manager = axelrod.TournamentManager(logger, output_directory)
+    manager = axelrod.TournamentManager(logger, output_directory, not no_eco)
 
     if not exclude_basic:
         players = manager.one_player_per_strategy(axelrod.basic_strategies)
