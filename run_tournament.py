@@ -40,25 +40,6 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
 
     manager.run_tournaments()
 
-    # This is the "ecological" variant that uses the results of the above.
-    # if not no_eco:
-    #     eco = axelrod.Ecosystem(results)
-    #     ecoturns = {
-    #         'basic_strategies': 100,
-    #         'cheating_strategies': 20,
-    #         'strategies': 200,
-    #         'all_strategies': 40,
-    #     }
-    #     eco.reproduce(ecoturns.get(tournament_name))
-
-    # # Save a stackplot with the population histories for all strategies.
-    # if not no_eco:
-    #     figure = plot.stackplot(eco.population_sizes)
-    #     file_name = output_file_path(
-    #             output_directory, tournament_name + '_reproduce', 'png')
-    #     save_plot(figure, file_name)
-
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
