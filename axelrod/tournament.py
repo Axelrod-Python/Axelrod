@@ -8,7 +8,7 @@ class Tournament(object):
 
     game = Game()
 
-    def __init__(self, name, players, game=None,
+    def __init__(self, players, name='axelrod', game=None,
                  turns=200, repetitions=10):
         self.name = name
         self.players = players
