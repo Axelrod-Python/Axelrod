@@ -8,6 +8,7 @@ class TournamentManager(object):
 
     def __init__(self, logger, output_directory, with_ecological):
         self.tournaments = []
+        self.ecological_variants = []
         self.logger = logger
         self.output_directory = output_directory
         self.with_ecological = with_ecological
@@ -50,10 +51,32 @@ class TournamentManager(object):
             tournament.play()
             tournament.result_set.init_output()
             self.save_csv(tournament)
-            self.save_plots(tournament)
+            self.save_tournament_plots(tournament)
+            if self.with_ecological:
+                ecosystem = axelrod.Ecosystem(tournament.results)
+                self.run_ecological_variant(tournament, ecosystem)
+                self.save_tournament_plots(tournament, ecosystem)
+            else:
+                self.save_tournament_plots(tournament)
             dt = time.time() - t0
             self.logger.log(
                 "Finished " + tournament.name + " tournament in %.1fs" % dt)
+
+    def run_ecological_variant(self, tournament, ecosystem):
+        self.logger.log(
+            'Starting ecological variant of ' + tournament.name)
+        t0 = time.time()
+        ecoturns = {
+            'basic_strategies': 100,
+            'cheating_strategies': 20,
+            'strategies': 200,
+            'all_strategies': 40,
+        }
+        ecosystem.reproduce(ecoturns.get(tournament.name))
+        dt = time.time() - t0
+        self.logger.log(
+            "Finished ecological variant of " +
+            tournament.name + " in %.1fs" % dt)
 
     def save_csv(self, tournament):
         csv = tournament.result_set.csv()
@@ -62,7 +85,7 @@ class TournamentManager(object):
         with open(file_name, 'w') as f:
             f.write(csv)
 
-    def save_plots(self, tournament):
+    def save_tournament_plots(self, tournament, ecosystem=None):
         results = tournament.result_set
         plot = Plot(results)
         if not plot.matplotlib_installed:
@@ -74,3 +97,8 @@ class TournamentManager(object):
             file_name = self.output_file_path(
                 tournament.name + '_' + plot_type, 'png')
             self.save_plot(figure, file_name)
+        if ecosystem is not None:
+            figure = plot.stackplot(ecosystem.population_sizes)
+            file_name = output_file_path(
+                    output_directory, tournament.name + '_reproduce', 'png')
+            save_plot(figure, file_name)
