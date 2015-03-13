@@ -7,13 +7,13 @@ import axelrod
 
 class TestEcosystem(unittest.TestCase):
 
-    cooperators = axelrod.Tournament([
+    cooperators = axelrod.Tournament('cooperators', [
         axelrod.Cooperator(),
         axelrod.Cooperator(),
         axelrod.Cooperator(),
         axelrod.Cooperator(),
     ])
-    defector_wins = axelrod.Tournament([
+    defector_wins = axelrod.Tournament('defector_wins', [
         axelrod.Cooperator(),
         axelrod.Cooperator(),
         axelrod.Cooperator(),
