@@ -8,9 +8,9 @@ class Tournament(object):
 
     game = Game()
 
-    def __init__(self, players, game=None, turns=200, repetitions=10):
-        """Initiate a tournmanent of players"""
-
+    def __init__(self, players, name='axelrod', game=None,
+                 turns=200, repetitions=10):
+        self.name = name
         self.players = players
         self.nplayers = len(self.players)
 

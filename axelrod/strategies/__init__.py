@@ -29,7 +29,7 @@ basic_strategies = [
     TitForTat,
 ]
 
-strategies = basic_strategies + [
+ordinary_strategies = [
     Appeaser,
     ArrogantQLearner,
     AverageCopier,
@@ -83,6 +83,4 @@ cheating_strategies = [
     MindReader,
     MindWarper,
     ProtectedMindReader,
-    ]
-
-all_strategies = strategies + cheating_strategies
+]
