@@ -20,6 +20,10 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.game.score(('C', 'C')), (2, 2))
         self.assertEqual(tournament.turns, 200)
         self.assertEqual(tournament.repetitions, 10)
+        self.assertEqual(tournament.name, 'test')
+        anonymous_tournament = axelrod.Tournament(players=[P1, P2, P3])
+        self.assertEqual(anonymous_tournament.name, 'axelrod')
+
 
     def test_full_tournament(self):
         """A test to check that tournament runs with all non cheating strategies."""
