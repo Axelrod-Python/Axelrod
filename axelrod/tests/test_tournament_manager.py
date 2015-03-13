@@ -45,7 +45,8 @@ class TestTournamentManager(unittest.TestCase):
         mgr = axelrod.TournamentManager(
             self.test_logger, self.test_output_directory,
             self.test_with_ecological)
-        mgr.add_tournament(self.test_tournament_name, self.test_players)
+        mgr.add_tournament(
+            players=self.test_players, name=self.test_tournament_name)
         self.assertEqual(len(mgr.tournaments), 1)
         self.assertIsInstance(mgr.tournaments[0], axelrod.Tournament)
         self.assertEqual(mgr.tournaments[0].name, self.test_tournament_name)
