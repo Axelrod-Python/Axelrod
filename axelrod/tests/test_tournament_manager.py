@@ -26,19 +26,25 @@ class TestTournamentManager(unittest.TestCase):
         self.assertEqual(mgr.with_ecological, self.test_with_ecological)
 
     def test_one_player_per_strategy(self):
-        mgr = axelrod.TournamentManager(self.test_logger, self.test_output_directory)
+        mgr = axelrod.TournamentManager(
+            self.test_logger, self.test_output_directory,
+            self.test_with_ecological)
         players = mgr.one_player_per_strategy(self.test_strategies)
         self.assertIsInstance(players[0], axelrod.Defector)
         self.assertIsInstance(players[1], axelrod.Cooperator)
 
     def test_output_file_path(self):
-        mgr = axelrod.TournamentManager(self.test_logger, self.test_output_directory)
+        mgr = axelrod.TournamentManager(
+            self.test_logger, self.test_output_directory,
+            self.test_with_ecological)
         output_file_path = mgr.output_file_path(
             self.test_file_name, self.test_file_extenstion)
         self.assertEqual(output_file_path, self.expected_output_file_path)
 
     def test_add_tournament(self):
-        mgr = axelrod.TournamentManager(self.test_logger, self.test_output_directory)
+        mgr = axelrod.TournamentManager(
+            self.test_logger, self.test_output_directory,
+            self.test_with_ecological)
         mgr.add_tournament(self.test_tournament_name, self.test_players)
         self.assertEqual(len(mgr.tournaments), 1)
         self.assertIsInstance(mgr.tournaments[0], axelrod.Tournament)
