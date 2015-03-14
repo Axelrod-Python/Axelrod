@@ -125,10 +125,10 @@ So for the :code:`TitForTat` strategy which is written in the :code:`titfortat.p
 Once you have done that (**and you need to do this even if you have added a strategy to an already existing file**), you need to add the class itself to one of the following lists::
 
     basic_strategies
-    strategies
+    ordinary_strategies
     cheating_strategies
 
-You will most probably be adding the strategy to one of :code:`strategies` or :code:`cheating_strategies`.
+You will most probably be adding the strategy to one of :code:`ordinary_strategies` or :code:`cheating_strategies`.
 If you are unsure take a look at the section: `Is your strategy honest?`_.
 
 For :code:`TitForTat` this looks like::
