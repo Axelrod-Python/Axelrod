@@ -151,6 +151,7 @@ All other contributions are of course welcome: if you can improve this in any wa
 - [marcharper](https://github.com/marcharper)
 - [martinjc](https://github.com/martinjc)
 - [meatballs](https://github.com/meatballs)
+- [theref](https://github.com/theref)
 - [timothyf1](https://github.com/timothyf1)
 - [uglyfruitcake](https://github.com/uglyfruitcake)
 - [pmslavin](https://github.com/pmslavin)
