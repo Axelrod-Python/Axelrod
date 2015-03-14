@@ -20,9 +20,34 @@ The rest of this page will consider two aspects:
 Contributing strategies
 -----------------------
 
+Here is the file structure for the Axelrod repository::
+
+    .
+    ├── axelrod
+    │   └── __init__.py
+    │   └── ecosystem.py
+    │   └── game.py
+    │   └── player.py
+    │   └── plot.py
+    │   └── result_set.py
+    │   └── round_robin.py
+    │   └── tournament.py
+    │   └── /strategies/
+    │       └── __init__.py
+    │       └── cooperator.py
+    │       └── defector.py
+    │       └── grudger.py
+    │       └── titfortat.py
+    │       └── gobymajority.py
+    │       └── ...
+    │   └── /tests/
+    │       └── test_*.py
+    └── README.md
+    └── run_tournament.py
+
 To contribute a strategy you need to follow as many of the following steps as possible:
 
-1. Fork this repository.
+1. Fork the `github repository <https://github.com/drvinceknight/Axelrod>`_.
 2. Add a <strategy>.py file to the strategies directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
 3. Update the ./axelrod/strategies/__init__.py file (you need to write the import statement and add the strategy to the relevant python list).
 4. This one is optional: write some unit tests in the ./axelrod/tests/ directory.
@@ -32,7 +57,7 @@ To contribute a strategy you need to follow as many of the following steps as po
 Is your strategy honest?
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-In general the rules for an 'honest' strategy is very simple:
+The rules for an 'honest' strategy are very simple:
 
 1. It does not change what it's opponents do/know.
 2. It forgets everything every time it starts playing someone (this is implemented with the :code:`reset` method).
