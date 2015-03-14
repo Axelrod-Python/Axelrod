@@ -48,14 +48,104 @@ Here is the file structure for the Axelrod repository::
 To contribute a strategy you need to follow as many of the following steps as possible:
 
 1. Fork the `github repository <https://github.com/drvinceknight/Axelrod>`_.
-2. Add a <strategy>.py file to the strategies directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
-3. Update the ./axelrod/strategies/__init__.py file (you need to write the import statement and add the strategy to the relevant python list).
+2. Add a :code:`<strategy>.py` file to the strategies directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
+3. Update the :code:`./axelrod/strategies/__init__.py` file (you need to write the import statement and add the strategy to the relevant python list).
 4. This one is optional: write some unit tests in the ./axelrod/tests/ directory.
-5. This one is also optional: add your name to the contributors list down below. If you don't I'll try and do it myself.
+5. This one is also optional: add your name to the contributors list in the bottom of the :code:`README.md` file.
 6. Send me a pull request.
 
+Adding a strategy
+^^^^^^^^^^^^^^^^^
+
+Writing the strategy
+''''''''''''''''''''
+
+There are a couple of things that need to be created in a strategy.py file.
+Let us take a look at the :code:`TitForTat` class (located in the :code:`axelrod/strategies/titfortat.py` file)::
+
+
+    class TitForTat(Player):
+        """A player starts by cooperating and then mimics previous move by opponent."""
+
+        name = 'Tit For Tat'
+
+        def strategy(self, opponent):
+            try:
+                return opponent.history[-1]
+            except IndexError:
+                return 'C'
+
+The first thing that is needed is a docstring that explains what the strategy does::
+
+    """A player starts by cooperating and then mimics previous move by opponent."""
+
+After that simply add in the string that will appear as the name of the strategy::
+
+    name = 'Tit For Tat'
+
+Note that this is mainly used in plots by :code:`matplotlib` so you can use LaTeX if you want to.
+For example there is strategy with :math:`\pi` as a name::
+
+    name = '$\pi$'
+
+After that the only thing required is to write the :code:`strategy` method which takes an opponent as an argument.
+In the case of :code:`TitForTat` the strategy attempts to play the same thing as the last strategy played by the opponent (:code:`opponent.history[-1]`) and if this is not possible (in other words the opponent has not played yet) will cooperate::
+
+    def strategy(self, opponent):
+        try:
+            return opponent.history[-1]
+        except IndexError:
+            return 'C'
+
+If your strategy creates any particular attribute along the way you need to make sure that there is a :code:`reset` method that takes account of it.
+An example of this is the :code:`ForgetfulGrudger` strategy which creates a boolean variable :code:`grudged` and a counter :code:`grudge_memory` which keeps track of things during a duel.
+Here is the :code:`reset` method which takes care of resetting this in between rounds::
+
+    def reset(self):
+        """Resets scores and history."""
+        self.history = []
+        self.grudged = False
+        self.grudge_memory = 0
+
+Adding the strategy to the library
+''''''''''''''''''''''''''''''''''
+
+To get the strategy to be recognised by the library we need to add it to the files that initialise when someone types :code:`import axelrod`.
+This is done in the :code:`axelrod/strategies/__init__.py` file.
+
+If you have added your strategy to a file that already existed (perhaps you added a new variant of :code:`titfortat` to the :code:`titfortat.py` file), **you do not need to do the following**: add a line similar to::
+
+    from <file_name> import *
+
+Where :code:`file_name.py` is the name of the file you created.
+So for the :code:`TitForTat` strategy which is written in the :code:`titfortat.py` file we have::
+
+    from titfortat import *
+
+Once you have done that (**and you need to do this even if you have added a strategy to an already existing file**), you need to add the class itself to one of the following lists::
+
+    basic_strategies
+    strategies
+    cheating_strategies
+
+You will most probably be adding the strategy to one of :code:`strategies` or :code:`cheating_strategies`.
+If you are unsure take a look at the section: `Is your strategy honest?`_.
+
+For :code:`TitForTat` this looks like::
+
+    basic_strategies = [
+        Alternator,
+        Cooperator,
+        Defector,
+        Random,
+        TitForTat,
+    ]
+
+Note that :code:`TitForTat` is here added to the :code:`basic_strategies` list.
+If you would like to check if your strategy is honest, read the next section, if you would like to take a look at how to write tests please skip to `How to write tests`_ (again though if you need a hand with testing please let us know!).
+
 Is your strategy honest?
-^^^^^^^^^^^^^^^^^^^^^^^^
+''''''''''''''''''''''''
 
 The rules for an 'honest' strategy are very simple:
 
@@ -75,6 +165,72 @@ Simply add your strategy to the correct place in :code:`strategies/__init__.py`:
         GellerCooperator,
         ...
 
+How to write tests
+''''''''''''''''''
+
+To write tests you either need to create a file called :code:`test_<library>.py` where :code:`<library>.py` is the name of the file you have created or similarly add tests to the test file that is already present in the :code:`axelrod/tests/` directory.
+
+As an example, the :code:`axelrod/tests/test_titfortat.py` contains the following code::
+
+
+    import axelrod
+
+    from test_player import TestPlayer
+
+
+    class TestTitForTat(TestPlayer):
+
+        name = "Tit For Tat"
+        player = axelrod.TitForTat
+
+        def test_strategy(self):
+            """Starts by cooperating."""
+            P1 = axelrod.TitForTat()
+            P2 = axelrod.Player()
+            self.assertEqual(P1.strategy(P2), 'C')
+
+        def test_effect_of_strategy(self):
+            """
+            Repeats last action of opponent history
+            """
+            P1 = axelrod.TitForTat()
+            P2 = axelrod.Player()
+            P2.history = ['C', 'C', 'C', 'C']
+            self.assertEqual(P1.strategy(P2), 'C')
+            P2.history = ['C', 'C', 'C', 'C', 'D']
+            self.assertEqual(P1.strategy(P2), 'D')
+
+The :code:`test_effect_of_strategy` method mainly checks that the :code:`strategy` method in the :code:`TitForTat` class works as expected:
+
+1. If the opponent's last strategy was :code:`C`: then :code:`TitForTat` should cooperate::
+
+    P2.history = ['C', 'C', 'C', 'C']
+    self.assertEqual(P1.strategy(P2), 'C')
+
+2. If the opponent's last strategy was :code:`D`: then :code:`TitForTat` should defect::
+
+    P2.history = ['C', 'C', 'C', 'C', 'D']
+    self.assertEqual(P1.strategy(P2), 'D')
+
+As mentioned in `Writing the strategy`_ if you write a strategy with a :code:`reset` method that should be tested.
+Here is the test for the :code:`ForgetfulGrudger` strategy (in the :code:`test_grudger.py` file)::
+
+    def test_reset_method(self):
+        """
+        tests the reset method
+        """
+        P1 = axelrod.ForgetfulGrudger()
+        P1.history = ['C', 'D', 'D', 'D']
+        P1.grudged = True
+        P1.grudge_memory = 4
+        P1.reset()
+        self.assertEqual(P1.history, [])
+        self.assertEqual(P1.grudged, False)
+        self.assertEqual(P1.grudge_memory, 0)
 
 Contributing to the library
 ---------------------------
+
+All contributions (docs, tests, etc) are very welcome, if there is a specific functionality that you would like to add the please open an `issue <https://github.com/drvinceknight/Axelrod/issues>`_ (or indeed take a look at the ones already there and jump in the conversation!).
+
+In general follow this library aims to follow the guidelines mentioned at the top of this page.
