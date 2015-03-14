@@ -22,10 +22,8 @@ class TestTitForTat(TestPlayer):
         """
         P1 = axelrod.TitForTat()
         P2 = axelrod.Player()
-        P1.history = ['C', 'D', 'D', 'D']
         P2.history = ['C', 'C', 'C', 'C']
         self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C', 'D', 'D', 'D', 'C']
         P2.history = ['C', 'C', 'C', 'C', 'D']
         self.assertEqual(P1.strategy(P2), 'D')
 
