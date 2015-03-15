@@ -228,6 +228,24 @@ Here is the test for the :code:`ForgetfulGrudger` strategy (in the :code:`test_g
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)
 
+
+How to run tests
+''''''''''''''''
+
+The project has an extensive test suite which is run each time a new contribution is made to the repository.
+If you want to check that all the tests pass before you submit a pull request you can run the tests yourself::
+
+    python -m unittest discover axelrod/tests/
+
+If you are developing new tests for the suite, it is useful to run a single test file so that you don't have to wait for the entire suite each time.
+For example, to run only the tests for the Grudger strategy::
+
+    python -m unittest axelrod.tests.test_grudger
+
+Note that this project is being taken care off by `travis-ci <https://travis-ci.org/>`_, so tests will be run automatically when opening a pull request.
+You can see the latest build status `here <https://travis-ci.org/drvinceknight/Axelrod>`_.
+
+
 Contributing to the library
 ---------------------------
 
