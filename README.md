@@ -92,52 +92,7 @@ $ make html
 
 All contributions are welcome: with a particular emphasis on contributing further strategies.
 
-The file structure is:
-
-```
-.
-├── axelrod
-│   └── __init__.py
-│   └── tournament.py
-│   └── /strategies/
-│       └── __init__.py
-│       └── cooperator.py
-│       └── defector.py
-│       └── grudger.py
-│       └── titfortat.py
-│       └── gobymajority.py
-│   └── /tests/
-│       └── test_*.py
-└── README.md
-└── run_tournament.py
-```
-
-To contribute a strategy you need to do 4 (optionally 6) things (all of which can actually be done right here using the github website):
-
-1. Fork this repository.
-2. Add a `<strategy>.py` file to the `strategies` directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
-3. Update the `./axelrod/strategies/__init__.py` file (you need to write the `import` statement and add the strategy to the relevant python list).
-4. (This one is optional: write some unit tests in the `./axelrod/tests/` directory).
-5. (This one is also optional: add your name to the contributors list down below. If you don't I'll try and do it myself).
-6. Send me a pull request.
-
-If any of these steps sound complicated please just get in touch with me and I would be delighted to help.
-There is a [video](https://www.youtube.com/watch?v=5kOUVdktxAo&feature=youtu.be) and a [blog post](http://goo.gl/zkgSkc) discussing showing how to contribute if this is helpful.
-
-The project has an extensive test suite which is run each time a new contribution is made to the repository. If you want to check that all the tests pass before you submit a pull request you can run the tests yourself:
-```
-$ python -m unittest discover axelrod/tests/
-```
-
-If you are developing new tests for the suite, it is useful to run a single test file so that you don't have to wait for the entire suite each time. For example, to run only the tests for the Grudger strategy:
-```
-$ python -m unittest axelrod.tests.test_grudger
-```
-
-Note that this project is being taken care off by [travis-ci](https://travis-ci.org/), so tests will be run automatically when opening a pull request.
-You can see the latest build status [here](https://travis-ci.org/drvinceknight/Axelrod).
-
-All other contributions are of course welcome: if you can improve this in any way (from typos to better unit testing) please do :)
+You can find helpful instructions about contributing in the documentation: [http://axelrod.readthedocs.org/en/latest/contributing.html](http://axelrod.readthedocs.org/en/latest/contributing.html).
 
 # Contributors
 
@@ -151,6 +106,7 @@ All other contributions are of course welcome: if you can improve this in any wa
 - [marcharper](https://github.com/marcharper)
 - [martinjc](https://github.com/martinjc)
 - [meatballs](https://github.com/meatballs)
+- [theref](https://github.com/theref)
 - [timothyf1](https://github.com/timothyf1)
 - [uglyfruitcake](https://github.com/uglyfruitcake)
 - [pmslavin](https://github.com/pmslavin)
