@@ -7,7 +7,7 @@ class Ecosystem(object):
 
     def __init__(self, results, fitness=None):
 
-        results.init_output()
+        results.finalise()
         self.results = results
         self.nplayers = self.results.nplayers
         self.payoff_matrix = self.results.payoff_matrix
