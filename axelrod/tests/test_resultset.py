@@ -68,10 +68,10 @@ class TestResultSet(unittest.TestCase):
         self.assertEquals(payoffs, self.expected_payoffs)
         self.assertEquals(stddevs, self.expected_stddevs)
 
-    def test_init_output(self):
+    def test_finalise(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
         rs.results = self.test_results
-        rs.init_output()
+        rs.finalise()
         self.assertEquals(rs.scores, self.expected_scores)
         self.assertEquals(rs.ranking, self.expected_ranking)
         self.assertEquals(rs.ranked_names, self.expected_ranked_names)

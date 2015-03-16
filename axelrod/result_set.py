@@ -84,7 +84,7 @@ class ResultSet(object):
                 stddevs[-1].append(dev)
         return averages, stddevs
 
-    def init_output(self):
+    def finalise(self):
         """
         Sets the scores, ranking and ranked_names properties.
         The output_initialised property ensures that this only done once
@@ -99,7 +99,7 @@ class ResultSet(object):
 
     def csv(self):
         """Returns a string of csv formatted results"""
-        self.init_output()
+        self.finalise()
         csv_string = StringIO()
         header = ",".join(self.ranked_names) + "\n"
         csv_string.write(header)

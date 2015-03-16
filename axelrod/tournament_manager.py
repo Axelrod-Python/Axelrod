@@ -41,7 +41,7 @@ class TournamentManager(object):
             t0 = time.time()
 
             tournament.play()
-            tournament.result_set.init_output()
+            tournament.result_set.finalise()
 
             self.logger.log(
                 "Finished " + tournament.name + " tournament", t0)
