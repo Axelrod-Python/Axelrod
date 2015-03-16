@@ -13,7 +13,7 @@ class Logger(object):
 
 class NullLogger(Logger):
 
-    def log(self, message):
+    def log(self, message, start_time=None):
         pass
 
 
