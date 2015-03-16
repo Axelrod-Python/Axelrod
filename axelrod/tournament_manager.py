@@ -49,18 +49,25 @@ class TournamentManager(object):
                 str(tournament.repetitions) + ' round robins of ' +
                 str(tournament.turns) + ' turns per pair.')
             t0 = time.time()
+
             tournament.play()
             tournament.result_set.init_output()
-            self.save_csv(tournament)
-            if self.with_ecological:
-                ecosystem = Ecosystem(tournament.result_set)
-                self.run_ecological_variant(tournament, ecosystem)
-                self.save_plots(tournament, ecosystem)
-            else:
-                self.save_plots(tournament)
+
             dt = time.time() - t0
             self.logger.log(
                 "Finished " + tournament.name + " tournament in %.1fs" % dt)
+
+            if self.with_ecological:
+                ecosystem = Ecosystem(tournament.result_set)
+                self.run_ecological_variant(tournament, ecosystem)
+            else:
+                ecosystem = None
+
+            self.generate_output(tournament, ecosystem)
+
+            dt = time.time() - t0
+            self.logger.log(
+                "Finished all " + tournament.name + " tasks in %.1fs" % dt)
 
     def run_ecological_variant(self, tournament, ecosystem):
         self.logger.log(
@@ -77,6 +84,10 @@ class TournamentManager(object):
         self.logger.log(
             "Finished ecological variant of " +
             tournament.name + " in %.1fs" % dt)
+
+    def generate_output(self, tournament, ecosystem=None):
+        self.save_csv(tournament)
+        self.save_plots(tournament, ecosystem)
 
     def save_csv(self, tournament):
         csv = tournament.result_set.csv()
