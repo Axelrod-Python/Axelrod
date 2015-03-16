@@ -17,15 +17,6 @@ class TournamentManager(object):
     def one_player_per_strategy(self, strategies):
         return [strategy() for strategy in strategies]
 
-    def output_file_path(self, file_name, file_extension):
-        return os.path.join(
-            self.output_directory,
-            file_name + '.' + file_extension)
-
-    def save_plot(self, figure, file_name):
-        figure.savefig(file_name, bbox_inches='tight')
-        figure.clf()
-
     def add_tournament(self, name, players, game=None,
                        turns=200, repetitions=10):
         tournament = Tournament(
@@ -39,23 +30,21 @@ class TournamentManager(object):
         t0 = time.time()
         for tournament in self.tournaments:
             self.run_single_tournament(tournament)
-        dt = time.time() - t0
-        self.logger.log(
-            "Finished all tournaments in %.1fs" % dt)
+        self.logger.log("Finished all tournaments", t0)
 
     def run_single_tournament(self, tournament):
             self.logger.log(
                 'Starting ' + tournament.name + ' tournament with ' +
                 str(tournament.repetitions) + ' round robins of ' +
                 str(tournament.turns) + ' turns per pair.')
+
             t0 = time.time()
 
             tournament.play()
             tournament.result_set.init_output()
 
-            dt = time.time() - t0
             self.logger.log(
-                "Finished " + tournament.name + " tournament in %.1fs" % dt)
+                "Finished " + tournament.name + " tournament", t0)
 
             if self.with_ecological:
                 ecosystem = Ecosystem(tournament.result_set)
@@ -63,11 +52,10 @@ class TournamentManager(object):
             else:
                 ecosystem = None
 
-            self.generate_output(tournament, ecosystem)
+            self.generate_output_files(tournament, ecosystem)
 
-            dt = time.time() - t0
             self.logger.log(
-                "Finished all " + tournament.name + " tasks in %.1fs" % dt)
+                "Finished all " + tournament.name + " tasks", t0)
 
     def run_ecological_variant(self, tournament, ecosystem):
         self.logger.log(
@@ -80,12 +68,10 @@ class TournamentManager(object):
             'all_strategies': 40,
         }
         ecosystem.reproduce(ecoturns.get(tournament.name))
-        dt = time.time() - t0
         self.logger.log(
-            "Finished ecological variant of " +
-            tournament.name + " in %.1fs" % dt)
+            "Finished ecological variant of " + tournament.name, t0)
 
-    def generate_output(self, tournament, ecosystem=None):
+    def generate_output_files(self, tournament, ecosystem=None):
         self.save_csv(tournament)
         self.save_plots(tournament, ecosystem)
 
@@ -113,3 +99,12 @@ class TournamentManager(object):
             file_name = self.output_file_path(
                     tournament.name + '_reproduce', 'png')
             self.save_plot(figure, file_name)
+
+    def output_file_path(self, file_name, file_extension):
+        return os.path.join(
+            self.output_directory,
+            file_name + '.' + file_extension)
+
+    def save_plot(self, figure, file_name):
+        figure.savefig(file_name, bbox_inches='tight')
+        figure.clf()
