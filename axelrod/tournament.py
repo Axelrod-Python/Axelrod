@@ -1,4 +1,4 @@
-from multiprocessing import Queue, Process
+import multiprocessing
 from game import *
 from result_set import *
 from round_robin import *
@@ -36,22 +36,22 @@ class Tournament(object):
         self.deterministic_cache = cache
 
         processes = []
-        max_workers = 5
-        work_queue = Queue()
-        done_queue = Queue()
+        max_workers = multiprocessing.cpu_count()
+        work_queue = multiprocessing.Queue()
+        done_queue = multiprocessing.Queue()
 
         for repetition in range(self.repetitions - 1):
             work_queue.put(repetition)
 
         for worker in range(max_workers):
-            process = Process(
+            process = multiprocessing.Process(
                 target=self.worker, args=(work_queue, done_queue))
-            process.start()
             processes.append(process)
             work_queue.put('STOP')
+            process.start()
 
         for process in processes:
-            process.join()
+            process.join(0.5)
 
         done_queue.put('STOP')
 
