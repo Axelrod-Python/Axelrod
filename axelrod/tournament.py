@@ -28,21 +28,29 @@ class Tournament(object):
 
     def play(self):
         """Play the tournament with repetitions of round robin"""
+        payoffs_list = []
 
-        round_robin = RoundRobin(
-            self.players,
-            self.game,
-            self.turns,
-            self.deterministic_cache)
-        plist = list(range(len(self.players)))
-        replist = list(range(self.repetitions))
+        for repetition in range(self.repetitions):
+            payoffs, deterministic_cache = self.generate_payoffs(
+                self.deterministic_cache)
+            payoffs_list.append(payoffs)
+            self.deterministic_cache = deterministic_cache
 
-        for irep in replist:
-            payoffs = round_robin.play()
-            self.deterministic_cache = round_robin.deterministic_cache
-            for i in plist:
-                for j in plist:
-                    self.result_set.results[i][j][irep] = payoffs[i][j]
-
-        self.result_set.finalise()
+        self.update_result_set(payoffs_list)
         return self.result_set
+
+    def generate_payoffs(self, deterministic_cache):
+        round_robin = RoundRobin(
+            players=self.players,
+            game=self.game,
+            turns=self.turns,
+            deterministic_cache=deterministic_cache)
+        payoffs = round_robin.play()
+        return payoffs, deterministic_cache
+
+    def update_result_set(self, payoffs_list):
+        for index, payoffs in enumerate(payoffs_list):
+            for i in range(len(self.players)):
+                for j in range(len(self.players)):
+                    self.result_set.results[i][j][index] = payoffs[i][j]
+        self.result_set.finalise()
