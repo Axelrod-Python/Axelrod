@@ -55,6 +55,7 @@ class TournamentManager(object):
 
             self.logger.log(
                 "Finished all " + tournament.name + " tasks", t0)
+            self.logger.log("")
 
     def run_ecological_variant(self, tournament, ecosystem):
         self.logger.log(
