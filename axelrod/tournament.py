@@ -29,18 +29,18 @@ class Tournament(object):
         payoffs_list = []
         deterministic_cache = {}
 
-        payoffs, cache = self.generate_payoffs(deterministic_cache)
+        payoffs, cache = self.play_round_robin(deterministic_cache)
         payoffs_list.append(payoffs)
         deterministic_cache = cache
 
         for repetition in range(self.repetitions - 1):
-            payoffs, cache = self.generate_payoffs(deterministic_cache)
+            payoffs, cache = self.play_round_robin(deterministic_cache)
             payoffs_list.append(payoffs)
 
         self.update_result_set(payoffs_list)
         return self.result_set
 
-    def generate_payoffs(self, deterministic_cache):
+    def play_round_robin(self, deterministic_cache):
         round_robin = RoundRobin(
             players=self.players,
             game=self.game,
