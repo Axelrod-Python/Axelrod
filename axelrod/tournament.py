@@ -1,3 +1,4 @@
+from multiprocessing import Queue, Process
 from game import *
 from result_set import *
 from round_robin import *
@@ -34,12 +35,36 @@ class Tournament(object):
         payoffs_list.append(payoffs)
         self.deterministic_cache = cache
 
+        processes = []
+        max_workers = 5
+        work_queue = Queue()
+        done_queue = Queue()
+
         for repetition in range(self.repetitions - 1):
-            payoffs, cache = self.play_round_robin(self.deterministic_cache)
+            work_queue.put(repetition)
+
+        for worker in range(max_workers):
+            process = Process(
+                target=self.worker, args=(work_queue, done_queue))
+            process.start()
+            processes.append(process)
+            work_queue.put('STOP')
+
+        for process in processes:
+            process.join()
+
+        done_queue.put('STOP')
+
+        for payoffs in iter(done_queue.get, 'STOP'):
             payoffs_list.append(payoffs)
 
         self.update_result_set(payoffs_list)
         return self.result_set
+
+    def worker(self, work_queue, done_queue):
+        for repetition in iter(work_queue.get, 'STOP'):
+            payoffs, cache = self.play_round_robin(self.deterministic_cache)
+            done_queue.put(payoffs)
 
     def play_round_robin(self, deterministic_cache):
         round_robin = RoundRobin(
