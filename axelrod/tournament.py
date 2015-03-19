@@ -26,11 +26,20 @@ class Tournament(object):
             turns=turns,
             repetitions=repetitions)
 
+        # The cache doesn't need to be an instance level variable at the moment,
+        # it could just be internal to the play method.
+        # However, there's no reason why the cache couldn't be passed between
+        # tournaments by the tournament manager and so it sits here waiting for
+        # that code to be written.
         self.deterministic_cache = {}
 
     def play(self):
         payoffs_list = []
 
+        # We play the first repetition in order to build the deterministic cache.
+        # It's done separately so that only further repetions have any chance of
+        # running in parallel. This allows the cache to be made available to processes
+        # running in parallel without the problems of cross-process communication.
         payoffs, cache = self.play_round_robin(self.deterministic_cache)
         payoffs_list.append(payoffs)
         self.deterministic_cache = cache
@@ -50,6 +59,9 @@ class Tournament(object):
         return payoffs_list
 
     def run_parallel_repetitions(self, payoffs_list):
+        # At first sight, it might seem simpler to use the multiprocessing Pool
+        # Class rather than Processes and Queues. However, Pool can only accept
+        # target functions which can be pickled and instance methods cannot.
         processes = []
         work_queue = multiprocessing.Queue()
         done_queue = multiprocessing.Queue()
@@ -94,6 +106,8 @@ class Tournament(object):
         cache = round_robin.deterministic_cache
         return payoffs, cache
 
+    # It's not right that this method directly updates an attribute of the RoundRobin
+    # Class. It should be moved into RoundRobin and simply called from here.
     def update_result_set(self, payoffs_list):
         for index, payoffs in enumerate(payoffs_list):
             for i in range(len(self.players)):
