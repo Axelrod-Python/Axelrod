@@ -106,7 +106,7 @@ class Tournament(object):
         return payoffs, cache
 
     # It's not right that this method directly updates an attribute of the
-    # RoundRobin Class. It should be moved into RoundRobin and simply called
+    # ResultSet Class. It should be moved into ResultSet and simply called
     # from here.
     def update_result_set(self, payoffs_list):
         for index, payoffs in enumerate(payoffs_list):
