@@ -9,7 +9,10 @@ except ImportError:
 class Plot(object):
 
     def __init__(self, result_set):
-        self.result_set = result_set
+        if result_set.finalised:
+            self.result_set = result_set
+        else:
+            raise AttributeError("Result Set is not finalised")
         self.nplayers = self.result_set.nplayers
         self.matplotlib_installed = matplotlib_installed
 
