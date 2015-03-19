@@ -22,21 +22,25 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
 
     if not exclude_basic:
         players = manager.one_player_per_strategy(axelrod.basic_strategies)
-        manager.add_tournament('basic_strategies', players, processes)
+        manager.add_tournament(
+            name='basic_strategies', players=players, processes=processes)
     if not exclude_strategies:
         strategies = axelrod.basic_strategies + axelrod.ordinary_strategies
         players = manager.one_player_per_strategy(strategies)
-        manager.add_tournament('strategies', players, processes)
+        manager.add_tournament(
+            name='strategies', players=players, processes=processes)
     if not exclude_cheating:
         players = manager.one_player_per_strategy(axelrod.cheating_strategies)
-        manager.add_tournament('cheating_strategies', players, processes)
+        manager.add_tournament(
+            name='cheating_strategies', players=players, processes=processes)
     if not exclude_all:
         strategies = (
             axelrod.basic_strategies +
             axelrod.ordinary_strategies +
             axelrod.cheating_strategies)
         players = manager.one_player_per_strategy(strategies)
-        manager.add_tournament('all_strategies', players, processes)
+        manager.add_tournament(
+            name='all_strategies', players=players, processes=processes)
 
     manager.run_tournaments()
 
