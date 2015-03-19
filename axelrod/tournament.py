@@ -114,13 +114,3 @@ class Tournament(object):
         payoffs = round_robin.play()
         cache = round_robin.deterministic_cache
         return payoffs, cache
-
-    # It's not right that this method directly updates an attribute of the
-    # ResultSet Class. It should be moved into ResultSet and simply called
-    # from here.
-    def update_result_set(self, payoffs_list):
-        for index, payoffs in enumerate(payoffs_list):
-            for i in range(len(self.players)):
-                for j in range(len(self.players)):
-                    self.result_set.results[i][j][index] = payoffs[i][j]
-        self.result_set.finalise()
