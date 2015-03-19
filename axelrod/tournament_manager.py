@@ -35,29 +35,29 @@ class TournamentManager(object):
         self.logger.log("Finished all tournaments", t0)
 
     def run_single_tournament(self, tournament):
-            self.logger.log(
-                'Starting ' + tournament.name + ' tournament with ' +
-                str(tournament.repetitions) + ' round robins of ' +
-                str(tournament.turns) + ' turns per pair.')
+        self.logger.log(
+            'Starting ' + tournament.name + ' tournament with ' +
+            str(tournament.repetitions) + ' round robins of ' +
+            str(tournament.turns) + ' turns per pair.')
 
-            t0 = time.time()
+        t0 = time.time()
 
-            tournament.play()
+        tournament.play()
 
-            self.logger.log(
-                "Finished " + tournament.name + " tournament", t0)
+        self.logger.log(
+            "Finished " + tournament.name + " tournament", t0)
 
-            if self.with_ecological:
-                ecosystem = Ecosystem(tournament.result_set)
-                self.run_ecological_variant(tournament, ecosystem)
-            else:
-                ecosystem = None
+        if self.with_ecological:
+            ecosystem = Ecosystem(tournament.result_set)
+            self.run_ecological_variant(tournament, ecosystem)
+        else:
+            ecosystem = None
 
-            self.generate_output_files(tournament, ecosystem)
+        self.generate_output_files(tournament, ecosystem)
 
-            self.logger.log(
-                "Finished all " + tournament.name + " tasks", t0)
-            self.logger.log("")
+        self.logger.log(
+            "Finished all " + tournament.name + " tasks", t0)
+        self.logger.log("")
 
     def run_ecological_variant(self, tournament, ecosystem):
         self.logger.log(
