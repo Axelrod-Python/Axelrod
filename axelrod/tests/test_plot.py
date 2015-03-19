@@ -13,13 +13,12 @@ class TestPlot(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         players = ('Player1', 'Player2', 'Player3')
-        results = [
-            [[0, 0], [10, 10], [21, 21]],
-            [[10, 8], [0, 0], [16, 20]],
-            [[16, 16], [16, 16], [0, 0]]]
+        test_payoffs_list = [
+            [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
+            [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
+        ]
         cls.test_result_set = axelrod.ResultSet(players, 5, 2)
-        cls.test_result_set.results = results
-        cls.test_result_set.finalise()
+        cls.test_result_set.finalise(test_payoffs_list)
 
         cls.expected_boxplot_dataset = [[2.6, 2.8], [3.1, 3.1], [3.2, 3.2]]
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]

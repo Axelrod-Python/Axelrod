@@ -54,7 +54,7 @@ class Tournament(object):
         else:
             payoffs_list = self.run_parallel_repetitions(payoffs_list)
 
-        self.update_result_set(payoffs_list)
+        self.result_set.finalise(payoffs_list)
         return self.result_set
 
     def run_serial_repetitions(self, payoffs_list):

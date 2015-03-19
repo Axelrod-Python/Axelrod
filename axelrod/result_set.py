@@ -29,7 +29,7 @@ class ResultSet(object):
         replist = list(range(repetitions))
         self.results = [[[0 for r in replist ] for j in plist] for i in plist]
 
-        self.output_initialised = False
+        self.finalised = False
 
     def generate_scores(self):
         """Return normalized scores based on the results.
@@ -84,27 +84,27 @@ class ResultSet(object):
                 stddevs[-1].append(dev)
         return averages, stddevs
 
-    def finalise(self):
-        """
-        Sets the scores, ranking and ranked_names properties.
-        The output_initialised property ensures that this only done once
-        per tournament.
-        """
-        if not self.output_initialised:
+    def finalise(self, payoffs_list):
+        if not self.finalised:
+            for index, payoffs in enumerate(payoffs_list):
+                for i in range(len(self.players)):
+                    for j in range(len(self.players)):
+                        self.results[i][j][index] = payoffs[i][j]
             self.scores = self.generate_scores()
             self.ranking = self.generate_ranking(self.scores)
             self.ranked_names = self.generate_ranked_names(self.ranking)
             self.payoff_matrix, self.payoff_stddevs = self.generate_payoff_matrix()
-            self.output_initialised = True
+            self.finalised = True
 
     def csv(self):
-        """Returns a string of csv formatted results"""
-        self.finalise()
-        csv_string = StringIO()
-        header = ",".join(self.ranked_names) + "\n"
-        csv_string.write(header)
-        writer = csv.writer(csv_string, lineterminator="\n")
-        for irep in range(self.repetitions):
-            data = [self.scores[rank][irep] for rank in self.ranking]
-            writer.writerow(map(str, data))
-        return csv_string.getvalue()
+        if self.finalised:
+            csv_string = StringIO()
+            header = ",".join(self.ranked_names) + "\n"
+            csv_string.write(header)
+            writer = csv.writer(csv_string, lineterminator="\n")
+            for irep in range(self.repetitions):
+                data = [self.scores[rank][irep] for rank in self.ranking]
+                writer.writerow(map(str, data))
+            return csv_string.getvalue()
+        else:
+            raise AttributeError("Result Set is not finalised")
