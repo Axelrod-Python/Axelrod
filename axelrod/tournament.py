@@ -10,7 +10,7 @@ class Tournament(object):
     game = Game()
 
     def __init__(self, players, name='axelrod', game=None,
-                 turns=200, repetitions=10):
+                 turns=200, repetitions=10, processes=None):
         self.name = name
         self.players = players
         self.nplayers = len(self.players)
@@ -19,6 +19,7 @@ class Tournament(object):
             self.game = game
         self.turns = turns
         self.repetitions = repetitions
+        self.processes = processes
 
         self.result_set = ResultSet(
             players=players,
@@ -28,22 +29,37 @@ class Tournament(object):
         self.deterministic_cache = {}
 
     def play(self):
-        """Play the tournament with repetitions of round robin"""
         payoffs_list = []
 
         payoffs, cache = self.play_round_robin(self.deterministic_cache)
         payoffs_list.append(payoffs)
         self.deterministic_cache = cache
 
+        if self.processes is None:
+            payoffs_list = self.run_serial_repetitions(payoffs_list)
+        else:
+            payoffs_list = self.run_parallel_repetitions(payoffs_list)
+
+        self.update_result_set(payoffs_list)
+        return self.result_set
+
+    def run_serial_repetitions(self, payoffs_list):
+        pass
+
+    def run_parallel_repetitions(self, payoffs_list):
         processes = []
-        max_workers = multiprocessing.cpu_count()
         work_queue = multiprocessing.Queue()
         done_queue = multiprocessing.Queue()
+
+        if self.processes == 0 or self.processes > multiprocessing.cpu_count:
+            workers = multiprocessing.cpu_count()
+        else:
+            workers = self.processes
 
         for repetition in range(self.repetitions - 1):
             work_queue.put(repetition)
 
-        for worker in range(max_workers):
+        for worker in range(workers):
             process = multiprocessing.Process(
                 target=self.worker, args=(work_queue, done_queue))
             processes.append(process)
@@ -58,8 +74,7 @@ class Tournament(object):
         for payoffs in iter(done_queue.get, 'STOP'):
             payoffs_list.append(payoffs)
 
-        self.update_result_set(payoffs_list)
-        return self.result_set
+        return payoffs_list
 
     def worker(self, work_queue, done_queue):
         for repetition in iter(work_queue.get, 'STOP'):
