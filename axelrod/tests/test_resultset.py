@@ -23,6 +23,10 @@ class TestResultSet(unittest.TestCase):
             [1.8, 0.0, 3.6],
             [3.2, 3.2, 0.0],
         ]
+        cls.test_payoffs_list = [
+            [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
+            [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
+        ]
         cls.expected_stddevs = [
             [0.0, 0.0, 0.0],
             [0.20, 0.0, 0.40],
@@ -40,7 +44,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEquals(rs.turns, 5)
         self.assertEquals(rs.repetitions, 2)
         self.assertTrue(rs.results, expected_results)
-        self.assertFalse(rs.output_initialised)
+        self.assertFalse(rs.finalised)
 
     def test_generate_scores(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
@@ -70,17 +74,15 @@ class TestResultSet(unittest.TestCase):
 
     def test_finalise(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
-        rs.results = self.test_results
-        rs.finalise()
+        rs.finalise(self.test_payoffs_list)
         self.assertEquals(rs.scores, self.expected_scores)
         self.assertEquals(rs.ranking, self.expected_ranking)
         self.assertEquals(rs.ranked_names, self.expected_ranked_names)
-        self.assertTrue(rs.output_initialised)
+        self.assertTrue(rs.finalised)
 
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
+        self.assertRaises(AttributeError, rs.csv)
+        rs.finalise(self.test_payoffs_list)
         rs.results = self.test_results
         self.assertEquals(rs.csv(), self.expected_csv)
-
-if __name__ == '__main__':
-    unittest.main()
