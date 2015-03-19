@@ -2,13 +2,14 @@ import multiprocessing
 from game import *
 from result_set import *
 from round_robin import *
+from logger import *
 
 
 class Tournament(object):
     game = Game()
 
-    def __init__(self, players, name='axelrod', game=None,
-                 turns=200, repetitions=10, processes=None):
+    def __init__(self, players, name='axelrod', game=None, turns=200,
+                 repetitions=10, processes=None, logger=None):
         self.name = name
         self.players = players
         self.nplayers = len(self.players)
@@ -18,6 +19,11 @@ class Tournament(object):
         self.turns = turns
         self.repetitions = repetitions
         self.processes = processes
+
+        if logger is None:
+            self.logger = NullLogger()
+        else:
+            self.logger = logger
 
         self.result_set = ResultSet(
             players=players,
@@ -69,6 +75,8 @@ class Tournament(object):
             workers = multiprocessing.cpu_count()
         else:
             workers = self.processes
+
+        self.logger.log('Running repetitions with %s parallel processes' % workers)
 
         for repetition in range(self.repetitions - 1):
             work_queue.put(repetition)
