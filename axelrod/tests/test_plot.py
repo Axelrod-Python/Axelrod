@@ -32,6 +32,8 @@ class TestPlot(unittest.TestCase):
             [3.2, 3.2, 0.0]]
 
     def test_init(self):
+        result_set = axelrod.ResultSet(('Player1', 'Player2', 'Player3'), 5, 2)
+        self.assertRaises(AttributeError, axelrod.Plot, result_set)
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)
         self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
