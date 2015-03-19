@@ -11,7 +11,7 @@ import axelrod
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
                     exclude_cheating, exclude_all, no_eco, output_directory,
-                    logging):
+                    logging, processes):
     loggers = {
         'console': axelrod.ConsoleLogger,
         'none': axelrod.NullLogger,
@@ -22,21 +22,21 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
 
     if not exclude_basic:
         players = manager.one_player_per_strategy(axelrod.basic_strategies)
-        manager.add_tournament('basic_strategies', players)
+        manager.add_tournament('basic_strategies', players, processes)
     if not exclude_strategies:
         strategies = axelrod.basic_strategies + axelrod.ordinary_strategies
         players = manager.one_player_per_strategy(strategies)
-        manager.add_tournament('strategies', players)
+        manager.add_tournament('strategies', players, processes)
     if not exclude_cheating:
         players = manager.one_player_per_strategy(axelrod.cheating_strategies)
-        manager.add_tournament('cheating_strategies', players)
+        manager.add_tournament('cheating_strategies', players, processes)
     if not exclude_all:
         strategies = (
             axelrod.basic_strategies +
             axelrod.ordinary_strategies +
             axelrod.cheating_strategies)
         players = manager.one_player_per_strategy(strategies)
-        manager.add_tournament('all_strategies', players)
+        manager.add_tournament('all_strategies', players, processes)
 
     manager.run_tournaments()
 
@@ -61,6 +61,8 @@ if __name__ == "__main__":
                         help='exclude combined strategies plot')
     parser.add_argument('--ne', action='store_true',
                         help='no ecological variant')
+    parser.add_argument('-p', '--processes', type=int, default=None,
+                        help='Number of parallel processes to spawn. 0 uses cpu count.')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
@@ -68,4 +70,4 @@ if __name__ == "__main__":
     else:
         run_tournaments(args.turns, args.repetitions, args.xb, args.xs,
                         args.xc, args.xa, args.ne, args.output_directory,
-                        args.logging)
+                        args.logging, args.processes)
