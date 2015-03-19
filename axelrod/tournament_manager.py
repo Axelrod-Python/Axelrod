@@ -24,7 +24,8 @@ class TournamentManager(object):
             players=players,
             turns=turns,
             repetitions=repetitions,
-            processes=processes)
+            processes=processes,
+            logger=self.logger)
         self.tournaments.append(tournament)
 
     def run_tournaments(self):
