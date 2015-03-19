@@ -17,13 +17,14 @@ class TournamentManager(object):
     def one_player_per_strategy(self, strategies):
         return [strategy() for strategy in strategies]
 
-    def add_tournament(self, name, players, game=None,
-                       turns=200, repetitions=10):
+    def add_tournament(self, name, players, game=None, turns=200,
+                       repetitions=10, processes=None):
         tournament = Tournament(
             name=name,
             players=players,
             turns=turns,
-            repetitions=repetitions)
+            repetitions=repetitions,
+            processes=processes)
         self.tournaments.append(tournament)
 
     def run_tournaments(self):
