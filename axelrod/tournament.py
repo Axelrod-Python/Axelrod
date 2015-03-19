@@ -44,7 +44,10 @@ class Tournament(object):
         return self.result_set
 
     def run_serial_repetitions(self, payoffs_list):
-        pass
+        for repetition in range(self.repetitions - 1):
+            payoffs, cache = self.play_round_robin(self.deterministic_cache)
+            payoffs_list.append(payoffs)
+        return payoffs_list
 
     def run_parallel_repetitions(self, payoffs_list):
         processes = []
