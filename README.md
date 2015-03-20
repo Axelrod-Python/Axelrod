@@ -69,6 +69,18 @@ Note that you can run `python run_tournament.py -h` for further options availabl
 $ python run_tournament.py --xc --xa
 ```
 
+You can also run the tournament in parallel (below will run 4 parallel processes):
+
+```
+$ python run_tournament.py -p 4
+```
+
+You can run with all available CPUs with:
+
+```
+$ python run_tournament.py -p 0
+```
+
 ## Awesome visualisation
 
 [martinjc](https://github.com/martinjc) put together a pretty awesome visualisation of this using d3. Hosted on gh-pages it can be seen here: [drvinceknight.github.io/Axelrod](http://drvinceknight.github.io/Axelrod/).
