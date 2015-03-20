@@ -95,6 +95,8 @@ class ResultSet(object):
             self.ranked_names = self.generate_ranked_names(self.ranking)
             self.payoff_matrix, self.payoff_stddevs = self.generate_payoff_matrix()
             self.finalised = True
+        else:
+            raise AttributeError('Result set is already finalised')
 
     def csv(self):
         if self.finalised:

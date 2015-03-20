@@ -7,22 +7,24 @@ import axelrod
 
 class TestEcosystem(unittest.TestCase):
 
-    cooperators = axelrod.Tournament(players=[
-        axelrod.Cooperator(),
-        axelrod.Cooperator(),
-        axelrod.Cooperator(),
-        axelrod.Cooperator(),
-    ])
-    defector_wins = axelrod.Tournament(players=[
-        axelrod.Cooperator(),
-        axelrod.Cooperator(),
-        axelrod.Cooperator(),
-        axelrod.Defector(),
-    ])
 
-    def setUp(self):
-        self.res_cooperators = self.cooperators.play()
-        self.res_defector_wins = self.defector_wins.play()
+
+    @classmethod
+    def setUpClass(cls):
+        cooperators = axelrod.Tournament(players=[
+            axelrod.Cooperator(),
+            axelrod.Cooperator(),
+            axelrod.Cooperator(),
+            axelrod.Cooperator(),
+        ])
+        defector_wins = axelrod.Tournament(players=[
+            axelrod.Cooperator(),
+            axelrod.Cooperator(),
+            axelrod.Cooperator(),
+            axelrod.Defector(),
+        ])
+        cls.res_cooperators = cooperators.play()
+        cls.res_defector_wins = defector_wins.play()
 
     def test_init(self):
         """Are the populations created correctly?"""
