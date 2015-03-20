@@ -71,7 +71,7 @@ class Tournament(object):
         work_queue = multiprocessing.Queue()
         done_queue = multiprocessing.Queue()
 
-        if self.processes < 2 or self.processes > multiprocessing.cpu_count:
+        if self.processes < 2 or self.processes > multiprocessing.cpu_count():
             workers = multiprocessing.cpu_count()
         else:
             workers = self.processes
