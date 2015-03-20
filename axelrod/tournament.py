@@ -77,7 +77,7 @@ class Tournament(object):
             workers = self.processes
 
         self.logger.log(
-            'Running repetitions with %s parallel processes' % workers)
+            'Running repetitions with %d parallel processes' % workers)
 
         for repetition in range(self.repetitions - 1):
             work_queue.put(repetition)
