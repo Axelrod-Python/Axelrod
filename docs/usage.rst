@@ -1,12 +1,228 @@
 Usage
 =====
 
-No content yet.
+This library is intended to allow for users to create their own tournaments (and incorporating various strategies as required) and comes with a script that runs the tournament with a variety of options:
+
+1. `Using as a library`_
+2. `Running the tournament`_
 
 Using as a library
 ------------------
 
-No content yet.
+Creating and running a tournament
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Assuming that the library is in your path (more details about this to come: `see this github issue <https://github.com/drvinceknight/Axelrod/issues/94>`_).
+We can list the so called 'basic strategies' by doing the following::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    for s in strategies:
+        print s
+
+ which gives::
+
+    Alternator
+    Cooperator
+    Defector
+    Random
+    Tit For Tat
+
+Before creating a tournament let us add another :code:`Defector` to our strategies::
+
+    strategies.append(axelrod.Defector())
+
+We can easily create a tournament with these basic strategies by doing the following::
+
+    tournament = axelrod.tournament.Tournament(strategies)
+
+To view the player types in our tournament::
+
+    tournament.players
+
+which gives::
+
+    [Alternator, Cooperator, Defector, Random, Tit For Tat, Defector]
+
+Now to run the tournament and save the results::
+
+    results = tournament.play()
+
+The output of `tournament.play()` is a `ResultSet` which is something that holds all the information we could need.
+First, let us generate the scores::
+
+    scores = results.generate_scores()
+    scores
+
+which gives::
+
+    [[3.022, 3.054, 3.014, 3.041, 3.093, 3.069, 3.102, 3.046, 3.005, 3.02], [3.776, 3.785, 3.833, 3.779, 3.806, 3.797, 3.812, 3.824, 3.743, 3.833], [2.416, 2.392, 2.392, 2.42, 2.38, 2.412, 2.424, 2.32, 2.368, 2.392], [3.116, 3.113, 3.086, 3.106, 3.075, 3.109, 3.071, 3.125, 3.153, 3.078], [3.038, 3.05, 3.041, 3.057, 3.057, 3.075, 3.066, 3.07, 3.058, 3.052], [2.352, 2.38, 2.364, 2.412, 2.412, 2.404, 2.38, 2.348, 2.452, 2.404]]
+
+We see here that when we ran :code:`tournament.play()` it automatically repeated the round robin tournament 10 times (this is to deal with the stochasticity of the random players).
+The :code:`scores` contains a list of normalized scored for all players.
+
+To generate a ranking based on median score we run::
+
+    ranking = results.generate_ranking(scores)
+
+which gives::
+
+    ranking
+    [2, 5, 0, 4, 3, 1]
+
+Finally, to obtain the ranking in a helpful format with all the names we run::
+
+    ranks = results.generate_ranked_names(ranking)
+
+which gives::
+
+    ranks
+    ['Defector', 'Defector', 'Alternator', 'Tit For Tat', 'Random', 'Cooperator']
+
+So in this particular instance our two defectors have won.
+Let us write a little script that will throw in a new :code:`TitForTat` player until the tit for tat player wins::
+
+    while ranks[0] == 'Defector':
+       strategies.append(axelrod.TitForTat())  # Adding a new tit for tat player
+       tournament = axelrod.tournament.Tournament(strategies)
+       results = tournament.play()
+       scores = results.generate_scores()
+       ranking = results.generate_ranking(scores)
+       ranks = results.generate_ranked_names(ranking)
+
+Once that has run let us see how many :code:`TitForTat` players were required::
+
+    strategies.count('TitForTat')
+
+which gives::
+
+    3
+
+We can wrap all this in a function and use it to see how many :code:`TitForTat` are needed to overcome a varying number :code:`Defector`::
+
+    def find_number_of_tit_for_tat(number_of_defectors):
+       strategies = [s() for s in axelrod.basic_strategies]
+       for d in range(number_of_defectors - 1):
+            strategies.append(axelrod.Defector())
+       ranks = ['Defector']  # Creating a dummy list to start
+       count = 1
+       while ranks[0] == 'Defector':
+            count += 1
+            strategies.append(axelrod.TitForTat())
+            tournament = axelrod.tournament.Tournament(strategies)
+            results = tournament.play()
+            scores = results.generate_scores()
+            ranking = results.generate_ranking(scores)
+            ranks = results.generate_ranked_names(ranking)
+       return count
+
+Let us use that to find the number required for a range of number of :code:`Defector`::
+
+    d = range(2, 50)
+    t = [find_number_of_tit_for_tat(n) for n in d]
+
+By viewing :code:`t` we actually see that even with 50 :code:`Defector` 3 :code:`TitForTat` is all that is needed to win the tournament::
+
+    max(t)
+
+gives::
+
+    3
+
+So even with a large quantity of :code:`Defector` only a small number of :code:`TitForTat` strategies is required.
+
+
+Graphics
+^^^^^^^^
+
+The whole library can be used without any other non base Python libraries however if you have `matplotlib <http://matplotlib.org/>`_ installed on your system there are various graphical things coded in and ready to go.
+
+Let us see the global scores for the basic strategies::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    tournament = axelrod.tournament.Tournament(strategies)
+    results = tournament.play()
+    plot = axelrod.Plot(results)
+    p = plot.boxplot()
+    p.show()
+
+We see the output of this here:
+
+.. image:: _static/usage/basic_strategies.svg
+   :width: 50%
+   :align: center
+
+If we run the same tournament but with 5 :code:`Defector` and 3 :code:`TitForTat` we get:
+
+.. image:: _static/usage/basic_strategies-5-Defector-3-TitForTat.svg
+   :width: 50%
+   :align: center
+
+
+Payoff matrix
+^^^^^^^^^^^^^
+
+Once a tournament has been run we can generate the payoff matrix that corresponds to it::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    tournament = axelrod.tournament.Tournament(strategies)
+    results = tournament.play()
+    results.generate_payoff_matrix()
+
+The output of this is a square matrix showing the payoffs (and another matrix showing the standard deviations) to the row player. Here is the payoff matrix::
+
+    [[3.0 , 1.0 , 4.5 , 2.77 , 2.49],
+     [3.5 , 2.0 , 5.0 , 3.499, 2.0],
+     [2.0 , 0.0 , 4.0 , 1.96 , 3.98],
+     [2.74, 1.00, 4.51, 2.77 , 2.71],
+     [2.51, 2.0 , 4.01, 2.73 , 2.0]]
+
+Again, if :code:`matplotlib` is installed we can visualise this::
+
+    plot = axelrod.Plot(results)
+    p = plot.payoff()
+    p.show()
+
+this is shown here:
+
+.. image:: _static/usage/payoffs.svg
+   :width: 50%
+   :align: center
+
+As an aside we can use this matrix with `gambit <http://gambit.sourceforge.net/>`_ or `sagemath <http://sagemath.org/>`_ to compute the Nash equilibria for the corresponding normal form game. Here is how to do this in Sage::
+
+    # This is not part of the Axelrod module (run in Sage)
+    A = matrix([[3.0 , 1.0 , 4.5 , 2.77 , 2.49],
+               [3.5 , 2.0 , 5.0 , 3.499, 2.0],
+               [2.0 , 0.0 , 4.0 , 1.96 , 3.98],
+               [2.74, 1.00, 4.51, 2.77 , 2.71],
+               [2.51, 2.0 , 4.01, 2.73 , 2.0]])
+    g = NormalFormGame([A, A.transpose()])
+    g.obtain_nash(maximization=False)
+
+You can run the above code in a public `SageMathCloud sheet here <https://cloud.sagemath.com/projects/2caafc5b-408d-46cd-be4f-db5d1cb06886/files/axelrod.sagews>`_. The output is shown here::
+
+    [[(0, 0, 0, 0, 1), (0, 0, 0, 0, 1)],
+     [(0, 0, 0, 0, 1), (0, 49/149, 0, 0, 100/149)],
+     [(0, 0, 198/199, 0, 1/199), (0, 0, 198/199, 0, 1/199)],
+     [(0, 0, 1, 0, 0), (0, 0, 1, 0, 0)],
+     [(0, 49/149, 0, 0, 100/149), (0, 0, 0, 0, 1)],
+     [(0, 49/149, 0, 0, 100/149), (0, 49/149, 0, 0, 100/149)]]
+
+Recall the ordering of the players::
+
+    [Alternator, Cooperator, Defector, Random, Tit For Tat, Defector]
+
+Thus we see that there are multiple Nash equilibria for this game. Two pure equilibria that involve both players playing :code:`Defector` and both players playing :code:`TitForTat`.
+
+To further study how this system evolves over time and how robust some of the observations we have made are let us look at how this game can be interpreted in an ecological setting.
+
+Ecological variant
+^^^^^^^^^^^^^^^^^^
+
+The previous examples seem to indicate that even with a large amount of
 
 Running the tournament
 ----------------------
