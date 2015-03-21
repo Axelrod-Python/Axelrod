@@ -29,6 +29,7 @@ class TestEcosystem(unittest.TestCase):
     def test_init(self):
         """Are the populations created correctly?"""
 
+        # By default create populations of equal size
         eco = axelrod.Ecosystem(self.res_cooperators)
         pops = eco.population_sizes
         self.assertEquals(eco.nplayers, 4)
@@ -36,6 +37,30 @@ class TestEcosystem(unittest.TestCase):
         self.assertEquals(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)
         self.assertEquals(list(set(pops[0])), [0.25])
+
+        # Can pass list of initial population distributions
+        eco = axelrod.Ecosystem(self.res_cooperators, population=[.7, .25, .03, .02])
+        pops = eco.population_sizes
+        self.assertEquals(eco.nplayers, 4)
+        self.assertEquals(len(pops), 1)
+        self.assertEquals(len(pops[0]), 4)
+        self.assertAlmostEqual(sum(pops[0]), 1.0)
+        self.assertEquals(pops[0], [.7, .25, .03, .02])
+
+        # Distribution will automatically normalise
+        eco = axelrod.Ecosystem(self.res_cooperators, population=[70, 25, 3, 2])
+        pops = eco.population_sizes
+        self.assertEquals(eco.nplayers, 4)
+        self.assertEquals(len(pops), 1)
+        self.assertEquals(len(pops[0]), 4)
+        self.assertAlmostEqual(sum(pops[0]), 1.0)
+        self.assertEquals(pops[0], [.7, .25, .03, .02])
+
+        # If passed list is of incorrect size get error
+        self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators, population=[.7, .2, .03, .1, .1])
+
+        # If passed list has negative values
+        self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators, population=[.7, -.2, .03, .2])
 
     def test_cooperators(self):
         """Are cooperators stable over time?"""
