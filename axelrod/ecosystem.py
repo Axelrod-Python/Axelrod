@@ -5,7 +5,7 @@ import random
 class Ecosystem(object):
     """Create an ecosystem based on the payoff matrix from an Axelrod tournament."""
 
-    def __init__(self, results, fitness=None):
+    def __init__(self, results, fitness=None, population=None):
 
         self.results = results
         self.nplayers = self.results.nplayers
@@ -14,9 +14,21 @@ class Ecosystem(object):
 
         # Population sizes will be recorded in this nested list, with each internal
         # list containing strategy populations for a given turn. The first list,
-        # representing the starting populations, should have all equal values,
-        # and all population lists should be normalized to one.
-        self.population_sizes = [[1.0 / self.nplayers for i in range(self.nplayers)]]
+        # representing the starting populations, will by default have all equal
+        # values, and all population lists will be normalized to one.
+        # An initial population vector can also be passed. This will be
+        # normalised, but must be of the correct size and have all
+        # non-negative values.
+        if population:
+            if min(population) < 0:
+                raise TypeError("Minimum value of population vector must be non-negative")
+            elif len(population) != self.nplayers:
+                raise TypeError("Population vector must be same size as number of players")
+            else:
+                norm = float(sum(population))
+                self.population_sizes = [[p / norm for p in population]]
+        else:
+            self.population_sizes = [[1.0 / self.nplayers for i in range(self.nplayers)]]
 
         # This function is quite arbitrary and probably only influences the kinetics
         # for the current code.
