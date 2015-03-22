@@ -34,7 +34,7 @@ Before creating a tournament let us add another :code:`Defector` to our strategi
 
 We can easily create a tournament with these basic strategies by doing the following::
 
-    tournament = axelrod.tournament.Tournament(strategies)
+    tournament = axelrod.Tournament(strategies)
 
 To view the player types in our tournament::
 
@@ -84,7 +84,7 @@ Let us write a little script that will throw in a new :code:`TitForTat` player u
 
     while ranks[0] == 'Defector':
        strategies.append(axelrod.TitForTat())  # Adding a new tit for tat player
-       tournament = axelrod.tournament.Tournament(strategies)
+       tournament = axelrod.Tournament(strategies)
        results = tournament.play()
        scores = results.generate_scores()
        ranking = results.generate_ranking(scores)
@@ -109,7 +109,7 @@ We can wrap all this in a function and use it to see how many :code:`TitForTat` 
        while ranks[0] == 'Defector':
             count += 1
             strategies.append(axelrod.TitForTat())
-            tournament = axelrod.tournament.Tournament(strategies)
+            tournament = axelrod.Tournament(strategies)
             results = tournament.play()
             scores = results.generate_scores()
             ranking = results.generate_ranking(scores)
@@ -141,7 +141,7 @@ Let us see the global scores for the basic strategies::
 
     import axelrod
     strategies = [s() for s in axelrod.basic_strategies]
-    tournament = axelrod.tournament.Tournament(strategies)
+    tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     plot = axelrod.Plot(results)
     p = plot.boxplot()
@@ -167,7 +167,7 @@ Once a tournament has been run we can generate the payoff matrix that correspond
 
     import axelrod
     strategies = [s() for s in axelrod.basic_strategies]
-    tournament = axelrod.tournament.Tournament(strategies)
+    tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     results.generate_payoff_matrix()
 
@@ -222,9 +222,6 @@ To further study how this system evolves over time and how robust some of the ob
 Ecological variant
 ^^^^^^^^^^^^^^^^^^
 
-<<<<<<< HEAD
-The previous examples seem to indicate that even with a large amount of
-=======
 The previous examples seem to indicate that even with a large amount of :code:`Defector`, :code:`TitForTat` wins the tournament.
 However, the Nash equilibria for the basic tournament shows that we have equilibria involving both those two strategies.
 
@@ -232,7 +229,7 @@ An ecological variant of the tournament can be run with this library which allow
 
     import axelrod
     strategies = [s() for s in axelrod.basic_strategies]
-    tournament = axelrod.tournament.Tournament(strategies)
+    tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results)
     eco.reproduce(250) # Evolve the population over 250 time steps
@@ -253,7 +250,7 @@ We can see how this differs when the initial population contains a large number 
 
     import axelrod
     strategies = [s() for s in axelrod.basic_strategies]
-    tournament = axelrod.tournament.Tournament(strategies)
+    tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results, population=[.1, .05, .7, .1, .05])
     eco.reproduce(250) # Evolve the population over 250 time steps
@@ -271,7 +268,7 @@ Here is a with an even larger initial number of :code:`Defector` (note that it t
 
     import axelrod
     strategies = [s() for s in axelrod.basic_strategies]
-    tournament = axelrod.tournament.Tournament(strategies)
+    tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results, population=[.1, .05, 7, .1, .05])
     eco.reproduce(1000) # Evolve the population over 1000 time steps
@@ -284,7 +281,6 @@ The output is shown here:
 .. image:: _static/usage/basic_strategies-reproduce-huge-initial-D.svg
    :width: 50%
    :align: center
->>>>>>> docs
 
 Running the tournament
 ----------------------
