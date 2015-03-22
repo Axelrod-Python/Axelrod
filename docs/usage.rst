@@ -20,7 +20,7 @@ We can list the so called 'basic strategies' by doing the following::
     for s in strategies:
         print s
 
- which gives::
+which gives::
 
     Alternator
     Cooperator
