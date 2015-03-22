@@ -11,7 +11,6 @@ This project is both:
 * A python library that reproduces Axelrod's tournament.
 * A github experiment allowing anyone to contribute a strategy.
 
-The documentation is still very sparse but take a look at the github repository here: `<https://github.com/drvinceknight/Axelrod>`_.
 
 Contents:
 
