@@ -222,9 +222,110 @@ To further study how this system evolves over time and how robust some of the ob
 Ecological variant
 ^^^^^^^^^^^^^^^^^^
 
+<<<<<<< HEAD
 The previous examples seem to indicate that even with a large amount of
+=======
+The previous examples seem to indicate that even with a large amount of :code:`Defector`, :code:`TitForTat` wins the tournament.
+However, the Nash equilibria for the basic tournament shows that we have equilibria involving both those two strategies.
+
+An ecological variant of the tournament can be run with this library which allows to see how each strategy does in a population over time where the performance in the tournament indicates how likely the given strategy is to reproduce.  To create such a variant simply run::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    tournament = axelrod.tournament.Tournament(strategies)
+    results = tournament.play()
+    eco = axelrod.Ecosystem(results)
+    eco.reproduce(250) # Evolve the population over 250 time steps
+    plot = axelrod.Plot(results)
+    p = plot.stackplot(eco.population_sizes)
+    p.show()
+
+We see the output here:
+
+.. image:: _static/usage/basic_strategies-reproduce.svg
+   :width: 50%
+   :align: center
+
+We see that the :code:`Defector` population starts to grow before the :code:`TitForTat` population takes over leaving some :code:`Cooperator` as well.
+The final population is completely cooperative.
+
+We can see how this differs when the initial population contains a large number of :code:`Defector`::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    tournament = axelrod.tournament.Tournament(strategies)
+    results = tournament.play()
+    eco = axelrod.Ecosystem(results, population=[.1, .05, .7, .1, .05])
+    eco.reproduce(250) # Evolve the population over 250 time steps
+    plot = axelrod.Plot(results)
+    p = plot.stackplot(eco.population_sizes)
+    p.show()
+
+We see the output here:
+
+.. image:: _static/usage/basic_strategies-reproduce-large-initial-D.svg
+   :width: 50%
+   :align: center
+
+Here is a with an even larger initial number of :code:`Defector` (note that it takes a little longer to stabilise)::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    tournament = axelrod.tournament.Tournament(strategies)
+    results = tournament.play()
+    eco = axelrod.Ecosystem(results, population=[.1, .05, 7, .1, .05])
+    eco.reproduce(1000) # Evolve the population over 1000 time steps
+    plot = axelrod.Plot(results)
+    p = plot.stackplot(eco.population_sizes)
+    p.show()
+
+The output is shown here:
+
+.. image:: _static/usage/basic_strategies-reproduce-huge-initial-D.svg
+   :width: 50%
+   :align: center
+>>>>>>> docs
 
 Running the tournament
 ----------------------
 
-No content yet.
+The :code:`run_tournament.py` script allows to easily run basic versions of the tournament and output all graphics as required.
+
+To view the help for the :code:`run_tournament.py` file run::
+
+    python run_tournament.py -h
+
+There are a variety of options that include:
+
+- Excluding certain strategy sets.
+- Not running the ecological variant.
+- Running the rounds of the tournament in parallel.
+
+Particular parameters can also be changed:
+
+- The output directory for the plot and csv files.
+- The number of turns and repetitions for the tournament.
+
+Here is a command that will run the whole tournament, excluding the cheating strategies, using all available CPUS and outputting the files to the current directory::
+
+    python run_tournament.py --xc -p 0 -o .
+
+Here are some of the plots that are output when running with the latest total number of strategies:
+
+The results from the tournament itself (ordered by median score):
+
+.. image:: ../assets/strategies_boxplot.png
+   :width: 50%
+   :align: center
+
+The payoff matrix from that tournament:
+
+.. image:: ../assets/strategies_payoff.png
+   :width: 50%
+   :align: center
+
+The ecological variant:
+
+.. image:: ../assets/strategies_reproduce.png
+   :width: 50%
+   :align: center
