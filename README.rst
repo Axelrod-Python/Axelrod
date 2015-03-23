@@ -3,6 +3,9 @@ Axelrod
 
 |Join the chat at https://gitter.im/drvinceknight/Axelrod|
 
+.. image:: https://travis-ci.org/drvinceknight/Axelrod.svg?branch=packaging
+    :target: https://travis-ci.org/drvinceknight/Axelrod
+
 A repository to reproduce Axelrod's iterated prisoner's dilemma.
 **Please contribute strategies via pull request (or just get in touch
 with me).**
@@ -24,7 +27,7 @@ This automatically outputs a ``png`` file with the results. You can see
 the results from the latest run of the tournament here:
 
 .. figure:: ./assets/strategies_boxplot.png
-   :alt: 
+   :alt:
 
 As you can see: the 'tit for tat' strategy has not won in this instance,
 that is mainly because more strategies are needed to get anywhere near
@@ -34,7 +37,7 @@ You can see the results from the latest run of the tournament here with
 the cheating strategies (which manipulate/read what the opponent does):
 
 .. figure:: ./assets/all_strategies_boxplot.png
-   :alt: 
+   :alt:
 
 Please do contribute :)
 
