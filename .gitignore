@@ -3,3 +3,5 @@
 site/
 _build/
 *.log
+dist/
+MANIFEST
