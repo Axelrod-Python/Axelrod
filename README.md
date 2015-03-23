@@ -2,6 +2,8 @@
 
 [![Join the chat at https://gitter.im/drvinceknight/Axelrod](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/drvinceknight/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![Build Status](https://travis-ci.org/drvinceknight/Axelrod.svg?branch=packaging)](https://travis-ci.org/drvinceknight/Axelrod)
+
 A repository to reproduce Axelrod's iterated prisoner's dilemma.
 **Please contribute strategies via pull request (or just get in touch with me).**
 
