@@ -103,15 +103,15 @@ class Tournament(object):
 
     def worker(self, work_queue, done_queue):
         for repetition in iter(work_queue.get, 'STOP'):
-            payoffs, cache = self.play_round_robin(self.deterministic_cache)
+            payoffs, cache = self.play_round_robin()
             done_queue.put(payoffs)
 
-    def play_round_robin(self, deterministic_cache):
+    def play_round_robin(self):
         round_robin = RoundRobin(
             players=self.players,
             game=self.game,
             turns=self.turns,
-            deterministic_cache=deterministic_cache)
+            deterministic_cache=self.deterministic_cache)
         payoffs = round_robin.play()
         cache = round_robin.deterministic_cache
         return payoffs, cache
