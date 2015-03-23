@@ -1,10 +1,10 @@
-Axelrod
-=======
-
 |Join the chat at https://gitter.im/drvinceknight/Axelrod|
 
 .. image:: https://travis-ci.org/drvinceknight/Axelrod.svg?branch=packaging
     :target: https://travis-ci.org/drvinceknight/Axelrod
+
+Axelrod
+=======
 
 A repository to reproduce Axelrod's iterated prisoner's dilemma.
 **Please contribute strategies via pull request (or just get in touch
