@@ -62,6 +62,7 @@ ordinary_strategies = [
     Retaliate2,
     Retaliate3,
     RiskyQLearner,
+    SneakyTitForTat,
     StochasticWSLS,
     SuspiciousTitForTat,
     TitFor2Tats,
