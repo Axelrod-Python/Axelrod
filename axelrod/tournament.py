@@ -88,10 +88,8 @@ class Tournament(object):
             work_queue.put('STOP')
             process.start()
 
-        # There is a 0.5 second timeout here as the all_strategies tournament
-        # occasionally hangs the join method for some strange reason.
         for process in processes:
-            process.join(0.5)
+            process.join()
 
         done_queue.put('STOP')
 
