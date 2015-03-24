@@ -17,9 +17,7 @@ class TestTitForTat(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
 
     def test_effect_of_strategy(self):
-        """
-        Repeats last action of opponent history
-        """
+        """Repeats last action of opponent history."""
         P1 = axelrod.TitForTat()
         P2 = axelrod.Player()
         P2.history = ['C', 'C', 'C', 'C']
@@ -34,17 +32,13 @@ class TestTitFor2Tats(TestPlayer):
     player = axelrod.TitFor2Tats
 
     def test_strategy(self):
-        """
-        Starts by cooperating
-        """
+        """Starts by cooperating."""
         P1 = axelrod.TitFor2Tats()
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), 'C')
 
     def test_effect_of_strategy(self):
-        """
-        Will defect only when last two turns of opponent were defections.
-        """
+        """Will defect only when last two turns of opponent were defections."""
         P1 = axelrod.TitFor2Tats()
         P2 = axelrod.Player()
         P1.history = ['C', 'C', 'C']
@@ -112,3 +106,26 @@ class TestSuspiciousTitForTat(TestPlayer):
         P1.history.append('C')
         P2.history.append('C')
         self.assertEqual(P1.strategy(P2), 'D')
+
+
+class TestSneakyTitForTat(TestPlayer):
+
+    name = "Sneaky Tit For Tat"
+    player = axelrod.SneakyTitForTat
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        P1 = axelrod.SneakyTitForTat()
+        P2 = axelrod.Player()
+        self.assertEqual(P1.strategy(P2), 'C')
+
+    def test_effect_of_strategy(self):
+        """Will try defecting after two turns of cooperation, but will stop if punished."""
+        P1 = axelrod.SneakyTitForTat()
+        P2 = axelrod.Player()
+        P1.history = ['C', 'C']
+        P2.history = ['C', 'C']
+        self.assertEqual(P1.strategy(P2), 'D')
+        P1.history = ['C', 'C', 'D', 'D']
+        P2.history = ['C', 'C', 'C', 'D']
+        self.assertEqual(P1.strategy(P2), 'C')
