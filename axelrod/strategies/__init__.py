@@ -54,6 +54,7 @@ ordinary_strategies = [
     LimitedRetaliate,
     LimitedRetaliate2,
     LimitedRetaliate3,
+    NiceAverageCopier,
     OnceBitten,
     OppositeGrudger,
     Pi,
