@@ -7,12 +7,15 @@ from ecosystem import *
 
 class TournamentManager(object):
 
-    def __init__(self, logger, output_directory, with_ecological):
+    def __init__(self, logger, output_directory, with_ecological, pass_cache=True):
         self.tournaments = []
         self.ecological_variants = []
         self.logger = logger
         self.output_directory = output_directory
         self.with_ecological = with_ecological
+        self.pass_cache = pass_cache
+        self.deterministic_cache = {}
+        self.cache_valid_for_turns = None
 
     def one_player_per_strategy(self, strategies):
         return [strategy() for strategy in strategies]
@@ -41,6 +44,13 @@ class TournamentManager(object):
 
         t0 = time.time()
 
+        if self.pass_cache and self.valid_cache(tournament.turns):
+            self.logger.log('Passing cache with %d entries to %s tournament' %
+                            (len(self.deterministic_cache), tournament.name))
+            tournament.deterministic_cache = self.deterministic_cache
+        else:
+            self.logger.log('Cache is not valid for %s tournament' %
+                            tournament.name)
         tournament.play()
 
         self.logger.log('Finished %s tournament' % tournament.name, t0)
@@ -52,10 +62,19 @@ class TournamentManager(object):
             ecosystem = None
 
         self.generate_output_files(tournament, ecosystem)
+        self.cache_valid_for_turns = tournament.turns
+
+        self.logger.log('Cache now has %d entries' %
+                        len(self.deterministic_cache))
 
         self.logger.log(
             'Finished all %s tasks' % tournament.name, t0)
         self.logger.log("")
+
+    def valid_cache(self, turns):
+        return ((len(self.deterministic_cache) == 0) or
+                (len(self.deterministic_cache) > 0) and
+                turns == self.cache_valid_for_turns)
 
     def run_ecological_variant(self, tournament, ecosystem):
         self.logger.log(

@@ -30,11 +30,6 @@ class Tournament(object):
             turns=turns,
             repetitions=repetitions)
 
-        # The cache doesn't need to be an instance level variable,
-        # it could just be internal to the play method.
-        # However, there's no reason why the cache couldn't be passed between
-        # tournaments by the tournament manager and so it sits here waiting for
-        # that code to be written.
         self.deterministic_cache = {}
 
     def play(self):
@@ -45,9 +40,8 @@ class Tournament(object):
         # any chance of running in parallel. This allows the cache to be made
         # available to processes running in parallel without the problems of
         # cross-process communication.
-        payoffs, cache = self.play_round_robin(self.deterministic_cache)
+        payoffs = self.play_round_robin()
         payoffs_list.append(payoffs)
-        self.deterministic_cache = cache
 
         if self.processes is None:
             payoffs_list = self.run_serial_repetitions(payoffs_list)
@@ -59,7 +53,7 @@ class Tournament(object):
 
     def run_serial_repetitions(self, payoffs_list):
         for repetition in range(self.repetitions - 1):
-            payoffs, cache = self.play_round_robin(self.deterministic_cache)
+            payoffs = self.play_round_robin()
             payoffs_list.append(payoffs)
         return payoffs_list
 
@@ -89,10 +83,8 @@ class Tournament(object):
             work_queue.put('STOP')
             process.start()
 
-        # There is a 0.5 second timeout here as the all_strategies tournament
-        # occasionally hangs the join method for some strange reason.
         for process in processes:
-            process.join(0.5)
+            process.join()
 
         done_queue.put('STOP')
 
@@ -103,15 +95,15 @@ class Tournament(object):
 
     def worker(self, work_queue, done_queue):
         for repetition in iter(work_queue.get, 'STOP'):
-            payoffs, cache = self.play_round_robin(self.deterministic_cache)
+            payoffs = self.play_round_robin(cache_mutable=False)
             done_queue.put(payoffs)
 
-    def play_round_robin(self, deterministic_cache):
+    def play_round_robin(self, cache_mutable=True):
         round_robin = RoundRobin(
             players=self.players,
             game=self.game,
             turns=self.turns,
-            deterministic_cache=deterministic_cache)
+            deterministic_cache=self.deterministic_cache,
+            cache_mutable=cache_mutable)
         payoffs = round_robin.play()
-        cache = round_robin.deterministic_cache
-        return payoffs, cache
+        return payoffs
