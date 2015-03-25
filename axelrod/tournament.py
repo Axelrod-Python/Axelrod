@@ -38,7 +38,6 @@ class Tournament(object):
         self.deterministic_cache = {}
 
     def play(self):
-        self.logger.log('Tournament: cache (%s) has %d entries' % (id(self.deterministic_cache), len(self.deterministic_cache)))
         payoffs_list = []
 
         # We play the first repetition in order to build the deterministic
@@ -55,7 +54,6 @@ class Tournament(object):
             payoffs_list = self.run_parallel_repetitions(payoffs_list)
 
         self.result_set.finalise(payoffs_list)
-        self.logger.log('Tournament: cache (%s) has %d entries' % (id(self.deterministic_cache), len(self.deterministic_cache)))
         return self.result_set
 
     def run_serial_repetitions(self, payoffs_list):
