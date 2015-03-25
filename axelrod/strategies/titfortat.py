@@ -42,3 +42,18 @@ class SuspiciousTitForTat(Player):
 
     def strategy(self, opponent):
         return 'C' if opponent.history[-1:] == ['D'] else 'D'
+
+
+class SneakyTitForTat(Player):
+    """Tries defecting once and repents if punished."""
+
+    name = "Sneaky Tit For Tat"
+
+    def strategy(self, opponent):
+        if len(self.history) < 2:
+            return "C"
+        if 'D' not in opponent.history:
+            return 'D'
+        if opponent.history[-1] == 'D' and self.history[-2] == 'D':
+            return "C"
+        return opponent.history[-1]

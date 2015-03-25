@@ -9,6 +9,7 @@ from geller import *
 from gobymajority import *
 from grudger import *
 from grumpy import *
+from hunter import *
 from inverse import *
 from mathematicalconstants import *
 from memoryone import *
@@ -30,10 +31,13 @@ basic_strategies = [
 ]
 
 ordinary_strategies = [
+    AlternatorHunter,
     Appeaser,
     ArrogantQLearner,
     AverageCopier,
     CautiousQLearner,
+    CooperatorHunter,
+    DefectorHunter,
     FoolMeOnce,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,
@@ -54,14 +58,19 @@ ordinary_strategies = [
     LimitedRetaliate,
     LimitedRetaliate2,
     LimitedRetaliate3,
+    MathConstantHunter,
+    MetaHunter,
+    NiceAverageCopier,
     OnceBitten,
     OppositeGrudger,
     Pi,
     Punisher,
+    RandomHunter,
     Retaliate,
     Retaliate2,
     Retaliate3,
     RiskyQLearner,
+    SneakyTitForTat,
     StochasticWSLS,
     SuspiciousTitForTat,
     TitFor2Tats,
