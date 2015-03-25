@@ -1,15 +1,13 @@
 class RoundRobin(object):
     """A class to define play a round robin game of players"""
 
-    def __init__(self, players, game, turns, deterministic_cache={},
-                 cache_mutable=True):
+    def __init__(self, players, game, turns, deterministic_cache={}):
         """Initialise the players, game and deterministic cache"""
         self.players = players
         self.nplayers = len(players)
         self.game = game
         self.turns = turns
         self.deterministic_cache = deterministic_cache
-        self.cache_mutable = cache_mutable
 
     def calculate_scores(self, p1, p2):
         """Calculates the score for two players based their history"""
@@ -62,7 +60,7 @@ class RoundRobin(object):
                         turn += 1
                         p1.play(p2)
                     scores = self.calculate_scores(p1, p2)
-                    if self.cache_mutable and not (p1.stochastic or p2.stochastic):
+                    if not (p1.stochastic or p2.stochastic):
                         self.deterministic_cache[key] = scores
                 else:
                     scores = self.deterministic_cache[key]
