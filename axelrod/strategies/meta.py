@@ -19,6 +19,9 @@ class MetaPlayer(Player):
         # Initiate all the player in out team.
         self.team = [t() for t in self.team]
 
+        # If the team will have stochastic players, this meta is also stochastic.
+        self.stochastic = any([t.stochastic for t in self.team])
+
     def strategy(self, opponent):
 
         # Make sure the history of all hunters is current.
@@ -40,7 +43,6 @@ class MetaMajority(MetaPlayer):
     """A player who goes by the majority vote of all other non-meta players."""
 
     name = "Meta Majority"
-    stochastic = True
 
     def __init__(self):
 
@@ -50,9 +52,6 @@ class MetaMajority(MetaPlayer):
         self.team = ordinary_strategies
 
         MetaPlayer.__init__(self)
-
-        # Since the team will have stochastic players, meta is also stochastic.
-        self.stochastic = True
 
     def meta_strategy(self, results):
         if results.count('D') > results.count('C'):
@@ -64,7 +63,6 @@ class MetaMinority(MetaPlayer):
     """A player who goes by the minority vote of all other non-meta players."""
 
     name = "Meta Minority"
-    stochastic = True
 
     def __init__(self):
 
@@ -74,9 +72,6 @@ class MetaMinority(MetaPlayer):
         self.team = ordinary_strategies
 
         MetaPlayer.__init__(self)
-
-        # Since the team will have stochastic players, meta is also stochastic.
-        self.stochastic = True
 
     def meta_strategy(self, results):
         if results.count('D') < results.count('C'):
@@ -88,7 +83,6 @@ class MetaWinner(MetaPlayer):
     """A player who goes by the strategy of the current winner."""
 
     name = "Meta Winner"
-    stochastic = True
 
     def __init__(self, team=None):
 
@@ -101,9 +95,6 @@ class MetaWinner(MetaPlayer):
             self.team = ordinary_strategies
 
         MetaPlayer.__init__(self)
-
-        # Since the team will have stochastic players, meta is also stochastic.
-        self.stochastic = True
 
         # For each player, we will keep the history of proposed moves and
         # a running score since the beginning of the game.
