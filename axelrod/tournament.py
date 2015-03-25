@@ -30,11 +30,6 @@ class Tournament(object):
             turns=turns,
             repetitions=repetitions)
 
-        # The cache doesn't need to be an instance level variable,
-        # it could just be internal to the play method.
-        # However, there's no reason why the cache couldn't be passed between
-        # tournaments by the tournament manager and so it sits here waiting for
-        # that code to be written.
         self.deterministic_cache = {}
 
     def play(self):
