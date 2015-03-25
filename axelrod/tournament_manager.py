@@ -44,7 +44,7 @@ class TournamentManager(object):
 
         t0 = time.time()
 
-        if self.pass_cache and self.valid_cache(tournament):
+        if self.pass_cache and self.valid_cache(tournament.turns):
             self.logger.log('Passing cache with %d entries to %s tournament' %
                             (len(self.deterministic_cache), tournament.name))
             tournament.deterministic_cache = self.deterministic_cache
@@ -71,10 +71,10 @@ class TournamentManager(object):
             'Finished all %s tasks' % tournament.name, t0)
         self.logger.log("")
 
-    def valid_cache(self, tournament):
+    def valid_cache(self, turns):
         return ((len(self.deterministic_cache) == 0) or
                 (len(self.deterministic_cache) > 0) and
-                tournament.turns == self.turns)
+                turns == self.turns)
 
     def run_ecological_variant(self, tournament, ecosystem):
         self.logger.log(
