@@ -7,12 +7,13 @@ from ecosystem import *
 
 class TournamentManager(object):
 
-    def __init__(self, logger, output_directory, with_ecological):
+    def __init__(self, logger, output_directory, with_ecological, pass_cache=True):
         self.tournaments = []
         self.ecological_variants = []
         self.logger = logger
         self.output_directory = output_directory
         self.with_ecological = with_ecological
+        self.pass_cache = pass_cache
         self.deterministic_cache = {}
         self.turns = None
 
@@ -43,10 +44,7 @@ class TournamentManager(object):
 
         t0 = time.time()
 
-        valid_cache = ((len(self.deterministic_cache) == 0) or
-                       (len(self.deterministic_cache) > 0) and
-                       tournament.turns == self.turns)
-        if valid_cache:
+        if self.pass_cache and self.valid_cache(tournament):
             self.logger.log('Passing cache with %d entries to %s tournament' %
                             (len(self.deterministic_cache), tournament.name))
             tournament.deterministic_cache = self.deterministic_cache
@@ -72,6 +70,11 @@ class TournamentManager(object):
         self.logger.log(
             'Finished all %s tasks' % tournament.name, t0)
         self.logger.log("")
+
+    def valid_cache(self, tournament):
+        return ((len(self.deterministic_cache) == 0) or
+                (len(self.deterministic_cache) > 0) and
+                tournament.turns == self.turns)
 
     def run_ecological_variant(self, tournament, ecosystem):
         self.logger.log(
