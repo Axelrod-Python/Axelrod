@@ -61,9 +61,6 @@ class TestTournamentManager(unittest.TestCase):
         self.assertTrue(mgr.valid_cache(200))
         mgr.deterministic_cache['test_key'] = 'test_value'
         self.assertFalse(mgr.valid_cache(200))
-        mgr.turns = 500
+        mgr.cache_valid_for_turns = 500
         self.assertFalse(mgr.valid_cache(200))
         self.assertTrue(mgr.valid_cache(500))
-
-
-

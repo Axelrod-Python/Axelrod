@@ -15,7 +15,7 @@ class TournamentManager(object):
         self.with_ecological = with_ecological
         self.pass_cache = pass_cache
         self.deterministic_cache = {}
-        self.turns = None
+        self.cache_valid_for_turns = None
 
     def one_player_per_strategy(self, strategies):
         return [strategy() for strategy in strategies]
@@ -62,7 +62,7 @@ class TournamentManager(object):
             ecosystem = None
 
         self.generate_output_files(tournament, ecosystem)
-        self.turns = tournament.turns
+        self.cache_valid_for_turns = tournament.turns
 
         self.logger.log('Cache now has %d entries' %
                         len(self.deterministic_cache))
@@ -74,7 +74,7 @@ class TournamentManager(object):
     def valid_cache(self, turns):
         return ((len(self.deterministic_cache) == 0) or
                 (len(self.deterministic_cache) > 0) and
-                turns == self.turns)
+                turns == self.cache_valid_for_turns)
 
     def run_ecological_variant(self, tournament, ecosystem):
         self.logger.log(
