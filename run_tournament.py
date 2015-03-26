@@ -69,8 +69,8 @@ if __name__ == "__main__":
                         help='no ecological variant')
     parser.add_argument('-p', '--processes', type=int, default=None,
                         help='Number of parallel processes to spawn. 0 uses cpu count.')
-    parser.add_argument('-s', '--save_cache', action='store_true',
-                        help='save cache to file')
+    parser.add_argument('--rc', action='store_true',
+                        help='rebuild and save cache to file')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
@@ -78,4 +78,4 @@ if __name__ == "__main__":
     else:
         run_tournaments(args.turns, args.repetitions, args.xb, args.xs,
                         args.xc, args.xa, args.ne, args.output_directory,
-                        args.logging, args.processes, args.save_cache)
+                        args.logging, args.processes, args.rc)
