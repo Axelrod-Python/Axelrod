@@ -35,24 +35,22 @@ class Tournament(object):
     def play(self):
         payoffs_list = []
 
-        # We play the first repetition in order to build the deterministic
-        # cache. It's done separately so that only further repetions have
-        # any chance of running in parallel. This allows the cache to be made
-        # available to processes running in parallel without the problems of
-        # cross-process communication.
-        payoffs = self.play_round_robin()
-        payoffs_list.append(payoffs)
-
         if self.processes is None:
             payoffs_list = self.run_serial_repetitions(payoffs_list)
         else:
+            if len(self.deterministic_cache) == 0:
+                self.logger.log('Cache is empty. Playing first round robin to build cache')
+                payoffs = self.play_round_robin()
+                payoffs_list.append(payoffs)
+                self.repetitions -= 1
             payoffs_list = self.run_parallel_repetitions(payoffs_list)
 
         self.result_set.finalise(payoffs_list)
         return self.result_set
 
     def run_serial_repetitions(self, payoffs_list):
-        for repetition in range(self.repetitions - 1):
+        self.logger.log('Playing %d round robins' % self.repetitions)
+        for repetition in range(self.repetitions):
             payoffs = self.play_round_robin()
             payoffs_list.append(payoffs)
         return payoffs_list
@@ -71,9 +69,9 @@ class Tournament(object):
             workers = self.processes
 
         self.logger.log(
-            'Running repetitions with %d parallel processes' % workers)
+            'Playing %d round robins with %d parallel processes' % (self.repetitions, workers))
 
-        for repetition in range(self.repetitions - 1):
+        for repetition in range(self.repetitions):
             work_queue.put(repetition)
 
         for worker in range(workers):
