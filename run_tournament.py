@@ -11,14 +11,16 @@ import axelrod
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
                     exclude_cheating, exclude_all, no_eco, output_directory,
-                    logging, processes):
+                    logging, processes, save_cache):
     loggers = {
         'console': axelrod.ConsoleLogger,
         'none': axelrod.NullLogger,
         'file': axelrod.FileLogger
     }
     logger = loggers[logging]()
-    manager = axelrod.TournamentManager(logger, output_directory, not no_eco)
+    manager = axelrod.TournamentManager(
+        logger=logger, output_directory=output_directory,
+        with_ecological=not no_eco, save_cache=save_cache)
 
     if not exclude_basic:
         players = manager.one_player_per_strategy(axelrod.basic_strategies)
@@ -67,6 +69,8 @@ if __name__ == "__main__":
                         help='no ecological variant')
     parser.add_argument('-p', '--processes', type=int, default=None,
                         help='Number of parallel processes to spawn. 0 uses cpu count.')
+    parser.add_argument('--rc', action='store_true',
+                        help='rebuild cache and save to file')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
@@ -74,4 +78,4 @@ if __name__ == "__main__":
     else:
         run_tournaments(args.turns, args.repetitions, args.xb, args.xs,
                         args.xc, args.xa, args.ne, args.output_directory,
-                        args.logging, args.processes)
+                        args.logging, args.processes, args.rc)

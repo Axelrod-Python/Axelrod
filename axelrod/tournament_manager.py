@@ -1,5 +1,6 @@
 import os
 import time
+import cPickle as pickle
 from tournament import *
 from plot import *
 from ecosystem import *
@@ -7,15 +8,23 @@ from ecosystem import *
 
 class TournamentManager(object):
 
-    def __init__(self, logger, output_directory, with_ecological, pass_cache=True):
+    def __init__(self, logger, output_directory, with_ecological,
+                 pass_cache=True, load_cache=True, save_cache=False,
+                 cache_file='./cache.txt'):
         self.tournaments = []
         self.ecological_variants = []
         self.logger = logger
         self.output_directory = output_directory
         self.with_ecological = with_ecological
         self.pass_cache = pass_cache
+        self.save_cache = save_cache
+        self.cache_file = cache_file
         self.deterministic_cache = {}
         self.cache_valid_for_turns = None
+        self.load_cache = False
+
+        if load_cache and not save_cache:
+            self.load_cache = self.load_cache_from_file(cache_file)
 
     def one_player_per_strategy(self, strategies):
         return [strategy() for strategy in strategies]
@@ -35,6 +44,8 @@ class TournamentManager(object):
         t0 = time.time()
         for tournament in self.tournaments:
             self.run_single_tournament(tournament)
+        if self.save_cache:
+            self.save_cache_to_file(self.deterministic_cache, self.cache_file)
         self.logger.log("Finished all tournaments", t0)
 
     def run_single_tournament(self, tournament):
@@ -48,6 +59,8 @@ class TournamentManager(object):
             self.logger.log('Passing cache with %d entries to %s tournament' %
                             (len(self.deterministic_cache), tournament.name))
             tournament.deterministic_cache = self.deterministic_cache
+            if self.load_cache:
+                tournament.prebuilt_cache = True
         else:
             self.logger.log('Cache is not valid for %s tournament' %
                             tournament.name)
@@ -127,3 +140,32 @@ class TournamentManager(object):
     def save_plot(self, figure, file_name):
         figure.savefig(file_name, bbox_inches='tight')
         figure.clf()
+
+    def save_cache_to_file(self, cache, file_name):
+        self.logger.log(
+            'Saving cache with %d entries to %s' % (len(cache), file_name))
+        deterministic_cache = DeterministicCache(
+            cache, self.cache_valid_for_turns)
+        file = open(file_name, 'w')
+        pickle.dump(deterministic_cache, file)
+        return True
+
+    def load_cache_from_file(self, file_name):
+        try:
+            file = open(file_name, 'r')
+            deterministic_cache = pickle.load(file)
+            self.deterministic_cache = deterministic_cache.cache
+            self.cache_valid_for_turns = deterministic_cache.turns
+            self.logger.log(
+                'Loaded cache with %d entries' % len(self.deterministic_cache))
+            return True
+        except IOError:
+            self.logger.log('Cache file not found. Starting with empty cache')
+            return False
+
+
+class DeterministicCache(object):
+
+    def __init__(self, cache, turns):
+        self.cache = cache
+        self.turns = turns
