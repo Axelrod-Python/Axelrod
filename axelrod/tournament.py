@@ -83,13 +83,15 @@ class Tournament(object):
             work_queue.put('STOP')
             process.start()
 
-        for process in processes:
-            process.join()
-
-        done_queue.put('STOP')
-
-        for payoffs in iter(done_queue.get, 'STOP'):
-            payoffs_list.append(payoffs)
+        stops = 0
+        while True:
+            payoffs = done_queue.get()
+            if payoffs == 'STOP':
+                stops += 1
+                if stops == workers:
+                    break
+            else:
+                payoffs_list.append(payoffs)
 
         return payoffs_list
 
@@ -97,6 +99,7 @@ class Tournament(object):
         for repetition in iter(work_queue.get, 'STOP'):
             payoffs = self.play_round_robin(cache_mutable=False)
             done_queue.put(payoffs)
+        done_queue.put('STOP')
 
     def play_round_robin(self, cache_mutable=True):
         round_robin = RoundRobin(
