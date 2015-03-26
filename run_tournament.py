@@ -70,7 +70,7 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--processes', type=int, default=None,
                         help='Number of parallel processes to spawn. 0 uses cpu count.')
     parser.add_argument('--rc', action='store_true',
-                        help='rebuild and save cache to file')
+                        help='rebuild cache and save to file')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
