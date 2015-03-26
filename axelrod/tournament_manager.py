@@ -21,6 +21,7 @@ class TournamentManager(object):
         self.cache_file = cache_file
         self.deterministic_cache = {}
         self.cache_valid_for_turns = None
+        self.load_cache = False
 
         if load_cache:
             self.load_cache = self.load_cache_from_file(cache_file)
