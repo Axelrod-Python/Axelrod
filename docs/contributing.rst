@@ -34,6 +34,7 @@ Here is the file structure for the Axelrod repository::
     │   └── tournament.py
     │   └── /strategies/
     │       └── __init__.py
+    │       └── _strategies.py
     │       └── cooperator.py
     │       └── defector.py
     │       └── grudger.py
@@ -49,7 +50,7 @@ To contribute a strategy you need to follow as many of the following steps as po
 
 1. Fork the `github repository <https://github.com/drvinceknight/Axelrod>`_.
 2. Add a :code:`<strategy>.py` file to the strategies directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
-3. Update the :code:`./axelrod/strategies/__init__.py` file (you need to write the import statement and add the strategy to the relevant python list).
+3. Update the :code:`./axelrod/strategies/_strategies.py` file (you need to write the import statement and add the strategy to the relevant python list).
 4. This one is optional: write some unit tests in the ./axelrod/tests/ directory.
 5. This one is also optional: add your name to the contributors list in the bottom of the :code:`README.md` file.
 6. Send me a pull request.
@@ -111,7 +112,7 @@ Adding the strategy to the library
 ''''''''''''''''''''''''''''''''''
 
 To get the strategy to be recognised by the library we need to add it to the files that initialise when someone types :code:`import axelrod`.
-This is done in the :code:`axelrod/strategies/__init__.py` file.
+This is done in the :code:`axelrod/strategies/_strategies.py` file.
 
 If you have added your strategy to a file that already existed (perhaps you added a new variant of :code:`titfortat` to the :code:`titfortat.py` file), **you do not need to do the following**: add a line similar to::
 
@@ -156,7 +157,7 @@ If your strategy is not 'honest': that's not at all a problem though.
 Things that break the above rules are very welcome, although they should be well documented.
 There's a special list in which they must reside so that they are not run by the default tournament but this does not stop them being used by anyone wanting to build their own tournament.
 
-Simply add your strategy to the correct place in :code:`strategies/__init__.py`::
+Simply add your strategy to the correct place in :code:`strategies/_strategies.py`::
 
     ...
     # These are strategies that do not follow the rules of Axelrods tournament
