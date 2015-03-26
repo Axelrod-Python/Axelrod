@@ -54,11 +54,10 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_valid_cache(self):
         mgr = axelrod.TournamentManager(
-            self.test_logger, self.test_output_directory,
-            self.test_with_ecological)
+            logger=self.test_logger, output_directory=self.test_output_directory,
+            with_ecological=self.test_with_ecological, load_cache=False)
         mgr.add_tournament(
-                players=self.test_players, name=self.test_tournament_name,
-                load_cache=False)
+                players=self.test_players, name=self.test_tournament_name)
         self.assertTrue(mgr.valid_cache(200))
         mgr.deterministic_cache['test_key'] = 'test_value'
         self.assertFalse(mgr.valid_cache(200))
