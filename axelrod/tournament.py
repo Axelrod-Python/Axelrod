@@ -9,7 +9,7 @@ class Tournament(object):
     game = Game()
 
     def __init__(self, players, name='axelrod', game=None, turns=200,
-                 repetitions=10, processes=None, logger=None):
+                 repetitions=10, processes=None, logger=None, prebuilt_cache=False):
         self.name = name
         self.players = players
         self.nplayers = len(self.players)
@@ -19,6 +19,7 @@ class Tournament(object):
         self.turns = turns
         self.repetitions = repetitions
         self.processes = processes
+        self.prebuilt_cache=prebuilt_cache
 
         if logger is None:
             self.logger = NullLogger()
@@ -35,24 +36,22 @@ class Tournament(object):
     def play(self):
         payoffs_list = []
 
-        # We play the first repetition in order to build the deterministic
-        # cache. It's done separately so that only further repetions have
-        # any chance of running in parallel. This allows the cache to be made
-        # available to processes running in parallel without the problems of
-        # cross-process communication.
-        payoffs = self.play_round_robin()
-        payoffs_list.append(payoffs)
-
         if self.processes is None:
             self.run_serial_repetitions(payoffs_list)
         else:
+            if len(self.deterministic_cache) == 0 or not self.prebuilt_cache:
+                self.logger.log('Playing first round robin to build cache')
+                payoffs = self.play_round_robin()
+                payoffs_list.append(payoffs)
+                self.repetitions -= 1
             self.run_parallel_repetitions(payoffs_list)
 
         self.result_set.finalise(payoffs_list)
         return self.result_set
 
     def run_serial_repetitions(self, payoffs_list):
-        for repetition in range(self.repetitions - 1):
+        self.logger.log('Playing %d round robins' % self.repetitions)
+        for repetition in range(self.repetitions):
             payoffs = self.play_round_robin()
             payoffs_list.append(payoffs)
         return True
@@ -69,17 +68,17 @@ class Tournament(object):
         else:
             workers = self.processes
 
-        for repetition in range(self.repetitions - 1):
+        for repetition in range(self.repetitions):
             work_queue.put(repetition)
 
+        self.logger.log(
+            'Playing %d round robins with %d parallel processes' % (self.repetitions, workers))
         self.start_workers(workers, work_queue, done_queue)
         self.process_done_queue(workers, done_queue, payoffs_list)
 
         return True
 
     def start_workers(self, workers, work_queue, done_queue):
-        self.logger.log(
-            'Playing round robins with %d parallel processes' % workers)
         for worker in range(workers):
             process = multiprocessing.Process(
                 target=self.worker, args=(work_queue, done_queue))
