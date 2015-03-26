@@ -58,6 +58,8 @@ class TournamentManager(object):
             self.logger.log('Passing cache with %d entries to %s tournament' %
                             (len(self.deterministic_cache), tournament.name))
             tournament.deterministic_cache = self.deterministic_cache
+            if self.load_cache:
+                tournament.prebuilt_cache = True
         else:
             self.logger.log('Cache is not valid for %s tournament' %
                             tournament.name)

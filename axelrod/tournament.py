@@ -9,7 +9,7 @@ class Tournament(object):
     game = Game()
 
     def __init__(self, players, name='axelrod', game=None, turns=200,
-                 repetitions=10, processes=None, logger=None):
+                 repetitions=10, processes=None, logger=None, prebuilt_cache=False):
         self.name = name
         self.players = players
         self.nplayers = len(self.players)
@@ -19,6 +19,7 @@ class Tournament(object):
         self.turns = turns
         self.repetitions = repetitions
         self.processes = processes
+        self.prebuilt_cache=prebuilt_cache
 
         if logger is None:
             self.logger = NullLogger()
@@ -38,8 +39,8 @@ class Tournament(object):
         if self.processes is None:
             payoffs_list = self.run_serial_repetitions(payoffs_list)
         else:
-            if len(self.deterministic_cache) == 0:
-                self.logger.log('Cache is empty. Playing first round robin to build cache')
+            if len(self.deterministic_cache) == 0 or not self.prebuilt_cache:
+                self.logger.log('Playing first round robin to build cache')
                 payoffs = self.play_round_robin()
                 payoffs_list.append(payoffs)
                 self.repetitions -= 1
