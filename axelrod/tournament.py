@@ -44,9 +44,9 @@ class Tournament(object):
         payoffs_list.append(payoffs)
 
         if self.processes is None:
-            payoffs_list = self.run_serial_repetitions(payoffs_list)
+            self.run_serial_repetitions(payoffs_list)
         else:
-            payoffs_list = self.run_parallel_repetitions(payoffs_list)
+            self.run_parallel_repetitions(payoffs_list)
 
         self.result_set.finalise(payoffs_list)
         return self.result_set
@@ -55,7 +55,7 @@ class Tournament(object):
         for repetition in range(self.repetitions - 1):
             payoffs = self.play_round_robin()
             payoffs_list.append(payoffs)
-        return payoffs_list
+        return True
 
     def run_parallel_repetitions(self, payoffs_list):
         # At first sight, it might seem simpler to use the multiprocessing Pool
@@ -75,7 +75,7 @@ class Tournament(object):
         self.start_workers(workers, work_queue, done_queue)
         self.process_done_queue(workers, done_queue, payoffs_list)
 
-        return payoffs_list
+        return True
 
     def start_workers(self, workers, work_queue, done_queue):
         self.logger.log(
