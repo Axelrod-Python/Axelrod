@@ -23,7 +23,7 @@ class TournamentManager(object):
         self.cache_valid_for_turns = None
         self.load_cache = False
 
-        if load_cache:
+        if load_cache and not save_cache:
             self.load_cache = self.load_cache_from_file(cache_file)
 
     def one_player_per_strategy(self, strategies):
