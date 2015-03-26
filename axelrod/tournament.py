@@ -70,19 +70,26 @@ class Tournament(object):
         else:
             workers = self.processes
 
-        self.logger.log(
-            'Running repetitions with %d parallel processes' % workers)
-
         for repetition in range(self.repetitions - 1):
             work_queue.put(repetition)
 
+        self.start_workers(processes, workers, work_queue, done_queue)
+        self.process_done_queue(workers, done_queue, payoffs_list)
+
+        return payoffs_list
+
+    def start_workers(self, processes, workers, work_queue, done_queue):
+        self.logger.log(
+            'Playing round robins with %d parallel processes' % workers)
         for worker in range(workers):
             process = multiprocessing.Process(
                 target=self.worker, args=(work_queue, done_queue))
             processes.append(process)
             work_queue.put('STOP')
             process.start()
+        return True
 
+    def process_done_queue(self, workers, done_queue, payoffs_list):
         stops = 0
         while stops < workers:
             payoffs = done_queue.get()
@@ -90,14 +97,14 @@ class Tournament(object):
                 stops += 1
             else:
                 payoffs_list.append(payoffs)
-
-        return payoffs_list
+        return True
 
     def worker(self, work_queue, done_queue):
         for repetition in iter(work_queue.get, 'STOP'):
             payoffs = self.play_round_robin(cache_mutable=False)
             done_queue.put(payoffs)
         done_queue.put('STOP')
+        return True
 
     def play_round_robin(self, cache_mutable=True):
         round_robin = RoundRobin(
