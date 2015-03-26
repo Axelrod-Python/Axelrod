@@ -61,7 +61,6 @@ class Tournament(object):
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
-        processes = []
         work_queue = multiprocessing.Queue()
         done_queue = multiprocessing.Queue()
 
@@ -73,18 +72,17 @@ class Tournament(object):
         for repetition in range(self.repetitions - 1):
             work_queue.put(repetition)
 
-        self.start_workers(processes, workers, work_queue, done_queue)
+        self.start_workers(workers, work_queue, done_queue)
         self.process_done_queue(workers, done_queue, payoffs_list)
 
         return payoffs_list
 
-    def start_workers(self, processes, workers, work_queue, done_queue):
+    def start_workers(self, workers, work_queue, done_queue):
         self.logger.log(
             'Playing round robins with %d parallel processes' % workers)
         for worker in range(workers):
             process = multiprocessing.Process(
                 target=self.worker, args=(work_queue, done_queue))
-            processes.append(process)
             work_queue.put('STOP')
             process.start()
         return True
