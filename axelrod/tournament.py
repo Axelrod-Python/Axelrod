@@ -44,9 +44,9 @@ class Tournament(object):
         payoffs_list.append(payoffs)
 
         if self.processes is None:
-            payoffs_list = self.run_serial_repetitions(payoffs_list)
+            self.run_serial_repetitions(payoffs_list)
         else:
-            payoffs_list = self.run_parallel_repetitions(payoffs_list)
+            self.run_parallel_repetitions(payoffs_list)
 
         self.result_set.finalise(payoffs_list)
         return self.result_set
@@ -55,13 +55,12 @@ class Tournament(object):
         for repetition in range(self.repetitions - 1):
             payoffs = self.play_round_robin()
             payoffs_list.append(payoffs)
-        return payoffs_list
+        return True
 
     def run_parallel_repetitions(self, payoffs_list):
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
-        processes = []
         work_queue = multiprocessing.Queue()
         done_queue = multiprocessing.Queue()
 
@@ -70,33 +69,40 @@ class Tournament(object):
         else:
             workers = self.processes
 
-        self.logger.log(
-            'Running repetitions with %d parallel processes' % workers)
-
         for repetition in range(self.repetitions - 1):
             work_queue.put(repetition)
 
+        self.start_workers(workers, work_queue, done_queue)
+        self.process_done_queue(workers, done_queue, payoffs_list)
+
+        return True
+
+    def start_workers(self, workers, work_queue, done_queue):
+        self.logger.log(
+            'Playing round robins with %d parallel processes' % workers)
         for worker in range(workers):
             process = multiprocessing.Process(
                 target=self.worker, args=(work_queue, done_queue))
-            processes.append(process)
             work_queue.put('STOP')
             process.start()
+        return True
 
-        for process in processes:
-            process.join()
-
-        done_queue.put('STOP')
-
-        for payoffs in iter(done_queue.get, 'STOP'):
-            payoffs_list.append(payoffs)
-
-        return payoffs_list
+    def process_done_queue(self, workers, done_queue, payoffs_list):
+        stops = 0
+        while stops < workers:
+            payoffs = done_queue.get()
+            if payoffs == 'STOP':
+                stops += 1
+            else:
+                payoffs_list.append(payoffs)
+        return True
 
     def worker(self, work_queue, done_queue):
         for repetition in iter(work_queue.get, 'STOP'):
             payoffs = self.play_round_robin(cache_mutable=False)
             done_queue.put(payoffs)
+        done_queue.put('STOP')
+        return True
 
     def play_round_robin(self, cache_mutable=True):
         round_robin = RoundRobin(
