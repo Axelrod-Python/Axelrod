@@ -84,12 +84,10 @@ class Tournament(object):
             process.start()
 
         stops = 0
-        while True:
+        while stops < workers:
             payoffs = done_queue.get()
             if payoffs == 'STOP':
                 stops += 1
-                if stops == workers:
-                    break
             else:
                 payoffs_list.append(payoffs)
 
