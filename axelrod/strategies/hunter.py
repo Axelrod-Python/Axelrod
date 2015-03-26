@@ -2,6 +2,8 @@ import random
 
 from axelrod import Player
 
+from meta import MetaPlayer
+
 
 class DefectorHunter(Player):
     """A player who hunts for defectors."""
@@ -83,14 +85,12 @@ class RandomHunter(Player):
         return 'C'
 
 
-class MetaHunter(Player):
+class MetaHunter(MetaPlayer):
     """A player who uses a selection of hunters sequentially."""
 
     name = "Meta Hunter"
 
     def __init__(self):
-
-        Player.__init__(self)
 
         # We need to make sure this is not marked as stochastic.
         self.stochastic = False
@@ -100,19 +100,13 @@ class MetaHunter(Player):
         # to hunters that use defections as cues. However, a really tangible benefit comes from
         # combining Random Hunter and Math Constant Hunter, since together they catch strategies
         # that are lightly randomized but still quite constant (the tricky/suspecious ones).
-        self.hunters = [DefectorHunter(), AlternatorHunter(), MathConstantHunter(), RandomHunter()]
+        self.team = [DefectorHunter, AlternatorHunter, MathConstantHunter, RandomHunter]
 
-    def strategy(self, opponent):
+        MetaPlayer.__init__(self)
 
-        # Make sure the history of all hunters is current.
-        for ih in range(len(self.hunters)):
-            self.hunters[ih].history = self.history
+    def meta_strategy(self, results):
 
         # If any of the hunters smells prey, then defect!
-        result = 'C'
-        for hunter in self.hunters:
-            if hunter.strategy(opponent) == 'D':
-                result = 'D'
-                break
-
-        return result
+        if 'D' in results:
+            return 'D'
+        return 'C'
