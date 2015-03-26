@@ -68,20 +68,17 @@ class Tournament(object):
         else:
             workers = self.processes
 
-        self.logger.log(
-            'Playing %d round robins with %d parallel processes' % (self.repetitions, workers))
-
         for repetition in range(self.repetitions):
             work_queue.put(repetition)
 
+        self.logger.log(
+            'Playing %d round robins with %d parallel processes' % (self.repetitions, workers))
         self.start_workers(workers, work_queue, done_queue)
         self.process_done_queue(workers, done_queue, payoffs_list)
 
         return True
 
     def start_workers(self, workers, work_queue, done_queue):
-        self.logger.log(
-            'Playing round robins with %d parallel processes' % workers)
         for worker in range(workers):
             process = multiprocessing.Process(
                 target=self.worker, args=(work_queue, done_queue))
