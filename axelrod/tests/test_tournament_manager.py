@@ -57,7 +57,8 @@ class TestTournamentManager(unittest.TestCase):
             self.test_logger, self.test_output_directory,
             self.test_with_ecological)
         mgr.add_tournament(
-                players=self.test_players, name=self.test_tournament_name)
+                players=self.test_players, name=self.test_tournament_name,
+                load_cache=False)
         self.assertTrue(mgr.valid_cache(200))
         mgr.deterministic_cache['test_key'] = 'test_value'
         self.assertFalse(mgr.valid_cache(200))
