@@ -3,7 +3,7 @@ from game import *
 from result_set import *
 from round_robin import *
 from logger import *
-
+import logging
 
 class Tournament(object):
     game = Game()
@@ -21,10 +21,7 @@ class Tournament(object):
         self.processes = processes
         self.prebuilt_cache=prebuilt_cache
 
-        if logger is None:
-            self.logger = NullLogger()
-        else:
-            self.logger = logger
+        self.logger = logging.getLogger(__name__)
 
         self.result_set = ResultSet(
             players=players,
@@ -40,7 +37,7 @@ class Tournament(object):
             self.run_serial_repetitions(payoffs_list)
         else:
             if len(self.deterministic_cache) == 0 or not self.prebuilt_cache:
-                self.logger.log('Playing first round robin to build cache')
+                self.logger.debug('Playing first round robin to build cache')
                 payoffs = self.play_round_robin()
                 payoffs_list.append(payoffs)
                 self.repetitions -= 1
@@ -50,7 +47,7 @@ class Tournament(object):
         return self.result_set
 
     def run_serial_repetitions(self, payoffs_list):
-        self.logger.log('Playing %d round robins' % self.repetitions)
+        self.logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
             payoffs = self.play_round_robin()
             payoffs_list.append(payoffs)
@@ -71,7 +68,7 @@ class Tournament(object):
         for repetition in range(self.repetitions):
             work_queue.put(repetition)
 
-        self.logger.log(
+        self.logger.debug(
             'Playing %d round robins with %d parallel processes' % (self.repetitions, workers))
         self.start_workers(workers, work_queue, done_queue)
         self.process_done_queue(workers, done_queue, payoffs_list)
