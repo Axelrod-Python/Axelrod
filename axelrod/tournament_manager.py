@@ -10,7 +10,7 @@ from utils import *
 
 class TournamentManager(object):
 
-    def __init__(self, logger, output_directory, with_ecological,
+    def __init__(self, output_directory, with_ecological,
                  pass_cache=True, load_cache=True, save_cache=False,
                  cache_file='./cache.txt'):
         self.tournaments = []
@@ -38,8 +38,7 @@ class TournamentManager(object):
             players=players,
             turns=turns,
             repetitions=repetitions,
-            processes=processes,
-            logger=self.logger)
+            processes=processes)
         self.tournaments.append(tournament)
 
     def run_tournaments(self):
@@ -84,7 +83,6 @@ class TournamentManager(object):
 
         self.logger.debug(
             timed_message('Finished all %s tasks' % tournament.name, t0))
-        self.logger.debug("")
 
     def valid_cache(self, turns):
         return ((len(self.deterministic_cache) == 0) or
