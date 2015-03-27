@@ -2,14 +2,13 @@ import multiprocessing
 from game import *
 from result_set import *
 from round_robin import *
-from logger import *
 import logging
 
 class Tournament(object):
     game = Game()
 
     def __init__(self, players, name='axelrod', game=None, turns=200,
-                 repetitions=10, processes=None, logger=None, prebuilt_cache=False):
+                 repetitions=10, processes=None, prebuilt_cache=False):
         self.name = name
         self.players = players
         self.nplayers = len(self.players)
