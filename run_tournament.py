@@ -6,21 +6,35 @@ The code for strategies is present in `axelrod/strategies`.
 from __future__ import division
 
 import argparse
+import logging
 import axelrod
 
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
                     exclude_cheating, exclude_all, no_eco, output_directory,
-                    logging, processes, save_cache):
-    loggers = {
-        'console': axelrod.ConsoleLogger,
-        'none': axelrod.NullLogger,
-        'file': axelrod.FileLogger
-    }
-    logger = loggers[logging]()
+                    logging_option, processes, save_cache):
     manager = axelrod.TournamentManager(
-        logger=logger, output_directory=output_directory,
+        output_directory=output_directory,
         with_ecological=not no_eco, save_cache=save_cache)
+
+    logHandlers = {
+        'console': logging.StreamHandler(),
+        'none': logging.NullHandler(),
+        'file': logging.FileHandler('./axelrod.log')
+    }
+    logHandler = logHandlers[logging_option]
+
+    logFormatters = {
+        'console': '%(message)s',
+        'none': '',
+        'file': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    }
+    logFormatter = logging.Formatter(logFormatters[logging_option])
+
+    logHandler.setFormatter(logFormatter)
+    logger = logging.getLogger('axelrod')
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logHandler)
 
     if not exclude_basic:
         players = manager.one_player_per_strategy(axelrod.basic_strategies)
