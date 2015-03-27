@@ -18,11 +18,11 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
         with_ecological=not no_eco, save_cache=save_cache)
 
     logHandlers = {
-        'console': logging.StreamHandler,
-        'none': logging.NullHandler,
-        'file': logging.FileHandler
+        'console': logging.StreamHandler(),
+        'none': logging.NullHandler(),
+        'file': logging.FileHandler('./axelrod.log')
     }
-    logHandler = logHandlers[logging_option]()
+    logHandler = logHandlers[logging_option]
     logger = logging.getLogger('axelrod')
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logHandler)
