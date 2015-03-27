@@ -7,3 +7,6 @@ from tournament_manager import *
 from strategies import *
 from logger import *
 from ecosystem import *
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
