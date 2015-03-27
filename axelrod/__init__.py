@@ -6,6 +6,3 @@ from tournament import *
 from tournament_manager import *
 from strategies import *
 from ecosystem import *
-import logging
-
-logging.getLogger('axelrod').addHandler(logging.NullHandler())
