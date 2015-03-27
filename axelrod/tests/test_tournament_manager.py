@@ -6,7 +6,6 @@ class TestTournamentManager(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.test_logger = axelrod.NullLogger()
         cls.test_output_directory = './assets/'
         cls.test_with_ecological = True
         cls.test_tournament_name = 'test_tournament'
@@ -19,7 +18,7 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_init(self):
         mgr = axelrod.TournamentManager(
-            self.test_logger, self.test_output_directory,
+            self.test_output_directory,
             self.test_with_ecological)
         self.assertEqual(mgr.output_directory, self.test_output_directory)
         self.assertEqual(mgr.tournaments, [])
@@ -28,7 +27,7 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_one_player_per_strategy(self):
         mgr = axelrod.TournamentManager(
-            self.test_logger, self.test_output_directory,
+            self.test_output_directory,
             self.test_with_ecological)
         players = mgr.one_player_per_strategy(self.test_strategies)
         self.assertIsInstance(players[0], axelrod.Defector)
@@ -36,7 +35,7 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_output_file_path(self):
         mgr = axelrod.TournamentManager(
-            self.test_logger, self.test_output_directory,
+            self.test_output_directory,
             self.test_with_ecological)
         output_file_path = mgr.output_file_path(
             self.test_file_name, self.test_file_extenstion)
@@ -44,7 +43,7 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_add_tournament(self):
         mgr = axelrod.TournamentManager(
-            self.test_logger, self.test_output_directory,
+            self.test_output_directory,
             self.test_with_ecological)
         mgr.add_tournament(
             players=self.test_players, name=self.test_tournament_name)
@@ -54,7 +53,7 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_valid_cache(self):
         mgr = axelrod.TournamentManager(
-            logger=self.test_logger, output_directory=self.test_output_directory,
+            output_directory=self.test_output_directory,
             with_ecological=self.test_with_ecological, load_cache=False)
         mgr.add_tournament(
                 players=self.test_players, name=self.test_tournament_name)

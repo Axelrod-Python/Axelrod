@@ -8,4 +8,4 @@ from strategies import *
 from ecosystem import *
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.getLogger('axelrod').addHandler(logging.NullHandler())
