@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='Axelrod',
-    version='0.0.2',
+    version='0.0.3',
     author='Vince Knight',
     author_email='vincent.knight@gmail.com',
     packages=['axelrod', 'axelrod.strategies', 'axelrod.tests'],
