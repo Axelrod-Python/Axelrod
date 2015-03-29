@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """A script to run the Axelrod tournament.
 
 The code for strategies is present in `axelrod/strategies`.
