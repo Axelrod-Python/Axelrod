@@ -70,7 +70,7 @@ if __name__ == "__main__":
                         help='turns per pair')
     parser.add_argument('-r', '--repetitions', type=int, default=50,
                         help='round-robin repetitions')
-    parser.add_argument('-o', '--output_directory', default='./assets/',
+    parser.add_argument('-o', '--output_directory', default='./',
                         help='output directory')
     parser.add_argument('--xb', action='store_true',
                         help='exlude basic strategies plot')
