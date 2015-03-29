@@ -6,19 +6,35 @@ The code for strategies is present in `axelrod/strategies`.
 from __future__ import division
 
 import argparse
+import logging
 import axelrod
 
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
                     exclude_cheating, exclude_all, no_eco, output_directory,
-                    logging, processes):
-    loggers = {
-        'console': axelrod.ConsoleLogger,
-        'none': axelrod.NullLogger,
-        'file': axelrod.FileLogger
+                    logging_option, processes, save_cache):
+    manager = axelrod.TournamentManager(
+        output_directory=output_directory,
+        with_ecological=not no_eco, save_cache=save_cache)
+
+    logHandlers = {
+        'console': logging.StreamHandler(),
+        'none': logging.NullHandler(),
+        'file': logging.FileHandler('./axelrod.log')
     }
-    logger = loggers[logging]()
-    manager = axelrod.TournamentManager(logger, output_directory, not no_eco)
+    logHandler = logHandlers[logging_option]
+
+    logFormatters = {
+        'console': '%(message)s',
+        'none': '',
+        'file': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    }
+    logFormatter = logging.Formatter(logFormatters[logging_option])
+
+    logHandler.setFormatter(logFormatter)
+    logger = logging.getLogger('axelrod')
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logHandler)
 
     if not exclude_basic:
         players = manager.one_player_per_strategy(axelrod.basic_strategies)
@@ -67,6 +83,8 @@ if __name__ == "__main__":
                         help='no ecological variant')
     parser.add_argument('-p', '--processes', type=int, default=None,
                         help='Number of parallel processes to spawn. 0 uses cpu count.')
+    parser.add_argument('--rc', action='store_true',
+                        help='rebuild cache and save to file')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
@@ -74,4 +92,4 @@ if __name__ == "__main__":
     else:
         run_tournaments(args.turns, args.repetitions, args.xb, args.xs,
                         args.xc, args.xa, args.ne, args.output_directory,
-                        args.logging, args.processes)
+                        args.logging, args.processes, args.rc)
