@@ -6,7 +6,7 @@ setup(
     author='Vince Knight',
     author_email='vincent.knight@gmail.com',
     packages=['axelrod', 'axelrod.strategies', 'axelrod.tests'],
-    scripts=['run_tournament.py', 'README.rst'],
+    scripts=['run_axelrod', 'README.rst'],
     url='http://axelrod.readthedocs.org/',
     license='The MIT License (MIT)',
     description='Reproduce the Axelrod iterated prisoners dilemma tournament',
