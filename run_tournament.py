@@ -12,10 +12,11 @@ import axelrod
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
                     exclude_cheating, exclude_all, no_eco, output_directory,
-                    logging_option, processes, save_cache):
+                    logging_option, processes, save_cache, cache_file):
     manager = axelrod.TournamentManager(
         output_directory=output_directory,
-        with_ecological=not no_eco, save_cache=save_cache)
+        with_ecological=not no_eco, save_cache=save_cache,
+        cache_file=cache_file)
 
     logHandlers = {
         'console': logging.StreamHandler(),
@@ -85,6 +86,8 @@ if __name__ == "__main__":
                         help='Number of parallel processes to spawn. 0 uses cpu count.')
     parser.add_argument('--rc', action='store_true',
                         help='rebuild cache and save to file')
+    parser.add_argument('-c', '--cache_file', type=str, default='./cache.txt',
+                        help='Path to cache file')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
@@ -92,4 +95,4 @@ if __name__ == "__main__":
     else:
         run_tournaments(args.turns, args.repetitions, args.xb, args.xs,
                         args.xc, args.xa, args.ne, args.output_directory,
-                        args.logging, args.processes, args.rc)
+                        args.logging, args.processes, args.rc, args.cache_file)
