@@ -9,6 +9,25 @@ This library is intended to allow for users to create their own tournaments (and
 Using as a library
 ------------------
 
+Installation
+^^^^^^^^^^^^
+
+The simplest way to install the package is to obtain it from the PyPi
+repository::
+
+    pip install axelrod
+
+You can also build it from source if you would like to::
+
+    git clone https://github.com/Axelrod-Python/Axelrod.git
+    cd Axelrod
+    python setup.py install
+
+Note also that you can use this package without needing to install it at all.
+Simple unzip the tarbell available here:
+`<https://pypi.python.org/packages/source/A/Axelrod/Axelrod-0.0.5.tar.gz>`_
+uncompress it and you can run everything from within that directory.
+
 Creating and running a tournament
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
