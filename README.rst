@@ -117,5 +117,5 @@ Contributors
 -  `uglyfruitcake <https://github.com/uglyfruitcake>`__
 -  `pmslavin <https://github.com/pmslavin>`__
 
-.. |Join the chat at https://gitter.im/drvinceknight/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
-   :target: https://gitter.im/drvinceknight/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
+   :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
