@@ -12,7 +12,7 @@ Using as a library
 Creating and running a tournament
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Assuming that the library is in your path (more details about this to come: `see this github issue <https://github.com/drvinceknight/Axelrod/issues/94>`_).
+Assuming that the library is in your path (more details about this to come: `see this github issue <https://github.com/Axelrod-Python/Axelrod/issues/94>`_).
 We can list the so called 'basic strategies' by doing the following::
 
     import axelrod
