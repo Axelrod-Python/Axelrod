@@ -1,7 +1,7 @@
 |Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
 
-.. image:: https://travis-ci.org/drvinceknight/Axelrod.svg?branch=packaging
-    :target: https://travis-ci.org/drvinceknight/Axelrod
+.. image:: https://travis-ci.org/Axelrod-Python/Axelrod.svg?branch=packaging
+    :target: https://travis-ci.org/Axelrod-Python/Axelrod
 
 Axelrod
 =======
