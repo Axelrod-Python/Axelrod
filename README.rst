@@ -1,4 +1,4 @@
-|Join the chat at https://gitter.im/drvinceknight/Axelrod|
+|Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
 
 .. image:: https://travis-ci.org/drvinceknight/Axelrod.svg?branch=packaging
     :target: https://travis-ci.org/drvinceknight/Axelrod
