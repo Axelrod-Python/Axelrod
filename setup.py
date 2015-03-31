@@ -4,7 +4,10 @@ setup(
     name='Axelrod',
     version='0.0.5',
     author='Vince Knight, Owen Campbell, Karol Langner',
-    author_email='vincent.knight@gmail.com',
+    author_email=(
+        'Vince Knight <vincent.knight@gmail.com>, '
+        'Owen Campbell <owen.campbell@tanti.org.uk>, '
+        'Karol Langner <karol.langner@gmail.com>'),
     packages=['axelrod', 'axelrod.strategies', 'axelrod.tests'],
     scripts=['run_axelrod'],
     url='http://axelrod.readthedocs.org/',
