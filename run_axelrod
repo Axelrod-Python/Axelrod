@@ -68,7 +68,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--logging', type=str, default='console',
                         help='logging (none, console or file)')
-    parser.add_argument('-v', '--verbosity', type=str, default='DEBUG',
+    parser.add_argument('-v', '--verbosity', type=str, default='INFO',
                         help='Logging level. DEBUG, INFO, ERROR or CRITICAL')
     parser.add_argument('-t', '--turns', type=int, default=200,
                         help='turns per pair')
