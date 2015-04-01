@@ -10,7 +10,6 @@ setup(
     url='http://axelrod.readthedocs.org/',
     license='The MIT License (MIT)',
     description='Reproduce the Axelrod iterated prisoners dilemma tournament',
-    long_description=open('README.txt').read(),
     install_requires=[
         "matplotlib >= 1.4.2",
     ],
