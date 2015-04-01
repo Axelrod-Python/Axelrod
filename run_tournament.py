@@ -12,7 +12,7 @@ import axelrod
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
                     exclude_cheating, exclude_all, no_eco, output_directory,
-                    logging_option, processes, save_cache, cache_file):
+                    logging_option, verbosity, processes, save_cache, cache_file):
     manager = axelrod.TournamentManager(
         output_directory=output_directory,
         with_ecological=not no_eco, save_cache=save_cache,
@@ -66,6 +66,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--logging', type=str, default='console',
                         help='logging (none, console or file)')
+    parser.add_argument('-v', '--verbosity', type=str, default='DEBUG',
+                        help='Logging level. DEBUG, INFO, ERROR or CRITICAL')
     parser.add_argument('-t', '--turns', type=int, default=200,
                         help='turns per pair')
     parser.add_argument('-r', '--repetitions', type=int, default=50,
@@ -95,4 +97,5 @@ if __name__ == "__main__":
     else:
         run_tournaments(args.turns, args.repetitions, args.xb, args.xs,
                         args.xc, args.xa, args.ne, args.output_directory,
-                        args.logging, args.processes, args.rc, args.cache_file)
+                        args.logging, args.verbosity, args.processes, args.rc,
+                        args.cache_file)
