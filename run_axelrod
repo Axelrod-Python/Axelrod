@@ -13,7 +13,8 @@ import axelrod
 
 def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
                     exclude_cheating, exclude_all, no_eco, output_directory,
-                    logging_option, verbosity, processes, save_cache, cache_file):
+                    logging_option, verbosity, processes, save_cache,
+                    cache_file):
     manager = axelrod.TournamentManager(
         output_directory=output_directory,
         with_ecological=not no_eco, save_cache=save_cache,
@@ -35,7 +36,7 @@ def run_tournaments(turns, repetitions, exclude_basic, exclude_strategies,
 
     logHandler.setFormatter(logFormatter)
     logger = logging.getLogger('axelrod')
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.getLevelName(verbosity))
     logger.addHandler(logHandler)
 
     if not exclude_basic:
