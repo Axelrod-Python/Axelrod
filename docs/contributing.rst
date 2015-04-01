@@ -44,7 +44,7 @@ Here is the file structure for the Axelrod repository::
     │   └── /tests/
     │       └── test_*.py
     └── README.md
-    └── run_tournament.py
+    └── run_axelrod
 
 To contribute a strategy you need to follow as many of the following steps as possible:
 
