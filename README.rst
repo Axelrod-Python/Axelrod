@@ -1,7 +1,9 @@
-|Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
+.. image:: https://badge.waffle.io/Axelrod-Python/Axelrod.svg?label=ready&title=Ready
+    :target: https://waffle.io/Axelrod-Python/Axelrod
 
 .. image:: https://travis-ci.org/Axelrod-Python/Axelrod.svg?branch=packaging
     :target: https://travis-ci.org/Axelrod-Python/Axelrod
+|Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
 
 Axelrod
 =======
@@ -98,6 +100,10 @@ contributing further strategies.
 You can find helpful instructions about contributing in the
 documentation:
 http://axelrod.readthedocs.org/en/latest/contributing.html.
+
+.. image:: https://graphs.waffle.io/Axelrod-Python/Axelrod/throughput.svg
+ :target: https://waffle.io/Axelrod-Python/Axelrod/metrics
+  :alt: 'Throughput Graph'
 
 Contributors
 ============
