@@ -47,10 +47,10 @@ class TournamentManager(object):
             self.run_single_tournament(tournament)
         if self.save_cache:
             self.save_cache_to_file(self.deterministic_cache, self.cache_file)
-        self.logger.debug(timed_message('Finished all tournaments', t0))
+        self.logger.info(timed_message('Finished all tournaments', t0))
 
     def run_single_tournament(self, tournament):
-        self.logger.debug(
+        self.logger.info(
             'Starting %s tournament with %d round robins of %d turns per pair.'
             % (tournament.name, tournament.repetitions, tournament.turns))
 
@@ -81,7 +81,7 @@ class TournamentManager(object):
         self.logger.debug('Cache now has %d entries' %
                         len(self.deterministic_cache))
 
-        self.logger.debug(
+        self.logger.info(
             timed_message('Finished all %s tasks' % tournament.name, t0))
 
     def valid_cache(self, turns):
@@ -118,7 +118,7 @@ class TournamentManager(object):
         results = tournament.result_set
         plot = Plot(results)
         if not plot.matplotlib_installed:
-            self.logger.debug('The matplotlib library is not installed. '
+            self.logger.error('The matplotlib library is not installed. '
                             'No plots will be produced')
             return
         for plot_type in ('boxplot', 'payoff'):
