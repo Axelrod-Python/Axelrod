@@ -1,7 +1,7 @@
 Contributing
 ============
 
-All contributions to this repository are welcome via pull request on the `github repository <https://github.com/drvinceknight/Axelrod>`_.
+All contributions to this repository are welcome via pull request on the `github repository <https://github.com/Axelrod-Python/Axelrod>`_.
 
 The project follows the following guidelines:
 
@@ -48,7 +48,7 @@ Here is the file structure for the Axelrod repository::
 
 To contribute a strategy you need to follow as many of the following steps as possible:
 
-1. Fork the `github repository <https://github.com/drvinceknight/Axelrod>`_.
+1. Fork the `github repository <https://github.com/Axelrod-Python/Axelrod>`_.
 2. Add a :code:`<strategy>.py` file to the strategies directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
 3. Update the :code:`./axelrod/strategies/_strategies.py` file (you need to write the import statement and add the strategy to the relevant python list).
 4. This one is optional: write some unit tests in the ./axelrod/tests/ directory.
@@ -244,12 +244,12 @@ For example, to run only the tests for the Grudger strategy::
     python -m unittest axelrod.tests.test_grudger
 
 Note that this project is being taken care off by `travis-ci <https://travis-ci.org/>`_, so tests will be run automatically when opening a pull request.
-You can see the latest build status `here <https://travis-ci.org/drvinceknight/Axelrod>`_.
+You can see the latest build status `here <https://travis-ci.org/Axelrod-Python/Axelrod>`_.
 
 
 Contributing to the library
 ---------------------------
 
-All contributions (docs, tests, etc) are very welcome, if there is a specific functionality that you would like to add the please open an `issue <https://github.com/drvinceknight/Axelrod/issues>`_ (or indeed take a look at the ones already there and jump in the conversation!).
+All contributions (docs, tests, etc) are very welcome, if there is a specific functionality that you would like to add the please open an `issue <https://github.com/Axelrod-Python/Axelrod/issues>`_ (or indeed take a look at the ones already there and jump in the conversation!).
 
 In general follow this library aims to follow the guidelines mentioned at the top of this page.

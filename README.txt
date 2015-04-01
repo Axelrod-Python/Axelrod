@@ -1,7 +1,9 @@
-|Join the chat at https://gitter.im/drvinceknight/Axelrod|
+.. image:: https://badge.waffle.io/Axelrod-Python/Axelrod.svg?label=ready&title=Ready
+    :target: https://waffle.io/Axelrod-Python/Axelrod
 
-.. image:: https://travis-ci.org/drvinceknight/Axelrod.svg?branch=packaging
-    :target: https://travis-ci.org/drvinceknight/Axelrod
+.. image:: https://travis-ci.org/Axelrod-Python/Axelrod.svg?branch=packaging
+    :target: https://travis-ci.org/Axelrod-Python/Axelrod
+|Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
 
 Axelrod
 =======
@@ -99,6 +101,10 @@ You can find helpful instructions about contributing in the
 documentation:
 http://axelrod.readthedocs.org/en/latest/contributing.html.
 
+.. image:: https://graphs.waffle.io/Axelrod-Python/Axelrod/throughput.svg
+ :target: https://waffle.io/Axelrod-Python/Axelrod/metrics
+  :alt: 'Throughput Graph'
+
 Contributors
 ============
 
@@ -117,5 +123,5 @@ Contributors
 -  `uglyfruitcake <https://github.com/uglyfruitcake>`__
 -  `pmslavin <https://github.com/pmslavin>`__
 
-.. |Join the chat at https://gitter.im/drvinceknight/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
-   :target: https://gitter.im/drvinceknight/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
+   :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
