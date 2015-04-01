@@ -6,11 +6,9 @@ This library is intended to allow for users to create their own tournaments (and
 1. `Using as a library`_
 2. `Running the tournament`_
 
-Using as a library
-------------------
 
 Installation
-^^^^^^^^^^^^
+------------
 
 The simplest way to install the package is to obtain it from the PyPi
 repository::
@@ -28,10 +26,12 @@ Simple unzip the tarbell available here:
 `<https://pypi.python.org/packages/source/A/Axelrod/Axelrod-0.0.5.tar.gz>`_
 uncompress it and you can run everything from within that directory.
 
+Using as a library
+------------------
+
 Creating and running a tournament
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Assuming that the library is in your path (more details about this to come: `see this github issue <https://github.com/Axelrod-Python/Axelrod/issues/94>`_).
 We can list the so called 'basic strategies' by doing the following::
 
     import axelrod
@@ -154,7 +154,7 @@ So even with a large quantity of :code:`Defector` only a small number of :code:`
 Graphics
 ^^^^^^^^
 
-The whole library can be used without any other non base Python libraries however if you have `matplotlib <http://matplotlib.org/>`_ installed on your system there are various graphical things coded in and ready to go.
+The whole library can be used without any other non base Python libraries however if you have `matplotlib <http://matplotlib.org/>`_ installed on your system (this is installed automatically if you used :code:`pip install axelrod`) there are various graphical things coded in and ready to go.
 
 Let us see the global scores for the basic strategies::
 
@@ -304,11 +304,17 @@ The output is shown here:
 Running the tournament
 ----------------------
 
-The :code:`run_tournament.py` script allows to easily run basic versions of the tournament and output all graphics as required.
+Once :code:`axelrod` is installed you have access to a `run_axelrod` script that will
+do most of what you need.
 
-To view the help for the :code:`run_tournament.py` file run::
+To view the help for the :code:`run_axelrod` file run::
 
-    python run_tournament.py -h
+    run_axelrod.py
+
+Note that if you have not installed the package you can still used this script
+directly from the repository::
+
+    python run_axelrod -h
 
 There are a variety of options that include:
 
@@ -321,9 +327,9 @@ Particular parameters can also be changed:
 - The output directory for the plot and csv files.
 - The number of turns and repetitions for the tournament.
 
-Here is a command that will run the whole tournament, excluding the cheating strategies, using all available CPUS and outputting the files to the current directory::
+Here is a command that will run the whole tournament, excluding the cheating strategies and using all available CPUS::
 
-    python run_tournament.py --xc -p 0 -o .
+    run_axelrod --xc -p 0
 
 Here are some of the plots that are output when running with the latest total number of strategies:
 
