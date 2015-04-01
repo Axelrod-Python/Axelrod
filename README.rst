@@ -15,6 +15,23 @@ with me).**
 For an overview of how to use and contribute to this repository, see the
 documentation: http://axelrod.readthedocs.org/
 
+Installation
+============
+
+The simplest way to install is::
+
+    $ pip install axelrod
+
+Otherwise::
+
+    $ git clone https://github.com/Axelrod-Python/Axelrod.git
+    $ cd Axelrod
+    $ python setup.py install
+
+Note that (as documented at http://axelrod.readthedocs.org/) you do not need to
+run the last step to use this package (you can run all the code from the root of
+the directory).
+
 Results
 =======
 
