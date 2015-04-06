@@ -87,29 +87,29 @@ class StochasticWSLS(MemoryOnePlayer):
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
 
+class ZDChi(MemoryOnePlayer):
+    """An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula."""
+
+    name = 'ZDChi'
+
+    def __init__(self, chi=2):
+        chi = float(chi)
+        (R, P, T, S) = Game().RPTS()
+
+        phi_max = float(P-S) / ((P-S) + chi * (T-P))
+        phi = phi_max / 2.
+
+        p1 = 1. - phi*(chi - 1) * float(R-P) / (P-S)
+        p2 = 1 - phi * (1 + chi * float(T-P) / (P-S))
+        p3 = phi * (chi + float(T-P)/(P-S))
+        p4 = 0
+
+        four_vector = (p1, p2, p3, p4)
+        super(self.__class__, self).__init__(four_vector)
+
 ###########################################################
 # Have commented out strategies below: see #102 on github #
 ###########################################################
-
-#class ZDChi(MemoryOnePlayer):
-    #"""An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula."""
-
-    #name = 'ZDChi'
-
-    #def __init__(self, chi=2):
-        #chi = float(chi)
-        #(R, P, T, S) = Game.RPTS()
-
-        #phi_max = float(P-S) / ((P-S) + chi * (T-P))
-        #phi = phi_max / 2.
-
-        #p1 = 1. - phi*(chi - 1) * float(R-P) / (P-S)
-        #p2 = 1 - phi * (1 + chi * float(T-P) / (P-S))
-        #p3 = phi * (chi + float(T-P)/(P-S))
-        #p4 = 0
-
-        #four_vector = (p1, p2, p3, p4)
-        #super(self.__class__, self).__init__(four_vector)
 
 #def zd_vector2(chi):
     #"""Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R) but may not. See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""

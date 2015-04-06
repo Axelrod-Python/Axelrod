@@ -188,3 +188,49 @@ class TestStochasticWSLS(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
         self.assertEqual(P1.strategy(P2), 'C')
         self.assertEqual(P1.strategy(P2), 'C')
+
+class TestZDChi(TestPlayer):
+
+    name = "ZDChi"
+    player = axelrod.ZDChi
+    stochastic = True
+
+    def test_four_vector(self):
+        P1 = self.player()
+        expected_dictionary = {('C', 'D'): 0.5, ('D', 'C'): 0.75, ('D', 'D'): 0.0, ('C', 'C'): 1.1666666666666667}
+        for key in sorted(expected_dictionary.keys()):
+            self.assertAlmostEqual(P1._four_vector[key],
+                    expected_dictionary[key])
+
+    def test_strategy(self):
+        # Testing the expected value is difficult here so these just ensure that
+        # future changes that break these tests will be examined carefully.
+        P1 = self.player()
+        P2 = axelrod.Player()
+        self.assertEqual(P1.strategy(P2), 'C')
+
+        P1.history = ['C']
+        P2.history = ['C']
+        random.seed(2)
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history = ['C']
+        P2.history = ['D']
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history = ['D']
+        P2.history = ['C']
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history = ['D']
+        P2.history = ['D']
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
