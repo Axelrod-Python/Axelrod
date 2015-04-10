@@ -15,6 +15,14 @@ repository::
 
     pip install axelrod
 
+Take a look at this asciicast which demonstrates how to do this (and run a basic
+tournament):
+
+.. image:: https://asciinema.org/a/18590.png
+    :width: 50%
+    :align: center
+    :target: https://asciinema.org/a/18590
+
 You can also build it from source if you would like to::
 
     git clone https://github.com/Axelrod-Python/Axelrod.git
