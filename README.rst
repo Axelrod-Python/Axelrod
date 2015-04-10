@@ -22,6 +22,11 @@ The simplest way to install is::
 
     $ pip install axelrod
 
+Here is an asciicast showing how to install and use the library:
+
+.. image:: https://asciinema.org/a/18590.png
+    :target: https://asciinema.org/a/18590
+
 Otherwise::
 
     $ git clone https://github.com/Axelrod-Python/Axelrod.git
