@@ -25,6 +25,7 @@ The simplest way to install is::
 Here is an asciicast showing how to install and use the library:
 
 .. image:: https://asciinema.org/a/18590.png
+    :width: 50%
     :target: https://asciinema.org/a/18590
 
 Otherwise::
