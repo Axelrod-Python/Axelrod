@@ -26,6 +26,10 @@ from axelrod import Player
 
 
 class Geller(Player):
+    """Observes what the player will do in the next round and adjust.
+
+    If unable to do this: will play randomly.
+    """
 
     name = 'Geller'
     default = lambda self: 'C' if random.random() > 0.5 else 'D'
@@ -45,9 +49,15 @@ class Geller(Player):
             return opponent.strategy(self)
 
 class GellerCooperator(Geller):
+    """Observes what the payer will do (like :code:`Geller`) but if unable to
+    will cooperate.
+    """
     name = 'Geller Cooperator'
     default = lambda self: 'C'
 
 class GellerDefector(Geller):
+    """Observes what the payer will do (like :code:`Geller`) but if unable to
+    will defect.
+    """
     name = 'Geller Defector'
     default = lambda self: 'D'
