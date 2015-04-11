@@ -17,11 +17,6 @@ see what it's going to play, and return a result based on that
 
 This is almost certainly cheating, and more than likely against the
 spirit of the 'competition' :-)
-
-This code will fall into infinite recursion when played against itself,
-a problem that can be alleviated by looking at the name of the function
-calling `strategy`. If it is also `strategy`, we should return some
-default value - for example 'C', 'D' or random.
 """
 
 import inspect
