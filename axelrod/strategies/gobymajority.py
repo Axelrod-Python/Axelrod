@@ -4,7 +4,8 @@ from axelrod import Player
 class GoByMajority(Player):
     """A player examines the history of the opponent: if the opponent has more defections than cooperations then the player defects.
 
-    An optinal memory attribute will limit the number of turns remembered
+    An optional memory attribute will limit the number of turns remembered (by
+    default this is 0)
     """
 
     memory = 0
@@ -26,14 +27,22 @@ class GoByMajority(Player):
 
 
 class GoByMajority40(GoByMajority):
+    """ :code:`GoByMajority` player with a memory of 40.
+    """
     memory = 40
 
 class GoByMajority20(GoByMajority):
+    """ :code:`GoByMajority` player with a memory of 20.
+    """
     memory = 20
 
 class GoByMajority10(GoByMajority):
+    """ :code:`GoByMajority` player with a memory of 10.
+    """
     memory = 10
 
 class GoByMajority5(GoByMajority):
+    """ :code:`GoByMajority` player with a memory of 5.
+    """
     memory = 5
 
