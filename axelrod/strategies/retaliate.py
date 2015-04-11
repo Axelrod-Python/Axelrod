@@ -31,10 +31,14 @@ class Retaliate(Player):
 
 
 class Retaliate2(Retaliate):
+    """ :code:`Retaliate` player with a threshold of 8 percent.
+    """
     retaliation_threshold = 0.08
 
 
 class Retaliate3(Retaliate):
+    """ :code:`Retaliate` player with a threshold of 5 percent.
+    """
     retaliation_threshold = 0.05
 
 
@@ -92,10 +96,16 @@ class LimitedRetaliate(Player):
 
 
 class LimitedRetaliate2(LimitedRetaliate):
+    """ :code:`LimitedRetaliate` player with a threshold of 8 percent and a
+    retaliation limit of 15.
+    """
     retaliation_limit = 15
     retaliation_threshold = 0.08
 
 
 class LimitedRetaliate3(LimitedRetaliate):
+    """ :code:`LimitedRetaliate` player with a threshold of 5 percent and a
+    retaliation limit of 20.
+    """
     retaliation_limit = 20
     retaliation_threshold = 0.05
