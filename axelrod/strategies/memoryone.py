@@ -88,7 +88,11 @@ class StochasticWSLS(MemoryOnePlayer):
         super(self.__class__, self).__init__(four_vector)
 
 class ZDChi(MemoryOnePlayer):
-    """An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula."""
+    """An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula.
+
+    This strategy should be re-written for the case of a maximisation version of
+    the IPD (in which it would perform better)
+    """
 
     name = 'ZDChi'
 
@@ -107,19 +111,24 @@ class ZDChi(MemoryOnePlayer):
         four_vector = (p1, p2, p3, p4)
         super(self.__class__, self).__init__(four_vector)
 
-###########################################################
-# Have commented out strategies below: see #102 on github #
-###########################################################
+class ZDGTFT2(MemoryOnePlayer):
+    """A Generous Zero Determinant Strategy. See the Stewart and Plotkin paper
+    in PNAS
 
-#def zd_vector2(chi):
-    #"""Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R) but may not. See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""
-    #return (1., (chi - 1.)/(3. * chi + 2.), 1., 2.*(chi - 1.)/(3. * chi + 2.))
+    This strategy should be re-written for the case of a maximisation version of
+    the IPD (in which it would perform better)
+    """
 
-#class ZDGTFT2(MemoryOnePlayer):
-    #"""A Generous Zero Determinant Strategy."""
+    name = 'ZDGTFT2'
 
-    #name = 'ZDGTFT2'
+    def __init__(self, chi=2.):
+        chi = float(chi)
+        (R, P, T, S) = Game().RPTS()
 
-    #def __init__(self):
-        #four_vector = zd_vector2(2.)
-        #super(self.__class__, self).__init__(four_vector)
+        p1 = 1.
+        p2 = (chi - S)/(R * chi + (T - R))
+        p3 = 1.
+        p4 = 2. * (chi - S)/(R * chi + (P - R))
+
+        four_vector = (p1, p2, p3, p4)
+        super(self.__class__, self).__init__(four_vector)

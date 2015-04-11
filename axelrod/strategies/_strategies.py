@@ -83,6 +83,7 @@ ordinary_strategies = [
     TwoTitsForTat,
     WinStayLoseShift,
     ZDChi,
+    ZDGTFT2,
     e,
 ]
 
