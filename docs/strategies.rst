@@ -14,14 +14,19 @@ Here are some of the basic strategies
 A list of all further (honest) strategies
 -----------------------------------------
 
-.. autoclass:: AntiTitForTat
+.. autoclass:: AlternatorHunter
 .. autoclass:: Appeaser
 .. autoclass:: ArrogantQLearner
 .. autoclass:: AverageCopier
 .. autoclass:: CautiousQLearner
+.. autoclass:: CooperatorHunter
+.. autoclass:: DefectorHunter
+.. autoclass:: FoolMeOnce
+.. autoclass:: ForgetfulFoolMeOnce
 .. autoclass:: ForgetfulGrudger
 .. autoclass:: Forgiver
 .. autoclass:: ForgivingTitForTat
+.. autoclass:: GTFT
 .. autoclass:: GoByMajority
 .. autoclass:: GoByMajority10
 .. autoclass:: GoByMajority20
@@ -36,23 +41,36 @@ A list of all further (honest) strategies
 .. autoclass:: LimitedRetaliate
 .. autoclass:: LimitedRetaliate2
 .. autoclass:: LimitedRetaliate3
+.. autoclass:: MathConstantHunter
+.. autoclass:: MetaHunter
+.. autoclass:: MetaMajority
+.. autoclass:: MetaMinority
+.. autoclass:: MetaWinner
+.. autoclass:: NiceAverageCopier
 .. autoclass:: OnceBitten
 .. autoclass:: OppositeGrudger
 .. autoclass:: Pi
 .. autoclass:: Punisher
+.. autoclass:: RandomHunter
 .. autoclass:: Retaliate
 .. autoclass:: Retaliate2
 .. autoclass:: Retaliate3
 .. autoclass:: RiskyQLearner
+.. autoclass:: SneakyTitForTat
+.. autoclass:: StochasticWSLS
+.. autoclass:: SuspiciousTitForTat
 .. autoclass:: TitFor2Tats
 .. autoclass:: TrickyCooperator
 .. autoclass:: TrickyDefector
 .. autoclass:: TwoTitsForTat
+.. autoclass:: WinStayLoseShift
+.. autoclass:: ZDChi
 .. autoclass:: e
 
 A list of the cheating strategies
 ---------------------------------
 
+.. autoclass:: Darwin
 .. autoclass:: Geller
 .. autoclass:: GellerCooperator
 .. autoclass:: GellerDefector
