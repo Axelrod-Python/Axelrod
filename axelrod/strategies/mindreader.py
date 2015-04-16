@@ -49,7 +49,7 @@ class MindReader(Player):
             self.history = copy.copy(dummy_history_self)
             opponent.history = copy.copy(dummy_history_opponent)
 
-        return strategies[results.index(min(results))]
+        return strategies[results.index(max(results))]
 
 class ProtectedMindReader(MindReader):
     """A player that looks ahead at what the opponent will do and decides what to do.

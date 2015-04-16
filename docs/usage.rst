@@ -83,7 +83,7 @@ First, let us generate the scores::
 
 which gives::
 
-    [[3.022, 3.054, 3.014, 3.041, 3.093, 3.069, 3.102, 3.046, 3.005, 3.02], [3.776, 3.785, 3.833, 3.779, 3.806, 3.797, 3.812, 3.824, 3.743, 3.833], [2.416, 2.392, 2.392, 2.42, 2.38, 2.412, 2.424, 2.32, 2.368, 2.392], [3.116, 3.113, 3.086, 3.106, 3.075, 3.109, 3.071, 3.125, 3.153, 3.078], [3.038, 3.05, 3.041, 3.057, 3.057, 3.075, 3.066, 3.07, 3.058, 3.052], [2.352, 2.38, 2.364, 2.412, 2.412, 2.404, 2.38, 2.348, 2.452, 2.404]]
+    [[1.952, 1.943, 1.951, 1.96, 1.924, 1.943, 2.007, 1.966, 2.003, 1.963], [1.221, 1.185, 1.173, 1.218, 1.206, 1.218, 1.221, 1.224, 1.188, 1.221], [2.588, 2.616, 2.608, 2.632, 2.588, 2.624, 2.612, 2.532, 2.588, 2.564], [1.917, 1.896, 1.901, 1.884, 1.931, 1.896, 1.87, 1.912, 1.886, 1.899], [1.967, 1.94, 1.929, 1.934, 1.957, 1.959, 1.948, 1.95, 1.937, 1.955], [2.636, 2.664, 2.632, 2.592, 2.588, 2.644, 2.604, 2.572, 2.612, 2.588]]
 
 We see here that when we ran :code:`tournament.play()` it automatically repeated the round robin tournament 10 times (this is to deal with the stochasticity of the random players).
 The :code:`scores` contains a list of normalized scored for all players.
@@ -119,7 +119,7 @@ Let us write a little script that will throw in a new :code:`TitForTat` player u
 
 Once that has run let us see how many :code:`TitForTat` players were required::
 
-    strategies.count('TitForTat')
+    ranks.count('Tit For Tat')
 
 which gives::
 
@@ -200,11 +200,11 @@ Once a tournament has been run we can generate the payoff matrix that correspond
 
 The output of this is a square matrix showing the payoffs (and another matrix showing the standard deviations) to the row player. Here is the payoff matrix::
 
-    [[3.0 , 1.0 , 4.5 , 2.77 , 2.49],
-     [3.5 , 2.0 , 5.0 , 3.499, 2.0],
-     [2.0 , 0.0 , 4.0 , 1.96 , 3.98],
-     [2.74, 1.00, 4.51, 2.77 , 2.71],
-     [2.51, 2.0 , 4.01, 2.73 , 2.0]]
+     [[2.0, 4.0, 0.5, 2.26, 2.52],
+      [1.5, 3.0, 0.0, 1.48, 3.0],
+      [3.0, 5.0, 1.0, 3.03, 1.02],
+      [2.25, 4.02, 0.50, 2.23, 2.26],
+      [2.49, 3.0, 1.0, 2.25, 3.0]]
 
 Again, if :code:`matplotlib` is installed we can visualise this::
 
@@ -259,7 +259,7 @@ An ecological variant of the tournament can be run with this library which allow
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results)
-    eco.reproduce(250) # Evolve the population over 250 time steps
+    eco.reproduce(50) # Evolve the population over 50 time steps
     plot = axelrod.Plot(results)
     p = plot.stackplot(eco.population_sizes)
     p.show()
@@ -280,7 +280,7 @@ We can see how this differs when the initial population contains a large number 
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results, population=[.1, .05, .7, .1, .05])
-    eco.reproduce(250) # Evolve the population over 250 time steps
+    eco.reproduce(50) # Evolve the population over 50 time steps
     plot = axelrod.Plot(results)
     p = plot.stackplot(eco.population_sizes)
     p.show()
@@ -298,7 +298,7 @@ Here is a with an even larger initial number of :code:`Defector` (note that it t
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results, population=[.1, .05, 7, .1, .05])
-    eco.reproduce(1000) # Evolve the population over 1000 time steps
+    eco.reproduce(140) # Evolve the population over 140 time steps
     plot = axelrod.Plot(results)
     p = plot.stackplot(eco.population_sizes)
     p.show()

@@ -20,16 +20,16 @@ class TestPlot(unittest.TestCase):
         cls.test_result_set = axelrod.ResultSet(players, 5, 2)
         cls.test_result_set.finalise(test_payoffs_list)
 
-        cls.expected_boxplot_dataset = [[2.6, 2.8], [3.1, 3.1], [3.2, 3.2]]
+        cls.expected_boxplot_dataset = [[3.2, 3.2], [3.1, 3.1], [2.6, 2.8]]
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]
-        cls.expected_boxplot_xticks_labels = ['Player2', 'Player1', 'Player3']
+        cls.expected_boxplot_xticks_labels = ['Player3', 'Player1', 'Player2']
         cls.expected_boxplot_title = ('Mean score per stage game over 5 rounds'
                                       ' repeated 2 times (3 strategies)')
 
         cls.expected_payoff_dataset = [
-            [0.0, 1.8, 3.6],
-            [2.0, 0.0, 4.2],
-            [3.2, 3.2, 0.0]]
+            [0.0, 3.2, 3.2],
+            [4.2, 0.0, 2.0],
+            [3.6, 1.8, 0.0]]
 
     def test_init(self):
         result_set = axelrod.ResultSet(('Player1', 'Player2', 'Player3'), 5, 2)

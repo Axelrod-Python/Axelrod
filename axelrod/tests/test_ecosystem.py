@@ -8,7 +8,6 @@ import axelrod
 class TestEcosystem(unittest.TestCase):
 
 
-
     @classmethod
     def setUpClass(cls):
         cooperators = axelrod.Tournament(players=[
