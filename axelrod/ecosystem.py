@@ -35,7 +35,7 @@ class Ecosystem(object):
         if fitness:
             self.fitness = fitness
         else:
-            self.fitness = lambda p: 5.0 / (5.0 + p)
+            self.fitness = lambda p: p
 
     def reproduce(self, turns):
 
