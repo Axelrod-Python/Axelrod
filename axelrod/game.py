@@ -1,12 +1,12 @@
 class Game(object):
     """A class to hold the game matrix and to score a game accordingly."""
 
-    def __init__(self, r=2, s=0, t=5, p=4):
+    def __init__(self, r=3, s=0, t=5, p=1):
         self.scores = {
             ('C', 'C'): (r, r),
             ('D', 'D'): (p, p),
-            ('C', 'D'): (t, s),
-            ('D', 'C'): (s, t),
+            ('C', 'D'): (s, t),
+            ('D', 'C'): (t, s),
         }
 
     def RPTS(self):
