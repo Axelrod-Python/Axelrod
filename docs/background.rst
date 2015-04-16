@@ -14,14 +14,16 @@ The `Prisoner's dilemma <http://en.wikipedia.org/wiki/Prisoner%27s_dilemma>`_ is
 +----------+---------------+---------------+
 |          | Cooperate     | Defect        |
 +==========+===============+===============+
-|Cooperate | (2,2)         | (0,5)         |
+|Cooperate | (3,3)         | (5,0)         |
 +----------+---------------+---------------+
-|Defect    | (5,0)         | (4,4)         |
+|Defect    | (0,5)         | (1,1)         |
 +----------+---------------+---------------+
 
-If both players cooperate they will each go to prison for 2 years.
-If one cooperates and the other defects: the defector does not go to prison and the cooperator goes to prison for 5 years.
-If both defect: they both go to prison for 4 years.
+If both players cooperate they will each go to prison for 2 years and receive an
+equivalent utility of 3.
+If one cooperates and the other defects: the defector does not go to prison and the cooperator goes to prison for 5 years, the cooperator receives a utility of 5 and the defector a utility of 0.
+If both defect: they both go to prison for 4 years and receive an equivalent
+utility of 1.
 
 By simply investigating the best responses against both possible actions of each player it is immediate to see that the Nash equilibrium for this game is for both players to defect.
 
@@ -29,7 +31,7 @@ The iterated Prisoner's Dilemma
 -------------------------------
 
 We can use the basic Prisoner's Dilemma as a _stage_ game in a repeated game.
-Players now aim to minimise the amount of time spent in prison over a repetition of the game.
+Players now aim to maximise the utility (corresponding to years in prison) over a repetition of the game.
 Strategies can take in to account both players history and so can take the form:
 
     "I will cooperate unless you defect 3 times in a row at which point I will defect forever."
