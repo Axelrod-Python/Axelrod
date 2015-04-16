@@ -61,7 +61,7 @@ class ResultSet(object):
         """
         ranking = sorted(
             range(self.nplayers),
-            key=lambda i: median(scores[i]))
+            key=lambda i: -median(scores[i]))
         return ranking
 
     def generate_ranked_names(self, ranking):
