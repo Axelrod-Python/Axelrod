@@ -34,16 +34,16 @@ class TestRoundRobin(unittest.TestCase):
         rr = axelrod.RoundRobin(players=[p1, p2], game=self.game, turns=20)
         self.assertEquals(rr.players, [p1, p2])
         self.assertEquals(rr.nplayers, 2)
-        self.assertEquals(rr.game.score(('C', 'C')), (2, 2))
+        self.assertEquals(rr.game.score(('C', 'C')), (3, 3))
 
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
         self.assertEquals(rr.deterministic_cache, {})
         rr.play()
-        self.assertEqual(rr.deterministic_cache[(axelrod.Defector, axelrod.Defector)], (80, 80))
-        self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Cooperator)], (40, 40))
-        self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Defector)], (100, 0))
+        self.assertEqual(rr.deterministic_cache[(axelrod.Defector, axelrod.Defector)], (20, 20))
+        self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Cooperator)], (60, 60))
+        self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Defector)], (0, 100))
         self.assertFalse((axelrod.Random, axelrod.Random) in rr.deterministic_cache)
 
     def test_calculate_score_for_mix(self):
@@ -53,7 +53,7 @@ class TestRoundRobin(unittest.TestCase):
         P2 = axelrod.Defector()
         P2.history = ['C', 'D', 'D']
         round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
-        self.assertEqual(round_robin.calculate_scores(P1, P2), (11, 6))
+        self.assertEqual(round_robin.calculate_scores(P1, P2), (4, 9))
 
     def test_calculate_score_for_all_cooperate(self):
         """Test that scores are calculated correctly."""
@@ -62,7 +62,7 @@ class TestRoundRobin(unittest.TestCase):
         P2 = axelrod.Player()
         P2.history = ['C', 'C', 'C']
         round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
-        self.assertEqual(round_robin.calculate_scores(P1, P2), (6, 6))
+        self.assertEqual(round_robin.calculate_scores(P1, P2), (9, 9))
 
     def test_calculate_score_for_all_defect(self):
         """Test that scores are calculated correctly."""
@@ -71,34 +71,34 @@ class TestRoundRobin(unittest.TestCase):
         P2 = axelrod.Player()
         P2.history = ['D', 'D', 'D']
         round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
-        self.assertEqual(round_robin.calculate_scores(P1, P2), (12, 12))
+        self.assertEqual(round_robin.calculate_scores(P1, P2), (3, 3))
 
     def test_round_robin_defector_v_cooperator(self):
         """Test round robin: the defector viciously punishes the cooperator."""
-        outcome = [('Defector', 0), ('Cooperator', 50)]
+        outcome = [('Cooperator', 0), ('Defector', 100)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_defector_v_titfortat(self):
         """Test round robin: the defector does well against tit for tat."""
-        outcome = [('Defector', 36), ('TitForTat', 41)]
+        outcome = [('TitForTat', 9), ('Defector', 14)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_cooperator_v_titfortat(self):
         """Test round robin: the cooperator does very well WITH tit for tat."""
-        outcome = [('Cooperator', 20), ('TitForTat', 20)]
+        outcome = [('Cooperator', 30), ('TitForTat', 30)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_cooperator_v_titfortat_v_defector(self):
         """Test round robin: the defector seems to dominate in this small population."""
-        outcome = [('Defector', 36), ('TitForTat', 61), ('Cooperator', 70)]
+        outcome = [('Cooperator', 30), ('TitForTat', 39), ('Defector', 114)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_cooperator_v_titfortat_v_defector_v_grudger(self):
-        """Test round robin: tit for tat does a lot better this time around."""
-        outcome = [('Defector', 72), ('TitForTat', 81), ('Grudger', 81), ('Cooperator', 90)]
+        """Test round robin: tit for tat does better this time around."""
+        outcome = [('Cooperator', 60), ('TitForTat', 69), ('Grudger', 69), ('Defector', 128)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_round_robin_cooperator_v_titfortat_v_defector_v_grudger_v_go_by_majority(self):
-        """Test round robin: Tit for tat now wins."""
-        outcome = [('TitForTat', 101), ('Grudger', 101), ('GoByMajority', 101), ('Defector', 108), ('Cooperator', 110)]
+        """Test round robin: Tit for tat is doing a lot better."""
+        outcome = [('Cooperator', 90), ('Grudger', 99), ('GoByMajority', 99), ('TitForTat', 99), ('Defector', 142)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
