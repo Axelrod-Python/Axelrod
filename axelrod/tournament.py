@@ -1,134 +1,110 @@
-"""
-Recreate Axelrod's tournament
+import multiprocessing
+from game import *
+from result_set import *
+from round_robin import *
+import logging
 
+class Tournament(object):
+    game = Game()
 
-"""
+    def __init__(self, players, name='axelrod', game=None, turns=200,
+                 repetitions=10, processes=None, prebuilt_cache=False):
+        self.name = name
+        self.players = players
+        self.nplayers = len(self.players)
 
-import inspect
-import itertools
+        if game is not None:
+            self.game = game
+        self.turns = turns
+        self.repetitions = repetitions
+        self.processes = processes
+        self.prebuilt_cache=prebuilt_cache
 
+        self.logger = logging.getLogger(__name__)
 
-class Axelrod:
-    """
-    A class for an iterated prisoner's dilemma.
+        self.result_set = ResultSet(
+            players=players,
+            turns=turns,
+            repetitions=repetitions)
 
-    Take a list of players (see the Player class):
-
-        >>> P1 = Defector()
-        >>> P2 = Cooperator()
-        >>> axelrod = Axelrod(P1, P2)
-        >>> axelrod.round_robin(turns=10)
-        >>> for player in sorted(axelrod.players, key=lambda x: x.score):
-        ...     print player, player.score
-        Defector 0
-        Cooperator 50
-    """
-    def __init__(self, *args):
-        """
-        Initiate a tournament of players
-        """
-        self.players = list(args)
         self.deterministic_cache = {}
 
-    def round_robin(self, turns=200):
-        """
-        Plays a round robin where each match lasts turns.
+    def play(self):
+        payoffs_list = []
 
-        We can cache scores for paris of deterministic strategies, since the outcome
-        will always be the same. There are many possible keys to cache by, but perhaps
-        the most versatile is a tuple with the classes of both players.
-        """
-        for p1, p2 in itertools.combinations(self.players, 2):
-            cl1 = p1.__class__
-            cl2 = p2.__class__
-            key = (cl1, cl2)
-            if p1.stochastic or p2.stochastic or key not in self.deterministic_cache:
-                turn = 0
-                p1.reset()
-                p2.reset()
-                while turn < turns:
-                    turn += 1
-                    p1.play(p2)
-                scores = self.calculate_scores(p1, p2)
-                if not (p1.stochastic or p2.stochastic):
-                    self.deterministic_cache[key] = scores
+        if self.processes is None:
+            self.run_serial_repetitions(payoffs_list)
+        else:
+            if len(self.deterministic_cache) == 0 or not self.prebuilt_cache:
+                self.logger.debug('Playing first round robin to build cache')
+                payoffs = self.play_round_robin()
+                payoffs_list.append(payoffs)
+                self.repetitions -= 1
+            self.run_parallel_repetitions(payoffs_list)
+
+        self.result_set.finalise(payoffs_list)
+        return self.result_set
+
+    def run_serial_repetitions(self, payoffs_list):
+        self.logger.debug('Playing %d round robins' % self.repetitions)
+        for repetition in range(self.repetitions):
+            payoffs = self.play_round_robin()
+            payoffs_list.append(payoffs)
+        return True
+
+    def run_parallel_repetitions(self, payoffs_list):
+        # At first sight, it might seem simpler to use the multiprocessing Pool
+        # Class rather than Processes and Queues. However, Pool can only accept
+        # target functions which can be pickled and instance methods cannot.
+        work_queue = multiprocessing.Queue()
+        done_queue = multiprocessing.Queue()
+
+        if self.processes < 2 or self.processes > multiprocessing.cpu_count():
+            workers = multiprocessing.cpu_count()
+        else:
+            workers = self.processes
+
+        for repetition in range(self.repetitions):
+            work_queue.put(repetition)
+
+        self.logger.debug(
+            'Playing %d round robins with %d parallel processes' % (self.repetitions, workers))
+        self.start_workers(workers, work_queue, done_queue)
+        self.process_done_queue(workers, done_queue, payoffs_list)
+
+        return True
+
+    def start_workers(self, workers, work_queue, done_queue):
+        for worker in range(workers):
+            process = multiprocessing.Process(
+                target=self.worker, args=(work_queue, done_queue))
+            work_queue.put('STOP')
+            process.start()
+        return True
+
+    def process_done_queue(self, workers, done_queue, payoffs_list):
+        stops = 0
+        while stops < workers:
+            payoffs = done_queue.get()
+            if payoffs == 'STOP':
+                stops += 1
             else:
-                scores = self.deterministic_cache[key]
-            p1.score += scores[0]
-            p2.score += scores[1]
+                payoffs_list.append(payoffs)
+        return True
 
-    def tournament(self, turns=200, repetitions=10):
-        """
-        Runs repetitions of the round robin (this is mainly to handle stochastic strategies).
+    def worker(self, work_queue, done_queue):
+        for repetition in iter(work_queue.get, 'STOP'):
+            payoffs = self.play_round_robin(cache_mutable=False)
+            done_queue.put(payoffs)
+        done_queue.put('STOP')
+        return True
 
-        Returns a dictionary containing the scores for every repetition.
-        """
-        dic = {player:[] for player in self.players}
-        for repetition in range(repetitions):
-            self.round_robin(turns=turns)
-            for player in self.players:
-                dic[player].append(player.score)  # Record score
-                player.score = 0  # Reset score
-        return dic
-
-    def calculate_scores(self, p1, p2):
-        """
-        Calculates the score for two players based their history and on following:
-
-        - C vs C both get 2
-        - D vs D both get 4
-        - C vs D => C gets 5 and D gets 0
-        """
-
-        scores = {
-            ('C', 'C'): (2, 2),
-            ('D', 'D'): (4, 4),
-            ('C', 'D'): (5, 0),
-            ('D', 'C'): (0, 5),
-        }
-        s1, s2 = 0, 0
-
-        for pair in zip(p1.history, p2.history):
-            score = scores[pair]
-            s1 += score[0]
-            s2 += score[1]
-        return s1, s2
-
-
-class Player(object):
-    """An abstract class for a player"""
-
-    name = "Player"
-
-    def __init__(self):
-        """
-        Initiates an empty history and 0 score for every player
-        """
-        self.history = []
-        self.score = 0
-        self.stochastic = "random" in inspect.getsource(self.__class__)
-
-    def play(self, opponent):
-        """
-        This pits two players against each other: note that this will raise
-        an error if no strategy method is defined (which are defined through
-        class inheritance).
-        """
-        s1, s2 = self.strategy(opponent), opponent.strategy(self)
-        self.history.append(s1)
-        opponent.history.append(s2)
-
-    def reset(self):
-        """
-        Resets history.
-        When creating strategies that create new attributes then this method should be re-written (in the inherited class) and should not only reset history but also rest all other attributes.
-        """
-        self.history = []
-
-    def strategy(self, opponent):
-        """This is a placeholder"""
-        return None
-
-    def __repr__(self):
-        """The string method for the strategy."""
-        return self.name
+    def play_round_robin(self, cache_mutable=True):
+        round_robin = RoundRobin(
+            players=self.players,
+            game=self.game,
+            turns=self.turns,
+            deterministic_cache=self.deterministic_cache,
+            cache_mutable=cache_mutable)
+        payoffs = round_robin.play()
+        return payoffs
