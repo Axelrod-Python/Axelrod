@@ -52,7 +52,7 @@ class ZDChi(MemoryOnePlayer):
         super(self.__class__, self).__init__(four_vector)
 
 class ZDGTFT2(MemoryOnePlayer):
-    """A Generous Zero Determinant Strategy."""
+    """A Generous Zero Determinant Strategy, http://www.pnas.org/content/109/26/10134/F1.expansion.html"""
 
     name = 'ZDGTFT2'
 
