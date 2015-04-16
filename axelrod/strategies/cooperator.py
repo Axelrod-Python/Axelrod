@@ -1,5 +1,6 @@
 from axelrod import Player
 
+
 class Cooperator(Player):
     """A player who only ever cooperates."""
 
@@ -7,6 +8,7 @@ class Cooperator(Player):
 
     def strategy(self, opponent):
         return 'C'
+
 
 class TrickyCooperator(Player):
     """A cooperator that is trying to be tricky."""

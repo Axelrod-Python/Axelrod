@@ -1,0 +1,7 @@
+v0.0.1, 2015-03-27 -- Initial release
+v0.0.2, 2015-03-27 -- Minor fix
+v0.0.3, 2015-03-27 -- Minor fix
+v0.0.4, 2015-03-28 -- Adding all authors
+v0.0.5, 2015-03-28 -- Corrects formatting of authors
+v0.0.6, 2015-04-01 -- Removes long description
+v0.0.7, 2015-04-01 -- Perhaps removes long description

@@ -31,14 +31,29 @@ class TwoTitsForTat(Player):
             return 'D'
         return 'C'
 
-class AntiTitForTat(Player):
+class SuspiciousTitForTat(Player):
     """A player that behaves opposite to Tit For Tat.
 
     Starts by defecting and then does the opposite of opponent's previous move.
     This the opposite of TIT FOR TAT, also sometimes called BULLY.
     """
 
-    name = "Anti Tit For Tat"
+    name = "Suspicious Tit For Tat"
 
     def strategy(self, opponent):
         return 'C' if opponent.history[-1:] == ['D'] else 'D'
+
+
+class SneakyTitForTat(Player):
+    """Tries defecting once and repents if punished."""
+
+    name = "Sneaky Tit For Tat"
+
+    def strategy(self, opponent):
+        if len(self.history) < 2:
+            return "C"
+        if 'D' not in opponent.history:
+            return 'D'
+        if opponent.history[-1] == 'D' and self.history[-2] == 'D':
+            return "C"
+        return opponent.history[-1]
