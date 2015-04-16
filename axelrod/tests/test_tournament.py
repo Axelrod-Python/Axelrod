@@ -17,7 +17,7 @@ class TestTournament(unittest.TestCase):
         P3 = axelrod.Defector()
         tournament = axelrod.Tournament(name='test', players=[P1, P2, P3], processes=4)
         self.assertEqual([str(s) for s in tournament.players], ['Defector', 'Defector', 'Defector'])
-        self.assertEqual(tournament.game.score(('C', 'C')), (2, 2))
+        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, 200)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
@@ -37,13 +37,12 @@ class TestTournament(unittest.TestCase):
     def test_tournament(self):
         """Test tournament."""
 
-        outcome = [
-            ('Tit For Tat', [2001, 2001, 2001, 2001, 2001]),
-            ('Cooperator', [2200, 2200, 2200, 2200, 2200]),
-            ('Defector', [2388, 2388, 2388, 2388, 2388]),
-            ('Grudger', [2001, 2001, 2001, 2001, 2001]),
-            ('Go By Majority', [2001, 2001, 2001, 2001, 2001]),
-        ]
+        outcome = [('Cooperator', [1800, 1800, 1800, 1800, 1800]),
+                   ('Defector', [1612, 1612, 1612, 1612, 1612]),
+                   ('Go By Majority', [1999, 1999, 1999, 1999, 1999]),
+                   ('Grudger', [1999, 1999, 1999, 1999, 1999]),
+                   ('Tit For Tat', [1999, 1999, 1999, 1999, 1999])]
+
         outcome.sort()
 
         P1 = axelrod.Cooperator()
