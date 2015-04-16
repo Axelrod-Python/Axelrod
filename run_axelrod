@@ -64,7 +64,7 @@ def run_tournaments(args):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Run a recreationg of Axelrod's tournament")
     parser.add_argument('-l', '--logging', type=str, default='console',
                         help='logging (none, console or file)')
     parser.add_argument('-v', '--verbosity', type=str, default='INFO',
