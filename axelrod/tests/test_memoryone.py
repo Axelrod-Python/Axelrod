@@ -191,7 +191,7 @@ class TestStochasticWSLS(TestPlayer):
 
 class TestZDChi(TestPlayer):
 
-    name = "ZDChi"
+    name = "ZD Extort-2"
     player = axelrod.ZDChi
     stochastic = True
 
