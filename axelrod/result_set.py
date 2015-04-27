@@ -47,6 +47,11 @@ class ResultSet(object):
         self._ranked_names = self._generate_ranked_names(self.ranking)
         self._payoff_matrix, self._payoff_stddevs = self._generate_payoff_matrix()
 
+    @payoffs_list.deleter
+    def payoffs_list(self):
+        del(self._payoffs_list)
+        self._finalised = False
+
     @property
     def results(self):
         if self._finalised:
