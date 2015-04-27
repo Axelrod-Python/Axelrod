@@ -50,6 +50,8 @@ class TestResultSet(unittest.TestCase):
         rs = axelrod.ResultSet(self.players, 5, 2)
         rs.payoffs_list = self.test_payoffs_list
         self.assertEquals(rs.payoffs_list, self.test_payoffs_list)
+        del(rs.payoffs_list)
+        self.assertFalse(rs._finalised)
 
     def test_results(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
