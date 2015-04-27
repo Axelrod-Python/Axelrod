@@ -107,19 +107,47 @@ class ZDChi(MemoryOnePlayer):
         four_vector = (p1, p2, p3, p4)
         super(self.__class__, self).__init__(four_vector)
 
-###########################################################
-# Have commented out strategies below: see #102 on github #
-###########################################################
+class ZDChi(MemoryOnePlayer):
+    """An Extortionate Zero Determinant Strategy enforcing the relationship 's_x - P = chi (s_y - P)'. See the Press and Dyson paper in PNAS for the original formula."""
 
-#def zd_vector2(chi):
-    #"""Note that this function assumes the (3,0,5,1) game matrix. It's supposed to enforce s_x - R = 2(S_y - R) but may not. See http://nr.com/whp/StewartPlotkinExtortion2012.pdf"""
-    #return (1., (chi - 1.)/(3. * chi + 2.), 1., 2.*(chi - 1.)/(3. * chi + 2.))
+    name = 'ZD Extort-2'
 
-#class ZDGTFT2(MemoryOnePlayer):
-    #"""A Generous Zero Determinant Strategy."""
+    def __init__(self, chi=2):
+        chi = float(chi)
+        (R, P, T, S) = Game().RPTS()
 
-    #name = 'ZDGTFT2'
+        phi_max = float(P-S) / ((P-S) + chi * (T-P))
+        phi = phi_max / 2.
 
-    #def __init__(self):
-        #four_vector = zd_vector2(2.)
-        #super(self.__class__, self).__init__(four_vector)
+        p1 = 1. - phi*(chi - 1) * float(R-P) / (P-S)
+        p2 = 1 - phi * (1 + chi * float(T-P) / (P-S))
+        p3 = phi * (chi + float(T-P)/(P-S))
+        p4 = 0
+
+        four_vector = (p1, p2, p3, p4)
+        super(self.__class__, self).__init__(four_vector)
+
+class ZDGTFT2(MemoryOnePlayer):
+    """A Generous Zero Determinant Strategy enforcing the relationship 's_x - R = 2 (s_y - R)'. There are infinitely many such strategies depending on the choice of parameters. See the paper "From extortion to generosity, evolution in the Iterated Prisoner's Dilemma" PNAS 2013 for more details."""
+
+    name = 'ZD GTFT2'
+
+    def __init__(self, phi=1., chi=0.5):
+        chi = float(chi)
+        (R, P, T, S) = Game().RPTS()
+        kappa = R
+        B = T
+        C = T-R 
+        ## Compute minimum allowed chi (max allowed is 1)
+        #min_chi = max([(kappa - B) / (kappa + C), (kappa + C) / (kappa - B)])
+        #if min_chi < 0:
+            #min_chi = 0
+        #chi = min_chi
+        p1 = 1. - phi*(1-chi) * (R-kappa)
+        p2 = 1. - phi * (chi *C + B - (1 - chi)*kappa)
+        p3 = phi * (chi*B + C + (1- chi)*kappa)
+        p4 = phi*(1-chi)*kappa
+
+        four_vector = (p1, p2, p3, p4)
+        super(self.__class__, self).__init__(four_vector)
+

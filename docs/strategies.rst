@@ -65,6 +65,7 @@ A list of all further (honest) strategies
 .. autoclass:: TwoTitsForTat
 .. autoclass:: WinStayLoseShift
 .. autoclass:: ZDChi
+.. autoclass:: ZDGTFT2
 .. autoclass:: e
 
 A list of the cheating strategies
