@@ -76,34 +76,31 @@ Now to run the tournament and save the results::
     results = tournament.play()
 
 The output of `tournament.play()` is a `ResultSet` which is something that holds all the information we could need.
-First, let us generate the scores::
+First, let us view the scores::
 
-    scores = results.generate_scores()
-    scores
+    results.scores
 
 which gives::
 
     [[1.952, 1.943, 1.951, 1.96, 1.924, 1.943, 2.007, 1.966, 2.003, 1.963], [1.221, 1.185, 1.173, 1.218, 1.206, 1.218, 1.221, 1.224, 1.188, 1.221], [2.588, 2.616, 2.608, 2.632, 2.588, 2.624, 2.612, 2.532, 2.588, 2.564], [1.917, 1.896, 1.901, 1.884, 1.931, 1.896, 1.87, 1.912, 1.886, 1.899], [1.967, 1.94, 1.929, 1.934, 1.957, 1.959, 1.948, 1.95, 1.937, 1.955], [2.636, 2.664, 2.632, 2.592, 2.588, 2.644, 2.604, 2.572, 2.612, 2.588]]
 
 We see here that when we ran :code:`tournament.play()` it automatically repeated the round robin tournament 10 times (this is to deal with the stochasticity of the random players).
-The :code:`scores` contains a list of normalized scored for all players.
+The :code:`scores` contains a list of normalized scores for all players.
 
-To generate a ranking based on median score we run::
+To view a ranking based on median score::
 
-    ranking = results.generate_ranking(scores)
+    results.ranking
 
 which gives::
 
-    ranking
     [2, 5, 0, 4, 3, 1]
 
-Finally, to obtain the ranking in a helpful format with all the names we run::
+Finally, to obtain the ranking in a helpful format with all the names::
 
-    ranks = results.generate_ranked_names(ranking)
+    results.ranked_names
 
 which gives::
 
-    ranks
     ['Defector', 'Defector', 'Alternator', 'Tit For Tat', 'Random', 'Cooperator']
 
 So in this particular instance our two defectors have won.
@@ -113,9 +110,7 @@ Let us write a little script that will throw in a new :code:`TitForTat` player u
        strategies.append(axelrod.TitForTat())  # Adding a new tit for tat player
        tournament = axelrod.Tournament(strategies)
        results = tournament.play()
-       scores = results.generate_scores()
-       ranking = results.generate_ranking(scores)
-       ranks = results.generate_ranked_names(ranking)
+       ranks = results.ranked_names
 
 Once that has run let us see how many :code:`TitForTat` players were required::
 
@@ -138,9 +133,7 @@ We can wrap all this in a function and use it to see how many :code:`TitForTat` 
             strategies.append(axelrod.TitForTat())
             tournament = axelrod.Tournament(strategies)
             results = tournament.play()
-            scores = results.generate_scores()
-            ranking = results.generate_ranking(scores)
-            ranks = results.generate_ranked_names(ranking)
+            ranks = results.ranked_names
        return count
 
 Let us use that to find the number required for a range of number of :code:`Defector`::
@@ -196,15 +189,17 @@ Once a tournament has been run we can generate the payoff matrix that correspond
     strategies = [s() for s in axelrod.basic_strategies]
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
-    results.generate_payoff_matrix()
+    results.payoff_matrix
 
-The output of this is a square matrix showing the payoffs (and another matrix showing the standard deviations) to the row player. Here is the payoff matrix::
+The output of this is a square matrix showing the payoffs to the row player. Here is the payoff matrix::
 
      [[2.0, 4.0, 0.5, 2.26, 2.52],
       [1.5, 3.0, 0.0, 1.48, 3.0],
       [3.0, 5.0, 1.0, 3.03, 1.02],
       [2.25, 4.02, 0.50, 2.23, 2.26],
       [2.49, 3.0, 1.0, 2.25, 3.0]]
+
+(We can also view the standard deviations using `results.payoff_stddevs`)
 
 Again, if :code:`matplotlib` is installed we can visualise this::
 
@@ -217,6 +212,7 @@ this is shown here:
 .. image:: _static/usage/payoffs.svg
    :width: 50%
    :align: center
+
 
 As an aside we can use this matrix with `gambit <http://gambit.sourceforge.net/>`_ or `sagemath <http://sagemath.org/>`_ to compute the Nash equilibria for the corresponding normal form game. Here is how to do this in Sage::
 
