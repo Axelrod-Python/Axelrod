@@ -8,6 +8,8 @@ class TestResultSet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.players = ('Player1', 'Player2', 'Player3')
+        cls.expected_initial_results = [
+            [[0, 0] for j in range(3)] for i in range(3)]
         cls.test_payoffs_list = [
             [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
             [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
@@ -38,12 +40,11 @@ class TestResultSet(unittest.TestCase):
 
     def test_init(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
-        expected_results = [[[0,0] for j in range(3)] for i in range(3)]
         self.assertEquals(rs.nplayers, 3)
         self.assertEquals(rs.players, self.players)
         self.assertEquals(rs.turns, 5)
         self.assertEquals(rs.repetitions, 2)
-        self.assertTrue(rs._results, expected_results)
+        self.assertTrue(rs._results, self.expected_initial_results)
         self.assertFalse(rs._finalised)
 
     def test_payoffs(self):
@@ -52,6 +53,7 @@ class TestResultSet(unittest.TestCase):
         self.assertEquals(rs.payoffs_list, self.test_payoffs_list)
         del(rs.payoffs_list)
         self.assertFalse(rs._finalised)
+        self.assertTrue(rs._results, self.expected_initial_results)
 
     def test_results(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
