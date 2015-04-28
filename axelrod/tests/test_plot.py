@@ -18,7 +18,7 @@ class TestPlot(unittest.TestCase):
             [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
         ]
         cls.test_result_set = axelrod.ResultSet(players, 5, 2)
-        cls.test_result_set.finalise(test_payoffs_list)
+        cls.test_result_set.payoffs_list = test_payoffs_list
 
         cls.expected_boxplot_dataset = [[3.2, 3.2], [3.1, 3.1], [2.6, 2.8]]
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]
