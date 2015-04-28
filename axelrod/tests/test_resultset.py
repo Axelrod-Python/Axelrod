@@ -1,5 +1,4 @@
 import unittest
-
 import axelrod
 
 
@@ -109,4 +108,3 @@ class TestResultSet(unittest.TestCase):
         self.assertEquals(rs.csv(), self.expected_csv)
         del(rs.payoffs_list)
         self.assertRaises(AttributeError, rs.csv)
-

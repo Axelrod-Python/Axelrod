@@ -1,6 +1,5 @@
 import math
 import csv
-
 from StringIO import StringIO
 
 
