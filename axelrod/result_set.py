@@ -17,6 +17,8 @@ def median(lst):
 class ResultSet(object):
     """A class to hold the results of a tournament."""
 
+    unfinalised_error_msg = 'payoffs_list has not been set.'
+
     def __init__(self, players, turns, repetitions):
 
         self.players = players
@@ -57,16 +59,14 @@ class ResultSet(object):
         if self._finalised:
             return self._results
         else:
-            raise AttributeError(
-                "No payoffs list has been passed to this ResultSet object.")
+            raise AttributeError(self.unfinalised_error_msg)
 
     @property
     def scores(self):
         if self._finalised:
             return self._scores
         else:
-            raise AttributeError(
-                "No payoffs list has been passed to this ResultSet object.")
+            raise AttributeError(self.unfinalised_error_msg)
 
     def _generate_scores(self):
         """Return normalized scores based on the results.
@@ -95,8 +95,7 @@ class ResultSet(object):
         if self._finalised:
             return self._ranking
         else:
-            raise AttributeError(
-                "No payoffs list has been passed to this ResultSet object.")
+            raise AttributeError(self.unfinalised_error_msg)
 
     def _generate_ranking(self, scores):
         """
@@ -114,8 +113,7 @@ class ResultSet(object):
         if self._finalised:
             return self._ranked_names
         else:
-            raise AttributeError(
-                "No payoffs list has been passed to this ResultSet object.")
+            raise AttributeError(self.unfinalised_error_msg)
 
     def _generate_ranked_names(self, ranking):
         """Returns a list of players names sorted by their ranked order."""
@@ -127,16 +125,14 @@ class ResultSet(object):
         if self._finalised:
             return self._payoff_matrix
         else:
-            raise AttributeError(
-                "No payoffs list has been passed to this ResultSet object.")
+            raise AttributeError(self.unfinalised_error_msg)
 
     @property
     def payoff_stddevs(self):
         if self._finalised:
             return self._payoff_stddevs
         else:
-            raise AttributeError(
-                "No payoffs list has been passed to this ResultSet object.")
+            raise AttributeError(self.unfinalised_error_msg)
 
     def _generate_payoff_matrix(self):
         """Returns a per-turn averaged payoff matrix and its stddevs."""
@@ -165,5 +161,4 @@ class ResultSet(object):
                 writer.writerow(map(str, data))
             return csv_string.getvalue()
         else:
-            raise AttributeError(
-                "No payoffs list has been passed to this ResultSet object.")
+            raise AttributeError(self.unfinalised_error_msg)
