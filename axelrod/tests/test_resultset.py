@@ -53,13 +53,14 @@ class TestResultSet(unittest.TestCase):
         self.assertEquals(rs.payoffs_list, self.test_payoffs_list)
         del(rs.payoffs_list)
         self.assertFalse(rs._finalised)
-        self.assertTrue(rs._results, self.expected_initial_results)
 
     def test_results(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
         self.assertRaises(AttributeError, getattr, rs, 'results')
         rs.payoffs_list = self.test_payoffs_list
         self.assertEquals(rs.results, self.expected_results)
+        del(rs.payoffs_list)
+        self.assertTrue(rs._results, self.expected_initial_results)
 
     def test_scores(self):
         rs = axelrod.ResultSet(self.players, 5, 2)
