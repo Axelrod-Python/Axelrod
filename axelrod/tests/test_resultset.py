@@ -63,6 +63,7 @@ class TestResultSet(unittest.TestCase):
         rs.payoffs_list = self.test_payoffs_list
         self.assertEquals(rs.results, self.expected_results)
         del(rs.payoffs_list)
+        self.assertRaises(AttributeError, getattr, rs, 'results')
         self.assertTrue(rs._results, self.expected_initial_results)
 
     def test_scores(self):
