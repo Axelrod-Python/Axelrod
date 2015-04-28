@@ -20,14 +20,11 @@ class ResultSet(object):
     unfinalised_error_msg = 'payoffs_list has not been set.'
 
     def __init__(self, players, turns, repetitions):
-
         self.players = players
         self.nplayers = len(players)
         self.turns = turns
         self.repetitions = repetitions
-
         self._init_results()
-
         self._finalised = False
 
     # payoffs_list is the only property with a setter method.
@@ -46,10 +43,7 @@ class ResultSet(object):
     @payoffs_list.setter
     def payoffs_list(self, payoffs_list):
         self._payoffs_list = payoffs_list
-        for index, payoffs in enumerate(payoffs_list):
-            for i in range(len(self.players)):
-                for j in range(len(self.players)):
-                    self._results[i][j][index] = payoffs[i][j]
+        self._update_results()
         self._finalised = True
         self._scores = self._generate_scores()
         self._ranking = self._generate_ranking(self.scores)
@@ -59,6 +53,7 @@ class ResultSet(object):
     @payoffs_list.deleter
     def payoffs_list(self):
         del(self._payoffs_list)
+        self._init_results()
         self._finalised = False
 
     @property
@@ -72,6 +67,12 @@ class ResultSet(object):
         plist = list(range(self.nplayers))
         replist = list(range(self.repetitions))
         self._results = [[[0 for r in replist] for j in plist] for i in plist]
+
+    def _update_results(self):
+        for index, payoffs in enumerate(self.payoffs_list):
+            for i in range(len(self.players)):
+                for j in range(len(self.players)):
+                    self._results[i][j][index] = payoffs[i][j]
 
     @property
     def scores(self):
