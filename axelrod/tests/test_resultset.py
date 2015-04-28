@@ -107,3 +107,6 @@ class TestResultSet(unittest.TestCase):
         self.assertRaises(AttributeError, rs.csv)
         rs.payoffs_list = self.test_payoffs_list
         self.assertEquals(rs.csv(), self.expected_csv)
+        del(rs.payoffs_list)
+        self.assertRaises(AttributeError, rs.csv)
+
