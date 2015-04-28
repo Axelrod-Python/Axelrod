@@ -8,11 +8,14 @@ class TestResultSet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.players = ('Player1', 'Player2', 'Player3')
-        cls.expected_initial_results = [
-            [[0, 0] for j in range(3)] for i in range(3)]
         cls.test_payoffs_list = [
             [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
             [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
+        ]
+        cls.expected_initial_results = [
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]],
         ]
         cls.expected_results = [
             [[0, 0], [10, 10], [21, 21]],
