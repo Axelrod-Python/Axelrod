@@ -26,11 +26,18 @@ class ResultSet(object):
         self.turns = turns
         self.repetitions = repetitions
 
-        plist = list(range(self.nplayers))
-        replist = list(range(repetitions))
-        self._results = [[[0 for r in replist] for j in plist] for i in plist]
+        self._init_results()
 
         self._finalised = False
+
+    # payoffs_list is the only property with a setter method.
+    #
+    # Setting payoffs_list calls methods to set all the other
+    # properties on the instance (result, scores, ranking, ranked_names,
+    # payoff_matrix, payoff_stddevs).
+    #
+    # The getter methods on those other properties will return an error
+    # if payoffs_list has not been set.
 
     @property
     def payoffs_list(self):
@@ -60,6 +67,11 @@ class ResultSet(object):
             return self._results
         else:
             raise AttributeError(self.unfinalised_error_msg)
+
+    def _init_results(self):
+        plist = list(range(self.nplayers))
+        replist = list(range(self.repetitions))
+        self._results = [[[0 for r in replist] for j in plist] for i in plist]
 
     @property
     def scores(self):
