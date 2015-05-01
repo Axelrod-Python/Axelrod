@@ -1,7 +1,6 @@
 """Tests for the main tournament class."""
 
 import unittest
-
 import axelrod
 
 
@@ -21,7 +20,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.turns, 200)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
-        self.assertEqual(tournament.processes, 4)
+        self.assertEqual(tournament._processes, 4)
         anonymous_tournament = axelrod.Tournament(players=[P1, P2, P3])
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
