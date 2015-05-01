@@ -2,6 +2,7 @@
 
 import unittest
 import axelrod
+import logging
 
 
 class TestTournament(unittest.TestCase):
@@ -9,19 +10,22 @@ class TestTournament(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.game = axelrod.Game()
+        cls.players = [axelrod.Defector(), axelrod.Defector(), axelrod.Defector()]
+        cls.test_name = 'test'
 
-    def test_initialisation(self):
-        P1 = axelrod.Defector()
-        P2 = axelrod.Defector()
-        P3 = axelrod.Defector()
-        tournament = axelrod.Tournament(name='test', players=[P1, P2, P3], processes=4)
+    def test_init(self):
+        tournament = axelrod.Tournament(name=self.test_name, players=self.players, processes=4)
         self.assertEqual([str(s) for s in tournament.players], ['Defector', 'Defector', 'Defector'])
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, 200)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
         self.assertEqual(tournament._processes, 4)
-        anonymous_tournament = axelrod.Tournament(players=[P1, P2, P3])
+        self.assertFalse(tournament._prebuilt_cache)
+        self.assertIsInstance(tournament._logger, logging.Logger)
+        self.assertIsInstance(tournament.result_set, axelrod.ResultSet)
+        self.assertEqual(tournament._deterministic_cache, {})
+        anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
     def test_tournament(self):
