@@ -54,10 +54,6 @@ the results from the latest run of the tournament here:
 .. figure:: ./assets/strategies_boxplot.png
    :alt:
 
-As you can see: the 'tit for tat' strategy has not won in this instance,
-that is mainly because more strategies are needed to get anywhere near
-Axelrod's tournament.
-
 You can see the results from the latest run of the tournament here with
 the cheating strategies (which manipulate/read what the opponent does):
 
