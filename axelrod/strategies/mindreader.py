@@ -44,7 +44,7 @@ class MindReader(Player):
 
         for strategy in strategies:
             self.simulate_match(opponent, strategy, rounds)
-            results.append(round_robin.calculate_scores(self, opponent)[0])
+            results.append(round_robin._calculate_scores(self, opponent)[0])
 
             self.history = copy.copy(dummy_history_self)
             opponent.history = copy.copy(dummy_history_opponent)
