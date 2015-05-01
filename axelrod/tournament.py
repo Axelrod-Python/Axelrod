@@ -4,6 +4,7 @@ from result_set import *
 from round_robin import *
 import logging
 
+
 class Tournament(object):
     game = Game()
 
@@ -18,7 +19,7 @@ class Tournament(object):
         self.turns = turns
         self.repetitions = repetitions
         self.processes = processes
-        self.prebuilt_cache=prebuilt_cache
+        self.prebuilt_cache = prebuilt_cache
 
         self.logger = logging.getLogger(__name__)
 
@@ -68,7 +69,8 @@ class Tournament(object):
             work_queue.put(repetition)
 
         self.logger.debug(
-            'Playing %d round robins with %d parallel processes' % (self.repetitions, workers))
+            'Playing %d round robins with %d parallel processes' %
+            (self.repetitions, workers))
         self.start_workers(workers, work_queue, done_queue)
         self.process_done_queue(workers, done_queue, payoffs_list)
 
