@@ -15,7 +15,7 @@ class Plot(object):
             raise AttributeError(
                 "No payoffs list has been passed to this ResultSet object.")
         # self._nplayers = self.result_set.nplayers
-        self._matplotlib_installed = matplotlib_installed
+        self.matplotlib_installed = matplotlib_installed
 
     @property
     def _boxplot_dataset(self):
@@ -45,7 +45,7 @@ class Plot(object):
 
     def boxplot(self):
 
-        if not self._matplotlib_installed:
+        if not self.matplotlib_installed:
             return None
 
         figure = plt.figure()
@@ -60,7 +60,7 @@ class Plot(object):
 
     def payoff(self):
 
-        if not self._matplotlib_installed:
+        if not self.matplotlib_installed:
             return None
 
         figure, ax = plt.subplots()
@@ -75,7 +75,7 @@ class Plot(object):
 
     def stackplot(self, populations):
 
-        if not self._matplotlib_installed:
+        if not self.matplotlib_installed:
             return None
 
         figure, ax = plt.subplots()
