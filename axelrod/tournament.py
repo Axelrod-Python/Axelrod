@@ -19,7 +19,7 @@ class Tournament(object):
         self.turns = turns
         self.repetitions = repetitions
         self._processes = processes
-        self._prebuilt_cache = prebuilt_cache
+        self.prebuilt_cache = prebuilt_cache
 
         self._logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ class Tournament(object):
             turns=turns,
             repetitions=repetitions)
 
-        self._deterministic_cache = {}
+        self.deterministic_cache = {}
 
     def play(self):
         payoffs_list = []
@@ -106,7 +106,7 @@ class Tournament(object):
             players=self.players,
             game=self.game,
             turns=self.turns,
-            deterministic_cache=self._deterministic_cache,
+            deterministic_cache=self.deterministic_cache,
             cache_mutable=cache_mutable)
         payoffs = round_robin.play()
         return payoffs

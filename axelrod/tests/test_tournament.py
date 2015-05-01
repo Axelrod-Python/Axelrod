@@ -21,10 +21,10 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
         self.assertEqual(tournament._processes, 4)
-        self.assertFalse(tournament._prebuilt_cache)
+        self.assertFalse(tournament.prebuilt_cache)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertIsInstance(tournament.result_set, axelrod.ResultSet)
-        self.assertEqual(tournament._deterministic_cache, {})
+        self.assertEqual(tournament.deterministic_cache, {})
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
