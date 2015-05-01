@@ -36,29 +36,29 @@ class TestPlot(unittest.TestCase):
         self.assertRaises(AttributeError, axelrod.Plot, result_set)
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)
-        self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
+        self.assertEqual(matplotlib_installed, plot._matplotlib_installed)
 
     def test_boxplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertSequenceEqual(
-            plot.boxplot_dataset(),
+            plot._boxplot_dataset,
             self.expected_boxplot_dataset)
 
     def test_boxplot_xticks_locations(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(
-            plot.boxplot_xticks_locations(),
+            plot._boxplot_xticks_locations,
             self.expected_boxplot_xticks_locations)
 
     def test_boxplot_xticks_labels(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(
-            plot.boxplot_xticks_labels(),
+            plot._boxplot_xticks_labels,
             self.expected_boxplot_xticks_labels)
 
     def test_boxplot_title(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertEqual(plot.boxplot_title(), self.expected_boxplot_title)
+        self.assertEqual(plot._boxplot_title, self.expected_boxplot_title)
 
     def test_boxplot(self):
         if matplotlib_installed:
@@ -70,7 +70,7 @@ class TestPlot(unittest.TestCase):
     def test_payoff_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertSequenceEqual(
-            plot.payoff_dataset(),
+            plot._payoff_dataset,
             self.expected_payoff_dataset)
 
     def test_payoff(self):
