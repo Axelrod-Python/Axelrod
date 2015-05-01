@@ -11,7 +11,7 @@ class RoundRobin(object):
         self.deterministic_cache = deterministic_cache
         self.cache_mutable = cache_mutable
 
-    def calculate_scores(self, p1, p2):
+    def _calculate_scores(self, p1, p2):
         """Calculates the score for two players based their history"""
         s1, s2 = 0, 0
         for pair in zip(p1.history, p2.history):
@@ -61,7 +61,7 @@ class RoundRobin(object):
                     while turn < self.turns:
                         turn += 1
                         p1.play(p2)
-                    scores = self.calculate_scores(p1, p2)
+                    scores = self._calculate_scores(p1, p2)
                     if self.cache_mutable and not (p1.stochastic or p2.stochastic):
                         self.deterministic_cache[key] = scores
                 else:
