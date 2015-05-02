@@ -4,7 +4,6 @@ from axelrod import Player, Game
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
-
 class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
@@ -35,8 +34,6 @@ class MemoryOnePlayer(Player):
 
     def __init__(self, four_vector, initial='C'):
         Player.__init__(self)
-        #if four_vector is None:
-            #four_vector = [1,0,0,1]
         self._four_vector = dict( zip(  [ ('C','C'), ('C','D'), ('D','C'), ('D','D')], map(float, four_vector) ) )
         self._initial = initial
         self.stochastic = False
@@ -90,8 +87,7 @@ class StochasticWSLS(MemoryOnePlayer):
         super(self.__class__, self).__init__(four_vector)
 
 class ZeroDeterminantPlayer(MemoryOnePlayer):
-    """Abstraction for ZD players. The correct formula is Equation 14 in http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886 .
-    These players enforce a linear difference in stationary payoffs s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and generous strategies when l = R and s > 0"""
+    """Abstraction for ZD players. The correct formula is Equation 14 in http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886 . These players enforce a linear difference in stationary payoffs s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and generous strategies when l = R and s > 0"""
     name = 'ZD ABC'
 
     def __init__(self, phi=0., s=None, l=None):
