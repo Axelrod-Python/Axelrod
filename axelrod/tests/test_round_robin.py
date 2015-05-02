@@ -53,7 +53,7 @@ class TestRoundRobin(unittest.TestCase):
         P2 = axelrod.Defector()
         P2.history = ['C', 'D', 'D']
         round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
-        self.assertEqual(round_robin.calculate_scores(P1, P2), (4, 9))
+        self.assertEqual(round_robin._calculate_scores(P1, P2), (4, 9))
 
     def test_calculate_score_for_all_cooperate(self):
         """Test that scores are calculated correctly."""
@@ -62,7 +62,7 @@ class TestRoundRobin(unittest.TestCase):
         P2 = axelrod.Player()
         P2.history = ['C', 'C', 'C']
         round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
-        self.assertEqual(round_robin.calculate_scores(P1, P2), (9, 9))
+        self.assertEqual(round_robin._calculate_scores(P1, P2), (9, 9))
 
     def test_calculate_score_for_all_defect(self):
         """Test that scores are calculated correctly."""
@@ -71,7 +71,7 @@ class TestRoundRobin(unittest.TestCase):
         P2 = axelrod.Player()
         P2.history = ['D', 'D', 'D']
         round_robin = axelrod.RoundRobin(players=[P1, P2], game=self.game, turns=200)
-        self.assertEqual(round_robin.calculate_scores(P1, P2), (3, 3))
+        self.assertEqual(round_robin._calculate_scores(P1, P2), (3, 3))
 
     def test_round_robin_defector_v_cooperator(self):
         """Test round robin: the defector viciously punishes the cooperator."""
