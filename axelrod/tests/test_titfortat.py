@@ -137,24 +137,24 @@ class TestAntiTitForTat(TestPlayer):
 
     def test_strategy(self):
         """Starts by Cooperating"""
-        P1 = axelrod.SuspiciousTitForTat()
+        P1 = axelrod.AntiTitForTat()
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), 'C')
 
     def test_affect_of_strategy(self):
         """Will do opposite of what opponent does."""
-        P1 = axelrod.SuspiciousTitForTat()
+        P1 = axelrod.AntiTitForTat()
         P2 = axelrod.Player()
         P1.history = ['C']
         P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
         P1.history.append('D')
         P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'C')
         P1.history.append('C')
         P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'C')
         P1.history.append('C')
         P2.history.append('C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
         
