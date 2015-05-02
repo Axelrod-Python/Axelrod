@@ -189,10 +189,10 @@ class TestStochasticWSLS(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
         self.assertEqual(P1.strategy(P2), 'C')
 
-class TestExtort2(TestPlayer):
+class TestZDExtort2(TestPlayer):
 
     name = "ZD-Extort-2"
-    player = axelrod.Extort2
+    player = axelrod.ZDExtort2
     stochastic = True
 
     def test_four_vector(self):
