@@ -4,6 +4,7 @@ from result_set import *
 from round_robin import *
 import logging
 
+
 class Tournament(object):
     game = Game()
 
@@ -17,10 +18,10 @@ class Tournament(object):
             self.game = game
         self.turns = turns
         self.repetitions = repetitions
-        self.processes = processes
-        self.prebuilt_cache=prebuilt_cache
+        self._processes = processes
+        self.prebuilt_cache = prebuilt_cache
 
-        self.logger = logging.getLogger(__name__)
+        self._logger = logging.getLogger(__name__)
 
         self.result_set = ResultSet(
             players=players,
@@ -32,57 +33,58 @@ class Tournament(object):
     def play(self):
         payoffs_list = []
 
-        if self.processes is None:
-            self.run_serial_repetitions(payoffs_list)
+        if self._processes is None:
+            self._run_serial_repetitions(payoffs_list)
         else:
-            if len(self.deterministic_cache) == 0 or not self.prebuilt_cache:
-                self.logger.debug('Playing first round robin to build cache')
+            if len(self._deterministic_cache) == 0 or not self._prebuilt_cache:
+                self._logger.debug('Playing first round robin to build cache')
                 payoffs = self.play_round_robin()
                 payoffs_list.append(payoffs)
                 self.repetitions -= 1
-            self.run_parallel_repetitions(payoffs_list)
+            self._run_parallel_repetitions(payoffs_list)
 
         self.result_set.payoffs_list = payoffs_list
         return self.result_set
 
-    def run_serial_repetitions(self, payoffs_list):
-        self.logger.debug('Playing %d round robins' % self.repetitions)
+    def _run_serial_repetitions(self, payoffs_list):
+        self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            payoffs = self.play_round_robin()
+            payoffs = self._play_round_robin()
             payoffs_list.append(payoffs)
         return True
 
-    def run_parallel_repetitions(self, payoffs_list):
+    def _run_parallel_repetitions(self, payoffs_list):
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
         work_queue = multiprocessing.Queue()
         done_queue = multiprocessing.Queue()
 
-        if self.processes < 2 or self.processes > multiprocessing.cpu_count():
+        if self._processes < 2 or self._processes > multiprocessing.cpu_count():
             workers = multiprocessing.cpu_count()
         else:
-            workers = self.processes
+            workers = self._processes
 
         for repetition in range(self.repetitions):
             work_queue.put(repetition)
 
-        self.logger.debug(
-            'Playing %d round robins with %d parallel processes' % (self.repetitions, workers))
-        self.start_workers(workers, work_queue, done_queue)
-        self.process_done_queue(workers, done_queue, payoffs_list)
+        self._logger.debug(
+            'Playing %d round robins with %d parallel processes' %
+            (self.repetitions, workers))
+        self._start_workers(workers, work_queue, done_queue)
+        self._process_done_queue(workers, done_queue, payoffs_list)
 
         return True
 
-    def start_workers(self, workers, work_queue, done_queue):
+    def _start_workers(self, workers, work_queue, done_queue):
         for worker in range(workers):
             process = multiprocessing.Process(
-                target=self.worker, args=(work_queue, done_queue))
+                target=self._worker, args=(work_queue, done_queue))
             work_queue.put('STOP')
             process.start()
         return True
 
-    def process_done_queue(self, workers, done_queue, payoffs_list):
+    def _process_done_queue(self, workers, done_queue, payoffs_list):
         stops = 0
         while stops < workers:
             payoffs = done_queue.get()
@@ -92,14 +94,14 @@ class Tournament(object):
                 payoffs_list.append(payoffs)
         return True
 
-    def worker(self, work_queue, done_queue):
+    def _worker(self, work_queue, done_queue):
         for repetition in iter(work_queue.get, 'STOP'):
-            payoffs = self.play_round_robin(cache_mutable=False)
+            payoffs = self._play_round_robin(cache_mutable=False)
             done_queue.put(payoffs)
         done_queue.put('STOP')
         return True
 
-    def play_round_robin(self, cache_mutable=True):
+    def _play_round_robin(self, cache_mutable=True):
         round_robin = RoundRobin(
             players=self.players,
             game=self.game,
