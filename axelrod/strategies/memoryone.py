@@ -88,26 +88,6 @@ class StochasticWSLS(MemoryOnePlayer):
         super(self.__class__, self).__init__(four_vector)
 
 class ZDChi(MemoryOnePlayer):
-    """An Extortionate Zero Determinant Strategy. See the Press and Dyson paper in PNAS for the original formula."""
-
-    name = 'ZDChi'
-
-    def __init__(self, chi=2):
-        chi = float(chi)
-        (R, P, T, S) = Game().RPTS()
-
-        phi_max = float(P-S) / ((P-S) + chi * (T-P))
-        phi = phi_max / 2.
-
-        p1 = 1. - phi*(chi - 1) * float(R-P) / (P-S)
-        p2 = 1 - phi * (1 + chi * float(T-P) / (P-S))
-        p3 = phi * (chi + float(T-P)/(P-S))
-        p4 = 0
-
-        four_vector = (p1, p2, p3, p4)
-        super(self.__class__, self).__init__(four_vector)
-
-class ZDChi(MemoryOnePlayer):
     """An Extortionate Zero Determinant Strategy enforcing the relationship 's_x - P = chi (s_y - P)'. See the Press and Dyson paper in PNAS for the original formula."""
 
     name = 'ZD Extort-2'
