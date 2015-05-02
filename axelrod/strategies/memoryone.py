@@ -33,8 +33,10 @@ class MemoryOnePlayer(Player):
 
     name = 'Generic Memory One Player'
 
-    def __init__(self, four_vector=[1,0,0,1], initial='C'):
+    def __init__(self, four_vector, initial='C'):
         Player.__init__(self)
+        #if four_vector is None:
+            #four_vector = [1,0,0,1]
         self._four_vector = dict( zip(  [ ('C','C'), ('C','D'), ('D','C'), ('D','D')], map(float, four_vector) ) )
         self._initial = initial
         self.stochastic = False
@@ -87,49 +89,46 @@ class StochasticWSLS(MemoryOnePlayer):
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
 
-class ZDChi(MemoryOnePlayer):
-    """An Extortionate Zero Determinant Strategy enforcing the relationship 's_x - P = chi (s_y - P)'. See the Press and Dyson paper in PNAS for the original formula. Supposedly ZD Extort-2 is (8/9, 1/2, 1/3, 0), which corresponds to phi=1/18 and chi=2."""
+class ZeroDeterminantPlayer(MemoryOnePlayer):
+    """Abstraction for ZD players. The correct formula is Equation 14 in http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886 .
+    These players enforce a linear difference in stationary payoffs s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and generous strategies when l = R and s > 0"""
+    name = 'ZD ABC'
 
-    name = 'ZD Extort-2'
-
-    def __init__(self, phi=1./18, chi=2.):
-        chi = float(chi)
+    def __init__(self, phi=0., s=None, l=None):
         (R, P, S, T) = Game().RPST()
+        if s is None:
+            s = 1
+        if l is None:
+            l = R
 
-        phi_max = float(P-S) / ((P-S) + chi * (T-P))
-        if phi > phi_max:
+        # Check parameters
+        s_min = - min((T-l)/(l-S), (l-S) / (T-l))
+        if (l < P) or (l > R) or (s > 1) or (s < s_min):
             raise ValueError
 
-        p1 = 1. - phi*(chi - 1) * float(R-P) / float(P-S)
-        p2 = 1 - phi * (1 + chi * float(T-P) / float(P-S))
-        p3 = phi * (chi + float(T-P)/(P-S))
-        p4 = 0
+        p1 = 1 - phi*(1-s)*(R-l)
+        p2 = 1 - phi*(s*(l-S) + (T-l))
+        p3 = phi*((l-S)+s*(T-l))
+        p4 = phi*(1-s)*(l-P)
 
-        four_vector = (p1, p2, p3, p4)
-        print self.name, four_vector
-        super(self.__class__, self).__init__(four_vector)
+        four_vector = [p1, p2, p3, p4]
+        MemoryOnePlayer.__init__(self, four_vector)
 
-class ZDGTFT2(MemoryOnePlayer):
-    """A Generous Zero Determinant Strategy enforcing the relationship 's_x - R = 2 (s_y - R)'. There are infinitely many such strategies depending on the choice of parameters. See the paper "From extortion to generosity, evolution in the Iterated Prisoner's Dilemma" PNAS 2013 for more details. Supposedly ZDGTFT2 is (1, 1/8, 1, 1/4). Note that this chi appears to be 1/chi for extortionate strategies."""
+class ZDGTFT2(ZeroDeterminantPlayer):
+    """A Generous Zero Determinant Strategy."""
 
-    name = 'ZD GTFT2'
+    name = 'ZD-GTFT-2'
 
-    def __init__(self, phi=1., chi=0.5):
-        chi = float(chi)
-        (R, P, T, S) = Game().RPST()
-        kappa = R
-        B = T
-        C = T-R 
-        ## Compute minimum allowed chi (max allowed is 1)
-        #min_chi = max([(kappa - B) / (kappa + C), (kappa + C) / (kappa - B)])
-        #if min_chi < 0:
-            #min_chi = 0
-        #chi = min_chi
-        p1 = 1. - phi*(1-chi) * (B - C - kappa)
-        p2 = 1. - phi * (chi *C + B - (1 - chi)*kappa)
-        p3 = phi * (chi*B + C + (1- chi)*kappa)
-        p4 = phi*(1-chi)*kappa
+    def __init__(self, phi=0., chi=2.):
+        (R, P, S, T) = Game().RPST()
+        ZeroDeterminantPlayer.__init__(self, phi=0.25, s=0.5, l=R)
 
-        four_vector = (p1, p2, p3, p4)
-        super(self.__class__, self).__init__(four_vector)
+class Extort2(ZeroDeterminantPlayer):
+    """An Extortionate Zero Determinant Strategy."""
+
+    name = 'ZD-Extort-2'
+
+    def __init__(self):
+        (R, P, S, T) = Game().RPST()
+        ZeroDeterminantPlayer.__init__(self, phi=1./9, s=0.5, l=P)
 

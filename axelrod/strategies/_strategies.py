@@ -82,7 +82,7 @@ ordinary_strategies = [
     TrickyDefector,
     TwoTitsForTat,
     WinStayLoseShift,
-    ZDChi,
+    Extort2,
     ZDGTFT2,
     e,
 ]
