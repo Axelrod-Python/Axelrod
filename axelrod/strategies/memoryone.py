@@ -123,7 +123,7 @@ class ZDGTFT2(ZeroDeterminantPlayer):
         (R, P, S, T) = Game().RPST()
         ZeroDeterminantPlayer.__init__(self, phi=0.25, s=0.5, l=R)
 
-class Extort2(ZeroDeterminantPlayer):
+class ZDExtort2(ZeroDeterminantPlayer):
     """An Extortionate Zero Determinant Strategy."""
 
     name = 'ZD-Extort-2'
