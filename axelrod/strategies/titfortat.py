@@ -1,5 +1,7 @@
 from axelrod import Player
 
+flip_dict = {'C': 'D', 'D':'C'}
+
 class TitForTat(Player):
     """A player starts by cooperating and then mimics previous move by opponent."""
 
@@ -57,3 +59,14 @@ class SneakyTitForTat(Player):
         if opponent.history[-1] == 'D' and self.history[-2] == 'D':
             return "C"
         return opponent.history[-1]
+
+class AntiTitForTat(Player):
+    """A strategy that always plays the opposite of the opponents previous move."""
+
+    name = 'Anti Tit For Tat'
+
+    def strategy(self, opponent):
+        try:
+            return flip_dict[opponent.history[-1]]
+        except IndexError:
+            return 'C'
