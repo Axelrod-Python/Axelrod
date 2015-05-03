@@ -1,5 +1,7 @@
 import inspect
+import random
 
+flip_dict = {'C': 'D', 'D':'C'}
 
 class Player(object):
     """A class for a player in the tournament.
@@ -8,6 +10,7 @@ class Player(object):
     """
 
     name = "Player"
+    noise_probability = 0.0
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
@@ -27,6 +30,13 @@ class Player(object):
     def play(self, opponent):
         """This pits two players against each other."""
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
+        if self.noise_probability:
+            r = random.random()
+            if r < self.noise_probability:
+                s1 = flip_dict[s1]
+            r = random.random()
+            if r < self.noise_probability:
+                s2 = flip_dict[s2]
         self.history.append(s1)
         opponent.history.append(s2)
 
