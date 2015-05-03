@@ -66,7 +66,7 @@ class SuspiciousTitForTat(Player):
 
     def strategy(self, opponent):
         try:
-            return flip_dict[opponent.history[-1]]
+            return opponent.history[-1]
         except IndexError:
             return 'D'
 
