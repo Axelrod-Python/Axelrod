@@ -79,20 +79,20 @@ class TestTwoTitsForTat(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
 
 
-class TestSuspiciousTitForTat(TestPlayer):
+class TestBully(TestPlayer):
 
-    name = "Suspicious Tit For Tat"
-    player = axelrod.SuspiciousTitForTat
+    name = "Bully"
+    player = axelrod.Bully
 
     def test_strategy(self):
         """Starts by defecting"""
-        P1 = axelrod.SuspiciousTitForTat()
+        P1 = axelrod.Bully()
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), 'D')
 
     def test_affect_of_strategy(self):
         """Will do opposite of what opponent does."""
-        P1 = axelrod.SuspiciousTitForTat()
+        P1 = axelrod.Bully()
         P2 = axelrod.Player()
         P1.history = ['D']
         P2.history = ['C']
@@ -129,6 +129,35 @@ class TestSneakyTitForTat(TestPlayer):
         P1.history = ['C', 'C', 'D', 'D']
         P2.history = ['C', 'C', 'C', 'D']
         self.assertEqual(P1.strategy(P2), 'C')
+
+class TestSuspiciousTitForTat(TestPlayer):
+
+    name = 'Suspicious Tit For Tat'
+    player = axelrod.SuspiciousTitForTat
+
+    def test_strategy(self):
+        """Starts by Cooperating"""
+        P1 = axelrod.SuspiciousTitForTat()
+        P2 = axelrod.Player()
+        self.assertEqual(P1.strategy(P2), 'D')
+
+    def test_affect_of_strategy(self):
+        """Will do opposite of what opponent does."""
+        P1 = axelrod.SuspiciousTitForTat()
+        P2 = axelrod.Player()
+        P1.history = ['C']
+        P2.history = ['C']
+        self.assertEqual(P1.strategy(P2), 'D')
+        P1.history.append('D')
+        P2.history.append('D')
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history.append('C')
+        P2.history.append('D')
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history.append('C')
+        P2.history.append('C')
+        self.assertEqual(P1.strategy(P2), 'D')
+        
 
 class TestAntiTitForTat(TestPlayer):
 
