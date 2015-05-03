@@ -218,15 +218,15 @@ class TestZDExtort2(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['C']
         P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['D']
         P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['D']
         P2.history = ['D']
@@ -270,13 +270,13 @@ class TestZDGTFT2(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'D')
         P1.history = ['D']
         P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['D']
         P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
