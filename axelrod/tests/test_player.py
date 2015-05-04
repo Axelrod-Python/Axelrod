@@ -55,15 +55,15 @@ class TestPlayer(unittest.TestCase):
         P1 = self.player()
         P2 = axelrod.Player()
         # Construct the test lists
-        histories = [ [['C'],['C']], [['C'],['D']], [['D'],['C']], [['D'],['D']]]
+        histories = [[['C'],['C']], [['C'],['D']], [['D'],['C']], [['D'],['D']]]
         response_lists = []
         for i, history in enumerate(histories):
             response_lists.append([history[0], history[1], responses[i]])
         test_responses(self, P1, P2, response_lists, random_seed=random_seed)
 
-    def responses_test(self, response_lists, random_seed=None):
+    def responses_test(self, history_1, history_2, responses, random_seed=None):
         """Test responses to arbitrary histories. Input response_list is a list of lists, each of which consists of a list for the history of player 1, a list for the history of player 2, and a list for the subsequent moves by player one to test."""
         P1 = self.player()
         P2 = axelrod.Player()
-        test_responses(self, P1, P2, response_lists, random_seed=random_seed)
+        test_responses(self, P1, P2, [[history_1, history_2, responses]], random_seed=random_seed)
 
