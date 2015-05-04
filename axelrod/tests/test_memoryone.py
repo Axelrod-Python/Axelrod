@@ -6,34 +6,20 @@ import axelrod
 
 from test_player import TestPlayer
 
+C, D = 'C', 'D'
 
-class TestWinStayLostShift(TestPlayer):
+class TestWinStayLoseShift(TestPlayer):
 
     name = "Win-Stay Lose-Shift"
     player = axelrod.WinStayLoseShift
 
     def test_strategy(self):
         """Starts by cooperating"""
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
         """Check that switches if does not get best payoff."""
-        P1 = self.player()
-        P2 = axelrod.Player()
-        P1.history = ['C']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['D']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['D']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.markov_test([C,D,D,C])
 
 class TestGTFT(TestPlayer):
 
@@ -42,50 +28,7 @@ class TestGTFT(TestPlayer):
     stochastic = True
 
     def test_strategy(self):
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
-
-        P1.history = ['C']
-        P2.history = ['C']
-        random.seed(2)
-        # With probability .05 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-
-        P1.history = ['C']
-        P2.history = ['D']
-        random.seed(31)
-        # With probability .05 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['C']
-        random.seed(2)
-        # With probability .05 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-
-        P1.history = ['D']
-        P2.history = ['D']
-        random.seed(31)
-        # With probability .05 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
+        self.first_play_test(C)
 
 class TestStochasticCooperator(TestPlayer):
 
@@ -94,49 +37,24 @@ class TestStochasticCooperator(TestPlayer):
     stochastic = True
 
     def test_strategy(self):
+        self.first_play_test(C)
+
+    def test_four_vector(self):
         P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        expected_dictionary = {(C, C): 0.935, (C, D): 0.229, (D,C): 0.266, (D, D): 0.42}
+        for key in sorted(expected_dictionary.keys()):
+            self.assertAlmostEqual(P1._four_vector[key],
+                    expected_dictionary[key])
 
-        P1.history = ['C']
-        P2.history = ['C']
-        random.seed(15)
-        # With probability .065 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-
-        P1.history = ['C']
-        P2.history = ['D']
-        random.seed(1)
-        # With probability .229 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['C']
-        random.seed(3)
-        # With probability .266 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['D']
-        random.seed(13)
-        # With probability .42 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
+    def test_effect_of_strategy(self):
+        # With probability 0.065 will defect
+        self.responses_test([[[C],[C],[D,C,C,C]]], random_seed=15)
+        # With probability 0.266 will cooperate
+        self.responses_test([[[C],[D],[C,D,D,D]]], random_seed=1)
+        # With probability 0.42 will cooperate
+        self.responses_test([[[D],[C],[C,D,D,D]]], random_seed=3)
+        # With probability 0.229 will cooperate
+        self.responses_test([[[D],[D],[C,D,D,D]]], random_seed=13)
 
 class TestStochasticWSLS(TestPlayer):
 
@@ -145,49 +63,17 @@ class TestStochasticWSLS(TestPlayer):
     stochastic = True
 
     def test_strategy(self):
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
-        P1.history = ['C']
-        P2.history = ['C']
-        random.seed(2)
-        # With probability .05 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-
-        P1.history = ['C']
-        P2.history = ['D']
-        random.seed(31)
-        # With probability .05 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['C']
-        random.seed(31)
-        # With probability .05 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['D']
-        random.seed(2)
-        # With probability .05 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+    def test_effect_of_strategy(self):
+        # With probability 0.05 will defect
+        self.responses_test([[[C],[C],[D,C,C,C]]], random_seed=2)
+        # With probability 0.05 will cooperate
+        self.responses_test([[[C],[D],[C,D,D,D]]], random_seed=31)
+        # With probability 0.05 will cooperate
+        self.responses_test([[[D],[C],[C,D,D,D]]], random_seed=31)
+        # With probability 0.05 will defect
+        self.responses_test([[[D],[D],[D,C,C,C]]], random_seed=2)
 
 class TestZDChi(TestPlayer):
 
