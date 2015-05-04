@@ -25,8 +25,8 @@ class TestGrudger(TestPlayer):
         """
         If opponent defects at any point then the player will defect forever
         """
-        self.responses_test([C,D,D,D],[C,C,C,C],[C])
-        self.responses_test([C,C,D,D,D],[C,D,C,C,C],[D])
+        self.responses_test([C, D, D, D], [C, C, C, C], [C])
+        self.responses_test([C, C, D, D, D], [C, D, C, C, C], [D])
 
 class TestForgetfulGrudger(TestPlayer):
 

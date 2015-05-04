@@ -33,7 +33,10 @@ class TestTrickyDefector(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Test if it tries to trick opponent"""
-        self.markov_test([D,D,D,D])
-        self.responses_test([C,C,C],[C,C,C],[D])
-        self.responses_test([C,C,C,D,D],[C,C,C,C,D],[D])
-        self.responses_test([C,C,C,D,D]+[C]*11,[C,C,C,C,D]+[D] + [C]*10,[D])
+        self.markov_test([D, D, D, D])
+        self.responses_test([C, C, C], [C, C, C], [D])
+        self.responses_test([C, C, C, D, D], [C, C, C, C, D], [D])
+        history = [C, C, C, D, D] + [C]*11
+        opponent_history = [C, C, C, C, D] + [D] + [C]*10
+        self.responses_test(history, opponent_history,[D])
+
