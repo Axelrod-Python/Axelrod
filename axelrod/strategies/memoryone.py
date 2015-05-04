@@ -4,7 +4,6 @@ from axelrod import Player, Game
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
-
 class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
@@ -84,6 +83,7 @@ class StochasticWSLS(MemoryOnePlayer):
     name = 'Stochastic WSLS'
 
     def __init__(self, ep=0.05):
+        self.ep = ep
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
 
