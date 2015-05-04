@@ -145,7 +145,7 @@ class TournamentManager(object):
         self._logger.debug(
             'Saving cache with %d entries to %s' % (len(cache), file_name))
         deterministic_cache = DeterministicCache(
-            cache, self.cache_valid_for_turns)
+            cache, self._cache_valid_for_turns)
         file = open(file_name, 'w')
         pickle.dump(deterministic_cache, file)
         return True
