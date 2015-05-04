@@ -4,36 +4,22 @@ import random
 
 import axelrod
 
-from test_player import TestPlayer
+from test_player import TestPlayer, test_four_vector
 
+C, D = 'C', 'D'
 
-class TestWinStayLostShift(TestPlayer):
+class TestWinStayLoseShift(TestPlayer):
 
     name = "Win-Stay Lose-Shift"
     player = axelrod.WinStayLoseShift
 
     def test_strategy(self):
         """Starts by cooperating"""
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
         """Check that switches if does not get best payoff."""
-        P1 = self.player()
-        P2 = axelrod.Player()
-        P1.history = ['C']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['D']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['D']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.markov_test([C,D,D,C])
 
 class TestGTFT(TestPlayer):
 
@@ -42,50 +28,13 @@ class TestGTFT(TestPlayer):
     stochastic = True
 
     def test_strategy(self):
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
-        P1.history = ['C']
-        P2.history = ['C']
-        random.seed(2)
-        # With probability .05 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-
-        P1.history = ['C']
-        P2.history = ['D']
-        random.seed(31)
-        # With probability .05 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['C']
-        random.seed(2)
-        # With probability .05 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-
-        P1.history = ['D']
-        P2.history = ['D']
-        random.seed(31)
-        # With probability .05 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
+    def test_four_vector(self):
+        player = self.player()
+        ep = player.ep
+        expected_dictionary = {(C, C): 1.-ep, (C, D): ep, (D,C): 1.-ep, (D, D): ep}
+        test_four_vector(self, expected_dictionary)
 
 class TestStochasticCooperator(TestPlayer):
 
@@ -93,50 +42,22 @@ class TestStochasticCooperator(TestPlayer):
     player = axelrod.StochasticCooperator
     stochastic = True
 
+    def test_four_vector(self):
+        expected_dictionary = {(C, C): 0.935, (C, D): 0.229, (D,C): 0.266, (D, D): 0.42}
+        test_four_vector(self, expected_dictionary)
+
     def test_strategy(self):
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
-        P1.history = ['C']
-        P2.history = ['C']
-        random.seed(15)
-        # With probability .065 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-
-        P1.history = ['C']
-        P2.history = ['D']
-        random.seed(1)
-        # With probability .229 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['C']
-        random.seed(3)
-        # With probability .266 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['D']
-        random.seed(13)
-        # With probability .42 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
+    def test_effect_of_strategy(self):
+        # With probability 0.065 will defect
+        self.responses_test([C],[C],[D,C,C,C], random_seed=15)
+        # With probability 0.266 will cooperate
+        self.responses_test([C],[D],[C,D,D,D], random_seed=1)
+        # With probability 0.42 will cooperate
+        self.responses_test([D],[C],[C,D,D,D], random_seed=3)
+        # With probability 0.229 will cooperate
+        self.responses_test([D],[D],[C,D,D,D], random_seed=13)
 
 class TestStochasticWSLS(TestPlayer):
 
@@ -145,49 +66,23 @@ class TestStochasticWSLS(TestPlayer):
     stochastic = True
 
     def test_strategy(self):
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
-        P1.history = ['C']
-        P2.history = ['C']
-        random.seed(2)
-        # With probability .05 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+    def test_four_vector(self):
+        player = self.player()
+        ep = player.ep
+        expected_dictionary = {(C, C): 1.-ep, (C, D): ep, (D,C): ep, (D, D): 1.-ep}
+        test_four_vector(self, expected_dictionary)
 
-        P1.history = ['C']
-        P2.history = ['D']
-        random.seed(31)
-        # With probability .05 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['C']
-        random.seed(31)
-        # With probability .05 will cooperate
-        self.assertEqual(P1.strategy(P2), 'C')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
-        P1.history = ['D']
-        P2.history = ['D']
-        random.seed(2)
-        # With probability .05 will defect
-        self.assertEqual(P1.strategy(P2), 'D')
-        # But otherwise will defect
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+    def test_effect_of_strategy(self):
+        # With probability 0.05 will defect
+        self.responses_test([C],[C],[D,C,C,C], random_seed=2)
+        # With probability 0.05 will cooperate
+        self.responses_test([C],[D],[C,D,D,D], random_seed=31)
+        # With probability 0.05 will cooperate
+        self.responses_test([D],[C],[C,D,D,D], random_seed=31)
+        # With probability 0.05 will defect
+        self.responses_test([D],[D],[D,C,C,C], random_seed=2)
 
 class TestZDExtort2(TestPlayer):
 
@@ -197,43 +92,17 @@ class TestZDExtort2(TestPlayer):
 
     def test_four_vector(self):
         P1 = self.player()
-        expected_dictionary = {('C', 'D'): 0.5, ('D', 'C'): 1./3, ('D', 'D'): 0., ('C', 'C'): 8./9}
-        for key in sorted(expected_dictionary.keys()):
-            self.assertAlmostEqual(P1._four_vector[key],
-                    expected_dictionary[key])
+        expected_dictionary = {(C, C): 8./9, (C, D): 0.5, (D,C): 1./3, (D, D): 0.}
+        test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        # Testing the expected value is difficult here so these just ensure that
-        # future changes that break these tests will be examined carefully.
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
-        P1.history = ['C']
-        P2.history = ['C']
-        random.seed(2)
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['D']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['D']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
+    def test_effect_of_strategy(self):
+        self.responses_test([C],[C],[D,D,C,C], random_seed=2)
+        self.responses_test([C],[D],[D,D,D,C])
+        self.responses_test([D],[C],[D,D,D,C])
+        self.responses_test([D],[D],[D,D,D,D])
 
 class TestZDGTFT2(TestPlayer):
 
@@ -243,40 +112,14 @@ class TestZDGTFT2(TestPlayer):
 
     def test_four_vector(self):
         P1 = self.player()
-        expected_dictionary = {('C', 'D'): 1./8, ('D', 'C'): 1., ('D', 'D'): 0.25, ('C', 'C'): 1.}
-        for key in sorted(expected_dictionary.keys()):
-            self.assertAlmostEqual(P1._four_vector[key],
-                    expected_dictionary[key])
+        expected_dictionary = {(C, C): 1., (C, D): 1./8, (D,C): 1., (D, D): 0.25}
+        test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        # Testing the expected value is difficult here so these just ensure that
-        # future changes that break these tests will be examined carefully.
-        P1 = self.player()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
-        P1.history = ['C']
-        P2.history = ['C']
-        random.seed(2)
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['D']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['D']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
+    def test_effect_of_strategy(self):
+        self.responses_test([C],[C],[C,C,C,C], random_seed=2)
+        self.responses_test([C],[D],[D,D,D,D])
+        self.responses_test([D],[C],[C,C,C,C])
+        self.responses_test([D],[D],[D,D,D,D])
