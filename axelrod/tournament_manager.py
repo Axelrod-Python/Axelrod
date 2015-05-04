@@ -137,15 +137,15 @@ class TournamentManager(object):
             self._output_directory,
             file_name + '.' + file_extension)
 
-    def _save_plot(self, figure, file_name):
-        figure.savefig(file_name, bbox_inches='tight')
+    def _save_plot(self, figure, file_name, dpi=400):
+        figure.savefig(file_name, bbox_inches='tight', dpi=dpi)
         figure.clf()
 
     def _save_cache_to_file(self, cache, file_name):
         self._logger.debug(
             'Saving cache with %d entries to %s' % (len(cache), file_name))
         deterministic_cache = DeterministicCache(
-            cache, self.cache_valid_for_turns)
+            cache, self._cache_valid_for_turns)
         file = open(file_name, 'w')
         pickle.dump(deterministic_cache, file)
         return True
