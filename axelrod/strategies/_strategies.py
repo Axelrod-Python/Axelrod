@@ -34,8 +34,10 @@ basic_strategies = [
 ordinary_strategies = [
     AlternatorHunter,
     Appeaser,
+    AntiTitForTat,
     ArrogantQLearner,
     AverageCopier,
+    Bully,
     CautiousQLearner,
     CooperatorHunter,
     DefectorHunter,
@@ -82,7 +84,7 @@ ordinary_strategies = [
     TrickyDefector,
     TwoTitsForTat,
     WinStayLoseShift,
-    ZDChi,
+    ZDExtort2,
     ZDGTFT2,
     e,
 ]
