@@ -51,13 +51,13 @@ class TestStochasticCooperator(TestPlayer):
 
     def test_effect_of_strategy(self):
         # With probability 0.065 will defect
-        self.responses_test([[[C],[C],[D,C,C,C]]], random_seed=15)
+        self.responses_test([C],[C],[D,C,C,C], random_seed=15)
         # With probability 0.266 will cooperate
-        self.responses_test([[[C],[D],[C,D,D,D]]], random_seed=1)
+        self.responses_test([C],[D],[C,D,D,D], random_seed=1)
         # With probability 0.42 will cooperate
-        self.responses_test([[[D],[C],[C,D,D,D]]], random_seed=3)
+        self.responses_test([D],[C],[C,D,D,D], random_seed=3)
         # With probability 0.229 will cooperate
-        self.responses_test([[[D],[D],[C,D,D,D]]], random_seed=13)
+        self.responses_test([D],[D],[C,D,D,D], random_seed=13)
 
 class TestStochasticWSLS(TestPlayer):
 
@@ -76,13 +76,13 @@ class TestStochasticWSLS(TestPlayer):
 
     def test_effect_of_strategy(self):
         # With probability 0.05 will defect
-        self.responses_test([[[C],[C],[D,C,C,C]]], random_seed=2)
+        self.responses_test([C],[C],[D,C,C,C], random_seed=2)
         # With probability 0.05 will cooperate
-        self.responses_test([[[C],[D],[C,D,D,D]]], random_seed=31)
+        self.responses_test([C],[D],[C,D,D,D], random_seed=31)
         # With probability 0.05 will cooperate
-        self.responses_test([[[D],[C],[C,D,D,D]]], random_seed=31)
+        self.responses_test([D],[C],[C,D,D,D], random_seed=31)
         # With probability 0.05 will defect
-        self.responses_test([[[D],[D],[D,C,C,C]]], random_seed=2)
+        self.responses_test([D],[D],[D,C,C,C], random_seed=2)
 
 class TestZDExtort2(TestPlayer):
 
@@ -99,10 +99,10 @@ class TestZDExtort2(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        self.responses_test([[[C],[C],[D,D,C,C]]], random_seed=2)
-        self.responses_test([[[C],[D],[D,D,D,C]]])
-        self.responses_test([[[D],[C],[D,D,D,C]]])
-        self.responses_test([[[D],[D],[D,D,D,D]]])
+        self.responses_test([C],[C],[D,D,C,C], random_seed=2)
+        self.responses_test([C],[D],[D,D,D,C])
+        self.responses_test([D],[C],[D,D,D,C])
+        self.responses_test([D],[D],[D,D,D,D])
 
 class TestZDGTFT2(TestPlayer):
 
@@ -119,7 +119,7 @@ class TestZDGTFT2(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        self.responses_test([[[C],[C],[C,C,C,C]]], random_seed=2)
-        self.responses_test([[[C],[D],[D,D,D,D]]])
-        self.responses_test([[[D],[C],[C,C,C,C]]])
-        self.responses_test([[[D],[D],[D,D,D,D]]])
+        self.responses_test([C],[C],[C,C,C,C], random_seed=2)
+        self.responses_test([C],[D],[D,D,D,D])
+        self.responses_test([D],[C],[C,C,C,C])
+        self.responses_test([D],[D],[D,D,D,D])
