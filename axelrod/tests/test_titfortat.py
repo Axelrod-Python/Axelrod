@@ -1,10 +1,10 @@
 """Test for the tit for tat strategies."""
 
 import axelrod
-
 from test_player import TestPlayer
 
 C, D = 'C', 'D'
+
 
 class TestTitForTat(TestPlayer):
 
@@ -17,9 +17,10 @@ class TestTitForTat(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Repeats last action of opponent history."""
-        self.markov_test([C,D,C,D])
-        self.responses_test([],[C,C,C,C],[C])
-        self.responses_test([],[C,C,C,C,D],[D])
+        self.markov_test([C, D, C, D])
+        self.responses_test([], [C, C, C, C], [C])
+        self.responses_test([], [C, C, C, C, D], [D])
+
 
 class TestTitFor2Tats(TestPlayer):
 
@@ -32,8 +33,9 @@ class TestTitFor2Tats(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Will defect only when last two turns of opponent were defections."""
-        self.responses_test([C,C,C],[D,D,D],[D])
-        self.responses_test([C,C,D,D],[D,D,D,C],[C])
+        self.responses_test([C, C, C], [D, D, D], [D])
+        self.responses_test([C, C, D, D], [D, D, D, C], [C])
+
 
 class TestTwoTitsForTat(TestPlayer):
 
@@ -46,9 +48,10 @@ class TestTwoTitsForTat(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Will defect twice when last turn of opponent was defection."""
-        self.responses_test([C,C],[D,D],[D])
-        self.responses_test([C,C,C],[D,D,C],[D])
-        self.responses_test([C,C,D,D],[D,D,C, C],[C])
+        self.responses_test([C, C], [D, D], [D])
+        self.responses_test([C, C, C], [D, D, C], [D])
+        self.responses_test([C, C, D, D], [D, D, C, C], [C])
+
 
 class TestBully(TestPlayer):
 
@@ -61,7 +64,8 @@ class TestBully(TestPlayer):
 
     def test_affect_of_strategy(self):
         """Will do opposite of what opponent does."""
-        self.markov_test([D,C,D,C])
+        self.markov_test([D, C, D, C])
+
 
 class TestSneakyTitForTat(TestPlayer):
 
@@ -74,8 +78,9 @@ class TestSneakyTitForTat(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Will try defecting after two turns of cooperation, but will stop if punished."""
-        self.responses_test([C,C],[C,C],[D])
-        self.responses_test([C,C,D,D],[C,C,C,D],[C])
+        self.responses_test([C, C], [C, C], [D])
+        self.responses_test([C, C, D, D], [C, C, C, D], [C])
+
 
 class TestSuspiciousTitForTat(TestPlayer):
 
@@ -88,7 +93,8 @@ class TestSuspiciousTitForTat(TestPlayer):
 
     def test_affect_of_strategy(self):
         """Plays like TFT after the first move, repeating the opponents last move."""
-        self.markov_test([C,D,C,D])
+        self.markov_test([C, D, C, D])
+
 
 class TestAntiTitForTat(TestPlayer):
 
@@ -101,4 +107,4 @@ class TestAntiTitForTat(TestPlayer):
 
     def test_affect_of_strategy(self):
         """Will do opposite of what opponent does."""
-        self.markov_test([D,C,D,C])
+        self.markov_test([D, C, D, C])

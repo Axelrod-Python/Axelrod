@@ -15,7 +15,7 @@ class TestGrumpy(TestPlayer):
         """
         Starts by cooperating
         """
-        self.first_play_test(C)
+        self.first_play_test('C')
 
     def test_initial_grumpy_strategy(self):
         """

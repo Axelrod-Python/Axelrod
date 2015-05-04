@@ -4,6 +4,8 @@ import axelrod
 
 from test_player import TestPlayer
 
+C, D = 'C', 'D'
+
 
 class TestMetaMajority(TestPlayer):
 
