@@ -2,7 +2,7 @@
 
 import axelrod
 
-from test_player import TestPlayer
+from test_player import TestPlayer, C, D
 
 
 class TestRetaliate(TestPlayer):
@@ -12,23 +12,15 @@ class TestRetaliate(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating.        """
-        P1 = axelrod.Retaliate()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
         """If opponent has defected more than 10 percent of the time, defect."""
         P1 = axelrod.Retaliate()
         P2 = axelrod.Player()
-        P1.history = ['C', 'C', 'C', 'C']
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C', 'C', 'C', 'C', 'D']
-        P2.history = ['C', 'C', 'C', 'D', 'C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['C', 'C', 'C', 'C', 'C', 'C']
-        P2.history = ['C', 'C', 'C', 'C', 'C', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.responses_test([C]*4, [C]*4, [C])
+        self.responses_test([C, C, C, C, D], [C, C, C, D, C], [D])
+        self.responses_test([C]*6, [C]*5+[D], [D])
 
 
 class TestLimitedRetaliate(TestPlayer):
@@ -38,30 +30,25 @@ class TestLimitedRetaliate(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating.        """
-        P1 = axelrod.LimitedRetaliate()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        """If opponent has never defected, co-operate"""
         P1 = axelrod.LimitedRetaliate()
         P2 = axelrod.Player()
-        P1.history = ['C', 'C', 'C', 'C']
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
+        """If opponent has never defected, co-operate"""
+        self.responses_test([C]*4, [C]*4, [C])
+        P1.history = [C]*5
         self.assertFalse(P1.retaliating)
 
         """If opponent has previously defected and won, defect and be retaliating"""
-        P1.history = ['C', 'C', 'C', 'C', 'D']
-        P2.history = ['C', 'C', 'C', 'D', 'C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertTrue(P1.retaliating)
+        self.responses_test([C, C, C, C, D], [C, C, C, D, C], [D])
+        P1.history = [C, C, C, C, D, D]
+        self.assertFalse(P1.retaliating)
 
         """If opponent has just defected and won, defect and be retaliating"""
-        P1.history = ['C', 'C', 'C', 'C', 'C', 'C']
-        P2.history = ['C', 'C', 'C', 'C', 'C', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertTrue(P1.retaliating)
+        self.responses_test([C, C, C, C, C, C], [C, C, C, C, C, D], [D])
+        P1.history = [C]*6 + [D]
+        self.assertFalse(P1.retaliating)
 
         """If I've hit the limit for retaliation attempts, co-operate"""
         P1.history = ['C', 'C', 'C', 'C', 'D']
