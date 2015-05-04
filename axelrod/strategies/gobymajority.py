@@ -9,6 +9,7 @@ class GoByMajority(Player):
     """
 
     memory = 0
+    memoryone = False # Long memory
 
     def strategy(self, opponent):
         """This is affected by the history of the opponent.

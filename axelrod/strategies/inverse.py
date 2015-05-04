@@ -5,6 +5,7 @@ class Inverse(Player):
     """A player who defects with a probability that diminishes relative to how long ago the opponent defected."""
 
     name = 'Inverse'
+    memoryone = False # Long memory
 
     def strategy(self, opponent):
         """Looks at opponent history to see if they have defected.

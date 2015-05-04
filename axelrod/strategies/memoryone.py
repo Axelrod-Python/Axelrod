@@ -8,6 +8,7 @@ class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
     name = 'Win-Stay Lose-Shift'
+    memoryone = True # Four-Vector = (1,0,0,1)
 
     def __init__(self, initial='C'):
         Player.__init__(self)
@@ -31,6 +32,7 @@ class MemoryOnePlayer(Player):
     """Uses a four-vector for strategies based on the last round of play, (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift. Intended to be used as an abstract base class or to at least be supplied with a initializing four_vector."""
 
     name = 'Generic Memory One Player'
+    memoryone = True 
 
     def __init__(self, four_vector, initial='C'):
         Player.__init__(self)
@@ -51,13 +53,6 @@ class MemoryOnePlayer(Player):
         if r < p:
             return 'C'
         return 'D'
-
-## Examples of strategies as Memory-One
-# tft = (1.,0.,1.,0.)
-# gtft = (1.-ep,ep.,1.-ep,ep)
-# wsls = (1.,0.,0.,1.)
-# alld = (0.,0.,0.,0.)
-# allc = (1.,1.,1.,1.)
 
 class GTFT(MemoryOnePlayer):
     """Generous Tit-For-Tat Strategy."""

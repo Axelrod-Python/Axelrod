@@ -10,10 +10,13 @@ class RiskyQLearner(Player):
     """
 
     name = 'Risky QLearner'
+    memoryone = False # Long memory
     learning_rate = 0.9
     discount_rate = 0.9
     action_selection_parameter = 0.1
     memory_length = 12
+
+
 
     def __init__(self):
         """Initialises the player by picking a random strategy."""
