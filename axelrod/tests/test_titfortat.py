@@ -32,8 +32,6 @@ class TestTitFor2Tats(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Will defect only when last two turns of opponent were defections."""
-        P1 = axelrod.TitFor2Tats()
-        P2 = axelrod.Player()
         self.responses_test([C,C,C],[D,D,D],[D])
         self.responses_test([C,C,D,D],[D,D,D,C],[C])
 
