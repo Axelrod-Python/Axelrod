@@ -4,7 +4,9 @@ import random
 
 import axelrod
 
-from test_player import TestPlayer, C, D
+from test_player import TestPlayer
+
+C, D = 'C', 'D'
 
 
 class TestGrudger(TestPlayer):

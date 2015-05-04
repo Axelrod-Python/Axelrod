@@ -4,15 +4,10 @@ import random
 
 import axelrod
 
-from test_player import TestPlayer, C, D
+from test_player import TestPlayer
 
+C, D = 'C', 'D'
 
-    #def test_strategy(self):
-        #self.first_play_test(C)
-
-    #def test_effect_of_strategy(self):
-        ## With probability 0.065 will defect
-        #self.responses_test([C],[C],[D,C,C,C], random_seed=15)
 
 class TestAverageCopier(TestPlayer):
 

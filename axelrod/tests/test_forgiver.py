@@ -2,7 +2,9 @@
 
 import axelrod
 
-from test_player import TestPlayer, C, D
+from test_player import TestPlayer
+
+C, D = 'C', 'D'
 
 
 class TestForgiver(TestPlayer):
@@ -20,7 +22,6 @@ class TestForgiver(TestPlayer):
         self.responses_test([C,C,C,C],[C,C,C,C],[C])
         self.responses_test([C,C,C,C,D],[C,C,C,D,C],[D])
         self.responses_test([C]*11,[C]*10+[D],[C])
-
 
 
 class TestForgivingTitForTat(TestPlayer):
