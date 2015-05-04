@@ -18,8 +18,8 @@ class TestDefectorHunter(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         for i in range(3):
-            self.responses_test([C]*i,[D]*i,[C])
-        self.responses_test([C]*4,[D]*4,[D])
+            self.responses_test([C]*i, [D]*i, [C])
+        self.responses_test([C]*4, [D]*4, [D])
 
 class TestCooperatorHunter(TestPlayer):
 
@@ -30,8 +30,8 @@ class TestCooperatorHunter(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         for i in range(3):
-            self.responses_test([C]*i,[C]*i,[C])
-        self.responses_test([C]*4,[C]*4,[D])
+            self.responses_test([C]*i, [C]*i, [C])
+        self.responses_test([C]*4, [C]*4, [D])
 
 class TestAlternatorHunter(TestPlayer):
 
@@ -41,10 +41,10 @@ class TestAlternatorHunter(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C, C],[C, D],[C])
-        self.responses_test([C, C, C],[C, D, C],[C])
-        self.responses_test([C, C, C, C],[C, D, C, D],[D])
-        self.responses_test([C, C, C, C, C],[C, D, C, D, C],[D])
+        self.responses_test([C, C], [C, D], [C])
+        self.responses_test([C, C, C], [C, D, C], [C])
+        self.responses_test([C, C, C, C], [C, D, C, D], [D])
+        self.responses_test([C, C, C, C, C], [C, D, C, D, C], [D])
 
 class TestMathConstantHunter(TestPlayer):
 
@@ -64,7 +64,7 @@ class TestRandomHunter(TestPlayer):
     def test_strategy(self):
         P1 = axelrod.RandomHunter()
         P2 = axelrod.Player()
-        P1.history = ['C'] * 8
+        P1.history = [C] * 8
         P2.history = [random.choice(['C', 'D']) for i in range(8)]
         for i in range(10):
             self.assertEqual(P1.strategy(P2), 'D')
@@ -80,10 +80,10 @@ class TestMetaHunter(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         # We are not using the Cooperator Hunter here, so this should lead to cooperation.
-        self.responses_test([C, C, C, C],[C, C, C, C],[C])
+        self.responses_test([C, C, C, C], [C, C, C, C], [C])
         # All these others, however, should trigger a defection for the hunter.
-        self.responses_test([C, C, C, C], [D, D, D, D],[D])
-        self.responses_test([C, C, C, C], [C, D, C, D],[D])
-        self.responses_test([C]*8, [C, C, C, D, C, C, C, D],[D])
+        self.responses_test([C, C, C, C], [D, D, D, D], [D])
+        self.responses_test([C, C, C, C], [C, D, C, D], [D])
+        self.responses_test([C]*8, [C, C, C, D, C, C, C, D], [D])
         self.responses_test([C]*8, [random.choice([C, D]) for i in range(8)],[D])
 

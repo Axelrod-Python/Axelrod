@@ -17,19 +17,20 @@ class TestAverageCopier(TestPlayer):
 
     def test_strategy(self):
         """Test that the first strategy is picked randomly."""
-        self.responses_test([],[],[C,D,D,C,C,C,D,D,C,C], random_seed=1)
+        responses = [C, D, D, C, C, C, D, D, C, C]
+        self.responses_test([], [], responses, random_seed=1)
 
     def test_when_oppenent_all_Cs(self):
         """
         Tests that if opponent has played all C then player chooses C
         """
-        self.responses_test([],[C,C,C,C],[C,C,C], random_seed=5)
+        self.responses_test([], [C, C, C, C], [C, C, C], random_seed=5)
 
     def test_when_opponent_all_Ds(self):
         """
         Tests that if opponent has played all D then player chooses D
         """
-        self.responses_test([],[D,D,D,D],[D,D,D], random_seed=5)
+        self.responses_test([], [D, D, D, D], [D, D, D], random_seed=5)
 
 class TestNiceAverageCopier(TestPlayer):
 
@@ -45,10 +46,10 @@ class TestNiceAverageCopier(TestPlayer):
         """
         Tests that if opponent has played all C then player chooses C
         """
-        self.responses_test([],[C,C,C,C],[C,C,C], random_seed=5)
+        self.responses_test([], [C, C, C, C], [C, C, C], random_seed=5)
 
     def test_when_opponent_all_Ds(self):
         """
         Tests that if opponent has played all D then player chooses D
         """
-        self.responses_test([],[D,D,D,D],[D,D,D], random_seed=5)
+        self.responses_test([], [D, D, D, D], [D, D, D], random_seed=5)
