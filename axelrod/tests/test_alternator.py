@@ -2,8 +2,7 @@
 
 import axelrod
 
-from test_player import TestPlayer
-
+from test_player import TestPlayer, C, D
 
 class TestAlternator(TestPlayer):
 
@@ -12,17 +11,10 @@ class TestAlternator(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating."""
-        P1 = axelrod.Alternator()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
         """Simply does the opposite to what the strategy did last time."""
-        P1 = axelrod.Alternator()
-        P2 = axelrod.Player()
-        P1.history = ['C', 'D', 'D', 'D']
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C', 'C', 'D', 'D', 'C']
-        P2.history = ['C', 'D', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.markov_test([D ,D, C, C])
+        self.responses_test([C, D, D, D], [C, C, C, C], [C])
+        self.responses_test([C, C, D, D, C], [C, D, C, C, C], [D])

@@ -4,7 +4,7 @@ import random
 
 import axelrod
 
-from test_player import TestPlayer
+from test_player import TestPlayer, C, D
 
 
 class TestGrudger(TestPlayer):
@@ -17,23 +17,14 @@ class TestGrudger(TestPlayer):
         """
         Starts by cooperating
         """
-        P1 = axelrod.Grudger()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_strategy(self):
         """
         If opponent defects at any point then the player will defect forever
         """
-        P1 = axelrod.Grudger()
-        P2 = axelrod.Player()
-        P1.history = ['C', 'D', 'D', 'D']
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C', 'C', 'D', 'D', 'D']
-        P2.history = ['C', 'D', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'D')
-
+        self.responses_test([C,D,D,D],[C,C,C,C],[C])
+        self.responses_test([C,C,D,D,D],[C,D,C,C,C],[D])
 
 class TestForgetfulGrudger(TestPlayer):
 
@@ -45,7 +36,6 @@ class TestForgetfulGrudger(TestPlayer):
 
         P1 = axelrod.ForgetfulGrudger()
         P2 = axelrod.Player()
-
         self.assertEqual(P1.grudged, False)
 
         # Starts by playing C
@@ -111,21 +101,13 @@ class TestOppositeGrudger(TestPlayer):
 
     def test_initial_strategy(self):
         """
-        Starts by cooperating
+        Starts by cdefecting
         """
-        P1 = axelrod.OppositeGrudger()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.first_play_test(D)
 
     def test_strategy(self):
         """
         If opponent cooperates at any point then the player will cooperate forever
         """
-        P1 = axelrod.OppositeGrudger()
-        P2 = axelrod.Player()
-        P1.history = ['C', 'D', 'D', 'D']
-        P2.history = ['D', 'D', 'D', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['C', 'C', 'D', 'D', 'D']
-        P2.history = ['C', 'D', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.responses_test([C,D,D,D],[D,D,D,D],[D])
+        self.responses_test([C,C,D,D,D],[C,D,C,C,C],[C])

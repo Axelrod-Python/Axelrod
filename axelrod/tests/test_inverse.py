@@ -4,7 +4,7 @@ import random
 
 import axelrod
 
-from test_player import TestPlayer
+from test_player import TestPlayer, C, D
 
 
 class TestInverse(TestPlayer):
@@ -17,35 +17,22 @@ class TestInverse(TestPlayer):
         """
         Test that initial strategy cooperates.
         """
-        P1 = axelrod.Inverse()
-        P2 = axelrod.Player()
-        P2.history = []
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_that_cooperate_if_opponent_has_not_defected(self):
         """
         Test that as long as the opponent has not defected the player will cooperate.
         """
-        P1 = axelrod.Inverse()
-        P2 = axelrod.Player()
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P2.history.append('C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.responses_test([], [C]*4, [C])
+        self.responses_test([], []*5, [C])
 
     def test_when_opponent_has_all_Ds(self):
         """
         Tests that if opponent has played all D then player chooses D
         """
-        random.seed(5)
-        P1 = axelrod.Inverse()
-        P2 = axelrod.Player()
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P2.history = ['D', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P2.history = ['D', 'D', 'D', 'D', 'D', 'D', 'D', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.responses_test([], [D], [D], random_seed=5)
+        self.responses_test([], [D, D], [D])
+        self.responses_test([], [D]*8, [D])
 
     def test_when_opponent_som_Ds(self):
         """
@@ -54,11 +41,8 @@ class TestInverse(TestPlayer):
         random.seed(5)
         P1 = axelrod.Inverse()
         P2 = axelrod.Player()
-        P2.history = ['C', 'D', 'C', 'D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P2.history = ['C', 'C', 'C', 'C', 'D', 'D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P2.history = ['D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        random.seed(5)
-        self.assertEqual(P1.strategy(P2), 'D')
+
+        self.responses_test([], [C, D, C, D], [C], random_seed=5)
+        self.responses_test([], [C, C, C, C, D, D], [C])
+        self.responses_test([], [D]*8+[C], [D])
+        self.responses_test([], [D]*8+[C], [D], random_seed=5)
