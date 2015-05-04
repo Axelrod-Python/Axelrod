@@ -61,10 +61,7 @@ class SuspiciousTitForTat(Player):
         return 'C' if opponent.history[-1:] == ['C'] else 'D'
 
 class AntiTitForTat(Player):
-    """A strategy that plays the opposite of the opponents previous move.
-
-    This is similar to BULLY above, except that the first move is cooperation.
-    """
+    """A strategy that plays the opposite of the opponents previous move.This is similar to BULLY above, except that the first move is cooperation. """
 
     name = 'Anti Tit For Tat'
 

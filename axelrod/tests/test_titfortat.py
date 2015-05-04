@@ -37,7 +37,6 @@ class TestTitFor2Tats(TestPlayer):
         self.responses_test([C,C,C],[D,D,D],[D])
         self.responses_test([C,C,D,D],[D,D,D,C],[C])
 
-
 class TestTwoTitsForTat(TestPlayer):
 
     name = 'Two Tits For Tat'
@@ -105,4 +104,3 @@ class TestAntiTitForTat(TestPlayer):
     def test_affect_of_strategy(self):
         """Will do opposite of what opponent does."""
         self.markov_test([D,C,D,C])
-
