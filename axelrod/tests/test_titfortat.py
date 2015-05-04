@@ -1,8 +1,9 @@
 """Test for the tit for tat strategies."""
 
 import axelrod
-
 from test_player import TestPlayer
+
+C, D = 'C', 'D'
 
 
 class TestTitForTat(TestPlayer):
@@ -12,18 +13,13 @@ class TestTitForTat(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating."""
-        P1 = axelrod.TitForTat()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
         """Repeats last action of opponent history."""
-        P1 = axelrod.TitForTat()
-        P2 = axelrod.Player()
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P2.history = ['C', 'C', 'C', 'C', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.markov_test([C, D, C, D])
+        self.responses_test([], [C, C, C, C], [C])
+        self.responses_test([], [C, C, C, C, D], [D])
 
 
 class TestTitFor2Tats(TestPlayer):
@@ -33,20 +29,12 @@ class TestTitFor2Tats(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating."""
-        P1 = axelrod.TitFor2Tats()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
         """Will defect only when last two turns of opponent were defections."""
-        P1 = axelrod.TitFor2Tats()
-        P2 = axelrod.Player()
-        P1.history = ['C', 'C', 'C']
-        P2.history = ['C', 'D', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['C', 'C', 'D', 'D']
-        P2.history = ['D', 'D', 'D', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.responses_test([C, C, C], [D, D, D], [D])
+        self.responses_test([C, C, D, D], [D, D, D, C], [C])
 
 
 class TestTwoTitsForTat(TestPlayer):
@@ -55,28 +43,14 @@ class TestTwoTitsForTat(TestPlayer):
     player = axelrod.TwoTitsForTat
 
     def test_strategy(self):
-        """
-        Starts by cooperating
-        """
-        P1 = axelrod.TwoTitsForTat()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        """Starts by cooperating."""
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        """
-        Will defect only when last two turns of opponent were defections.
-        """
-        P1 = axelrod.TwoTitsForTat()
-        P2 = axelrod.Player()
-        P1.history = ['C', 'C']
-        P2.history = ['D', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['C', 'C', 'D']
-        P2.history = ['D', 'D', 'C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['C', 'C', 'D', 'D']
-        P2.history = ['D', 'D', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
+        """Will defect twice when last turn of opponent was defection."""
+        self.responses_test([C, C], [D, D], [D])
+        self.responses_test([C, C, C], [D, D, C], [D])
+        self.responses_test([C, C, D, D], [D, D, C, C], [C])
 
 
 class TestBully(TestPlayer):
@@ -86,26 +60,11 @@ class TestBully(TestPlayer):
 
     def test_strategy(self):
         """Starts by defecting"""
-        P1 = axelrod.Bully()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.first_play_test(D)
 
     def test_affect_of_strategy(self):
         """Will do opposite of what opponent does."""
-        P1 = axelrod.Bully()
-        P2 = axelrod.Player()
-        P1.history = ['D']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history.append('D')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('C')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.markov_test([D, C, D, C])
 
 
 class TestSneakyTitForTat(TestPlayer):
@@ -115,20 +74,13 @@ class TestSneakyTitForTat(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating."""
-        P1 = axelrod.SneakyTitForTat()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_effect_of_strategy(self):
         """Will try defecting after two turns of cooperation, but will stop if punished."""
-        P1 = axelrod.SneakyTitForTat()
-        P2 = axelrod.Player()
-        P1.history = ['C', 'C']
-        P2.history = ['C', 'C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['C', 'C', 'D', 'D']
-        P2.history = ['C', 'C', 'C', 'D']
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.responses_test([C, C], [C, C], [D])
+        self.responses_test([C, C, D, D], [C, C, C, D], [C])
+
 
 class TestSuspiciousTitForTat(TestPlayer):
 
@@ -136,28 +88,13 @@ class TestSuspiciousTitForTat(TestPlayer):
     player = axelrod.SuspiciousTitForTat
 
     def test_strategy(self):
-        """Starts by Cooperating"""
-        P1 = axelrod.SuspiciousTitForTat()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'D')
+        """Starts by Defecting"""
+        self.first_play_test(D)
 
     def test_affect_of_strategy(self):
-        """Will do opposite of what opponent does."""
-        P1 = axelrod.SuspiciousTitForTat()
-        P2 = axelrod.Player()
-        P1.history = ['C']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('D')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history.append('C')
-        P2.history.append('C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        
+        """Plays like TFT after the first move, repeating the opponents last move."""
+        self.markov_test([C, D, C, D])
+
 
 class TestAntiTitForTat(TestPlayer):
 
@@ -166,24 +103,8 @@ class TestAntiTitForTat(TestPlayer):
 
     def test_strategy(self):
         """Starts by Cooperating"""
-        P1 = axelrod.AntiTitForTat()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_affect_of_strategy(self):
         """Will do opposite of what opponent does."""
-        P1 = axelrod.AntiTitForTat()
-        P2 = axelrod.Player()
-        P1.history = ['C']
-        P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history.append('D')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('C')
-        self.assertEqual(P1.strategy(P2), 'D')
-        
+        self.markov_test([D, C, D, C])
