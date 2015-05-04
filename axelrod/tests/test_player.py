@@ -3,6 +3,12 @@ import unittest
 
 import axelrod
 
+def test_four_vector(test_class, expected_dictionary):
+    P1 = test_class.player()
+    for key in sorted(expected_dictionary.keys()):
+        test_class.assertAlmostEqual(P1._four_vector[key],
+                expected_dictionary[key])
+
 def test_responses(test_class, P1, P2, response_lists, random_seed=None):
     """Test responses to arbitrary histories. Used for the the following tests in TestPlayer: first_play_test, markov_test, and responses_test. Works for arbitrary players as well. Input response_lists is a list of lists, each of which consists of a list for the history of player 1, a list for the history of player 2, and a list for the subsequent moves by player one to test."""
     if random_seed:
