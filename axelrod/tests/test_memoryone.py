@@ -189,15 +189,15 @@ class TestStochasticWSLS(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
         self.assertEqual(P1.strategy(P2), 'C')
 
-class TestZDChi(TestPlayer):
+class TestZDExtort2(TestPlayer):
 
-    name = "ZD Extort-2"
-    player = axelrod.ZDChi
+    name = "ZD-Extort-2"
+    player = axelrod.ZDExtort2
     stochastic = True
 
     def test_four_vector(self):
         P1 = self.player()
-        expected_dictionary = {('C', 'D'): 0.5, ('D', 'C'): 0.75, ('D', 'D'): 0.0, ('C', 'C'): 1.1666666666666667}
+        expected_dictionary = {('C', 'D'): 0.5, ('D', 'C'): 1./3, ('D', 'D'): 0., ('C', 'C'): 8./9}
         for key in sorted(expected_dictionary.keys()):
             self.assertAlmostEqual(P1._four_vector[key],
                     expected_dictionary[key])
@@ -212,8 +212,8 @@ class TestZDChi(TestPlayer):
         P1.history = ['C']
         P2.history = ['C']
         random.seed(2)
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P1.strategy(P2), 'C')
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['C']
@@ -224,9 +224,9 @@ class TestZDChi(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['D']
         P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['D']
         P2.history = ['D']
@@ -237,13 +237,13 @@ class TestZDChi(TestPlayer):
 
 class TestZDGTFT2(TestPlayer):
 
-    name = "ZD GTFT2"
+    name = "ZD-GTFT-2"
     player = axelrod.ZDGTFT2
     stochastic = True
 
     def test_four_vector(self):
         P1 = self.player()
-        expected_dictionary = {('C', 'D'): 4.0, ('D', 'C'): -1.5, ('D', 'D'): 1.5, ('C', 'C'): 1.0}
+        expected_dictionary = {('C', 'D'): 1./8, ('D', 'C'): 1., ('D', 'D'): 0.25, ('C', 'C'): 1.}
         for key in sorted(expected_dictionary.keys()):
             self.assertAlmostEqual(P1._four_vector[key],
                     expected_dictionary[key])
@@ -264,19 +264,19 @@ class TestZDGTFT2(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['C']
         P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
         P1.history = ['D']
         P2.history = ['C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['D']
         P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), 'D')
