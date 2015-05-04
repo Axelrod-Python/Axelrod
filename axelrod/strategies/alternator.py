@@ -4,6 +4,7 @@ class Alternator(Player):
     """A player who alternates between cooperating and defecting."""
 
     name = 'Alternator'
+    memoryone = True
 
     def strategy(self, opponent):
         if len(self.history) == 0:
