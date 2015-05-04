@@ -8,10 +8,7 @@ class TitForTat(Player):
     name = 'Tit For Tat'
 
     def strategy(self, opponent):
-        try:
-            return opponent.history[-1]
-        except IndexError:
-            return 'C'
+        return 'D' if opponent.history[-1:] == ['D'] else 'C'
 
 class TitFor2Tats(Player):
     """A player starts by cooperating and then defects only after two defects by opponent."""
@@ -19,9 +16,7 @@ class TitFor2Tats(Player):
     name = "Tit For 2 Tats"
 
     def strategy(self, opponent):
-        if opponent.history[-2:] == ['D', 'D']:
-            return 'D'
-        return 'C'
+        return 'D' if opponent.history[-2:] == ['D', 'D'] else 'C'
 
 class TwoTitsForTat(Player):
     """A player starts by cooperating and replies to each defect by two defections."""
@@ -29,15 +24,13 @@ class TwoTitsForTat(Player):
     name = "Two Tits For Tat"
 
     def strategy(self, opponent):
-        if 'D' in opponent.history[-2:]:
-            return 'D'
-        return 'C'
+        return 'D' if 'D' in opponent.history[-2:] else 'C'
 
 class Bully(Player):
-    """A player that behaves opposite to Tit For Tat.
+    """A player that behaves opposite to Tit For Tat, including first move.
 
     Starts by defecting and then does the opposite of opponent's previous move.
-    This the opposite of TIT FOR TAT, also sometimes called BULLY.
+    This the complete opposite of TIT FOR TAT, also called BULLY in literature.
     """
 
     name = "Bully"
@@ -65,18 +58,15 @@ class SuspiciousTitForTat(Player):
     name = "Suspicious Tit For Tat"
 
     def strategy(self, opponent):
-        try:
-            return opponent.history[-1]
-        except IndexError:
-            return 'D'
+        return 'C' if opponent.history[-1:] == ['C'] else 'D'
 
 class AntiTitForTat(Player):
-    """A strategy that always plays the opposite of the opponents previous move."""
+    """A strategy that plays the opposite of the opponents previous move.
+
+    This is similar to BULLY above, except that the first move is cooperation.
+    """
 
     name = 'Anti Tit For Tat'
 
     def strategy(self, opponent):
-        try:
-            return flip_dict[opponent.history[-1]]
-        except IndexError:
-            return 'C'
+        return 'D' if opponent.history[-1:] == ['C'] else 'C'
