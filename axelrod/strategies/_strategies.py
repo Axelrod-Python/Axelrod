@@ -34,8 +34,10 @@ basic_strategies = [
 ordinary_strategies = [
     AlternatorHunter,
     Appeaser,
+    AntiTitForTat,
     ArrogantQLearner,
     AverageCopier,
+    Bully,
     CautiousQLearner,
     CooperatorHunter,
     DefectorHunter,
