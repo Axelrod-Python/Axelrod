@@ -106,7 +106,7 @@ class Tournament(object):
             game=self.game,
             turns=self.turns,
             deterministic_cache=self.deterministic_cache,
-            cache_mutable=cache_mutable
+            cache_mutable=cache_mutable,
             noise=self.noise)
         payoffs = round_robin.play()
         return payoffs
