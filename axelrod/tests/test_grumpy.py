@@ -15,9 +15,7 @@ class TestGrumpy(TestPlayer):
         """
         Starts by cooperating
         """
-        P1 = axelrod.Grumpy()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test('C')
 
     def test_initial_grumpy_strategy(self):
         """
