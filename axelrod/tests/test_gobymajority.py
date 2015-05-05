@@ -4,6 +4,8 @@ import axelrod
 
 from test_player import TestPlayer
 
+C, D = 'C', 'D'
+
 
 class TestGoByMajority(TestPlayer):
 
@@ -12,26 +14,15 @@ class TestGoByMajority(TestPlayer):
     stochastic = False
 
     def test_initial_strategy(self):
-        """
-        Starts by cooperating
-        """
-        P1 = axelrod.GoByMajority()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        """Starts by cooperating """
+        self.first_play_test(C)
 
     def test_strategy(self):
         """
         If opponent cooperates at least as often as they defect then the player cooperates
         """
-        P1 = axelrod.GoByMajority()
-        P2 = axelrod.Player()
-        P1.history = ['C', 'D', 'D', 'D']
-        P2.history = ['D', 'D', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C', 'C', 'D', 'D', 'D']
-        P2.history = ['D', 'D', 'C', 'C', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-
+        self.responses_test([C, D, D, D], [D, D, C, C], [C])
+        self.responses_test([C, C, D, D], [D, D, C, C, D], [D])
 
 def factory_TestGoByRecentMajority(L):
 
@@ -43,9 +34,7 @@ def factory_TestGoByRecentMajority(L):
 
         def test_initial_strategy(self):
             """Starts by cooperating."""
-            P1 = self.player()
-            P2 = axelrod.Player()
-            self.assertEqual(P1.strategy(P2), 'C')
+            self.first_play_test(C)
 
         def test_strategy(self):
             """If opponent cooperates at least as often as they defect then the player cooperates."""
