@@ -31,7 +31,7 @@ class TestRoundRobin(unittest.TestCase):
 
     def test_init(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
-        rr = axelrod.RoundRobin(players=[p1, p2], game=self.game, turns=20, noise_level=0.2)
+        rr = axelrod.RoundRobin(players=[p1, p2], game=self.game, turns=20, noise=0.2)
         self.assertEquals(rr.players, [p1, p2])
         self.assertEquals(rr.nplayers, 2)
         self.assertEquals(rr.game.score(('C', 'C')), (3, 3))
