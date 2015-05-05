@@ -1,7 +1,8 @@
 import inspect
 import random
 
-flip_dict = {'C': 'D', 'D':'C'}
+flip_dict = {'C': 'D', 'D': 'C'}
+
 
 class Player(object):
     """A class for a player in the tournament.
