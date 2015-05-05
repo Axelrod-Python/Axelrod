@@ -10,7 +10,6 @@ class Player(object):
     """
 
     name = "Player"
-    noise_probability = 0.0
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
@@ -27,15 +26,15 @@ class Player(object):
         """This is a placeholder strategy."""
         return None
 
-    def play(self, opponent):
+    def play(self, opponent, noise=0):
         """This pits two players against each other."""
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
-        if self.noise_probability:
+        if noise:
             r = random.random()
-            if r < self.noise_probability:
+            if r < noise:
                 s1 = flip_dict[s1]
             r = random.random()
-            if r < self.noise_probability:
+            if r < noise:
                 s2 = flip_dict[s2]
         self.history.append(s1)
         opponent.history.append(s2)
