@@ -24,10 +24,10 @@ class Tournament(object):
             turns=turns,
             repetitions=repetitions)
         self.deterministic_cache = {}
+        self.noise = noise
 
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self._noise = noise
 
     def play(self):
         payoffs_list = []
@@ -35,7 +35,7 @@ class Tournament(object):
         if self._processes is None:
             self._run_serial_repetitions(payoffs_list)
         else:
-            if (not self._noise and (len(self.deterministic_cache) == 0 or not self.prebuilt_cache)):
+            if (not self.noise and (len(self.deterministic_cache) == 0 or not self.prebuilt_cache)):
                 self._logger.debug('Playing first round robin to build cache')
                 payoffs = self._play_round_robin()
                 payoffs_list.append(payoffs)
@@ -107,6 +107,6 @@ class Tournament(object):
             turns=self.turns,
             deterministic_cache=self.deterministic_cache,
             cache_mutable=cache_mutable
-            noise=self._noise)
+            noise=self.noise)
         payoffs = round_robin.play()
         return payoffs
