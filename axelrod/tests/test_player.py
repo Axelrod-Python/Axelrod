@@ -83,20 +83,22 @@ class TestPlayer(unittest.TestCase):
             self, P1, P2, history_1, history_2, responses, random_seed=random_seed)
 
 class TestHeadsUp(unittest.TestCase):
+    """Test class for heads up play between two given players."""
     
     def versus_test(self, player_1_class, player_2_class, outcomes, player_1_history=None, player_2_history=None, random_seed=None):
+        """Tests a sequence of outcomes for two given players."""
         if random_seed:
             random.seed(random_seed)
         player_1 = player_1_class()
         player_2 = player_2_class()
-        if player_1.history is not None:
-            player_1.history = player_1_history
-        else:
-            player_1.history = []
-        if player_2.history is not None:
-            player_2.history = player_2_history
-        else:
-            player_2.history = []
+        # Set histories
+        if player_1_history is None:
+            player_1_history = []
+        player_1.history = player_1_history
+        if player_2_history is None:
+            player_2_history = []
+        player_2.history = player_2_history
+        # Test sequence of play
         for outcome_1, outcome_2 in outcomes:
             player_1.play(player_2)
             self.assertEqual(player_1_history[-1], outcome_1)
