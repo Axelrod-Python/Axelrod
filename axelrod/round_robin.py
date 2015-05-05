@@ -2,7 +2,7 @@ class RoundRobin(object):
     """A class to define play a round robin game of players"""
 
     def __init__(self, players, game, turns, deterministic_cache={},
-                 cache_mutable=True):
+                 cache_mutable=True, noise_level=0):
         """Initialise the players, game and deterministic cache"""
         self.players = players
         self.nplayers = len(players)
@@ -10,6 +10,10 @@ class RoundRobin(object):
         self.turns = turns
         self.deterministic_cache = deterministic_cache
         self.cache_mutable = cache_mutable
+        self._noise_level = noise_level
+        self._noisy = False
+        if self._noise_level > 0:
+            self._noisy = True
 
     def _calculate_scores(self, p1, p2):
         """Calculates the score for two players based their history"""
@@ -54,7 +58,7 @@ class RoundRobin(object):
                 # There are many possible keys to cache by, but perhaps the
                 # most versatile is a tuple with the classes of both players.
                 key = (cl1, cl2)
-                if (p1.stochastic or p2.stochastic or key not in self.deterministic_cache):
+                if (self._noisy or p1.stochastic or p2.stochastic or key not in self.deterministic_cache):
                     turn = 0
                     p1.reset()
                     p2.reset()
@@ -62,14 +66,14 @@ class RoundRobin(object):
                         turn += 1
                         p1.play(p2)
                     scores = self._calculate_scores(p1, p2)
-                    if self.cache_mutable and not (p1.stochastic or p2.stochastic):
+                    if not self._noisy and self.cache_mutable and not (p1.stochastic or p2.stochastic):
                         self.deterministic_cache[key] = scores
                 else:
                     scores = self.deterministic_cache[key]
 
                 # For self-interactions we can take the average of the two sides, which
                 # should improve the averaging a bit.
-                if ip1 == ip2:
+                if not self._noisy and ip1 == ip2:
                     payoffs[ip1][ip2] = 0.5 * (scores[0] + scores[1])
                 else:
                     payoffs[ip1][ip2] = scores[0]
