@@ -229,7 +229,7 @@ Here is the test for the :code:`ForgetfulGrudger` strategy (in the :code:`test_g
         self.assertEqual(P1.grudge_memory, 0)
 
 
-We have added some convenience member functions to the :code:`TestPlayer class`. All three of these functions can take an optional keyword argument :code:`random_seed` (useful for stochastic strategies).
+We have added some convenience member functions to the :code:`TestPlayer` class. All three of these functions can take an optional keyword argument :code:`random_seed` (useful for stochastic strategies).
 
 1. The member function :code:`first_play_test` tests the first strategy, e.g.::
 
@@ -273,7 +273,7 @@ This is equivalent to::
     def test_effect_of_strategy(self):
         self.responses_test([C], [C], [D, C, C, C], random_seed=15)
 
-In this case each player has their history set to :code:`[C]` and the expected responses are D, C, C, C. Note that the history will elongate as the responses accumulated.
+In this case each player has their history set to :code:`[C]` and the expected responses are D, C, C, C. Note that the histories will elongate as the responses accumulated.
 
 
 How to run tests
