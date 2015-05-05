@@ -171,8 +171,7 @@ How to write tests
 
 To write tests you either need to create a file called :code:`test_<library>.py` where :code:`<library>.py` is the name of the file you have created or similarly add tests to the test file that is already present in the :code:`axelrod/tests/` directory.
 
-As an example, the :code:`axelrod/tests/test_titfortat.py` contains the following code::
-
+As an example, you code write tests for Tit-For-Tat as follows:
 
     import axelrod
 
@@ -228,6 +227,53 @@ Here is the test for the :code:`ForgetfulGrudger` strategy (in the :code:`test_g
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)
+
+
+We have added some convenience memver functions to the TestPlayer class. All three of these functions can take an optional keyword argument random_seed (useful for stochastic strategies).
+
+1. The member function :code:`first_play_test` tests the first strategy, e.g.::
+
+    def test_strategy(self):
+        self.first_play_test('C')
+
+This is equivalent to::
+
+    def test_effect_of_strategy(self):
+        P1 = axelrod.TitForTat() # Or whatever player is in your test class
+        P2 = axelrod.Player()
+        P2.history = []
+        P2.history = []
+        self.assertEqual(P1.strategy(P2), 'C')
+
+2. The member function :code:`markov_test` takes a list of for plays, each following one round of CC, CD, DC, and DD respectively::
+
+    def test_effect_of_strategy(self):
+        self.markov_test(['C', 'D', 'D', 'C'])
+
+This is equivalent to::
+
+    def test_effect_of_strategy(self):
+        P1 = axelrod.TitForTat() # Or whatever player is in your test class
+        P2 = axelrod.Player()
+        P2.history = ['C']
+        P2.history = ['C']
+        self.assertEqual(P1.strategy(P2), 'C')
+        P2.history = ['C']
+        P2.history = ['D']
+        self.assertEqual(P1.strategy(P2), 'D')
+        P2.history = ['D']
+        P2.history = ['C']
+        self.assertEqual(P1.strategy(P2), 'D')
+        P2.history = ['D']
+        P2.history = ['D']
+        self.assertEqual(P1.strategy(P2), 'C')
+
+3. The member function :code:`responses_test` takes arbitrary histories for each player and tests a list of expected next responses::
+
+    def test_effect_of_strategy(self):
+        self.responses_test([C], [C], [D, C, C, C], random_seed=15)
+
+In this case each player has their history set to :code:`[C]` and the expected responses are D, C, C, C. Note that the history will elongate as the responses accumulated.
 
 
 How to run tests
