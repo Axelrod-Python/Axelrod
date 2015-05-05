@@ -6,6 +6,8 @@ import axelrod
 
 from test_player import TestPlayer
 
+C, D = 'C', 'D'
+
 
 class TestAverageCopier(TestPlayer):
 
@@ -15,44 +17,20 @@ class TestAverageCopier(TestPlayer):
 
     def test_strategy(self):
         """Test that the first strategy is picked randomly."""
-        random.seed(1)
-        P1 = axelrod.AverageCopier()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        responses = [C, D, D, C, C, C, D, D, C, C]
+        self.responses_test([], [], responses, random_seed=1)
 
     def test_when_oppenent_all_Cs(self):
         """
         Tests that if opponent has played all C then player chooses C
         """
-        random.seed(5)
-        P1 = axelrod.AverageCopier()
-        P2 = axelrod.Player()
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.responses_test([], [C, C, C, C], [C, C, C], random_seed=5)
 
     def test_when_opponent_all_Ds(self):
         """
         Tests that if opponent has played all D then player chooses D
         """
-        random.seed(5)
-        P1 = axelrod.AverageCopier()
-        P2 = axelrod.Player()
-        P2.history = ['D', 'D', 'D', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-
+        self.responses_test([], [D, D, D, D], [D, D, D], random_seed=5)
 
 class TestNiceAverageCopier(TestPlayer):
 
@@ -62,30 +40,16 @@ class TestNiceAverageCopier(TestPlayer):
 
     def test_strategy(self):
         """Test that the first strategy is cooperation."""
-        P1 = axelrod.NiceAverageCopier()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test(C)
 
     def test_when_oppenent_all_Cs(self):
         """
         Tests that if opponent has played all C then player chooses C
         """
-        random.seed(5)
-        P1 = axelrod.NiceAverageCopier()
-        P2 = axelrod.Player()
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.responses_test([], [C, C, C, C], [C, C, C], random_seed=5)
 
     def test_when_opponent_all_Ds(self):
         """
         Tests that if opponent has played all D then player chooses D
         """
-        random.seed(5)
-        P1 = axelrod.NiceAverageCopier()
-        P2 = axelrod.Player()
-        P2.history = ['D', 'D', 'D', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.responses_test([], [D, D, D, D], [D, D, D], random_seed=5)
