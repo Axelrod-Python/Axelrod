@@ -171,7 +171,7 @@ How to write tests
 
 To write tests you either need to create a file called :code:`test_<library>.py` where :code:`<library>.py` is the name of the file you have created or similarly add tests to the test file that is already present in the :code:`axelrod/tests/` directory.
 
-As an example, you code write tests for Tit-For-Tat as follows:
+As an example, you code write tests for Tit-For-Tat as follows::
 
     import axelrod
 
@@ -229,7 +229,7 @@ Here is the test for the :code:`ForgetfulGrudger` strategy (in the :code:`test_g
         self.assertEqual(P1.grudge_memory, 0)
 
 
-We have added some convenience memver functions to the TestPlayer class. All three of these functions can take an optional keyword argument random_seed (useful for stochastic strategies).
+We have added some convenience member functions to the :code:`TestPlayer class`. All three of these functions can take an optional keyword argument :code:`random_seed` (useful for stochastic strategies).
 
 1. The member function :code:`first_play_test` tests the first strategy, e.g.::
 
@@ -245,7 +245,7 @@ This is equivalent to::
         P2.history = []
         self.assertEqual(P1.strategy(P2), 'C')
 
-2. The member function :code:`markov_test` takes a list of for plays, each following one round of CC, CD, DC, and DD respectively::
+2. The member function :code:`markov_test` takes a list of four plays, each following one round of CC, CD, DC, and DD respectively::
 
     def test_effect_of_strategy(self):
         self.markov_test(['C', 'D', 'D', 'C'])
