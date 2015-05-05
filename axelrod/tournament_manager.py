@@ -32,20 +32,21 @@ class TournamentManager(object):
         return [strategy() for strategy in strategies]
 
     def add_tournament(self, name, players, game=None, turns=200,
-                       repetitions=10, processes=None):
+                       repetitions=10, processes=None, noise=0):
         tournament = Tournament(
             name=name,
             players=players,
             turns=turns,
             repetitions=repetitions,
-            processes=processes)
+            processes=processes,
+            noise=noise)
         self._tournaments.append(tournament)
 
     def run_tournaments(self):
         t0 = time.time()
         for tournament in self._tournaments:
             self._run_single_tournament(tournament)
-        if self._save_cache:
+        if self._save_cache and not tournament.noise:
             self._save_cache_to_file(self._deterministic_cache, self._cache_file)
         self._logger.info(timed_message('Finished all tournaments', t0))
 
@@ -56,7 +57,7 @@ class TournamentManager(object):
 
         t0 = time.time()
 
-        if self._pass_cache and self._valid_cache(tournament.turns):
+        if not tournament.noise and self._pass_cache and self._valid_cache(tournament.turns):
             self._logger.debug('Passing cache with %d entries to %s tournament' %
                             (len(self._deterministic_cache), tournament.name))
             tournament.deterministic_cache = self._deterministic_cache
