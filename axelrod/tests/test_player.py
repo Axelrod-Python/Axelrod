@@ -24,7 +24,6 @@ def test_responses(test_class, P1, P2, history_1, history_2, responses, random_s
     for response in responses:
         test_class.assertEqual(P1.strategy(P2), response)
 
-
 class TestPlayer(unittest.TestCase):
 
     name = "Player"
@@ -82,3 +81,23 @@ class TestPlayer(unittest.TestCase):
         P2 = axelrod.Player()
         test_responses(
             self, P1, P2, history_1, history_2, responses, random_seed=random_seed)
+
+class TestHeadsUp(unittest.TestCase):
+    
+    def versus_test(self, player_1_class, player_2_class, outcomes, player_1_history=None, player_2_history=None, random_seed=None):
+        if random_seed:
+            random.seed(random_seed)
+        player_1 = player_1_class()
+        player_2 = player_2_class()
+        if player_1.history is not None:
+            player_1.history = player_1_history
+        else:
+            player_1.history = []
+        if player_2.history is not None:
+            player_2.history = player_2_history
+        else:
+            player_2.history = []
+        for outcome_1, outcome_2 in outcomes:
+            player_1.play(player_2)
+            self.assertEqual(player_1_history[-1], outcome_1)
+            self.assertEqual(player_2_history[-1], outcome_2)
