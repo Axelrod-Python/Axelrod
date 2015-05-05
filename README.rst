@@ -60,6 +60,11 @@ the cheating strategies (which manipulate/read what the opponent does):
 .. figure:: ./assets/all_strategies_boxplot.png
    :alt:
 
+Also the pairwise performance of each strategy versus all others:
+
+.. figure:: ./assets/strategies_payoff.png
+   :alt:
+
 Please do contribute :)
 
 Note that you can run ``python run_tournament.py -h`` for further

@@ -4,6 +4,8 @@ import axelrod
 
 from test_player import TestPlayer
 
+C, D = 'C', 'D'
+
 
 class TestAppeaser(TestPlayer):
 
@@ -11,6 +13,10 @@ class TestAppeaser(TestPlayer):
     player = axelrod.Appeaser
 
     def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+
+    def test_effect_of_strategy(self):
         P1 = axelrod.Appeaser()
         P2 = axelrod.Player()
         P1.str = 'C';
