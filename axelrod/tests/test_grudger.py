@@ -103,7 +103,7 @@ class TestOppositeGrudger(TestPlayer):
 
     def test_initial_strategy(self):
         """
-        Starts by cdefecting
+        Starts by defecting
         """
         self.first_play_test(D)
 
