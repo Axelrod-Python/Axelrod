@@ -6,6 +6,8 @@ import axelrod
 
 from test_player import TestPlayer
 
+C, D = 'C', 'D'
+
 
 class TestDefectorHunter(TestPlayer):
 
@@ -14,14 +16,10 @@ class TestDefectorHunter(TestPlayer):
     stochastic = False
 
     def test_strategy(self):
-
-        P1 = axelrod.DefectorHunter()
-        P2 = axelrod.Player()
-        for i in range(4):
-            self.assertEqual(P1.strategy(P2), 'C')
-            P1.history.append('C')
-            P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.first_play_test(C)
+        for i in range(3):
+            self.responses_test([C]*i, [D]*i, [C])
+        self.responses_test([C]*4, [D]*4, [D])
 
 class TestCooperatorHunter(TestPlayer):
 
@@ -30,14 +28,10 @@ class TestCooperatorHunter(TestPlayer):
     stochastic = False
 
     def test_strategy(self):
-
-        P1 = axelrod.CooperatorHunter()
-        P2 = axelrod.Player()
-        for i in range(4):
-            self.assertEqual(P1.strategy(P2), 'C')
-            P1.history.append('C')
-            P2.history.append('C')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.first_play_test(C)
+        for i in range(3):
+            self.responses_test([C]*i, [C]*i, [C])
+        self.responses_test([C]*4, [C]*4, [D])
 
 class TestAlternatorHunter(TestPlayer):
 
@@ -46,14 +40,11 @@ class TestAlternatorHunter(TestPlayer):
     stochastic = False
 
     def test_strategy(self):
-
-        P1 = axelrod.AlternatorHunter()
-        P2 = axelrod.Player()
-        for i in range(4):
-            self.assertEqual(P1.strategy(P2), 'C')
-            P1.history.append('C')
-            P2.history.append('C'*(i%2==0) or 'D')
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.first_play_test(C)
+        self.responses_test([C, C], [C, D], [C])
+        self.responses_test([C, C, C], [C, D, C], [C])
+        self.responses_test([C, C, C, C], [C, D, C, D], [D])
+        self.responses_test([C, C, C, C, C], [C, D, C, D, C], [D])
 
 class TestMathConstantHunter(TestPlayer):
 
@@ -62,12 +53,7 @@ class TestMathConstantHunter(TestPlayer):
     stochastic = False
 
     def test_strategy(self):
-
-        P1 = axelrod.MathConstantHunter()
-        P2 = axelrod.Player()
-        P1.history = ['C'] * 8
-        P2.history = ['C', 'C', 'C', 'D', 'C', 'C', 'C', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.responses_test([C]*8, [C, C, C, D, C, C, C, D], [D])
 
 class TestRandomHunter(TestPlayer):
 
@@ -76,10 +62,9 @@ class TestRandomHunter(TestPlayer):
     stochastic = False
 
     def test_strategy(self):
-
         P1 = axelrod.RandomHunter()
         P2 = axelrod.Player()
-        P1.history = ['C'] * 8
+        P1.history = [C] * 8
         P2.history = [random.choice(['C', 'D']) for i in range(8)]
         for i in range(10):
             self.assertEqual(P1.strategy(P2), 'D')
@@ -93,25 +78,12 @@ class TestMetaHunter(TestPlayer):
     stochastic = False
 
     def test_strategy(self):
-
-        P1 = axelrod.MetaHunter()
-        P2 = axelrod.Player()
-
-        self.assertEqual(P1.strategy(P2), 'C')
-
+        self.first_play_test(C)
         # We are not using the Cooperator Hunter here, so this should lead to cooperation.
-        P1.history = ['C'] * 4
-        P2.history = ['C'] * 4
-        self.assertEqual(P1.strategy(P2), 'C')
-
+        self.responses_test([C, C, C, C], [C, C, C, C], [C])
         # All these others, however, should trigger a defection for the hunter.
-        histories = [
-            ['D'] * 4,
-            ['C', 'D'] * 2,
-            ['C', 'C', 'C', 'D', 'C', 'C', 'C', 'D'],
-            [random.choice(['C', 'D']) for i in range(8)],
-        ]
-        for h in histories:
-            P1.history = ['C'] * len(h)
-            P2.history = h
-            self.assertEqual(P1.strategy(P2), 'D')
+        self.responses_test([C, C, C, C], [D, D, D, D], [D])
+        self.responses_test([C, C, C, C], [C, D, C, D], [D])
+        self.responses_test([C]*8, [C, C, C, D, C, C, C, D], [D])
+        self.responses_test([C]*8, [random.choice([C, D]) for i in range(8)],[D])
+

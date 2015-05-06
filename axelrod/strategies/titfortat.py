@@ -1,6 +1,7 @@
 from axelrod import Player
 
-flip_dict = {'C': 'D', 'D':'C'}
+flip_dict = {'C': 'D', 'D': 'C'}
+
 
 class TitForTat(Player):
     """A player starts by cooperating and then mimics previous move by opponent."""
@@ -11,6 +12,7 @@ class TitForTat(Player):
     def strategy(self, opponent):
         return 'D' if opponent.history[-1:] == ['D'] else 'C'
 
+
 class TitFor2Tats(Player):
     """A player starts by cooperating and then defects only after two defects by opponent."""
 
@@ -20,6 +22,7 @@ class TitFor2Tats(Player):
     def strategy(self, opponent):
         return 'D' if opponent.history[-2:] == ['D', 'D'] else 'C'
 
+
 class TwoTitsForTat(Player):
     """A player starts by cooperating and replies to each defect by two defections."""
 
@@ -28,6 +31,7 @@ class TwoTitsForTat(Player):
 
     def strategy(self, opponent):
         return 'D' if 'D' in opponent.history[-2:] else 'C'
+
 
 class Bully(Player):
     """A player that behaves opposite to Tit For Tat, including first move.
@@ -41,6 +45,7 @@ class Bully(Player):
 
     def strategy(self, opponent):
         return 'C' if opponent.history[-1:] == ['D'] else 'D'
+
 
 class SneakyTitForTat(Player):
     """Tries defecting once and repents if punished."""
@@ -57,6 +62,7 @@ class SneakyTitForTat(Player):
             return "C"
         return opponent.history[-1]
 
+
 class SuspiciousTitForTat(Player):
     """A TFT that initially defects."""
 
@@ -66,11 +72,10 @@ class SuspiciousTitForTat(Player):
     def strategy(self, opponent):
         return 'C' if opponent.history[-1:] == ['C'] else 'D'
 
+
 class AntiTitForTat(Player):
     """A strategy that plays the opposite of the opponents previous move.
-
-    This is similar to BULLY above, except that the first move is cooperation.
-    """
+    This is similar to BULLY above, except that the first move is cooperation."""
 
     name = 'Anti Tit For Tat'
     memoryone = True # Four-Vector = (0.,1.,0.,1.)
