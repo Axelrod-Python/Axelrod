@@ -11,7 +11,9 @@ def test_four_vector(test_class, expected_dictionary):
         test_class.assertAlmostEqual(
             P1._four_vector[key], expected_dictionary[key])
 
-def test_responses(test_class, P1, P2, history_1, history_2, responses, random_seed=None):
+
+def test_responses(test_class, P1, P2, history_1, history_2,
+                   responses, random_seed=None):
     """Test responses to arbitrary histories. Used for the the following tests
     in TestPlayer: first_play_test, markov_test, and responses_test.
     Works for arbitrary players as well. Input response_lists is a list of
@@ -68,9 +70,9 @@ class TestPlayer(unittest.TestCase):
         histories = [
             [[C], [C]], [[C], [D]], [[D], [C]],
             [[D], [D]]]
-        response_lists = []
         for i, history in enumerate(histories):
-            test_responses(self, P1, P2, history[0], history[1], responses[i], random_seed=random_seed)
+            test_responses(self, P1, P2, history[0], history[1], responses[i],
+                           random_seed=random_seed)
 
     def responses_test(self, history_1, history_2, responses,
                        random_seed=None):
@@ -81,14 +83,16 @@ class TestPlayer(unittest.TestCase):
         P1 = self.player()
         P2 = axelrod.Player()
         test_responses(
-            self, P1, P2, history_1, history_2, responses, random_seed=random_seed)
+            self, P1, P2, history_1, history_2, responses,
+            random_seed=random_seed)
 
 
 class TestHeadsUp(unittest.TestCase):
     """Test class for heads up play between two given players."""
-    
-    def versus_test(self, player_1_class, player_2_class, outcomes, 
-                    player_1_history=None, player_2_history=None, random_seed=None):
+
+    def versus_test(self, player_1_class, player_2_class, outcomes,
+                    player_1_history=None, player_2_history=None,
+                    random_seed=None):
         """Tests a sequence of outcomes for two given players."""
         if random_seed:
             random.seed(random_seed)
