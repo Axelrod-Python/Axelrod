@@ -7,6 +7,7 @@ class TitForTat(Player):
     """A player starts by cooperating and then mimics previous move by opponent."""
 
     name = 'Tit For Tat'
+    memoryone = True  # Four-Vector = (1.,0.,1.,0.)
 
     def strategy(self, opponent):
         return 'D' if opponent.history[-1:] == ['D'] else 'C'
@@ -16,6 +17,7 @@ class TitFor2Tats(Player):
     """A player starts by cooperating and then defects only after two defects by opponent."""
 
     name = "Tit For 2 Tats"
+    memoryone = False  # Long memory, memory-2
 
     def strategy(self, opponent):
         return 'D' if opponent.history[-2:] == ['D', 'D'] else 'C'
@@ -25,6 +27,7 @@ class TwoTitsForTat(Player):
     """A player starts by cooperating and replies to each defect by two defections."""
 
     name = "Two Tits For Tat"
+    memoryone = False  # Long memory, memory-2
 
     def strategy(self, opponent):
         return 'D' if 'D' in opponent.history[-2:] else 'C'
@@ -38,6 +41,7 @@ class Bully(Player):
     """
 
     name = "Bully"
+    memoryone = True  # Four-Vector = (0.,1.,0.,1.)
 
     def strategy(self, opponent):
         return 'C' if opponent.history[-1:] == ['D'] else 'D'
@@ -47,6 +51,7 @@ class SneakyTitForTat(Player):
     """Tries defecting once and repents if punished."""
 
     name = "Sneaky Tit For Tat"
+    memoryone = False  # Long memory
 
     def strategy(self, opponent):
         if len(self.history) < 2:
@@ -62,6 +67,7 @@ class SuspiciousTitForTat(Player):
     """A TFT that initially defects."""
 
     name = "Suspicious Tit For Tat"
+    memoryone = True  # Four-Vector = (1.,0.,1.,0.)
 
     def strategy(self, opponent):
         return 'C' if opponent.history[-1:] == ['C'] else 'D'
@@ -72,6 +78,7 @@ class AntiTitForTat(Player):
     This is similar to BULLY above, except that the first move is cooperation."""
 
     name = 'Anti Tit For Tat'
+    memoryone = True  # Four-Vector = (0.,1.,0.,1.)
 
     def strategy(self, opponent):
         return 'D' if opponent.history[-1:] == ['C'] else 'C'

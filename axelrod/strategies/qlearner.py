@@ -10,6 +10,7 @@ class RiskyQLearner(Player):
     """
 
     name = 'Risky QLearner'
+    memoryone = False  # Long memory
     learning_rate = 0.9
     discount_rate = 0.9
     action_selection_parameter = 0.1
@@ -27,8 +28,8 @@ class RiskyQLearner(Player):
         self.prev_action = random.choice(['C', 'D'])
         self.history = []
         self.score = 0
-        self.Qs = {'':{'C':0, 'D':0}}
-        self.Vs = {'':0}
+        self.Qs = {'': {'C': 0, 'D': 0}}
+        self.Vs = {'': 0}
         self.prev_state = ''
 
     def strategy(self, opponent):
@@ -36,7 +37,7 @@ class RiskyQLearner(Player):
         state = self.find_state(opponent)
         reward = self.find_reward(opponent)
         if state not in self.Qs:
-            self.Qs[state] = {'C':0, 'D':0}
+            self.Qs[state] = {'C': 0, 'D': 0}
             self.Vs[state] = 0
         self.perform_q_learning(self.prev_state, state, self.prev_action, reward)
         if state not in self.Qs:
