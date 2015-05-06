@@ -12,12 +12,9 @@ import logging
 import axelrod
 
 
-def run_tournaments(cache_file='./cache.txt', logging_destination='console', no_ecological=False, output_directory='./', processes=None, rebuild_cache=False, repetitions=10, turns=200, verbosity='INFO', exclude_combined=False, exclude_basic=False, exclude_cheating=False, exclude_ordinary=False, noise=0):
-    manager = axelrod.TournamentManager(
-        output_directory=output_directory,
-        with_ecological=not no_ecological, save_cache=rebuild_cache,
-        cache_file=cache_file)
-
+def setup_logging(logging_destination='console', verbosity='INFO'):
+    """Sets up logging. Call this outside of run_tournaments to avoid 
+    accumulating logging handlers."""
     logHandlers = {
         'console': logging.StreamHandler(),
         'none': logging.NullHandler(),
@@ -36,6 +33,12 @@ def run_tournaments(cache_file='./cache.txt', logging_destination='console', no_
     logger = logging.getLogger('axelrod')
     logger.setLevel(logging.getLevelName(verbosity))
     logger.addHandler(logHandler)
+
+def run_tournaments(cache_file='./cache.txt', output_directory='./', repetitions=10, turns=200, processes=None, no_ecological=False, rebuild_cache=False, exclude_combined=False, exclude_basic=False, exclude_cheating=False, exclude_ordinary=False, noise=0):
+    manager = axelrod.TournamentManager(
+        output_directory=output_directory,
+        with_ecological=not no_ecological, save_cache=rebuild_cache,
+        cache_file=cache_file)
 
     stdkwargs = {
         'processes': processes,
@@ -102,5 +105,9 @@ if __name__ == "__main__":
     if all([args.exclude_basic, args.exclude_ordinary, args.exclude_cheating, args.exclude_combined]):
         print "You've excluded everything - nothing for me to do"
     else:
+        setup_logging(args.logging_destination, args.verbosity)
         # Unravel argparse Namespace object to python keyword arguments.
-        run_tournaments(**vars(args))
+        kwargs = vars(args)
+        del kwargs["logging_destination"]
+        del kwargs["verbosity"]
+        run_tournaments(**kwargs)
