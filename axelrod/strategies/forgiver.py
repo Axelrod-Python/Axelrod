@@ -8,6 +8,7 @@ class Forgiver(Player):
     """
 
     name = 'Forgiver'
+    memoryone = False # Long memory
 
     def strategy(self, opponent):
         """
@@ -29,6 +30,7 @@ class ForgivingTitForTat(Player):
     """
 
     name = 'Forgiving Tit For Tat'
+    memoryone = False # Long memory
 
     def strategy(self, opponent):
         """

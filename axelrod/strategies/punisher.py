@@ -9,6 +9,7 @@ class Punisher(Player):
     """
 
     name = 'Punisher'
+    memoryone = False # Long memory
 
     def __init__(self):
         """
@@ -57,6 +58,7 @@ class InversePunisher(Player):
     """
 
     name = 'Inverse Punisher'
+    memoryone = False # Long memory
 
     def __init__(self):
         """
