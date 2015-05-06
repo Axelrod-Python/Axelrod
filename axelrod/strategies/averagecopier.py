@@ -6,7 +6,7 @@ class AverageCopier(Player):
     """The player will cooperate with probability p if the opponent's cooperation ratio is p."""
 
     name = 'Average Copier'
-    memoryone = False # Long memory
+    memoryone = False  # Long memory
 
     def strategy(self, opponent):
         """Randomly picks a strategy (not affected by history)."""
@@ -23,7 +23,7 @@ class NiceAverageCopier(Player):
     """Same as Average Copier, but always starts by cooperating."""
 
     name = 'Nice Average Copier'
-    memoryone = False # Long memory
+    memoryone = False  # Long memory
 
     def strategy(self, opponent):
         """Randomly picks a strategy (not affected by history)."""

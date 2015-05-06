@@ -7,7 +7,7 @@ class Retaliate(Player):
     has won more than 10 percent times the number of defections the player has.
     """
     retaliation_threshold = 0.1
-    memoryone = False # Long memory
+    memoryone = False  # Long memory
 
     def __init__(self):
         """
@@ -54,7 +54,7 @@ class LimitedRetaliate(Player):
     retaliation_threshold = 0.1
     retaliating = False
     retaliation_count = 0
-    memoryone = False # Long memory
+    memoryone = False  # Long memory
 
     def __init__(self):
         """

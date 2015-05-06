@@ -1,5 +1,6 @@
 from axelrod import Player
 
+
 class Alternator(Player):
     """A player who alternates between cooperating and defecting."""
 

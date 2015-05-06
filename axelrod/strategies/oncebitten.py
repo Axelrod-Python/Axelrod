@@ -1,13 +1,14 @@
 import random
 from axelrod import Player
 
+
 class OnceBitten(Player):
     """
     Co-operates once when the opponent defects, but if they defect twice in a row defaults to forgetful grudger for 10 turns defecting
     """
 
     name = 'Once Bitten'
-    memoryone = False # Long memory
+    memoryone = False  # Long memory
 
     def __init__(self):
         """
@@ -48,13 +49,14 @@ class OnceBitten(Player):
         self.grudged = False
         self.grudge_memory = 0
 
+
 class FoolMeOnce(Player):
     """
     Forgives one D then retaliates forever on a second D.
     """
 
     name = 'Fool Me Once'
-    memoryone = False # Long memory
+    memoryone = False  # Long memory
 
     def __init__(self):
         """
@@ -78,13 +80,14 @@ class FoolMeOnce(Player):
         self.D_count = 0
         self.history = []
 
+
 class ForgetfulFoolMeOnce(Player):
     """
     Forgives one D then retaliates forever on a second D. Sometimes randomly forgets the defection count.
     """
 
     name = 'Forgetful Fool Me Once'
-    memoryone = False # Long memory
+    memoryone = False  # Long memory
 
     def __init__(self, forget_probability=0.1):
         super(ForgetfulFoolMeOnce, self).__init__()

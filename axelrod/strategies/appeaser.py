@@ -1,14 +1,15 @@
 from axelrod import Player
 
+
 class Appeaser(Player):
     """A player who tries to guess what the opponent wants.
-    
+
     Switch the behaviour every time the opponent plays 'D'.
     Start with 'C', switch between 'C' and 'D' when opponent plays 'D'.
     """
 
     name = 'Appeaser'
-    memoryone = False # Depends on internal memory.
+    memoryone = False  # Depends on internal memory.
 
     def strategy(self, opponent):
         if len(self.history) == 0:
