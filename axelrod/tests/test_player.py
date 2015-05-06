@@ -85,7 +85,8 @@ class TestPlayer(unittest.TestCase):
 class TestHeadsUp(unittest.TestCase):
     """Test class for heads up play between two given players."""
     
-    def versus_test(self, player_1_class, player_2_class, outcomes, player_1_history=None, player_2_history=None, random_seed=None):
+    def versus_test(self, player_1_class, player_2_class, outcomes, 
+                    player_1_history=None, player_2_history=None, random_seed=None):
         """Tests a sequence of outcomes for two given players."""
         if random_seed:
             random.seed(random_seed)
