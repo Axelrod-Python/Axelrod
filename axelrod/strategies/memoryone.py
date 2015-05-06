@@ -4,6 +4,7 @@ from axelrod import Player, Game
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
+
 class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
@@ -13,30 +14,36 @@ class WinStayLoseShift(Player):
     def __init__(self, initial='C'):
         Player.__init__(self)
         self.response_dict = {
-            ('C','C'): 'C',
-            ('C','D'): 'D',
-            ('D','C'): 'D',
-            ('D','D'): 'C',
+            ('C', 'C'): 'C',
+            ('C', 'D'): 'D',
+            ('D', 'C'): 'D',
+            ('D', 'D'): 'C',
         }
         self._initial = initial
         self.stochastic = False
 
     def strategy(self, opponent):
-        """Switches if it doesn't get the best payout, traditionally equivalent to a Memory one strategy of [1,0,0,1], but this implementation does not require random draws."""
+        """Switches if it doesn't get the best payout, traditionally equivalent
+        to a Memory one strategy of [1,0,0,1], but this implementation does not
+        require random draws."""
         if not opponent.history:
             return self._initial
         last_round = (self.history[-1], opponent.history[-1])
         return self.response_dict[last_round]
 
+
 class MemoryOnePlayer(Player):
-    """Uses a four-vector for strategies based on the last round of play, (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift. Intended to be used as an abstract base class or to at least be supplied with a initializing four_vector."""
+    """Uses a four-vector for strategies based on the last round of play,
+    (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift.
+    Intended to be used as an abstract base class or to at least be supplied
+    with a initializing four_vector."""
 
     name = 'Generic Memory One Player'
     memoryone = True 
 
     def __init__(self, four_vector, initial='C'):
         Player.__init__(self)
-        self._four_vector = dict( zip(  [ ('C','C'), ('C','D'), ('D','C'), ('D','D')], map(float, four_vector) ) )
+        self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self._initial = initial
         self.stochastic = False
         for x in set(four_vector):
@@ -45,7 +52,7 @@ class MemoryOnePlayer(Player):
 
     def strategy(self, opponent):
         if not len(opponent.history):
-             return self._initial
+            return self._initial
         # Determine which probability to use
         p = self._four_vector[(self.history[-1], opponent.history[-1])]
         # Draw a random number in [0,1] to decide
@@ -54,14 +61,17 @@ class MemoryOnePlayer(Player):
             return 'C'
         return 'D'
 
+
 class GTFT(MemoryOnePlayer):
     """Generous Tit-For-Tat Strategy."""
 
     name = 'Generous Tit-For-Tat'
 
     def __init__(self, ep=0.05):
+        self.ep = ep
         four_vector = [1-ep, ep, 1-ep, ep]
         super(self.__class__, self).__init__(four_vector)
+
 
 class StochasticCooperator(MemoryOnePlayer):
     """Stochastic Cooperator, http://www.nature.com/ncomms/2013/130801/ncomms3193/full/ncomms3193.html."""
@@ -72,17 +82,24 @@ class StochasticCooperator(MemoryOnePlayer):
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super(self.__class__, self).__init__(four_vector)
 
+
 class StochasticWSLS(MemoryOnePlayer):
     """Stochastic WSLS, similar to Generous TFT"""
 
     name = 'Stochastic WSLS'
 
     def __init__(self, ep=0.05):
+        self.ep = ep
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
 
+
 class ZeroDeterminantPlayer(MemoryOnePlayer):
-    """Abstraction for ZD players. The correct formula is Equation 14 in http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886 . These players enforce a linear difference in stationary payoffs s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and generous strategies when l = R and s > 0"""
+    """Abstraction for ZD players. The correct formula is Equation 14 in
+    http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886 .
+    These players enforce a linear difference in stationary payoffs
+    s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and
+    generous strategies when l = R and s > 0"""
     name = 'ZD ABC'
 
     def __init__(self, phi=0., s=None, l=None):
@@ -105,6 +122,7 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
         four_vector = [p1, p2, p3, p4]
         MemoryOnePlayer.__init__(self, four_vector)
 
+
 class ZDGTFT2(ZeroDeterminantPlayer):
     """A Generous Zero Determinant Strategy."""
 
@@ -114,6 +132,7 @@ class ZDGTFT2(ZeroDeterminantPlayer):
         (R, P, S, T) = Game().RPST()
         ZeroDeterminantPlayer.__init__(self, phi=0.25, s=0.5, l=R)
 
+
 class ZDExtort2(ZeroDeterminantPlayer):
     """An Extortionate Zero Determinant Strategy."""
 
@@ -122,4 +141,3 @@ class ZDExtort2(ZeroDeterminantPlayer):
     def __init__(self):
         (R, P, S, T) = Game().RPST()
         ZeroDeterminantPlayer.__init__(self, phi=1./9, s=0.5, l=P)
-
