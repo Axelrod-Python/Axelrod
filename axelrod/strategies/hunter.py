@@ -1,7 +1,4 @@
-import random
-
 from axelrod import Player
-
 from meta import MetaPlayer
 
 
@@ -9,9 +6,10 @@ class DefectorHunter(Player):
     """A player who hunts for defectors."""
 
     name = 'Defector Hunter'
+    memoryone = False  # Long memory
 
     def strategy(self, opponent):
-        if len(self.history) >= 4 and all([h == 'D' for h in opponent.history]):
+        if (len(self.history) >= 4 and all([h == 'D' for h in opponent.history])):
             return 'D'
         return 'C'
 
@@ -20,11 +18,11 @@ class CooperatorHunter(Player):
     """A player who hunts for cooperators."""
 
     name = 'Cooperator Hunter'
+    memoryone = False  # Long memory
 
     def strategy(self, opponent):
         if len(self.history) >= 4 and all([h == 'C' for h in opponent.history]):
             return 'D'
-
         return 'C'
 
 
@@ -32,6 +30,7 @@ class AlternatorHunter(Player):
     """A player who hunts for alternators."""
 
     name = 'Alternator Hunter'
+    memoryone = False  # Long memory
 
     def strategy(self, opponent):
         oh = opponent.history
@@ -44,6 +43,7 @@ class MathConstantHunter(Player):
     """A player who hunts for mathemtical constant players."""
 
     name = "Math Constant Hunter"
+    memoryone = False  # Long memory
 
     def strategy(self, opponent):
 
@@ -64,6 +64,7 @@ class RandomHunter(Player):
     """A player who hunts for random players."""
 
     name = "Random Hunter"
+    memoryone = False  # Long memory
 
     # We need to make sure this is not marked as stochastic.
     def __init__(self):
@@ -89,6 +90,7 @@ class MetaHunter(MetaPlayer):
     """A player who uses a selection of hunters sequentially."""
 
     name = "Meta Hunter"
+    memoryone = False  # Long memory
 
     def __init__(self):
 
