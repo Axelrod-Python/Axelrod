@@ -24,6 +24,7 @@ def test_responses(test_class, P1, P2, history_1, history_2, responses, random_s
     for response in responses:
         test_class.assertEqual(P1.strategy(P2), response)
 
+
 class TestPlayer(unittest.TestCase):
 
     name = "Player"
@@ -81,6 +82,7 @@ class TestPlayer(unittest.TestCase):
         P2 = axelrod.Player()
         test_responses(
             self, P1, P2, history_1, history_2, responses, random_seed=random_seed)
+
 
 class TestHeadsUp(unittest.TestCase):
     """Test class for heads up play between two given players."""
