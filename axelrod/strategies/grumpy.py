@@ -4,6 +4,7 @@ class Grumpy(Player):
     """A player that defects after a ceratin level of grumpiness. Grumpiness increases when the opponent defects and decreases when the opponent co-operates."""
 
     name = 'Grumpy'
+    memoryone = False # Depends on internal memory.
 
     def __init__(self, starting_state = 'Nice', grumpy_threshold = 10, nice_threshold = -10):
         """Player starts of nice be default with set thresholds"""

@@ -8,6 +8,7 @@ class Appeaser(Player):
     """
 
     name = 'Appeaser'
+    memoryone = False # Depends on internal memory.
 
     def strategy(self, opponent):
         if len(self.history) == 0:
