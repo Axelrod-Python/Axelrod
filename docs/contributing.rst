@@ -276,6 +276,17 @@ This is equivalent to::
 In this case each player has their history set to :code:`[C]` and the expected responses are D, C, C, C. Note that the histories will elongate as the responses accumulated.
 
 
+Finally, there is a :code:`TestHeadsUp` class that streamlines the testing of two strategies playing each other using a test function :code:`versus_test`. For example, to test several rounds of play of Tit-For-Two-Tats versus Bully::
+
+    class TestTF2TvsBully(TestHeadsUp):
+        """Test Tit for Two Tats vs Bully"""
+        def test_rounds(self):
+            outcomes = [[C, D], [C, D], [D, D], [D, C], [C, C], [C, D], [C, D], [D, D]]
+            self.versus_test(axelrod.TitFor2Tats, axelrod.Bully, outcomes)
+
+The function :code:`versus_test` also accepts a :code:`random_seed` keyword, and like :code:`responses_test` the history is accumulated.
+
+
 How to run tests
 ''''''''''''''''
 
