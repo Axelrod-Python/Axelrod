@@ -141,6 +141,7 @@ class TournamentManager(object):
     def _save_plot(self, figure, file_name, dpi=400):
         figure.savefig(file_name, bbox_inches='tight', dpi=dpi)
         figure.clf()
+        plt.close(figure)
 
     def _save_cache_to_file(self, cache, file_name):
         self._logger.debug(
