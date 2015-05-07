@@ -305,6 +305,27 @@ The output is shown here:
    :width: 50%
    :align: center
 
+Noise
+^^^^^
+
+We can also introduce 'noise' into the tournament - the probability that any given play will actually be the opposite of that intended by the strategy. Setting the noise level to 10%::
+
+    import axelrod
+    strategies = [s() for s in axelrod.ordinary_strategies]
+    noise = 0.1
+    tournament = axelrod.Tournament(strategies, noise)
+    results = tournament.play()
+    plot = axelrod.Plot(results)
+    p = plot.boxplot()
+    p.show()
+
+The output is shown here:
+
+.. image:: _static/usage/basic_strategies-noise_10.svg
+   :width: 50%
+   :align: center
+
+
 Running the tournament
 ----------------------
 
