@@ -2,8 +2,6 @@ import random
 import unittest
 import axelrod
 
-C, D = 'C', 'D'
-
 
 def cooperate(self):
     return 'C'
@@ -13,53 +11,12 @@ def defect(self):
     return 'D'
 
 
-def test_four_vector(test_class, expected_dictionary):
-    P1 = test_class.player()
-    for key in sorted(expected_dictionary.keys()):
-        test_class.assertAlmostEqual(
-            P1._four_vector[key], expected_dictionary[key])
-
-
-def test_responses(test_class, P1, P2, history_1, history_2,
-                   responses, random_seed=None):
-    """Test responses to arbitrary histories. Used for the the following tests
-    in TestPlayer: first_play_test, markov_test, and responses_test.
-    Works for arbitrary players as well. Input response_lists is a list of
-    lists, each of which consists of a list for the history of player 1, a
-    list for the history of player 2, and a list for the subsequent moves
-    by player one to test."""
-    if random_seed:
-        random.seed(random_seed)
-    P1.history, P2.history = history_1, history_2
-    for response in responses:
-        test_class.assertEqual(P1.strategy(P2), response)
-
-
-class TestPlayer(unittest.TestCase):
+class TestPlayerClass(unittest.TestCase):
+    "Tests the Player class itself"
 
     name = "Player"
     player = axelrod.Player
     stochastic = False
-
-    def test_initialisation(self):
-        """Test that the player initiates correctly."""
-        self.assertEqual(self.player().history, [])
-        self.assertEqual(self.player().stochastic, self.stochastic)
-
-    def test_repr(self):
-        """Test that the representation is correct."""
-        self.assertEquals(str(self.player()), self.name)
-
-    def test_reset(self):
-        """Make sure reseting works correctly."""
-        p = self.player()
-        p.history = [C, C]
-        p.reset()
-        self.assertEquals(p.history, [])
-
-    def test_strategy(self):
-        """Test that strategy method."""
-        self.assertEquals(self.player().strategy(self.player()), None)
 
     def test_add_noise(self):
         random.seed(1)
@@ -86,6 +43,60 @@ class TestPlayer(unittest.TestCase):
         p1.play(p2, noise)
         self.assertEqual(p1.history[0], 'D')
         self.assertEqual(p2.history[0], 'D')
+
+
+C, D = 'C', 'D'
+
+
+def test_four_vector(test_class, expected_dictionary):
+    P1 = test_class.player()
+    for key in sorted(expected_dictionary.keys()):
+        test_class.assertAlmostEqual(
+            P1._four_vector[key], expected_dictionary[key])
+
+
+def test_responses(test_class, P1, P2, history_1, history_2,
+                   responses, random_seed=None):
+    """Test responses to arbitrary histories. Used for the the following tests
+    in TestPlayer: first_play_test, markov_test, and responses_test.
+    Works for arbitrary players as well. Input response_lists is a list of
+    lists, each of which consists of a list for the history of player 1, a
+    list for the history of player 2, and a list for the subsequent moves
+    by player one to test."""
+    if random_seed:
+        random.seed(random_seed)
+    P1.history, P2.history = history_1, history_2
+    for response in responses:
+        test_class.assertEqual(P1.strategy(P2), response)
+
+
+class TestPlayer(unittest.TestCase):
+    "A Test class from which other player test classes are inherited"
+
+    name = "Player"
+    player = axelrod.Player
+    stochastic = False
+
+    def test_initialisation(self):
+        """Test that the player initiates correctly."""
+        self.assertEqual(self.player().history, [])
+        self.assertEqual(self.player().stochastic, self.stochastic)
+
+    def test_repr(self):
+        """Test that the representation is correct."""
+        self.assertEquals(str(self.player()), self.name)
+
+    def test_reset(self):
+        """Make sure reseting works correctly."""
+        p = self.player()
+        p.history = [C, C]
+        p.reset()
+        self.assertEquals(p.history, [])
+
+    def test_strategy(self):
+        """Test that strategy method."""
+        self.assertEquals(self.player().strategy(self.player()), None)
+
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
