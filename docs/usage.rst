@@ -319,13 +319,6 @@ We can also introduce 'noise' into the tournament - the probability that any giv
     p = plot.boxplot()
     p.show()
 
-The output is shown here:
-
-.. image:: _static/usage/basic_strategies-noise_10.svg
-   :width: 50%
-   :align: center
-
-
 Running the tournament
 ----------------------
 
