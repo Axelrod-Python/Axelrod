@@ -53,6 +53,14 @@ class TestPlayer(unittest.TestCase):
         """Test that strategy method."""
         self.assertEquals(self.player().strategy(self.player()), None)
 
+    def test_add_noise(self):
+        random.seed(1)
+        noise = 0.2
+        s1, s2 = 'C', 'C'
+        noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
+        self.assertEqual(noisy_s1, 'D')
+        self.assertEqual(noisy_s2, 'C')
+
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
         P1 = self.player()
