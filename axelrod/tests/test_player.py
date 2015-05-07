@@ -5,6 +5,14 @@ import axelrod
 C, D = 'C', 'D'
 
 
+def cooperate(self):
+    return 'C'
+
+
+def defect(self):
+    return 'D'
+
+
 def test_four_vector(test_class, expected_dictionary):
     P1 = test_class.player()
     for key in sorted(expected_dictionary.keys()):
@@ -60,6 +68,24 @@ class TestPlayer(unittest.TestCase):
         noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
         self.assertEqual(noisy_s1, 'D')
         self.assertEqual(noisy_s2, 'C')
+
+    def test_play(self):
+        p1, p2 = self.player(), self.player()
+        p1.strategy = cooperate
+        p2.strategy = defect
+        p1.play(p2)
+        self.assertEqual(p1.history[0], 'C')
+        self.assertEqual(p2.history[0], 'D')
+
+    def test_noisy_play(self):
+        random.seed(1)
+        noise = 0.2
+        p1, p2 = self.player(), self.player()
+        p1.strategy = cooperate
+        p2.strategy = defect
+        p1.play(p2, noise)
+        self.assertEqual(p1.history[0], 'D')
+        self.assertEqual(p2.history[0], 'D')
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
