@@ -9,26 +9,25 @@ class Tournament(object):
     game = Game()
 
     def __init__(self, players, name='axelrod', game=None, turns=200,
-                 repetitions=10, processes=None, prebuilt_cache=False):
+                 repetitions=10, processes=None, prebuilt_cache=False,
+                 noise=0):
         self.name = name
         self.players = players
         self.nplayers = len(self.players)
-
         if game is not None:
             self.game = game
         self.turns = turns
         self.repetitions = repetitions
-        self._processes = processes
         self.prebuilt_cache = prebuilt_cache
-
-        self._logger = logging.getLogger(__name__)
-
         self.result_set = ResultSet(
             players=players,
             turns=turns,
             repetitions=repetitions)
-
         self.deterministic_cache = {}
+        self.noise = noise
+
+        self._processes = processes
+        self._logger = logging.getLogger(__name__)
 
     def play(self):
         payoffs_list = []
@@ -36,7 +35,7 @@ class Tournament(object):
         if self._processes is None:
             self._run_serial_repetitions(payoffs_list)
         else:
-            if len(self.deterministic_cache) == 0 or not self.prebuilt_cache:
+            if (not self.noise and (len(self.deterministic_cache) == 0 or not self.prebuilt_cache)):
                 self._logger.debug('Playing first round robin to build cache')
                 payoffs = self._play_round_robin()
                 payoffs_list.append(payoffs)
@@ -107,6 +106,7 @@ class Tournament(object):
             game=self.game,
             turns=self.turns,
             deterministic_cache=self.deterministic_cache,
-            cache_mutable=cache_mutable)
+            cache_mutable=cache_mutable,
+            noise=self.noise)
         payoffs = round_robin.play()
         return payoffs
