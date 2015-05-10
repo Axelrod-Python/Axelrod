@@ -1,4 +1,7 @@
 import inspect
+import random
+
+flip_dict = {'C': 'D', 'D': 'C'}
 
 
 class Player(object):
@@ -20,13 +23,24 @@ class Player(object):
         """The string method for the strategy."""
         return self.name
 
+    def _add_noise(self, noise, s1, s2):
+        r = random.random()
+        if r < noise:
+            s1 = flip_dict[s1]
+        r = random.random()
+        if r < noise:
+            s2 = flip_dict[s2]
+        return s1, s2
+
     def strategy(self, opponent):
         """This is a placeholder strategy."""
         return None
 
-    def play(self, opponent):
+    def play(self, opponent, noise=0):
         """This pits two players against each other."""
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
+        if noise:
+            s1, s2 = self._add_noise(noise, s1, s2)
         self.history.append(s1)
         opponent.history.append(s2)
 

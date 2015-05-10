@@ -37,7 +37,11 @@ def run_tournaments(args):
     logger.setLevel(logging.getLevelName(args.verbosity))
     logger.addHandler(logHandler)
 
-    stdkwargs = {'processes': args.processes, 'turns': args.turns, 'repetitions': args.repetitions }
+    stdkwargs = {
+        'processes': args.processes,
+        'turns': args.turns,
+        'repetitions': args.repetitions,
+        'noise': args.noise}
     if not args.xb:
         players = manager.one_player_per_strategy(axelrod.basic_strategies)
         manager.add_tournament(
@@ -91,6 +95,8 @@ if __name__ == "__main__":
                         help='rebuild cache and save to file')
     parser.add_argument('-c', '--cache_file', type=str, default='./cache.txt',
                         help='Path to cache file')
+    parser.add_argument('-n', '--noise', type=float, default=0,
+                        help='Noise level')
     args = parser.parse_args()
 
     if args.xb and args.xs and args.xc and args.xa:
