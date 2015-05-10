@@ -2,6 +2,7 @@ matplotlib_installed = True
 try:
     import matplotlib.pyplot as plt
     import matplotlib.transforms as transforms
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
 except ImportError:
     matplotlib_installed = False
 
@@ -69,8 +70,11 @@ class Plot(object):
         plt.yticks(range(self.result_set.nplayers))
         ax.set_xticklabels(self.result_set.ranked_names, rotation=90)
         ax.set_yticklabels(self.result_set.ranked_names)
-        plt.tick_params(axis='both', which='both', labelsize=8)
-        figure.colorbar(mat)
+        plt.tick_params(axis='both', which='both', labelsize=7)
+        # Make the colorbar match up with the plot
+        divider = make_axes_locatable(plt.gca())
+        cax = divider.append_axes("right", "5%", pad="3%")
+        plt.colorbar(mat, cax=cax)
         return figure
 
     def stackplot(self, populations):
