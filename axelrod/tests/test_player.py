@@ -2,6 +2,49 @@ import random
 import unittest
 import axelrod
 
+
+def cooperate(self):
+    return 'C'
+
+
+def defect(self):
+    return 'D'
+
+
+class TestPlayerClass(unittest.TestCase):
+    "Tests the Player class itself"
+
+    name = "Player"
+    player = axelrod.Player
+    stochastic = False
+
+    def test_add_noise(self):
+        random.seed(1)
+        noise = 0.2
+        s1, s2 = 'C', 'C'
+        noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
+        self.assertEqual(noisy_s1, 'D')
+        self.assertEqual(noisy_s2, 'C')
+
+    def test_play(self):
+        p1, p2 = self.player(), self.player()
+        p1.strategy = cooperate
+        p2.strategy = defect
+        p1.play(p2)
+        self.assertEqual(p1.history[0], 'C')
+        self.assertEqual(p2.history[0], 'D')
+
+    def test_noisy_play(self):
+        random.seed(1)
+        noise = 0.2
+        p1, p2 = self.player(), self.player()
+        p1.strategy = cooperate
+        p2.strategy = defect
+        p1.play(p2, noise)
+        self.assertEqual(p1.history[0], 'D')
+        self.assertEqual(p2.history[0], 'D')
+
+
 C, D = 'C', 'D'
 
 
@@ -28,6 +71,7 @@ def test_responses(test_class, P1, P2, history_1, history_2,
 
 
 class TestPlayer(unittest.TestCase):
+    "A Test class from which other player test classes are inherited"
 
     name = "Player"
     player = axelrod.Player
@@ -52,6 +96,7 @@ class TestPlayer(unittest.TestCase):
     def test_strategy(self):
         """Test that strategy method."""
         self.assertEquals(self.player().strategy(self.player()), None)
+
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
