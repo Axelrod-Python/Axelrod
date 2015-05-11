@@ -62,11 +62,6 @@ def run_tournaments(cache_file='./cache.txt',
                     exclude_ordinary=False,
                     noise=0):
 
-    manager = axelrod.TournamentManager(
-        output_directory=output_directory,
-        with_ecological=not no_ecological, save_cache=rebuild_cache,
-        cache_file=cache_file)
-
     stdkwargs = {
         'processes': processes,
         'turns': turns,
@@ -80,6 +75,12 @@ def run_tournaments(cache_file='./cache.txt',
         'all_strategies': exclude_combined}
 
     exclusions = [key for key, value in exclusions_dict.items() if value]
+
+    manager = axelrod.TournamentManager(
+        output_directory=output_directory,
+        with_ecological=not no_ecological,
+        save_cache=rebuild_cache,
+        cache_file=cache_file)
 
     for name, strategies in tournaments_dict(exclusions).items():
         players = manager.one_player_per_strategy(strategies)
