@@ -27,7 +27,7 @@ def setup_logging(logging_destination='console', verbosity='INFO'):
 
     logHandler.setFormatter(logFormatter)
     logger = logging.getLogger('axelrod')
-    logger.setLevel(logging.getLevelName(verbosity))
+    logger.setLevel(logging.getLevelName(verbosity.upper()))
     logger.addHandler(logHandler)
 
 
