@@ -6,7 +6,6 @@ The code for strategies is present in `axelrod/strategies`.
 """
 
 from __future__ import division
-
 import argparse
 from axelrod import run_tournaments, setup_logging
 
