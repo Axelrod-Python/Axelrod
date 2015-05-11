@@ -57,10 +57,10 @@ def run_tournaments(cache_file='./cache.txt',
         no_ecological=no_ecological,
         rebuild_cache=rebuild_cache,
         cache_file=cache_file,
+        exclusions=exclusions,
         processes=processes,
         turns=turns,
         repetitions=repetitions,
-        noise=noise,
-        exclusions=exclusions)
+        noise=noise)
 
     manager.run_tournaments()

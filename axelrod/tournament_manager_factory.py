@@ -11,11 +11,18 @@ class TournamentManagerFactory(object):
             no_ecological,
             rebuild_cache,
             cache_file,
+            exclusions,
             processes,
             turns,
             repetitions,
-            noise,
-            exclusions=[]):
+            noise):
+
+        kwargs = {
+            'processes': processes,
+            'turns': turns,
+            'repetitions': repetitions,
+            'noise': noise
+        }
 
         manager = axelrod.TournamentManager(
             output_directory=output_directory,
@@ -23,16 +30,16 @@ class TournamentManagerFactory(object):
             save_cache=rebuild_cache,
             cache_file=cache_file)
 
-        cls._add_tournaments(manager, processes, turns, repetitions, noise, exclusions)
+        cls._add_tournaments(manager, exclusions, kwargs)
 
         return manager
 
     @classmethod
-    def _add_tournaments(cls, manager, processes, turns, repetitions, noise, exclusions=[]):
+    def _add_tournaments(cls, manager, exclusions, kwargs):
         for name, strategies in cls._tournaments_dict(exclusions).items():
             players = manager.one_player_per_strategy(strategies)
             manager.add_tournament(
-                name=name, players=players, processes=processes, turns=turns, repetitions=repetitions, noise=noise)
+                name=name, players=players, **kwargs)
 
     @staticmethod
     def _tournaments_dict(exclusions=[]):
