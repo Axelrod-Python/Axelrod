@@ -1,6 +1,6 @@
 import time
 import logging
-import axelrod
+from tournament_manager_factory import TournamentManagerFactory
 
 
 def timed_message(message, start_time):
@@ -31,24 +31,6 @@ def setup_logging(logging_destination='console', verbosity='INFO'):
     logger.addHandler(logHandler)
 
 
-def tournaments_dict(exclusions=[]):
-
-    tournaments = {
-        'basic_strategies': axelrod.basic_strategies,
-        'strategies':
-            axelrod.basic_strategies +
-            axelrod.ordinary_strategies,
-        'cheating_strategies': axelrod.cheating_strategies,
-        'all_strategies':
-            axelrod.basic_strategies +
-            axelrod.ordinary_strategies +
-            axelrod.cheating_strategies}
-
-    return {
-        key: value for
-        key, value in tournaments.items() if key not in exclusions}
-
-
 def run_tournaments(cache_file='./cache.txt',
                     output_directory='./',
                     repetitions=10,
@@ -62,12 +44,6 @@ def run_tournaments(cache_file='./cache.txt',
                     exclude_ordinary=False,
                     noise=0):
 
-    stdkwargs = {
-        'processes': processes,
-        'turns': turns,
-        'repetitions': repetitions,
-        'noise': noise}
-
     exclusions_dict = {
         'basic_strategies': exclude_basic,
         'strategies': exclude_ordinary,
@@ -76,15 +52,15 @@ def run_tournaments(cache_file='./cache.txt',
 
     exclusions = [key for key, value in exclusions_dict.items() if value]
 
-    manager = axelrod.TournamentManager(
+    manager = TournamentManagerFactory.create_tournament_manager(
         output_directory=output_directory,
-        with_ecological=not no_ecological,
-        save_cache=rebuild_cache,
-        cache_file=cache_file)
-
-    for name, strategies in tournaments_dict(exclusions).items():
-        players = manager.one_player_per_strategy(strategies)
-        manager.add_tournament(
-            name=name, players=players, **stdkwargs)
+        no_ecological=no_ecological,
+        rebuild_cache=rebuild_cache,
+        cache_file=cache_file,
+        processes=processes,
+        turns=turns,
+        repetitions=repetitions,
+        noise=noise,
+        exclusions=exclusions)
 
     manager.run_tournaments()
