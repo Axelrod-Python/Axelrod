@@ -31,6 +31,24 @@ def setup_logging(logging_destination='console', verbosity='INFO'):
     logger.addHandler(logHandler)
 
 
+def tournaments_dict(exclusions=[]):
+
+    tournaments = {
+        'basic_strategies': axelrod.basic_strategies,
+        'strategies':
+            axelrod.basic_strategies +
+            axelrod.ordinary_strategies,
+        'cheating_strategies': axelrod.cheating_strategies,
+        'all_strategies':
+            axelrod.basic_strategies +
+            axelrod.ordinary_strategies +
+            axelrod.cheating_strategies}
+
+    return {
+        key: value for
+        key, value in tournaments.items() if key not in exclusions}
+
+
 def run_tournaments(cache_file='./cache.txt',
                     output_directory='./',
                     repetitions=10,
@@ -55,29 +73,17 @@ def run_tournaments(cache_file='./cache.txt',
         'repetitions': repetitions,
         'noise': noise}
 
-    if not exclude_basic:
-        players = manager.one_player_per_strategy(axelrod.basic_strategies)
-        manager.add_tournament(
-            name='basic_strategies', players=players, **stdkwargs)
+    exclusions_dict = {
+        'basic_strategies': exclude_basic,
+        'strategies': exclude_ordinary,
+        'cheating_strategies': exclude_cheating,
+        'all_strategies': exclude_combined}
 
-    if not exclude_ordinary:
-        strategies = axelrod.basic_strategies + axelrod.ordinary_strategies
+    exclusions = [key for key, value in exclusions_dict.items() if value]
+
+    for name, strategies in tournaments_dict(exclusions).items():
         players = manager.one_player_per_strategy(strategies)
         manager.add_tournament(
-            name='strategies', players=players, **stdkwargs)
-
-    if not exclude_cheating:
-        players = manager.one_player_per_strategy(axelrod.cheating_strategies)
-        manager.add_tournament(
-            name='cheating_strategies', players=players, **stdkwargs)
-
-    if not exclude_combined:
-        strategies = (
-            axelrod.basic_strategies +
-            axelrod.ordinary_strategies +
-            axelrod.cheating_strategies)
-        players = manager.one_player_per_strategy(strategies)
-        manager.add_tournament(
-            name='all_strategies', players=players, **stdkwargs)
+            name=name, players=players, **stdkwargs)
 
     manager.run_tournaments()
