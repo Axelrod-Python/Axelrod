@@ -14,7 +14,7 @@ class TestTournament(unittest.TestCase):
         cls.test_name = 'test'
 
     def test_init(self):
-        tournament = axelrod.Tournament(name=self.test_name, players=self.players, processes=4)
+        tournament = axelrod.Tournament(name=self.test_name, players=self.players, processes=4, noise=0.2)
         self.assertEqual([str(s) for s in tournament.players], ['Defector', 'Defector', 'Defector'])
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, 200)
@@ -25,6 +25,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertIsInstance(tournament.result_set, axelrod.ResultSet)
         self.assertEqual(tournament.deterministic_cache, {})
+        self.assertEqual(tournament.noise, 0.2)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 

@@ -115,7 +115,7 @@ class TournamentManager(object):
         with open(file_name, 'w') as f:
             f.write(csv)
 
-    def _save_plots(self, tournament, ecosystem=None):
+    def _save_plots(self, tournament, ecosystem=None, image_format="png"):
         results = tournament.result_set
         plot = Plot(results)
         if not plot.matplotlib_installed:
@@ -125,12 +125,12 @@ class TournamentManager(object):
         for plot_type in ('boxplot', 'payoff'):
             figure = getattr(plot, plot_type)()
             file_name = self._output_file_path(
-                tournament.name + '_' + plot_type, 'png')
+                tournament.name + '_' + plot_type, image_format)
             self._save_plot(figure, file_name)
         if ecosystem is not None:
             figure = plot.stackplot(ecosystem.population_sizes)
             file_name = self._output_file_path(
-                    tournament.name + '_reproduce', 'png')
+                    tournament.name + '_reproduce', image_format)
             self._save_plot(figure, file_name)
 
     def _output_file_path(self, file_name, file_extension):

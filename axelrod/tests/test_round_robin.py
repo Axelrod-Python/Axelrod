@@ -1,4 +1,5 @@
 import unittest
+import random
 import axelrod
 
 
@@ -21,7 +22,8 @@ class TestRoundRobin(unittest.TestCase):
         players = [getattr(axelrod, n)() for n in names]
 
         # Do the actual game and build the expected outcome tuples.
-        round_robin = axelrod.RoundRobin(players=players, game=cls.game, turns=turns)
+        round_robin = axelrod.RoundRobin(
+            players=players, game=cls.game, turns=turns)
         payoffs = round_robin.play()
         scores = cls.payoffs2scores(payoffs)
         outcome = zip(names, scores)
@@ -31,11 +33,12 @@ class TestRoundRobin(unittest.TestCase):
 
     def test_init(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
-        rr = axelrod.RoundRobin(players=[p1, p2], game=self.game, turns=20, noise=0.2)
+        rr = axelrod.RoundRobin(players=[p1, p2], game=self.game, deterministic_cache={}, turns=20, noise=0.2)
         self.assertEquals(rr.players, [p1, p2])
         self.assertEquals(rr.nplayers, 2)
         self.assertEquals(rr.game.score(('C', 'C')), (3, 3))
         self.assertEqual(rr._noise, 0.2)
+        self.assertEqual(rr.deterministic_cache, {})
 
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
@@ -46,6 +49,22 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Cooperator)], (60, 60))
         self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Defector)], (0, 100))
         self.assertFalse((axelrod.Random, axelrod.Random) in rr.deterministic_cache)
+
+    def test_noisy_cache(self):
+        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2, p3], game=self.game, turns=20, deterministic_cache={}, noise=0.2)
+        rr.play()
+        self.assertEqual(rr.deterministic_cache, {})
+
+    def test_noisy_play(self):
+        random.seed(1)
+        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2, p3], game=self.game, turns=20, noise=0.2)
+        payoff = rr.play()
+        expected_payoff = [[57, 10, 45], [80, 40, 57], [65, 22, 37]]
+        self.assertEqual(payoff, expected_payoff)
 
     def test_calculate_score_for_mix(self):
         """Test that scores are calculated correctly."""
