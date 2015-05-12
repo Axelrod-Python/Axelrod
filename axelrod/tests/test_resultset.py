@@ -22,6 +22,11 @@ class TestResultSet(unittest.TestCase):
             [[16, 16], [16, 16], [0, 0]],
         ]
         cls.expected_scores = [
+            [31, 31],
+            [26, 28],
+            [32, 32],
+        ]
+        cls.expected_normalised_scores = [
             [3.1, 3.1],
             [2.6, 2.8],
             [3.2, 3.2],
@@ -72,6 +77,14 @@ class TestResultSet(unittest.TestCase):
         self.assertEquals(rs.scores, self.expected_scores)
         del(rs.payoffs_list)
         self.assertRaises(AttributeError, getattr, rs, 'scores')
+
+    def test_normalised_scores(self):
+        rs = axelrod.ResultSet(self.players, 5, 2)
+        self.assertRaises(AttributeError, getattr, rs, 'normalised_scores')
+        rs.payoffs_list = self.test_payoffs_list
+        self.assertEquals(rs.normalised_scores, self.expected_normalised_scores)
+        del(rs.payoffs_list)
+        self.assertRaises(AttributeError, getattr, rs, 'normalised_scores')
 
     def test_ranking(self):
         rs = axelrod.ResultSet(self.players, 5, 2)

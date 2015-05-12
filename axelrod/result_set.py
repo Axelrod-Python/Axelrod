@@ -45,6 +45,7 @@ class ResultSet(object):
         self._update_results()
         self._finalised = True
         self._scores = self._generate_scores()
+        self._normalised_scores = self._generate_normalised_scores()
         self._ranking = self._generate_ranking(self.scores)
         self._ranked_names = self._generate_ranked_names(self.ranking)
         self._payoff_matrix, self._payoff_stddevs = self._generate_payoff_matrix()
@@ -95,12 +96,19 @@ class ResultSet(object):
                 for ip in range(self.nplayers):
                     if ip != ires:
                         scores[-1][-1] += res[ip][irep]
+        return scores
 
-        normalization = self.turns * (self.nplayers - 1)
-        scores_normalized = [
-            [1.0 * s / normalization for s in r] for r in scores]
+    @property
+    def normalised_scores(self):
+        if self._finalised:
+            return self._normalised_scores
+        else:
+            raise AttributeError(self.unfinalised_error_msg)
 
-        return scores_normalized
+    def _generate_normalised_scores(self):
+        normalisation = self.turns * (self.nplayers - 1)
+        return [
+            [1.0 * s / normalisation for s in r] for r in self.scores]
 
     @property
     def ranking(self):
@@ -169,7 +177,7 @@ class ResultSet(object):
             csv_string.write(header)
             writer = csv.writer(csv_string, lineterminator="\n")
             for irep in range(self.repetitions):
-                data = [self.scores[rank][irep] for rank in self.ranking]
+                data = [self.normalised_scores[rank][irep] for rank in self.ranking]
                 writer.writerow(map(str, data))
             return csv_string.getvalue()
         else:
