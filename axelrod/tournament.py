@@ -48,7 +48,8 @@ class Tournament(object):
     def build_cache_required(self):
         return (
             not self.noise and (
-                len(self.deterministic_cache) == 0 or not self.prebuilt_cache))
+                len(self.deterministic_cache) == 0 or
+                not self.prebuilt_cache))
 
     def _run_single_repetition(self, payoffs_list):
         payoffs = self._play_round_robin()
