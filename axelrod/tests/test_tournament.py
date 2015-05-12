@@ -89,7 +89,7 @@ class TestTournament(unittest.TestCase):
             processes=4,
             noise=0.2,
             prebuilt_cache=False)
-        self.assertFalse(tournament.build_cache_required)
+        self.assertFalse(tournament._build_cache_required())
 
         # Noisy, with prebuilt cache, empty deterministic cache
         tournament = axelrod.Tournament(
@@ -98,7 +98,7 @@ class TestTournament(unittest.TestCase):
             processes=4,
             noise=0.2,
             prebuilt_cache=True)
-        self.assertFalse(tournament.build_cache_required)
+        self.assertFalse(tournament._build_cache_required())
 
         # Not noisy, with prebuilt cache, deterministic cache has content
         tournament = axelrod.Tournament(
@@ -108,7 +108,7 @@ class TestTournament(unittest.TestCase):
             processes=4,
             prebuilt_cache=True)
         tournament.deterministic_cache = {'test': 100}
-        self.assertFalse(tournament.build_cache_required)
+        self.assertFalse(tournament._build_cache_required())
 
         # Not noisy, no prebuilt cache, deterministic cache has content
         tournament = axelrod.Tournament(
@@ -118,7 +118,7 @@ class TestTournament(unittest.TestCase):
             processes=4,
             prebuilt_cache=False)
         tournament.deterministic_cache = {'test': 100}
-        self.assertTrue(tournament.build_cache_required)
+        self.assertTrue(tournament._build_cache_required())
 
         # Not noisy, with prebuilt cache, empty deterministic cache
         tournament = axelrod.Tournament(
@@ -127,7 +127,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             processes=4,
             prebuilt_cache=True)
-        self.assertTrue(tournament.build_cache_required)
+        self.assertTrue(tournament._build_cache_required())
 
         # Not noisy, no prebuilt cache, empty deterministic cache
         tournament = axelrod.Tournament(
@@ -136,7 +136,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             processes=4,
             prebuilt_cache=False)
-        self.assertTrue(tournament.build_cache_required)
+        self.assertTrue(tournament._build_cache_required())
 
     def test_run_single_repetition(self):
         payoffs_list = []
