@@ -18,6 +18,7 @@ class TestTournament(unittest.TestCase):
             axelrod.GoByMajority()]
         cls.player_names = [str(p) for p in cls.players]
         cls.test_name = 'test'
+        cls.test_repetitions = 5
 
         cls.expected_payoffs = [
             [600.0, 600, 0, 600, 600],
@@ -120,10 +121,23 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=5)
+            repetitions=self.test_repetitions)
         tournament._run_single_repetition(payoffs_list)
         self.assertEqual(len(payoffs_list), 1)
         self.assertEqual(payoffs_list[0], self.expected_payoffs)
+
+    def test_run_serial_repetitions(self):
+        payoffs_list = []
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        tournament._run_serial_repetitions(payoffs_list)
+        self.assertEqual(len(payoffs_list), self.test_repetitions)
+        for r in range(self.test_repetitions):
+            self.assertEqual(payoffs_list[r], self.expected_payoffs)
 
     def test_serial_play(self):
         tournament = axelrod.Tournament(
@@ -131,7 +145,7 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=5)
+            repetitions=self.test_repetitions)
         scores = tournament.play().scores
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
@@ -142,7 +156,7 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=5,
+            repetitions=self.test_repetitions,
             processes=2)
         scores = tournament.play().scores
         actual_outcome = sorted(zip(self.player_names, scores))
