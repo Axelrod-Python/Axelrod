@@ -163,6 +163,43 @@ class TestTournament(unittest.TestCase):
         for r in range(self.test_repetitions):
             self.assertEqual(payoffs_list[r], self.expected_payoffs)
 
+    def test_n_workers(self):
+        max_processes = multiprocessing.cpu_count()
+
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=1)
+        self.assertEqual(tournament._n_workers(), max_processes)
+
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=max_processes + 2)
+        self.assertEqual(tournament._n_workers(), max_processes)
+
+    @unittest.skipIf(
+        multiprocessing.cpu_count() < 2,
+        "not supported on single processor machines")
+    def test_2_workers(self):
+        # This is a separate test with a skip condition because we
+        # cannot guarantee that the tests will always be run on a machine
+        # with more than one processor
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        self.assertEqual(tournament._n_workers(), 2)
+
     def test_process_done_queue(self):
         workers = 2
         done_queue = multiprocessing.Queue()
