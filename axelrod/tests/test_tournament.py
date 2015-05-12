@@ -114,6 +114,29 @@ class TestTournament(unittest.TestCase):
             prebuilt_cache=False)
         self.assertTrue(tournament.build_cache_required)
 
+    def test_play_round_robin_mutable(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        payoffs = tournament._play_round_robin()
+        self.assertEqual(payoffs, self.expected_payoffs)
+        self.assertTrue(
+            (axelrod.Cooperator, axelrod.Defector) in tournament.deterministic_cache)
+
+    def test_play_round_robin_immutable(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        payoffs = tournament._play_round_robin(cache_mutable=False)
+        self.assertEqual(payoffs, self.expected_payoffs)
+        self.assertEqual(tournament.deterministic_cache, {})
+
     def test_run_single_repetition(self):
         payoffs_list = []
         tournament = axelrod.Tournament(
