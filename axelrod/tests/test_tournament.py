@@ -107,12 +107,6 @@ class TestTournament(unittest.TestCase):
         self.assertTrue(tournament.build_cache_required)
 
     def test_serial_play(self):
-        pass
-
-    def test_parallel_play(self):
-        pass
-
-    def test_tournament(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -120,10 +114,17 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=5)
         scores = tournament.play().scores
-        # scores = [[sum([r[i] for ir,sorted(zip(self.player_names, scores))r in enumerate(res) if ir != ires]) for i in range(5)] for ires,res in enumerate(results)]
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
 
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_parallel_play(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=5,
+            processes=2)
+        scores = tournament.play().scores
+        actual_outcome = sorted(zip(self.player_names, scores))
+        self.assertEqual(actual_outcome, self.expected_outcome)
