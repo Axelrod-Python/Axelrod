@@ -35,10 +35,9 @@ class Tournament(object):
         if self._processes is None:
             self._run_serial_repetitions(payoffs_list)
         else:
-            if self._build_cache_required:
+            if self.build_cache_required:
                 self._logger.debug('Playing first round robin to build cache')
-                payoffs = self._play_round_robin()
-                payoffs_list.append(payoffs)
+                self._run_single_repetition(payoffs_list)
                 self.repetitions -= 1
             self._run_parallel_repetitions(payoffs_list)
 
@@ -51,11 +50,14 @@ class Tournament(object):
             not self.noise and (
                 len(self.deterministic_cache) == 0 or not self.prebuilt_cache))
 
+    def _run_single_repetition(self, payoffs_list):
+        payoffs = self._play_round_robin()
+        payoffs_list.append(payoffs)
+
     def _run_serial_repetitions(self, payoffs_list):
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            payoffs = self._play_round_robin()
-            payoffs_list.append(payoffs)
+            self._run_single_repetition(payoffs_list)
         return True
 
     def _run_parallel_repetitions(self, payoffs_list):
