@@ -66,11 +66,7 @@ class Tournament(object):
         # target functions which can be pickled and instance methods cannot.
         work_queue = multiprocessing.Queue()
         done_queue = multiprocessing.Queue()
-
-        if self._processes < 2 or self._processes > multiprocessing.cpu_count():
-            workers = multiprocessing.cpu_count()
-        else:
-            workers = self._processes
+        workers = self._n_workers()
 
         for repetition in range(self.repetitions):
             work_queue.put(repetition)
@@ -83,10 +79,12 @@ class Tournament(object):
 
         return True
 
-    @property
-    def foo(self):
-        return self._foo
-
+    def _n_workers(self):
+        if (self._processes < 2 or self._processes > multiprocessing.cpu_count()):
+            n_workers = multiprocessing.cpu_count()
+        else:
+            n_workers = self._processes
+        return n_workers
 
     def _start_workers(self, workers, work_queue, done_queue):
         for worker in range(workers):
