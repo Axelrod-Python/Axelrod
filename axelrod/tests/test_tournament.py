@@ -203,7 +203,7 @@ class TestTournament(unittest.TestCase):
         "not supported on single processor machines")
     def test_2_workers(self):
         # This is a separate test with a skip condition because we
-        # cannot guarantee that the tests will always be run on a machine
+        # cannot guarantee that the tests will always run on a machine
         # with more than one processor
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -270,7 +270,8 @@ class TestTournament(unittest.TestCase):
         payoffs = tournament._play_round_robin()
         self.assertEqual(payoffs, self.expected_payoffs)
         self.assertTrue(
-            (axelrod.Cooperator, axelrod.Defector) in tournament.deterministic_cache)
+            (axelrod.Cooperator, axelrod.Defector) in
+            tournament.deterministic_cache)
 
     def test_play_round_robin_immutable(self):
         tournament = axelrod.Tournament(
