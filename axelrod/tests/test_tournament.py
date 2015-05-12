@@ -215,10 +215,25 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament._n_workers(), 2)
 
     def test_start_workers(self):
-        # Cannot easily test this method as it would involve
-        # counting the number of processes initiated by
-        # the multiprocessing library.
-        pass
+        workers = 2
+        work_queue = multiprocessing.Queue()
+        done_queue = multiprocessing.Queue()
+        for repetition in range(self.test_repetitions):
+            work_queue.put(repetition)
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        tournament._start_workers(workers, work_queue, done_queue)
+
+        stops = 0
+        while stops < workers:
+            payoffs = done_queue.get()
+            if payoffs == 'STOP':
+                stops += 1
+        self.assertEqual(stops, workers)
 
     def test_process_done_queue(self):
         workers = 2
