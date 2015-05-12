@@ -35,21 +35,29 @@ class Tournament(object):
         if self._processes is None:
             self._run_serial_repetitions(payoffs_list)
         else:
-            if (not self.noise and (len(self.deterministic_cache) == 0 or not self.prebuilt_cache)):
+            if self._build_cache_required():
                 self._logger.debug('Playing first round robin to build cache')
-                payoffs = self._play_round_robin()
-                payoffs_list.append(payoffs)
+                self._run_single_repetition(payoffs_list)
                 self.repetitions -= 1
             self._run_parallel_repetitions(payoffs_list)
 
         self.result_set.payoffs_list = payoffs_list
         return self.result_set
 
+    def _build_cache_required(self):
+        return (
+            not self.noise and (
+                len(self.deterministic_cache) == 0 or
+                not self.prebuilt_cache))
+
+    def _run_single_repetition(self, payoffs_list):
+        payoffs = self._play_round_robin()
+        payoffs_list.append(payoffs)
+
     def _run_serial_repetitions(self, payoffs_list):
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            payoffs = self._play_round_robin()
-            payoffs_list.append(payoffs)
+            self._run_single_repetition(payoffs_list)
         return True
 
     def _run_parallel_repetitions(self, payoffs_list):
@@ -58,11 +66,7 @@ class Tournament(object):
         # target functions which can be pickled and instance methods cannot.
         work_queue = multiprocessing.Queue()
         done_queue = multiprocessing.Queue()
-
-        if self._processes < 2 or self._processes > multiprocessing.cpu_count():
-            workers = multiprocessing.cpu_count()
-        else:
-            workers = self._processes
+        workers = self._n_workers()
 
         for repetition in range(self.repetitions):
             work_queue.put(repetition)
@@ -74,6 +78,13 @@ class Tournament(object):
         self._process_done_queue(workers, done_queue, payoffs_list)
 
         return True
+
+    def _n_workers(self):
+        if (self._processes < 2 or self._processes > multiprocessing.cpu_count()):
+            n_workers = multiprocessing.cpu_count()
+        else:
+            n_workers = self._processes
+        return n_workers
 
     def _start_workers(self, workers, work_queue, done_queue):
         for worker in range(workers):

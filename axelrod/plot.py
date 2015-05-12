@@ -20,7 +20,7 @@ class Plot(object):
 
     @property
     def _boxplot_dataset(self):
-        return [self.result_set.scores[ir] for ir in self.result_set.ranking]
+        return [self.result_set.normalised_scores[ir] for ir in self.result_set.ranking]
 
     @property
     def _payoff_dataset(self):
