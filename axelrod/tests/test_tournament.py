@@ -163,6 +163,20 @@ class TestTournament(unittest.TestCase):
         for r in range(self.test_repetitions):
             self.assertEqual(payoffs_list[r], self.expected_payoffs)
 
+    def test_run_parallel_repetitions(self):
+        payoffs_list = []
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        tournament._run_parallel_repetitions(payoffs_list)
+        self.assertEqual(len(payoffs_list), self.test_repetitions)
+        for r in range(self.test_repetitions):
+            self.assertEqual(payoffs_list[r], self.expected_payoffs)
+
     def test_n_workers(self):
         max_processes = multiprocessing.cpu_count()
 
