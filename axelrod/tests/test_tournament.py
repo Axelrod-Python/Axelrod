@@ -214,6 +214,12 @@ class TestTournament(unittest.TestCase):
             processes=2)
         self.assertEqual(tournament._n_workers(), 2)
 
+    def test_start_workers(self):
+        # Cannot easily test this method as it would involve
+        # counting the number of processes initiated by
+        # the multiprocessing library.
+        pass
+
     def test_process_done_queue(self):
         workers = 2
         done_queue = multiprocessing.Queue()
