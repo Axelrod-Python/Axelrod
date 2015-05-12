@@ -35,7 +35,7 @@ class Tournament(object):
         if self._processes is None:
             self._run_serial_repetitions(payoffs_list)
         else:
-            if (not self.noise and (len(self.deterministic_cache) == 0 or not self.prebuilt_cache)):
+            if self._build_cache_required:
                 self._logger.debug('Playing first round robin to build cache')
                 payoffs = self._play_round_robin()
                 payoffs_list.append(payoffs)
@@ -44,6 +44,12 @@ class Tournament(object):
 
         self.result_set.payoffs_list = payoffs_list
         return self.result_set
+
+    @property
+    def build_cache_required(self):
+        return (
+            not self.noise and (
+                len(self.deterministic_cache) == 0 or not self.prebuilt_cache))
 
     def _run_serial_repetitions(self, payoffs_list):
         self._logger.debug('Playing %d round robins' % self.repetitions)

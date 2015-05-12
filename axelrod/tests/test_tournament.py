@@ -14,7 +14,11 @@ class TestTournament(unittest.TestCase):
         cls.test_name = 'test'
 
     def test_init(self):
-        tournament = axelrod.Tournament(name=self.test_name, players=self.players, processes=4, noise=0.2)
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            processes=4,
+            noise=0.2)
         self.assertEqual([str(s) for s in tournament.players], ['Defector', 'Defector', 'Defector'])
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, 200)
@@ -28,6 +32,66 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.noise, 0.2)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
+
+    def test_build_cache_required(self):
+        # Noisy, no prebuilt cache, deterministic cache empty
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            processes=4,
+            noise=0.2,
+            prebuilt_cache=False)
+        self.assertFalse(tournament.build_cache_required)
+
+        # Noisy, with prebuilt cache, deterministic cache empty
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            processes=4,
+            noise=0.2,
+            prebuilt_cache=True)
+        self.assertFalse(tournament.build_cache_required)
+
+        # Not noisy, with prebuilt cache, deterministic cache has content
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            processes=4,
+            prebuilt_cache=True)
+        tournament.deterministic_cache = {'test': 100}
+        self.assertFalse(tournament.build_cache_required)
+
+        # Not noisy, no prebuilt cache, deterministic cache has content
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            processes=4,
+            prebuilt_cache=False)
+        tournament.deterministic_cache = {'test': 100}
+        self.assertTrue(tournament.build_cache_required)
+
+        # Not noisy, with prebuilt cache, deterministic cache is empty
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            processes=4,
+            prebuilt_cache=True)
+        self.assertTrue(tournament.build_cache_required)
+
+        # Not noisy, no prebuilt cache, deterministic cache is empty
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            processes=4,
+            prebuilt_cache=False)
+        self.assertTrue(tournament.build_cache_required)
+
+    def test_serial_play(self):
+        pass
+
+    def test_parallel_play(self):
+        pass
+
 
     def test_tournament(self):
         """Test tournament."""
