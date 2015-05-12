@@ -3,6 +3,7 @@
 import unittest
 import axelrod
 import logging
+import multiprocessing
 
 
 class TestTournament(unittest.TestCase):
@@ -161,6 +162,27 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(payoffs_list), self.test_repetitions)
         for r in range(self.test_repetitions):
             self.assertEqual(payoffs_list[r], self.expected_payoffs)
+
+    def test_worker(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+
+        work_queue = multiprocessing.Queue()
+        for repetition in range(self.test_repetitions):
+            work_queue.put(repetition)
+        work_queue.put('STOP')
+
+        done_queue = multiprocessing.Queue()
+        tournament._worker(work_queue, done_queue)
+        for r in range(self.test_repetitions):
+            payoffs = done_queue.get()
+            self.assertEqual(payoffs, self.expected_payoffs)
+        queue_stop = done_queue.get()
+        self.assertEqual(queue_stop, 'STOP')
 
     def test_serial_play(self):
         tournament = axelrod.Tournament(
