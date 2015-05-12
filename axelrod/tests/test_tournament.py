@@ -163,6 +163,25 @@ class TestTournament(unittest.TestCase):
         for r in range(self.test_repetitions):
             self.assertEqual(payoffs_list[r], self.expected_payoffs)
 
+    def test_process_done_queue(self):
+        workers = 2
+        done_queue = multiprocessing.Queue()
+        payoffs_list = []
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        for r in range(self.test_repetitions):
+            done_queue.put('test_payoffs')
+        for w in range(workers):
+            done_queue.put('STOP')
+        tournament._process_done_queue(workers, done_queue, payoffs_list)
+        self.assertEqual(len(payoffs_list), self.test_repetitions)
+        for repetition in range(self.test_repetitions):
+            self.assertEqual(payoffs_list[r], 'test_payoffs')
+
     def test_worker(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
