@@ -78,14 +78,14 @@ Now to run the tournament and save the results::
 The output of `tournament.play()` is a `ResultSet` which is something that holds all the information we could need.
 First, let us view the scores::
 
-    results.scores
+    results.normalised_scores
 
 which gives::
 
     [[1.952, 1.943, 1.951, 1.96, 1.924, 1.943, 2.007, 1.966, 2.003, 1.963], [1.221, 1.185, 1.173, 1.218, 1.206, 1.218, 1.221, 1.224, 1.188, 1.221], [2.588, 2.616, 2.608, 2.632, 2.588, 2.624, 2.612, 2.532, 2.588, 2.564], [1.917, 1.896, 1.901, 1.884, 1.931, 1.896, 1.87, 1.912, 1.886, 1.899], [1.967, 1.94, 1.929, 1.934, 1.957, 1.959, 1.948, 1.95, 1.937, 1.955], [2.636, 2.664, 2.632, 2.592, 2.588, 2.644, 2.604, 2.572, 2.612, 2.588]]
 
 We see here that when we ran :code:`tournament.play()` it automatically repeated the round robin tournament 10 times (this is to deal with the stochasticity of the random players).
-The :code:`scores` contains a list of normalized scores for all players.
+The :code:`normalised_scores` contains a list of normalized scores for all players.
 
 To view a ranking based on median score::
 
