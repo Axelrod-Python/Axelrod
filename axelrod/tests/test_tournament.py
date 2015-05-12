@@ -57,6 +57,29 @@ class TestTournament(unittest.TestCase):
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
+    def test_serial_play(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        scores = tournament.play().scores
+        actual_outcome = sorted(zip(self.player_names, scores))
+        self.assertEqual(actual_outcome, self.expected_outcome)
+
+    def test_parallel_play(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        scores = tournament.play().scores
+        actual_outcome = sorted(zip(self.player_names, scores))
+        self.assertEqual(actual_outcome, self.expected_outcome)
+
     def test_build_cache_required(self):
         # Noisy, no prebuilt cache, empty deterministic cache
         tournament = axelrod.Tournament(
@@ -114,29 +137,6 @@ class TestTournament(unittest.TestCase):
             processes=4,
             prebuilt_cache=False)
         self.assertTrue(tournament.build_cache_required)
-
-    def test_play_round_robin_mutable(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        payoffs = tournament._play_round_robin()
-        self.assertEqual(payoffs, self.expected_payoffs)
-        self.assertTrue(
-            (axelrod.Cooperator, axelrod.Defector) in tournament.deterministic_cache)
-
-    def test_play_round_robin_immutable(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        payoffs = tournament._play_round_robin(cache_mutable=False)
-        self.assertEqual(payoffs, self.expected_payoffs)
-        self.assertEqual(tournament.deterministic_cache, {})
 
     def test_run_single_repetition(self):
         payoffs_list = []
@@ -203,25 +203,25 @@ class TestTournament(unittest.TestCase):
         queue_stop = done_queue.get()
         self.assertEqual(queue_stop, 'STOP')
 
-    def test_serial_play(self):
+    def test_play_round_robin_mutable(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        scores = tournament.play().scores
-        actual_outcome = sorted(zip(self.player_names, scores))
-        self.assertEqual(actual_outcome, self.expected_outcome)
+        payoffs = tournament._play_round_robin()
+        self.assertEqual(payoffs, self.expected_payoffs)
+        self.assertTrue(
+            (axelrod.Cooperator, axelrod.Defector) in tournament.deterministic_cache)
 
-    def test_parallel_play(self):
+    def test_play_round_robin_immutable(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=self.test_repetitions,
-            processes=2)
-        scores = tournament.play().scores
-        actual_outcome = sorted(zip(self.player_names, scores))
-        self.assertEqual(actual_outcome, self.expected_outcome)
+            repetitions=self.test_repetitions)
+        payoffs = tournament._play_round_robin(cache_mutable=False)
+        self.assertEqual(payoffs, self.expected_payoffs)
+        self.assertEqual(tournament.deterministic_cache, {})
