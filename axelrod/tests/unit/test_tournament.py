@@ -163,6 +163,20 @@ class TestTournament(unittest.TestCase):
             prebuilt_cache=False)
         self.assertTrue(tournament._build_cache_required())
 
+    def test_build_cache(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        tournament._run_single_repetition = MagicMock(
+            name='_run_single_repetition')
+        tournament._build_cache([])
+        tournament._run_single_repetition.assert_called_once_with([])
+        self.assertEqual(tournament.repetitions, self.test_repetitions - 1)
+
     def test_run_single_repetition(self):
         payoffs_list = []
         tournament = axelrod.Tournament(
