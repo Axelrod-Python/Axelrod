@@ -50,7 +50,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
     def test_serial_play(self):
-        # Test that we get the expected result
+        # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -76,7 +76,7 @@ class TestTournament(unittest.TestCase):
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
     def test_parallel_play(self):
-        # Test that we get the expected result
+        # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
