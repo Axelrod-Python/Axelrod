@@ -169,7 +169,7 @@ Simply add your strategy to the correct place in :code:`strategies/_strategies.p
 How to write tests
 ''''''''''''''''''
 
-To write tests you either need to create a file called :code:`test_<library>.py` where :code:`<library>.py` is the name of the file you have created or similarly add tests to the test file that is already present in the :code:`axelrod/tests/` directory.
+To write tests you either need to create a file called :code:`test_<library>.py` where :code:`<library>.py` is the name of the file you have created or similarly add tests to the test file that is already present in the :code:`axelrod/tests/unit/` directory.
 
 As an example, you code write tests for Tit-For-Tat as follows::
 
@@ -293,12 +293,17 @@ How to run tests
 The project has an extensive test suite which is run each time a new contribution is made to the repository.
 If you want to check that all the tests pass before you submit a pull request you can run the tests yourself::
 
-    python -m unittest discover axelrod/tests/
+    python -m unittest discover
 
 If you are developing new tests for the suite, it is useful to run a single test file so that you don't have to wait for the entire suite each time.
 For example, to run only the tests for the Grudger strategy::
 
-    python -m unittest axelrod.tests.test_grudger
+    python -m unittest axelrod.tests.unit.test_grudger
+
+The test suite is dvided into two categories: unit tests and integration tests. Each can be run individually::
+
+    python -m unittest discover -s axelrod.tests.unit
+    python -m unittest discover -s axelrod.tests.integration
 
 Note that this project is being taken care off by `travis-ci <https://travis-ci.org/>`_, so tests will be run automatically when opening a pull request.
 You can see the latest build status `here <https://travis-ci.org/Axelrod-Python/Axelrod>`_.
