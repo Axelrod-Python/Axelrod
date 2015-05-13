@@ -50,6 +50,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
     def test_serial_play(self):
+        # Test that we get the expected result
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -59,6 +60,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
 
+        # Test that _run_serial_repetitions is called with empty payoffs list
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -74,6 +76,7 @@ class TestTournament(unittest.TestCase):
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
     def test_parallel_play(self):
+        # Test that we get the expected result
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -84,6 +87,8 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
 
+        # Test that _run_parallel_repetitions is called with
+        # one entry in payoffs list
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
