@@ -4,7 +4,11 @@ python:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-install: "pip install -r requirements.txt"
+install:
+  - pip install -r requirements.txt
+  - pip install coveralls
 script:
-  - python -m unittest discover axelrod/tests/
+  - coverage run --source=axelrod -m unittest discover
   - cd docs/; python strategies.py
+after_success:
+  coveralls
