@@ -6,7 +6,8 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 install:
   - pip install -r requirements.txt
-  - pip install coveralls
+  - pip install python-coveralls
+  - pip install coverage
 script:
   - coverage run --source=axelrod -m unittest discover
   - cd docs/; python strategies.py
