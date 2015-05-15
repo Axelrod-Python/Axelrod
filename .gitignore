@@ -5,4 +5,3 @@ _build/
 *.log
 dist/
 MANIFEST
-.coverage
