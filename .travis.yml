@@ -12,4 +12,4 @@ script:
   - coverage run --source=axelrod -m unittest discover
   - cd docs/; python strategies.py
 after_success:
-  coveralls debug
+  coveralls
