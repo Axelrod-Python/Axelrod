@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='Axelrod',
@@ -13,4 +13,5 @@ setup(
     install_requires=[
         "matplotlib >= 1.4.2",
     ],
+    test_suite='axelrod.tests'
 )
