@@ -1,8 +1,16 @@
 .. image:: https://badge.waffle.io/Axelrod-Python/Axelrod.svg?label=ready&title=Ready
     :target: https://waffle.io/Axelrod-Python/Axelrod
 
+
+.. image:: https://coveralls.io/repos/Axelrod-Python/Axelrod/badge.svg
+    :target: https://coveralls.io/r/Axelrod-Python/Axelrod
+
+.. image:: https://img.shields.io/pypi/v/Axelrod.svg
+    :target: https://pypi.python.org/pypi/Axelrod
+
 .. image:: https://travis-ci.org/Axelrod-Python/Axelrod.svg?branch=packaging
     :target: https://travis-ci.org/Axelrod-Python/Axelrod
+
 |Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
 
 Axelrod
