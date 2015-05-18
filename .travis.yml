@@ -7,7 +7,7 @@ before_install:
 install:
   - pip install -r requirements.txt
   - pip install coverage
-  - pip install coveralls-python
+  - pip install coveralls
 script:
   - coverage run -m unittest discover
 after_success:
