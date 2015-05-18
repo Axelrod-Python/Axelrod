@@ -9,6 +9,6 @@ install:
   - pip install coverage
   - pip install coveralls
 script:
-  - coverage run -m unittest discover
+  - coverage run --source=axelrod -m unittest discover
 after_success:
   coveralls
