@@ -20,6 +20,7 @@ Contents:
    background
    usage
    strategies
+   index_of_strategies
    contributing
 
 
