@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+
 from axelrod import Player
-from meta import MetaPlayer
+from .meta import MetaPlayer
 
 
 class DefectorHunter(Player):
@@ -53,7 +55,8 @@ class MathConstantHunter(Player):
             # The variance of the uniform distribution is about 1/4, so we can expect
             # that the difference in proportion of defects/cooperations in two halves
             # will quickly vary by less than that.
-            delta = abs(opponent.history[:n/2].count('D') - opponent.history[n/2:].count('D'))
+            half = n // 2
+            delta = abs(opponent.history[:half].count('D') - opponent.history[half:].count('D'))
             if delta < 0.25 * n:
                 return 'D'
 

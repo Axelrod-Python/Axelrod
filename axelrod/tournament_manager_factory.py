@@ -1,5 +1,8 @@
-from tournament_manager import *
+from __future__ import absolute_import
+
 import axelrod.strategies
+
+from .tournament_manager import *
 
 
 class TournamentManagerFactory(object):
