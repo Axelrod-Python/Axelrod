@@ -1,9 +1,9 @@
 .. currentmodule:: axelrod.strategies
-Here is a list of strategies
-============================
+List of strategies
+==================
 
-Here are some of the basic strategies
--------------------------------------
+Basic strategies
+----------------
 
 .. autoclass:: Alternator
 .. autoclass:: Cooperator
@@ -11,13 +11,15 @@ Here are some of the basic strategies
 .. autoclass:: Random
 .. autoclass:: TitForTat
 
-A list of all further (honest) strategies
------------------------------------------
+Further (honest) Strategies
+---------------------------
 
 .. autoclass:: AlternatorHunter
 .. autoclass:: Appeaser
+.. autoclass:: AntiTitForTat
 .. autoclass:: ArrogantQLearner
 .. autoclass:: AverageCopier
+.. autoclass:: Bully
 .. autoclass:: CautiousQLearner
 .. autoclass:: CooperatorHunter
 .. autoclass:: DefectorHunter
@@ -64,12 +66,12 @@ A list of all further (honest) strategies
 .. autoclass:: TrickyDefector
 .. autoclass:: TwoTitsForTat
 .. autoclass:: WinStayLoseShift
-.. autoclass:: ZDChi
+.. autoclass:: ZDExtort2
 .. autoclass:: ZDGTFT2
 .. autoclass:: e
 
-A list of the cheating strategies
----------------------------------
+Cheating strategies
+-------------------
 
 .. autoclass:: Darwin
 .. autoclass:: Geller
