@@ -41,7 +41,7 @@ class RiskyQLearner(Player):
             self.Vs[state] = 0
         self.perform_q_learning(self.prev_state, state, self.prev_action, reward)
         if state not in self.Qs:
-            action =  random.choice(['C', 'D'])
+            action = random.choice(['C', 'D'])
         else:
             action = self.select_action(state)
         self.prev_state = state
@@ -61,8 +61,8 @@ class RiskyQLearner(Player):
         """
         Finds the my_state (the opponents last n moves +  its previous proportion of playing 'C') as a hashable state
         """
-        prob = round(sum([i=='C' for i in opponent.history]), 1)
-        return ''.join(opponent.history[-self.memory_length:]) + str(prob)
+        prob = '{:.1f}'.format(opponent.history.count('C'))
+        return ''.join(opponent.history[-self.memory_length:]) + prob
 
     def perform_q_learning(self, prev_state, state, action, reward):
         """
