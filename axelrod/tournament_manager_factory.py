@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from collections import OrderedDict
 
 import axelrod.strategies
 
@@ -45,19 +46,23 @@ class TournamentManagerFactory(object):
                 name=name, players=players, **kwargs)
 
     @staticmethod
-    def _tournaments_dict(exclusions=[]):
+    def _tournaments_dict(exclusions=None):
+        if exclusions is None:
+            exclusions = []
 
-        tournaments = {
-            'basic_strategies': axelrod.basic_strategies,
-            'strategies':
+        tournaments = OrderedDict([
+            ('basic_strategies', axelrod.basic_strategies),
+            ('strategies',
                 axelrod.basic_strategies +
-                axelrod.ordinary_strategies,
-            'cheating_strategies': axelrod.cheating_strategies,
-            'all_strategies':
+                axelrod.ordinary_strategies),
+            ('cheating_strategies', axelrod.cheating_strategies),
+            ('all_strategies',
                 axelrod.basic_strategies +
                 axelrod.ordinary_strategies +
-                axelrod.cheating_strategies}
+                axelrod.cheating_strategies)
+        ])
 
-        return {
-            key: value for
-            key, value in tournaments.items() if key not in exclusions}
+        return OrderedDict([
+            (key, value) for
+            key, value in tournaments.items() if key not in exclusions
+        ])
