@@ -23,20 +23,20 @@ def print_header(string, character):
 if __name__ == "__main__":
 
     print ".. currentmodule:: axelrod.strategies"
-    print_header("Here is a list of strategies", '=')
+    print_header("List of strategies", '=')
 
-    print_header("Here are some of the basic strategies", '-')
+    print_header("Basic strategies", '-')
     for strategy in basic_strategies:
         print ".. autoclass:: %s" % strategy.__name__
 
     print ""
 
-    print_header("A list of all further (honest) strategies", '-')
+    print_header("Further (honest) Strategies", '-')
     for strategy in ordinary_strategies:
         print ".. autoclass:: %s" % strategy.__name__
 
     print ""
 
-    print_header("A list of the cheating strategies", '-')
+    print_header("Cheating strategies", '-')
     for strategy in cheating_strategies:
         print ".. autoclass:: %s" % strategy.__name__
