@@ -29,7 +29,7 @@ utility of 1.
 
 By simply investigating the best responses against both possible actions of each player it is immediate to see that the Nash equilibrium for this game is for both players to defect.
 
-The iterated Prisoner's Dilemma
+The Iterated Prisoner's Dilemma
 -------------------------------
 
 We can use the basic Prisoner's Dilemma as a _stage_ game in a repeated game.
