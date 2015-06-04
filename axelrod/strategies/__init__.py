@@ -1,1 +1,1 @@
-from _strategies import *
+from ._strategies import *

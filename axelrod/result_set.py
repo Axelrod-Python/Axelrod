@@ -1,6 +1,7 @@
 import math
 import csv
-from StringIO import StringIO
+
+from six.moves import StringIO
 
 
 def median(lst):
@@ -8,9 +9,9 @@ def median(lst):
     if len(lst) < 1:
             return None
     if len(lst) % 2 == 1:
-            return lst[((len(lst)+1)/2)-1]
+            return lst[((len(lst)+1) // 2)-1]
     if len(lst) % 2 == 0:
-            return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
+            return float(sum(lst[(len(lst) // 2)-1:(len(lst) // 2)+1]))/2.0
 
 
 class ResultSet(object):
@@ -178,7 +179,7 @@ class ResultSet(object):
             writer = csv.writer(csv_string, lineterminator="\n")
             for irep in range(self.repetitions):
                 data = [self.normalised_scores[rank][irep] for rank in self.ranking]
-                writer.writerow(map(str, data))
+                writer.writerow(list(map(str, data)))
             return csv_string.getvalue()
         else:
             raise AttributeError(self.unfinalised_error_msg)

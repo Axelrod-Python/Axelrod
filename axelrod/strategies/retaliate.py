@@ -24,7 +24,7 @@ class Retaliate(Player):
         If the opponent has played D to my C more often than x% of the time
         that I've done the same to him, play D. Otherwise, play C.
         """
-        history = zip(self.history, opponent.history)
+        history = list(zip(self.history, opponent.history))
         if history.count(('C', 'D')) > (
            history.count(('D', 'C')) * self.retaliation_threshold):
             return 'D'
@@ -73,7 +73,7 @@ class LimitedRetaliate(Player):
         that I've done the same to him, retaliate by playing D but stop doing
         so once I've hit the retaliation limit.
         """
-        history = zip(self.history, opponent.history)
+        history = list(zip(self.history, opponent.history))
         if history.count(('C', 'D')) > (
            history.count(('D', 'C')) * self.retaliation_threshold):
             self.retaliating = True
