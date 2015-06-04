@@ -54,7 +54,7 @@ tournament. To run the tournament, you simply need to:
 
 ::
 
-    $ python run_tournament.py
+    $ python run_axelrod
 
 This automatically outputs a ``png`` file with the results. You can see
 the results from the latest run of the tournament here:
@@ -75,26 +75,26 @@ Also the pairwise performance of each strategy versus all others:
 
 Please do contribute :)
 
-Note that you can run ``python run_tournament.py -h`` for further
+Note that you can run ``python run_axelrod -h`` for further
 options available: for example, cheating strategies can be excluded for
 faster results by running:
 
 ::
 
-    $ python run_tournament.py --xc --xa
+    $ python run_axelrod --xc --xa
 
 You can also run the tournament in parallel (below will run 4 parallel
 processes):
 
 ::
 
-    $ python run_tournament.py -p 4
+    $ python run_axelrod -p 4
 
 You can run with all available CPUs with:
 
 ::
 
-    $ python run_tournament.py -p 0
+    $ python run_axelrod -p 0
 
 Awesome visualisation
 ---------------------
