@@ -23,7 +23,7 @@ def print_header(string, character):
 if __name__ == "__main__":
 
     print ".. currentmodule:: axelrod.strategies"
-    print_header("List of strategies", '=')
+    print_header("Index of strategies", '=')
 
     print_header("Basic strategies", '-')
     for strategy in basic_strategies:
