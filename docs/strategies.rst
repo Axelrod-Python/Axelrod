@@ -50,8 +50,8 @@ which gives::
 
 We see that after cooperating once, Tit For Tat defects at every step.
 
-Tideman and Chieruzzi
-^^^^^^^^^^^^^^^^^^^^^
+**Not implemented**: Tideman and Chieruzzi
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This strategy begins by playing Tit For Tat and then things get slightly
 complicated:
@@ -71,12 +71,6 @@ A 'fresh start' is a sequence of two cooperations followed by an assumption that
 the game has just started.
 
 *This strategy came second in Axelrod's original tournament.*
-
-Implementation
-**************
-
-This strategy is not yet implemented: `please do send us a pull request!
-<https://github.com/Axelrod-Python/Axelrod/pulls>`_.
 
 Axelrod's second tournament
 ---------------------------
