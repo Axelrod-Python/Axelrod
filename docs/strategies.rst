@@ -72,6 +72,37 @@ the game has just started.
 
 *This strategy came second in Axelrod's original tournament.*
 
+**Not implemented**: Nydegger
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy begins by playing Tit For Tat for the first 3 rounds with the
+following modifications:
+
+**If it is the only strategy to cooperate in the first round and the only
+strategy to defect on the second round then it defects on the 3 round
+(despite the fact that Tit For Tat would now cooperate).**
+
+After these first 3 rounds the next move is made depending on the previous 3
+rounds. A score is given to these rounds according to the following
+calculation:
+
+.. math::
+
+    A = 16 a_1 + 4 a_2 + a_3
+
+Where :math:`a_i` is dependent on the outcome of the previous :math:`i` th
+round.  If both strategies defect, :math:`a_i=3`, if the opponent only defects:
+:math:`a_i=2` and finally if it is only this strategy that defects then
+:math:`a_i=1`.
+
+Finally this strategy defects if and only if:
+
+.. math::
+
+    A \in \{1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61\}
+
+*This strategy came third in Axelrod's original tournament.*
+
 Axelrod's second tournament
 ---------------------------
 
