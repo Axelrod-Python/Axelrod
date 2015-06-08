@@ -110,6 +110,15 @@ This is a pretty simple strategy, it cooperates with probability :math:`\frac{2}
 
 *This strategy came fourth in Axelrod's original tournament.*
 
+**Not implemented**: Shubik
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy plays a modification of Tit For Tat. It starts be retaliating
+with a single defection but the number of defections increases by 1 each time
+the opponent defects when this strategy cooperates.
+
+*This strategy came fifth in Axelrod's original tournament.*
+
 Axelrod's second tournament
 ---------------------------
 
