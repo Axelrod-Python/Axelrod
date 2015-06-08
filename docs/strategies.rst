@@ -103,6 +103,13 @@ Finally this strategy defects if and only if:
 
 *This strategy came third in Axelrod's original tournament.*
 
+**Not implemented**: Grofman
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is a pretty simple strategy, it cooperates with probability :math:`\frac{2}{7}`.
+
+*This strategy came fourth in Axelrod's original tournament.*
+
 Axelrod's second tournament
 ---------------------------
 
