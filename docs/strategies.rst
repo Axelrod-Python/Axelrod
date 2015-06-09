@@ -208,6 +208,23 @@ until it is only .5.
 
 *This strategy came eleventh in Axelrod's original tournament.*
 
+**Not implemented**: Joss
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy plays Tit For Tat, always defecting if the opponent defects but
+cooperating when the opponent cooperates with probability .9.
+
+*This strategy came twelfth in Axelrod's original tournament.*
+
+**Not implemented**: Tullock
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy cooperates for the first 11 rounds and then cooperates 10% less
+often (randomly) than the opponent has in the previous 10 rounds.
+
+*This strategy came thirteenth in Axelrod's original tournament.*
+
+
 Axelrod's second tournament
 ---------------------------
 
