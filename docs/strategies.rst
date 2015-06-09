@@ -170,6 +170,23 @@ first 10 moves and then plays Grudger.
 
 *This strategy came eighth in Axelrod's original tournament.*
 
+**Not implemented**: Graaskamp
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy follows the following rules:
+
+1. Play Tit For Tat for the first 50 rounds;
+2. Defects on round 51;
+3. Plays 5 further rounds of Tit For Tat;
+4. A check is then made to see if the opponent is playing randomly in which case
+   it defects for the rest of the game;
+5. The strategy also checks to see if the opponent is playing Tit For Tat or
+   another strategy from a preliminary tournament called 'Analogy'. If so it
+   plays Tit For Tat. If not it cooperates and randomly defects every 5 to 15
+   moves.
+
+*This strategy came ninth in Axelrod's original tournament.*
+
 Axelrod's second tournament
 ---------------------------
 
