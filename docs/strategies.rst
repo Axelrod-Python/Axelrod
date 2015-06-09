@@ -197,8 +197,16 @@ during play and the strategy attempts to maximise the long term play.
 
 Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
 
-
 *This strategy came tenth in Axelrod's original tournament.*
+
+**Not implemented**: Feld
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy plays Tit For Tat, always defecting if the opponent defects but
+cooperating when the opponent cooperates with a gradually decreasing probability
+until it is only .5.
+
+*This strategy came eleventh in Axelrod's original tournament.*
 
 Axelrod's second tournament
 ---------------------------
