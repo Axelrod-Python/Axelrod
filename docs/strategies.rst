@@ -29,6 +29,7 @@ Here is a quick implementation of this in the library::
    p2 = axelrod.Cooperator()  # Create a player that always cooperates
    for round in range(5):
        p1.play(p2)
+
    print p1.history
 
 which gives::
@@ -131,6 +132,35 @@ This strategy plays a modification of Tit For Tat.
    opponent  is playing randomly.
 
 *This strategy came sixth in Axelrod's original tournament.*
+
+Grudger
+^^^^^^^
+
+This strategy cooperates until the opponent defects and then defects forever.
+
+*This strategy came seventh in Axelrod's original tournament.*
+
+Implementation
+**************
+
+Here is how this is implemented in the library::
+
+   import axelrod
+   p1 = axelrod.Grudger()  # Create a player that grudger
+   p2 = axelrod.Random()  # Create a player that plays randomly
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+   print p2.history
+
+which gives (for the random seed used)::
+
+    ['C', 'C', 'D', 'D', 'D']
+    ['C', 'D', 'C', 'D', 'D']
+
+We see that as soon as :code:`p2` defected :code:`p1` defected for the rest of
+the play.
 
 Axelrod's second tournament
 ---------------------------
