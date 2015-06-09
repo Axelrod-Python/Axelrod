@@ -7,17 +7,20 @@ Axelrod's first tournament
 Axelrod's first tournament is described in his 1980 paper entitled `'Effective
 choice in the Prisoner's Dilemma' <http://www.jstor.org/stable/173932>`_. This
 tournament included 14 strategies and they are listed below, (ranked in the
-order in which they appeared). _An indication is given as to whether or not
-this strategy is implemented in the :code:`axelrod` library.
+order in which they appeared).
+
+An indication is given as to whether or not this strategy is implemented in the
+:code:`axelrod` library. If this strategy is not implemented please do send us a
+`pull request <https://github.com/Axelrod-Python/Axelrod/pulls>`_.
 
 Tit for Tat
 ^^^^^^^^^^^
 
 This strategy was referred to as the *'simplest'* strategy submitted. It
-begins by cooperating and then simply repeats the last move made by the
+begins by cooperating and then simply repeats the last moves made by the
 opponent.
 
-*Tit for Tat came fist in Axelrod's original tournament.*
+*Tit for Tat came 1st in Axelrod's original tournament.*
 
 Implementation
 **************
@@ -25,7 +28,7 @@ Implementation
 Here is a quick implementation of this in the library::
 
    import axelrod
-   p1 = axelrod.TitForTat()  # Create a player that players tit for tat
+   p1 = axelrod.TitForTat()  # Create a player that plays tit for tat
    p2 = axelrod.Cooperator()  # Create a player that always cooperates
    for round in range(5):
        p1.play(p2)
@@ -39,7 +42,7 @@ which gives::
 We see that Tit for Tat cooperated every time, let us see how things change
 when it plays against a player that always defects::
 
-   p1 = axelrod.TitForTat()  # Create a player that players tit for tat
+   p1 = axelrod.TitForTat()  # Create a player that plays tit for tat
    p3 = axelrod.Defector()  # Create a player that always cooperates
    for round in range(5):
        p1.play(p3)
@@ -58,7 +61,7 @@ This strategy begins by playing Tit For Tat and then things get slightly
 complicated:
 
 1. Every run of defections played by the opponent increases the number of
-   defections that this strategy retaliates with.
+   defections that this strategy retaliates with by 1.
 2. The opponent is given a 'fresh start' if:
 
    * it is 10 points behind this strategy
@@ -69,9 +72,9 @@ complicated:
      least 3.0 standard deviations.
 
 A 'fresh start' is a sequence of two cooperations followed by an assumption that
-the game has just started.
+the game has just started (everything is forgotten).
 
-*This strategy came second in Axelrod's original tournament.*
+*This strategy came 2nd in Axelrod's original tournament.*
 
 **Not implemented**: Nydegger
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -102,14 +105,14 @@ Finally this strategy defects if and only if:
 
     A \in \{1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61\}
 
-*This strategy came third in Axelrod's original tournament.*
+*This strategy came 3rd in Axelrod's original tournament.*
 
 **Not implemented**: Grofman
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is a pretty simple strategy: it cooperates with probability :math:`\frac{2}{7}`.
 
-*This strategy came fourth in Axelrod's original tournament.*
+*This strategy came 4th in Axelrod's original tournament.*
 
 **Not implemented**: Shubik
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -118,7 +121,7 @@ This strategy plays a modification of Tit For Tat. It starts be retaliating
 with a single defection but the number of defections increases by 1 each time
 the opponent defects when this strategy cooperates.
 
-*This strategy came fifth in Axelrod's original tournament.*
+*This strategy came 5th in Axelrod's original tournament.*
 
 **Not implemented**: Stein
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -131,14 +134,14 @@ This strategy plays a modification of Tit For Tat.
    test<http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
    opponent  is playing randomly.
 
-*This strategy came sixth in Axelrod's original tournament.*
+*This strategy came 6th in Axelrod's original tournament.*
 
 Grudger
 ^^^^^^^
 
 This strategy cooperates until the opponent defects and then defects forever.
 
-*This strategy came seventh in Axelrod's original tournament.*
+*This strategy came 7th in Axelrod's original tournament.*
 
 Implementation
 **************
@@ -168,7 +171,7 @@ the play.
 This strategy is a modification of Grudger. It starts by cooperating for the
 first 10 moves and then plays Grudger.
 
-*This strategy came eighth in Axelrod's original tournament.*
+*This strategy came 8th in Axelrod's original tournament.*
 
 **Not implemented**: Graaskamp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -185,7 +188,7 @@ This strategy follows the following rules:
    plays Tit For Tat. If not it cooperates and randomly defects every 5 to 15
    moves.
 
-*This strategy came ninth in Axelrod's original tournament.*
+*This strategy came 9th in Axelrod's original tournament.*
 
 **Not implemented**: Downing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -197,7 +200,7 @@ during play and the strategy attempts to maximise the long term play.
 
 Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
 
-*This strategy came tenth in Axelrod's original tournament.*
+*This strategy came 10th in Axelrod's original tournament.*
 
 **Not implemented**: Feld
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -206,7 +209,7 @@ This strategy plays Tit For Tat, always defecting if the opponent defects but
 cooperating when the opponent cooperates with a gradually decreasing probability
 until it is only .5.
 
-*This strategy came eleventh in Axelrod's original tournament.*
+*This strategy came 11th in Axelrod's original tournament.*
 
 **Not implemented**: Joss
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -214,15 +217,15 @@ until it is only .5.
 This strategy plays Tit For Tat, always defecting if the opponent defects but
 cooperating when the opponent cooperates with probability .9.
 
-*This strategy came twelfth in Axelrod's original tournament.*
+*This strategy came 12th in Axelrod's original tournament.*
 
 **Not implemented**: Tullock
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This strategy cooperates for the first 11 rounds and then cooperates 10% less
-often (randomly) than the opponent has in the previous 10 rounds.
+This strategy cooperates for the first 11 rounds and then (randomly) cooperates 10% less
+often than the opponent has in the previous 10 rounds.
 
-*This strategy came thirteenth in Axelrod's original tournament.*
+*This strategy came 13th in Axelrod's original tournament.*
 
 **Not implemented**: 'Grad Student in Political Science'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -233,14 +236,14 @@ opponent seems to be random, very cooperative or very uncooperative.
 Furthermore, if after round 130 the strategy is losing then :math:`P` is also
 adjusted.
 
-*This strategy came fourteenth in Axelrod's original tournament.*
+*This strategy came 14th in Axelrod's original tournament.*
 
 Random
 ^^^^^^
 
 This strategy plays randomly (disregarding the history of play).
 
-*This strategy came fifteenth in Axelrod's original tournament.*
+*This strategy came 15th in Axelrod's original tournament.*
 
 Implementation
 **************
@@ -264,5 +267,9 @@ which gives (for the random seed used)::
 Axelrod's second tournament
 ---------------------------
 
+Work in progress.
+
 Strategies implemented in the module
 ------------------------------------
+
+Work in progress.
