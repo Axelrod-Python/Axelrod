@@ -162,6 +162,14 @@ which gives (for the random seed used)::
 We see that as soon as :code:`p2` defected :code:`p1` defected for the rest of
 the play.
 
+**Not implemented**: Davis
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy is a modification of Grudger. It starts by cooperating for the
+first 10 moves and then plays Grudger.
+
+*This strategy came eighth in Axelrod's original tournament.*
+
 Axelrod's second tournament
 ---------------------------
 
