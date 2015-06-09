@@ -224,6 +224,42 @@ often (randomly) than the opponent has in the previous 10 rounds.
 
 *This strategy came thirteenth in Axelrod's original tournament.*
 
+**Not implemented**: 'Grad Student in Political Science'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy cooperates with a given probability :math:`P`. This probability
+(which has initial value .3) is updated every 10 rounds based on whether the
+opponent seems to be random, very cooperative or very uncooperative.
+Furthermore, if after round 130 the strategy is losing then :math:`P` is also
+adjusted.
+
+*This strategy came fourteenth in Axelrod's original tournament.*
+
+Random
+^^^^^^
+
+This strategy plays randomly (disregarding the history of play).
+
+*This strategy came fifteenth in Axelrod's original tournament.*
+
+Implementation
+**************
+
+Here is how this is implemented in the library::
+
+   import axelrod
+   p1 = axelrod.Random()  # Create a player that plays randomly
+   p2 = axelrod.Random()  # Create a player that plays randomly
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+   print p2.history
+
+which gives (for the random seed used)::
+
+    ['D', 'D', 'C', 'C', 'C']
+    ['D', 'C', 'D', 'D', 'C']
 
 Axelrod's second tournament
 ---------------------------
