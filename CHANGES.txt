@@ -6,3 +6,4 @@ v0.0.5, 2015-03-28 -- Corrects formatting of authors
 v0.0.6, 2015-04-01 -- Removes long description
 v0.0.7, 2015-04-01 -- Perhaps removes long description
 v0.0.8, 2015-04-16 -- Change default behaviour to maximisation
+v0.0.9, 2015-06-14 -- Various improvements including noisy tournaments
