@@ -106,7 +106,7 @@ Finally this strategy defects if and only if:
 **Not implemented**: Grofman
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is a pretty simple strategy, it cooperates with probability :math:`\frac{2}{7}`.
+This is a pretty simple strategy: it cooperates with probability :math:`\frac{2}{7}`.
 
 *This strategy came fourth in Axelrod's original tournament.*
 
@@ -118,6 +118,19 @@ with a single defection but the number of defections increases by 1 each time
 the opponent defects when this strategy cooperates.
 
 *This strategy came fifth in Axelrod's original tournament.*
+
+**Not implemented**: Stein
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy plays a modification of Tit For Tat.
+
+1. It cooperates for the first 4 moves.
+2. It defects on the last 2 moves.
+3. Every 15 moves it makes use of a `chi-squared
+   test<http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
+   opponent  is playing randomly.
+
+*This strategy came sixth in Axelrod's original tournament.*
 
 Axelrod's second tournament
 ---------------------------
