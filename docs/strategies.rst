@@ -187,6 +187,19 @@ This strategy follows the following rules:
 
 *This strategy came ninth in Axelrod's original tournament.*
 
+**Not implemented**: Downing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy attempts to estimate the next move of the opponent by estimating
+the probability of cooperating given that they defected (:math:`p(C|D)`)or cooperated on the
+previous round (:math:`p(C|C)`). These probabilities are continuously updated
+during play and the strategy attempts to maximise the long term play.
+
+Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
+
+
+*This strategy came tenth in Axelrod's original tournament.*
+
 Axelrod's second tournament
 ---------------------------
 
