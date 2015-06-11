@@ -1,6 +1,9 @@
+from __future__ import absolute_import
+
 import time
 import logging
-from tournament_manager_factory import TournamentManagerFactory
+
+from .tournament_manager_factory import TournamentManagerFactory
 
 
 def timed_message(message, start_time):
@@ -27,7 +30,8 @@ def setup_logging(logging_destination='console', verbosity='INFO'):
 
     logHandler.setFormatter(logFormatter)
     logger = logging.getLogger('axelrod')
-    logger.setLevel(logging.getLevelName(verbosity.upper()))
+    level = logging.getLevelName(verbosity.upper())
+    logger.setLevel(verbosity.upper())
     logger.addHandler(logHandler)
 
 
