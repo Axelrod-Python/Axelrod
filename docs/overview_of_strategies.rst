@@ -107,21 +107,70 @@ Finally this strategy defects if and only if:
 
 *This strategy came 3rd in Axelrod's original tournament.*
 
-**Not implemented**: Grofman
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Grofman
+^^^^^^^
 
-This is a pretty simple strategy: it cooperates with probability :math:`\frac{2}{7}`.
+This is a pretty simple strategy: it cooperates with probability :math:`\frac{2}{7}`. In contemporary terminology, this is a memory-one player 
+with all four conditional probabilities of cooperation equal to :math:`\frac{2}{7}`.
 
 *This strategy came 4th in Axelrod's original tournament.*
 
-**Not implemented**: Shubik
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Here is how this is implemented in the library::
 
-This strategy plays a modification of Tit For Tat. It starts be retaliating
+    import axelrod
+    p1 = axelrod.Grofman()  # Create a Grofman player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+
+which gives::
+
+    ['C', 'C', 'D', 'D', 'D']
+
+Over a longer number of rounds::
+
+    from collections import Counter
+    for round in range(5):
+        p1.play(p2)
+    counter = Counter(p1.history)
+    print(counter)
+    Counter({'D': 367, 'C': 138})
+    print float(counter['C']) / (counter['C'] + counter['D'])
+    print 2./7
+
+We have that Grofman cooperates roughly in :math:`\frac{2}{7}`-ths of the rounds::
+
+    0.2732673267326733 # Grofman
+    0.2857142857142857 # 2./7
+
+Shubik
+^^^^^^
+
+This strategy plays a modification of Tit For Tat. It starts by retaliating
 with a single defection but the number of defections increases by 1 each time
 the opponent defects when this strategy cooperates.
 
 *This strategy came 5th in Axelrod's original tournament.*
+
+    import axelrod
+    p1 = axelrod.Shubik()  # Create a Shubik player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(13):
+        p1.play(p2)
+
+    print p1.history
+    print p2.history
+
+This yields the following history of play::
+
+    ['C', 'D', 'C', 'D', 'D', 'D', 'C', 'C', 'C', 'D', 'D', 'D', 'C']
+    ['D', 'C', 'D', 'C', 'D', 'C', 'C', 'C', 'D', 'C', 'C', 'C', 'D']
+
+The increasing retaliation periods are visible in the output. Note that
+ Shubik defects if both players defected in the previous round but does
+ not increase the retaliation period.
 
 **Not implemented**: Stein
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -211,13 +260,31 @@ until it is only .5.
 
 *This strategy came 11th in Axelrod's original tournament.*
 
-**Not implemented**: Joss
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Joss
+^^^^
 
 This strategy plays Tit For Tat, always defecting if the opponent defects but
 cooperating when the opponent cooperates with probability .9.
 
 *This strategy came 12th in Axelrod's original tournament.*
+
+This is a memory-one strategy with four-vector :math:`(0.9, 0, 1, 0)`. Here is how this is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.Joss()  # Create a Joss player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(10):
+        p1.play(p2)
+
+    print p1.history
+    print p2.history
+
+This gives::
+
+    ['C', 'C', 'C', 'D', 'C', 'D', 'C', 'C', 'C', 'C']
+    ['C', 'C', 'D', 'C', 'D', 'C', 'C', 'C', 'C', 'D']
+
+Which is the same as Tit-For-Tat for these 10 rounds.
 
 **Not implemented**: Tullock
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
