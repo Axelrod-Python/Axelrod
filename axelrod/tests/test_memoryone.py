@@ -123,3 +123,34 @@ class TestZDGTFT2(TestPlayer):
         self.responses_test([C], [D], [D, D, D, D])
         self.responses_test([D], [C], [C, C, C, C])
         self.responses_test([D], [D], [D, D, D, D])
+
+
+class TestGrofman(TestPlayer):
+
+    name = "Grofman"
+    player = axelrod.Grofman
+    stochastic = True
+
+    def test_four_vector(self):
+        p = float(2) / 7
+        expected_dictionary = {(C, C): p, (C, D): p, (D, C): p, (D, D): p}
+        test_four_vector(self, expected_dictionary)
+
+    def test_strategy(self):
+        self.responses_test([C], [C], [D, D, C], random_seed=2)
+        self.responses_test([C], [D], [C, D, D])
+
+
+class TestJoss(TestPlayer):
+
+    name = "Joss"
+    player = axelrod.Joss
+    stochastic = True
+
+    def test_four_vector(self):
+        expected_dictionary = {(C, C): 0.9, (C, D): 0, (D, C): 1, (D, D): 0}
+        test_four_vector(self, expected_dictionary)
+
+    def test_strategy(self):
+        self.responses_test([C], [C], [D, D, C, C], random_seed=2)
+        self.responses_test([C], [D], [D, D, D, D])
