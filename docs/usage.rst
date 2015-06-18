@@ -274,7 +274,6 @@ such as WinStayLoseShift that are more robust in the presence of noise.
 
 Adding noise makes a dramatic difference in the pairwise payoffs:
 
-
 .. class:: center
 .. image:: _static/usage/strategies_payoff.svg
    :width: 45%
@@ -294,9 +293,6 @@ and accordingly to the ranking of strategies overall:
 .. image:: _static/usage/strategies_boxplot_noise_5.svg
    :width: 45%
    :align: center
-
-
-
 
 To run a noisy tournament, just use the keyword argument `noise` when 
 creating tournaments. Both `run_axelrod` and the utility function 
