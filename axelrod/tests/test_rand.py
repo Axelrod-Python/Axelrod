@@ -32,25 +32,23 @@ class TestTullock(TestPlayer):
         """Cooperates for first ten rounds"""
         self.first_play_test(C)
         for i in range(10):
-            history_1 = [C]*i
-            history_2 = [C]*i
+            history_1 = [C] * i
+            history_2 = [C] * i
             self.responses_test(history_1, history_2, [C])
         # Now cooperate 10% less than opponent
-        history_1 = [C]*11
-        history_2 = [D]*11
+        history_1 = [C] * 11
+        history_2 = [D] * 11
         self.responses_test(history_1, history_2, [D], random_seed=10)
-        history_1 = [C]*11
-        history_2 = [D]*10 + [C]
+        history_1 = [C] * 11
+        history_2 = [D] * 10 + [C]
         self.responses_test(history_1, history_2, [D], random_seed=10)
         # Test beyond 10 rounds
-        history_1 = [C]*11
-        history_2 = [D]*5 + [C]*6
-        self.responses_test(history_1, history_2, [D, D, D, D],
-                            random_seed=20)
-        history_1 = [C]*11
-        history_2 = [C]*9 + [D]*2
-        self.responses_test(history_1, history_2, [C, D, D, C],
-                            random_seed=25)
+        history_1 = [C] * 11
+        history_2 = [D] * 5 + [C] * 6
+        self.responses_test(history_1, history_2, [D, D, D, D], random_seed=20)
+        history_1 = [C] * 11
+        history_2 = [C] * 9 + [D] *2
+        self.responses_test(history_1, history_2, [C, D, D, C], random_seed=25)
 
 
 class TestFeld(TestPlayer):
