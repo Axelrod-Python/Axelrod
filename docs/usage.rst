@@ -272,27 +272,37 @@ round possibilities CD, DC, CD, DD, substantially lowering the average
 score per round. Moreover, TitForTat is now outplayed by other strategies 
 such as WinStayLoseShift that are more robust in the presence of noise.
 
-Adding noise makes a dramatic difference in the pairwise payoffs:
+Adding noise makes a dramatic difference in the pairwise payoffs (5% on right):
 
-.. class:: center
-.. image:: _static/usage/strategies_payoff.svg
-   :width: 45%
-   :align: center
+.. |pairwise_no_noise| image:: _static/usage/strategies_payoff.svg
+   :width: 75%
+   :align: middle
+   :alt: Pairwise payoffs without noise
 
-.. image:: _static/usage/strategies_payoff_noise_5.svg
-   :width: 45%
-   :align: center
+.. |pairwise_5_noise| image:: _static/usage/strategies_payoff_noise_5.svg
+   :width: 75%
+   :align: middle
+   :alt: Pairwise payoffs with 5% noise
+
++---------------------+--------------------+
+| |pairwise_no_noise| | |pairwise_5_noise| |
++---------------------+--------------------+
 
 and accordingly to the ranking of strategies overall:
 
-.. class:: center
-.. image:: _static/usage/strategies_boxplot.svg
-   :width: 45%
-   :align: center
+.. |boxplot_no_noise| image:: _static/usage/strategies_boxplot.svg
+   :width: 75%
+   :align: middle
+   :alt: Strategy performance without noise
 
-.. image:: _static/usage/strategies_boxplot_noise_5.svg
-   :width: 45%
-   :align: center
+.. |boxplot_5_noise| image:: _static/usage/strategies_boxplot_noise_5.svg
+   :width: 75%
+   :align: middle
+   :alt: Strategy performance with 5% noise
+
++--------------------+-------------------+
+| |boxplot_no_noise| | |boxplot_5_noise| |
++--------------------+-------------------+
 
 To run a noisy tournament, just use the keyword argument `noise` when 
 creating tournaments. Both `run_axelrod` and the utility function 
@@ -303,7 +313,7 @@ default tournament from the command line with 5% noise simply use::
 
 When creating tournaments, add noise with a keyword argument at the time of creation::
 
-    tournament = axelrod.Tournament(strategies, noise=0.01)
+    tournament = axelrod.Tournament(strategies, noise=0.05)
 
 Ecological variant
 ^^^^^^^^^^^^^^^^^^
