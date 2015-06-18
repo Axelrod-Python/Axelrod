@@ -242,6 +242,47 @@ Thus we see that there are multiple Nash equilibria for this game. Two pure equi
 
 To further study how this system evolves over time and how robust some of the observations we have made are let us look at how this game can be interpreted in an ecological setting.
 
+Noisy Tournaments
+^^^^^^^^^^^^^^^^^
+
+A common variation on iterated prisoner's dilemma tournaments is to add
+stochasticity in the choice of plays, simply called noise. This noise is
+indroduced by flipping plays between 'C' and 'D' with some probability
+that is applied to all plays after they are delivered by the player.
+
+The presence of this persistant bakground noise causes some strategies
+to behave substantially differently. For example, TitForTat can fall into 
+defection loops with itself when there is noise. While TitForTat would usually
+cooperate well with itself::
+
+ C C C C C ...
+ C C C C C ...
+
+Noise can cause a C to flip to a D (or vice versa), disrupting the
+cooperative chain::
+
+ C C C D C D C D D D ...
+ C C C C D C D D D D ...
+
+The defections continue until multiple noise events return the plays to CC.
+Even a small amount of noise changes the stationary distribution (the 
+long run averages of the plays per round) of TitForTat versus itself from 
+always cooperating with itself to being evenly distributed over the four 
+round possibilities CD, DC, CD, DD, substantially lowering the average 
+score per round. Moreover, TitForTat is now outplayed by other strategies 
+such as WinStayLoseShift that are more robust in the presence of noise.
+
+To run a noisy tournament, just use the keyword argument `noise` when 
+creating tournaments. Both `run_axelrod` and the utility function 
+`run_tournaments` accept and passthrough the noise argument. To run the
+default tournament from the command line with 5% noise simply use::
+
+    python run_axelrod --noise 0.05
+
+When creating tournaments, add noise with a keyword argument at the time of creation::
+
+    tournament = axelrod.Tournament(strategies, noise=0.01)
+
 Ecological variant
 ^^^^^^^^^^^^^^^^^^
 
@@ -339,6 +380,7 @@ There are a variety of options that include:
 - Excluding certain strategy sets.
 - Not running the ecological variant.
 - Running the rounds of the tournament in parallel.
+- Include background noise
 
 Particular parameters can also be changed:
 
