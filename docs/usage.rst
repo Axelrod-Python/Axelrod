@@ -313,7 +313,14 @@ default tournament from the command line with 5% noise simply use::
 
 When creating tournaments, add noise with a keyword argument at the time of creation::
 
-    tournament = axelrod.Tournament(strategies, noise=0.05)
+    import axelrod
+    strategies = [s() for s in axelrod.ordinary_strategies]
+    noise = 0.1
+    tournament = axelrod.Tournament(strategies, noise=noise)
+    results = tournament.play()
+    plot = axelrod.Plot(results)
+    p = plot.boxplot()
+    p.show()
 
 Ecological variant
 ^^^^^^^^^^^^^^^^^^
@@ -377,20 +384,6 @@ The output is shown here:
 .. image:: _static/usage/basic_strategies-reproduce-huge-initial-D.svg
    :width: 50%
    :align: center
-
-Noise
-^^^^^
-
-We can also introduce 'noise' into the tournament - the probability that any given play will actually be the opposite of that intended by the strategy. Setting the noise level to 10%::
-
-    import axelrod
-    strategies = [s() for s in axelrod.ordinary_strategies]
-    noise = 0.1
-    tournament = axelrod.Tournament(strategies, noise)
-    results = tournament.play()
-    plot = axelrod.Plot(results)
-    p = plot.boxplot()
-    p.show()
 
 Running the tournament
 ----------------------
