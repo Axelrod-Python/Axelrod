@@ -22,6 +22,7 @@ Further (honest) Strategies
 .. autoclass:: Bully
 .. autoclass:: CautiousQLearner
 .. autoclass:: CooperatorHunter
+.. autoclass:: Davis
 .. autoclass:: DefectorHunter
 .. autoclass:: FoolMeOnce
 .. autoclass:: ForgetfulFoolMeOnce
