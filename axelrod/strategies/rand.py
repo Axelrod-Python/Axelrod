@@ -43,7 +43,7 @@ class Feld(Player):
     memoryone = False # Probabilities are not constant
 
     def _cooperation_probability(self):
-        """It's not clear what the iterpolating function is, so we'll do
+        """It's not clear what the interpolating function is, so we'll do
         something simple that decreases monotonically from 1.0 to 0.5 over
         200 rounds."""
         slope = 0.5/200
