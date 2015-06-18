@@ -18,7 +18,7 @@ class Tullock(Player):
     than the opponent has in previous rounds."""
 
     name = "Tullock"
-    memoryone = False # memory-10
+    memoryone = False # long memory
 
     def __init__(self, rounds_to_cooperate=11):
         Player.__init__(self)
@@ -46,7 +46,8 @@ class Feld(Player):
     name = "Feld"
     memoryone = False # Probabilities are not constant
 
-    def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5, rounds_of_decay=200):
+    def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
+                 rounds_of_decay=200):
         Player.__init__(self)
         self._start_coop_prob = start_coop_prob
         self._end_coop_prob = end_coop_prob
@@ -56,7 +57,8 @@ class Feld(Player):
         """It's not clear what the interpolating function is, so we'll do
         something simple that decreases monotonically from 1.0 to 0.5 over
         200 rounds."""
-        slope = (self._end_coop_prob - self._start_coop_prob ) / float(self._rounds_of_decay)
+        diff = (self._end_coop_prob - self._start_coop_prob)
+        slope = diff / float(self._rounds_of_decay)
         rounds = len(self.history)
         return max(self._start_coop_prob + slope * rounds,
                    self._end_coop_prob)

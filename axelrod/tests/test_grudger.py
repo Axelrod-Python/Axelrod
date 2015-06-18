@@ -110,7 +110,8 @@ class TestOppositeGrudger(TestPlayer):
 
     def test_strategy(self):
         """
-        If opponent cooperates at any point then the player will cooperate forever
+        If opponent cooperates at any point then the player will cooperate
+        forever.
         """
         self.responses_test([C,D,D,D],[D,D,D,D],[D])
         self.responses_test([C,C,D,D,D],[C,D,C,C,C],[C])
@@ -137,8 +138,9 @@ class TestDavis(TestPlayer):
             history1.append('C')
             self.responses_test(history1, history2, ['C'])
 
-        #If opponent defects at any point then the player will defect forever (after 10 rounds)
+        # If opponent defects at any point then the player will defect forever
+        # (after 10 rounds)
         self.responses_test([C, D, D, D], [C, C, C, C], [C])
         self.responses_test([C, C, D, D, D], [C, D, C, C, C], [C])
-        self.responses_test([C]*10 + [C, C, D, D, D],
-                            [C]*10 + [C, D, C, C, C], [D])
+        self.responses_test([C]*10 + [C, C, D, D, D], [C]*10 + [C, D, C, C, C],
+                            [D])
