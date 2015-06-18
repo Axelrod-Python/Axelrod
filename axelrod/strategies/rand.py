@@ -42,13 +42,20 @@ class Feld(Player):
     name = "Feld"
     memoryone = False # Probabilities are not constant
 
+    def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5, rounds_of_decay=200):
+        Player.__init__(self)
+        self._start_coop_prob = start_coop_prob
+        self._end_coop_prob = end_coop_prob
+        self._rounds_of_decay = rounds_of_decay
+
     def _cooperation_probability(self):
         """It's not clear what the interpolating function is, so we'll do
         something simple that decreases monotonically from 1.0 to 0.5 over
         200 rounds."""
-        slope = 0.5/200
+        slope = (self._end_coop_prob - self._start_coop_prob ) / float(self._rounds_of_decay)
         rounds = len(self.history)
-        return max(1.0 - slope * rounds, 0.5)
+        return max(self._start_coop_prob + slope * rounds,
+                   self._end_coop_prob)
 
     def strategy(self, opponent):
         if not self.history:
