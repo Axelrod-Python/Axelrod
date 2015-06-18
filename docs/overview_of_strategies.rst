@@ -283,7 +283,8 @@ cooperating when the opponent cooperates with probability .9.
 
 *This strategy came 12th in Axelrod's original tournament.*
 
-This is a memory-one strategy with four-vector :math:`(0.9, 0, 1, 0)`. Here is how this is implemented in the library::
+This is a memory-one strategy with four-vector :math:`(0.9, 0, 1, 0)`. Here is
+how this is implemented in the library::
 
     import axelrod
     p1 = axelrod.Joss()  # Create a Joss player
@@ -301,13 +302,29 @@ This gives::
 
 Which is the same as Tit-For-Tat for these 10 rounds.
 
-**Not implemented**: Tullock
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Tullock
+^^^^^^^
 
-This strategy cooperates for the first 11 rounds and then (randomly) cooperates 10% less
-often than the opponent has in the previous 10 rounds.
+This strategy cooperates for the first 11 rounds and then (randomly) cooperates
+10% less often than the opponent has in the previous 10 rounds.
 
 *This strategy came 13th in Axelrod's original tournament.*
+
+    import axelrod
+    p1 = axelrod.Tullock()  # Create a Tullock player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(15):
+        p1.play(p2)
+
+    print p1.history
+    print p2.history
+
+This gives::
+
+    ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'C', 'D']
+    ['D', 'C', 'C', 'D', 'D', 'C', 'C', 'D', 'D', 'D', 'C', 'D', 'C', 'D', 'C']
+
+We have 10 rounds of cooperation and some apparently random plays afterward.
 
 **Not implemented**: 'Grad Student in Political Science'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
