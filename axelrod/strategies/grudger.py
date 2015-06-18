@@ -62,3 +62,17 @@ class OppositeGrudger(Player):
         if 'C' in opponent.history:
             return 'C'
         return 'D'
+
+class Davis(Player):
+    """A player starts by cooperating for 10 rounds then plays Grudger, defecting if at any point the opponent has defected."""
+
+    name = 'Davis'
+    memoryone = False  # Long memory
+
+    def strategy(self, opponent):
+        """Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D."""
+        if len(self.history) < 10:
+            return 'C'
+        if 'D' in opponent.history:
+            return 'D'
+        return 'C'

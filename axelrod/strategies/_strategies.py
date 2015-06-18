@@ -40,6 +40,7 @@ ordinary_strategies = [
     Bully,
     CautiousQLearner,
     CooperatorHunter,
+    Davis,
     DefectorHunter,
     FoolMeOnce,
     ForgetfulFoolMeOnce,

@@ -214,11 +214,26 @@ which gives (for the random seed used)::
 We see that as soon as :code:`p2` defected :code:`p1` defected for the rest of
 the play.
 
-**Not implemented**: Davis
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Davis
+^^^^^
 
 This strategy is a modification of Grudger. It starts by cooperating for the
-first 10 moves and then plays Grudger.
+first 10 moves and then plays Grudger. It is implemented as follows:
+
+   import axelrod
+   p1 = axelrod.Davis()  # Create a Davis player
+   p2 = axelrod.Random()  # Create a player that plays randomly
+   for round in range(15):
+       p1.play(p2)
+
+   print p1.history
+   print p2.history
+
+This always produces 10 rounds of attempted cooperation followed by Grudger::
+
+    ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
+    ['D', 'C', 'D', 'D', 'C', 'D', 'D', 'C', 'D', 'C', 'D', 'D', 'C', 'C', 'D']
+
 
 *This strategy came 8th in Axelrod's original tournament.*
 
