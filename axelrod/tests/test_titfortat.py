@@ -119,7 +119,6 @@ class TestShubik(TestPlayer):
         # Starts by Cooperating
         self.first_play_test(C)
         # Looks like Tit-For-Tat at first
-        #self.markov_test([C, D, C, D])
         self.markov_test([C, D, C, D])
 
     def test_affect_of_strategy(self):

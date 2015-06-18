@@ -63,23 +63,23 @@ class TestFeld(TestPlayer):
         self.responses_test([C], [D], [D])
         self.responses_test([D], [D], [D])
         # Test cooperation probabilities
-        p1 = self.player(start_coop_prob=1.0, end_coop_prob=0.8, rounds_of_decay=100)
+        p1 = self.player(start_coop_prob=1.0, end_coop_prob=0.8,
+                         rounds_of_decay=100)
         self.assertEqual(1.0, p1._cooperation_probability())
-        p1.history = [C]*50
+        p1.history = [C] * 50
         self.assertEqual(0.9, p1._cooperation_probability())
-        p1.history = [C]*100
+        p1.history = [C] * 100
         self.assertEqual(0.8, p1._cooperation_probability())
         # Test cooperation probabilities, second set of params
-        p1 = self.player(start_coop_prob=1.0, end_coop_prob=0.5, rounds_of_decay=200)
+        p1 = self.player(start_coop_prob=1.0, end_coop_prob=0.5,
+                         rounds_of_decay=200)
         self.assertEqual(1.0, p1._cooperation_probability())
-        p1.history = [C]*100
+        p1.history = [C] * 100
         self.assertEqual(0.75, p1._cooperation_probability())
-        p1.history = [C]*200
+        p1.history = [C] * 200
         self.assertEqual(0.5, p1._cooperation_probability())
         # Test beyond 200 rounds
-        history_1 = [C]*200
-        history_2 = [C]*200
-        self.responses_test(history_1, history_2, [C, D, D, C],
-                            random_seed=1)
-        self.responses_test(history_1, history_2, [C, C, D, C],
-                            random_seed=50)
+        history_1 = [C] * 200
+        history_2 = [C] * 200
+        self.responses_test(history_1, history_2, [C, D, D, C], random_seed=1)
+        self.responses_test(history_1, history_2, [C, C, D, C], random_seed=50)
