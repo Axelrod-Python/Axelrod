@@ -42,12 +42,11 @@ class TestTullock(TestPlayer):
         history_1 = [C]*11
         history_2 = [D]*10 + [C]
         self.responses_test(history_1, history_2, [D], random_seed=10)
-
+        # Test beyond 10 rounds
         history_1 = [C]*11
         history_2 = [D]*5 + [C]*6
         self.responses_test(history_1, history_2, [D, D, D, D],
                             random_seed=20)
-
         history_1 = [C]*11
         history_2 = [C]*9 + [D]*2
         self.responses_test(history_1, history_2, [C, D, D, C],
@@ -72,7 +71,7 @@ class TestFeld(TestPlayer):
         self.assertEqual(0.75, p1._cooperation_probability())
         p1.history = [C]*200
         self.assertEqual(0.5, p1._cooperation_probability())
-
+        # Test beyond 200 rounds
         history_1 = [C]*200
         history_2 = [C]*200
         self.responses_test(history_1, history_2, [C, D, D, C],

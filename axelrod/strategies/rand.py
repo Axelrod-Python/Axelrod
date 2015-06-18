@@ -18,10 +18,10 @@ class Tullock(Player):
     """
     Cooperates for the first 11 rounds then randomly cooperates 10% less often
     than the opponent has in previous rounds."""
-    
+
     name = "Tullock"
     memoryone = False # memory-10
-    
+
     def strategy(self, opponent):
         if len(self.history) < 11:
             return 'C'
@@ -40,7 +40,7 @@ class Feld(Player):
     """
 
     name = "Feld"
-    memoryone = False
+    memoryone = False # Probabilities are not constant
 
     def _cooperation_probability(self):
         """It's not clear what the iterpolating function is, so we'll do
