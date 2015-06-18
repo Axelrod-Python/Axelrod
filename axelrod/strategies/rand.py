@@ -36,6 +36,7 @@ class Tullock(Player):
             return 'C'
         return 'D'
 
+
 class Feld(Player):
     """
     Defects when opponent defects. Cooperates with a probability that decreases

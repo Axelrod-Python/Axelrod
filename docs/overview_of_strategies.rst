@@ -115,7 +115,10 @@ with all four conditional probabilities of cooperation equal to :math:`\frac{2}{
 
 *This strategy came 4th in Axelrod's original tournament.*
 
-Here is how this is implemented in the library::
+Implementation
+**************
+
+Here is how Grofman is implemented in the library::
 
     import axelrod
     p1 = axelrod.Grofman()  # Create a Grofman player
@@ -154,6 +157,11 @@ the opponent defects when this strategy cooperates.
 
 *This strategy came 5th in Axelrod's original tournament.*
 
+Implementation
+**************
+
+Here is how Shubik is implemented in the library::
+
     import axelrod
     p1 = axelrod.Shubik()  # Create a Shubik player
     p2 = axelrod.Random()  # Create a player that plays randomly
@@ -169,8 +177,8 @@ This yields the following history of play::
     ['D', 'C', 'D', 'C', 'D', 'C', 'C', 'C', 'D', 'C', 'C', 'C', 'D']
 
 The increasing retaliation periods are visible in the output. Note that
- Shubik defects if both players defected in the previous round but does
- not increase the retaliation period.
+Shubik defects if both players defected in the previous round but does
+not increase the retaliation period.
 
 **Not implemented**: Stein
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -218,7 +226,14 @@ Davis
 ^^^^^
 
 This strategy is a modification of Grudger. It starts by cooperating for the
-first 10 moves and then plays Grudger. It is implemented as follows:
+first 10 moves and then plays Grudger.
+
+*This strategy came 8th in Axelrod's original tournament.*
+
+Implementation
+**************
+
+Davis is implemented as follows:
 
    import axelrod
    p1 = axelrod.Davis()  # Create a Davis player
@@ -229,13 +244,11 @@ first 10 moves and then plays Grudger. It is implemented as follows:
    print p1.history
    print p2.history
 
-This always produces 10 rounds of attempted cooperation followed by Grudger::
+This always produces (at least) 10 rounds of attempted cooperation followed by
+Grudger::
 
     ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
     ['D', 'C', 'D', 'D', 'C', 'D', 'D', 'C', 'D', 'C', 'D', 'D', 'C', 'C', 'D']
-
-
-*This strategy came 8th in Axelrod's original tournament.*
 
 **Not implemented**: Graaskamp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -276,6 +289,11 @@ until it is only .5.
 
 *This strategy came 11th in Axelrod's original tournament.*
 
+Implementation
+**************
+
+Feld is implemented in the library as follows::
+
     import axelrod
     p1 = axelrod.Feld()  # Create a Feld player
     p2 = axelrod.Random()  # Create a player that plays randomly
@@ -290,6 +308,9 @@ We can see from the output that Feld defects when its opponent does::
     ['C', 'D', 'C', 'D', 'D', 'D', 'D', 'C', 'D', 'D']
     ['D', 'C', 'D', 'D', 'D', 'D', 'C', 'D', 'D', 'D']
 
+The defection times lengthen each time the opponent defects when Feld
+cooperates.
+
 Joss
 ^^^^
 
@@ -298,8 +319,11 @@ cooperating when the opponent cooperates with probability .9.
 
 *This strategy came 12th in Axelrod's original tournament.*
 
+Implementation
+**************
+
 This is a memory-one strategy with four-vector :math:`(0.9, 0, 1, 0)`. Here is
-how this is implemented in the library::
+how Joss is implemented in the library::
 
     import axelrod
     p1 = axelrod.Joss()  # Create a Joss player
@@ -324,6 +348,9 @@ This strategy cooperates for the first 11 rounds and then (randomly) cooperates
 10% less often than the opponent has in the previous 10 rounds.
 
 *This strategy came 13th in Axelrod's original tournament.*
+
+Implementation
+**************
 
     import axelrod
     p1 = axelrod.Tullock()  # Create a Tullock player
