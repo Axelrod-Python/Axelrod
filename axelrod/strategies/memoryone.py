@@ -141,3 +141,32 @@ class ZDExtort2(ZeroDeterminantPlayer):
     def __init__(self):
         (R, P, S, T) = Game().RPST()
         ZeroDeterminantPlayer.__init__(self, phi=1./9, s=0.5, l=P)
+
+
+### Strategies for recreating Axelrod's tournament ###
+
+
+class Grofman(MemoryOnePlayer):
+    """
+    Cooperates with probability 2/7.
+    """
+
+    name = "Grofman"
+
+    def __init__(self):
+        p = float(2) / 7
+        four_vector = (p, p, p, p)
+        super(self.__class__, self).__init__(four_vector)
+
+
+class Joss(MemoryOnePlayer):
+    """
+    Cooperates with probability 0.9 when the opponent cooperates, otherwise 
+    emulates Tit-For-Tat.
+    """
+
+    name = "Joss"
+
+    def __init__(self):
+        four_vector = (0.9, 0, 1, 0)
+        super(self.__class__, self).__init__(four_vector)

@@ -22,7 +22,10 @@ Further (honest) Strategies
 .. autoclass:: Bully
 .. autoclass:: CautiousQLearner
 .. autoclass:: CooperatorHunter
+.. autoclass:: Davis
 .. autoclass:: DefectorHunter
+.. autoclass:: e
+.. autoclass:: Feld
 .. autoclass:: FoolMeOnce
 .. autoclass:: ForgetfulFoolMeOnce
 .. autoclass:: ForgetfulGrudger
@@ -35,11 +38,13 @@ Further (honest) Strategies
 .. autoclass:: GoByMajority40
 .. autoclass:: GoByMajority5
 .. autoclass:: Golden
+.. autoclass:: Grofman
 .. autoclass:: Grudger
 .. autoclass:: Grumpy
 .. autoclass:: HesitantQLearner
 .. autoclass:: Inverse
 .. autoclass:: InversePunisher
+.. autoclass:: Joss
 .. autoclass:: LimitedRetaliate
 .. autoclass:: LimitedRetaliate2
 .. autoclass:: LimitedRetaliate3
@@ -58,17 +63,18 @@ Further (honest) Strategies
 .. autoclass:: Retaliate2
 .. autoclass:: Retaliate3
 .. autoclass:: RiskyQLearner
+.. autoclass:: Shubik
 .. autoclass:: SneakyTitForTat
 .. autoclass:: StochasticWSLS
 .. autoclass:: SuspiciousTitForTat
 .. autoclass:: TitFor2Tats
 .. autoclass:: TrickyCooperator
 .. autoclass:: TrickyDefector
+.. autoclass:: Tullock
 .. autoclass:: TwoTitsForTat
 .. autoclass:: WinStayLoseShift
 .. autoclass:: ZDExtort2
 .. autoclass:: ZDGTFT2
-.. autoclass:: e
 
 Cheating strategies
 -------------------
