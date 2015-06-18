@@ -114,7 +114,7 @@ To write/render the documenation locally, you will need
 
 ::
 
-    $ pip install sphinx sphinx-autobuild
+    $ pip install sphinx sphinx-autobuild mock
 
 Once you have sphinx:
 

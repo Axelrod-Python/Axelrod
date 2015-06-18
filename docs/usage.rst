@@ -240,10 +240,90 @@ Recall the ordering of the players::
 
 Thus we see that there are multiple Nash equilibria for this game. Two pure equilibria that involve both players playing :code:`Defector` and both players playing :code:`TitForTat`.
 
-To further study how this system evolves over time and how robust some of the observations we have made are let us look at how this game can be interpreted in an ecological setting.
+Noisy Tournaments
+^^^^^^^^^^^^^^^^^
+
+A common variation on iterated prisoner's dilemma tournaments is to add
+stochasticity in the choice of plays, simply called noise. This noise is
+indroduced by flipping plays between 'C' and 'D' with some probability
+that is applied to all plays after they are delivered by the player.
+
+The presence of this persistant bakground noise causes some strategies
+to behave substantially differently. For example, TitForTat can fall into 
+defection loops with itself when there is noise. While TitForTat would usually
+cooperate well with itself::
+
+ C C C C C ...
+ C C C C C ...
+
+Noise can cause a C to flip to a D (or vice versa), disrupting the
+cooperative chain::
+
+ C C C D C D C D D D ...
+ C C C C D C D D D D ...
+
+The defections continue until multiple noise events return the plays to CC.
+Even a small amount of noise changes the stationary distribution (the 
+long run averages of the plays per round) of TitForTat versus itself from 
+always cooperating with itself to being evenly distributed over the four 
+round possibilities CD, DC, CD, DD, substantially lowering the average 
+score per round. Moreover, TitForTat is now outplayed by other strategies 
+such as WinStayLoseShift that are more robust in the presence of noise.
+
+Adding noise makes a dramatic difference in the pairwise payoffs (5% on right):
+
+.. |pairwise_no_noise| image:: _static/usage/strategies_payoff.svg
+   :width: 75%
+   :align: middle
+   :alt: Pairwise payoffs without noise
+
+.. |pairwise_5_noise| image:: _static/usage/strategies_payoff_noise_5.svg
+   :width: 75%
+   :align: middle
+   :alt: Pairwise payoffs with 5% noise
+
++---------------------+--------------------+
+| |pairwise_no_noise| | |pairwise_5_noise| |
++---------------------+--------------------+
+
+and accordingly to the ranking of strategies overall:
+
+.. |boxplot_no_noise| image:: _static/usage/strategies_boxplot.svg
+   :width: 75%
+   :align: middle
+   :alt: Strategy performance without noise
+
+.. |boxplot_5_noise| image:: _static/usage/strategies_boxplot_noise_5.svg
+   :width: 75%
+   :align: middle
+   :alt: Strategy performance with 5% noise
+
++--------------------+-------------------+
+| |boxplot_no_noise| | |boxplot_5_noise| |
++--------------------+-------------------+
+
+To run a noisy tournament, just use the keyword argument `noise` when 
+creating tournaments. Both `run_axelrod` and the utility function 
+`run_tournaments` accept and passthrough the noise argument. To run the
+default tournament from the command line with 5% noise simply use::
+
+    python run_axelrod --noise 0.05
+
+When creating tournaments, add noise with a keyword argument at the time of creation::
+
+    import axelrod
+    strategies = [s() for s in axelrod.ordinary_strategies]
+    noise = 0.1
+    tournament = axelrod.Tournament(strategies, noise=noise)
+    results = tournament.play()
+    plot = axelrod.Plot(results)
+    p = plot.boxplot()
+    p.show()
 
 Ecological variant
 ^^^^^^^^^^^^^^^^^^
+
+To further study how this system evolves over time and how robust some of the observations we have made are let us look at how this game can be interpreted in an ecological setting.
 
 The previous examples seem to indicate that even with a large amount of :code:`Defector`, :code:`TitForTat` wins the tournament.
 However, the Nash equilibria for the basic tournament shows that we have equilibria involving both those two strategies.
@@ -305,20 +385,6 @@ The output is shown here:
    :width: 50%
    :align: center
 
-Noise
-^^^^^
-
-We can also introduce 'noise' into the tournament - the probability that any given play will actually be the opposite of that intended by the strategy. Setting the noise level to 10%::
-
-    import axelrod
-    strategies = [s() for s in axelrod.ordinary_strategies]
-    noise = 0.1
-    tournament = axelrod.Tournament(strategies, noise)
-    results = tournament.play()
-    plot = axelrod.Plot(results)
-    p = plot.boxplot()
-    p.show()
-
 Running the tournament
 ----------------------
 
@@ -339,6 +405,7 @@ There are a variety of options that include:
 - Excluding certain strategy sets.
 - Not running the ecological variant.
 - Running the rounds of the tournament in parallel.
+- Include background noise
 
 Particular parameters can also be changed:
 
