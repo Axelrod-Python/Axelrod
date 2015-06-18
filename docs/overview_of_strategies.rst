@@ -267,14 +267,28 @@ Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
 
 *This strategy came 10th in Axelrod's original tournament.*
 
-**Not implemented**: Feld
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Feld
+^^^^
 
 This strategy plays Tit For Tat, always defecting if the opponent defects but
 cooperating when the opponent cooperates with a gradually decreasing probability
 until it is only .5.
 
 *This strategy came 11th in Axelrod's original tournament.*
+
+    import axelrod
+    p1 = axelrod.Feld()  # Create a Feld player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(10):
+        p1.play(p2)
+
+    print p1.history
+    print p2.history
+
+We can see from the output that Feld defects when its opponent does::
+
+    ['C', 'D', 'C', 'D', 'D', 'D', 'D', 'C', 'D', 'D']
+    ['D', 'C', 'D', 'D', 'D', 'D', 'C', 'D', 'D', 'D']
 
 Joss
 ^^^^
