@@ -24,6 +24,7 @@ Further (honest) Strategies
 .. autoclass:: CooperatorHunter
 .. autoclass:: Davis
 .. autoclass:: DefectorHunter
+.. autoclass:: e
 .. autoclass:: FoolMeOnce
 .. autoclass:: ForgetfulFoolMeOnce
 .. autoclass:: ForgetfulGrudger
@@ -68,11 +69,11 @@ Further (honest) Strategies
 .. autoclass:: TitFor2Tats
 .. autoclass:: TrickyCooperator
 .. autoclass:: TrickyDefector
+.. autoclass:: Tullock
 .. autoclass:: TwoTitsForTat
 .. autoclass:: WinStayLoseShift
 .. autoclass:: ZDExtort2
 .. autoclass:: ZDGTFT2
-.. autoclass:: e
 
 Cheating strategies
 -------------------

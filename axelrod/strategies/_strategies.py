@@ -86,6 +86,7 @@ ordinary_strategies = [
     TitFor2Tats,
     TrickyCooperator,
     TrickyDefector,
+    Tullock,
     TwoTitsForTat,
     WinStayLoseShift,
     ZDExtort2,

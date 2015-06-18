@@ -28,6 +28,7 @@ class TestGrudger(TestPlayer):
         self.responses_test([C, D, D, D], [C, C, C, C], [C])
         self.responses_test([C, C, D, D, D], [C, D, C, C, C], [D])
 
+
 class TestForgetfulGrudger(TestPlayer):
 
     name = "Forgetful Grudger"
@@ -113,6 +114,7 @@ class TestOppositeGrudger(TestPlayer):
         """
         self.responses_test([C,D,D,D],[D,D,D,D],[D])
         self.responses_test([C,C,D,D,D],[C,D,C,C,C],[C])
+
 
 class TestDavis(TestPlayer):
 
