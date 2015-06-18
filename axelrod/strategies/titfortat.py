@@ -88,7 +88,7 @@ class Shubik(Player):
     """
     Plays like Tit-For-Tat with the following modification. After 
     each retaliation, the number of rounds that Shubik retaliates
-    increased by 1.
+    increases by 1.
     """
 
     name = 'Shubik'
