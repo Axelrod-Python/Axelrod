@@ -53,6 +53,7 @@ ordinary_strategies = [
     GoByMajority20,
     GoByMajority40,
     GoByMajority5,
+    Feld,
     Golden,
     Grofman,
     Grudger,

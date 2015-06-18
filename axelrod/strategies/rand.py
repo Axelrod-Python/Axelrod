@@ -32,3 +32,31 @@ class Tullock(Player):
         if r < prop_cooperate:
             return 'C'
         return 'D'
+
+class Feld(Player):
+    """
+    Defects when opponent defects. Cooperates with a probability that decreases
+    to 0.5 at round 200.
+    """
+
+    name = "Feld"
+    memoryone = False
+
+    def _cooperation_probability(self):
+        """It's not clear what the iterpolating function is, so we'll do
+        something simple that decreases monotonically from 1.0 to 0.5 over
+        200 rounds."""
+        slope = 0.5/200
+        rounds = len(self.history)
+        return max(1.0 - slope * rounds, 0.5)
+
+    def strategy(self, opponent):
+        if not self.history:
+            return 'C'
+        if opponent.history[-1] == 'D':
+            return 'D'
+        p = self._cooperation_probability()
+        r = random.random()
+        if r < p:
+            return 'C'
+        return 'D'

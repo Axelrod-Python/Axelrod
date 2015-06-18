@@ -181,7 +181,7 @@ This strategy plays a modification of Tit For Tat.
 2. It defects on the last 2 moves.
 3. Every 15 moves it makes use of a `chi-squared
    test<http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
-   opponent  is playing randomly.
+   opponent is playing randomly.
 
 *This strategy came 6th in Axelrod's original tournament.*
 
@@ -258,9 +258,10 @@ This strategy follows the following rules:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This strategy attempts to estimate the next move of the opponent by estimating
-the probability of cooperating given that they defected (:math:`p(C|D)`)or cooperated on the
-previous round (:math:`p(C|C)`). These probabilities are continuously updated
-during play and the strategy attempts to maximise the long term play.
+the probability of cooperating given that they defected (:math:`p(C|D)`) or 
+cooperated on the previous round (:math:`p(C|C)`). These probabilities are
+continuously updated during play and the strategy attempts to maximise the long 
+term play.
 
 Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
 

@@ -53,3 +53,29 @@ class TestTullock(TestPlayer):
         self.responses_test(history_1, history_2, [C, D, D, C],
                             random_seed=25)
 
+
+class TestFeld(TestPlayer):
+
+    name = "Feld"
+    player = axelrod.Feld
+    stochastic = True
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        # Test retaliate
+        self.responses_test([C], [D], [D])
+        self.responses_test([D], [D], [D])
+        # Test cooperation probabilities
+        p1 = self.player()
+        self.assertEqual(1.0, p1._cooperation_probability())
+        p1.history = [C]*100
+        self.assertEqual(0.75, p1._cooperation_probability())
+        p1.history = [C]*200
+        self.assertEqual(0.5, p1._cooperation_probability())
+
+        history_1 = [C]*200
+        history_2 = [C]*200
+        self.responses_test(history_1, history_2, [C, D, D, C],
+                            random_seed=1)
+        self.responses_test(history_1, history_2, [C, C, D, C],
+                            random_seed=50)
