@@ -272,6 +272,32 @@ round possibilities CD, DC, CD, DD, substantially lowering the average
 score per round. Moreover, TitForTat is now outplayed by other strategies 
 such as WinStayLoseShift that are more robust in the presence of noise.
 
+Adding noise makes a dramatic difference in the pairwise payoffs:
+
+
+.. class:: center
+.. image:: _static/usage/strategies_payoff.svg
+   :width: 45%
+   :align: center
+
+.. image:: _static/usage/strategies_payoff_noise_5.svg
+   :width: 45%
+   :align: center
+
+and accordingly to the ranking of strategies overall:
+
+.. class:: center
+.. image:: _static/usage/strategies_boxplot.svg
+   :width: 45%
+   :align: center
+
+.. image:: _static/usage/strategies_boxplot_noise_5.svg
+   :width: 45%
+   :align: center
+
+
+
+
 To run a noisy tournament, just use the keyword argument `noise` when 
 creating tournaments. Both `run_axelrod` and the utility function 
 `run_tournaments` accept and passthrough the noise argument. To run the
