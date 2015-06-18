@@ -1,5 +1,3 @@
-from collections import Counter
-
 from axelrod import Player
 import random
 
@@ -22,14 +20,19 @@ class Tullock(Player):
     name = "Tullock"
     memoryone = False # memory-10
 
+    def __init__(self, rounds_to_cooperate=10):
+        Player.__init__(self)
+        self._rounds_to_cooperate = rounds_to_cooperate
+
     def strategy(self, opponent):
-        if len(self.history) < 11:
+        rounds = self._rounds_to_cooperate
+        if len(self.history) < rounds:
             return 'C'
-        counter = Counter(opponent.history[-10:])
-        prop_cooperate = counter['C'] / 10.
+        cooperate_count = opponent.history[-rounds:].count('C')
+        prop_cooperate = cooperate_count / float(rounds)
         prob_cooperate = max(0, prop_cooperate - 0.10)
         r = random.random()
-        if r < prop_cooperate:
+        if r < prob_cooperate:
             return 'C'
         return 'D'
 
