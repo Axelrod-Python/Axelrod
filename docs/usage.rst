@@ -240,8 +240,6 @@ Recall the ordering of the players::
 
 Thus we see that there are multiple Nash equilibria for this game. Two pure equilibria that involve both players playing :code:`Defector` and both players playing :code:`TitForTat`.
 
-To further study how this system evolves over time and how robust some of the observations we have made are let us look at how this game can be interpreted in an ecological setting.
-
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^
 
@@ -324,6 +322,8 @@ When creating tournaments, add noise with a keyword argument at the time of crea
 
 Ecological variant
 ^^^^^^^^^^^^^^^^^^
+
+To further study how this system evolves over time and how robust some of the observations we have made are let us look at how this game can be interpreted in an ecological setting.
 
 The previous examples seem to indicate that even with a large amount of :code:`Defector`, :code:`TitForTat` wins the tournament.
 However, the Nash equilibria for the basic tournament shows that we have equilibria involving both those two strategies.
