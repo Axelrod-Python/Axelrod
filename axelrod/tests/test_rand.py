@@ -65,7 +65,14 @@ class TestFeld(TestPlayer):
         self.responses_test([C], [D], [D])
         self.responses_test([D], [D], [D])
         # Test cooperation probabilities
-        p1 = self.player()
+        p1 = self.player(start_coop_prob=1.0, end_coop_prob=0.8, rounds_of_decay=100)
+        self.assertEqual(1.0, p1._cooperation_probability())
+        p1.history = [C]*50
+        self.assertEqual(0.9, p1._cooperation_probability())
+        p1.history = [C]*100
+        self.assertEqual(0.8, p1._cooperation_probability())
+        # Test cooperation probabilities, second set of params
+        p1 = self.player(start_coop_prob=1.0, end_coop_prob=0.5, rounds_of_decay=200)
         self.assertEqual(1.0, p1._cooperation_probability())
         p1.history = [C]*100
         self.assertEqual(0.75, p1._cooperation_probability())
