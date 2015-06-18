@@ -20,7 +20,7 @@ class Tullock(Player):
     name = "Tullock"
     memoryone = False # memory-10
 
-    def __init__(self, rounds_to_cooperate=10):
+    def __init__(self, rounds_to_cooperate=11):
         Player.__init__(self)
         self._rounds_to_cooperate = rounds_to_cooperate
 

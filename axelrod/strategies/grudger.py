@@ -69,9 +69,13 @@ class Davis(Player):
     name = 'Davis'
     memoryone = False  # Long memory
 
+    def __init__(self, rounds_to_cooperate=10):
+        Player.__init__(self)
+        self._rounds_to_cooperate = rounds_to_cooperate
+
     def strategy(self, opponent):
         """Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D."""
-        if len(self.history) < 10:
+        if len(self.history) < self._rounds_to_cooperate:
             return 'C'
         if 'D' in opponent.history:
             return 'D'
