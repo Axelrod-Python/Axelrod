@@ -25,6 +25,7 @@ Further (honest) Strategies
 .. autoclass:: Davis
 .. autoclass:: DefectorHunter
 .. autoclass:: e
+.. autoclass:: Feld
 .. autoclass:: FoolMeOnce
 .. autoclass:: ForgetfulFoolMeOnce
 .. autoclass:: ForgetfulGrudger
