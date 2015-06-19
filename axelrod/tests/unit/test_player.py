@@ -12,7 +12,6 @@ def defect(self):
 
 
 class TestPlayerClass(unittest.TestCase):
-    "Tests the Player class itself"
 
     name = "Player"
     player = axelrod.Player
@@ -43,7 +42,6 @@ class TestPlayerClass(unittest.TestCase):
         p1.play(p2, noise)
         self.assertEqual(p1.history[0], 'D')
         self.assertEqual(p2.history[0], 'D')
-
 
 C, D = 'C', 'D'
 
@@ -100,7 +98,6 @@ class TestPlayer(unittest.TestCase):
     def test_strategy(self):
         """Test that strategy method."""
         self.assertEquals(self.player().strategy(self.player()), None)
-
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""

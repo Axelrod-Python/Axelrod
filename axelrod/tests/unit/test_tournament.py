@@ -4,6 +4,7 @@ import unittest
 import axelrod
 import logging
 import multiprocessing
+from mock import MagicMock
 
 
 class TestTournament(unittest.TestCase):
@@ -17,7 +18,6 @@ class TestTournament(unittest.TestCase):
             axelrod.Defector(),
             axelrod.Grudger(),
             axelrod.GoByMajority()]
-        cls.player_names = [str(p) for p in cls.players]
         cls.test_name = 'test'
         cls.test_repetitions = 5
 
@@ -27,14 +27,6 @@ class TestTournament(unittest.TestCase):
             [1000, 204, 200.0, 204, 204],
             [600, 600, 199, 600.0, 600],
             [600, 600, 199, 600, 600]]
-
-        cls.expected_outcome = [
-            ('Cooperator', [1800, 1800, 1800, 1800, 1800]),
-            ('Defector', [1612, 1612, 1612, 1612, 1612]),
-            ('Go By Majority', [1999, 1999, 1999, 1999, 1999]),
-            ('Grudger', [1999, 1999, 1999, 1999, 1999]),
-            ('Tit For Tat', [1999, 1999, 1999, 1999, 1999])]
-        cls.expected_outcome.sort()
 
     def test_init(self):
         tournament = axelrod.Tournament(
@@ -58,17 +50,33 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
     def test_serial_play(self):
+        # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        scores = tournament.play().scores
-        actual_outcome = sorted(zip(self.player_names, scores))
-        self.assertEqual(actual_outcome, self.expected_outcome)
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        # Test that _run_serial_repetitions is called with empty payoffs list
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        tournament._run_serial_repetitions = MagicMock(
+            name='_run_serial_repetitions')
+        tournament._run_parallel_repetitions = MagicMock(
+            name='_run_parallel_repetitions')
+        tournament.play()
+        tournament._run_serial_repetitions.assert_called_once_with([])
+        self.assertFalse(tournament._run_parallel_repetitions.called)
 
     def test_parallel_play(self):
+        # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -76,9 +84,26 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions,
             processes=2)
-        scores = tournament.play().scores
-        actual_outcome = sorted(zip(self.player_names, scores))
-        self.assertEqual(actual_outcome, self.expected_outcome)
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        # Test that _run_parallel_repetitions is called with
+        # one entry in payoffs list
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        tournament._run_serial_repetitions = MagicMock(
+            name='_run_serial_repetitions')
+        tournament._run_parallel_repetitions = MagicMock(
+            name='_run_parallel_repetitions')
+        tournament.play()
+        tournament._run_parallel_repetitions.assert_called_once_with(
+            [self.expected_payoffs])
+        self.assertFalse(tournament._run_serial_repetitions.called)
 
     def test_build_cache_required(self):
         # Noisy, no prebuilt cache, empty deterministic cache
@@ -137,6 +162,20 @@ class TestTournament(unittest.TestCase):
             processes=4,
             prebuilt_cache=False)
         self.assertTrue(tournament._build_cache_required())
+
+    def test_build_cache(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        tournament._run_single_repetition = MagicMock(
+            name='_run_single_repetition')
+        tournament._build_cache([])
+        tournament._run_single_repetition.assert_called_once_with([])
+        self.assertEqual(tournament.repetitions, self.test_repetitions - 1)
 
     def test_run_single_repetition(self):
         payoffs_list = []
