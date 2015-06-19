@@ -47,6 +47,10 @@ C, D = 'C', 'D'
 
 
 def test_four_vector(test_class, expected_dictionary):
+    """
+    Checks that two dictionaries match -- the four-vector defining
+    a memory-one strategy and the given expected dictionary.
+    """
     P1 = test_class.player()
     for key in sorted(expected_dictionary.keys()):
         test_class.assertAlmostEqual(
@@ -106,13 +110,14 @@ class TestPlayer(unittest.TestCase):
     def markov_test(self, responses, random_seed=None):
         """Test responses to the four possible one round histories. Input
         responses is simply the four responses to CC, CD, DC, and DD."""
-        P1 = self.player()
-        P2 = axelrod.Player()
         # Construct the test lists
         histories = [
             [[C], [C]], [[C], [D]], [[D], [C]],
             [[D], [D]]]
         for i, history in enumerate(histories):
+            # Needs to be in the inner loop in case player retains some state
+            P1 = self.player()
+            P2 = axelrod.Player()
             test_responses(self, P1, P2, history[0], history[1], responses[i],
                            random_seed=random_seed)
 

@@ -1,10 +1,14 @@
 language: python
 python:
-  - "2.7"
+  - 2.7
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-install: "pip install -r requirements.txt"
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+install:
+  - pip install -r requirements.txt
+  - pip install coverage
+  - pip install coveralls
 script:
-  - python -m unittest discover axelrod/tests/
-  - cd docs/; python strategies.py
+  - coverage run --source=axelrod -m unittest discover
+after_success:
+  - coveralls

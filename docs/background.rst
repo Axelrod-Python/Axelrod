@@ -21,13 +21,15 @@ The `Prisoner's dilemma <http://en.wikipedia.org/wiki/Prisoner%27s_dilemma>`_ is
 
 If both players cooperate they will each go to prison for 2 years and receive an
 equivalent utility of 3.
-If one cooperates and the other defects: the defector does not go to prison and the cooperator goes to prison for 5 years, the cooperator receives a utility of 5 and the defector a utility of 0.
+If one cooperates and the other defects: the defector does not go to prison and the cooperator goes to prison for 5 years, the cooperator receives a utility of 0 and the defector a utility of 5.
 If both defect: they both go to prison for 4 years and receive an equivalent
 utility of 1.
 
+.. note:: Years in prison doesn't equal to utility directly. The formula is U = 5 - Y for Y in [0, 5], where ``U`` is the utility, ``Y`` are years in prison. The reason is to follow the original Axelrod's scoring.
+
 By simply investigating the best responses against both possible actions of each player it is immediate to see that the Nash equilibrium for this game is for both players to defect.
 
-The iterated Prisoner's Dilemma
+The Iterated Prisoner's Dilemma
 -------------------------------
 
 We can use the basic Prisoner's Dilemma as a _stage_ game in a repeated game.

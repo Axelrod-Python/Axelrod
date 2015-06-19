@@ -1,9 +1,9 @@
 .. currentmodule:: axelrod.strategies
-Here is a list of strategies
-============================
+Index of strategies
+===================
 
-Here are some of the basic strategies
--------------------------------------
+Basic strategies
+----------------
 
 .. autoclass:: Alternator
 .. autoclass:: Cooperator
@@ -11,16 +11,21 @@ Here are some of the basic strategies
 .. autoclass:: Random
 .. autoclass:: TitForTat
 
-A list of all further (honest) strategies
------------------------------------------
+Further (honest) Strategies
+---------------------------
 
 .. autoclass:: AlternatorHunter
 .. autoclass:: Appeaser
+.. autoclass:: AntiTitForTat
 .. autoclass:: ArrogantQLearner
 .. autoclass:: AverageCopier
+.. autoclass:: Bully
 .. autoclass:: CautiousQLearner
 .. autoclass:: CooperatorHunter
+.. autoclass:: Davis
 .. autoclass:: DefectorHunter
+.. autoclass:: e
+.. autoclass:: Feld
 .. autoclass:: FoolMeOnce
 .. autoclass:: ForgetfulFoolMeOnce
 .. autoclass:: ForgetfulGrudger
@@ -33,11 +38,13 @@ A list of all further (honest) strategies
 .. autoclass:: GoByMajority40
 .. autoclass:: GoByMajority5
 .. autoclass:: Golden
+.. autoclass:: Grofman
 .. autoclass:: Grudger
 .. autoclass:: Grumpy
 .. autoclass:: HesitantQLearner
 .. autoclass:: Inverse
 .. autoclass:: InversePunisher
+.. autoclass:: Joss
 .. autoclass:: LimitedRetaliate
 .. autoclass:: LimitedRetaliate2
 .. autoclass:: LimitedRetaliate3
@@ -56,20 +63,21 @@ A list of all further (honest) strategies
 .. autoclass:: Retaliate2
 .. autoclass:: Retaliate3
 .. autoclass:: RiskyQLearner
+.. autoclass:: Shubik
 .. autoclass:: SneakyTitForTat
 .. autoclass:: StochasticWSLS
 .. autoclass:: SuspiciousTitForTat
 .. autoclass:: TitFor2Tats
 .. autoclass:: TrickyCooperator
 .. autoclass:: TrickyDefector
+.. autoclass:: Tullock
 .. autoclass:: TwoTitsForTat
 .. autoclass:: WinStayLoseShift
-.. autoclass:: ZDChi
+.. autoclass:: ZDExtort2
 .. autoclass:: ZDGTFT2
-.. autoclass:: e
 
-A list of the cheating strategies
----------------------------------
+Cheating strategies
+-------------------
 
 .. autoclass:: Darwin
 .. autoclass:: Geller
