@@ -110,7 +110,7 @@ Finally this strategy defects if and only if:
 Grofman
 ^^^^^^^
 
-This is a pretty simple strategy: it cooperates with probability :math:`\frac{2}{7}`. In contemporary terminology, this is a memory-one player 
+This is a pretty simple strategy: it cooperates with probability :math:`\frac{2}{7}`. In contemporary terminology, this is a memory-one player
 with all four conditional probabilities of cooperation equal to :math:`\frac{2}{7}`.
 
 *This strategy came 4th in Axelrod's original tournament.*
@@ -233,16 +233,16 @@ first 10 moves and then plays Grudger.
 Implementation
 **************
 
-Davis is implemented as follows:
+Davis is implemented as follows::
 
-   import axelrod
-   p1 = axelrod.Davis()  # Create a Davis player
-   p2 = axelrod.Random()  # Create a player that plays randomly
-   for round in range(15):
+    import axelrod
+    p1 = axelrod.Davis()  # Create a Davis player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(15):
        p1.play(p2)
 
-   print p1.history
-   print p2.history
+    print p1.history
+    print p2.history
 
 This always produces (at least) 10 rounds of attempted cooperation followed by
 Grudger::
@@ -271,9 +271,9 @@ This strategy follows the following rules:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This strategy attempts to estimate the next move of the opponent by estimating
-the probability of cooperating given that they defected (:math:`p(C|D)`) or 
+the probability of cooperating given that they defected (:math:`p(C|D)`) or
 cooperated on the previous round (:math:`p(C|C)`). These probabilities are
-continuously updated during play and the strategy attempts to maximise the long 
+continuously updated during play and the strategy attempts to maximise the long
 term play.
 
 Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
@@ -351,6 +351,8 @@ This strategy cooperates for the first 11 rounds and then (randomly) cooperates
 
 Implementation
 **************
+
+Tullock is implemented in the library as follows::
 
     import axelrod
     p1 = axelrod.Tullock()  # Create a Tullock player
