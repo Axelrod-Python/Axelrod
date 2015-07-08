@@ -14,9 +14,9 @@ The `Prisoner's dilemma <http://en.wikipedia.org/wiki/Prisoner%27s_dilemma>`_ is
 +----------+---------------+---------------+
 |          | Cooperate     | Defect        |
 +==========+===============+===============+
-|Cooperate | (3,3)         | (5,0)         |
+|Cooperate | (3,3)         | (0,5)         |
 +----------+---------------+---------------+
-|Defect    | (0,5)         | (1,1)         |
+|Defect    | (5,0)         | (1,1)         |
 +----------+---------------+---------------+
 
 If both players cooperate they will each go to prison for 2 years and receive an
