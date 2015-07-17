@@ -416,3 +416,326 @@ Strategies implemented in the module
 ------------------------------------
 
 Work in progress.
+
+Stewart and Plotkin's Tournament (2012)
+---------------------------------------
+
+In 2012, Alexander Stewart and Joshua Plotkin ran a variant of Axelrod's
+tournament with 19 strategies to test the effectiveness of the then newly
+discovered Zero-Determinant strategies.
+
+The paper is identified as *doi: 10.1073/pnas.1208087109* and referred to as
+[S&P, PNAS 2012] below. Unfortunately the details of the tournament and the
+implementation of  strategies is not clear in the manuscript. We can, however,
+make reasonable guesses to the implementation of many strategies based on their
+names and classical definitions.
+
+The following classical strategies are included in the tournament:
+
++----------+----------------------+----------------------+
+| S&P Name | Long name            | Axelrod Library Name |
++----------+----------------------+----------------------+
+| ALLC     | Always Cooperate     | `Cooperator`         |
++----------+----------------------+----------------------+
+| ALLD     | Always Defect        | `Defector`           |
++----------+----------------------+----------------------+
+| TFT      | Tit-For-Tat          | `TitForTat`          |
++----------+----------------------+----------------------+
+| GTFT     | Generous Tit-For-Tat | `GenerousTitForTat`  |
++----------+----------------------+----------------------+
+| TFT      | TitForTat            | `TitForTat`          |
++----------+----------------------+----------------------+
+| TF2T     | Tit-For-Two-Tats     | `TitFor2Tats`        |
++----------+----------------------+----------------------+
+| WSLS     | Win-Stay-Lose-Shift  | `WinStayLoseShift`   |
++----------+----------------------+----------------------+
+| RANDOM   | Random               | `Random`             |
++----------+----------------------+----------------------+
+
+ALLC and TFT are defined above. The remaining classical strategies are defined
+below. The tournament also included two Zero Determinant strategies, both implemented in the library. The full table of strategies and results is
+[available online](http://www.pnas.org/content/109/26/10134/F1.expansion.html).
+
+ALLD
+^^^^
+
+ALLD always defects.
+
+*ALLD came last (19th) in average score and 1st in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Here is a quick implementation of this in the library::
+
+   import axelrod
+   p1 = axelrod.Defector()  # Create a player that plays ALLD
+   p2 = axelrod.Cooperator()  # Create a player that always cooperates
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+
+which gives::
+
+   ['D', 'D', 'D', 'D', 'D']
+
+GTFT
+^^^^
+
+Generous-Tit-For-Tat plays Tit-For-Tat with occasional forgiveness, which
+prevents cycling defections against itself. The forgiveness factor is given
+by :math:`\epsilon`. The value of :math:`\epsilon` in the S&P tournament is not
+known and defaults to :math:`\epsilon = 0.05` in the library, defining a
+memory-one strategy:
+
+- :math:`P(C | CC) = 1 - \epsilon`
+- :math:`P(C | CD) = \epsilon`
+- :math:`P(C | DC) = 1 - \epsilon`
+- :math:`P(C | DD) = \epsilon`
+
+*GTFT came 2nd in average score and 18th in wins in S&P's tournament.*
+
+Note that some sources define GTFT as TFT but with only an altered probability
+of cooperating after a defection, as follows:
+
+- :math:`P(C | CC) = 1`
+- :math:`P(C | CD) = p`
+- :math:`P(C | DC) = 1`
+- :math:`P(C | DD) = p`
+
+where :math:`p = \text{min}\left(1 - \frac{T-R}{R-S}, \frac{R-P}{T-P}\right)`.
+[S&P, PNAS 2012] does not specify how GTFT is defined.
+
+Implementation
+**************
+
+Here is a quick implementation of this in the library::
+
+   import axelrod
+   p1 = axelrod.GTFT()  # Create a player that plays GTFT
+   p2 = axelrod.Cooperator()  # Create a player that always cooperates
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+
+TF2T
+^^^^
+
+Tit-For-Two-Tats is like Tit-For-Tat but only retailates after two defections
+rather than one. This is not a memory-one strategy.
+
+*TF2T came 3rd in average score and last (?) in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Here is the implementation of this in the library::
+
+   import axelrod
+   p1 = axelrod.TitFor2Tats()  # Create a player that plays TF2T
+   p2 = axelrod.Cooperator()  # Create a player that always cooperates
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+
+WSLS
+^^^^
+
+Win-Stay-Lose-Shift is a strategy that shifts if the highest payoff was not
+earned in the previous round. WSLS is also known as "Win-Stay-Lose-Switch" and 
+"Pavlov". It can be seen as a memory-one strategy as follows:
+
+- :math:`P(C | CC) = 1`
+- :math:`P(C | CD) = 0`
+- :math:`P(C | DC) = 0`
+- :math:`P(C | DD) = 1`
+
+*TF2T came 7th in average score and 13th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Here is a quick implementation of this in the library::
+
+   import axelrod
+   p1 = axelrod.WinStayLoseShift()  # Create a player that plays WSLS
+   p2 = axelrod.Cooperator()  # Create a player that always cooperates
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+
+RANDOM
+^^^^^^
+
+RANDOM is a strategy that presumably cooperates or defects randomly with
+equal probability. This is also a memory-one strategy:
+
+- :math:`P(C | CC) = 0.5`
+- :math:`P(C | CD) = 0.5`
+- :math:`P(C | DC) = 0.5`
+- :math:`P(C | DD) = 0.5`
+
+*RANDOM came 8th in average score and 8th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Here is a quick implementation of this in the library::
+
+   import axelrod
+   p1 = axelrod.Random()  # Create a player that plays WSLS
+   p2 = axelrod.Cooperator()  # Create a player that always cooperates
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+
+ZDGTFT-2
+^^^^^^^
+
+This memory-one strategy is defined by the following four conditional
+probabilities based on the last round of play:
+- :math:`P(C | CC) = 1`
+- :math:`P(C | CD) = 1/8`
+- :math:`P(C | DC) = 1`
+- :math:`P(C | DD) = 1/4`
+
+*This strategy came 1st in average score and 16th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Here is how ZDGTFT-2 is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.ZDGTFT2()  # Create a ZDGTFT-2 player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+
+EXTORT-2
+^^^^^^^^
+
+This memory-one strategy is defined by the following four conditional
+probabilities based on the last round of play:
+- :math:`P(C | CC) = 8/9`
+- :math:`P(C | CD) = 1/2`
+- :math:`P(C | DC) = 1/3`
+- :math:`P(C | DD) = 0`
+
+*This strategy came 18th in average score and 2nd in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Here is how EXTORT-2 is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.EXTORT2()  # Create a EXTORT-2 player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+
+GRIM
+^^^^
+
+Grim is not defined in [S&P, PNAS 2012] but it defined elsewhere as follows.
+GRIM (also called "Grim trigger"), cooperates until the opponent defects and
+then always defects thereafter. In the library this strategy is called
+*Fool Me Once*.
+
+*GRIM came 10th in average score and 11th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Here is how GRIM is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.FoolMeOnce()  # Create a GRIM player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+
+HARD_JOSS
+^^^^^^^^^
+
+HARD_JOSS is not defined in [S&P, PNAS 2012] but is otherwise defined as a
+strategy that plays like TitForTat but cooperates only with probability
+:math:`0.9`. This is a memory-one strategy with the following probabilities:
+
+- :math:`P(C | CC) = 0.9`
+- :math:`P(C | CD) = 0`
+- :math:`P(C | DC) = 1`
+- :math:`P(C | DD) = 0`
+
+*HARD_JOSS came 16th in average score and 4th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+HARD_JOSS is not explicitly defined in the library but can easily be
+instantiated as follows::
+
+    import axelrod
+    four_vector = [0.9, 0., 1., 0.]
+    p1 = axelrod.MemoryOnePlayer(four_vector)  # Create a memory-one HARD_JOSS Player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+
+**Not implemented?**: HARD_MAJO
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+HARD_MAJO is not defined in [S&P, PNAS 2012] and is presumably the same as
+"Hard Majority",
+defined as follows: the strategy defects on the first move, defects if the
+number of defections of the opponent is greater than or equal to the number of
+times it has cooperated, and otherwise cooperates,
+
+*HARD_MAJO came 13th in average score and 5th in wins in S&P's tournament.*
+
+**Not implemented**: HARD_TFT
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Hard TFT is not defined in [S&P, PNAS 2012] but is
+[elsewhere](http://www.prisoners-dilemma.com/strategies.html)
+defined as follows. The strategy cooperates on the
+first move, defects if the opponent has defected on any of the previous three
+rounds, and otherwise cooperates.
+
+*HARD_TFT came 12th in average score and 10th in wins in S&P's tournament.*
+
+**Not implemented**: HARD_TF2T
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Hard TF2T is not defined in [S&P, PNAS 2012] but is elsewhere defined as
+follows. The strategy cooperates on the first move, defects if the opponent
+has defected twice (successively) of the previous three rounds, and otherwise 
+cooperates.
+
+*HARD_TF2T came 6th in average score and 17th in wins in S&P's tournament.*
+
+Remaining Strategies
+^^^^^^^^^^^^^^^^^^^^
+
+The remaining strategies are not unambiguously defined in [S&P, PNAS 2012] and
+need to be sourced (and implemented):
+
+- CALCULATOR
+- PROBE
+- PROBE2
+- PROBE3
+- HARD_PROBE
