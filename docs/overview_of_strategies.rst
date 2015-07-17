@@ -417,19 +417,17 @@ Strategies implemented in the module
 
 Work in progress.
 
-Stewart and Plotkin's Tournament
---------------------------------
+Stewart and Plotkin's Tournament (2012)
+---------------------------------------
 
 In 2012, Alexander Stewart and Joshua Plotkin ran a variant of Axelrod's
 tournament with 19 strategies to test the effectiveness of the then newly
 discovered Zero-Determinant strategies.
 
 The paper is identified as *doi: 10.1073/pnas.1208087109* and referred to as
-[S&P, PNAS 2012] below.
-
-Unfortunately the details of the tournament and the implementation of 
-strategies is not clear in the manuscript. We can, however, make
-reasonable guesses to the implementation of many strategies based on their
+[S&P, PNAS 2012] below. Unfortunately the details of the tournament and the
+implementation of  strategies is not clear in the manuscript. We can, however,
+make reasonable guesses to the implementation of many strategies based on their
 names and classical definitions.
 
 The following classical strategies are included in the tournament:
@@ -533,7 +531,7 @@ rather than one. This is not a memory-one strategy.
 Implementation
 **************
 
-Here is a quick implementation of this in the library::
+Here is the implementation of this in the library::
 
    import axelrod
    p1 = axelrod.TitFor2Tats()  # Create a player that plays TF2T
@@ -687,9 +685,7 @@ Implementation
 **************
 
 HARD_JOSS is not explicitly defined in the library but can easily be
-instantiated as follows:
-
-Here is how EXTORT-2 is implemented in the library::
+instantiated as follows::
 
     import axelrod
     four_vector = [0.9, 0., 1., 0.]
@@ -714,7 +710,9 @@ times it has cooperated, and otherwise cooperates,
 **Not implemented**: HARD_TFT
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Hard TFT is not defined in [S&P, PNAS 2012] but is [elsewhere](http://www.prisoners-dilemma.com/strategies.html) defined as follows. The strategy cooperates on the
+Hard TFT is not defined in [S&P, PNAS 2012] but is
+[elsewhere](http://www.prisoners-dilemma.com/strategies.html)
+defined as follows. The strategy cooperates on the
 first move, defects if the opponent has defected on any of the previous three
 rounds, and otherwise cooperates.
 
@@ -733,13 +731,11 @@ cooperates.
 Remaining Strategies
 ^^^^^^^^^^^^^^^^^^^^
 
-The remaining strategies are not unambiguously defined in [S&P, PNAS 2012] and need to be sourced (and implemented):
+The remaining strategies are not unambiguously defined in [S&P, PNAS 2012] and
+need to be sourced (and implemented):
 
 - CALCULATOR
 - PROBE
 - PROBE2
 - PROBE3
 - HARD_PROBE
-
-
-
