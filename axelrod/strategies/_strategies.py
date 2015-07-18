@@ -58,6 +58,8 @@ ordinary_strategies = [
     Grofman,
     Grudger,
     Grumpy,
+    HardTitForTat,
+    HardTitFor2Tats,
     HesitantQLearner,
     Inverse,
     InversePunisher,
