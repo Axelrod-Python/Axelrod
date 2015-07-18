@@ -138,3 +138,39 @@ class Shubik(Player):
             self._decrease_retaliation_counter()
             return 'D'
         return 'C'
+
+
+class HardTitForTat(Player):
+    """A variant of Tit For Tat that uses a longer history for retaliation."""
+
+    name = 'Hard Tit For Tat'
+    memoryone = False  # memory-three
+
+    def strategy(self, opponent):
+        # Cooperate on the first move
+        if not opponent.history:
+            return 'C'
+        # Defects if 'D' in the opponent's last three moves
+        if 'D' in opponent.history[-3:]:
+            return 'D'
+        # Otherwise cooperates
+        return 'C'
+
+class HardTitFor2Tats(Player):
+    """A variant of Tit For Two Tats that uses a longer history for
+    retaliation."""
+
+    name = "Hard Tit For 2 Tats"
+    memoryone = False  # memory-three
+
+    def strategy(self, opponent):
+        # Cooperate on the first move
+        if not opponent.history:
+            return 'C'
+        # Defects if two consecutive 'D' in the opponent's last three moves
+        history_string = "".join(opponent.history[-3:])
+        if 'DD' in history_string:
+            return 'D'
+        # Otherwise cooperates
+        return 'C'
+

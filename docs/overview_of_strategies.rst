@@ -707,8 +707,8 @@ times it has cooperated, and otherwise cooperates,
 
 *HARD_MAJO came 13th in average score and 5th in wins in S&P's tournament.*
 
-**Not implemented**: HARD_TFT
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+HARD_TFT
+^^^^^^^^
 
 Hard TFT is not defined in [S&P, PNAS 2012] but is
 [elsewhere](http://www.prisoners-dilemma.com/strategies.html)
@@ -718,8 +718,21 @@ rounds, and otherwise cooperates.
 
 *HARD_TFT came 12th in average score and 10th in wins in S&P's tournament.*
 
-**Not implemented**: HARD_TF2T
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Implementation
+**************
+
+HARD_TFT is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.HardTitForTat()  # Create a HARD_TFT player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+
+HARD_TF2T
+^^^^^^^^^
 
 Hard TF2T is not defined in [S&P, PNAS 2012] but is elsewhere defined as
 follows. The strategy cooperates on the first move, defects if the opponent
@@ -727,6 +740,19 @@ has defected twice (successively) of the previous three rounds, and otherwise
 cooperates.
 
 *HARD_TF2T came 6th in average score and 17th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+HARD_TF2T is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.HardTitFor2Tats()  # Create a HARD_TF2T player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
 
 Remaining Strategies
 ^^^^^^^^^^^^^^^^^^^^
