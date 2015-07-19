@@ -111,3 +111,8 @@ class ForgetfulFoolMeOnce(Player):
     def reset(self):
         self.D_count = 0
         self.history = []
+
+
+class BackStabber(FoolMeOnce):
+
+    name = 'BackStabber'

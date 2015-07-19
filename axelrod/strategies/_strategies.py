@@ -37,6 +37,7 @@ ordinary_strategies = [
     AntiTitForTat,
     ArrogantQLearner,
     AverageCopier,
+    BackStabber,
     Bully,
     CautiousQLearner,
     CooperatorHunter,
