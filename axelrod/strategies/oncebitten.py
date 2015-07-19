@@ -116,3 +116,9 @@ class ForgetfulFoolMeOnce(Player):
 class BackStabber(FoolMeOnce):
 
     name = 'BackStabber'
+
+    def strategy(self, opponent):
+        if len(opponent.history) > 196:
+            return 'D'
+        else:
+            return super(BackStabber, self).strategy(opponent)
