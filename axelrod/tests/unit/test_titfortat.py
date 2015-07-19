@@ -139,3 +139,46 @@ class TestShubik(TestPlayer):
         history_1 = [C, D, C, D, D, C, D, D, D]
         history_2 = [D, C, D, C, C, D, C, C, C]
         self.responses_test(history_1, history_2, [C])
+
+
+class TestHardTitForTat(TestPlayer):
+
+    name = "Hard Tit For Tat"
+    player = axelrod.HardTitForTat
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+
+    def test_effect_of_strategy(self):
+        """Repeats last action of opponent history."""
+        self.responses_test([C, C, C], [C, C, C], [C])
+        self.responses_test([C, C, C], [D, C, C], [D])
+        self.responses_test([C, C, C], [C, D, C], [D])
+        self.responses_test([C, C, C], [C, C, D], [D])
+        self.responses_test([C, C, C, C], [D, C, C, C], [C])
+
+
+class TestHardTitFor2Tats(TestPlayer):
+
+    name = "Hard Tit For 2 Tats"
+    player = axelrod.HardTitFor2Tats
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+
+    def test_effect_of_strategy(self):
+        """Repeats last action of opponent history."""
+        self.responses_test([C, C, C], [C, C, C], [C])
+        self.responses_test([C, C, C], [D, C, C], [C])
+        self.responses_test([C, C, C], [C, D, C], [C])
+        self.responses_test([C, C, C], [C, C, D], [C])
+
+        self.responses_test([C, C, C], [D, C, D], [C])
+        self.responses_test([C, C, C], [D, D, C], [D])
+        self.responses_test([C, C, C], [C, D, D], [D])
+
+        self.responses_test([C, C, C, C], [D, C, C, C], [C])
+        self.responses_test([C, C, C, C], [D, D, C, C], [C])
+        self.responses_test([C, C, C, C], [C, D, D, C], [D])
