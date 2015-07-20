@@ -1,5 +1,6 @@
 """Test for the memoryone strategies."""
 import axelrod
+from axelrod import Game
 from test_player import TestPlayer, test_four_vector
 
 C, D = 'C', 'D'
@@ -30,8 +31,9 @@ class TestGTFT(TestPlayer):
 
     def test_four_vector(self):
         player = self.player()
-        ep = player.ep
-        expected_dictionary = {(C, C): 1.-ep, (C, D): ep, (D, C): 1.-ep, (D, D): ep}
+        (R, P, S, T) = Game().RPST()
+        p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
+        expected_dictionary = {(C, C): 1., (C, D): p, (D, C): 1., (D, D): p}
         test_four_vector(self, expected_dictionary)
 
 
