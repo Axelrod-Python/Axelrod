@@ -599,6 +599,7 @@ ZDGTFT-2
 
 This memory-one strategy is defined by the following four conditional
 probabilities based on the last round of play:
+
 - :math:`P(C\,|\,CC) = 1`
 - :math:`P(C\,|\,CD) = 1/8`
 - :math:`P(C\,|\,DC) = 1`
@@ -617,7 +618,16 @@ Here is how ZDGTFT-2 is implemented in the library::
     for round in range(5):
         p1.play(p2)
 
+    print p2.history
     print p1.history
+
+which gives (for the particular random seed used)::
+
+    ['D', 'D', 'D', 'C', 'C', 'D', 'C', 'D', 'D', 'D']
+    ['C', 'C', 'D', 'D', 'C', 'C', 'D', 'C', 'D', 'D']
+
+looking closely (and repeating the above) will show that the above
+probabilities are respected.
 
 EXTORT-2
 ^^^^^^^^
