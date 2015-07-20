@@ -582,11 +582,10 @@ this gives::
 which shows that :code:`WSLS` will choose the strategy that was a best response
 in the previous round.
 
-RANDOM
+Random
 ^^^^^^
 
-RANDOM is a strategy that presumably cooperates or defects randomly with
-equal probability. This is also a memory-one strategy:
+Random is a strategy that was defined in `Axelrod's first tournament`_, note that this is also a memory-one strategy:
 
 - :math:`P(C\,|\,CC) = 0.5`
 - :math:`P(C\,|\,CD) = 0.5`
@@ -594,19 +593,6 @@ equal probability. This is also a memory-one strategy:
 - :math:`P(C\,|\,DD) = 0.5`
 
 *RANDOM came 8th in average score and 8th in wins in S&P's tournament.*
-
-Implementation
-**************
-
-Here is a quick implementation of this in the library::
-
-   import axelrod
-   p1 = axelrod.Random()  # Create a player that plays WSLS
-   p2 = axelrod.Cooperator()  # Create a player that always cooperates
-   for round in range(5):
-       p1.play(p2)
-
-   print p1.history
 
 ZDGTFT-2
 ^^^^^^^
