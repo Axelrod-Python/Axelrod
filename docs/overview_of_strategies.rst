@@ -684,17 +684,8 @@ strategy that plays like TitForTat but cooperates only with probability
 Implementation
 **************
 
-HARD_JOSS is not explicitly defined in the library but can easily be
-instantiated as follows::
+HARD_JOSS as described above is implemented in the library as `Joss` and is presumably the same as the Joss strategy from Axelrod's First tournament (see above).
 
-    import axelrod
-    four_vector = [0.9, 0., 1., 0.]
-    p1 = axelrod.MemoryOnePlayer(four_vector)  # Create a memory-one HARD_JOSS Player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
-
-    print p1.history
 
 **Not implemented?**: HARD_MAJO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
