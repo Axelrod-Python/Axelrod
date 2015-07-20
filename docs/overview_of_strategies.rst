@@ -438,6 +438,8 @@ The following classical strategies are included in the tournament:
 +----------+----------------------+----------------------+
 | TFT      | Tit-For-Tat          | `TitForTat`          |
 +----------+----------------------+----------------------+
+| GRIM     | Grim                 | `Grudger`            |
++----------+----------------------+----------------------+
 | GTFT     | Generous Tit-For-Tat | `GenerousTitForTat`  |
 +----------+----------------------+----------------------+
 | TFT      | TitForTat            | `TitForTat`          |
@@ -668,10 +670,10 @@ you can see that :code:`ZDExtort2` never cooperates after both strategies defect
 GRIM
 ^^^^
 
-Grim is not defined in [S&P, PNAS 2012] but it defined elsewhere as follows.
+Grim is not defined in [S&P, PNAS 2012] but it is defined elsewhere as follows.
 GRIM (also called "Grim trigger"), cooperates until the opponent defects and
 then always defects thereafter. In the library this strategy is called
-*Fool Me Once*.
+*Grudger*.
 
 *GRIM came 10th in average score and 11th in wins in S&P's tournament.*
 
@@ -681,12 +683,16 @@ Implementation
 Here is how GRIM is implemented in the library::
 
     import axelrod
-    p1 = axelrod.FoolMeOnce()  # Create a GRIM player
-    p2 = axelrod.Random()  # Create a player that plays randomly
+    p1 = axelrod.Grudger()  # Create a GRIM player
+    p2 = axelrod.Defector()  # Create a player that always defects
     for round in range(5):
         p1.play(p2)
 
     print p1.history
+
+this gives::
+
+    ['C', 'D', 'D', 'D', 'D']
 
 HARD_JOSS
 ^^^^^^^^^
