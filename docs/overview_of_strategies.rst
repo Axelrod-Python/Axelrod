@@ -569,11 +569,18 @@ Here is a quick implementation of this in the library::
 
    import axelrod
    p1 = axelrod.WinStayLoseShift()  # Create a player that plays WSLS
-   p2 = axelrod.Cooperator()  # Create a player that always cooperates
+   p2 = axelrod.Alternator()  # Create a player that alternates
    for round in range(5):
        p1.play(p2)
 
    print p1.history
+
+this gives::
+
+    ['C', 'C', 'D', 'D', 'C']
+
+which shows that :code:`WSLS` will choose the strategy that was a best response
+in the previous round.
 
 RANDOM
 ^^^^^^
