@@ -718,11 +718,10 @@ the same as the Joss strategy from `Axelrod's first tournament`_.
 **Not implemented?**: HARD_MAJO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-HARD_MAJO is not defined in [S&P, PNAS 2012] and is presumably the same as
-"Hard Majority",
-defined as follows: the strategy defects on the first move, defects if the
-number of defections of the opponent is greater than or equal to the number of
-times it has cooperated, and otherwise cooperates,
+HARD_MAJO is not defined in [S&P, PNAS 2012] and is presumably the same as "Hard
+Majority", defined as follows: the strategy defects on the first move, defects
+if the number of defections of the opponent is greater than or equal to the
+number of times it has cooperated, and otherwise cooperates,
 
 *HARD_MAJO came 13th in average score and 5th in wins in S&P's tournament.*
 
