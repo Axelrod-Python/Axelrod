@@ -509,16 +509,22 @@ Here is a quick implementation of this in the library::
 
    import axelrod
    p1 = axelrod.GTFT()  # Create a player that plays GTFT
-   p2 = axelrod.Cooperator()  # Create a player that always cooperates
-   for round in range(5):
+   p2 = axelrod.Defector()  # Create a player that always defects
+   for round in range(10):
        p1.play(p2)
 
    print p1.history
 
+this gives (for the random seed used)::
+
+    ['C', 'D', 'D', 'C', 'D', 'D', 'D', 'D', 'D', 'D']
+
+which shows that :code:`GTFT` tried to forgive :code:`Defector`.
+
 TF2T
 ^^^^
 
-Tit-For-Two-Tats is like Tit-For-Tat but only retailates after two defections
+Tit-For-Two-Tats is like Tit-For-Tat but only retaliates after two defections
 rather than one. This is not a memory-one strategy.
 
 *TF2T came 3rd in average score and last (?) in wins in S&P's tournament.*
@@ -530,11 +536,17 @@ Here is the implementation of this in the library::
 
    import axelrod
    p1 = axelrod.TitFor2Tats()  # Create a player that plays TF2T
-   p2 = axelrod.Cooperator()  # Create a player that always cooperates
-   for round in range(5):
+   p2 = axelrod.Defector()  # Create a player that always defects
+   for round in range(3):
        p1.play(p2)
 
    print p1.history
+
+which gives::
+
+    ['C', 'C', 'D']
+
+we see that it takes 2 defections to trigger a defection by :code:`TitFor2Tats`.
 
 WSLS
 ^^^^
