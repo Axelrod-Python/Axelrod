@@ -711,7 +711,8 @@ strategy that plays like TitForTat but cooperates only with probability
 Implementation
 **************
 
-HARD_JOSS as described above is implemented in the library as `Joss` and is presumably the same as the Joss strategy from Axelrod's First tournament (see above).
+HARD_JOSS as described above is implemented in the library as `Joss` and is
+the same as the Joss strategy from `Axelrod's first tournament`_.
 
 
 **Not implemented?**: HARD_MAJO
