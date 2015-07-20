@@ -484,20 +484,20 @@ by :math:`\epsilon`. The value of :math:`\epsilon` in the S&P tournament is not
 known and defaults to :math:`\epsilon = 0.05` in the library, defining a
 memory-one strategy:
 
-- :math:`P(C | CC) = 1 - \epsilon`
-- :math:`P(C | CD) = \epsilon`
-- :math:`P(C | DC) = 1 - \epsilon`
-- :math:`P(C | DD) = \epsilon`
+- :math:`P(C\,|\,CC) = 1 - \epsilon`
+- :math:`P(C\,|\,CD) = \epsilon`
+- :math:`P(C\,|\,DC) = 1 - \epsilon`
+- :math:`P(C\,|\,DD) = \epsilon`
 
 *GTFT came 2nd in average score and 18th in wins in S&P's tournament.*
 
 Note that some sources define GTFT as TFT but with only an altered probability
 of cooperating after a defection, as follows:
 
-- :math:`P(C | CC) = 1`
-- :math:`P(C | CD) = p`
-- :math:`P(C | DC) = 1`
-- :math:`P(C | DD) = p`
+- :math:`P(C\,|\,CC) = 1`
+- :math:`P(C\,|\,CD) = p`
+- :math:`P(C\,|\,DC) = 1`
+- :math:`P(C\,|\,DD) = p`
 
 where :math:`p = \text{min}\left(1 - \frac{T-R}{R-S}, \frac{R-P}{T-P}\right)`.
 [S&P, PNAS 2012] does not specify how GTFT is defined.
@@ -543,10 +543,10 @@ Win-Stay-Lose-Shift is a strategy that shifts if the highest payoff was not
 earned in the previous round. WSLS is also known as "Win-Stay-Lose-Switch" and
 "Pavlov". It can be seen as a memory-one strategy as follows:
 
-- :math:`P(C | CC) = 1`
-- :math:`P(C | CD) = 0`
-- :math:`P(C | DC) = 0`
-- :math:`P(C | DD) = 1`
+- :math:`P(C\,|\,CC) = 1`
+- :math:`P(C\,|\,CD) = 0`
+- :math:`P(C\,|\,DC) = 0`
+- :math:`P(C\,|\,DD) = 1`
 
 *TF2T came 7th in average score and 13th in wins in S&P's tournament.*
 
@@ -569,10 +569,10 @@ RANDOM
 RANDOM is a strategy that presumably cooperates or defects randomly with
 equal probability. This is also a memory-one strategy:
 
-- :math:`P(C | CC) = 0.5`
-- :math:`P(C | CD) = 0.5`
-- :math:`P(C | DC) = 0.5`
-- :math:`P(C | DD) = 0.5`
+- :math:`P(C\,|\,CC) = 0.5`
+- :math:`P(C\,|\,CD) = 0.5`
+- :math:`P(C\,|\,DC) = 0.5`
+- :math:`P(C\,|\,DD) = 0.5`
 
 *RANDOM came 8th in average score and 8th in wins in S&P's tournament.*
 
@@ -594,10 +594,10 @@ ZDGTFT-2
 
 This memory-one strategy is defined by the following four conditional
 probabilities based on the last round of play:
-- :math:`P(C | CC) = 1`
-- :math:`P(C | CD) = 1/8`
-- :math:`P(C | DC) = 1`
-- :math:`P(C | DD) = 1/4`
+- :math:`P(C\,|\,CC) = 1`
+- :math:`P(C\,|\,CD) = 1/8`
+- :math:`P(C\,|\,DC) = 1`
+- :math:`P(C\,|\,DD) = 1/4`
 
 *This strategy came 1st in average score and 16th in wins in S&P's tournament.*
 
@@ -619,10 +619,10 @@ EXTORT-2
 
 This memory-one strategy is defined by the following four conditional
 probabilities based on the last round of play:
-- :math:`P(C | CC) = 8/9`
-- :math:`P(C | CD) = 1/2`
-- :math:`P(C | DC) = 1/3`
-- :math:`P(C | DD) = 0`
+- :math:`P(C\,|\,CC) = 8/9`
+- :math:`P(C\,|\,CD) = 1/2`
+- :math:`P(C\,|\,DC) = 1/3`
+- :math:`P(C\,|\,DD) = 0`
 
 *This strategy came 18th in average score and 2nd in wins in S&P's tournament.*
 
@@ -669,10 +669,10 @@ HARD_JOSS is not defined in [S&P, PNAS 2012] but is otherwise defined as a
 strategy that plays like TitForTat but cooperates only with probability
 :math:`0.9`. This is a memory-one strategy with the following probabilities:
 
-- :math:`P(C | CC) = 0.9`
-- :math:`P(C | CD) = 0`
-- :math:`P(C | DC) = 1`
-- :math:`P(C | DD) = 0`
+- :math:`P(C\,|\,CC) = 0.9`
+- :math:`P(C\,|\,CD) = 0`
+- :math:`P(C\,|\,DC) = 1`
+- :math:`P(C\,|\,DD) = 0`
 
 *HARD_JOSS came 16th in average score and 4th in wins in S&P's tournament.*
 
