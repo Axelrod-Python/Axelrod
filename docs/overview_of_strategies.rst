@@ -483,28 +483,18 @@ GTFT
 ^^^^
 
 Generous-Tit-For-Tat plays Tit-For-Tat with occasional forgiveness, which
-prevents cycling defections against itself. The forgiveness factor is given
-by :math:`\epsilon`. The value of :math:`\epsilon` in the S&P tournament is not
-known and defaults to :math:`\epsilon = 0.05` in the library, defining a
-memory-one strategy:
+prevents cycling defections against itself.
 
-- :math:`P(C\,|\,CC) = 1 - \epsilon`
-- :math:`P(C\,|\,CD) = \epsilon`
-- :math:`P(C\,|\,DC) = 1 - \epsilon`
-- :math:`P(C\,|\,DD) = \epsilon`
-
-*GTFT came 2nd in average score and 18th in wins in S&P's tournament.*
-
-Note that some sources define GTFT as TFT but with only an altered probability
-of cooperating after a defection, as follows:
+GTFT is defined as a memory-one strategy as follows:
 
 - :math:`P(C\,|\,CC) = 1`
 - :math:`P(C\,|\,CD) = p`
 - :math:`P(C\,|\,DC) = 1`
 - :math:`P(C\,|\,DD) = p`
 
-where :math:`p = \text{min}\left(1 - \frac{T-R}{R-S}, \frac{R-P}{T-P}\right)`.
-[S&P, PNAS 2012] does not specify how GTFT is defined.
+where :math:`p = \min\left(1 - \frac{T-R}{R-S}, \frac{R-P}{T-P}\right)`.
+
+*GTFT came 2nd in average score and 18th in wins in S&P's tournament.*
 
 Implementation
 **************
