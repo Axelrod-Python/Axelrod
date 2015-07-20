@@ -412,11 +412,6 @@ Axelrod's second tournament
 
 Work in progress.
 
-Strategies implemented in the module
-------------------------------------
-
-Work in progress.
-
 Stewart and Plotkin's Tournament (2012)
 ---------------------------------------
 
@@ -545,7 +540,7 @@ WSLS
 ^^^^
 
 Win-Stay-Lose-Shift is a strategy that shifts if the highest payoff was not
-earned in the previous round. WSLS is also known as "Win-Stay-Lose-Switch" and 
+earned in the previous round. WSLS is also known as "Win-Stay-Lose-Switch" and
 "Pavlov". It can be seen as a memory-one strategy as follows:
 
 - :math:`P(C | CC) = 1`
@@ -736,7 +731,7 @@ HARD_TF2T
 
 Hard TF2T is not defined in [S&P, PNAS 2012] but is elsewhere defined as
 follows. The strategy cooperates on the first move, defects if the opponent
-has defected twice (successively) of the previous three rounds, and otherwise 
+has defected twice (successively) of the previous three rounds, and otherwise
 cooperates.
 
 *HARD_TF2T came 6th in average score and 17th in wins in S&P's tournament.*
@@ -765,3 +760,8 @@ need to be sourced (and implemented):
 - PROBE2
 - PROBE3
 - HARD_PROBE
+
+Strategies implemented in the module
+------------------------------------
+
+Work in progress.
