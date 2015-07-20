@@ -434,6 +434,8 @@ The following classical strategies are included in the tournament:
 +----------+----------------------+----------------------+
 | ALLD     | Always Defect        | `Defector`           |
 +----------+----------------------+----------------------+
+| EXTORT   | Extort               | `ZDExtort2`          |
++----------+----------------------+----------------------+
 | TFT      | Tit-For-Tat          | `TitForTat`          |
 +----------+----------------------+----------------------+
 | GTFT     | Generous Tit-For-Tat | `GenerousTitForTat`  |
@@ -634,6 +636,7 @@ EXTORT-2
 
 This memory-one strategy is defined by the following four conditional
 probabilities based on the last round of play:
+
 - :math:`P(C\,|\,CC) = 8/9`
 - :math:`P(C\,|\,CD) = 1/2`
 - :math:`P(C\,|\,DC) = 1/3`
@@ -647,12 +650,20 @@ Implementation
 Here is how EXTORT-2 is implemented in the library::
 
     import axelrod
-    p1 = axelrod.EXTORT2()  # Create a EXTORT-2 player
+    p1 = axelrod.ZDExtort2()  # Create a EXTORT-2 player
     p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
+    for round in range(10):
         p1.play(p2)
 
+    print p2.history
     print p1.history
+
+which gives (for the particular seed used)::
+
+['D', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C', 'D']
+['C', 'C', 'D', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
+
+you can see that :code:`ZDExtort2` never cooperates after both strategies defect.
 
 GRIM
 ^^^^
