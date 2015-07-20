@@ -5,7 +5,7 @@ class Defector(Player):
     """A player who only ever defects."""
 
     name = 'Defector'
-    memory_depth = 1  # Four-Vector = (0,0,0,0)
+    memory_depth = 0  # Memory-one Four-Vector = (0,0,0,0)
 
     def strategy(self, opponent):
         return 'D'

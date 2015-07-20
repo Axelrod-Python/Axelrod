@@ -5,7 +5,7 @@ class Cooperator(Player):
     """A player who only ever cooperates."""
 
     name = 'Cooperator'
-    memory_depth = 1  # Four-Vector = (1,1,1,1)
+    memory_depth = 0  # Memory-one Four-Vector = (1,1,1,1)
 
     def strategy(self, opponent):
         return 'C'
