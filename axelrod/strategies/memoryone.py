@@ -69,7 +69,9 @@ class GTFT(MemoryOnePlayer):
 
     def __init__(self, ep=0.05):
         self.ep = ep
-        four_vector = [1-ep, ep, 1-ep, ep]
+        (R, P, S, T) = Game().RPST()
+        p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
+        four_vector = [1, p, 1, p]
         super(self.__class__, self).__init__(four_vector)
 
 
