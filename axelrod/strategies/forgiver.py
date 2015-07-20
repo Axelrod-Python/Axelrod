@@ -8,14 +8,14 @@ class Forgiver(Player):
     """
 
     name = 'Forgiver'
-    memoryone = False  # Long memory
+    memory_depth = float('inf')  # Long memory
 
     def strategy(self, opponent):
         """
         Begins by playing C, then plays D if the opponent has defected more than 10 percent of the time
         """
         try:
-            if opponent.history.count('D') > len(opponent.history)/10:
+            if opponent.history.count('D') > len(opponent.history) / 10.:
                 return 'D'
             return 'C'
         except IndexError:
@@ -30,7 +30,7 @@ class ForgivingTitForTat(Player):
     """
 
     name = 'Forgiving Tit For Tat'
-    memoryone = False  # Long memory
+    memory_depth = float('inf')  # Long memory
 
     def strategy(self, opponent):
         """
@@ -39,7 +39,7 @@ class ForgivingTitForTat(Player):
         and their most recent decision was defect.
         """
         try:
-            if opponent.history.count('D') > len(opponent.history)/10:
+            if opponent.history.count('D') > len(opponent.history) / 10.:
                 return opponent.history[-1]
             return 'C'
         except IndexError:
