@@ -1,5 +1,8 @@
 import inspect
-from axelrod import Player
+from axelrod import Player, Game
+
+
+(R, P, S, T) = Game().RPST()
 
 
 class Darwin(Player):
@@ -20,12 +23,13 @@ class Darwin(Player):
     """
 
     name = "Darwin"
+    memory_depth = float('inf')
     genome = ['C']
     valid_callers = ["play"]    # What functions may invoke our strategy.
-    outcomes = { ('C','C') : 1,
-                 ('C','D') : -5,
-                 ('D','C') : 5,
-                 ('D','D') : -1
+    outcomes = { ('C','C') : R,
+                 ('C','D') : S,
+                 ('D','C') : T,
+                 ('D','D') : P
                }
 
     def __init__(self):
