@@ -42,7 +42,10 @@ class TournamentManagerFactory(object):
                 name=name, players=players, **kwargs)
 
     @staticmethod
-    def _tournaments_dict(exclusions=[]):
+    def _tournaments_dict(exclusions=None):
+
+        if exclusions is None:
+            exclusions = []
 
         tournaments = {
             'basic_strategies': axelrod.basic_strategies,
