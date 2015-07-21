@@ -6,7 +6,7 @@ class Random(Player):
     """A player who randomly chooses between cooperating and defecting."""
 
     name = 'Random'
-    memoryone = True  # Four-Vector = (0.5, 0.5, 0.5, 0.5)
+    memory_depth = 0  # Memory-one Four-Vector = (0.5, 0.5, 0.5, 0.5)
 
     @staticmethod
     def strategy(opponent):
@@ -19,11 +19,12 @@ class Tullock(Player):
     than the opponent has in previous rounds."""
 
     name = "Tullock"
-    memoryone = False # long memory
+    memory_depth = 11 # long memory, modified by init
 
     def __init__(self, rounds_to_cooperate=11):
         Player.__init__(self)
         self._rounds_to_cooperate = rounds_to_cooperate
+        self.__class__.memory_depth = rounds_to_cooperate
 
     def strategy(self, opponent):
         rounds = self._rounds_to_cooperate
@@ -45,7 +46,7 @@ class Feld(Player):
     """
 
     name = "Feld"
-    memoryone = False # Probabilities are not constant
+    memory_depth = 200 # Varies actually, eventually becomes depth 1
 
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
                  rounds_of_decay=200):

@@ -9,7 +9,7 @@ class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
     name = 'Win-Stay Lose-Shift'
-    memoryone = True  # Four-Vector = (1,0,0,1)
+    memory_depth = 1  # Four-Vector = (1,0,0,1)
 
     def __init__(self, initial='C'):
         Player.__init__(self)
@@ -39,7 +39,7 @@ class MemoryOnePlayer(Player):
     with a initializing four_vector."""
 
     name = 'Generic Memory One Player'
-    memoryone = True
+    memory_depth = 1
 
     def __init__(self, four_vector, initial='C'):
         Player.__init__(self)

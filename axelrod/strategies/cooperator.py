@@ -5,7 +5,7 @@ class Cooperator(Player):
     """A player who only ever cooperates."""
 
     name = 'Cooperator'
-    memoryone = True  # Four-Vector = (1,1,1,1)
+    memory_depth = 0  # Memory-one Four-Vector = (1,1,1,1)
 
     @staticmethod
     def strategy(opponent):
@@ -16,7 +16,7 @@ class TrickyCooperator(Player):
     """A cooperator that is trying to be tricky."""
 
     name = "Tricky Cooperator"
-    memoryone = False  # Long memory
+    memory_depth = 10  # Long memory
 
     @staticmethod
     def strategy(opponent):

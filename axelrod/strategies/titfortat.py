@@ -7,7 +7,7 @@ class TitForTat(Player):
     """A player starts by cooperating and then mimics previous move by opponent."""
 
     name = 'Tit For Tat'
-    memoryone = True  # Four-Vector = (1.,0.,1.,0.)
+    memory_depth = 1  # Four-Vector = (1.,0.,1.,0.)
 
     @staticmethod
     def strategy(opponent):
@@ -18,7 +18,7 @@ class TitFor2Tats(Player):
     """A player starts by cooperating and then defects only after two defects by opponent."""
 
     name = "Tit For 2 Tats"
-    memoryone = False  # Long memory, memory-2
+    memory_depth = 2  # Long memory, memory-2
 
     @staticmethod
     def strategy(opponent):
@@ -29,7 +29,7 @@ class TwoTitsForTat(Player):
     """A player starts by cooperating and replies to each defect by two defections."""
 
     name = "Two Tits For Tat"
-    memoryone = False  # Long memory, memory-2
+    memory_depth = 2  # Long memory, memory-2
 
     @staticmethod
     def strategy(opponent):
@@ -44,7 +44,7 @@ class Bully(Player):
     """
 
     name = "Bully"
-    memoryone = True  # Four-Vector = (0.,1.,0.,1.)
+    memory_depth = 1  # Four-Vector = (0.,1.,0.,1.)
 
     @staticmethod
     def strategy(opponent):
@@ -55,7 +55,7 @@ class SneakyTitForTat(Player):
     """Tries defecting once and repents if punished."""
 
     name = "Sneaky Tit For Tat"
-    memoryone = False  # Long memory
+    memory_depth = float('inf')  # Long memory
 
     def strategy(self, opponent):
         if len(self.history) < 2:
@@ -71,7 +71,7 @@ class SuspiciousTitForTat(Player):
     """A TFT that initially defects."""
 
     name = "Suspicious Tit For Tat"
-    memoryone = True  # Four-Vector = (1.,0.,1.,0.)
+    memory_depth = 1  # Four-Vector = (1.,0.,1.,0.)
 
     @staticmethod
     def strategy(opponent):
@@ -83,7 +83,7 @@ class AntiTitForTat(Player):
     This is similar to BULLY above, except that the first move is cooperation."""
 
     name = 'Anti Tit For Tat'
-    memoryone = True  # Four-Vector = (0.,1.,0.,1.)
+    memory_depth = 1  # Four-Vector = (0.,1.,0.,1.)
 
     @staticmethod
     def strategy(opponent):
@@ -98,7 +98,7 @@ class Shubik(Player):
     """
 
     name = 'Shubik'
-    memoryone = False # Responses depend on more than just the last round
+    memory_depth = float('inf')
 
     def __init__(self):
         Player.__init__(self)
@@ -150,7 +150,7 @@ class HardTitForTat(Player):
     """A variant of Tit For Tat that uses a longer history for retaliation."""
 
     name = 'Hard Tit For Tat'
-    memoryone = False  # memory-three
+    memory_depth = 3  # memory-three
 
     @staticmethod
     def strategy(opponent):
@@ -168,7 +168,7 @@ class HardTitFor2Tats(Player):
     retaliation."""
 
     name = "Hard Tit For 2 Tats"
-    memoryone = False  # memory-three
+    memory_depth = 3  # memory-three
 
     @staticmethod
     def strategy(opponent):
