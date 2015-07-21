@@ -459,7 +459,7 @@ The following classical strategies are included in the library:
 +--------------+----------------------+--------------------------+
 | `HARD_MAJO`_ | Hard majority        | :code:`GoByMajority`     |
 +--------------+----------------------+--------------------------+
-| `HARD_JOSS`_ | Hard joss            | :code:`Joss`             |
+| `HARD_JOSS`_ | Hard Joss            | :code:`Joss`             |
 +--------------+----------------------+--------------------------+
 | `HARD_TFT`_  | Hard tit for tat     | :code:`HardTitForTat`    |
 +--------------+----------------------+--------------------------+
