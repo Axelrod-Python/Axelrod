@@ -760,7 +760,17 @@ HARD_TF2T is implemented in the library::
     for round in range(5):
         p1.play(p2)
 
+    print p2.history
     print p1.history
+
+which gives (for this particular seed)::
+
+    ['D', 'D', 'C', 'D', 'C']
+    ['C', 'C', 'D', 'D', 'C']
+
+we see that :code:`HardTitFor2Tats` waited for 2 defects before defecting, but
+also continued to defect on the 4th round (as there were 2 defections in the
+previous 3 moves by the opponent).
 
 Remaining Strategies
 ^^^^^^^^^^^^^^^^^^^^
