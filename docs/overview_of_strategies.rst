@@ -13,6 +13,26 @@ An indication is given as to whether or not this strategy is implemented in the
 :code:`axelrod` library. If this strategy is not implemented please do send us a
 `pull request <https://github.com/Axelrod-Python/Axelrod/pulls>`_.
 
+The following strategies are included in the library:
+
++----------------+--------------------------+--------------------------+
+| Name           | Long name                | Axelrod Library Name     |
++================+==========================+==========================+
+| `Tit For Tat`_ | Always Cooperate         | :code:`Cooperator`       |
++----------------+--------------------------+--------------------------+
+| `Grofman`_     | Grofman (name of author) | :code:`Grofman`          |
++----------------+--------------------------+--------------------------+
+| `Shubik`_      | Shubik (name of author)  | :code:`Shubik`           |
++----------------+--------------------------+--------------------------+
+| `Grudger`_     | Grudger (name of author) | :code:`Grudger`          |
++----------------+--------------------------+--------------------------+
+| `Davis`_       | Davis (name of author)   | :code:`Davis`            |
++----------------+--------------------------+--------------------------+
+| `Joss`_        | Feld (name of author)    | :code:`Feld`             |
++----------------+--------------------------+--------------------------+
+| `Tullock`_     | Tullock (name of author) | :code:`Tullock`          |
++----------------+--------------------------+--------------------------+
+
 Tit for Tat
 ^^^^^^^^^^^
 
@@ -425,45 +445,45 @@ implementation of  strategies is not clear in the manuscript. We can, however,
 make reasonable guesses to the implementation of many strategies based on their
 names and classical definitions.
 
-The following classical strategies are included in the tournament:
+The following classical strategies are included in the library:
 
-+----------+----------------------+--------------------------+
-| S&P Name | Long name            | Axelrod Library Name     |
-+==========+======================+==========================+
-| ALLC     | Always Cooperate     | :code:`Cooperator`       |
-+----------+----------------------+--------------------------+
-| ALLD     | Always Defect        | :code:`Defector`         |
-+----------+----------------------+--------------------------+
-| EXTORT-2 | Extort-2             | :code:`ZDExtort2`        |
-+----------+----------------------+--------------------------+
-| HARD_MAJO| Hard majority        | :code:`GoByMajority`     |
-+----------+----------------------+--------------------------+
-| HARD_JOSS| Hard joss            | :code:`Joss`             |
-+----------+----------------------+--------------------------+
-| HARD_TFT | Hard tit for tat     | :code:`HardTitForTat`    |
-+----------+----------------------+--------------------------+
-| HARD_TF2T| Hard tit for 2 tats  | :code:`HardTitFor2Tats`  |
-+----------+----------------------+--------------------------+
-| TFT      | Tit-For-Tat          | :code:`TitForTat`        |
-+----------+----------------------+--------------------------+
-| GRIM     | Grim                 | :code:`Grudger`          |
-+----------+----------------------+--------------------------+
-| GTFT     | Generous Tit-For-Tat | :code:`GenerousTitForTat`|
-+----------+----------------------+--------------------------+
-| TFT      | TitForTat            | :code:`TitForTat`        |
-+----------+----------------------+--------------------------+
-| TF2T     | Tit-For-Two-Tats     | :code:`TitFor2Tats`      |
-+----------+----------------------+--------------------------+
-| WSLS     | Win-Stay-Lose-Shift  | :code:`WinStayLoseShift` |
-+----------+----------------------+--------------------------+
-| RANDOM   | Random               | :code:`Random`           |
-+----------+----------------------+--------------------------+
-| ZDGTFT-2 | ZDGTFT-2             | :code:`ZDGTFT2`          |
-+----------+----------------------+--------------------------+
++--------------+----------------------+--------------------------+
+| S&P Name     | Long name            | Axelrod Library Name     |
++==============+======================+==========================+
+| ALLC         | Always Cooperate     | :code:`Cooperator`       |
++--------------+----------------------+--------------------------+
+| ALLD         | Always Defect        | :code:`Defector`         |
++--------------+----------------------+--------------------------+
+| `EXTORT-2`_  | Extort-2             | :code:`ZDExtort2`        |
++--------------+----------------------+--------------------------+
+| `HARD_MAJO`_ | Hard majority        | :code:`GoByMajority`     |
++--------------+----------------------+--------------------------+
+| `HARD_JOSS`_ | Hard joss            | :code:`Joss`             |
++--------------+----------------------+--------------------------+
+| `HARD_TFT`_  | Hard tit for tat     | :code:`HardTitForTat`    |
++--------------+----------------------+--------------------------+
+| `HARD_TF2T`_ | Hard tit for 2 tats  | :code:`HardTitFor2Tats`  |
++--------------+----------------------+--------------------------+
+| TFT          | Tit-For-Tat          | :code:`TitForTat`        |
++--------------+----------------------+--------------------------+
+| `GRIM`_      | Grim                 | :code:`Grudger`          |
++--------------+----------------------+--------------------------+
+| `GTFT`_      | Generous Tit-For-Tat | :code:`GenerousTitForTat`|
++--------------+----------------------+--------------------------+
+| `TF2T`_      | Tit-For-Two-Tats     | :code:`TitFor2Tats`      |
++--------------+----------------------+--------------------------+
+| `WSLS`_      | Win-Stay-Lose-Shift  | :code:`WinStayLoseShift` |
++--------------+----------------------+--------------------------+
+| RANDOM       | Random               | :code:`Random`           |
++--------------+----------------------+--------------------------+
+| `ZDGTFT-2`_  | ZDGTFT-2             | :code:`ZDGTFT2`          |
++--------------+----------------------+--------------------------+
 
-ALLC, ALLD and TFT are defined above. The remaining classical strategies are defined
-below. The tournament also included two Zero Determinant strategies, both implemented in the library. The full table of strategies and results is
-[available online](http://www.pnas.org/content/109/26/10134/F1.expansion.html).
+ALLC, ALLD, TFT and RANDOM are defined above. The remaining classical
+strategies are defined below. The tournament also included two Zero Determinant
+strategies, both implemented in the library. The full table of strategies and
+results is [available
+online](http://www.pnas.org/content/109/26/10134/F1.expansion.html).
 
 GTFT
 ^^^^
@@ -562,7 +582,7 @@ this gives::
 which shows that :code:`WSLS` will choose the strategy that was a best response
 in the previous round.
 
-Random
+RANDOM
 ^^^^^^
 
 Random is a strategy that was defined in `Axelrod's first tournament`_, note that this is also a memory-one strategy:
