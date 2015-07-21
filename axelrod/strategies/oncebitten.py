@@ -52,7 +52,7 @@ class OnceBitten(Player):
 
 class FoolMeOnce(Player):
     """
-    Forgives one D then retaliates forever on a second D. Also known as GRIM.
+    Forgives one D then retaliates forever on a second D.
     """
 
     name = 'Fool Me Once'
