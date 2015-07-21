@@ -5,7 +5,7 @@ class Defector(Player):
     """A player who only ever defects."""
 
     name = 'Defector'
-    memoryone = True  # Four-Vector = (0,0,0,0)
+    memory_depth = 0  # Memory-one Four-Vector = (0,0,0,0)
 
     def strategy(self, opponent):
         return 'D'
@@ -15,7 +15,7 @@ class TrickyDefector(Player):
     """A defector that is trying to be tricky."""
 
     name = "Tricky Defector"
-    memoryone = False  # Long memory
+    memory_depth = float('inf')  # Long memory
 
     def strategy(self, opponent):
         """Almost always defects, but will try to trick the opponent into cooperating.
