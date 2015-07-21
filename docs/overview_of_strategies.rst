@@ -429,14 +429,20 @@ The following classical strategies are included in the tournament:
 
 +----------+----------------------+--------------------------+
 | S&P Name | Long name            | Axelrod Library Name     |
-+----------+----------------------+--------------------------+
++==========+======================+==========================+
 | ALLC     | Always Cooperate     | :code:`Cooperator`       |
 +----------+----------------------+--------------------------+
 | ALLD     | Always Defect        | :code:`Defector`         |
 +----------+----------------------+--------------------------+
-| EXTORT   | Extort               | :code:`ZDExtort2`        |
+| EXTORT-2 | Extort-2             | :code:`ZDExtort2`        |
 +----------+----------------------+--------------------------+
 | HARD_MAJO| Hard majority        | :code:`GoByMajority`     |
++----------+----------------------+--------------------------+
+| HARD_JOSS| Hard joss            | :code:`Joss`             |
++----------+----------------------+--------------------------+
+| HARD_TFT | Hard tit for tat     | :code:`HardTitForTat`    |
++----------+----------------------+--------------------------+
+| HARD_TF2T| Hard tit for 2 tats  | :code:`HardTitFor2Tats`  |
 +----------+----------------------+--------------------------+
 | TFT      | Tit-For-Tat          | :code:`TitForTat`        |
 +----------+----------------------+--------------------------+
@@ -452,34 +458,12 @@ The following classical strategies are included in the tournament:
 +----------+----------------------+--------------------------+
 | RANDOM   | Random               | :code:`Random`           |
 +----------+----------------------+--------------------------+
+| ZDGTFT-2 | ZDGTFT-2             | :code:`ZDGTFT2`          |
++----------+----------------------+--------------------------+
 
-ALLC and TFT are defined above. The remaining classical strategies are defined
+ALLC, ALLD and TFT are defined above. The remaining classical strategies are defined
 below. The tournament also included two Zero Determinant strategies, both implemented in the library. The full table of strategies and results is
 [available online](http://www.pnas.org/content/109/26/10134/F1.expansion.html).
-
-ALLD
-^^^^
-
-ALLD always defects.
-
-*ALLD came last (19th) in average score and 1st in wins in S&P's tournament.*
-
-Implementation
-**************
-
-Here is a quick implementation of this in the library::
-
-   import axelrod
-   p1 = axelrod.Defector()  # Create a player that plays ALLD
-   p2 = axelrod.Cooperator()  # Create a player that always cooperates
-   for round in range(5):
-       p1.play(p2)
-
-   print p1.history
-
-which gives::
-
-   ['D', 'D', 'D', 'D', 'D']
 
 GTFT
 ^^^^
@@ -705,7 +689,6 @@ Implementation
 
 HARD_JOSS as described above is implemented in the library as `Joss` and is
 the same as the Joss strategy from `Axelrod's first tournament`_.
-
 
 HARD_MAJO
 ^^^^^^^^^
