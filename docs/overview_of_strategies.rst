@@ -756,11 +756,19 @@ HARD_TFT is implemented in the library::
 
     import axelrod
     p1 = axelrod.HardTitForTat()  # Create a HARD_TFT player
-    p2 = axelrod.Random()  # Create a player that plays randomly
+    p2 = axelrod.Alternator()  # Create a player that alternates
     for round in range(5):
         p1.play(p2)
 
     print p1.history
+
+which gives::
+
+['C', 'C', 'D', 'D', 'D']
+
+we see that :code:`HardTitForTat` cooperates for the first two moves but then
+constantly defetcts as there is always a defection in it's opponent's recent
+history.
 
 HARD_TF2T
 ^^^^^^^^^
