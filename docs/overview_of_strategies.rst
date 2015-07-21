@@ -772,17 +772,30 @@ we see that :code:`HardTitFor2Tats` waited for 2 defects before defecting, but
 also continued to defect on the 4th round (as there were 2 defections in the
 previous 3 moves by the opponent).
 
-Remaining Strategies
-^^^^^^^^^^^^^^^^^^^^
+**Not implemented**: CALCULATOR
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The remaining strategies are not unambiguously defined in [S&P, PNAS 2012] and
-need to be sourced (and implemented):
+This strategy is not unambiguously defined in [S&P, PNAS 2012].
 
-- CALCULATOR
-- PROBE
-- PROBE2
-- PROBE3
-- HARD_PROBE
+**Not implemented**: PROBE
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy is not unambiguously defined in [S&P, PNAS 2012].
+
+**Not implemented**: PROBE2
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy is not unambiguously defined in [S&P, PNAS 2012].
+
+**Not implemented**: PROBE3
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy is not unambiguously defined in [S&P, PNAS 2012].
+
+**Not implemented**: HARD_PROBE
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This strategy is not unambiguously defined in [S&P, PNAS 2012].
 
 Strategies implemented in the module
 ------------------------------------
