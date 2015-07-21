@@ -106,7 +106,8 @@ class MetaHunter(MetaPlayer):
 
         MetaPlayer.__init__(self)
 
-    def meta_strategy(self, results):
+    @staticmethod
+    def meta_strategy(results):
 
         # If any of the hunters smells prey, then defect!
         if 'D' in results:
