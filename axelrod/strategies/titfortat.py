@@ -57,8 +57,7 @@ class SneakyTitForTat(Player):
     name = "Sneaky Tit For Tat"
     memoryone = False  # Long memory
 
-    @staticmethod
-    def strategy(opponent):
+    def strategy(self, opponent):
         if len(self.history) < 2:
             return "C"
         if 'D' not in opponent.history:
