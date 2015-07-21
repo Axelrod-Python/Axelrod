@@ -51,9 +51,15 @@ To contribute a strategy you need to follow as many of the following steps as po
 1. Fork the `github repository <https://github.com/Axelrod-Python/Axelrod>`_.
 2. Add a :code:`<strategy>.py` file to the strategies directory. (Take a look at the others in there: you need to write code for the strategy and one other simple thing.)
 3. Update the :code:`./axelrod/strategies/_strategies.py` file (you need to write the import statement and add the strategy to the relevant python list).
-4. This one is optional: write some unit tests in the ./axelrod/tests/ directory.
-5. This one is also optional: add your name to the contributors list in the bottom of the :code:`README.md` file.
-6. Send me a pull request.
+4. Update :code:`./axelrod/docs/overview_of_strategies.rst` with a description
+   of what the strategy does and include an example of it working. If relevant
+   please also add a source for the strategy (if it is not an original one).
+5. This one is optional: write some unit tests in the ./axelrod/tests/ directory.
+6. This one is also optional: add your name to the contributors list in the bottom of the :code:`README.md` file.
+7. Send us a pull request.
+
+**If you would like a hand with any of the above please do get in touch: we're
+always delight to have new strategies.**
 
 Adding a strategy
 ^^^^^^^^^^^^^^^^^
