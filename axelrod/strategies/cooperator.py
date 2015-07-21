@@ -7,7 +7,8 @@ class Cooperator(Player):
     name = 'Cooperator'
     memoryone = True  # Four-Vector = (1,1,1,1)
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return 'C'
 
 
@@ -17,7 +18,8 @@ class TrickyCooperator(Player):
     name = "Tricky Cooperator"
     memoryone = False  # Long memory
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         """Almost always cooperates, but will try to trick the opponent by defecting.
 
         Defect once in a while in order to get a better payout, when the opponent
@@ -26,4 +28,3 @@ class TrickyCooperator(Player):
         if 'D' not in opponent.history[-10:] and opponent.history[-3:] == ['C']*3:
             return 'D'
         return 'C'
-
