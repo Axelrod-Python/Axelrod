@@ -172,3 +172,15 @@ class Joss(MemoryOnePlayer):
     def __init__(self):
         four_vector = (0.9, 0, 1, 0)
         super(self.__class__, self).__init__(four_vector)
+
+class SoftJoss(MemoryOnePlayer):
+    """
+    Defects with probability 0.9 when the opponent defects, otherwise 
+    emulates Tit-For-Tat.
+    """
+
+    name = "Soft Joss"
+
+    def __init__(self):
+        four_vector = (1., 0, 0.9, 0)
+        super(self.__class__, self).__init__(four_vector)
