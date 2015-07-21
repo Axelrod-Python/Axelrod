@@ -128,7 +128,9 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         self.assertEqual(P1.strategy(P2), 'C')
         P2.history = ['D', 'D']
         self.assertEqual(P1.strategy(P2), 'D')
-        # Sometime will forget count:
+        # Sometime eventually forget count:
+        for i in range(18):
+            self.assertEqual(P1.strategy(P2), 'D')
         self.assertEqual(P1.strategy(P2), 'C')
 
     def test_reset(self):
