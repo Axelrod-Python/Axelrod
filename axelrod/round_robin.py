@@ -1,14 +1,17 @@
 class RoundRobin(object):
     """A class to define play a round robin game of players"""
 
-    def __init__(self, players, game, turns, deterministic_cache={},
+    def __init__(self, players, game, turns, deterministic_cache=None,
                  cache_mutable=True, noise=0):
         """Initialise the players, game and deterministic cache"""
         self.players = players
         self.nplayers = len(players)
         self.game = game
         self.turns = turns
-        self.deterministic_cache = deterministic_cache
+        if deterministic_cache is None:
+            self.deterministic_cache = {}
+        else:
+            self.deterministic_cache = deterministic_cache
         self.cache_mutable = cache_mutable
         self._noise = noise
 
