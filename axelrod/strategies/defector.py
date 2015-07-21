@@ -7,7 +7,8 @@ class Defector(Player):
     name = 'Defector'
     memory_depth = 0  # Memory-one Four-Vector = (0,0,0,0)
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return 'D'
 
 

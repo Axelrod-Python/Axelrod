@@ -6,17 +6,24 @@ class MindController(Player):
 
     name = 'Mind Controller'
 
-    def strategy(self, opponent):
-        """Alters the opponents strategy method to be a lambda function which always returns C
-        This player will then always return D to take advantage of this
+    @staticmethod
+    def strategy(opponent):
+        """
+        Alters the opponents strategy method to be a lambda function which
+        always returns C. This player will then always return D to take
+        advantage of this
         """
 
         opponent.strategy = lambda opponent: 'C'
 
         return 'D'
 
+
 class MindWarper(Player):
-    """A player that changes the opponent's strategy but blocks changes to it's own."""
+    """
+    A player that changes the opponent's strategy but blocks changes to
+    its own.
+    """
 
     name = 'Mind Warper'
 
@@ -26,15 +33,21 @@ class MindWarper(Player):
         else:
             self.__dict__[name] = val
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         opponent.strategy = lambda opponent: 'C'
         return 'D'
 
+
 class MindBender(MindWarper):
-    """A player that changes the opponent's strategy by modifying the internal dictionary."""
+    """
+    A player that changes the opponent's strategy by modifying the internal
+    dictionary.
+    """
 
     name = 'Mind Bender'
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         opponent.__dict__['strategy'] = lambda opponent: 'C'
         return 'D'

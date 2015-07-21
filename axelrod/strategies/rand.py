@@ -8,7 +8,8 @@ class Random(Player):
     name = 'Random'
     memory_depth = 0  # Memory-one Four-Vector = (0.5, 0.5, 0.5, 0.5)
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return random.choice(['C', 'D'])
 
 

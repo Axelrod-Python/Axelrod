@@ -9,9 +9,11 @@ class Inverse(Player):
     name = 'Inverse'
     memory_depth = float('inf')  # Long memory
 
-    def strategy(self, opponent):
-        """Looks at opponent history to see if they have defected. If so, player
-        defection is inversely proportional to when this occurred.
+    @staticmethod
+    def strategy(opponent):
+        """Looks at opponent history to see if they have defected.
+
+        If so, player defection is inversely proportional to when this occurred.
         """
 
         index = next((index for index, value in enumerate(opponent.history, start=1) if value == 'D'), None)

@@ -10,7 +10,8 @@ class Forgiver(Player):
     name = 'Forgiver'
     memory_depth = float('inf')  # Long memory
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         """
         Begins by playing C, then plays D if the opponent has defected more than 10 percent of the time
         """
@@ -32,7 +33,8 @@ class ForgivingTitForTat(Player):
     name = 'Forgiving Tit For Tat'
     memory_depth = float('inf')  # Long memory
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         """
         Begins by playing C, then plays D if,
         the opponent has defected more than 10 percent of the time,
