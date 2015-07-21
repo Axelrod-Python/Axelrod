@@ -484,20 +484,9 @@ GTFT
 ^^^^
 
 Generous-Tit-For-Tat plays Tit-For-Tat with occasional forgiveness, which
-prevents cycling defections against itself. The forgiveness factor is given
-by :math:`\epsilon`. The value of :math:`\epsilon` in the S&P tournament is not
-known and defaults to :math:`\epsilon = 0.05` in the library, defining a
-memory-one strategy:
+prevents cycling defections against itself.
 
-- :math:`P(C | CC) = 1 - \epsilon`
-- :math:`P(C | CD) = \epsilon`
-- :math:`P(C | DC) = 1 - \epsilon`
-- :math:`P(C | DD) = \epsilon`
-
-*GTFT came 2nd in average score and 18th in wins in S&P's tournament.*
-
-Note that some sources define GTFT as TFT but with only an altered probability
-of cooperating after a defection, as follows:
+GTFT is defined as a memory-one strategy as follows:
 
 - :math:`P(C | CC) = 1`
 - :math:`P(C | CD) = p`
@@ -505,7 +494,8 @@ of cooperating after a defection, as follows:
 - :math:`P(C | DD) = p`
 
 where :math:`p = \text{min}\left(1 - \frac{T-R}{R-S}, \frac{R-P}{T-P}\right)`.
-[S&P, PNAS 2012] does not specify how GTFT is defined.
+
+*GTFT came 2nd in average score and 18th in wins in S&P's tournament.*
 
 Implementation
 **************
@@ -684,17 +674,8 @@ strategy that plays like TitForTat but cooperates only with probability
 Implementation
 **************
 
-HARD_JOSS is not explicitly defined in the library but can easily be
-instantiated as follows::
+HARD_JOSS as described above is implemented in the library as `Joss` and is presumably the same as the Joss strategy from Axelrod's First tournament (see above).
 
-    import axelrod
-    four_vector = [0.9, 0., 1., 0.]
-    p1 = axelrod.MemoryOnePlayer(four_vector)  # Create a memory-one HARD_JOSS Player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
-
-    print p1.history
 
 **Not implemented?**: HARD_MAJO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
