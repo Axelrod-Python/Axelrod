@@ -8,7 +8,8 @@ class Inverse(Player):
     name = 'Inverse'
     memoryone = False  # Long memory
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         """Looks at opponent history to see if they have defected.
 
         If so, player defection is inversely proportional to when this occurred.
