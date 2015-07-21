@@ -427,29 +427,31 @@ names and classical definitions.
 
 The following classical strategies are included in the tournament:
 
-+----------+----------------------+----------------------+
-| S&P Name | Long name            | Axelrod Library Name |
-+----------+----------------------+----------------------+
-| ALLC     | Always Cooperate     | `Cooperator`         |
-+----------+----------------------+----------------------+
-| ALLD     | Always Defect        | `Defector`           |
-+----------+----------------------+----------------------+
-| EXTORT   | Extort               | `ZDExtort2`          |
-+----------+----------------------+----------------------+
-| TFT      | Tit-For-Tat          | `TitForTat`          |
-+----------+----------------------+----------------------+
-| GRIM     | Grim                 | `Grudger`            |
-+----------+----------------------+----------------------+
-| GTFT     | Generous Tit-For-Tat | `GenerousTitForTat`  |
-+----------+----------------------+----------------------+
-| TFT      | TitForTat            | `TitForTat`          |
-+----------+----------------------+----------------------+
-| TF2T     | Tit-For-Two-Tats     | `TitFor2Tats`        |
-+----------+----------------------+----------------------+
-| WSLS     | Win-Stay-Lose-Shift  | `WinStayLoseShift`   |
-+----------+----------------------+----------------------+
-| RANDOM   | Random               | `Random`             |
-+----------+----------------------+----------------------+
++----------+----------------------+--------------------------+
+| S&P Name | Long name            | Axelrod Library Name     |
++----------+----------------------+--------------------------+
+| ALLC     | Always Cooperate     | :code:`Cooperator`       |
++----------+----------------------+--------------------------+
+| ALLD     | Always Defect        | :code:`Defector`         |
++----------+----------------------+--------------------------+
+| EXTORT   | Extort               | :code:`ZDExtort2`        |
++----------+----------------------+--------------------------+
+| HARD_MAJO| Hard majority        | :code:`GoByMajority`     |
++----------+----------------------+--------------------------+
+| TFT      | Tit-For-Tat          | :code:`TitForTat`        |
++----------+----------------------+--------------------------+
+| GRIM     | Grim                 | :code:`Grudger`          |
++----------+----------------------+--------------------------+
+| GTFT     | Generous Tit-For-Tat | :code:`GenerousTitForTat`|
++----------+----------------------+--------------------------+
+| TFT      | TitForTat            | :code:`TitForTat`        |
++----------+----------------------+--------------------------+
+| TF2T     | Tit-For-Two-Tats     | :code:`TitFor2Tats`      |
++----------+----------------------+--------------------------+
+| WSLS     | Win-Stay-Lose-Shift  | :code:`WinStayLoseShift` |
++----------+----------------------+--------------------------+
+| RANDOM   | Random               | :code:`Random`           |
++----------+----------------------+--------------------------+
 
 ALLC and TFT are defined above. The remaining classical strategies are defined
 below. The tournament also included two Zero Determinant strategies, both implemented in the library. The full table of strategies and results is
@@ -705,15 +707,36 @@ HARD_JOSS as described above is implemented in the library as `Joss` and is
 the same as the Joss strategy from `Axelrod's first tournament`_.
 
 
-**Not implemented?**: HARD_MAJO
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+HARD_MAJO
+^^^^^^^^^
 
-HARD_MAJO is not defined in [S&P, PNAS 2012] and is presumably the same as "Hard
-Majority", defined as follows: the strategy defects on the first move, defects
+HARD_MAJO is not defined in [S&P, PNAS 2012] and is presumably the same as "Go by Majority", defined as follows: the strategy defects on the first move, defects
 if the number of defections of the opponent is greater than or equal to the
 number of times it has cooperated, and otherwise cooperates,
 
 *HARD_MAJO came 13th in average score and 5th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+HARD_MAJO is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.GoByMajority()  # Create a HARD_TFT player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p2.history
+    print p1.history
+
+which gives (for this seed)::
+
+
+    ['D', 'C', 'C', 'D', 'D']
+    ['C', 'D', 'C', 'C', 'C']
+
+we see that following the third round (at which point the opponent has cooperated a lot), :code:`GoByMajority` cooperates.
 
 HARD_TFT
 ^^^^^^^^
