@@ -435,9 +435,10 @@ Work in progress.
 Stewart and Plotkin's Tournament (2012)
 ---------------------------------------
 
-In 2012, Alexander Stewart and Joshua Plotkin ran a variant of Axelrod's
-tournament with 19 strategies to test the effectiveness of the then newly
-discovered Zero-Determinant strategies.
+In 2012, `Alexander Stewart and Joshua Plotkin
+<http://www.pnas.org/content/109/26/10134.full.pdf>`_ ran a variant of
+Axelrod's tournament with 19 strategies to test the effectiveness of the then
+newly discovered Zero-Determinant strategies.
 
 The paper is identified as *doi: 10.1073/pnas.1208087109* and referred to as
 [S&P, PNAS 2012] below. Unfortunately the details of the tournament and the
@@ -482,8 +483,25 @@ The following classical strategies are included in the library:
 ALLC, ALLD, TFT and RANDOM are defined above. The remaining classical
 strategies are defined below. The tournament also included two Zero Determinant
 strategies, both implemented in the library. The full table of strategies and
-results is [available
-online](http://www.pnas.org/content/109/26/10134/F1.expansion.html).
+results is `available
+online <http://www.pnas.org/content/109/26/10134/F1.expansion.html)>`_.
+
+Memory one strategies
+^^^^^^^^^^^^^^^^^^^^^
+
+In 2012 `Press and Dyson <http://www.pnas.org/content/109/26/10409.full.pdf>`_
+showed interesting results with regards to so called memory one strategies.
+Stewart and Poltkin implemented a number of these. A memory one strategy is
+simply a probabilistic strategy that is defined by 4 parameters.  These four
+parameters dictate the probability of cooperating given 1 of 4 possible
+outcomes of the previous round:
+
+- :math:`P(C\,|\,CC) = p_1`
+- :math:`P(C\,|\,CD) = p_2`
+- :math:`P(C\,|\,DC) = p_3`
+- :math:`P(C\,|\,DD) = p_4`
+
+The memory one strategy class is used to define a number of strategies below.
 
 GTFT
 ^^^^
