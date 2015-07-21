@@ -7,7 +7,7 @@ class Grumpy(Player):
     when the opponent co-operates."""
 
     name = 'Grumpy'
-    memoryone = False  # Depends on internal memory.
+    memory_depth = float('inf')  # Depends on internal memory.
 
     def __init__(self, starting_state='Nice', grumpy_threshold=10,
                  nice_threshold=-10):
