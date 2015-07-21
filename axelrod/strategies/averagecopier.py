@@ -8,7 +8,8 @@ class AverageCopier(Player):
     name = 'Average Copier'
     memory_depth = float('inf')  # Long memory
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         """Randomly picks a strategy (not affected by history)."""
         if len(opponent.history) == 0:
             return random.choice(['C', 'D'])
@@ -25,7 +26,8 @@ class NiceAverageCopier(Player):
     name = 'Nice Average Copier'
     memory_depth = float('inf')  # Long memory
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         """Randomly picks a strategy (not affected by history)."""
         if len(opponent.history) == 0:
             return 'C'

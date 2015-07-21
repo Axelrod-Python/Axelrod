@@ -9,7 +9,8 @@ class TitForTat(Player):
     name = 'Tit For Tat'
     memory_depth = 1  # Four-Vector = (1.,0.,1.,0.)
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return 'D' if opponent.history[-1:] == ['D'] else 'C'
 
 
@@ -19,7 +20,8 @@ class TitFor2Tats(Player):
     name = "Tit For 2 Tats"
     memory_depth = 2  # Long memory, memory-2
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return 'D' if opponent.history[-2:] == ['D', 'D'] else 'C'
 
 
@@ -29,7 +31,8 @@ class TwoTitsForTat(Player):
     name = "Two Tits For Tat"
     memory_depth = 2  # Long memory, memory-2
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return 'D' if 'D' in opponent.history[-2:] else 'C'
 
 
@@ -43,7 +46,8 @@ class Bully(Player):
     name = "Bully"
     memory_depth = 1  # Four-Vector = (0.,1.,0.,1.)
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return 'C' if opponent.history[-1:] == ['D'] else 'D'
 
 
@@ -69,7 +73,8 @@ class SuspiciousTitForTat(Player):
     name = "Suspicious Tit For Tat"
     memory_depth = 1  # Four-Vector = (1.,0.,1.,0.)
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return 'C' if opponent.history[-1:] == ['C'] else 'D'
 
 
@@ -80,13 +85,14 @@ class AntiTitForTat(Player):
     name = 'Anti Tit For Tat'
     memory_depth = 1  # Four-Vector = (0.,1.,0.,1.)
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         return 'D' if opponent.history[-1:] == ['C'] else 'C'
 
 
 class Shubik(Player):
     """
-    Plays like Tit-For-Tat with the following modification. After 
+    Plays like Tit-For-Tat with the following modification. After
     each retaliation, the number of rounds that Shubik retaliates
     increases by 1.
     """
@@ -146,7 +152,8 @@ class HardTitForTat(Player):
     name = 'Hard Tit For Tat'
     memory_depth = 3  # memory-three
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         # Cooperate on the first move
         if not opponent.history:
             return 'C'
@@ -163,7 +170,8 @@ class HardTitFor2Tats(Player):
     name = "Hard Tit For 2 Tats"
     memory_depth = 3  # memory-three
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         # Cooperate on the first move
         if not opponent.history:
             return 'C'
