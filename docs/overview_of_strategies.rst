@@ -863,3 +863,8 @@ Backstabber
 ^^^^^^^^^^^
 
 A variation of Fool Me Once, this strategy will also defect on the final 2 turns of the round unconditionally.
+
+Aggravater
+^^^^^^^^^^^
+
+This strategy begins by defecting and then will cooperate until the opponent defects. After the opponent defects it will defect unconditionally. Essentially Grudger, but begins by defecting.
