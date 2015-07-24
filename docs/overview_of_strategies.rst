@@ -456,7 +456,7 @@ Here is how this is implemented in the library::
    print p1.history
    print p2.history
 
-which gives::
+which gives (for a particular random seed)::
 
     ['D', 'C', 'D', 'C', 'C', 'C', 'C', 'D', 'C', 'D']
     ['D', 'D', 'C', 'C', 'C', 'C', 'D', 'C', 'D', 'C']
