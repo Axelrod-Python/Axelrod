@@ -1,5 +1,5 @@
 """
-Compute the principle eigenvector of a matrix using power iteration.
+Compute the principal eigenvector of a matrix using power iteration.
 
 See also numpy.linalg.eig which calculates all the eigenvalues and
 eigenvectors.
@@ -8,9 +8,10 @@ eigenvectors.
 import numpy
 
 
-def normalize(nvec):
-    """Normalizes the given numpy array."""
+def normalise(nvec):
+    """Normalises the given numpy array."""
     return nvec / numpy.sqrt(numpy.dot(nvec, nvec))
+
 
 def squared_error(vector_1, vector_2, sqrt=True):
     """Computes the squared error between two numpy arrays."""
@@ -19,6 +20,7 @@ def squared_error(vector_1, vector_2, sqrt=True):
     if sqrt:
         return numpy.sqrt(s)
     return s
+
 
 def power_iteration(mat, initial=None):
     """
@@ -38,15 +40,16 @@ def power_iteration(mat, initial=None):
 
     if initial is None:
         size = mat.shape[0]
-        initial = normalize(numpy.ones(size))
+        initial = normalise(numpy.ones(size))
     vec = initial
     while True:
-        vec = normalize(numpy.dot(mat, vec))
+        vec = normalise(numpy.dot(mat, vec))
         yield vec
 
-def principle_eigenvector(mat, maximum_iterations=None, max_error=1e-8):
+
+def principal_eigenvector(mat, maximum_iterations=None, max_error=1e-8):
     """
-    Computes the (normalized) principle eigenvector of the given matrix.
+    Computes the (normalised) principal eigenvector of the given matrix.
 
     Params
     ------
@@ -57,7 +60,7 @@ def principle_eigenvector(mat, maximum_iterations=None, max_error=1e-8):
     maximum_iterations: int, None
         The maximum number of iterations of the approximation
     max_error: float, 1e-8
-        Exit criterion -- error threshold of the difference of successive steps 
+        Exit criterion -- error threshold of the difference of successive steps
     """
 
     mat_ = numpy.matrix(mat)
@@ -75,7 +78,8 @@ def principle_eigenvector(mat, maximum_iterations=None, max_error=1e-8):
             break
         last = vector
     # Compute the eigenvalue (Rayleigh quotient)
-    eigenvalue = numpy.dot(numpy.dot(mat_, vector), vector) / numpy.dot(vector, vector)
+    eigenvalue = numpy.dot(
+        numpy.dot(mat_, vector), vector) / numpy.dot(vector, vector)
     # Liberate the eigenvalue from numpy
     eigenvalue = float(eigenvalue)
     return (vector, eigenvalue)
