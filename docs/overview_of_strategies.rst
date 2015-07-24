@@ -63,7 +63,7 @@ We see that Tit for Tat cooperated every time, let us see how things change
 when it plays against a player that always defects::
 
    p1 = axelrod.TitForTat()  # Create a player that plays tit for tat
-   p3 = axelrod.Defector()  # Create a player that always cooperates
+   p3 = axelrod.Defector()  # Create a player that always defects
    for round in range(5):
        p1.play(p3)
    print p1.history
@@ -852,4 +852,14 @@ This strategy is not unambiguously defined in [S&P, PNAS 2012].
 Strategies implemented in the module
 ------------------------------------
 
-Work in progress.
+There are several original strategies which have been created as part of this project and have never (to our knowledge) appeared in previous tournaments.
+
+Fool Me Once
+^^^^^^^^^^^
+
+This strategy begins by cooperating but will defect if at any point the opponent has defected more than once.
+
+Backstabber
+^^^^^^^^^^^
+
+A variation of Fool Me Once, this strategy will also defect on the final 2 turns of the round unconditionally.
