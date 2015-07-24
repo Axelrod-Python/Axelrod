@@ -9,7 +9,7 @@ cp strategies_boxplot.png assets/strategies_boxplot_noise_5.png
 
 # Running noiseless tournament
 echo "-- Running Axelrod, regenerating cache, results, and figures"
-./run_axelrod --rc --xc -p 0
+./run_axelrod --rc -p 0
 # Copy the results and figures over to assets
 cp *.csv assets/
 cp *.png assets/
