@@ -114,11 +114,15 @@ class ForgetfulFoolMeOnce(Player):
 
 
 class BackStabber(FoolMeOnce):
-
+    """
+    A variation of Fool Me Once, this strategy will also defect
+    on the final 2 turns of the round unconditionally.
+    """
+    
     name = 'BackStabber'
 
     def strategy(self, opponent):
-        if len(opponent.history) > 196:
+        if len(opponent.history) > 197:
             return 'D'
         else:
             return super(BackStabber, self).strategy(opponent)
