@@ -22,7 +22,7 @@ class TestGoByMajority(TestPlayer):
         If opponent cooperates at least as often as they defect then the player cooperates
         """
         self.responses_test([C, D, D, D], [D, D, C, C], [C])
-        self.responses_test([C, C, D, D], [D, D, C, C, D], [D])
+        self.responses_test([C, C, D, D, C], [D, D, C, C, D], [D])
 
 def factory_TestGoByRecentMajority(L):
 

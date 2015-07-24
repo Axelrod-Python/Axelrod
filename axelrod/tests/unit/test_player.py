@@ -1,11 +1,14 @@
+import copy
 import random
 import unittest
 import axelrod
 
 
+C, D = 'C', 'D'
+
+
 def cooperate(self):
     return 'C'
-
 
 def defect(self):
     return 'D'
@@ -43,7 +46,20 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p1.history[0], 'D')
         self.assertEqual(p2.history[0], 'D')
 
-C, D = 'C', 'D'
+
+class MockPlayer(axelrod.Player):
+    """Creates a mock player that enforces a particular next move for a given
+    player."""
+
+    def __init__(self, player, move):
+        # Need to retain history for opponents that examine opponents history
+        # Do a deep copy just to be safe
+        self.history = copy.copy(player.history)
+        self.move = move
+
+    def strategy(self, opponent):
+        # Just return the saved move
+        return self.move
 
 
 def test_four_vector(test_class, expected_dictionary):
@@ -56,7 +72,6 @@ def test_four_vector(test_class, expected_dictionary):
         test_class.assertAlmostEqual(
             P1._four_vector[key], expected_dictionary[key])
 
-
 def test_responses(test_class, P1, P2, history_1, history_2,
                    responses, random_seed=None):
     """Test responses to arbitrary histories. Used for the the following tests
@@ -67,7 +82,15 @@ def test_responses(test_class, P1, P2, history_1, history_2,
     by player one to test."""
     if random_seed:
         random.seed(random_seed)
-    P1.history, P2.history = history_1, history_2
+    # Force the histories, In case either history is impossible or if some 
+    # internal state needs to be set, actually submit to moves to the strategy
+    # method. Still need to append history manually.
+    for h1, h2 in zip(history_1, history_2):
+        P1.strategy(MockPlayer(P2, h2))
+        P2.strategy(MockPlayer(P1, h1))
+        P1.history.append(h1)
+        P2.history.append(h2)
+    # Run the tests
     for response in responses:
         test_class.assertEqual(P1.strategy(P2), response)
 

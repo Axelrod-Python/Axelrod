@@ -81,5 +81,5 @@ class TestFeld(TestPlayer):
         # Test beyond 200 rounds
         history_1 = [C] * 200
         history_2 = [C] * 200
-        self.responses_test(history_1, history_2, [C, D, D, C], random_seed=1)
-        self.responses_test(history_1, history_2, [C, C, D, C], random_seed=50)
+        self.responses_test(history_1, history_2, [C, C, D, D], random_seed=1)
+        self.responses_test(history_1, history_2, [D, D, D, D], random_seed=50)
