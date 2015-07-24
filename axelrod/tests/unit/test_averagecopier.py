@@ -24,7 +24,8 @@ class TestAverageCopier(TestPlayer):
         """
         Tests that if opponent has played all C then player chooses C
         """
-        self.responses_test([], [C, C, C, C], [C, C, C], random_seed=5)
+        self.responses_test([C, C, C, C], [C, C, C, C], [C, C, C],
+                            random_seed=5)
 
     def test_when_opponent_all_Ds(self):
         """
@@ -46,10 +47,12 @@ class TestNiceAverageCopier(TestPlayer):
         """
         Tests that if opponent has played all C then player chooses C
         """
-        self.responses_test([], [C, C, C, C], [C, C, C], random_seed=5)
+        self.responses_test([C, C, C, C], [C, C, C, C], [C, C, C],
+                            random_seed=5)
 
     def test_when_opponent_all_Ds(self):
         """
         Tests that if opponent has played all D then player chooses D
         """
-        self.responses_test([], [D, D, D, D], [D, D, D], random_seed=5)
+        self.responses_test([D, D, D, D], [D, D, D, D], [D, D, D],
+                            random_seed=5)
