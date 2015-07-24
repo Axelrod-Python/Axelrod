@@ -70,7 +70,12 @@ class RoundRobin(object):
                 # There are many possible keys to cache by, but perhaps the
                 # most versatile is a tuple with the classes of both players.
                 key = (cl1, cl2)
-                if (self._noise or p1.stochastic or p2.stochastic or key not in self.deterministic_cache):
+                play_required = (
+                    self._noise or
+                    p1.stochastic or
+                    p2.stochastic or
+                    key not in self.deterministic_cache)
+                if play_required:
                     turn = 0
                     p1.reset()
                     p2.reset()
@@ -81,7 +86,11 @@ class RoundRobin(object):
                     cooperation_rates = (
                         self._calculate_cooperation(p1),
                         self._calculate_cooperation(p2))
-                    if not self._noise and self.cache_mutable and not (p1.stochastic or p2.stochastic):
+                    cache_update_required = (
+                        not self._noise and
+                        self.cache_mutable and
+                        not (p1.stochastic or p2.stochastic))
+                    if cache_update_required:
                         self.deterministic_cache[key] = scores
                 else:
                     scores = self.deterministic_cache[key]
