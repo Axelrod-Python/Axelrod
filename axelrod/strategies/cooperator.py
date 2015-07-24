@@ -28,3 +28,17 @@ class TrickyCooperator(Player):
         if 'D' not in opponent.history[-10:] and opponent.history[-3:] == ['C']*3:
             return 'D'
         return 'C'
+
+
+class Aggravater(Player):
+    """The worst possible strategy?
+    Defects twice at the beginning, followed by endless cooperation."""
+
+    name = 'Aggravater'
+    memory_depth = 0
+
+    @staticmethod
+    def strategy(opponent):
+        if len(opponent.history) < 2:
+            return 'D'
+        return 'C'

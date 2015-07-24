@@ -32,6 +32,7 @@ basic_strategies = [
 ]
 
 ordinary_strategies = [
+    Aggravater,
     AlternatorHunter,
     Appeaser,
     AntiTitForTat,
