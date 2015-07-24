@@ -18,8 +18,8 @@ class TestTitForTat(TestPlayer):
     def test_effect_of_strategy(self):
         """Repeats last action of opponent history."""
         self.markov_test([C, D, C, D])
-        self.responses_test([C]*4, [C, C, C, C], [C])
-        self.responses_test([C]*5, [C, C, C, C, D], [D])
+        self.responses_test([C] * 4, [C, C, C, C], [C])
+        self.responses_test([C] * 5, [C, C, C, C, D], [D])
 
 
 class TestTitFor2Tats(TestPlayer):
