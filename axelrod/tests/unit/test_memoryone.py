@@ -156,3 +156,18 @@ class TestJoss(TestPlayer):
     def test_strategy(self):
         self.responses_test([C], [C], [D, D, C, C], random_seed=2)
         self.responses_test([C], [D], [D, D, D, D])
+
+
+class TestSoftJoss(TestPlayer):
+
+    name = "Soft Joss"
+    player = axelrod.SoftJoss
+    stochastic = True
+
+    def test_four_vector(self):
+        expected_dictionary = {(C, C): 1., (C, D): 0, (D, C): 0.9, (D, D): 0}
+        test_four_vector(self, expected_dictionary)
+
+    def test_strategy(self):
+        self.responses_test([C], [C], [C, C, C, C], random_seed=2)
+        self.responses_test([C], [D], [D, D, D, D], random_seed=5)
