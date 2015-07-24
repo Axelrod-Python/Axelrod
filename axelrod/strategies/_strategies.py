@@ -86,6 +86,7 @@ ordinary_strategies = [
     SneakyTitForTat,
     StochasticWSLS,
     SuspiciousTitForTat,
+    Tester,
     TitFor2Tats,
     TrickyCooperator,
     TrickyDefector,
