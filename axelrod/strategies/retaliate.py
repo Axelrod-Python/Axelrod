@@ -6,15 +6,16 @@ class Retaliate(Player):
     A player starts by cooperating but will retaliate once the opponent
     has won more than 10 percent times the number of defections the player has.
     """
-    retaliation_threshold = 0.1
-    memoryone = False  # Long memory
 
-    def __init__(self):
+    memory_depth = float('inf')  # Long memory
+
+    def __init__(self, retaliation_threshold=0.1):
         """
         Uses the basic init from the Player class, but also set the name to
         include the retaliation setting.
         """
         Player.__init__(self)
+        self.retaliation_threshold = retaliation_threshold
         self.name = (
             'Retaliate (' +
             str(self.retaliation_threshold) + ')')
@@ -32,15 +33,23 @@ class Retaliate(Player):
 
 
 class Retaliate2(Retaliate):
-    """ :code:`Retaliate` player with a threshold of 8 percent.
     """
-    retaliation_threshold = 0.08
+    Retaliate player with a threshold of 8 percent.
+    """
+
+    def __init__(self, retaliation_threshold=0.08):
+        super(self.__class__, self).__init__(
+            retaliation_threshold=retaliation_threshold)
 
 
 class Retaliate3(Retaliate):
-    """ :code:`Retaliate` player with a threshold of 5 percent.
     """
-    retaliation_threshold = 0.05
+    Retaliate player with a threshold of 5 percent.
+    """
+
+    def __init__(self, retaliation_threshold=0.05):
+        super(self.__class__, self).__init__(
+            retaliation_threshold=retaliation_threshold)
 
 
 class LimitedRetaliate(Player):
@@ -50,18 +59,20 @@ class LimitedRetaliate(Player):
     the opponent 10 times more often that it has lost or it reaches the
     retaliation limit (20 defections).
     """
-    retaliation_limit = 20
-    retaliation_threshold = 0.1
-    retaliating = False
-    retaliation_count = 0
-    memoryone = False  # Long memory
 
-    def __init__(self):
+    memory_depth = float('inf')  # Long memory
+
+    def __init__(self, retaliation_threshold = 0.1, retaliation_limit = 20,):
         """
         Uses the basic init from the Player class, but also set the name to
         include the retaliation setting.
         """
         Player.__init__(self)
+        self.retaliating = False
+        self.retaliation_count = 0
+        self.retaliation_threshold = retaliation_threshold
+        self.retaliation_limit = retaliation_limit
+
         self.name = (
             'Limited Retaliate (' +
             str(self.retaliation_threshold) +
@@ -73,6 +84,7 @@ class LimitedRetaliate(Player):
         that I've done the same to him, retaliate by playing D but stop doing
         so once I've hit the retaliation limit.
         """
+
         history = zip(self.history, opponent.history)
         if history.count(('C', 'D')) > (
            history.count(('D', 'C')) * self.retaliation_threshold):
@@ -98,16 +110,24 @@ class LimitedRetaliate(Player):
 
 
 class LimitedRetaliate2(LimitedRetaliate):
-    """ :code:`LimitedRetaliate` player with a threshold of 8 percent and a
+    """
+    LimitedRetaliate player with a threshold of 8 percent and a
     retaliation limit of 15.
     """
-    retaliation_limit = 15
-    retaliation_threshold = 0.08
+
+    def __init__(self, retaliation_threshold=0.08, retaliation_limit=15):
+        super(self.__class__, self).__init__(
+            retaliation_threshold=retaliation_threshold,
+            retaliation_limit=retaliation_limit)
 
 
 class LimitedRetaliate3(LimitedRetaliate):
-    """ :code:`LimitedRetaliate` player with a threshold of 5 percent and a
+    """
+    LimitedRetaliate player with a threshold of 5 percent and a
     retaliation limit of 20.
     """
-    retaliation_limit = 20
-    retaliation_threshold = 0.05
+
+    def __init__(self, retaliation_threshold=0.05, retaliation_limit=20):
+        super(self.__class__, self).__init__(
+            retaliation_threshold=retaliation_threshold,
+            retaliation_limit=retaliation_limit)
