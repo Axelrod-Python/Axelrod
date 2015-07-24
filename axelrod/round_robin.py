@@ -1,3 +1,6 @@
+from __future__ import division
+
+
 class RoundRobin(object):
     """A class to define play a round robin game of players"""
 
@@ -24,6 +27,9 @@ class RoundRobin(object):
             s2 += score[1]
         return s1, s2
 
+    def _calculate_cooperation(self, player):
+        return player.history.count('C') / len(player.history)
+
     def _empty_matrix(self, rows, columns):
         return [[0 for j in range(columns)] for i in range(rows)]
 
@@ -40,6 +46,7 @@ class RoundRobin(object):
         """
 
         payoffs = self._empty_matrix(self.nplayers, self.nplayers)
+        cooperation = self._empty_matrix(self.nplayers, self.nplayers)
 
         for ip1 in range(self.nplayers):
 
@@ -70,10 +77,14 @@ class RoundRobin(object):
                         turn += 1
                         p1.play(p2, self._noise)
                     scores = self._calculate_scores(p1, p2)
+                    cooperation_rates = (
+                        self._calculate_cooperation(p1),
+                        self._calculate_cooperation(p2))
                     if not self._noise and self.cache_mutable and not (p1.stochastic or p2.stochastic):
                         self.deterministic_cache[key] = scores
                 else:
                     scores = self.deterministic_cache[key]
+                    cooperation_rates = (0, 0)
 
                 # For self-interactions we can take the average of the two sides, which
                 # should improve the averaging a bit.
@@ -83,6 +94,10 @@ class RoundRobin(object):
                     payoffs[ip1][ip2] = scores[0]
                     payoffs[ip2][ip1] = scores[1]
 
-                self.payoffs = payoffs
+                cooperation[ip1][ip2] = cooperation_rates[0]
+                cooperation[ip2][ip1] = cooperation_rates[1]
+
+        self.payoffs = payoffs
+        self.cooperation = cooperation
 
         return self.payoffs
