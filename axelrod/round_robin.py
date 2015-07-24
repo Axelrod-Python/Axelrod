@@ -36,11 +36,11 @@ class RoundRobin(object):
     def play(self):
         """Plays a round robin where each match lasts turns.
 
-        We cache scores for pairs of deterministic strategies, since the outcome will
-        always be the same.
+        We cache scores for pairs of deterministic strategies, since the
+        outcome will always be the same.
 
-        Notice also that we need to handle self-interactions with some special exceptions
-        due to the way gameplay is coded within Player.
+        Notice also that we need to handle self-interactions with some special
+        exceptions due to the way gameplay is coded within Player.
 
         Returns the total payoff matrix.
         """
@@ -55,9 +55,10 @@ class RoundRobin(object):
 
             for ip2 in range(ip1, self.nplayers):
 
-                # For self-interactions we need to create an additional object. otherwise
-                # the play method in Player will write twice to the same history, effectively
-                # doubling the score and causing historic schizophrenia.
+                # For self-interactions we need to create an additional object.
+                # Otherwise the play method in Player will write twice to the
+                # same history, effectively doubling the score and causing
+                # historic schizophrenia.
                 if ip1 == ip2:
                     p2 = cl1()
                     p2.tournament_length = self.turns
@@ -86,8 +87,8 @@ class RoundRobin(object):
                     scores = self.deterministic_cache[key]
                     cooperation_rates = (0, 0)
 
-                # For self-interactions we can take the average of the two sides, which
-                # should improve the averaging a bit.
+                # For self-interactions we can take the average of the two
+                # sides, which should improve the averaging a bit.
                 if not self._noise and ip1 == ip2:
                     payoffs[ip1][ip2] = 0.5 * (scores[0] + scores[1])
                 else:
