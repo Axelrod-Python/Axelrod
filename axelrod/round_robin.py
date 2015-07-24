@@ -24,6 +24,12 @@ class RoundRobin(object):
             p1.stochastic or
             p2.stochastic)
 
+    def _cache_update_required(self, p1, p2):
+        return (
+            not self._noise and
+            self.cache_mutable and
+            not (p1.stochastic or p2.stochastic))
+
     def _calculate_scores(self, p1, p2):
         """Calculates the score for two players based their history"""
         s1, s2 = 0, 0
@@ -90,11 +96,7 @@ class RoundRobin(object):
                     cooperation_rates = (
                         self._calculate_cooperation(p1),
                         self._calculate_cooperation(p2))
-                    cache_update_required = (
-                        not self._noise and
-                        self.cache_mutable and
-                        not (p1.stochastic or p2.stochastic))
-                    if cache_update_required:
+                    if self._cache_update_required(p1, p2):
                         self.deterministic_cache[key] = scores
                 else:
                     scores = self.deterministic_cache[key]
