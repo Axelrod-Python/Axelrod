@@ -24,6 +24,9 @@ class RoundRobin(object):
             s2 += score[1]
         return s1, s2
 
+    def _empty_matrix(self, rows, columns):
+        return [[0 for j in range(columns)] for i in range(rows)]
+
     def play(self):
         """Plays a round robin where each match lasts turns.
 
@@ -36,7 +39,7 @@ class RoundRobin(object):
         Returns the total payoff matrix.
         """
 
-        payoffs = [[0 for j in range(self.nplayers)] for i in range(self.nplayers)]
+        payoffs = self._empty_matrix(self.nplayers, self.nplayers)
 
         for ip1 in range(self.nplayers):
 
@@ -80,4 +83,6 @@ class RoundRobin(object):
                     payoffs[ip1][ip2] = scores[0]
                     payoffs[ip2][ip1] = scores[1]
 
-        return payoffs
+                self.payoffs = payoffs
+
+        return self.payoffs
