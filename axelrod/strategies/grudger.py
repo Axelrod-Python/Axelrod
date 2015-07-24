@@ -82,3 +82,17 @@ class Davis(Player):
         if 'D' in opponent.history:
             return 'D'
         return 'C'
+
+
+class Aggravater(Player):
+    """Grudger, except that it defects on the first turn"""
+
+    name = 'Aggravater'
+    memory_depth = float('inf')
+
+    def strategy(self, opponent):
+        if len(self.history) == 0:
+            return 'D'
+        elif 'D' in opponent.history:
+            return 'D'
+        return 'C'

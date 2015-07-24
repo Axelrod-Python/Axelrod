@@ -28,18 +28,3 @@ class TrickyCooperator(Player):
         if 'D' not in opponent.history[-10:] and opponent.history[-3:] == ['C']*3:
             return 'D'
         return 'C'
-
-
-class Aggravater(Player):
-    """Defects once at the beginning.
-    If the opponent then defects at any point it will defect forever. Else Cooperate"""
-
-    name = 'Aggravater'
-    memory_depth = float('inf')
-
-    def strategy(self, opponent):
-        if len(self.history) == 0:
-            return 'D'
-        elif 'D' in opponent.history:
-            return 'D'
-        return 'C'
