@@ -272,12 +272,12 @@ such as WinStayLoseShift that are more robust in the presence of noise.
 
 Adding noise makes a dramatic difference in the pairwise payoffs (5% on right):
 
-.. |pairwise_no_noise| image:: _static/usage/strategies_payoff.svg
+.. |pairwise_no_noise| image:: ../assets/strategies_payoff.png
    :width: 75%
    :align: middle
    :alt: Pairwise payoffs without noise
 
-.. |pairwise_5_noise| image:: _static/usage/strategies_payoff_noise_5.svg
+.. |pairwise_5_noise| image:: ../assets/strategies_payoff_noise_5.png
    :width: 75%
    :align: middle
    :alt: Pairwise payoffs with 5% noise
@@ -288,12 +288,12 @@ Adding noise makes a dramatic difference in the pairwise payoffs (5% on right):
 
 and accordingly to the ranking of strategies overall:
 
-.. |boxplot_no_noise| image:: _static/usage/strategies_boxplot.svg
+.. |boxplot_no_noise| image:: ../assets/strategies_boxplot.png
    :width: 75%
    :align: middle
    :alt: Strategy performance without noise
 
-.. |boxplot_5_noise| image:: _static/usage/strategies_boxplot_noise_5.svg
+.. |boxplot_5_noise| image:: ../assets/strategies_boxplot_noise_5.png
    :width: 75%
    :align: middle
    :alt: Strategy performance with 5% noise
