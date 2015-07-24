@@ -90,8 +90,9 @@ class Aggravater(Player):
     name = 'Aggravater'
     memory_depth = float('inf')
 
-    def strategy(self, opponent):
-        if len(self.history) == 0:
+    @staticmethod
+    def strategy(opponent):
+        if len(opponent.history) == 0:
             return 'D'
         elif 'D' in opponent.history:
             return 'D'
