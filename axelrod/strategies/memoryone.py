@@ -173,6 +173,7 @@ class Joss(MemoryOnePlayer):
         four_vector = (0.9, 0, 1, 0)
         super(self.__class__, self).__init__(four_vector)
 
+
 class SoftJoss(MemoryOnePlayer):
     """
     Defects with probability 0.9 when the opponent defects, otherwise 
