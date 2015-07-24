@@ -432,6 +432,36 @@ Axelrod's second tournament
 
 Work in progress.
 
+TESTER
+^^^^^^
+
+This strategy is a TFT variant that attempts to exploit certain strategies. It
+defects on the first move. If the opponent ever defects, TESTER 'apologies' by
+cooperating and then plays TFT for the rest of the game. Otherwise TESTER
+alternates cooperation and defection.
+
+*This strategy came 46th in Axelrod's second tournament.*
+
+Implementation
+**************
+
+Here is how this is implemented in the library::
+
+   import axelrod
+   p1 = axelrod.Tester()  # Create a Tester player
+   p2 = axelrod.Random()  # Create a player that plays randomly
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+   print p2.history
+
+which gives (for a particular random seed)::
+
+    ['D', 'C', 'D', 'C', 'C', 'C', 'C', 'D', 'C', 'D']
+    ['D', 'D', 'C', 'C', 'C', 'C', 'D', 'C', 'D', 'C']
+
+
 Stewart and Plotkin's Tournament (2012)
 ---------------------------------------
 
