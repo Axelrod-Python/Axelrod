@@ -31,14 +31,15 @@ class TrickyCooperator(Player):
 
 
 class Aggravater(Player):
-    """The worst possible strategy?
-    Defects twice at the beginning, followed by endless cooperation."""
+    """Defects once at the beginning.
+    If the opponent then defects at any point it will defect forever. Else Cooperate"""
 
     name = 'Aggravater'
-    memory_depth = 0
+    memory_depth = float('inf')
 
-    @staticmethod
-    def strategy(opponent):
-        if len(opponent.history) < 2:
+    def strategy(self, opponent):
+        if len(self.history) == 0:
+            return 'D'
+        elif 'D' in opponent.history:
             return 'D'
         return 'C'
