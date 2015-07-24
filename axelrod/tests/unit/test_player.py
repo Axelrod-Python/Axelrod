@@ -48,14 +48,18 @@ class TestPlayerClass(unittest.TestCase):
 
 
 class MockPlayer(axelrod.Player):
+    """Creates a mock player that enforces a particular next move for a given
+    player."""
 
     def __init__(self, player, move):
+        # Need to retain history for opponents that examine opponents history
         # Do a deep copy just to be safe
         self.history = copy.copy(player.history)
         self.history = player.history
         self.move = move
 
     def strategy(self, opponent):
+        # Just return the saved move
         return self.move
 
 
