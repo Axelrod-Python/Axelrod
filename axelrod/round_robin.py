@@ -18,6 +18,12 @@ class RoundRobin(object):
         self.cache_mutable = cache_mutable
         self._noise = noise
 
+    def _stochastic_interaction(self, p1, p2):
+        return (
+            self._noise or
+            p1.stochastic or
+            p2.stochastic)
+
     def _calculate_scores(self, p1, p2):
         """Calculates the score for two players based their history"""
         s1, s2 = 0, 0
@@ -71,9 +77,7 @@ class RoundRobin(object):
                 # most versatile is a tuple with the classes of both players.
                 key = (cl1, cl2)
                 play_required = (
-                    self._noise or
-                    p1.stochastic or
-                    p2.stochastic or
+                    self._stochastic_interaction(p1, p2) or
                     key not in self.deterministic_cache)
                 if play_required:
                     turn = 0
