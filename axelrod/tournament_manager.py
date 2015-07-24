@@ -28,7 +28,8 @@ class TournamentManager(object):
         if load_cache and not save_cache:
             self.load_cache = self._load_cache_from_file(cache_file)
 
-    def one_player_per_strategy(self, strategies):
+    @staticmethod
+    def one_player_per_strategy(strategies):
         return [strategy() for strategy in strategies]
 
     def add_tournament(self, name, players, game=None, turns=200,
@@ -138,7 +139,8 @@ class TournamentManager(object):
             self._output_directory,
             file_name + '.' + file_extension)
 
-    def _save_plot(self, figure, file_name, dpi=400):
+    @staticmethod
+    def _save_plot(figure, file_name, dpi=400):
         figure.savefig(file_name, bbox_inches='tight', dpi=dpi)
         figure.clf()
         plt.close(figure)

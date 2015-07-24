@@ -8,7 +8,7 @@ class OnceBitten(Player):
     """
 
     name = 'Once Bitten'
-    memoryone = False  # Long memory
+    memory_depth = float('inf')  # Long memory
 
     def __init__(self):
         """
@@ -56,7 +56,7 @@ class FoolMeOnce(Player):
     """
 
     name = 'Fool Me Once'
-    memoryone = False  # Long memory
+    memory_depth = float('inf')  # Long memory
 
     def __init__(self):
         """
@@ -87,9 +87,9 @@ class ForgetfulFoolMeOnce(Player):
     """
 
     name = 'Forgetful Fool Me Once'
-    memoryone = False  # Long memory
+    memory_depth = float('inf')  # Long memory
 
-    def __init__(self, forget_probability=0.1):
+    def __init__(self, forget_probability = 0.05):
         super(ForgetfulFoolMeOnce, self).__init__()
         self.D_count = 0
         self._initial = 'C'

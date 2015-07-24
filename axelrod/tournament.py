@@ -97,7 +97,8 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, payoffs_list):
+    @staticmethod
+    def _process_done_queue(workers, done_queue, payoffs_list):
         stops = 0
         while stops < workers:
             payoffs = done_queue.get()
