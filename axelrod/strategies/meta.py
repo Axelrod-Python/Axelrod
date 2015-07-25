@@ -85,7 +85,7 @@ class MetaWinner(MetaPlayer):
 
     def __init__(self, team=None):
 
-        # The default is to used all strategies available, but we need to import the list
+        # The default is to use all strategies available, but we need to import the list
         # at runtime, since _strategies import also _this_ module before defining the list.
         if team:
             self.team = team
