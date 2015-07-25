@@ -2,6 +2,7 @@ from axelrod import Player
 
 
 class BackStabber(Player):
+
     """
     Forgives the first 3 defections but on the fourth
     will defect forever. Defects after the 198th round unconditionally.
@@ -36,6 +37,7 @@ class BackStabber(Player):
 
 
 class DoubleCrosser(Player):
+
     """
     Forgives the first 3 defections but on the fourth
     will defect forever. If the opponent did not defect
@@ -65,11 +67,8 @@ class DoubleCrosser(Player):
             self.D_count += 1
         if len(opponent.history) < 180:
             if len(opponent.history) > (cutoff):
-                firstelements = []
-                for i in range(1, cutoff + 1):
-                    firstelements.append(opponent.history[i - 1])
-                if 'D' not in firstelements:
-                    if opponent.history[-2:] != ['D', 'D']:
+                if 'D' not in opponent.history[:cutoff + 1]:
+                    if opponent.history[-2:] != ['D', 'D']:  # Fail safe
                         return 'C'
         if self.D_count > 3:
             return 'D'
