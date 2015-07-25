@@ -4,7 +4,7 @@ from axelrod import Player
 class BackStabber(Player):
     """
     Forgives the first 3 defections but on the fourth
-    will defect forever. Defects on round 198 and 199 unconditionally.
+    will defect forever. Defects after the 198th round unconditionally.
     """
 
     name = 'BackStabber'
