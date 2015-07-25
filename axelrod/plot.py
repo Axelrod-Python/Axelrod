@@ -55,7 +55,7 @@ class Plot(object):
             self._boxplot_xticks_locations,
             self._boxplot_xticks_labels,
             rotation=90)
-        plt.tick_params(axis='both', which='both', labelsize=8)
+        plt.tick_params(axis='both', which='both', labelsize=7)
         plt.title(self._boxplot_title)
         return figure
 
@@ -70,7 +70,7 @@ class Plot(object):
         plt.yticks(range(self.result_set.nplayers))
         ax.set_xticklabels(self.result_set.ranked_names, rotation=90)
         ax.set_yticklabels(self.result_set.ranked_names)
-        plt.tick_params(axis='both', which='both', labelsize=7)
+        plt.tick_params(axis='both', which='both', labelsize=6)
         # Make the colorbar match up with the plot
         divider = make_axes_locatable(plt.gca())
         cax = divider.append_axes("right", "5%", pad="3%")
@@ -87,7 +87,7 @@ class Plot(object):
         pops = [[populations[iturn][ir] for iturn in turns] for ir in self.result_set.ranking]
         ax.stackplot(turns, *pops)
 
-        ax.yaxis.tick_right()
+        ax.yaxis.tick_left()
         ax.yaxis.set_label_position("right")
         ax.yaxis.labelpad = 25.0
 
@@ -99,9 +99,9 @@ class Plot(object):
         trans = transforms.blended_transform_factory(ax.transAxes, ax.transData)
         ticks = []
         for i, n in enumerate(self.result_set.ranked_names):
-            x = -0.02
+            x = -0.01
             y = (i + 0.5) * 1.0 / self.result_set.nplayers
-            ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False, va='center', ha='right', fontsize=8)
+            ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False, va='center', ha='right', fontsize=5)
             ticks.append(y)
         ax.set_yticks(ticks)
         ax.tick_params(direction='out')
