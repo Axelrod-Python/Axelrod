@@ -116,7 +116,7 @@ class ForgetfulFoolMeOnce(Player):
 class BackStabber(Player):
     """
     A variation of Fool Me Once, this strategy will
-    wait for the third defection and also defect on
+    wait for the fourth defection and also defect on
     rounds 198 and 199 unconditionally.
     """
 
@@ -139,7 +139,7 @@ class BackStabber(Player):
             return self._initial
         if opponent.history[-1] == 'D':
             self.D_count += 1
-        if self.D_count > 2:
+        if self.D_count > 3:
             return 'D'
         return 'C'
 

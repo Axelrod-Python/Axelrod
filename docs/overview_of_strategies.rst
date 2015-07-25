@@ -892,9 +892,9 @@ This strategy begins by cooperating but will defect if at any point the opponent
 Backstabber
 ^^^^^^^^^^^
 
-A variation of Fool Me Once, this strategy will wait for the third defection and also defect on rounds 198 and 199 unconditionally.
+A variation of Fool Me Once, this strategy will wait for the fourth defection and also defect on rounds 198 and 199 unconditionally.
 
 Aggravater
 ^^^^^^^^^^^
 
-This strategy begins by defecting and then will cooperate until the opponent defects. After the opponent defects it will defect unconditionally. Essentially Grudger, but begins by defecting.
+This strategy begins by defecting 3 times and then will cooperate until the opponent defects. After the opponent defects it will defect unconditionally. Essentially Grudger, but begins by defecting 3 times.

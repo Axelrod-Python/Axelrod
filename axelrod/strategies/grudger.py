@@ -85,14 +85,14 @@ class Davis(Player):
 
 
 class Aggravater(Player):
-    """Grudger, except that it defects on the first turn"""
+    """Grudger, except that it defects on the first 3 turns turn"""
 
     name = 'Aggravater'
     memory_depth = float('inf')
 
     @staticmethod
     def strategy(opponent):
-        if len(opponent.history) == 0:
+        if len(opponent.history) < 3:
             return 'D'
         elif 'D' in opponent.history:
             return 'D'

@@ -161,11 +161,14 @@ class TestBackStabber(TestPlayer):
     def test_strategy(self):
         """
         A variation of Fool Me Once, this strategy will
-        wait for the third defection and also defect on
+        wait for the fourth defection and also defect on
         rounds 198 and 199 unconditionally.
         """
         P1 = axelrod.BackStabber()
         P2 = axelrod.Defector()
+        P1.history = ['C']
+        P2.history = ['D']
+        self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['C']
         P2.history = ['D']
         self.assertEqual(P1.strategy(P2), 'C')
