@@ -107,4 +107,6 @@ class Plot(object):
         ax.tick_params(direction='out')
         ax.set_yticklabels([])
 
+        ax.set_xscale('log')
+
         return figure
