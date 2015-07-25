@@ -1,6 +1,7 @@
 from alternator import *
 from appeaser import *
 from averagecopier import *
+from backstabber import *
 from cooperator import *
 from darwin import *
 from defector import *
@@ -32,11 +33,13 @@ basic_strategies = [
 ]
 
 ordinary_strategies = [
+    Aggravater,
     AlternatorHunter,
     Appeaser,
     AntiTitForTat,
     ArrogantQLearner,
     AverageCopier,
+    BackStabber,
     Bully,
     CautiousQLearner,
     CooperatorHunter,
