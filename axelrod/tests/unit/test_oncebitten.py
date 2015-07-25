@@ -160,7 +160,9 @@ class TestBackStabber(TestPlayer):
 
     def test_strategy(self):
         """
-        If opponent defects at any point then the player will defect forever
+        If opponent defects more than once at any point then 
+        the player will defect forever. The player will always 
+        defect on rounds 198 and 199.
         """
         P1 = axelrod.BackStabber()
         P2 = axelrod.Defector()
