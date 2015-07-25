@@ -892,7 +892,7 @@ This strategy begins by cooperating but will defect if at any point the opponent
 Backstabber
 ^^^^^^^^^^^
 
-Forgives the first 3 defections but on the fourth will defect forever. Defects on round 198 and 199 unconditionally.
+Forgives the first 3 defections but on the fourth will defect forever. Defects after the 198th round unconditionally.
 
 Aggravater
 ^^^^^^^^^^^
