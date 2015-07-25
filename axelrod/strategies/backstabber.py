@@ -33,3 +33,48 @@ class BackStabber(Player):
     def reset(self):
         self.D_count = 0
         self.history = []
+
+
+class DoubleCrosser(Player):
+    """
+    Forgives the first 3 defections but on the fourth
+    will defect forever. If the opponent did not defect
+    in the first 6 rounds the player will cooperate until
+    the 180th round. Defects after the 198th round unconditionally.
+    """
+
+    name = 'DoubleCrosser'
+    memory_depth = float('inf')  # Long memory
+
+    def __init__(self):
+        """
+        Initialised the player
+        """
+        super(DoubleCrosser, self).__init__()
+        self.D_count = 0
+        self._initial = 'C'
+        self.stochastic = False
+
+    def strategy(self, opponent):
+        cutoff = 6
+        if len(opponent.history) > 197:
+            return 'D'
+        if not opponent.history:
+            return self._initial
+        if opponent.history[-1] == 'D':
+            self.D_count += 1
+        if len(opponent.history) < 180:
+            if len(opponent.history) > (cutoff):
+                firstelements = []
+                for i in range(1, cutoff + 1):
+                    firstelements.append(opponent.history[i - 1])
+                if 'D' not in firstelements:
+                    if opponent.history[-2:] != ['D', 'D']:
+                        return 'C'
+        if self.D_count > 3:
+            return 'D'
+        return 'C'
+
+    def reset(self):
+        self.D_count = 0
+        self.history = []
