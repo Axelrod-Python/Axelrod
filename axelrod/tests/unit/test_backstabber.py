@@ -25,13 +25,13 @@ class TestBackStabber(TestPlayer):
         P2.history = ['D']
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history.append('C')
-        P1.history.append('D')
+        P2.history.append('D')
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history.append('C')
-        P1.history.append('D')
+        P2.history.append('D')
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history.append('C')
-        P1.history.append('D')
+        P2.history.append('D')
         self.assertEqual(P1.strategy(P2), 'D')
         P2.history = ['C'] * 197
         self.assertEqual(P1.strategy(P2), 'D')
