@@ -894,6 +894,11 @@ Backstabber
 
 Forgives the first 3 defections but on the fourth will defect forever. Defects after the 198th round unconditionally.
 
+DoubleCrosser
+^^^^^^^^^^^^^
+
+Forgives the first 3 defections but on the fourth will defect forever. If the opponent did not defect in the first 6 rounds the player will cooperate until the 180th round. Defects after the 198th round unconditionally.
+
 Aggravater
 ^^^^^^^^^^^
 

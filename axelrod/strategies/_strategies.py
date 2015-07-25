@@ -45,6 +45,7 @@ ordinary_strategies = [
     CooperatorHunter,
     Davis,
     DefectorHunter,
+    DoubleCrosser,
     FoolMeOnce,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,
