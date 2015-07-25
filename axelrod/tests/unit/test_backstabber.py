@@ -24,14 +24,14 @@ class TestBackStabber(TestPlayer):
         P1.history = ['C']
         P2.history = ['D']
         self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
+        P1.history.append('C')
+        P1.history.append('D')
         self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
+        P1.history.append('C')
+        P1.history.append('D')
         self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
+        P1.history.append('C')
+        P1.history.append('D')
         self.assertEqual(P1.strategy(P2), 'D')
         P2.history = ['C'] * 197
         self.assertEqual(P1.strategy(P2), 'D')
@@ -67,22 +67,25 @@ class DoubleCrosser(TestPlayer):
         in the first 6 rounds the player will cooperate until
         the 180th round. Defects after the 198th round unconditionally.
         """
-        P1 = axelrod.DoubleCrosser()
+        P1 = axelrod.BackStabber()
         P2 = axelrod.Defector()
-        P1.history = ['C']
-        P2.history = ['D']
+        P2.history = ['C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C']
         self.assertEqual(P1.strategy(P2), 'C')
         P1.history = ['C']
         P2.history = ['D']
         self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
+        P1.history.append('C')
+        P2.history.append('D')
         self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
+        P1.history.append('C')
+        P2.history.append('D')
+        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history.append('C')
+        P2.history.append('D')
         self.assertEqual(P1.strategy(P2), 'D')
         P2.history = ['C'] * 197
         self.assertEqual(P1.strategy(P2), 'D')
+
 
     def test_reset(self):
         """Check that count gets reset properly"""
