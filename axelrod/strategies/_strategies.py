@@ -1,6 +1,7 @@
 from alternator import *
 from appeaser import *
 from averagecopier import *
+from backstabber import *
 from cooperator import *
 from darwin import *
 from defector import *
