@@ -115,8 +115,8 @@ class ForgetfulFoolMeOnce(Player):
 
 class BackStabber(Player):
     """
-    A variation of Fool Me Once, this strategy will 
-    wait for the third defection and also defect on 
+    A variation of Fool Me Once, this strategy will
+    wait for the third defection and also defect on
     rounds 198 and 199 unconditionally.
     """
 
