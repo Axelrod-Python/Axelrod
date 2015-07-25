@@ -892,7 +892,7 @@ This strategy begins by cooperating but will defect if at any point the opponent
 Backstabber
 ^^^^^^^^^^^
 
-A variation of Fool Me Once, this strategy will also defect on rounds 198 and 199 unconditionally.
+A variation of Fool Me Once, this strategy will wait for the third defection and also defect on rounds 198 and 199 unconditionally.
 
 Aggravater
 ^^^^^^^^^^^
