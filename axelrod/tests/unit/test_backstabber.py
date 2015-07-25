@@ -86,7 +86,6 @@ class DoubleCrosser(TestPlayer):
         P2.history = ['C'] * 197
         self.assertEqual(P1.strategy(P2), 'D')
 
-
     def test_reset(self):
         """Check that count gets reset properly"""
         P1 = self.player()
