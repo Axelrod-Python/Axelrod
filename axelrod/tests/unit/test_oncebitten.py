@@ -145,4 +145,3 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         P1.reset()
         self.assertEqual(P1.D_count, 0)
         self.assertEqual(P1.history, [])
-

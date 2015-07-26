@@ -63,7 +63,7 @@ We see that Tit for Tat cooperated every time, let us see how things change
 when it plays against a player that always defects::
 
    p1 = axelrod.TitForTat()  # Create a player that plays tit for tat
-   p3 = axelrod.Defector()  # Create a player that always cooperates
+   p3 = axelrod.Defector()  # Create a player that always defects
    for round in range(5):
        p1.play(p3)
    print p1.history
@@ -431,6 +431,36 @@ Axelrod's second tournament
 ---------------------------
 
 Work in progress.
+
+TESTER
+^^^^^^
+
+This strategy is a TFT variant that attempts to exploit certain strategies. It
+defects on the first move. If the opponent ever defects, TESTER 'apologies' by
+cooperating and then plays TFT for the rest of the game. Otherwise TESTER
+alternates cooperation and defection.
+
+*This strategy came 46th in Axelrod's second tournament.*
+
+Implementation
+**************
+
+Here is how this is implemented in the library::
+
+   import axelrod
+   p1 = axelrod.Tester()  # Create a Tester player
+   p2 = axelrod.Random()  # Create a player that plays randomly
+   for round in range(5):
+       p1.play(p2)
+
+   print p1.history
+   print p2.history
+
+which gives (for a particular random seed)::
+
+    ['D', 'C', 'D', 'C', 'C', 'C', 'C', 'D', 'C', 'D']
+    ['D', 'D', 'C', 'C', 'C', 'C', 'D', 'C', 'D', 'C']
+
 
 Stewart and Plotkin's Tournament (2012)
 ---------------------------------------
@@ -852,4 +882,24 @@ This strategy is not unambiguously defined in [S&P, PNAS 2012].
 Strategies implemented in the module
 ------------------------------------
 
-Work in progress.
+There are several original strategies which have been created as part of this project and have never (to our knowledge) appeared in previous tournaments.
+
+Fool Me Once
+^^^^^^^^^^^
+
+This strategy begins by cooperating but will defect if at any point the opponent has defected more than once.
+
+Backstabber
+^^^^^^^^^^^
+
+Forgives the first 3 defections but on the fourth will defect forever. Defects after the 198th round unconditionally.
+
+DoubleCrosser
+^^^^^^^^^^^^^
+
+Forgives the first 3 defections but on the fourth will defect forever. If the opponent did not defect in the first 6 rounds the player will cooperate until the 180th round. Defects after the 198th round unconditionally.
+
+Aggravater
+^^^^^^^^^^^
+
+This strategy begins by defecting 3 times and then will cooperate until the opponent defects. After the opponent defects it will defect unconditionally. Essentially Grudger, but begins by defecting 3 times.
