@@ -36,6 +36,7 @@ class TestTournament(unittest.TestCase):
             processes=4,
             noise=0.2)
         self.assertEqual(len(tournament.players), len(self.players))
+        self.assertEqual(tournament.players[0].turns, 200)
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, 200)
         self.assertEqual(tournament.repetitions, 10)
