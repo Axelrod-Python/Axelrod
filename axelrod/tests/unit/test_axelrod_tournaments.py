@@ -81,6 +81,7 @@ class TestChampion(TestPlayer):
         # Initially cooperates
         self.first_play_test(C)
         # Cooperates for num_rounds / 20 (10 by default)
+        random.seed(3)
         random_sample = []
         for i in range(10):
             random_sample.append(random.choice([C,D]))
@@ -101,7 +102,10 @@ class TestChampion(TestPlayer):
             random_sample.append(C)
             self.responses_test(my_responses, random_sample, [C])
 
-        self.responses_test(my_responses + [C], random_sample + [D], [C], random_seed=50)
+        self.responses_test(my_responses + [C], random_sample + [D], [C],
+                            random_seed=50)
+        self.responses_test(my_responses + [C], random_sample + [D], [C],
+                            random_seed=30)
         self.responses_test(my_responses + [C] * 40, random_sample + [D] * 40,
                             [D], random_seed=40)
 
