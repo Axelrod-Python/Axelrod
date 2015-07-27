@@ -74,6 +74,17 @@ class TestRoundRobin(unittest.TestCase):
         expected = [[0, 0], [0, 0]]
         self.assertEqual(result, expected)
 
+    def test_pair_of_players(self):
+        players = [
+            axelrod.Cooperator(), axelrod.Defector(), axelrod.TitForTat()]
+        rr = axelrod.RoundRobin(
+            players=players, game=self.game, turns=20)
+        pair = rr._pair_of_players(0, 2)
+        self.assertEqual(pair['instances'][0].name, 'Cooperator')
+        self.assertEqual(pair['instances'][1].name, 'Tit For Tat')
+        self.assertEqual(pair['classes'][0], axelrod.Cooperator)
+        self.assertEqual(pair['classes'][1], axelrod.TitForTat)
+
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
