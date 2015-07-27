@@ -1,4 +1,5 @@
 from alternator import *
+from axelrod_tournaments import *
 from appeaser import *
 from averagecopier import *
 from backstabber import *
