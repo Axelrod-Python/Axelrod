@@ -7,6 +7,8 @@ from axelrod import Player
 import random
 
 
+flip_dict = {'C': 'D', 'D': 'C'}
+
 ## First Tournament
 
 class Feld(Player):
