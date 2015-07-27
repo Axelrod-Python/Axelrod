@@ -35,7 +35,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             processes=4,
             noise=0.2)
-        self.assertEqual(tournament.players, self.players)
+        self.assertEqual(len(tournament.players), len(self.players))
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, 200)
         self.assertEqual(tournament.repetitions, 10)
@@ -48,6 +48,10 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.noise, 0.2)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
+
+    def test_create_players_list(self):
+        
+
 
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
