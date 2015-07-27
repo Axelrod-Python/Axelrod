@@ -12,11 +12,11 @@ class Tournament(object):
                  repetitions=10, processes=None, prebuilt_cache=False,
                  noise=0):
         self.name = name
-        self.players = players
+        self.turns = turns
+        self.players = self._create_players_list(players)
         self.nplayers = len(self.players)
         if game is not None:
             self.game = game
-        self.turns = turns
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
         self.result_set = ResultSet(
@@ -28,7 +28,6 @@ class Tournament(object):
 
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self._add_turns_to_players
 
     def play(self):
         payoffs_list = []
@@ -127,6 +126,9 @@ class Tournament(object):
         payoffs = round_robin.play()
         return payoffs
 
-    def _add_turns_to_players():
-        for player in self.players:
+    def _create_players_list(self, players):
+        newplayers = []
+        for player in players:
             player.turns = self.turns
+            newplayers.append(player)
+        return newplayers
