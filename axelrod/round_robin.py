@@ -75,26 +75,12 @@ class RoundRobin(object):
         cooperation = self._empty_matrix(self.nplayers, self.nplayers)
 
         for ip1 in range(self.nplayers):
-
-            p1 = self.players[ip1]
-            cl1 = p1.__class__
-
             for ip2 in range(ip1, self.nplayers):
+                pair = self._pair_of_players(ip1, ip2)
+                p1 = pair['instances'][0]
+                p2 = pair['instances'][1]
+                key = pair['classes']
 
-                # For self-interactions we need to create an additional object.
-                # Otherwise the play method in Player will write twice to the
-                # same history, effectively doubling the score and causing
-                # historic schizophrenia.
-                if ip1 == ip2:
-                    p2 = cl1()
-                    cl2 = cl1
-                else:
-                    p2 = self.players[ip2]
-                    cl2 = p2.__class__
-
-                # There are many possible keys to cache by, but perhaps the
-                # most versatile is a tuple with the classes of both players.
-                key = (cl1, cl2)
                 play_required = (
                     self._stochastic_interaction(p1, p2) or
                     key not in self.deterministic_cache)
