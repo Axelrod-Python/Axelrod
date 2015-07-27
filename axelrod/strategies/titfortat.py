@@ -181,36 +181,3 @@ class HardTitFor2Tats(Player):
             return 'D'
         # Otherwise cooperates
         return 'C'
-
-class Tester(Player):
-    """
-    Submitted to Axelrod's second tournament by David Gladstein.
-
-    Defects on the first move and plays TFT if the opponent ever defects (after
-    one apology cooperation round). Otherwise alternate cooperation and defection.
-    """
-
-    name = "Tester"
-    memory_depth = float('inf')
-
-    def __init__(self):
-        Player.__init__(self)
-        self.is_TFT = False
-
-    def strategy(self, opponent):
-        # Defect on the first move
-        if not opponent.history:
-            return 'D'
-        # Am I TFT?
-        if self.is_TFT:
-            return 'D' if opponent.history[-1:] == ['D'] else 'C'
-        else:
-            # Did opponent defect?
-            if opponent.history[-1] == 'D':
-                self.is_TFT = True
-                return 'C'
-            if len(self.history) in [1, 2]:
-                return 'C'
-            # Alternate C and D
-            return flip_dict[self.history[-1]]
-
