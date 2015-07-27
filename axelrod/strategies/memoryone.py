@@ -169,8 +169,8 @@ class Joss(MemoryOnePlayer):
 
     name = "Joss"
 
-    def __init__(self):
-        four_vector = (0.9, 0, 1, 0)
+    def __init__(self, p=0.9):
+        four_vector = (p, 0, p, 0)
         super(self.__class__, self).__init__(four_vector)
 
 
@@ -182,6 +182,6 @@ class SoftJoss(MemoryOnePlayer):
 
     name = "Soft Joss"
 
-    def __init__(self):
-        four_vector = (1., 0, 0.9, 0)
+    def __init__(self, q=0.9):
+        four_vector = (1., 1 - q, 1, 1 - q)
         super(self.__class__, self).__init__(four_vector)
