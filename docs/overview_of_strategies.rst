@@ -432,6 +432,68 @@ Axelrod's second tournament
 
 Work in progress.
 
+EATHERLEY
+^^^^^^^^^
+
+This strategy was submitted by Graham Eatherley to Axelrod's second tournament
+and generally cooperates unless the opponent defects, in which case Eatherley
+defects with a probability equal to the proportion of rounds that the opponent
+has defected.
+
+*This strategy came  in Axelrod's second tournament.*
+
+Implementation
+**************
+
+Here is how Eatherley is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.Eatherley()  # Create a Eatherley player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+    print p2.history
+
+which gives (for a particular random seed)::
+
+    ['C', 'C', 'C', 'D', 'C']
+    ['C', 'D', 'D', 'C', 'C']
+
+
+CHAMPION
+^^^^^^^^
+
+This strategy was submitted by Danny Champion to Axelrod's second tournament and
+operates in three phases. The first phase lasts for the first 1/20-th of the
+rounds and Champion always cooperates. In the second phase, lasting until
+4/50-th of the rounds have passed, Champion mirrors its opponent's last move. In
+the last phase, Champion cooperates unless
+- the opponent defected on the last round, and
+- the opponent has cooperated less than 60% of the rounds, and
+- a random number is greater than the proportion of rounds defected
+
+Implementation
+**************
+
+Here is how Champion is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.Champion()  # Create a Champion player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+    print p2.history
+
+which gives (for a particular random seed)::
+
+    ['C', 'C', 'C', 'C', 'C']
+    ['D', 'C', 'D', 'D', 'C']
+
+
 TESTER
 ^^^^^^
 
@@ -447,19 +509,20 @@ Implementation
 
 Here is how this is implemented in the library::
 
-   import axelrod
-   p1 = axelrod.Tester()  # Create a Tester player
-   p2 = axelrod.Random()  # Create a player that plays randomly
-   for round in range(5):
-       p1.play(p2)
+    import axelrod
+    p1 = axelrod.Tester()  # Create a Tester player
+    p2 = axelrod.Random()  # Create a player that plays randomly
+    for round in range(5):
+        p1.play(p2)
 
-   print p1.history
-   print p2.history
+    print p1.history
+    print p2.history
 
 which gives (for a particular random seed)::
 
-    ['D', 'C', 'D', 'C', 'C', 'C', 'C', 'D', 'C', 'D']
-    ['D', 'D', 'C', 'C', 'C', 'C', 'D', 'C', 'D', 'C']
+    ['D', 'C', 'C', 'D', 'D']
+    ['C', 'D', 'D', 'D', 'C']
+
 
 
 Stewart and Plotkin's Tournament (2012)
