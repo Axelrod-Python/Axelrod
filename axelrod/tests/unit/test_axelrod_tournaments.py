@@ -11,8 +11,8 @@ C, D = 'C', 'D'
 
 class TestEatherly(TestPlayer):
 
-    name = "Eatherly"
-    player = axelrod.Eatherly
+    name = "Eatherley"
+    player = axelrod.Eatherley
     stochastic = True
 
     def test_strategy(self):
