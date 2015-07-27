@@ -90,62 +90,6 @@ class AntiTitForTat(Player):
         return 'D' if opponent.history[-1:] == ['C'] else 'C'
 
 
-class Shubik(Player):
-    """
-    Plays like Tit-For-Tat with the following modification. After
-    each retaliation, the number of rounds that Shubik retaliates
-    increases by 1.
-    """
-
-    name = 'Shubik'
-    memory_depth = float('inf')
-
-    def __init__(self):
-        Player.__init__(self)
-        self.is_retaliating = False
-        self.retaliation_length = 0
-        self.retaliation_remaining = 0
-
-    def _refresh_retaliation(self, opponent):
-        """Reset the retaliation counter based on the history"""
-        self.retaliation_length = 0
-        for i in range(len(self.history)):
-            if self.history[i] == 'C':
-                if opponent.history[i] == 'D':
-                    self.retaliation_length += 1
-        self.retaliation_remaining = self.retaliation_length
-
-    def _decrease_retaliation_counter(self):
-        """Lower the remaining owed retaliation count and flip to non-retaliate
-        if the count drops to zero."""
-        if self.is_retaliating:
-            self.retaliation_remaining -= 1
-            if self.retaliation_remaining == 0:
-                self.is_retaliating = False
-
-    def strategy(self, opponent):
-        if not opponent.history:
-            return 'C'
-        if opponent.history[-1] == 'D':
-            # Retaliate against defections
-            if self.history[-1] == 'C': # it's on now!
-                # Lengthen the retaliation period
-                self.is_retaliating = True
-                self._refresh_retaliation(opponent)
-                self._decrease_retaliation_counter()
-                return 'D'
-            else:
-                # Just retaliate
-                if self.is_retaliating:
-                    self._decrease_retaliation_counter()
-                return 'D'
-        if self.is_retaliating:
-            # Are we retaliating still?
-            self._decrease_retaliation_counter()
-            return 'D'
-        return 'C'
-
-
 class HardTitForTat(Player):
     """A variant of Tit For Tat that uses a longer history for retaliation."""
 
