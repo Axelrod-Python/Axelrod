@@ -45,6 +45,20 @@ class RoundRobin(object):
     def _empty_matrix(self, rows, columns):
         return [[0 for j in range(columns)] for i in range(rows)]
 
+    def _pair_of_players(self, player_1_index, player_2_index):
+        instance1 = self.players[player_1_index]
+        class1 = instance1.__class__
+        if player_1_index == player_2_index:
+            instance2 = class1()
+            class2 = class1
+        else:
+            instance2 = self.players[player_2_index]
+            class2 = instance2.__class__
+        return {
+            'instances': (instance1, instance2),
+            'classes': (class1, class2)
+        }
+
     def play(self):
         """Plays a round robin where each match lasts turns.
 
