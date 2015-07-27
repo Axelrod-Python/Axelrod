@@ -49,10 +49,6 @@ class TestTournament(unittest.TestCase):
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
-    #def test_create_players_list(self):
-
-
-
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
