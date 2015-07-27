@@ -16,7 +16,7 @@ class Player(object):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
         self.stochastic = "random" in inspect.getsource(self.__class__)
-        self.turns = None
+        self.turns = -1
         if self.name == "Player":
             self.stochastic = False
 
