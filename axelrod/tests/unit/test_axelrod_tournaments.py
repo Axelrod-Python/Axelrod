@@ -9,26 +9,6 @@ from test_player import TestPlayer
 C, D = 'C', 'D'
 
 
-class TestEatherly(TestPlayer):
-
-    name = "Eatherley"
-    player = axelrod.Eatherley
-    stochastic = True
-
-    def test_strategy(self):
-        # Initially cooperates
-        self.first_play_test(C)
-        # Test cooperate after opponent cooperates
-        self.responses_test([C], [C], [C])
-        self.responses_test([C, C], [C, C], [C])
-        self.responses_test([D, C], [D, C], [C])
-        self.responses_test([D, C, C], [D, C, C], [C])
-        # Test defection after opponent defection
-        self.responses_test([D], [D], [D])
-        self.responses_test([D, D], [D, D], [D])
-        self.responses_test([D, C, C, D], [D, C, C, D], [D, C], random_seed=10)
-
-
 class TestChampion(TestPlayer):
     name = "Champion"
     player = axelrod.Champion
@@ -61,3 +41,51 @@ class TestChampion(TestPlayer):
         self.responses_test(my_responses + [C], random_sample + [D], [C], random_seed=50)
         self.responses_test(my_responses + [C] * 40, random_sample + [D] * 40,
                             [D], random_seed=40)
+
+
+class TestEatherly(TestPlayer):
+
+    name = "Eatherley"
+    player = axelrod.Eatherley
+    stochastic = True
+
+    def test_strategy(self):
+        # Initially cooperates
+        self.first_play_test(C)
+        # Test cooperate after opponent cooperates
+        self.responses_test([C], [C], [C])
+        self.responses_test([C, C], [C, C], [C])
+        self.responses_test([D, C], [D, C], [C])
+        self.responses_test([D, C, C], [D, C, C], [C])
+        # Test defection after opponent defection
+        self.responses_test([D], [D], [D])
+        self.responses_test([D, D], [D, D], [D])
+        self.responses_test([D, C, C, D], [D, C, C, D], [D, C], random_seed=10)
+
+
+class TestTester(TestPlayer):
+
+    name = "Tester"
+    player = axelrod.Tester
+
+    def test_strategy(self):
+        """Starts by defecting."""
+        self.first_play_test(D)
+
+    def test_effect_of_strategy(self):
+
+        # Test Alternating CD
+        self.responses_test([D], [C], [C])
+        self.responses_test([D, C], [C, C], [C])
+        self.responses_test([D, C, C], [C, C, C], [D])
+        self.responses_test([D, C, C, D], [C, C, C, C], [C])
+        self.responses_test([D, C, C, D, C], [C, C, C, C, C], [D])
+
+        # Test cooperation after opponent defection
+        self.responses_test([D, C], [D, C], [C])
+
+        # Test TFT after defection
+        self.responses_test([D, C, C], [D, C, C], [C])
+        self.responses_test([D, C, C, C], [D, C, C, C], [C])
+        self.responses_test([D, C, D], [D, D, D], [D])
+        self.responses_test([D, C, C], [D, C, D], [D])
