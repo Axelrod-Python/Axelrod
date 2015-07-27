@@ -66,6 +66,14 @@ class TestRoundRobin(unittest.TestCase):
         expected = 0.5
         self.assertEqual(result, expected)
 
+    def test_empty_matrix(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        result = rr._empty_matrix(2, 2)
+        expected = [[0, 0], [0, 0]]
+        self.assertEqual(result, expected)
+
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
