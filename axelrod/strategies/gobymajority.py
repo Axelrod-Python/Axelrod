@@ -11,8 +11,9 @@ class GoByMajority(Player):
 
     # memory_depth is set by __init__
 
-    def __init__(self, memory_depth=0):
+    def __init__(self, memory_depth=0, soft=True):
         Player.__init__(self)
+        self.soft = soft
         self.memory_depth = memory_depth
         # Set class var for consistency with other strategies
         self.__class__.memory_depth = memory_depth
@@ -26,8 +27,15 @@ class GoByMajority(Player):
 
         memory = self.memory_depth
         history = opponent.history[-memory:]
-        if sum([s == 'D' for s in history]) > sum([s == 'C' for s in history]):
+        defections = sum([s == 'D' for s in history])
+        cooperations = sum([s == 'C' for s in history])
+        if defections > cooperations:
             return 'D'
+        if defections == cooperations:
+            if self.soft:
+                return 'C'
+            else:
+                return 'D'
         return 'C'
 
     def __repr__(self):
