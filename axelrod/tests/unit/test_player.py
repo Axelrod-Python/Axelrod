@@ -82,7 +82,7 @@ def test_responses(test_class, P1, P2, history_1, history_2,
     by player one to test."""
     if random_seed:
         random.seed(random_seed)
-    # Force the histories, In case either history is impossible or if some
+    # Force the histories, In case either history is impossible or if some 
     # internal state needs to be set, actually submit to moves to the strategy
     # method. Still need to append history manually.
     for h1, h2 in zip(history_1, history_2):
@@ -106,7 +106,6 @@ class TestPlayer(unittest.TestCase):
         """Test that the player initiates correctly."""
         self.assertEqual(self.player().history, [])
         self.assertEqual(self.player().stochastic, self.stochastic)
-        self.assertEqual(self.player().turns, -1)
 
     def test_repr(self):
         """Test that the representation is correct."""
