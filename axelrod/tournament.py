@@ -13,7 +13,7 @@ class Tournament(object):
                  noise=0):
         self.name = name
         self.turns = turns
-        self.players = self._create_players_list(players)
+        self.players = players
         self.nplayers = len(self.players)
         if game is not None:
             self.game = game
@@ -25,16 +25,20 @@ class Tournament(object):
             repetitions=repetitions)
         self.deterministic_cache = {}
         self.noise = noise
-
         self._processes = processes
         self._logger = logging.getLogger(__name__)
 
-    def _create_players_list(self, players):
+    @property
+    def players(self):
+        return self._players
+
+    @players.setter
+    def players(self, players):
         newplayers = []
         for player in players:
             player.turns = self.turns
             newplayers.append(player)
-        return newplayers
+        self._players = newplayers
 
     def play(self):
         payoffs_list = []
