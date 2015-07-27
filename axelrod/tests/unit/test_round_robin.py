@@ -29,6 +29,10 @@ class TestRoundRobin(unittest.TestCase):
         rr = axelrod.RoundRobin(
             players=[p1, p2], game=self.game, turns=20)
         self.assertFalse(rr._stochastic_interaction(p1, p2))
+        p1 = axelrod.Random()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        self.assertTrue(rr._stochastic_interaction(p1, p2))
 
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
