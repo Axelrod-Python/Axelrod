@@ -43,6 +43,37 @@ class TestFeld(TestPlayer):
         self.responses_test(history_1, history_2, [D, D, D, D], random_seed=50)
 
 
+class TestShubik(TestPlayer):
+
+    name = 'Shubik'
+    player = axelrod.Shubik
+
+    def test_strategy(self):
+        # Starts by Cooperating
+        self.first_play_test(C)
+        # Looks like Tit-For-Tat at first
+        self.markov_test([C, D, C, D])
+
+    def test_affect_of_strategy(self):
+        """Plays a modified TFT."""
+        self.responses_test([C, C, C], [C, C, C], [C, C, C])
+        # Make sure that the retaliations are increasing
+        # Retaliate once and forgive
+        self.responses_test([C], [D], [D])
+        self.responses_test([C, D], [D, C], [C])
+        self.responses_test([C, D, C], [D, C, C], [C])
+        # Retaliate twice and forgive
+        self.responses_test([C, D, C], [D, C, D], [D, D])
+        self.responses_test([C, D, C, D, D], [D, C, D, C, C], [C])
+        # Opponent defection during retaliation doesn't increase retaliation period
+        self.responses_test([C, D, C, D, D], [D, C, D, D, C], [C])
+        # Retaliate thrice and forgive
+        self.responses_test([C, D, C, D, D, C], [D, C, D, C, C, D], [D, D, D])
+        history_1 = [C, D, C, D, D, C, D, D, D]
+        history_2 = [D, C, D, C, C, D, C, C, C]
+        self.responses_test(history_1, history_2, [C])
+
+
 class TestTullock(TestPlayer):
 
     name = "Tullock"
