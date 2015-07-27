@@ -80,7 +80,21 @@ class RoundRobin(object):
                 p1 = pair['instances'][0]
                 p2 = pair['instances'][1]
                 key = pair['classes']
+                # For self-interactions we need to create an additional object.
+                # Otherwise the play method in Player will write twice to the
+                # same history, effectively doubling the score and causing
+                # historic schizophrenia.
+                if ip1 == ip2:
+                    p2 = cl1()
+                    p2.tournament_length = self.turns
+                    cl2 = cl1
+                else:
+                    p2 = self.players[ip2]
+                    cl2 = p2.__class__
 
+                # There are many possible keys to cache by, but perhaps the
+                # most versatile is a tuple with the classes of both players.
+                key = (cl1, cl2)
                 play_required = (
                     self._stochastic_interaction(p1, p2) or
                     key not in self.deterministic_cache)
