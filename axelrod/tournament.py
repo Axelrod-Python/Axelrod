@@ -28,6 +28,7 @@ class Tournament(object):
 
         self._processes = processes
         self._logger = logging.getLogger(__name__)
+        self._add_turns_to_players
 
     def play(self):
         payoffs_list = []
@@ -125,3 +126,7 @@ class Tournament(object):
             noise=self.noise)
         payoffs = round_robin.play()
         return payoffs
+
+    def _add_turns_to_players():
+        for player in self.players:
+            player.turns = self.turns

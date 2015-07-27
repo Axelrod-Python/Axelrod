@@ -5,7 +5,7 @@ class BackStabber(Player):
 
     """
     Forgives the first 3 defections but on the fourth
-    will defect forever. Defects after the 198th round unconditionally.
+    will defect forever. Defects on the last 2 rounds unconditionally.
     """
 
     name = 'BackStabber'
@@ -21,7 +21,7 @@ class BackStabber(Player):
         self.stochastic = False
 
     def strategy(self, opponent):
-        if len(opponent.history) > 197:
+        if len(opponent.history) > (self.turns - 3):
             return 'D'
         if not opponent.history:
             return self._initial
@@ -42,7 +42,7 @@ class DoubleCrosser(Player):
     Forgives the first 3 defections but on the fourth
     will defect forever. If the opponent did not defect
     in the first 6 rounds the player will cooperate until
-    the 180th round. Defects after the 198th round unconditionally.
+    the 180th round. Defects on the last 2 rounds unconditionally.
     """
 
     name = 'DoubleCrosser'
@@ -59,7 +59,7 @@ class DoubleCrosser(Player):
 
     def strategy(self, opponent):
         cutoff = 6
-        if len(opponent.history) > 197:
+        if len(opponent.history) > (self.turns - 3):
             return 'D'
         if not opponent.history:
             return self._initial
