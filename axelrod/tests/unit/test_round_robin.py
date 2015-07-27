@@ -47,6 +47,16 @@ class TestRoundRobin(unittest.TestCase):
             players=[p1, p2], game=self.game, turns=20)
         self.assertFalse(rr._cache_update_required(p1, p2))
 
+    def test_calculate_scores(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        p1.history = ['C', 'C', 'D', 'D']
+        p2.history = ['C', 'D', 'C', 'D']
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        result = rr._calculate_scores(p1, p2)
+        expected = (9, 9)
+        self.assertEqual(result, expected)
+
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
