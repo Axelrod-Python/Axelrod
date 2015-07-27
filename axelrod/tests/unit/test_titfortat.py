@@ -183,32 +183,3 @@ class TestHardTitFor2Tats(TestPlayer):
         self.responses_test([C, C, C, C], [D, C, C, C], [C])
         self.responses_test([C, C, C, C], [D, D, C, C], [C])
         self.responses_test([C, C, C, C], [C, D, D, C], [D])
-
-class TestTester(TestPlayer):
-
-    name = "Tester"
-    player = axelrod.Tester
-
-    def test_strategy(self):
-        """Starts by defecting."""
-        self.first_play_test(D)
-
-    def test_effect_of_strategy(self):
-
-        # Test Alternating CD
-        self.responses_test([D], [C], [C])
-        self.responses_test([D, C], [C, C], [C])
-        self.responses_test([D, C, C], [C, C, C], [D])
-        self.responses_test([D, C, C, D], [C, C, C, C], [C])
-        self.responses_test([D, C, C, D, C], [C, C, C, C, C], [D])
-
-        # Test cooperation after opponent defection
-        self.responses_test([D, C], [D, C], [C])
-
-        # Test TFT after defection
-        self.responses_test([D, C, C], [D, C, C], [C])
-        self.responses_test([D, C, C, C], [D, C, C, C], [C])
-        self.responses_test([D, C, D], [D, D, D], [D])
-        self.responses_test([D, C, C], [D, C, D], [D])
-
-
