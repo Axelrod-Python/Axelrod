@@ -35,8 +35,11 @@ class RoundRobin(object):
 
         for player1_index in range(self.nplayers):
             for player2_index in range(player1_index, self.nplayers):
-                self._score_single_interaction(
-                    player1_index, player2_index, payoffs, cooperation)
+                scores, cooperation_rates = self._score_single_interaction(
+                    player1_index, player2_index)
+                self._update_matrices(
+                    player1_index, player2_index, scores, payoffs,
+                    cooperation_rates, cooperation)
 
         self.payoffs = payoffs
         self.cooperation = cooperation
@@ -46,8 +49,7 @@ class RoundRobin(object):
     def _empty_matrix(self, rows, columns):
         return [[0 for j in range(columns)] for i in range(rows)]
 
-    def _score_single_interaction(self, player1_index, player2_index, payoffs,
-                                  cooperation):
+    def _score_single_interaction(self, player1_index, player2_index):
         player1, player2, classes = self._pair_of_players(
             player1_index, player2_index)
         play_required = (
@@ -59,7 +61,10 @@ class RoundRobin(object):
         else:
             scores = self.deterministic_cache[classes]
             cooperation_rates = (-1, -1)
+        return scores, cooperation_rates
 
+    def _update_matrices(self, player1_index, player2_index, scores,
+                         payoffs, cooperation_rates, cooperation):
         # For self-interactions we can take the average of the two
         # sides, which should improve the averaging a bit.
         if not self._noise and player1_index == player2_index:
