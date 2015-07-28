@@ -34,10 +34,14 @@ class TestRoundRobin(unittest.TestCase):
         rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
         self.assertEquals(rr.deterministic_cache, {})
         rr.play()
-        self.assertEqual(rr.deterministic_cache[(axelrod.Defector, axelrod.Defector)], (20, 20))
-        self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Cooperator)], (60, 60))
-        self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Defector)], (0, 100))
-        self.assertFalse((axelrod.Random, axelrod.Random) in rr.deterministic_cache)
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Defector, axelrod.Defector)], (20, 20))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Cooperator, axelrod.Cooperator)], (60, 60))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Cooperator, axelrod.Defector)], (0, 100))
+        self.assertFalse(
+            (axelrod.Random, axelrod.Random) in rr.deterministic_cache)
 
     def test_noisy_play(self):
         random.seed(1)
