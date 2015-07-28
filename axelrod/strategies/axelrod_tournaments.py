@@ -144,12 +144,14 @@ class Champion(Player):
 
     def __init__(self):
         Player.__init__(self)
-        self.rounds = 200
+        #self.tournament_length = 200 # may be overwritten by tournament
 
     def strategy(self, opponent):
         current_round = len(self.history)
-        expected_length = self.rounds # how are we getting this?
+        expected_length = self.tournament_length
         # Cooperate for the first 1/20-th of the game
+        if current_round == 0:
+            return 'C'
         if current_round < expected_length / 20.:
             return 'C'
         # Mirror partner for the next phase
