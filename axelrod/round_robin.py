@@ -58,16 +58,16 @@ class RoundRobin(object):
 
     def _run_single_interaction(self, player1_index, player2_index, payoffs,
                                 cooperation):
-        player1, player2, key = self._pair_of_players(
+        player1, player2, classes = self._pair_of_players(
             player1_index, player2_index)
         play_required = (
             self._stochastic_interaction(player1, player2) or
-            key not in self.deterministic_cache)
+            classes not in self.deterministic_cache)
         if play_required:
             scores, cooperation_rates = self._play_single_interaction(
-                player1, player2, key)
+                player1, player2, classes)
         else:
-            scores = self.deterministic_cache[key]
+            scores = self.deterministic_cache[classes]
             cooperation_rates = (0, 0)
 
         # For self-interactions we can take the average of the two
@@ -82,7 +82,7 @@ class RoundRobin(object):
         cooperation[player1_index][player2_index] = cooperation_rates[0]
         cooperation[player2_index][player1_index] = cooperation_rates[1]
 
-    def _play_single_interaction(self, player1, player2, key):
+    def _play_single_interaction(self, player1, player2, classes):
         turn = 0
         player1.reset()
         player2.reset()
@@ -94,7 +94,7 @@ class RoundRobin(object):
             self._calculate_cooperation(player1),
             self._calculate_cooperation(player2))
         if self._cache_update_required(player1, player2):
-            self.deterministic_cache[key] = scores
+            self.deterministic_cache[classes] = scores
         return scores, cooperation_rates
 
     def play(self):
