@@ -109,7 +109,19 @@ class TestRoundRobin(unittest.TestCase):
         self.assertTrue(rr._stochastic_interaction(p1, p2))
 
     def test_play_single_interaction(self):
-        pass
+        players = [
+            axelrod.Alternator(), axelrod.Defector(), axelrod.TitForTat()]
+        rr = axelrod.RoundRobin(
+            players=players, game=self.game, turns=20)
+        player1 = players[0]
+        player2 = players[2]
+        classes = (player1.__class__, player2.__class__)
+        scores, cooperation_rates = (
+            rr._play_single_interaction(player1, player2, classes))
+        expected_scores = (53, 48)
+        expected_cooperation_rates = (0.5, 0.55)
+        self.assertEqual(expected_scores, scores)
+        self.assertEqual(expected_cooperation_rates, cooperation_rates)
 
     def test_calculate_scores(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
