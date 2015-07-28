@@ -83,11 +83,11 @@ class RoundRobin(object):
             class2 = player2.__class__
         return player1, player2, (class1, class2)
 
-    def _stochastic_interaction(self, p1, p2):
+    def _stochastic_interaction(self, player1, player2):
         return (
             self._noise or
-            p1.stochastic or
-            p2.stochastic)
+            player1.stochastic or
+            player2.stochastic)
 
     def _play_single_interaction(self, player1, player2, classes):
         turn = 0
