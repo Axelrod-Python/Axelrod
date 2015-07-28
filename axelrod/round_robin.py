@@ -59,8 +59,9 @@ class RoundRobin(object):
             scores, cooperation_rates = self._play_single_interaction(
                 player1, player2, classes)
         else:
-            scores = self.deterministic_cache[classes]
-            cooperation_rates = (-1, -1)
+            scores = self.deterministic_cache[classes]['scores']
+            cooperation_rates = (
+                self.deterministic_cache[classes]['cooperation_rates'])
         return scores, cooperation_rates
 
     def _update_matrices(self, player1_index, player2_index, scores,
@@ -106,7 +107,9 @@ class RoundRobin(object):
             self._calculate_cooperation(player1),
             self._calculate_cooperation(player2))
         if self._cache_update_required(player1, player2):
-            self.deterministic_cache[classes] = scores
+            self.deterministic_cache[classes] = {
+                'scores': scores,
+                'cooperation_rates': cooperation_rates}
         return scores, cooperation_rates
 
     def _calculate_scores(self, p1, p2):

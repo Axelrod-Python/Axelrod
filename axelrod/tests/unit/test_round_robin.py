@@ -35,11 +35,11 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEquals(rr.deterministic_cache, {})
         rr.play()
         self.assertEqual(rr.deterministic_cache[
-            (axelrod.Defector, axelrod.Defector)], (20, 20))
+            (axelrod.Defector, axelrod.Defector)]['scores'], (20, 20))
         self.assertEqual(rr.deterministic_cache[
-            (axelrod.Cooperator, axelrod.Cooperator)], (60, 60))
+            (axelrod.Cooperator, axelrod.Cooperator)]['scores'], (60, 60))
         self.assertEqual(rr.deterministic_cache[
-            (axelrod.Cooperator, axelrod.Defector)], (0, 100))
+            (axelrod.Cooperator, axelrod.Defector)]['scores'], (0, 100))
         self.assertFalse(
             (axelrod.Random, axelrod.Random) in rr.deterministic_cache)
 
