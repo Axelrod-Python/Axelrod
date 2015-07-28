@@ -21,50 +21,29 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(rr.cache_mutable, True)
         self.assertEqual(rr._noise, 0.2)
 
-    def test_stochastic_interaction(self):
-        p1, p2 = axelrod.Player(), axelrod.Player()
+    def test_play(self):
+        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(
-            players=[p1, p2], game=self.game, turns=20, noise=0.2)
-        self.assertTrue(rr._stochastic_interaction(p1, p2))
-        rr = axelrod.RoundRobin(
-            players=[p1, p2], game=self.game, turns=20)
-        self.assertFalse(rr._stochastic_interaction(p1, p2))
-        p1 = axelrod.Random()
-        rr = axelrod.RoundRobin(
-            players=[p1, p2], game=self.game, turns=20)
-        self.assertTrue(rr._stochastic_interaction(p1, p2))
+            players=[p1, p2, p3], game=self.game, turns=20)
+        payoff = rr.play()
+        expected_payoff = [[60.0, 0, 33], [100, 20.0, 56], [78, 11, 46.5]]
+        self.assertEqual(payoff, expected_payoff)
 
-    def test_cache_update_required(self):
-        p1, p2 = axelrod.Player(), axelrod.Player()
+    def test_noisy_play(self):
+        random.seed(1)
+        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(
-            players=[p1, p2], game=self.game, turns=20, noise=0.2)
-        self.assertFalse(rr._cache_update_required(p1, p2))
-        rr = axelrod.RoundRobin(
-            players=[p1, p2], game=self.game, turns=20)
-        self.assertTrue(rr._cache_update_required(p1, p2))
-        p1 = axelrod.Random()
-        rr = axelrod.RoundRobin(
-            players=[p1, p2], game=self.game, turns=20)
-        self.assertFalse(rr._cache_update_required(p1, p2))
+            players=[p1, p2, p3], game=self.game, turns=20, noise=0.2)
+        payoff = rr.play()
+        expected_payoff = [[57, 10, 45], [80, 40, 57], [65, 22, 37]]
+        self.assertEqual(payoff, expected_payoff)
 
-    def test_calculate_scores(self):
-        p1, p2 = axelrod.Player(), axelrod.Player()
-        p1.history = ['C', 'C', 'D', 'D']
-        p2.history = ['C', 'D', 'C', 'D']
+    def test_noisy_cache(self):
+        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(
-            players=[p1, p2], game=self.game, turns=20)
-        result = rr._calculate_scores(p1, p2)
-        expected = (9, 9)
-        self.assertEqual(result, expected)
-
-    def test_calculate_cooperation(self):
-        p1, p2 = axelrod.Player(), axelrod.Player()
-        p1.history = ['C', 'C', 'D', 'D']
-        rr = axelrod.RoundRobin(
-            players=[p1, p2], game=self.game, turns=20)
-        result = rr._calculate_cooperation(p1)
-        expected = 0.5
-        self.assertEqual(result, expected)
+            players=[p1, p2, p3], game=self.game, turns=20, noise=0.2)
+        rr.play()
+        self.assertEqual(rr.deterministic_cache, {})
 
     def test_empty_matrix(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
@@ -73,6 +52,9 @@ class TestRoundRobin(unittest.TestCase):
         result = rr._empty_matrix(2, 2)
         expected = [[0, 0], [0, 0]]
         self.assertEqual(result, expected)
+
+    def test_score_single_interaction(self):
+        pass
 
     def test_pair_of_players(self):
         players = [
@@ -99,18 +81,50 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(rr.deterministic_cache[(axelrod.Cooperator, axelrod.Defector)], (0, 100))
         self.assertFalse((axelrod.Random, axelrod.Random) in rr.deterministic_cache)
 
-    def test_noisy_cache(self):
-        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
+    def test_stochastic_interaction(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
         rr = axelrod.RoundRobin(
-            players=[p1, p2, p3], game=self.game, turns=20, noise=0.2)
-        rr.play()
-        self.assertEqual(rr.deterministic_cache, {})
+            players=[p1, p2], game=self.game, turns=20, noise=0.2)
+        self.assertTrue(rr._stochastic_interaction(p1, p2))
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        self.assertFalse(rr._stochastic_interaction(p1, p2))
+        p1 = axelrod.Random()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        self.assertTrue(rr._stochastic_interaction(p1, p2))
 
-    def test_noisy_play(self):
-        random.seed(1)
-        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
+    def test_play_single_interaction(self):
+        pass
+
+    def test_calculate_scores(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        p1.history = ['C', 'C', 'D', 'D']
+        p2.history = ['C', 'D', 'C', 'D']
         rr = axelrod.RoundRobin(
-            players=[p1, p2, p3], game=self.game, turns=20, noise=0.2)
-        payoff = rr.play()
-        expected_payoff = [[57, 10, 45], [80, 40, 57], [65, 22, 37]]
-        self.assertEqual(payoff, expected_payoff)
+            players=[p1, p2], game=self.game, turns=20)
+        result = rr._calculate_scores(p1, p2)
+        expected = (9, 9)
+        self.assertEqual(result, expected)
+
+    def test_cache_update_required(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20, noise=0.2)
+        self.assertFalse(rr._cache_update_required(p1, p2))
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        self.assertTrue(rr._cache_update_required(p1, p2))
+        p1 = axelrod.Random()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        self.assertFalse(rr._cache_update_required(p1, p2))
+
+    def test_calculate_cooperation(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        p1.history = ['C', 'C', 'D', 'D']
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        result = rr._calculate_cooperation(p1)
+        expected = 0.5
+        self.assertEqual(result, expected)
