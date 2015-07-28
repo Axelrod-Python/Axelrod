@@ -11,6 +11,7 @@ class TestBackStabber(TestPlayer):
 
     def test_initial(self):
         P1 = axelrod.BackStabber()
+        P1.tournament_length = 200
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), P1._initial)
 
@@ -20,6 +21,7 @@ class TestBackStabber(TestPlayer):
         will defect forever. Defects after the 198th round unconditionally.
         """
         P1 = axelrod.BackStabber()
+        P1.tournament_length = 200
         P2 = axelrod.Defector()
         P1.history = ['C']
         P2.history = ['D']
@@ -39,6 +41,7 @@ class TestBackStabber(TestPlayer):
     def test_reset(self):
         """Check that count gets reset properly"""
         P1 = self.player()
+        P1.tournament_length = 200
         P1.history = ['C', 'D']
         P2 = axelrod.Player()
         P2.history = ['D']
@@ -49,7 +52,7 @@ class TestBackStabber(TestPlayer):
         self.assertEqual(P1.history, [])
 
 
-class DoubleCrosser(TestPlayer):
+class TestDoubleCrosser(TestPlayer):
 
     name = "DoubleCrosser"
     player = axelrod.DoubleCrosser
@@ -57,6 +60,7 @@ class DoubleCrosser(TestPlayer):
 
     def test_initial(self):
         P1 = axelrod.DoubleCrosser()
+        P1.tournament_length = 200
         P2 = axelrod.Player()
         self.assertEqual(P1.strategy(P2), P1._initial)
 
@@ -68,6 +72,7 @@ class DoubleCrosser(TestPlayer):
         the 180th round. Defects after the 198th round unconditionally.
         """
         P1 = axelrod.BackStabber()
+        P1.tournament_length = 200
         P2 = axelrod.Defector()
         P2.history = ['C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C']
         self.assertEqual(P1.strategy(P2), 'C')
@@ -89,6 +94,7 @@ class DoubleCrosser(TestPlayer):
     def test_reset(self):
         """Check that count gets reset properly"""
         P1 = self.player()
+        P1.tournament_length = 200
         P1.history = ['C', 'D']
         P2 = axelrod.Player()
         P2.history = ['D']
