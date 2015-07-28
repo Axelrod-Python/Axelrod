@@ -68,7 +68,17 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_score_single_interaction(self):
-        pass
+        players = [
+            axelrod.Alternator(), axelrod.Defector(), axelrod.TitForTat()]
+        rr = axelrod.RoundRobin(
+            players=players, game=self.game, turns=20)
+        payoffs = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        cooperation = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        rr._score_single_interaction(0, 2, payoffs, cooperation)
+        expected_payoffs = [[0, 0, 53], [0, 0, 0], [48, 0, 0]]
+        expected_cooperation = [[0, 0, 0.5], [0, 0, 0], [0.55, 0, 0]]
+        self.assertEqual(expected_payoffs, payoffs)
+        self.assertEqual(expected_cooperation, cooperation)
 
     def test_pair_of_players(self):
         players = [

@@ -58,7 +58,7 @@ class RoundRobin(object):
                 player1, player2, classes)
         else:
             scores = self.deterministic_cache[classes]
-            cooperation_rates = (0, 0)
+            cooperation_rates = (-1, -1)
 
         # For self-interactions we can take the average of the two
         # sides, which should improve the averaging a bit.
