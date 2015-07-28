@@ -29,6 +29,20 @@ class TestRoundRobin(unittest.TestCase):
         expected_payoff = [[60.0, 0, 33], [100, 20.0, 56], [78, 11, 46.5]]
         self.assertEqual(payoff, expected_payoff)
 
+    def test_deterministic_cache(self):
+        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
+        rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
+        self.assertEquals(rr.deterministic_cache, {})
+        rr.play()
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Defector, axelrod.Defector)], (20, 20))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Cooperator, axelrod.Cooperator)], (60, 60))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Cooperator, axelrod.Defector)], (0, 100))
+        self.assertFalse(
+            (axelrod.Random, axelrod.Random) in rr.deterministic_cache)
+
     def test_noisy_play(self):
         random.seed(1)
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
