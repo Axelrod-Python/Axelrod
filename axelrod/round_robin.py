@@ -45,16 +45,52 @@ class RoundRobin(object):
     def _empty_matrix(self, rows, columns):
         return [[0 for j in range(columns)] for i in range(rows)]
 
-    def _pair_of_players(self, player_1_index, player_2_index):
-        player1 = self.players[player_1_index]
+    def _pair_of_players(self, player1_index, player2_index):
+        player1 = self.players[player1_index]
         class1 = player1.__class__
-        if player_1_index == player_2_index:
+        if player1_index == player2_index:
             player2 = class1()
             class2 = class1
         else:
-            player2 = self.players[player_2_index]
+            player2 = self.players[player2_index]
             class2 = player2.__class__
         return player1, player2, (class1, class2)
+
+    def _play_single_interaction(self, player1_index, player2_index, payoffs,
+                                 cooperation):
+        player1, player2, key = self._pair_of_players(
+            player1_index, player2_index)
+        play_required = (
+            self._stochastic_interaction(player1, player2) or
+            key not in self.deterministic_cache)
+        if play_required:
+            turn = 0
+            player1.reset()
+            player2.reset()
+            while turn < self.turns:
+                turn += 1
+                player1.play(player2, self._noise)
+            scores = self._calculate_scores(player1, player2)
+            cooperation_rates = (
+                self._calculate_cooperation(player1),
+                self._calculate_cooperation(player2))
+            if self._cache_update_required(player1, player2):
+                self.deterministic_cache[key] = scores
+        else:
+            scores = self.deterministic_cache[key]
+            cooperation_rates = (0, 0)
+
+        # For self-interactions we can take the average of the two
+        # sides, which should improve the averaging a bit.
+        if not self._noise and player1_index == player2_index:
+            payoffs[player1_index][player2_index] = (
+                0.5 * (scores[0] + scores[1]))
+        else:
+            payoffs[player1_index][player2_index] = scores[0]
+            payoffs[player2_index][player1_index] = scores[1]
+
+        cooperation[player1_index][player2_index] = cooperation_rates[0]
+        cooperation[player2_index][player1_index] = cooperation_rates[1]
 
     def play(self):
         """Plays a round robin where each match lasts turns.
@@ -71,43 +107,10 @@ class RoundRobin(object):
         payoffs = self._empty_matrix(self.nplayers, self.nplayers)
         cooperation = self._empty_matrix(self.nplayers, self.nplayers)
 
-        for ip1 in range(self.nplayers):
-            for ip2 in range(ip1, self.nplayers):
-                p1, p2, key = self._pair_of_players(ip1, ip2)
-
-                # There are many possible keys to cache by, but perhaps the
-                # most versatile is a tuple with the classes of both players.
-                key = (cl1, cl2)
-                play_required = (
-                    self._stochastic_interaction(p1, p2) or
-                    key not in self.deterministic_cache)
-                if play_required:
-                    turn = 0
-                    p1.reset()
-                    p2.reset()
-                    while turn < self.turns:
-                        turn += 1
-                        p1.play(p2, self._noise)
-                    scores = self._calculate_scores(p1, p2)
-                    cooperation_rates = (
-                        self._calculate_cooperation(p1),
-                        self._calculate_cooperation(p2))
-                    if self._cache_update_required(p1, p2):
-                        self.deterministic_cache[key] = scores
-                else:
-                    scores = self.deterministic_cache[key]
-                    cooperation_rates = (0, 0)
-
-                # For self-interactions we can take the average of the two
-                # sides, which should improve the averaging a bit.
-                if not self._noise and ip1 == ip2:
-                    payoffs[ip1][ip2] = 0.5 * (scores[0] + scores[1])
-                else:
-                    payoffs[ip1][ip2] = scores[0]
-                    payoffs[ip2][ip1] = scores[1]
-
-                cooperation[ip1][ip2] = cooperation_rates[0]
-                cooperation[ip2][ip1] = cooperation_rates[1]
+        for player1_index in range(self.nplayers):
+            for player2_index in range(player1_index, self.nplayers):
+                self._play_single_interaction(
+                    player1_index, player2_index, payoffs, cooperation)
 
         self.payoffs = payoffs
         self.cooperation = cooperation
