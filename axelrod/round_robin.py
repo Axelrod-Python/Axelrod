@@ -56,26 +56,16 @@ class RoundRobin(object):
             class2 = player2.__class__
         return player1, player2, (class1, class2)
 
-    def _play_single_interaction(self, player1_index, player2_index, payoffs,
-                                 cooperation):
+    def _run_single_interaction(self, player1_index, player2_index, payoffs,
+                                cooperation):
         player1, player2, key = self._pair_of_players(
             player1_index, player2_index)
         play_required = (
             self._stochastic_interaction(player1, player2) or
             key not in self.deterministic_cache)
         if play_required:
-            turn = 0
-            player1.reset()
-            player2.reset()
-            while turn < self.turns:
-                turn += 1
-                player1.play(player2, self._noise)
-            scores = self._calculate_scores(player1, player2)
-            cooperation_rates = (
-                self._calculate_cooperation(player1),
-                self._calculate_cooperation(player2))
-            if self._cache_update_required(player1, player2):
-                self.deterministic_cache[key] = scores
+            scores, cooperation_rates = self._play_single_interaction(
+                player1, player2, key)
         else:
             scores = self.deterministic_cache[key]
             cooperation_rates = (0, 0)
@@ -91,6 +81,21 @@ class RoundRobin(object):
 
         cooperation[player1_index][player2_index] = cooperation_rates[0]
         cooperation[player2_index][player1_index] = cooperation_rates[1]
+
+    def _play_single_interaction(self, player1, player2, key):
+        turn = 0
+        player1.reset()
+        player2.reset()
+        while turn < self.turns:
+            turn += 1
+            player1.play(player2, self._noise)
+        scores = self._calculate_scores(player1, player2)
+        cooperation_rates = (
+            self._calculate_cooperation(player1),
+            self._calculate_cooperation(player2))
+        if self._cache_update_required(player1, player2):
+            self.deterministic_cache[key] = scores
+        return scores, cooperation_rates
 
     def play(self):
         """Plays a round robin where each match lasts turns.
@@ -109,7 +114,7 @@ class RoundRobin(object):
 
         for player1_index in range(self.nplayers):
             for player2_index in range(player1_index, self.nplayers):
-                self._play_single_interaction(
+                self._run_single_interaction(
                     player1_index, player2_index, payoffs, cooperation)
 
         self.payoffs = payoffs
