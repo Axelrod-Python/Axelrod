@@ -78,8 +78,25 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(expected_scores, scores)
         self.assertEqual(expected_cooperation_rates, cooperation_rates)
 
+    # TODO
+    # Use MagicMock to test that _play_single_interaction is called / not
+    # called in the correct cirucumstances.
+
     def test_update_matrices(self):
-        pass
+        players = [
+            axelrod.Alternator(), axelrod.Defector(), axelrod.TitForTat()]
+        rr = axelrod.RoundRobin(
+            players=players, game=self.game, turns=20)
+        scores = (53, 48)
+        cooperation_rates = (0.5, 0.55)
+        payoffs = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        cooperation = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        rr._update_matrices(
+            0, 2, scores, payoffs, cooperation_rates, cooperation)
+        expected_payoffs = [[0, 0, 53], [0, 0, 0], [48, 0, 0]]
+        expected_cooperation = [[0, 0, 0.5], [0, 0, 0], [0.55, 0, 0]]
+        self.assertEqual(expected_payoffs, payoffs)
+        self.assertEqual(expected_cooperation, cooperation)
 
     def test_pair_of_players(self):
         players = [
