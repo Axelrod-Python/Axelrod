@@ -18,46 +18,36 @@ class RoundRobin(object):
         self.cache_mutable = cache_mutable
         self._noise = noise
 
-    def _stochastic_interaction(self, p1, p2):
-        return (
-            self._noise or
-            p1.stochastic or
-            p2.stochastic)
+    def play(self):
+        """Plays a round robin where each match lasts turns.
 
-    def _cache_update_required(self, p1, p2):
-        return (
-            not self._noise and
-            self.cache_mutable and
-            not (p1.stochastic or p2.stochastic))
+        We cache scores for pairs of deterministic strategies, since the
+        outcome will always be the same.
 
-    def _calculate_scores(self, p1, p2):
-        """Calculates the score for two players based their history"""
-        s1, s2 = 0, 0
-        for pair in zip(p1.history, p2.history):
-            score = self.game.score(pair)
-            s1 += score[0]
-            s2 += score[1]
-        return s1, s2
+        Notice also that we need to handle self-interactions with some special
+        exceptions due to the way gameplay is coded within Player.
 
-    def _calculate_cooperation(self, player):
-        return player.history.count('C') / len(player.history)
+        Returns the total payoff matrix.
+        """
+
+        payoffs = self._empty_matrix(self.nplayers, self.nplayers)
+        cooperation = self._empty_matrix(self.nplayers, self.nplayers)
+
+        for player1_index in range(self.nplayers):
+            for player2_index in range(player1_index, self.nplayers):
+                self._score_single_interaction(
+                    player1_index, player2_index, payoffs, cooperation)
+
+        self.payoffs = payoffs
+        self.cooperation = cooperation
+
+        return self.payoffs
 
     def _empty_matrix(self, rows, columns):
         return [[0 for j in range(columns)] for i in range(rows)]
 
-    def _pair_of_players(self, player1_index, player2_index):
-        player1 = self.players[player1_index]
-        class1 = player1.__class__
-        if player1_index == player2_index:
-            player2 = class1()
-            class2 = class1
-        else:
-            player2 = self.players[player2_index]
-            class2 = player2.__class__
-        return player1, player2, (class1, class2)
-
-    def _run_single_interaction(self, player1_index, player2_index, payoffs,
-                                cooperation):
+    def _score_single_interaction(self, player1_index, player2_index, payoffs,
+                                  cooperation):
         player1, player2, classes = self._pair_of_players(
             player1_index, player2_index)
         play_required = (
@@ -82,6 +72,23 @@ class RoundRobin(object):
         cooperation[player1_index][player2_index] = cooperation_rates[0]
         cooperation[player2_index][player1_index] = cooperation_rates[1]
 
+    def _pair_of_players(self, player1_index, player2_index):
+        player1 = self.players[player1_index]
+        class1 = player1.__class__
+        if player1_index == player2_index:
+            player2 = class1()
+            class2 = class1
+        else:
+            player2 = self.players[player2_index]
+            class2 = player2.__class__
+        return player1, player2, (class1, class2)
+
+    def _stochastic_interaction(self, p1, p2):
+        return (
+            self._noise or
+            p1.stochastic or
+            p2.stochastic)
+
     def _play_single_interaction(self, player1, player2, classes):
         turn = 0
         player1.reset()
@@ -97,27 +104,20 @@ class RoundRobin(object):
             self.deterministic_cache[classes] = scores
         return scores, cooperation_rates
 
-    def play(self):
-        """Plays a round robin where each match lasts turns.
+    def _calculate_scores(self, p1, p2):
+        """Calculates the score for two players based their history"""
+        s1, s2 = 0, 0
+        for pair in zip(p1.history, p2.history):
+            score = self.game.score(pair)
+            s1 += score[0]
+            s2 += score[1]
+        return s1, s2
 
-        We cache scores for pairs of deterministic strategies, since the
-        outcome will always be the same.
+    def _cache_update_required(self, p1, p2):
+        return (
+            not self._noise and
+            self.cache_mutable and
+            not (p1.stochastic or p2.stochastic))
 
-        Notice also that we need to handle self-interactions with some special
-        exceptions due to the way gameplay is coded within Player.
-
-        Returns the total payoff matrix.
-        """
-
-        payoffs = self._empty_matrix(self.nplayers, self.nplayers)
-        cooperation = self._empty_matrix(self.nplayers, self.nplayers)
-
-        for player1_index in range(self.nplayers):
-            for player2_index in range(player1_index, self.nplayers):
-                self._run_single_interaction(
-                    player1_index, player2_index, payoffs, cooperation)
-
-        self.payoffs = payoffs
-        self.cooperation = cooperation
-
-        return self.payoffs
+    def _calculate_cooperation(self, player):
+        return player.history.count('C') / len(player.history)
