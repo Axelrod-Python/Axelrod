@@ -78,6 +78,9 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(expected_scores, scores)
         self.assertEqual(expected_cooperation_rates, cooperation_rates)
 
+    def test_update_matrices(self):
+        pass
+
     def test_pair_of_players(self):
         players = [
             axelrod.Cooperator(), axelrod.Defector(), axelrod.TitForTat()]
