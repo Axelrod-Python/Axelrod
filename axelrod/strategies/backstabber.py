@@ -21,7 +21,7 @@ class BackStabber(Player):
         self.stochastic = False
 
     def strategy(self, opponent):
-        if len(opponent.history) > (self.turns - 3):
+        if len(opponent.history) > (self.tournament_length - 3):
             return 'D'
         if not opponent.history:
             return self._initial
@@ -59,7 +59,7 @@ class DoubleCrosser(Player):
 
     def strategy(self, opponent):
         cutoff = 6
-        if len(opponent.history) > (self.turns - 3):
+        if len(opponent.history) > (self.tournament_length - 3):
             return 'D'
         if not opponent.history:
             return self._initial

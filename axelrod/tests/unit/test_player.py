@@ -106,7 +106,7 @@ class TestPlayer(unittest.TestCase):
         """Test that the player initiates correctly."""
         self.assertEqual(self.player().history, [])
         self.assertEqual(self.player().stochastic, self.stochastic)
-        self.assertEqual(self.player().turns, -1)
+        self.assertEqual(self.player().tournament_length, -1)
 
     def test_repr(self):
         """Test that the representation is correct."""
