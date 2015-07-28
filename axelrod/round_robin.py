@@ -46,18 +46,15 @@ class RoundRobin(object):
         return [[0 for j in range(columns)] for i in range(rows)]
 
     def _pair_of_players(self, player_1_index, player_2_index):
-        instance1 = self.players[player_1_index]
-        class1 = instance1.__class__
+        player1 = self.players[player_1_index]
+        class1 = player1.__class__
         if player_1_index == player_2_index:
-            instance2 = class1()
+            player2 = class1()
             class2 = class1
         else:
-            instance2 = self.players[player_2_index]
-            class2 = instance2.__class__
-        return {
-            'instances': (instance1, instance2),
-            'classes': (class1, class2)
-        }
+            player2 = self.players[player_2_index]
+            class2 = player2.__class__
+        return player1, player2, (class1, class2)
 
     def play(self):
         """Plays a round robin where each match lasts turns.
@@ -76,10 +73,7 @@ class RoundRobin(object):
 
         for ip1 in range(self.nplayers):
             for ip2 in range(ip1, self.nplayers):
-                pair = self._pair_of_players(ip1, ip2)
-                p1 = pair['instances'][0]
-                p2 = pair['instances'][1]
-                key = pair['classes']
+                p1, p2, key = self._pair_of_players(ip1, ip2)
 
                 play_required = (
                     self._stochastic_interaction(p1, p2) or
