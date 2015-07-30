@@ -117,35 +117,6 @@ class TestOppositeGrudger(TestPlayer):
         self.responses_test([C,C,D,D,D],[C,D,C,C,C],[C])
 
 
-class TestDavis(TestPlayer):
-
-    name = "Davis"
-    player = axelrod.Davis
-    stochastic = False
-
-    def test_initial_strategy(self):
-        """
-        Starts by cooperating
-        """
-        self.first_play_test(C)
-
-    def test_strategy(self):
-        # Cooperates for the first ten rounds
-        history1 = []
-        history2 = []
-        for i in range(9):
-            history2.append(random.choice(['C', 'D']))
-            history1.append('C')
-            self.responses_test(history1, history2, ['C'])
-
-        # If opponent defects at any point then the player will defect forever
-        # (after 10 rounds)
-        self.responses_test([C, D, D, D], [C, C, C, C], [C])
-        self.responses_test([C, C, D, D, D], [C, D, C, C, C], [C])
-        self.responses_test([C]*10 + [C, C, D, D, D], [C]*10 + [C, D, C, C, C],
-                            [D])
-
-
 class TestAggravater(TestPlayer):
 
     name = "Aggravater"
