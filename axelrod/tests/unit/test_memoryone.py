@@ -150,7 +150,7 @@ class TestJoss(TestPlayer):
     stochastic = True
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 0.9, (C, D): 0, (D, C): 1, (D, D): 0}
+        expected_dictionary = {(C, C): 0.9, (C, D): 0, (D, C): 0.9, (D, D): 0}
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
@@ -165,7 +165,7 @@ class TestSoftJoss(TestPlayer):
     stochastic = True
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 1., (C, D): 0, (D, C): 0.9, (D, D): 0}
+        expected_dictionary = {(C, C): 1, (C, D): 0.1, (D, C): 1., (D, D): 0.1}
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):

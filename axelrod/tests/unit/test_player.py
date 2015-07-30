@@ -146,13 +146,15 @@ class TestPlayer(unittest.TestCase):
                            random_seed=random_seed)
 
     def responses_test(self, history_1, history_2, responses,
-                       random_seed=None):
+                       random_seed=None, tournament_length=200):
         """Test responses to arbitrary histories. Input response_list is a
         list of lists, each of which consists of a list for the history of
         player 1, a list for the history of player 2, and a list for the
         subsequent moves by player one to test."""
         P1 = self.player()
+        P1.tournament_length = tournament_length
         P2 = axelrod.Player()
+        P2.tournament_length = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed)
