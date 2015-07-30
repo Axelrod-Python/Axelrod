@@ -92,7 +92,11 @@ def test_responses(test_class, P1, P2, history_1, history_2,
         P2.history.append(h2)
     # Run the tests
     for response in responses:
-        test_class.assertEqual(P1.strategy(P2), response)
+        s1 = P1.strategy(P2)
+        s2 = P2.strategy(P1)
+        P1.history.append(s1)
+        P2.history.append(s2)
+        test_class.assertEqual(s1, response)
 
 
 class TestPlayer(unittest.TestCase):
