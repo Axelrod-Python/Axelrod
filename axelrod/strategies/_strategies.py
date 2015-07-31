@@ -3,6 +3,7 @@ from axelrod_tournaments import *
 from appeaser import *
 from averagecopier import *
 from backstabber import *
+from calculator import Calculator
 from cooperator import *
 from darwin import *
 from defector import *
