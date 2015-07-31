@@ -85,7 +85,8 @@ class TestPlot(unittest.TestCase):
             eco = axelrod.Ecosystem(self.test_result_set)
             eco.reproduce(100)
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.stackplot(eco.population_sizes), matplotlib.pyplot.Figure)
+            self.assertIsInstance(
+                plot.stackplot(eco.population_sizes), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 
