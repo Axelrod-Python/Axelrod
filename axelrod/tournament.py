@@ -38,22 +38,20 @@ class Tournament(object):
         self._players = newplayers
 
     def play(self):
-        payoffs_list = []
-        cooperation_list = []
+        outcome = {'payoff': [], 'cooperation': []}
 
         if self._processes is None:
-            self._run_serial_repetitions(payoffs_list)
+            self._run_serial_repetitions(outcome)
         else:
             if self._build_cache_required():
-                self._build_cache(payoffs_list)
-            self._run_parallel_repetitions(payoffs_list)
+                self._build_cache(outcome)
+            self._run_parallel_repetitions(outcome)
 
         self.result_set = ResultSet(
             players=self.players,
             turns=self.turns,
             repetitions=self.repetitions,
-            payoffs_list=payoffs_list,
-            cooperation_list=cooperation_list)
+            outcome=outcome)
         return self.result_set
 
     def _build_cache_required(self):
@@ -62,22 +60,23 @@ class Tournament(object):
                 len(self.deterministic_cache) == 0 or
                 not self.prebuilt_cache))
 
-    def _build_cache(self, payoffs_list):
+    def _build_cache(self, outcome):
         self._logger.debug('Playing first round robin to build cache')
-        self._run_single_repetition(payoffs_list)
+        self._run_single_repetition(outcome)
         self._parallel_repetitions -= 1
 
-    def _run_single_repetition(self, payoffs_list):
-        payoffs = self._play_round_robin()
-        payoffs_list.append(payoffs)
+    def _run_single_repetition(self, outcome):
+        output = self._play_round_robin()
+        outcome['payoff'].append(output['payoff'])
+        outcome['cooperation'].append(output['cooperation'])
 
-    def _run_serial_repetitions(self, payoffs_list):
+    def _run_serial_repetitions(self, outcome):
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            self._run_single_repetition(payoffs_list)
+            self._run_single_repetition(outcome)
         return True
 
-    def _run_parallel_repetitions(self, payoffs_list):
+    def _run_parallel_repetitions(self, outcome):
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
@@ -92,7 +91,7 @@ class Tournament(object):
             'Playing %d round robins with %d parallel processes' %
             (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, payoffs_list)
+        self._process_done_queue(workers, done_queue, outcome)
 
         return True
 
@@ -112,20 +111,21 @@ class Tournament(object):
         return True
 
     @staticmethod
-    def _process_done_queue(workers, done_queue, payoffs_list):
+    def _process_done_queue(workers, done_queue, outcome):
         stops = 0
         while stops < workers:
-            payoffs = done_queue.get()
-            if payoffs == 'STOP':
+            output = done_queue.get()
+            if output == 'STOP':
                 stops += 1
             else:
-                payoffs_list.append(payoffs)
+                outcome['payoff'].append(output['payoff'])
+                outcome['cooperation'].append(output['cooperation'])
         return True
 
     def _worker(self, work_queue, done_queue):
         for repetition in iter(work_queue.get, 'STOP'):
-            payoffs = self._play_round_robin(cache_mutable=False)
-            done_queue.put(payoffs)
+            output = self._play_round_robin(cache_mutable=False)
+            done_queue.put(output)
         done_queue.put('STOP')
         return True
 
@@ -137,5 +137,4 @@ class Tournament(object):
             deterministic_cache=self.deterministic_cache,
             cache_mutable=cache_mutable,
             noise=self.noise)
-        payoffs = round_robin.play()
-        return payoffs
+        return round_robin.play()
