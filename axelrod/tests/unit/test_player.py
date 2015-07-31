@@ -88,8 +88,6 @@ def test_responses(test_class, P1, P2, history_1, history_2,
     for h1, h2 in zip(history_1, history_2):
         s1 = P1.strategy(MockPlayer(P2, h2))
         s2 = P2.strategy(MockPlayer(P1, h1))
-        #test_class.assertEqual(s1, h1)
-        #test_class.assertEqual(s2, h2)
         P1.history.append(h1)
         P2.history.append(h2)
     # Run the tests
@@ -102,7 +100,6 @@ def test_responses(test_class, P1, P2, history_1, history_2,
             s2 = 'C'
         P1.history.append(s1)
         P2.history.append(s2)
-
 
 
 class TestPlayer(unittest.TestCase):

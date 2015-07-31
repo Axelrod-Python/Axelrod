@@ -1,4 +1,4 @@
-"""Tests for grudger strategies."""
+"""Tests for prober strategies."""
 
 import random
 
