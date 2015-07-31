@@ -25,18 +25,24 @@ class TestRoundRobin(unittest.TestCase):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(
             players=[p1, p2, p3], game=self.game, turns=20)
-        payoff = rr.play()
+        results = rr.play()
         expected_payoff = [[60.0, 0, 33], [100, 20.0, 56], [78, 11, 46.5]]
-        self.assertEqual(payoff, expected_payoff)
+        expected_cooperation = [
+            [1.0, 1.0, 1.0], [0.0, 0.0, 0.0], [0.55, 0.45, 0.65]]
+        self.assertEqual(results['payoff'], expected_payoff)
+        self.assertEqual(results['cooperation'], expected_cooperation)
 
     def test_noisy_play(self):
         random.seed(1)
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(
             players=[p1, p2, p3], game=self.game, turns=20, noise=0.2)
-        payoff = rr.play()
+        results = rr.play()
         expected_payoff = [[57, 10, 45], [80, 40, 57], [65, 22, 37]]
-        self.assertEqual(payoff, expected_payoff)
+        expected_cooperation = [
+            [0.75, 0.8, 0.85], [0.1, 0.15, 0.2], [0.65, 0.55, 0.45]]
+        self.assertEqual(results['payoff'], expected_payoff)
+        self.assertEqual(results['cooperation'], expected_cooperation)
 
     def test_empty_matrix(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
