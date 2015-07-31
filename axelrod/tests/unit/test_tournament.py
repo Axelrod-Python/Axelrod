@@ -27,12 +27,19 @@ class TestTournament(unittest.TestCase):
         cls.test_name = 'test'
         cls.test_repetitions = 5
 
-        cls.expected_payoffs = [
+        cls.expected_payoff = [
             [600, 600, 0, 600, 600],
             [600, 600, 199, 600, 600],
             [1000, 204, 200.0, 204, 204],
             [600, 600, 199, 600.0, 600],
             [600, 600, 199, 600, 600]]
+
+        cls.expected_cooperation = [
+            [1.0, 1.0, 1.0, 1.0, 1.0],
+            [1.0, 1.0, 0.005, 1.0, 1.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0],
+            [1.0, 1.0, 0.005, 1.0, 1.0],
+            [1.0, 1.0, 0.005, 1.0, 1.0]]
 
     def test_init(self):
         tournament = axelrod.Tournament(
@@ -79,7 +86,7 @@ class TestTournament(unittest.TestCase):
         tournament._run_parallel_repetitions = MagicMock(
             name='_run_parallel_repetitions')
         tournament.play()
-        tournament._run_serial_repetitions.assert_called_once_with([])
+        tournament._run_serial_repetitions.assert_called_once_with({'cooperation': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
     def test_parallel_play(self):
@@ -109,7 +116,7 @@ class TestTournament(unittest.TestCase):
             name='_run_parallel_repetitions')
         tournament.play()
         tournament._run_parallel_repetitions.assert_called_once_with(
-            [self.expected_payoffs])
+            {'payoff': [self.expected_payoff], 'cooperation': [self.expected_cooperation]})
         self.assertFalse(tournament._run_serial_repetitions.called)
 
     def test_build_cache_required(self):
@@ -186,32 +193,36 @@ class TestTournament(unittest.TestCase):
             tournament._parallel_repetitions, self.test_repetitions - 1)
 
     def test_run_single_repetition(self):
-        payoffs_list = []
+        outcome = {'payoff': [], 'cooperation': []}
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        tournament._run_single_repetition(payoffs_list)
-        self.assertEqual(len(payoffs_list), 1)
-        self.assertEqual(payoffs_list[0], self.expected_payoffs)
+        tournament._run_single_repetition(outcome)
+        self.assertEqual(len(outcome['payoff']), 1)
+        self.assertEqual(len(outcome['cooperation']), 1)
+        self.assertEqual(outcome['payoff'][0], self.expected_payoff)
+        self.assertEqual(outcome['cooperation'][0], self.expected_cooperation)
 
     def test_run_serial_repetitions(self):
-        payoffs_list = []
+        outcome = {'payoff': [], 'cooperation': []}
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        tournament._run_serial_repetitions(payoffs_list)
-        self.assertEqual(len(payoffs_list), self.test_repetitions)
+        tournament._run_serial_repetitions(outcome)
+        self.assertEqual(len(outcome['payoff']), self.test_repetitions)
+        self.assertEqual(len(outcome['cooperation']), self.test_repetitions)
         for r in range(self.test_repetitions):
-            self.assertEqual(payoffs_list[r], self.expected_payoffs)
+            self.assertEqual(outcome['payoff'][r], self.expected_payoff)
+            self.assertEqual(outcome['cooperation'][r], self.expected_cooperation)
 
     def test_run_parallel_repetitions(self):
-        payoffs_list = []
+        outcome = {'payoff': [], 'cooperation': []}
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -219,10 +230,12 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions,
             processes=2)
-        tournament._run_parallel_repetitions(payoffs_list)
-        self.assertEqual(len(payoffs_list), self.test_repetitions)
+        tournament._run_parallel_repetitions(outcome)
+        self.assertEqual(len(outcome['payoff']), self.test_repetitions)
+        self.assertEqual(len(outcome['cooperation']), self.test_repetitions)
         for r in range(self.test_repetitions):
-            self.assertEqual(payoffs_list[r], self.expected_payoffs)
+            self.assertEqual(outcome['payoff'][r], self.expected_payoff)
+            self.assertEqual(outcome['cooperation'][r], self.expected_cooperation)
 
     def test_n_workers(self):
         max_processes = multiprocessing.cpu_count()
@@ -285,7 +298,7 @@ class TestTournament(unittest.TestCase):
     def test_process_done_queue(self):
         workers = 2
         done_queue = multiprocessing.Queue()
-        payoffs_list = []
+        outcome = {'payoff': [], 'cooperation': []}
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -293,13 +306,16 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions)
         for r in range(self.test_repetitions):
-            done_queue.put('test_payoffs')
+            done_queue.put(
+                {'payoff': 'test_payoffs', 'cooperation': 'test_cooperation'})
         for w in range(workers):
             done_queue.put('STOP')
-        tournament._process_done_queue(workers, done_queue, payoffs_list)
-        self.assertEqual(len(payoffs_list), self.test_repetitions)
+        tournament._process_done_queue(workers, done_queue, outcome)
+        self.assertEqual(len(outcome['payoff']), self.test_repetitions)
+        self.assertEqual(len(outcome['cooperation']), self.test_repetitions)
         for repetition in range(self.test_repetitions):
-            self.assertEqual(payoffs_list[r], 'test_payoffs')
+            self.assertEqual(outcome['payoff'][r], 'test_payoffs')
+            self.assertEqual(outcome['cooperation'][r], 'test_cooperation')
 
     def test_worker(self):
         tournament = axelrod.Tournament(
@@ -317,8 +333,9 @@ class TestTournament(unittest.TestCase):
         done_queue = multiprocessing.Queue()
         tournament._worker(work_queue, done_queue)
         for r in range(self.test_repetitions):
-            payoffs = done_queue.get()
-            self.assertEqual(payoffs, self.expected_payoffs)
+            output = done_queue.get()
+            self.assertEqual(output['payoff'], self.expected_payoff)
+            self.assertEqual(output['cooperation'], self.expected_cooperation)
         queue_stop = done_queue.get()
         self.assertEqual(queue_stop, 'STOP')
 
@@ -329,8 +346,8 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        payoffs = tournament._play_round_robin()
-        self.assertEqual(payoffs, self.expected_payoffs)
+        output = tournament._play_round_robin()
+        self.assertEqual(output['payoff'], self.expected_payoff)
         self.assertTrue(
             (axelrod.Cooperator, axelrod.Defector) in
             tournament.deterministic_cache)
@@ -342,6 +359,6 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        payoffs = tournament._play_round_robin(cache_mutable=False)
-        self.assertEqual(payoffs, self.expected_payoffs)
+        output = tournament._play_round_robin()
+        self.assertEqual(output['payoff'], self.expected_payoff)
         self.assertEqual(tournament.deterministic_cache, {})
