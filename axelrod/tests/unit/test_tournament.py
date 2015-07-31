@@ -86,7 +86,8 @@ class TestTournament(unittest.TestCase):
         tournament._run_parallel_repetitions = MagicMock(
             name='_run_parallel_repetitions')
         tournament.play()
-        tournament._run_serial_repetitions.assert_called_once_with({'cooperation': [], 'payoff': []})
+        tournament._run_serial_repetitions.assert_called_once_with(
+            {'cooperation': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
     def test_parallel_play(self):
@@ -115,8 +116,9 @@ class TestTournament(unittest.TestCase):
         tournament._run_parallel_repetitions = MagicMock(
             name='_run_parallel_repetitions')
         tournament.play()
-        tournament._run_parallel_repetitions.assert_called_once_with(
-            {'payoff': [self.expected_payoff], 'cooperation': [self.expected_cooperation]})
+        tournament._run_parallel_repetitions.assert_called_once_with({
+            'payoff': [self.expected_payoff],
+            'cooperation': [self.expected_cooperation]})
         self.assertFalse(tournament._run_serial_repetitions.called)
 
     def test_build_cache_required(self):
@@ -219,7 +221,8 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(outcome['cooperation']), self.test_repetitions)
         for r in range(self.test_repetitions):
             self.assertEqual(outcome['payoff'][r], self.expected_payoff)
-            self.assertEqual(outcome['cooperation'][r], self.expected_cooperation)
+            self.assertEqual(
+                outcome['cooperation'][r], self.expected_cooperation)
 
     def test_run_parallel_repetitions(self):
         outcome = {'payoff': [], 'cooperation': []}
@@ -235,7 +238,8 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(outcome['cooperation']), self.test_repetitions)
         for r in range(self.test_repetitions):
             self.assertEqual(outcome['payoff'][r], self.expected_payoff)
-            self.assertEqual(outcome['cooperation'][r], self.expected_cooperation)
+            self.assertEqual(
+                outcome['cooperation'][r], self.expected_cooperation)
 
     def test_n_workers(self):
         max_processes = multiprocessing.cpu_count()
