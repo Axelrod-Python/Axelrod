@@ -18,10 +18,10 @@ Axelrod
 
 A repository with the following goals:
 
-1. To enable the reproduction of previous IPD research as easily as possible.
-2. To produce the de-facto tool for any future IPD research.
+1. To enable the reproduction of previous Iterated Prisoner's Dilemma research as easily as possible.
+2. To produce the de-facto tool for any future Iterated Prisoner's Dilemma research.
 3. To provide as simple a means as possible for anyone to define and contribute
-   new and original IPD strategies.
+   new and original Iterated Prisoner's Dilemma strategies.
 
 **Please contribute strategies via pull request (or just get in touch
 with us).**
