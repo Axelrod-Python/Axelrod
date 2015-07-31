@@ -52,6 +52,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.deterministic_cache, {})
         self.assertEqual(tournament.noise, 0.2)
+        self.assertEqual(tournament._parallel_repetitions, 10)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
