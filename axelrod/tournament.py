@@ -22,12 +22,9 @@ class Tournament(object):
             self.game = game
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
-        self.result_set = ResultSet(
-            players=players,
-            turns=turns,
-            repetitions=repetitions)
         self.deterministic_cache = {}
         self.noise = noise
+        self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
 
@@ -45,6 +42,7 @@ class Tournament(object):
 
     def play(self):
         payoffs_list = []
+        cooperation_list = []
 
         if self._processes is None:
             self._run_serial_repetitions(payoffs_list)
@@ -53,7 +51,12 @@ class Tournament(object):
                 self._build_cache(payoffs_list)
             self._run_parallel_repetitions(payoffs_list)
 
-        self.result_set.payoffs_list = payoffs_list
+        self.result_set = ResultSet(
+            players=self.players,
+            turns=self.turns,
+            repetitions=self.repetitions,
+            payoffs_list=payoffs_list,
+            cooperation_list=cooperation_list)
         return self.result_set
 
     def _build_cache_required(self):
@@ -65,7 +68,7 @@ class Tournament(object):
     def _build_cache(self, payoffs_list):
         self._logger.debug('Playing first round robin to build cache')
         self._run_single_repetition(payoffs_list)
-        self.repetitions -= 1
+        self._parallel_repetitions -= 1
 
     def _run_single_repetition(self, payoffs_list):
         payoffs = self._play_round_robin()
@@ -85,12 +88,12 @@ class Tournament(object):
         done_queue = multiprocessing.Queue()
         workers = self._n_workers()
 
-        for repetition in range(self.repetitions):
+        for repetition in range(self._parallel_repetitions):
             work_queue.put(repetition)
 
         self._logger.debug(
             'Playing %d round robins with %d parallel processes' %
-            (self.repetitions, workers))
+            (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
         self._process_done_queue(workers, done_queue, payoffs_list)
 
