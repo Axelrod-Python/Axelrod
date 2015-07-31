@@ -359,6 +359,6 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        output = tournament._play_round_robin()
+        output = tournament._play_round_robin(cache_mutable=False)
         self.assertEqual(output['payoff'], self.expected_payoff)
         self.assertEqual(tournament.deterministic_cache, {})
