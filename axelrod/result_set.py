@@ -22,14 +22,13 @@ def median(lst):
 class ResultSet(object):
     """A class to hold the results of a tournament."""
 
-    def __init__(self, players, turns, repetitions, payoffs_list,
-                 cooperation_list):
+    def __init__(self, players, turns, repetitions, outcome):
         self.players = players
         self.nplayers = len(players)
         self.turns = turns
         self.repetitions = repetitions
-        self.payoffs_list = payoffs_list
-        self.cooperation_list = cooperation_list
+        self.payoffs_list = outcome['payoff']
+        self.cooperation_list = outcome['cooperation']
         self.results = self._results_matrix()
         self.scores = self._scores()
         self.normalised_scores = self._normalised_scores()
