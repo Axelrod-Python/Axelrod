@@ -32,6 +32,33 @@ class TestRoundRobin(unittest.TestCase):
         # The outcome is expected to be sort by score.
         return sorted(outcome, key=lambda k: k[1])
 
+    def test_deterministic_cache(self):
+        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
+        rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
+        self.assertEquals(rr.deterministic_cache, {})
+        rr.play()
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Defector, axelrod.Defector)]['scores'], (20, 20))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Defector, axelrod.Defector)]['cooperation_rates'], (0, 0))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Cooperator, axelrod.Cooperator)]['scores'], (60, 60))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Cooperator, axelrod.Cooperator)]['cooperation_rates'], (1, 1))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Cooperator, axelrod.Defector)]['scores'], (0, 100))
+        self.assertEqual(rr.deterministic_cache[
+            (axelrod.Cooperator, axelrod.Defector)]['cooperation_rates'], (1, 0))
+        self.assertFalse(
+            (axelrod.Random, axelrod.Random) in rr.deterministic_cache)
+
+    def test_noisy_cache(self):
+        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2, p3], game=self.game, turns=20, noise=0.2)
+        rr.play()
+        self.assertEqual(rr.deterministic_cache, {})
+
     def test_calculate_score_for_mix(self):
         """Test that scores are calculated correctly."""
         P1 = axelrod.Defector()
