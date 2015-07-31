@@ -769,8 +769,8 @@ Here is how EXTORT-2 is implemented in the library::
 
 which gives (for the particular seed used)::
 
-['D', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C', 'D']
-['C', 'C', 'D', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
+    ['D', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C', 'D']
+    ['C', 'C', 'D', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
 
 you can see that :code:`ZDExtort2` never cooperates after both strategies defect.
 
@@ -878,7 +878,7 @@ HARD_TFT is implemented in the library::
 
 which gives::
 
-['C', 'C', 'D', 'D', 'D']
+    ['C', 'C', 'D', 'D', 'D']
 
 we see that :code:`HardTitForTat` cooperates for the first two moves but then
 constantly defetcts as there is always a defection in it's opponent's recent
@@ -917,10 +917,30 @@ we see that :code:`HardTitFor2Tats` waited for 2 defects before defecting, but
 also continued to defect on the 4th round (as there were 2 defections in the
 previous 3 moves by the opponent).
 
-**Not implemented**: CALCULATOR
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Calculator
+^^^^^^^^^^
 
-This strategy is not unambiguously defined in [S&P, PNAS 2012].
+This strategy is not unambiguously defined in [S&P, PNAS 2012] but is defined
+elsewhere. Calculator plays like Joss for 20 rounds. On the 21 round,
+Calculator attempts to detect a cycle in the opponents history, and defects
+unconditionally thereafter if a cycle is found. Otherwise Calculator plays like
+TFT for the remaining rounds.
+
+Calculator is implemented in the library as follows:
+
+    import axelrod
+    p1 = axelrod.Calculator()  # Create a HARD_TF2T player
+    p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    for round in range(5):
+        p1.play(p2)
+
+    print p1.history
+    print p2.history
+
+This returns (for a particular random seed)::
+
+    ['C', 'C', 'C', 'C', 'C']
+    ['C', 'C', 'C', 'C', 'C']
 
 Prober
 ^^^^^^
