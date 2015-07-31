@@ -11,7 +11,8 @@ class TestResultSet(unittest.TestCase):
             [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
             [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
         ]
-        cls.expected_initial_results = [
+        cls.test_cooperation_list = []
+        cls.expected_null_results = [
             [[0, 0], [0, 0], [0, 0]],
             [[0, 0], [0, 0], [0, 0]],
             [[0, 0], [0, 0], [0, 0]],
@@ -43,81 +44,74 @@ class TestResultSet(unittest.TestCase):
         ]
         cls.expected_ranking = [2, 0, 1]
         cls.expected_ranked_names = ['Player3', 'Player1', 'Player2']
-        cls.expected_csv = 'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n'
+        cls.expected_csv = (
+            'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
 
     def test_init(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        self.assertEquals(rs.nplayers, 3)
-        self.assertEquals(rs.players, self.players)
-        self.assertEquals(rs.turns, 5)
-        self.assertEquals(rs.repetitions, 2)
-        self.assertTrue(rs._results, self.expected_initial_results)
-        self.assertFalse(rs._finalised)
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(rs.players, self.players)
+        self.assertEqual(rs.nplayers, 3)
+        self.assertEqual(rs.turns, 5)
+        self.assertEqual(rs.repetitions, 2)
+        self.assertEqual(rs.payoffs_list, self.test_payoffs_list)
+        self.assertEqual(rs.cooperation_list, self.test_cooperation_list)
 
-    def test_payoffs(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        rs.payoffs_list = self.test_payoffs_list
-        self.assertEquals(rs.payoffs_list, self.test_payoffs_list)
-        del(rs.payoffs_list)
-        self.assertFalse(rs._finalised)
+    def test_null_results_matrix(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(rs._null_results_matrix(), self.expected_null_results)
 
-    def test_results(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        self.assertRaises(AttributeError, getattr, rs, 'results')
-        rs.payoffs_list = self.test_payoffs_list
-        self.assertEquals(rs.results, self.expected_results)
-        del(rs.payoffs_list)
-        self.assertRaises(AttributeError, getattr, rs, 'results')
-        self.assertTrue(rs._results, self.expected_initial_results)
+    def test_results_matrix(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(rs._results_matrix(), self.expected_results)
+        self.assertEqual(rs.results, self.expected_results)
 
     def test_scores(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        self.assertRaises(AttributeError, getattr, rs, 'scores')
-        rs.payoffs_list = self.test_payoffs_list
-        self.assertEquals(rs.scores, self.expected_scores)
-        del(rs.payoffs_list)
-        self.assertRaises(AttributeError, getattr, rs, 'scores')
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(rs._scores(), self.expected_scores)
+        self.assertEqual(rs.scores, self.expected_scores)
 
     def test_normalised_scores(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        self.assertRaises(AttributeError, getattr, rs, 'normalised_scores')
-        rs.payoffs_list = self.test_payoffs_list
-        self.assertEquals(rs.normalised_scores, self.expected_normalised_scores)
-        del(rs.payoffs_list)
-        self.assertRaises(AttributeError, getattr, rs, 'normalised_scores')
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(
+            rs._normalised_scores(), self.expected_normalised_scores)
+        self.assertEqual(
+            rs.normalised_scores, self.expected_normalised_scores)
 
     def test_ranking(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        self.assertRaises(AttributeError, getattr, rs, 'ranking')
-        rs.payoffs_list = self.test_payoffs_list
-        self.assertEquals(rs.ranking, self.expected_ranking)
-        del(rs.payoffs_list)
-        self.assertRaises(AttributeError, getattr, rs, 'ranking')
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(
+            rs._ranking(self.expected_scores), self.expected_ranking)
+        self.assertEqual(rs.ranking, self.expected_ranking)
 
     def test_ranked_names(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        self.assertRaises(AttributeError, getattr, rs, 'ranked_names')
-        rs.payoffs_list = self.test_payoffs_list
-        self.assertEquals(rs.ranked_names, self.expected_ranked_names)
-        del(rs.payoffs_list)
-        self.assertRaises(AttributeError, getattr, rs, 'ranked_names')
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(
+            rs._ranked_names(self.expected_ranking),
+            self.expected_ranked_names)
+        self.assertEqual(rs.ranked_names, self.expected_ranked_names)
+
+    @staticmethod
+    def round_stddevs(stddevs):
+        return [[round(x, 1) for x in row] for row in stddevs]
 
     def test_payoff_matrix(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        self.assertRaises(AttributeError, getattr, rs, 'payoff_matrix')
-        self.assertRaises(AttributeError, getattr, rs, 'payoff_stddevs')
-        rs.payoffs_list = self.test_payoffs_list
-        stddevs = [[round(x, 1) for x in row] for row in rs.payoff_stddevs]
-        self.assertEquals(rs.payoff_matrix, self.expected_payoffs)
-        self.assertEquals(stddevs, self.expected_stddevs)
-        del(rs.payoffs_list)
-        self.assertRaises(AttributeError, getattr, rs, 'payoff_matrix')
-        self.assertRaises(AttributeError, getattr, rs, 'payoff_stddevs')
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(rs._payoff_matrix()[0], self.expected_payoffs)
+        self.assertEqual(
+            self.round_stddevs(rs._payoff_matrix()[1]), self.expected_stddevs)
+        self.assertEqual(rs.payoff_matrix, self.expected_payoffs)
+        self.assertEqual(self.round_stddevs(
+            rs.payoff_stddevs), self.expected_stddevs)
 
     def test_csv(self):
-        rs = axelrod.ResultSet(self.players, 5, 2)
-        self.assertRaises(AttributeError, rs.csv)
-        rs.payoffs_list = self.test_payoffs_list
-        self.assertEquals(rs.csv(), self.expected_csv)
-        del(rs.payoffs_list)
-        self.assertRaises(AttributeError, rs.csv)
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_payoffs_list,
+                               self.test_cooperation_list)
+        self.assertEqual(rs.csv(), self.expected_csv)
