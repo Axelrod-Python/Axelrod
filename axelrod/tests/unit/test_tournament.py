@@ -44,7 +44,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament._processes, 4)
         self.assertFalse(tournament.prebuilt_cache)
         self.assertIsInstance(tournament._logger, logging.Logger)
-        self.assertIsInstance(tournament.result_set, axelrod.ResultSet)
         self.assertEqual(tournament.deterministic_cache, {})
         self.assertEqual(tournament.noise, 0.2)
         anonymous_tournament = axelrod.Tournament(players=self.players)
@@ -176,7 +175,7 @@ class TestTournament(unittest.TestCase):
             name='_run_single_repetition')
         tournament._build_cache([])
         tournament._run_single_repetition.assert_called_once_with([])
-        self.assertEqual(tournament.repetitions, self.test_repetitions - 1)
+        self.assertEqual(tournament._parallel_repetitions, self.test_repetitions - 1)
 
     def test_run_single_repetition(self):
         payoffs_list = []
