@@ -29,26 +29,6 @@ class TestRoundRobin(unittest.TestCase):
         expected_payoff = [[60.0, 0, 33], [100, 20.0, 56], [78, 11, 46.5]]
         self.assertEqual(payoff, expected_payoff)
 
-    def test_deterministic_cache(self):
-        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
-        rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
-        self.assertEquals(rr.deterministic_cache, {})
-        rr.play()
-        self.assertEqual(rr.deterministic_cache[
-            (axelrod.Defector, axelrod.Defector)]['scores'], (20, 20))
-        self.assertEqual(rr.deterministic_cache[
-            (axelrod.Defector, axelrod.Defector)]['cooperation_rates'], (0, 0))
-        self.assertEqual(rr.deterministic_cache[
-            (axelrod.Cooperator, axelrod.Cooperator)]['scores'], (60, 60))
-        self.assertEqual(rr.deterministic_cache[
-            (axelrod.Cooperator, axelrod.Cooperator)]['cooperation_rates'], (1, 1))
-        self.assertEqual(rr.deterministic_cache[
-            (axelrod.Cooperator, axelrod.Defector)]['scores'], (0, 100))
-        self.assertEqual(rr.deterministic_cache[
-            (axelrod.Cooperator, axelrod.Defector)]['cooperation_rates'], (1, 0))
-        self.assertFalse(
-            (axelrod.Random, axelrod.Random) in rr.deterministic_cache)
-
     def test_noisy_play(self):
         random.seed(1)
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
@@ -57,13 +37,6 @@ class TestRoundRobin(unittest.TestCase):
         payoff = rr.play()
         expected_payoff = [[57, 10, 45], [80, 40, 57], [65, 22, 37]]
         self.assertEqual(payoff, expected_payoff)
-
-    def test_noisy_cache(self):
-        p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
-        rr = axelrod.RoundRobin(
-            players=[p1, p2, p3], game=self.game, turns=20, noise=0.2)
-        rr.play()
-        self.assertEqual(rr.deterministic_cache, {})
 
     def test_empty_matrix(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
