@@ -51,6 +51,8 @@ class MemoryOnePlayer(Player):
                 self.stochastic = True
 
     def strategy(self, opponent):
+        #print self.history
+        #print opponent.history
         if not len(opponent.history):
             return self._initial
         # Determine which probability to use

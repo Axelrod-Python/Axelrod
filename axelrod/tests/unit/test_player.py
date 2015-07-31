@@ -86,17 +86,23 @@ def test_responses(test_class, P1, P2, history_1, history_2,
     # internal state needs to be set, actually submit to moves to the strategy
     # method. Still need to append history manually.
     for h1, h2 in zip(history_1, history_2):
-        P1.strategy(MockPlayer(P2, h2))
-        P2.strategy(MockPlayer(P1, h1))
+        s1 = P1.strategy(MockPlayer(P2, h2))
+        s2 = P2.strategy(MockPlayer(P1, h1))
+        #test_class.assertEqual(s1, h1)
+        #test_class.assertEqual(s2, h2)
         P1.history.append(h1)
         P2.history.append(h2)
     # Run the tests
     for response in responses:
         s1 = P1.strategy(P2)
         s2 = P2.strategy(P1)
+        test_class.assertEqual(s1, response)
+        # Lock in histories
+        if s2 is None: # axelrod.Player() returns None
+            s2 = 'C'
         P1.history.append(s1)
         P2.history.append(s2)
-        test_class.assertEqual(s1, response)
+
 
 
 class TestPlayer(unittest.TestCase):
