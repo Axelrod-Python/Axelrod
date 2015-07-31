@@ -100,10 +100,10 @@ class Tournament(object):
         return True
 
     def _n_workers(self):
-        if (self._processes < 2 or self._processes > multiprocessing.cpu_count()):
-            n_workers = multiprocessing.cpu_count()
-        else:
+        if (2 <= self._processes <= multiprocessing.cpu_count()):
             n_workers = self._processes
+        else:
+            n_workers = multiprocessing.cpu_count()
         return n_workers
 
     def _start_workers(self, workers, work_queue, done_queue):
