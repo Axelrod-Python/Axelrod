@@ -182,7 +182,8 @@ class TestTournament(unittest.TestCase):
             name='_run_single_repetition')
         tournament._build_cache([])
         tournament._run_single_repetition.assert_called_once_with([])
-        self.assertEqual(tournament._parallel_repetitions, self.test_repetitions - 1)
+        self.assertEqual(
+            tournament._parallel_repetitions, self.test_repetitions - 1)
 
     def test_run_single_repetition(self):
         payoffs_list = []
