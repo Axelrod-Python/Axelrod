@@ -30,7 +30,7 @@ class RoundRobin(object):
         Returns the total payoff matrix.
         """
 
-        payoffs = self._empty_matrix(self.nplayers, self.nplayers)
+        payoff = self._empty_matrix(self.nplayers, self.nplayers)
         cooperation = self._empty_matrix(self.nplayers, self.nplayers)
 
         for player1_index in range(self.nplayers):
@@ -38,13 +38,10 @@ class RoundRobin(object):
                 scores, cooperation_rates = self._score_single_interaction(
                     player1_index, player2_index)
                 self._update_matrices(
-                    player1_index, player2_index, scores, payoffs,
+                    player1_index, player2_index, scores, payoff,
                     cooperation_rates, cooperation)
 
-        self.payoffs = payoffs
-        self.cooperation = cooperation
-
-        return self.payoffs
+        return {'payoff': payoff, 'cooperation': cooperation}
 
     def _empty_matrix(self, rows, columns):
         return [[0 for j in range(columns)] for i in range(rows)]
