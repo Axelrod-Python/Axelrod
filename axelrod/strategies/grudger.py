@@ -65,7 +65,7 @@ class OppositeGrudger(Player):
 
 
 class Aggravater(Player):
-    """Grudger, except that it defects on the first 3 turns turn"""
+    """Grudger, except that it defects on the first 3 turns"""
 
     name = 'Aggravater'
     memory_depth = float('inf')
