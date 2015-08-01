@@ -2,7 +2,6 @@ from axelrod import Player
 
 
 class BackStabber(Player):
-
     """
     Forgives the first 3 defections but on the fourth
     will defect forever. Defects on the last 2 rounds unconditionally.
@@ -37,7 +36,6 @@ class BackStabber(Player):
 
 
 class DoubleCrosser(Player):
-
     """
     Forgives the first 3 defections but on the fourth
     will defect forever. If the opponent did not defect
