@@ -31,9 +31,9 @@ class MetaPlayer(Player):
         results = [player.strategy(opponent) for player in self.team]
 
         # A subclass should just define a way to choose the result based on team results.
-        return self.meta_strategy(results)
+        return self.meta_strategy(results, opponent)
 
-    def meta_strategy(self, results):
+    def meta_strategy(self, results, opponent):
         """Determine the meta result based on results of all players."""
         pass
 
@@ -52,7 +52,7 @@ class MetaMajority(MetaPlayer):
 
         MetaPlayer.__init__(self)
 
-    def meta_strategy(self, results):
+    def meta_strategy(self, results, opponent):
         if results.count('D') > results.count('C'):
             return 'D'
         return 'C'
@@ -72,7 +72,7 @@ class MetaMinority(MetaPlayer):
 
         MetaPlayer.__init__(self)
 
-    def meta_strategy(self, results):
+    def meta_strategy(self, results, opponent):
         if results.count('D') < results.count('C'):
             return 'D'
         return 'C'
@@ -113,7 +113,7 @@ class MetaWinner(MetaPlayer):
 
         return MetaPlayer.strategy(self, opponent)
 
-    def meta_strategy(self, results):
+    def meta_strategy(self, results, opponent):
 
         scores = [pl.score for pl in self.team]
         bestscore = min(scores)
