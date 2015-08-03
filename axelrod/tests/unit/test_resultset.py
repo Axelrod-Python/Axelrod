@@ -13,8 +13,8 @@ class TestResultSet(unittest.TestCase):
                 [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
             ],
             'cooperation': [
-                [[0, 0.4, 1], [1, 1, 1], [0.5, 0.6, 0.8]],
-                [[0, 0.3, 0.9], [0.9, 1, 0.9], [0.4, 0.5, 0.6]]
+                [[0, 5, 5], [1, 4, 4], [2, 2, 3]],
+                [[1, 5, 5], [2, 2, 2], [5, 5, 4]]
             ]}
         cls.expected_null_matrix = [
             [[0, 0], [0, 0], [0, 0]],
@@ -28,9 +28,9 @@ class TestResultSet(unittest.TestCase):
                 [[16, 16], [16, 16], [0, 0]],
             ],
             'cooperation': [
-                [[0, 0], [0.4, 0.3], [1, 0.9]],
-                [[1, 0.9], [1, 1], [1, 0.9]],
-                [[0.5, 0.4], [0.6, 0.5], [0.8, 0.6]]
+                [[0, 1], [5, 5], [5, 5]],
+                [[1, 2], [4, 2], [4, 2]],
+                [[2, 5], [2, 5], [3, 4]]
             ]
         }
         cls.expected_scores = [
@@ -55,6 +55,16 @@ class TestResultSet(unittest.TestCase):
         ]
         cls.expected_ranking = [2, 0, 1]
         cls.expected_ranked_names = ['Player3', 'Player1', 'Player2']
+        cls.expected_cooperation = [
+            [1, 10, 10],
+            [3, 6, 6],
+            [7, 7, 7]
+        ]
+        cls.expected_normalised_cooperation = [
+            [0.1, 1, 1],
+            [0.3, 0.6, 0.6],
+            [0.7, 0.7, 0.7]
+        ]
         cls.expected_csv = (
             'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
 
@@ -84,7 +94,8 @@ class TestResultSet(unittest.TestCase):
     def test_normalised_scores(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         self.assertEqual(
-            rs._normalised_scores(self.expected_scores), self.expected_normalised_scores)
+            rs._normalised_scores(self.expected_scores),
+            self.expected_normalised_scores)
         self.assertEqual(
             rs.normalised_scores, self.expected_normalised_scores)
 
@@ -114,6 +125,22 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.payoff_matrix, self.expected_payoffs)
         self.assertEqual(self.round_stddevs(
             rs.payoff_stddevs), self.expected_stddevs)
+
+    def test_cooperation(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        self.assertEqual(
+            rs._cooperation(self.expected_results['cooperation']),
+            self.expected_cooperation)
+        self.assertEqual(rs.cooperation, self.expected_cooperation)
+
+    def test_normalised_cooperation(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        self.assertEqual(
+            rs._normalised_cooperation(self.expected_cooperation),
+            self.expected_normalised_cooperation
+        )
+        self.assertEqual(
+            rs.normalised_cooperation, self.expected_normalised_cooperation)
 
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)

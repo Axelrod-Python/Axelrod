@@ -30,6 +30,10 @@ class ResultSet(object):
             self.ranked_names = self._ranked_names(self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (
                 self._payoff_matrix(self.results['payoff']))
+        if 'cooperation' in self.results:
+            self.cooperation = self._cooperation(self.results['cooperation'])
+            self.normalised_cooperation = (
+                self._normalised_cooperation(self.cooperation))
 
     def _null_matrix(self):
         plist = list(range(self.nplayers))
@@ -101,6 +105,15 @@ class ResultSet(object):
                 averages[-1].append(avg)
                 stddevs[-1].append(dev)
         return averages, stddevs
+
+    def _cooperation(self, results):
+        return[[sum(element) for element in row] for row in results]
+
+    def _normalised_cooperation(self, cooperation):
+        normalisation = self.turns * self.repetitions
+        return[
+            [1.0 * element / normalisation for element in row]
+            for row in cooperation]
 
     def csv(self):
         csv_string = StringIO()
