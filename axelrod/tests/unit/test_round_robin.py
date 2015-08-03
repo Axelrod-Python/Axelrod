@@ -28,7 +28,7 @@ class TestRoundRobin(unittest.TestCase):
         results = rr.play()
         expected_payoff = [[60.0, 0, 33], [100, 20.0, 56], [78, 11, 46.5]]
         expected_cooperation = [
-            [1.0, 1.0, 1.0], [0.0, 0.0, 0.0], [0.55, 0.45, 0.65]]
+            [20, 20, 20], [0, 0, 0], [11, 9, 13]]
         self.assertEqual(results['payoff'], expected_payoff)
         self.assertEqual(results['cooperation'], expected_cooperation)
 
@@ -40,7 +40,7 @@ class TestRoundRobin(unittest.TestCase):
         results = rr.play()
         expected_payoff = [[57, 10, 45], [80, 40, 57], [65, 22, 37]]
         expected_cooperation = [
-            [0.75, 0.8, 0.85], [0.1, 0.15, 0.2], [0.65, 0.55, 0.45]]
+            [15, 16, 17], [2, 3, 4], [13, 11, 9]]
         self.assertEqual(results['payoff'], expected_payoff)
         self.assertEqual(results['cooperation'], expected_cooperation)
 
@@ -59,7 +59,7 @@ class TestRoundRobin(unittest.TestCase):
             players=players, game=self.game, turns=20)
         scores, cooperation_rates = rr._score_single_interaction(0, 2)
         expected_scores = (53, 48)
-        expected_cooperation_rates = (0.5, 0.55)
+        expected_cooperation_rates = (10, 11)
         self.assertEqual(expected_scores, scores)
         self.assertEqual(expected_cooperation_rates, cooperation_rates)
 
@@ -136,7 +136,7 @@ class TestRoundRobin(unittest.TestCase):
         scores, cooperation_rates = (
             rr._play_single_interaction(player1, player2, classes))
         expected_scores = (53, 48)
-        expected_cooperation_rates = (0.5, 0.55)
+        expected_cooperation_rates = (10, 11)
         self.assertEqual(expected_scores, scores)
         self.assertEqual(expected_cooperation_rates, cooperation_rates)
 
@@ -169,5 +169,5 @@ class TestRoundRobin(unittest.TestCase):
         rr = axelrod.RoundRobin(
             players=[p1, p2], game=self.game, turns=20)
         result = rr._calculate_cooperation(p1)
-        expected = 0.5
+        expected = 2
         self.assertEqual(result, expected)
