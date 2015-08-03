@@ -21,29 +21,32 @@ class ResultSet(object):
         self.nplayers = len(players)
         self.turns = turns
         self.repetitions = repetitions
-        self.payoffs_list = outcome['payoff']
-        self.cooperation_list = outcome['cooperation']
-        self.results = self._results_matrix()
-        self.scores = self._scores()
+        self.outcome = outcome
+        self.results = self._results(outcome)
+        self.scores = self._scores(self.results['payoff'])
         self.normalised_scores = self._normalised_scores()
         self.ranking = self._ranking(self.scores)
         self.ranked_names = self._ranked_names(self.ranking)
-        self.payoff_matrix, self.payoff_stddevs = self._payoff_matrix()
+        self.payoff_matrix, self.payoff_stddevs = (
+            self._payoff_matrix(self.results['payoff']))
 
-    def _null_results_matrix(self):
+    def _null_matrix(self):
         plist = list(range(self.nplayers))
         replist = list(range(self.repetitions))
         return [[[0 for r in replist] for j in plist] for i in plist]
 
-    def _results_matrix(self):
-        matrix = self._null_results_matrix()
-        for index, payoffs in enumerate(self.payoffs_list):
-            for i in range(len(self.players)):
-                for j in range(len(self.players)):
-                    matrix[i][j][index] = payoffs[i][j]
-        return matrix
+    def _results(self, outcome):
+        results = {}
+        for result_type, result_list in outcome.iteritems():
+            matrix = self._null_matrix()
+            for index, result_matrix in enumerate(result_list):
+                for i in range(len(self.players)):
+                    for j in range(len(self.players)):
+                        matrix[i][j][index] = result_matrix[i][j]
+                results[result_type] = matrix
+        return results
 
-    def _scores(self):
+    def _scores(self, payoff):
         """Return scores based on the results.
 
         Originally there were no self-interactions, so the code here was
@@ -52,7 +55,7 @@ class ResultSet(object):
         normalization factor.
         """
         scores = []
-        for ires, res in enumerate(self.results):
+        for ires, res in enumerate(payoff):
             scores.append([])
             for irep in range(self.repetitions):
                 scores[-1].append(0)
@@ -82,11 +85,11 @@ class ResultSet(object):
         ranked_names = [str(self.players[i]) for i in ranking]
         return ranked_names
 
-    def _payoff_matrix(self):
+    def _payoff_matrix(self, payoff):
         """Returns a per-turn averaged payoff matrix and its stddevs."""
         averages = []
         stddevs = []
-        for res in self.results:
+        for res in payoff:
             averages.append([])
             stddevs.append([])
             for s in res:
