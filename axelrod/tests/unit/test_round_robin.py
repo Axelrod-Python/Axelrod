@@ -97,6 +97,10 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(player1.name, player2.name)
         self.assertEqual(key[0], key[1])
         self.assertNotEqual(player1, player2)
+        # Check that the two player instances are wholly independent
+        player1.name = 'player 1'
+        player2.name = 'player 2'
+        self.assertNotEqual(player1.name, player2.name)
 
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
