@@ -25,7 +25,7 @@ class TestRoundRobin(unittest.TestCase):
         # Do the actual game and build the expected outcome tuples.
         round_robin = axelrod.RoundRobin(
             players=players, game=cls.game, turns=turns)
-        payoffs = round_robin.play()
+        payoffs = round_robin.play()['payoff']
         scores = cls.payoffs2scores(payoffs)
         outcome = zip(names, scores)
 
