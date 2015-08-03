@@ -24,6 +24,7 @@ class Tournament(object):
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
+        self._outcome = {'payoff': [], 'cooperation': []}
 
     @property
     def players(self):
@@ -38,20 +39,18 @@ class Tournament(object):
         self._players = newplayers
 
     def play(self):
-        outcome = {'payoff': [], 'cooperation': []}
-
         if self._processes is None:
-            self._run_serial_repetitions(outcome)
+            self._run_serial_repetitions(self._outcome)
         else:
             if self._build_cache_required():
-                self._build_cache(outcome)
-            self._run_parallel_repetitions(outcome)
+                self._build_cache(self._outcome)
+            self._run_parallel_repetitions(self._outcome)
 
         self.result_set = ResultSet(
             players=self.players,
             turns=self.turns,
             repetitions=self.repetitions,
-            outcome=outcome)
+            outcome=self._outcome)
         return self.result_set
 
     def _build_cache_required(self):
