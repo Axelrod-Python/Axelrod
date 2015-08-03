@@ -50,6 +50,7 @@ class RoundRobin(object):
                 # doubling the score and causing historic schizophrenia.
                 if ip1 == ip2:
                     p2 = cl1()
+                    p2.tournament_length = self.turns
                     cl2 = cl1
                 else:
                     p2 = self.players[ip2]
