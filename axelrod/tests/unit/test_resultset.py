@@ -12,17 +12,27 @@ class TestResultSet(unittest.TestCase):
                 [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
                 [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
             ],
-            'cooperation': []}
-        cls.expected_null_results = [
+            'cooperation': [
+                [[0, 0.4, 1], [1, 1, 1], [0.5, 0.6, 0.8]],
+                [[0, 0.3, 0.9], [0.9, 1, 0.9], [0.4, 0.5, 0.6]]
+            ]}
+        cls.expected_null_matrix = [
             [[0, 0], [0, 0], [0, 0]],
             [[0, 0], [0, 0], [0, 0]],
             [[0, 0], [0, 0], [0, 0]],
         ]
-        cls.expected_results = [
-            [[0, 0], [10, 10], [21, 21]],
-            [[10, 8], [0, 0], [16, 20]],
-            [[16, 16], [16, 16], [0, 0]],
-        ]
+        cls.expected_results = {
+            'payoff': [
+                [[0, 0], [10, 10], [21, 21]],
+                [[10, 8], [0, 0], [16, 20]],
+                [[16, 16], [16, 16], [0, 0]],
+            ],
+            'cooperation': [
+                [[0, 0], [0.4, 0.3], [1, 0.9]],
+                [[1, 0.9], [1, 1], [1, 0.9]],
+                [[0.5, 0.4], [0.6, 0.5], [0.8, 0.6]]
+            ]
+        }
         cls.expected_scores = [
             [31, 31],
             [26, 28],
@@ -54,21 +64,21 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.nplayers, 3)
         self.assertEqual(rs.turns, 5)
         self.assertEqual(rs.repetitions, 2)
-        self.assertEqual(rs.payoffs_list, self.test_outcome['payoff'])
-        self.assertEqual(rs.cooperation_list, self.test_outcome['cooperation'])
+        self.assertEqual(rs.outcome, self.test_outcome)
 
-    def test_null_results_matrix(self):
+    def test_null_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        self.assertEqual(rs._null_results_matrix(), self.expected_null_results)
+        self.assertEqual(rs._null_matrix(), self.expected_null_matrix)
 
-    def test_results_matrix(self):
+    def test_results(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        self.assertEqual(rs._results_matrix(), self.expected_results)
+        self.assertEqual(rs._results(self.test_outcome), self.expected_results)
         self.assertEqual(rs.results, self.expected_results)
 
     def test_scores(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        self.assertEqual(rs._scores(), self.expected_scores)
+        self.assertEqual(
+            rs._scores(self.expected_results['payoff']), self.expected_scores)
         self.assertEqual(rs.scores, self.expected_scores)
 
     def test_normalised_scores(self):
@@ -97,9 +107,10 @@ class TestResultSet(unittest.TestCase):
 
     def test_payoff_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        self.assertEqual(rs._payoff_matrix()[0], self.expected_payoffs)
+        averages, stddevs = rs._payoff_matrix(self.expected_results['payoff'])
+        self.assertEqual(averages, self.expected_payoffs)
         self.assertEqual(
-            self.round_stddevs(rs._payoff_matrix()[1]), self.expected_stddevs)
+            self.round_stddevs(stddevs), self.expected_stddevs)
         self.assertEqual(rs.payoff_matrix, self.expected_payoffs)
         self.assertEqual(self.round_stddevs(
             rs.payoff_stddevs), self.expected_stddevs)
