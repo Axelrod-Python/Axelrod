@@ -29,12 +29,13 @@ class ResultSet(object):
         self.repetitions = repetitions
         self.outcome = outcome
         self.results = self._results(outcome)
-        self.scores = self._scores(self.results['payoff'])
-        self.normalised_scores = self._normalised_scores(self.scores)
-        self.ranking = self._ranking(self.scores)
-        self.ranked_names = self._ranked_names(self.ranking)
-        self.payoff_matrix, self.payoff_stddevs = (
-            self._payoff_matrix(self.results['payoff']))
+        if 'payoff' in self.results:
+            self.scores = self._scores(self.results['payoff'])
+            self.normalised_scores = self._normalised_scores(self.scores)
+            self.ranking = self._ranking(self.scores)
+            self.ranked_names = self._ranked_names(self.ranking)
+            self.payoff_matrix, self.payoff_stddevs = (
+                self._payoff_matrix(self.results['payoff']))
 
     def _null_matrix(self):
         plist = list(range(self.nplayers))
