@@ -84,7 +84,7 @@ class TestResultSet(unittest.TestCase):
     def test_normalised_scores(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         self.assertEqual(
-            rs._normalised_scores(), self.expected_normalised_scores)
+            rs._normalised_scores(self.expected_scores), self.expected_normalised_scores)
         self.assertEqual(
             rs.normalised_scores, self.expected_normalised_scores)
 
