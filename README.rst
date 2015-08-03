@@ -16,12 +16,24 @@
 Axelrod
 =======
 
-A repository to reproduce Axelrod's iterated prisoner's dilemma.
+A repository with the following goals:
+
+1. To enable the reproduction of previous Iterated Prisoner's Dilemma research as easily as possible.
+2. To produce the de-facto tool for any future Iterated Prisoner's Dilemma research.
+3. To provide as simple a means as possible for anyone to define and contribute
+   new and original Iterated Prisoner's Dilemma strategies.
+
 **Please contribute strategies via pull request (or just get in touch
-with me).**
+with us).**
 
 For an overview of how to use and contribute to this repository, see the
 documentation: http://axelrod.readthedocs.org/
+
+If you do use this library for your personal research we would love to hear
+about it: please do add a link at the bottom of this README file (PR's welcome
+or again, just let us know) :) If there is something that is missing in this
+library and that you would like implemented so as to be able to carry out a
+project please open an issue and let us know!
 
 Installation
 ============
@@ -154,6 +166,18 @@ Contributors
 -  `timothyf1 <https://github.com/timothyf1>`__
 -  `uglyfruitcake <https://github.com/uglyfruitcake>`__
 -  `pmslavin <https://github.com/pmslavin>`__
+
+Projects that use this library
+==============================
+
+If you happen to use this library for anything from a blog post to a research
+paper please list it here:
+
+- `A 2015 pedagogic paper on active learning
+  <https://github.com/drvinceknight/Playing-games-a-case-study-in-active-learning>`_
+  by `drvinceknight <https://twitter.com/drvinceknight>`_ published in `MSOR
+  Connections <https://journals.gre.ac.uk/index.php/msor/about>`_: the library
+  is mentioned briefly as a way of demonstrating repeated games.
 
 .. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
