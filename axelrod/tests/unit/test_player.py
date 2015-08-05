@@ -68,7 +68,9 @@ class MockPlayer(axelrod.Player):
     def __init__(self, player, move):
         # Need to retain history for opponents that examine opponents history
         # Do a deep copy just to be safe
-        self.history = copy.copy(player.history)
+        self.history = copy.deepcopy(player.history)
+        self.cooperations = player.cooperations
+        self.defections = player.defections
         self.move = move
 
     def strategy(self, opponent):
