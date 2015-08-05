@@ -96,10 +96,10 @@ class TournamentManager(object):
             'Starting ecological variant of %s' % tournament.name)
         t0 = time.time()
         ecoturns = {
-            'basic_strategies': 100,
-            'cheating_strategies': 20,
-            'strategies': 200,
-            'all_strategies': 40,
+            'basic_strategies': 1000,
+            'cheating_strategies': 10,
+            'strategies': 1000,
+            'all_strategies': 10,
         }
         ecosystem.reproduce(ecoturns.get(tournament.name))
         self._logger.debug(

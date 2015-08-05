@@ -67,10 +67,10 @@ class GTFT(MemoryOnePlayer):
 
     name = 'Generous Tit-For-Tat'
 
-    def __init__(self, ep=0.05):
-        self.ep = ep
+    def __init__(self, p=None):
         (R, P, S, T) = Game().RPST()
-        p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
+        if not p:
+            p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
         four_vector = [1, p, 1, p]
         super(self.__class__, self).__init__(four_vector)
 

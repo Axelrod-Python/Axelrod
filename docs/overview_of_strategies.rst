@@ -769,8 +769,8 @@ Here is how EXTORT-2 is implemented in the library::
 
 which gives (for the particular seed used)::
 
-['D', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C', 'D']
-['C', 'C', 'D', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
+    ['D', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C', 'D']
+    ['C', 'C', 'D', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
 
 you can see that :code:`ZDExtort2` never cooperates after both strategies defect.
 
@@ -878,7 +878,7 @@ HARD_TFT is implemented in the library::
 
 which gives::
 
-['C', 'C', 'D', 'D', 'D']
+    ['C', 'C', 'D', 'D', 'D']
 
 we see that :code:`HardTitForTat` cooperates for the first two moves but then
 constantly defetcts as there is always a defection in it's opponent's recent
@@ -917,30 +917,147 @@ we see that :code:`HardTitFor2Tats` waited for 2 defects before defecting, but
 also continued to defect on the 4th round (as there were 2 defections in the
 previous 3 moves by the opponent).
 
-**Not implemented**: CALCULATOR
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Calculator
+^^^^^^^^^^
 
-This strategy is not unambiguously defined in [S&P, PNAS 2012].
+This strategy is not unambiguously defined in [S&P, PNAS 2012] but is defined
+elsewhere. Calculator plays like Joss for 20 rounds. On the 21 round,
+Calculator attempts to detect a cycle in the opponents history, and defects
+unconditionally thereafter if a cycle is found. Otherwise Calculator plays like
+TFT for the remaining rounds.
 
-**Not implemented**: PROBE
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Calculator is implemented in the library as follows:
 
-This strategy is not unambiguously defined in [S&P, PNAS 2012].
+    import axelrod
+    p1 = axelrod.Calculator()  # Create a HARD_TF2T player
+    p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    for round in range(5):
+        p1.play(p2)
 
-**Not implemented**: PROBE2
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    print p1.history
+    print p2.history
 
-This strategy is not unambiguously defined in [S&P, PNAS 2012].
+This returns (for a particular random seed)::
 
-**Not implemented**: PROBE3
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ['C', 'C', 'C', 'C', 'C']
+    ['C', 'C', 'C', 'C', 'C']
 
-This strategy is not unambiguously defined in [S&P, PNAS 2012].
+Prober
+^^^^^^
 
-**Not implemented**: HARD_PROBE
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PROBE is not unambiguously defined in [S&P, PNAS 2012] but is defined
+elsewhere as Prober. The strategy starts by playing D, C, C on the first three
+rounds and then defects forever if the opponent cooperates on rounds
+two and three. Otherwise Prober plays as TitForTat would.
 
-This strategy is not unambiguously defined in [S&P, PNAS 2012].
+*Prober came 15th in average score and 9th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Prober is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.Prober()  # Create a Prober player
+    p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    for round in range(5):
+        p1.play(p2)
+
+    print p2.history
+    print p1.history
+
+which gives::
+
+    ['D', 'C', 'C', 'D', 'D']
+    ['C', 'C', 'C', 'C', 'C']
+
+Prober2
+^^^^^^^
+
+PROBE2 is not unambiguously defined in [S&P, PNAS 2012] but is defined
+elsewhere as Prober2. The strategy starts by playing D, C, C on the first three
+rounds and then cooperates forever if the opponent played D then C on rounds
+two and three. Otherwise Prober2 plays as TitForTat would.
+
+*Prober2 came 9th in average score and 12th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Prober2 is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.Prober2()  # Create a Prober2 player
+    p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    for round in range(5):
+        p1.play(p2)
+
+    print p2.history
+    print p1.history
+
+which gives::
+
+    ['D', 'C', 'C', 'C', 'C']
+    ['C', 'C', 'C', 'C', 'C']
+
+Prober3
+^^^^^^^
+
+PROBE3 is not unambiguously defined in [S&P, PNAS 2012] but is defined
+elsewhere as Prober3. The strategy starts by playing D, C on the first two
+rounds and then defects forever if the opponent cooperated on round two.
+Otherwise Prober3 plays as TitForTat would.
+
+*Prober3 came 17th in average score and 7th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+Prober3 is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.Prober3()  # Create a Prober3 player
+    p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    for round in range(5):
+        p1.play(p2)
+
+    print p2.history
+    print p1.history
+
+which gives::
+
+    ['D', 'C', 'D', 'D', 'D']
+    ['C', 'C', 'C', 'C', 'C']
+
+HardProber
+^^^^^^^^^^
+
+HARD_PROBE is not unambiguously defined in [S&P, PNAS 2012] but is defined
+elsewhere as HardProber. The strategy starts by playing D, D, C, C on the first
+four rounds and then defects forever if the opponent cooperates on rounds
+two and three. Otherwise Prober plays as TitForTat would.
+
+*Prober2 came 5th in average score and 6th in wins in S&P's tournament.*
+
+Implementation
+**************
+
+HardProber is implemented in the library::
+
+    import axelrod
+    p1 = axelrod.HardProber()  # Create a Prober3 player
+    p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    for round in range(5):
+        p1.play(p2)
+
+    print p2.history
+    print p1.history
+
+which gives::
+
+    ['D', 'D', 'C', 'C', 'D']
+    ['C', 'C', 'C', 'C', 'C']
+
 
 Strategies implemented in the module
 ------------------------------------
