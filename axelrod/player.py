@@ -19,6 +19,8 @@ class Player(object):
         self.tournament_length = -1
         if self.name == "Player":
             self.stochastic = False
+        self.cooperations = 0
+        self.defections = 0
 
     def __repr__(self):
         """The string method for the strategy."""
@@ -44,6 +46,15 @@ class Player(object):
             s1, s2 = self._add_noise(noise, s1, s2)
         self.history.append(s1)
         opponent.history.append(s2)
+        # Update player counts of cooperation and defection
+        if s1 == 'C':
+            self.cooperations += 1
+        else:
+            self.defections += 1
+        if s2 == 'C':
+            opponent.cooperations += 1
+        else:
+            opponent.defections += 1
 
     def reset(self):
         """Resets history.
@@ -53,3 +64,5 @@ class Player(object):
         rest all other attributes.
         """
         self.history = []
+        self.cooperations = 0
+        self.defections = 0

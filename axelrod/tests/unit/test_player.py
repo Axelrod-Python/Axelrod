@@ -36,6 +36,20 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p1.history[0], 'C')
         self.assertEqual(p2.history[0], 'D')
 
+        # Test cooperation / defection counts
+        self.assertEqual(p1.cooperations, 1)
+        self.assertEqual(p1.defections, 0)
+        self.assertEqual(p2.cooperations, 0)
+        self.assertEqual(p2.defections, 1)
+        p1.play(p2)
+        self.assertEqual(p1.history[-1], 'C')
+        self.assertEqual(p2.history[-1], 'D')
+        # Test cooperation / defection counts
+        self.assertEqual(p1.cooperations, 2)
+        self.assertEqual(p1.defections, 0)
+        self.assertEqual(p2.cooperations, 0)
+        self.assertEqual(p2.defections, 2)
+
     def test_noisy_play(self):
         random.seed(1)
         noise = 0.2
@@ -114,6 +128,8 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player().history, [])
         self.assertEqual(self.player().stochastic, self.stochastic)
         self.assertEqual(self.player().tournament_length, -1)
+        self.assertEqual(self.player().cooperations, 0)
+        self.assertEqual(self.player().defections, 0)
 
     def test_repr(self):
         """Test that the representation is correct."""
@@ -125,6 +141,8 @@ class TestPlayer(unittest.TestCase):
         p.history = [C, C]
         p.reset()
         self.assertEquals(p.history, [])
+        self.assertEqual(self.player().cooperations, 0)
+        self.assertEqual(self.player().defections, 0)
 
     def test_strategy(self):
         """Test that strategy method."""
