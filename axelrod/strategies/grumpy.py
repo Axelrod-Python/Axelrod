@@ -27,9 +27,13 @@ class Grumpy(Player):
         Won't become nice once that grumpy threshold is hit, but must reach a much lower threshold before it becomes nice again.
         """
 
-        self.grumpiness = (
-            sum(play == 'D' for play in opponent.history) -
-            sum(play == 'C' for play in opponent.history))
+        #self.grumpiness = (
+            #sum(play == 'D' for play in opponent.history) -
+            #sum(play == 'C' for play in opponent.history))
+
+        self.grumpiness = opponent.defections - opponent.cooperations
+            #sum(play == 'D' for play in opponent.history) -
+            #sum(play == 'C' for play in opponent.history))
 
         if self.state == 'Nice':
             if self.grumpiness > self.grumpy_threshold:

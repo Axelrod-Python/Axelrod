@@ -7,6 +7,8 @@ from test_player import TestPlayer
 
 C, D = 'C', 'D'
 
+from test_player import test_responses
+
 
 class TestGrumpy(TestPlayer):
 
@@ -35,18 +37,21 @@ class TestGrumpy(TestPlayer):
         """
         P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
         P2 = axelrod.Player()
-        P1.history = [C, D, D, D]
-        P2.history = [C, C, C, C]
-        self.assertEqual(P1.strategy(P2), C)
-        P1.history = [C, C, D, D, D]
-        P2.history = [D, D, D, D, D]
-        self.assertEqual(P1.strategy(P2), D)
-        P1.history = [C, C, D, D, D, D, D, D]
-        P2.history = [D, D, D, D, D, C, C, C]
-        self.assertEqual(P1.strategy(P2), D)
-        P1.history = [C, C, D, D, D, D, D, D, D, D, D]
-        P2.history = [D, D, D, D, D, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), C)
+        test_responses(self, P1, P2, [C, D, D, D], [C, C, C, C], [C])
+
+        P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
+        P2 = axelrod.Player()
+        test_responses(self, P1, P2, [C, C, D, D, D], [D, D, D, D, D], [D])
+
+        P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
+        P2 = axelrod.Player()
+        test_responses(self, P1, P2, [C, C, D, D, D, D, D, D],
+                       [D, D, D, D, D, C, C, C], [D])
+
+        P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
+        P2 = axelrod.Player()
+        test_responses(self, P1, P2, [C, C, D, D, D, D, D, D, D, D, D],
+                       [D, D, D, D, D, C, C, C, C, C, C], [C])
 
     def test_reset_method(self):
         """
