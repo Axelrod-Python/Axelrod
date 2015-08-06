@@ -15,12 +15,9 @@ class Forgiver(Player):
         """
         Begins by playing C, then plays D if the opponent has defected more than 10 percent of the time
         """
-        try:
-            if opponent.history.count('D') > len(opponent.history) / 10.:
-                return 'D'
-            return 'C'
-        except IndexError:
-            return 'C'
+        if opponent.defections > len(opponent.history) / 10.:
+            return 'D'
+        return 'C'
 
 
 class ForgivingTitForTat(Player):
@@ -40,9 +37,6 @@ class ForgivingTitForTat(Player):
         the opponent has defected more than 10 percent of the time,
         and their most recent decision was defect.
         """
-        try:
-            if opponent.history.count('D') > len(opponent.history) / 10.:
-                return opponent.history[-1]
-            return 'C'
-        except IndexError:
-            return 'C'
+        if opponent.defections > len(opponent.history) / 10.:
+            return opponent.history[-1]
+        return 'C'

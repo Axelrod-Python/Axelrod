@@ -3,38 +3,53 @@ import random
 import unittest
 import axelrod
 
+from axelrod import simulate_play, Player
 
 C, D = 'C', 'D'
 
 
 def cooperate(self):
-    return 'C'
+    return C
 
 def defect(self):
-    return 'D'
+    return D
 
 
 class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
-    player = axelrod.Player
+    player = Player
     stochastic = False
 
     def test_add_noise(self):
         random.seed(1)
         noise = 0.2
-        s1, s2 = 'C', 'C'
+        s1, s2 = C, C
         noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
-        self.assertEqual(noisy_s1, 'D')
-        self.assertEqual(noisy_s2, 'C')
+        self.assertEqual(noisy_s1, D)
+        self.assertEqual(noisy_s2, C)
 
     def test_play(self):
         p1, p2 = self.player(), self.player()
         p1.strategy = cooperate
         p2.strategy = defect
         p1.play(p2)
-        self.assertEqual(p1.history[0], 'C')
-        self.assertEqual(p2.history[0], 'D')
+        self.assertEqual(p1.history[0], C)
+        self.assertEqual(p2.history[0], D)
+
+        # Test cooperation / defection counts
+        self.assertEqual(p1.cooperations, 1)
+        self.assertEqual(p1.defections, 0)
+        self.assertEqual(p2.cooperations, 0)
+        self.assertEqual(p2.defections, 1)
+        p1.play(p2)
+        self.assertEqual(p1.history[-1], C)
+        self.assertEqual(p2.history[-1], D)
+        # Test cooperation / defection counts
+        self.assertEqual(p1.cooperations, 2)
+        self.assertEqual(p1.defections, 0)
+        self.assertEqual(p2.cooperations, 0)
+        self.assertEqual(p2.defections, 2)
 
     def test_noisy_play(self):
         random.seed(1)
@@ -43,34 +58,9 @@ class TestPlayerClass(unittest.TestCase):
         p1.strategy = cooperate
         p2.strategy = defect
         p1.play(p2, noise)
-        self.assertEqual(p1.history[0], 'D')
-        self.assertEqual(p2.history[0], 'D')
+        self.assertEqual(p1.history[0], D)
+        self.assertEqual(p2.history[0], D)
 
-
-class MockPlayer(axelrod.Player):
-    """Creates a mock player that enforces a particular next move for a given
-    player."""
-
-    def __init__(self, player, move):
-        # Need to retain history for opponents that examine opponents history
-        # Do a deep copy just to be safe
-        self.history = copy.copy(player.history)
-        self.move = move
-
-    def strategy(self, opponent):
-        # Just return the saved move
-        return self.move
-
-
-def test_four_vector(test_class, expected_dictionary):
-    """
-    Checks that two dictionaries match -- the four-vector defining
-    a memory-one strategy and the given expected dictionary.
-    """
-    P1 = test_class.player()
-    for key in sorted(expected_dictionary.keys()):
-        test_class.assertAlmostEqual(
-            P1._four_vector[key], expected_dictionary[key])
 
 def test_responses(test_class, P1, P2, history_1, history_2,
                    responses, random_seed=None):
@@ -86,27 +76,18 @@ def test_responses(test_class, P1, P2, history_1, history_2,
     # internal state needs to be set, actually submit to moves to the strategy
     # method. Still need to append history manually.
     for h1, h2 in zip(history_1, history_2):
-        s1 = P1.strategy(MockPlayer(P2, h2))
-        s2 = P2.strategy(MockPlayer(P1, h1))
-        P1.history.append(h1)
-        P2.history.append(h2)
+        simulate_play(P1, P2, h1, h2)
     # Run the tests
     for response in responses:
-        s1 = P1.strategy(P2)
-        s2 = P2.strategy(P1)
+        s1, s2 = simulate_play(P1, P2)
         test_class.assertEqual(s1, response)
-        # Lock in histories
-        if s2 is None: # axelrod.Player() returns None
-            s2 = 'C'
-        P1.history.append(s1)
-        P2.history.append(s2)
 
 
 class TestPlayer(unittest.TestCase):
     "A Test class from which other player test classes are inherited"
 
     name = "Player"
-    player = axelrod.Player
+    player = Player
     stochastic = False
 
     def test_initialisation(self):
@@ -114,6 +95,8 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player().history, [])
         self.assertEqual(self.player().stochastic, self.stochastic)
         self.assertEqual(self.player().tournament_length, -1)
+        self.assertEqual(self.player().cooperations, 0)
+        self.assertEqual(self.player().defections, 0)
 
     def test_repr(self):
         """Test that the representation is correct."""
@@ -125,6 +108,8 @@ class TestPlayer(unittest.TestCase):
         p.history = [C, C]
         p.reset()
         self.assertEquals(p.history, [])
+        self.assertEqual(self.player().cooperations, 0)
+        self.assertEqual(self.player().defections, 0)
 
     def test_strategy(self):
         """Test that strategy method."""
@@ -133,7 +118,7 @@ class TestPlayer(unittest.TestCase):
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
         P1 = self.player()
-        P2 = axelrod.Player()
+        P2 = Player()
         test_responses(
             self, P1, P2, [], [], [play],
             random_seed=random_seed)
@@ -148,7 +133,7 @@ class TestPlayer(unittest.TestCase):
         for i, history in enumerate(histories):
             # Needs to be in the inner loop in case player retains some state
             P1 = self.player()
-            P2 = axelrod.Player()
+            P2 = Player()
             test_responses(self, P1, P2, history[0], history[1], responses[i],
                            random_seed=random_seed)
 
@@ -160,7 +145,7 @@ class TestPlayer(unittest.TestCase):
         subsequent moves by player one to test."""
         P1 = self.player()
         P1.tournament_length = tournament_length
-        P2 = axelrod.Player()
+        P2 = Player()
         P2.tournament_length = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
@@ -190,3 +175,14 @@ class TestHeadsUp(unittest.TestCase):
             player_1.play(player_2)
             self.assertEqual(player_1_history[-1], outcome_1)
             self.assertEqual(player_2_history[-1], outcome_2)
+
+
+def test_four_vector(test_class, expected_dictionary):
+    """
+    Checks that two dictionaries match -- the four-vector defining
+    a memory-one strategy and the given expected dictionary.
+    """
+    P1 = test_class.player()
+    for key in sorted(expected_dictionary.keys()):
+        test_class.assertAlmostEqual(
+            P1._four_vector[key], expected_dictionary[key])

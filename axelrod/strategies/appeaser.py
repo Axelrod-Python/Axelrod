@@ -12,12 +12,12 @@ class Appeaser(Player):
     memory_depth = float('inf')  # Depends on internal memory.
 
     def strategy(self, opponent):
-        if len(self.history) == 0:
-            self.str = 'C'
+        if not len(self.history):
+            self.move = 'C'
         else:
             if opponent.history[-1] == 'D':
-                if self.str == 'C':
-                    self.str = 'D'
+                if self.move == 'C':
+                    self.move = 'D'
                 else:
-                    self.str = 'C'
-        return self.str
+                    self.move = 'C'
+        return self.move

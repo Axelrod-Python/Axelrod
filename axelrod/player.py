@@ -1,7 +1,24 @@
 import inspect
 import random
 
-flip_dict = {'C': 'D', 'D': 'C'}
+C, D = 'C', 'D'
+flip_dict = {C: D, D: C}
+
+
+def update_histories(player1, player2, move1, move2):
+    """Updates histories and cooperation / defections counts following play."""
+    # Update histories
+    player1.history.append(move1)
+    player2.history.append(move2)
+    # Update player counts of cooperation and defection
+    if move1 == C:
+        player1.cooperations += 1
+    elif move1 == D:
+        player1.defections += 1
+    if move2 == C:
+        player2.cooperations += 1
+    elif move2 == D:
+        player2.defections += 1
 
 
 class Player(object):
@@ -19,6 +36,8 @@ class Player(object):
         self.tournament_length = -1
         if self.name == "Player":
             self.stochastic = False
+        self.cooperations = 0
+        self.defections = 0
 
     def __repr__(self):
         """The string method for the strategy."""
@@ -42,8 +61,7 @@ class Player(object):
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         if noise:
             s1, s2 = self._add_noise(noise, s1, s2)
-        self.history.append(s1)
-        opponent.history.append(s2)
+        update_histories(self, opponent, s1, s2)
 
     def reset(self):
         """Resets history.
@@ -53,3 +71,5 @@ class Player(object):
         rest all other attributes.
         """
         self.history = []
+        self.cooperations = 0
+        self.defections = 0

@@ -63,7 +63,7 @@ class FoolMeOncevsBully(TestHeadsUp):
 class FoolMeOncevsSTFT(TestHeadsUp):
     """Test Fool Me Once vs Suspicious TFT"""
     def test_rounds(self):
-        outcomes = [[C, D]] + [[C, C]]*8
+        outcomes = [[C, D]] + [[C, C]] * 8
         self.versus_test(
             axelrod.FoolMeOnce, axelrod.SuspiciousTitForTat, outcomes)
 
@@ -71,7 +71,7 @@ class FoolMeOncevsSTFT(TestHeadsUp):
 class GrudgervsSTFT(TestHeadsUp):
     """Test Grudger vs Suspicious TFT"""
     def test_rounds(self):
-        outcomes = [[C, D], [D, C]] + [[D, D]]*8
+        outcomes = [[C, D], [D, C]] + [[D, D]] * 8
         self.versus_test(
             axelrod.Grudger, axelrod.SuspiciousTitForTat, outcomes)
 

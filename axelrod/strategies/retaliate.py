@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from axelrod import Player
 
 
@@ -19,18 +21,25 @@ class Retaliate(Player):
         self.name = (
             'Retaliate (' +
             str(self.retaliation_threshold) + ')')
+        self.play_counts = defaultdict(int)
 
     def strategy(self, opponent):
         """
         If the opponent has played D to my C more often than x% of the time
         that I've done the same to him, play D. Otherwise, play C.
         """
-        history = zip(self.history, opponent.history)
-        if history.count(('C', 'D')) > (
-           history.count(('D', 'C')) * self.retaliation_threshold):
-            return 'D'
+        if len(self.history):
+            last_round = (self.history[-1], opponent.history[-1])
+            self.play_counts[last_round] += 1
+        CD_count = self.play_counts[('C', 'D')]
+        DC_count = self.play_counts[('D', 'C')]
+        if CD_count > DC_count * self.retaliation_threshold:
+                return 'D'
         return 'C'
 
+    def reset(self):
+        Player.reset(self)
+        self.play_counts = defaultdict(int)
 
 class Retaliate2(Retaliate):
     """

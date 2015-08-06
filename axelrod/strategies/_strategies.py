@@ -40,11 +40,12 @@ ordinary_strategies = [
     AlternatorHunter,
     Appeaser,
     AntiTitForTat,
-    ArrogantQLearner,
+    #ArrogantQLearner, # needs fixing
     AverageCopier,
     BackStabber,
     Bully,
-    CautiousQLearner,
+    Calculator,
+    #CautiousQLearner, # needs fixing
     Champion,
     CooperatorHunter,
     Davis,
@@ -70,7 +71,7 @@ ordinary_strategies = [
     HardProber,
     HardTitForTat,
     HardTitFor2Tats,
-    HesitantQLearner,
+    #HesitantQLearner, # needs fixing
     Inverse,
     InversePunisher,
     Joss,
@@ -94,7 +95,7 @@ ordinary_strategies = [
     Retaliate,
     Retaliate2,
     Retaliate3,
-    RiskyQLearner,
+    #RiskyQLearner, # Needs fixing
     Shubik,
     SoftJoss,
     SneakyTitForTat,

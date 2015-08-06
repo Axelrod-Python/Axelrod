@@ -21,7 +21,7 @@ class TestCalculator(TestPlayer):
         P2 = axelrod.Player()
         P2.history = [C] * 20
         self.assertTrue(P1.detect_cycle(P2.history))
-        #P2.history = [D] * 20
+        P2.history = [D] * 20
         self.assertTrue(P1.detect_cycle(P2.history))
         P2.history = [C, D] * 10
         self.assertTrue(P1.detect_cycle(P2.history))
