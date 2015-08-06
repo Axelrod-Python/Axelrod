@@ -19,7 +19,7 @@ class TestDefector(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Test that always defects."""
-        self.markov_test([D,D,D,D])
+        self.markov_test([D, D, D, D])
 
 class TestTrickyDefector(TestPlayer):
 
@@ -36,7 +36,7 @@ class TestTrickyDefector(TestPlayer):
         self.markov_test([D, D, D, D])
         self.responses_test([C, C, C], [C, C, C], [D])
         self.responses_test([C, C, C, D, D], [C, C, C, C, D], [D])
-        history = [C, C, C, D, D] + [C]*11
-        opponent_history = [C, C, C, C, D] + [D] + [C]*10
+        history = [C, C, C, D, D] + [C] * 11
+        opponent_history = [C, C, C, C, D] + [D] + [C] * 10
         self.responses_test(history, opponent_history,[D])
 

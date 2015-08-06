@@ -18,6 +18,6 @@ class TestAlternator(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Simply does the opposite to what the strategy did last time."""
-        self.markov_test([D ,D, C, C])
+        self.markov_test([D, D, C, C])
         self.responses_test([C, D, D, D], [C, C, C, C], [C])
         self.responses_test([C, C, D, D, C], [C, D, C, C, C], [D])
