@@ -61,102 +61,6 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p2.history[0], 'D')
 
 
-class MockPlayer(axelrod.Player):
-    """Creates a mock player that enforces a particular next move for a given
-    player."""
-
-    def __init__(self, player, move):
-        # Need to retain history for opponents that examine opponents history
-        # Do a deep copy just to be safe
-        axelrod.Player.__init__(self)
-        self.history = copy.deepcopy(player.history)
-        self.cooperations = player.cooperations
-        self.defections = player.defections
-        self.move = move
-
-    def strategy(self, opponent):
-        # Just return the saved move
-        return self.move
-
-
-def test_four_vector(test_class, expected_dictionary):
-    """
-    Checks that two dictionaries match -- the four-vector defining
-    a memory-one strategy and the given expected dictionary.
-    """
-    P1 = test_class.player()
-    for key in sorted(expected_dictionary.keys()):
-        test_class.assertAlmostEqual(
-            P1._four_vector[key], expected_dictionary[key])
-
-def simulate_play(P1, P2, h1=None, h2=None):
-    """
-    Simulates play with or without forced history. If h1 and h2 are given, these
-    moves are enforced in the players strategy. This generally should not be
-    necessary, but various tests may force impossible or unlikely histories.
-    """
-
-    if h1 and h2:
-        # Simulate Plays
-        s1 = P1.strategy(MockPlayer(P2, h2))
-        s2 = P2.strategy(MockPlayer(P1, h1))
-        # Record intended history
-        P1.history.append(h1)
-        P2.history.append(h2)
-        # Update Cooperation / Defection counts
-        if h1 == 'D':
-            P1.defections += 1
-        else:
-            P1.cooperations += 1
-        if h2 == 'D':
-            P2.defections += 1
-        else:
-            P2.cooperations += 1
-        return (h1, h2)
-    else:
-        s1 = P1.strategy(P2)
-        s2 = P2.strategy(P1)
-        # If P1 or P2 is axelrod.Player, they will return None, change to
-        # s1 or s2 to 'C' if that case.
-        if not s1:
-            s1 = 'C'
-        if not s2:
-            s2 = 'C'
-        # Record history
-        P1.history.append(s1)
-        P2.history.append(s2)
-        # Update Cooperation / Defection counts
-        if s1 == 'D':
-            P1.defections += 1
-        else:
-            P1.cooperations += 1
-        if s2 == 'D':
-            P2.defections += 1
-        else:
-            P2.cooperations += 1
-        return (s1, s2)
-
-def test_responses(test_class, P1, P2, history_1, history_2,
-                   responses, random_seed=None):
-    """Test responses to arbitrary histories. Used for the the following tests
-    in TestPlayer: first_play_test, markov_test, and responses_test.
-    Works for arbitrary players as well. Input response_lists is a list of
-    lists, each of which consists of a list for the history of player 1, a
-    list for the history of player 2, and a list for the subsequent moves
-    by player one to test."""
-    if random_seed:
-        random.seed(random_seed)
-    # Force the histories, In case either history is impossible or if some
-    # internal state needs to be set, actually submit to moves to the strategy
-    # method. Still need to append history manually.
-    for h1, h2 in zip(history_1, history_2):
-        simulate_play(P1, P2, h1, h2)
-    # Run the tests
-    for response in responses:
-        s1, s2 = simulate_play(P1, P2)
-        test_class.assertEqual(s1, response)
-
-
 class TestPlayer(unittest.TestCase):
     "A Test class from which other player test classes are inherited"
 
@@ -249,3 +153,165 @@ class TestHeadsUp(unittest.TestCase):
             player_1.play(player_2)
             self.assertEqual(player_1_history[-1], outcome_1)
             self.assertEqual(player_2_history[-1], outcome_2)
+
+
+class MockPlayer(axelrod.Player):
+    """Creates a mock player that enforces a particular next move for a given
+    player."""
+
+    def __init__(self, player, move):
+        # Need to retain history for opponents that examine opponents history
+        # Do a deep copy just to be safe
+        axelrod.Player.__init__(self)
+        self.history = copy.deepcopy(player.history)
+        self.cooperations = player.cooperations
+        self.defections = player.defections
+        self.move = move
+
+    def strategy(self, opponent):
+        # Just return the saved move
+        return self.move
+
+
+class TestMockPlayer(unittest.TestCase):
+
+    def test_strategy(self):
+        for move in ['C', 'D']:
+            m = MockPlayer(axelrod.Player(), move)
+            p2 = axelrod.Player()
+            self.assertEqual(move, m.strategy(p2))
+
+    def test_cloning(self):
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Defector()
+        moves = 10
+        for i in range(moves):
+            p1.play(p2)
+        m1 = MockPlayer(p1, 'C')
+        m2 = MockPlayer(p2, 'D')
+        self.assertEqual(m1.move, 'C')
+        self.assertEqual(m1.history, p1.history)
+        self.assertEqual(m1.cooperations, p1.cooperations)
+        self.assertEqual(m1.defections, p1.defections)
+        self.assertEqual(m2.move, 'D')
+        self.assertEqual(m2.history, p2.history)
+        self.assertEqual(m2.cooperations, p2.cooperations)
+        self.assertEqual(m2.defections, p2.defections)
+
+
+# Auxilliary Tests for use in testing strategies
+
+def test_four_vector(test_class, expected_dictionary):
+    """
+    Checks that two dictionaries match -- the four-vector defining
+    a memory-one strategy and the given expected dictionary.
+    """
+    P1 = test_class.player()
+    for key in sorted(expected_dictionary.keys()):
+        test_class.assertAlmostEqual(
+            P1._four_vector[key], expected_dictionary[key])
+
+def simulate_play(P1, P2, h1=None, h2=None):
+    """
+    Simulates play with or without forced history. If h1 and h2 are given, these
+    moves are enforced in the players strategy. This generally should not be
+    necessary, but various tests may force impossible or unlikely histories.
+    """
+
+    if h1 and h2:
+        # Simulate Plays
+        s1 = P1.strategy(MockPlayer(P2, h2))
+        s2 = P2.strategy(MockPlayer(P1, h1))
+        # Record intended history
+        P1.history.append(h1)
+        P2.history.append(h2)
+        # Update Cooperation / Defection counts
+        if h1 == 'D':
+            P1.defections += 1
+        else:
+            P1.cooperations += 1
+        if h2 == 'D':
+            P2.defections += 1
+        else:
+            P2.cooperations += 1
+        return (h1, h2)
+    else:
+        s1 = P1.strategy(P2)
+        s2 = P2.strategy(P1)
+        # If P1 or P2 is axelrod.Player, they will return None, change to
+        # s1 or s2 to 'C' if that case.
+        if not s1:
+            s1 = 'C'
+        if not s2:
+            s2 = 'C'
+        # Record history
+        P1.history.append(s1)
+        P2.history.append(s2)
+        # Update Cooperation / Defection counts
+        if s1 == 'D':
+            P1.defections += 1
+        else:
+            P1.cooperations += 1
+        if s2 == 'D':
+            P2.defections += 1
+        else:
+            P2.cooperations += 1
+        return (s1, s2)
+
+def test_responses(test_class, P1, P2, history_1, history_2,
+                   responses, random_seed=None):
+    """Test responses to arbitrary histories. Used for the the following tests
+    in TestPlayer: first_play_test, markov_test, and responses_test.
+    Works for arbitrary players as well. Input response_lists is a list of
+    lists, each of which consists of a list for the history of player 1, a
+    list for the history of player 2, and a list for the subsequent moves
+    by player one to test."""
+    if random_seed:
+        random.seed(random_seed)
+    # Force the histories, In case either history is impossible or if some
+    # internal state needs to be set, actually submit to moves to the strategy
+    # method. Still need to append history manually.
+    for h1, h2 in zip(history_1, history_2):
+        simulate_play(P1, P2, h1, h2)
+    # Run the tests
+    for response in responses:
+        s1, s2 = simulate_play(P1, P2)
+        test_class.assertEqual(s1, response)
+
+
+class TestSimulatePlay(unittest.TestCase):
+
+    def test_various(self):
+        p1 = axelrod.Player()
+        p2 = axelrod.Player()
+        self.assertEqual(simulate_play(p1, p2), ('C', 'C'))
+        self.assertEqual(p1.cooperations, 1)
+        self.assertEqual(p2.cooperations, 1)
+        self.assertEqual(p1.defections, 0)
+        self.assertEqual(p2.defections, 0)
+
+        for h1 in ['C', 'D']:
+            for h2 in ['C', 'D']:
+                self.assertEqual(simulate_play(p1, p2, h1, h2), (h1, h2))
+        self.assertEqual(p1.cooperations, 3)
+        self.assertEqual(p2.cooperations, 3)
+        self.assertEqual(p1.defections, 2)
+        self.assertEqual(p2.defections, 2)
+
+    def test_various2(self):
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Defector()
+        self.assertEqual(simulate_play(p1, p2), ('C', 'D'))
+        self.assertEqual(p1.cooperations, 1)
+        self.assertEqual(p2.cooperations, 0)
+        self.assertEqual(p1.defections, 0)
+        self.assertEqual(p2.defections, 1)
+
+        self.assertEqual(simulate_play(p1, p2), ('C', 'D'))
+        self.assertEqual(p1.cooperations, 2)
+        self.assertEqual(p2.cooperations, 0)
+        self.assertEqual(p1.defections, 0)
+        self.assertEqual(p2.defections, 2)
+
+        self.assertEqual(p1.history, ['C'] * 2)
+        self.assertEqual(p2.history, ['D'] * 2)
