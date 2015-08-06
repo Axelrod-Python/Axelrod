@@ -4,6 +4,22 @@ import random
 flip_dict = {'C': 'D', 'D': 'C'}
 
 
+def update_histories(player1, player2, move1, move2):
+    """Updates histories and cooperation / defections counts following play."""
+    # Update histories
+    player1.history.append(move1)
+    player2.history.append(move2)
+    # Update player counts of cooperation and defection
+    if move1 == 'C':
+        player1.cooperations += 1
+    elif move1 == 'D':
+        player1.defections += 1
+    if move2 == 'C':
+        player2.cooperations += 1
+    elif move2 == 'D':
+        player2.defections += 1
+
+
 class Player(object):
     """A class for a player in the tournament.
 
@@ -44,17 +60,18 @@ class Player(object):
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         if noise:
             s1, s2 = self._add_noise(noise, s1, s2)
-        self.history.append(s1)
-        opponent.history.append(s2)
-        # Update player counts of cooperation and defection
-        if s1 == 'C':
-            self.cooperations += 1
-        else:
-            self.defections += 1
-        if s2 == 'C':
-            opponent.cooperations += 1
-        else:
-            opponent.defections += 1
+        update_histories(self, opponent, s1, s2)
+        #self.history.append(s1)
+        #opponent.history.append(s2)
+        ## Update player counts of cooperation and defection
+        #if s1 == 'C':
+            #self.cooperations += 1
+        #else:
+            #self.defections += 1
+        #if s2 == 'C':
+            #opponent.cooperations += 1
+        #else:
+            #opponent.defections += 1
 
     def reset(self):
         """Resets history.
