@@ -31,10 +31,10 @@ class Retaliate(Player):
         if len(self.history):
             last_round = (self.history[-1], opponent.history[-1])
             self.play_counts[last_round] += 1
-        if self.play_counts[('C', 'D')] > (
-           self.play_counts[('D', 'C')] * self.retaliation_threshold):
-
-            return 'D'
+        CD_count = self.play_counts[('C', 'D')]
+        DC_count = self.play_counts[('D', 'C')]
+        if CD_count > DC_count * self.retaliation_threshold:
+                return 'D'
         return 'C'
 
     def reset(self):

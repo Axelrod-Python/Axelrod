@@ -5,6 +5,9 @@ import axelrod
 from test_player import TestPlayer
 
 
+C, D = 'C', 'D'
+
+
 class TestGrumpy(TestPlayer):
 
     name = "Grumpy"
@@ -15,7 +18,7 @@ class TestGrumpy(TestPlayer):
         """
         Starts by cooperating
         """
-        self.first_play_test('C')
+        self.first_play_test(C)
 
     def test_initial_grumpy_strategy(self):
         """
@@ -23,7 +26,7 @@ class TestGrumpy(TestPlayer):
         """
         P1 = axelrod.Grumpy(starting_state = 'Grumpy')
         P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), D)
 
     def test_strategy(self):
         """
@@ -32,25 +35,25 @@ class TestGrumpy(TestPlayer):
         """
         P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
         P2 = axelrod.Player()
-        P1.history = ['C', 'D', 'D', 'D']
-        P2.history = ['C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C', 'C', 'D', 'D', 'D']
-        P2.history = ['D', 'D', 'D', 'D', 'D']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['C', 'C', 'D', 'D', 'D', 'D', 'D', 'D']
-        P2.history = ['D', 'D', 'D', 'D', 'D', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = ['C', 'C', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D']
-        P2.history = ['D', 'D', 'D', 'D', 'D', 'C', 'C', 'C', 'C', 'C', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
+        P1.history = [C, D, D, D]
+        P2.history = [C, C, C, C]
+        self.assertEqual(P1.strategy(P2), C)
+        P1.history = [C, C, D, D, D]
+        P2.history = [D, D, D, D, D]
+        self.assertEqual(P1.strategy(P2), D)
+        P1.history = [C, C, D, D, D, D, D, D]
+        P2.history = [D, D, D, D, D, C, C, C]
+        self.assertEqual(P1.strategy(P2), D)
+        P1.history = [C, C, D, D, D, D, D, D, D, D, D]
+        P2.history = [D, D, D, D, D, C, C, C, C, C, C]
+        self.assertEqual(P1.strategy(P2), C)
 
     def test_reset_method(self):
         """
         tests the reset method
         """
         P1 = axelrod.Grumpy(starting_state = 'Grumpy')
-        P1.history = ['C', 'D', 'D', 'D']
+        P1.history = [C, D, D, D]
         P1.state = 'Nice'
         P1.reset()
         self.assertEqual(P1.history, [])
