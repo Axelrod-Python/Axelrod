@@ -9,10 +9,10 @@ C, D = 'C', 'D'
 
 
 def cooperate(self):
-    return 'C'
+    return C
 
 def defect(self):
-    return 'D'
+    return D
 
 
 class TestPlayerClass(unittest.TestCase):
@@ -24,18 +24,18 @@ class TestPlayerClass(unittest.TestCase):
     def test_add_noise(self):
         random.seed(1)
         noise = 0.2
-        s1, s2 = 'C', 'C'
+        s1, s2 = C, C
         noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
-        self.assertEqual(noisy_s1, 'D')
-        self.assertEqual(noisy_s2, 'C')
+        self.assertEqual(noisy_s1, D)
+        self.assertEqual(noisy_s2, C)
 
     def test_play(self):
         p1, p2 = self.player(), self.player()
         p1.strategy = cooperate
         p2.strategy = defect
         p1.play(p2)
-        self.assertEqual(p1.history[0], 'C')
-        self.assertEqual(p2.history[0], 'D')
+        self.assertEqual(p1.history[0], C)
+        self.assertEqual(p2.history[0], D)
 
         # Test cooperation / defection counts
         self.assertEqual(p1.cooperations, 1)
@@ -43,8 +43,8 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p2.cooperations, 0)
         self.assertEqual(p2.defections, 1)
         p1.play(p2)
-        self.assertEqual(p1.history[-1], 'C')
-        self.assertEqual(p2.history[-1], 'D')
+        self.assertEqual(p1.history[-1], C)
+        self.assertEqual(p2.history[-1], D)
         # Test cooperation / defection counts
         self.assertEqual(p1.cooperations, 2)
         self.assertEqual(p1.defections, 0)
@@ -58,8 +58,8 @@ class TestPlayerClass(unittest.TestCase):
         p1.strategy = cooperate
         p2.strategy = defect
         p1.play(p2, noise)
-        self.assertEqual(p1.history[0], 'D')
-        self.assertEqual(p2.history[0], 'D')
+        self.assertEqual(p1.history[0], D)
+        self.assertEqual(p2.history[0], D)
 
 
 def test_responses(test_class, P1, P2, history_1, history_2,

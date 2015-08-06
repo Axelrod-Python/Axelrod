@@ -40,12 +40,12 @@ def factory_TestGoByRecentMajority(L):
             """If opponent cooperates at least as often as they defect then the player cooperates."""
             P1 = self.player()
             P2 = axelrod.Player()
-            P1.history = ['D'] * int(1.5 * L)
-            P2.history = ['D'] * (L - 1) + ['C'] * (L // 2 + 1)
-            self.assertEqual(P1.strategy(P2), 'C')
-            P1.history = ['C'] * int(1.5 * L)
-            P2.history = ['C'] * (L - 1) + ['D'] * (L // 2 + 1)
-            self.assertEqual(P1.strategy(P2), 'D')
+            P1.history = [D] * int(1.5 * L)
+            P2.history = [D] * (L - 1) + [C] * (L // 2 + 1)
+            self.assertEqual(P1.strategy(P2), C)
+            P1.history = [C] * int(1.5 * L)
+            P2.history = [C] * (L - 1) + [D] * (L // 2 + 1)
+            self.assertEqual(P1.strategy(P2), D)
 
     return TestGoByRecentMajority
 
