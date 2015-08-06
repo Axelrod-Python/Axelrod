@@ -1,4 +1,4 @@
-from axelrod import Player, RoundRobin, Game
+from axelrod import Player, RoundRobin, Game, update_histories
 import copy
 import inspect
 
@@ -32,16 +32,7 @@ class MindReader(Player):
         for match in range(rounds):
             play_1, play_2 = strategy, opponent.strategy(self)
             # Update histories and counts
-            self.history.append(play_1)
-            opponent.history.append(play_2)
-            if play_1 == 'C':
-                self.cooperations += 1
-            else:
-                self.defections += 1
-            if play_2 == 'C':
-                opponent.cooperations += 1
-            else:
-                opponent.defections += 1
+            update_histories(self, opponent, play_1, play_2)
 
     def look_ahead(self, opponent, rounds = 10):
         """Plays a number of rounds to determine the best strategy."""
