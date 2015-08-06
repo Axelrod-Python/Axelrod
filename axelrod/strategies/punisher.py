@@ -16,15 +16,15 @@ class Punisher(Player):
         Initialised the player
         """
         super(Punisher, self).__init__()
-        self.history = []
-        self.score = 0
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1
 
     def strategy(self, opponent):
         """
-        Begins by playing C, then plays D for an amount of rounds proportional to the opponents historical '%' of playing 'D' if the opponent ever plays D
+        Begins by playing C, then plays D for an amount of rounds proportional
+        to the opponents historical '%' of playing 'D' if the opponent ever 
+        plays D
         """
 
         if self.grudge_memory >= self.mem_length:
@@ -52,9 +52,10 @@ class Punisher(Player):
 
 class InversePunisher(Player):
     """
-    A player starts by cooperating however will defect if at any point the opponent has defected,
-    but forgets after meme_length matches, with 1<=mem_length<=20 proportional to the amount
-    of time the opponent has played 'C'. The inverse of Punisher
+    A player starts by cooperating however will defect if at any point the 
+    opponent has defected, but forgets after meme_length matches, with 
+    1<=mem_length<=20 proportional to the amount of time the opponent has
+    played 'C'. The inverse of Punisher
     """
 
     name = 'Inverse Punisher'
@@ -66,7 +67,6 @@ class InversePunisher(Player):
         """
         super(InversePunisher, self).__init__()
         self.history = []
-        self.score = 0
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1

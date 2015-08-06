@@ -17,7 +17,6 @@ class TestPunisher(TestPlayer):
         """Tests for the __init__ method."""
         P1 = axelrod.Punisher()
         self.assertEqual(P1.history, [])
-        self.assertEqual(P1.score, 0)
         self.assertEqual(P1.mem_length, 1)
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 1)
@@ -111,7 +110,6 @@ class TestInversePunisher(TestPlayer):
         """Tests for the __init__ method."""
         P1 = axelrod.InversePunisher()
         self.assertEqual(P1.history, [])
-        self.assertEqual(P1.score, 0)
         self.assertEqual(P1.mem_length, 1)
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 1)

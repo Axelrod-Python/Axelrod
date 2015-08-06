@@ -149,7 +149,6 @@ class Tullock(Player):
         return 'D'
 
 
-
 ## Second Tournament
 
 class Champion(Player):

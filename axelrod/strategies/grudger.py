@@ -24,8 +24,6 @@ class ForgetfulGrudger(Player):
     def __init__(self):
         """Initialised the player."""
         super(ForgetfulGrudger, self).__init__()
-        self.history = []
-        self.score = 0
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0

@@ -44,6 +44,7 @@ ordinary_strategies = [
     AverageCopier,
     BackStabber,
     Bully,
+    Calculator,
     CautiousQLearner,
     Champion,
     CooperatorHunter,
