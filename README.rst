@@ -178,7 +178,7 @@ paper please list it here:
   by `drvinceknight <https://twitter.com/drvinceknight>`_ published in `MSOR
   Connections <https://journals.gre.ac.uk/index.php/msor/about>`_: the library
   is mentioned briefly as a way of demonstrating repeated games.
-- `A repository with various example tournaments
+- `A repository with various example tournaments and visualizations of strategies
   <https://github.com/marcharper/AxelrodExamples>`_
   by `marcharper <https://github.com/marcharper>`_.
 
