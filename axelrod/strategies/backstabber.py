@@ -9,30 +9,16 @@ class BackStabber(Player):
 
     name = 'BackStabber'
     memory_depth = float('inf')  # Long memory
-
-    def __init__(self):
-        """
-        Initialised the player
-        """
-        super(BackStabber, self).__init__()
-        self.D_count = 0
-        self._initial = 'C'
-        self.stochastic = False
+    stochastic = False
 
     def strategy(self, opponent):
+        if not opponent.history:
+            return 'C'
         if len(opponent.history) > (self.tournament_length - 3):
             return 'D'
-        if not opponent.history:
-            return self._initial
-        if opponent.history[-1] == 'D':
-            self.D_count += 1
-        if self.D_count > 3:
+        if opponent.defections > 3:
             return 'D'
         return 'C'
-
-    def reset(self):
-        self.D_count = 0
-        self.history = []
 
 
 class DoubleCrosser(Player):
@@ -45,33 +31,20 @@ class DoubleCrosser(Player):
 
     name = 'DoubleCrosser'
     memory_depth = float('inf')  # Long memory
-
-    def __init__(self):
-        """
-        Initialised the player
-        """
-        super(DoubleCrosser, self).__init__()
-        self.D_count = 0
-        self._initial = 'C'
-        self.stochastic = False
+    stochastic = False
 
     def strategy(self, opponent):
         cutoff = 6
+
+        if not opponent.history:
+            return 'C'
         if len(opponent.history) > (self.tournament_length - 3):
             return 'D'
-        if not opponent.history:
-            return self._initial
-        if opponent.history[-1] == 'D':
-            self.D_count += 1
         if len(opponent.history) < 180:
-            if len(opponent.history) > (cutoff):
+            if len(opponent.history) > cutoff:
                 if 'D' not in opponent.history[:cutoff + 1]:
                     if opponent.history[-2:] != ['D', 'D']:  # Fail safe
                         return 'C'
-        if self.D_count > 3:
+        if opponent.defections > 3:
             return 'D'
         return 'C'
-
-    def reset(self):
-        self.D_count = 0
-        self.history = []

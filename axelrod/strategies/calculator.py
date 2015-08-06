@@ -29,8 +29,6 @@ class Calculator(Player):
 
     def strategy(self, opponent):
         turn = len(self.history)
-        #if turn == 0:
-            #return 'C'
         if turn == 20:
             self.cycle = self.detect_cycle(opponent.history)
             return self.extended_strategy(opponent)
@@ -38,7 +36,6 @@ class Calculator(Player):
             return self.extended_strategy(opponent)
         else:
             play = self.joss_instance.strategy(opponent)
-            #self.history.append(play)
             self.joss_instance.history.append(play)
             return play
 
@@ -49,3 +46,6 @@ class Calculator(Player):
             # TFT
             return 'D' if opponent.history[-1:] == ['D'] else 'C'
 
+    def reset(self):
+        Player.reset(self)
+        self.joss_instance = Joss()
