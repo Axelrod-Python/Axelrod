@@ -2,12 +2,12 @@ import copy
 
 import axelrod
 
-from axelrod import update_histories
+from axelrod import Player, update_histories
 
 C, D = 'C', 'D'
 
 
-class MockPlayer(axelrod.Player):
+class MockPlayer(Player):
     """Creates a mock player that enforces a particular next move for a given
     player."""
 

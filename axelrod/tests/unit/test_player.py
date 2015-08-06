@@ -3,7 +3,7 @@ import random
 import unittest
 import axelrod
 
-from axelrod import simulate_play
+from axelrod import simulate_play, Player
 
 C, D = 'C', 'D'
 
@@ -18,7 +18,7 @@ def defect(self):
 class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
-    player = axelrod.Player
+    player = Player
     stochastic = False
 
     def test_add_noise(self):
@@ -62,11 +62,32 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p2.history[0], 'D')
 
 
+def test_responses(test_class, P1, P2, history_1, history_2,
+                   responses, random_seed=None):
+    """Test responses to arbitrary histories. Used for the the following tests
+    in TestPlayer: first_play_test, markov_test, and responses_test.
+    Works for arbitrary players as well. Input response_lists is a list of
+    lists, each of which consists of a list for the history of player 1, a
+    list for the history of player 2, and a list for the subsequent moves
+    by player one to test."""
+    if random_seed:
+        random.seed(random_seed)
+    # Force the histories, In case either history is impossible or if some
+    # internal state needs to be set, actually submit to moves to the strategy
+    # method. Still need to append history manually.
+    for h1, h2 in zip(history_1, history_2):
+        simulate_play(P1, P2, h1, h2)
+    # Run the tests
+    for response in responses:
+        s1, s2 = simulate_play(P1, P2)
+        test_class.assertEqual(s1, response)
+
+
 class TestPlayer(unittest.TestCase):
     "A Test class from which other player test classes are inherited"
 
     name = "Player"
-    player = axelrod.Player
+    player = Player
     stochastic = False
 
     def test_initialisation(self):
@@ -97,7 +118,7 @@ class TestPlayer(unittest.TestCase):
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
         P1 = self.player()
-        P2 = axelrod.Player()
+        P2 = Player()
         test_responses(
             self, P1, P2, [], [], [play],
             random_seed=random_seed)
@@ -112,7 +133,7 @@ class TestPlayer(unittest.TestCase):
         for i, history in enumerate(histories):
             # Needs to be in the inner loop in case player retains some state
             P1 = self.player()
-            P2 = axelrod.Player()
+            P2 = Player()
             test_responses(self, P1, P2, history[0], history[1], responses[i],
                            random_seed=random_seed)
 
@@ -124,14 +145,11 @@ class TestPlayer(unittest.TestCase):
         subsequent moves by player one to test."""
         P1 = self.player()
         P1.tournament_length = tournament_length
-        P2 = axelrod.Player()
+        P2 = Player()
         P2.tournament_length = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed)
-
-
-# Auxilliary Tests for use in testing strategies
 
 
 class TestHeadsUp(unittest.TestCase):
@@ -168,23 +186,3 @@ def test_four_vector(test_class, expected_dictionary):
     for key in sorted(expected_dictionary.keys()):
         test_class.assertAlmostEqual(
             P1._four_vector[key], expected_dictionary[key])
-
-def test_responses(test_class, P1, P2, history_1, history_2,
-                   responses, random_seed=None):
-    """Test responses to arbitrary histories. Used for the the following tests
-    in TestPlayer: first_play_test, markov_test, and responses_test.
-    Works for arbitrary players as well. Input response_lists is a list of
-    lists, each of which consists of a list for the history of player 1, a
-    list for the history of player 2, and a list for the subsequent moves
-    by player one to test."""
-    if random_seed:
-        random.seed(random_seed)
-    # Force the histories, In case either history is impossible or if some
-    # internal state needs to be set, actually submit to moves to the strategy
-    # method. Still need to append history manually.
-    for h1, h2 in zip(history_1, history_2):
-        simulate_play(P1, P2, h1, h2)
-    # Run the tests
-    for response in responses:
-        s1, s2 = simulate_play(P1, P2)
-        test_class.assertEqual(s1, response)
