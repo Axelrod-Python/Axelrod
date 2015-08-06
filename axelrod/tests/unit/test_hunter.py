@@ -18,8 +18,8 @@ class TestDefectorHunter(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         for i in range(3):
-            self.responses_test([C]*i, [D]*i, [C])
-        self.responses_test([C]*4, [D]*4, [D])
+            self.responses_test([C] * i, [D] * i, [C])
+        self.responses_test([C] * 4, [D] * 4, [D])
 
 class TestCooperatorHunter(TestPlayer):
 
@@ -30,8 +30,8 @@ class TestCooperatorHunter(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         for i in range(3):
-            self.responses_test([C]*i, [C]*i, [C])
-        self.responses_test([C]*4, [C]*4, [D])
+            self.responses_test([C] * i, [C] * i, [C])
+        self.responses_test([C] * 4, [C] * 4, [D])
 
 class TestAlternatorHunter(TestPlayer):
 
@@ -41,12 +41,12 @@ class TestAlternatorHunter(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C]*2, [C, D], [C])
-        self.responses_test([C]*3, [C, D, C], [C])
-        self.responses_test([C]*4, [C, D]*2, [C])
-        self.responses_test([C]*5, [C, D]*2 + [C], [C])
-        self.responses_test([C]*6, [C, D]*3, [D])
-        self.responses_test([C]*7, [C, D]*3 + [C], [D])
+        self.responses_test([C] * 2, [C, D], [C])
+        self.responses_test([C] * 3, [C, D, C], [C])
+        self.responses_test([C] * 4, [C, D] * 2, [C])
+        self.responses_test([C] * 5, [C, D] * 2 + [C], [C])
+        self.responses_test([C] * 6, [C, D] * 3, [D])
+        self.responses_test([C] * 7, [C, D] * 3 + [C], [D])
 
 class TestMathConstantHunter(TestPlayer):
 
@@ -55,7 +55,7 @@ class TestMathConstantHunter(TestPlayer):
     stochastic = False
 
     def test_strategy(self):
-        self.responses_test([C]*8, [C]*7 + [D], [D])
+        self.responses_test([C] * 8, [C] * 7 + [D], [D])
 
 class TestRandomHunter(TestPlayer):
 
@@ -69,12 +69,12 @@ class TestRandomHunter(TestPlayer):
         P2 = axelrod.Player()
 
         # We should also catch the alternator here.
-        self.responses_test([C]*12, [C, D]*6, [D])
+        self.responses_test([C] * 12, [C, D] * 6, [D])
 
         # It is still possible for this test to fail, but very unlikely.
         P1.history = [C] * 100
-        P2.history = [random.choice(['C', 'D']) for i in range(100)]
-        self.assertEqual(P1.strategy(P2), 'D')
+        P2.history = [random.choice([C, D]) for i in range(100)]
+        self.assertEqual(P1.strategy(P2), D)
 
 class TestMetaHunter(TestPlayer):
 
@@ -89,11 +89,10 @@ class TestMetaHunter(TestPlayer):
         self.responses_test([C, C, C, C], [C, C, C, C], [C])
 
         # After long histories tit-for-tat should come into play.
-        self.responses_test([C]*101, [C]*100 + [D], [D])
+        self.responses_test([C] * 101, [C] * 100 + [D], [D])
 
         # All these others, however, should trigger a defection for the hunter.
-        self.responses_test([C]*4, [D]*4, [D])
-        self.responses_test([C]*6, [C, D]*3, [D])
-        self.responses_test([C]*8, [C, C, C, D, C, C, C, D], [D])
-        self.responses_test([C]*100, [random.choice([C, D]) for i in range(100)],[D])
-
+        self.responses_test([C] * 4, [D] * 4, [D])
+        self.responses_test([C] * 6, [C, D] * 3, [D])
+        self.responses_test([C] * 8, [C, C, C, D, C, C, C, D], [D])
+        self.responses_test([C] * 100, [random.choice([C, D]) for i in range(100)],[D])

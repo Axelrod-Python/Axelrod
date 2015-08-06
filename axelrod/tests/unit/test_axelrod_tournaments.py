@@ -26,16 +26,16 @@ class TestDavis(TestPlayer):
         history1 = []
         history2 = []
         for i in range(9):
-            history2.append(random.choice(['C', 'D']))
-            history1.append('C')
-            self.responses_test(history1, history2, ['C'])
+            history2.append(random.choice([C, D]))
+            history1.append(C)
+            self.responses_test(history1, history2, [C])
 
         # If opponent defects at any point then the player will defect forever
         # (after 10 rounds)
         self.responses_test([C, D, D, D], [C, C, C, C], [C])
         self.responses_test([C, C, D, D, D], [C, D, C, C, C], [C])
-        self.responses_test([C]*10 + [C, C, D, D, D], [C]*10 + [C, D, C, C, C],
-                            [D])
+        self.responses_test([C] * 10 + [C, C, D, D, D], [C] * 10 +
+                            [C, D, C, C, C], [D])
 
 
 class TestFeld(TestPlayer):
@@ -128,7 +128,7 @@ class TestTullock(TestPlayer):
         history_2 = [D] * 5 + [C] * 6
         self.responses_test(history_1, history_2, [D, D, D, D], random_seed=20)
         history_1 = [C] * 11
-        history_2 = [C] * 9 + [D] *2
+        history_2 = [C] * 9 + [D] * 2
         self.responses_test(history_1, history_2, [C, D, D, C], random_seed=25)
 
 
@@ -144,7 +144,7 @@ class TestChampion(TestPlayer):
         random.seed(3)
         random_sample = []
         for i in range(10):
-            random_sample.append(random.choice([C,D]))
+            random_sample.append(random.choice([C, D]))
             self.responses_test([C] * i, random_sample, [C])
 
         # Mirror opponent in the next stage (15 rounds by default)
