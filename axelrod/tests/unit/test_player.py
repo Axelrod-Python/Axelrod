@@ -3,6 +3,7 @@ import random
 import unittest
 import axelrod
 
+from axelrod import simulate_play
 
 C, D = 'C', 'D'
 
@@ -182,8 +183,8 @@ def test_responses(test_class, P1, P2, history_1, history_2,
     # internal state needs to be set, actually submit to moves to the strategy
     # method. Still need to append history manually.
     for h1, h2 in zip(history_1, history_2):
-        axelrod.simulate_play(P1, P2, h1, h2)
+        simulate_play(P1, P2, h1, h2)
     # Run the tests
     for response in responses:
-        s1, s2 = axelrod.simulate_play(P1, P2)
+        s1, s2 = simulate_play(P1, P2)
         test_class.assertEqual(s1, response)
