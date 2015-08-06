@@ -1,7 +1,8 @@
 import inspect
 import random
 
-flip_dict = {'C': 'D', 'D': 'C'}
+C, D = 'C', 'D'
+flip_dict = {C: D, D: C}
 
 
 def update_histories(player1, player2, move1, move2):
@@ -10,13 +11,13 @@ def update_histories(player1, player2, move1, move2):
     player1.history.append(move1)
     player2.history.append(move2)
     # Update player counts of cooperation and defection
-    if move1 == 'C':
+    if move1 == C:
         player1.cooperations += 1
-    elif move1 == 'D':
+    elif move1 == D:
         player1.defections += 1
-    if move2 == 'C':
+    if move2 == C:
         player2.cooperations += 1
-    elif move2 == 'D':
+    elif move2 == D:
         player2.defections += 1
 
 
@@ -61,17 +62,6 @@ class Player(object):
         if noise:
             s1, s2 = self._add_noise(noise, s1, s2)
         update_histories(self, opponent, s1, s2)
-        #self.history.append(s1)
-        #opponent.history.append(s2)
-        ## Update player counts of cooperation and defection
-        #if s1 == 'C':
-            #self.cooperations += 1
-        #else:
-            #self.defections += 1
-        #if s2 == 'C':
-            #opponent.cooperations += 1
-        #else:
-            #opponent.defections += 1
 
     def reset(self):
         """Resets history.
