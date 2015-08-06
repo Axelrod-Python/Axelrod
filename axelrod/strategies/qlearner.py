@@ -86,7 +86,7 @@ class RiskyQLearner(Player):
         """
         Resets scores and history
         """
-        Player.reset(self)
+        self.history = []
 
         self.Qs = {'':{'C':0, 'D':0}}
         self.Vs = {'':0}
