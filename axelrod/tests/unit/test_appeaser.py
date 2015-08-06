@@ -18,12 +18,11 @@ class TestAppeaser(TestPlayer):
 
     def test_effect_of_strategy(self):
         P1 = axelrod.Appeaser()
-        P2 = axelrod.Player()
-        P1.str = C;
+        P2 = axelrod.Cooperator()
         self.assertEqual(P1.strategy(P2), C)
-        P1.history = [C]
-        P2.history = [C]
-        self.assertEqual(P1.strategy(P2), C)
-        P1.history = [C, D, C]
-        P2.history = [C, C, D]
-        self.assertEqual(P1.strategy(P2), D)
+
+        self.responses_test([C], [C], [C, C, C])
+        self.responses_test([C, D, C, D], [C, C, D], [D])
+        self.responses_test([C, D, C, D, C], [C, C, D, D], [C])
+        self.responses_test([C, D, C, D, C, D], [C, C, D, D, D], [D])
+

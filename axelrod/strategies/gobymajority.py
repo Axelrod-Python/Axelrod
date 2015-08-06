@@ -31,7 +31,7 @@ class GoByMajority(Player):
         cooperations = sum([s == 'C' for s in history])
         if defections > cooperations:
             return 'D'
-        #if defections == cooperations:
+        if defections == cooperations:
             if self.soft:
                 return 'C'
             else:

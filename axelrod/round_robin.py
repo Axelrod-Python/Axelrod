@@ -65,6 +65,7 @@ class RoundRobin(object):
                     p2.reset()
                     while turn < self.turns:
                         turn += 1
+                        print p1
                         p1.play(p2, self._noise)
                     scores = self._calculate_scores(p1, p2)
                     if not self._noise and self.cache_mutable and not (p1.stochastic or p2.stochastic):

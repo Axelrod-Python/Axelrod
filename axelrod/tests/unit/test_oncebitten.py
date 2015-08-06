@@ -105,14 +105,12 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         random.seed(2)
         P1 = self.player()
         P2 = axelrod.Player()
-        P2.history = [D]
-        self.assertEqual(P1.strategy(P2), C)
-        P2.history = [D, D]
-        self.assertEqual(P1.strategy(P2), D)
+
+        self.responses_test([C], [D], [C])
+        self.responses_test([C, C], [D, D], [D])
         # Sometime eventually forget count:
-        for i in range(18):
-            self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.strategy(P2), C)
+        self.responses_test([C, C], [D, D], [D] * 13 + [C])
+
 
     def test_reset(self):
         """Check that count gets reset properly"""
