@@ -31,7 +31,7 @@ class GoByMajority(Player):
         cooperations = sum([s == 'C' for s in history])
         if defections > cooperations:
             return 'D'
-        if defections == cooperations:
+        #if defections == cooperations:
             if self.soft:
                 return 'C'
             else:
@@ -41,7 +41,7 @@ class GoByMajority(Player):
     def __repr__(self):
         """The string method for the strategy."""
         memory = self.memory_depth
-        return 'Go By Majority' + (memory > 0) * ("/%i" % memory)
+        return 'Go By Majority' + (memory > 0) * (":%i" % memory)
 
 
 class GoByMajority40(GoByMajority):
