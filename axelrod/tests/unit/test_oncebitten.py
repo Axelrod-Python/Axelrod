@@ -78,35 +78,18 @@ class TestFoolMeOnce(TestPlayer):
     stochastic = False
 
     def test_initial(self):
-        P1 = axelrod.FoolMeOnce()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), P1._initial)
+        self.first_play_test('C')
 
     def test_strategy(self):
         """
-        If opponent defects at any point then the player will defect forever
+        If opponent defects more than once, defect forever
         """
         P1 = axelrod.FoolMeOnce()
         P2 = axelrod.Defector()
-        P1.history = ['C']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'D')
-
-
-    def test_reset(self):
-        """Check that count gets reset properly"""
-        P1 = self.player()
-        P1.history = ['C', 'D']
-        P2 = axelrod.Player()
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.D_count, 1)
-        P1.reset()
-        self.assertEqual(P1.D_count, 0)
-        self.assertEqual(P1.history, [])
+        self.responses_test([C], [D], [C])
+        self.responses_test([C, C], [D, D], [D])
+        self.responses_test([C, C], [D, C], [C])
+        self.responses_test([C, C, C], [D, D, D], [D])
 
 class TestForgetfulFoolMeOnce(TestPlayer):
 
@@ -115,9 +98,7 @@ class TestForgetfulFoolMeOnce(TestPlayer):
     stochastic = True
 
     def test_initial(self):
-        P1 = axelrod.ForgetfulFoolMeOnce()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.first_play_test('C')
 
     def test_strategy(self):
         """Test that will forgive one D but will grudge after 2 Ds, randomly forgets count"""

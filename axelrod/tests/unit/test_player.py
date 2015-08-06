@@ -100,7 +100,7 @@ def simulate_play(P1, P2, h1=None, h2=None):
         # Simulate Plays
         s1 = P1.strategy(MockPlayer(P2, h2))
         s2 = P2.strategy(MockPlayer(P1, h1))
-        # Record history
+        # Record intended history
         P1.history.append(h1)
         P2.history.append(h2)
         # Update Cooperation / Defection counts

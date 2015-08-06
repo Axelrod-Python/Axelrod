@@ -9,7 +9,7 @@ class DefectorHunter(Player):
     memory_depth = float('inf')  # Long memory
 
     def strategy(self, opponent):
-        if len(self.history) >= 4 and set(opponent.history) == set(['D']):
+        if len(self.history) >= 4 and len(opponent.history) == opponent.defections:
             return 'D'
         return 'C'
 
@@ -21,7 +21,7 @@ class CooperatorHunter(Player):
     memory_depth = float('inf')  # Long memory
 
     def strategy(self, opponent):
-        if len(self.history) >= 4 and set(opponent.history) == set(['C']):
+        if len(self.history) >= 4 and len(opponent.history) == opponent.cooperations:
             return 'D'
         return 'C'
 
@@ -59,7 +59,7 @@ class MathConstantHunter(Player):
         """
 
         n = len(self.history)
-        if n >= 8 and 'C' in opponent.history and 'D' in opponent.history:
+        if n >= 8 and opponent.cooperations and opponent.defections:
 
             start1, end1 = 0, n/2
             start2, end2 = n/4, 3*n/4
@@ -96,7 +96,6 @@ class RandomHunter(Player):
 
         n = len(self.history)
         if n > 10:
-
             probabilities = []
             if self.history[:-1].count('C') > 5:
                 countCC = len([i for i in range(n-1) if self.history[i] == "C" and opponent.history[i+1] == "C"])

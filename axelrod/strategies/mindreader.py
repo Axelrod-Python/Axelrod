@@ -21,7 +21,9 @@ class MindReader(Player):
         if calname in ('strategy', 'simulate_match'):
             return 'D'
 
-        best_strategy = self.look_ahead(opponent)
+        # Clone myself to preserve histories
+        clone = copy.deepcopy(self)
+        best_strategy = clone.look_ahead(opponent)
 
         return best_strategy
 
@@ -29,8 +31,17 @@ class MindReader(Player):
         """Simulates a number of matches."""
         for match in range(rounds):
             play_1, play_2 = strategy, opponent.strategy(self)
+            # Update histories and counts
             self.history.append(play_1)
             opponent.history.append(play_2)
+            if play_1 == 'C':
+                self.cooperations += 1
+            else:
+                self.defections += 1
+            if play_2 == 'C':
+                opponent.cooperations += 1
+            else:
+                opponent.defections += 1
 
     def look_ahead(self, opponent, rounds = 10):
         """Plays a number of rounds to determine the best strategy."""
@@ -39,15 +50,20 @@ class MindReader(Player):
         round_robin = RoundRobin(players=[self, opponent], game=game, turns=rounds)
         strategies = ['C', 'D']
 
+        # Record internal variables 
         dummy_history_self = copy.copy(self.history)
-        dummy_history_opponent = copy.copy(opponent.history)
+        cooperations = self.cooperations
+        defections = self.defections
 
         for strategy in strategies:
-            self.simulate_match(opponent, strategy, rounds)
-            results.append(round_robin._calculate_scores(self, opponent)[0])
+            opponent_ = copy.deepcopy(opponent)
+            self.simulate_match(opponent_, strategy, rounds)
+            results.append(round_robin._calculate_scores(self, opponent_)[0])
 
+            # Restore histories and counts
             self.history = copy.copy(dummy_history_self)
-            opponent.history = copy.copy(dummy_history_opponent)
+            self.cooperations = cooperations
+            self.defections = defections
 
         return strategies[results.index(max(results))]
 
