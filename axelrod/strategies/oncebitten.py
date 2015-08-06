@@ -15,8 +15,6 @@ class OnceBitten(Player):
         Initialised the player
         """
         super(OnceBitten, self).__init__()
-        self.history = []
-        self.score = 0
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0

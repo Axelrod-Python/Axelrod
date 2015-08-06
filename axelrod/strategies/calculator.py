@@ -29,8 +29,6 @@ class Calculator(Player):
 
     def strategy(self, opponent):
         turn = len(self.history)
-        #if turn == 0:
-            #return 'C'
         if turn == 20:
             self.cycle = self.detect_cycle(opponent.history)
             return self.extended_strategy(opponent)
