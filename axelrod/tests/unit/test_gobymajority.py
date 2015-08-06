@@ -28,7 +28,7 @@ def factory_TestGoByRecentMajority(L):
 
     class TestGoByRecentMajority(TestPlayer):
 
-        name = "Go By Majority/%i" % L
+        name = "Go By Majority:%i" % L
         player = getattr(axelrod, 'GoByMajority%i' % L)
         stochastic = False
 
