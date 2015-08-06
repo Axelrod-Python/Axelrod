@@ -13,15 +13,11 @@ class Appeaser(Player):
 
     def strategy(self, opponent):
         if not len(self.history):
-            self.play = 'C'
+            self.move = 'C'
         else:
             if opponent.history[-1] == 'D':
-                if self.play == 'C':
-                    self.play = 'D'
+                if self.move == 'C':
+                    self.move = 'D'
                 else:
-                    self.play = 'C'
-        return self.play
-
-    def reset(self):
-        Player.reset(self)
-        self.play = 'C'
+                    self.move = 'C'
+        return self.move
