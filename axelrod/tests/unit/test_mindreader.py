@@ -40,7 +40,7 @@ class TestMindReader(TestPlayer):
         Will keep nasty strategies happy if it can
         """
         P1 = axelrod.MindReader()
-        P2 = axelrod.Grudger()
+        P2 = axelrod.TitForTat()
         self.assertEqual(P1.strategy(P2), 'C')
  
     def test_simulate_matches(self):

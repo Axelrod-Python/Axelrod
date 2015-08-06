@@ -38,7 +38,6 @@ class Calculator(Player):
             return self.extended_strategy(opponent)
         else:
             play = self.joss_instance.strategy(opponent)
-            #self.history.append(play)
             self.joss_instance.history.append(play)
             return play
 
@@ -49,3 +48,6 @@ class Calculator(Player):
             # TFT
             return 'D' if opponent.history[-1:] == ['D'] else 'C'
 
+    def reset(self):
+        Player.reset(self)
+        self.joss_instance = Joss()

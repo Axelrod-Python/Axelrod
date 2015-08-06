@@ -2,6 +2,7 @@ import axelrod
 
 from test_player import TestPlayer
 
+C, D = 'C', 'D'
 
 class TestBackStabber(TestPlayer):
 
@@ -9,47 +10,23 @@ class TestBackStabber(TestPlayer):
     player = axelrod.BackStabber
     stochastic = False
 
-    def test_initial(self):
-        P1 = axelrod.BackStabber()
-        P1.tournament_length = 200
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), P1._initial)
-
     def test_strategy(self):
         """
         Forgives the first 3 defections but on the fourth
         will defect forever. Defects after the 198th round unconditionally.
         """
-        P1 = axelrod.BackStabber()
-        P1.tournament_length = 200
-        P2 = axelrod.Defector()
-        P1.history = ['C']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        P2.history = ['C'] * 197
-        self.assertEqual(P1.strategy(P2), 'D')
 
-    def test_reset(self):
-        """Check that count gets reset properly"""
-        P1 = self.player()
-        P1.tournament_length = 200
-        P1.history = ['C', 'D']
-        P2 = axelrod.Player()
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.D_count, 1)
-        P1.reset()
-        self.assertEqual(P1.D_count, 0)
-        self.assertEqual(P1.history, [])
+        self.first_play_test(C)
+
+        # Forgives three defections
+        self.responses_test([C], [D], [C], tournament_length=200)
+        self.responses_test([C, C], [D, D], [C], tournament_length=200)
+        self.responses_test([C, C, C], [D, D, D], [C], tournament_length=200)
+        self.responses_test([C, C, C, C], [D, D, D, D], [D],
+                            tournament_length=200)
+
+        # Defects on rounds 199, and 200 no matter what
+        self.responses_test([C] * 198 , [C] * 198, [D, D, D], tournament_length=200)
 
 
 class TestDoubleCrosser(TestPlayer):
@@ -58,12 +35,6 @@ class TestDoubleCrosser(TestPlayer):
     player = axelrod.DoubleCrosser
     stochastic = False
 
-    def test_initial(self):
-        P1 = axelrod.DoubleCrosser()
-        P1.tournament_length = 200
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), P1._initial)
-
     def test_strategy(self):
         """
         Forgives the first 3 defections but on the fourth
@@ -71,35 +42,23 @@ class TestDoubleCrosser(TestPlayer):
         in the first 6 rounds the player will cooperate until
         the 180th round. Defects after the 198th round unconditionally.
         """
-        P1 = axelrod.BackStabber()
-        P1.tournament_length = 200
-        P2 = axelrod.Defector()
-        P2.history = ['C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = ['C']
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history.append('C')
-        P2.history.append('D')
-        self.assertEqual(P1.strategy(P2), 'D')
-        P2.history = ['C'] * 197
-        self.assertEqual(P1.strategy(P2), 'D')
 
-    def test_reset(self):
-        """Check that count gets reset properly"""
-        P1 = self.player()
-        P1.tournament_length = 200
-        P1.history = ['C', 'D']
-        P2 = axelrod.Player()
-        P2.history = ['D']
-        self.assertEqual(P1.strategy(P2), 'C')
-        self.assertEqual(P1.D_count, 1)
-        P1.reset()
-        self.assertEqual(P1.D_count, 0)
-        self.assertEqual(P1.history, [])
+        self.first_play_test(C)
+
+        # Forgives three defections
+        self.responses_test([C], [D], [C], tournament_length=200)
+        self.responses_test([C, C], [D, D], [C], tournament_length=200)
+        self.responses_test([C, C, C], [D, D, D], [C], tournament_length=200)
+        self.responses_test([C, C, C, C], [D, D, D, D], [D],
+                            tournament_length=200)
+
+        # If opponent did not defect in the first six rounds, cooperate until
+        # round 180
+        self.responses_test([C] * 6, [C] * 6, [C] * 174, tournament_length=200)
+        self.responses_test([C] * 12, [C] * 6 + [D] + [C] * 5, [C] * 160,
+                            tournament_length=200)
+
+        # Defects on rounds 199, and 200 no matter what
+        self.responses_test([C] * 198 , [C] * 198, [D, D, D], tournament_length=200)
+
+

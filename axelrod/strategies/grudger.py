@@ -9,7 +9,7 @@ class Grudger(Player):
 
     def strategy(self, opponent):
         """Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D."""
-        if 'D' in opponent.history:
+        if opponent.defections:
             return 'D'
         return 'C'
 
@@ -46,7 +46,7 @@ class ForgetfulGrudger(Player):
 
     def reset(self):
         """Resets scores and history."""
-        self.history = []
+        Player.reset(self)
         self.grudged = False
         self.grudge_memory = 0
 
@@ -59,7 +59,7 @@ class OppositeGrudger(Player):
 
     def strategy(self, opponent):
         """Begins by playing D, then plays C for the remaining rounds if the opponent ever plays C."""
-        if 'C' in opponent.history:
+        if opponent.cooperations:
             return 'C'
         return 'D'
 
@@ -74,6 +74,6 @@ class Aggravater(Player):
     def strategy(opponent):
         if len(opponent.history) < 3:
             return 'D'
-        elif 'D' in opponent.history:
+        elif opponent.defections:
             return 'D'
         return 'C'

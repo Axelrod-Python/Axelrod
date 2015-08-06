@@ -44,7 +44,7 @@ class Punisher(Player):
         """
         Resets scores and history
         """
-        self.history = []
+        Player.reset(self)
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1
@@ -95,7 +95,7 @@ class InversePunisher(Player):
         """
         Resets scores and history
         """
-        self.history = []
+        Player.reset(self)
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1
