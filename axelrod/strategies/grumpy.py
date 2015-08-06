@@ -14,7 +14,6 @@ class Grumpy(Player):
         """Player starts of nice be default with set thresholds"""
         super(Grumpy, self).__init__()
         self.history = []
-        #self.score = 0
         self.state = starting_state
         self.starting_state = starting_state
         self.grumpy_threshold = grumpy_threshold
