@@ -20,11 +20,11 @@ class TestMetaMajority(TestPlayer):
 
         # With more cooperators on the team than defectors, we should cooperate.
         P1.team = [axelrod.Cooperator(), axelrod.Cooperator(), axelrod.Defector()]
-        self.assertEqual(P1.strategy(P2), "C")
+        self.assertEqual(P1.strategy(P2), C)
 
         # With more defectors, we should defect.
         P1.team = [axelrod.Cooperator(), axelrod.Defector(), axelrod.Defector()]
-        self.assertEqual(P1.strategy(P2), "D")
+        self.assertEqual(P1.strategy(P2), D)
 
 
 class TestMetaMinority(TestPlayer):
@@ -40,11 +40,11 @@ class TestMetaMinority(TestPlayer):
 
         # With more cooperators on the team, we should defect.
         P1.team = [axelrod.Cooperator(), axelrod.Cooperator(), axelrod.Defector()]
-        self.assertEqual(P1.strategy(P2), "D")
+        self.assertEqual(P1.strategy(P2), D)
 
         # With defectors in the majority, we will cooperate here.
         P1.team = [axelrod.Cooperator(), axelrod.Defector(), axelrod.Defector()]
-        self.assertEqual(P1.strategy(P2), "C")
+        self.assertEqual(P1.strategy(P2), C)
 
 
 class TestMetaWinner(TestPlayer):
@@ -61,12 +61,12 @@ class TestMetaWinner(TestPlayer):
         # This meta player will simply choose the strategy with the highest current score.
         P1.team[0].score = 0
         P1.team[1].score = 1
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
         P1.team[0].score = 1
         P1.team[1].score = 0
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), D)
 
         # If there is a tie, choose to cooperate if possible.
         P1.team[0].score = 1
         P1.team[1].score = 1
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
