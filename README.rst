@@ -178,6 +178,9 @@ paper please list it here:
   by `drvinceknight <https://twitter.com/drvinceknight>`_ published in `MSOR
   Connections <https://journals.gre.ac.uk/index.php/msor/about>`_: the library
   is mentioned briefly as a way of demonstrating repeated games.
+- `A repository with various example tournaments and visualizations of strategies
+  <https://github.com/marcharper/AxelrodExamples>`_
+  by `marcharper <https://github.com/marcharper>`_.
 
 .. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
