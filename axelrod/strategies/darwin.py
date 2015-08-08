@@ -64,7 +64,7 @@ class Darwin(Player):
 
     def reset(self):
         """ Reset instance properties. """
-        self.history = []
+        Player.reset(self)
         self.__class__.genome[0] = 'C' # Ensure initial Cooperate
 
 
