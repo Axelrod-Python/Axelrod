@@ -91,6 +91,7 @@ ordinary_strategies = [
     DoubleCrosser,
     Eatherley,
     FoolMeOnce,
+    FoolMeForever,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,
     Forgiver,
