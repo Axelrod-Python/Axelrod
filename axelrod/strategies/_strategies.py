@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from __future__ import absolute_import
 
 from .alternator import *
@@ -29,6 +30,36 @@ from .rand import *
 from .retaliate import *
 from .titfortat import *
 
+=======
+from alternator import *
+from axelrod_tournaments import *
+from appeaser import *
+from averagecopier import *
+from backstabber import *
+from calculator import Calculator
+from cooperator import *
+from cycler import *
+from darwin import *
+from defector import *
+from forgiver import *
+from geller import *
+from gobymajority import *
+from grudger import *
+from grumpy import *
+from hunter import *
+from inverse import *
+from mathematicalconstants import *
+from memoryone import *
+from meta import *
+from mindcontrol import *
+from mindreader import *
+from oncebitten import *
+from prober import *
+from punisher import *
+from qlearner import *
+from rand import *
+from retaliate import *
+from titfortat import *
 
 basic_strategies = [
     Alternator,
@@ -42,6 +73,7 @@ ordinary_strategies = [
     Aggravater,
     AlternatorHunter,
     Appeaser,
+    AntiCycler,
     AntiTitForTat,
     ArrogantQLearner,
     AverageCopier,
@@ -51,6 +83,9 @@ ordinary_strategies = [
     CautiousQLearner,
     Champion,
     CooperatorHunter,
+    CyclerCCD,
+    CyclerCCCD,
+    CyclerCCCCCD,
     Davis,
     DefectorHunter,
     DoubleCrosser,
