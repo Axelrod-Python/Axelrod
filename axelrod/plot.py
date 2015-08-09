@@ -65,7 +65,8 @@ class Plot(object):
             return None
 
         figure, ax = plt.subplots()
-        mat = ax.matshow(self._payoff_dataset, cmap='YlGnBu')
+        cmap = plt.get_cmap('YlGnBu')
+        mat = ax.matshow(self._payoff_dataset, cmap=cmap)
         plt.xticks(range(self.result_set.nplayers))
         plt.yticks(range(self.result_set.nplayers))
         ax.set_xticklabels(self.result_set.ranked_names, rotation=90)
