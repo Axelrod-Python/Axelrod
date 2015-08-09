@@ -57,6 +57,16 @@ class Cycler(Player):
         self.cycle_iter = itertools.cycle(self.cycle)
 
 
-CyclerCCD = functools.partial(Cycler, "CCD")
-CyclerCCCD = functools.partial(Cycler, "CCCD")
-CyclerCCCCCD = functools.partial(Cycler, "CCCCCD")
+class CyclerCCD(Cycler):
+    def __init__(self, cycle="CCD"):
+        Cycler.__init__(self, cycle=cycle)
+
+
+class CyclerCCCD(Cycler):
+    def __init__(self, cycle="CCCD"):
+        Cycler.__init__(self, cycle=cycle)
+
+
+class CyclerCCCCCD(Cycler):
+    def __init__(self, cycle="CCCCCD"):
+        Cycler.__init__(self, cycle=cycle)
