@@ -1,5 +1,3 @@
-import functools
-import itertools
 
 from axelrod import Player
 
@@ -42,19 +40,13 @@ class Cycler(Player):
     def __init__(self, cycle="CCD"):
         Player.__init__(self)
         self.cycle = cycle
-        self.cycle_iter = itertools.cycle(self.cycle)
         self.name += " " + cycle
         self.memory_depth = len(cycle)
 
     def strategy(self, opponent):
-        return self.cycle_iter.next()
-        #curent_round = len(history) + 1
-        #index = curent_round % len(self.cycle)
-        #return self.cycle[index]
-
-    def reset(self):
-        Player.reset(self)
-        self.cycle_iter = itertools.cycle(self.cycle)
+        curent_round = len(self.history)
+        index = curent_round % len(self.cycle)
+        return self.cycle[index]
 
 
 class CyclerCCD(Cycler):
