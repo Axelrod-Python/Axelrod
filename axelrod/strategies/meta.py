@@ -47,7 +47,7 @@ class MetaMajority(MetaPlayer):
 
         # We need to import the list of strategies at runtime, since
         # _strategies import also _this_ module before defining the list.
-        from _strategies import ordinary_strategies
+        from ._strategies import ordinary_strategies
         self.team = ordinary_strategies
 
         MetaPlayer.__init__(self)
@@ -67,7 +67,7 @@ class MetaMinority(MetaPlayer):
 
         # We need to import the list of strategies at runtime, since
         # _strategies import also _this_ module before defining the list.
-        from _strategies import ordinary_strategies
+        from ._strategies import ordinary_strategies
         self.team = ordinary_strategies
 
         MetaPlayer.__init__(self)
@@ -90,7 +90,7 @@ class MetaWinner(MetaPlayer):
         if team:
             self.team = team
         else:
-            from _strategies import ordinary_strategies
+            from ._strategies import ordinary_strategies
             self.team = ordinary_strategies
 
         MetaPlayer.__init__(self)

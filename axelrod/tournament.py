@@ -1,8 +1,11 @@
-import multiprocessing
-from game import *
-from result_set import *
-from round_robin import *
+from __future__ import absolute_import
+
 import logging
+import multiprocessing
+
+from .game import *
+from .result_set import *
+from .round_robin import *
 
 
 class Tournament(object):

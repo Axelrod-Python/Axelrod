@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+
 from axelrod import Player
-from meta import MetaPlayer
+from .meta import MetaPlayer
 
 
 class DefectorHunter(Player):
