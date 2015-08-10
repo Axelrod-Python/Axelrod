@@ -30,7 +30,7 @@ class RiskyQLearner(Player):
         self.prev_action = random_choice()
         self.history = []
         self.score = 0
-        self.Qs = OrderedDict({'':  OrderedDict({'C': 0, 'D': 0})})
+        self.Qs = OrderedDict({'':  OrderedDict(zip(['C', 'D'], [0, 0])) })
         self.Vs = OrderedDict({'': 0})
         self.prev_state = ''
         (R, P, S, T) = Game().RPST()
