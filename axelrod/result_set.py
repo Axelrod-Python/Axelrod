@@ -2,11 +2,11 @@ import math
 import csv
 
 try:
-    # Python 3
-    from io import StringIO
-except importError:
     # Python 2
     from StringIO import StringIO
+except ImportError:
+    # Python 3
+    from io import StringIO
 
 
 def median(lst):
