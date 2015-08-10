@@ -1,7 +1,8 @@
 import random
 
-from axelrod import Player, random_choice
+from axelrod import Game, Player, random_choice
 
+(R, P, S, T) = Game().RPST()
 
 class RiskyQLearner(Player):
     """A player who learns the best strategies through the q-learning algorithm.
@@ -28,7 +29,7 @@ class RiskyQLearner(Player):
         self.prev_action = random_choice()
         self.history = []
         self.score = 0
-        self.Qs = {'': {'C': 0, 'D': 0}}
+        self.Qs = {'':  {'C': 0, 'D': 0}}
         self.Vs = {'': 0}
         self.prev_state = ''
 
@@ -53,7 +54,7 @@ class RiskyQLearner(Player):
         Selects the action based on the epsilon-soft policy
         """
         rnd_num = random.random()
-        if rnd_num < (1-self.action_selection_parameter):
+        if rnd_num < (1. - self.action_selection_parameter):
             return max(self.Qs[state], key=lambda x: self.Qs[state][x])
         return random_choice()
 
@@ -75,7 +76,7 @@ class RiskyQLearner(Player):
         """
         Finds the reward gained on the last iteration
         """
-        payoff_matrix = {'C':{'C':1, 'D':-2}, 'D':{'C':3, 'D':-1}}
+        payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': S}}
         if len(opponent.history) == 0:
             opp_prev_action = random_choice()
         else:
@@ -86,7 +87,7 @@ class RiskyQLearner(Player):
         """
         Resets scores and history
         """
-        self.history = []
+        Player.reset(self)
 
         self.Qs = {'':{'C':0, 'D':0}}
         self.Vs = {'':0}
