@@ -1,8 +1,9 @@
+from collections import OrderedDict
+
 import random
 
 from axelrod import Game, Player, random_choice
 
-(R, P, S, T) = Game().RPST()
 
 class RiskyQLearner(Player):
     """A player who learns the best strategies through the q-learning algorithm.
@@ -29,16 +30,19 @@ class RiskyQLearner(Player):
         self.prev_action = random_choice()
         self.history = []
         self.score = 0
-        self.Qs = {'':  {'C': 0, 'D': 0}}
-        self.Vs = {'': 0}
+        self.Qs = OrderedDict({'':  OrderedDict({'C': 0, 'D': 0})})
+        self.Vs = OrderedDict({'': 0})
         self.prev_state = ''
+        (R, P, S, T) = Game().RPST()
+        self.payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': S}}
+
 
     def strategy(self, opponent):
         """Runs a qlearn algorithm while the tournament is running."""
         state = self.find_state(opponent)
         reward = self.find_reward(opponent)
         if state not in self.Qs:
-            self.Qs[state] = {'C': 0, 'D': 0}
+            self.Qs[state] = OrderedDict(zip(['C', 'D'], [0, 0]))
             self.Vs[state] = 0
         self.perform_q_learning(self.prev_state, state, self.prev_action, reward)
         if state not in self.Qs:
@@ -54,7 +58,8 @@ class RiskyQLearner(Player):
         Selects the action based on the epsilon-soft policy
         """
         rnd_num = random.random()
-        if rnd_num < (1. - self.action_selection_parameter):
+        p = 1. - self.action_selection_parameter
+        if rnd_num < p:
             return max(self.Qs[state], key=lambda x: self.Qs[state][x])
         return random_choice()
 
@@ -62,26 +67,26 @@ class RiskyQLearner(Player):
         """
         Finds the my_state (the opponents last n moves +  its previous proportion of playing 'C') as a hashable state
         """
-        prob = '{:.1f}'.format(opponent.history.count('C'))
+        prob = '{:.1f}'.format(opponent.cooperations)
         return ''.join(opponent.history[-self.memory_length:]) + prob
 
     def perform_q_learning(self, prev_state, state, action, reward):
         """
         Performs the qlearning algorithm
         """
-        self.Qs[prev_state][action] = (1-self.learning_rate)*self.Qs[prev_state][action] + self.learning_rate*(reward + self.discount_rate*self.Vs[state])
+        self.Qs[prev_state][action] = (1.-self.learning_rate)*self.Qs[prev_state][action] + self.learning_rate*(reward + self.discount_rate*self.Vs[state])
         self.Vs[prev_state] = max(self.Qs[prev_state].values())
 
     def find_reward(self, opponent):
         """
         Finds the reward gained on the last iteration
         """
-        payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': S}}
+
         if len(opponent.history) == 0:
             opp_prev_action = random_choice()
         else:
             opp_prev_action = opponent.history[-1]
-        return payoff_matrix[self.prev_action][opp_prev_action]
+        return self.payoff_matrix[self.prev_action][opp_prev_action]
 
     def reset(self):
         """
@@ -89,8 +94,8 @@ class RiskyQLearner(Player):
         """
         Player.reset(self)
 
-        self.Qs = {'':{'C':0, 'D':0}}
-        self.Vs = {'':0}
+        self.Qs = {'': {'C': 0, 'D': 0}}
+        self.Vs = {'': 0}
         self.prev_state = ''
         self.prev_action = random_choice()
 
