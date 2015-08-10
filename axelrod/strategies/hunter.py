@@ -63,12 +63,12 @@ class MathConstantHunter(Player):
         n = len(self.history)
         if n >= 8 and opponent.cooperations and opponent.defections:
 
-            start1, end1 = 0, n/2
-            start2, end2 = n/4, 3*n/4
-            start3, end3 = n/2, n
-            count1 = opponent.history[start1:end1].count('C') + self.history[start1:end1].count('C')
-            count2 = opponent.history[start2:end2].count('C') + self.history[start2:end2].count('C')
-            count3 = opponent.history[start3:end3].count('C') + self.history[start3:end3].count('C')
+            start1, end1 = 0, n // 2
+            start2, end2 = n // 4, 3 * n // 4
+            start3, end3 = n // 2, n
+            count1 = opponent.history[start1: end1].count('C') + self.history[start1: end1].count('C')
+            count2 = opponent.history[start2: end2].count('C') + self.history[start2: end2].count('C')
+            count3 = opponent.history[start3: end3].count('C') + self.history[start3: end3].count('C')
             ratio1 = 0.5 * count1 / (end1 - start1)
             ratio2 = 0.5 * count2 / (end2 - start2)
             ratio3 = 0.5 * count3 / (end3 - start3)

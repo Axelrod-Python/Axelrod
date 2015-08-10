@@ -1,7 +1,12 @@
 import math
 import csv
 
-from six.moves import StringIO
+try:
+    # Python 3
+    from io import StringIO
+except importError:
+    # Python 2
+    from StringIO import StringIO
 
 
 def median(lst):

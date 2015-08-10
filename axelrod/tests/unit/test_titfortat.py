@@ -1,7 +1,7 @@
 """Test for the tit for tat strategies."""
 
 import axelrod
-from test_player import TestPlayer
+from .test_player import TestPlayer
 
 C, D = 'C', 'D'
 

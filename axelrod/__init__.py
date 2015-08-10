@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+from .random_ import random_choice
+
 from .plot import *
 from .game import *
 from .player import *

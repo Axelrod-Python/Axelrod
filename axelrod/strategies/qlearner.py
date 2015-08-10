@@ -1,6 +1,6 @@
 import random
 
-from axelrod import Player
+from axelrod import Player, random_choice
 
 
 class RiskyQLearner(Player):
@@ -25,7 +25,7 @@ class RiskyQLearner(Player):
         # for any subclasses that do not override methods using random calls.
         self.stochastic = True
 
-        self.prev_action = random.choice(['C', 'D'])
+        self.prev_action = random_choice()
         self.history = []
         self.score = 0
         self.Qs = {'': {'C': 0, 'D': 0}}
@@ -41,7 +41,7 @@ class RiskyQLearner(Player):
             self.Vs[state] = 0
         self.perform_q_learning(self.prev_state, state, self.prev_action, reward)
         if state not in self.Qs:
-            action = random.choice(['C', 'D'])
+            action = random_choice()
         else:
             action = self.select_action(state)
         self.prev_state = state
@@ -55,7 +55,7 @@ class RiskyQLearner(Player):
         rnd_num = random.random()
         if rnd_num < (1-self.action_selection_parameter):
             return max(self.Qs[state], key=lambda x: self.Qs[state][x])
-        return random.choice(['C', 'D'])
+        return random_choice()
 
     def find_state(self, opponent):
         """
@@ -77,7 +77,7 @@ class RiskyQLearner(Player):
         """
         payoff_matrix = {'C':{'C':1, 'D':-2}, 'D':{'C':3, 'D':-1}}
         if len(opponent.history) == 0:
-            opp_prev_action = random.choice(['C', 'D'])
+            opp_prev_action = random_choice()
         else:
             opp_prev_action = opponent.history[-1]
         return payoff_matrix[self.prev_action][opp_prev_action]
@@ -91,7 +91,7 @@ class RiskyQLearner(Player):
         self.Qs = {'':{'C':0, 'D':0}}
         self.Vs = {'':0}
         self.prev_state = ''
-        self.prev_action = random.choice(['C', 'D'])
+        self.prev_action = random_choice()
 
 
 class ArrogantQLearner(RiskyQLearner):
