@@ -5,6 +5,7 @@ import axelrod
 
 from axelrod import simulate_play, Player
 
+
 C, D = 'C', 'D'
 
 

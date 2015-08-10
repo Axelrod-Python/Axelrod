@@ -4,7 +4,7 @@ import random
 
 import axelrod
 
-from test_player import TestPlayer
+from .test_player import TestPlayer
 
 
 class TestRiskyQLearner(TestPlayer):

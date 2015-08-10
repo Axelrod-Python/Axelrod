@@ -1,9 +1,7 @@
 """Test for the random strategy."""
 
-from mock import patch
-
 import axelrod
-from axelrod.tests.test_player import TestPlayer
+from .test_player import TestPlayer
 
 C, D = 'C', 'D'
 
@@ -14,12 +12,10 @@ class TestRandom(TestPlayer):
     player = axelrod.Random
     stochastic = True
 
-    @patch('random.choice')
-    def test_strategy(self, mocked_random):
+    def test_strategy(self):
         """Test that strategy is randomly picked (not affected by history)."""
         response_1 = [C, D, C]
         response_2 = [C, C, D]
-        mocked_random.side_effect = response_1 + response_2
 
         self.first_play_test(C, random_seed=1)
         self.first_play_test(D, random_seed=2)

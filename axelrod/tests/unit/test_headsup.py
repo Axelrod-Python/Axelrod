@@ -2,7 +2,7 @@
 
 import axelrod
 
-from test_player import TestHeadsUp
+from .test_player import TestHeadsUp
 
 C, D = 'C', 'D'
 

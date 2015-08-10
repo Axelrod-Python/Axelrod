@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals, print_function
 
 import os
-from six.moves import cPickle as pickle
+import pickle
 
 from .tournament import *
 from .plot import *

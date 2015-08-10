@@ -1,7 +1,7 @@
 import itertools
 
 from axelrod import Player
-from memoryone import Joss
+from .memoryone import Joss
 
 
 class Calculator(Player):
@@ -20,8 +20,8 @@ class Calculator(Player):
     @staticmethod
     def detect_cycle(history):
         """Detects if there is a cycle in the opponent's history."""
-        for i in range(len(history) / 2):
-            cycle = itertools.cycle(history[0:i+1])
+        for i in range(len(history) // 2):
+            cycle = itertools.cycle(history[0: i + 1])
             cycle_list = list(itertools.islice(cycle, 0, len(history)))
             if list(history) == cycle_list:
                 return True
