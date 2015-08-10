@@ -30,7 +30,7 @@ class Plot(object):
 
     @property
     def _boxplot_xticks_locations(self):
-        return range(1, len(self.result_set.ranked_names) + 2)
+        return list(range(1, len(self.result_set.ranked_names) + 2))
 
     @property
     def _boxplot_xticks_labels(self):

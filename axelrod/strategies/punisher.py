@@ -36,7 +36,11 @@ class Punisher(Player):
             self.grudge_memory += 1
             return 'D'
         elif 'D' in opponent.history[-1:]:
+<<<<<<< HEAD
             self.mem_length = (opponent.defections * 20) / len(opponent.history)
+=======
+            self.mem_length = (sum([i == 'D' for i in opponent.history])*20)//len(opponent.history)
+>>>>>>> tricoder/future/python3
             self.grudged = True
             return 'D'
         return 'C'

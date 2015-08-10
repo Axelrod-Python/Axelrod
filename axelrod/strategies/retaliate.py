@@ -28,6 +28,7 @@ class Retaliate(Player):
         If the opponent has played D to my C more often than x% of the time
         that I've done the same to him, play D. Otherwise, play C.
         """
+
         if len(self.history):
             last_round = (self.history[-1], opponent.history[-1])
             self.play_counts[last_round] += 1
@@ -93,8 +94,12 @@ class LimitedRetaliate(Player):
         that I've done the same to him, retaliate by playing D but stop doing
         so once I've hit the retaliation limit.
         """
+<<<<<<< HEAD
 
         history = zip(self.history, opponent.history)
+=======
+        history = list(zip(self.history, opponent.history))
+>>>>>>> tricoder/future/python3
         if history.count(('C', 'D')) > (
            history.count(('D', 'C')) * self.retaliation_threshold):
             self.retaliating = True

@@ -1,11 +1,12 @@
+from __future__ import absolute_import, unicode_literals, print_function
+
 import os
-import time
-import cPickle as pickle
-from tournament import *
-from plot import *
-from ecosystem import *
-import logging
-from utils import *
+from six.moves import cPickle as pickle
+
+from .tournament import *
+from .plot import *
+from .ecosystem import *
+from .utils import *
 
 
 class TournamentManager(object):
@@ -150,14 +151,14 @@ class TournamentManager(object):
             'Saving cache with %d entries to %s' % (len(cache), file_name))
         deterministic_cache = DeterministicCache(
             cache, self._cache_valid_for_turns)
-        file = open(file_name, 'w')
-        pickle.dump(deterministic_cache, file)
+        with open(file_name, 'wb') as io:
+            pickle.dump(deterministic_cache, io)
         return True
 
     def _load_cache_from_file(self, file_name):
         try:
-            file = open(file_name, 'r')
-            deterministic_cache = pickle.load(file)
+            with open(file_name, 'rb') as io:
+                deterministic_cache = pickle.load(io)
             self._deterministic_cache = deterministic_cache.cache
             self._cache_valid_for_turns = deterministic_cache.turns
             self._logger.debug(

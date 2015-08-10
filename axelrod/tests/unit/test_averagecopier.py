@@ -1,6 +1,10 @@
 """Test for the average_copier strategy."""
 
 import random
+#try:
+    #from unittest.mock import patch
+#except ImportError:
+    #from mock import patch
 
 import axelrod
 
@@ -15,7 +19,8 @@ class TestAverageCopier(TestPlayer):
     player = axelrod.AverageCopier
     stochastic = True
 
-    def test_strategy(self):
+    @patch('random.choice')
+    def test_strategy(self, mocked_random):
         """Test that the first strategy is picked randomly."""
         self.responses_test([], [], [C], random_seed=1)
         self.responses_test([], [], [D], random_seed=2)
