@@ -122,18 +122,18 @@ class TestArrogantQLearner(TestPlayer):
         p2 = axelrod.Cooperator()
         test_responses(self, p1, p2, [], [], [C, C, C, C, C, C, C])
 
-    #def test_reset_method(self):
-        #"""Tests the reset method."""
-        #P1 = axelrod.ArrogantQLearner()
-        #P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
-        #P1.Vs = {'': 0, '0.0': 0}
-        #P1.history = [C, D, D, D]
-        #P1.prev_state = C
-        #P1.reset()
-        #self.assertEqual(P1.prev_state, '')
-        #self.assertEqual(P1.history, [])
-        #self.assertEqual(P1.Vs, {'':0})
-        #self.assertEqual(P1.Qs, {'':{C:0, D:0}})
+    def test_reset_method(self):
+        """Tests the reset method."""
+        P1 = axelrod.ArrogantQLearner()
+        P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
+        P1.Vs = {'': 0, '0.0': 0}
+        P1.history = [C, D, D, D]
+        P1.prev_state = C
+        P1.reset()
+        self.assertEqual(P1.prev_state, '')
+        self.assertEqual(P1.history, [])
+        self.assertEqual(P1.Vs, {'':0})
+        self.assertEqual(P1.Qs, {'':{C:0, D:0}})
 
 
 class TestHesitantQLearner(TestPlayer):
@@ -185,20 +185,20 @@ class TestHesitantQLearner(TestPlayer):
         p2 = axelrod.Cooperator()
         test_responses(self, p1, p2, [], [], [C, C, C, C, C, C, C])
 
-    #def test_reset_method(self):
-        #"""
-        #tests the reset method
-        #"""
-        #P1 = axelrod.HesitantQLearner()
-        #P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
-        #P1.Vs = {'': 0, '0.0': 0}
-        #P1.history = [C, D, D, D]
-        #P1.prev_state = C
-        #P1.reset()
-        #self.assertEqual(P1.prev_state, '')
-        #self.assertEqual(P1.history, [])
-        #self.assertEqual(P1.Vs, {'': 0})
-        #self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})
+    def test_reset_method(self):
+        """
+        tests the reset method
+        """
+        P1 = axelrod.HesitantQLearner()
+        P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
+        P1.Vs = {'': 0, '0.0': 0}
+        P1.history = [C, D, D, D]
+        P1.prev_state = C
+        P1.reset()
+        self.assertEqual(P1.prev_state, '')
+        self.assertEqual(P1.history, [])
+        self.assertEqual(P1.Vs, {'': 0})
+        self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})
 
 
 class TestCautiousQLearner(TestPlayer):
@@ -246,15 +246,15 @@ class TestCautiousQLearner(TestPlayer):
         p2 = axelrod.Cooperator()
         test_responses(self, p1, p2, [], [], [C, C, C, C, C, C, C])
 
-    #def test_reset_method(self):
-        #"""Tests the reset method."""
-        #P1 = axelrod.CautiousQLearner()
-        #P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
-        #P1.Vs = {'': 0, '0.0': 0}
-        #P1.history = [C, D, D, D]
-        #P1.prev_state = C
-        #P1.reset()
-        #self.assertEqual(P1.prev_state, '')
-        #self.assertEqual(P1.history, [])
-        #self.assertEqual(P1.Vs, {'': 0})
-        #self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})
+    def test_reset_method(self):
+        """Tests the reset method."""
+        P1 = axelrod.CautiousQLearner()
+        P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
+        P1.Vs = {'': 0, '0.0': 0}
+        P1.history = [C, D, D, D]
+        P1.prev_state = C
+        P1.reset()
+        self.assertEqual(P1.prev_state, '')
+        self.assertEqual(P1.history, [])
+        self.assertEqual(P1.Vs, {'': 0})
+        self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})
