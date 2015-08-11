@@ -181,9 +181,9 @@ paper please list it here:
 - `A repository with various example tournaments and visualizations of strategies
   <https://github.com/marcharper/AxelrodExamples>`_
   by `marcharper <https://github.com/marcharper>`_.
--`Axelrod-Python related blog articles
+- `Axelrod-Python related blog articles
   <http://www.thomascampbell.me.uk/category/axelrod.html>`_
-  by `Uglfruitcake <https://github.com/uglyfruitcake>`_. 
+  by `Uglyfruitcake <https://github.com/uglyfruitcake>`_. 
 
 .. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
