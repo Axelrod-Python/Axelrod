@@ -4,7 +4,13 @@ import unittest
 import axelrod
 import logging
 import multiprocessing
-from mock import MagicMock
+
+try:
+    # Python 3
+    from unittest.mock import MagicMock
+except ImportError:
+    # Python 2
+    from mock import MagicMock
 
 
 class TestTournament(unittest.TestCase):

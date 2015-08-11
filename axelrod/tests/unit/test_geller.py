@@ -2,7 +2,7 @@
 
 import axelrod
 
-from test_player import TestPlayer
+from .test_player import TestPlayer
 
 
 class TestGeller(TestPlayer):

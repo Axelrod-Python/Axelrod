@@ -106,7 +106,7 @@ if __name__ == "__main__":
             args.exclude_ordinary,
             args.exclude_cheating,
             args.exclude_combined]):
-        print "You've excluded everything - nothing for me to do"
+        print("You've excluded everything - nothing for me to do")
     else:
         setup_logging(args.logging_destination, args.verbosity)
         # Unravel argparse Namespace object to python keyword arguments.

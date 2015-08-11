@@ -1,13 +1,10 @@
 """Test for the grumpy strategy."""
 
 import axelrod
-
-from test_player import TestPlayer
+from .test_player import TestPlayer, test_responses
 
 
 C, D = 'C', 'D'
-
-from test_player import test_responses
 
 
 class TestGrumpy(TestPlayer):
