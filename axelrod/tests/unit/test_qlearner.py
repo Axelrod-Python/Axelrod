@@ -20,7 +20,6 @@ class TestRiskyQLearner(TestPlayer):
         random.seed(5)
         p1 = axelrod.RiskyQLearner()
         p2 = axelrod.Cooperator()
-        #print(p1.prev_action)
         simulate_play(p1, p2)
         self.assertEqual(p1.Qs, {'': {C: 0, D: 0.9}, '0.0': {C: 0, D: 0}})
         simulate_play(p1, p2)
