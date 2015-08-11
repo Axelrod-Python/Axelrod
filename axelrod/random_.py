@@ -2,7 +2,7 @@ import random
 
 def random_choice(p=0.5):
     """
-    Return 'C' wit probability `p`, else return 'D'
+    Return 'C' with probability `p`, else return 'D'
 
     Emulates Python's random.choice(['C', 'D']) since it is not consistent
     across Python 2.7 to Python 3.4"""
