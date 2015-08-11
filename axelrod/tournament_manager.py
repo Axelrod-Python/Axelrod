@@ -117,7 +117,7 @@ class TournamentManager(object):
         with open(file_name, 'w') as f:
             f.write(csv)
 
-    def _save_plots(self, tournament, ecosystem=None, image_format="png"):
+    def _save_plots(self, tournament, ecosystem=None, image_format="svg"):
         results = tournament.result_set
         plot = Plot(results)
         if not plot.matplotlib_installed:
