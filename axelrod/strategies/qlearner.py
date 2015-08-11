@@ -34,7 +34,7 @@ class RiskyQLearner(Player):
         self.Vs = OrderedDict({'': 0})
         self.prev_state = ''
         (R, P, S, T) = Game().RPST()
-        self.payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': S}}
+        self.payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': P}}
 
 
     def strategy(self, opponent):
