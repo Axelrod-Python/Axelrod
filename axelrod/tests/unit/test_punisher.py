@@ -4,7 +4,7 @@ import random
 
 import axelrod
 
-from test_player import TestPlayer
+from .test_player import TestPlayer
 
 C, D = 'C', 'D'
 
@@ -158,7 +158,7 @@ class TestInversePunisher(TestPlayer):
         self.assertEqual(P1.strategy(P2), D)
         self.assertEqual(P1.grudged, True)
 
-        for turn in range(P1.mem_length-1):
+        for turn in range(P1.mem_length - 1):
             self.assertEqual(P1.mem_length, 10)
             self.assertEqual(P1.strategy(P2), D)
             # Doesn't matter what opponent plays now

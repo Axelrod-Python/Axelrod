@@ -5,6 +5,7 @@ import axelrod
 
 from axelrod import simulate_play, Player
 
+
 C, D = 'C', 'D'
 
 
@@ -64,12 +65,15 @@ class TestPlayerClass(unittest.TestCase):
 
 def test_responses(test_class, P1, P2, history_1, history_2,
                    responses, random_seed=None):
-    """Test responses to arbitrary histories. Used for the the following tests
+    """
+    Test responses to arbitrary histories. Used for the the following tests
     in TestPlayer: first_play_test, markov_test, and responses_test.
     Works for arbitrary players as well. Input response_lists is a list of
     lists, each of which consists of a list for the history of player 1, a
     list for the history of player 2, and a list for the subsequent moves
-    by player one to test."""
+    by player one to test.
+    """
+
     if random_seed:
         random.seed(random_seed)
     # Force the histories, In case either history is impossible or if some
@@ -100,20 +104,20 @@ class TestPlayer(unittest.TestCase):
 
     def test_repr(self):
         """Test that the representation is correct."""
-        self.assertEquals(str(self.player()), self.name)
+        self.assertEqual(str(self.player()), self.name)
 
     def test_reset(self):
         """Make sure reseting works correctly."""
         p = self.player()
         p.history = [C, C]
         p.reset()
-        self.assertEquals(p.history, [])
+        self.assertEqual(p.history, [])
         self.assertEqual(self.player().cooperations, 0)
         self.assertEqual(self.player().defections, 0)
 
     def test_strategy(self):
         """Test that strategy method."""
-        self.assertEquals(self.player().strategy(self.player()), None)
+        self.assertEqual(self.player().strategy(self.player()), None)
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
@@ -142,7 +146,8 @@ class TestPlayer(unittest.TestCase):
         """Test responses to arbitrary histories. Input response_list is a
         list of lists, each of which consists of a list for the history of
         player 1, a list for the history of player 2, and a list for the
-        subsequent moves by player one to test."""
+        subsequent moves by player one to test.
+        """
         P1 = self.player()
         P1.tournament_length = tournament_length
         P2 = Player()

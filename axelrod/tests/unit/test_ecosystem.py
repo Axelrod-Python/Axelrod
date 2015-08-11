@@ -31,29 +31,29 @@ class TestEcosystem(unittest.TestCase):
         # By default create populations of equal size
         eco = axelrod.Ecosystem(self.res_cooperators)
         pops = eco.population_sizes
-        self.assertEquals(eco.nplayers, 4)
-        self.assertEquals(len(pops), 1)
-        self.assertEquals(len(pops[0]), 4)
+        self.assertEqual(eco.nplayers, 4)
+        self.assertEqual(len(pops), 1)
+        self.assertEqual(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)
-        self.assertEquals(list(set(pops[0])), [0.25])
+        self.assertEqual(list(set(pops[0])), [0.25])
 
         # Can pass list of initial population distributions
         eco = axelrod.Ecosystem(self.res_cooperators, population=[.7, .25, .03, .02])
         pops = eco.population_sizes
-        self.assertEquals(eco.nplayers, 4)
-        self.assertEquals(len(pops), 1)
-        self.assertEquals(len(pops[0]), 4)
+        self.assertEqual(eco.nplayers, 4)
+        self.assertEqual(len(pops), 1)
+        self.assertEqual(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)
-        self.assertEquals(pops[0], [.7, .25, .03, .02])
+        self.assertEqual(pops[0], [.7, .25, .03, .02])
 
         # Distribution will automatically normalise
         eco = axelrod.Ecosystem(self.res_cooperators, population=[70, 25, 3, 2])
         pops = eco.population_sizes
-        self.assertEquals(eco.nplayers, 4)
-        self.assertEquals(len(pops), 1)
-        self.assertEquals(len(pops[0]), 4)
+        self.assertEqual(eco.nplayers, 4)
+        self.assertEqual(len(pops), 1)
+        self.assertEqual(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)
-        self.assertEquals(pops[0], [.7, .25, .03, .02])
+        self.assertEqual(pops[0], [.7, .25, .03, .02])
 
         # If passed list is of incorrect size get error
         self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators, population=[.7, .2, .03, .1, .1])
@@ -67,11 +67,11 @@ class TestEcosystem(unittest.TestCase):
         eco = axelrod.Ecosystem(self.res_cooperators)
         eco.reproduce(100)
         pops = eco.population_sizes
-        self.assertEquals(len(pops), 101)
+        self.assertEqual(len(pops), 101)
         for p in pops:
-            self.assertEquals(len(p), 4)
-            self.assertEquals(sum(p), 1.0)
-            self.assertEquals(list(set(p)), [0.25])
+            self.assertEqual(len(p), 4)
+            self.assertEqual(sum(p), 1.0)
+            self.assertEqual(list(set(p)), [0.25])
 
     def test_defector_wins(self):
         """Does one defector win over time?"""
@@ -79,12 +79,12 @@ class TestEcosystem(unittest.TestCase):
         eco = axelrod.Ecosystem(self.res_defector_wins)
         eco.reproduce(1000)
         pops = eco.population_sizes
-        self.assertEquals(len(pops), 1001)
+        self.assertEqual(len(pops), 1001)
         for p in pops:
-            self.assertEquals(len(p), 4)
-            self.assertAlmostEquals(sum(p), 1.0)
+            self.assertEqual(len(p), 4)
+            self.assertAlmostEqual(sum(p), 1.0)
         last = pops[-1]
-        self.assertAlmostEquals(last[0], 0.0)
-        self.assertAlmostEquals(last[1], 0.0)
-        self.assertAlmostEquals(last[2], 0.0)
-        self.assertAlmostEquals(last[3], 1.0)
+        self.assertAlmostEqual(last[0], 0.0)
+        self.assertAlmostEqual(last[1], 0.0)
+        self.assertAlmostEqual(last[2], 0.0)
+        self.assertAlmostEqual(last[3], 1.0)
