@@ -169,7 +169,7 @@ Let us see the global scores for the basic strategies::
 
 We see the output of this here:
 
-.. image:: _static/usage/basic_strategies.svg
+.. image:: http://axelrod-python.github.io/tournament/assets/basic_strategies_boxplot.svg
    :width: 50%
    :align: center
 
@@ -209,7 +209,7 @@ Again, if :code:`matplotlib` is installed we can visualise this::
 
 this is shown here:
 
-.. image:: _static/usage/payoffs.svg
+.. image:: http://axelrod-python.github.io/tournament/assets/basic_strategies_payoff.svg
    :width: 50%
    :align: center
 
@@ -272,12 +272,12 @@ such as WinStayLoseShift that are more robust in the presence of noise.
 
 Adding noise makes a dramatic difference in the pairwise payoffs (5% on right):
 
-.. |pairwise_no_noise| image:: ../assets/strategies_payoff.png
+.. |pairwise_no_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_payoff.svg
    :width: 75%
    :align: middle
    :alt: Pairwise payoffs without noise
 
-.. |pairwise_5_noise| image:: ../assets/strategies_payoff_noise_5.png
+.. |pairwise_5_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_payoff_noise_5.svg
    :width: 75%
    :align: middle
    :alt: Pairwise payoffs with 5% noise
@@ -288,12 +288,12 @@ Adding noise makes a dramatic difference in the pairwise payoffs (5% on right):
 
 and accordingly to the ranking of strategies overall:
 
-.. |boxplot_no_noise| image:: ../assets/strategies_boxplot.png
+.. |boxplot_no_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
    :width: 75%
    :align: middle
    :alt: Strategy performance without noise
 
-.. |boxplot_5_noise| image:: ../assets/strategies_boxplot_noise_5.png
+.. |boxplot_5_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot_noise_5.svg
    :width: 75%
    :align: middle
    :alt: Strategy performance with 5% noise
@@ -342,7 +342,7 @@ An ecological variant of the tournament can be run with this library which allow
 
 We see the output here:
 
-.. image:: _static/usage/basic_strategies-reproduce.svg
+.. image:: http://axelrod-python.github.io/tournament/assets/basic_strategies_reproduce.svg
    :width: 50%
    :align: center
 
@@ -420,18 +420,18 @@ Here are some of the plots that are output when running with the latest total nu
 
 The results from the tournament itself (ordered by median score):
 
-.. image:: ../assets/strategies_boxplot.png
+.. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
    :width: 50%
    :align: center
 
 The payoff matrix from that tournament:
 
-.. image:: ../assets/strategies_payoff.png
+.. image:: http://axelrod-python.github.io/tournament/assets/strategies_payoff.svg
    :width: 50%
    :align: center
 
 The ecological variant:
 
-.. image:: ../assets/strategies_reproduce.png
+.. image:: http://axelrod-python.github.io/tournament/assets/strategies_reproduce.svg
    :width: 50%
    :align: center
