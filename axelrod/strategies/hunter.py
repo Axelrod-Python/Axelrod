@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+
 from axelrod import Player
-from meta import MetaPlayer
+from .meta import MetaPlayer
 
 
 class DefectorHunter(Player):
@@ -9,7 +11,7 @@ class DefectorHunter(Player):
     memory_depth = float('inf')  # Long memory
 
     def strategy(self, opponent):
-        if len(self.history) >= 4 and set(opponent.history) == set(['D']):
+        if len(self.history) >= 4 and len(opponent.history) == opponent.defections:
             return 'D'
         return 'C'
 
@@ -21,7 +23,7 @@ class CooperatorHunter(Player):
     memory_depth = float('inf')  # Long memory
 
     def strategy(self, opponent):
-        if len(self.history) >= 4 and set(opponent.history) == set(['C']):
+        if len(self.history) >= 4 and len(opponent.history) == opponent.cooperations:
             return 'D'
         return 'C'
 
@@ -59,14 +61,14 @@ class MathConstantHunter(Player):
         """
 
         n = len(self.history)
-        if n >= 8 and 'C' in opponent.history and 'D' in opponent.history:
+        if n >= 8 and opponent.cooperations and opponent.defections:
 
-            start1, end1 = 0, n/2
-            start2, end2 = n/4, 3*n/4
-            start3, end3 = n/2, n
-            count1 = opponent.history[start1:end1].count('C') + self.history[start1:end1].count('C')
-            count2 = opponent.history[start2:end2].count('C') + self.history[start2:end2].count('C')
-            count3 = opponent.history[start3:end3].count('C') + self.history[start3:end3].count('C')
+            start1, end1 = 0, n // 2
+            start2, end2 = n // 4, 3 * n // 4
+            start3, end3 = n // 2, n
+            count1 = opponent.history[start1: end1].count('C') + self.history[start1: end1].count('C')
+            count2 = opponent.history[start2: end2].count('C') + self.history[start2: end2].count('C')
+            count3 = opponent.history[start3: end3].count('C') + self.history[start3: end3].count('C')
             ratio1 = 0.5 * count1 / (end1 - start1)
             ratio2 = 0.5 * count2 / (end2 - start2)
             ratio3 = 0.5 * count3 / (end3 - start3)
@@ -96,7 +98,6 @@ class RandomHunter(Player):
 
         n = len(self.history)
         if n > 10:
-
             probabilities = []
             if self.history[:-1].count('C') > 5:
                 countCC = len([i for i in range(n-1) if self.history[i] == "C" and opponent.history[i+1] == "C"])

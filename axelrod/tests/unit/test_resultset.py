@@ -72,6 +72,7 @@ class TestResultSet(unittest.TestCase):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         self.assertEqual(rs.players, self.players)
         self.assertEqual(rs.nplayers, 3)
+        self.assertEqual(rs.players, self.players)
         self.assertEqual(rs.turns, 5)
         self.assertEqual(rs.repetitions, 2)
         self.assertEqual(rs.outcome, self.test_outcome)
@@ -145,3 +146,4 @@ class TestResultSet(unittest.TestCase):
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         self.assertEqual(rs.csv(), self.expected_csv)
+

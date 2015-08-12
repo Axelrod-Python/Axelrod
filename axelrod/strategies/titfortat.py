@@ -107,6 +107,7 @@ class HardTitForTat(Player):
         # Otherwise cooperates
         return 'C'
 
+
 class HardTitFor2Tats(Player):
     """A variant of Tit For Two Tats that uses a longer history for
     retaliation."""

@@ -4,7 +4,7 @@ import random
 
 import axelrod
 
-from test_player import TestPlayer
+from .test_player import TestPlayer
 
 C, D = 'C', 'D'
 
@@ -42,52 +42,52 @@ class TestForgetfulGrudger(TestPlayer):
         self.assertEqual(P1.grudged, False)
 
         # Starts by playing C
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
         self.assertEqual(P1.grudged, False)
-        P2.history.append('C')
+        P2.history.append(C)
 
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
         self.assertEqual(P1.grudged, False)
-        P2.history.append('C')
+        P2.history.append(C)
 
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
         self.assertEqual(P1.grudged, False)
-        P2.history.append('C')
+        P2.history.append(C)
 
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
         self.assertEqual(P1.grudged, False)
-        P2.history.append('D')
+        P2.history.append(D)
 
-        self.assertEqual(P2.history, ['C', 'C', 'C', 'D'])
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P2.history, [C, C, C, D])
+        self.assertEqual(P1.strategy(P2), D)
         self.assertEqual(P1.grudged, True)
 
         for turn in range(P1.mem_length-1):
-            self.assertEqual(P1.strategy(P2), 'D')
+            self.assertEqual(P1.strategy(P2), D)
             # Doesn't matter what opponent plays now
-            P2.history.append(random.choice(['C', 'D']))
+            P2.history.append(random.choice([C, D]))
             self.assertEqual(P1.grudged, True)
 
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), D)
         self.assertEqual(P1.grudge_memory, 10)
         self.assertEqual(P1.grudged, True)
-        P2.history.append('C')
+        P2.history.append(C)
 
         # Back to being not grudged
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
         self.assertEqual(P1.grudged, False)
-        P2.history.append('C')
+        P2.history.append(C)
 
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
         self.assertEqual(P1.grudged, False)
-        P2.history.append('C')
+        P2.history.append(C)
 
     def test_reset_method(self):
         """
         tests the reset method
         """
         P1 = axelrod.ForgetfulGrudger()
-        P1.history = ['C', 'D', 'D', 'D']
+        P1.history = [C, D, D, D]
         P1.grudged = True
         P1.grudge_memory = 4
         P1.reset()
@@ -113,8 +113,8 @@ class TestOppositeGrudger(TestPlayer):
         If opponent cooperates at any point then the player will cooperate
         forever.
         """
-        self.responses_test([C,D,D,D],[D,D,D,D],[D])
-        self.responses_test([C,C,D,D,D],[C,D,C,C,C],[C])
+        self.responses_test([C, D, D, D], [D, D, D, D], [D])
+        self.responses_test([C, C, D, D, D], [C, D, C, C, C], [C])
 
 
 class TestAggravater(TestPlayer):

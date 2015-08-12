@@ -2,7 +2,7 @@
 
 import axelrod
 
-from test_player import TestPlayer
+from .test_player import TestPlayer
 
 C, D = 'C', 'D'
 
@@ -35,6 +35,6 @@ class TestTrickyCooperator(TestPlayer):
         """Test if it tries to trick opponent"""
         self.responses_test([C, C, C], [C, C, C], [D])
         self.responses_test([C, C, C, D, D], [C, C, C, C, D], [C])
-        history = [C, C, C, D, D] + [C]*11
-        opponent_histroy = [C, C, C, C, D] + [D] + [C]*10
+        history = [C, C, C, D, D] + [C] * 11
+        opponent_histroy = [C, C, C, C, D] + [D] + [C] * 10
         self.responses_test(history, opponent_histroy,[D])

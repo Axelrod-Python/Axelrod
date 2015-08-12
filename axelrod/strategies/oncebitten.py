@@ -15,8 +15,6 @@ class OnceBitten(Player):
         Initialised the player
         """
         super(OnceBitten, self).__init__()
-        self.history = []
-        self.score = 0
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0
@@ -45,7 +43,7 @@ class OnceBitten(Player):
         """
         Resets scores and history
         """
-        self.history = []
+        Player.reset(self)
         self.grudged = False
         self.grudge_memory = 0
 
@@ -57,44 +55,31 @@ class FoolMeOnce(Player):
 
     name = 'Fool Me Once'
     memory_depth = float('inf')  # Long memory
-
-    def __init__(self):
-        """
-        Initialised the player
-        """
-        super(FoolMeOnce, self).__init__()
-        self.D_count = 0
-        self._initial = 'C'
-        self.stochastic = False
+    stochastic = False
 
     def strategy(self, opponent):
         if not opponent.history:
-            return self._initial
-        if opponent.history[-1] == 'D':
-            self.D_count += 1
-        if self.D_count > 1:
+            return 'C'
+        if opponent.defections > 1:
             return 'D'
         return 'C'
-
-    def reset(self):
-        self.D_count = 0
-        self.history = []
 
 
 class ForgetfulFoolMeOnce(Player):
     """
-    Forgives one D then retaliates forever on a second D. Sometimes randomly forgets the defection count.
+    Forgives one D then retaliates forever on a second D. Sometimes randomly forgets the defection count, and so keeps a secondary count separate from the the
+    standard count in Player.
     """
 
     name = 'Forgetful Fool Me Once'
     memory_depth = float('inf')  # Long memory
+    stochastic = True
 
     def __init__(self, forget_probability = 0.05):
-        super(ForgetfulFoolMeOnce, self).__init__()
+        Player.__init__(self)
         self.D_count = 0
         self._initial = 'C'
         self.forget_probability = forget_probability
-        self.stochastic = True
 
     def strategy(self, opponent):
         r = random.random()
@@ -109,5 +94,5 @@ class ForgetfulFoolMeOnce(Player):
         return 'C'
 
     def reset(self):
+        Player.reset(self)
         self.D_count = 0
-        self.history = []

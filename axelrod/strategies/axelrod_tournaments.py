@@ -27,7 +27,7 @@ class Davis(Player):
         opponent ever plays D."""
         if len(self.history) < self._rounds_to_cooperate:
             return 'C'
-        if 'D' in opponent.history:
+        if opponent.defections:
             return 'D'
         return 'C'
 
@@ -86,15 +86,6 @@ class Shubik(Player):
         self.retaliation_length = 0
         self.retaliation_remaining = 0
 
-    def _refresh_retaliation(self, opponent):
-        """Reset the retaliation counter based on the history"""
-        self.retaliation_length = 0
-        for i in range(len(self.history)):
-            if self.history[i] == 'C':
-                if opponent.history[i] == 'D':
-                    self.retaliation_length += 1
-        self.retaliation_remaining = self.retaliation_length
-
     def _decrease_retaliation_counter(self):
         """Lower the remaining owed retaliation count and flip to non-retaliate
         if the count drops to zero."""
@@ -111,7 +102,8 @@ class Shubik(Player):
             if self.history[-1] == 'C': # it's on now!
                 # Lengthen the retaliation period
                 self.is_retaliating = True
-                self._refresh_retaliation(opponent)
+                self.retaliation_length += 1
+                self.retaliation_remaining = self.retaliation_length
                 self._decrease_retaliation_counter()
                 return 'D'
             else:
@@ -125,6 +117,11 @@ class Shubik(Player):
             return 'D'
         return 'C'
 
+    def reset(self):
+        Player.reset(self)
+        self.is_retaliating = False
+        self.retaliation_length = 0
+        self.retaliation_remaining = 0
 
 class Tullock(Player):
     """
@@ -152,7 +149,6 @@ class Tullock(Player):
         return 'D'
 
 
-
 ## Second Tournament
 
 class Champion(Player):
@@ -162,10 +158,6 @@ class Champion(Player):
 
     name = "Champion"
     memory_depth = float('inf')
-
-    def __init__(self):
-        Player.__init__(self)
-        #self.tournament_length = 200 # may be overwritten by tournament
 
     def strategy(self, opponent):
         current_round = len(self.history)
@@ -179,8 +171,7 @@ class Champion(Player):
         if current_round < expected_length * 5 / 40.:
             return opponent.history[-1]
         # Now cooperate unless all of the necessary conditions are true
-        opponent_defections = len([x for x in opponent.history if x == 'D'])
-        defection_prop = float(opponent_defections) / len(opponent.history)
+        defection_prop = float(opponent.defections) / len(opponent.history)
         if opponent.history[-1] == 'D':
             r = random.random()
             if defection_prop > max(0.4, r):
@@ -205,8 +196,7 @@ class Eatherley(Player):
             return 'C'
         # Respond to defections with probability equal to opponent's total
         # proportion of defections
-        opponent_defections = len([x for x in opponent.history if x == 'D'])
-        defection_prop = float(opponent_defections) / len(opponent.history)
+        defection_prop = float(opponent.defections) / len(opponent.history)
         r = random.random()
         if r < defection_prop:
             return 'D'
@@ -244,3 +234,7 @@ class Tester(Player):
                 return 'C'
             # Alternate C and D
             return flip_dict[self.history[-1]]
+
+    def reset(self):
+        Player.reset(self)
+        self.is_TFT = False

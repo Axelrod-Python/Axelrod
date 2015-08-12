@@ -112,14 +112,14 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
             l = R
 
         # Check parameters
-        s_min = - min((T-l)/(l-S), (l-S) / (T-l))
+        s_min = - min((T-l) / (l-S), (l-S) / (T-l))
         if (l < P) or (l > R) or (s > 1) or (s < s_min):
             raise ValueError
 
-        p1 = 1 - phi*(1-s)*(R-l)
-        p2 = 1 - phi*(s*(l-S) + (T-l))
-        p3 = phi*((l-S)+s*(T-l))
-        p4 = phi*(1-s)*(l-P)
+        p1 = 1 - phi * (1 - s) * (R - l)
+        p2 = 1 - phi * (s * (l - S) + (T - l))
+        p3 = phi * ((l - S) + s * (T - l))
+        p4 = phi * (1 - s) * (l - P)
 
         four_vector = [p1, p2, p3, p4]
         MemoryOnePlayer.__init__(self, four_vector)

@@ -2,7 +2,9 @@
 
 import axelrod
 
-from test_player import TestPlayer
+from .test_player import TestPlayer
+
+C, D = 'C', 'D'
 
 
 class TestMindReader(TestPlayer):
@@ -17,7 +19,7 @@ class TestMindReader(TestPlayer):
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Cooperator()
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), D)
  
     def test_vs_defect(self):
         """
@@ -25,7 +27,7 @@ class TestMindReader(TestPlayer):
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Defector()
-        self.assertEqual(P1.strategy(P2), 'D')
+        self.assertEqual(P1.strategy(P2), D)
 
     def test_vs_grudger(self):
         """
@@ -33,15 +35,15 @@ class TestMindReader(TestPlayer):
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Grudger()
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.assertEqual(P1.strategy(P2), C)
 
     def test_vs_tit_for_tat(self):
         """
         Will keep nasty strategies happy if it can
         """
         P1 = axelrod.MindReader()
-        P2 = axelrod.Grudger()
-        self.assertEqual(P1.strategy(P2), 'C')
+        P2 = axelrod.TitForTat()
+        self.assertEqual(P1.strategy(P2), C)
  
     def test_simulate_matches(self):
         """
@@ -49,8 +51,8 @@ class TestMindReader(TestPlayer):
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Grudger()
-        P1.simulate_match(P2, 'C', 4)
-        self.assertEqual(P2.history, ['C', 'C', 'C', 'C'])
+        P1.simulate_match(P2, C, 4)
+        self.assertEqual(P2.history, [C, C, C, C])
  
     def test_history_is_same(self):
         """
@@ -58,11 +60,11 @@ class TestMindReader(TestPlayer):
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Grudger()
-        P1.history = ['C', 'C']
-        P2.history = ['C', 'D']
+        P1.history = [C, C]
+        P2.history = [C, D]
         P1.strategy(P2)
-        self.assertEqual(P1.history, ['C', 'C'])
-        self.assertEqual(P2.history, ['C', 'D'])
+        self.assertEqual(P1.history, [C, C])
+        self.assertEqual(P2.history, [C, D])
 
     def test_vs_geller(self):
         """Ensures that a recursion error does not occour """
@@ -78,7 +80,7 @@ class TestMindReader(TestPlayer):
         P2 = axelrod.MindController()
         P3 = axelrod.Cooperator()
         P2.strategy(P1)
-        self.assertEqual(P1.strategy(P3), 'D')
+        self.assertEqual(P1.strategy(P3), D)
 
     def test_init(self):
         """Tests for init method """
@@ -88,6 +90,6 @@ class TestMindReader(TestPlayer):
     def test_reset(self):
         """Tests to see if the class is reset correctly """
         P1 = axelrod.MindReader()
-        P1.history = ['C', 'D', 'D', 'D']
+        P1.history = [C, D, D, D]
         P1.reset()
         self.assertEqual(P1.history, [])

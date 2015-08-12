@@ -1,31 +1,34 @@
-from alternator import *
-from axelrod_tournaments import *
-from appeaser import *
-from averagecopier import *
-from backstabber import *
-from calculator import Calculator
-from cooperator import *
-from darwin import *
-from defector import *
-from forgiver import *
-from geller import *
-from gobymajority import *
-from grudger import *
-from grumpy import *
-from hunter import *
-from inverse import *
-from mathematicalconstants import *
-from memoryone import *
-from meta import *
-from mindcontrol import *
-from mindreader import *
-from oncebitten import *
-from prober import *
-from punisher import *
-from qlearner import *
-from rand import *
-from retaliate import *
-from titfortat import *
+from __future__ import absolute_import
+
+from .alternator import *
+from .appeaser import *
+from .averagecopier import *
+from .axelrod_tournaments import *
+from .backstabber import *
+from .calculator import Calculator
+from .cooperator import *
+from .darwin import *
+from .defector import *
+from .forgiver import *
+from .geller import *
+from .gobymajority import *
+from .grudger import *
+from .grumpy import *
+from .hunter import *
+from .inverse import *
+from .mathematicalconstants import *
+from .memoryone import *
+from .meta import *
+from .mindcontrol import *
+from .mindreader import *
+from .oncebitten import *
+from .prober import *
+from .punisher import *
+from .qlearner import *
+from .rand import *
+from .retaliate import *
+from .titfortat import *
+
 
 basic_strategies = [
     Alternator,
@@ -40,11 +43,12 @@ ordinary_strategies = [
     AlternatorHunter,
     Appeaser,
     AntiTitForTat,
-    ArrogantQLearner,
+    #ArrogantQLearner, # needs fixing
     AverageCopier,
     BackStabber,
     Bully,
-    CautiousQLearner,
+    Calculator,
+    #CautiousQLearner, # needs fixing
     Champion,
     CooperatorHunter,
     Davis,
@@ -70,7 +74,7 @@ ordinary_strategies = [
     HardProber,
     HardTitForTat,
     HardTitFor2Tats,
-    HesitantQLearner,
+    #HesitantQLearner, # needs fixing
     Inverse,
     InversePunisher,
     Joss,
@@ -94,7 +98,7 @@ ordinary_strategies = [
     Retaliate,
     Retaliate2,
     Retaliate3,
-    RiskyQLearner,
+    #RiskyQLearner, # Needs fixing
     Shubik,
     SoftJoss,
     SneakyTitForTat,
