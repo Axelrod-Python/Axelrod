@@ -42,21 +42,11 @@ The simplest way to install is::
 
     $ pip install axelrod
 
-Here is an asciicast showing how to install and use the library:
-
-.. image:: https://asciinema.org/a/18590.png
-    :width: 50%
-    :target: https://asciinema.org/a/18590
-
 Otherwise::
 
     $ git clone https://github.com/Axelrod-Python/Axelrod.git
     $ cd Axelrod
     $ python setup.py install
-
-Note that (as documented at http://axelrod.readthedocs.org/) you do not need to
-run the last step to use this package (you can run all the code from the root of
-the directory).
 
 Results
 =======
@@ -183,7 +173,7 @@ paper please list it here:
   by `marcharper <https://github.com/marcharper>`_.
 - `Axelrod-Python related blog articles
   <http://www.thomascampbell.me.uk/category/axelrod.html>`_
-  by `Uglyfruitcake <https://github.com/uglyfruitcake>`_. 
+  by `Uglyfruitcake <https://github.com/uglyfruitcake>`_.
 
 .. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
