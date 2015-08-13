@@ -48,7 +48,7 @@ class ResultSet(object):
 
     def _results(self, outcome):
         results = {}
-        for result_type, result_list in outcome.iteritems():
+        for result_type, result_list in outcome.items():
             matrix = self._null_matrix()
             for index, result_matrix in enumerate(result_list):
                 for i in range(len(self.players)):
@@ -122,19 +122,6 @@ class ResultSet(object):
             for row in cooperation]
 
     def csv(self):
-<<<<<<< HEAD
-        if self._finalised:
-            csv_string = StringIO()
-            header = ",".join(self.ranked_names) + "\n"
-            csv_string.write(header)
-            writer = csv.writer(csv_string, lineterminator="\n")
-            for irep in range(self.repetitions):
-                data = [self.normalised_scores[rank][irep] for rank in self.ranking]
-                writer.writerow(list(map(str, data)))
-            return csv_string.getvalue()
-        else:
-            raise AttributeError(self.unfinalised_error_msg)
-=======
         csv_string = StringIO()
         header = ",".join(self.ranked_names) + "\n"
         csv_string.write(header)
@@ -142,6 +129,5 @@ class ResultSet(object):
         for irep in range(self.repetitions):
             data = [self.normalised_scores[rank][irep]
                     for rank in self.ranking]
-            writer.writerow(map(str, data))
+            writer.writerow(list(map(str, data)))
         return csv_string.getvalue()
->>>>>>> refactor resultset to use payoffs and cooperation lists in init
