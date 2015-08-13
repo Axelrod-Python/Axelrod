@@ -1,7 +1,6 @@
 .. image:: https://badge.waffle.io/Axelrod-Python/Axelrod.svg?label=ready&title=Ready
     :target: https://waffle.io/Axelrod-Python/Axelrod
 
-
 .. image:: https://coveralls.io/repos/Axelrod-Python/Axelrod/badge.svg
     :target: https://coveralls.io/r/Axelrod-Python/Axelrod
 
@@ -42,98 +41,45 @@ The simplest way to install is::
 
     $ pip install axelrod
 
-Here is an asciicast showing how to install and use the library:
-
-.. image:: https://asciinema.org/a/18590.png
-    :width: 50%
-    :target: https://asciinema.org/a/18590
-
 Otherwise::
 
     $ git clone https://github.com/Axelrod-Python/Axelrod.git
     $ cd Axelrod
     $ python setup.py install
 
-Note that (as documented at http://axelrod.readthedocs.org/) you do not need to
-run the last step to use this package (you can run all the code from the root of
-the directory).
+Usage
+-----
+
+The full documentation can be found here:
+`axelrod.readthedocs.org/ <http://axelrod.readthedocs.org/>`__.
+
+The documentation includes details of how to setup a tournament but here is an
+example showing how to create a tournament with all stochastic strategies::
+
+    import axelrod
+    strategies = [s() for s in axelrod.ordinary_strategies if s().stochastic]
+    tournament = axelrod.Tournament(strategies)
+    results = tournament.play()
+
+The :code:`results` object now contains all the results we could need::
+
+    print(results.ranked_names)
+
+gives::
+
+    ['Inverse', 'Forgetful Fool Me Once', 'Nice Average Copier', 'Champion',
+    'Generous Tit-For-Tat', 'Eatherley', 'ZD-GTFT-2', 'Meta Majority', 'Soft Joss',
+    'Average Copier', 'Feld', 'Stochastic WSLS', 'Tullock', 'Joss', 'ZD-Extort-2',
+    'Grofman', 'Random', 'Meta Winner', 'Meta Minority']
 
 Results
 =======
 
-This repository contains Python (2.7) code that reproduces the
-tournament. To run the tournament, you simply need to:
+A tournament with the full set of strategies from the library can be found at
+https://github.com/Axelrod-Python/tournament. Here is the latest graphical
+version of the results:
 
-::
-
-    $ python run_axelrod
-
-This automatically outputs a ``png`` file with the results. You can see
-the results from the latest run of the tournament here:
-
-.. figure:: ./assets/strategies_boxplot.png
-   :alt:
-
-You can see the results from the latest run of the tournament here with
-the cheating strategies (which manipulate/read what the opponent does):
-
-.. figure:: ./assets/all_strategies_boxplot.png
-   :alt:
-
-Also the pairwise performance of each strategy versus all others:
-
-.. figure:: ./assets/strategies_payoff.png
-   :alt:
-
-Please do contribute :)
-
-Note that you can run ``python run_axelrod -h`` for further
-options available: for example, cheating strategies can be excluded for
-faster results by running:
-
-::
-
-    $ python run_axelrod --xc --xa
-
-You can also run the tournament in parallel (below will run 4 parallel
-processes):
-
-::
-
-    $ python run_axelrod -p 4
-
-You can run with all available CPUs with:
-
-::
-
-    $ python run_axelrod -p 0
-
-Awesome visualisation
----------------------
-
-`martinjc <https://github.com/martinjc>`__ put together a pretty awesome
-visualisation of this using d3. Hosted on gh-pages it can be seen here:
-`drvinceknight.github.io/Axelrod <http://drvinceknight.github.io/Axelrod/>`__.
-
-Documentation
--------------
-
-There is currently a very sparse set of documentation up here:
-`axelrod.readthedocs.org/ <http://axelrod.readthedocs.org/>`__.
-
-To write/render the documenation locally, you will need
-`sphinx <http://sphinx-doc.org/>`__:
-
-::
-
-    $ pip install sphinx sphinx-autobuild mock
-
-Once you have sphinx:
-
-::
-
-    $ cd docs
-    $ make html
+.. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
 
 Contributing
 ============
@@ -183,7 +129,7 @@ paper please list it here:
   by `marcharper <https://github.com/marcharper>`_.
 - `Axelrod-Python related blog articles
   <http://www.thomascampbell.me.uk/category/axelrod.html>`_
-  by `Uglyfruitcake <https://github.com/uglyfruitcake>`_. 
+  by `Uglyfruitcake <https://github.com/uglyfruitcake>`_.
 
 .. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
