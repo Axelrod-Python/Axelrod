@@ -7,6 +7,7 @@ from .axelrod_tournaments import *
 from .backstabber import *
 from .calculator import Calculator
 from .cooperator import *
+from .cycler import *
 from .darwin import *
 from .defector import *
 from .forgiver import *
