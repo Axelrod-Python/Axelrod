@@ -22,14 +22,12 @@ class Tournament(object):
             self.game = game
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
-        self.result_set = ResultSet(
-            players=players,
-            turns=turns,
-            repetitions=repetitions)
         self.deterministic_cache = {}
         self.noise = noise
+        self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
+        self._outcome = {'payoff': [], 'cooperation': []}
 
     @property
     def players(self):
@@ -44,16 +42,18 @@ class Tournament(object):
         self._players = newplayers
 
     def play(self):
-        payoffs_list = []
-
         if self._processes is None:
-            self._run_serial_repetitions(payoffs_list)
+            self._run_serial_repetitions(self._outcome)
         else:
             if self._build_cache_required():
-                self._build_cache(payoffs_list)
-            self._run_parallel_repetitions(payoffs_list)
+                self._build_cache(self._outcome)
+            self._run_parallel_repetitions(self._outcome)
 
-        self.result_set.payoffs_list = payoffs_list
+        self.result_set = ResultSet(
+            players=self.players,
+            turns=self.turns,
+            repetitions=self.repetitions,
+            outcome=self._outcome)
         return self.result_set
 
     def _build_cache_required(self):
@@ -62,22 +62,23 @@ class Tournament(object):
                 len(self.deterministic_cache) == 0 or
                 not self.prebuilt_cache))
 
-    def _build_cache(self, payoffs_list):
+    def _build_cache(self, outcome):
         self._logger.debug('Playing first round robin to build cache')
-        self._run_single_repetition(payoffs_list)
-        self.repetitions -= 1
+        self._run_single_repetition(outcome)
+        self._parallel_repetitions -= 1
 
-    def _run_single_repetition(self, payoffs_list):
-        payoffs = self._play_round_robin()
-        payoffs_list.append(payoffs)
+    def _run_single_repetition(self, outcome):
+        output = self._play_round_robin()
+        outcome['payoff'].append(output['payoff'])
+        outcome['cooperation'].append(output['cooperation'])
 
-    def _run_serial_repetitions(self, payoffs_list):
+    def _run_serial_repetitions(self, outcome):
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            self._run_single_repetition(payoffs_list)
+            self._run_single_repetition(outcome)
         return True
 
-    def _run_parallel_repetitions(self, payoffs_list):
+    def _run_parallel_repetitions(self, outcome):
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
@@ -85,22 +86,22 @@ class Tournament(object):
         done_queue = multiprocessing.Queue()
         workers = self._n_workers()
 
-        for repetition in range(self.repetitions):
+        for repetition in range(self._parallel_repetitions):
             work_queue.put(repetition)
 
         self._logger.debug(
             'Playing %d round robins with %d parallel processes' %
-            (self.repetitions, workers))
+            (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, payoffs_list)
+        self._process_done_queue(workers, done_queue, outcome)
 
         return True
 
     def _n_workers(self):
-        if (self._processes < 2 or self._processes > multiprocessing.cpu_count()):
-            n_workers = multiprocessing.cpu_count()
-        else:
+        if (2 <= self._processes <= multiprocessing.cpu_count()):
             n_workers = self._processes
+        else:
+            n_workers = multiprocessing.cpu_count()
         return n_workers
 
     def _start_workers(self, workers, work_queue, done_queue):
@@ -112,20 +113,21 @@ class Tournament(object):
         return True
 
     @staticmethod
-    def _process_done_queue(workers, done_queue, payoffs_list):
+    def _process_done_queue(workers, done_queue, outcome):
         stops = 0
         while stops < workers:
-            payoffs = done_queue.get()
-            if payoffs == 'STOP':
+            output = done_queue.get()
+            if output == 'STOP':
                 stops += 1
             else:
-                payoffs_list.append(payoffs)
+                outcome['payoff'].append(output['payoff'])
+                outcome['cooperation'].append(output['cooperation'])
         return True
 
     def _worker(self, work_queue, done_queue):
         for repetition in iter(work_queue.get, 'STOP'):
-            payoffs = self._play_round_robin(cache_mutable=False)
-            done_queue.put(payoffs)
+            output = self._play_round_robin(cache_mutable=False)
+            done_queue.put(output)
         done_queue.put('STOP')
         return True
 
@@ -137,5 +139,4 @@ class Tournament(object):
             deterministic_cache=self.deterministic_cache,
             cache_mutable=cache_mutable,
             noise=self.noise)
-        payoffs = round_robin.play()
-        return payoffs
+        return round_robin.play()
