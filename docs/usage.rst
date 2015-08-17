@@ -249,7 +249,7 @@ indroduced by flipping plays between 'C' and 'D' with some probability
 that is applied to all plays after they are delivered by the player.
 
 The presence of this persistant bakground noise causes some strategies
-to behave substantially differently. For example, TitForTat can fall into 
+to behave substantially differently. For example, TitForTat can fall into
 defection loops with itself when there is noise. While TitForTat would usually
 cooperate well with itself::
 
@@ -263,11 +263,11 @@ cooperative chain::
  C C C C D C D D D D ...
 
 The defections continue until multiple noise events return the plays to CC.
-Even a small amount of noise changes the stationary distribution (the 
-long run averages of the plays per round) of TitForTat versus itself from 
-always cooperating with itself to being evenly distributed over the four 
-round possibilities CD, DC, CD, DD, substantially lowering the average 
-score per round. Moreover, TitForTat is now outplayed by other strategies 
+Even a small amount of noise changes the stationary distribution (the
+long run averages of the plays per round) of TitForTat versus itself from
+always cooperating with itself to being evenly distributed over the four
+round possibilities CD, DC, CD, DD, substantially lowering the average
+score per round. Moreover, TitForTat is now outplayed by other strategies
 such as WinStayLoseShift that are more robust in the presence of noise.
 
 Adding noise makes a dramatic difference in the pairwise payoffs (5% on right):
@@ -302,8 +302,8 @@ and accordingly to the ranking of strategies overall:
 | |boxplot_no_noise| | |boxplot_5_noise| |
 +--------------------+-------------------+
 
-To run a noisy tournament, just use the keyword argument `noise` when 
-creating tournaments. Both `run_axelrod` and the utility function 
+To run a noisy tournament, just use the keyword argument `noise` when
+creating tournaments. Both `run_axelrod` and the utility function
 `run_tournaments` accept and passthrough the noise argument. To run the
 default tournament from the command line with 5% noise simply use::
 
@@ -384,6 +384,35 @@ The output is shown here:
 .. image:: _static/usage/basic_strategies-reproduce-huge-initial-D.svg
    :width: 50%
    :align: center
+
+Cooperation Matrix
+^^^^^^^^^^^^^^^^^^
+
+Tyler Singer-Clark's June 2014 paper, "Morality Metrics On Iterated Prisoner’s Dilemma Players," describes several interesting metrics which may be used to analyse IPD tournaments. Each metric depends upon the cooperation rate of the players, defined by Tyler Singer-Clark as:
+
+.. math::
+
+    CR(b) = \frac{C(b)}{TT}
+
+where C(b) is the total number of turns where a player chose to cooperate and TT is the total number of turns played.
+
+Tyler's paper is available here:  http://www.scottaaronson.com/morality.pdf
+
+A matrix of cooperation rates is available within a tournament's ResultSet::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    tournament = axelrod.Tournament(strategies)
+    results = tournament.play()
+    results.normalised_cooperation
+
+The output of this is a square matrix showing the cooperation rates of the row player::
+
+     [[0.5, 0.5, 0.5, 0.5, 0.5],
+      [1.0, 1.0, 1.0, 1.0, 1.0],
+      [0.0, 0.0, 0.0, 0.0, 0.0],
+      [0.5185, 0.4855, 0.5035, 0.511, 0.488],
+      [0.505, 1.0, 0.005, 0.49, 1.0]]
 
 Running the tournament
 ----------------------
