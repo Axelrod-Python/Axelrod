@@ -2,8 +2,8 @@ from distutils.core import setup
 
 setup(
     name='Axelrod',
-    version='0.0.9',
-    author='Vince Knight, Owen Campbell, Karol Langner',
+    version='0.0.11',
+    author='Vince Knight, Owen Campbell, Karol Langner, Marc Harper',
     author_email=('axelrod-python@googlegroups.com'),
     packages=['axelrod', 'axelrod.strategies', 'axelrod.tests'],
     scripts=['run_axelrod'],
