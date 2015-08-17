@@ -2,7 +2,7 @@
 
 import itertools
 import axelrod
-from test_player import TestPlayer, test_four_vector
+from .test_player import TestPlayer, test_four_vector
 
 C, D = 'C', 'D'
 
