@@ -117,9 +117,11 @@ class ResultSet(object):
         return[[sum(element) for element in row] for row in results]
 
     def _normalised_cooperation(self, cooperation):
-        normalisation = self.turns * self.repetitions
+        """Takes the cooperation matrix (C) and returns a matrix (N)
+        where N = C / turns"""
+        turns = self.turns * self.repetitions
         return[
-            [1.0 * element / normalisation for element in row]
+            [1.0 * element / turns for element in row]
             for row in cooperation]
 
     def _cooperation_rates(self, cooperation):
