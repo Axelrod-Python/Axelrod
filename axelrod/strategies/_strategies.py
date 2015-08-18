@@ -30,6 +30,7 @@ from .rand import *
 from .retaliate import *
 from .titfortat import *
 
+
 basic_strategies = [
     Alternator,
     Cooperator,
