@@ -137,9 +137,8 @@ class ResultSet(object):
         return [sum(row) / total_turns for row in cooperation]
 
     def _good_partner_matrix(self, results):
-        """Takes the cooperation results and returns a matrix of whether a
-        player i was a good partner or not (1 or 0) in an interaction with
-        player j"""
+        """Takes the cooperation results and returns a matrix to count when
+        player i was a good partner in interactions with player j"""
         return []
 
     def _good_partner_rating(self, good_partner):

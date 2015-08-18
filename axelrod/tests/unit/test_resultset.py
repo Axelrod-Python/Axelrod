@@ -66,8 +66,12 @@ class TestResultSet(unittest.TestCase):
             [0.7, 0.7, 0.7]
         ]
         cls.expected_cooperation_rates = [0.7, 0.5, 0.7]
-        cls.expected_good_partner_matrix = []
-        cls.expected_good_partner_rating = []
+        cls.expected_good_partner_matrix = [
+            [0, 2, 2],
+            [0, 0, 1],
+            [1, 1, 0]
+        ]
+        cls.expected_good_partner_rating = [0.5, 0.125, 0.25]
         cls.expected_csv = (
             'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
 
