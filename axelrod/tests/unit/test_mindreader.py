@@ -3,6 +3,7 @@
 import axelrod
 
 from .test_player import TestPlayer
+from axelrod.strategies.mindreader import simulate_match
 
 C, D = 'C', 'D'
 
@@ -51,7 +52,7 @@ class TestMindReader(TestPlayer):
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Grudger()
-        P1.simulate_match(P2, C, 4)
+        simulate_match(P1, P2, C, 4)
         self.assertEqual(P2.history, [C, C, C, C])
  
     def test_history_is_same(self):
@@ -72,7 +73,7 @@ class TestMindReader(TestPlayer):
         P2 = axelrod.Geller()
         P1.strategy(P2)
         P2.strategy(P1)
-        
+
     def tests_protected_mind_reader(self):
         """Ensures that no other player can alter its strategy """
 
