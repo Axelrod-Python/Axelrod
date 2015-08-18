@@ -41,6 +41,10 @@ class ResultSet(object):
             self.normalised_cooperation = (
                 self._normalised_cooperation(self.cooperation))
             self.cooperation_rates = self._cooperation_rates(self.cooperation)
+            self.good_partner_matrix = (
+                self._good_partner_matrix(self.results['cooperation']))
+            self.good_partner_rating = (
+                self._good_partner_rating(self.good_partner_matrix))
 
     def _null_matrix(self):
         plist = list(range(self.nplayers))
@@ -131,6 +135,17 @@ class ResultSet(object):
         ordered by player index"""
         total_turns = self.turns * self.repetitions * self.nplayers
         return [sum(row) / total_turns for row in cooperation]
+
+    def _good_partner_matrix(self, results):
+        """Takes the cooperation results and returns a matrix of whether a
+        player i was a good partner or not (1 or 0) in an interaction with
+        player j"""
+        return []
+
+    def _good_partner_rating(self, good_partner):
+        """Takes the good partner matrix and returns a list of good partner
+        ratings ordered by player index"""
+        return []
 
     def csv(self):
         csv_string = StringIO()

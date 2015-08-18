@@ -66,6 +66,8 @@ class TestResultSet(unittest.TestCase):
             [0.7, 0.7, 0.7]
         ]
         cls.expected_cooperation_rates = [0.7, 0.5, 0.7]
+        cls.expected_good_partner_matrix = []
+        cls.expected_good_partner_rating = []
         cls.expected_csv = (
             'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
 
@@ -150,6 +152,26 @@ class TestResultSet(unittest.TestCase):
             self.expected_cooperation_rates)
         self.assertEqual(
             rs.cooperation_rates, self.expected_cooperation_rates)
+
+    def test_good_partner_matrix(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        self.assertEqual(
+            rs._good_partner_matrix(self.expected_results['cooperation']),
+            self.expected_good_partner_matrix
+        )
+        self.assertEqual(
+            rs.good_partner_matrix, self.expected_good_partner_matrix
+        )
+
+    def test_good_partner_rating(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        self.assertEqual(
+            rs._good_partner_rating(self.expected_good_partner_matrix),
+            self.expected_good_partner_rating
+        )
+        self.assertEqual(
+            rs.good_partner_rating, self.expected_good_partner_rating
+        )
 
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
