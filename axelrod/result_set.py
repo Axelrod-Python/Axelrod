@@ -114,6 +114,8 @@ class ResultSet(object):
         return averages, stddevs
 
     def _cooperation(self, results):
+        """Takes the cooperation results and sums each element to return the
+        cooperation matrix"""
         return[[sum(element) for element in row] for row in results]
 
     def _normalised_cooperation(self, cooperation):
