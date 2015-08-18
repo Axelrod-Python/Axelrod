@@ -109,8 +109,6 @@ class FoolMeForever(Player):
     stochastic = False
 
     def strategy(self, opponent):
-        #if opponent.defections == 1:
-            #return 'C'
         if opponent.defections > 0:
             return 'C'
         return 'D'
