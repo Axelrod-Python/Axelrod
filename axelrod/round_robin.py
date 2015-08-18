@@ -80,6 +80,7 @@ class RoundRobin(object):
         player1 = self.players[player1_index]
         class1 = player1.__class__
         if player1_index == player2_index:
+            player1.reset()
             player2 = copy.deepcopy(player1)
             class2 = class1
         else:
