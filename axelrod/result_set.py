@@ -40,6 +40,7 @@ class ResultSet(object):
             self.cooperation = self._cooperation(self.results['cooperation'])
             self.normalised_cooperation = (
                 self._normalised_cooperation(self.cooperation))
+            self.cooperation_rates = self._cooperation_rates(self.cooperation)
 
     def _null_matrix(self):
         plist = list(range(self.nplayers))
@@ -120,6 +121,12 @@ class ResultSet(object):
         return[
             [1.0 * element / normalisation for element in row]
             for row in cooperation]
+
+    def _cooperation_rates(self, cooperation):
+        """Takes the cooperation matrix and returns a list of cooperation rates
+        ordered by player index"""
+        total_turns = self.turns * self.repetitions * self.nplayers
+        return [sum(row) / total_turns for row in cooperation]
 
     def csv(self):
         csv_string = StringIO()

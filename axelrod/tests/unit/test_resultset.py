@@ -65,6 +65,7 @@ class TestResultSet(unittest.TestCase):
             [0.3, 0.6, 0.6],
             [0.7, 0.7, 0.7]
         ]
+        cls.expected_cooperation_rates = [0.7, 0.5, 0.7]
         cls.expected_csv = (
             'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
 
@@ -141,6 +142,14 @@ class TestResultSet(unittest.TestCase):
         )
         self.assertEqual(
             rs.normalised_cooperation, self.expected_normalised_cooperation)
+
+    def test_cooperation_rates(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        self.assertEqual(
+            rs._cooperation_rates(self.expected_cooperation),
+            self.expected_cooperation_rates)
+        self.assertEqual(
+            rs.cooperation_rates, self.expected_cooperation_rates)
 
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
