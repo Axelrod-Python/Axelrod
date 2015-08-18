@@ -144,7 +144,8 @@ class ResultSet(object):
     def _good_partner_rating(self, good_partner):
         """Takes the good partner matrix and returns a list of good partner
         ratings ordered by player index"""
-        return []
+        interactions = self.repetitions * (self.nplayers ** 2 - self.nplayers)
+        return [sum(row) / interactions for row in good_partner]
 
     def csv(self):
         csv_string = StringIO()

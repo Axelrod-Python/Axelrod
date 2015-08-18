@@ -71,7 +71,7 @@ class TestResultSet(unittest.TestCase):
             [0, 0, 1],
             [1, 1, 0]
         ]
-        cls.expected_good_partner_rating = [0.5, 0.125, 0.25]
+        cls.expected_good_partner_rating = [0.333, 0.083, 0.167]
         cls.expected_csv = (
             'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
 
@@ -167,10 +167,16 @@ class TestResultSet(unittest.TestCase):
             rs.good_partner_matrix, self.expected_good_partner_matrix
         )
 
+    @staticmethod
+    def round_good_partner_rating(good_partner_rating):
+        return [round(x, 3) for x in good_partner_rating]
+
     def test_good_partner_rating(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        good_partner_rating = (
+            rs._good_partner_rating(self.expected_good_partner_matrix))
         self.assertEqual(
-            rs._good_partner_rating(self.expected_good_partner_matrix),
+            self.round_good_partner_rating(good_partner_rating),
             self.expected_good_partner_rating
         )
         self.assertEqual(
