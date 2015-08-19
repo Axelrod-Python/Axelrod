@@ -11,28 +11,33 @@ def simulate_match(player_1, player_2, strategy, rounds = 10):
         # Update histories and counts
         update_histories(player_1, player_2, play_1, play_2)
 
+def roll_back_history(player, rounds):
+    """Undo the last `rounds` rounds as sufficiently as possible."""
+    for i in range(rounds):
+        play = player.history.pop(-1)
+        if play == 'C':
+            player.cooperations -= 1
+        elif play == 'D':
+            player.defections -= 1
+
 def look_ahead(player_1, player_2, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
     results = []
     game = Game()
 
-    # Record internal variables of player_1 to restore later
-    cooperations = player_1.cooperations
-    defections = player_2.defections
-
     # Simulate plays for `rounds` rounds
     strategies = ['C', 'D']
     for strategy in strategies:
-        opponent_ = copy.deepcopy(player_2) # need deepcopy here
+        #opponent_ = copy.deepcopy(player_2) # need deepcopy here
+        opponent_ = player_2
         round_robin = RoundRobin(players=[player_1, opponent_], game=game,
                                  turns=rounds)
         simulate_match(player_1, opponent_, strategy, rounds)
         results.append(round_robin._calculate_scores(player_1, opponent_)[0])
 
         # Restore histories and counts
-        player_1.history = player_1.history[:-rounds] # roll back history
-        player_1.cooperations = cooperations
-        player_1.defections = defections
+        roll_back_history(player_1, rounds)
+        roll_back_history(player_2, rounds)
 
     return strategies[results.index(max(results))]
 
@@ -41,7 +46,7 @@ class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
 
     name = 'Mind Reader'
-    stochastic = True # Don't cache me bro
+    stochastic = True # Don't cache me
 
     def strategy(self, opponent):
         """Pretends to play the opponent a number of times before each match.
