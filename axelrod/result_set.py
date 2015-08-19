@@ -55,7 +55,7 @@ class ResultSet(object):
             self.good_partner_rating = (
                 self._good_partner_rating(self.good_partner_matrix))
             self.eigenjesus_rating = (
-                self._eigenjesus_rating(self.normalised_cooperation))
+                self._eigenvector(self.normalised_cooperation))
 
     @property
     def _null_results_matrix(self):
@@ -282,9 +282,9 @@ class ResultSet(object):
         """
         return [sum(row) / self._interactions for row in good_partner]
 
-    def _eigenjesus_rating(self, cooperation):
-        """Takes the cooperation matrix and returns a list of eigenjesus ratings
-        ordered by player index.
+    def _eigenvector(self, cooperation):
+        """Takes a cooperation matrix and returns its principal eigenvector as
+        a list.
         """
         eigenvector, eigenvalue = principal_eigenvector(cooperation)
         return eigenvector.tolist()

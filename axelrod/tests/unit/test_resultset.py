@@ -203,7 +203,7 @@ class TestResultSet(unittest.TestCase):
     def test_eigenjesus_rating(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         eigenjesus_rating = (
-            rs._eigenjesus_rating(self.expected_normalised_cooperation))
+            rs._eigenvector(self.expected_normalised_cooperation))
         self.assertEqual(
             self.round_rating(eigenjesus_rating, 3),
             self.expected_eigenjesus_rating
