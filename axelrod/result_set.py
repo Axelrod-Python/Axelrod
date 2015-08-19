@@ -135,7 +135,6 @@ class ResultSet(object):
         where t is the total number of turns played per repetition for a given
         player excluding self-interactions.
         """
-
         normalisation = self.turns * (self.nplayers - 1)
         return [
             [1.0 * s / normalisation for s in r] for r in scores]
@@ -173,8 +172,29 @@ class ResultSet(object):
         return averages, stddevs
 
     def _cooperation(self, results):
-        """Takes the cooperation results and sums each element to return the
-        cooperation matrix"""
+        """Takes the cooperation results of the form:
+
+            [
+                [[a, j], [b, k], [c, l]],
+                [[d, m], [e, n], [f, o]],
+                [[g, p], [h, q], [i, r]],
+            ]
+
+        i.e. one row per player, containing one element per opponent (in order
+        of player index) which lists cooperation values for each repetition.
+
+        and returns the cooperation matrix (C) of the form:
+
+            [
+                [[a + j], [b + k], [c + l]],
+                [[d + m], [e + n], [f + o]],
+                [[g + p], [h + q], [i + r]],
+            ]
+
+        i.e. an n by n matrix where n is the number of players. Each row (i) and
+        column (j) represents an individual player and the the value Cij is
+        the number of times player i cooperated against opponent j.
+        """
         return[[sum(element) for element in row] for row in results]
 
     def _normalised_cooperation(self, cooperation):
@@ -183,7 +203,8 @@ class ResultSet(object):
 
             N = C / t
 
-        where t is the total number of turns played in the tournament."""
+        where t is the total number of turns played in the tournament.
+        """
         turns = self.turns * self.repetitions
         return[
             [1.0 * element / turns for element in row]
@@ -197,12 +218,14 @@ class ResultSet(object):
 
     def _good_partner_matrix(self, results):
         """Takes the cooperation results and returns a matrix to count when
-        player i was a good partner in interactions with player j"""
+        player i was a good partner in interactions with player j
+        """
         return []
 
     def _good_partner_rating(self, good_partner):
         """Takes the good partner matrix and returns a list of good partner
-        ratings ordered by player index"""
+        ratings ordered by player index
+        """
         interactions = self.repetitions * (self.nplayers ** 2 - self.nplayers)
         return [sum(row) / interactions for row in good_partner]
 
