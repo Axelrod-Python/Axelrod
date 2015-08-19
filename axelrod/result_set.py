@@ -297,7 +297,7 @@ class ResultSet(object):
         """Takes a cooperation matrix and returns its principal eigenvector as
         a list.
         """
-        eigenvector, eigenvalue = principal_eigenvector(cooperation)
+        eigenvector, eigenvalue = principal_eigenvector(cooperation, 10000)
         return eigenvector.tolist()
 
     def csv(self):
