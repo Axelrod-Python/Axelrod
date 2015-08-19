@@ -47,6 +47,11 @@ class ResultSet(object):
                 self._good_partner_rating(self.good_partner_matrix))
 
     def _null_matrix(self):
+        """Returns a null matrix (i.e. fully populated with zero values) using
+        lists of the form required for the results dictionary.
+
+        i.e. one row per player, containing one element per opponent (in order
+        of player index) which lists values for each repetition."""
         plist = list(range(self.nplayers))
         replist = list(range(self.repetitions))
         return [[[0 for r in replist] for j in plist] for i in plist]
