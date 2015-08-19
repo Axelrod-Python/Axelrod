@@ -49,6 +49,8 @@ class ResultSet(object):
             self.cooperation = self._cooperation(self.results['cooperation'])
             self.normalised_cooperation = (
                 self._normalised_cooperation(self.cooperation))
+            self.vindictive_cooperation = (
+                self._vindictive_cooperation(self.normalised_cooperation))
             self.cooperation_rates = self._cooperation_rates(self.cooperation)
             self.good_partner_matrix = (
                 self._good_partner_matrix(self.results['cooperation']))
@@ -229,6 +231,13 @@ class ResultSet(object):
         return[
             [1.0 * element / turns for element in row]
             for row in cooperation]
+
+    def _vindictive_cooperation(self, cooperation):
+        """Takes a cooperation matrix (C) and returns a matrix (D) such that:
+
+            Dij = 2(Cij -0.5)
+        """
+        return [[2 * (element - 0.5) for element in row] for row in cooperation]
 
     def _cooperation_rates(self, cooperation):
         """Takes the cooperation matrix and returns a list of cooperation rates

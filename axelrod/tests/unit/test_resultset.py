@@ -70,6 +70,11 @@ class TestResultSet(unittest.TestCase):
             [0.3, 0.6, 0.6],
             [0.7, 0.7, 0.7]
         ]
+        cls.expected_vindictive_cooperation = [
+            [-0.8, 1.0, 1.0],
+            [-0.4, 0.2, 0.2],
+            [0.4, 0.4, 0.4]
+        ]
         cls.expected_cooperation_rates = [0.7, 0.5, 0.7]
         cls.expected_good_partner_matrix = [
             [0, 2, 2],
@@ -132,18 +137,18 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.ranked_names, self.expected_ranked_names)
 
     @staticmethod
-    def round_stddevs(stddevs):
-        return [[round(x, 1) for x in row] for row in stddevs]
+    def round_matrix(matrix, precision):
+        return [[round(x, precision) for x in row] for row in matrix]
 
     def test_payoff_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         averages, stddevs = rs._payoff_matrix(self.expected_results['payoff'])
         self.assertEqual(averages, self.expected_payoffs)
         self.assertEqual(
-            self.round_stddevs(stddevs), self.expected_stddevs)
+            self.round_matrix(stddevs, 1), self.expected_stddevs)
         self.assertEqual(rs.payoff_matrix, self.expected_payoffs)
-        self.assertEqual(self.round_stddevs(
-            rs.payoff_stddevs), self.expected_stddevs)
+        self.assertEqual(self.round_matrix(
+            rs.payoff_stddevs, 1), self.expected_stddevs)
 
     def test_cooperation(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
@@ -160,6 +165,18 @@ class TestResultSet(unittest.TestCase):
         )
         self.assertEqual(
             rs.normalised_cooperation, self.expected_normalised_cooperation)
+
+    def test_vindictive_cooperation(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        vindictive_cooperation = (
+            rs._vindictive_cooperation(self.expected_normalised_cooperation))
+        self.assertEqual(
+            self.round_matrix(vindictive_cooperation, 1),
+            self.expected_vindictive_cooperation
+        )
+        self.assertEqual(
+            self.round_matrix(rs.vindictive_cooperation, 1),
+            self.expected_vindictive_cooperation)
 
     def test_cooperation_rates(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
