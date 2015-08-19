@@ -77,6 +77,7 @@ class TestResultSet(unittest.TestCase):
             [1, 1, 0]
         ]
         cls.expected_good_partner_rating = [0.333, 0.083, 0.167]
+        cls.expected_eigenjesus_rating = [0.619, 0.451, 0.643]
         cls.expected_csv = (
             'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
 
@@ -183,21 +184,35 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs._interactions, 12)
 
     @staticmethod
-    def round_good_partner_rating(good_partner_rating):
-        return [round(x, 3) for x in good_partner_rating]
+    def round_rating(rating, precision):
+        return [round(x, precision) for x in rating]
 
     def test_good_partner_rating(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         good_partner_rating = (
             rs._good_partner_rating(self.expected_good_partner_matrix))
         self.assertEqual(
-            self.round_good_partner_rating(good_partner_rating),
+            self.round_rating(good_partner_rating, 3),
             self.expected_good_partner_rating
         )
         self.assertEqual(
-            self.round_good_partner_rating(good_partner_rating),
+            self.round_rating(rs.good_partner_rating, 3),
             self.expected_good_partner_rating
         )
+
+    def test_eigenjesus_rating(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        eigenjesus_rating = (
+            rs._eigenjesus_rating(self.expected_normalised_cooperation))
+        self.assertEqual(
+            self.round_rating(eigenjesus_rating, 3),
+            self.expected_eigenjesus_rating
+        )
+        self.assertEqual(
+            self.round_rating(rs.eigenjesus_rating, 3),
+            self.expected_eigenjesus_rating
+        )
+
 
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
