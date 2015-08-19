@@ -46,7 +46,8 @@ class ResultSet(object):
             self.good_partner_rating = (
                 self._good_partner_rating(self.good_partner_matrix))
 
-    def _null_matrix(self):
+    @property
+    def _null_results_matrix(self):
         """Returns a null matrix (i.e. fully populated with zero values) using
         lists of the form required for the results dictionary.
 
@@ -82,7 +83,7 @@ class ResultSet(object):
         """
         results = {}
         for result_type, result_list in outcome.items():
-            matrix = self._null_matrix()
+            matrix = self._null_results_matrix
             for index, result_matrix in enumerate(result_list):
                 for i in range(len(self.players)):
                     for j in range(len(self.players)):
@@ -242,7 +243,6 @@ class ResultSet(object):
         more than opponent j.
         """
         return []
-
 
     @property
     def _interactions(self):

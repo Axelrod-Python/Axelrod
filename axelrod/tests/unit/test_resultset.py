@@ -83,9 +83,9 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.repetitions, 2)
         self.assertEqual(rs.outcome, self.test_outcome)
 
-    def test_null_matrix(self):
+    def test_null_results_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        self.assertEqual(rs._null_matrix(), self.expected_null_matrix)
+        self.assertEqual(rs._null_results_matrix, self.expected_null_matrix)
 
     def test_results(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
