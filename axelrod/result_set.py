@@ -52,6 +52,29 @@ class ResultSet(object):
         return [[[0 for r in replist] for j in plist] for i in plist]
 
     def _results(self, outcome):
+        """Takes the outcome dictionary, in which the values are lists of
+        the form:
+
+            [
+                [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
+                [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
+            ]
+
+        i.e. one row per repetition, containing one element per player,
+        which lists values for each opponent in order of player index.
+
+        and returns a results dictionary, in which the values are lists of
+        the form:
+
+            [
+                [[0, 0], [10, 10], [21, 21]],
+                [[10, 8], [0, 0], [16, 20]],
+                [[16, 16], [16, 16], [0, 0]],
+            ]
+
+        i.e. one row per player, containing one element per opponent (in order
+        of player index) which lists values for each repetition.
+        """
         results = {}
         for result_type, result_list in outcome.items():
             matrix = self._null_matrix()
