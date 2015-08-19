@@ -23,6 +23,14 @@ class ResultSet(object):
     """A class to hold the results of a tournament."""
 
     def __init__(self, players, turns, repetitions, outcome):
+        """
+        players: a list of player objects.
+        turns: an integer defining the number of turns per interaction.
+        repetitions: an integer defining the number of time the round robin was
+        repeated.
+        outcome: a dictionary returned from the RoundRobin class and containing
+        various sets of results for processing by this class.
+        """
         self.players = players
         self.nplayers = len(players)
         self.turns = turns
