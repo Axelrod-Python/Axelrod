@@ -250,7 +250,13 @@ class ResultSet(object):
         sum of the number of repetitions where player i cooperated as often or
         more than opponent j.
         """
-        return []
+        matrix = self._null_matrix
+        for r in range(self.repetitions):
+            for i in range(self.nplayers):
+                for j in range(self.nplayers):
+                    if i != j and results[i][j][r] >= results[j][i][r]:
+                        matrix[i][j] += 1
+        return matrix
 
     @property
     def _interactions(self):
