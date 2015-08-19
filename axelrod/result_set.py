@@ -109,6 +109,14 @@ class ResultSet(object):
         return scores
 
     def _normalised_scores(self, scores):
+        """Takes the scores matrix(S) and returns a normalised scores matrix(N)
+        such that:
+        
+            N = S / t
+
+        where t is the total number of turns played per repetition for a given
+        player."""
+
         normalisation = self.turns * (self.nplayers - 1)
         return [
             [1.0 * s / normalisation for s in r] for r in scores]
