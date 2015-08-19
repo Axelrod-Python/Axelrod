@@ -91,12 +91,30 @@ class ResultSet(object):
         return results
 
     def _scores(self, payoff):
-        """Return scores based on the results.
+        """Takes a payoff matrix of the form:
 
-        Originally there were no self-interactions, so the code here was
-        rewritten to exclude those from the generated score. To include
-        self-interactions, remove the condition on ip and ires and fix the
-        normalization factor.
+            [
+                [[a, j], [b, k], [c, l]],
+                [[d, m], [e, n], [f, o]],
+                [[g, p], [h, q], [i, r]],
+            ]
+
+        i.e. one row per player, containing one element per opponent (in order
+        of player index) which lists payoffs for each repetition.
+
+        and returns a scores matrix of the form:
+
+            [
+                [a + b + c, j + k + l],
+                [d + e + f, m + n+ o],
+                [h + h + i, p + q + r],
+            ]
+
+        i.e. one row per player which lists the total score for each repetition.
+
+        In Axelrod's original tournament, there were no self-interactions
+        (e.g. player 1 versus player 1) and so these are also excluded from the
+        scores here by the condition on ip and ires.
         """
         scores = []
         for ires, res in enumerate(payoff):
@@ -115,7 +133,8 @@ class ResultSet(object):
             N = S / t
 
         where t is the total number of turns played per repetition for a given
-        player."""
+        player excluding self-interactions.
+        """
 
         normalisation = self.turns * (self.nplayers - 1)
         return [
