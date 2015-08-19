@@ -1,5 +1,6 @@
 import math
 import csv
+from .eigen import *
 
 try:
     # Python 2
@@ -53,6 +54,8 @@ class ResultSet(object):
                 self._good_partner_matrix(self.results['cooperation']))
             self.good_partner_rating = (
                 self._good_partner_rating(self.good_partner_matrix))
+            self.eigenjesus_rating = (
+                self._eigenjesus_rating(self.normalised_cooperation))
 
     @property
     def _null_results_matrix(self):
@@ -278,6 +281,13 @@ class ResultSet(object):
         ratings ordered by player index.
         """
         return [sum(row) / self._interactions for row in good_partner]
+
+    def _eigenjesus_rating(self, cooperation):
+        """Takes the cooperation matrix and returns a list of eigenjesus ratings
+        ordered by player index.
+        """
+        eigenvector, eigenvalue = principal_eigenvector(cooperation)
+        return eigenvector.tolist()
 
     def csv(self):
         csv_string = StringIO()
