@@ -245,7 +245,7 @@ class ResultSet(object):
         """Takes the cooperation matrix and returns a list of cooperation rates
         ordered by player index"""
         total_turns = self.turns * self.repetitions * self.nplayers
-        return [sum(row) / total_turns for row in cooperation]
+        return [1.0 * sum(row) / total_turns for row in cooperation]
 
     def _good_partner_matrix(self, results):
         """Takes the cooperation results of the form:
@@ -291,7 +291,7 @@ class ResultSet(object):
         """Takes the good partner matrix and returns a list of good partner
         ratings ordered by player index.
         """
-        return [sum(row) / self._interactions for row in good_partner]
+        return [1.0 * sum(row) / self._interactions for row in good_partner]
 
     def _eigenvector(self, cooperation):
         """Takes a cooperation matrix and returns its principal eigenvector as
