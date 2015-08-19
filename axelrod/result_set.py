@@ -52,10 +52,18 @@ class ResultSet(object):
         lists of the form required for the results dictionary.
 
         i.e. one row per player, containing one element per opponent (in order
-        of player index) which lists values for each repetition."""
+        of player index) which lists values for each repetition.
+        """
         plist = list(range(self.nplayers))
         replist = list(range(self.repetitions))
         return [[[0 for r in replist] for j in plist] for i in plist]
+
+    @property
+    def _null_matrix(self):
+        """Returns a null n by n matrix where n is the number of players.
+        """
+        plist = list(range(self.nplayers))
+        return [[0 for j in plist] for i in plist]
 
     def _results(self, outcome):
         """Takes the outcome dictionary, in which the values are lists of
