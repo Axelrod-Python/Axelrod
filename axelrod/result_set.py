@@ -61,8 +61,8 @@ class ResultSet(object):
         the form:
 
             [
-                [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
-                [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
+                [[a, b, c], [d, e, f], [g, h, i]],
+                [[j, k, l], [m, n, o], [p, q, r]],
             ]
 
         i.e. one row per repetition, containing one element per player,
@@ -72,9 +72,9 @@ class ResultSet(object):
         the form:
 
             [
-                [[0, 0], [10, 10], [21, 21]],
-                [[10, 8], [0, 0], [16, 20]],
-                [[16, 16], [16, 16], [0, 0]],
+                [[a, j], [b, k], [c, l]],
+                [[d, m], [e, n], [f, o]],
+                [[g, p], [h, q], [i, r]],
             ]
 
         i.e. one row per player, containing one element per opponent (in order
@@ -109,8 +109,8 @@ class ResultSet(object):
         return scores
 
     def _normalised_scores(self, scores):
-        """Takes the scores matrix(S) and returns a normalised scores matrix(N)
-        such that:
+        """Takes the scores matrix (S) and returns a normalised scores matrix
+        (N) such that:
 
             N = S / t
 
