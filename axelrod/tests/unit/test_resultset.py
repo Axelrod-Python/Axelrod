@@ -16,10 +16,15 @@ class TestResultSet(unittest.TestCase):
                 [[0, 5, 5], [1, 4, 4], [2, 2, 3]],
                 [[1, 5, 5], [2, 2, 2], [5, 5, 4]]
             ]}
+        cls.expected_null_results_matrix = [
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]],
+        ]
         cls.expected_null_matrix = [
-            [[0, 0], [0, 0], [0, 0]],
-            [[0, 0], [0, 0], [0, 0]],
-            [[0, 0], [0, 0], [0, 0]],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
         ]
         cls.expected_results = {
             'payoff': [
@@ -85,7 +90,13 @@ class TestResultSet(unittest.TestCase):
 
     def test_null_results_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        self.assertEqual(rs._null_results_matrix, self.expected_null_matrix)
+        self.assertEqual(
+            rs._null_results_matrix, self.expected_null_results_matrix)
+
+    def test_null_matrix(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        self.assertEqual(
+            rs._null_matrix, self.expected_null_matrix)
 
     def test_results(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
