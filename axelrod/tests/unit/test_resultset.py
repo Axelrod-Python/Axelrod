@@ -167,6 +167,10 @@ class TestResultSet(unittest.TestCase):
             rs.good_partner_matrix, self.expected_good_partner_matrix
         )
 
+    def test_interactions(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        self.assertEqual(rs._interactions(), 12)
+
     @staticmethod
     def round_good_partner_rating(good_partner_rating):
         return [round(x, 3) for x in good_partner_rating]

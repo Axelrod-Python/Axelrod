@@ -243,12 +243,17 @@ class ResultSet(object):
         """
         return []
 
+    def _interactions(self):
+        """Returns the number of interactions between players excluding
+        self-interactions.
+        """
+        return self.repetitions * (self.nplayers ** 2 - self.nplayers)
+
     def _good_partner_rating(self, good_partner):
         """Takes the good partner matrix and returns a list of good partner
         ratings ordered by player index
         """
-        interactions = self.repetitions * (self.nplayers ** 2 - self.nplayers)
-        return [sum(row) / interactions for row in good_partner]
+        return [sum(row) / self._interactions() for row in good_partner]
 
     def csv(self):
         csv_string = StringIO()
