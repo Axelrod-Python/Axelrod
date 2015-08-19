@@ -217,8 +217,29 @@ class ResultSet(object):
         return [sum(row) / total_turns for row in cooperation]
 
     def _good_partner_matrix(self, results):
-        """Takes the cooperation results and returns a matrix to count when
-        player i was a good partner in interactions with player j
+        """Takes the cooperation results of the form:
+
+            [
+                [[a, j], [b, k], [c, l]],
+                [[d, m], [e, n], [f, o]],
+                [[g, p], [h, q], [i, r]],
+            ]
+
+        i.e. one row per player, containing one element per opponent (in order
+        of player index) which lists cooperation values for each repetition.
+
+        and returns the good partner matrix (P) of the form:
+
+            [
+                [0, 0 + (1 if b >= d) + (1 if k >= m), 0 + (1 if c >= g) + (1 if l >= p) ],
+                [0 + (1 if e >= g) + (1 if n >= p), 0, 0 + (1 if f >= h) + (1 if o >= q)],
+                [0 + (1 if g >= c) + (1 if p >= l), 0 + (1 if h >= f) + (1 if q >= o), 0]
+            ]
+
+        i.e. an n by n matrix where n is the number of players. Each row (i) and
+        column (j) represents an individual player and the the value Pij is the
+        sum of the number of repetitions where player i cooperated as often or
+        more than opponent j.
         """
         return []
 
