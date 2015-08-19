@@ -169,7 +169,7 @@ class TestResultSet(unittest.TestCase):
 
     def test_interactions(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        self.assertEqual(rs._interactions(), 12)
+        self.assertEqual(rs._interactions, 12)
 
     @staticmethod
     def round_good_partner_rating(good_partner_rating):
