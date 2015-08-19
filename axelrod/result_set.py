@@ -58,6 +58,8 @@ class ResultSet(object):
                 self._good_partner_rating(self.good_partner_matrix))
             self.eigenjesus_rating = (
                 self._eigenvector(self.normalised_cooperation))
+            self.eigenmoses_rating = (
+                self._eigenvector(self.vindictive_cooperation))
 
     @property
     def _null_results_matrix(self):
@@ -295,7 +297,7 @@ class ResultSet(object):
         """Takes a cooperation matrix and returns its principal eigenvector as
         a list.
         """
-        eigenvector, eigenvalue = principal_eigenvector(cooperation)
+        eigenvector, eigenvalue = principal_eigenvector(cooperation, 1000)
         return eigenvector.tolist()
 
     def csv(self):
