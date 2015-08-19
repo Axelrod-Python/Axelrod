@@ -195,7 +195,8 @@ class TestResultSet(unittest.TestCase):
             self.expected_good_partner_rating
         )
         self.assertEqual(
-            rs.good_partner_rating, self.expected_good_partner_rating
+            self.round_good_partner_rating(good_partner_rating),
+            self.expected_good_partner_rating
         )
 
     def test_csv(self):
