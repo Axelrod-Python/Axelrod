@@ -6,15 +6,15 @@ class TestResultSet(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.players = ('Player1', 'Player2', 'Player3')
+        cls.players = ('Alternator', 'TitForTat', 'Random')
         cls.test_outcome = {
             'payoff': [
-                [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
-                [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
+                [[11.0, 13, 15], [13, 15.0, 14], [10, 14, 8.0]],
+                [[11.0, 13, 12], [13, 15.0, 7], [12, 12, 14.5]],
             ],
             'cooperation': [
-                [[0, 5, 5], [1, 4, 4], [2, 2, 3]],
-                [[1, 5, 5], [2, 2, 2], [5, 5, 4]]
+                [[3, 3, 3], [3, 5, 4], [4, 4, 1]],
+                [[3, 3, 3], [3, 5, 2], [3, 1, 4]]
             ]}
         cls.expected_null_results_matrix = [
             [[0, 0], [0, 0], [0, 0]],
@@ -28,64 +28,63 @@ class TestResultSet(unittest.TestCase):
         ]
         cls.expected_results = {
             'payoff': [
-                [[0, 0], [10, 10], [21, 21]],
-                [[10, 8], [0, 0], [16, 20]],
-                [[16, 16], [16, 16], [0, 0]],
+                [[11.0, 11.0], [13, 13], [15, 12]],
+                [[13, 13], [15.0, 15.0], [14, 7]],
+                [[10, 12], [14, 12], [8.0, 14.5]],
             ],
             'cooperation': [
-                [[0, 1], [5, 5], [5, 5]],
-                [[1, 2], [4, 2], [4, 2]],
-                [[2, 5], [2, 5], [3, 4]]
+                [[3, 3], [3, 3], [3, 3]],
+                [[3, 3], [5, 5], [4, 2]],
+                [[4, 3], [4, 1], [1, 4]]
             ]
         }
         cls.expected_scores = [
-            [31, 31],
-            [26, 28],
-            [32, 32],
+            [28, 25],
+            [27, 20],
+            [24, 24]
         ]
         cls.expected_normalised_scores = [
-            [3.1, 3.1],
-            [2.6, 2.8],
-            [3.2, 3.2],
+            [2.8, 2.5],
+            [2.7, 2.0],
+            [2.4, 2.4]
         ]
         cls.expected_payoffs = [
-            [0.0, 2.0, 4.2],
-            [1.8, 0.0, 3.6],
-            [3.2, 3.2, 0.0],
+            [2.2, 2.6, 2.7],
+            [2.6, 3.0, 2.1],
+            [2.2, 2.6, 2.25]
         ]
         cls.expected_stddevs = [
-            [0.0, 0.0, 0.0],
-            [0.20, 0.0, 0.40],
-            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.3],
+            [0.0, 0.0, 0.7],
+            [0.2, 0.2, 0.65]
         ]
-        cls.expected_ranking = [2, 0, 1]
-        cls.expected_ranked_names = ['Player3', 'Player1', 'Player2']
+        cls.expected_ranking = [0, 2, 1]
+        cls.expected_ranked_names = ['Alternator', 'Random', 'TitForTat']
         cls.expected_cooperation = [
-            [1, 10, 10],
-            [3, 6, 6],
-            [7, 7, 7]
+            [6, 6, 6],
+            [6, 10, 6],
+            [7, 5, 5]
         ]
         cls.expected_normalised_cooperation = [
-            [0.1, 1, 1],
-            [0.3, 0.6, 0.6],
-            [0.7, 0.7, 0.7]
+            [0.6, 0.6, 0.6],
+            [0.6, 1.0, 0.6],
+            [0.7, 0.5, 0.5]
         ]
         cls.expected_vindictive_cooperation = [
-            [-0.8, 1.0, 1.0],
-            [-0.4, 0.2, 0.2],
-            [0.4, 0.4, 0.4]
-        ]
-        cls.expected_cooperation_rates = [0.7, 0.5, 0.7]
+            [0.2, 0.2, 0.2],
+            [0.2, 1.0, 0.2],
+            [0.4, 0.0, 0.0]]
+        cls.expected_cooperation_rates = [0.6, 0.73, 0.57]
         cls.expected_good_partner_matrix = [
-            [0, 2, 2],
-            [0, 0, 1],
-            [1, 1, 0]
+            [0, 2, 1],
+            [2, 0, 2],
+            [2, 1, 0]
         ]
-        cls.expected_good_partner_rating = [0.333, 0.083, 0.167]
-        cls.expected_eigenjesus_rating = [0.619, 0.451, 0.643]
-        cls.expected_eigenmoses_rating = [-0.816, -0.408, 0.408]
+        cls.expected_good_partner_rating = [0.25, 0.33, 0.25]
+        cls.expected_eigenjesus_rating = [0.536, 0.678, 0.503]
+        cls.expected_eigenmoses_rating = [0.243, 0.966, 0.091]
         cls.expected_csv = (
-            'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
+            'Alternator,Random,TitForTat\n2.8,2.4,2.7\n2.5,2.4,2.0\n')
 
     def test_init(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
@@ -144,12 +143,14 @@ class TestResultSet(unittest.TestCase):
     def test_payoff_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         averages, stddevs = rs._payoff_matrix(self.expected_results['payoff'])
-        self.assertEqual(averages, self.expected_payoffs)
         self.assertEqual(
-            self.round_matrix(stddevs, 1), self.expected_stddevs)
-        self.assertEqual(rs.payoff_matrix, self.expected_payoffs)
+            self.round_matrix(averages, 2), self.expected_payoffs)
+        self.assertEqual(
+            self.round_matrix(stddevs, 2), self.expected_stddevs)
+        self.assertEqual(
+            self.round_matrix(rs.payoff_matrix, 2), self.expected_payoffs)
         self.assertEqual(self.round_matrix(
-            rs.payoff_stddevs, 1), self.expected_stddevs)
+            rs.payoff_stddevs, 2), self.expected_stddevs)
 
     def test_cooperation(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
@@ -179,13 +180,19 @@ class TestResultSet(unittest.TestCase):
             self.round_matrix(rs.vindictive_cooperation, 1),
             self.expected_vindictive_cooperation)
 
+    @staticmethod
+    def round_rating(rating, precision):
+        return [round(x, precision) for x in rating]
+
     def test_cooperation_rates(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        cooperation_rates = rs._cooperation_rates(self.expected_cooperation)
         self.assertEqual(
-            rs._cooperation_rates(self.expected_cooperation),
+            self.round_rating(cooperation_rates, 2),
             self.expected_cooperation_rates)
         self.assertEqual(
-            rs.cooperation_rates, self.expected_cooperation_rates)
+            self.round_rating(rs.cooperation_rates, 2),
+            self.expected_cooperation_rates)
 
     def test_good_partner_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
@@ -201,20 +208,16 @@ class TestResultSet(unittest.TestCase):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         self.assertEqual(rs._interactions, 12)
 
-    @staticmethod
-    def round_rating(rating, precision):
-        return [round(x, precision) for x in rating]
-
     def test_good_partner_rating(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         good_partner_rating = (
             rs._good_partner_rating(self.expected_good_partner_matrix))
         self.assertEqual(
-            self.round_rating(good_partner_rating, 3),
+            self.round_rating(good_partner_rating, 2),
             self.expected_good_partner_rating
         )
         self.assertEqual(
-            self.round_rating(rs.good_partner_rating, 3),
+            self.round_rating(rs.good_partner_rating, 2),
             self.expected_good_partner_rating
         )
 
