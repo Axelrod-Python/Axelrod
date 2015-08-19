@@ -83,6 +83,7 @@ class TestResultSet(unittest.TestCase):
         ]
         cls.expected_good_partner_rating = [0.333, 0.083, 0.167]
         cls.expected_eigenjesus_rating = [0.619, 0.451, 0.643]
+        cls.expected_eigenmoses_rating = [-0.816, -0.408, 0.408]
         cls.expected_csv = (
             'Player3,Player1,Player2\n3.2,3.1,2.6\n3.2,3.1,2.8\n')
 
@@ -230,6 +231,18 @@ class TestResultSet(unittest.TestCase):
             self.expected_eigenjesus_rating
         )
 
+    def test_eigenmoses_rating(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        eigenmoses_rating = (
+            rs._eigenvector(self.expected_vindictive_cooperation))
+        self.assertEqual(
+            self.round_rating(eigenmoses_rating, 3),
+            self.expected_eigenmoses_rating
+        )
+        self.assertEqual(
+            self.round_rating(rs.eigenmoses_rating, 3),
+            self.expected_eigenmoses_rating
+        )
 
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
