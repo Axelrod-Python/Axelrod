@@ -111,7 +111,7 @@ class ResultSet(object):
     def _normalised_scores(self, scores):
         """Takes the scores matrix(S) and returns a normalised scores matrix(N)
         such that:
-        
+
             N = S / t
 
         where t is the total number of turns played per repetition for a given
@@ -160,7 +160,11 @@ class ResultSet(object):
 
     def _normalised_cooperation(self, cooperation):
         """Takes the cooperation matrix (C) and returns a matrix (N)
-        where N = C / turns"""
+        such that:
+
+            N = C / t
+
+        where t is the total number of turns played in the tournament."""
         turns = self.turns * self.repetitions
         return[
             [1.0 * element / turns for element in row]
