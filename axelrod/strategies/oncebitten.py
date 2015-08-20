@@ -96,3 +96,19 @@ class ForgetfulFoolMeOnce(Player):
     def reset(self):
         Player.reset(self)
         self.D_count = 0
+
+
+class FoolMeForever(Player):
+    """
+    Fool me once, shame on me. Teach a man to fool me and I'll be fooled for
+    the rest of my life.
+    """
+
+    name = 'Fool Me Forever'
+    memory_depth = float('inf')  # Long memory
+    stochastic = False
+
+    def strategy(self, opponent):
+        if opponent.defections > 0:
+            return 'C'
+        return 'D'
