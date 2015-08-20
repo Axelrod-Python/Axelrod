@@ -7,6 +7,7 @@ from .axelrod_tournaments import *
 from .backstabber import *
 from .calculator import Calculator
 from .cooperator import *
+from .cycler import *
 from .darwin import *
 from .defector import *
 from .forgiver import *
@@ -42,6 +43,7 @@ ordinary_strategies = [
     Aggravater,
     AlternatorHunter,
     Appeaser,
+    AntiCycler,
     AntiTitForTat,
     ArrogantQLearner,
     AverageCopier,
@@ -51,11 +53,15 @@ ordinary_strategies = [
     CautiousQLearner,
     Champion,
     CooperatorHunter,
+    CyclerCCD,
+    CyclerCCCD,
+    CyclerCCCCCD,
     Davis,
     DefectorHunter,
     DoubleCrosser,
     Eatherley,
     FoolMeOnce,
+    FoolMeForever,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,
     Forgiver,
