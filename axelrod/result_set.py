@@ -49,8 +49,8 @@ class ResultSet(object):
             self.cooperation = self._cooperation(self.results['cooperation'])
             self.normalised_cooperation = (
                 self._normalised_cooperation(self.cooperation))
-            self.vindictive_cooperation = (
-                self._vindictive_cooperation(self.normalised_cooperation))
+            self.vengeful_cooperation = (
+                self._vengeful_cooperation(self.normalised_cooperation))
             self.cooperation_rates = self._cooperation_rates(self.cooperation)
             self.good_partner_matrix = (
                 self._good_partner_matrix(self.results['cooperation']))
@@ -59,7 +59,7 @@ class ResultSet(object):
             self.eigenjesus_rating = (
                 self._eigenvector(self.normalised_cooperation))
             self.eigenmoses_rating = (
-                self._eigenvector(self.vindictive_cooperation))
+                self._eigenvector(self.vengeful_cooperation))
 
     @property
     def _null_results_matrix(self):
@@ -234,7 +234,7 @@ class ResultSet(object):
             [1.0 * element / turns for element in row]
             for row in cooperation]
 
-    def _vindictive_cooperation(self, cooperation):
+    def _vengeful_cooperation(self, cooperation):
         """Takes a cooperation matrix (C) and returns a matrix (D) such that:
 
             Dij = 2(Cij -0.5)
