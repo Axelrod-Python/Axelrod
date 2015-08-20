@@ -124,3 +124,22 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         P1.reset()
         self.assertEqual(P1.D_count, 0)
         self.assertEqual(P1.history, [])
+
+
+class TestFoolMeForever(TestPlayer):
+
+    name = "Fool Me Forever"
+    player = axelrod.FoolMeForever
+    stochastic = False
+
+    def test_strategy(self):
+        """
+        If opponent defects more than once, defect forever
+        """
+        P1 = axelrod.FoolMeOnce()
+        P2 = axelrod.Defector()
+        self.responses_test([], [], [D])
+        self.responses_test([D], [D], [C])
+        self.responses_test([D], [C], [D])
+        self.responses_test([D, C], [D, C], [C])
+        self.responses_test([D, C, C], [D, C, C], [C])

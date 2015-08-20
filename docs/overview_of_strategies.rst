@@ -1069,6 +1069,19 @@ Fool Me Once
 
 This strategy begins by cooperating but will defect if at any point the opponent has defected more than once.
 
+Forgetful Fool Me Once
+^^^^^^^^^^^^^^^^^^^^^^
+
+Like Fool Me Once, this strategy defects if the opponent ever defects, but sometimes
+forgets that the opponent had defected, cooperating again until another defection.
+
+Fool Me Forever
+^^^^^^^^^^^^^^^
+
+This strategy defects until the opponent defects, and then cooperates there after.
+Note that this strategy is different than opposite grudger, which cooperates
+indefinitely after an opponent cooperation.
+
 Backstabber
 ^^^^^^^^^^^
 
@@ -1080,6 +1093,25 @@ DoubleCrosser
 Forgives the first 3 defections but on the fourth will defect forever. If the opponent did not defect in the first 6 rounds the player will cooperate until the 180th round. Defects after the 198th round unconditionally.
 
 Aggravater
-^^^^^^^^^^^
+^^^^^^^^^^
 
 This strategy begins by defecting 3 times and then will cooperate until the opponent defects. After the opponent defects it will defect unconditionally. Essentially Grudger, but begins by defecting 3 times.
+
+Alternator
+^^^^^^^^^^
+
+This strategy alternates 'C' and 'D' indefinitely.
+
+Cycler
+^^^^^^
+
+Cycler is an abstract base player that cycles through a given sequence of plays.
+For example, Alternator would be `Cycler("CD")`. The library includes three
+others by default: Cyclers for "CCD", "CCCD", and "CCCCCD".
+
+Anti-Cycler
+^^^^^^^^^^^
+
+AntiCycler plays a sequence that contains no cycles::
+
+    C CD CCD CCCD CCCCD CCCCCD ...
