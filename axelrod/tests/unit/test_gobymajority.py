@@ -9,7 +9,7 @@ C, D = 'C', 'D'
 
 class TestGoByMajority(TestPlayer):
 
-    name = "Go By Majority"
+    name = "Soft Go By Majority"
     player = axelrod.GoByMajority
     stochastic = False
 
@@ -28,7 +28,7 @@ def factory_TestGoByRecentMajority(L):
 
     class TestGoByRecentMajority(TestPlayer):
 
-        name = "Go By Majority:%i" % L
+        name = "Soft Go By Majority:%i" % L
         player = getattr(axelrod, 'GoByMajority%i' % L)
         stochastic = False
 
