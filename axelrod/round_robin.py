@@ -84,10 +84,10 @@ class RoundRobin(object):
             # deepcopy rather than instantiating the class variable
             argspec = inspect.getargspec(player1.__init__)
             if len(argspec.args) > 1:
-                player1.reset()
                 player2 = copy.deepcopy(player1)
             else:
                 player2 = class1()
+                player2.tournament_length = self.turns
             class2 = class1
         else:
             player2 = self.players[player2_index]
