@@ -65,14 +65,18 @@ class MemoryOnePlayer(Player):
 class GTFT(MemoryOnePlayer):
     """Generous Tit-For-Tat Strategy."""
 
-    name = 'Generous Tit-For-Tat'
+    name = 'GTFT'
 
     def __init__(self, p=None):
         (R, P, S, T) = Game().RPST()
         if not p:
             p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
+        self.p = p
         four_vector = [1, p, 1, p]
         super(self.__class__, self).__init__(four_vector)
+
+    def __repr__(self):
+        return "%s: %s" % (self.name, round(self.p, 2))
 
 
 class StochasticCooperator(MemoryOnePlayer):
@@ -171,7 +175,11 @@ class Joss(MemoryOnePlayer):
 
     def __init__(self, p=0.9):
         four_vector = (p, 0, p, 0)
+        self.p = p
         super(self.__class__, self).__init__(four_vector)
+
+    def __repr__(self):
+        return "%s: %s" % (self.name, round(self.p, 2))
 
 
 class SoftJoss(MemoryOnePlayer):
@@ -185,3 +193,7 @@ class SoftJoss(MemoryOnePlayer):
     def __init__(self, q=0.9):
         four_vector = (1., 1 - q, 1, 1 - q)
         super(self.__class__, self).__init__(four_vector)
+        self.q = q
+
+    def __repr__(self):
+        return "%s: %s" % (self.name, round(self.q, 2))
