@@ -70,7 +70,7 @@ class TestResultSet(unittest.TestCase):
             [0.6, 1.0, 0.6],
             [0.7, 0.5, 0.5]
         ]
-        cls.expected_vindictive_cooperation = [
+        cls.expected_vengeful_cooperation = [
             [0.2, 0.2, 0.2],
             [0.2, 1.0, 0.2],
             [0.4, 0.0, 0.0]]
@@ -168,17 +168,17 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(
             rs.normalised_cooperation, self.expected_normalised_cooperation)
 
-    def test_vindictive_cooperation(self):
+    def test_vengeful_cooperation(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        vindictive_cooperation = (
-            rs._vindictive_cooperation(self.expected_normalised_cooperation))
+        vengeful_cooperation = (
+            rs._vengeful_cooperation(self.expected_normalised_cooperation))
         self.assertEqual(
-            self.round_matrix(vindictive_cooperation, 1),
-            self.expected_vindictive_cooperation
+            self.round_matrix(vengeful_cooperation, 1),
+            self.expected_vengeful_cooperation
         )
         self.assertEqual(
-            self.round_matrix(rs.vindictive_cooperation, 1),
-            self.expected_vindictive_cooperation)
+            self.round_matrix(rs.vengeful_cooperation, 1),
+            self.expected_vengeful_cooperation)
 
     @staticmethod
     def round_rating(rating, precision):
@@ -237,7 +237,7 @@ class TestResultSet(unittest.TestCase):
     def test_eigenmoses_rating(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
         eigenmoses_rating = (
-            rs._eigenvector(self.expected_vindictive_cooperation))
+            rs._eigenvector(self.expected_vengeful_cooperation))
         self.assertEqual(
             self.round_rating(eigenmoses_rating, 3),
             self.expected_eigenmoses_rating
