@@ -80,8 +80,8 @@ class TestResultSet(unittest.TestCase):
             [2, 0, 2],
             [2, 1, 0]
         ]
-        cls.expected_good_partner_rating = [0.25, 0.33, 0.25]
-        cls.expected_eigenjesus_rating = [0.536, 0.678, 0.503]
+        cls.expected_good_partner_rating = [0.75, 1.0, 0.75]
+        cls.expected_eigenjesus_rating = [0.537, 0.678, 0.503]
         cls.expected_eigenmoses_rating = [0.243, 0.966, 0.091]
         cls.expected_csv = (
             'Alternator,Random,TitForTat\n2.8,2.4,2.7\n2.5,2.4,2.0\n')
@@ -206,7 +206,7 @@ class TestResultSet(unittest.TestCase):
 
     def test_interactions(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        self.assertEqual(rs._interactions, 12)
+        self.assertEqual(rs._interactions, 4)
 
     def test_good_partner_rating(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)

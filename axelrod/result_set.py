@@ -285,7 +285,7 @@ class ResultSet(object):
         """Returns the number of interactions between players excluding
         self-interactions.
         """
-        return self.repetitions * (self.nplayers ** 2 - self.nplayers)
+        return self.repetitions * (self.nplayers - 1)
 
     def _good_partner_rating(self, good_partner):
         """Takes the good partner matrix and returns a list of good partner
