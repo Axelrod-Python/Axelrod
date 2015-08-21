@@ -34,14 +34,16 @@ class TournamentManager(object):
         return [strategy() for strategy in strategies]
 
     def add_tournament(self, name, players, game=None, turns=200,
-                       repetitions=10, processes=None, noise=0):
+                       repetitions=10, processes=None, noise=0,
+                       with_morality=True):
         tournament = Tournament(
             name=name,
             players=players,
             turns=turns,
             repetitions=repetitions,
             processes=processes,
-            noise=noise)
+            noise=noise,
+            with_morality=with_morality)
         self._tournaments.append(tournament)
 
     def run_tournaments(self):
