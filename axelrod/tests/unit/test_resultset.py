@@ -74,7 +74,7 @@ class TestResultSet(unittest.TestCase):
             [0.2, 0.2, 0.2],
             [0.2, 1.0, 0.2],
             [0.4, 0.0, 0.0]]
-        cls.expected_cooperation_rates = [0.6, 0.73, 0.57]
+        cls.expected_cooperating_rating = [0.6, 0.73, 0.57]
         cls.expected_good_partner_matrix = [
             [0, 2, 1],
             [2, 0, 2],
@@ -184,15 +184,15 @@ class TestResultSet(unittest.TestCase):
     def round_rating(rating, precision):
         return [round(x, precision) for x in rating]
 
-    def test_cooperation_rates(self):
+    def test_cooperating_rating(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
-        cooperation_rates = rs._cooperation_rates(self.expected_cooperation)
+        cooperating_rating = rs._cooperating_rating(self.expected_cooperation)
         self.assertEqual(
-            self.round_rating(cooperation_rates, 2),
-            self.expected_cooperation_rates)
+            self.round_rating(cooperating_rating, 2),
+            self.expected_cooperating_rating)
         self.assertEqual(
-            self.round_rating(rs.cooperation_rates, 2),
-            self.expected_cooperation_rates)
+            self.round_rating(rs.cooperating_rating, 2),
+            self.expected_cooperating_rating)
 
     def test_good_partner_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
