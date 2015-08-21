@@ -56,6 +56,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.name, 'test')
         self.assertEqual(tournament._processes, 4)
         self.assertFalse(tournament.prebuilt_cache)
+        self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.deterministic_cache, {})
         self.assertEqual(tournament.noise, 0.2)
