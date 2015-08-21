@@ -418,7 +418,7 @@ There is also a 'good parter' matrix showing how often a player cooperated at le
 
     results.good_partner_matrix
 
-Each of the metrics described in Tyler's paper are avaiable as follows::
+Each of the metrics described in Tyler's paper is avaiable as follows::
 
     results.cooperation_rating
     results.good_partner_rating
