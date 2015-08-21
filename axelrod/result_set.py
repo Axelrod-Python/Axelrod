@@ -314,8 +314,9 @@ class ResultSet(object):
                     [[g, p], [h, q], [i, r]],
                 ]
 
-            i.e. one row per player, containing one element per opponent (in order
-            of player index) which lists cooperation values for each repetition.
+            i.e. one row per player, containing one element per opponent (in
+            order of player index) which lists cooperation values for each
+            repetition.
 
         Returns:
             The good partner matrix (P) of the form:
