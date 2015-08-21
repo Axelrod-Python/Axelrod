@@ -51,7 +51,7 @@ class ResultSet(object):
                 self._normalised_cooperation(self.cooperation))
             self.vengeful_cooperation = (
                 self._vengeful_cooperation(self.normalised_cooperation))
-            self.cooperation_rates = self._cooperation_rates(self.cooperation)
+            self.cooperating_rating = self._cooperating_rating(self.cooperation)
             self.good_partner_matrix = (
                 self._good_partner_matrix(self.results['cooperation']))
             self.good_partner_rating = (
@@ -293,7 +293,7 @@ class ResultSet(object):
         """
         return [[2 * (element - 0.5) for element in row] for row in cooperation]
 
-    def _cooperation_rates(self, cooperation):
+    def _cooperating_rating(self, cooperation):
         """
         Args:
             cooperation (list): the cooperation matrix
