@@ -385,18 +385,18 @@ The output is shown here:
    :width: 50%
    :align: center
 
-Cooperation Matrix
-^^^^^^^^^^^^^^^^^^
+Morality Metrics
+^^^^^^^^^^^^^^^^
 
-Tyler Singer-Clark's June 2014 paper, "Morality Metrics On Iterated Prisoner’s Dilemma Players," describes several interesting metrics which may be used to analyse IPD tournaments. Each metric depends upon the cooperation rate of the players, defined by Tyler Singer-Clark as:
+Tyler Singer-Clark's June 2014 paper, "Morality Metrics On Iterated Prisoner’s Dilemma Players," describes several interesting metrics which may be used to analyse IPD tournaments all of which are available within the ResultSet class. (Tyler's paper is available here: http://www.scottaaronson.com/morality.pdf).
+
+Each metric depends upon the cooperation rate of the players, defined by Tyler Singer-Clark as:
 
 .. math::
 
     CR(b) = \frac{C(b)}{TT}
 
 where C(b) is the total number of turns where a player chose to cooperate and TT is the total number of turns played.
-
-Tyler's paper is available here:  http://www.scottaaronson.com/morality.pdf
 
 A matrix of cooperation rates is available within a tournament's ResultSet::
 
@@ -413,6 +413,17 @@ The output of this is a square matrix showing the cooperation rates of the row p
       [0.0, 0.0, 0.0, 0.0, 0.0],
       [0.5185, 0.4855, 0.5035, 0.511, 0.488],
       [0.505, 1.0, 0.005, 0.49, 1.0]]
+
+There is also a 'good parter' matrix showing how often a player cooperated at least as much as its opponent::
+
+    results.good_partner_matrix
+
+Each of the metrics described in Tyler's paper is avaiable as follows::
+
+    results.cooperation_rating
+    results.good_partner_rating
+    results.eigenjesus_rating
+    results.eigenmoses_rating
 
 Running the tournament
 ----------------------

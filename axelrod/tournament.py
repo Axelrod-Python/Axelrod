@@ -13,7 +13,7 @@ class Tournament(object):
 
     def __init__(self, players, name='axelrod', game=None, turns=200,
                  repetitions=10, processes=None, prebuilt_cache=False,
-                 noise=0):
+                 noise=0, with_morality=True):
         self.name = name
         self.turns = turns
         self.players = players
@@ -24,6 +24,7 @@ class Tournament(object):
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = {}
         self.noise = noise
+        self._with_morality = with_morality
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
@@ -53,7 +54,8 @@ class Tournament(object):
             players=self.players,
             turns=self.turns,
             repetitions=self.repetitions,
-            outcome=self._outcome)
+            outcome=self._outcome,
+            with_morality=self._with_morality)
         return self.result_set
 
     def _build_cache_required(self):
