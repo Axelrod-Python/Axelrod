@@ -23,7 +23,8 @@ def median(lst):
 class ResultSet(object):
     """A class to hold the results of a tournament."""
 
-    def __init__(self, players, turns, repetitions, outcome):
+    def __init__(self, players, turns, repetitions, outcome,
+                 with_morality=True):
         """
         Args:
             players (list): a list of player objects.
@@ -31,6 +32,8 @@ class ResultSet(object):
             repetitions (int): the number of time the round robin was repeated.
             outcome (dict): returned from the RoundRobin class and containing
                 various sets of results for processing by this class.
+            with_morality (bool): a flag to determine whether morality metrics
+                should be calculated.
         """
         self.players = players
         self.nplayers = len(players)
@@ -38,6 +41,19 @@ class ResultSet(object):
         self.repetitions = repetitions
         self.outcome = outcome
         self.results = self._results(outcome)
+        self.scores = None
+        self.normalised_scores = None
+        self.ranking = None
+        self.ranked_names = None
+        self.payoff_matrix = None
+        self.cooperation = None
+        self.normalised_cooperation = None
+        self.vengeful_cooperation = None
+        self.cooperating_rating = None
+        self.good_partner_matrix = None
+        self.good_partner_rating = None
+        self.eigenjesus_rating = None
+        self.eigenmoses_rating = None
         if 'payoff' in self.results:
             self.scores = self._scores(self.results['payoff'])
             self.normalised_scores = self._normalised_scores(self.scores)
@@ -45,7 +61,7 @@ class ResultSet(object):
             self.ranked_names = self._ranked_names(self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (
                 self._payoff_matrix(self.results['payoff']))
-        if 'cooperation' in self.results:
+        if 'cooperation' in self.results and with_morality:
             self.cooperation = self._cooperation(self.results['cooperation'])
             self.normalised_cooperation = (
                 self._normalised_cooperation(self.cooperation))

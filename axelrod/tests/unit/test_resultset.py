@@ -93,6 +93,8 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.turns, 5)
         self.assertEqual(rs.repetitions, 2)
         self.assertEqual(rs.outcome, self.test_outcome)
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome, False)
+        self.assertEqual(rs.cooperation, None)
 
     def test_null_results_matrix(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
