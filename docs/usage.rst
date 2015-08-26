@@ -1,7 +1,9 @@
 Usage
 =====
 
-This library is intended to allow for users to create their own tournaments (and incorporating various strategies as required) and comes with a script that runs the tournament with a variety of options:
+This library is intended to allow for users to create their own tournaments (and
+incorporating various strategies as required) and comes with a script that runs
+the tournament with a variety of options:
 
 1. `Using as a library`_
 2. `Running the tournament`_
@@ -149,13 +151,17 @@ gives::
 
     3
 
-So even with a large quantity of :code:`Defector` only a small number of :code:`TitForTat` strategies is required.
+So even with a large quantity of :code:`Defector` only a small number of
+:code:`TitForTat` strategies is required.
 
 
 Graphics
 ^^^^^^^^
 
-The whole library can be used without any other non base Python libraries however if you have `matplotlib <http://matplotlib.org/>`_ installed on your system (this is installed automatically if you used :code:`pip install axelrod`) there are various graphical things coded in and ready to go.
+The whole library can be used without any other non base Python libraries
+however if you have `matplotlib <http://matplotlib.org/>`_ installed on your
+system (this is installed automatically if you used :code:`pip install axelrod`)
+there are various graphical things coded in and ready to go.
 
 Let us see the global scores for the basic strategies::
 
@@ -179,6 +185,42 @@ If we run the same tournament but with 5 :code:`Defector` and 3 :code:`TitForTat
    :width: 50%
    :align: center
 
+Non default arguments
+^^^^^^^^^^^^^^^^^^^^^
+
+By default the tournament is run for 200 rounds and repeated 10 times. This are
+the default values and can be changed::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    tournament = axelrod.Tournament(strategies, turns=20, repetitions=50)
+    results = tournament.play()
+    plot = axelrod.Plot(results)
+    p = plot.boxplot()
+    p.show()
+
+
+.. image:: _static/usage/basic_strategies_20_turns_50_repetitions.svg
+   :width: 50%
+   :align: center
+
+
+There are various other arguments that can be passed including the actual game
+that is repeated. Here is an example showing the standard strategies playing a
+scaled version of the standard game::
+
+    import axelrod
+    strategies = [s() for s in axelrod.basic_strategies]
+    tournament = axelrod.Tournament(strategies, game=Game(30, 0, 50, 10))
+    results = tournament.play()
+    plot = axelrod.Plot(results)
+    p = plot.boxplot()
+    p.show()
+
+
+.. image:: _static/usage/basic_strategies_scaled_games.svg
+   :width: 50%
+   :align: center
 
 Payoff matrix
 ^^^^^^^^^^^^^
