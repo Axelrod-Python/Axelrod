@@ -38,7 +38,7 @@ class Tournament(object):
     def players(self, players):
         newplayers = []
         for player in players:
-            player.tournament_length = self.turns
+            player.tournament_attributes['length'] = self.turns
             newplayers.append(player)
         self._players = newplayers
 
