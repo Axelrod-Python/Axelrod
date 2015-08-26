@@ -149,9 +149,9 @@ class TestPlayer(unittest.TestCase):
         subsequent moves by player one to test.
         """
         P1 = self.player()
-        P1.tournament_length = tournament_length
+        P1.tournament_attributes['length'] = tournament_length
         P2 = Player()
-        P2.tournament_length = tournament_length
+        P2.tournament_attributes['length'] = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed)
