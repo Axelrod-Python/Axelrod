@@ -14,7 +14,7 @@ class BackStabber(Player):
     def strategy(self, opponent):
         if not opponent.history:
             return 'C'
-        if len(opponent.history) > (self.tournament_length - 3):
+        if len(opponent.history) > (self.tournament_attributes['length'] - 3):
             return 'D'
         if opponent.defections > 3:
             return 'D'
@@ -38,7 +38,7 @@ class DoubleCrosser(Player):
 
         if not opponent.history:
             return 'C'
-        if len(opponent.history) > (self.tournament_length - 3):
+        if len(opponent.history) > (self.tournament_attributes['length'] - 3):
             return 'D'
         if len(opponent.history) < 180:
             if len(opponent.history) > cutoff:
