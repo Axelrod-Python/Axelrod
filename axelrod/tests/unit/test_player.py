@@ -98,7 +98,8 @@ class TestPlayer(unittest.TestCase):
         """Test that the player initiates correctly."""
         self.assertEqual(self.player().history, [])
         self.assertEqual(self.player().stochastic, self.stochastic)
-        self.assertEqual(self.player().tournament_attributes, {'length': -1})
+        self.assertEqual(self.player().tournament_attributes,
+            {'length': -1, 'game': None})
         self.assertEqual(self.player().cooperations, 0)
         self.assertEqual(self.player().defections, 0)
 

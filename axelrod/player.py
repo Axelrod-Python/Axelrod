@@ -33,7 +33,7 @@ class Player(object):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
         self.stochastic = "random" in inspect.getsource(self.__class__)
-        self.tournament_attributes = {'length': -1}
+        self.tournament_attributes = {'length': -1, 'game': None}
         if self.name == "Player":
             self.stochastic = False
         self.cooperations = 0
