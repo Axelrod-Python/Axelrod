@@ -158,10 +158,7 @@ So even with a large quantity of :code:`Defector` only a small number of
 Graphics
 ^^^^^^^^
 
-The whole library can be used without any other non base Python libraries
-however if you have `matplotlib <http://matplotlib.org/>`_ installed on your
-system (this is installed automatically if you used :code:`pip install axelrod`)
-there are various graphical things coded in and ready to go.
+There are a variety of graphical outputs that the library can produce.
 
 Let us see the global scores for the basic strategies::
 
