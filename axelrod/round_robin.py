@@ -87,7 +87,7 @@ class RoundRobin(object):
                 player2 = copy.deepcopy(player1)
             else:
                 player2 = class1()
-                player2.tournament_length = self.turns
+                player2.tournament_attributes = player1.tournament_attributes
             class2 = class1
         else:
             player2 = self.players[player2_index]

@@ -26,6 +26,7 @@ class TestTournament(unittest.TestCase):
             axelrod.GoByMajority()]
         cls.test_name = 'test'
         cls.test_repetitions = 5
+        cls.test_turns = 100
 
         cls.expected_payoff = [
             [600, 600, 0, 600, 600],
@@ -46,12 +47,19 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
+            turns=self.test_turns,
             processes=4,
             noise=0.2)
         self.assertEqual(len(tournament.players), len(self.players))
-        self.assertEqual(tournament.players[0].tournament_length, 200)
+        self.assertEqual(
+            tournament.players[0].tournament_attributes['length'],
+            self.test_turns
+        )
+        self.assertIsInstance(
+            tournament.players[0].tournament_attributes['game'], axelrod.Game
+        )
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
-        self.assertEqual(tournament.turns, 200)
+        self.assertEqual(tournament.turns, self.test_turns)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
         self.assertEqual(tournament._processes, 4)
