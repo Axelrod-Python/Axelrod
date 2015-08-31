@@ -98,7 +98,8 @@ class TestPlayer(unittest.TestCase):
         """Test that the player initiates correctly."""
         self.assertEqual(self.player().history, [])
         self.assertEqual(self.player().stochastic, self.stochastic)
-        self.assertEqual(self.player().tournament_length, -1)
+        self.assertEqual(self.player().tournament_attributes,
+            {'length': -1, 'game': None})
         self.assertEqual(self.player().cooperations, 0)
         self.assertEqual(self.player().defections, 0)
 
@@ -149,9 +150,9 @@ class TestPlayer(unittest.TestCase):
         subsequent moves by player one to test.
         """
         P1 = self.player()
-        P1.tournament_length = tournament_length
+        P1.tournament_attributes['length'] = tournament_length
         P2 = Player()
-        P2.tournament_length = tournament_length
+        P2.tournament_attributes['length'] = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed)
