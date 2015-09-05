@@ -58,7 +58,7 @@ class MathConstantHunter(Player):
     # We need to make sure this is not marked as stochastic.
     def __init__(self):
         Player.__init__(self)
-        self.behavirou['stochastic'] = False
+        self.behaviour['stochastic'] = False
 
     def strategy(self, opponent):
         """
@@ -97,7 +97,7 @@ class RandomHunter(Player):
     # We need to make sure this is not marked as stochastic.
     def __init__(self):
         Player.__init__(self)
-        self.behavirou['stochastic'] = False
+        self.behaviour['stochastic'] = False
 
     def strategy(self, opponent):
         """
