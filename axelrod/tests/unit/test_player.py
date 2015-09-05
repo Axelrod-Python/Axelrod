@@ -20,7 +20,9 @@ class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
     player = Player
-    behaviour['stochastic'] = False
+    behaviour = {
+        'stochastic': False
+    }
 
     def test_add_noise(self):
         random.seed(1)
