@@ -61,6 +61,7 @@ class FoolMeOnce(Player):
     }
 
     def __init__(self):
+        Player.__init__(self)
         self.behaviour['stochastic'] = False
 
     def strategy(self, opponent):
@@ -117,6 +118,7 @@ class FoolMeForever(Player):
     }
 
     def __init__(self):
+        Player.__init__(self)
         self.behaviour['stochastic'] = False
 
     def strategy(self, opponent):
