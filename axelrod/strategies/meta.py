@@ -21,7 +21,8 @@ class MetaPlayer(Player):
         self.team = [t() for t in self.team]
 
         # If the team will have stochastic players, this meta is also stochastic.
-        self.stochastic = any([t.behaviour['stochastic'] for t in self.team])
+        self.behaviour['stochastic'] = (
+            any([t.behaviour['stochastic'] for t in self.team]))
 
     def strategy(self, opponent):
 

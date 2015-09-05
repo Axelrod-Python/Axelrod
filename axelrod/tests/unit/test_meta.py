@@ -11,7 +11,9 @@ class TestMetaMajority(TestPlayer):
 
     name = "Meta Majority"
     player = axelrod.MetaMajority
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
 
@@ -31,7 +33,9 @@ class TestMetaMinority(TestPlayer):
 
     name = "Meta Minority"
     player = axelrod.MetaMinority
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
 
@@ -51,7 +55,9 @@ class TestMetaWinner(TestPlayer):
 
     name = "Meta Winner"
     player = axelrod.MetaWinner
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
 

@@ -22,7 +22,7 @@ class WinStayLoseShift(Player):
             ('D', 'D'): 'C',
         }
         self._initial = initial
-        self.stochastic = False
+        self.behaviour['stochastic'] = False
 
     def strategy(self, opponent):
         """Switches if it doesn't get the best payout, traditionally equivalent
@@ -52,8 +52,8 @@ class MemoryOnePlayer(Player):
         self.stochastic = False
         for x in set(four_vector):
             if x != 0 and x != 1:
-                self.stochastic = True
-
+                self.behaviour['stochastic'] = True
+                
     def strategy(self, opponent):
         if not len(opponent.history):
             return self._initial

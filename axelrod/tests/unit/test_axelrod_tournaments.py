@@ -13,7 +13,9 @@ class TestDavis(TestPlayer):
 
     name = "Davis"
     player = axelrod.Davis
-    stochastic = False
+    behaviour = {
+        'stochastic': False
+    }
 
     def test_initial_strategy(self):
         """
@@ -42,7 +44,10 @@ class TestFeld(TestPlayer):
 
     name = "Feld"
     player = axelrod.Feld
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
+
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -107,7 +112,10 @@ class TestTullock(TestPlayer):
 
     name = "Tullock"
     player = axelrod.Tullock
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
+
 
     def test_strategy(self):
         """Cooperates for first ten rounds"""
@@ -135,7 +143,10 @@ class TestTullock(TestPlayer):
 class TestChampion(TestPlayer):
     name = "Champion"
     player = axelrod.Champion
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
+
 
     def test_strategy(self):
         # Initially cooperates
@@ -174,7 +185,9 @@ class TestEatherly(TestPlayer):
 
     name = "Eatherley"
     player = axelrod.Eatherley
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
         # Initially cooperates

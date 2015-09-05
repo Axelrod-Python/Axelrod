@@ -13,7 +13,9 @@ class TestOnceBitten(TestPlayer):
 
     name = "Once Bitten"
     player = axelrod.OnceBitten
-    stochastic = False
+    behaviour = {
+        'stochastic': False
+    }
 
     def test_initial_strategy(self):
         """Starts by cooperating."""
@@ -75,7 +77,9 @@ class TestFoolMeOnce(TestPlayer):
 
     name = "Fool Me Once"
     player = axelrod.FoolMeOnce
-    stochastic = False
+    behaviour = {
+        'stochastic': False
+    }
 
     def test_initial(self):
         self.first_play_test(C)
@@ -95,7 +99,9 @@ class TestForgetfulFoolMeOnce(TestPlayer):
 
     name = 'Forgetful Fool Me Once'
     player = axelrod.ForgetfulFoolMeOnce
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_initial(self):
         self.first_play_test(C)
@@ -130,7 +136,9 @@ class TestFoolMeForever(TestPlayer):
 
     name = "Fool Me Forever"
     player = axelrod.FoolMeForever
-    stochastic = False
+    behaviour = {
+        'stochastic': False
+    }
 
     def test_strategy(self):
         """

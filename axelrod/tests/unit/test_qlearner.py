@@ -13,7 +13,9 @@ class TestRiskyQLearner(TestPlayer):
 
     name = 'Risky QLearner'
     player = axelrod.RiskyQLearner
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_payoff_matrix(self):
         (R, P, S, T) = Game().RPST()
@@ -80,7 +82,9 @@ class TestArrogantQLearner(TestPlayer):
 
     name = 'Arrogant QLearner'
     player = axelrod.ArrogantQLearner
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_qs_update(self):
         """
@@ -145,7 +149,9 @@ class TestHesitantQLearner(TestPlayer):
 
     name = 'Hesitant QLearner'
     player = axelrod.HesitantQLearner
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_qs_update(self):
         """Test that the q and v values update."""
@@ -210,7 +216,9 @@ class TestCautiousQLearner(TestPlayer):
 
     name = 'Cautious QLearner'
     player = axelrod.CautiousQLearner
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_qs_update(self):
         """Test that the q and v values update."""
