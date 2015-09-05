@@ -130,7 +130,7 @@ class RoundRobin(object):
         return (
             not self._noise and
             self.cache_mutable and
-            not (p1.stochastic or p2.stochastic))
+            not (p1.behaviour['stochastic'] or p2.behaviour['stochastic']))
 
     def _calculate_cooperation(self, player):
         return player.history.count('C')
