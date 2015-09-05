@@ -94,7 +94,9 @@ class TestPlayer(unittest.TestCase):
 
     name = "Player"
     player = Player
-    behaviour['stochastic'] = False
+    behaviour = {
+        'stochastic': False
+    }
 
     def test_initialisation(self):
         """Test that the player initiates correctly."""

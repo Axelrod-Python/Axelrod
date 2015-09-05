@@ -48,6 +48,7 @@ class MindReader(Player):
     name = 'Mind Reader'
 
     def __init__(self):
+        Player.__init__(self)
         self.behaviour['stochastic'] = True # Don't cache me
 
     def strategy(self, opponent):
