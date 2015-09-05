@@ -41,7 +41,7 @@ class GoByMajority(Player):
     def __repr__(self):
         """The string method for the strategy."""
         memory = self.memory_depth
-        name = 'Go By Majority' + (memory > 0) * (":%i" % memory)
+        name = 'Go By Majority' + (memory > 0) * (": %i" % memory)
         if self.soft:
             name = "Soft " + name
         else:
