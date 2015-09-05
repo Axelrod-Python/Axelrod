@@ -13,7 +13,9 @@ class TestInverse(TestPlayer):
 
     name = "Inverse"
     player = axelrod.Inverse
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
         """

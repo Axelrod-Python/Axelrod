@@ -27,7 +27,7 @@ class RiskyQLearner(Player):
 
         # Set this explicitely, since the constructor of super will not pick it up
         # for any subclasses that do not override methods using random calls.
-        self.stochastic = True
+        self.behaviour['stochastic'] = True
 
         self.prev_action = random_choice()
         self.history = []
