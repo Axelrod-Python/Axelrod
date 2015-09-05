@@ -20,7 +20,7 @@ class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
     player = Player
-    stochastic = False
+    behaviour['stochastic'] = False
 
     def test_add_noise(self):
         random.seed(1)
@@ -92,12 +92,14 @@ class TestPlayer(unittest.TestCase):
 
     name = "Player"
     player = Player
-    stochastic = False
+    behaviour['stochastic'] = False
 
     def test_initialisation(self):
         """Test that the player initiates correctly."""
         self.assertEqual(self.player().history, [])
-        self.assertEqual(self.player().stochastic, self.stochastic)
+        self.assertEqual(
+            self.player().behaviour['stochastic'],
+            self.behaviour['stochastic'])
         self.assertEqual(self.player().tournament_attributes,
             {'length': -1, 'game': None})
         self.assertEqual(self.player().cooperations, 0)
