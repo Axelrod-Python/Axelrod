@@ -28,14 +28,20 @@ class Player(object):
     """
 
     name = "Player"
+    behaviour = {
+        'stochastic': None,
+        'reads_source': None,
+        'modifies_source': None,
+        'memory_depth': None
+    }
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
-        self.stochastic = "random" in inspect.getsource(self.__class__)
+        self.behaviour['stochastic'] = "random" in inspect.getsource(self.__class__)
         self.tournament_attributes = {'length': -1, 'game': None}
         if self.name == "Player":
-            self.stochastic = False
+            self.behaviour['stochastic'] = False
         self.cooperations = 0
         self.defections = 0
 
