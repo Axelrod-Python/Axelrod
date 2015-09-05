@@ -8,8 +8,9 @@ class BackStabber(Player):
     """
 
     name = 'BackStabber'
-    memory_depth = float('inf')  # Long memory
-    stochastic = False
+    behaviour = {
+        'memory_depth': float('inf')
+    }
 
     def strategy(self, opponent):
         if not opponent.history:
@@ -30,8 +31,9 @@ class DoubleCrosser(Player):
     """
 
     name = 'DoubleCrosser'
-    memory_depth = float('inf')  # Long memory
-    stochastic = False
+    behaviour = {
+        'memory_depth': float('inf')
+    }
 
     def strategy(self, opponent):
         cutoff = 6

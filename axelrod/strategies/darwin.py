@@ -23,7 +23,9 @@ class Darwin(Player):
     """
 
     name = "Darwin"
-    memory_depth = float('inf')
+    behaviour = {
+        'memory_depth': float('inf')
+    }
     genome = ['C']
     valid_callers = ["play"]    # What functions may invoke our strategy.
     outcomes = { ('C','C') : R,
@@ -72,4 +74,3 @@ class Darwin(Player):
         """ Select response according to outcome. """
         if outcome < 0 and (len(self.__class__.genome) >= trial):
             self.response = 'D' if self.__class__.genome[trial-1] == 'C' else 'C'
-

@@ -5,7 +5,9 @@ class MetaPlayer(Player):
     """A generic player that has its own team of players."""
 
     team = []
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def __init__(self):
 

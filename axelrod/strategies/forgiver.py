@@ -8,7 +8,9 @@ class Forgiver(Player):
     """
 
     name = 'Forgiver'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     @staticmethod
     def strategy(opponent):
@@ -28,7 +30,9 @@ class ForgivingTitForTat(Player):
     """
 
     name = 'Forgiving Tit For Tat'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     @staticmethod
     def strategy(opponent):

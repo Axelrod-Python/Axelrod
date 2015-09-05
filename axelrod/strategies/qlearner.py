@@ -12,7 +12,9 @@ class RiskyQLearner(Player):
     """
 
     name = 'Risky QLearner'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
     learning_rate = 0.9
     discount_rate = 0.9
     action_selection_parameter = 0.1
