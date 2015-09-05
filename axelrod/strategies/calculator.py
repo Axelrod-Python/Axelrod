@@ -11,7 +11,9 @@ class Calculator(Player):
     """
 
     name = "Calculator"
-    memory_depth = float('inf')
+    behaviour = {
+        'memory_depth': float('inf')
+    }
 
     def __init__(self):
         Player.__init__(self)

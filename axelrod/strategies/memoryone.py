@@ -9,7 +9,9 @@ class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
     name = 'Win-Stay Lose-Shift'
-    memory_depth = 1  # Four-Vector = (1,0,0,1)
+    behaviour = {
+        'memory_depth': 1  # Four-Vector = (1,0,0,1)
+    }
 
     def __init__(self, initial='C'):
         Player.__init__(self)
@@ -39,7 +41,9 @@ class MemoryOnePlayer(Player):
     with a initializing four_vector."""
 
     name = 'Generic Memory One Player'
-    memory_depth = 1
+    behaviour = {
+        'memory_depth': 1
+    }
 
     def __init__(self, four_vector, initial='C'):
         Player.__init__(self)
@@ -163,7 +167,7 @@ class Grofman(MemoryOnePlayer):
 
 class Joss(MemoryOnePlayer):
     """
-    Cooperates with probability 0.9 when the opponent cooperates, otherwise 
+    Cooperates with probability 0.9 when the opponent cooperates, otherwise
     emulates Tit-For-Tat.
     """
 
@@ -176,7 +180,7 @@ class Joss(MemoryOnePlayer):
 
 class SoftJoss(MemoryOnePlayer):
     """
-    Defects with probability 0.9 when the opponent defects, otherwise 
+    Defects with probability 0.9 when the opponent defects, otherwise
     emulates Tit-For-Tat.
     """
 

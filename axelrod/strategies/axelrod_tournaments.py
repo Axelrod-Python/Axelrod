@@ -16,7 +16,9 @@ class Davis(Player):
     defecting if at any point the opponent has defected."""
 
     name = 'Davis'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def __init__(self, rounds_to_cooperate=10):
         Player.__init__(self)
@@ -39,7 +41,9 @@ class Feld(Player):
     """
 
     name = "Feld"
-    memory_depth = 200 # Varies actually, eventually becomes depth 1
+    behaviour = {
+        'memory_depth': 200 # Varies actually, eventually becomes depth 1
+    }
 
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
                  rounds_of_decay=200):
@@ -78,7 +82,9 @@ class Shubik(Player):
     """
 
     name = 'Shubik'
-    memory_depth = float('inf')
+    behaviour = {
+        'memory_depth': float('inf')
+    }
 
     def __init__(self):
         Player.__init__(self)
@@ -129,7 +135,9 @@ class Tullock(Player):
     than the opponent has in previous rounds."""
 
     name = "Tullock"
-    memory_depth = 11 # long memory, modified by init
+    behaviour = {
+        'memory_depth': 11 # long memory, modified by init
+    }
 
     def __init__(self, rounds_to_cooperate=11):
         Player.__init__(self)
@@ -157,7 +165,9 @@ class Champion(Player):
     """
 
     name = "Champion"
-    memory_depth = float('inf')
+    behaviour = {
+        'memory_depth': float('inf')
+    }
 
     def strategy(self, opponent):
         current_round = len(self.history)
@@ -185,7 +195,9 @@ class Eatherley(Player):
     """
 
     name = "Eatherley"
-    memory_depth = float('inf')
+    behaviour = {
+        'memory_depth': float('inf')
+    }
 
     def strategy(self, opponent):
         # Cooperate on the first move
@@ -212,7 +224,9 @@ class Tester(Player):
     """
 
     name = "Tester"
-    memory_depth = float('inf')
+    behaviour = {
+        'memory_depth': float('inf')
+    }
 
     def __init__(self):
         Player.__init__(self)

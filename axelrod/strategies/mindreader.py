@@ -46,7 +46,9 @@ class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
 
     name = 'Mind Reader'
-    stochastic = True # Don't cache me
+
+    def __init__(self):
+        self.behaviour['stochastic'] = True # Don't cache me
 
     def strategy(self, opponent):
         """Pretends to play the opponent a number of times before each match.

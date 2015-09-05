@@ -10,7 +10,9 @@ class Punisher(Player):
     """
 
     name = 'Punisher'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def __init__(self):
         """
@@ -24,7 +26,7 @@ class Punisher(Player):
     def strategy(self, opponent):
         """
         Begins by playing C, then plays D for an amount of rounds proportional
-        to the opponents historical '%' of playing 'D' if the opponent ever 
+        to the opponents historical '%' of playing 'D' if the opponent ever
         plays D
         """
 
@@ -53,14 +55,16 @@ class Punisher(Player):
 
 class InversePunisher(Player):
     """
-    A player starts by cooperating however will defect if at any point the 
-    opponent has defected, but forgets after meme_length matches, with 
+    A player starts by cooperating however will defect if at any point the
+    opponent has defected, but forgets after meme_length matches, with
     1<=mem_length<=20 proportional to the amount of time the opponent has
     played 'C'. The inverse of Punisher
     """
 
     name = 'Inverse Punisher'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def __init__(self):
         """
