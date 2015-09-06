@@ -12,7 +12,9 @@ class Calculator(Player):
 
     name = "Calculator"
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
     }
 
     def __init__(self):

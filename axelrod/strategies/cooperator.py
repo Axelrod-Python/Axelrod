@@ -6,7 +6,9 @@ class Cooperator(Player):
 
     name = 'Cooperator'
     behaviour = {
-        'memory_depth': 0  # Memory-one Four-Vector = (1,1,1,1)
+        'memory_depth': 0,
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
     }
 
     @staticmethod
@@ -19,7 +21,9 @@ class TrickyCooperator(Player):
 
     name = "Tricky Cooperator"
     behaviour = {
-        'memory_depth': 10  # Long memory
+        'memory_depth': 10,
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
     }
 
     @staticmethod
