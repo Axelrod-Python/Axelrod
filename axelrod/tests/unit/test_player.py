@@ -95,7 +95,10 @@ class TestPlayer(unittest.TestCase):
     name = "Player"
     player = Player
     behaviour = {
-        'stochastic': False
+        'stochastic': False,
+        'memory_depth': None,
+        'inspects_opponent_source': None,
+        'updates_opponent_source': None
     }
 
     def test_initialisation(self):
@@ -104,6 +107,12 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             self.player().behaviour['stochastic'],
             self.behaviour['stochastic'])
+        self.assertEqual(
+            self.player().behaviour['inspects_opponent_source'],
+            self.behaviour['inspects_opponent_source'])
+        self.assertEqual(
+            self.player().behaviour['updates_opponent_source'],
+            self.behaviour['updates_opponent_source'])
         self.assertEqual(self.player().tournament_attributes,
             {'length': -1, 'game': None})
         self.assertEqual(self.player().cooperations, 0)

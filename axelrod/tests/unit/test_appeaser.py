@@ -11,6 +11,12 @@ class TestAppeaser(TestPlayer):
 
     name = "Appeaser"
     player = axelrod.Appeaser
+    behaviour = {
+        'stochastic': False,
+        'memory_depth': float('inf'),  # Depends on internal memory.
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""
@@ -25,4 +31,3 @@ class TestAppeaser(TestPlayer):
         self.responses_test([C, D, C, D], [C, C, D], [D])
         self.responses_test([C, D, C, D, C], [C, C, D, D], [C])
         self.responses_test([C, D, C, D, C, D], [C, C, D, D, D], [D])
-

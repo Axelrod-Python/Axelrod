@@ -14,7 +14,10 @@ class TestAverageCopier(TestPlayer):
     name = "Average Copier"
     player = axelrod.AverageCopier
     behaviour = {
-        'stochastic': True
+        'stochastic': True,
+        'memory_depth': float('inf'),
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
     }
 
     def test_strategy(self):
@@ -40,7 +43,9 @@ class TestNiceAverageCopier(TestPlayer):
     name = "Nice Average Copier"
     player = axelrod.NiceAverageCopier
     behaviour = {
-        'stochastic': True
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
     }
 
     def test_strategy(self):

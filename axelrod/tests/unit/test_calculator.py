@@ -13,7 +13,12 @@ class TestCalculator(TestPlayer):
 
     name = "Calculator"
     player = axelrod.Calculator
-    stochastic = False
+    behaviour = {
+        'stochastic': False,
+        'memory_depth': float('inf'),
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
+    }
 
     def test_cycle_detection(self):
         P1 = axelrod.Calculator()
@@ -43,4 +48,3 @@ class TestCalculator(TestPlayer):
         P2.history = history
         self.assertFalse(P1.detect_cycle(P2.history))
         self.assertEqual('C', P1.strategy(P2))
-
