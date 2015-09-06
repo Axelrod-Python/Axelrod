@@ -37,6 +37,10 @@ class Player(object):
             "random" in inspect.getsource(self.__class__))
         if self.name == "Player":
             self.behaviour['stochastic'] = False
+        if 'inspects_opponent_source' not in self.behaviour:
+            self.behaviour['inspects_opponent_source'] = None
+        if 'updates_opponent_souce' not in self.behaviour:
+            self.behaviour['updates_opponent_souce'] = None
         self.tournament_attributes = {'length': -1, 'game': None}
         self.cooperations = 0
         self.defections = 0
