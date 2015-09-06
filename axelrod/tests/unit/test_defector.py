@@ -11,7 +11,12 @@ class TestDefector(TestPlayer):
 
     name = "Defector"
     player = axelrod.Defector
-    stoachastic = False
+    behaviour = {
+        'stochastic': False,
+        'memory_depth': 0,
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""
@@ -25,7 +30,12 @@ class TestTrickyDefector(TestPlayer):
 
     name = "Tricky Defector"
     player = axelrod.TrickyDefector
-    stochastic = False
+    behaviour = {
+        'stochastic': False,
+        'memory_depth': float('inf'),
+        'inspects_opponent_source': False,
+        'updates_opponent_source': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""
@@ -39,4 +49,3 @@ class TestTrickyDefector(TestPlayer):
         history = [C, C, C, D, D] + [C] * 11
         opponent_history = [C, C, C, C, D] + [D] + [C] * 10
         self.responses_test(history, opponent_history,[D])
-
