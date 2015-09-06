@@ -24,6 +24,14 @@ class TestGoByMajority(TestPlayer):
         self.responses_test([C, D, D, D], [D, D, C, C], [C])
         self.responses_test([C, C, D, D, C], [D, D, C, C, D], [D])
 
+    def test_repr(self):
+        player = self.player(soft=True)
+        name = str(player)
+        self.assertEqual(name, "Soft Go By Majority")
+        player = self.player(soft=False)
+        name = str(player)
+        self.assertEqual(name, "Hard Go By Majority")
+
 def factory_TestGoByRecentMajority(L):
 
     class TestGoByRecentMajority(TestPlayer):
