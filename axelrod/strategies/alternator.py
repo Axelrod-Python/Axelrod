@@ -6,9 +6,7 @@ class Alternator(Player):
 
     name = 'Alternator'
     behaviour = {
-        'memory_depth': 1,
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': 1
     }
 
     def strategy(self, opponent):
