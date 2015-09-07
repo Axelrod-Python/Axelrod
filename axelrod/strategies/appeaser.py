@@ -10,9 +10,7 @@ class Appeaser(Player):
 
     name = 'Appeaser'
     behaviour = {
-        'memory_depth': float('inf'),  # Depends on internal memory.
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')  # Depends on internal memory.
     }
 
     def strategy(self, opponent):

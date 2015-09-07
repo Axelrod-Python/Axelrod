@@ -8,12 +8,7 @@ class TestBackStabber(TestPlayer):
 
     name = "BackStabber"
     player = axelrod.BackStabber
-    behaviour = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
-    }
+    stochastic = False
 
     def test_strategy(self):
         """
@@ -39,12 +34,7 @@ class TestDoubleCrosser(TestPlayer):
 
     name = "DoubleCrosser"
     player = axelrod.DoubleCrosser
-    behaviour = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
-    }
+    stochastic = False
 
     def test_strategy(self):
         """
@@ -72,3 +62,4 @@ class TestDoubleCrosser(TestPlayer):
         # Defects on rounds 199, and 200 no matter what
         self.responses_test([C] * 198 , [C] * 198, [D, D, D],
                             tournament_length=200)
+

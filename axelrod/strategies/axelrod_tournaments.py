@@ -17,9 +17,7 @@ class Davis(Player):
 
     name = 'Davis'
     behaviour = {
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')  # Long memory
     }
 
     def __init__(self, rounds_to_cooperate=10):
@@ -44,9 +42,7 @@ class Feld(Player):
 
     name = "Feld"
     behaviour = {
-        'memory_depth': 200,
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': 200 # Varies actually, eventually becomes depth 1
     }
 
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
@@ -87,9 +83,7 @@ class Shubik(Player):
 
     name = 'Shubik'
     behaviour = {
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')
     }
 
     def __init__(self):
@@ -142,9 +136,7 @@ class Tullock(Player):
 
     name = "Tullock"
     behaviour = {
-        'memory_depth': 11,
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': 11 # long memory, modified by init
     }
 
     def __init__(self, rounds_to_cooperate=11):
@@ -174,9 +166,7 @@ class Champion(Player):
 
     name = "Champion"
     behaviour = {
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')
     }
 
     def strategy(self, opponent):
@@ -206,9 +196,7 @@ class Eatherley(Player):
 
     name = "Eatherley"
     behaviour = {
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')
     }
 
     def strategy(self, opponent):
@@ -237,9 +225,7 @@ class Tester(Player):
 
     name = "Tester"
     behaviour = {
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')
     }
 
     def __init__(self):

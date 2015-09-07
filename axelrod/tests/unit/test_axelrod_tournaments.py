@@ -14,10 +14,7 @@ class TestDavis(TestPlayer):
     name = "Davis"
     player = axelrod.Davis
     behaviour = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'stochastic': False
     }
 
     def test_initial_strategy(self):
@@ -48,11 +45,9 @@ class TestFeld(TestPlayer):
     name = "Feld"
     player = axelrod.Feld
     behaviour = {
-        'stochastic': True,
-        'memory_depth': 200,
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'stochastic': True
     }
+
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -86,12 +81,6 @@ class TestShubik(TestPlayer):
 
     name = 'Shubik'
     player = axelrod.Shubik
-    behaviour = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
-    }
 
     def test_strategy(self):
         # Starts by Cooperating
@@ -124,11 +113,9 @@ class TestTullock(TestPlayer):
     name = "Tullock"
     player = axelrod.Tullock
     behaviour = {
-        'stochastic': True,
-        'memory_depth': 11,
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'stochastic': True
     }
+
 
     def test_strategy(self):
         """Cooperates for first ten rounds"""
@@ -157,11 +144,9 @@ class TestChampion(TestPlayer):
     name = "Champion"
     player = axelrod.Champion
     behaviour = {
-        'stochastic': True,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'stochastic': True
     }
+
 
     def test_strategy(self):
         # Initially cooperates
@@ -201,10 +186,7 @@ class TestEatherly(TestPlayer):
     name = "Eatherley"
     player = axelrod.Eatherley
     behaviour = {
-        'stochastic': True,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'stochastic': True
     }
 
     def test_strategy(self):
@@ -225,13 +207,6 @@ class TestTester(TestPlayer):
 
     name = "Tester"
     player = axelrod.Tester
-    behaviour = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
-    }
-
 
     def test_strategy(self):
         """Starts by defecting."""
