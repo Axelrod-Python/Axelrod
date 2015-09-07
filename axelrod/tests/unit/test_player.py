@@ -100,14 +100,16 @@ class TestPlayer(unittest.TestCase):
 
     def test_initialisation(self):
         """Test that the player initiates correctly."""
-        self.assertEqual(self.player().history, [])
+        player = self.player()
+        self.assertEqual(player.history, [])
         self.assertEqual(
-            self.player().behaviour['stochastic'],
+            player.behaviour['stochastic'],
             self.behaviour['stochastic'])
-        self.assertEqual(self.player().tournament_attributes,
+        self.assertTrue('memory_depth' in player.behaviour)
+        self.assertEqual(player.tournament_attributes,
             {'length': -1, 'game': None})
-        self.assertEqual(self.player().cooperations, 0)
-        self.assertEqual(self.player().defections, 0)
+        self.assertEqual(player.cooperations, 0)
+        self.assertEqual(player.defections, 0)
 
     def test_repr(self):
         """Test that the representation is correct."""
