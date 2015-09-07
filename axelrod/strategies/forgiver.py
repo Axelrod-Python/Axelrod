@@ -9,9 +9,7 @@ class Forgiver(Player):
 
     name = 'Forgiver'
     behaviour = {
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')  # Long memory
     }
 
     @staticmethod
@@ -33,9 +31,7 @@ class ForgivingTitForTat(Player):
 
     name = 'Forgiving Tit For Tat'
     behaviour = {
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')  # Long memory
     }
 
     @staticmethod
