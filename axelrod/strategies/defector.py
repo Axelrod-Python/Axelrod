@@ -6,9 +6,7 @@ class Defector(Player):
 
     name = 'Defector'
     behaviour = {
-        'memory_depth': 0,
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': 0  # Memory-one Four-Vector = (0,0,0,0)
     }
 
     @staticmethod
@@ -21,9 +19,7 @@ class TrickyDefector(Player):
 
     name = "Tricky Defector"
     behaviour = {
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
+        'memory_depth': float('inf')  # Long memory
     }
 
     def strategy(self, opponent):

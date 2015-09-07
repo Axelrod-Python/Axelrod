@@ -11,12 +11,7 @@ class TestForgiver(TestPlayer):
 
     name = "Forgiver"
     player = axelrod.Forgiver
-    behaviour = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
-    }
+    stochastic = False
 
     def test_initial_strategy(self):
         """Starts by cooperating."""
@@ -33,13 +28,8 @@ class TestForgivingTitForTat(TestPlayer):
 
     name = "Forgiving Tit For Tat"
     player = axelrod.ForgivingTitForTat
-    behaviour = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'inspects_opponent_source': False,
-        'updates_opponent_source': False
-    }
-    
+    stochastic = False
+
     def test_initial_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
@@ -48,3 +38,4 @@ class TestForgivingTitForTat(TestPlayer):
         self.responses_test([C, C, C, C], [C, C, C, C], [C])
         self.responses_test([C, C, C, C, D],[C, C, C, D, C], [C])
         self.responses_test([C] * 11, [C] * 9 + [D] * 2, [D])
+
