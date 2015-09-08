@@ -46,10 +46,7 @@ class Player(object):
         for dimension in self.default_behaviour:
             if dimension not in self.behaviour:
                 self.behaviour[dimension] = self.default_behaviour[dimension]
-        self.tournament_attributes = {
-            'length': None,
-            'game': None
-        }
+        self.tournament_attributes = {'length': -1, 'game': None}
         self.cooperations = 0
         self.defections = 0
 

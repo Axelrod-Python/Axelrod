@@ -107,7 +107,7 @@ class TestPlayer(unittest.TestCase):
             self.behaviour['stochastic'])
         self.assertTrue('memory_depth' in player.behaviour)
         self.assertEqual(player.tournament_attributes,
-            {'length': None, 'game': None})
+            {'length': -1, 'game': None})
         self.assertEqual(player.cooperations, 0)
         self.assertEqual(player.defections, 0)
 
