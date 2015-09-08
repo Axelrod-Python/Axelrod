@@ -97,8 +97,8 @@ class RoundRobin(object):
     def _stochastic_interaction(self, player1, player2):
         return (
             self._noise or
-            player1.stochastic or
-            player2.stochastic)
+            player1.behaviour['stochastic'] or
+            player2.behaviour['stochastic'])
 
     def _play_single_interaction(self, player1, player2, classes):
         turn = 0
@@ -130,7 +130,7 @@ class RoundRobin(object):
         return (
             not self._noise and
             self.cache_mutable and
-            not (p1.stochastic or p2.stochastic))
+            not (p1.behaviour['stochastic'] or p2.behaviour['stochastic']))
 
     def _calculate_cooperation(self, player):
         return player.history.count('C')

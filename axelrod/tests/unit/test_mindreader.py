@@ -12,7 +12,9 @@ class TestMindReader(TestPlayer):
 
     name = "Mind Reader"
     player = axelrod.MindReader
-    stochastic = False
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
         """
@@ -21,7 +23,7 @@ class TestMindReader(TestPlayer):
         P1 = axelrod.MindReader()
         P2 = axelrod.Cooperator()
         self.assertEqual(P1.strategy(P2), D)
- 
+
     def test_vs_defect(self):
         """
         Will defect against pure defecting strategies
@@ -45,7 +47,7 @@ class TestMindReader(TestPlayer):
         P1 = axelrod.MindReader()
         P2 = axelrod.TitForTat()
         self.assertEqual(P1.strategy(P2), C)
- 
+
     def test_simulate_matches(self):
         """
         Simulates a number of matches
@@ -54,7 +56,7 @@ class TestMindReader(TestPlayer):
         P2 = axelrod.Grudger()
         simulate_match(P1, P2, C, 4)
         self.assertEqual(P2.history, [C, C, C, C])
- 
+
     def test_history_is_same(self):
         """
         Checks that the history is not altered by the player

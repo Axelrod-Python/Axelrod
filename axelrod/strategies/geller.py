@@ -33,7 +33,9 @@ class Geller(Player):
 
     name = 'Geller'
     default = lambda self: 'C' if random.random() > 0.5 else 'D'
-    memory_depth = -1
+    behaviour = {
+        'memory_depth': -1
+    }
 
     def strategy(self, opponent):
         """

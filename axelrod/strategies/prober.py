@@ -8,7 +8,9 @@ class Prober(Player):
     """
 
     name = 'Prober'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def strategy(self, opponent):
         turn = len(self.history)
@@ -33,7 +35,9 @@ class Prober2(Player):
     """
 
     name = 'Prober 2'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def strategy(self, opponent):
         turn = len(self.history)
@@ -58,7 +62,9 @@ class Prober3(Player):
     """
 
     name = 'Prober 3'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def strategy(self, opponent):
         turn = len(self.history)
@@ -81,7 +87,9 @@ class HardProber(Player):
     """
 
     name = 'Hard Prober'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def strategy(self, opponent):
         turn = len(self.history)

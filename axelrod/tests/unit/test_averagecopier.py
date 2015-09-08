@@ -13,7 +13,9 @@ class TestAverageCopier(TestPlayer):
 
     name = "Average Copier"
     player = axelrod.AverageCopier
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
         """Test that the first strategy is picked randomly."""
@@ -37,7 +39,9 @@ class TestNiceAverageCopier(TestPlayer):
 
     name = "Nice Average Copier"
     player = axelrod.NiceAverageCopier
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
         """Test that the first strategy is cooperation."""

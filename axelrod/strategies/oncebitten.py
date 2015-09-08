@@ -8,7 +8,9 @@ class OnceBitten(Player):
     """
 
     name = 'Once Bitten'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def __init__(self):
         """
@@ -54,8 +56,13 @@ class FoolMeOnce(Player):
     """
 
     name = 'Fool Me Once'
-    memory_depth = float('inf')  # Long memory
-    stochastic = False
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
+
+    def __init__(self):
+        Player.__init__(self)
+        self.behaviour['stochastic'] = False
 
     def strategy(self, opponent):
         if not opponent.history:
@@ -72,8 +79,9 @@ class ForgetfulFoolMeOnce(Player):
     """
 
     name = 'Forgetful Fool Me Once'
-    memory_depth = float('inf')  # Long memory
-    stochastic = True
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def __init__(self, forget_probability = 0.05):
         Player.__init__(self)
@@ -105,8 +113,13 @@ class FoolMeForever(Player):
     """
 
     name = 'Fool Me Forever'
-    memory_depth = float('inf')  # Long memory
-    stochastic = False
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
+
+    def __init__(self):
+        Player.__init__(self)
+        self.behaviour['stochastic'] = False
 
     def strategy(self, opponent):
         if opponent.defections > 0:

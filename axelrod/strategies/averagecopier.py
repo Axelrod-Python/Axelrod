@@ -8,7 +8,9 @@ class AverageCopier(Player):
     """The player will cooperate with probability p if the opponent's cooperation ratio is p."""
 
     name = 'Average Copier'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     @staticmethod
     def strategy(opponent):

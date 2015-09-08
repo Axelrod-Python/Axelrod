@@ -25,7 +25,9 @@ class TestGTFT(TestPlayer):
 
     name = "GTFT: 0.33"
     player = axelrod.GTFT
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -42,7 +44,9 @@ class TestStochasticCooperator(TestPlayer):
 
     name = "Stochastic Cooperator"
     player = axelrod.StochasticCooperator
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_four_vector(self):
         expected_dictionary = {(C, C): 0.935, (C, D): 0.229, (D, C): 0.266, (D, D): 0.42}
@@ -66,7 +70,9 @@ class TestStochasticWSLS(TestPlayer):
 
     name = "Stochastic WSLS"
     player = axelrod.StochasticWSLS
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -92,7 +98,9 @@ class TestZDExtort2(TestPlayer):
 
     name = "ZD-Extort-2"
     player = axelrod.ZDExtort2
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_four_vector(self):
         expected_dictionary = {(C, C): 8./9, (C, D): 0.5, (D, C): 1./3, (D, D): 0.}
@@ -112,7 +120,9 @@ class TestZDGTFT2(TestPlayer):
 
     name = "ZD-GTFT-2"
     player = axelrod.ZDGTFT2
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_four_vector(self):
         expected_dictionary = {(C, C): 1., (C, D): 1./8, (D, C): 1., (D, D): 0.25}
@@ -132,7 +142,9 @@ class TestGrofman(TestPlayer):
 
     name = "Grofman"
     player = axelrod.Grofman
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_four_vector(self):
         p = float(2) / 7
@@ -148,7 +160,9 @@ class TestJoss(TestPlayer):
 
     name = "Joss: 0.9"
     player = axelrod.Joss
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_four_vector(self):
         expected_dictionary = {(C, C): 0.9, (C, D): 0, (D, C): 0.9, (D, D): 0}
@@ -163,7 +177,9 @@ class TestSoftJoss(TestPlayer):
 
     name = "Soft Joss: 0.9"
     player = axelrod.SoftJoss
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
 
     def test_four_vector(self):
         expected_dictionary = {(C, C): 1, (C, D): 0.1, (D, C): 1., (D, D): 0.1}

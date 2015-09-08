@@ -8,8 +8,9 @@ class Retaliate(Player):
     A player starts by cooperating but will retaliate once the opponent
     has won more than 10 percent times the number of defections the player has.
     """
-
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     def __init__(self, retaliation_threshold=0.1):
         """

@@ -9,7 +9,10 @@ class TestGeller(TestPlayer):
 
     name = "Geller"
     player = axelrod.Geller
-    stochastic = True
+    behaviour = {
+        'stochastic': True
+    }
+
 
     def test_strategy(self):
         """Should cooperate against cooperaters and defect against defectors."""
@@ -26,7 +29,10 @@ class TestGellerCooperator(TestGeller):
 
     name = "Geller Cooperator"
     player = axelrod.GellerCooperator
-    stochastic = False
+    behaviour = {
+        'stochastic': False
+    }
+
 
     def test_against_self(self):
         P1 = self.player()
@@ -37,7 +43,10 @@ class TestGellerDefector(TestGeller):
 
     name = "Geller Defector"
     player = axelrod.GellerDefector
-    stochastic = False
+    behaviour = {
+        'stochastic': False
+    }
+
 
     def test_against_self(self):
         P1 = self.player()

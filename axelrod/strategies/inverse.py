@@ -7,7 +7,9 @@ class Inverse(Player):
     long ago the opponent defected."""
 
     name = 'Inverse'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf')  # Long memory
+    }
 
     @staticmethod
     def strategy(opponent):
