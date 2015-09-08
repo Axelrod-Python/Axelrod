@@ -29,6 +29,12 @@ class Player(object):
 
     name = "Player"
     behaviour = {}
+    default_behaviour = {
+        'stochastic': False,
+        'memory_depth': float('inf'),
+        'inspects_opponent_source': None,
+        'manipulates_opponent_state': None
+    }
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
@@ -37,12 +43,9 @@ class Player(object):
             "random" in inspect.getsource(self.__class__))
         if self.name == "Player":
             self.behaviour['stochastic'] = False
-        if 'memory_depth' not in self.behaviour:
-            self.behaviour['memory_depth'] = float('inf')
-        if 'inspects_opponent_source' not in self.behaviour:
-            self.behaviour['inspects_opponent_source'] = None
-        if 'manipulates_opponent_state' not in self.behaviour:
-            self.behaviour['manipulates_opponent_state'] = None
+        for dimension in self.default_behaviour:
+            if dimension not in self.behaviour:
+                self.behaviour[dimension] = self.default_behaviour[dimension]
         self.tournament_attributes = {'length': -1, 'game': None}
         self.cooperations = 0
         self.defections = 0
