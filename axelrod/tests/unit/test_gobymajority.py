@@ -9,7 +9,7 @@ C, D = 'C', 'D'
 
 class TestGoByMajority(TestPlayer):
 
-    name = "Go By Majority"
+    name = "Soft Go By Majority"
     player = axelrod.GoByMajority
     stochastic = False
 
@@ -24,11 +24,19 @@ class TestGoByMajority(TestPlayer):
         self.responses_test([C, D, D, D], [D, D, C, C], [C])
         self.responses_test([C, C, D, D, C], [D, D, C, C, D], [D])
 
+    def test_repr(self):
+        player = self.player(soft=True)
+        name = str(player)
+        self.assertEqual(name, "Soft Go By Majority")
+        player = self.player(soft=False)
+        name = str(player)
+        self.assertEqual(name, "Hard Go By Majority")
+
 def factory_TestGoByRecentMajority(L):
 
     class TestGoByRecentMajority(TestPlayer):
 
-        name = "Go By Majority:%i" % L
+        name = "Soft Go By Majority: %i" % L
         player = getattr(axelrod, 'GoByMajority%i' % L)
         stochastic = False
 

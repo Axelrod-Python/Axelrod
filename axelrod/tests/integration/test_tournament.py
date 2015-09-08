@@ -20,8 +20,8 @@ class TestTournament(unittest.TestCase):
         cls.expected_outcome = [
             ('Cooperator', [1800, 1800, 1800, 1800, 1800]),
             ('Defector', [1612, 1612, 1612, 1612, 1612]),
-            ('Go By Majority', [1999, 1999, 1999, 1999, 1999]),
             ('Grudger', [1999, 1999, 1999, 1999, 1999]),
+            ('Soft Go By Majority', [1999, 1999, 1999, 1999, 1999]),
             ('Tit For Tat', [1999, 1999, 1999, 1999, 1999])]
         cls.expected_outcome.sort()
 

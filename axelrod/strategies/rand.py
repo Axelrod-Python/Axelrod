@@ -19,3 +19,6 @@ class Random(Player):
         if r > self.p:
             return 'D'
         return 'C'
+
+    def __repr__(self):
+        return "%s: %s" % (self.name, round(self.p, 2))
