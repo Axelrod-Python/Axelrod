@@ -114,6 +114,33 @@ Here is the :code:`reset` method which takes care of resetting this in between r
         self.grudged = False
         self.grudge_memory = 0
 
+
+You can also modify the name of the strategy with the `__repr__` method, which is invoked
+when `str` is applied to a player instance. For example, the player `Random` takes a 
+parameter `p` for how often it cooperates, and the `__repr__` method adds the value
+of this parameter to the name::
+
+    def __repr__(self):
+        return "%s: %s" % (self.name, round(self.p, 2))
+
+Now we have separate names for different instantiations::
+
+    import axelrod
+    player1 = axelrod.Random(p=0.5)
+    player2 = axelrod.Random(p=0.1)
+    print(str(player1))
+    print(str(player2))
+
+This produces the following output::
+
+    'Random: 0.5'
+    'Random: 0.1'
+
+This helps distinguish players in tournaments that have multiple instances of the
+same strategy. If you modify the `__repr__` method of player, be sure to add an
+appropriate test.
+
+
 Adding the strategy to the library
 ''''''''''''''''''''''''''''''''''
 

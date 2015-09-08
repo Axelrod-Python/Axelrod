@@ -8,7 +8,7 @@ C, D = 'C', 'D'
 
 class TestRandom(TestPlayer):
 
-    name = "Random"
+    name = "Random: 0.5"
     player = axelrod.Random
     behaviour = {
         'stochastic': True

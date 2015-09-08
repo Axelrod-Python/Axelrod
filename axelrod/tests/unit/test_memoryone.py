@@ -23,7 +23,7 @@ class TestWinStayLoseShift(TestPlayer):
 
 class TestGTFT(TestPlayer):
 
-    name = "Generous Tit-For-Tat"
+    name = "GTFT: 0.33"
     player = axelrod.GTFT
     behaviour = {
         'stochastic': True
@@ -158,7 +158,7 @@ class TestGrofman(TestPlayer):
 
 class TestJoss(TestPlayer):
 
-    name = "Joss"
+    name = "Joss: 0.9"
     player = axelrod.Joss
     behaviour = {
         'stochastic': True
@@ -175,7 +175,7 @@ class TestJoss(TestPlayer):
 
 class TestSoftJoss(TestPlayer):
 
-    name = "Soft Joss"
+    name = "Soft Joss: 0.9"
     player = axelrod.SoftJoss
     behaviour = {
         'stochastic': True
