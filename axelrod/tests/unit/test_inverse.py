@@ -13,8 +13,11 @@ class TestInverse(TestPlayer):
 
     name = "Inverse"
     player = axelrod.Inverse
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):
