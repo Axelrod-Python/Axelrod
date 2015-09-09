@@ -94,22 +94,22 @@ class TestPlayer(unittest.TestCase):
 
     name = "Player"
     player = Player
-    behaviour = {
-        'stochastic': False
+    expected_behaviour ={
+        'stochastic': False,
+        'memory_depth': float('inf'),
+        'inspects_opponent_source': None,
+        'manipulates_opponent_state': None
     }
 
     def test_initialisation(self):
         """Test that the player initiates correctly."""
         player = self.player()
         self.assertEqual(player.history, [])
-        self.assertEqual(
-            player.behaviour['stochastic'],
-            self.behaviour['stochastic'])
-        self.assertTrue('memory_depth' in player.behaviour)
         self.assertEqual(player.tournament_attributes,
             {'length': -1, 'game': None})
         self.assertEqual(player.cooperations, 0)
         self.assertEqual(player.defections, 0)
+        self.behaviour_test()
 
     def test_repr(self):
         """Test that the representation is correct."""
@@ -164,6 +164,18 @@ class TestPlayer(unittest.TestCase):
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed)
+
+    def behaviour_test(self):
+        """Test that the keys in the expected_behaviour dictionary give the
+        expected values in the player behaviour dictionary. Also checks that
+        two particular keys (memory_depth and stochastic) are in the
+        dictionary."""
+        player = self.player()
+        self.assertTrue('memory_depth' in player.behaviour)
+        self.assertTrue('stochastic' in player.behaviour)
+        for key in self.expected_behaviour:
+            self.assertEqual(player.behaviour[key],
+                             self.expected_behaviour[key])
 
 
 class TestHeadsUp(unittest.TestCase):
