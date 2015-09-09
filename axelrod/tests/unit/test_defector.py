@@ -11,7 +11,12 @@ class TestDefector(TestPlayer):
 
     name = "Defector"
     player = axelrod.Defector
-    stoachastic = False
+    expected_behaviour = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""
