@@ -9,6 +9,11 @@ class GoByMajority(Player):
     default this is 0)
     """
 
+    behaviour = {
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
     # memory_depth is set by __init__
 
     def __init__(self, memory_depth=0, soft=True):

@@ -11,7 +11,13 @@ class TestGoByMajority(TestPlayer):
 
     name = "Soft Go By Majority"
     player = axelrod.GoByMajority
-    stochastic = False
+
+    expected_behaviour = {
+        'stochastic': False,
+        'memory_depth': 0,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_initial_strategy(self):
         """Starts by cooperating """
@@ -38,7 +44,13 @@ def factory_TestGoByRecentMajority(L):
 
         name = "Soft Go By Majority: %i" % L
         player = getattr(axelrod, 'GoByMajority%i' % L)
-        stochastic = False
+
+        expected_behaviour = {
+            'stochastic': False,
+            'memory_depth': L,
+            'inspects_opponent_source': False,
+            'manipulates_opponent_state': False
+        }
 
         def test_initial_strategy(self):
             """Starts by cooperating."""
