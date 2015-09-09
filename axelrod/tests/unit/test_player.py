@@ -68,7 +68,7 @@ class TestPlayerClass(unittest.TestCase):
 def test_responses(test_class, P1, P2, history_1, history_2,
                    responses, random_seed=None):
     """
-    Test responses to arbitrary histories. Used for the the following tests
+    Test responses to arbitrary histories. Used for the following tests
     in TestPlayer: first_play_test, markov_test, and responses_test.
     Works for arbitrary players as well. Input response_lists is a list of
     lists, each of which consists of a list for the history of player 1, a
