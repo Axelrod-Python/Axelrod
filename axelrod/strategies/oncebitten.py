@@ -9,7 +9,10 @@ class OnceBitten(Player):
 
     name = 'Once Bitten'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self):
@@ -57,7 +60,10 @@ class FoolMeOnce(Player):
 
     name = 'Fool Me Once'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self):
@@ -80,7 +86,10 @@ class ForgetfulFoolMeOnce(Player):
 
     name = 'Forgetful Fool Me Once'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, forget_probability = 0.05):
@@ -114,7 +123,10 @@ class FoolMeForever(Player):
 
     name = 'Fool Me Forever'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self):
