@@ -9,7 +9,9 @@ class Retaliate(Player):
     has won more than 10 percent times the number of defections the player has.
     """
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, retaliation_threshold=0.1):
@@ -71,7 +73,11 @@ class LimitedRetaliate(Player):
     retaliation limit (20 defections).
     """
 
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def __init__(self, retaliation_threshold = 0.1, retaliation_limit = 20,):
         """

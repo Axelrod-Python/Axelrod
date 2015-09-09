@@ -9,12 +9,16 @@ from .test_player import TestPlayer, test_responses
 
 C, D = 'C', 'D'
 
+
 class TestRiskyQLearner(TestPlayer):
 
     name = 'Risky QLearner'
     player = axelrod.RiskyQLearner
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_payoff_matrix(self):
@@ -82,8 +86,11 @@ class TestArrogantQLearner(TestPlayer):
 
     name = 'Arrogant QLearner'
     player = axelrod.ArrogantQLearner
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_qs_update(self):
@@ -149,8 +156,11 @@ class TestHesitantQLearner(TestPlayer):
 
     name = 'Hesitant QLearner'
     player = axelrod.HesitantQLearner
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_qs_update(self):
@@ -216,8 +226,11 @@ class TestCautiousQLearner(TestPlayer):
 
     name = 'Cautious QLearner'
     player = axelrod.CautiousQLearner
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_qs_update(self):

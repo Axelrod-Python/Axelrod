@@ -13,7 +13,10 @@ class RiskyQLearner(Player):
 
     name = 'Risky QLearner'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
     learning_rate = 0.9
     discount_rate = 0.9
