@@ -8,7 +8,9 @@ class TitForTat(Player):
 
     name = 'Tit For Tat'
     behaviour = {
-        'memory_depth': 1  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
@@ -21,7 +23,9 @@ class TitFor2Tats(Player):
 
     name = "Tit For 2 Tats"
     behaviour = {
-        'memory_depth': 2  # Long memory, memory-2
+        'memory_depth': 2,  # Long memory, memory-2
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
@@ -34,7 +38,9 @@ class TwoTitsForTat(Player):
 
     name = "Two Tits For Tat"
     behaviour = {
-        'memory_depth': 2  # Long memory, memory-2
+        'memory_depth': 2,  # Long memory, memory-2
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
@@ -51,7 +57,9 @@ class Bully(Player):
 
     name = "Bully"
     behaviour = {
-        'memory_depth': 1  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
@@ -64,7 +72,9 @@ class SneakyTitForTat(Player):
 
     name = "Sneaky Tit For Tat"
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -82,7 +92,9 @@ class SuspiciousTitForTat(Player):
 
     name = "Suspicious Tit For Tat"
     behaviour = {
-        'memory_depth': 1  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
@@ -96,7 +108,9 @@ class AntiTitForTat(Player):
 
     name = 'Anti Tit For Tat'
     behaviour = {
-        'memory_depth': 1  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
@@ -109,7 +123,9 @@ class HardTitForTat(Player):
 
     name = 'Hard Tit For Tat'
     behaviour = {
-        'memory_depth': 3  # memory-three
+        'memory_depth': 3,  # memory-three
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
@@ -130,7 +146,9 @@ class HardTitFor2Tats(Player):
 
     name = "Hard Tit For 2 Tats"
     behaviour = {
-        'memory_depth': 3  # memory-three
+        'memory_depth': 3,  # memory-three
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
