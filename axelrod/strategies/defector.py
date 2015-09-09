@@ -6,7 +6,10 @@ class Defector(Player):
 
     name = 'Defector'
     behaviour = {
-        'memory_depth': 0  # Memory-one Four-Vector = (0,0,0,0)
+        'memory_depth': 0,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
