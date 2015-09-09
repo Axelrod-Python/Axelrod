@@ -11,6 +11,12 @@ class TestWinStayLoseShift(TestPlayer):
 
     name = "Win-Stay Lose-Shift"
     player = axelrod.WinStayLoseShift
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating"""
@@ -25,8 +31,11 @@ class TestGTFT(TestPlayer):
 
     name = "GTFT: 0.33"
     player = axelrod.GTFT
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):
@@ -44,8 +53,11 @@ class TestStochasticCooperator(TestPlayer):
 
     name = "Stochastic Cooperator"
     player = axelrod.StochasticCooperator
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_four_vector(self):
@@ -70,8 +82,11 @@ class TestStochasticWSLS(TestPlayer):
 
     name = "Stochastic WSLS"
     player = axelrod.StochasticWSLS
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):
@@ -98,8 +113,11 @@ class TestZDExtort2(TestPlayer):
 
     name = "ZD-Extort-2"
     player = axelrod.ZDExtort2
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_four_vector(self):
@@ -120,8 +138,11 @@ class TestZDGTFT2(TestPlayer):
 
     name = "ZD-GTFT-2"
     player = axelrod.ZDGTFT2
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_four_vector(self):
@@ -142,8 +163,11 @@ class TestGrofman(TestPlayer):
 
     name = "Grofman"
     player = axelrod.Grofman
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_four_vector(self):
@@ -160,8 +184,11 @@ class TestJoss(TestPlayer):
 
     name = "Joss: 0.9"
     player = axelrod.Joss
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_four_vector(self):
@@ -177,8 +204,11 @@ class TestSoftJoss(TestPlayer):
 
     name = "Soft Joss: 0.9"
     player = axelrod.SoftJoss
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_four_vector(self):

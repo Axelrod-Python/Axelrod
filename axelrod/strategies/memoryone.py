@@ -10,7 +10,10 @@ class WinStayLoseShift(Player):
 
     name = 'Win-Stay Lose-Shift'
     behaviour = {
-        'memory_depth': 1  # Four-Vector = (1,0,0,1)
+        'memory_depth': 1,  # Memory-one Four-Vector = (p, p, p, p)
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, initial='C'):
@@ -42,18 +45,20 @@ class MemoryOnePlayer(Player):
 
     name = 'Generic Memory One Player'
     behaviour = {
-        'memory_depth': 1
+        'memory_depth': 1,  # Memory-one Four-Vector = (p, p, p, p)
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, four_vector, initial='C'):
         Player.__init__(self)
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self._initial = initial
-        self.stochastic = False
         for x in set(four_vector):
             if x != 0 and x != 1:
                 self.behaviour['stochastic'] = True
-                
+
     def strategy(self, opponent):
         if not len(opponent.history):
             return self._initial
@@ -110,6 +115,7 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
     These players enforce a linear difference in stationary payoffs
     s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and
     generous strategies when l = R and s > 0"""
+
     name = 'ZD ABC'
 
     def __init__(self, phi=0., s=None, l=None):
