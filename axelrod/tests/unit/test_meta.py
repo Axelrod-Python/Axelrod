@@ -11,8 +11,11 @@ class TestMetaMajority(TestPlayer):
 
     name = "Meta Majority"
     player = axelrod.MetaMajority
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):
@@ -33,8 +36,11 @@ class TestMetaMinority(TestPlayer):
 
     name = "Meta Minority"
     player = axelrod.MetaMinority
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):
@@ -55,8 +61,11 @@ class TestMetaWinner(TestPlayer):
 
     name = "Meta Winner"
     player = axelrod.MetaWinner
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):

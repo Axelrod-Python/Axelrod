@@ -13,8 +13,11 @@ class TestOnceBitten(TestPlayer):
 
     name = "Once Bitten"
     player = axelrod.OnceBitten
-    behaviour = {
-        'stochastic': False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_initial_strategy(self):
@@ -73,12 +76,16 @@ class TestOnceBitten(TestPlayer):
         self.assertFalse(P1.grudged)
         self.assertEqual(P1.history, [])
 
+
 class TestFoolMeOnce(TestPlayer):
 
     name = "Fool Me Once"
     player = axelrod.FoolMeOnce
-    behaviour = {
-        'stochastic': False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_initial(self):
@@ -95,12 +102,16 @@ class TestFoolMeOnce(TestPlayer):
         self.responses_test([C, C], [D, C], [C])
         self.responses_test([C, C, C], [D, D, D], [D])
 
+
 class TestForgetfulFoolMeOnce(TestPlayer):
 
     name = 'Forgetful Fool Me Once'
     player = axelrod.ForgetfulFoolMeOnce
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_initial(self):
@@ -136,8 +147,11 @@ class TestFoolMeForever(TestPlayer):
 
     name = "Fool Me Forever"
     player = axelrod.FoolMeForever
-    behaviour = {
-        'stochastic': False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):
