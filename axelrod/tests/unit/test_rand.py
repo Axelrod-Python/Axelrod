@@ -10,8 +10,11 @@ class TestRandom(TestPlayer):
 
     name = "Random: 0.5"
     player = axelrod.Random
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': 0,
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):

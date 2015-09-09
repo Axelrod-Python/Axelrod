@@ -7,7 +7,10 @@ class Random(Player):
 
     name = 'Random'
     behaviour = {
-        'memory_depth': 0  # Memory-one Four-Vector = (p, p, p, p)
+        'memory_depth': 0,  # Memory-one Four-Vector = (p, p, p, p)
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, p=0.5):
