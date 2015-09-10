@@ -33,6 +33,7 @@ class Player(object):
         'stochastic': False,
         'memory_depth': float('inf'),
         'inspects_opponent_source': None,
+        'manipulates_opponent_source': None,
         'manipulates_opponent_state': None
     }
 
