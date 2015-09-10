@@ -10,6 +10,7 @@ class TitForTat(Player):
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -25,6 +26,7 @@ class TitFor2Tats(Player):
     behaviour = {
         'memory_depth': 2,  # Long memory, memory-2
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -40,6 +42,7 @@ class TwoTitsForTat(Player):
     behaviour = {
         'memory_depth': 2,  # Long memory, memory-2
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -59,6 +62,7 @@ class Bully(Player):
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -74,6 +78,7 @@ class SneakyTitForTat(Player):
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -94,6 +99,7 @@ class SuspiciousTitForTat(Player):
     behaviour = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -110,6 +116,7 @@ class AntiTitForTat(Player):
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -125,6 +132,7 @@ class HardTitForTat(Player):
     behaviour = {
         'memory_depth': 3,  # memory-three
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -148,6 +156,7 @@ class HardTitFor2Tats(Player):
     behaviour = {
         'memory_depth': 3,  # memory-three
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

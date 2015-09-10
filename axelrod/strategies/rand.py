@@ -10,6 +10,7 @@ class Random(Player):
         'memory_depth': 0,  # Memory-one Four-Vector = (p, p, p, p)
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

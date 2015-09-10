@@ -14,6 +14,7 @@ class TestRandom(TestPlayer):
         'memory_depth': 0,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

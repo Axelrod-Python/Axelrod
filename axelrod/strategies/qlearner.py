@@ -16,6 +16,7 @@ class RiskyQLearner(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
     learning_rate = 0.9

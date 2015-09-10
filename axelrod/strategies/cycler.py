@@ -13,6 +13,7 @@ class AntiCycler(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -44,6 +45,7 @@ class Cycler(Player):
         'memory_depth': 1,
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

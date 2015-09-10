@@ -18,6 +18,7 @@ class TestRiskyQLearner(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

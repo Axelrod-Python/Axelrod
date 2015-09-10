@@ -9,7 +9,10 @@ class BackStabber(Player):
 
     name = 'BackStabber'
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -32,7 +35,10 @@ class DoubleCrosser(Player):
 
     name = 'DoubleCrosser'
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):

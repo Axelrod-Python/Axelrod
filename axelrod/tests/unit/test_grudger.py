@@ -13,7 +13,13 @@ class TestGrudger(TestPlayer):
 
     name = "Grudger"
     player = axelrod.Grudger
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_initial_strategy(self):
         """
@@ -33,7 +39,13 @@ class TestForgetfulGrudger(TestPlayer):
 
     name = "Forgetful Grudger"
     player = axelrod.ForgetfulGrudger
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
 
@@ -100,7 +112,13 @@ class TestOppositeGrudger(TestPlayer):
 
     name = 'Opposite Grudger'
     player = axelrod.OppositeGrudger
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_initial_strategy(self):
         """
@@ -121,7 +139,13 @@ class TestAggravater(TestPlayer):
 
     name = "Aggravater"
     player = axelrod.Aggravater
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_initial_strategy(self):
         """
