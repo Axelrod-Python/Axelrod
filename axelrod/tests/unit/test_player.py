@@ -171,11 +171,15 @@ class TestPlayer(unittest.TestCase):
         two particular keys (memory_depth and stochastic) are in the
         dictionary."""
         player = self.player()
-        self.assertTrue('memory_depth' in player.behaviour)
-        self.assertTrue('stochastic' in player.behaviour)
+        self.assertTrue('memory_depth' in player.behaviour,
+                        msg="memory_depth not in behaviour")
+        self.assertTrue('stochastic' in player.behaviour,
+                        msg="stochastic not in behaviour")
         for key in self.expected_behaviour:
             self.assertEqual(player.behaviour[key],
-                             self.expected_behaviour[key])
+                             self.expected_behaviour[key],
+                             msg="%s - Behaviour: %s != Expected Behaviour: %s" %
+                             (key, player.behaviour[key], self.expected_behaviour[key]))
 
 
 class TestHeadsUp(unittest.TestCase):
