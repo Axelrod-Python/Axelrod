@@ -9,8 +9,11 @@ class TestGeller(TestPlayer):
 
     name = "Geller"
     player = axelrod.Geller
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': -1,
+        'stochastic': True,
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
     }
 
 
@@ -29,8 +32,11 @@ class TestGellerCooperator(TestGeller):
 
     name = "Geller Cooperator"
     player = axelrod.GellerCooperator
-    behaviour = {
-        'stochastic': False
+    expected_behaviour = {
+        'memory_depth': -1,
+        'stochastic': False,
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
     }
 
 
@@ -43,8 +49,11 @@ class TestGellerDefector(TestGeller):
 
     name = "Geller Defector"
     player = axelrod.GellerDefector
-    behaviour = {
-        'stochastic': False
+    expected_behaviour = {
+        'memory_depth': -1,
+        'stochastic': False,
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
     }
 
 

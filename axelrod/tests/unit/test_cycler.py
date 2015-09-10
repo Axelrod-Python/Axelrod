@@ -11,7 +11,12 @@ class TestAntiCycler(TestPlayer):
 
     name = "AntiCycler"
     player = axelrod.AntiCycler
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating"""
@@ -25,7 +30,12 @@ def test_cycler_factory(cycle):
 
         name = "Cycler %s" % cycle
         player = getattr(axelrod, 'Cycler%s' % cycle)
-        stochastic = False
+        expected_behaviour = {
+            'memory_depth': 1,
+            'stochastic': False,
+            'inspects_opponent_source': False,
+            'manipulates_opponent_state': False
+        }
 
         def test_strategy(self):
             """Starts by cooperating"""
@@ -38,5 +48,3 @@ def test_cycler_factory(cycle):
 TestCyclerCCD = test_cycler_factory("CCD")
 TestCyclerCCCD = test_cycler_factory("CCCD")
 TestCyclerCCCCCD = test_cycler_factory("CCCCCD")
-
-

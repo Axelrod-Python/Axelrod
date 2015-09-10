@@ -10,7 +10,10 @@ class AntiCycler(Player):
 
     name = 'AntiCycler'
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self):
@@ -38,7 +41,10 @@ class Cycler(Player):
 
     name = 'Cycler'
     behaviour = {
-        'memory_depth': 1
+        'memory_depth': 1,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, cycle="CCD"):
