@@ -4,7 +4,7 @@ import inspect
 from axelrod import Player, RoundRobin, Game, update_histories
 
 
-def simulate_match(player_1, player_2, strategy, rounds = 10):
+def simulate_match(player_1, player_2, strategy, rounds=10):
     """Simulates a number of matches."""
     for match in range(rounds):
         play_1, play_2 = strategy, player_2.strategy(player_1)
@@ -47,7 +47,7 @@ class MindReader(Player):
 
     name = 'Mind Reader'
     behaviour = {
-        'memory_depth': float('inf'),
+        'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,  # Finds out what opponent will do
         'manipulates_opponent_state': False
@@ -84,10 +84,10 @@ class ProtectedMindReader(MindReader):
 
     name = 'Protected Mind Reader'
     behaviour = {
-        'memory_depth': float('inf'),
+        'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_state': True  # Stop's opponents strategy
+        'manipulates_opponent_state': True  # Stops opponents strategy
     }
 
     def __setattr__(self, name, val):

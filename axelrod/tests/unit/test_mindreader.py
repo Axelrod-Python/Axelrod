@@ -13,7 +13,7 @@ class TestMindReader(TestPlayer):
     name = "Mind Reader"
     player = axelrod.MindReader
     expected_behaviour = {
-        'memory_depth': float('inf'),
+        'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,
         'manipulates_opponent_state': False
@@ -97,7 +97,7 @@ class TestProtectedMindReader(TestPlayer):
     name = "Protected Mind Reader"
     player = axelrod.ProtectedMindReader
     expected_behaviour = {
-        'memory_depth': float('inf'),
+        'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,
         'manipulates_opponent_state': True
