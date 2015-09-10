@@ -34,7 +34,10 @@ class Geller(Player):
     name = 'Geller'
     default = lambda self: 'C' if random.random() > 0.5 else 'D'
     behaviour = {
-        'memory_depth': -1
+        'memory_depth': -1,
+        'stochastic': True,
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -57,6 +60,12 @@ class GellerCooperator(Geller):
     """
     name = 'Geller Cooperator'
     default = lambda self: 'C'
+    behaviour = {
+        'memory_depth': -1,
+        'stochastic': False,
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
+    }
 
 class GellerDefector(Geller):
     """Observes what the payer will do (like :code:`Geller`) but if unable to
@@ -64,3 +73,9 @@ class GellerDefector(Geller):
     """
     name = 'Geller Defector'
     default = lambda self: 'D'
+    behaviour = {
+        'memory_depth': -1,
+        'stochastic': False,
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
+    }
