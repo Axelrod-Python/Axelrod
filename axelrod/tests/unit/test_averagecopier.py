@@ -13,8 +13,11 @@ class TestAverageCopier(TestPlayer):
 
     name = "Average Copier"
     player = axelrod.AverageCopier
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):
@@ -35,12 +38,16 @@ class TestAverageCopier(TestPlayer):
         """
         self.responses_test([C, C, C, C], [D, D, D, D], [D, D, D], random_seed=5)
 
+
 class TestNiceAverageCopier(TestPlayer):
 
     name = "Nice Average Copier"
     player = axelrod.NiceAverageCopier
-    behaviour = {
-        'stochastic': True
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):

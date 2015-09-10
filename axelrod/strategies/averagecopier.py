@@ -9,7 +9,10 @@ class AverageCopier(Player):
 
     name = 'Average Copier'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod
@@ -23,11 +26,17 @@ class AverageCopier(Player):
             return 'C'
         return 'D'
 
+
 class NiceAverageCopier(Player):
     """Same as Average Copier, but always starts by cooperating."""
 
     name = 'Nice Average Copier'
-    memory_depth = float('inf')  # Long memory
+    behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     @staticmethod
     def strategy(opponent):

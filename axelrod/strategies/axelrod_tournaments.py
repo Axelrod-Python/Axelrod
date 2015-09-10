@@ -17,7 +17,10 @@ class Davis(Player):
 
     name = 'Davis'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, rounds_to_cooperate=10):
@@ -42,7 +45,10 @@ class Feld(Player):
 
     name = "Feld"
     behaviour = {
-        'memory_depth': 200 # Varies actually, eventually becomes depth 1
+        'memory_depth': 200, # Varies actually, eventually becomes depth 1
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
@@ -83,7 +89,10 @@ class Shubik(Player):
 
     name = 'Shubik'
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self):
@@ -136,7 +145,10 @@ class Tullock(Player):
 
     name = "Tullock"
     behaviour = {
-        'memory_depth': 11 # long memory, modified by init
+        'memory_depth': 11, # long memory, modified by init
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self, rounds_to_cooperate=11):
@@ -166,7 +178,10 @@ class Champion(Player):
 
     name = "Champion"
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -196,7 +211,10 @@ class Eatherley(Player):
 
     name = "Eatherley"
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -225,7 +243,10 @@ class Tester(Player):
 
     name = "Tester"
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self):
