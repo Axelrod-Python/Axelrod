@@ -13,6 +13,7 @@ class TestTitForTat(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -34,6 +35,7 @@ class TestTitFor2Tats(TestPlayer):
     expected_behaviour = {
         'memory_depth': 2,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -54,6 +56,7 @@ class TestTwoTitsForTat(TestPlayer):
     expected_behaviour = {
         'memory_depth': 2,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -76,6 +79,7 @@ class TestBully(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -95,6 +99,7 @@ class TestSneakyTitForTat(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -115,6 +120,7 @@ class TestSuspiciousTitForTat(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -134,6 +140,7 @@ class TestAntiTitForTat(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -153,6 +160,7 @@ class TestHardTitForTat(TestPlayer):
     expected_behaviour = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -176,6 +184,7 @@ class TestHardTitFor2Tats(TestPlayer):
     expected_behaviour = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

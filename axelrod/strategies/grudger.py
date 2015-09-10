@@ -6,7 +6,11 @@ class Grudger(Player):
 
     name = 'Grudger'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -18,11 +22,15 @@ class Grudger(Player):
 
 class ForgetfulGrudger(Player):
     """A player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after meme_length matches."""
+    opponent has defected, but forgets after mem_length matches."""
 
     name = 'Forgetful Grudger'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self):
@@ -58,7 +66,11 @@ class OppositeGrudger(Player):
 
     name = 'Opposite Grudger'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -73,7 +85,11 @@ class Aggravater(Player):
 
     name = 'Aggravater'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     @staticmethod

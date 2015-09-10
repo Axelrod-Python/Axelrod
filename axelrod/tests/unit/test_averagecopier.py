@@ -17,6 +17,7 @@ class TestAverageCopier(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -47,6 +48,7 @@ class TestNiceAverageCopier(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

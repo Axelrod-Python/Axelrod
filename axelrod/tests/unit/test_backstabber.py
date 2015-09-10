@@ -8,7 +8,13 @@ class TestBackStabber(TestPlayer):
 
     name = "BackStabber"
     player = axelrod.BackStabber
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         """
@@ -34,7 +40,13 @@ class TestDoubleCrosser(TestPlayer):
 
     name = "DoubleCrosser"
     player = axelrod.DoubleCrosser
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         """

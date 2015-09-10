@@ -9,7 +9,11 @@ class DefectorHunter(Player):
 
     name = 'Defector Hunter'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -23,7 +27,11 @@ class CooperatorHunter(Player):
 
     name = 'Cooperator Hunter'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -37,7 +45,11 @@ class AlternatorHunter(Player):
 
     name = 'Alternator Hunter'
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def strategy(self, opponent):
@@ -48,11 +60,14 @@ class AlternatorHunter(Player):
 
 
 class MathConstantHunter(Player):
-    """A player who hunts for mathemtical constant players."""
+    """A player who hunts for mathematical constant players."""
 
     name = "Math Constant Hunter"
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     # We need to make sure this is not marked as stochastic.
@@ -91,7 +106,10 @@ class RandomHunter(Player):
 
     name = "Random Hunter"
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     # We need to make sure this is not marked as stochastic.
@@ -127,7 +145,10 @@ class MetaHunter(MetaPlayer):
 
     name = "Meta Hunter"
     behaviour = {
-        'memory_depth': float('inf')  # Long memory
+        'memory_depth': float('inf'),  # Long memory
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
 
     def __init__(self):

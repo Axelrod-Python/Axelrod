@@ -12,6 +12,7 @@ class AverageCopier(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -35,6 +36,7 @@ class NiceAverageCopier(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

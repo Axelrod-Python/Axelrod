@@ -13,7 +13,13 @@ class TestDefectorHunter(TestPlayer):
 
     name = "Defector Hunter"
     player = axelrod.DefectorHunter
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -25,7 +31,13 @@ class TestCooperatorHunter(TestPlayer):
 
     name = "Cooperator Hunter"
     player = axelrod.CooperatorHunter
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -37,7 +49,13 @@ class TestAlternatorHunter(TestPlayer):
 
     name = "Alternator Hunter"
     player = axelrod.AlternatorHunter
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -52,7 +70,13 @@ class TestMathConstantHunter(TestPlayer):
 
     name = "Math Constant Hunter"
     player = axelrod.MathConstantHunter
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         self.responses_test([C] * 8, [C] * 7 + [D], [D])
@@ -61,7 +85,13 @@ class TestRandomHunter(TestPlayer):
 
     name = "Random Hunter"
     player = axelrod.RandomHunter
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
 
@@ -80,7 +110,13 @@ class TestMetaHunter(TestPlayer):
 
     name = "Meta Hunter"
     player = axelrod.MetaHunter
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         self.first_play_test(C)

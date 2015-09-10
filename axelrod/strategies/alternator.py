@@ -9,6 +9,7 @@ class Alternator(Player):
         'memory_depth': 1,
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
