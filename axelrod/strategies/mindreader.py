@@ -46,18 +46,24 @@ class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
 
     name = 'Mind Reader'
+    behaviour = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
+    }
 
     def __init__(self):
         Player.__init__(self)
-        self.behaviour['stochastic'] = True # Don't cache me
 
     def strategy(self, opponent):
         """Pretends to play the opponent a number of times before each match.
         The primary purpose is to look far enough ahead to see if a defect will
         be punished by the opponent.
-        If the MindReader attempts to play itself (or another similar strategy),
-        then it will cause a recursion loop, so this is also handeled in this
-        method, by defecting if the method is called by strategy
+
+        If the MindReader attempts to play itself (or another similar
+        strategy), then it will cause a recursion loop, so this is also handled
+        in this method, by defecting if the method is called by strategy
         """
 
         curframe = inspect.currentframe()
@@ -77,6 +83,12 @@ class ProtectedMindReader(MindReader):
     It is also protected from mind control strategies"""
 
     name = 'Protected Mind Reader'
+    behaviour = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': True  # Stop's opponents strategy
+    }
 
     def __setattr__(self, name, val):
         """Stops any other strategy altering the methods of this class """
