@@ -17,6 +17,7 @@ class TestDavis(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -51,6 +52,7 @@ class TestFeld(TestPlayer):
         'memory_depth': 200,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -91,6 +93,7 @@ class TestShubik(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -128,6 +131,7 @@ class TestTullock(TestPlayer):
         'memory_depth': 11,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -162,6 +166,7 @@ class TestChampion(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -207,6 +212,7 @@ class TestEatherly(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -232,6 +238,7 @@ class TestTester(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

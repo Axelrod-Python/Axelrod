@@ -24,8 +24,13 @@ class Darwin(Player):
 
     name = "Darwin"
     behaviour = {
-        'memory_depth': float('inf')
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
     }
+
     genome = ['C']
     valid_callers = ["play"]    # What functions may invoke our strategy.
     outcomes = { ('C','C') : R,

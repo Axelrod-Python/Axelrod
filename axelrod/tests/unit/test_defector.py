@@ -26,11 +26,18 @@ class TestDefector(TestPlayer):
         """Test that always defects."""
         self.markov_test([D, D, D, D])
 
+
 class TestTrickyDefector(TestPlayer):
 
     name = "Tricky Defector"
     player = axelrod.TrickyDefector
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""

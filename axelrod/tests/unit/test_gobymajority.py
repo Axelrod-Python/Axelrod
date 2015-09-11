@@ -16,6 +16,7 @@ class TestGoByMajority(TestPlayer):
         'stochastic': False,
         'memory_depth': 0,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -49,6 +50,7 @@ def factory_TestGoByRecentMajority(L):
             'stochastic': False,
             'memory_depth': L,
             'inspects_opponent_source': False,
+            'manipulates_opponent_source': False,
             'manipulates_opponent_state': False
         }
 

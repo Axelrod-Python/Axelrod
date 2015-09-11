@@ -13,7 +13,13 @@ class TestProber(TestPlayer):
 
     name = "Prober"
     player = axelrod.Prober
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_initial_strategy(self):
         """Starts by playing DCC."""
@@ -35,7 +41,13 @@ class TestProber2(TestPlayer):
 
     name = "Prober 2"
     player = axelrod.Prober2
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_initial_strategy(self):
         """Starts by playing DCC."""
@@ -57,7 +69,13 @@ class TestProber3(TestPlayer):
 
     name = "Prober 3"
     player = axelrod.Prober3
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_initial_strategy(self):
         """Starts by playing DC."""
@@ -80,7 +98,13 @@ class TestHardProber(TestPlayer):
 
     name = "Hard Prober"
     player = axelrod.HardProber
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_initial_strategy(self):
         """Starts by playing DC."""

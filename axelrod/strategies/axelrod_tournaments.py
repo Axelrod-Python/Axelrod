@@ -20,6 +20,7 @@ class Davis(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -48,6 +49,7 @@ class Feld(Player):
         'memory_depth': 200, # Varies actually, eventually becomes depth 1
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -92,6 +94,7 @@ class Shubik(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -148,6 +151,7 @@ class Tullock(Player):
         'memory_depth': 11, # long memory, modified by init
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -181,6 +185,7 @@ class Champion(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -214,6 +219,7 @@ class Eatherley(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -246,6 +252,7 @@ class Tester(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

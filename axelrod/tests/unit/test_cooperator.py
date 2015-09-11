@@ -36,6 +36,7 @@ class TestTrickyCooperator(TestPlayer):
         'memory_depth': 10,
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
