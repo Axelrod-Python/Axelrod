@@ -50,6 +50,7 @@ class MindReader(Player):
         'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_source': True,
         'manipulates_opponent_state': False
     }
 
@@ -87,7 +88,8 @@ class ProtectedMindReader(MindReader):
         'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_state': True  # Stops opponents strategy
+        'manipulates_opponent_source': True,  # Stops opponent's strategy
+        'manipulates_opponent_state': False
     }
 
     def __setattr__(self, name, val):

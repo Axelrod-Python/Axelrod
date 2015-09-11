@@ -11,7 +11,13 @@ class TestMindController(TestPlayer):
 
     name = 'Mind Controller'
     player = axelrod.MindController
-    stochastic = False
+    expected_behaviour = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         """ Will always make opponent cooperate """
@@ -55,8 +61,22 @@ class TestMindWarper(TestMindController):
 
     name = "Mind Warper"
     player = axelrod.MindWarper
+    expected_behaviour = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
+    }
 
 class TestMindBender(TestMindController):
 
     name = "Mind Bender"
     player = axelrod.MindBender
+    expected_behaviour = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
+    }

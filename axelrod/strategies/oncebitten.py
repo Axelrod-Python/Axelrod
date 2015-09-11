@@ -12,6 +12,7 @@ class OnceBitten(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -63,6 +64,7 @@ class FoolMeOnce(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -89,6 +91,7 @@ class ForgetfulFoolMeOnce(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -126,6 +129,7 @@ class FoolMeForever(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

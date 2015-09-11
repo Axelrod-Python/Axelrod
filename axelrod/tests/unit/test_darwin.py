@@ -9,6 +9,13 @@ class TestDarwin(TestPlayer):
 
     name = "Darwin"
     player = axelrod.Darwin
+    expected_behaviour = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': False
+    }
 
     def test_strategy(self):
         p1 = self.player()

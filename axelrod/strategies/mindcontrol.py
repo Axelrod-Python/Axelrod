@@ -5,6 +5,13 @@ class MindController(Player):
     """A player that changes the opponents strategy to cooperate."""
 
     name = 'Mind Controller'
+    behaviour = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False
+    }
 
     @staticmethod
     def strategy(opponent):
@@ -26,6 +33,13 @@ class MindWarper(Player):
     """
 
     name = 'Mind Warper'
+    behaviour = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': True,  # changes what opponent will do
+        'manipulates_opponent_state': False
+    }
 
     def __setattr__(self, name, val):
         if name == 'strategy':
@@ -46,6 +60,13 @@ class MindBender(MindWarper):
     """
 
     name = 'Mind Bender'
+    behaviour = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_opponent_source': False,
+        'manipulates_opponent_source': True,  # changes what opponent will do
+        'manipulates_opponent_state': False
+    }
 
     @staticmethod
     def strategy(opponent):

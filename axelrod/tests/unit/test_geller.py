@@ -13,6 +13,7 @@ class TestGeller(TestPlayer):
         'memory_depth': -1,
         'stochastic': True,
         'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_state': False,
         'manipulates_opponent_state': False
     }
 
@@ -36,6 +37,7 @@ class TestGellerCooperator(TestGeller):
         'memory_depth': -1,
         'stochastic': False,
         'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -53,6 +55,7 @@ class TestGellerDefector(TestGeller):
         'memory_depth': -1,
         'stochastic': False,
         'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

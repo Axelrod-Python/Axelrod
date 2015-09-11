@@ -15,6 +15,7 @@ class TestWinStayLoseShift(TestPlayer):
         'memory_depth': 1,
         'stochastic': False,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -35,6 +36,7 @@ class TestGTFT(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -57,6 +59,7 @@ class TestStochasticCooperator(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -86,6 +89,7 @@ class TestStochasticWSLS(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -117,6 +121,7 @@ class TestZDExtort2(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -142,6 +147,7 @@ class TestZDGTFT2(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -167,6 +173,7 @@ class TestGrofman(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -188,6 +195,7 @@ class TestJoss(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 
@@ -208,6 +216,7 @@ class TestSoftJoss(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'inspects_opponent_source': False,
+        'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
     }
 

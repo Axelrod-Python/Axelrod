@@ -16,6 +16,7 @@ class TestMindReader(TestPlayer):
         'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,
+        'manipulates_opponent_state': True,
         'manipulates_opponent_state': False
     }
 
@@ -99,8 +100,9 @@ class TestProtectedMindReader(TestPlayer):
     expected_behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': True,
-        'manipulates_opponent_state': True
+        'inspects_opponent_source': True,  # Finds out what opponent will do
+        'manipulates_opponent_source': True,  # Stops opponent's strategy
+        'manipulates_opponent_state': False
     }
 
     def test_strategy(self):
