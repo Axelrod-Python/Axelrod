@@ -27,6 +27,32 @@ class TestClassification(unittest.TestCase):
     def test_multiple_instances(self):
         """Certain instances of classes of strategies will have different
         behaviours based on the initialisation variables"""
+        P1 = axelrod.MemoryOnePlayer((.5, .5, .5, .5))
+        P2 = axelrod.MemoryOnePlayer((1, 0, 0, 1))
+        self.assertNotEqual(P1.behaviour, P2.behaviour)
+
         P1 = axelrod.Joss()
         P2 = axelrod.Joss(0)
         self.assertNotEqual(P1.behaviour, P2.behaviour)
+
+        P1 = axelrod.GTFT(1)
+        P2 = axelrod.GTFT(.5)
+        self.assertNotEqual(P1.behaviour, P2.behaviour)
+
+        P1 = axelrod.StochasticWSLS()
+        P2 = axelrod.StochasticWSLS(0)
+        self.assertNotEqual(P1.behaviour, P2.behaviour)
+
+        P1 = axelrod.GoByMajority(5)
+        P2 = axelrod.StochasticWSLS(10)
+        self.assertNotEqual(P1.behaviour, P2.behaviour)
+
+    def test_manipulation_of_behaviour(self):
+        """Test that can change the behaviour of an instance without changing
+        the behaviour of the class"""
+        player = axelrod.Cooperator()
+        player.behaviour['memory_depth'] += 1
+        self.assertNotEqual(player.behaviour, axelrod.Cooperator.behaviour)
+        player = axelrod.Defector()
+        player.behaviour['memory_depth'] += 1
+        self.assertNotEqual(player.behaviour, axelrod.Defector.behaviour)
