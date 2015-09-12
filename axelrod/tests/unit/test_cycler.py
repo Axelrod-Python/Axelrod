@@ -14,9 +14,9 @@ class TestAntiCycler(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -34,9 +34,9 @@ def test_cycler_factory(cycle):
         expected_behaviour = {
             'memory_depth': 1,
             'stochastic': False,
-            'inspects_opponent_source': False,
-            'manipulates_opponent_source': False,
-            'manipulates_opponent_state': False
+            'inspects_source': False,
+            'manipulates_source': False,
+            'manipulates_state': False
         }
 
         def test_strategy(self):

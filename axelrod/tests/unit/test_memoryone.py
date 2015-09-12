@@ -14,9 +14,9 @@ class TestWinStayLoseShift(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -35,9 +35,9 @@ class TestGTFT(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -58,9 +58,9 @@ class TestStochasticCooperator(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_four_vector(self):
@@ -88,9 +88,9 @@ class TestStochasticWSLS(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -120,9 +120,9 @@ class TestZDExtort2(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_four_vector(self):
@@ -146,9 +146,9 @@ class TestZDGTFT2(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_four_vector(self):
@@ -172,9 +172,9 @@ class TestGrofman(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_four_vector(self):
@@ -194,9 +194,9 @@ class TestJoss(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_four_vector(self):
@@ -215,9 +215,9 @@ class TestSoftJoss(TestPlayer):
     expected_behaviour = {
         'memory_depth': 1,
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_four_vector(self):

@@ -14,9 +14,9 @@ class TestMindController(TestPlayer):
     expected_behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': True,  # Finds out what opponent will do
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -64,9 +64,9 @@ class TestMindWarper(TestMindController):
     expected_behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': True,  # Finds out what opponent will do
+        'manipulates_state': False
     }
 
 class TestMindBender(TestMindController):
@@ -76,7 +76,7 @@ class TestMindBender(TestMindController):
     expected_behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': True,  # Finds out what opponent will do
+        'manipulates_state': False
     }

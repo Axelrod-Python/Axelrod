@@ -16,9 +16,9 @@ class TestOnceBitten(TestPlayer):
     expected_behaviour = {
         'memory_depth': 12,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_initial_strategy(self):
@@ -86,9 +86,9 @@ class TestFoolMeOnce(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_initial(self):
@@ -111,9 +111,9 @@ class TestForgetfulFoolMeOnce(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_initial(self):
@@ -150,9 +150,9 @@ class TestFoolMeForever(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):

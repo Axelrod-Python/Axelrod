@@ -12,9 +12,9 @@ class WinStayLoseShift(Player):
     behaviour = {
         'memory_depth': 1,  # Memory-one Four-Vector = (1, 0, 0, 1)
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self, initial='C'):
@@ -48,9 +48,9 @@ class MemoryOnePlayer(Player):
     behaviour = {
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self, four_vector, initial='C'):

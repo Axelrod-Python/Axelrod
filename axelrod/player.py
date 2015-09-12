@@ -33,9 +33,9 @@ class Player(object):
     default_behaviour = {
         'stochastic': False,
         'memory_depth': float('inf'),
-        'inspects_opponent_source': None,
-        'manipulates_opponent_source': None,
-        'manipulates_opponent_state': None
+        'inspects_source': None,
+        'manipulates_source': None,
+        'manipulates_state': None
     }
 
     def __init__(self):

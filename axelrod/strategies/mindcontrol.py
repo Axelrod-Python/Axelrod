@@ -8,9 +8,9 @@ class MindController(Player):
     behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': True,  # Finds out what opponent will do
+        'manipulates_state': False
     }
 
     @staticmethod
@@ -36,9 +36,9 @@ class MindWarper(Player):
     behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': True,  # changes what opponent will do
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': True,  # changes what opponent will do
+        'manipulates_state': False
     }
 
     def __setattr__(self, name, val):
@@ -63,9 +63,9 @@ class MindBender(MindWarper):
     behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': True,  # changes what opponent will do
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': True,  # changes what opponent will do
+        'manipulates_state': False
     }
 
     @staticmethod

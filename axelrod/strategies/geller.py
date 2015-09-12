@@ -36,9 +36,9 @@ class Geller(Player):
     behaviour = {
         'memory_depth': -1,
         'stochastic': True,
-        'inspects_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -64,9 +64,9 @@ class GellerCooperator(Geller):
     behaviour = {
         'memory_depth': -1,
         'stochastic': False,
-        'inspects_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
 class GellerDefector(Geller):
@@ -78,7 +78,7 @@ class GellerDefector(Geller):
     behaviour = {
         'memory_depth': -1,
         'stochastic': False,
-        'inspects_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': False,
+        'manipulates_state': False
     }

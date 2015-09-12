@@ -9,9 +9,9 @@ class Random(Player):
     behaviour = {
         'memory_depth': 0,  # Memory-one Four-Vector = (p, p, p, p)
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self, p=0.5):

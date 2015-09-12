@@ -16,9 +16,9 @@ class TestAverageCopier(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -47,9 +47,9 @@ class TestNiceAverageCopier(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
