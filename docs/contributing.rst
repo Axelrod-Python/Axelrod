@@ -95,8 +95,11 @@ For example there is strategy with :math:`\pi` as a name::
 
     name = '$\pi$'
 
-After that the only thing required is to write the :code:`strategy` method which takes an opponent as an argument.
-In the case of :code:`TitForTat` the strategy attempts to play the same thing as the last strategy played by the opponent (:code:`opponent.history[-1]`) and if this is not possible (in other words the opponent has not played yet) will cooperate::
+After that the only thing required is to write the :code:`strategy` method which
+takes an opponent as an argument.  In the case of :code:`TitForTat` the strategy
+attempts to play the same thing as the last strategy played by the opponent
+(:code:`opponent.history[-1]`) and if this is not possible (in other words the
+opponent has not played yet) will cooperate::
 
     def strategy(self, opponent):
         try:
@@ -104,9 +107,12 @@ In the case of :code:`TitForTat` the strategy attempts to play the same thing as
         except IndexError:
             return 'C'
 
-If your strategy creates any particular attribute along the way you need to make sure that there is a :code:`reset` method that takes account of it.
-An example of this is the :code:`ForgetfulGrudger` strategy which creates a boolean variable :code:`grudged` and a counter :code:`grudge_memory` which keeps track of things during a duel.
-Here is the :code:`reset` method which takes care of resetting this in between rounds::
+If your strategy creates any particular attribute along the way you need to make
+sure that there is a :code:`reset` method that takes account of it.  An example
+of this is the :code:`ForgetfulGrudger` strategy which creates a boolean
+variable :code:`grudged` and a counter :code:`grudge_memory` which keeps track
+of things during a duel.  Here is the :code:`reset` method which takes care of
+resetting this in between rounds::
 
     def reset(self):
         """Resets scores and history."""
@@ -115,10 +121,10 @@ Here is the :code:`reset` method which takes care of resetting this in between r
         self.grudge_memory = 0
 
 
-You can also modify the name of the strategy with the `__repr__` method, which is invoked
-when `str` is applied to a player instance. For example, the player `Random` takes a
-parameter `p` for how often it cooperates, and the `__repr__` method adds the value
-of this parameter to the name::
+You can also modify the name of the strategy with the `__repr__` method, which
+is invoked when `str` is applied to a player instance. For example, the player
+`Random` takes a parameter `p` for how often it cooperates, and the `__repr__`
+method adds the value of this parameter to the name::
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -140,6 +146,10 @@ This helps distinguish players in tournaments that have multiple instances of th
 same strategy. If you modify the `__repr__` method of player, be sure to add an
 appropriate test.
 
+There is also a behaviour dictionary that allows for easy classification of
+strategies: take a look at the `Strategy Behaviour`_ section for more
+information.
+
 
 Adding the strategy to the library
 ''''''''''''''''''''''''''''''''''
@@ -156,27 +166,10 @@ So for the :code:`TitForTat` strategy which is written in the :code:`titfortat.p
 
     from titfortat import *
 
-Once you have done that (**and you need to do this even if you have added a strategy to an already existing file**), you need to add the class itself to one of the following lists::
+Once you have done that (**and you need to do this even if you have added a
+strategy to an already existing file**), you need to add the class itself to one
+of the :code:`strategies` list.
 
-    basic_strategies
-    ordinary_strategies
-    cheating_strategies
-
-You will most probably be adding the strategy to one of :code:`ordinary_strategies` or :code:`cheating_strategies`.
-If you are unsure take a look at the section: `Strategy behaviour`_.
-
-For :code:`TitForTat` this looks like::
-
-    basic_strategies = [
-        Alternator,
-        Cooperator,
-        Defector,
-        Random,
-        TitForTat,
-    ]
-
-Note that :code:`TitForTat` is here added to the :code:`basic_strategies` list.
-If you would like to check if your strategy is honest, read the next section, if you would like to take a look at how to write tests please skip to `How to write tests`_ (again though if you need a hand with testing please let us know!).
 
 Strategy behaviour
 ''''''''''''''''''
@@ -205,6 +198,7 @@ the initialisation depending on input parameters. A good example of this is the
     >>> joss.behaviour['stochastic'], boring_joss.behaviour['stochastic']
     (True, False)
 
+Dimensions that are not classified have value `None` in the dictionary.
 
 There are currently three important dimensions that help identify if a strategy
 is 'honest' or not:
