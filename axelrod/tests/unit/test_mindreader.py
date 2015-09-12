@@ -16,8 +16,8 @@ class TestMindReader(TestPlayer):
         'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,
-        'manipulates_opponent_state': True,
-        'manipulates_opponent_state': False
+        'manipulates_opponent_state': False,
+        'manipulates_opponent_state': True
     }
 
     def test_strategy(self):

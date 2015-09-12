@@ -50,8 +50,8 @@ class MindReader(Player):
         'memory_depth': -10,
         'stochastic': False,
         'inspects_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_source': True,
-        'manipulates_opponent_state': False
+        'manipulates_opponent_source': False,
+        'manipulates_opponent_state': True
     }
 
     def __init__(self):

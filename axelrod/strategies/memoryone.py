@@ -10,7 +10,7 @@ class WinStayLoseShift(Player):
 
     name = 'Win-Stay Lose-Shift'
     behaviour = {
-        'memory_depth': 1,  # Memory-one Four-Vector = (p, p, p, p)
+        'memory_depth': 1,  # Memory-one Four-Vector = (1, 0, 0, 1)
         'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
@@ -46,7 +46,7 @@ class MemoryOnePlayer(Player):
 
     name = 'Generic Memory One Player'
     behaviour = {
-        'memory_depth': 1,  # Memory-one Four-Vector = (p, p, p, p)
+        'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,

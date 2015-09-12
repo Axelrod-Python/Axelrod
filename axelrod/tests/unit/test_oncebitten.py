@@ -14,7 +14,7 @@ class TestOnceBitten(TestPlayer):
     name = "Once Bitten"
     player = axelrod.OnceBitten
     expected_behaviour = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 12,
         'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,

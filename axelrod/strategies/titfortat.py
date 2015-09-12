@@ -9,6 +9,7 @@ class TitForTat(Player):
     name = 'Tit For Tat'
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -25,6 +26,7 @@ class TitFor2Tats(Player):
     name = "Tit For 2 Tats"
     behaviour = {
         'memory_depth': 2,  # Long memory, memory-2
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -41,6 +43,7 @@ class TwoTitsForTat(Player):
     name = "Two Tits For Tat"
     behaviour = {
         'memory_depth': 2,  # Long memory, memory-2
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -61,6 +64,7 @@ class Bully(Player):
     name = "Bully"
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -77,6 +81,7 @@ class SneakyTitForTat(Player):
     name = "Sneaky Tit For Tat"
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -98,6 +103,7 @@ class SuspiciousTitForTat(Player):
     name = "Suspicious Tit For Tat"
     behaviour = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -115,6 +121,7 @@ class AntiTitForTat(Player):
     name = 'Anti Tit For Tat'
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -131,6 +138,7 @@ class HardTitForTat(Player):
     name = 'Hard Tit For Tat'
     behaviour = {
         'memory_depth': 3,  # memory-three
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -155,6 +163,7 @@ class HardTitFor2Tats(Player):
     name = "Hard Tit For 2 Tats"
     behaviour = {
         'memory_depth': 3,  # memory-three
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
