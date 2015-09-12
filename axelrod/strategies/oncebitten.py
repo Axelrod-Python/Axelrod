@@ -9,7 +9,7 @@ class OnceBitten(Player):
 
     name = 'Once Bitten'
     behaviour = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 12,  # Long memory
         'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,

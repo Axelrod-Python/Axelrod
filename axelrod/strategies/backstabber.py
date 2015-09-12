@@ -10,6 +10,7 @@ class BackStabber(Player):
     name = 'BackStabber'
     behaviour = {
         'memory_depth': float('inf'),
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -36,6 +37,7 @@ class DoubleCrosser(Player):
     name = 'DoubleCrosser'
     behaviour = {
         'memory_depth': float('inf'),
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False

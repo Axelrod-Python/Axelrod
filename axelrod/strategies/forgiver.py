@@ -10,6 +10,7 @@ class Forgiver(Player):
     name = 'Forgiver'
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
@@ -35,6 +36,7 @@ class ForgivingTitForTat(Player):
     name = 'Forgiving Tit For Tat'
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
         'inspects_opponent_source': False,
         'manipulates_opponent_source': False,
         'manipulates_opponent_state': False
