@@ -12,6 +12,7 @@ class TestTitForTat(TestPlayer):
     player = axelrod.TitForTat
     expected_behaviour = {
         'memory_depth': 1,
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
