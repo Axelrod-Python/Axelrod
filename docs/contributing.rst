@@ -116,7 +116,7 @@ Here is the :code:`reset` method which takes care of resetting this in between r
 
 
 You can also modify the name of the strategy with the `__repr__` method, which is invoked
-when `str` is applied to a player instance. For example, the player `Random` takes a 
+when `str` is applied to a player instance. For example, the player `Random` takes a
 parameter `p` for how often it cooperates, and the `__repr__` method adds the value
 of this parameter to the name::
 
@@ -163,7 +163,7 @@ Once you have done that (**and you need to do this even if you have added a stra
     cheating_strategies
 
 You will most probably be adding the strategy to one of :code:`ordinary_strategies` or :code:`cheating_strategies`.
-If you are unsure take a look at the section: `Is your strategy honest?`_.
+If you are unsure take a look at the section: `Strategy behaviour`_.
 
 For :code:`TitForTat` this looks like::
 
@@ -178,26 +178,44 @@ For :code:`TitForTat` this looks like::
 Note that :code:`TitForTat` is here added to the :code:`basic_strategies` list.
 If you would like to check if your strategy is honest, read the next section, if you would like to take a look at how to write tests please skip to `How to write tests`_ (again though if you need a hand with testing please let us know!).
 
-Is your strategy honest?
-''''''''''''''''''''''''
+Strategy behaviour
+''''''''''''''''''
 
-The rules for an 'honest' strategy are very simple:
+Every class has a behaviour dictionary that gives some classification of the
+strategy according to certain dimensions::
 
-1. It does not change what it's opponents do/know.
-2. It forgets everything every time it starts playing someone (this is implemented with the :code:`reset` method).
+Let us take a look at :code:`TitForTat`::
 
-If your strategy is not 'honest': that's not at all a problem though.
-Things that break the above rules are very welcome, although they should be well documented.
-There's a special list in which they must reside so that they are not run by the default tournament but this does not stop them being used by anyone wanting to build their own tournament.
+    >>> behaviour = axelrod.TitForTat.behaviour
+    >>> for key in behaviour:
+    ....    print key, behaviour[key]
+    manipulates_state False
+    stochastic False
+    manipulates_source False
+    inspects_source False
+    memory_depth 1
 
-Simply add your strategy to the correct place in :code:`strategies/_strategies.py`::
+Note that when an instance of a class is created it gets it's own copy of the
+default behaviour dictionary from the class. This might sometimes be modified by
+the initialisation depending on input parameters. A good example of this is the
+:code:`Joss` strategy::
 
-    ...
-    # These are strategies that do not follow the rules of Axelrods tournament
-    cheating_strategies = [
-        Geller,
-        GellerCooperator,
-        ...
+    >>> joss = axelrod.Joss()
+    >>> boring_joss = axelrod.Joss(1)
+    >>> joss.behaviour['stochastic'], boring_joss.behaviour['stochastic']
+    (True, False)
+
+
+There are currently three important dimensions that help identify if a strategy
+is 'honest' or not:
+
+1. :code:`inspects_source` - does the strategy 'read' any source code that
+   it would not normally have access to. An example of this is :code:`Geller`.
+2. :code:`manipulates_source` - does the strategy 'write' any source code that
+   it would not normally be able to. An example of this is :code:`Mind Bender`.
+3. :code:`manipulates_state` - does the strategy 'change' any attributes that
+   it would not normally be able to. An example of this is :code:`Mind Reader`.
+
 
 How to write tests
 ''''''''''''''''''
@@ -215,6 +233,13 @@ As an example, you code write tests for Tit-For-Tat as follows::
 
         name = "Tit For Tat"
         player = axelrod.TitForTat
+        expected_behaviour = {
+            'memory_depth': 1,
+            'stochastic': False,
+            'inspects_source': False,
+            'manipulates_source': False,
+            'manipulates_state': False
+        }
 
         def test_strategy(self):
             """Starts by cooperating."""
@@ -319,6 +344,11 @@ Finally, there is a :code:`TestHeadsUp` class that streamlines the testing of tw
 
 The function :code:`versus_test` also accepts a :code:`random_seed` keyword, and like :code:`responses_test` the history is accumulated.
 
+The :code:`expected_behaviour` dictionary tests that the behaviour of the
+strategy is as expected (the tests for this is inherited in the :code:`init`
+method). Please be sure to classify new strategies according to the already
+present dimensions but if you create a new dimension you do not **need** to re
+classify all the other strategies (but feel free to! :)).
 
 How to run tests
 ''''''''''''''''
