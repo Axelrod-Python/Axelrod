@@ -97,8 +97,8 @@ class TestPlayer(unittest.TestCase):
     expected_behaviour ={
         'stochastic': False,
         'memory_depth': float('inf'),
-        'inspects_opponent_source': None,
-        'manipulates_opponent_state': None
+        'inspects_source': None,
+        'manipulates_state': None
     }
 
     def test_initialisation(self):

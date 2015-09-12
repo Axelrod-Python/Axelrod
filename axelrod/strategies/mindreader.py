@@ -49,9 +49,9 @@ class MindReader(Player):
     behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': True
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': False,
+        'manipulates_state': True
     }
 
     def __init__(self):
@@ -87,9 +87,9 @@ class ProtectedMindReader(MindReader):
     behaviour = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_opponent_source': True,  # Finds out what opponent will do
-        'manipulates_opponent_source': True,  # Stops opponent's strategy
-        'manipulates_opponent_state': False
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': True,  # Stops opponent's strategy
+        'manipulates_state': False
     }
 
     def __setattr__(self, name, val):

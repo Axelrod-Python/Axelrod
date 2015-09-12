@@ -8,9 +8,9 @@ class MetaPlayer(Player):
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self):

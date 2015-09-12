@@ -15,9 +15,9 @@ class TestGoByMajority(TestPlayer):
     expected_behaviour = {
         'stochastic': False,
         'memory_depth': 0,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_initial_strategy(self):
@@ -49,9 +49,9 @@ def factory_TestGoByRecentMajority(L):
         expected_behaviour = {
             'stochastic': False,
             'memory_depth': L,
-            'inspects_opponent_source': False,
-            'manipulates_opponent_source': False,
-            'manipulates_opponent_state': False
+            'inspects_source': False,
+            'manipulates_source': False,
+            'manipulates_state': False
         }
 
         def test_initial_strategy(self):

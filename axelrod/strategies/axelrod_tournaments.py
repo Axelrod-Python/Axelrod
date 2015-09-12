@@ -19,9 +19,9 @@ class Davis(Player):
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self, rounds_to_cooperate=10):
@@ -48,9 +48,9 @@ class Feld(Player):
     behaviour = {
         'memory_depth': 200, # Varies actually, eventually becomes depth 1
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
@@ -93,9 +93,9 @@ class Shubik(Player):
     behaviour = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self):
@@ -150,9 +150,9 @@ class Tullock(Player):
     behaviour = {
         'memory_depth': 11, # long memory, modified by init
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self, rounds_to_cooperate=11):
@@ -184,9 +184,9 @@ class Champion(Player):
     behaviour = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -218,9 +218,9 @@ class Eatherley(Player):
     behaviour = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -251,9 +251,9 @@ class Tester(Player):
     behaviour = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self):

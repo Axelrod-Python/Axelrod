@@ -14,9 +14,9 @@ class TestMetaMajority(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'manipulates_opponent_source': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_state': False
+        'manipulates_source': False,
+        'inspects_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -40,9 +40,9 @@ class TestMetaMinority(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -66,9 +66,9 @@ class TestMetaWinner(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):

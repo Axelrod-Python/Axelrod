@@ -16,9 +16,9 @@ class TestClassification(unittest.TestCase):
         # A set of dimensions that are known to have been fully applied
         known_keys = ['stochastic',
                       'memory_depth',
-                      'inspects_opponent_source',
-                      'manipulates_opponent_source',
-                      'manipulates_opponent_state']
+                      'inspects_source',
+                      'manipulates_source',
+                      'manipulates_state']
 
         for s in strategies:
             s = s()

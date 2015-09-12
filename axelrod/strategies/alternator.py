@@ -8,9 +8,9 @@ class Alternator(Player):
     behaviour = {
         'memory_depth': 1,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):

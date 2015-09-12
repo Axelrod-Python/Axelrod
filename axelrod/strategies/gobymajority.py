@@ -11,9 +11,9 @@ class GoByMajority(Player):
 
     behaviour = {
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
     # memory_depth is set by __init__
 

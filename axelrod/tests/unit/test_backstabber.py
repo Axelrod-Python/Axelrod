@@ -11,9 +11,9 @@ class TestBackStabber(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -43,9 +43,9 @@ class TestDoubleCrosser(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):

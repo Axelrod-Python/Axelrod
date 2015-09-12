@@ -16,9 +16,9 @@ class TestDefectorHunter(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -34,9 +34,9 @@ class TestCooperatorHunter(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -52,9 +52,9 @@ class TestAlternatorHunter(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -73,9 +73,9 @@ class TestMathConstantHunter(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -88,9 +88,9 @@ class TestRandomHunter(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -113,9 +113,9 @@ class TestMetaHunter(TestPlayer):
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):

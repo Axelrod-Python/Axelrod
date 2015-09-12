@@ -8,9 +8,9 @@ class Grudger(Player):
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -28,9 +28,9 @@ class ForgetfulGrudger(Player):
     behaviour = {
         'memory_depth': 10,
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def __init__(self):
@@ -68,9 +68,9 @@ class OppositeGrudger(Player):
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -87,9 +87,9 @@ class Aggravater(Player):
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod

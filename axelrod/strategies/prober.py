@@ -10,9 +10,9 @@ class Prober(Player):
     name = 'Prober'
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -40,9 +40,9 @@ class Prober2(Player):
     name = 'Prober 2'
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -70,9 +70,9 @@ class Prober3(Player):
     name = 'Prober 3'
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -98,9 +98,9 @@ class HardProber(Player):
     name = 'Hard Prober'
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):

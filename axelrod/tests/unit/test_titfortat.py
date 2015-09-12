@@ -12,9 +12,9 @@ class TestTitForTat(TestPlayer):
     player = axelrod.TitForTat
     expected_behaviour = {
         'memory_depth': 1,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -34,9 +34,9 @@ class TestTitFor2Tats(TestPlayer):
     player = axelrod.TitFor2Tats
     expected_behaviour = {
         'memory_depth': 2,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -55,9 +55,9 @@ class TestTwoTitsForTat(TestPlayer):
     player = axelrod.TwoTitsForTat
     expected_behaviour = {
         'memory_depth': 2,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -78,9 +78,9 @@ class TestBully(TestPlayer):
     player = axelrod.Bully
     expected_behaviour = {
         'memory_depth': 1,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -98,9 +98,9 @@ class TestSneakyTitForTat(TestPlayer):
     player = axelrod.SneakyTitForTat
     expected_behaviour = {
         'memory_depth': float('inf'),  # Long memory
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -119,9 +119,9 @@ class TestSuspiciousTitForTat(TestPlayer):
     player = axelrod.SuspiciousTitForTat
     expected_behaviour = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -139,9 +139,9 @@ class TestAntiTitForTat(TestPlayer):
     player = axelrod.AntiTitForTat
     expected_behaviour = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -159,9 +159,9 @@ class TestHardTitForTat(TestPlayer):
     player = axelrod.HardTitForTat
     expected_behaviour = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -183,9 +183,9 @@ class TestHardTitFor2Tats(TestPlayer):
     player = axelrod.HardTitFor2Tats
     expected_behaviour = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):

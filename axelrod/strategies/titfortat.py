@@ -10,9 +10,9 @@ class TitForTat(Player):
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod
@@ -27,9 +27,9 @@ class TitFor2Tats(Player):
     behaviour = {
         'memory_depth': 2,  # Long memory, memory-2
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod
@@ -44,9 +44,9 @@ class TwoTitsForTat(Player):
     behaviour = {
         'memory_depth': 2,  # Long memory, memory-2
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod
@@ -65,9 +65,9 @@ class Bully(Player):
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod
@@ -82,9 +82,9 @@ class SneakyTitForTat(Player):
     behaviour = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
@@ -104,9 +104,9 @@ class SuspiciousTitForTat(Player):
     behaviour = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod
@@ -122,9 +122,9 @@ class AntiTitForTat(Player):
     behaviour = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod
@@ -139,9 +139,9 @@ class HardTitForTat(Player):
     behaviour = {
         'memory_depth': 3,  # memory-three
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod
@@ -164,9 +164,9 @@ class HardTitFor2Tats(Player):
     behaviour = {
         'memory_depth': 3,  # memory-three
         'stochastic': False,
-        'inspects_opponent_source': False,
-        'manipulates_opponent_source': False,
-        'manipulates_opponent_state': False
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     @staticmethod
