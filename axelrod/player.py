@@ -1,5 +1,6 @@
 import inspect
 import random
+import copy
 
 C, D = 'C', 'D'
 flip_dict = {C: D, D: C}
@@ -40,6 +41,7 @@ class Player(object):
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
+        self.behaviour = copy.copy(self.behaviour)
         self.behaviour['stochastic'] = (
             "random" in inspect.getsource(self.__class__))
         if self.name == "Player":
