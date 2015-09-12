@@ -7,12 +7,6 @@ import axelrod
 class TestClassification(unittest.TestCase):
 
     def test_known_classifiers(self):
-        # Grabbing all the strategies: this will be changed to just be
-        # `axelrod.strategies`
-        strategies = axelrod.basic_strategies
-        strategies += axelrod.ordinary_strategies
-        strategies += axelrod.cheating_strategies
-
         # A set of dimensions that are known to have been fully applied
         known_keys = ['stochastic',
                       'memory_depth',
@@ -20,7 +14,7 @@ class TestClassification(unittest.TestCase):
                       'manipulates_source',
                       'manipulates_state']
 
-        for s in strategies:
+        for s in axelrod.strategies:
             s = s()
             self.assertTrue(None not in [s.behaviour[key] for key in known_keys])
 
@@ -56,3 +50,20 @@ class TestClassification(unittest.TestCase):
         player = axelrod.Defector()
         player.behaviour['memory_depth'] += 1
         self.assertNotEqual(player.behaviour, axelrod.Defector.behaviour)
+
+    def test_is_cheater(self):
+        """A test that verifies if the is_cheater function works correctly"""
+        known_cheaters = [axelrod.Darwin,
+                          axelrod.Geller,
+                          axelrod.GellerCooperator,
+                          axelrod.GellerDefector,
+                          axelrod.MindBender,
+                          axelrod.MindController,
+                          axelrod.MindWarper,
+                          axelrod.MindReader]
+
+        for strategy in known_cheaters:
+            self.assertTrue(axelrod.is_cheater(strategy), msg=strategy)
+
+        for strategy in axelrod.basic_strategies:
+            self.assertFalse(axelrod.is_cheater(strategy), msg=strategy)
