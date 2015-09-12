@@ -57,9 +57,7 @@ class MemoryOnePlayer(Player):
         Player.__init__(self)
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self._initial = initial
-        for x in set(four_vector):
-            if x != 0 and x != 1:
-                self.behaviour['stochastic'] = True
+        self.behaviour['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent):
         if not len(opponent.history):
