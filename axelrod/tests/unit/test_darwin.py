@@ -14,7 +14,7 @@ class TestDarwin(TestPlayer):
         'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
-        'manipulates_state': False
+        'manipulates_state': True
     }
 
     def test_strategy(self):
