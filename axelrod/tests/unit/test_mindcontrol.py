@@ -11,7 +11,7 @@ class TestMindController(TestPlayer):
 
     name = 'Mind Controller'
     player = axelrod.MindController
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': False,
@@ -61,7 +61,7 @@ class TestMindWarper(TestMindController):
 
     name = "Mind Warper"
     player = axelrod.MindWarper
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': False,
@@ -73,7 +73,7 @@ class TestMindBender(TestMindController):
 
     name = "Mind Bender"
     player = axelrod.MindBender
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': False,

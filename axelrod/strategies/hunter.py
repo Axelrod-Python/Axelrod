@@ -8,7 +8,7 @@ class DefectorHunter(Player):
     """A player who hunts for defectors."""
 
     name = 'Defector Hunter'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -26,7 +26,7 @@ class CooperatorHunter(Player):
     """A player who hunts for cooperators."""
 
     name = 'Cooperator Hunter'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -44,7 +44,7 @@ class AlternatorHunter(Player):
     """A player who hunts for alternators."""
 
     name = 'Alternator Hunter'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -63,7 +63,7 @@ class MathConstantHunter(Player):
     """A player who hunts for mathematical constant players."""
 
     name = "Math Constant Hunter"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,
@@ -73,7 +73,7 @@ class MathConstantHunter(Player):
     # We need to make sure this is not marked as stochastic.
     def __init__(self):
         Player.__init__(self)
-        self.behaviour['stochastic'] = False
+        self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         """
@@ -105,7 +105,7 @@ class RandomHunter(Player):
     """A player who hunts for random players."""
 
     name = "Random Hunter"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,
@@ -115,7 +115,7 @@ class RandomHunter(Player):
     # We need to make sure this is not marked as stochastic.
     def __init__(self):
         Player.__init__(self)
-        self.behaviour['stochastic'] = False
+        self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         """
@@ -144,7 +144,7 @@ class MetaHunter(MetaPlayer):
     """A player who uses a selection of hunters."""
 
     name = "Meta Hunter"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,
@@ -154,7 +154,7 @@ class MetaHunter(MetaPlayer):
     def __init__(self):
 
         # We need to make sure this is not marked as stochastic.
-        self.behaviour['stochastic'] = False
+        self.classifier['stochastic'] = False
 
         # Notice that we don't include the cooperator hunter, because it leads to excessive
         # defection and therefore bad performance against unforgiving strategies. We will stick

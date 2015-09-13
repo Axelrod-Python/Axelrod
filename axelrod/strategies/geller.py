@@ -33,7 +33,7 @@ class Geller(Player):
 
     name = 'Geller'
     default = lambda self: 'C' if random.random() > 0.5 else 'D'
-    behaviour = {
+    classifier = {
         'memory_depth': -1,
         'stochastic': True,
         'inspects_source': True,  # Finds out what opponent will do
@@ -61,7 +61,7 @@ class GellerCooperator(Geller):
     """
     name = 'Geller Cooperator'
     default = lambda self: 'C'
-    behaviour = {
+    classifier = {
         'memory_depth': -1,
         'stochastic': False,
         'inspects_source': True,  # Finds out what opponent will do
@@ -75,7 +75,7 @@ class GellerDefector(Geller):
     """
     name = 'Geller Defector'
     default = lambda self: 'D'
-    behaviour = {
+    classifier = {
         'memory_depth': -1,
         'stochastic': False,
         'inspects_source': True,  # Finds out what opponent will do

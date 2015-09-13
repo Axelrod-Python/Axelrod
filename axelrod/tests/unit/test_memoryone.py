@@ -11,7 +11,7 @@ class TestWinStayLoseShift(TestPlayer):
 
     name = "Win-Stay Lose-Shift"
     player = axelrod.WinStayLoseShift
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
         'inspects_source': False,
@@ -32,7 +32,7 @@ class TestGTFT(TestPlayer):
 
     name = "GTFT: 0.33"
     player = axelrod.GTFT
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
         'inspects_source': False,
@@ -55,7 +55,7 @@ class TestStochasticCooperator(TestPlayer):
 
     name = "Stochastic Cooperator"
     player = axelrod.StochasticCooperator
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
         'inspects_source': False,
@@ -85,7 +85,7 @@ class TestStochasticWSLS(TestPlayer):
 
     name = "Stochastic WSLS"
     player = axelrod.StochasticWSLS
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
         'inspects_source': False,
@@ -117,7 +117,7 @@ class TestZDExtort2(TestPlayer):
 
     name = "ZD-Extort-2"
     player = axelrod.ZDExtort2
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
         'inspects_source': False,
@@ -143,7 +143,7 @@ class TestZDGTFT2(TestPlayer):
 
     name = "ZD-GTFT-2"
     player = axelrod.ZDGTFT2
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
         'inspects_source': False,
@@ -169,7 +169,7 @@ class TestGrofman(TestPlayer):
 
     name = "Grofman"
     player = axelrod.Grofman
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
         'inspects_source': False,
@@ -191,7 +191,7 @@ class TestJoss(TestPlayer):
 
     name = "Joss: 0.9"
     player = axelrod.Joss
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
         'inspects_source': False,
@@ -212,7 +212,7 @@ class TestSoftJoss(TestPlayer):
 
     name = "Soft Joss: 0.9"
     player = axelrod.SoftJoss
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
         'inspects_source': False,

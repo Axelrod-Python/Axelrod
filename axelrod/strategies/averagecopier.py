@@ -8,7 +8,7 @@ class AverageCopier(Player):
     """The player will cooperate with probability p if the opponent's cooperation ratio is p."""
 
     name = 'Average Copier'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
@@ -32,7 +32,7 @@ class NiceAverageCopier(Player):
     """Same as Average Copier, but always starts by cooperating."""
 
     name = 'Nice Average Copier'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,

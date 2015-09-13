@@ -7,7 +7,7 @@ class TitForTat(Player):
     """A player starts by cooperating and then mimics previous move by opponent."""
 
     name = 'Tit For Tat'
-    behaviour = {
+    classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'inspects_source': False,
@@ -24,7 +24,7 @@ class TitFor2Tats(Player):
     """A player starts by cooperating and then defects only after two defects by opponent."""
 
     name = "Tit For 2 Tats"
-    behaviour = {
+    classifier = {
         'memory_depth': 2,  # Long memory, memory-2
         'stochastic': False,
         'inspects_source': False,
@@ -41,7 +41,7 @@ class TwoTitsForTat(Player):
     """A player starts by cooperating and replies to each defect by two defections."""
 
     name = "Two Tits For Tat"
-    behaviour = {
+    classifier = {
         'memory_depth': 2,  # Long memory, memory-2
         'stochastic': False,
         'inspects_source': False,
@@ -62,7 +62,7 @@ class Bully(Player):
     """
 
     name = "Bully"
-    behaviour = {
+    classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'inspects_source': False,
@@ -79,7 +79,7 @@ class SneakyTitForTat(Player):
     """Tries defecting once and repents if punished."""
 
     name = "Sneaky Tit For Tat"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -101,7 +101,7 @@ class SuspiciousTitForTat(Player):
     """A TFT that initially defects."""
 
     name = "Suspicious Tit For Tat"
-    behaviour = {
+    classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'inspects_source': False,
@@ -119,7 +119,7 @@ class AntiTitForTat(Player):
     This is similar to BULLY above, except that the first move is cooperation."""
 
     name = 'Anti Tit For Tat'
-    behaviour = {
+    classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'inspects_source': False,
@@ -136,7 +136,7 @@ class HardTitForTat(Player):
     """A variant of Tit For Tat that uses a longer history for retaliation."""
 
     name = 'Hard Tit For Tat'
-    behaviour = {
+    classifier = {
         'memory_depth': 3,  # memory-three
         'stochastic': False,
         'inspects_source': False,
@@ -161,7 +161,7 @@ class HardTitFor2Tats(Player):
     retaliation."""
 
     name = "Hard Tit For 2 Tats"
-    behaviour = {
+    classifier = {
         'memory_depth': 3,  # memory-three
         'stochastic': False,
         'inspects_source': False,

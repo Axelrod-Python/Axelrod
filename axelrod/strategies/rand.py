@@ -6,7 +6,7 @@ class Random(Player):
     """A player who randomly chooses between cooperating and defecting."""
 
     name = 'Random'
-    behaviour = {
+    classifier = {
         'memory_depth': 0,  # Memory-one Four-Vector = (p, p, p, p)
         'stochastic': True,
         'inspects_source': False,

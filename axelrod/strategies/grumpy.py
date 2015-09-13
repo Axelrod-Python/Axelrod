@@ -7,7 +7,7 @@ class Grumpy(Player):
     when the opponent co-operates."""
 
     name = 'Grumpy'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

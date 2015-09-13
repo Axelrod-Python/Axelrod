@@ -9,7 +9,7 @@ class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
     name = 'Win-Stay Lose-Shift'
-    behaviour = {
+    classifier = {
         'memory_depth': 1,  # Memory-one Four-Vector = (1, 0, 0, 1)
         'stochastic': False,
         'inspects_source': False,
@@ -26,7 +26,7 @@ class WinStayLoseShift(Player):
             ('D', 'D'): 'C',
         }
         self._initial = initial
-        self.behaviour['stochastic'] = False
+        self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         """Switches if it doesn't get the best payout, traditionally equivalent
@@ -45,7 +45,7 @@ class MemoryOnePlayer(Player):
     with a initializing four_vector."""
 
     name = 'Generic Memory One Player'
-    behaviour = {
+    classifier = {
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': False,
         'inspects_source': False,
@@ -57,7 +57,7 @@ class MemoryOnePlayer(Player):
         Player.__init__(self)
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self._initial = initial
-        self.behaviour['stochastic'] = any(0 < x < 1 for x in set(four_vector))
+        self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent):
         if not len(opponent.history):

@@ -11,7 +11,7 @@ class TestMetaMajority(TestPlayer):
 
     name = "Meta Majority"
     player = axelrod.MetaMajority
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'manipulates_source': False,
@@ -37,7 +37,7 @@ class TestMetaMinority(TestPlayer):
 
     name = "Meta Minority"
     player = axelrod.MetaMinority
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
@@ -63,7 +63,7 @@ class TestMetaWinner(TestPlayer):
 
     name = "Meta Winner"
     player = axelrod.MetaWinner
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,

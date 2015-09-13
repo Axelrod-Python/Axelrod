@@ -137,10 +137,10 @@ def is_cheater(s):
     """
     A function to check if a strategy cheats.
     """
-    behaviour = s.behaviour
-    return behaviour['inspects_source'] or\
-           behaviour['manipulates_source'] or\
-           behaviour['manipulates_state']
+    classifier = s.classifier
+    return classifier['inspects_source'] or\
+           classifier['manipulates_source'] or\
+           classifier['manipulates_state']
 
 ordinary_strategies = [s for s in strategies if not is_cheater(s)]
 cheating_strategies = [s for s in strategies if is_cheater(s)]

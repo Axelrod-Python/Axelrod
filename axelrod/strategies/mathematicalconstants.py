@@ -6,7 +6,7 @@ class CotoDeRatio(Player):
     """The player will always aim to bring the ratio of co-operations to
     defections closer to the ratio as given in a sub class"""
 
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,

@@ -10,7 +10,7 @@ class TestTitForTat(TestPlayer):
 
     name = "Tit For Tat"
     player = axelrod.TitForTat
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
         'inspects_source': False,
@@ -33,7 +33,7 @@ class TestTitFor2Tats(TestPlayer):
 
     name = 'Tit For 2 Tats'
     player = axelrod.TitFor2Tats
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 2,
         'inspects_source': False,
         'manipulates_source': False,
@@ -54,7 +54,7 @@ class TestTwoTitsForTat(TestPlayer):
 
     name = 'Two Tits For Tat'
     player = axelrod.TwoTitsForTat
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 2,
         'inspects_source': False,
         'manipulates_source': False,
@@ -77,7 +77,7 @@ class TestBully(TestPlayer):
 
     name = "Bully"
     player = axelrod.Bully
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'inspects_source': False,
         'manipulates_source': False,
@@ -97,7 +97,7 @@ class TestSneakyTitForTat(TestPlayer):
 
     name = "Sneaky Tit For Tat"
     player = axelrod.SneakyTitForTat
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,
@@ -118,7 +118,7 @@ class TestSuspiciousTitForTat(TestPlayer):
 
     name = 'Suspicious Tit For Tat'
     player = axelrod.SuspiciousTitForTat
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'inspects_source': False,
         'manipulates_source': False,
@@ -138,7 +138,7 @@ class TestAntiTitForTat(TestPlayer):
 
     name = 'Anti Tit For Tat'
     player = axelrod.AntiTitForTat
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'inspects_source': False,
         'manipulates_source': False,
@@ -158,7 +158,7 @@ class TestHardTitForTat(TestPlayer):
 
     name = "Hard Tit For Tat"
     player = axelrod.HardTitForTat
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
         'inspects_source': False,
         'manipulates_source': False,
@@ -182,7 +182,7 @@ class TestHardTitFor2Tats(TestPlayer):
 
     name = "Hard Tit For 2 Tats"
     player = axelrod.HardTitFor2Tats
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
         'inspects_source': False,
         'manipulates_source': False,

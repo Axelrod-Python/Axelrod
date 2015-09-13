@@ -13,7 +13,7 @@ class TestGrudger(TestPlayer):
 
     name = "Grudger"
     player = axelrod.Grudger
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -39,7 +39,7 @@ class TestForgetfulGrudger(TestPlayer):
 
     name = "Forgetful Grudger"
     player = axelrod.ForgetfulGrudger
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 10,
         'stochastic': False,
         'inspects_source': False,
@@ -112,7 +112,7 @@ class TestOppositeGrudger(TestPlayer):
 
     name = 'Opposite Grudger'
     player = axelrod.OppositeGrudger
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -139,7 +139,7 @@ class TestAggravater(TestPlayer):
 
     name = "Aggravater"
     player = axelrod.Aggravater
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

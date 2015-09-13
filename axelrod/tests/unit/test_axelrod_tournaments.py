@@ -13,7 +13,7 @@ class TestDavis(TestPlayer):
 
     name = "Davis"
     player = axelrod.Davis
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -48,7 +48,7 @@ class TestFeld(TestPlayer):
 
     name = "Feld"
     player = axelrod.Feld
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 200,
         'stochastic': True,
         'inspects_source': False,
@@ -89,7 +89,7 @@ class TestShubik(TestPlayer):
 
     name = 'Shubik'
     player = axelrod.Shubik
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -127,7 +127,7 @@ class TestTullock(TestPlayer):
 
     name = "Tullock"
     player = axelrod.Tullock
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 11,
         'stochastic': True,
         'inspects_source': False,
@@ -162,7 +162,7 @@ class TestTullock(TestPlayer):
 class TestChampion(TestPlayer):
     name = "Champion"
     player = axelrod.Champion
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
         'inspects_source': False,
@@ -208,7 +208,7 @@ class TestEatherly(TestPlayer):
 
     name = "Eatherley"
     player = axelrod.Eatherley
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
         'inspects_source': False,
@@ -234,7 +234,7 @@ class TestTester(TestPlayer):
 
     name = "Tester"
     player = axelrod.Tester
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,

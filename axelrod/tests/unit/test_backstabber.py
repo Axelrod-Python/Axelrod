@@ -8,7 +8,7 @@ class TestBackStabber(TestPlayer):
 
     name = "BackStabber"
     player = axelrod.BackStabber
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -40,7 +40,7 @@ class TestDoubleCrosser(TestPlayer):
 
     name = "DoubleCrosser"
     player = axelrod.DoubleCrosser
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,

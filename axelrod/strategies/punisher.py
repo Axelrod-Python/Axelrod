@@ -10,7 +10,7 @@ class Punisher(Player):
     """
 
     name = 'Punisher'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,
@@ -66,7 +66,7 @@ class InversePunisher(Player):
     """
 
     name = 'Inverse Punisher'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

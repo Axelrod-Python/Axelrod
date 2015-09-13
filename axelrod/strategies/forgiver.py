@@ -8,7 +8,7 @@ class Forgiver(Player):
     """
 
     name = 'Forgiver'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -34,7 +34,7 @@ class ForgivingTitForTat(Player):
     """
 
     name = 'Forgiving Tit For Tat'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

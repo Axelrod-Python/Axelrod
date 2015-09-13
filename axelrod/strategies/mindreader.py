@@ -46,7 +46,7 @@ class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
 
     name = 'Mind Reader'
-    behaviour = {
+    classifier = {
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': True,  # Finds out what opponent will do
@@ -84,7 +84,7 @@ class ProtectedMindReader(MindReader):
     It is also protected from mind control strategies"""
 
     name = 'Protected Mind Reader'
-    behaviour = {
+    classifier = {
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': True,  # Finds out what opponent will do

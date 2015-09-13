@@ -18,7 +18,7 @@ class TestPunisher(TestPlayer):
 
     name = "Punisher"
     player = axelrod.Punisher
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,
@@ -126,7 +126,7 @@ class TestInversePunisher(TestPlayer):
 
     name = "Inverse Punisher"
     player = axelrod.InversePunisher
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,

@@ -5,7 +5,7 @@ class MindController(Player):
     """A player that changes the opponents strategy to cooperate."""
 
     name = 'Mind Controller'
-    behaviour = {
+    classifier = {
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': False,
@@ -33,7 +33,7 @@ class MindWarper(Player):
     """
 
     name = 'Mind Warper'
-    behaviour = {
+    classifier = {
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': False,
@@ -60,7 +60,7 @@ class MindBender(MindWarper):
     """
 
     name = 'Mind Bender'
-    behaviour = {
+    classifier = {
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': False,

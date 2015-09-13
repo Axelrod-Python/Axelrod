@@ -11,7 +11,7 @@ class TestAppeaser(TestPlayer):
 
     name = "Appeaser"
     player = axelrod.Appeaser
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Depends on internal memory.
         'stochastic': False,
         'inspects_source': False,

@@ -8,7 +8,7 @@ class Prober(Player):
     """
 
     name = 'Prober'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,
@@ -38,7 +38,7 @@ class Prober2(Player):
     """
 
     name = 'Prober 2'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,
@@ -68,7 +68,7 @@ class Prober3(Player):
     """
 
     name = 'Prober 3'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,
@@ -96,7 +96,7 @@ class HardProber(Player):
     """
 
     name = 'Hard Prober'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,

@@ -11,7 +11,7 @@ class TestGrumpy(TestPlayer):
 
     name = "Grumpy"
     player = axelrod.Grumpy
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

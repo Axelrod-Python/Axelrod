@@ -5,7 +5,7 @@ class Cooperator(Player):
     """A player who only ever cooperates."""
 
     name = 'Cooperator'
-    behaviour = {
+    classifier = {
         'memory_depth': 0,
         'stochastic': False,
         'inspects_source': False,
@@ -22,7 +22,7 @@ class TrickyCooperator(Player):
     """A cooperator that is trying to be tricky."""
 
     name = "Tricky Cooperator"
-    behaviour = {
+    classifier = {
         'memory_depth': 10,
         'stochastic': False,
         'inspects_source': False,

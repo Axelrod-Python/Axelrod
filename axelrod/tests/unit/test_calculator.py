@@ -13,7 +13,7 @@ class TestCalculator(TestPlayer):
 
     name = "Calculator"
     player = axelrod.Calculator
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
