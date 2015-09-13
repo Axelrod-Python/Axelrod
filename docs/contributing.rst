@@ -342,7 +342,8 @@ The :code:`expected_classifier` dictionary tests that the classification of the
 strategy is as expected (the tests for this is inherited in the :code:`init`
 method). Please be sure to classify new strategies according to the already
 present dimensions but if you create a new dimension you do not **need** to re
-classify all the other strategies (but feel free to! :)).
+classify all the other strategies (but feel free to! :)), but please do add it
+to the :code:`default_classifier` in the :code:`axelrod/player.py` parent class.
 
 How to run tests
 ''''''''''''''''
