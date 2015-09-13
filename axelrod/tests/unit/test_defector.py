@@ -11,7 +11,7 @@ class TestDefector(TestPlayer):
 
     name = "Defector"
     player = axelrod.Defector
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 0,
         'stochastic': False,
         'inspects_source': False,
@@ -31,7 +31,7 @@ class TestTrickyDefector(TestPlayer):
 
     name = "Tricky Defector"
     player = axelrod.TrickyDefector
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

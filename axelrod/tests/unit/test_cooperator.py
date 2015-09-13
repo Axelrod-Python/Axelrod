@@ -11,7 +11,7 @@ class TestCooperator(TestPlayer):
 
     name = "Cooperator"
     player = axelrod.Cooperator
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 0,
         'stochastic': False,
         'inspects_source': False,
@@ -32,7 +32,7 @@ class TestTrickyCooperator(TestPlayer):
 
     name = "Tricky Cooperator"
     player = axelrod.TrickyCooperator
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 10,
         'stochastic': False,
         'inspects_source': False,

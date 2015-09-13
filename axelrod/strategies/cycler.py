@@ -9,7 +9,7 @@ class AntiCycler(Player):
     """
 
     name = 'AntiCycler'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -41,7 +41,7 @@ class Cycler(Player):
     """A player that repeats a given sequence indefinitely."""
 
     name = 'Cycler'
-    behaviour = {
+    classifier = {
         'memory_depth': 1,
         'stochastic': False,
         'inspects_source': False,

@@ -5,7 +5,7 @@ class Grudger(Player):
     """A player starts by cooperating however will defect if at any point the opponent has defected."""
 
     name = 'Grudger'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -25,7 +25,7 @@ class ForgetfulGrudger(Player):
     opponent has defected, but forgets after mem_length matches."""
 
     name = 'Forgetful Grudger'
-    behaviour = {
+    classifier = {
         'memory_depth': 10,
         'stochastic': False,
         'inspects_source': False,
@@ -65,7 +65,7 @@ class OppositeGrudger(Player):
     """A player starts by defecting however will cooperate if at any point the opponent has cooperated."""
 
     name = 'Opposite Grudger'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -84,7 +84,7 @@ class Aggravater(Player):
     """Grudger, except that it defects on the first 3 turns"""
 
     name = 'Aggravater'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

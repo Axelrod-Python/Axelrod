@@ -13,7 +13,7 @@ class TestOnceBitten(TestPlayer):
 
     name = "Once Bitten"
     player = axelrod.OnceBitten
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 12,
         'stochastic': False,
         'inspects_source': False,
@@ -83,7 +83,7 @@ class TestFoolMeOnce(TestPlayer):
 
     name = "Fool Me Once"
     player = axelrod.FoolMeOnce
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -108,7 +108,7 @@ class TestForgetfulFoolMeOnce(TestPlayer):
 
     name = 'Forgetful Fool Me Once'
     player = axelrod.ForgetfulFoolMeOnce
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
@@ -147,7 +147,7 @@ class TestFoolMeForever(TestPlayer):
 
     name = "Fool Me Forever"
     player = axelrod.FoolMeForever
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

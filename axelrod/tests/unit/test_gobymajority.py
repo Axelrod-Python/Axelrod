@@ -12,7 +12,7 @@ class TestGoByMajority(TestPlayer):
     name = "Soft Go By Majority"
     player = axelrod.GoByMajority
 
-    expected_behaviour = {
+    expected_classifier = {
         'stochastic': False,
         'memory_depth': 0,
         'inspects_source': False,
@@ -46,7 +46,7 @@ def factory_TestGoByRecentMajority(L):
         name = "Soft Go By Majority: %i" % L
         player = getattr(axelrod, 'GoByMajority%i' % L)
 
-        expected_behaviour = {
+        expected_classifier = {
             'stochastic': False,
             'memory_depth': L,
             'inspects_source': False,

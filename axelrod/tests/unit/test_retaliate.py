@@ -11,7 +11,7 @@ class TestRetaliate(TestPlayer):
 
     name = "Retaliate (0.1)"
     player = axelrod.Retaliate
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -36,7 +36,7 @@ class TestLimitedRetaliate(TestPlayer):
 
     name = 'Limited Retaliate (0.1/20)'
     player = axelrod.LimitedRetaliate
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

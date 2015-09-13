@@ -8,7 +8,7 @@ class BackStabber(Player):
     """
 
     name = 'BackStabber'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -35,7 +35,7 @@ class DoubleCrosser(Player):
     """
 
     name = 'DoubleCrosser'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,

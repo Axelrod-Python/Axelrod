@@ -13,7 +13,7 @@ class TestDefectorHunter(TestPlayer):
 
     name = "Defector Hunter"
     player = axelrod.DefectorHunter
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,
@@ -31,7 +31,7 @@ class TestCooperatorHunter(TestPlayer):
 
     name = "Cooperator Hunter"
     player = axelrod.CooperatorHunter
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,
@@ -49,7 +49,7 @@ class TestAlternatorHunter(TestPlayer):
 
     name = "Alternator Hunter"
     player = axelrod.AlternatorHunter
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,
@@ -70,7 +70,7 @@ class TestMathConstantHunter(TestPlayer):
 
     name = "Math Constant Hunter"
     player = axelrod.MathConstantHunter
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,
@@ -85,7 +85,7 @@ class TestRandomHunter(TestPlayer):
 
     name = "Random Hunter"
     player = axelrod.RandomHunter
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,
@@ -110,7 +110,7 @@ class TestMetaHunter(TestPlayer):
 
     name = "Meta Hunter"
     player = axelrod.MetaHunter
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,

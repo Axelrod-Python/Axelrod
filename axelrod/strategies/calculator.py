@@ -11,7 +11,7 @@ class Calculator(Player):
     """
 
     name = "Calculator"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
         'inspects_source': False,

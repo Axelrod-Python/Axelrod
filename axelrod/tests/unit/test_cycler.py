@@ -11,7 +11,7 @@ class TestAntiCycler(TestPlayer):
 
     name = "AntiCycler"
     player = axelrod.AntiCycler
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -31,7 +31,7 @@ def test_cycler_factory(cycle):
 
         name = "Cycler %s" % cycle
         player = getattr(axelrod, 'Cycler%s' % cycle)
-        expected_behaviour = {
+        expected_classifier = {
             'memory_depth': 1,
             'stochastic': False,
             'inspects_source': False,

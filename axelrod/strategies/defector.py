@@ -5,7 +5,7 @@ class Defector(Player):
     """A player who only ever defects."""
 
     name = 'Defector'
-    behaviour = {
+    classifier = {
         'memory_depth': 0,
         'stochastic': False,
         'inspects_source': False,
@@ -22,7 +22,7 @@ class TrickyDefector(Player):
     """A defector that is trying to be tricky."""
 
     name = "Tricky Defector"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

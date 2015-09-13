@@ -11,7 +11,7 @@ class TestForgiver(TestPlayer):
 
     name = "Forgiver"
     player = axelrod.Forgiver
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -34,7 +34,7 @@ class TestForgivingTitForTat(TestPlayer):
 
     name = "Forgiving Tit For Tat"
     player = axelrod.ForgivingTitForTat
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,

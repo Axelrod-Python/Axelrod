@@ -146,8 +146,8 @@ This helps distinguish players in tournaments that have multiple instances of th
 same strategy. If you modify the `__repr__` method of player, be sure to add an
 appropriate test.
 
-There is also a behaviour dictionary that allows for easy classification of
-strategies: take a look at the `Strategy Behaviour`_ section for more
+There is also a classifier dictionary that allows for easy classification of
+strategies: take a look at the `Strategy classification`_ section for more
 information.
 
 
@@ -171,17 +171,17 @@ strategy to an already existing file**), you need to add the class itself to one
 of the :code:`strategies` list.
 
 
-Strategy behaviour
-''''''''''''''''''
+Strategy classification
+'''''''''''''''''''''''
 
-Every class has a behaviour dictionary that gives some classification of the
+Every class has a classifier dictionary that gives some classification of the
 strategy according to certain dimensions::
 
 Let us take a look at :code:`TitForTat`::
 
-    >>> behaviour = axelrod.TitForTat.behaviour
-    >>> for key in behaviour:
-    ....    print key, behaviour[key]
+    >>> classifier = axelrod.TitForTat.classifier
+    >>> for key in classifier:
+    ....    print key, classifier[key]
     manipulates_state False
     stochastic False
     manipulates_source False
@@ -189,13 +189,13 @@ Let us take a look at :code:`TitForTat`::
     memory_depth 1
 
 Note that when an instance of a class is created it gets it's own copy of the
-default behaviour dictionary from the class. This might sometimes be modified by
+default classifier dictionary from the class. This might sometimes be modified by
 the initialisation depending on input parameters. A good example of this is the
 :code:`Joss` strategy::
 
     >>> joss = axelrod.Joss()
     >>> boring_joss = axelrod.Joss(1)
-    >>> joss.behaviour['stochastic'], boring_joss.behaviour['stochastic']
+    >>> joss.classifier['stochastic'], boring_joss.classifier['stochastic']
     (True, False)
 
 Dimensions that are not classified have value `None` in the dictionary.
@@ -227,7 +227,7 @@ As an example, you code write tests for Tit-For-Tat as follows::
 
         name = "Tit For Tat"
         player = axelrod.TitForTat
-        expected_behaviour = {
+        expected_classifier = {
             'memory_depth': 1,
             'stochastic': False,
             'inspects_source': False,
@@ -338,7 +338,7 @@ Finally, there is a :code:`TestHeadsUp` class that streamlines the testing of tw
 
 The function :code:`versus_test` also accepts a :code:`random_seed` keyword, and like :code:`responses_test` the history is accumulated.
 
-The :code:`expected_behaviour` dictionary tests that the behaviour of the
+The :code:`expected_classifier` dictionary tests that the classification of the
 strategy is as expected (the tests for this is inherited in the :code:`init`
 method). Please be sure to classify new strategies according to the already
 present dimensions but if you create a new dimension you do not **need** to re

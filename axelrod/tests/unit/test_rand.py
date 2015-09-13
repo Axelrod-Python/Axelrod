@@ -10,7 +10,7 @@ class TestRandom(TestPlayer):
 
     name = "Random: 0.5"
     player = axelrod.Random
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 0,
         'stochastic': True,
         'inspects_source': False,

@@ -11,7 +11,7 @@ class TestAlternator(TestPlayer):
 
     name = "Alternator"
     player = axelrod.Alternator
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
         'inspects_source': False,

@@ -23,7 +23,7 @@ class Darwin(Player):
     """
 
     name = "Darwin"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,

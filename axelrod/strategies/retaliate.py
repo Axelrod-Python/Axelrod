@@ -8,7 +8,7 @@ class Retaliate(Player):
     A player starts by cooperating but will retaliate once the opponent
     has won more than 10 percent times the number of defections the player has.
     """
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -75,7 +75,7 @@ class LimitedRetaliate(Player):
     retaliation limit (20 defections).
     """
 
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,

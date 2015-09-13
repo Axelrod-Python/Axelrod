@@ -7,7 +7,7 @@ class Inverse(Player):
     long ago the opponent defected."""
 
     name = 'Inverse'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,

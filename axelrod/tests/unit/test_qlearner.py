@@ -14,7 +14,7 @@ class TestRiskyQLearner(TestPlayer):
 
     name = 'Risky QLearner'
     player = axelrod.RiskyQLearner
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
         'inspects_source': False,
@@ -87,7 +87,7 @@ class TestArrogantQLearner(TestPlayer):
 
     name = 'Arrogant QLearner'
     player = axelrod.ArrogantQLearner
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
@@ -157,7 +157,7 @@ class TestHesitantQLearner(TestPlayer):
 
     name = 'Hesitant QLearner'
     player = axelrod.HesitantQLearner
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
@@ -227,7 +227,7 @@ class TestCautiousQLearner(TestPlayer):
 
     name = 'Cautious QLearner'
     player = axelrod.CautiousQLearner
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,

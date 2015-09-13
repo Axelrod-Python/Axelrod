@@ -13,7 +13,7 @@ class TestAverageCopier(TestPlayer):
 
     name = "Average Copier"
     player = axelrod.AverageCopier
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
@@ -44,7 +44,7 @@ class TestNiceAverageCopier(TestPlayer):
 
     name = "Nice Average Copier"
     player = axelrod.NiceAverageCopier
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,

@@ -16,7 +16,7 @@ class Davis(Player):
     defecting if at any point the opponent has defected."""
 
     name = 'Davis'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -45,7 +45,7 @@ class Feld(Player):
     """
 
     name = "Feld"
-    behaviour = {
+    classifier = {
         'memory_depth': 200, # Varies actually, eventually becomes depth 1
         'stochastic': False,
         'inspects_source': False,
@@ -90,7 +90,7 @@ class Shubik(Player):
     """
 
     name = 'Shubik'
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -147,7 +147,7 @@ class Tullock(Player):
     than the opponent has in previous rounds."""
 
     name = "Tullock"
-    behaviour = {
+    classifier = {
         'memory_depth': 11, # long memory, modified by init
         'stochastic': False,
         'inspects_source': False,
@@ -181,7 +181,7 @@ class Champion(Player):
     """
 
     name = "Champion"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -215,7 +215,7 @@ class Eatherley(Player):
     """
 
     name = "Eatherley"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
@@ -248,7 +248,7 @@ class Tester(Player):
     """
 
     name = "Tester"
-    behaviour = {
+    classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,

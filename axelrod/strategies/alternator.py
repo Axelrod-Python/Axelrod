@@ -5,7 +5,7 @@ class Alternator(Player):
     """A player who alternates between cooperating and defecting."""
 
     name = 'Alternator'
-    behaviour = {
+    classifier = {
         'memory_depth': 1,
         'stochastic': False,
         'inspects_source': False,

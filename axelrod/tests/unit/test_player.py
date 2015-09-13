@@ -20,7 +20,7 @@ class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
     player = Player
-    behaviour = {
+    classifier = {
         'stochastic': False
     }
 
@@ -94,7 +94,7 @@ class TestPlayer(unittest.TestCase):
 
     name = "Player"
     player = Player
-    expected_behaviour ={
+    expected_classifier ={
         'stochastic': False,
         'memory_depth': float('inf'),
         'inspects_source': None,
@@ -109,7 +109,7 @@ class TestPlayer(unittest.TestCase):
             {'length': -1, 'game': None})
         self.assertEqual(player.cooperations, 0)
         self.assertEqual(player.defections, 0)
-        self.behaviour_test()
+        self.classifier_test()
 
     def test_repr(self):
         """Test that the representation is correct."""
@@ -165,21 +165,21 @@ class TestPlayer(unittest.TestCase):
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed)
 
-    def behaviour_test(self):
-        """Test that the keys in the expected_behaviour dictionary give the
-        expected values in the player behaviour dictionary. Also checks that
+    def classifier_test(self):
+        """Test that the keys in the expected_classifier dictionary give the
+        expected values in the player classifier dictionary. Also checks that
         two particular keys (memory_depth and stochastic) are in the
         dictionary."""
         player = self.player()
-        self.assertTrue('memory_depth' in player.behaviour,
-                        msg="memory_depth not in behaviour")
-        self.assertTrue('stochastic' in player.behaviour,
-                        msg="stochastic not in behaviour")
-        for key in self.expected_behaviour:
-            self.assertEqual(player.behaviour[key],
-                             self.expected_behaviour[key],
+        self.assertTrue('memory_depth' in player.classifier,
+                        msg="memory_depth not in classifier")
+        self.assertTrue('stochastic' in player.classifier,
+                        msg="stochastic not in classifier")
+        for key in self.expected_classifier:
+            self.assertEqual(player.classifier[key],
+                             self.expected_classifier[key],
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
-                             (key, player.behaviour[key], self.expected_behaviour[key]))
+                             (key, player.classifier[key], self.expected_classifier[key]))
 
 
 class TestHeadsUp(unittest.TestCase):

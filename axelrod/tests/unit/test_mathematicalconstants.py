@@ -11,7 +11,7 @@ class TestGolden(TestPlayer):
 
     name = '$\phi$'
     player = axelrod.Golden
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -40,7 +40,7 @@ class TestPi(TestPlayer):
 
     name = '$\pi$'
     player = axelrod.Pi
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
@@ -69,7 +69,7 @@ class Teste(TestPlayer):
 
     name = '$e$'
     player = axelrod.e
-    expected_behaviour = {
+    expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'inspects_source': False,
