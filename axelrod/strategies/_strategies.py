@@ -1,47 +1,50 @@
 from __future__ import absolute_import
 
-from .alternator import *
-from .appeaser import *
-from .averagecopier import *
-from .axelrod_tournaments import *
-from .backstabber import *
+from .alternator import Alternator
+from .appeaser import Appeaser
+from .averagecopier import AverageCopier, NiceAverageCopier
+from .axelrod_tournaments import (
+    Davis, Feld, Shubik, Tullock, Champion, Eatherley, Tester)
+from .backstabber import BackStabber, DoubleCrosser
 from .calculator import Calculator
-from .cooperator import *
-from .cycler import *
-from .darwin import *
-from .defector import *
-from .forgiver import *
-from .geller import *
-from .gobymajority import *
-from .grudger import *
-from .grumpy import *
-from .hunter import *
-from .inverse import *
-from .mathematicalconstants import *
-from .memoryone import *
-from .meta import *
-from .mindcontrol import *
-from .mindreader import *
-from .oncebitten import *
-from .prober import *
-from .punisher import *
-from .qlearner import *
-from .rand import *
-from .retaliate import *
-from .titfortat import *
+from .cooperator import Cooperator, TrickyCooperator
+from .cycler import AntiCycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD
+from .darwin import Darwin
+from .defector import Defector, TrickyDefector
+from .forgiver import Forgiver, ForgivingTitForTat
+from .geller import Geller, GellerCooperator, GellerDefector
+from .gobymajority import (
+    GoByMajority, GoByMajority10, GoByMajority20, GoByMajority40,
+    GoByMajority5)
+from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
+from .grumpy import Grumpy
+from .hunter import (
+    DefectorHunter, CooperatorHunter, AlternatorHunter, MathConstantHunter,
+    RandomHunter)
+from .inverse import Inverse
+from .mathematicalconstants import Golden, Pi, e
+from .memoryone import (
+    WinStayLoseShift,GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
+    ZDExtort2, Grofman, Joss, SoftJoss )
+from .mindcontrol import MindController, MindWarper, MindBender
+from .mindreader import MindReader, ProtectedMindReader
+from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
+from .prober import Prober, Prober2, Prober3, HardProber
+from .punisher import Punisher, InversePunisher
+from .qlearner import RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner
+from .rand import Random
+from .retaliate import (
+    Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
+    LimitedRetaliate3)
+from .titfortat import (
+    TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
+    SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats)
 
-# A list of strategies to quickly create a tournament
-basic_strategies = [
-    Alternator,
-    Cooperator,
-    Defector,
-    Random,
-    TitForTat,
-]
 
 # All the strategies in the tournament
-strategies = basic_strategies + [
+strategies = [
     Aggravater,
+    Alternator,
     AlternatorHunter,
     AntiCycler,
     AntiTitForTat,
@@ -53,12 +56,14 @@ strategies = basic_strategies + [
     Calculator,
     CautiousQLearner,
     Champion,
+    Cooperator,
     CooperatorHunter,
     CyclerCCCCCD,
     CyclerCCCD,
     CyclerCCD,
     Darwin,
     Davis,
+    Defector,
     DefectorHunter,
     DoubleCrosser,
     Eatherley,
@@ -93,10 +98,6 @@ strategies = basic_strategies + [
     LimitedRetaliate2,
     LimitedRetaliate3,
     MathConstantHunter,
-    MetaHunter,
-    MetaMajority,
-    MetaMinority,
-    MetaWinner,
     MindBender,
     MindController,
     MindReader,
@@ -110,6 +111,7 @@ strategies = basic_strategies + [
     Prober3,
     ProtectedMindReader,
     Punisher,
+    Random,
     RandomHunter,
     Retaliate,
     Retaliate2,
@@ -121,6 +123,7 @@ strategies = basic_strategies + [
     StochasticWSLS,
     SuspiciousTitForTat,
     Tester,
+    TitForTat,
     TitFor2Tats,
     TrickyCooperator,
     TrickyDefector,
@@ -131,16 +134,3 @@ strategies = basic_strategies + [
     ZDGTFT2,
     e,
     ]
-
-
-def is_cheater(s):
-    """
-    A function to check if a strategy cheats.
-    """
-    classifier = s.classifier
-    return classifier['inspects_source'] or\
-           classifier['manipulates_source'] or\
-           classifier['manipulates_state']
-
-ordinary_strategies = [s for s in strategies if not is_cheater(s)]
-cheating_strategies = [s for s in strategies if is_cheater(s)]

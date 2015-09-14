@@ -7,6 +7,7 @@ class CotoDeRatio(Player):
     defections closer to the ratio as given in a sub class"""
 
     classifier = {
+        'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
         'inspects_source': False,
         'manipulates_source': False,

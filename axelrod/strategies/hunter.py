@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 from axelrod import Player
-from .meta import MetaPlayer
 
 
 class DefectorHunter(Player):
@@ -65,15 +64,11 @@ class MathConstantHunter(Player):
     name = "Math Constant Hunter"
     classifier = {
         'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    # We need to make sure this is not marked as stochastic.
-    def __init__(self):
-        Player.__init__(self)
-        self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         """
@@ -107,15 +102,11 @@ class RandomHunter(Player):
     name = "Random Hunter"
     classifier = {
         'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    # We need to make sure this is not marked as stochastic.
-    def __init__(self):
-        Player.__init__(self)
-        self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         """
@@ -138,44 +129,3 @@ class RandomHunter(Player):
                 return 'D'
 
         return 'C'
-
-
-class MetaHunter(MetaPlayer):
-    """A player who uses a selection of hunters."""
-
-    name = "Meta Hunter"
-    classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def __init__(self):
-
-        # We need to make sure this is not marked as stochastic.
-        self.classifier['stochastic'] = False
-
-        # Notice that we don't include the cooperator hunter, because it leads to excessive
-        # defection and therefore bad performance against unforgiving strategies. We will stick
-        # to hunters that use defections as cues. However, a really tangible benefit comes from
-        # combining Random Hunter and Math Constant Hunter, since together they catch strategies
-        # that are lightly randomized but still quite constant (the tricky/suspecious ones).
-        self.team = [DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter]
-
-        MetaPlayer.__init__(self)
-
-    @staticmethod
-    def meta_strategy(results, opponent):
-
-        # If any of the hunters smells prey, then defect!
-        if 'D' in results:
-            return 'D'
-
-        # Tit-for-tat might seem like a better default choice, but in many cases it complicates
-        # the heuristics of hunting and creates fale-positives. So go ahead and use it, but only
-        # for longer histories.
-        if len(opponent.history) > 100:
-            return 'D' if opponent.history[-1:] == ['D'] else 'C'
-        else:
-            return 'C'
