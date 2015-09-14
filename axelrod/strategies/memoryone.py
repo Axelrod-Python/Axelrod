@@ -161,37 +161,6 @@ class ZDExtort2(ZeroDeterminantPlayer):
 
 ### Strategies for recreating Axelrod's tournament ###
 
-
-class Grofman(MemoryOnePlayer):
-    """
-    Cooperates with probability 2/7.
-    """
-
-    name = "Grofman"
-
-    def __init__(self):
-        p = float(2) / 7
-        four_vector = (p, p, p, p)
-        super(self.__class__, self).__init__(four_vector)
-
-
-class Joss(MemoryOnePlayer):
-    """
-    Cooperates with probability 0.9 when the opponent cooperates, otherwise
-    emulates Tit-For-Tat.
-    """
-
-    name = "Joss"
-
-    def __init__(self, p=0.9):
-        four_vector = (p, 0, p, 0)
-        self.p = p
-        super(self.__class__, self).__init__(four_vector)
-
-    def __repr__(self):
-        return "%s: %s" % (self.name, round(self.p, 2))
-
-
 class SoftJoss(MemoryOnePlayer):
     """
     Defects with probability 0.9 when the opponent defects, otherwise

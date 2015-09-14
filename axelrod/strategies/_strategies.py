@@ -4,7 +4,7 @@ from .alternator import Alternator
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_tournaments import (
-    Davis, Feld, Shubik, Tullock, Champion, Eatherley, Tester)
+    Davis, Feld, Grofman, Joss, Shubik, Tullock, Champion, Eatherley, Tester)
 from .backstabber import BackStabber, DoubleCrosser
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
@@ -25,7 +25,7 @@ from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     WinStayLoseShift,GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
-    ZDExtort2, Grofman, Joss, SoftJoss )
+    ZDExtort2, SoftJoss )
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
