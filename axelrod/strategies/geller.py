@@ -55,6 +55,7 @@ class Geller(Player):
         else:
             return opponent.strategy(self)
 
+
 class GellerCooperator(Geller):
     """Observes what the payer will do (like :code:`Geller`) but if unable to
     will cooperate.
@@ -68,6 +69,7 @@ class GellerCooperator(Geller):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
 
 class GellerDefector(Geller):
     """Observes what the payer will do (like :code:`Geller`) but if unable to

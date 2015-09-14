@@ -6,6 +6,7 @@ from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstant
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in strategies if not is_cheater(s)]
 
+
 class MetaPlayer(Player):
     """A generic player that has its own team of players."""
 

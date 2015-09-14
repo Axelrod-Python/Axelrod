@@ -159,7 +159,8 @@ class ZDExtort2(ZeroDeterminantPlayer):
         ZeroDeterminantPlayer.__init__(self, phi=1./9, s=0.5, l=P)
 
 
-### Strategies for recreating Axelrod's tournament ###
+### Strategies for recreating tournaments
+# See also Joss in axelrod_tournaments.py
 
 class SoftJoss(MemoryOnePlayer):
     """

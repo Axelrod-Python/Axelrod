@@ -41,7 +41,8 @@ from .titfortat import (
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats)
 
 
-# All the strategies in the tournament
+# Note: Meta* strategies are handled in .__init__.py
+
 strategies = [
     Aggravater,
     Alternator,
@@ -133,4 +134,4 @@ strategies = [
     ZDExtort2,
     ZDGTFT2,
     e,
-    ]
+]
