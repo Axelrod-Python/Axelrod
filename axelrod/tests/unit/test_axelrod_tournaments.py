@@ -4,7 +4,7 @@ import random
 
 import axelrod
 
-from .test_player import TestPlayer
+from .test_player import TestPlayer, test_four_vector
 
 C, D = 'C', 'D'
 
@@ -83,6 +83,49 @@ class TestFeld(TestPlayer):
         history_2 = [C] * 200
         self.responses_test(history_1, history_2, [C, C, D, D], random_seed=1)
         self.responses_test(history_1, history_2, [D, D, D, D], random_seed=50)
+
+
+class TestGrofman(TestPlayer):
+
+    name = "Grofman"
+    player = axelrod.Grofman
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_four_vector(self):
+        p = float(2) / 7
+        expected_dictionary = {(C, C): p, (C, D): p, (D, C): p, (D, D): p}
+        test_four_vector(self, expected_dictionary)
+
+    def test_strategy(self):
+        self.responses_test([C], [C], [D, D, C], random_seed=2)
+        self.responses_test([C], [D], [C, D, D])
+
+
+class TestJoss(TestPlayer):
+
+    name = "Joss: 0.9"
+    player = axelrod.Joss
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_four_vector(self):
+        expected_dictionary = {(C, C): 0.9, (C, D): 0, (D, C): 0.9, (D, D): 0}
+        test_four_vector(self, expected_dictionary)
+
+    def test_strategy(self):
+        self.responses_test([C], [C], [D], random_seed=2)
+        self.responses_test([C], [D], [D], random_seed=4)
 
 
 class TestShubik(TestPlayer):
