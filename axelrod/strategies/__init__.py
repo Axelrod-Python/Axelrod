@@ -1,7 +1,7 @@
 from ..player import is_basic, is_cheater
-from ._strategies import strategies
+from ._strategies import *
 
-# `from ._strategies import strategies` import the collection `strategies`
+# `from ._strategies import *` import the collection `strategies`
 # Now import the Meta strategies. This cannot be done in _strategies
 # because it creates circular dependencies
 
