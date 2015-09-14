@@ -1,7 +1,7 @@
 import itertools
 
 from axelrod import Player
-from .memoryone import Joss
+from .axelrod_tournaments import Joss
 
 
 class Calculator(Player):

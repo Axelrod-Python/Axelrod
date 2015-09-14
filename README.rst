@@ -57,7 +57,7 @@ The documentation includes details of how to setup a tournament but here is an
 example showing how to create a tournament with all stochastic strategies::
 
     import axelrod
-    strategies = [s() for s in axelrod.ordinary_strategies if s().stochastic]
+    strategies = [s() for s in axelrod.ordinary_strategies if s().classifier['stochastic']]
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
 
@@ -67,10 +67,8 @@ The :code:`results` object now contains all the results we could need::
 
 gives::
 
-    ['Inverse', 'Forgetful Fool Me Once', 'Nice Average Copier', 'Champion',
-    'Generous Tit-For-Tat', 'Eatherley', 'ZD-GTFT-2', 'Meta Majority', 'Soft Joss',
-    'Average Copier', 'Feld', 'Stochastic WSLS', 'Tullock', 'Joss', 'ZD-Extort-2',
-    'Grofman', 'Random', 'Meta Winner', 'Meta Minority']
+    ['Meta Hunter', 'Inverse', 'Forgetful Fool Me Once', 'GTFT: 0.33', 'Champion', 'ZD-GTFT-2', 'Eatherley', 'Math Constant Hunter', 'Random Hunter', 'Soft Joss: 0.9', 'Meta Majority', 'Nice Average Copier', 'Feld', 'Meta Minority', 'Grofman', 'Stochastic WSLS', 'ZD-Extort-2', 'Tullock', 'Joss: 0.9', 'Arrogant QLearner', 'Average Copier', 'Cautious QLearner', 'Hesitant QLearner', 'Risky QLearner', 'Random: 0.5', 'Meta Winner']
+
 
 Results
 =======
