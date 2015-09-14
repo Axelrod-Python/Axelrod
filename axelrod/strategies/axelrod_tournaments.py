@@ -2,9 +2,10 @@
 Additional strategies from Axelrod's two tournaments.
 """
 
-from axelrod import Player
-
 import random
+
+from axelrod import Player
+from.memoryone import MemoryOnePlayer
 
 
 flip_dict = {'C': 'D', 'D': 'C'}
@@ -81,6 +82,36 @@ class Feld(Player):
         if r < p:
             return 'C'
         return 'D'
+
+
+class Grofman(MemoryOnePlayer):
+    """
+    Cooperates with probability 2/7.
+    """
+
+    name = "Grofman"
+
+    def __init__(self):
+        p = float(2) / 7
+        four_vector = (p, p, p, p)
+        super(self.__class__, self).__init__(four_vector)
+
+
+class Joss(MemoryOnePlayer):
+    """
+    Cooperates with probability 0.9 when the opponent cooperates, otherwise
+    emulates Tit-For-Tat.
+    """
+
+    name = "Joss"
+
+    def __init__(self, p=0.9):
+        four_vector = (p, 0, p, 0)
+        self.p = p
+        super(self.__class__, self).__init__(four_vector)
+
+    def __repr__(self):
+        return "%s: %s" % (self.name, round(self.p, 2))
 
 
 class Shubik(Player):
