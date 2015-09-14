@@ -6,6 +6,29 @@ C, D = 'C', 'D'
 flip_dict = {C: D, D: C}
 
 
+# Strategy classifiers
+
+def is_basic(s):
+    """
+    Defines criteria for a strategy to be considered 'basic'
+    """
+    stochastic = s.classifier['stochastic']
+    depth = s.classifier['memory_depth']
+    inspects_source = s.classifier['inspects_source']
+    manipulates_source = s.classifier['manipulates_source']
+    manipulates_state = s.classifier['manipulates_state']
+    return not (stochastic or inspects_source or manipulates_source or manipulates_state) and (depth in (0, 1))
+
+def is_cheater(s):
+    """
+    A function to check if a strategy cheats.
+    """
+    classifier = s.classifier
+    return classifier['inspects_source'] or\
+           classifier['manipulates_source'] or\
+           classifier['manipulates_state']
+
+
 def update_histories(player1, player2, move1, move2):
     """Updates histories and cooperation / defections counts following play."""
     # Update histories

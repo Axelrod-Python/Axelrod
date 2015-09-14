@@ -9,6 +9,7 @@ import random
 
 flip_dict = {'C': 'D', 'D': 'C'}
 
+
 ## First Tournament
 
 class Davis(Player):
@@ -140,6 +141,7 @@ class Shubik(Player):
         self.is_retaliating = False
         self.retaliation_length = 0
         self.retaliation_remaining = 0
+
 
 class Tullock(Player):
     """

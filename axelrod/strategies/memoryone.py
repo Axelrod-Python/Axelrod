@@ -47,7 +47,7 @@ class MemoryOnePlayer(Player):
     name = 'Generic Memory One Player'
     classifier = {
         'memory_depth': 1,  # Memory-one Four-Vector
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
