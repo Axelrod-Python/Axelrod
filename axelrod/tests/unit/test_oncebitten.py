@@ -13,7 +13,13 @@ class TestOnceBitten(TestPlayer):
 
     name = "Once Bitten"
     player = axelrod.OnceBitten
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': 12,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_initial_strategy(self):
         """Starts by cooperating."""
@@ -22,7 +28,8 @@ class TestOnceBitten(TestPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
     def test_strategy(self):
-        """If opponent defects at any point then the player will defect forever."""
+        """If opponent defects at any point then the player will defect
+        forever."""
         P1 = axelrod.OnceBitten()
         P2 = axelrod.Player()
         # Starts by playing C
@@ -71,11 +78,18 @@ class TestOnceBitten(TestPlayer):
         self.assertFalse(P1.grudged)
         self.assertEqual(P1.history, [])
 
+
 class TestFoolMeOnce(TestPlayer):
 
     name = "Fool Me Once"
     player = axelrod.FoolMeOnce
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_initial(self):
         self.first_play_test(C)
@@ -84,33 +98,36 @@ class TestFoolMeOnce(TestPlayer):
         """
         If opponent defects more than once, defect forever
         """
-        P1 = axelrod.FoolMeOnce()
-        P2 = axelrod.Defector()
         self.responses_test([C], [D], [C])
         self.responses_test([C, C], [D, D], [D])
         self.responses_test([C, C], [D, C], [C])
         self.responses_test([C, C, C], [D, D, D], [D])
 
+
 class TestForgetfulFoolMeOnce(TestPlayer):
 
     name = 'Forgetful Fool Me Once'
     player = axelrod.ForgetfulFoolMeOnce
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_initial(self):
         self.first_play_test(C)
 
     def test_strategy(self):
-        """Test that will forgive one D but will grudge after 2 Ds, randomly forgets count"""
+        """Test that will forgive one D but will grudge after 2 Ds, randomly
+        forgets count"""
         random.seed(2)
-        P1 = self.player()
-        P2 = axelrod.Player()
 
         self.responses_test([C], [D], [C])
         self.responses_test([C, C], [D, D], [D])
         # Sometime eventually forget count:
         self.responses_test([C, C], [D, D], [D] * 13 + [C])
-
 
     def test_reset(self):
         """Check that count gets reset properly"""
@@ -130,14 +147,18 @@ class TestFoolMeForever(TestPlayer):
 
     name = "Fool Me Forever"
     player = axelrod.FoolMeForever
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """
         If opponent defects more than once, defect forever
         """
-        P1 = axelrod.FoolMeOnce()
-        P2 = axelrod.Defector()
         self.responses_test([], [], [D])
         self.responses_test([D], [D], [C])
         self.responses_test([D], [C], [D])

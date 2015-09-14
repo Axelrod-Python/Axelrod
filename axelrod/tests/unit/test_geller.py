@@ -9,7 +9,14 @@ class TestGeller(TestPlayer):
 
     name = "Geller"
     player = axelrod.Geller
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': -1,
+        'stochastic': True,
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_state': False,
+        'manipulates_state': False
+    }
+
 
     def test_strategy(self):
         """Should cooperate against cooperaters and defect against defectors."""
@@ -26,7 +33,14 @@ class TestGellerCooperator(TestGeller):
 
     name = "Geller Cooperator"
     player = axelrod.GellerCooperator
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': -1,
+        'stochastic': False,
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
 
     def test_against_self(self):
         P1 = self.player()
@@ -37,7 +51,14 @@ class TestGellerDefector(TestGeller):
 
     name = "Geller Defector"
     player = axelrod.GellerDefector
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': -1,
+        'stochastic': False,
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
 
     def test_against_self(self):
         P1 = self.player()

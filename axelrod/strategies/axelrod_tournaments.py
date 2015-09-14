@@ -16,7 +16,13 @@ class Davis(Player):
     defecting if at any point the opponent has defected."""
 
     name = 'Davis'
-    memory_depth = float('inf')  # Long memory
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, rounds_to_cooperate=10):
         Player.__init__(self)
@@ -39,7 +45,13 @@ class Feld(Player):
     """
 
     name = "Feld"
-    memory_depth = 200 # Varies actually, eventually becomes depth 1
+    classifier = {
+        'memory_depth': 200, # Varies actually, eventually becomes depth 1
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
                  rounds_of_decay=200):
@@ -78,7 +90,13 @@ class Shubik(Player):
     """
 
     name = 'Shubik'
-    memory_depth = float('inf')
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self):
         Player.__init__(self)
@@ -129,7 +147,13 @@ class Tullock(Player):
     than the opponent has in previous rounds."""
 
     name = "Tullock"
-    memory_depth = 11 # long memory, modified by init
+    classifier = {
+        'memory_depth': 11, # long memory, modified by init
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, rounds_to_cooperate=11):
         Player.__init__(self)
@@ -157,7 +181,13 @@ class Champion(Player):
     """
 
     name = "Champion"
-    memory_depth = float('inf')
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def strategy(self, opponent):
         current_round = len(self.history)
@@ -185,7 +215,13 @@ class Eatherley(Player):
     """
 
     name = "Eatherley"
-    memory_depth = float('inf')
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def strategy(self, opponent):
         # Cooperate on the first move
@@ -212,7 +248,13 @@ class Tester(Player):
     """
 
     name = "Tester"
-    memory_depth = float('inf')
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self):
         Player.__init__(self)

@@ -10,7 +10,13 @@ class TestRandom(TestPlayer):
 
     name = "Random: 0.5"
     player = axelrod.Random
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': 0,
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Test that strategy is randomly picked (not affected by history)."""

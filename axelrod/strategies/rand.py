@@ -6,7 +6,13 @@ class Random(Player):
     """A player who randomly chooses between cooperating and defecting."""
 
     name = 'Random'
-    memory_depth = 0  # Memory-one Four-Vector = (p, p, p, p)
+    classifier = {
+        'memory_depth': 0,  # Memory-one Four-Vector = (p, p, p, p)
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, p=0.5):
         Player.__init__(self)

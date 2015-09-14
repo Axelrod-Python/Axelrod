@@ -4,12 +4,18 @@ from axelrod import Player
 class Appeaser(Player):
     """A player who tries to guess what the opponent wants.
 
-    Switch the behaviour every time the opponent plays 'D'.
+    Switch the classifier every time the opponent plays 'D'.
     Start with 'C', switch between 'C' and 'D' when opponent plays 'D'.
     """
 
     name = 'Appeaser'
-    memory_depth = float('inf')  # Depends on internal memory.
+    classifier = {
+        'memory_depth': float('inf'),  # Depends on internal memory.
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def strategy(self, opponent):
         if not len(self.history):

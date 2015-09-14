@@ -11,9 +11,16 @@ class TestRetaliate(TestPlayer):
 
     name = "Retaliate (0.1)"
     player = axelrod.Retaliate
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
-        """Starts by cooperating.        """
+        """Starts by cooperating."""
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
@@ -29,9 +36,16 @@ class TestLimitedRetaliate(TestPlayer):
 
     name = 'Limited Retaliate (0.1/20)'
     player = axelrod.LimitedRetaliate
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
-        """Starts by cooperating.        """
+        """Starts by cooperating."""
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):

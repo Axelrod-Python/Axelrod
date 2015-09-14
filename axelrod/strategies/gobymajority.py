@@ -9,14 +9,18 @@ class GoByMajority(Player):
     default this is 0)
     """
 
+    classifier = {
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
     # memory_depth is set by __init__
 
     def __init__(self, memory_depth=0, soft=True):
         Player.__init__(self)
         self.soft = soft
-        self.memory_depth = memory_depth
-        # Set class var for consistency with other strategies
-        self.__class__.memory_depth = memory_depth
+        self.classifier['memory_depth'] = memory_depth
 
     def strategy(self, opponent):
         """This is affected by the history of the opponent.
@@ -25,7 +29,7 @@ class GoByMajority(Player):
         If at any point the opponent has more defections than cooperations in memory the player defects.
         """
 
-        memory = self.memory_depth
+        memory = self.classifier['memory_depth']
         history = opponent.history[-memory:]
         defections = sum([s == 'D' for s in history])
         cooperations = sum([s == 'C' for s in history])
@@ -40,7 +44,7 @@ class GoByMajority(Player):
 
     def __repr__(self):
         """The string method for the strategy."""
-        memory = self.memory_depth
+        memory = self.classifier['memory_depth']
         name = 'Go By Majority' + (memory > 0) * (": %i" % memory)
         if self.soft:
             name = "Soft " + name
@@ -50,7 +54,7 @@ class GoByMajority(Player):
 
 
 class GoByMajority40(GoByMajority):
-    """ 
+    """
     GoByMajority player with a memory of 40.
     """
 

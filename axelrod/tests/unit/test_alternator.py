@@ -11,6 +11,13 @@ class TestAlternator(TestPlayer):
 
     name = "Alternator"
     player = axelrod.Alternator
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""

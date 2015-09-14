@@ -11,7 +11,13 @@ class TestGrumpy(TestPlayer):
 
     name = "Grumpy"
     player = axelrod.Grumpy
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_initial_nice_strategy(self):
         """

@@ -18,7 +18,13 @@ class TestPunisher(TestPlayer):
 
     name = "Punisher"
     player = axelrod.Punisher
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_init(self):
         """Tests for the __init__ method."""
@@ -120,7 +126,13 @@ class TestInversePunisher(TestPlayer):
 
     name = "Inverse Punisher"
     player = axelrod.InversePunisher
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_init(self):
         """Tests for the __init__ method."""

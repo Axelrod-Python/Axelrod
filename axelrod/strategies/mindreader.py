@@ -4,7 +4,7 @@ import inspect
 from axelrod import Player, RoundRobin, Game, update_histories
 
 
-def simulate_match(player_1, player_2, strategy, rounds = 10):
+def simulate_match(player_1, player_2, strategy, rounds=10):
     """Simulates a number of matches."""
     for match in range(rounds):
         play_1, play_2 = strategy, player_2.strategy(player_1)
@@ -46,15 +46,25 @@ class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
 
     name = 'Mind Reader'
-    stochastic = True # Don't cache me
+    classifier = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': False,
+        'manipulates_state': True
+    }
+
+    def __init__(self):
+        Player.__init__(self)
 
     def strategy(self, opponent):
         """Pretends to play the opponent a number of times before each match.
         The primary purpose is to look far enough ahead to see if a defect will
         be punished by the opponent.
-        If the MindReader attempts to play itself (or another similar strategy),
-        then it will cause a recursion loop, so this is also handeled in this
-        method, by defecting if the method is called by strategy
+
+        If the MindReader attempts to play itself (or another similar
+        strategy), then it will cause a recursion loop, so this is also handled
+        in this method, by defecting if the method is called by strategy
         """
 
         curframe = inspect.currentframe()
@@ -74,6 +84,13 @@ class ProtectedMindReader(MindReader):
     It is also protected from mind control strategies"""
 
     name = 'Protected Mind Reader'
+    classifier = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': True,  # Stops opponent's strategy
+        'manipulates_state': False
+    }
 
     def __setattr__(self, name, val):
         """Stops any other strategy altering the methods of this class """

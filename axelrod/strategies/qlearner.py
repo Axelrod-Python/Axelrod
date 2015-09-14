@@ -12,7 +12,13 @@ class RiskyQLearner(Player):
     """
 
     name = 'Risky QLearner'
-    memory_depth = float('inf')  # Long memory
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
     learning_rate = 0.9
     discount_rate = 0.9
     action_selection_parameter = 0.1
@@ -25,7 +31,7 @@ class RiskyQLearner(Player):
 
         # Set this explicitely, since the constructor of super will not pick it up
         # for any subclasses that do not override methods using random calls.
-        self.stochastic = True
+        self.classifier['stochastic'] = True
 
         self.prev_action = random_choice()
         self.history = []

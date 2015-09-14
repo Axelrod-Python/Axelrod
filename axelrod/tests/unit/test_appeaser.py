@@ -11,6 +11,13 @@ class TestAppeaser(TestPlayer):
 
     name = "Appeaser"
     player = axelrod.Appeaser
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Depends on internal memory.
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""

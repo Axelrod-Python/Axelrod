@@ -30,7 +30,7 @@ from .rand import *
 from .retaliate import *
 from .titfortat import *
 
-
+# A list of strategies to quickly create a tournament
 basic_strategies = [
     Alternator,
     Cooperator,
@@ -39,12 +39,13 @@ basic_strategies = [
     TitForTat,
 ]
 
-ordinary_strategies = [
+# All the strategies in the tournament
+strategies = basic_strategies + [
     Aggravater,
     AlternatorHunter,
-    Appeaser,
     AntiCycler,
     AntiTitForTat,
+    Appeaser,
     ArrogantQLearner,
     AverageCopier,
     BackStabber,
@@ -53,33 +54,37 @@ ordinary_strategies = [
     CautiousQLearner,
     Champion,
     CooperatorHunter,
-    CyclerCCD,
-    CyclerCCCD,
     CyclerCCCCCD,
+    CyclerCCCD,
+    CyclerCCD,
+    Darwin,
     Davis,
     DefectorHunter,
     DoubleCrosser,
     Eatherley,
-    FoolMeOnce,
+    Feld,
     FoolMeForever,
+    FoolMeOnce,
     ForgetfulFoolMeOnce,
     ForgetfulGrudger,
     Forgiver,
     ForgivingTitForTat,
     GTFT,
+    Geller,
+    GellerCooperator,
+    GellerDefector,
     GoByMajority,
     GoByMajority10,
     GoByMajority20,
     GoByMajority40,
     GoByMajority5,
-    Feld,
     Golden,
     Grofman,
     Grudger,
     Grumpy,
     HardProber,
-    HardTitForTat,
     HardTitFor2Tats,
+    HardTitForTat,
     HesitantQLearner,
     Inverse,
     InversePunisher,
@@ -92,6 +97,10 @@ ordinary_strategies = [
     MetaMajority,
     MetaMinority,
     MetaWinner,
+    MindBender,
+    MindController,
+    MindReader,
+    MindWarper,
     NiceAverageCopier,
     OnceBitten,
     OppositeGrudger,
@@ -99,6 +108,7 @@ ordinary_strategies = [
     Prober,
     Prober2,
     Prober3,
+    ProtectedMindReader,
     Punisher,
     RandomHunter,
     Retaliate,
@@ -106,8 +116,8 @@ ordinary_strategies = [
     Retaliate3,
     RiskyQLearner,
     Shubik,
-    SoftJoss,
     SneakyTitForTat,
+    SoftJoss,
     StochasticWSLS,
     SuspiciousTitForTat,
     Tester,
@@ -120,17 +130,17 @@ ordinary_strategies = [
     ZDExtort2,
     ZDGTFT2,
     e,
-]
+    ]
 
-# These are strategies that do not follow the rules of Axelrods tournament
-cheating_strategies = [
-    Darwin,
-    Geller,
-    GellerCooperator,
-    GellerDefector,
-    MindBender,
-    MindController,
-    MindReader,
-    MindWarper,
-    ProtectedMindReader,
-]
+
+def is_cheater(s):
+    """
+    A function to check if a strategy cheats.
+    """
+    classifier = s.classifier
+    return classifier['inspects_source'] or\
+           classifier['manipulates_source'] or\
+           classifier['manipulates_state']
+
+ordinary_strategies = [s for s in strategies if not is_cheater(s)]
+cheating_strategies = [s for s in strategies if is_cheater(s)]

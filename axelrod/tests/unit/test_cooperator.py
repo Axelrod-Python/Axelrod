@@ -11,7 +11,14 @@ class TestCooperator(TestPlayer):
 
     name = "Cooperator"
     player = axelrod.Cooperator
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""
@@ -25,7 +32,13 @@ class TestTrickyCooperator(TestPlayer):
 
     name = "Tricky Cooperator"
     player = axelrod.TrickyCooperator
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': 10,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""

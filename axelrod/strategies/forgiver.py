@@ -8,7 +8,13 @@ class Forgiver(Player):
     """
 
     name = 'Forgiver'
-    memory_depth = float('inf')  # Long memory
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     @staticmethod
     def strategy(opponent):
@@ -28,7 +34,13 @@ class ForgivingTitForTat(Player):
     """
 
     name = 'Forgiving Tit For Tat'
-    memory_depth = float('inf')  # Long memory
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     @staticmethod
     def strategy(opponent):

@@ -11,6 +11,13 @@ class TestGolden(TestPlayer):
 
     name = '$\phi$'
     player = axelrod.Golden
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """test initial strategy co-operates"""
@@ -33,6 +40,13 @@ class TestPi(TestPlayer):
 
     name = '$\pi$'
     player = axelrod.Pi
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """test initial strategy co-operates"""
@@ -51,10 +65,17 @@ class TestPi(TestPlayer):
         self.responses_test([C] * 4, [C, C, D, D], [C])
 
 
-class e(TestPlayer):
+class Teste(TestPlayer):
 
     name = '$e$'
     player = axelrod.e
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """test initial strategy co-operates"""

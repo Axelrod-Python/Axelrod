@@ -5,7 +5,13 @@ class Grudger(Player):
     """A player starts by cooperating however will defect if at any point the opponent has defected."""
 
     name = 'Grudger'
-    memory_depth = float('inf')  # Long memory
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def strategy(self, opponent):
         """Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D."""
@@ -16,10 +22,16 @@ class Grudger(Player):
 
 class ForgetfulGrudger(Player):
     """A player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after meme_length matches."""
+    opponent has defected, but forgets after mem_length matches."""
 
     name = 'Forgetful Grudger'
-    memory_depth = float('inf')  # Long memory
+    classifier = {
+        'memory_depth': 10,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self):
         """Initialised the player."""
@@ -53,7 +65,13 @@ class OppositeGrudger(Player):
     """A player starts by defecting however will cooperate if at any point the opponent has cooperated."""
 
     name = 'Opposite Grudger'
-    memory_depth = float('inf')  # Long memory
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def strategy(self, opponent):
         """Begins by playing D, then plays C for the remaining rounds if the opponent ever plays C."""
@@ -66,7 +84,13 @@ class Aggravater(Player):
     """Grudger, except that it defects on the first 3 turns"""
 
     name = 'Aggravater'
-    memory_depth = float('inf')
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     @staticmethod
     def strategy(opponent):
