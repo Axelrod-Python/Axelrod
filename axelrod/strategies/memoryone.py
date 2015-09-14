@@ -9,7 +9,13 @@ class WinStayLoseShift(Player):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
     name = 'Win-Stay Lose-Shift'
-    memory_depth = 1  # Four-Vector = (1,0,0,1)
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector = (1, 0, 0, 1)
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, initial='C'):
         Player.__init__(self)
@@ -20,7 +26,7 @@ class WinStayLoseShift(Player):
             ('D', 'D'): 'C',
         }
         self._initial = initial
-        self.stochastic = False
+        self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         """Switches if it doesn't get the best payout, traditionally equivalent
@@ -39,16 +45,19 @@ class MemoryOnePlayer(Player):
     with a initializing four_vector."""
 
     name = 'Generic Memory One Player'
-    memory_depth = 1
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, four_vector, initial='C'):
         Player.__init__(self)
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self._initial = initial
-        self.stochastic = False
-        for x in set(four_vector):
-            if x != 0 and x != 1:
-                self.stochastic = True
+        self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent):
         if not len(opponent.history):
@@ -106,6 +115,7 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
     These players enforce a linear difference in stationary payoffs
     s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and
     generous strategies when l = R and s > 0"""
+
     name = 'ZD ABC'
 
     def __init__(self, phi=0., s=None, l=None):
@@ -167,7 +177,7 @@ class Grofman(MemoryOnePlayer):
 
 class Joss(MemoryOnePlayer):
     """
-    Cooperates with probability 0.9 when the opponent cooperates, otherwise 
+    Cooperates with probability 0.9 when the opponent cooperates, otherwise
     emulates Tit-For-Tat.
     """
 
@@ -184,7 +194,7 @@ class Joss(MemoryOnePlayer):
 
 class SoftJoss(MemoryOnePlayer):
     """
-    Defects with probability 0.9 when the opponent defects, otherwise 
+    Defects with probability 0.9 when the opponent defects, otherwise
     emulates Tit-For-Tat.
     """
 

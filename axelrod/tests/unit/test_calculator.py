@@ -13,7 +13,13 @@ class TestCalculator(TestPlayer):
 
     name = "Calculator"
     player = axelrod.Calculator
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_cycle_detection(self):
         P1 = axelrod.Calculator()

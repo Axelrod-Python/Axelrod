@@ -8,8 +8,13 @@ class BackStabber(Player):
     """
 
     name = 'BackStabber'
-    memory_depth = float('inf')  # Long memory
-    stochastic = False
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def strategy(self, opponent):
         if not opponent.history:
@@ -30,8 +35,13 @@ class DoubleCrosser(Player):
     """
 
     name = 'DoubleCrosser'
-    memory_depth = float('inf')  # Long memory
-    stochastic = False
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def strategy(self, opponent):
         cutoff = 6

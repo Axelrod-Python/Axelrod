@@ -12,7 +12,13 @@ class TestMindReader(TestPlayer):
 
     name = "Mind Reader"
     player = axelrod.MindReader
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_source': True,
+        'manipulates_state': False,
+        'manipulates_state': True
+    }
 
     def test_strategy(self):
         """
@@ -21,7 +27,7 @@ class TestMindReader(TestPlayer):
         P1 = axelrod.MindReader()
         P2 = axelrod.Cooperator()
         self.assertEqual(P1.strategy(P2), D)
- 
+
     def test_vs_defect(self):
         """
         Will defect against pure defecting strategies
@@ -45,7 +51,7 @@ class TestMindReader(TestPlayer):
         P1 = axelrod.MindReader()
         P2 = axelrod.TitForTat()
         self.assertEqual(P1.strategy(P2), C)
- 
+
     def test_simulate_matches(self):
         """
         Simulates a number of matches
@@ -54,7 +60,7 @@ class TestMindReader(TestPlayer):
         P2 = axelrod.Grudger()
         simulate_match(P1, P2, C, 4)
         self.assertEqual(P2.history, [C, C, C, C])
- 
+
     def test_history_is_same(self):
         """
         Checks that the history is not altered by the player
@@ -68,20 +74,11 @@ class TestMindReader(TestPlayer):
         self.assertEqual(P2.history, [C, D])
 
     def test_vs_geller(self):
-        """Ensures that a recursion error does not occour """
+        """Ensures that a recursion error does not occur """
         P1 = axelrod.MindReader()
         P2 = axelrod.Geller()
         P1.strategy(P2)
         P2.strategy(P1)
-
-    def tests_protected_mind_reader(self):
-        """Ensures that no other player can alter its strategy """
-
-        P1 = axelrod.ProtectedMindReader()
-        P2 = axelrod.MindController()
-        P3 = axelrod.Cooperator()
-        P2.strategy(P1)
-        self.assertEqual(P1.strategy(P3), D)
 
     def test_init(self):
         """Tests for init method """
@@ -94,3 +91,41 @@ class TestMindReader(TestPlayer):
         P1.history = [C, D, D, D]
         P1.reset()
         self.assertEqual(P1.history, [])
+
+
+class TestProtectedMindReader(TestPlayer):
+
+    name = "Protected Mind Reader"
+    player = axelrod.ProtectedMindReader
+    expected_classifier = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_source': True,  # Finds out what opponent will do
+        'manipulates_source': True,  # Stops opponent's strategy
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """
+        Will defect against nice strategies
+        """
+        P1 = axelrod.ProtectedMindReader()
+        P2 = axelrod.Cooperator()
+        self.assertEqual(P1.strategy(P2), D)
+
+    def test_vs_defect(self):
+        """
+        Will defect against pure defecting strategies
+        """
+        P1 = axelrod.ProtectedMindReader()
+        P2 = axelrod.Defector()
+        self.assertEqual(P1.strategy(P2), D)
+
+    def tests_protected(self):
+        """Ensures that no other player can alter its strategy """
+
+        P1 = axelrod.ProtectedMindReader()
+        P2 = axelrod.MindController()
+        P3 = axelrod.Cooperator()
+        P2.strategy(P1)
+        self.assertEqual(P1.strategy(P3), D)

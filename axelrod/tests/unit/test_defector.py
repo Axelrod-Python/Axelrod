@@ -11,7 +11,12 @@ class TestDefector(TestPlayer):
 
     name = "Defector"
     player = axelrod.Defector
-    stoachastic = False
+    expected_classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""
@@ -21,11 +26,18 @@ class TestDefector(TestPlayer):
         """Test that always defects."""
         self.markov_test([D, D, D, D])
 
+
 class TestTrickyDefector(TestPlayer):
 
     name = "Tricky Defector"
     player = axelrod.TrickyDefector
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""

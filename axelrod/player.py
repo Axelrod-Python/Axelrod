@@ -1,5 +1,6 @@
 import inspect
 import random
+import copy
 
 C, D = 'C', 'D'
 flip_dict = {C: D, D: C}
@@ -28,14 +29,27 @@ class Player(object):
     """
 
     name = "Player"
+    classifier = {}
+    default_classifier = {
+        'stochastic': False,
+        'memory_depth': float('inf'),
+        'inspects_source': None,
+        'manipulates_source': None,
+        'manipulates_state': None
+    }
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
-        self.stochastic = "random" in inspect.getsource(self.__class__)
-        self.tournament_attributes = {'length': -1, 'game': None}
+        self.classifier = copy.copy(self.classifier)
+        self.classifier['stochastic'] = (
+            "random" in inspect.getsource(self.__class__))
         if self.name == "Player":
-            self.stochastic = False
+            self.classifier['stochastic'] = False
+        for dimension in self.default_classifier:
+            if dimension not in self.classifier:
+                self.classifier[dimension] = self.default_classifier[dimension]
+        self.tournament_attributes = {'length': -1, 'game': None}
         self.cooperations = 0
         self.defections = 0
 

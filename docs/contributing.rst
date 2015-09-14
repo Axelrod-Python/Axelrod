@@ -95,8 +95,11 @@ For example there is strategy with :math:`\pi` as a name::
 
     name = '$\pi$'
 
-After that the only thing required is to write the :code:`strategy` method which takes an opponent as an argument.
-In the case of :code:`TitForTat` the strategy attempts to play the same thing as the last strategy played by the opponent (:code:`opponent.history[-1]`) and if this is not possible (in other words the opponent has not played yet) will cooperate::
+After that the only thing required is to write the :code:`strategy` method which
+takes an opponent as an argument.  In the case of :code:`TitForTat` the strategy
+attempts to play the same thing as the last strategy played by the opponent
+(:code:`opponent.history[-1]`) and if this is not possible (in other words the
+opponent has not played yet) will cooperate::
 
     def strategy(self, opponent):
         try:
@@ -104,9 +107,12 @@ In the case of :code:`TitForTat` the strategy attempts to play the same thing as
         except IndexError:
             return 'C'
 
-If your strategy creates any particular attribute along the way you need to make sure that there is a :code:`reset` method that takes account of it.
-An example of this is the :code:`ForgetfulGrudger` strategy which creates a boolean variable :code:`grudged` and a counter :code:`grudge_memory` which keeps track of things during a duel.
-Here is the :code:`reset` method which takes care of resetting this in between rounds::
+If your strategy creates any particular attribute along the way you need to make
+sure that there is a :code:`reset` method that takes account of it.  An example
+of this is the :code:`ForgetfulGrudger` strategy which creates a boolean
+variable :code:`grudged` and a counter :code:`grudge_memory` which keeps track
+of things during a duel.  Here is the :code:`reset` method which takes care of
+resetting this in between rounds::
 
     def reset(self):
         """Resets scores and history."""
@@ -115,10 +121,10 @@ Here is the :code:`reset` method which takes care of resetting this in between r
         self.grudge_memory = 0
 
 
-You can also modify the name of the strategy with the `__repr__` method, which is invoked
-when `str` is applied to a player instance. For example, the player `Random` takes a 
-parameter `p` for how often it cooperates, and the `__repr__` method adds the value
-of this parameter to the name::
+You can also modify the name of the strategy with the `__repr__` method, which
+is invoked when `str` is applied to a player instance. For example, the player
+`Random` takes a parameter `p` for how often it cooperates, and the `__repr__`
+method adds the value of this parameter to the name::
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -140,6 +146,10 @@ This helps distinguish players in tournaments that have multiple instances of th
 same strategy. If you modify the `__repr__` method of player, be sure to add an
 appropriate test.
 
+There is also a classifier dictionary that allows for easy classification of
+strategies: take a look at the `Strategy classification`_ section for more
+information.
+
 
 Adding the strategy to the library
 ''''''''''''''''''''''''''''''''''
@@ -156,48 +166,50 @@ So for the :code:`TitForTat` strategy which is written in the :code:`titfortat.p
 
     from titfortat import *
 
-Once you have done that (**and you need to do this even if you have added a strategy to an already existing file**), you need to add the class itself to one of the following lists::
+Once you have done that (**and you need to do this even if you have added a
+strategy to an already existing file**), you need to add the class itself to one
+of the :code:`strategies` list.
 
-    basic_strategies
-    ordinary_strategies
-    cheating_strategies
 
-You will most probably be adding the strategy to one of :code:`ordinary_strategies` or :code:`cheating_strategies`.
-If you are unsure take a look at the section: `Is your strategy honest?`_.
+Strategy classification
+'''''''''''''''''''''''
 
-For :code:`TitForTat` this looks like::
+Every class has a classifier dictionary that gives some classification of the
+strategy according to certain dimensions::
 
-    basic_strategies = [
-        Alternator,
-        Cooperator,
-        Defector,
-        Random,
-        TitForTat,
-    ]
+Let us take a look at :code:`TitForTat`::
 
-Note that :code:`TitForTat` is here added to the :code:`basic_strategies` list.
-If you would like to check if your strategy is honest, read the next section, if you would like to take a look at how to write tests please skip to `How to write tests`_ (again though if you need a hand with testing please let us know!).
+    >>> classifier = axelrod.TitForTat.classifier
+    >>> for key in classifier:
+    ....    print key, classifier[key]
+    manipulates_state False
+    stochastic False
+    manipulates_source False
+    inspects_source False
+    memory_depth 1
 
-Is your strategy honest?
-''''''''''''''''''''''''
+Note that when an instance of a class is created it gets it's own copy of the
+default classifier dictionary from the class. This might sometimes be modified by
+the initialisation depending on input parameters. A good example of this is the
+:code:`Joss` strategy::
 
-The rules for an 'honest' strategy are very simple:
+    >>> joss = axelrod.Joss()
+    >>> boring_joss = axelrod.Joss(1)
+    >>> joss.classifier['stochastic'], boring_joss.classifier['stochastic']
+    (True, False)
 
-1. It does not change what it's opponents do/know.
-2. It forgets everything every time it starts playing someone (this is implemented with the :code:`reset` method).
+Dimensions that are not classified have value `None` in the dictionary.
 
-If your strategy is not 'honest': that's not at all a problem though.
-Things that break the above rules are very welcome, although they should be well documented.
-There's a special list in which they must reside so that they are not run by the default tournament but this does not stop them being used by anyone wanting to build their own tournament.
+There are currently three important dimensions that help identify if a strategy
+is 'honest' or not:
 
-Simply add your strategy to the correct place in :code:`strategies/_strategies.py`::
+1. :code:`inspects_source` - does the strategy 'read' any source code that
+   it would not normally have access to. An example of this is :code:`Geller`.
+2. :code:`manipulates_source` - does the strategy 'write' any source code that
+   it would not normally be able to. An example of this is :code:`Mind Bender`.
+3. :code:`manipulates_state` - does the strategy 'change' any attributes that
+   it would not normally be able to. An example of this is :code:`Mind Reader`.
 
-    ...
-    # These are strategies that do not follow the rules of Axelrods tournament
-    cheating_strategies = [
-        Geller,
-        GellerCooperator,
-        ...
 
 How to write tests
 ''''''''''''''''''
@@ -215,6 +227,13 @@ As an example, you code write tests for Tit-For-Tat as follows::
 
         name = "Tit For Tat"
         player = axelrod.TitForTat
+        expected_classifier = {
+            'memory_depth': 1,
+            'stochastic': False,
+            'inspects_source': False,
+            'manipulates_source': False,
+            'manipulates_state': False
+        }
 
         def test_strategy(self):
             """Starts by cooperating."""
@@ -319,6 +338,12 @@ Finally, there is a :code:`TestHeadsUp` class that streamlines the testing of tw
 
 The function :code:`versus_test` also accepts a :code:`random_seed` keyword, and like :code:`responses_test` the history is accumulated.
 
+The :code:`expected_classifier` dictionary tests that the classification of the
+strategy is as expected (the tests for this is inherited in the :code:`init`
+method). Please be sure to classify new strategies according to the already
+present dimensions but if you create a new dimension you do not **need** to re
+classify all the other strategies (but feel free to! :)), but please do add it
+to the :code:`default_classifier` in the :code:`axelrod/player.py` parent class.
 
 How to run tests
 ''''''''''''''''

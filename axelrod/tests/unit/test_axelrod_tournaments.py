@@ -13,7 +13,13 @@ class TestDavis(TestPlayer):
 
     name = "Davis"
     player = axelrod.Davis
-    stochastic = False
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_initial_strategy(self):
         """
@@ -42,7 +48,14 @@ class TestFeld(TestPlayer):
 
     name = "Feld"
     player = axelrod.Feld
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': 200,
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -76,6 +89,13 @@ class TestShubik(TestPlayer):
 
     name = 'Shubik'
     player = axelrod.Shubik
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         # Starts by Cooperating
@@ -107,7 +127,14 @@ class TestTullock(TestPlayer):
 
     name = "Tullock"
     player = axelrod.Tullock
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': 11,
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
 
     def test_strategy(self):
         """Cooperates for first ten rounds"""
@@ -135,7 +162,14 @@ class TestTullock(TestPlayer):
 class TestChampion(TestPlayer):
     name = "Champion"
     player = axelrod.Champion
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
 
     def test_strategy(self):
         # Initially cooperates
@@ -174,7 +208,13 @@ class TestEatherly(TestPlayer):
 
     name = "Eatherley"
     player = axelrod.Eatherley
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         # Initially cooperates
@@ -194,6 +234,13 @@ class TestTester(TestPlayer):
 
     name = "Tester"
     player = axelrod.Tester
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Starts by defecting."""

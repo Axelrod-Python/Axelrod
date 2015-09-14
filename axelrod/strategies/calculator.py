@@ -11,7 +11,13 @@ class Calculator(Player):
     """
 
     name = "Calculator"
-    memory_depth = float('inf')
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self):
         Player.__init__(self)

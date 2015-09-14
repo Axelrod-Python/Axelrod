@@ -9,7 +9,13 @@ class AntiCycler(Player):
     """
 
     name = 'AntiCycler'
-    memory_depth = float('inf')
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self):
         Player.__init__(self)
@@ -35,7 +41,13 @@ class Cycler(Player):
     """A player that repeats a given sequence indefinitely."""
 
     name = 'Cycler'
-    memory_depth = 1
+    classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, cycle="CCD"):
         Player.__init__(self)

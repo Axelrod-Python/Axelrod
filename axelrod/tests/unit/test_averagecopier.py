@@ -13,7 +13,13 @@ class TestAverageCopier(TestPlayer):
 
     name = "Average Copier"
     player = axelrod.AverageCopier
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Test that the first strategy is picked randomly."""
@@ -33,11 +39,18 @@ class TestAverageCopier(TestPlayer):
         """
         self.responses_test([C, C, C, C], [D, D, D, D], [D, D, D], random_seed=5)
 
+
 class TestNiceAverageCopier(TestPlayer):
 
     name = "Nice Average Copier"
     player = axelrod.NiceAverageCopier
-    stochastic = True
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Test that the first strategy is cooperation."""

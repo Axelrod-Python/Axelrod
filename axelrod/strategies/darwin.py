@@ -23,7 +23,14 @@ class Darwin(Player):
     """
 
     name = "Darwin"
-    memory_depth = float('inf')
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': True  # Does not reset properly.
+    }
+
     genome = ['C']
     valid_callers = ["play"]    # What functions may invoke our strategy.
     outcomes = { ('C','C') : R,
@@ -72,4 +79,3 @@ class Darwin(Player):
         """ Select response according to outcome. """
         if outcome < 0 and (len(self.__class__.genome) >= trial):
             self.response = 'D' if self.__class__.genome[trial-1] == 'C' else 'C'
-

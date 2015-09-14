@@ -5,7 +5,13 @@ class Cooperator(Player):
     """A player who only ever cooperates."""
 
     name = 'Cooperator'
-    memory_depth = 0  # Memory-one Four-Vector = (1,1,1,1)
+    classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     @staticmethod
     def strategy(opponent):
@@ -16,7 +22,13 @@ class TrickyCooperator(Player):
     """A cooperator that is trying to be tricky."""
 
     name = "Tricky Cooperator"
-    memory_depth = 10  # Long memory
+    classifier = {
+        'memory_depth': 10,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     @staticmethod
     def strategy(opponent):

@@ -20,7 +20,9 @@ class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
     player = Player
-    stochastic = False
+    classifier = {
+        'stochastic': False
+    }
 
     def test_add_noise(self):
         random.seed(1)
@@ -66,7 +68,7 @@ class TestPlayerClass(unittest.TestCase):
 def test_responses(test_class, P1, P2, history_1, history_2,
                    responses, random_seed=None):
     """
-    Test responses to arbitrary histories. Used for the the following tests
+    Test responses to arbitrary histories. Used for the following tests
     in TestPlayer: first_play_test, markov_test, and responses_test.
     Works for arbitrary players as well. Input response_lists is a list of
     lists, each of which consists of a list for the history of player 1, a
@@ -92,16 +94,22 @@ class TestPlayer(unittest.TestCase):
 
     name = "Player"
     player = Player
-    stochastic = False
+    expected_classifier ={
+        'stochastic': False,
+        'memory_depth': float('inf'),
+        'inspects_source': None,
+        'manipulates_state': None
+    }
 
     def test_initialisation(self):
         """Test that the player initiates correctly."""
-        self.assertEqual(self.player().history, [])
-        self.assertEqual(self.player().stochastic, self.stochastic)
-        self.assertEqual(self.player().tournament_attributes,
+        player = self.player()
+        self.assertEqual(player.history, [])
+        self.assertEqual(player.tournament_attributes,
             {'length': -1, 'game': None})
-        self.assertEqual(self.player().cooperations, 0)
-        self.assertEqual(self.player().defections, 0)
+        self.assertEqual(player.cooperations, 0)
+        self.assertEqual(player.defections, 0)
+        self.classifier_test()
 
     def test_repr(self):
         """Test that the representation is correct."""
@@ -156,6 +164,22 @@ class TestPlayer(unittest.TestCase):
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed)
+
+    def classifier_test(self):
+        """Test that the keys in the expected_classifier dictionary give the
+        expected values in the player classifier dictionary. Also checks that
+        two particular keys (memory_depth and stochastic) are in the
+        dictionary."""
+        player = self.player()
+        self.assertTrue('memory_depth' in player.classifier,
+                        msg="memory_depth not in classifier")
+        self.assertTrue('stochastic' in player.classifier,
+                        msg="stochastic not in classifier")
+        for key in self.expected_classifier:
+            self.assertEqual(player.classifier[key],
+                             self.expected_classifier[key],
+                             msg="%s - Behaviour: %s != Expected Behaviour: %s" %
+                             (key, player.classifier[key], self.expected_classifier[key]))
 
 
 class TestHeadsUp(unittest.TestCase):

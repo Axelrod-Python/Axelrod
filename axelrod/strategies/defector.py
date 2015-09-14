@@ -5,7 +5,13 @@ class Defector(Player):
     """A player who only ever defects."""
 
     name = 'Defector'
-    memory_depth = 0  # Memory-one Four-Vector = (0,0,0,0)
+    classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     @staticmethod
     def strategy(opponent):
@@ -16,7 +22,13 @@ class TrickyDefector(Player):
     """A defector that is trying to be tricky."""
 
     name = "Tricky Defector"
-    memory_depth = float('inf')  # Long memory
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def strategy(self, opponent):
         """Almost always defects, but will try to trick the opponent into cooperating.
