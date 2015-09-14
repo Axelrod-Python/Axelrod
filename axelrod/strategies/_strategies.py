@@ -25,7 +25,7 @@ from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     WinStayLoseShift,GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
-    ZDExtort2, SoftJoss )
+    ZDExtort2, SoftJoss, MemoryOnePlayer)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever

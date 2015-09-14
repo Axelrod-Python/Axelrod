@@ -49,7 +49,7 @@ class Feld(Player):
     name = "Feld"
     classifier = {
         'memory_depth': 200, # Varies actually, eventually becomes depth 1
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -182,7 +182,7 @@ class Tullock(Player):
     name = "Tullock"
     classifier = {
         'memory_depth': 11, # long memory, modified by init
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -216,7 +216,7 @@ class Champion(Player):
     name = "Champion"
     classifier = {
         'memory_depth': float('inf'),
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -250,7 +250,7 @@ class Eatherley(Player):
     name = "Eatherley"
     classifier = {
         'memory_depth': float('inf'),
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -75,7 +75,7 @@ class MathConstantHunter(Player):
         Check whether the number of cooperations in the first and second halves
         of the history are close. The variance of the uniform distribution (1/4)
         is a reasonable delta but use something lower for certainty and avoiding
-        false positives. Rhis approach will also detect a lot of random players.
+        false positives. This approach will also detect a lot of random players.
         """
 
         n = len(self.history)

@@ -65,8 +65,6 @@ class Player(object):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
         self.classifier = copy.copy(self.classifier)
-        self.classifier['stochastic'] = (
-            "random" in inspect.getsource(self.__class__))
         if self.name == "Player":
             self.classifier['stochastic'] = False
         for dimension in self.default_classifier:
