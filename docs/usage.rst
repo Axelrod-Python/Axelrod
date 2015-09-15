@@ -52,10 +52,18 @@ We can list the so called 'basic strategies' by doing the following::
 which gives::
 
     Alternator
+    Anti Tit For Tat
+    Bully
     Cooperator
+    Cycler CCCCCD
+    Cycler CCCD
+    Cycler CCD
     Defector
-    Random
+    Soft Go By Majority
+    Suspicious Tit For Tat
     Tit For Tat
+    Win-Stay Lose-Shift
+
 
 Before creating a tournament let us add another :code:`Defector` to our strategies::
 
@@ -71,7 +79,7 @@ To view the player types in our tournament::
 
 which gives::
 
-    [Alternator, Cooperator, Defector, Random, Tit For Tat, Defector]
+    [Alternator, Anti Tit For Tat, Bully, Cooperator, Cycler CCCCCD, Cycler CCCD, Cycler CCD, Defector, Soft Go By Majority, Suspicious Tit For Tat, Tit For Tat, Win-Stay Lose-Shift, Defector]
 
 Now to run the tournament and save the results::
 
@@ -84,7 +92,8 @@ First, let us view the scores::
 
 which gives::
 
-    [[1.952, 1.943, 1.951, 1.96, 1.924, 1.943, 2.007, 1.966, 2.003, 1.963], [1.221, 1.185, 1.173, 1.218, 1.206, 1.218, 1.221, 1.224, 1.188, 1.221], [2.588, 2.616, 2.608, 2.632, 2.588, 2.624, 2.612, 2.532, 2.588, 2.564], [1.917, 1.896, 1.901, 1.884, 1.931, 1.896, 1.87, 1.912, 1.886, 1.899], [1.967, 1.94, 1.929, 1.934, 1.957, 1.959, 1.948, 1.95, 1.937, 1.955], [2.636, 2.664, 2.632, 2.592, 2.588, 2.644, 2.604, 2.572, 2.612, 2.588]]
+    [[2.452916666666667, 2.452916666666667, 2.452916666666667, 2.452916666666667, 2.452916666666667, 2.452916666666667, 2.452916666666667, 2.452916666666667, 2.452916666666667, 2.452916666666667], [2.28, 2.28, 2.28, 2.28, 2.28, 2.28, 2.28, 2.28, 2.28, 2.28], [2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7, 2.7], [1.68875, 1.68875, 1.68875, 1.68875, 1.68875, 1.68875, 1.68875, 1.68875, 1.68875, 1.68875], [1.8416666666666666, 1.8416666666666666, 1.8416666666666666, 1.8416666666666666, 1.8416666666666666, 1.8416666666666666, 1.8416666666666666, 1.8416666666666666, 1.8416666666666666, 1.8416666666666666], [1.9983333333333333, 1.9983333333333333, 1.9983333333333333, 1.9983333333333333, 1.9983333333333333, 1.9983333333333333, 1.9983333333333333, 1.9983333333333333, 1.9983333333333333, 1.9983333333333333], [2.149583333333333, 2.149583333333333, 2.149583333333333, 2.149583333333333, 2.149583333333333, 2.149583333333333, 2.149583333333333, 2.149583333333333, 2.149583333333333, 2.149583333333333], [3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664], [2.1995833333333334, 2.1995833333333334, 2.1995833333333334, 2.1995833333333334, 2.1995833333333334, 2.1995833333333334, 2.1995833333333334, 2.1995833333333334, 2.1995833333333334, 2.1995833333333334], [2.2741666666666664, 2.2741666666666664, 2.2741666666666664, 2.2741666666666664, 2.2741666666666664, 2.2741666666666664, 2.2741666666666664, 2.2741666666666664, 2.2741666666666664, 2.2741666666666664], [2.39375, 2.39375, 2.39375, 2.39375, 2.39375, 2.39375, 2.39375, 2.39375, 2.39375, 2.39375], [2.19, 2.19, 2.19, 2.19, 2.19, 2.19, 2.19, 2.19, 2.19, 2.19], [3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664, 3.0866666666666664]]
+
 
 We see here that when we ran :code:`tournament.play()` it automatically repeated the round robin tournament 10 times (this is to deal with the stochasticity of the random players).
 The :code:`normalised_scores` contains a list of normalized scores for all players.
@@ -95,7 +104,7 @@ To view a ranking based on median score::
 
 which gives::
 
-    [2, 5, 0, 4, 3, 1]
+    [7, 12, 2, 0, 10, 1, 9, 8, 11, 6, 5, 4, 3]
 
 Finally, to obtain the ranking in a helpful format with all the names::
 
@@ -103,24 +112,23 @@ Finally, to obtain the ranking in a helpful format with all the names::
 
 which gives::
 
-    ['Defector', 'Defector', 'Alternator', 'Tit For Tat', 'Random', 'Cooperator']
+    ['Defector', 'Defector', 'Bully', 'Alternator', 'Tit For Tat', 'Anti Tit For Tat', 'Suspicious Tit For Tat', 'Soft Go By Majority', 'Win-Stay Lose-Shift', 'Cycler CCD', 'Cycler CCCD', 'Cycler CCCCCD', 'Cooperator']
 
 So in this particular instance our two defectors have won.
-Let us write a little script that will throw in a new :code:`TitForTat` player until the tit for tat player wins::
+Let us write a little script that will throw in a new :code:`TitForTat` player until the Tit-For-Tat player wins::
 
-    while ranks[0] == 'Defector':
+    while results.ranked_names[0] == 'Defector':
        strategies.append(axelrod.TitForTat())  # Adding a new tit for tat player
        tournament = axelrod.Tournament(strategies)
        results = tournament.play()
-       ranks = results.ranked_names
 
 Once that has run let us see how many :code:`TitForTat` players were required::
 
-    ranks.count('Tit For Tat')
+    results.ranked_names.count('Tit For Tat')
 
 which gives::
 
-    3
+    5
 
 We can wrap all this in a function and use it to see how many :code:`TitForTat` are needed to overcome a varying number :code:`Defector`::
 
@@ -149,7 +157,7 @@ By viewing :code:`t` we actually see that even with 50 :code:`Defector` 3 :code:
 
 gives::
 
-    3
+    6
 
 So even with a large quantity of :code:`Defector` only a small number of
 :code:`TitForTat` strategies is required.
