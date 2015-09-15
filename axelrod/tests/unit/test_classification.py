@@ -75,13 +75,25 @@ class TestClassification(unittest.TestCase):
                        axelrod.TitForTat,
                        axelrod.WinStayLoseShift]
 
+        known_ordinary = [axelrod.AverageCopier,
+                          axelrod.ForgivingTitForTat,
+                          axelrod.GoByMajority20,
+                          axelrod.GTFT,
+                          axelrod.Grudger,
+                          axelrod.Inverse,
+                          axelrod.Random]
+
         for strategy in known_cheaters:
-            self.assertTrue(axelrod.is_cheater(strategy), msg=strategy)
-            self.assertFalse(axelrod.is_basic(strategy), msg=strategy)
+            self.assertTrue(axelrod.is_cheater(strategy()), msg=strategy)
+            self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axelrod.is_basic(strategy), msg=strategy)
-            self.assertFalse(axelrod.is_cheater(strategy), msg=strategy)
+            self.assertTrue(axelrod.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axelrod.is_cheater(strategy()), msg=strategy)
+
+        for strategy in known_ordinary:
+            self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axelrod.is_cheater(strategy()), msg=strategy)
 
 
 class TestStrategies(unittest.TestCase):
