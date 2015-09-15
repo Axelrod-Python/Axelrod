@@ -52,14 +52,10 @@ We can list the so called 'basic strategies' by doing the following::
 which gives::
 
     Alternator
-    Anti Tit For Tat
-    Bully
     Cooperator
     Defector
-    Soft Go By Majority
-    Suspicious Tit For Tat
+    Random: 0.5
     Tit For Tat
-    Win-Stay Lose-Shift
 
 Before creating a tournament let us add another :code:`Defector` to our strategies::
 
@@ -75,7 +71,7 @@ To view the player types in our tournament::
 
 which gives::
 
-    [Alternator, Anti Tit For Tat, Bully, Cooperator, Defector, Soft Go By Majority, Suspicious Tit For Tat, Tit For Tat, Win-Stay Lose-Shift, Defector]
+    [Alternator, Cooperator, Defector, Random: 0.5, Tit For Tat, Defector]
 
 Now to run the tournament and save the results::
 
@@ -88,7 +84,7 @@ First, let us view the scores::
 
 which gives::
 
-    [[2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25], [1.8722222222222222, 1.8722222222222222, 1.8722222222222222, 1.8722222222222222, 1.8722222222222222, 1.8722222222222222, 1.8722222222222222, 1.8722222222222222, 1.8722222222222222, 1.8722222222222222], [2.428888888888889, 2.428888888888889, 2.428888888888889, 2.428888888888889, 2.428888888888889, 2.428888888888889, 2.428888888888889, 2.428888888888889, 2.428888888888889, 2.428888888888889], [1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5], [2.78, 2.78, 2.78, 2.78, 2.78, 2.78, 2.78, 2.78, 2.78, 2.78], [2.181111111111111, 2.181111111111111, 2.181111111111111, 2.181111111111111, 2.181111111111111, 2.181111111111111, 2.181111111111111, 2.181111111111111, 2.181111111111111, 2.181111111111111], [2.1127777777777776, 2.1127777777777776, 2.1127777777777776, 2.1127777777777776, 2.1127777777777776, 2.1127777777777776, 2.1127777777777776, 2.1127777777777776, 2.1127777777777776, 2.1127777777777776], [2.2755555555555556, 2.2755555555555556, 2.2755555555555556, 2.2755555555555556, 2.2755555555555556, 2.2755555555555556, 2.2755555555555556, 2.2755555555555556, 2.2755555555555556, 2.2755555555555556], [1.8794444444444445, 1.8794444444444445, 1.8794444444444445, 1.8794444444444445, 1.8794444444444445, 1.8794444444444445, 1.8794444444444445, 1.8794444444444445, 1.8794444444444445, 1.8794444444444445], [2.78, 2.78, 2.78, 2.78, 2.78, 2.78, 2.78, 2.78, 2.78, 2.78]]
+    [[1.94, 1.927, 1.929, 1.962, 1.961, 1.977, 1.907, 1.948, 1.954, 1.967], [1.2, 1.146, 1.194, 1.215, 1.188, 1.191, 1.203, 1.2, 1.191, 1.179], [2.588, 2.588, 2.608, 2.624, 2.632, 2.596, 2.62, 2.592, 2.612, 2.572], [1.889, 1.976, 1.91, 1.888, 1.899, 1.893, 1.919, 1.926, 1.921, 1.912], [1.927, 1.95, 1.943, 1.944, 1.941, 1.943, 1.942, 1.942, 1.957, 1.951], [2.636, 2.532, 2.628, 2.58, 2.604, 2.648, 2.584, 2.556, 2.584, 2.62]]
 
 
 We see here that when we ran :code:`tournament.play()` it automatically repeated the round robin tournament 10 times (this is to deal with the stochasticity of the random players).
@@ -100,7 +96,7 @@ To view a ranking based on median score::
 
 which gives::
 
-    [4, 9, 2, 7, 0, 5, 6, 8, 1, 3]
+    [2, 5, 0, 4, 3, 1]
 
 Finally, to obtain the ranking in a helpful format with all the names::
 
@@ -108,7 +104,8 @@ Finally, to obtain the ranking in a helpful format with all the names::
 
 which gives::
 
-    ['Defector', 'Defector', 'Bully', 'Tit For Tat', 'Alternator', 'Soft Go By Majority', 'Suspicious Tit For Tat', 'Win-Stay Lose-Shift', 'Anti Tit For Tat', 'Cooperator']
+    ['Defector', 'Defector', 'Alternator', 'Tit For Tat', 'Random: 0.5', 'Cooperator']
+
 
 So in this particular instance our two defectors have won.
 Let us write a little script that will throw in a new :code:`TitForTat` player until the Tit-For-Tat player wins::
@@ -124,7 +121,7 @@ Once that has run let us see how many :code:`TitForTat` players were required::
 
 which gives::
 
-    4
+    3
 
 We can wrap all this in a function and use it to see how many :code:`TitForTat` are needed to overcome a varying number :code:`Defector`::
 
@@ -153,7 +150,7 @@ By viewing :code:`t` we actually see that even with 50 :code:`Defector` 3 :code:
 
 gives::
 
-    4
+    3
 
 So even with a large quantity of :code:`Defector` only a small number of
 :code:`TitForTat` strategies is required.

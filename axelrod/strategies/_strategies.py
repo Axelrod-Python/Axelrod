@@ -41,7 +41,8 @@ from .titfortat import (
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats)
 
 
-# Note: Meta* strategies are handled in .__init__.py
+# Note: Meta* strategies are handled in .__init__.py, so this is not the
+# final form of the list
 
 strategies = [
     Aggravater,
