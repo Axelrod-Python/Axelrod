@@ -14,3 +14,6 @@ strategies.extend((MetaHunter, MetaMajority, MetaMinority, MetaWinner))
 basic_strategies =    [s for s in strategies if is_basic(s())]
 ordinary_strategies = [s for s in strategies if not is_cheater(s())]
 cheating_strategies = [s for s in strategies if is_cheater(s())]
+
+for x in basic_strategies:
+    print x

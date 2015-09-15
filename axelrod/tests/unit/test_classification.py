@@ -62,8 +62,48 @@ class TestClassification(unittest.TestCase):
                           axelrod.MindWarper,
                           axelrod.MindReader]
 
+        known_basic = [axelrod.Alternator,
+                       axelrod.AntiTitForTat,
+                       axelrod.Bully,
+                       axelrod.Cooperator,
+                       axelrod.CyclerCCCCCD,
+                       axelrod.CyclerCCCD,
+                       axelrod.CyclerCCD,
+                       axelrod.Defector,
+                       axelrod.GoByMajority,
+                       axelrod.SuspiciousTitForTat,
+                       axelrod.TitForTat,
+                       axelrod.WinStayLoseShift]
+
         for strategy in known_cheaters:
             self.assertTrue(axelrod.is_cheater(strategy), msg=strategy)
+            self.assertFalse(axelrod.is_basic(strategy), msg=strategy)
 
-        for strategy in axelrod.basic_strategies:
+        for strategy in known_basic:
+            self.assertTrue(axelrod.is_basic(strategy), msg=strategy)
             self.assertFalse(axelrod.is_cheater(strategy), msg=strategy)
+
+
+    def test_is_basic(self):
+        pass
+
+
+
+class TestStrategies(unittest.TestCase):
+
+    def test_strategy_list(self):
+        self.assertTrue(hasattr(axelrod, "strategies"))
+        self.assertTrue(hasattr(axelrod, "basic_strategies"))
+        self.assertTrue(hasattr(axelrod, "ordinary_strategies"))
+        self.assertTrue(hasattr(axelrod, "cheating_strategies"))
+
+    def test_lists_not_empty(self):
+        self.assertTrue(len(axelrod.strategies) > 0)
+        self.assertTrue(len(axelrod.basic_strategies) > 0)
+        self.assertTrue(len(axelrod.ordinary_strategies) > 0)
+        self.assertTrue(len(axelrod.cheating_strategies) > 0)
+
+    def test_meta_inclusion(self):
+        self.assertTrue(axelrod.MetaMajority in axelrod.strategies)
+
+
