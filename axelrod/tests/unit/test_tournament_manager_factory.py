@@ -22,11 +22,9 @@ class TestTournamentManagerFactory(unittest.TestCase):
 
         cls.expected_basic_strategies = axelrod.basic_strategies
         cls.expected_strategies = (
-            axelrod.basic_strategies +
             axelrod.ordinary_strategies)
         cls.expected_cheating_strategies = axelrod.cheating_strategies
         cls.expected_all_strategies = (
-            axelrod.basic_strategies +
             axelrod.ordinary_strategies +
             axelrod.cheating_strategies)
 
