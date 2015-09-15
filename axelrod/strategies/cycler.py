@@ -53,7 +53,7 @@ class Cycler(Player):
         Player.__init__(self)
         self.cycle = cycle
         self.name += " " + cycle
-        self.memory_depth = len(cycle)
+        self.classifier['memory_depth'] = len(cycle)
 
     def strategy(self, opponent):
         curent_round = len(self.history)

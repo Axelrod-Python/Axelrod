@@ -17,7 +17,7 @@ def is_basic(s):
     inspects_source = s.classifier['inspects_source']
     manipulates_source = s.classifier['manipulates_source']
     manipulates_state = s.classifier['manipulates_state']
-    return not (stochastic or inspects_source or manipulates_source or manipulates_state) and (depth in (0, 1))
+    return (not stochastic) and (not inspects_source) and (not manipulates_source) and (not manipulates_state) and (depth in (0, 1))
 
 def is_cheater(s):
     """
