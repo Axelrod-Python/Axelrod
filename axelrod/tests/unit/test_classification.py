@@ -62,16 +62,6 @@ class TestClassification(unittest.TestCase):
                           axelrod.MindWarper,
                           axelrod.MindReader]
 
-        known_basic = [axelrod.Alternator,
-                       axelrod.AntiTitForTat,
-                       axelrod.Bully,
-                       axelrod.Cooperator,
-                       axelrod.Defector,
-                       axelrod.GoByMajority,
-                       axelrod.SuspiciousTitForTat,
-                       axelrod.TitForTat,
-                       axelrod.WinStayLoseShift]
-
         known_ordinary = [axelrod.AverageCopier,
                           axelrod.ForgivingTitForTat,
                           axelrod.GoByMajority20,
@@ -82,14 +72,8 @@ class TestClassification(unittest.TestCase):
 
         for strategy in known_cheaters:
             self.assertTrue(axelrod.is_cheater(strategy()), msg=strategy)
-            self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
-
-        for strategy in known_basic:
-            self.assertTrue(axelrod.is_basic(strategy()), msg=strategy)
-            self.assertFalse(axelrod.is_cheater(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
             self.assertFalse(axelrod.is_cheater(strategy()), msg=strategy)
 
 

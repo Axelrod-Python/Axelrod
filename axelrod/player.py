@@ -8,17 +8,6 @@ flip_dict = {C: D, D: C}
 
 # Strategy classifiers
 
-def is_basic(s):
-    """
-    Defines criteria for a strategy to be considered 'basic'
-    """
-    stochastic = s.classifier['stochastic']
-    depth = s.classifier['memory_depth']
-    inspects_source = s.classifier['inspects_source']
-    manipulates_source = s.classifier['manipulates_source']
-    manipulates_state = s.classifier['manipulates_state']
-    return (not stochastic) and (not inspects_source) and (not manipulates_source) and (not manipulates_state) and (depth in (0, 1))
-
 def is_cheater(s):
     """
     A function to check if a strategy cheats.
