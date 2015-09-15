@@ -84,11 +84,6 @@ class TestClassification(unittest.TestCase):
             self.assertFalse(axelrod.is_cheater(strategy), msg=strategy)
 
 
-    def test_is_basic(self):
-        pass
-
-
-
 class TestStrategies(unittest.TestCase):
 
     def test_strategy_list(self):
