@@ -2,12 +2,14 @@
 Additional strategies from Axelrod's two tournaments.
 """
 
-from axelrod import Player
-
 import random
+
+from axelrod import Player
+from.memoryone import MemoryOnePlayer
 
 
 flip_dict = {'C': 'D', 'D': 'C'}
+
 
 ## First Tournament
 
@@ -47,7 +49,7 @@ class Feld(Player):
     name = "Feld"
     classifier = {
         'memory_depth': 200, # Varies actually, eventually becomes depth 1
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -80,6 +82,36 @@ class Feld(Player):
         if r < p:
             return 'C'
         return 'D'
+
+
+class Grofman(MemoryOnePlayer):
+    """
+    Cooperates with probability 2/7.
+    """
+
+    name = "Grofman"
+
+    def __init__(self):
+        p = float(2) / 7
+        four_vector = (p, p, p, p)
+        super(self.__class__, self).__init__(four_vector)
+
+
+class Joss(MemoryOnePlayer):
+    """
+    Cooperates with probability 0.9 when the opponent cooperates, otherwise
+    emulates Tit-For-Tat.
+    """
+
+    name = "Joss"
+
+    def __init__(self, p=0.9):
+        four_vector = (p, 0, p, 0)
+        self.p = p
+        super(self.__class__, self).__init__(four_vector)
+
+    def __repr__(self):
+        return "%s: %s" % (self.name, round(self.p, 2))
 
 
 class Shubik(Player):
@@ -141,6 +173,7 @@ class Shubik(Player):
         self.retaliation_length = 0
         self.retaliation_remaining = 0
 
+
 class Tullock(Player):
     """
     Cooperates for the first 11 rounds then randomly cooperates 10% less often
@@ -149,7 +182,7 @@ class Tullock(Player):
     name = "Tullock"
     classifier = {
         'memory_depth': 11, # long memory, modified by init
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -183,7 +216,7 @@ class Champion(Player):
     name = "Champion"
     classifier = {
         'memory_depth': float('inf'),
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -217,7 +250,7 @@ class Eatherley(Player):
     name = "Eatherley"
     classifier = {
         'memory_depth': float('inf'),
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

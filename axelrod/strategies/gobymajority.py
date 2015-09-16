@@ -13,9 +13,9 @@ class GoByMajority(Player):
         'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
-        'manipulates_state': False
+        'manipulates_state': False,
+        'memory_depth': 0 # memory_depth may be altered by __init__
     }
-    # memory_depth is set by __init__
 
     def __init__(self, memory_depth=0, soft=True):
         Player.__init__(self)

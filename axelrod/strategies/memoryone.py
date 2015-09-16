@@ -47,7 +47,7 @@ class MemoryOnePlayer(Player):
     name = 'Generic Memory One Player'
     classifier = {
         'memory_depth': 1,  # Memory-one Four-Vector
-        'stochastic': False,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -159,38 +159,8 @@ class ZDExtort2(ZeroDeterminantPlayer):
         ZeroDeterminantPlayer.__init__(self, phi=1./9, s=0.5, l=P)
 
 
-### Strategies for recreating Axelrod's tournament ###
-
-
-class Grofman(MemoryOnePlayer):
-    """
-    Cooperates with probability 2/7.
-    """
-
-    name = "Grofman"
-
-    def __init__(self):
-        p = float(2) / 7
-        four_vector = (p, p, p, p)
-        super(self.__class__, self).__init__(four_vector)
-
-
-class Joss(MemoryOnePlayer):
-    """
-    Cooperates with probability 0.9 when the opponent cooperates, otherwise
-    emulates Tit-For-Tat.
-    """
-
-    name = "Joss"
-
-    def __init__(self, p=0.9):
-        four_vector = (p, 0, p, 0)
-        self.p = p
-        super(self.__class__, self).__init__(four_vector)
-
-    def __repr__(self):
-        return "%s: %s" % (self.name, round(self.p, 2))
-
+### Strategies for recreating tournaments
+# See also Joss in axelrod_tournaments.py
 
 class SoftJoss(MemoryOnePlayer):
     """
