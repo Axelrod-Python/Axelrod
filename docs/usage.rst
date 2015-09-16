@@ -17,7 +17,7 @@ repository::
 
     pip install axelrod
 
-Take a look at this asciicast which demonstrates how to do this (and run a basic
+Take a look at this asciicast which demonstrates how to do this (and run a demo
 tournament):
 
 .. image:: https://asciinema.org/a/18590.png
@@ -42,10 +42,10 @@ Using as a library
 Creating and running a tournament
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We can list the so called 'basic strategies' by doing the following::
+We can list the so called 'demo strategies' by doing the following::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     for s in strategies:
         print s
 
@@ -54,14 +54,14 @@ which gives::
     Alternator
     Cooperator
     Defector
-    Random: 0.5
+    Random
     Tit For Tat
 
 Before creating a tournament let us add another :code:`Defector` to our strategies::
 
     strategies.append(axelrod.Defector())
 
-We can easily create a tournament with these basic strategies by doing the following::
+We can easily create a tournament with these demo strategies by doing the following::
 
     tournament = axelrod.Tournament(strategies)
 
@@ -71,7 +71,7 @@ To view the player types in our tournament::
 
 which gives::
 
-    [Alternator, Cooperator, Defector, Random: 0.5, Tit For Tat, Defector]
+    [Alternator, Cooperator, Defector, Random, Tit For Tat, Defector]
 
 Now to run the tournament and save the results::
 
@@ -84,8 +84,7 @@ First, let us view the scores::
 
 which gives::
 
-    [[1.94, 1.927, 1.929, 1.962, 1.961, 1.977, 1.907, 1.948, 1.954, 1.967], [1.2, 1.146, 1.194, 1.215, 1.188, 1.191, 1.203, 1.2, 1.191, 1.179], [2.588, 2.588, 2.608, 2.624, 2.632, 2.596, 2.62, 2.592, 2.612, 2.572], [1.889, 1.976, 1.91, 1.888, 1.899, 1.893, 1.919, 1.926, 1.921, 1.912], [1.927, 1.95, 1.943, 1.944, 1.941, 1.943, 1.942, 1.942, 1.957, 1.951], [2.636, 2.532, 2.628, 2.58, 2.604, 2.648, 2.584, 2.556, 2.584, 2.62]]
-
+    [[1.952, 1.943, 1.951, 1.96, 1.924, 1.943, 2.007, 1.966, 2.003, 1.963], [1.221, 1.185, 1.173, 1.218, 1.206, 1.218, 1.221, 1.224, 1.188, 1.221], [2.588, 2.616, 2.608, 2.632, 2.588, 2.624, 2.612, 2.532, 2.588, 2.564], [1.917, 1.896, 1.901, 1.884, 1.931, 1.896, 1.87, 1.912, 1.886, 1.899], [1.967, 1.94, 1.929, 1.934, 1.957, 1.959, 1.948, 1.95, 1.937, 1.955], [2.636, 2.664, 2.632, 2.592, 2.588, 2.644, 2.604, 2.572, 2.612, 2.588]]
 
 We see here that when we ran :code:`tournament.play()` it automatically repeated the round robin tournament 10 times (this is to deal with the stochasticity of the random players).
 The :code:`normalised_scores` contains a list of normalized scores for all players.
@@ -104,20 +103,20 @@ Finally, to obtain the ranking in a helpful format with all the names::
 
 which gives::
 
-    ['Defector', 'Defector', 'Alternator', 'Tit For Tat', 'Random: 0.5', 'Cooperator']
-
+   ['Defector', 'Defector', 'Alternator', 'Tit For Tat', 'Random', 'Cooperator']
 
 So in this particular instance our two defectors have won.
-Let us write a little script that will throw in a new :code:`TitForTat` player until the Tit-For-Tat player wins::
+Let us write a little script that will throw in a new :code:`TitForTat` player until the tit for tat player wins::
 
-    while results.ranked_names[0] == 'Defector':
+    while ranks[0] == 'Defector':
        strategies.append(axelrod.TitForTat())  # Adding a new tit for tat player
        tournament = axelrod.Tournament(strategies)
        results = tournament.play()
+       ranks = results.ranked_names
 
 Once that has run let us see how many :code:`TitForTat` players were required::
 
-    results.ranked_names.count('Tit For Tat')
+    ranks.count('Tit For Tat')
 
 which gives::
 
@@ -126,7 +125,7 @@ which gives::
 We can wrap all this in a function and use it to see how many :code:`TitForTat` are needed to overcome a varying number :code:`Defector`::
 
     def find_number_of_tit_for_tat(number_of_defectors):
-       strategies = [s() for s in axelrod.basic_strategies]
+       strategies = [s() for s in axelrod.demo_strategies]
        for d in range(number_of_defectors - 1):
             strategies.append(axelrod.Defector())
        ranks = ['Defector']  # Creating a dummy list to start
@@ -161,10 +160,10 @@ Graphics
 
 There are a variety of graphical outputs that the library can produce.
 
-Let us see the global scores for the basic strategies::
+Let us see the global scores for the demo strategies::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     plot = axelrod.Plot(results)
@@ -173,13 +172,13 @@ Let us see the global scores for the basic strategies::
 
 We see the output of this here:
 
-.. image:: http://axelrod-python.github.io/tournament/assets/basic_strategies_boxplot.svg
+.. image:: _static/usage/demo_strategies_boxplot.svg
    :width: 50%
    :align: center
 
 If we run the same tournament but with 5 :code:`Defector` and 3 :code:`TitForTat` we get:
 
-.. image:: _static/usage/basic_strategies-5-Defector-3-TitForTat.svg
+.. image:: _static/usage/demo_strategies-5-Defector-3-TitForTat.svg
    :width: 50%
    :align: center
 
@@ -190,7 +189,7 @@ By default the tournament is run for 200 rounds and repeated 10 times. This are
 the default values and can be changed::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies, turns=20, repetitions=50)
     results = tournament.play()
     plot = axelrod.Plot(results)
@@ -198,7 +197,7 @@ the default values and can be changed::
     p.show()
 
 
-.. image:: _static/usage/basic_strategies_20_turns_50_repetitions.svg
+.. image:: _static/usage/demo_strategies_20_turns_50_repetitions.svg
    :width: 50%
    :align: center
 
@@ -208,7 +207,7 @@ that is repeated. Here is an example showing the standard strategies playing a
 scaled version of the standard game::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies, game=Game(30, 0, 50, 10))
     results = tournament.play()
     plot = axelrod.Plot(results)
@@ -216,7 +215,7 @@ scaled version of the standard game::
     p.show()
 
 
-.. image:: _static/usage/basic_strategies_scaled_games.svg
+.. image:: _static/usage/demo_strategies_scaled_games.svg
    :width: 50%
    :align: center
 
@@ -226,7 +225,7 @@ Payoff matrix
 Once a tournament has been run we can generate the payoff matrix that corresponds to it::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     results.payoff_matrix
@@ -249,7 +248,7 @@ Again, if :code:`matplotlib` is installed we can visualise this::
 
 this is shown here:
 
-.. image:: http://axelrod-python.github.io/tournament/assets/basic_strategies_payoff.svg
+.. image:: _static/usage/demo_strategies_payoff.svg
    :width: 50%
    :align: center
 
@@ -366,23 +365,23 @@ Ecological variant
 To further study how this system evolves over time and how robust some of the observations we have made are let us look at how this game can be interpreted in an ecological setting.
 
 The previous examples seem to indicate that even with a large amount of :code:`Defector`, :code:`TitForTat` wins the tournament.
-However, the Nash equilibria for the basic tournament shows that we have equilibria involving both those two strategies.
+However, the Nash equilibria for the demo tournament shows that we have equilibria involving both those two strategies.
 
 An ecological variant of the tournament can be run with this library which allows to see how each strategy does in a population over time where the performance in the tournament indicates how likely the given strategy is to reproduce.  To create such a variant simply run::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results)
-    eco.reproduce(50) # Evolve the population over 50 time steps
+    eco.reproduce(100) # Evolve the population over 100 time steps
     plot = axelrod.Plot(results)
     p = plot.stackplot(eco.population_sizes)
     p.show()
 
 We see the output here:
 
-.. image:: http://axelrod-python.github.io/tournament/assets/basic_strategies_reproduce.svg
+.. image:: _static/usage/demo_strategies_reproduce.svg
    :width: 50%
    :align: center
 
@@ -392,7 +391,7 @@ The final population is completely cooperative.
 We can see how this differs when the initial population contains a large number of :code:`Defector`::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results, population=[.1, .05, .7, .1, .05])
@@ -403,14 +402,14 @@ We can see how this differs when the initial population contains a large number 
 
 We see the output here:
 
-.. image:: _static/usage/basic_strategies-reproduce-large-initial-D.svg
+.. image:: _static/usage/demo_strategies-reproduce-large-initial-D.svg
    :width: 50%
    :align: center
 
 Here is a with an even larger initial number of :code:`Defector` (note that it takes a little longer to stabilise)::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     eco = axelrod.Ecosystem(results, population=[.1, .05, 7, .1, .05])
@@ -421,7 +420,7 @@ Here is a with an even larger initial number of :code:`Defector` (note that it t
 
 The output is shown here:
 
-.. image:: _static/usage/basic_strategies-reproduce-huge-initial-D.svg
+.. image:: _static/usage/demo_strategies-reproduce-huge-initial-D.svg
    :width: 50%
    :align: center
 
@@ -441,7 +440,7 @@ where C(b) is the total number of turns where a player chose to cooperate and TT
 A matrix of cooperation rates is available within a tournament's ResultSet::
 
     import axelrod
-    strategies = [s() for s in axelrod.basic_strategies]
+    strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies)
     results = tournament.play()
     results.normalised_cooperation

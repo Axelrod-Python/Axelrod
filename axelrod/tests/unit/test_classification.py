@@ -62,6 +62,16 @@ class TestClassification(unittest.TestCase):
                           axelrod.MindWarper,
                           axelrod.MindReader]
 
+        known_basic = [axelrod.Alternator,
+                       axelrod.AntiTitForTat,
+                       axelrod.Bully,
+                       axelrod.Cooperator,
+                       axelrod.Defector,
+                       axelrod.GoByMajority,
+                       axelrod.SuspiciousTitForTat,
+                       axelrod.TitForTat,
+                       axelrod.WinStayLoseShift]
+
         known_ordinary = [axelrod.AverageCopier,
                           axelrod.ForgivingTitForTat,
                           axelrod.GoByMajority20,
@@ -72,26 +82,42 @@ class TestClassification(unittest.TestCase):
 
         for strategy in known_cheaters:
             self.assertTrue(axelrod.is_cheater(strategy()), msg=strategy)
+            self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
+
+        for strategy in known_basic:
+            self.assertTrue(axelrod.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axelrod.is_cheater(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
+            self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
             self.assertFalse(axelrod.is_cheater(strategy()), msg=strategy)
 
 
 class TestStrategies(unittest.TestCase):
 
     def test_strategy_list(self):
-        self.assertTrue(hasattr(axelrod, "strategies"))
-        self.assertTrue(hasattr(axelrod, "basic_strategies"))
-        self.assertTrue(hasattr(axelrod, "ordinary_strategies"))
-        self.assertTrue(hasattr(axelrod, "cheating_strategies"))
+        for strategy_list in ["strategies",
+                              "demo_strategies",
+                              "basic_strategies",
+                              "ordinary_strategies",
+                              "cheating_strategies"]:
+            self.assertTrue(hasattr(axelrod, strategy_list))
 
     def test_lists_not_empty(self):
-        self.assertTrue(len(axelrod.strategies) > 0)
-        self.assertTrue(len(axelrod.basic_strategies) > 0)
-        self.assertTrue(len(axelrod.ordinary_strategies) > 0)
-        self.assertTrue(len(axelrod.cheating_strategies) > 0)
+        for strategy_list in [axelrod.strategies,
+                              axelrod.demo_strategies,
+                              axelrod.basic_strategies,
+                              axelrod.ordinary_strategies,
+                              axelrod.cheating_strategies]:
+            self.assertTrue(len(strategy_list) > 0)
 
     def test_meta_inclusion(self):
         self.assertTrue(axelrod.MetaMajority in axelrod.strategies)
 
-
+    def test_demo_strategies(self):
+        demo_strategies = [axelrod.Cooperator,
+                           axelrod.Defector,
+                           axelrod.TitForTat,
+                           axelrod.Grudger,
+                           axelrod.Random]
+        self.assertTrue(demo_strategies, axelrod.demo_strategies)
