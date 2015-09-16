@@ -10,3 +10,4 @@ v0.0.9, 2015-06-14 -- Various improvements including noisy tournaments
 v0.0.10, 2015-08-17 -- Python 3 support and behaviour metrics
 v0.0.11, 2015-08-17 -- Updating Core team
 v0.0.12, 2015-09-02 -- Further behaviour and more info being passed to players.
+v0.0.13, 2015-09-16 -- Adding classifier dictionary and dynamic strategy list.
