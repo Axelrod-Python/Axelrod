@@ -6,6 +6,18 @@ C, D = 'C', 'D'
 flip_dict = {C: D, D: C}
 
 
+# Strategy classifiers
+
+def is_cheater(s):
+    """
+    A function to check if a strategy cheats.
+    """
+    classifier = s.classifier
+    return classifier['inspects_source'] or\
+           classifier['manipulates_source'] or\
+           classifier['manipulates_state']
+
+
 def update_histories(player1, player2, move1, move2):
     """Updates histories and cooperation / defections counts following play."""
     # Update histories
@@ -42,8 +54,6 @@ class Player(object):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
         self.classifier = copy.copy(self.classifier)
-        self.classifier['stochastic'] = (
-            "random" in inspect.getsource(self.__class__))
         if self.name == "Player":
             self.classifier['stochastic'] = False
         for dimension in self.default_classifier:

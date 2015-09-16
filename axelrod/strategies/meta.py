@@ -1,4 +1,10 @@
-from axelrod import Player
+from axelrod import Player, is_cheater
+from ._strategies import strategies
+from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter
+
+
+# Needs to be computed manually to prevent circular dependency
+ordinary_strategies = [s for s in strategies if not is_cheater(s)]
 
 
 class MetaPlayer(Player):
@@ -51,12 +57,7 @@ class MetaMajority(MetaPlayer):
     name = "Meta Majority"
 
     def __init__(self):
-
-        # We need to import the list of strategies at runtime, since
-        # _strategies import also _this_ module before defining the list.
-        from ._strategies import ordinary_strategies
         self.team = ordinary_strategies
-
         MetaPlayer.__init__(self)
 
     def meta_strategy(self, results, opponent):
@@ -71,12 +72,7 @@ class MetaMinority(MetaPlayer):
     name = "Meta Minority"
 
     def __init__(self):
-
-        # We need to import the list of strategies at runtime, since
-        # _strategies import also _this_ module before defining the list.
-        from ._strategies import ordinary_strategies
         self.team = ordinary_strategies
-
         MetaPlayer.__init__(self)
 
     def meta_strategy(self, results, opponent):
@@ -97,7 +93,7 @@ class MetaWinner(MetaPlayer):
         if team:
             self.team = team
         else:
-            from ._strategies import ordinary_strategies
+            # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
 
         MetaPlayer.__init__(self)
@@ -134,3 +130,41 @@ class MetaWinner(MetaPlayer):
             t.proposed_history.append(r)
 
         return bestresult
+
+
+class MetaHunter(MetaPlayer):
+    """A player who uses a selection of hunters."""
+
+    name = "Meta Hunter"
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        # Notice that we don't include the cooperator hunter, because it leads to excessive
+        # defection and therefore bad performance against unforgiving strategies. We will stick
+        # to hunters that use defections as cues. However, a really tangible benefit comes from
+        # combining Random Hunter and Math Constant Hunter, since together they catch strategies
+        # that are lightly randomized but still quite constant (the tricky/suspecious ones).
+        self.team = [DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter]
+
+        MetaPlayer.__init__(self)
+
+    @staticmethod
+    def meta_strategy(results, opponent):
+
+        # If any of the hunters smells prey, then defect!
+        if 'D' in results:
+            return 'D'
+
+        # Tit-for-tat might seem like a better default choice, but in many cases it complicates
+        # the heuristics of hunting and creates fale-positives. So go ahead and use it, but only
+        # for longer histories.
+        if len(opponent.history) > 100:
+            return 'D' if opponent.history[-1:] == ['D'] else 'C'
+        else:
+            return 'C'

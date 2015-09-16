@@ -53,11 +53,9 @@ class TournamentManagerFactory(object):
         tournaments = OrderedDict([
             ('basic_strategies', axelrod.basic_strategies),
             ('strategies',
-                axelrod.basic_strategies +
                 axelrod.ordinary_strategies),
             ('cheating_strategies', axelrod.cheating_strategies),
             ('all_strategies',
-                axelrod.basic_strategies +
                 axelrod.ordinary_strategies +
                 axelrod.cheating_strategies)
         ])
