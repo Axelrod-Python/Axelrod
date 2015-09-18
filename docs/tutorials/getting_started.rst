@@ -44,6 +44,6 @@ We can also plot these results (which helps visualise the stochastic effects)::
     >>> p = plot.boxplot()
     >>> p.show()
 
-.. image:: _static/usage/demo_strategies_boxplot.svg
+.. image:: _static/getting_started/demo_strategies_boxplot.svg
    :width: 50%
    :align: center
