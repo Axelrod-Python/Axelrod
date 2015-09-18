@@ -3,13 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the documentation for the Axelrod Python library
-===========================================================
+Tutorials
+=========
+
+This section contains a variety of tutorials related to the Axelrod library.
+
+Contents:
 
 .. toctree::
    :maxdepth: 2
 
-   tutorials/index.rst
+   getting_started.rst
 
 
 Indices and tables
