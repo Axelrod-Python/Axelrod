@@ -25,25 +25,26 @@ Creating and running a simple tournament
 
 The following lines of code create a simple list of strategies::
 
-    >>> import axelrod
-    >>> strategies = [s() for s in axelrod.demo_strategies]
+    >>> import axelrod as axl
+    >>> strategies = [axl.Cooperator(), axl.Defector(),
+    ...               axl.TitForTat(), axl.Grudger()]
     >>> strategies
-    [Cooperator, Defector, Tit For Tat, Grudger, Random: 0.5]
+    [Cooperator, Defector, Tit For Tat, Grudger]
 
 We can now create a tournament, play it, saving the results and viewing the
 ranks of each player::
 
-    >>> tournament = axelrod.Tournament(strategies)
+    >>> tournament = axl.Tournament(strategies)
     >>> results = tournament.play()
     >>> results.ranked_names
-    ['Defector', 'Grudger', 'Tit For Tat', 'Cooperator', 'Random: 0.5']
+    ['Defector', 'Tit For Tat', 'Grudger', 'Cooperator']
 
 We can also plot these results (which helps visualise the stochastic effects)::
 
-    >>> plot = axelrod.Plot(results)
+    >>> plot = axl.Plot(results)
     >>> p = plot.boxplot()
     >>> p.show()
 
-.. image:: _static/getting_started/demo_strategies_boxplot.svg
+.. image:: _static/getting_started/demo_deterministic_strategies_boxplot.svg
    :width: 50%
    :align: center
