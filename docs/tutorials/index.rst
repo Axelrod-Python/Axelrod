@@ -14,6 +14,8 @@ Contents:
    :maxdepth: 2
 
    getting_started.rst
+   payoff_matrix.rst
+   visualising_results.rst
 
 
 Indices and tables
