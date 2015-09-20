@@ -99,6 +99,7 @@ class StochasticCooperator(MemoryOnePlayer):
     def __init__(self):
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super(self.__class__, self).__init__(four_vector)
+        self.init_args = ()
 
 
 class StochasticWSLS(MemoryOnePlayer):

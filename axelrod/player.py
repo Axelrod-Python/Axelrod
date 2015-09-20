@@ -103,9 +103,8 @@ class Player(object):
         parameters as necessary."""
 
         cls = self.__class__
-        #print(cls)
-        #print(self.init_args)
         new_player = cls(*self.init_args)
+        new_player.tournament_attributes = copy.copy(self.tournament_attributes)
         return new_player
 
     def reset(self):
