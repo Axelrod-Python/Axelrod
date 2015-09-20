@@ -31,6 +31,11 @@ You can also build it from source if you would like to::
     cd Axelrod
     python setup.py install
 
+You will also need to install the dependencies if you have not already got
+them::
+
+    pip install -r requirements.txt
+
 Note also that you can use this package without needing to install it at all.
 Simple unzip the tarbell available here:
 `<https://pypi.python.org/packages/source/A/Axelrod/Axelrod-0.0.5.tar.gz>`_
