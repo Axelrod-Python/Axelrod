@@ -35,7 +35,7 @@ class TestRoundRobin(unittest.TestCase):
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
-        self.assertEquals(rr.deterministic_cache, {})
+        self.assertEqual(rr.deterministic_cache, {})
         rr.play()
         self.assertEqual(rr.deterministic_cache[
             (axelrod.Defector, axelrod.Defector)]['scores'], (20, 20))
