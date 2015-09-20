@@ -150,6 +150,11 @@ There is also a classifier dictionary that allows for easy classification of
 strategies: take a look at the `Strategy classification`_ section for more
 information.
 
+If your strategy makes use of parameters in its `__init__` method, be sure
+to set `self.init_args = [...]` appropriately with the same arguments (in
+the same order) so that the strategy will be properly duplicated as
+necessary. For example, the strategy `Random` defines `__init__(self, p=0.5)`
+and sets `self.init_args = (p,)` at the end of its `__init__` method.
 
 Adding the strategy to the library
 ''''''''''''''''''''''''''''''''''
