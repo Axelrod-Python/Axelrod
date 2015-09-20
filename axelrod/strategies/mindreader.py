@@ -54,9 +54,6 @@ class MindReader(Player):
         'manipulates_state': True
     }
 
-    def __init__(self):
-        Player.__init__(self)
-
     def strategy(self, opponent):
         """Pretends to play the opponent a number of times before each match.
         The primary purpose is to look far enough ahead to see if a defect will

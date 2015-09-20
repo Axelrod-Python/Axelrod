@@ -80,15 +80,21 @@ class RoundRobin(object):
         player1 = self.players[player1_index]
         class1 = player1.__class__
         if player1_index == player2_index:
-            # Check for arguments in __init__. If more than one (self), then
-            # deepcopy rather than instantiating the class variable
-            argspec = inspect.getargspec(player1.__init__)
-            if len(argspec.args) > 1:
-                player2 = copy.deepcopy(player1)
-            else:
-                player2 = class1()
-                player2.tournament_attributes = player1.tournament_attributes
             class2 = class1
+            try:
+                player2 = player1.reproduce()
+            except TypeError:
+                print(class1)
+                exit()
+            ## Check for arguments in __init__. If more than one (self), then
+            ## deepcopy rather than instantiating the class variable
+            #argspec = inspect.getargspec(player1.__init__)
+            #if len(argspec.args) > 1:
+                #player2 = copy.deepcopy(player1)
+            #else:
+                #player2 = class1()
+                #player2.tournament_attributes = player1.tournament_attributes
+            #class2 = class1
         else:
             player2 = self.players[player2_index]
             class2 = player2.__class__
