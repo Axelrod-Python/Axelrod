@@ -43,7 +43,6 @@ class Darwin(Player):
         super(Darwin, self).__init__()
         self.response = self.__class__.genome[0]
 
-
     def strategy(self, opponent):
         # Frustrate psychics and ensure that simulated rounds
         # do not influence genome.
@@ -68,12 +67,10 @@ class Darwin(Player):
 
         return current
 
-
     def reset(self):
         """ Reset instance properties. """
         Player.reset(self)
         self.__class__.genome[0] = 'C' # Ensure initial Cooperate
-
 
     def mutate(self, outcome, trial):
         """ Select response according to outcome. """

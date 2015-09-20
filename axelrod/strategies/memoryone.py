@@ -25,8 +25,9 @@ class WinStayLoseShift(Player):
             ('D', 'C'): 'D',
             ('D', 'D'): 'C',
         }
-        self._initial = initial
         self.classifier['stochastic'] = False
+        self._initial = initial
+        self.init_args = (initial,)
 
     def strategy(self, opponent):
         """Switches if it doesn't get the best payout, traditionally equivalent
@@ -58,6 +59,7 @@ class MemoryOnePlayer(Player):
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self._initial = initial
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
+        self.init_args = (four_vector, initial)
 
     def strategy(self, opponent):
         if not len(opponent.history):
@@ -83,6 +85,7 @@ class GTFT(MemoryOnePlayer):
         self.p = p
         four_vector = [1, p, 1, p]
         super(self.__class__, self).__init__(four_vector)
+        self.init_args = (p,)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -107,6 +110,7 @@ class StochasticWSLS(MemoryOnePlayer):
         self.ep = ep
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
+        self.init_args = (ep,)
 
 
 class ZeroDeterminantPlayer(MemoryOnePlayer):
@@ -137,6 +141,7 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
 
         four_vector = [p1, p2, p3, p4]
         MemoryOnePlayer.__init__(self, four_vector)
+        self.init_args = (phi, s, l)
 
 
 class ZDGTFT2(ZeroDeterminantPlayer):
@@ -144,9 +149,10 @@ class ZDGTFT2(ZeroDeterminantPlayer):
 
     name = 'ZD-GTFT-2'
 
-    def __init__(self, phi=0., chi=2.):
+    def __init__(self):
         (R, P, S, T) = Game().RPST()
         ZeroDeterminantPlayer.__init__(self, phi=0.25, s=0.5, l=R)
+        self.init_args = ()
 
 
 class ZDExtort2(ZeroDeterminantPlayer):
@@ -157,6 +163,7 @@ class ZDExtort2(ZeroDeterminantPlayer):
     def __init__(self):
         (R, P, S, T) = Game().RPST()
         ZeroDeterminantPlayer.__init__(self, phi=1./9, s=0.5, l=P)
+        self.init_args = ()
 
 
 ### Strategies for recreating tournaments
@@ -174,6 +181,7 @@ class SoftJoss(MemoryOnePlayer):
         four_vector = (1., 1 - q, 1, 1 - q)
         super(self.__class__, self).__init__(four_vector)
         self.q = q
+        self.init_args = (q,)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.q, 2))

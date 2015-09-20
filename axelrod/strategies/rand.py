@@ -17,6 +17,7 @@ class Random(Player):
     def __init__(self, p=0.5):
         Player.__init__(self)
         self.p = p
+        self.init_args = (p,)
 
     def strategy(self, opponent):
         r = random.random()

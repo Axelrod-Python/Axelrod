@@ -28,7 +28,6 @@ def is_cheater(s):
            classifier['manipulates_source'] or\
            classifier['manipulates_state']
 
-
 def update_histories(player1, player2, move1, move2):
     """Updates histories and cooperation / defections counts following play."""
     # Update histories
@@ -73,6 +72,7 @@ class Player(object):
         self.tournament_attributes = {'length': -1, 'game': None}
         self.cooperations = 0
         self.defections = 0
+        self.init_args = ()
 
     def __repr__(self):
         """The string method for the strategy."""
@@ -97,6 +97,16 @@ class Player(object):
         if noise:
             s1, s2 = self._add_noise(noise, s1, s2)
         update_histories(self, opponent, s1, s2)
+
+    def reproduce(self):
+        """Clones the player without history, reapplying configuration
+        parameters as necessary."""
+
+        cls = self.__class__
+        #print(cls)
+        #print(self.init_args)
+        new_player = cls(*self.init_args)
+        return new_player
 
     def reset(self):
         """Resets history.
