@@ -28,8 +28,7 @@ def look_ahead(player_1, player_2, rounds=10):
     # Simulate plays for `rounds` rounds
     strategies = ['C', 'D']
     for strategy in strategies:
-        #opponent_ = copy.deepcopy(player_2) # need deepcopy here
-        opponent_ = player_2
+        opponent_ = copy.deepcopy(player_2) # need deepcopy here
         round_robin = RoundRobin(players=[player_1, opponent_], game=game,
                                  turns=rounds)
         simulate_match(player_1, opponent_, strategy, rounds)
@@ -37,7 +36,6 @@ def look_ahead(player_1, player_2, rounds=10):
 
         # Restore histories and counts
         roll_back_history(player_1, rounds)
-        roll_back_history(player_2, rounds)
 
     return strategies[results.index(max(results))]
 
@@ -51,7 +49,7 @@ class MindReader(Player):
         'stochastic': False,
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': False,
-        'manipulates_state': True
+        'manipulates_state': False
     }
 
     def strategy(self, opponent):
