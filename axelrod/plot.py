@@ -35,7 +35,7 @@ class Plot(object):
     @property
     def _boxplot_title(self):
         return ("Mean score per stage game over {} "
-                "rounds repeated {} times ({} strategies)").format(
+                "turns repeated {} times ({} strategies)").format(
             self.result_set.turns,
             self.result_set.repetitions,
             len(self.result_set.ranking))
