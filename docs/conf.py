@@ -15,11 +15,15 @@
 import sys
 import os
 
-import mock
+from unittest.mock import MagicMock
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+            return Mock()
 
 MOCK_MODULES = ['numpy', 'matplotlib.pyplot', 'matplotlib', 'matplotlib.transforms', 'mpl_toolkits.axes_grid1', 'axelrod']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # Adds absolute path to axelrod module
 #sys.path.insert(0, os.path.abspath('../'))  # Adding path to module
