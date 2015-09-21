@@ -18,7 +18,7 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | Name                     | Long name                                 | Axelrod Library Name     |
 +==========================+===========================================+==========================+
-| `TitForTat`_             | Tit For Tat                               | :code:`TitForTat`        |
+| `Tit For Tat`_           | Tit For Tat                               | :code:`TitForTat`        |
 +--------------------------+-------------------------------------------+--------------------------+
 | `Tideman and Chieruzzi`_ | Tideman and Chieruzzi (authors' names)    | Not Implemented          |
 +--------------------------+-------------------------------------------+--------------------------+
