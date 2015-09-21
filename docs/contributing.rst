@@ -55,7 +55,9 @@ To contribute a strategy you need to follow as many of the following steps as po
    of what the strategy does and include an example of it working. If relevant
    please also add a source for the strategy (if it is not an original one).
 5. This one is optional: write some unit tests in the ./axelrod/tests/ directory.
-6. This one is also optional: add your name to the contributors list in the bottom of the :code:`README.md` file.
+6. This one is also optional: ping us a message and we'll add you to the
+   Contributors team. This would add an Axelrod-Python organisation badge to
+   your profile.
 7. Send us a pull request.
 
 **If you would like a hand with any of the above please do get in touch: we're
