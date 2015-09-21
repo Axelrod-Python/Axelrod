@@ -24,7 +24,7 @@ class TestPlot(unittest.TestCase):
         cls.expected_boxplot_dataset = [[3.2, 3.2], [3.1, 3.1], [2.6, 2.8]]
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]
         cls.expected_boxplot_xticks_labels = ['Player3', 'Player1', 'Player2']
-        cls.expected_boxplot_title = ('Mean score per stage game over 5 rounds'
+        cls.expected_boxplot_title = ('Mean score per stage game over 5 turns'
                                       ' repeated 2 times (3 strategies)')
 
         cls.expected_payoff_dataset = [
