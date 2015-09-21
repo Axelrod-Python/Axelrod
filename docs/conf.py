@@ -15,16 +15,16 @@
 import sys
 import os
 
+import mock
+
+MOCK_MODULES = ['numpy', 'matplotlib.pyplot', 'matplotlib',
+                'matplotlib.transforms', 'mpl_toolkits.axes_grid1', 'scipy',
+                'scipy.interpolate']
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
+
 # Adds absolute path to axelrod module
-#sys.path.insert(0, os.path.abspath('../'))  # Adding path to module
-
-#import mock
-
-#MOCK_MODULES = ['numpy', 'matplotlib.pyplot', 'matplotlib',
-                #'matplotlib.transforms', 'mpl_toolkits.axes_grid1', 'scipy',
-                #'scipy.interpolate']
-#for mod_name in MOCK_MODULES:
-    #sys.modules[mod_name] = mock.Mock()
+sys.path.insert(0, os.path.abspath('../'))  # Adding path to module
 
 # -- General configuration ------------------------------------------------
 
