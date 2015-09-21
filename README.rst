@@ -93,24 +93,6 @@ http://axelrod.readthedocs.org/en/latest/contributing.html.
  :target: https://waffle.io/Axelrod-Python/Axelrod/metrics
   :alt: 'Throughput Graph'
 
-Contributors
-============
-
--  `JasYoung314 <https://github.com/JasYoung314>`__
--  `Karlos78 <https://github.com/Karlos78>`__
--  `drvinceknight <https://twitter.com/drvinceknight>`__
--  `geraintpalmer <https://github.com/geraintpalmer>`__
--  `hollymarissa <https://github.com/hollymarissa>`__
--  `jomuel <https://github.com/jomuel>`__
--  `langner <https://github.com/langner>`__
--  `marcharper <https://github.com/marcharper>`__
--  `martinjc <https://github.com/martinjc>`__
--  `meatballs <https://github.com/meatballs>`__
--  `theref <https://github.com/theref>`__
--  `timothyf1 <https://github.com/timothyf1>`__
--  `uglyfruitcake <https://github.com/uglyfruitcake>`__
--  `pmslavin <https://github.com/pmslavin>`__
-
 Projects that use this library
 ==============================
 
