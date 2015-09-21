@@ -44,7 +44,7 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | `Tullock`_               | Tullock (author's name)                   | :code:`Tullock`          |
 +--------------------------+-------------------------------------------+--------------------------+
-| `Name Withheld`_         | Name Withheld (by a Grad Student in       | Not Implemented          |
+| `Unnamed Strategy`_      | Unnamed Strategy (by a Grad Student in    | Not Implemented          |
 |                          | Political Science)                        |                          |
 +--------------------------+-------------------------------------------+--------------------------+
 | `Random`_                | Random                                    | :code:`Random`           |
@@ -91,8 +91,10 @@ which gives::
 
 We see that after cooperating once, Tit For Tat defects at every step.
 
-**Not implemented**: Tideman and Chieruzzi
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Tideman and Chieruzzi
+^^^^^^^^^^^^^^^^^^^^^
+
+**Not implemented yet**
 
 This strategy begins by playing Tit For Tat and then things get slightly
 complicated:
@@ -113,8 +115,10 @@ the game has just started (everything is forgotten).
 
 *This strategy came 2nd in Axelrod's original tournament.*
 
-**Not implemented**: Nydegger
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Nydegger
+^^^^^^^^
+
+**Not implemented yet**
 
 This strategy begins by playing Tit For Tat for the first 3 rounds with the
 following modifications:
@@ -217,8 +221,10 @@ The increasing retaliation periods are visible in the output. Note that
 Shubik defects if both players defected in the previous round but does
 not increase the retaliation period.
 
-**Not implemented**: Stein and Rapoport
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Stein and Rapoport
+^^^^^^^^^^^^^^^^^^
+
+**Not implemented yet**
 
 This strategy plays a modification of Tit For Tat.
 
@@ -287,8 +293,10 @@ Grudger::
     ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
     ['D', 'C', 'D', 'D', 'C', 'D', 'D', 'C', 'D', 'C', 'D', 'D', 'C', 'C', 'D']
 
-**Not implemented**: Graaskamp
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Graaskamp
+^^^^^^^^^
+
+**Not implemented yet**
 
 This strategy follows the following rules:
 
@@ -304,8 +312,10 @@ This strategy follows the following rules:
 
 *This strategy came 9th in Axelrod's original tournament.*
 
-**Not implemented**: Downing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Downing
+^^^^^^^
+
+**Not implemented yet**
 
 This strategy attempts to estimate the next move of the opponent by estimating
 the probability of cooperating given that they defected (:math:`p(C|D)`) or
@@ -407,8 +417,10 @@ This gives::
 
 We have 10 rounds of cooperation and some apparently random plays afterward.
 
-**Not implemented**: Unnamed Strategy
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Unnamed Strategy
+^^^^^^^^^^^^^^^^
+
+**Not implemented yet**
 
 Apparently written by a grad student in political science whose name was withheld,
 this strategy cooperates with a given probability :math:`P`. This probability
