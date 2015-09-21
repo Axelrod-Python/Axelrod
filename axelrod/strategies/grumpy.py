@@ -24,6 +24,7 @@ class Grumpy(Player):
         self.starting_state = starting_state
         self.grumpy_threshold = grumpy_threshold
         self.nice_threshold = nice_threshold
+        self.init_args = (starting_state, grumpy_threshold, nice_threshold)
 
     def strategy(self, opponent):
         """A player that gets grumpier the more the opposition defects,
