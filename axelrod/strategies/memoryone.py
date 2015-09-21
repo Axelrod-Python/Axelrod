@@ -57,14 +57,14 @@ class MemoryOnePlayer(Player):
     def __init__(self, four_vector=None, initial='C'):
         Player.__init__(self)
         self._initial = initial
-        #self._four_vector = None
         if four_vector:
             self.set_four_vector(four_vector)
+        self.init_args = (four_vector, initial)
 
     def set_four_vector(self, four_vector):
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
-        self.init_args = (four_vector, initial)
+
 
     def strategy(self, opponent):
         if not self._four_vector:
@@ -87,8 +87,7 @@ class GTFT(MemoryOnePlayer):
 
     def __init__(self, p=None):
         self.p = p
-        four_vector = [1, p, 1, p]
-        super(self.__class__, self).__init__(four_vector)
+        super(self.__class__, self).__init__()
         self.init_args = (p,)
 
     def receive_tournament_attributes(self):
@@ -108,7 +107,6 @@ class StochasticCooperator(MemoryOnePlayer):
     name = 'Stochastic Cooperator'
 
     def __init__(self):
-        super(self.__class__, self).__init__()
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super(self.__class__, self).__init__(four_vector)
         self.init_args = ()
@@ -121,7 +119,6 @@ class StochasticWSLS(MemoryOnePlayer):
     name = 'Stochastic WSLS'
 
     def __init__(self, ep=0.05):
-        super(self.__class__, self).__init__()
         self.ep = ep
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
@@ -164,11 +161,6 @@ class ZDGTFT2(ZeroDeterminantPlayer):
     """A Generous Zero Determinant Strategy."""
 
     name = 'ZD-GTFT-2'
-
-<<<<<<< HEAD
-    def __init__(self):
-        (R, P, S, T) = Game().RPST()
-        ZeroDeterminantPlayer.__init__(self, phi=0.25, s=0.5, l=R)
 
     def __init__(self, phi=0.25, s=0.5):
         self.phi = phi
@@ -214,11 +206,10 @@ class SoftJoss(MemoryOnePlayer):
     name = "Soft Joss"
 
     def __init__(self, q=0.9):
-        super(self.__class__, self).__init__()
         self.q = q
-        self.init_args = (q,)
         four_vector = (1., 1 - q, 1, 1 - q)
-        self.set_four_vector(four_vector)
+        super(self.__class__, self).__init__(four_vector)
+        self.init_args = (q,)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.q, 2))
