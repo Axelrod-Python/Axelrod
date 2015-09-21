@@ -154,7 +154,6 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
 
         four_vector = [p1, p2, p3, p4]
         self.set_four_vector(four_vector)
-        self.init_args = (phi, s, l)
 
 
 class ZDGTFT2(ZeroDeterminantPlayer):
