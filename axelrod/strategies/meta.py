@@ -112,9 +112,9 @@ class MetaWinner(MetaPlayer):
             for player in self.team:
                 pl_C = player.proposed_history[-1] == "C"
                 opp_C = opponent.history[-1] == "C"
-                s = 2 * (pl_C and opp_C) or 5 * (pl_C and not opp_C) or 4 * (not pl_C and not opp_C) or 0
+                game = self.tournament_attributes["game"]
+                s = game.scores[(player.proposed_history[-1], opponent.history[-1])][0]
                 player.score += s
-
         return super(MetaWinner, self).strategy(opponent)
 
     def meta_strategy(self, results, opponent):

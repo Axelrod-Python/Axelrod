@@ -1,7 +1,7 @@
 import copy
 import inspect
 
-from axelrod import Player, RoundRobin, Game, update_histories
+from axelrod import Player, RoundRobin, update_histories
 
 
 def simulate_match(player_1, player_2, strategy, rounds=10):
@@ -20,10 +20,9 @@ def roll_back_history(player, rounds):
         elif play == 'D':
             player.defections -= 1
 
-def look_ahead(player_1, player_2, rounds=10):
+def look_ahead(player_1, player_2, game, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
     results = []
-    game = Game()
 
     # Simulate plays for `rounds` rounds
     strategies = ['C', 'D']
@@ -69,7 +68,9 @@ class MindReader(Player):
         if calname in ('strategy', 'simulate_match'):
             return 'D'
 
-        best_strategy = look_ahead(self, opponent)
+        game = self.tournament_attributes["game"]
+
+        best_strategy = look_ahead(self, opponent, game)
 
         return best_strategy
 

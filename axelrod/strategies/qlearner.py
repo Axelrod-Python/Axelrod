@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 import random
 
-from axelrod import Game, Player, random_choice
+from axelrod import Player, random_choice
 
 
 class RiskyQLearner(Player):
@@ -39,9 +39,10 @@ class RiskyQLearner(Player):
         self.Qs = OrderedDict({'':  OrderedDict(zip(['C', 'D'], [0, 0])) })
         self.Vs = OrderedDict({'': 0})
         self.prev_state = ''
-        (R, P, S, T) = Game().RPST()
-        self.payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': P}}
 
+    def receive_tournament_attributes(self):
+        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        self.payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': P}}
 
     def strategy(self, opponent):
         """Runs a qlearn algorithm while the tournament is running."""
