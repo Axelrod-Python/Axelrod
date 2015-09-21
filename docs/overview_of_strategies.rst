@@ -6,8 +6,8 @@ Axelrod's first tournament
 
 Axelrod's first tournament is described in his 1980 paper entitled `'Effective
 choice in the Prisoner's Dilemma' <http://www.jstor.org/stable/173932>`_. This
-tournament included 14 strategies and they are listed below, (ranked in the
-order in which they appeared).
+tournament included 14 strategies (plus a random "strategy") and they are listed
+below, (ranked in the order in which they appeared).
 
 An indication is given as to whether or not this strategy is implemented in the
 :code:`axelrod` library. If this strategy is not implemented please do send us a
@@ -49,23 +49,6 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | `Random`_                | Random                                    | :code:`Random`           |
 +--------------------------+-------------------------------------------+--------------------------+
-
-Tit for Tat
-Not implemented: Tideman and Chieruzzi
-Not implemented: Nydegger
-Grofman
-Shubik
-Not implemented: Stein and Rapoport
-FRIEDMAN (Grudger)
-Davis
-Not implemented: Graaskamp
-Not implemented: Downing
-Feld
-Joss
-Tullock
-Not implemented: 'Grad Student in Political Science'
-Random
-
 
 Tit for Tat
 ^^^^^^^^^^^
