@@ -1,6 +1,4 @@
 from __future__ import division
-import copy
-import inspect
 
 class RoundRobin(object):
     """A class to define play a round robin game of players"""
@@ -80,18 +78,10 @@ class RoundRobin(object):
         player1 = self.players[player1_index]
         class1 = player1.__class__
         if player1_index == player2_index:
-            # Check for arguments in __init__. If more than one (self), then
-            # deepcopy rather than instantiating the class variable
-            argspec = inspect.getargspec(player1.__init__)
-            if len(argspec.args) > 1:
-                player2 = copy.deepcopy(player1)
-            else:
-                player2 = class1()
-                player2.tournament_attributes = player1.tournament_attributes
-            class2 = class1
+            player2 = player1.clone()
         else:
             player2 = self.players[player2_index]
-            class2 = player2.__class__
+        class2 = player2.__class__
         return player1, player2, (class1, class2)
 
     def _stochastic_interaction(self, player1, player2):
