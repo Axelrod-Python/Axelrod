@@ -1,3 +1,4 @@
+
 class Game(object):
     """A class to hold the game matrix and to score a game accordingly."""
 
@@ -25,3 +26,5 @@ class Game(object):
         e.g. score(('C', 'C')) returns (2, 2)
         """
         return self.scores[pair]
+
+DefaultGame = Game()

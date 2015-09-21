@@ -4,7 +4,7 @@ import random
 import unittest
 
 import axelrod
-from axelrod import simulate_play, Player
+from axelrod import DefaultGame, simulate_play, Player
 
 
 C, D = 'C', 'D'
@@ -107,7 +107,7 @@ class TestPlayer(unittest.TestCase):
         player = self.player()
         self.assertEqual(player.history, [])
         self.assertEqual(player.tournament_attributes,
-            {'length': -1, 'game': None})
+            {'length': -1, 'game': DefaultGame})
         self.assertEqual(player.cooperations, 0)
         self.assertEqual(player.defections, 0)
         self.classifier_test()
