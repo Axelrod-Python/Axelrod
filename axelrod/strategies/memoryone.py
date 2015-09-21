@@ -68,7 +68,7 @@ class MemoryOnePlayer(Player):
 
     def strategy(self, opponent):
         if not self._four_vector:
-            raise ValueError, "Fourvector not yet set"
+            raise ValueError("Fourvector not yet set")
         if not len(opponent.history):
             return self._initial
         # Determine which probability to use
