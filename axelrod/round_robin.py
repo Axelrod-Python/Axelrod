@@ -78,7 +78,7 @@ class RoundRobin(object):
         player1 = self.players[player1_index]
         class1 = player1.__class__
         if player1_index == player2_index:
-            player2 = player1.reproduce()
+            player2 = player1.clone()
         else:
             player2 = self.players[player2_index]
         class2 = player2.__class__

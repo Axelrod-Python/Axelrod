@@ -98,7 +98,7 @@ class Player(object):
             s1, s2 = self._add_noise(noise, s1, s2)
         update_histories(self, opponent, s1, s2)
 
-    def reproduce(self):
+    def clone(self):
         """Clones the player without history, reapplying configuration
         parameters as necessary."""
 
