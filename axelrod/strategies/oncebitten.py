@@ -100,6 +100,7 @@ class ForgetfulFoolMeOnce(Player):
         self.D_count = 0
         self._initial = 'C'
         self.forget_probability = forget_probability
+        self.init_args = (forget_probability,)
 
     def strategy(self, opponent):
         r = random.random()
@@ -132,10 +133,6 @@ class FoolMeForever(Player):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    def __init__(self):
-        Player.__init__(self)
-        self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         if opponent.defections > 0:
