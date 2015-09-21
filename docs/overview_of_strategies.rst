@@ -13,25 +13,59 @@ An indication is given as to whether or not this strategy is implemented in the
 :code:`axelrod` library. If this strategy is not implemented please do send us a
 `pull request <https://github.com/Axelrod-Python/Axelrod/pulls>`_.
 
-The following strategies are included in the library:
+Strategies in the Axelrod's first tournament:
 
-+----------------+--------------------------+--------------------------+
-| Name           | Long name                | Axelrod Library Name     |
-+================+==========================+==========================+
-| `Tit For Tat`_ | Always Cooperate         | :code:`Cooperator`       |
-+----------------+--------------------------+--------------------------+
-| `Grofman`_     | Grofman (name of author) | :code:`Grofman`          |
-+----------------+--------------------------+--------------------------+
-| `Shubik`_      | Shubik (name of author)  | :code:`Shubik`           |
-+----------------+--------------------------+--------------------------+
-| `Grudger`_     | Grudger (name of author) | :code:`Grudger`          |
-+----------------+--------------------------+--------------------------+
-| `Davis`_       | Davis (name of author)   | :code:`Davis`            |
-+----------------+--------------------------+--------------------------+
-| `Joss`_        | Feld (name of author)    | :code:`Feld`             |
-+----------------+--------------------------+--------------------------+
-| `Tullock`_     | Tullock (name of author) | :code:`Tullock`          |
-+----------------+--------------------------+--------------------------+
++--------------------------+-------------------------------------------+--------------------------+
+| Name                     | Long name                                 | Axelrod Library Name     |
++==========================+===========================================+==========================+
+| `TitForTat`_             | Tit For Tat                               | :code:`TitForTat`        |
++--------------------------+-------------------------------------------+--------------------------+
+| `Tideman and Chieruzzi`_ | Tideman and Chieruzzi (authors' names)    | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Nydegger`_              | Nydegger (author's name)                  | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Grofman`_               | Grofman (author's name)                   | :code:`Grofman`          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Shubik`_                | Shubik (author's name)                    | :code:`Shubik`           |
++--------------------------+-------------------------------------------+--------------------------+
+| `Stein and Rapoport`_    | Stein and Rapoport (authors' names)       | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Grudger`_               | Grudger (by Friedman)                     | :code:`Grudger`          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Davis`_                 | Davis (author's name)                     | :code:`Davis`            |
++--------------------------+-------------------------------------------+--------------------------+
+| `Graaskamp`_             | Graaskamp (author's name)                 | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Downing`_               | Downing (author's name)                   | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Feld`_                  | Feld (author's name)                      | :code:`Feld`             |
++--------------------------+-------------------------------------------+--------------------------+
+| `Joss`_                  | Joss (author's name)                      | :code:`Joss`             |
++--------------------------+-------------------------------------------+--------------------------+
+| `Tullock`_               | Tullock (author's name)                   | :code:`Tullock`          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Name Withheld`_         | Name Withheld (by a Grad Student in       | Not Implemented          |
+|                          | Political Science)                        |                          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Random`_                | Random                                    | :code:`Random`           |
++--------------------------+-------------------------------------------+--------------------------+
+
+Tit for Tat
+Not implemented: Tideman and Chieruzzi
+Not implemented: Nydegger
+Grofman
+Shubik
+Not implemented: Stein and Rapoport
+FRIEDMAN (Grudger)
+Davis
+Not implemented: Graaskamp
+Not implemented: Downing
+Feld
+Joss
+Tullock
+Not implemented: 'Grad Student in Political Science'
+Random
+
 
 Tit for Tat
 ^^^^^^^^^^^
@@ -200,8 +234,8 @@ The increasing retaliation periods are visible in the output. Note that
 Shubik defects if both players defected in the previous round but does
 not increase the retaliation period.
 
-**Not implemented**: Stein
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Not implemented**: Stein and Rapoport
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This strategy plays a modification of Tit For Tat.
 
@@ -390,10 +424,11 @@ This gives::
 
 We have 10 rounds of cooperation and some apparently random plays afterward.
 
-**Not implemented**: 'Grad Student in Political Science'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Not implemented**: Unnamed Strategy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This strategy cooperates with a given probability :math:`P`. This probability
+Apparently written by a grad student in political science whose name was withheld,
+this strategy cooperates with a given probability :math:`P`. This probability
 (which has initial value .3) is updated every 10 rounds based on whether the
 opponent seems to be random, very cooperative or very uncooperative.
 Furthermore, if after round 130 the strategy is losing then :math:`P` is also
