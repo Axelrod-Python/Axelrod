@@ -151,3 +151,8 @@ class TestMirrorMindReader(TestPlayer):
         P1 = axelrod.MirrorMindReader()
         P2 = axelrod.Defector()
         self.assertEqual(P1.strategy(P2), D)
+
+    def test_nice_with_itself(self):
+        P1 = axelrod.MirrorMindReader()
+        P2 = axelrod.MirrorMindReader()
+        self.assertEqual(P1.strategy(P2), C)
