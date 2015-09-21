@@ -94,3 +94,33 @@ class ProtectedMindReader(MindReader):
             pass
         else:
             self.__dict__[name] = val
+
+class MirrorMindReader(ProtectedMindReader):
+    """A player that will mirror whatever strategy it is playing against by cheating
+    and calling the opponent's strategy function instead of its own."""
+
+    name = 'Mirror Mind Reader'
+
+    classifier = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_source': True, # reading and copying the source of the component 
+        'manipulates_source': True, # changing own source dynamically
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        """Will read the mind of the opponent and play the opponent's strategy.
+
+        Also avoid infinite recursion when called by itself or another mind reader
+        or bender by cooperating.
+        """
+
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        calname = calframe[1][3]
+
+        if calname in ('strategy', 'simulate_match'):
+            return 'C'
+
+        return opponent.strategy(self)
