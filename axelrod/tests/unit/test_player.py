@@ -1,8 +1,9 @@
 import copy
+import inspect
 import random
 import unittest
-import axelrod
 
+import axelrod
 from axelrod import simulate_play, Player
 
 
@@ -127,6 +128,19 @@ class TestPlayer(unittest.TestCase):
     def test_strategy(self):
         """Test that strategy method."""
         self.assertEqual(self.player().strategy(self.player()), None)
+
+    def test_clone(self):
+        # Make sure that self.init_args has the right number of arguments
+        p1 = self.player()
+        argspec = inspect.getargspec(p1.__init__)
+        self.assertEqual(len(argspec.args) - 1, len(p1.init_args))
+        # Test that the player is cloned correctly
+        p2 = p1.clone()
+        self.assertEqual(len(p2.history), 0)
+        self.assertEqual(p2.cooperations, 0)
+        self.assertEqual(p2.defections, 0)
+        self.assertEqual(p2.classifier, p1.classifier)
+        self.assertEqual(p2.tournament_attributes, p1.tournament_attributes)
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""

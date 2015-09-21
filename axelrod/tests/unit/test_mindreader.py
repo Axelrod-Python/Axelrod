@@ -17,7 +17,7 @@ class TestMindReader(TestPlayer):
         'stochastic': False,
         'inspects_source': True,
         'manipulates_state': False,
-        'manipulates_state': True
+        'manipulates_state': False
     }
 
     def test_strategy(self):

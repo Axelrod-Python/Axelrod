@@ -97,6 +97,7 @@ class MetaWinner(MetaPlayer):
             self.team = ordinary_strategies
 
         MetaPlayer.__init__(self)
+        self.init_args = (team,)
 
         # For each player, we will keep the history of proposed moves and
         # a running score since the beginning of the game.

@@ -21,6 +21,7 @@ class GoByMajority(Player):
         Player.__init__(self)
         self.soft = soft
         self.classifier['memory_depth'] = memory_depth
+        self.init_args = (memory_depth, soft)
 
     def strategy(self, opponent):
         """This is affected by the history of the opponent.
@@ -58,8 +59,9 @@ class GoByMajority40(GoByMajority):
     GoByMajority player with a memory of 40.
     """
 
-    def __init__(self, memory_depth=40):
-        super(self.__class__, self).__init__(memory_depth=memory_depth)
+    def __init__(self, memory_depth=40, soft=True):
+        super(self.__class__, self).__init__(memory_depth=memory_depth,
+                                             soft=soft)
 
 
 class GoByMajority20(GoByMajority):
@@ -67,23 +69,24 @@ class GoByMajority20(GoByMajority):
     GoByMajority player with a memory of 20.
     """
 
-    def __init__(self, memory_depth=20):
-        super(self.__class__, self).__init__(memory_depth=memory_depth)
-
+    def __init__(self, memory_depth=20, soft=True):
+        super(self.__class__, self).__init__(memory_depth=memory_depth,
+                                             soft=soft)
 
 class GoByMajority10(GoByMajority):
     """
     GoByMajority player with a memory of 10.
     """
 
-    def __init__(self, memory_depth=10):
-        super(self.__class__, self).__init__(memory_depth=memory_depth)
-
+    def __init__(self, memory_depth=10, soft=True):
+        super(self.__class__, self).__init__(memory_depth=memory_depth,
+                                             soft=soft)
 
 class GoByMajority5(GoByMajority):
     """
     GoByMajority player with a memory of 5.
     """
 
-    def __init__(self, memory_depth=5):
-        super(self.__class__, self).__init__(memory_depth=memory_depth)
+    def __init__(self, memory_depth=5, soft=True):
+        super(self.__class__, self).__init__(memory_depth=memory_depth,
+                                             soft=soft)
