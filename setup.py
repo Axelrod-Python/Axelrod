@@ -11,7 +11,7 @@ setup(
     url='http://axelrod.readthedocs.org/',
     license='The MIT License (MIT)',
     description='Reproduce the Axelrod iterated prisoners dilemma tournament',
-    install_requires=[
-        "matplotlib >= 1.4.2",
-    ],
+    # install_requires=[
+    #     "matplotlib >= 1.4.2",
+    # ],
 )
