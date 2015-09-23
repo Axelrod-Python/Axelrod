@@ -377,14 +377,6 @@ You can see the latest build status `here <https://travis-ci.org/Axelrod-Python/
 Adding the strategy to the documentation
 ''''''''''''''''''''''''''''''''''''''''
 
-To index all the strategies and make sure their docstrings get added to the
-documentation::
-
-    cd docs
-    python auto_generate_strategies_list.py > index_of_strategies.rst
-
-This will write the file that is automatically used by `<https://readthedocs.org/>`_ to generate this `list <http://axelrod.readthedocs.org/en/latest/strategies.html>`_ of strategies.
-
 If you would like to build the documentation locally use::
 
     make html
