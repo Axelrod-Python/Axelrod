@@ -47,7 +47,7 @@ Strategies in the Axelrod's first tournament:
 | `Unnamed Strategy`_      | Unnamed Strategy (by a Grad Student in    | Not Implemented          |
 |                          | Political Science)                        |                          |
 +--------------------------+-------------------------------------------+--------------------------+
-| `Random`_                | Random                                    | :code:`Random`           |
+| :ref:`random-strategy`   | Random                                    | :code:`Random`           |
 +--------------------------+-------------------------------------------+--------------------------+
 
 Tit for Tat
@@ -430,6 +430,8 @@ Furthermore, if after round 130 the strategy is losing then :math:`P` is also
 adjusted.
 
 *This strategy came 14th in Axelrod's original tournament.*
+
+.. _random-strategy:
 
 Random
 ^^^^^^
