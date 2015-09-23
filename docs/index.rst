@@ -20,7 +20,6 @@ Contents:
    background
    usage
    overview_of_strategies
-   index_of_strategies
    contributing
 
 
