@@ -1,7 +1,10 @@
 """Test for the memoryone strategies."""
 
+import unittest
+
 import axelrod
 from axelrod import Game
+from axelrod.strategies.memoryone import MemoryOnePlayer, ZeroDeterminantPlayer
 from .test_player import TestPlayer, test_four_vector
 
 C, D = 'C', 'D'
@@ -111,6 +114,23 @@ class TestStochasticWSLS(TestPlayer):
         self.responses_test([D], [C], [C], random_seed=31)
         # With probability 0.05 will defect
         self.responses_test([D], [D], [D], random_seed=2)
+
+
+class TestMemoryOnePlayer(unittest.TestCase):
+
+    def test_exception(self):
+        player = MemoryOnePlayer()
+        opponent = axelrod.Player()
+        with self.assertRaises(ValueError):
+            player.strategy(opponent)
+
+
+class TestZeroDeterminantPlayer(unittest.TestCase):
+
+    def test_exception(self):
+        player = ZeroDeterminantPlayer()
+        with self.assertRaises(ValueError):
+            player.receive_tournament_attributes(0, 0, -float("inf"))
 
 
 class TestZDExtort2(TestPlayer):

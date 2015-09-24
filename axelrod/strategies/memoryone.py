@@ -65,9 +65,8 @@ class MemoryOnePlayer(Player):
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
-
     def strategy(self, opponent):
-        if not self._four_vector:
+        if not hasattr(self, "_four_vector"):
             raise ValueError("Fourvector not yet set")
         if not len(opponent.history):
             return self._initial
@@ -135,7 +134,7 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
 
     name = 'ZD ABC'
 
-    def receive_tournament_attributes(self, phi, s, l):
+    def receive_tournament_attributes(self, phi=0, s=None, l=None):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         if s is None:
             s = 1
