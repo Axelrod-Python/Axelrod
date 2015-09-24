@@ -21,7 +21,7 @@ class MetaPlayer(Player):
 
     def __init__(self):
 
-        Player.__init__(self)
+        super(MetaPlayer, self).__init__()
 
         # Make sure we don't use any meta players to avoid infinite recursion.
         self.team = [t for t in self.team if not issubclass(t, MetaPlayer)]
@@ -58,7 +58,7 @@ class MetaMajority(MetaPlayer):
 
     def __init__(self):
         self.team = ordinary_strategies
-        MetaPlayer.__init__(self)
+        super(MetaMajority, self).__init__()
 
     def meta_strategy(self, results, opponent):
         if results.count('D') > results.count('C'):
@@ -73,7 +73,7 @@ class MetaMinority(MetaPlayer):
 
     def __init__(self):
         self.team = ordinary_strategies
-        MetaPlayer.__init__(self)
+        super(MetaMinority, self).__init__()
 
     def meta_strategy(self, results, opponent):
         if results.count('D') < results.count('C'):
@@ -96,7 +96,7 @@ class MetaWinner(MetaPlayer):
             # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
 
-        MetaPlayer.__init__(self)
+        super(MetaWinner, self).__init__()
         self.init_args = (team,)
 
         # For each player, we will keep the history of proposed moves and
@@ -115,7 +115,7 @@ class MetaWinner(MetaPlayer):
                 s = 2 * (pl_C and opp_C) or 5 * (pl_C and not opp_C) or 4 * (not pl_C and not opp_C) or 0
                 player.score += s
 
-        return MetaPlayer.strategy(self, opponent)
+        return super(MetaWinner, self).strategy(opponent)
 
     def meta_strategy(self, results, opponent):
 
@@ -153,7 +153,7 @@ class MetaHunter(MetaPlayer):
         # that are lightly randomized but still quite constant (the tricky/suspecious ones).
         self.team = [DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter]
 
-        MetaPlayer.__init__(self)
+        super(MetaHunter, self).__init__()
 
     @staticmethod
     def meta_strategy(results, opponent):
