@@ -77,6 +77,9 @@ class Player(object):
         self.set_tournament_attributes()
 
     def receive_tournament_attributes(self):
+        # Overwrite this function if your strategy needs
+        # to make use of tournament_attributes such as
+        # the game matrix or the number of rounds
         pass
 
     def set_tournament_attributes(self, length=-1, game=None):
