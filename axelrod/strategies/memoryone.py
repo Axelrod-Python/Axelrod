@@ -1,6 +1,6 @@
 import random
 
-from axelrod import Player, Game
+from axelrod import Player
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
@@ -54,14 +54,20 @@ class MemoryOnePlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, four_vector, initial='C'):
+    def __init__(self, four_vector=None, initial='C'):
         Player.__init__(self)
-        self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self._initial = initial
-        self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
+        if four_vector:
+            self.set_four_vector(four_vector)
         self.init_args = (four_vector, initial)
 
+    def set_four_vector(self, four_vector):
+        self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
+        self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
+
     def strategy(self, opponent):
+        if not hasattr(self, "_four_vector"):
+            raise ValueError("Fourvector not yet set")
         if not len(opponent.history):
             return self._initial
         # Determine which probability to use
@@ -79,13 +85,16 @@ class GTFT(MemoryOnePlayer):
     name = 'GTFT'
 
     def __init__(self, p=None):
-        (R, P, S, T) = Game().RPST()
-        if not p:
-            p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
         self.p = p
-        four_vector = [1, p, 1, p]
-        super(self.__class__, self).__init__(four_vector)
+        super(self.__class__, self).__init__()
         self.init_args = (p,)
+
+    def receive_tournament_attributes(self):
+        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        if not self.p:
+            self.p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
+        four_vector = [1, self.p, 1, self.p]
+        self.set_four_vector(four_vector)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -100,6 +109,7 @@ class StochasticCooperator(MemoryOnePlayer):
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super(self.__class__, self).__init__(four_vector)
         self.init_args = ()
+        self.set_four_vector(four_vector)
 
 
 class StochasticWSLS(MemoryOnePlayer):
@@ -112,6 +122,7 @@ class StochasticWSLS(MemoryOnePlayer):
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
         self.init_args = (ep,)
+        self.set_four_vector(four_vector)
 
 
 class ZeroDeterminantPlayer(MemoryOnePlayer):
@@ -123,8 +134,8 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
 
     name = 'ZD ABC'
 
-    def __init__(self, phi=0., s=None, l=None):
-        (R, P, S, T) = Game().RPST()
+    def receive_tournament_attributes(self, phi=0, s=None, l=None):
+        (R, P, S, T) = self.tournament_attributes["game"].RPST()
         if s is None:
             s = 1
         if l is None:
@@ -141,8 +152,7 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
         p4 = phi * (1 - s) * (l - P)
 
         four_vector = [p1, p2, p3, p4]
-        MemoryOnePlayer.__init__(self, four_vector)
-        self.init_args = (phi, s, l)
+        self.set_four_vector(four_vector)
 
 
 class ZDGTFT2(ZeroDeterminantPlayer):
@@ -150,21 +160,36 @@ class ZDGTFT2(ZeroDeterminantPlayer):
 
     name = 'ZD-GTFT-2'
 
-    def __init__(self):
-        (R, P, S, T) = Game().RPST()
-        ZeroDeterminantPlayer.__init__(self, phi=0.25, s=0.5, l=R)
-        self.init_args = ()
+    def __init__(self, phi=0.25, s=0.5):
+        self.phi = phi
+        self.s = s
+        super(self.__class__, self).__init__()
+        self.init_args = (phi, s)
 
+    def receive_tournament_attributes(self):
+        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        self.l = R
+        super(self.__class__, self).receive_tournament_attributes(self.phi,
+                                                                  self.s,
+                                                                  self.l)
 
 class ZDExtort2(ZeroDeterminantPlayer):
     """An Extortionate Zero Determinant Strategy."""
 
     name = 'ZD-Extort-2'
 
-    def __init__(self):
-        (R, P, S, T) = Game().RPST()
-        ZeroDeterminantPlayer.__init__(self, phi=1./9, s=0.5, l=P)
-        self.init_args = ()
+    def __init__(self, phi=1./9, s=0.5):
+        self.phi = phi
+        self.s = s
+        super(self.__class__, self).__init__()
+        self.init_args = (phi, s)
+
+    def receive_tournament_attributes(self):
+        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        self.l = P
+        super(self.__class__, self).receive_tournament_attributes(self.phi,
+                                                                  self.s,
+                                                                  self.l)
 
 
 ### Strategies for recreating tournaments
@@ -179,9 +204,9 @@ class SoftJoss(MemoryOnePlayer):
     name = "Soft Joss"
 
     def __init__(self, q=0.9):
+        self.q = q
         four_vector = (1., 1 - q, 1, 1 - q)
         super(self.__class__, self).__init__(four_vector)
-        self.q = q
         self.init_args = (q,)
 
     def __repr__(self):
