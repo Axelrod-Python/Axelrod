@@ -2,6 +2,8 @@ import inspect
 import random
 import copy
 
+from .game import DefaultGame
+
 C, D = 'C', 'D'
 flip_dict = {C: D, D: C}
 
@@ -69,10 +71,25 @@ class Player(object):
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
-        self.tournament_attributes = {'length': -1, 'game': None}
         self.cooperations = 0
         self.defections = 0
         self.init_args = ()
+        self.set_tournament_attributes()
+
+    def receive_tournament_attributes(self):
+        # Overwrite this function if your strategy needs
+        # to make use of tournament_attributes such as
+        # the game matrix or the number of rounds
+        pass
+
+    def set_tournament_attributes(self, length=-1, game=None):
+        if not game:
+            game = DefaultGame
+        self.tournament_attributes = {
+            "length": length,
+            "game": game
+        }
+        self.receive_tournament_attributes()
 
     def __repr__(self):
         """The string method for the strategy."""

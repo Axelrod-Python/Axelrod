@@ -1,8 +1,5 @@
 import inspect
-from axelrod import Player, Game
-
-
-(R, P, S, T) = Game().RPST()
+from axelrod import Player
 
 
 class Darwin(Player):
@@ -33,15 +30,13 @@ class Darwin(Player):
 
     genome = ['C']
     valid_callers = ["play"]    # What functions may invoke our strategy.
-    outcomes = { ('C','C') : R,
-                 ('C','D') : S,
-                 ('D','C') : T,
-                 ('D','D') : P
-               }
 
     def __init__(self):
         super(Darwin, self).__init__()
         self.response = self.__class__.genome[0]
+
+    def receive_tournament_attributes(self):
+        outcomes = self.tournament_attributes["game"].scores
 
     def strategy(self, opponent):
         # Frustrate psychics and ensure that simulated rounds
