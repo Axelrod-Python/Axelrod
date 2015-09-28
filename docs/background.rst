@@ -32,7 +32,7 @@ By simply investigating the best responses against both possible actions of each
 The Iterated Prisoner's Dilemma
 -------------------------------
 
-We can use the basic Prisoner's Dilemma as a _stage_ game in a repeated game.
+We can use the basic Prisoner's Dilemma as a *stage* game in a repeated game.
 Players now aim to maximise the utility (corresponding to years in prison) over a repetition of the game.
 Strategies can take in to account both players history and so can take the form:
 
