@@ -5,7 +5,10 @@ import random
 
 
 class AverageCopier(Player):
-    """The player will cooperate with probability p if the opponent's cooperation ratio is p."""
+    """
+    The player will cooperate with probability p if the opponent's cooperation ratio is p.
+    Starts with random decision.
+    """
 
     name = 'Average Copier'
     classifier = {
@@ -18,14 +21,11 @@ class AverageCopier(Player):
 
     @staticmethod
     def strategy(opponent):
-        """Randomly picks a strategy (not affected by history)."""
         if len(opponent.history) == 0:
+            # Randomly picks a strategy (not affected by history).
             return random_choice(0.5)
         p = opponent.cooperations // len(opponent.history)
-        rnd_num = random.random()
-        if rnd_num < p:
-            return 'C'
-        return 'D'
+        return random_choice(p)
 
 
 class NiceAverageCopier(Player):
@@ -42,7 +42,6 @@ class NiceAverageCopier(Player):
 
     @staticmethod
     def strategy(opponent):
-        """Randomly picks a strategy (not affected by history)."""
         if len(opponent.history) == 0:
             return 'C'
         p = opponent.cooperations // len(opponent.history)
