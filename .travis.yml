@@ -12,7 +12,11 @@ install:
   - pip install -r requirements.txt
   - pip install coverage
   - pip install coveralls
+  - pip install sphinx
 script:
+  # Run the test suit with coverage
   - coverage run --source=axelrod -m unittest discover
+  # Build the documentation
+  - cd docs; make html
 after_success:
   - coveralls
