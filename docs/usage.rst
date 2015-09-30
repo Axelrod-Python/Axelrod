@@ -295,7 +295,7 @@ The resulting wins list is::
 
   [0, 80, 0, 20, 30]
 
-which shows, for example, that Cooperator had 0 wins and Defector, 80 wins'
+which shows, for example, that Cooperator had 0 wins and Defector, 80 wins.
 
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^
