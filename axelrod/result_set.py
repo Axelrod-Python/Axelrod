@@ -46,6 +46,7 @@ class ResultSet(object):
         self.ranking = None
         self.ranked_names = None
         self.payoff_matrix = None
+        self.wins = None
         self.cooperation = None
         self.normalised_cooperation = None
         self.vengeful_cooperation = None
@@ -61,6 +62,7 @@ class ResultSet(object):
             self.ranked_names = self._ranked_names(self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (
                 self._payoff_matrix(self.results['payoff']))
+            self.wins = self._wins(self.results['payoff'])
         if 'cooperation' in self.results and with_morality:
             self.cooperation = self._cooperation(self.results['cooperation'])
             self.normalised_cooperation = (
@@ -249,6 +251,36 @@ class ResultSet(object):
                 averages[-1].append(avg)
                 stddevs[-1].append(dev)
         return averages, stddevs
+
+    def _wins(self, payoff):
+        wins = [0 for p in range(self.nplayers)]
+        for player in range(self.nplayers):
+            for opponent in range(self.nplayers):
+                players = (player, opponent)
+                for repetition in range(self.repetitions):
+                    payoffs = (
+                        payoff[player][opponent][repetition],
+                        payoff[opponent][player][repetition])
+                    winner = self._winner(players, payoffs)
+                    if winner is not None:
+                        wins[winner] += 1
+        return wins
+
+    def _winner(self, players, payoffs):
+        """
+        Args:
+            players (tuple): A tuple of player indexes
+            payoffs (tuple): A tuple of payoffs for the two players
+        Returns:
+            The index of the winning player or None if a draw
+        """
+        if payoffs[0] == payoffs[1]:
+            return None
+        else:
+            winning_payoff = max(payoffs)
+            winning_payoff_index = payoffs.index(winning_payoff)
+            winner = players[winning_payoff_index]
+            return winner
 
     def _cooperation(self, results):
         """
