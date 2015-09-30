@@ -253,6 +253,23 @@ class ResultSet(object):
         return averages, stddevs
 
     def _wins(self, payoff):
+        """
+        Args:
+            payoff (list): a matrix of the form:
+
+                [
+                    [[a, j], [b, k], [c, l]],
+                    [[d, m], [e, n], [f, o]],
+                    [[g, p], [h, q], [i, r]],
+                ]
+
+            i.e. one row per player, containing one element per opponent (in
+            order of player index) which lists payoffs for each repetition.
+
+        Returns:
+            A list of the number of wins for each player (in the orginal player
+            order).
+        """
         wins = [0 for p in range(self.nplayers)]
         for player in range(self.nplayers):
             for opponent in range(self.nplayers):
