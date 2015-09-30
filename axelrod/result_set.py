@@ -267,10 +267,19 @@ class ResultSet(object):
             order of player index) which lists payoffs for each repetition.
 
         Returns:
-            A list of the number of wins for each player (in the orginal player
-            order).
+            A wins matrix of the form:
+
+                [
+                    [player1 winsin repetition1, player1 wins in  repetition2],
+                    [player2 winsin repetition1, player2 wins in  repetition2],
+                    [player3 winsin repetition1, player3 wins in  repetition2],
+                ]
+
+            i.e. one row per player which lists the total wins for that player
+            in each repetition.
         """
-        wins = [0 for p in range(self.nplayers)]
+        wins = [
+            [0 for r in range(self.repetitions)] for p in range(self.nplayers)]
         for player in range(self.nplayers):
             for opponent in range(self.nplayers):
                 players = (player, opponent)
@@ -280,7 +289,7 @@ class ResultSet(object):
                         payoff[opponent][player][repetition])
                     winner = self._winner(players, payoffs)
                     if winner is not None:
-                        wins[winner] += 1
+                        wins[winner][repetition] += 1
         return wins
 
     def _winner(self, players, payoffs):

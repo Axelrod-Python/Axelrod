@@ -60,7 +60,7 @@ class TestResultSet(unittest.TestCase):
         ]
         cls.expected_ranking = [0, 2, 1]
         cls.expected_ranked_names = ['Alternator', 'Random', 'TitForTat']
-        cls.expected_wins = [2, 0, 2]
+        cls.expected_wins = [[2, 0], [0, 0], [0, 2]]
         cls.expected_cooperation = [
             [6, 6, 6],
             [6, 10, 6],
