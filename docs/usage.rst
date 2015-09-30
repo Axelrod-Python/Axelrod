@@ -291,11 +291,17 @@ The ResultSet object also includes the 'wins' attribute, which is derived from t
   results = tournament.play()
   results.wins
 
-The resulting wins list is::
+The resulting wins matrix is::
 
-  [0, 80, 0, 20, 30]
+  [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+  [4, 2, 2, 2, 4, 4, 4, 4, 4, 4]
+  ]
 
-which shows, for example, that Cooperator had 0 wins and Defector, 80 wins.
+which shows, for example, that Cooperator had 0 wins, Defector won 8 times in each repetition and Random won 4 times in the first repetition and twice in the second.
 
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^
