@@ -270,9 +270,9 @@ class ResultSet(object):
             A wins matrix of the form:
 
                 [
-                    [player1 winsin repetition1, player1 wins in  repetition2],
-                    [player2 winsin repetition1, player2 wins in  repetition2],
-                    [player3 winsin repetition1, player3 wins in  repetition2],
+                    [player1 wins in repetition1, player1 wins in repetition2],
+                    [player2 wins in repetition1, player2 wins in repetition2],
+                    [player3 wins in repetition1, player3 wins in repetition2],
                 ]
 
             i.e. one row per player which lists the total wins for that player
