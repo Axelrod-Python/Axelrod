@@ -257,7 +257,6 @@ this is shown here:
    :width: 50%
    :align: center
 
-
 As an aside we can use this matrix with `gambit <http://gambit.sourceforge.net/>`_ or `sagemath <http://sagemath.org/>`_ to compute the Nash equilibria for the corresponding normal form game. Here is how to do this in Sage::
 
     # This is not part of the Axelrod module (run in Sage)
@@ -283,6 +282,18 @@ Recall the ordering of the players::
     [Alternator, Cooperator, Defector, Random, Tit For Tat, Defector]
 
 Thus we see that there are multiple Nash equilibria for this game. Two pure equilibria that involve both players playing :code:`Defector` and both players playing :code:`TitForTat`.
+
+The ResultSet object also includes the 'wins' attribute, which is derived from the payoff matrix and lists the number of wins for each player::
+
+  import axelrod
+  strategies = [s() for s in axelrod.demo_strategies]
+  tournament = axelrod.Tournament(strategies)
+  results = tournament.play()
+  results.wins
+
+The resulting wins list is::
+
+  [0, 80, 0, 20, 30]
 
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^
