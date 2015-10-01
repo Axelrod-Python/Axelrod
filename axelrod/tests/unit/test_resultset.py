@@ -60,6 +60,7 @@ class TestResultSet(unittest.TestCase):
         ]
         cls.expected_ranking = [0, 2, 1]
         cls.expected_ranked_names = ['Alternator', 'Random', 'TitForTat']
+        cls.expected_wins = [[2, 0], [0, 0], [0, 2]]
         cls.expected_cooperation = [
             [6, 6, 6],
             [6, 10, 6],
@@ -153,6 +154,24 @@ class TestResultSet(unittest.TestCase):
             self.round_matrix(rs.payoff_matrix, 2), self.expected_payoffs)
         self.assertEqual(self.round_matrix(
             rs.payoff_stddevs, 2), self.expected_stddevs)
+
+    def test_wins(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        wins = rs.wins
+        self.assertEqual(wins, self.expected_wins)
+
+    def test_winner(self):
+        rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
+        test_players = (8, 4)
+        test_payoffs = (34, 44)
+        winner = rs._winner(test_players, test_payoffs)
+        self.assertEqual(winner, 4)
+        test_payoffs = (54, 44)
+        winner = rs._winner(test_players, test_payoffs)
+        self.assertEqual(winner, 8)
+        test_payoffs = (34, 34)
+        winner = rs._winner(test_players, test_payoffs)
+        self.assertEqual(winner, None)
 
     def test_cooperation(self):
         rs = axelrod.ResultSet(self.players, 5, 2, self.test_outcome)
