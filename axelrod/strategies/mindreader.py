@@ -15,10 +15,6 @@ def roll_back_history(player, rounds):
     """Undo the last `rounds` rounds as sufficiently as possible."""
     for i in range(rounds):
         play = player.history.pop(-1)
-        if play == 'C':
-            player.cooperations -= 1
-        elif play == 'D':
-            player.defections -= 1
 
 def look_ahead(player_1, player_2, game, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
