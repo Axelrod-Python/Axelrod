@@ -36,7 +36,7 @@ class Darwin(Player):
         self.response = self.__class__.genome[0]
 
     def receive_tournament_attributes(self):
-        outcomes = self.tournament_attributes["game"].scores
+        self.outcomes = self.tournament_attributes["game"].scores
 
     def strategy(self, opponent):
         # Frustrate psychics and ensure that simulated rounds
@@ -47,7 +47,7 @@ class Darwin(Player):
         trial = len(self.history)
 
         if trial > 0:
-            outcome = self.__class__.outcomes[(self.history[-1], opponent.history[-1])]
+            outcome = self.outcomes[(self.history[-1], opponent.history[-1])]
             self.mutate(outcome, trial)
             # Update genome with selected response
             self.__class__.genome[trial-1] = self.response
