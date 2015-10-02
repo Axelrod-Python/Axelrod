@@ -47,6 +47,17 @@ Otherwise::
     $ cd Axelrod
     $ python setup.py install
 
+You might need to install the libraries in `requirements.txt`::
+
+    pip install -r requirements.txt
+
+Note that on Ubuntu [some
+users](https://github.com/Axelrod-Python/Axelrod/issues/309) have had problems
+installing matplotlib. This seems to help with that::
+
+    sudo apt-get install libfreetype6-dev
+    sudo apt-get install libpng12-0-dev
+
 Usage
 -----
 
