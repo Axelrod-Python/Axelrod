@@ -44,18 +44,6 @@ class TestMindController(TestPlayer):
         self.assertEqual(P1.strategy(P2), D)
         self.assertEqual(P2.strategy(P1), C)
 
-    def test_init(self):
-        """Test to make sure parameters are initialised correctly """
-
-        P1 = axelrod.MindController()
-        self.assertEqual(P1.history, [])
-
-    def test_reset(self):
-        """ test for the reset method """
-        P1 = axelrod.MindController()
-        P1.history = [C, D, D, D]
-        P1.reset()
-        self.assertEqual(P1.history, [])
 
 class TestMindWarper(TestMindController):
 

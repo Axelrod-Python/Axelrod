@@ -123,4 +123,4 @@ class RoundRobin(object):
             not (p1.classifier['stochastic'] or p2.classifier['stochastic']))
 
     def _calculate_cooperation(self, player):
-        return player.history.count('C')
+        return player.cooperations

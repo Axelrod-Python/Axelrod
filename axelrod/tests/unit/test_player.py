@@ -223,8 +223,8 @@ class TestHeadsUp(unittest.TestCase):
         # Test sequence of play
         for outcome_1, outcome_2 in outcomes:
             player_1.play(player_2)
-            self.assertEqual(player_1_history[-1], outcome_1)
-            self.assertEqual(player_2_history[-1], outcome_2)
+            self.assertEqual(player_1.history[-1], outcome_1)
+            self.assertEqual(player_2.history[-1], outcome_2)
 
 
 def test_four_vector(test_class, expected_dictionary):

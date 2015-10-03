@@ -11,20 +11,12 @@ def simulate_match(player_1, player_2, strategy, rounds=10):
         # Update histories and counts
         update_histories(player_1, player_2, play_1, play_2)
 
-def roll_back_history(player, rounds):
-    """Undo the last `rounds` rounds as sufficiently as possible."""
-    for i in range(rounds):
-        play = player.history.pop(-1)
-        if play == 'C':
-            player.cooperations -= 1
-        elif play == 'D':
-            player.defections -= 1
-
 def look_ahead(player_1, player_2, game, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
     results = []
 
     # Simulate plays for `rounds` rounds
+    player_1_history = player_1.history.copy()
     strategies = ['C', 'D']
     for strategy in strategies:
         opponent_ = copy.deepcopy(player_2) # need deepcopy here
@@ -34,7 +26,7 @@ def look_ahead(player_1, player_2, game, rounds=10):
         results.append(round_robin._calculate_scores(player_1, opponent_)[0])
 
         # Restore histories and counts
-        roll_back_history(player_1, rounds)
+        player_1.history = player_1_history
 
     return strategies[results.index(max(results))]
 
@@ -94,7 +86,7 @@ class ProtectedMindReader(MindReader):
         if name == 'strategy':
             pass
         else:
-            self.__dict__[name] = val
+            super(MindReader, self).__setattr__(name, val)
 
 class MirrorMindReader(ProtectedMindReader):
     """A player that will mirror whatever strategy it is playing against by cheating
