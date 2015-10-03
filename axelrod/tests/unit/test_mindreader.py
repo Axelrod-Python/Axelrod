@@ -70,7 +70,6 @@ class TestMindReader(TestPlayer):
         P1.history = [C, C]
         P2.history = [C, D]
         P1.strategy(P2)
-        #print P1.history._history, P2.history._history
         self.assertEqual(P1.history, [C, C])
         self.assertEqual(P2.history, [C, D])
 
