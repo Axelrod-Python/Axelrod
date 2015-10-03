@@ -1,3 +1,4 @@
+import collections
 import inspect
 import random
 import copy
@@ -35,15 +36,43 @@ def update_histories(player1, player2, move1, move2):
     # Update histories
     player1.history.append(move1)
     player2.history.append(move2)
-    # Update player counts of cooperation and defection
-    if move1 == C:
-        player1.cooperations += 1
-    elif move1 == D:
-        player1.defections += 1
-    if move2 == C:
-        player2.cooperations += 1
-    elif move2 == D:
-        player2.defections += 1
+
+
+class History(object):
+    def __init__(self, history=None):
+        self.reset()
+        if history:
+            map(self.append, history)
+
+    def reset(self):
+        self._history = []
+        self._counter = collections.Counter()
+
+    def append(self, play):
+        self._history.append(play)
+        self._counter[play] += 1
+
+    def copy(self):
+        return History(self._history)
+
+    def __len__(self):
+        return len(self._history)
+
+    def cooperations(self):
+        return self._counter['C']
+
+    def defections(self):
+        return self._counter['D']
+
+    def __getitem__(self, key):
+        # Passthrough keys and slice objects
+        return self._history[key]
+
+    def __eq__(self, other):
+        # Allow comparison to lists
+        if isinstance(other, list):
+            other = History(other)
+        return (self._history == other._history) and (self._counter == other._counter)
 
 
 class Player(object):
@@ -64,15 +93,13 @@ class Player(object):
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
-        self.history = []
+        self._history = History()
         self.classifier = copy.copy(self.classifier)
         if self.name == "Player":
             self.classifier['stochastic'] = False
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
-        self.cooperations = 0
-        self.defections = 0
         self.init_args = ()
         self.set_tournament_attributes()
 
@@ -131,6 +158,25 @@ class Player(object):
         re-written (in the inherited class) and should not only reset history but also
         rest all other attributes.
         """
-        self.history = []
-        self.cooperations = 0
-        self.defections = 0
+        self._history.reset()
+
+    @property
+    def history(self):
+        if not hasattr(self, "_history"):
+            self._history = History()
+        return self._history
+
+    @history.setter
+    def history(self, obj):
+        if isinstance(obj, list):
+            self._history = History(obj)
+        elif isinstance(obj, History):
+            self._history = obj.copy()
+
+    @property
+    def cooperations(self):
+        return self.history.cooperations()
+
+    @property
+    def defections(self):
+        return self.history.defections()
