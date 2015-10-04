@@ -1,5 +1,7 @@
 """Tests for the hunter strategy."""
 
+import random
+
 import axelrod
 
 from .test_player import TestPlayer
@@ -32,6 +34,16 @@ class TestMetaMajority(TestPlayer):
         P1.team = [axelrod.Cooperator(), axelrod.Defector(), axelrod.Defector()]
         self.assertEqual(P1.strategy(P2), D)
 
+    def test_reset(self):
+        p1 = self.player()
+        p2 = axelrod.Cooperator()
+        p1.play(p2)
+        p1.play(p2)
+        p1.play(p2)
+        p1.reset()
+        for player in p1.team:
+            self.assertEqual(len(player.history), 0)
+
 
 class TestMetaMinority(TestPlayer):
 
@@ -57,6 +69,16 @@ class TestMetaMinority(TestPlayer):
         # With defectors in the majority, we will cooperate here.
         P1.team = [axelrod.Cooperator(), axelrod.Defector(), axelrod.Defector()]
         self.assertEqual(P1.strategy(P2), C)
+
+    def test_reset(self):
+        p1 = self.player()
+        p2 = axelrod.Cooperator()
+        p1.play(p2)
+        p1.play(p2)
+        p1.play(p2)
+        p1.reset()
+        for player in p1.team:
+            self.assertEqual(len(player.history), 0)
 
 
 class TestMetaWinner(TestPlayer):
@@ -88,3 +110,51 @@ class TestMetaWinner(TestPlayer):
         P1.team[0].score = 1
         P1.team[1].score = 1
         self.assertEqual(P1.strategy(P2), C)
+
+    def test_reset(self):
+        p1 = self.player()
+        p2 = axelrod.Cooperator()
+        p1.play(p2)
+        p1.play(p2)
+        p1.play(p2)
+        p1.reset()
+        for player in p1.team:
+            self.assertEqual(len(player.history), 0)
+
+
+class TestMetaHunter(TestPlayer):
+
+    name = "Meta Hunter"
+    player = axelrod.MetaHunter
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+        # We are not using the Cooperator Hunter here, so this should lead to cooperation.
+        self.responses_test([C, C, C, C], [C, C, C, C], [C])
+
+        # After long histories tit-for-tat should come into play.
+        self.responses_test([C] * 101, [C] * 100 + [D], [D])
+
+        # All these others, however, should trigger a defection for the hunter.
+        self.responses_test([C] * 4, [D] * 4, [D])
+        self.responses_test([C] * 6, [C, D] * 3, [D])
+        self.responses_test([C] * 8, [C, C, C, D, C, C, C, D], [D])
+        self.responses_test([C] * 100, [random.choice([C, D]) for i in range(100)],[D])
+
+    def test_reset(self):
+        p1 = self.player()
+        p2 = axelrod.Cooperator()
+        p1.play(p2)
+        p1.play(p2)
+        p1.play(p2)
+        p1.reset()
+        for player in p1.team:
+            self.assertEqual(len(player.history), 0)
