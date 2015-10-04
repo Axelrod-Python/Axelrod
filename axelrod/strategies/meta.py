@@ -52,6 +52,7 @@ class MetaPlayer(Player):
 
     def reset(self):
         Player.reset(self)
+        # Reset each player as well
         for player in self.team:
             player.reset()
 
