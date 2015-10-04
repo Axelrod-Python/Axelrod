@@ -1,7 +1,7 @@
 from axelrod import Player, obey_axelrod
 from ._strategies import strategies
 from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter
-
+from .cooperator import Cooperator
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in strategies if obey_axelrod(s)]
@@ -10,7 +10,9 @@ ordinary_strategies = [s for s in strategies if obey_axelrod(s)]
 class MetaPlayer(Player):
     """A generic player that has its own team of players."""
 
-    team = []
+    name = "Meta Player"
+
+    team = [Cooperator]
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
@@ -72,6 +74,7 @@ class MetaMajority(MetaPlayer):
             # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
         super(MetaMajority, self).__init__()
+        self.init_args = (team,)
 
     def meta_strategy(self, results, opponent):
         if results.count('D') > results.count('C'):
@@ -91,6 +94,7 @@ class MetaMinority(MetaPlayer):
             # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
         super(MetaMinority, self).__init__()
+        self.init_args = (team,)
 
     def meta_strategy(self, results, opponent):
         if results.count('D') < results.count('C'):
