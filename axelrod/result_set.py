@@ -1,7 +1,7 @@
 import math
 import csv
 from .eigen import *
-import payoff
+from axelrod import payoff
 
 try:
     # Python 2
