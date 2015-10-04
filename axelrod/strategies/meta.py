@@ -196,45 +196,51 @@ class MetaMajorityMemoryOne(MetaMajority):
     name = "Meta Majority Memory One"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if s.classifier['memory_depth'] <= 1]
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
         super(MetaMajorityMemoryOne, self).__init__(team=team)
+        self.init_args = ()
 
 
 class MetaWinnerMemoryOne(MetaWinner):
     name = "Meta Winner Memory One"
 
     def __init__(self):
-        team = [s for s in ordinary_strategies if s.classifier['memory_depth'] <= 1]
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
         super(MetaWinnerMemoryOne, self).__init__(team=team)
+        self.init_args = ()
 
 
 class MetaMajorityFiniteMemory(MetaMajority):
     name = "Meta Majority Finite Memory"
     def __init__(self):
-        team = [s for s in ordinary_strategies if s.classifier['memory_depth']
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
         super(MetaMajorityFiniteMemory, self).__init__(team=team)
+        self.init_args = ()
 
 
 class MetaWinnerFiniteMemory(MetaWinner):
     name = "Meta Winner Finite Memory"
     def __init__(self):
-        team = [s for s in ordinary_strategies if s.classifier['memory_depth']
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
         super(MetaWinnerFiniteMemory, self).__init__(team=team)
+        self.init_args = ()
 
 
 class MetaMajorityLongMemory(MetaMajority):
     name = "Meta Majority Long Memory"
     def __init__(self):
-        team = [s for s in ordinary_strategies if s.classifier['memory_depth']
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
         super(MetaMajorityLongMemory, self).__init__(team=team)
+        self.init_args = ()
 
 
 class MetaWinnerLongMemory(MetaWinner):
     name = "Meta Winner Long Memory"
     def __init__(self):
-        team = [s for s in ordinary_strategies if s.classifier['memory_depth']
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
         super(MetaWinnerLongMemory, self).__init__(team=team)
+        self.init_args = ()

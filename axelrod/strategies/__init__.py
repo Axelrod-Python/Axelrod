@@ -5,8 +5,16 @@ from ._strategies import *
 # Now import the Meta strategies. This cannot be done in _strategies
 # because it creates circular dependencies
 
-from .meta import MetaPlayer, MetaMajority, MetaMinority, MetaWinner, MetaHunter
-strategies.extend((MetaHunter, MetaMajority, MetaMinority, MetaWinner))
+from .meta import (
+    MetaPlayer, MetaMajority, MetaMinority, MetaWinner, MetaHunter,
+    MetaMajorityMemoryOne, MetaWinnerMemoryOne, MetaMajorityFiniteMemory,
+    MetaWinnerFiniteMemory, MetaMajorityLongMemory, MetaWinnerLongMemory
+    )
+
+strategies.extend((MetaHunter, MetaMajority, MetaMinority, MetaWinner,
+                   MetaMajorityMemoryOne, MetaWinnerMemoryOne,
+                   MetaMajorityFiniteMemory, MetaWinnerFiniteMemory,
+                   MetaMajorityLongMemory, MetaWinnerLongMemory))
 
 # Distinguished strategy collections in addition to
 # `strategies` from _strategies.py
