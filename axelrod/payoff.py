@@ -1,3 +1,5 @@
+import math
+
 def scores(payoff, nplayers, repetitions):
     """
     Arguments
@@ -115,3 +117,39 @@ def ranked_names(players, ranking):
     """
     ranked_names = [str(players[i]) for i in ranking]
     return ranked_names
+
+def payoff_matrix(payoff, turns, repetitions):
+    """
+    Arguments
+    ---------
+    payoff (list): a matrix of the form:
+
+        [
+            [[a, j], [b, k], [c, l]],
+            [[d, m], [e, n], [f, o]],
+            [[g, p], [h, q], [i, r]],
+        ]
+
+    i.e. one row per player, containing one element per opponent (in
+    order of player index) which lists payoffs for each repetition.
+
+    turns (integer): The number of turns in each round robin.
+    repetitions (integer): The number of repetitions in the tournament.
+
+    Returns
+    -------
+    A per-turn averaged payoff matrix and its standard deviations.
+    """
+    averages = []
+    stddevs = []
+    for res in payoff:
+        averages.append([])
+        stddevs.append([])
+        for s in res:
+            perturn = [1.0 * rep / turns for rep in s]
+            avg = sum(perturn) / repetitions
+            dev = math.sqrt(
+                sum([(avg - pt)**2 for pt in perturn]) / repetitions)
+            averages[-1].append(avg)
+            stddevs[-1].append(dev)
+    return averages, stddevs

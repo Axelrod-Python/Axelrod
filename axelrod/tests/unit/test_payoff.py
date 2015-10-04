@@ -30,6 +30,17 @@ class TestResultSet(unittest.TestCase):
         cls.expected_ranking = [0, 2, 1]
         cls.expected_ranked_names = ['Alternator', 'Random', 'TitForTat']
 
+        cls.expected_payoff_matrix = [
+            [2.2, 2.6, 2.7],
+            [2.6, 3.0, 2.1],
+            [2.2, 2.6, 2.25]
+        ]
+        cls.expected_payoff_stddevs = [
+            [0.0, 0.0, 0.3],
+            [0.0, 0.0, 0.7],
+            [0.2, 0.2, 0.65]
+        ]
+
     def test_scores(self):
         scores = axelrod.scores(self.expected_payoff, 3, 2)
         self.assertEqual(scores, self.expected_scores)
@@ -54,3 +65,14 @@ class TestResultSet(unittest.TestCase):
         ranked_names = axelrod.ranked_names(
             self.players, self.expected_ranking,)
         self.assertEqual(ranked_names, self.expected_ranked_names)
+
+    @staticmethod
+    def round_matrix(matrix, precision):
+        return [[round(x, precision) for x in row] for row in matrix]
+
+    def test_payoff_matrix(self):
+        averages, stddevs = axelrod.payoff_matrix(self.expected_payoff, 5, 2)
+        self.assertEqual(
+            self.round_matrix(averages, 2), self.expected_payoff_matrix)
+        self.assertEqual(
+            self.round_matrix(stddevs, 2), self.expected_payoff_stddevs)
