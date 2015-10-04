@@ -193,6 +193,8 @@ class MetaHunter(MetaPlayer):
 
 
 class MetaMajorityMemoryOne(MetaMajority):
+    """MetaMajority with the team of Memory One players"""
+
     name = "Meta Majority Memory One"
 
     def __init__(self):
@@ -202,6 +204,8 @@ class MetaMajorityMemoryOne(MetaMajority):
 
 
 class MetaWinnerMemoryOne(MetaWinner):
+    """MetaWinner with the team of Memory One players"""
+
     name = "Meta Winner Memory One"
 
     def __init__(self):
@@ -211,6 +215,8 @@ class MetaWinnerMemoryOne(MetaWinner):
 
 
 class MetaMajorityFiniteMemory(MetaMajority):
+    """MetaMajority with the team of Finite Memory Players"""
+
     name = "Meta Majority Finite Memory"
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
@@ -220,6 +226,8 @@ class MetaMajorityFiniteMemory(MetaMajority):
 
 
 class MetaWinnerFiniteMemory(MetaWinner):
+    """MetaWinner with the team of Finite Memory Players"""
+
     name = "Meta Winner Finite Memory"
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
@@ -229,6 +237,8 @@ class MetaWinnerFiniteMemory(MetaWinner):
 
 
 class MetaMajorityLongMemory(MetaMajority):
+    """MetaMajority with the team of Long (infinite) Memory Players"""
+
     name = "Meta Majority Long Memory"
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
@@ -238,6 +248,8 @@ class MetaMajorityLongMemory(MetaMajority):
 
 
 class MetaWinnerLongMemory(MetaWinner):
+    """MetaWinner with the team of Long (infinite) Memory Players"""
+
     name = "Meta Winner Long Memory"
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
