@@ -1,6 +1,6 @@
 from axelrod import Player, obey_axelrod
 from ._strategies import strategies
-from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter
+from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter
 
 
 # Needs to be computed manually to prevent circular dependency
@@ -157,7 +157,7 @@ class MetaHunter(MetaPlayer):
         # to hunters that use defections as cues. However, a really tangible benefit comes from
         # combining Random Hunter and Math Constant Hunter, since together they catch strategies
         # that are lightly randomized but still quite constant (the tricky/suspecious ones).
-        self.team = [DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter]
+        self.team = [DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter]
 
         super(MetaHunter, self).__init__()
 
