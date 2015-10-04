@@ -61,6 +61,8 @@ class AlternatorHunter(Player):
 
 
 class CycleHunter(Player):
+    """Hunts strategies that play cyclically, like any of the Cyclers,
+    Alternator, etc."""
 
     name = 'Cycle Hunter'
     classifier = {
