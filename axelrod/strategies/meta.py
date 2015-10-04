@@ -30,9 +30,12 @@ class MetaPlayer(Player):
         # Initiate all the player in out team.
         self.team = [t() for t in self.team]
 
-        # If the team will have stochastic players, this meta is also stochastic.
-        self.classifier['stochastic'] = (
-            any([t.classifier['stochastic'] for t in self.team]))
+        # This player inherits the classifiers of its team.
+        for key in ['stochastic', 'inspects_source', 'manipulates_source',
+                    'manipulates_state']:
+            self.classifier[key] = (any([t.classifier[key] for t in self.team]))
+        self.classifier['memory_depth'] = max([t.classifier['memory_depth'] for
+                                               t in self.team])
 
     def strategy(self, opponent):
 
