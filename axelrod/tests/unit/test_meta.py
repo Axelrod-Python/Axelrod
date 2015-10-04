@@ -3,6 +3,7 @@
 import random
 
 import axelrod
+import unittest
 
 from .test_player import TestPlayer
 
