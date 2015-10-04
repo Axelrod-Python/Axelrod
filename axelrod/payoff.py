@@ -153,3 +153,67 @@ def payoff_matrix(payoff, turns, repetitions):
             averages[-1].append(avg)
             stddevs[-1].append(dev)
     return averages, stddevs
+
+def winning_player(players, payoffs):
+    """
+    Arguments
+    ---------
+    players (tuple): A pair of player indexes
+    payoffs (tuple): A pair of payoffs for the two players
+
+    Returns
+    -------
+    The index of the winning player or None if a draw
+    """
+    if payoffs[0] == payoffs[1]:
+        return None
+    else:
+        winning_payoff = max(payoffs)
+        winning_payoff_index = payoffs.index(winning_payoff)
+        winner = players[winning_payoff_index]
+        return winner
+
+def wins(payoff, nplayers, repetitions):
+    """
+    Arguments
+    ---------
+    payoff (list): a matrix of the form:
+
+        [
+            [[a, j], [b, k], [c, l]],
+            [[d, m], [e, n], [f, o]],
+            [[g, p], [h, q], [i, r]],
+        ]
+
+    i.e. one row per player, containing one element per opponent (in
+    order of player index) which lists payoffs for each repetition.
+
+    nplayers (integer): The number of players in the tournament.
+    repetitions (integer): The number of repetitions in the tournament.
+
+    Returns
+    -------
+    A wins matrix of the form:
+
+        [
+            [player1 wins in repetition1, player1 wins in repetition2],
+            [player2 wins in repetition1, player2 wins in repetition2],
+            [player3 wins in repetition1, player3 wins in repetition2],
+        ]
+
+    i.e. one row per player which lists the total wins for that player
+    in each repetition.
+    """
+    wins = [
+        [0 for r in range(repetitions)] for p in range(nplayers)]
+    for player in range(nplayers):
+        for opponent in range(nplayers):
+            players = (player, opponent)
+            for repetition in range(repetitions):
+                payoffs = (
+                    payoff[player][opponent][repetition],
+                    payoff[opponent][player][repetition])
+                winner = winning_player(players, payoffs)
+                if winner is not None:
+                    wins[winner][repetition] += 1
+    return wins

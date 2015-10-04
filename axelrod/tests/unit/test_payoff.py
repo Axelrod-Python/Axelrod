@@ -41,6 +41,8 @@ class TestResultSet(unittest.TestCase):
             [0.2, 0.2, 0.65]
         ]
 
+        cls.expected_wins = [[2, 0], [0, 0], [0, 2]]
+
     def test_scores(self):
         scores = axelrod.scores(self.expected_payoff, 3, 2)
         self.assertEqual(scores, self.expected_scores)
@@ -76,3 +78,19 @@ class TestResultSet(unittest.TestCase):
             self.round_matrix(averages, 2), self.expected_payoff_matrix)
         self.assertEqual(
             self.round_matrix(stddevs, 2), self.expected_payoff_stddevs)
+
+    def test_winning_player(self):
+        test_players = (8, 4)
+        test_payoffs = (34, 44)
+        winner = axelrod.winning_player(test_players, test_payoffs)
+        self.assertEqual(winner, 4)
+        test_payoffs = (54, 44)
+        winner = axelrod.winning_player(test_players, test_payoffs)
+        self.assertEqual(winner, 8)
+        test_payoffs = (34, 34)
+        winner = axelrod.winning_player(test_players, test_payoffs)
+        self.assertEqual(winner, None)
+
+    def test_wins(self):
+        wins = axelrod.wins(self.expected_payoff, 3, 2)
+        self.assertEqual(wins, self.expected_wins)
