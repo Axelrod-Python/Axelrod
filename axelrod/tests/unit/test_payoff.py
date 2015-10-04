@@ -7,7 +7,7 @@ class TestResultSet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 
-        cls.test_payoff = [
+        cls.expected_payoff = [
             [[11.0, 11.0], [13, 13], [15, 12]],
             [[13, 13], [15.0, 15.0], [14, 7]],
             [[10, 12], [14, 12], [8.0, 14.5]],
@@ -19,6 +19,16 @@ class TestResultSet(unittest.TestCase):
             [24, 24]
         ]
 
+        cls.expected_normalised_scores = [
+            [2.8, 2.5],
+            [2.7, 2.0],
+            [2.4, 2.4]
+        ]
+
     def test_scores(self):
-        scores = axelrod.scores(self.test_payoff, 3, 2)
+        scores = axelrod.scores(self.expected_payoff, 3, 2)
         self.assertEqual(scores, self.expected_scores)
+
+    def test_normalised_scores(self):
+        scores = axelrod.normalised_scores(self.expected_scores, 3, 5)
+        self.assertEqual(scores, self.expected_normalised_scores)
