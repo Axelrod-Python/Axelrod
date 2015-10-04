@@ -90,6 +90,11 @@ version of the results:
 
 .. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
 
+Running Tests
+========
+ 
+coverage run --source=axelrod -m unittest discover
+ 
 Contributing
 ============
 
