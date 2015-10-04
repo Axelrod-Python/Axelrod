@@ -2,7 +2,7 @@ import unittest
 import axelrod
 
 
-class TestResultSet(unittest.TestCase):
+class TestPayoff(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
