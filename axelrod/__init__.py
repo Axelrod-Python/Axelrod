@@ -11,5 +11,6 @@ from .strategies import *
 from .tournament import Tournament
 from .tournament_manager import TournamentManager
 from .tournament_manager_factory import TournamentManagerFactory
+from .payoff import *
 from .result_set import ResultSet
 from .ecosystem import Ecosystem
