@@ -85,13 +85,15 @@ class TestCycleHunter(TestPlayer):
         self.first_play_test(C)
         player = self.player()
         # Test against cyclers
-        for opponent in [axelrod.CyclerCCD(), axelrod.CyclerCCCD(), axelrod.CyclerCCCCCD(), axelrod.Cooperator(), axelrod.Defector(), axelrod.Alternator()]:
+        for opponent in [axelrod.CyclerCCD(), axelrod.CyclerCCCD(),
+                         axelrod.CyclerCCCCCD(), axelrod.Alternator()]:
             player.reset()
             for i in range(30):
                 player.play(opponent)
             self.assertEqual(player.history[-1], 'D')
         # Test against non-cyclers
-        for opponent in [axelrod.Random(), axelrod.AntiCycler()]:
+        for opponent in [axelrod.Random(), axelrod.AntiCycler(),
+                         axelrod.Cooperator(), axelrod.Defector()]:
             player.reset()
             for i in range(30):
                 player.play(opponent)
