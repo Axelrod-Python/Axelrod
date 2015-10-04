@@ -64,3 +64,40 @@ def normalised_scores(scores, nplayers, turns):
     normalisation = turns * (nplayers - 1)
     return [
         [1.0 * s / normalisation for s in r] for r in scores]
+
+def median(list):
+    """
+    Arguments
+    ---------
+    list (list): A list of numeric values
+
+    Returns
+    -------
+    The median value of the list.
+
+    """
+    list = sorted(list)
+    if len(list) < 1:
+        return None
+    if len(list) % 2 == 1:
+        return list[((len(list) + 1) // 2) - 1]
+    if len(list) % 2 == 0:
+        return float(sum(list[(len(list) // 2) - 1:(len(list) // 2) + 1])) / 2.0
+
+def ranking(scores, nplayers):
+    """
+    Arguments
+    ---------
+    scores (list): A scores matrix (S) of the form returned by the scores
+    function.
+    nplayers (integer): The number of players in the tournament.
+
+    Returns
+    -------
+    A list of players (their index within the players list rather than
+    a player instance) ordered by median score
+    """
+    ranking = sorted(
+        range(nplayers),
+        key=lambda i: -median(scores[i]))
+    return ranking

@@ -25,6 +25,8 @@ class TestResultSet(unittest.TestCase):
             [2.4, 2.4]
         ]
 
+        cls.expected_ranking = [0, 2, 1]
+
     def test_scores(self):
         scores = axelrod.scores(self.expected_payoff, 3, 2)
         self.assertEqual(scores, self.expected_scores)
@@ -32,3 +34,15 @@ class TestResultSet(unittest.TestCase):
     def test_normalised_scores(self):
         scores = axelrod.normalised_scores(self.expected_scores, 3, 5)
         self.assertEqual(scores, self.expected_normalised_scores)
+
+    def test_median(self):
+        median = axelrod.median([])
+        self.assertEqual(median, None)
+        median = axelrod.median([1, 2, 4, 6])
+        self.assertEqual(median, 3.0)
+        median = axelrod.median(self.expected_scores)
+        self.assertEqual(median, [27, 20])
+
+    def test_ranking(self):
+        ranking = axelrod.ranking(self.expected_scores, 3)
+        self.assertEqual(ranking, self.expected_ranking)
