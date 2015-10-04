@@ -7,6 +7,8 @@ class TestResultSet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 
+        cls.players = ('Alternator', 'TitForTat', 'Random')
+
         cls.expected_payoff = [
             [[11.0, 11.0], [13, 13], [15, 12]],
             [[13, 13], [15.0, 15.0], [14, 7]],
@@ -26,6 +28,7 @@ class TestResultSet(unittest.TestCase):
         ]
 
         cls.expected_ranking = [0, 2, 1]
+        cls.expected_ranked_names = ['Alternator', 'Random', 'TitForTat']
 
     def test_scores(self):
         scores = axelrod.scores(self.expected_payoff, 3, 2)
@@ -46,3 +49,8 @@ class TestResultSet(unittest.TestCase):
     def test_ranking(self):
         ranking = axelrod.ranking(self.expected_scores, 3)
         self.assertEqual(ranking, self.expected_ranking)
+
+    def test_ranked_names(self):
+        ranked_names = axelrod.ranked_names(
+            self.players, self.expected_ranking,)
+        self.assertEqual(ranked_names, self.expected_ranked_names)

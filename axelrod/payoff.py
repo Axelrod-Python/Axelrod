@@ -101,3 +101,17 @@ def ranking(scores, nplayers):
         range(nplayers),
         key=lambda i: -median(scores[i]))
     return ranking
+
+def ranked_names(players, ranking):
+    """
+    Arguments
+    ---------
+    players (list): The list of players in the tournament
+    ranking (list): A list of player index numbers - as returned by the ranking
+    function
+
+    Returns:
+         A list of player names sorted by their ranked order.
+    """
+    ranked_names = [str(players[i]) for i in ranking]
+    return ranked_names
