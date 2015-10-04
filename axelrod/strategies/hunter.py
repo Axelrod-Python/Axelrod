@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+import itertools
+
 from axelrod import Player
 
 
@@ -56,6 +58,34 @@ class AlternatorHunter(Player):
         if len(self.history) >= 6 and all([oh[i] != oh[i+1] for i in range(len(oh)-1)]):
             return 'D'
         return 'C'
+
+
+class CycleHunter(Player):
+
+    name = 'Cycle Hunter'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @staticmethod
+    def detect_cycle(history):
+        """Detects if there is a cycle in the opponent's history."""
+        for i in range(len(history) // 2):
+            cycle = itertools.cycle(history[0: i + 1])
+            cycle_list = list(itertools.islice(cycle, 0, len(history)))
+            if list(history) == cycle_list:
+                return True
+        return False
+
+    def strategy(self, opponent):
+        if self.detect_cycle(opponent.history):
+            return 'D'
+        else:
+            return 'C'
 
 
 class MathConstantHunter(Player):

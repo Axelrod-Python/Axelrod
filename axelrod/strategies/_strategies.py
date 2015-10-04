@@ -19,8 +19,8 @@ from .gobymajority import (
 from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
 from .grumpy import Grumpy
 from .hunter import (
-    DefectorHunter, CooperatorHunter, AlternatorHunter, MathConstantHunter,
-    RandomHunter)
+    DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
+    MathConstantHunter, RandomHunter)
 from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
