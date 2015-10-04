@@ -70,7 +70,7 @@ class Feld(Player):
         start_coop_prob, float
             The initial probability to cooperate
         end_coop_prob, float
-            The dinal probability to cooperate
+            The final probability to cooperate
         rounds_of_decay, int
             The number of rounds to linearly decrease from start_coop_prob
             to end_coop_prob
