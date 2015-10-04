@@ -59,6 +59,7 @@ strategies = [
     Champion,
     Cooperator,
     CooperatorHunter,
+    CycleHunter,
     CyclerCCCCCD,
     CyclerCCCD,
     CyclerCCD,
