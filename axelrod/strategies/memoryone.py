@@ -224,7 +224,7 @@ class ZDExtort2(ZeroDeterminantPlayer):
             Parameters passed through to ZeroDeterminantPlayer to determine
             the four vector.
         """
-        self.phi = phiand
+        self.phi = phi
         self.s = s
         super(self.__class__, self).__init__()
         self.init_args = (phi, s)
