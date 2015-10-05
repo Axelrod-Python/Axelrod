@@ -1,3 +1,5 @@
+from . import eigen
+
 def cooperation_matrix(results):
     """
     Arguments
@@ -163,3 +165,19 @@ def good_partner_rating(good_partner_matrix, nplayers, repetitions):
     """
     return [1.0 * sum(row) / n_interactions(nplayers, repetitions)
         for row in good_partner_matrix]
+
+
+def eigenvector(cooperation_matrix):
+    """
+    Arguments
+    ---------
+    cooperation_matrix (list): a cooperation matrix
+
+    Returns
+    -------
+    the principal eigenvector of the cooperation matrix as a list.
+    """
+    eigenvector, eigenvalue = eigen.principal_eigenvector(
+        cooperation_matrix, 1000, 1e-3
+    )
+    return eigenvector.tolist()
