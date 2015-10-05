@@ -35,15 +35,6 @@ def update_histories(player1, player2, move1, move2):
     # Update histories
     player1.history.append(move1)
     player2.history.append(move2)
-    # Update player counts of cooperation and defection
-    if move1 == C:
-        player1.cooperations += 1
-    elif move1 == D:
-        player1.defections += 1
-    if move2 == C:
-        player2.cooperations += 1
-    elif move2 == D:
-        player2.defections += 1
 
 
 class Player(object):
@@ -71,10 +62,16 @@ class Player(object):
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
-        self.cooperations = 0
-        self.defections = 0
         self.init_args = ()
         self.set_tournament_attributes()
+
+    @property
+    def cooperations(self):
+        return self.history.count('C')
+
+    @property
+    def defections(self):
+        return self.history.count('D')
 
     def receive_tournament_attributes(self):
         # Overwrite this function if your strategy needs
@@ -132,5 +129,3 @@ class Player(object):
         rest all other attributes.
         """
         self.history = []
-        self.cooperations = 0
-        self.defections = 0

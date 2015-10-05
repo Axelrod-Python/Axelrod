@@ -11,8 +11,7 @@ C, D = 'C', 'D'
 
 def set_history(player, history):
     player.history = history
-    player.cooperations = history.count(C)
-    player.defections = history.count(D)
+
 
 class TestPunisher(TestPlayer):
 
