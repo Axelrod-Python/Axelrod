@@ -50,6 +50,12 @@ class MetaPlayer(Player):
         """Determine the meta result based on results of all players."""
         pass
 
+    def reset(self):
+        Player.reset(self)
+        # Reset each player as well
+        for player in self.team:
+            player.reset()
+
 
 class MetaMajority(MetaPlayer):
     """A player who goes by the majority vote of all other non-meta players."""
