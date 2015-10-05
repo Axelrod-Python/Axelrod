@@ -84,10 +84,16 @@ class LimitedRetaliate(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, retaliation_threshold = 0.1, retaliation_limit = 20,):
+    def __init__(self, retaliation_threshold=0.1, retaliation_limit=20):
         """
-        Uses the basic init from the Player class, but also set the name to
-        include the retaliation setting.
+        Parameters
+        ----------
+        retaliation_threshold, float
+            The threshold of the difference in defections, previous rounds of
+            (C, D) versus (D, C)
+        retaliation_limit, int
+            The maximum number of retaliations until the strategy returns to
+            cooperation
         """
         Player.__init__(self)
         self.retaliating = False
@@ -119,15 +125,6 @@ class LimitedRetaliate(Player):
         else:
             self.retaliating = False
             self.retaliation_count = 0
-
-        #history = list(zip(self.history, opponent.history))
-
-        #if history.count(('C', 'D')) > (
-           #history.count(('D', 'C')) * self.retaliation_threshold):
-            #self.retaliating = True
-        #else:
-            #self.retaliating = False
-            #self.retaliation_count = 0
 
         if self.retaliating:
             if self.retaliation_count < self.retaliation_limit:
