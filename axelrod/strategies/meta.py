@@ -131,8 +131,6 @@ class MetaWinner(MetaPlayer):
         # Update the running score for each player, before determining the next move.
         if len(self.history):
             for player in self.team:
-                pl_C = player.proposed_history[-1] == "C"
-                opp_C = opponent.history[-1] == "C"
                 game = self.tournament_attributes["game"]
                 s = game.scores[(player.proposed_history[-1], opponent.history[-1])][0]
                 player.score += s
@@ -150,6 +148,10 @@ class MetaWinner(MetaPlayer):
         # the new result has been settled based on scores accumulated until now.
         for r, t in zip(results, self.team):
             t.proposed_history.append(r)
+
+        if opponent.defections == 0:
+            # Don't poke the bear
+            return 'C'
 
         return bestresult
 
