@@ -17,7 +17,17 @@ class Grumpy(Player):
 
     def __init__(self, starting_state='Nice', grumpy_threshold=10,
                  nice_threshold=-10):
-        """Player starts of nice be default with set thresholds"""
+        """
+        Parameters
+        ----------
+        starting_state, str: 'Nice' or 'Grumpy'
+        grumpy_threshold, int
+            The threshold of opponent defections - cooperations to become
+            grumpy
+        nice_threshold, int
+            The threshold of opponent defections - cooperations to become
+            nice
+        """
         super(Grumpy, self).__init__()
         self.history = []
         self.state = starting_state
@@ -34,13 +44,7 @@ class Grumpy(Player):
         Won't become nice once that grumpy threshold is hit, but must reach a much lower threshold before it becomes nice again.
         """
 
-        #self.grumpiness = (
-            #sum(play == 'D' for play in opponent.history) -
-            #sum(play == 'C' for play in opponent.history))
-
         self.grumpiness = opponent.defections - opponent.cooperations
-            #sum(play == 'D' for play in opponent.history) -
-            #sum(play == 'C' for play in opponent.history))
 
         if self.state == 'Nice':
             if self.grumpiness > self.grumpy_threshold:
