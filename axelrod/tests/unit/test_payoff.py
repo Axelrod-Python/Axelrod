@@ -30,7 +30,7 @@ class TestPayoff(unittest.TestCase):
         cls.expected_ranking = [0, 2, 1]
         cls.expected_ranked_names = ['Alternator', 'Random', 'TitForTat']
 
-        cls.expected_payoff_matrix = [
+        cls.expected_normalised_payoff = [
             [2.2, 2.6, 2.7],
             [2.6, 3.0, 2.1],
             [2.2, 2.6, 2.25]
@@ -72,10 +72,10 @@ class TestPayoff(unittest.TestCase):
     def round_matrix(matrix, precision):
         return [[round(x, precision) for x in row] for row in matrix]
 
-    def test_payoff_matrix(self):
-        averages, stddevs = ap.payoff_matrix(self.expected_payoff, 5, 2)
+    def test_normalised_payoff(self):
+        averages, stddevs = ap.normalised_payoff(self.expected_payoff, 5, 2)
         self.assertEqual(
-            self.round_matrix(averages, 2), self.expected_payoff_matrix)
+            self.round_matrix(averages, 2), self.expected_normalised_payoff)
         self.assertEqual(
             self.round_matrix(stddevs, 2), self.expected_payoff_stddevs)
 

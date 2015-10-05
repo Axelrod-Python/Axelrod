@@ -118,7 +118,7 @@ def ranked_names(players, ranking):
     ranked_names = [str(players[i]) for i in ranking]
     return ranked_names
 
-def payoff_matrix(payoff, turns, repetitions):
+def normalised_payoff(payoff, turns, repetitions):
     """
     Arguments
     ---------
