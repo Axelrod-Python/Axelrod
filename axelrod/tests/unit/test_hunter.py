@@ -100,6 +100,37 @@ class TestCycleHunter(TestPlayer):
             self.assertEqual(player.history[-1], 'C')
 
 
+class TestEventualCycleHunter(TestPlayer):
+
+    name = "Cycle Hunter"
+    player = axelrod.CycleHunter
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        player = self.player()
+        # Test against cyclers
+        for opponent in [axelrod.CyclerCCD(), axelrod.CyclerCCCD(),
+                         axelrod.CyclerCCCCCD(), axelrod.Alternator()]:
+            player.reset()
+            for i in range(50):
+                player.play(opponent)
+            print opponent
+            self.assertEqual(player.history[-1], 'D')
+        # Test against non-cyclers and cooperators
+        for opponent in [axelrod.Random(), axelrod.AntiCycler(), axelrod.DoubleCrosser(), axelrod.Cooperator()]:
+            player.reset()
+            for i in range(50):
+                player.play(opponent)
+            self.assertEqual(player.history[-1], 'C')
+
+
 class TestMathConstantHunter(TestPlayer):
 
     name = "Math Constant Hunter"
