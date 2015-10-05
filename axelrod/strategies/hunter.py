@@ -94,6 +94,41 @@ class CycleHunter(Player):
             return 'C'
 
 
+class EventualCycleHunter(Player):
+    """Hunts strategies that eventually play cyclically"""
+
+    name = 'Eventual Cycle Hunter'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @staticmethod
+    def detect_eventual_cycle(history, offset=15):
+        """Detects if there is a cycle in the opponent's history."""
+        history_tail = history[-offset:]
+        for i in range(len(history_tail) // 2):
+            test_cycle = history_tail[: i + 1]
+            cycle = itertools.cycle(test_cycle)
+            cycle_list = list(itertools.islice(cycle, 0, len(history_tail)))
+            if history_tail == cycle_list:
+                return True
+        return False
+
+    def strategy(self, opponent):
+        if len(opponent.history) < 10:
+            return 'C'
+        if len(opponent.history) == opponent.cooperations:
+            return 'C'
+        if self.detect_eventual_cycle(opponent.history):
+            return 'D'
+        else:
+            return 'C'
+
+
 class MathConstantHunter(Player):
     """A player who hunts for mathematical constant players."""
 
