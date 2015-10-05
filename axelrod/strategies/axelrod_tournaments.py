@@ -27,6 +27,12 @@ class Davis(Player):
     }
 
     def __init__(self, rounds_to_cooperate=10):
+        """
+        Parameters
+        ----------
+        rounds_to_cooperate: int, 10
+           The number of rounds to cooperate initially
+        """
         Player.__init__(self)
         self._rounds_to_cooperate = rounds_to_cooperate
         self.init_args = (self._rounds_to_cooperate,)
@@ -58,6 +64,17 @@ class Feld(Player):
 
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
                  rounds_of_decay=200):
+        """
+        Parameters
+        ----------
+        start_coop_prob, float
+            The initial probability to cooperate
+        end_coop_prob, float
+            The final probability to cooperate
+        rounds_of_decay, int
+            The number of rounds to linearly decrease from start_coop_prob
+            to end_coop_prob
+        """
         Player.__init__(self)
         self._start_coop_prob = start_coop_prob
         self._end_coop_prob = end_coop_prob
@@ -111,6 +128,13 @@ class Joss(MemoryOnePlayer):
     name = "Joss"
 
     def __init__(self, p=0.9):
+        """
+        Parameters
+        ----------
+        p, float
+            The probability of cooperating when the previous round was (C, C)
+            or (D, C), i.e. the opponent cooperated.
+        """
         four_vector = (p, 0, p, 0)
         self.p = p
         super(self.__class__, self).__init__(four_vector)
@@ -195,6 +219,12 @@ class Tullock(Player):
     }
 
     def __init__(self, rounds_to_cooperate=11):
+        """
+        Parameters
+        ----------
+        rounds_to_cooperate: int, 10
+           The number of rounds to cooperate initially
+        """
         Player.__init__(self)
         self._rounds_to_cooperate = rounds_to_cooperate
         self.__class__.memory_depth = rounds_to_cooperate

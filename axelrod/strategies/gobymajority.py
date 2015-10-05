@@ -18,6 +18,17 @@ class GoByMajority(Player):
     }
 
     def __init__(self, memory_depth=0, soft=True):
+        """
+        Parameters
+        ----------
+        memory_depth, int >= 0
+            The number of rounds to use for the calculation of the cooperation
+            and defection probabilities of the opponent.
+        soft, bool
+            Indicates whether to cooperate or not in the case that the
+            cooperation and defection probabilities are equal.
+        """
+
         Player.__init__(self)
         self.soft = soft
         self.classifier['memory_depth'] = memory_depth

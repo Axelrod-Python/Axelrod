@@ -55,6 +55,15 @@ class MemoryOnePlayer(Player):
     }
 
     def __init__(self, four_vector=None, initial='C'):
+        """
+        Parameters
+        ----------
+        fourvector, list or tuple of floats of length 4
+            The response probabilities to the preceeding round of play
+            ( P(C|CC), P(C|CD), P(C|DC), P(C|DD) )
+        initial, 'C' or 'D'
+            The initial move
+        """
         Player.__init__(self)
         self._initial = initial
         if four_vector:
@@ -85,6 +94,12 @@ class GTFT(MemoryOnePlayer):
     name = 'GTFT'
 
     def __init__(self, p=None):
+        """
+        Parameters
+        ----------
+        p, float
+            A parameter used to compute the four-vector
+        """
         self.p = p
         super(self.__class__, self).__init__()
         self.init_args = (p,)
@@ -118,6 +133,14 @@ class StochasticWSLS(MemoryOnePlayer):
     name = 'Stochastic WSLS'
 
     def __init__(self, ep=0.05):
+        """
+        Parameters
+        ----------
+        ep, float
+            A parameter used to compute the four-vector -- the probability of
+            cooperating when the previous round was CD or DC
+        """
+
         self.ep = ep
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
@@ -135,6 +158,14 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
     name = 'ZD ABC'
 
     def receive_tournament_attributes(self, phi=0, s=None, l=None):
+        """
+        Parameters
+        ----------
+        phi, s, l: floats
+            Parameter used to compute the four-vector according to the
+            parameterization of Zero Determinant strategies below.
+        """
+
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         if s is None:
             s = 1
@@ -161,6 +192,13 @@ class ZDGTFT2(ZeroDeterminantPlayer):
     name = 'ZD-GTFT-2'
 
     def __init__(self, phi=0.25, s=0.5):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to ZeroDeterminantPlayer to determine
+            the four vector.
+        """
         self.phi = phi
         self.s = s
         super(self.__class__, self).__init__()
@@ -179,6 +217,13 @@ class ZDExtort2(ZeroDeterminantPlayer):
     name = 'ZD-Extort-2'
 
     def __init__(self, phi=1./9, s=0.5):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to ZeroDeterminantPlayer to determine
+            the four vector.
+        """
         self.phi = phi
         self.s = s
         super(self.__class__, self).__init__()
@@ -204,6 +249,12 @@ class SoftJoss(MemoryOnePlayer):
     name = "Soft Joss"
 
     def __init__(self, q=0.9):
+        """
+        Parameters
+        ----------
+        q, float
+            A parameter used to compute the four-vector
+        """
         self.q = q
         four_vector = (1., 1 - q, 1, 1 - q)
         super(self.__class__, self).__init__(four_vector)
