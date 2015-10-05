@@ -96,6 +96,12 @@ class ForgetfulFoolMeOnce(Player):
     }
 
     def __init__(self, forget_probability = 0.05):
+        """
+        Parameters
+        ----------
+        forget_probability, float
+            The probability of forgetting the count of opponent defections.
+        """
         Player.__init__(self)
         self.D_count = 0
         self._initial = 'C'

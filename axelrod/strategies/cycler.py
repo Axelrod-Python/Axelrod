@@ -50,6 +50,8 @@ class Cycler(Player):
     }
 
     def __init__(self, cycle="CCD"):
+        """This strategy will repeat the parameter `cycle` endlessly,
+        e.g. C C D C C D C C D ..."""
         Player.__init__(self)
         self.cycle = cycle
         self.name += " " + cycle

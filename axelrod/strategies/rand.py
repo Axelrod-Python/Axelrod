@@ -15,6 +15,12 @@ class Random(Player):
     }
 
     def __init__(self, p=0.5):
+        """
+        Parameters
+        ----------
+        p, float
+            The probability to cooperate
+        """
         Player.__init__(self)
         self.p = p
         self.init_args = (p,)
