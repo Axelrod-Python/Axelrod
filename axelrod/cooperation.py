@@ -135,3 +135,31 @@ def good_partner_matrix(results, nplayers, repetitions):
                 if i != j and results[i][j][r] >= results[j][i][r]:
                     matrix[i][j] += 1
     return matrix
+
+def n_interactions(nplayers, repetitions):
+    """
+    Arguments
+    ---------
+    nplayers (integer): The number of players in the tournament.
+    repetitions (integer): The number of repetitions in the tournament.
+
+    Returns
+    -------
+    the number of interactions between players excluding self-interactions.
+    """
+    return repetitions * (nplayers - 1)
+
+def good_partner_rating(good_partner_matrix, nplayers, repetitions):
+    """
+    Arguments
+    ---------
+    good_partner_matrix (list): the good partner matrix
+    nplayers (integer): The number of players in the tournament.
+    repetitions (integer): The number of repetitions in the tournament.
+
+    Returns
+    -------
+    a list of good partner ratings ordered by player index.
+    """
+    return [1.0 * sum(row) / n_interactions(nplayers, repetitions)
+        for row in good_partner_matrix]
