@@ -1,5 +1,49 @@
 import math
 
+def payoff_matrix(interactions, game):
+    """
+    Arguments
+    ---------
+    interactions (list): a matrix of the form:
+
+        e.g. for a tournament between Cooperator and Defector with
+        3 repetitions and 2 turns per round:
+        [
+            [
+                [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
+                [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
+            ],
+            [
+                [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
+                [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
+            ],
+            [
+                [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
+                [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
+            ]
+        ]
+
+    i.e. one list per repetition, containing one list per player, containing
+    one list per opponent (in order of player index) which contains a pair of
+    interactions for each turn in a round robin.
+
+    game (axelrod.Game): The game object to score the tournament.
+
+    Returns
+    -------
+    payoff (list): a matrix of the form:
+
+        [
+            [[a, j], [b, k], [c, l]],
+            [[d, m], [e, n], [f, o]],
+            [[g, p], [h, q], [i, r]],
+        ]
+
+    i.e. one row per player, containing one element per opponent (in
+    order of player index) which lists payoffs for each repetition.
+    """
+    pass
+
 def scores(payoff, nplayers, repetitions):
     """
     Arguments
