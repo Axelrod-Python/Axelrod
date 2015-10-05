@@ -1,10 +1,10 @@
-from axelrod import Player, is_cheater
+from axelrod import Player, obey_axelrod
 from ._strategies import strategies
 from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter
 
 
 # Needs to be computed manually to prevent circular dependency
-ordinary_strategies = [s for s in strategies if not is_cheater(s)]
+ordinary_strategies = [s for s in strategies if obey_axelrod(s)]
 
 
 class MetaPlayer(Player):
