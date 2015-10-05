@@ -55,12 +55,28 @@ def vengeful_cooperation(cooperation):
     """
     Arguments
     ---------
-        cooperation(list): A cooperation matrix (C)
+    cooperation(list): A cooperation matrix (C)
 
     Returns
     -------
-        A matrix (D) such that:
+    A matrix (D) such that:
 
-            Dij = 2(Cij -0.5)
+        Dij = 2(Cij -0.5)
     """
     return [[2 * (element - 0.5) for element in row] for row in cooperation]
+
+def cooperating_rating(cooperation, nplayers, turns, repetitions):
+    """
+    Arguments
+    ---------
+    cooperation (list): the cooperation matrix
+    nplayers (integer): The number of players in the tournament.
+    turns (integer): The number of turns in each round robin.
+    repetitions (integer): The number of repetitions in the tournament.
+
+    Returns
+    -------
+    a list of cooperation rates ordered by player index
+    """
+    total_turns = turns * repetitions * nplayers
+    return [1.0 * sum(row) / total_turns for row in cooperation]

@@ -30,6 +30,8 @@ class TestCooperation(unittest.TestCase):
             [0.2, 1.0, 0.2],
             [0.4, 0.0, 0.0]]
 
+        cls.expected_cooperating_rating = [0.6, 0.73, 0.57]
+
     def test_cooperation_matrix(self):
         cooperation_matrix = ac.cooperation_matrix(
             self.expected_cooperation_results
@@ -55,4 +57,17 @@ class TestCooperation(unittest.TestCase):
         self.assertEqual(
             self.round_matrix(vengeful_cooperation, 2),
             self.expected_vengeful_cooperation
+        )
+
+    @staticmethod
+    def round_rating(rating, precision):
+        return [round(x, precision) for x in rating]
+
+    def test_cooperating_rating(self):
+        cooperating_rating = ac.cooperating_rating(
+            self.expected_cooperation_matrix, 3, 5, 2
+        )
+        self.assertEqual(
+            self.round_rating(cooperating_rating, 2),
+            self.expected_cooperating_rating
         )
