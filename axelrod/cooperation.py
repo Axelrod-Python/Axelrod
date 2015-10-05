@@ -80,3 +80,58 @@ def cooperating_rating(cooperation, nplayers, turns, repetitions):
     """
     total_turns = turns * repetitions * nplayers
     return [1.0 * sum(row) / total_turns for row in cooperation]
+
+def null_matrix(nplayers):
+    """
+    Arguments
+    ---------
+    nplayers (integer): The number of players in the tournament.
+
+    Returns
+    -------
+    A null n by n matrix where n is the number of players.
+    """
+    plist = list(range(nplayers))
+    return [[0 for j in plist] for i in plist]
+
+def good_partner_matrix(results, nplayers, repetitions):
+    """
+    Arguments
+    ---------
+    results (list): cooperation results matrix of the form:
+
+        [
+            [[a, j], [b, k], [c, l]],
+            [[d, m], [e, n], [f, o]],
+            [[g, p], [h, q], [i, r]],
+        ]
+
+    i.e. one row per player, containing one element per opponent (in
+    order of player index) which lists cooperation values for each
+    repetition.
+
+    nplayers (integer): The number of players in the tournament.
+    repetitions (integer): The number of repetitions in the tournament.
+
+    Returns
+    -------
+    The good partner matrix (P) of the form:
+
+        [
+            [0, 0 + (1 if b >= d) + (1 if k >= m), 0 + (1 if c >= g) + (1 if l >= p) ],
+            [0 + (1 if e >= g) + (1 if n >= p), 0, 0 + (1 if f >= h) + (1 if o >= q)],
+            [0 + (1 if g >= c) + (1 if p >= l), 0 + (1 if h >= f) + (1 if q >= o), 0]
+        ]
+
+    i.e. an n by n matrix where n is the number of players. Each row (i)
+    and column (j) represents an individual player and the the value Pij
+    is the sum of the number of repetitions where player i cooperated as
+    often or more than opponent j.
+    """
+    matrix = null_matrix(nplayers)
+    for r in range(repetitions):
+        for i in range(nplayers):
+            for j in range(nplayers):
+                if i != j and results[i][j][r] >= results[j][i][r]:
+                    matrix[i][j] += 1
+    return matrix

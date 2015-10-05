@@ -32,6 +32,18 @@ class TestCooperation(unittest.TestCase):
 
         cls.expected_cooperating_rating = [0.6, 0.73, 0.57]
 
+        cls.expected_null_matrix = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+
+        cls.expected_good_partner_matrix = [
+            [0, 2, 1],
+            [2, 0, 2],
+            [2, 1, 0]
+        ]
+
     def test_cooperation_matrix(self):
         cooperation_matrix = ac.cooperation_matrix(
             self.expected_cooperation_results
@@ -71,3 +83,13 @@ class TestCooperation(unittest.TestCase):
             self.round_rating(cooperating_rating, 2),
             self.expected_cooperating_rating
         )
+
+    def test_null_matrix(self):
+        null_matrix = ac.null_matrix(3)
+        self.assertEqual(null_matrix, self.expected_null_matrix)
+
+    def test_good_partner_matrix(self):
+        good_partner_matrix = ac.good_partner_matrix(
+            self.expected_cooperation_results, 3, 2
+        )
+        self.assertEqual(good_partner_matrix, self.expected_good_partner_matrix)
