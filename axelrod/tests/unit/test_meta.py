@@ -122,7 +122,7 @@ class TestMetaWinner(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
         P1.team[0].score = 1
         P1.team[1].score = 0
-        self.assertEqual(P1.strategy(P2), D)
+        self.assertEqual(P1.strategy(P2), C)
 
         # If there is a tie, choose to cooperate if possible.
         P1.team[0].score = 1
