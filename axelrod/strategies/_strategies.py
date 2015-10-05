@@ -20,7 +20,7 @@ from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
 from .grumpy import Grumpy
 from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
-    MathConstantHunter, RandomHunter)
+    MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
@@ -69,6 +69,7 @@ strategies = [
     DefectorHunter,
     DoubleCrosser,
     Eatherley,
+    EventualCycleHunter,
     Feld,
     FoolMeForever,
     FoolMeOnce,
