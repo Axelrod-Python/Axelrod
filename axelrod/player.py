@@ -21,14 +21,14 @@ def is_basic(s):
     manipulates_state = s.classifier['manipulates_state']
     return (not stochastic) and (not inspects_source) and (not manipulates_source) and (not manipulates_state) and (depth in (0, 1))
 
-def is_cheater(s):
+def obey_axelrod(s):
     """
-    A function to check if a strategy cheats.
+    A function to check if a strategy obeys Axelrod's original tournament rules.
     """
     classifier = s.classifier
-    return classifier['inspects_source'] or\
+    return not (classifier['inspects_source'] or\
            classifier['manipulates_source'] or\
-           classifier['manipulates_state']
+           classifier['manipulates_state'])
 
 def update_histories(player1, player2, move1, move2):
     """Updates histories and cooperation / defections counts following play."""

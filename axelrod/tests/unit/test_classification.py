@@ -51,8 +51,8 @@ class TestClassification(unittest.TestCase):
         player.classifier['memory_depth'] += 1
         self.assertNotEqual(player.classifier, axelrod.Defector.classifier)
 
-    def test_is_cheater(self):
-        """A test that verifies if the is_cheater function works correctly"""
+    def test_obey_axelrod(self):
+        """A test that verifies if the obey_axelrod function works correctly"""
         known_cheaters = [axelrod.Darwin,
                           axelrod.Geller,
                           axelrod.GellerCooperator,
@@ -81,16 +81,51 @@ class TestClassification(unittest.TestCase):
                           axelrod.Random]
 
         for strategy in known_cheaters:
-            self.assertTrue(axelrod.is_cheater(strategy()), msg=strategy)
+            self.assertFalse(axelrod.obey_axelrod(strategy()), msg=strategy)
+
+        for strategy in known_basic:
+            self.assertTrue(axelrod.obey_axelrod(strategy()), msg=strategy)
+
+        for strategy in known_ordinary:
+            self.assertTrue(axelrod.obey_axelrod(strategy()), msg=strategy)
+
+    def test_is_basic(self):
+        """A test that verifies if the is_basic function works correctly"""
+        known_cheaters = [axelrod.Darwin,
+                          axelrod.Geller,
+                          axelrod.GellerCooperator,
+                          axelrod.GellerDefector,
+                          axelrod.MindBender,
+                          axelrod.MindController,
+                          axelrod.MindWarper,
+                          axelrod.MindReader]
+
+        known_basic = [axelrod.Alternator,
+                       axelrod.AntiTitForTat,
+                       axelrod.Bully,
+                       axelrod.Cooperator,
+                       axelrod.Defector,
+                       axelrod.GoByMajority,
+                       axelrod.SuspiciousTitForTat,
+                       axelrod.TitForTat,
+                       axelrod.WinStayLoseShift]
+
+        known_ordinary = [axelrod.AverageCopier,
+                          axelrod.ForgivingTitForTat,
+                          axelrod.GoByMajority20,
+                          axelrod.GTFT,
+                          axelrod.Grudger,
+                          axelrod.Inverse,
+                          axelrod.Random]
+
+        for strategy in known_cheaters:
             self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
 
         for strategy in known_basic:
             self.assertTrue(axelrod.is_basic(strategy()), msg=strategy)
-            self.assertFalse(axelrod.is_cheater(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
             self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
-            self.assertFalse(axelrod.is_cheater(strategy()), msg=strategy)
 
 
 class TestStrategies(unittest.TestCase):
