@@ -217,6 +217,8 @@ is 'honest' or not:
 3. :code:`manipulates_state` - does the strategy 'change' any attributes that
    it would not normally be able to. An example of this is :code:`Mind Reader`.
 
+These dimensions are currently relevant to the `obey_axelrod` strategy which
+checks if a strategy obeys Axelrod's original rules.
 
 How to write tests
 ''''''''''''''''''
