@@ -25,6 +25,11 @@ class TestCooperation(unittest.TestCase):
             [0.7, 0.5, 0.5]
         ]
 
+        cls.expected_vengeful_cooperation = [
+            [0.2, 0.2, 0.2],
+            [0.2, 1.0, 0.2],
+            [0.4, 0.0, 0.0]]
+
     def test_cooperation_matrix(self):
         cooperation_matrix = ac.cooperation_matrix(
             self.expected_cooperation_results
@@ -37,4 +42,17 @@ class TestCooperation(unittest.TestCase):
         )
         self.assertEqual(
             normalised_cooperation, self.expected_normalised_cooperation
+        )
+
+    @staticmethod
+    def round_matrix(matrix, precision):
+        return [[round(x, precision) for x in row] for row in matrix]
+
+    def test_vengeful_cooperation(self):
+        vengeful_cooperation = ac.vengeful_cooperation(
+            self.expected_normalised_cooperation
+        )
+        self.assertEqual(
+            self.round_matrix(vengeful_cooperation, 2),
+            self.expected_vengeful_cooperation
         )

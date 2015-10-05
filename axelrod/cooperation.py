@@ -50,3 +50,17 @@ def normalised_cooperation(cooperation, turns, repetitions):
     return[
         [1.0 * element / turns for element in row]
         for row in cooperation]
+
+def vengeful_cooperation(cooperation):
+    """
+    Arguments
+    ---------
+        cooperation(list): A cooperation matrix (C)
+
+    Returns
+    -------
+        A matrix (D) such that:
+
+            Dij = 2(Cij -0.5)
+    """
+    return [[2 * (element - 0.5) for element in row] for row in cooperation]
