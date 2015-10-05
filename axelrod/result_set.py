@@ -48,28 +48,28 @@ class ResultSet(object):
         self.eigenmoses_rating = None
         if 'payoff' in self.results:
             self.scores = ap.scores(
-                self.results['payoff'], self.nplayers, self.repetitions)
+                self.results['payoff'], len(players), repetitions)
             self.normalised_scores = ap.normalised_scores(
-                self.scores, self.nplayers, self.turns)
-            self.ranking = ap.ranking(self.scores, self.nplayers)
-            self.ranked_names = ap.ranked_names(self.players, self.ranking)
+                self.scores, len(players), turns)
+            self.ranking = ap.ranking(self.scores, len(players))
+            self.ranked_names = ap.ranked_names(players, self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (ap.payoff_matrix(
-                self.results['payoff'], self.turns, self.repetitions))
+                self.results['payoff'], turns, repetitions))
             self.wins = ap.wins(
-                self.results['payoff'], self.nplayers, self.repetitions)
+                self.results['payoff'], len(players), repetitions)
         if 'cooperation' in self.results and with_morality:
             self.cooperation = ac.cooperation_matrix(
                 self.results['cooperation'])
             self.normalised_cooperation = ac.normalised_cooperation(
-                self.cooperation, self.turns, self.repetitions)
+                self.cooperation, turns, repetitions)
             self.vengeful_cooperation = ac.vengeful_cooperation(
                 self.normalised_cooperation)
             self.cooperating_rating = ac.cooperating_rating(
-                self.cooperation, self.nplayers, self.turns, self.repetitions)
+                self.cooperation, len(players), turns, repetitions)
             self.good_partner_matrix = ac.good_partner_matrix(
-                self.results['cooperation'], self.nplayers, self.repetitions)
+                self.results['cooperation'], len(players), repetitions)
             self.good_partner_rating = ac.good_partner_rating(
-                self.good_partner_matrix, self.nplayers, self.repetitions)
+                self.good_partner_matrix, len(players), repetitions)
             self.eigenjesus_rating = ac.eigenvector(self.normalised_cooperation)
             self.eigenmoses_rating = ac.eigenvector(self.vengeful_cooperation)
 
