@@ -19,7 +19,22 @@ class TestCooperation(unittest.TestCase):
             [7, 5, 5]
         ]
 
+        cls.expected_normalised_cooperation = [
+            [0.6, 0.6, 0.6],
+            [0.6, 1.0, 0.6],
+            [0.7, 0.5, 0.5]
+        ]
+
     def test_cooperation_matrix(self):
         cooperation_matrix = ac.cooperation_matrix(
-            self.expected_cooperation_results)
+            self.expected_cooperation_results
+        )
         self.assertEqual(cooperation_matrix, self.expected_cooperation_matrix)
+
+    def test_normalised_cooperation(self):
+        normalised_cooperation = ac.normalised_cooperation(
+            self.expected_cooperation_matrix, 5, 2
+        )
+        self.assertEqual(
+            normalised_cooperation, self.expected_normalised_cooperation
+        )

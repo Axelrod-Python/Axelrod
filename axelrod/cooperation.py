@@ -29,3 +29,24 @@ def cooperation_matrix(results):
     is the number of times player i cooperated against opponent j.
     """
     return[[sum(element) for element in row] for row in results]
+
+def normalised_cooperation(cooperation, turns, repetitions):
+    """
+    Arguments
+    ---------
+    cooperation (list): the cooperation matrix (C)
+    turns (integer): The number of turns in each round robin.
+    repetitions (integer): The number of repetitions in the tournament.
+
+    Returns
+    -------
+    A matrix (N) such that:
+
+        N = C / t
+
+    where t is the total number of turns played in the tournament.
+    """
+    turns = turns * repetitions
+    return[
+        [1.0 * element / turns for element in row]
+        for row in cooperation]
