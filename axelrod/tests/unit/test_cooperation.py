@@ -44,6 +44,8 @@ class TestCooperation(unittest.TestCase):
             [2, 1, 0]
         ]
 
+        cls.expected_good_partner_rating = [0.75, 1.0, 0.75]
+
     def test_cooperation_matrix(self):
         cooperation_matrix = ac.cooperation_matrix(
             self.expected_cooperation_results
@@ -93,3 +95,13 @@ class TestCooperation(unittest.TestCase):
             self.expected_cooperation_results, 3, 2
         )
         self.assertEqual(good_partner_matrix, self.expected_good_partner_matrix)
+
+    def test_n_interactions(self):
+        n_interactions = ac.n_interactions(3, 2)
+        self.assertEqual(n_interactions, 4)
+
+    def test_good_partner_rating(self):
+        good_partner_rating = ac.good_partner_rating(
+            self.expected_good_partner_matrix, 3, 2
+        )
+        self.assertEqual(good_partner_rating, self.expected_good_partner_rating)
