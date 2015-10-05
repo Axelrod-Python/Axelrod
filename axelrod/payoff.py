@@ -118,11 +118,11 @@ def ranked_names(players, ranking):
     ranked_names = [str(players[i]) for i in ranking]
     return ranked_names
 
-def normalised_payoff(payoff, turns, repetitions):
+def normalised_payoff(payoff_matrix, turns, repetitions):
     """
     Arguments
     ---------
-    payoff (list): a matrix of the form:
+    payoff_matrix (list): a matrix of the form:
 
         [
             [[a, j], [b, k], [c, l]],
@@ -142,7 +142,7 @@ def normalised_payoff(payoff, turns, repetitions):
     """
     averages = []
     stddevs = []
-    for res in payoff:
+    for res in payoff_matrix:
         averages.append([])
         stddevs.append([])
         for s in res:
