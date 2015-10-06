@@ -2,9 +2,10 @@ import math
 
 def payoff_matrix(interactions, game):
     """
-    Arguments
-    ---------
-    interactions (list): a matrix of the form:
+    Parameters
+    ----------
+    interactions: list
+        A matrix of the form:
 
         e.g. for a tournament between Cooperator and Defector with 2 turns per
         round:
@@ -13,15 +14,17 @@ def payoff_matrix(interactions, game):
             [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
         ]
 
-    i.e. one list per player, containing one list per opponent (in order of
-    player index) which contains a pair of interactions for each turn in a
-    round robin.
+        i.e. one list per player, containing one list per opponent (in order of
+        player index) which contains a pair of interactions for each turn in a
+        round robin.
 
-    game (axelrod.Game): The game object to score the tournament.
+    game: axelrod.Game
+        The game object to score the tournament.
 
     Returns
     -------
-    payoff (list): a matrix of the form:
+    list
+        A matrix of the form:
 
         [
             [[a, j], [b, k], [c, l]],
@@ -29,16 +32,17 @@ def payoff_matrix(interactions, game):
             [[g, p], [h, q], [i, r]],
         ]
 
-    i.e. one row per player, containing one element per opponent (in
-    order of player index) which lists payoffs for each repetition.
+        i.e. one row per player, containing one element per opponent (in
+        order of player index) which lists payoffs for each repetition.
     """
     pass
 
 def scores(payoff, nplayers, repetitions):
     """
-    Arguments
-    ---------
-    payoff (list): a matrix of the form:
+    Parameters
+    ----------
+    payoff : list
+        A matrix of the form:
 
         [
             [[a, j], [b, k], [c, l]],
@@ -46,28 +50,31 @@ def scores(payoff, nplayers, repetitions):
             [[g, p], [h, q], [i, r]],
         ]
 
-    i.e. one row per player, containing one element per opponent (in
-    order of player index) which lists payoffs for each repetition.
+        i.e. one row per player, containing one element per opponent (in
+        order of player index) which lists payoffs for each repetition.
 
-    nplayers (integer): The number of players in the tournament.
-    repetitions (integer): The number of repetitions in the tournament.
+    nplayers : integer
+        The number of players in the tournament.
+    repetitions : integer
+        The number of repetitions in the tournament.
 
     Returns
     -------
-    A scores matrix of the form:
+    list
+        A scores matrix of the form:
 
-        [
-            [a + b + c, j + k + l],
-            [d + e + f, m + n+ o],
-            [h + h + i, p + q + r],
-        ]
+            [
+                [a + b + c, j + k + l],
+                [d + e + f, m + n+ o],
+                [h + h + i, p + q + r],
+            ]
 
-    i.e. one row per player which lists the total score for each
-    repetition.
+        i.e. one row per player which lists the total score for each
+        repetition.
 
-    In Axelrod's original tournament, there were no self-interactions
-    (e.g. player 1 versus player 1) and so these are also excluded from the
-    scores here by the condition on ip and ires.
+        In Axelrod's original tournament, there were no self-interactions
+        (e.g. player 1 versus player 1) and so these are also excluded from the
+        scores here by the condition on ip and ires.
     """
     scores = []
     for ires, res in enumerate(payoff):
@@ -81,21 +88,24 @@ def scores(payoff, nplayers, repetitions):
 
 def normalised_scores(scores, nplayers, turns):
     """
-    Arguments
-    ---------
-    scores (list): A scores matrix (S) of the form returned by the scores
-    function.
-    nplayers (integer): The number of players in the tournament.
-    turns (integer): The number of turns in each round robin.
+    Parameters
+    ----------
+    scores : list
+        A scores matrix (S) of the form returned by the scores function.
+    nplayers : integer
+        The number of players in the tournament.
+    turns : integer
+        The number of turns in each round robin.
 
     Returns
     -------
-    A normalised scores matrix (N) such that:
+    list
+        A normalised scores matrix (N) such that:
 
-        N = S / t
+            N = S / t
 
-    where t is the total number of turns played per repetition for a given
-    player excluding self-interactions.
+        where t is the total number of turns played per repetition for a given
+        player excluding self-interactions.
     """
     normalisation = turns * (nplayers - 1)
     return [
@@ -103,14 +113,15 @@ def normalised_scores(scores, nplayers, turns):
 
 def median(list):
     """
-    Arguments
-    ---------
-    list (list): A list of numeric values
+    Parameters
+    ----------
+    list : list
+        A list of numeric values
 
     Returns
     -------
-    The median value of the list.
-
+    float
+        The median value of the list.
     """
     list = sorted(list)
     if len(list) < 1:
@@ -122,16 +133,18 @@ def median(list):
 
 def ranking(scores, nplayers):
     """
-    Arguments
-    ---------
-    scores (list): A scores matrix (S) of the form returned by the scores
-    function.
-    nplayers (integer): The number of players in the tournament.
+    Parameters
+    ----------
+    scores : list
+        A scores matrix (S) of the form returned by the scores function.
+    nplayers : integer
+        The number of players in the tournament.
 
     Returns
     -------
-    A list of players (their index within the players list rather than
-    a player instance) ordered by median score
+    list
+        A list of players (their index within the players list rather than
+        a player instance) ordered by median score
     """
     ranking = sorted(
         range(nplayers),
@@ -140,13 +153,16 @@ def ranking(scores, nplayers):
 
 def ranked_names(players, ranking):
     """
-    Arguments
-    ---------
-    players (list): The list of players in the tournament
-    ranking (list): A list of player index numbers - as returned by the ranking
-    function
+    Parameters
+    ----------
+    players : list
+        The list of players in the tournament
+    ranking : list
+        A list of player index numbers - as returned by the ranking function
 
-    Returns:
+    Returns
+    -------
+    list
          A list of player names sorted by their ranked order.
     """
     ranked_names = [str(players[i]) for i in ranking]
@@ -154,9 +170,10 @@ def ranked_names(players, ranking):
 
 def normalised_payoff(payoff_matrix, turns, repetitions):
     """
-    Arguments
-    ---------
-    payoff_matrix (list): a matrix of the form:
+    Parameters
+    ----------
+    payoff : list
+        A matrix of the form:
 
         [
             [[a, j], [b, k], [c, l]],
@@ -164,15 +181,18 @@ def normalised_payoff(payoff_matrix, turns, repetitions):
             [[g, p], [h, q], [i, r]],
         ]
 
-    i.e. one row per player, containing one element per opponent (in
-    order of player index) which lists payoffs for each repetition.
+        i.e. one row per player, containing one element per opponent (in
+        order of player index) which lists payoffs for each repetition.
 
-    turns (integer): The number of turns in each round robin.
-    repetitions (integer): The number of repetitions in the tournament.
+    turns : integer
+        The number of turns in each round robin.
+    repetitions : integer
+        The number of repetitions in the tournament.
 
     Returns
     -------
-    A per-turn averaged payoff matrix and its standard deviations.
+    list
+        A per-turn averaged payoff matrix and its standard deviations.
     """
     averages = []
     stddevs = []
@@ -190,14 +210,17 @@ def normalised_payoff(payoff_matrix, turns, repetitions):
 
 def winning_player(players, payoffs):
     """
-    Arguments
-    ---------
-    players (tuple): A pair of player indexes
-    payoffs (tuple): A pair of payoffs for the two players
+    Parameters
+    ----------
+    players : tuple
+        A pair of player indexes
+    payoffs : tuple
+        A pair of payoffs for the two players
 
     Returns
     -------
-    The index of the winning player or None if a draw
+    integer
+        The index of the winning player or None if a draw
     """
     if payoffs[0] == payoffs[1]:
         return None
@@ -209,9 +232,10 @@ def winning_player(players, payoffs):
 
 def wins(payoff, nplayers, repetitions):
     """
-    Arguments
-    ---------
-    payoff (list): a matrix of the form:
+    Parameters
+    ----------
+    payoff : list
+        A matrix of the form:
 
         [
             [[a, j], [b, k], [c, l]],
@@ -219,15 +243,18 @@ def wins(payoff, nplayers, repetitions):
             [[g, p], [h, q], [i, r]],
         ]
 
-    i.e. one row per player, containing one element per opponent (in
-    order of player index) which lists payoffs for each repetition.
+        i.e. one row per player, containing one element per opponent (in
+        order of player index) which lists payoffs for each repetition.
 
-    nplayers (integer): The number of players in the tournament.
-    repetitions (integer): The number of repetitions in the tournament.
+    nplayers : integer
+        The number of players in the tournament.
+    repetitions : integer
+        The number of repetitions in the tournament.
 
     Returns
     -------
-    A wins matrix of the form:
+    list
+        A wins matrix of the form:
 
         [
             [player1 wins in repetition1, player1 wins in repetition2],
@@ -235,8 +262,8 @@ def wins(payoff, nplayers, repetitions):
             [player3 wins in repetition1, player3 wins in repetition2],
         ]
 
-    i.e. one row per player which lists the total wins for that player
-    in each repetition.
+        i.e. one row per player which lists the total wins for that player
+        in each repetition.
     """
     wins = [
         [0 for r in range(repetitions)] for p in range(nplayers)]
