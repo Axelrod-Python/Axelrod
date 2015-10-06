@@ -28,16 +28,17 @@ def payoff_matrix(interactions, game, nplayers, turns):
     Returns
     -------
     list
-        A matrix of the form:
+        A matrix (P) of the form:
 
         [
-            [[a, j], [b, k], [c, l]],
-            [[d, m], [e, n], [f, o]],
-            [[g, p], [h, q], [i, r]],
+            [a, b, c],
+            [d, e, f],
+            [g, h, i]
         ]
 
-        i.e. one row per player, containing one element per opponent (in
-        order of player index) which lists payoffs for each repetition.
+        i.e. an n by n matrix where n is the number of players. Each row (i)
+        and column (j) represents an individual player and the the value Pij
+        is the payoff value for player (i) versus player (j).
     """
     pass
 
