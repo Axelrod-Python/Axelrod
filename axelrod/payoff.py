@@ -2,6 +2,8 @@ import math
 
 def payoff_matrix(interactions, game, nplayers, turns):
     """
+    The payoff matrix from a single round robin.
+
     Parameters
     ----------
     interactions : list
