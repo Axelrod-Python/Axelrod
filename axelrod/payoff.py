@@ -4,7 +4,7 @@ def payoff_matrix(interactions, game):
     """
     Parameters
     ----------
-    interactions: list
+    interactions : list
         A matrix of the form:
 
         e.g. for a tournament between Cooperator and Defector with 2 turns per
@@ -18,7 +18,7 @@ def payoff_matrix(interactions, game):
         player index) which contains a pair of interactions for each turn in a
         round robin.
 
-    game: axelrod.Game
+    game : axelrod.Game
         The game object to score the tournament.
 
     Returns
