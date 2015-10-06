@@ -1,4 +1,5 @@
 import unittest
+from axelrod import Game
 import axelrod.payoff as ap
 
 
@@ -8,6 +9,30 @@ class TestPayoff(unittest.TestCase):
     def setUpClass(cls):
 
         cls.players = ('Alternator', 'TitForTat', 'Random')
+
+        cls.interactions = [
+            [
+                [('C', 'C'), ('D', 'D'), ('C', 'C'), ('D', 'D'), ('C', 'C')],
+                [('C', 'C'), ('D', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D')],
+                [('C', 'C'), ('D', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D')]
+            ],
+            [
+                [('C', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D'), ('D', 'C')],
+                [('C', 'C'), ('C', 'C'), ('C', 'C'), ('C', 'C'), ('C', 'C')],
+                [('C', 'D'), ('D', 'D'), ('D', 'C'), ('C', 'D'), ('D', 'C')]
+            ],
+            [
+                [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('D', 'C')],
+                [('D', 'C'), ('D', 'D'), ('D', 'D'), ('C', 'D'), ('D', 'C')],
+                [('D', 'C'), ('D', 'D'), ('D', 'C'), ('D', 'D'), ('D', 'D')]
+            ]
+        ]
+
+        cls.expected_payoff_matrix = [
+            [11, 13, 13],
+            [13, 15, 11],
+            [13, 12, 13]
+        ]
 
         cls.expected_payoff = [
             [[11.0, 11.0], [13, 13], [15, 12]],
@@ -42,6 +67,10 @@ class TestPayoff(unittest.TestCase):
         ]
 
         cls.expected_wins = [[2, 0], [0, 0], [0, 2]]
+
+    def test_payoff_matrix(self):
+        payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
+        self.assertEqual(payoff_matrix, self.expected_payoff_matrix)
 
     def test_scores(self):
         scores = ap.scores(self.expected_payoff, 3, 2)

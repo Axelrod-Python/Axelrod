@@ -40,7 +40,7 @@ def payoff_matrix(interactions, game, nplayers, turns):
         and column (j) represents an individual player and the the value Pij
         is the payoff value for player (i) versus player (j).
     """
-    pass
+    return []
 
 def scores(payoff, nplayers, repetitions):
     """
