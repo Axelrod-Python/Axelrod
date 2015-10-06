@@ -29,9 +29,9 @@ class TestPayoff(unittest.TestCase):
         ]
 
         cls.expected_payoff_matrix = [
-            [11, 13, 13],
-            [13, 15, 11],
-            [13, 12, 13]
+            [22, 26, 26],
+            [26, 30, 18],
+            [26, 23, 16]
         ]
 
         cls.expected_payoff = [
