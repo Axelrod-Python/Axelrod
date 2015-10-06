@@ -1,6 +1,6 @@
 import math
 
-def payoff_matrix(interactions, game):
+def payoff_matrix(interactions, game, nplayers, turns):
     """
     Parameters
     ----------
@@ -20,6 +20,10 @@ def payoff_matrix(interactions, game):
 
     game : axelrod.Game
         The game object to score the tournament.
+    nplayers : integer
+        The number of players in the tournament.
+    turns : integer
+        The number of turns in each round robin.
 
     Returns
     -------
