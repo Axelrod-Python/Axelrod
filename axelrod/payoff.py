@@ -6,26 +6,16 @@ def payoff_matrix(interactions, game):
     ---------
     interactions (list): a matrix of the form:
 
-        e.g. for a tournament between Cooperator and Defector with
-        3 repetitions and 2 turns per round:
+        e.g. for a tournament between Cooperator and Defector with 2 turns per
+        round:
         [
-            [
-                [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
-                [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
-            ],
-            [
-                [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
-                [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
-            ],
-            [
-                [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
-                [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
-            ]
+            [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
+            [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
         ]
 
-    i.e. one list per repetition, containing one list per player, containing
-    one list per opponent (in order of player index) which contains a pair of
-    interactions for each turn in a round robin.
+    i.e. one list per player, containing one list per opponent (in order of
+    player index) which contains a pair of interactions for each turn in a
+    round robin.
 
     game (axelrod.Game): The game object to score the tournament.
 
