@@ -18,11 +18,11 @@ class TestTournament(unittest.TestCase):
         cls.test_repetitions = 5
 
         cls.expected_outcome = [
-            ('Cooperator', [1800, 1800, 1800, 1800, 1800]),
-            ('Defector', [1612, 1612, 1612, 1612, 1612]),
-            ('Grudger', [1999, 1999, 1999, 1999, 1999]),
-            ('Soft Go By Majority', [1999, 1999, 1999, 1999, 1999]),
-            ('Tit For Tat', [1999, 1999, 1999, 1999, 1999])]
+            ('Cooperator', [180, 180, 180, 180, 180]),
+            ('Defector', [172, 172, 172, 172, 172]),
+            ('Grudger', [199, 199, 199, 199, 199]),
+            ('Soft Go By Majority', [199, 199, 199, 199, 199]),
+            ('Tit For Tat', [199, 199, 199, 199, 199])]
         cls.expected_outcome.sort()
 
     def test_full_tournament(self):
