@@ -5,6 +5,23 @@ import itertools
 from axelrod import Player
 
 
+def detect_cycle(history, min_size=1, offset=15):
+    """Detects if there is a cycle in the opponent's history.
+    Excludes cycles of length 1 to avoid Cooperator and Defector,
+    which have their own detectors."""
+    for i in range(min_size, len(history) // 2):
+        cycle = tuple(history[:i])
+        for j in range(len(history)):
+            if history[j] != cycle[j % len(cycle)]:
+                break
+        if j == len(history) - 1:
+            # We made it to the end, is the cycle itself a cycle?
+            # I.E. CCC is not ok as cycle if min_size is really 2
+            # Since this is the same as C
+            return cycle
+    return None
+
+
 class DefectorHunter(Player):
     """A player who hunts for defectors."""
 
@@ -74,24 +91,12 @@ class CycleHunter(Player):
     }
 
     @staticmethod
-    def detect_cycle(history):
-        """Detects if there is a cycle in the opponent's history.
-        Excludes cycles of length 1 to avoid Cooperator and Defector,
-        which have their own detectors."""
-        for i in range(len(history) // 2):
-            cycle = itertools.cycle(history[0: i + 1])
-            cycle_list = list(itertools.islice(cycle, 0, len(history)))
-            if list(history) == cycle_list:
-                if i == 0:
-                    return False
-                return True
-        return False
-
-    def strategy(self, opponent):
-        if self.detect_cycle(opponent.history):
-            return 'D'
-        else:
-            return 'C'
+    def strategy(opponent):
+        cycle = detect_cycle(opponent.history, min_size=2)
+        if cycle:
+            if len(set(cycle)) > 1:
+                return 'D'
+        return 'C'
 
 
 class EventualCycleHunter(Player):
