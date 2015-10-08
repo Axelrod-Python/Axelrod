@@ -1,12 +1,32 @@
 """Tests for the hunter strategy."""
 
 import random
+import unittest
 
 import axelrod
 
 from .test_player import TestPlayer
+from axelrod.strategies.hunter import detect_cycle
 
 C, D = 'C', 'D'
+
+
+class TestCycleDetection(unittest.TestCase):
+    def test_cycles(self):
+        history = [C] * 10
+        self.assertEqual(detect_cycle(history), (C,))
+        self.assertEqual(detect_cycle(history, min_size=2), (C, C))
+        history = [C, D] * 10
+        self.assertEqual(detect_cycle(history, min_size=2), (C, D))
+        self.assertEqual(detect_cycle(history, min_size=3), (C, D, C, D))
+        history = [C, D, C] * 10
+        self.assertTrue(detect_cycle(history), (C, D, C))
+        history = [C, C, D] * 10
+        self.assertTrue(detect_cycle(history), (C, C, D))
+
+    def test_noncycles(self):
+        history = [C, D, C, C, D, C, C, C, D]
+        self.assertEqual(detect_cycle(history), None)
 
 
 class TestDefectorHunter(TestPlayer):
@@ -121,7 +141,6 @@ class TestEventualCycleHunter(TestPlayer):
             player.reset()
             for i in range(50):
                 player.play(opponent)
-            print opponent
             self.assertEqual(player.history[-1], 'D')
         # Test against non-cyclers and cooperators
         for opponent in [axelrod.Random(), axelrod.AntiCycler(), axelrod.DoubleCrosser(), axelrod.Cooperator()]:

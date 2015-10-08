@@ -5,10 +5,10 @@ import logging
 
 from .tournament_manager_factory import TournamentManagerFactory
 
+
 def timed_message(message, start_time):
     elapsed_time = time.time() - start_time
     return message + " in %.1fs" % elapsed_time
-
 
 def setup_logging(logging_destination='console', verbosity='INFO'):
     """Sets up logging. Call this outside of run_tournaments to avoid
