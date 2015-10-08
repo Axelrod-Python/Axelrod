@@ -27,6 +27,8 @@ class TestCycleDetection(unittest.TestCase):
     def test_noncycles(self):
         history = [C, D, C, C, D, C, C, C, D]
         self.assertEqual(detect_cycle(history), None)
+        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C]
+        self.assertEqual(detect_cycle(history), None)
 
 
 class TestDefectorHunter(TestPlayer):
