@@ -5,16 +5,25 @@ import itertools
 from axelrod import Player
 
 
-def detect_cycle(history, min_size=1, offset=15):
-    """Detects if there is a cycle in the opponent's history.
-    Excludes cycles of length 1 to avoid Cooperator and Defector,
-    which have their own detectors."""
-    for i in range(min_size, len(history) // 2):
-        cycle = tuple(history[:i])
-        for j in range(len(history)):
-            if history[j] != cycle[j % len(cycle)]:
+def detect_cycle(history, min_size=1, offset=0):
+    """Detects cycles in the sequence history.
+
+    Parameters
+    ----------
+    history: sequence of C and D
+        The sequence to look for cycles within
+    min_size: int, 1
+        The minimum length of the cycle
+    offset: int, 0
+        The amount of history to skip initially
+    """
+    history_tail = history[-offset:]
+    for i in range(min_size, len(history_tail) // 2):
+        cycle = tuple(history_tail[:i])
+        for j in range(len(history_tail)):
+            if history_tail[j] != cycle[j % len(cycle)]:
                 break
-        if j == len(history) - 1:
+        if j == len(history_tail) - 1:
             # We made it to the end, is the cycle itself a cycle?
             # I.E. CCC is not ok as cycle if min_size is really 2
             # Since this is the same as C
@@ -111,24 +120,12 @@ class EventualCycleHunter(Player):
         'manipulates_state': False
     }
 
-    @staticmethod
-    def detect_eventual_cycle(history, offset=15):
-        """Detects if there is a cycle in the opponent's history."""
-        history_tail = history[-offset:]
-        for i in range(len(history_tail) // 2):
-            test_cycle = history_tail[: i + 1]
-            cycle = itertools.cycle(test_cycle)
-            cycle_list = list(itertools.islice(cycle, 0, len(history_tail)))
-            if history_tail == cycle_list:
-                return True
-        return False
-
     def strategy(self, opponent):
         if len(opponent.history) < 10:
             return 'C'
         if len(opponent.history) == opponent.cooperations:
             return 'C'
-        if self.detect_eventual_cycle(opponent.history):
+        if detect_cycle(opponent.history, offset=15):
             return 'D'
         else:
             return 'C'
