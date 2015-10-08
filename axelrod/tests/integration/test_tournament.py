@@ -28,7 +28,7 @@ class TestTournament(unittest.TestCase):
     def test_full_tournament(self):
         """A test to check that tournament runs with all non cheating strategies."""
         strategies = [strategy() for strategy in axelrod.ordinary_strategies]
-        tournament = axelrod.Tournament(name='test', players=strategies, game=self.game, turns=500, repetitions=2)
+        tournament = axelrod.Tournament(name='test', players=strategies, game=self.game, turns=20, repetitions=2)
         output_of_tournament = tournament.play().results
         self.assertEqual(type(output_of_tournament), dict)
         self.assertEqual(len(output_of_tournament['payoff']), len(strategies))
@@ -38,7 +38,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=200,
+            turns=20,
             repetitions=self.test_repetitions)
         scores = tournament.play().scores
         actual_outcome = sorted(zip(self.player_names, scores))
@@ -49,7 +49,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=200,
+            turns=20,
             repetitions=self.test_repetitions,
             processes=2)
         scores = tournament.play().scores
