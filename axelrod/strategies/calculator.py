@@ -23,16 +23,6 @@ class Calculator(Player):
         Player.__init__(self)
         self.joss_instance = Joss()
 
-    #@staticmethod
-    #def detect_cycle(history):
-        #"""Detects if there is a cycle in the opponent's history."""
-        #for i in range(len(history) // 2):
-            #cycle = itertools.cycle(history[0: i + 1])
-            #cycle_list = list(itertools.islice(cycle, 0, len(history)))
-            #if list(history) == cycle_list:
-                #return True
-        #return False
-
     def strategy(self, opponent):
         turn = len(self.history)
         if turn == 20:
