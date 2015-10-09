@@ -11,6 +11,9 @@ C, D = 'C', 'D'
 
 
 class TestMetaPlayer(TestPlayer):
+    """This is a test class for meta players, primarily to test the classifier
+    dictionary and the reset methods. Inherit from this class just as you would
+    the TestPlayer class."""
 
     name = "Meta Player"
     player = axelrod.MetaPlayer
