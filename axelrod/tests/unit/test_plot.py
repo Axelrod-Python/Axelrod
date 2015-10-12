@@ -26,11 +26,13 @@ class TestPlot(unittest.TestCase):
         cls.expected_boxplot_xticks_labels = ['Player3', 'Player1', 'Player2']
         cls.expected_boxplot_title = ('Mean score per stage game over 5 turns'
                                       ' repeated 2 times (3 strategies)')
-
         cls.expected_payoff_dataset = [
             [0.0, 3.2, 3.2],
             [4.2, 0.0, 2.0],
             [3.6, 1.8, 0.0]]
+        cls.expected_winplot_dataset = ([[2, 4], [0, 2], [0, 0]],
+                                        ['Player1', 'Player2', 'Player3'])
+        cls.expected_winplot_title = "Distributions of wins: 5 turns repeated 2 times (3 strategies)"
 
     def test_init(self):
         result_set = self.test_result_set
@@ -64,6 +66,23 @@ class TestPlot(unittest.TestCase):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
             self.assertIsInstance(plot.boxplot(), matplotlib.pyplot.Figure)
+        else:
+            self.skipTest('matplotlib not installed')
+
+    def test_winplot_dataset(self):
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertSequenceEqual(
+            plot._winplot_dataset,
+            self.expected_winplot_dataset)
+
+    def test_winplot_title(self):
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertEqual(plot._winplot_title, self.expected_winplot_title)
+
+    def test_winplot(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.winplot(), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 
