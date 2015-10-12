@@ -60,9 +60,8 @@ class Plot(object):
     def _winplot_dataset(self):
         # Sort wins by median
         wins = self.result_set.wins
-        ranked_names = self.result_set.ranked_names
-        medians = map(numpy.median, wins)
         players = self.result_set.players
+        medians = map(numpy.median, wins)
         medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
         # Reorder and grab names
         wins = [wins[x[1]] for x in medians]
@@ -71,7 +70,7 @@ class Plot(object):
 
     @property
     def _winplot_title(self):
-        return ("Distribution of wins"
+        return ("Distributions of wins:"
                 " {} turns repeated {} times ({} strategies)").format(
             self.result_set.turns,
             self.result_set.repetitions,
