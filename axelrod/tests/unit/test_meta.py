@@ -3,13 +3,54 @@
 import random
 
 import axelrod
+import unittest
 
 from .test_player import TestPlayer
 
 C, D = 'C', 'D'
 
 
-class TestMetaMajority(TestPlayer):
+class TestMetaPlayer(TestPlayer):
+    """This is a test class for meta players, primarily to test the classifier
+    dictionary and the reset methods. Inherit from this class just as you would
+    the TestPlayer class."""
+
+    name = "Meta Player"
+    player = axelrod.MetaPlayer
+    expected_classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'manipulates_source': False,
+        'inspects_source': False,
+        'manipulates_state': False
+    }
+
+    def test_meta_classifiers(self):
+        player = self.player()
+        classifier = dict()
+        for key in ['stochastic', 'inspects_source', 'manipulates_source',
+                    'manipulates_state']:
+            classifier[key] = (any([t.classifier[key] for t in player.team]))
+        classifier['memory_depth'] = max([t.classifier['memory_depth']
+                                          for t in player.team])
+        for key in classifier:
+            self.assertEqual(player.classifier[key],
+                             classifier[key],
+                             msg="%s - Behaviour: %s != Expected Behaviour: %s" %
+                             (key, player.classifier[key], classifier[key]))
+
+    def test_reset(self):
+        p1 = self.player()
+        p2 = axelrod.Cooperator()
+        p1.play(p2)
+        p1.play(p2)
+        p1.play(p2)
+        p1.reset()
+        for player in p1.team:
+            self.assertEqual(len(player.history), 0)
+
+
+class TestMetaMajority(TestMetaPlayer):
 
     name = "Meta Majority"
     player = axelrod.MetaMajority
@@ -34,18 +75,8 @@ class TestMetaMajority(TestPlayer):
         P1.team = [axelrod.Cooperator(), axelrod.Defector(), axelrod.Defector()]
         self.assertEqual(P1.strategy(P2), D)
 
-    def test_reset(self):
-        p1 = self.player()
-        p2 = axelrod.Cooperator()
-        p1.play(p2)
-        p1.play(p2)
-        p1.play(p2)
-        p1.reset()
-        for player in p1.team:
-            self.assertEqual(len(player.history), 0)
 
-
-class TestMetaMinority(TestPlayer):
+class TestMetaMinority(TestMetaPlayer):
 
     name = "Meta Minority"
     player = axelrod.MetaMinority
@@ -70,18 +101,8 @@ class TestMetaMinority(TestPlayer):
         P1.team = [axelrod.Cooperator(), axelrod.Defector(), axelrod.Defector()]
         self.assertEqual(P1.strategy(P2), C)
 
-    def test_reset(self):
-        p1 = self.player()
-        p2 = axelrod.Cooperator()
-        p1.play(p2)
-        p1.play(p2)
-        p1.play(p2)
-        p1.reset()
-        for player in p1.team:
-            self.assertEqual(len(player.history), 0)
 
-
-class TestMetaWinner(TestPlayer):
+class TestMetaWinner(TestMetaPlayer):
 
     name = "Meta Winner"
     player = axelrod.MetaWinner
@@ -104,25 +125,15 @@ class TestMetaWinner(TestPlayer):
         self.assertEqual(P1.strategy(P2), C)
         P1.team[0].score = 1
         P1.team[1].score = 0
-        self.assertEqual(P1.strategy(P2), D)
+        self.assertEqual(P1.strategy(P2), C)
 
         # If there is a tie, choose to cooperate if possible.
         P1.team[0].score = 1
         P1.team[1].score = 1
         self.assertEqual(P1.strategy(P2), C)
 
-    def test_reset(self):
-        p1 = self.player()
-        p2 = axelrod.Cooperator()
-        p1.play(p2)
-        p1.play(p2)
-        p1.play(p2)
-        p1.reset()
-        for player in p1.team:
-            self.assertEqual(len(player.history), 0)
 
-
-class TestMetaHunter(TestPlayer):
+class TestMetaHunter(TestMetaPlayer):
 
     name = "Meta Hunter"
     player = axelrod.MetaHunter
@@ -149,12 +160,93 @@ class TestMetaHunter(TestPlayer):
         self.responses_test([C] * 8, [C, C, C, D, C, C, C, D], [D])
         self.responses_test([C] * 100, [random.choice([C, D]) for i in range(100)],[D])
 
-    def test_reset(self):
-        p1 = self.player()
-        p2 = axelrod.Cooperator()
-        p1.play(p2)
-        p1.play(p2)
-        p1.play(p2)
-        p1.reset()
-        for player in p1.team:
-            self.assertEqual(len(player.history), 0)
+
+class TestMetaMajorityMemoryOne(TestMetaPlayer):
+    name = "Meta Majority Memory One"
+    player = axelrod.MetaMajorityMemoryOne
+    expected_classifier = {
+        'memory_depth': 1,  # Long memory
+        'stochastic' : True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMetaWinnerMemoryOne(TestMetaPlayer):
+    name = "Meta Winner Memory One"
+    player = axelrod.MetaWinnerMemoryOne
+    expected_classifier = {
+        'memory_depth': 1,  # Long memory
+        'stochastic' : True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMetaMajorityFiniteMemory(TestMetaPlayer):
+    name = "Meta Majority Finite Memory"
+    player = axelrod.MetaMajorityFiniteMemory
+    expected_classifier = {
+        'memory_depth': 200,  # Long memory
+        'stochastic' : True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMetaWinnerFiniteMemory(TestMetaPlayer):
+    name = "Meta Winner Finite Memory"
+    player = axelrod.MetaWinnerFiniteMemory
+    expected_classifier = {
+        'memory_depth': 200,  # Long memory
+        'stochastic' : True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMetaMajorityLongMemory(TestMetaPlayer):
+    name = "Meta Majority Long Memory"
+    player = axelrod.MetaMajorityLongMemory
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMetaWinnerLongMemory(TestMetaPlayer):
+    name = "Meta Winner Long Memory"
+    player = axelrod.MetaWinnerLongMemory
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic' : True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+

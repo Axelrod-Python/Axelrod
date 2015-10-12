@@ -1,6 +1,34 @@
 from __future__ import absolute_import
 
+import itertools
+
 from axelrod import Player
+
+
+def detect_cycle(history, min_size=1, offset=0):
+    """Detects cycles in the sequence history.
+
+    Parameters
+    ----------
+    history: sequence of C and D
+        The sequence to look for cycles within
+    min_size: int, 1
+        The minimum length of the cycle
+    offset: int, 0
+        The amount of history to skip initially
+    """
+    history_tail = history[-offset:]
+    for i in range(min_size, len(history_tail) // 2):
+        cycle = tuple(history_tail[:i])
+        for j in range(len(history_tail)):
+            if history_tail[j] != cycle[j % len(cycle)]:
+                break
+        if j == len(history_tail) - 1:
+            # We made it to the end, is the cycle itself a cycle?
+            # I.E. CCC is not ok as cycle if min_size is really 2
+            # Since this is the same as C
+            return cycle
+    return None
 
 
 class DefectorHunter(Player):
@@ -56,6 +84,51 @@ class AlternatorHunter(Player):
         if len(self.history) >= 6 and all([oh[i] != oh[i+1] for i in range(len(oh)-1)]):
             return 'D'
         return 'C'
+
+
+class CycleHunter(Player):
+    """Hunts strategies that play cyclically, like any of the Cyclers,
+    Alternator, etc."""
+
+    name = 'Cycle Hunter'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @staticmethod
+    def strategy(opponent):
+        cycle = detect_cycle(opponent.history, min_size=2)
+        if cycle:
+            if len(set(cycle)) > 1:
+                return 'D'
+        return 'C'
+
+
+class EventualCycleHunter(Player):
+    """Hunts strategies that eventually play cyclically"""
+
+    name = 'Eventual Cycle Hunter'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        if len(opponent.history) < 10:
+            return 'C'
+        if len(opponent.history) == opponent.cooperations:
+            return 'C'
+        if detect_cycle(opponent.history, offset=15):
+            return 'D'
+        else:
+            return 'C'
 
 
 class MathConstantHunter(Player):

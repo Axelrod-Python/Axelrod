@@ -18,17 +18,17 @@ class TestTournament(unittest.TestCase):
         cls.test_repetitions = 5
 
         cls.expected_outcome = [
-            ('Cooperator', [1800, 1800, 1800, 1800, 1800]),
-            ('Defector', [1612, 1612, 1612, 1612, 1612]),
-            ('Grudger', [1999, 1999, 1999, 1999, 1999]),
-            ('Soft Go By Majority', [1999, 1999, 1999, 1999, 1999]),
-            ('Tit For Tat', [1999, 1999, 1999, 1999, 1999])]
+            ('Cooperator', [180, 180, 180, 180, 180]),
+            ('Defector', [172, 172, 172, 172, 172]),
+            ('Grudger', [199, 199, 199, 199, 199]),
+            ('Soft Go By Majority', [199, 199, 199, 199, 199]),
+            ('Tit For Tat', [199, 199, 199, 199, 199])]
         cls.expected_outcome.sort()
 
     def test_full_tournament(self):
         """A test to check that tournament runs with all non cheating strategies."""
         strategies = [strategy() for strategy in axelrod.ordinary_strategies]
-        tournament = axelrod.Tournament(name='test', players=strategies, game=self.game, turns=500, repetitions=2)
+        tournament = axelrod.Tournament(name='test', players=strategies, game=self.game, turns=20, repetitions=2)
         output_of_tournament = tournament.play().results
         self.assertEqual(type(output_of_tournament), dict)
         self.assertEqual(len(output_of_tournament['payoff']), len(strategies))
@@ -38,7 +38,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=200,
+            turns=20,
             repetitions=self.test_repetitions)
         scores = tournament.play().scores
         actual_outcome = sorted(zip(self.player_names, scores))
@@ -49,7 +49,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=200,
+            turns=20,
             repetitions=self.test_repetitions,
             processes=2)
         scores = tournament.play().scores
