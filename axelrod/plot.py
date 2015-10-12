@@ -1,4 +1,6 @@
-import numpy
+from operator import itemgetter
+
+from numpy import mean, median
 
 matplotlib_installed = True
 try:
@@ -57,11 +59,87 @@ class Plot(object):
         return figure
 
     @property
+    def _sdb_plot_title(self):
+        return ("Distributions of payoff differences per stage game over {} "
+                "turns repeated {} times ({} strategies)").format(
+            self.result_set.turns,
+            self.result_set.repetitions,
+            len(self.result_set.ranking))
+
+    @property
+    def _sd_ordering(self):
+        # Sort by median then max
+        diffs = self.result_set.score_diffs
+        to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
+        to_sort.sort(reverse=True, key=itemgetter(0, 1))
+        ordering = [x[-1] for x in to_sort]
+        return ordering
+
+    @property
+    def _sdb_plot_dataset(self):
+        ordering = self._sd_ordering
+        diffs = self.result_set.score_diffs
+        players = self.result_set.players
+        # Reorder and grab names
+        diffs = [diffs[i] for i in ordering]
+        ranked_names = [str(players[i]) for i in ordering]
+        return diffs, ranked_names
+
+    def sdbplot(self):
+        """Score difference boxplots to visualize the distributions of how
+        players attain their payoffs."""
+
+        if not self.matplotlib_installed:
+            return None
+        diffs, ranked_names = self._sdb_plot_dataset
+        figure = plt.figure()
+        plt.boxplot(diffs)
+        plt.xticks(
+            self._boxplot_xticks_locations,
+            ranked_names,
+            rotation=90)
+        plt.tick_params(axis='both', which='both', labelsize=7)
+        plt.title(self._sdb_plot_title)
+        return figure
+
+    @property
+    def _pdplot_dataset(self):
+        # Order like the sdb_plot
+        ordering = self._sd_ordering
+        pdm = self.result_set.payoff_diffs_matrix
+        # Reorder and grab names
+        matrix = [[pdm[r1][r2] for r2 in ordering]
+                  for r1 in ordering]
+        players = self.result_set.players
+        ranked_names = [str(players[i]) for i in ordering]
+        return matrix, ranked_names
+
+    def pdplot(self):
+        """Payoff difference heatmap to visualize the distributions of how
+        players attain their payoffs."""
+        if not self.matplotlib_installed:
+            return None
+
+        matrix, ranked_names = self._pdplot_dataset
+        figure, ax = plt.subplots()
+        mat = ax.matshow(matrix, cmap='YlGnBu')
+        plt.xticks(range(self.result_set.nplayers))
+        plt.yticks(range(self.result_set.nplayers))
+        ax.set_xticklabels(ranked_names, rotation=90)
+        ax.set_yticklabels(ranked_names)
+        plt.tick_params(axis='both', which='both', labelsize=6)
+        # Make the colorbar match up with the plot
+        divider = make_axes_locatable(plt.gca())
+        cax = divider.append_axes("right", "5%", pad="3%")
+        plt.colorbar(mat, cax=cax)
+        return figure
+
+    @property
     def _winplot_dataset(self):
         # Sort wins by median
         wins = self.result_set.wins
         players = self.result_set.players
-        medians = map(numpy.median, wins)
+        medians = map(median, wins)
         medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
         # Reorder and grab names
         wins = [wins[x[1]] for x in medians]
