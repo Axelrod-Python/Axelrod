@@ -81,6 +81,7 @@ class Plot(object):
             return None
 
         wins, ranked_names = self._winplot_dataset
+        maximum = max(max(w) for w in wins)
 
         figure = plt.figure()
         plt.boxplot(wins)
@@ -90,6 +91,7 @@ class Plot(object):
             rotation=90)
         plt.tick_params(axis='both', which='both', labelsize=7)
         plt.title(self._winplot_title)
+        plt.ylim(-0.5, 0.5 + maximum)
         return figure
 
     def payoff(self):
