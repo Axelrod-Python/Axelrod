@@ -1,3 +1,5 @@
+import numpy
+
 matplotlib_installed = True
 try:
     import matplotlib.pyplot as plt
@@ -11,7 +13,6 @@ class Plot(object):
 
     def __init__(self, result_set):
         self.result_set = result_set
-        # self._nplayers = self.result_set.nplayers
         self.matplotlib_installed = matplotlib_installed
 
     @property
@@ -53,6 +54,44 @@ class Plot(object):
             rotation=90)
         plt.tick_params(axis='both', which='both', labelsize=7)
         plt.title(self._boxplot_title)
+        return figure
+
+    @property
+    def _winplot_dataset(self):
+        # Sort wins by median
+        wins = self.result_set.wins
+        players = self.result_set.players
+        medians = map(numpy.median, wins)
+        medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
+        # Reorder and grab names
+        wins = [wins[x[1]] for x in medians]
+        ranked_names = [str(players[x[1]]) for x in medians]
+        return wins, ranked_names
+
+    @property
+    def _winplot_title(self):
+        return ("Distributions of wins:"
+                " {} turns repeated {} times ({} strategies)").format(
+            self.result_set.turns,
+            self.result_set.repetitions,
+            len(self.result_set.ranking))
+
+    def winplot(self):
+        if not self.matplotlib_installed:
+            return None
+
+        wins, ranked_names = self._winplot_dataset
+        maximum = max(max(w) for w in wins)
+
+        figure = plt.figure()
+        plt.boxplot(wins)
+        plt.xticks(
+            self._boxplot_xticks_locations,
+            ranked_names,
+            rotation=90)
+        plt.tick_params(axis='both', which='both', labelsize=7)
+        plt.title(self._winplot_title)
+        plt.ylim(-0.5, 0.5 + maximum)
         return figure
 
     def payoff(self):

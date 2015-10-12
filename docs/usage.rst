@@ -303,6 +303,27 @@ The resulting wins matrix is::
 
 which shows, for example, that Cooperator had 0 wins, Defector won 8 times in each repetition and Random won 4 times in the first repetition and twice in the second.
 
+For any tournament, a plot of the distribution of wins is created, much like the
+plot for the distribution of mean scores. For the demo strategies we create the
+plot as follows::
+
+    import axelrod
+    strategies = [s() for s in axelrod.demo_strategies]
+    tournament = axelrod.Tournament(strategies, game=Game(30, 0, 50, 10))
+    results = tournament.play()
+    plot = axelrod.Plot(results)
+    p = plot.winplot()
+    p.show()
+
+This produces:
+
+.. image:: _static/usage/demo_strategies_winplot.svg
+   :width: 50%
+   :align: center
+
+In this case most of the strategies are deterministic, so there is not much
+variation in the distributions. See below for a more complex example.
+
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^
 
@@ -364,6 +385,23 @@ and accordingly to the ranking of strategies overall:
 +--------------------+-------------------+
 | |boxplot_no_noise| | |boxplot_5_noise| |
 +--------------------+-------------------+
+
+as well as the distributions of wins:
+
+.. |winplot_no_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
+   :width: 75%
+   :align: middle
+   :alt: Strategy performance without noise
+
+.. |winplot_5_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot_noise_5.svg
+   :width: 75%
+   :align: middle
+   :alt: Strategy performance with 5% noise
+
++--------------------+-------------------+
+| |winplot_no_noise| | |winplot_5_noise| |
++--------------------+-------------------+
+
 
 To run a noisy tournament, just use the keyword argument `noise` when
 creating tournaments. Both `run_axelrod` and the utility function
@@ -527,6 +565,13 @@ The results from the tournament itself (ordered by median score):
 .. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
    :width: 50%
    :align: center
+
+The distributions of head-to-head wins for each strategy:
+
+.. image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
+   :width: 50%
+   :align: center
+
 
 The payoff matrix from that tournament:
 
