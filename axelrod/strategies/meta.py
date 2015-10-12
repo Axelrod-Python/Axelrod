@@ -1,7 +1,7 @@
 from axelrod import Player, obey_axelrod
 from ._strategies import strategies
-from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter
-
+from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter, EventualCycleHunter
+from .cooperator import Cooperator
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in strategies if obey_axelrod(s)]
@@ -10,7 +10,9 @@ ordinary_strategies = [s for s in strategies if obey_axelrod(s)]
 class MetaPlayer(Player):
     """A generic player that has its own team of players."""
 
-    team = []
+    name = "Meta Player"
+
+    team = [Cooperator]
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
@@ -30,9 +32,12 @@ class MetaPlayer(Player):
         # Initiate all the player in out team.
         self.team = [t() for t in self.team]
 
-        # If the team will have stochastic players, this meta is also stochastic.
-        self.classifier['stochastic'] = (
-            any([t.classifier['stochastic'] for t in self.team]))
+        # This player inherits the classifiers of its team.
+        for key in ['stochastic', 'inspects_source', 'manipulates_source',
+                    'manipulates_state']:
+            self.classifier[key] = (any([t.classifier[key] for t in self.team]))
+        self.classifier['memory_depth'] = max([t.classifier['memory_depth'] for
+                                               t in self.team])
 
     def strategy(self, opponent):
 
@@ -62,9 +67,14 @@ class MetaMajority(MetaPlayer):
 
     name = "Meta Majority"
 
-    def __init__(self):
-        self.team = ordinary_strategies
+    def __init__(self, team=None):
+        if team:
+            self.team = team
+        else:
+            # Needs to be computed manually to prevent circular dependency
+            self.team = ordinary_strategies
         super(MetaMajority, self).__init__()
+        self.init_args = (team,)
 
     def meta_strategy(self, results, opponent):
         if results.count('D') > results.count('C'):
@@ -77,9 +87,14 @@ class MetaMinority(MetaPlayer):
 
     name = "Meta Minority"
 
-    def __init__(self):
-        self.team = ordinary_strategies
+    def __init__(self, team=None):
+        if team:
+            self.team = team
+        else:
+            # Needs to be computed manually to prevent circular dependency
+            self.team = ordinary_strategies
         super(MetaMinority, self).__init__()
+        self.init_args = (team,)
 
     def meta_strategy(self, results, opponent):
         if results.count('D') < results.count('C'):
@@ -116,8 +131,6 @@ class MetaWinner(MetaPlayer):
         # Update the running score for each player, before determining the next move.
         if len(self.history):
             for player in self.team:
-                pl_C = player.proposed_history[-1] == "C"
-                opp_C = opponent.history[-1] == "C"
                 game = self.tournament_attributes["game"]
                 s = game.scores[(player.proposed_history[-1], opponent.history[-1])][0]
                 player.score += s
@@ -135,6 +148,10 @@ class MetaWinner(MetaPlayer):
         # the new result has been settled based on scores accumulated until now.
         for r, t in zip(results, self.team):
             t.proposed_history.append(r)
+
+        if opponent.defections == 0:
+            # Don't poke the bear
+            return 'C'
 
         return bestresult
 
@@ -157,7 +174,7 @@ class MetaHunter(MetaPlayer):
         # to hunters that use defections as cues. However, a really tangible benefit comes from
         # combining Random Hunter and Math Constant Hunter, since together they catch strategies
         # that are lightly randomized but still quite constant (the tricky/suspecious ones).
-        self.team = [DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter]
+        self.team = [DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter, EventualCycleHunter]
 
         super(MetaHunter, self).__init__()
 
@@ -175,3 +192,69 @@ class MetaHunter(MetaPlayer):
             return 'D' if opponent.history[-1:] == ['D'] else 'C'
         else:
             return 'C'
+
+
+class MetaMajorityMemoryOne(MetaMajority):
+    """MetaMajority with the team of Memory One players"""
+
+    name = "Meta Majority Memory One"
+
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
+        super(MetaMajorityMemoryOne, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MetaWinnerMemoryOne(MetaWinner):
+    """MetaWinner with the team of Memory One players"""
+
+    name = "Meta Winner Memory One"
+
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
+        super(MetaWinnerMemoryOne, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MetaMajorityFiniteMemory(MetaMajority):
+    """MetaMajority with the team of Finite Memory Players"""
+
+    name = "Meta Majority Finite Memory"
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
+                < float('inf')]
+        super(MetaMajorityFiniteMemory, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MetaWinnerFiniteMemory(MetaWinner):
+    """MetaWinner with the team of Finite Memory Players"""
+
+    name = "Meta Winner Finite Memory"
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
+                < float('inf')]
+        super(MetaWinnerFiniteMemory, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MetaMajorityLongMemory(MetaMajority):
+    """MetaMajority with the team of Long (infinite) Memory Players"""
+
+    name = "Meta Majority Long Memory"
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
+                == float('inf')]
+        super(MetaMajorityLongMemory, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MetaWinnerLongMemory(MetaWinner):
+    """MetaWinner with the team of Long (infinite) Memory Players"""
+
+    name = "Meta Winner Long Memory"
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
+                == float('inf')]
+        super(MetaWinnerLongMemory, self).__init__(team=team)
+        self.init_args = ()

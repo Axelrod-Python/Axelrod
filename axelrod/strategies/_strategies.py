@@ -19,8 +19,8 @@ from .gobymajority import (
 from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
 from .grumpy import Grumpy
 from .hunter import (
-    DefectorHunter, CooperatorHunter, AlternatorHunter, MathConstantHunter,
-    RandomHunter)
+    DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
+    MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
@@ -59,6 +59,7 @@ strategies = [
     Champion,
     Cooperator,
     CooperatorHunter,
+    CycleHunter,
     CyclerCCCCCD,
     CyclerCCCD,
     CyclerCCD,
@@ -68,6 +69,7 @@ strategies = [
     DefectorHunter,
     DoubleCrosser,
     Eatherley,
+    EventualCycleHunter,
     Feld,
     FoolMeForever,
     FoolMeOnce,
