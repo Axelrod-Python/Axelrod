@@ -43,20 +43,20 @@ class Plot(object):
             self.result_set.repetitions,
             len(self.result_set.ranking))
 
-    def boxplot(self):
+    #def boxplot(self):
 
-        if not self.matplotlib_installed:
-            return None
+        #if not self.matplotlib_installed:
+            #return None
 
-        figure = plt.figure()
-        plt.boxplot(self._boxplot_dataset)
-        plt.xticks(
-            self._boxplot_xticks_locations,
-            self._boxplot_xticks_labels,
-            rotation=90)
-        plt.tick_params(axis='both', which='both', labelsize=7)
-        plt.title(self._boxplot_title)
-        return figure
+        #figure = plt.figure()
+        #plt.boxplot(self._boxplot_dataset)
+        #plt.xticks(
+            #self._boxplot_xticks_locations,
+            #self._boxplot_xticks_labels,
+            #rotation=90)
+        #plt.tick_params(axis='both', which='both', labelsize=7)
+        #plt.title(self._boxplot_title)
+        #return figure
 
     @property
     def _sdv_plot_title(self):
@@ -88,7 +88,7 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return diffs, ranked_names
 
-    def vplot(self, data, names):
+    def vplot(self, data, names, title=None):
         if not self.matplotlib_installed:
             return None
         nplayers = self.result_set.nplayers
@@ -103,9 +103,11 @@ class Plot(object):
             positions,
             names,
             rotation=90)
+
         plt.xlim(0, spacing * (nplayers + 1))
         plt.tick_params(axis='both', which='both', labelsize=7)
-        plt.title(self._sdv_plot_title)
+        if title:
+            plt.title(title)
         return figure
 
     #def bplot(self, data, names):
@@ -134,29 +136,30 @@ class Plot(object):
             return None
 
         diffs, ranked_names = self._sdv_plot_dataset
-        figure = self.vplot(diffs, ranked_names)
+        title = self._sdv_plot_title
+        figure = self.vplot(diffs, ranked_names, title)
         return figure
 
-        if not self.matplotlib_installed:
-            return None
-        diffs, ranked_names = self._sdv_plot_dataset
-        nplayers = self.result_set.nplayers
-        width = max(nplayers / 2, 12)
-        height = width / 4
-        figure = plt.figure(figsize=(width, height))
-        spacing = 4
-        positions = spacing * arange(1, nplayers + 1, 1)
-        plt.violinplot(diffs, positions=positions, widths=spacing / 2,
-                       showmedians=True)
-        plt.xticks(
-            #self._boxplot_xticks_locations,
-            positions,
-            ranked_names,
-            rotation=90)
-        plt.xlim(0, spacing * (nplayers + 1))
-        plt.tick_params(axis='both', which='both', labelsize=7)
-        plt.title(self._sdv_plot_title)
-        return figure
+        #if not self.matplotlib_installed:
+            #return None
+        #diffs, ranked_names = self._sdv_plot_dataset
+        #nplayers = self.result_set.nplayers
+        #width = max(nplayers / 2, 12)
+        #height = width / 4
+        #figure = plt.figure(figsize=(width, height))
+        #spacing = 4
+        #positions = spacing * arange(1, nplayers + 1, 1)
+        #plt.violinplot(diffs, positions=positions, widths=spacing / 2,
+                       #showmedians=True)
+        #plt.xticks(
+            ##self._boxplot_xticks_locations,
+            #positions,
+            #ranked_names,
+            #rotation=90)
+        #plt.xlim(0, spacing * (nplayers + 1))
+        #plt.tick_params(axis='both', which='both', labelsize=7)
+        #plt.title(self._sdv_plot_title)
+        #return figure
 
     @property
     def _pdplot_dataset(self):
@@ -214,19 +217,45 @@ class Plot(object):
         if not self.matplotlib_installed:
             return None
 
-        wins, ranked_names = self._winplot_dataset
+        data, names = self._winplot_dataset
+        title = self._winplot_title
+        figure = self.vplot(data, names, title)
+        # Expand ylim a bit
         maximum = max(max(w) for w in wins)
-
-        figure = plt.figure()
-        plt.boxplot(wins)
-        plt.xticks(
-            self._boxplot_xticks_locations,
-            ranked_names,
-            rotation=90)
-        plt.tick_params(axis='both', which='both', labelsize=7)
-        plt.title(self._winplot_title)
         plt.ylim(-0.5, 0.5 + maximum)
         return figure
+
+
+
+        #figure = plt.figure()
+        #plt.boxplot(wins)
+        #plt.xticks(
+            #self._boxplot_xticks_locations,
+            #ranked_names,
+            #rotation=90)
+        #plt.tick_params(axis='both', which='both', labelsize=7)
+        #plt.title(self._winplot_title)
+
+        #return figure
+
+
+    def boxplot(self):
+
+        if not self.matplotlib_installed:
+            return None
+
+        data = self._boxplot_dataset
+        names = self._boxplot_xticks_labels
+        figure = self.vplot(data, names)
+        plt.tick_params(axis='both', which='both', labelsize=7)
+        plt.title(self._boxplot_title)
+
+        return figure
+
+
+
+
+
 
     def payoff(self):
 
