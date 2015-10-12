@@ -91,6 +91,7 @@ class TestArrogantQLearner(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
+        'manipulates_source': False,
         'manipulates_state': False
     }
 
@@ -161,6 +162,7 @@ class TestHesitantQLearner(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
+        'manipulates_source': False,
         'manipulates_state': False
     }
 
@@ -231,6 +233,7 @@ class TestCautiousQLearner(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
+        'manipulates_source': False,
         'manipulates_state': False
     }
 

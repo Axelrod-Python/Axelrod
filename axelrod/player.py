@@ -106,7 +106,7 @@ class Player(object):
 
     def strategy(self, opponent):
         """This is a placeholder strategy."""
-        return None
+        raise NotImplementedError()
 
     def play(self, opponent, noise=0):
         """This pits two players against each other."""

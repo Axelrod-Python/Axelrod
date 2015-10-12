@@ -35,6 +35,7 @@ class TestTitFor2Tats(TestPlayer):
     player = axelrod.TitFor2Tats
     expected_classifier = {
         'memory_depth': 2,
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -56,6 +57,7 @@ class TestTwoTitsForTat(TestPlayer):
     player = axelrod.TwoTitsForTat
     expected_classifier = {
         'memory_depth': 2,
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -79,6 +81,7 @@ class TestBully(TestPlayer):
     player = axelrod.Bully
     expected_classifier = {
         'memory_depth': 1,
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -99,6 +102,7 @@ class TestSneakyTitForTat(TestPlayer):
     player = axelrod.SneakyTitForTat
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -120,6 +124,7 @@ class TestSuspiciousTitForTat(TestPlayer):
     player = axelrod.SuspiciousTitForTat
     expected_classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -140,6 +145,7 @@ class TestAntiTitForTat(TestPlayer):
     player = axelrod.AntiTitForTat
     expected_classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -160,6 +166,7 @@ class TestHardTitForTat(TestPlayer):
     player = axelrod.HardTitForTat
     expected_classifier = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -184,6 +191,7 @@ class TestHardTitFor2Tats(TestPlayer):
     player = axelrod.HardTitFor2Tats
     expected_classifier = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
