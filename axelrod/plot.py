@@ -67,8 +67,6 @@ class Plot(object):
         # Reorder and grab names
         wins = [wins[x[1]] for x in medians]
         ranked_names = [str(players[x[1]]) for x in medians]
-        #zipped = [(wins[i], str(self.players[i])) for (m, i) in medians]
-        #wins, ranked_names = zip(*zipped) # unzip!
         return wins, ranked_names
 
     @property
