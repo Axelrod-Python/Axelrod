@@ -388,8 +388,6 @@ and accordingly to the ranking of strategies overall:
 
 as well as the distributions of wins:
 
-and accordingly to the ranking of strategies overall:
-
 .. |winplot_no_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
    :width: 75%
    :align: middle
