@@ -14,7 +14,7 @@ class TestGeller(TestPlayer):
         'stochastic': True,
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_state': False,
-        'manipulates_state': False
+        'manipulates_source': False
     }
 
 

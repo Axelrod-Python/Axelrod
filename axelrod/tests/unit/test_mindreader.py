@@ -16,7 +16,7 @@ class TestMindReader(TestPlayer):
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': True,
-        'manipulates_state': False,
+        'manipulates_source': False,
         'manipulates_state': False
     }
 
