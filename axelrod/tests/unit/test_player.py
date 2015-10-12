@@ -65,6 +65,9 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p1.history[0], D)
         self.assertEqual(p2.history[0], D)
 
+    def test_strategy(self):
+        self.assertRaises(NotImplementedError, self.player().strategy, self.player())
+
 
 def test_responses(test_class, P1, P2, history_1, history_2,
                    responses, random_seed=None):
