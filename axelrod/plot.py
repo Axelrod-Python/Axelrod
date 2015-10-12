@@ -1,6 +1,6 @@
-from operator import itemgetter
+#from operator import itemgetter
 
-from numpy import mean, median
+from numpy import arange, mean, median
 
 matplotlib_installed = True
 try:
@@ -59,7 +59,7 @@ class Plot(object):
         return figure
 
     @property
-    def _sdb_plot_title(self):
+    def _sdv_plot_title(self):
         return ("Distributions of payoff differences per stage game over {} "
                 "turns repeated {} times ({} strategies)").format(
             self.result_set.turns,
@@ -68,15 +68,18 @@ class Plot(object):
 
     @property
     def _sd_ordering(self):
-        # Sort by median then max
-        diffs = self.result_set.score_diffs
-        to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
-        to_sort.sort(reverse=True, key=itemgetter(0, 1))
-        ordering = [x[-1] for x in to_sort]
-        return ordering
+
+        return self.result_set.ranking
+
+        ## Sort by median then max
+        #diffs = self.result_set.score_diffs
+        #to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
+        #to_sort.sort(reverse=True, key=itemgetter(0, 1))
+        #ordering = [x[-1] for x in to_sort]
+        #return ordering
 
     @property
-    def _sdb_plot_dataset(self):
+    def _sdv_plot_dataset(self):
         ordering = self._sd_ordering
         diffs = self.result_set.score_diffs
         players = self.result_set.players
@@ -85,26 +88,79 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return diffs, ranked_names
 
-    def sdbplot(self):
-        """Score difference boxplots to visualize the distributions of how
+    def vplot(self, data, names):
+        if not self.matplotlib_installed:
+            return None
+        nplayers = self.result_set.nplayers
+        width = max(nplayers / 2, 12)
+        height = width / 4
+        figure = plt.figure(figsize=(width, height))
+        spacing = 4
+        positions = spacing * arange(1, nplayers + 1, 1)
+        plt.violinplot(data, positions=positions, widths=spacing / 2,
+                       showmedians=True)
+        plt.xticks(
+            positions,
+            names,
+            rotation=90)
+        plt.xlim(0, spacing * (nplayers + 1))
+        plt.tick_params(axis='both', which='both', labelsize=7)
+        plt.title(self._sdv_plot_title)
+        return figure
+
+    #def bplot(self, data, names):
+        #if not self.matplotlib_installed:
+            #return None
+
+        #figure = plt.figure()
+        #plt.boxplot(data)
+        #plt.xticks(
+            #self._boxplot_xticks_locations,
+            #names,
+            #rotation=90)
+        #plt.tick_params(axis='both', which='both', labelsize=7)
+        #plt.title(self._boxplot_title)
+        #return figure
+
+
+
+
+
+    def sdvplot(self):
+        """Score difference violinplots to visualize the distributions of how
         players attain their payoffs."""
 
         if not self.matplotlib_installed:
             return None
-        diffs, ranked_names = self._sdb_plot_dataset
-        figure = plt.figure()
-        plt.boxplot(diffs)
+
+        diffs, ranked_names = self._sdv_plot_dataset
+        figure = self.vplot(diffs, ranked_names)
+        return figure
+
+        if not self.matplotlib_installed:
+            return None
+        diffs, ranked_names = self._sdv_plot_dataset
+        nplayers = self.result_set.nplayers
+        width = max(nplayers / 2, 12)
+        height = width / 4
+        figure = plt.figure(figsize=(width, height))
+        spacing = 4
+        positions = spacing * arange(1, nplayers + 1, 1)
+        plt.violinplot(diffs, positions=positions, widths=spacing / 2,
+                       showmedians=True)
         plt.xticks(
-            self._boxplot_xticks_locations,
+            #self._boxplot_xticks_locations,
+            positions,
             ranked_names,
             rotation=90)
+        plt.xlim(0, spacing * (nplayers + 1))
         plt.tick_params(axis='both', which='both', labelsize=7)
-        plt.title(self._sdb_plot_title)
+        plt.title(self._sdv_plot_title)
         return figure
 
     @property
     def _pdplot_dataset(self):
-        # Order like the sdb_plot
+        # Order like the sdv_plot
         ordering = self._sd_ordering
         pdm = self.result_set.payoff_diffs_matrix
         # Reorder and grab names
