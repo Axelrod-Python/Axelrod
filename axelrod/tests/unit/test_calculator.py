@@ -35,3 +35,10 @@ class TestCalculator(TestPlayer):
         history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C]
         P2.history = history
         self.assertEqual('C', P1.strategy(P2))
+
+        # Test post 20 rounds responses
+        self.responses_test([C] * 21, [C] * 21, [D])
+        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D]
+        self.responses_test([C] * 21, history, [D])
+        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D, C]
+        self.responses_test([C] * 22, history, [C])
