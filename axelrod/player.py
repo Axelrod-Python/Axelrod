@@ -119,7 +119,7 @@ class Player(object):
         parameters as necessary."""
 
         new_player = copy.copy(self)
-        new_player.reset()
+        new_player.tournament_attributes = copy.copy(self.tournament_attributes)
         return new_player
 
     def reset(self):
