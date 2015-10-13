@@ -33,7 +33,7 @@ class Darwin(Player):
 
     def __init__(self):
         super(Darwin, self).__init__()
-        self.response = self.__class__.genome[0]
+        self.response = Darwin.genome[0]
 
     def receive_tournament_attributes(self):
         self.outcomes = self.tournament_attributes["game"].scores
@@ -50,14 +50,14 @@ class Darwin(Player):
             outcome = self.outcomes[(self.history[-1], opponent.history[-1])]
             self.mutate(outcome, trial)
             # Update genome with selected response
-            self.__class__.genome[trial-1] = self.response
+            Darwin.genome[trial-1] = self.response
 
-        if trial < len(self.__class__.genome):
+        if trial < len(Darwin.genome):
             # Return response from genome where available...
-            current = self.__class__.genome[trial]
+            current = Darwin.genome[trial]
         else:
             # ...otherwise use Tit-for-Tat
-            self.__class__.genome.append(opponent.history[-1])
+            Darwin.genome.append(opponent.history[-1])
             current = opponent.history[-1]
 
         return current
@@ -65,9 +65,9 @@ class Darwin(Player):
     def reset(self):
         """ Reset instance properties. """
         Player.reset(self)
-        self.__class__.genome[0] = 'C' # Ensure initial Cooperate
+        Darwin.genome[0] = 'C' # Ensure initial Cooperate
 
     def mutate(self, outcome, trial):
         """ Select response according to outcome. """
-        if outcome < 0 and (len(self.__class__.genome) >= trial):
-            self.response = 'D' if self.__class__.genome[trial-1] == 'C' else 'C'
+        if outcome < 0 and (len(Darwin.genome) >= trial):
+            self.response = 'D' if Darwin.genome[trial-1] == 'C' else 'C'
