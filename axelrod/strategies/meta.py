@@ -74,7 +74,6 @@ class MetaMajority(MetaPlayer):
             # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
         super(MetaMajority, self).__init__()
-        self.init_args = (team,)
 
     def meta_strategy(self, results, opponent):
         if results.count('D') > results.count('C'):
@@ -94,7 +93,6 @@ class MetaMinority(MetaPlayer):
             # Needs to be computed manually to prevent circular dependency
             self.team = ordinary_strategies
         super(MetaMinority, self).__init__()
-        self.init_args = (team,)
 
     def meta_strategy(self, results, opponent):
         if results.count('D') < results.count('C'):
@@ -118,7 +116,6 @@ class MetaWinner(MetaPlayer):
             self.team = ordinary_strategies
 
         super(MetaWinner, self).__init__()
-        self.init_args = (team,)
 
         # For each player, we will keep the history of proposed moves and
         # a running score since the beginning of the game.
@@ -202,7 +199,6 @@ class MetaMajorityMemoryOne(MetaMajority):
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
         super(MetaMajorityMemoryOne, self).__init__(team=team)
-        self.init_args = ()
 
 
 class MetaWinnerMemoryOne(MetaWinner):
@@ -213,7 +209,6 @@ class MetaWinnerMemoryOne(MetaWinner):
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
         super(MetaWinnerMemoryOne, self).__init__(team=team)
-        self.init_args = ()
 
 
 class MetaMajorityFiniteMemory(MetaMajority):
@@ -224,7 +219,6 @@ class MetaMajorityFiniteMemory(MetaMajority):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
         super(MetaMajorityFiniteMemory, self).__init__(team=team)
-        self.init_args = ()
 
 
 class MetaWinnerFiniteMemory(MetaWinner):
@@ -235,7 +229,6 @@ class MetaWinnerFiniteMemory(MetaWinner):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
         super(MetaWinnerFiniteMemory, self).__init__(team=team)
-        self.init_args = ()
 
 
 class MetaMajorityLongMemory(MetaMajority):
@@ -246,7 +239,6 @@ class MetaMajorityLongMemory(MetaMajority):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
         super(MetaMajorityLongMemory, self).__init__(team=team)
-        self.init_args = ()
 
 
 class MetaWinnerLongMemory(MetaWinner):
@@ -257,4 +249,3 @@ class MetaWinnerLongMemory(MetaWinner):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
         super(MetaWinnerLongMemory, self).__init__(team=team)
-        self.init_args = ()

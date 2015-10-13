@@ -106,7 +106,6 @@ class ForgetfulFoolMeOnce(Player):
         self.D_count = 0
         self._initial = 'C'
         self.forget_probability = forget_probability
-        self.init_args = (forget_probability,)
 
     def strategy(self, opponent):
         r = random.random()

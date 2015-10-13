@@ -73,7 +73,6 @@ class Player(object):
                 self.classifier[dimension] = self.default_classifier[dimension]
         self.cooperations = 0
         self.defections = 0
-        self.init_args = ()
         self.set_tournament_attributes()
 
     def receive_tournament_attributes(self):
@@ -119,9 +118,8 @@ class Player(object):
         """Clones the player without history, reapplying configuration
         parameters as necessary."""
 
-        cls = self.__class__
-        new_player = cls(*self.init_args)
-        new_player.tournament_attributes = copy.copy(self.tournament_attributes)
+        new_player = copy.copy(self)
+        new_player.reset()
         return new_player
 
     def reset(self):
