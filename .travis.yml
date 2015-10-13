@@ -17,6 +17,7 @@ script:
   # Build the documentation
   - cd docs; make html
   # Run the test suit with coverage
+  - cd ..
   - coverage run --source=axelrod -m unittest discover
   - coverage run --source=axelrod setup.py test
   - coverage report -m
