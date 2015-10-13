@@ -1,5 +1,5 @@
 
-import numpy # for numpy.linalg.linalg.LinAlgError
+from numpy.linalg import LinAlgError
 from numpy import arange, mean, median
 
 matplotlib_installed = True
@@ -82,7 +82,7 @@ class Plot(object):
         title = self._boxplot_title
         try:
             figure = self._violinplot(data, names, title=title)
-        except numpy.linalg.linalg.LinAlgError:
+        except LinAlgError:
             # Matplotlib doesn't handle single point distributions well
             # in violin plots. Should be fixed in next release:
             # https://github.com/matplotlib/matplotlib/pull/4816
@@ -119,7 +119,7 @@ class Plot(object):
         title = self._winplot_title
         try:
             figure = self._violinplot(data, names, title)
-        except numpy.linalg.linalg.LinAlgError:
+        except LinAlgError:
             # Matplotlib doesn't handle single point distributions well
             # in violin plots. Should be fixed in next release:
             # https://github.com/matplotlib/matplotlib/pull/4816
