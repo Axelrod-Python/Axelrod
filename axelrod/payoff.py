@@ -129,26 +129,6 @@ def normalised_scores(scores, nplayers, turns):
     return [
         [1.0 * s / normalisation for s in r] for r in scores]
 
-#def median(list):
-    #"""
-    #Parameters
-    #----------
-    #list : list
-        #A list of numeric values
-
-    #Returns
-    #-------
-    #float
-        #The median value of the list.
-    #"""
-    #list = sorted(list)
-    #if len(list) < 1:
-        #return None
-    #if len(list) % 2 == 1:
-        #return list[((len(list) + 1) // 2) - 1]
-    #if len(list) % 2 == 0:
-        #return float(sum(list[(len(list) // 2) - 1:(len(list) // 2) + 1])) / 2.0
-
 def ranking(scores, nplayers):
     """
     Parameters
@@ -329,10 +309,11 @@ def payoff_diffs_means(payoff, nplayers, repetitions, turns):
          player_i payoff - player_j payoff in repetition2,
          ...])
 
-        normalized by the number of turns.
+        normalized by the number of turns. I.e. the nplayers x nplayers
+        matrix of mean payoff differences between each player and opponent.
     """
 
-    diffs_matrix = numpy.zeros((nplayers, nplayers))
+    diffs_matrix = [[0] * nplayers for _ in range(nplayers)]
     for player in range(nplayers):
         for opponent in range(nplayers):
             diffs = []
@@ -370,10 +351,8 @@ def score_diffs(payoff, nplayers, repetitions, turns):
     Returns
     -------
     list (of lists of lists)
-        A matrix of mean payoff differences of the form with i, j entry:
-        [player_i payoff - player_j payoff in repetition1,
-         player_i payoff - player_j payoff in repetition2,
-         ...]
+        A matrix of payoff differences of the form with i, j entry:
+        [player_i payoff - player_j payoff for each j and each repetition]
         where the payoffs have been normalized by the number of turns and summed
         over the repititions.
     """
