@@ -32,7 +32,6 @@ class GoByMajority(Player):
         Player.__init__(self)
         self.soft = soft
         self.classifier['memory_depth'] = memory_depth
-        self.init_args = (memory_depth, soft)
 
     def strategy(self, opponent):
         """This is affected by the history of the opponent.

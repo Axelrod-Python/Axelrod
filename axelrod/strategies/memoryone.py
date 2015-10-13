@@ -27,7 +27,6 @@ class WinStayLoseShift(Player):
         }
         self.classifier['stochastic'] = False
         self._initial = initial
-        self.init_args = (initial,)
 
     def strategy(self, opponent):
         """Switches if it doesn't get the best payout, traditionally equivalent
@@ -68,7 +67,6 @@ class MemoryOnePlayer(Player):
         self._initial = initial
         if four_vector:
             self.set_four_vector(four_vector)
-        self.init_args = (four_vector, initial)
 
     def set_four_vector(self, four_vector):
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
@@ -102,7 +100,6 @@ class GTFT(MemoryOnePlayer):
         """
         self.p = p
         super(self.__class__, self).__init__()
-        self.init_args = (p,)
 
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
@@ -123,7 +120,6 @@ class StochasticCooperator(MemoryOnePlayer):
     def __init__(self):
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super(self.__class__, self).__init__(four_vector)
-        self.init_args = ()
         self.set_four_vector(four_vector)
 
 
@@ -144,7 +140,6 @@ class StochasticWSLS(MemoryOnePlayer):
         self.ep = ep
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(self.__class__, self).__init__(four_vector)
-        self.init_args = (ep,)
         self.set_four_vector(four_vector)
 
 
@@ -202,7 +197,6 @@ class ZDGTFT2(ZeroDeterminantPlayer):
         self.phi = phi
         self.s = s
         super(self.__class__, self).__init__()
-        self.init_args = (phi, s)
 
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
@@ -227,7 +221,6 @@ class ZDExtort2(ZeroDeterminantPlayer):
         self.phi = phi
         self.s = s
         super(self.__class__, self).__init__()
-        self.init_args = (phi, s)
 
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
@@ -258,7 +251,6 @@ class SoftJoss(MemoryOnePlayer):
         self.q = q
         four_vector = (1., 1 - q, 1, 1 - q)
         super(self.__class__, self).__init__(four_vector)
-        self.init_args = (q,)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.q, 2))

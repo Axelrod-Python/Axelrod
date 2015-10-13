@@ -35,7 +35,6 @@ class Davis(Player):
         """
         Player.__init__(self)
         self._rounds_to_cooperate = rounds_to_cooperate
-        self.init_args = (self._rounds_to_cooperate,)
 
     def strategy(self, opponent):
         """Begins by playing C, then plays D for the remaining rounds if the
@@ -79,9 +78,6 @@ class Feld(Player):
         self._start_coop_prob = start_coop_prob
         self._end_coop_prob = end_coop_prob
         self._rounds_of_decay = rounds_of_decay
-        self.init_args = (start_coop_prob,
-                          end_coop_prob,
-                          rounds_of_decay)
 
     def _cooperation_probability(self):
         """It's not clear what the interpolating function is, so we'll do
@@ -116,7 +112,6 @@ class Grofman(MemoryOnePlayer):
         p = float(2) / 7
         four_vector = (p, p, p, p)
         super(self.__class__, self).__init__(four_vector)
-        self.init_args = ()
 
 
 class Joss(MemoryOnePlayer):
@@ -138,7 +133,6 @@ class Joss(MemoryOnePlayer):
         four_vector = (p, 0, p, 0)
         self.p = p
         super(self.__class__, self).__init__(four_vector)
-        self.init_args = (p,)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -228,7 +222,6 @@ class Tullock(Player):
         Player.__init__(self)
         self._rounds_to_cooperate = rounds_to_cooperate
         self.__class__.memory_depth = rounds_to_cooperate
-        self.init_args = (rounds_to_cooperate,)
 
     def strategy(self, opponent):
         rounds = self._rounds_to_cooperate
