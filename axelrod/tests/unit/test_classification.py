@@ -38,7 +38,7 @@ class TestClassification(unittest.TestCase):
         self.assertNotEqual(P1.classifier, P2.classifier)
 
         P1 = axelrod.GoByMajority(5)
-        P2 = axelrod.StochasticWSLS(10)
+        P2 = axelrod.StochasticWSLS(.1)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
     def test_manipulation_of_classifier(self):
