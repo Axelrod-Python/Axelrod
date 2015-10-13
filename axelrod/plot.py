@@ -23,10 +23,13 @@ class Plot(object):
         """For making boxplots."""
         if not self.matplotlib_installed:
             return None
-        figure = plt.figure()
+        nplayers = self.result_set.nplayers
+        width = max(nplayers / 3, 12)
+        height = width / 2
+        figure = plt.figure(figsize=(width, height))
         plt.boxplot(data)
         plt.xticks(self._boxplot_xticks_locations, names, rotation=90)
-        plt.tick_params(axis='both', which='both', labelsize=7)
+        plt.tick_params(axis='both', which='both', labelsize=8)
         if title:
             plt.title(title)
         return figure
@@ -45,7 +48,7 @@ class Plot(object):
                        showmedians=True, showextrema=False)
         plt.xticks(positions, names, rotation=90)
         plt.xlim(0, spacing * (nplayers + 1))
-        plt.tick_params(axis='both', which='both', labelsize=7)
+        plt.tick_params(axis='both', which='both', labelsize=8)
         if title:
             plt.title(title)
         return figure
@@ -189,13 +192,19 @@ class Plot(object):
         """Generic heatmap plot"""
         if not self.matplotlib_installed:
             return None
+
+        nplayers = self.result_set.nplayers
+        width = max(nplayers / 4, 12)
+        height = width
         figure, ax = plt.subplots()
+        figure.set_figwidth(width)
+        figure.set_figheight(height)
         mat = ax.matshow(data, cmap='YlGnBu')
         plt.xticks(range(self.result_set.nplayers))
         plt.yticks(range(self.result_set.nplayers))
         ax.set_xticklabels(names, rotation=90)
         ax.set_yticklabels(names)
-        plt.tick_params(axis='both', which='both', labelsize=6)
+        plt.tick_params(axis='both', which='both', labelsize=16)
         # Make the colorbar match up with the plot
         divider = make_axes_locatable(plt.gca())
         cax = divider.append_axes("right", "5%", pad="3%")
