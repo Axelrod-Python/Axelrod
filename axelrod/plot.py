@@ -1,5 +1,5 @@
-#from operator import itemgetter
 
+import numpy # for numpy.linalg.linalg.LinAlgError
 from numpy import arange, mean, median
 
 matplotlib_installed = True
@@ -16,6 +16,50 @@ class Plot(object):
     def __init__(self, result_set):
         self.result_set = result_set
         self.matplotlib_installed = matplotlib_installed
+
+    ## Abstract Box and Violin plots
+
+    def _boxplot(self, data, names=None, title=None):
+        """For making boxplots."""
+        if not self.matplotlib_installed:
+            return None
+
+        if not names:
+            names = self._boxplot_xticks_labels
+
+        figure = plt.figure()
+        plt.boxplot(data)
+        plt.xticks(
+            self._boxplot_xticks_locations,
+            names,
+            rotation=90)
+        plt.tick_params(axis='both', which='both', labelsize=7)
+        if title:
+            plt.title(title)
+        return figure
+
+    def _violinplot(self, data, names, title=None):
+        """For making violinplots."""
+        if not self.matplotlib_installed:
+            return None
+        nplayers = self.result_set.nplayers
+        width = max(nplayers / 2, 12)
+        height = width / 2
+        figure = plt.figure(figsize=(width, height))
+        spacing = 4
+        positions = spacing * arange(1, nplayers + 1, 1)
+        plt.violinplot(data, positions=positions, widths=spacing / 2)
+        plt.xticks(
+            positions,
+            names,
+            rotation=90)
+        plt.xlim(0, spacing * (nplayers + 1))
+        plt.tick_params(axis='both', which='both', labelsize=7)
+        if title:
+            plt.title(title)
+        return figure
+
+    ## Box and Violin plots for mean score, score diferrences, and wins
 
     @property
     def _boxplot_dataset(self):
@@ -43,20 +87,60 @@ class Plot(object):
             self.result_set.repetitions,
             len(self.result_set.ranking))
 
-    #def boxplot(self):
+    def boxplot(self):
+        """For the specific mean score boxplot."""
+        data = self._boxplot_dataset
+        names = self._boxplot_xticks_labels
+        title = self._boxplot_title
+        try:
+            figure = self._violinplot(data, names, title=title)
+        except numpy.linalg.linalg.LinAlgError:
+            # Matplotlib doesn't handle single point distributions well
+            # in violin plots. Should be fixed in next release:
+            # https://github.com/matplotlib/matplotlib/pull/4816
+            # Fall back to boxplot
+            figure = self._boxplot(data, names, title=title)
+        return figure
 
-        #if not self.matplotlib_installed:
-            #return None
+    @property
+    def _winplot_dataset(self):
+        # Sort wins by median
+        wins = self.result_set.wins
+        players = self.result_set.players
+        medians = map(median, wins)
+        medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
+        # Reorder and grab names
+        wins = [wins[x[-1]] for x in medians]
+        ranked_names = [str(players[x[-1]]) for x in medians]
+        return wins, ranked_names
 
-        #figure = plt.figure()
-        #plt.boxplot(self._boxplot_dataset)
-        #plt.xticks(
-            #self._boxplot_xticks_locations,
-            #self._boxplot_xticks_labels,
-            #rotation=90)
-        #plt.tick_params(axis='both', which='both', labelsize=7)
-        #plt.title(self._boxplot_title)
-        #return figure
+    @property
+    def _winplot_title(self):
+        return ("Distributions of wins:"
+                " {} turns repeated {} times ({} strategies)").format(
+            self.result_set.turns,
+            self.result_set.repetitions,
+            len(self.result_set.ranking))
+
+    def winplot(self):
+        """Plots the distributions for the number of wins for each strategy."""
+        if not self.matplotlib_installed:
+            return None
+
+        data, names = self._winplot_dataset
+        title = self._winplot_title
+        try:
+            figure = self._violinplot(data, names, title)
+        except numpy.linalg.linalg.LinAlgError:
+            # Matplotlib doesn't handle single point distributions well
+            # in violin plots. Should be fixed in next release:
+            # https://github.com/matplotlib/matplotlib/pull/4816
+            # Fall back to boxplot
+            figure = self._boxplot(data, names, title)
+        # Expand ylim a bit
+        maximum = max(max(w) for w in data)
+        plt.ylim(-0.5, 0.5 + maximum)
+        return figure
 
     @property
     def _sdv_plot_title(self):
@@ -68,10 +152,10 @@ class Plot(object):
 
     @property
     def _sd_ordering(self):
-
         return self.result_set.ranking
 
         ## Sort by median then max
+        #from operator import itemgetter
         #diffs = self.result_set.score_diffs
         #to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
         #to_sort.sort(reverse=True, key=itemgetter(0, 1))
@@ -88,78 +172,15 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return diffs, ranked_names
 
-    def vplot(self, data, names, title=None):
-        if not self.matplotlib_installed:
-            return None
-        nplayers = self.result_set.nplayers
-        width = max(nplayers / 2, 12)
-        height = width / 4
-        figure = plt.figure(figsize=(width, height))
-        spacing = 4
-        positions = spacing * arange(1, nplayers + 1, 1)
-        plt.violinplot(data, positions=positions, widths=spacing / 2,
-                       showmedians=True)
-        plt.xticks(
-            positions,
-            names,
-            rotation=90)
-
-        plt.xlim(0, spacing * (nplayers + 1))
-        plt.tick_params(axis='both', which='both', labelsize=7)
-        if title:
-            plt.title(title)
-        return figure
-
-    #def bplot(self, data, names):
-        #if not self.matplotlib_installed:
-            #return None
-
-        #figure = plt.figure()
-        #plt.boxplot(data)
-        #plt.xticks(
-            #self._boxplot_xticks_locations,
-            #names,
-            #rotation=90)
-        #plt.tick_params(axis='both', which='both', labelsize=7)
-        #plt.title(self._boxplot_title)
-        #return figure
-
-
-
-
-
     def sdvplot(self):
         """Score difference violinplots to visualize the distributions of how
         players attain their payoffs."""
-
-        if not self.matplotlib_installed:
-            return None
-
         diffs, ranked_names = self._sdv_plot_dataset
         title = self._sdv_plot_title
-        figure = self.vplot(diffs, ranked_names, title)
+        figure = self._violinplot(diffs, ranked_names, title)
         return figure
 
-        #if not self.matplotlib_installed:
-            #return None
-        #diffs, ranked_names = self._sdv_plot_dataset
-        #nplayers = self.result_set.nplayers
-        #width = max(nplayers / 2, 12)
-        #height = width / 4
-        #figure = plt.figure(figsize=(width, height))
-        #spacing = 4
-        #positions = spacing * arange(1, nplayers + 1, 1)
-        #plt.violinplot(diffs, positions=positions, widths=spacing / 2,
-                       #showmedians=True)
-        #plt.xticks(
-            ##self._boxplot_xticks_locations,
-            #positions,
-            #ranked_names,
-            #rotation=90)
-        #plt.xlim(0, spacing * (nplayers + 1))
-        #plt.tick_params(axis='both', which='both', labelsize=7)
-        #plt.title(self._sdv_plot_title)
-        #return figure
+    ## Payoff heatmaps
 
     @property
     def _pdplot_dataset(self):
@@ -193,70 +214,6 @@ class Plot(object):
         plt.colorbar(mat, cax=cax)
         return figure
 
-    @property
-    def _winplot_dataset(self):
-        # Sort wins by median
-        wins = self.result_set.wins
-        players = self.result_set.players
-        medians = map(median, wins)
-        medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
-        # Reorder and grab names
-        wins = [wins[x[1]] for x in medians]
-        ranked_names = [str(players[x[1]]) for x in medians]
-        return wins, ranked_names
-
-    @property
-    def _winplot_title(self):
-        return ("Distributions of wins:"
-                " {} turns repeated {} times ({} strategies)").format(
-            self.result_set.turns,
-            self.result_set.repetitions,
-            len(self.result_set.ranking))
-
-    def winplot(self):
-        if not self.matplotlib_installed:
-            return None
-
-        data, names = self._winplot_dataset
-        title = self._winplot_title
-        figure = self.vplot(data, names, title)
-        # Expand ylim a bit
-        maximum = max(max(w) for w in wins)
-        plt.ylim(-0.5, 0.5 + maximum)
-        return figure
-
-
-
-        #figure = plt.figure()
-        #plt.boxplot(wins)
-        #plt.xticks(
-            #self._boxplot_xticks_locations,
-            #ranked_names,
-            #rotation=90)
-        #plt.tick_params(axis='both', which='both', labelsize=7)
-        #plt.title(self._winplot_title)
-
-        #return figure
-
-
-    def boxplot(self):
-
-        if not self.matplotlib_installed:
-            return None
-
-        data = self._boxplot_dataset
-        names = self._boxplot_xticks_labels
-        figure = self.vplot(data, names)
-        plt.tick_params(axis='both', which='both', labelsize=7)
-        plt.title(self._boxplot_title)
-
-        return figure
-
-
-
-
-
-
     def payoff(self):
 
         if not self.matplotlib_installed:
@@ -274,6 +231,8 @@ class Plot(object):
         cax = divider.append_axes("right", "5%", pad="3%")
         plt.colorbar(mat, cax=cax)
         return figure
+
+    ## Ecological Plots
 
     def stackplot(self, populations):
 

@@ -126,7 +126,8 @@ class TournamentManager(object):
             self._logger.error('The matplotlib library is not installed. '
                             'No plots will be produced')
             return
-        for plot_type in ('boxplot', 'payoff', 'winplot', 'sdvplot', 'pdplot'):
+        #for plot_type in ('boxplot', 'payoff', 'winplot', 'sdvplot', 'pdplot'):
+        for plot_type in ('boxplot', 'winplot', 'sdvplot', 'payoff', 'pdplot'):
             figure = getattr(plot, plot_type)()
             file_name = self._output_file_path(
                 tournament.name + '_' + plot_type, image_format)
