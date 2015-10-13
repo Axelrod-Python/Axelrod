@@ -1,4 +1,4 @@
-import random
+from random import random
 
 from axelrod import Player
 
@@ -45,13 +45,13 @@ class MemoryOnePlayer(Player):
 
     def strategy(self, opponent):
         if not hasattr(self, "_four_vector"):
-            raise ValueError("Fourvector not yet set")
+            raise ValueError("_four_vector not yet set")
         if len(opponent.history) == 0:
             return self._initial
         # Determine which probability to use
         p = self._four_vector[(self.history[-1], opponent.history[-1])]
         # Draw a random number in [0,1] to decide
-        return 'C' if random.random() < p else 'D'
+        return 'C' if random() < p else 'D'
 
 
 class WinStayLoseShift(MemoryOnePlayer):
