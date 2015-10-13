@@ -57,6 +57,7 @@ class TestMindController(TestPlayer):
         P1.reset()
         self.assertEqual(P1.history, [])
 
+
 class TestMindWarper(TestMindController):
 
     name = "Mind Warper"
@@ -69,6 +70,18 @@ class TestMindWarper(TestMindController):
         'manipulates_state': False
     }
 
+    def test_setattr(self):
+        player = self.player()
+        player.strategy = lambda opponent: 'C'
+
+    def test_strategy(self):
+        player = self.player()
+        opponent = axelrod.Defector()
+        play1 = player.strategy(opponent)
+        play2 = opponent.strategy(player)
+        self.assertEqual(play1, 'D')
+        self.assertEqual(play2, 'C')
+
 class TestMindBender(TestMindController):
 
     name = "Mind Bender"
@@ -80,3 +93,11 @@ class TestMindBender(TestMindController):
         'manipulates_source': True,  # Finds out what opponent will do
         'manipulates_state': False
     }
+
+    def test_strategy(self):
+        player = self.player()
+        opponent = axelrod.Defector()
+        play1 = player.strategy(opponent)
+        play2 = opponent.strategy(player)
+        self.assertEqual(play1, 'D')
+        self.assertEqual(play2, 'C')
