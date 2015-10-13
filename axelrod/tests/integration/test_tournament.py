@@ -67,12 +67,19 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_tournament_manager(self):
         strategies = [s() for s in axelrod.demo_strategies]
-        tm = axelrod.TournamentManager("./", False, save_cache=True)
+        tm = axelrod.TournamentManager("./", False, save_cache=False)
         tm.add_tournament("test", strategies, repetitions=2, turns=10,
                           noise=0.05)
         tm.run_tournaments()
 
-        tm = axelrod.TournamentManager("./", False, save_cache=False)
+        strategies = [s() for s in axelrod.basic_strategies]
+        tm = axelrod.TournamentManager("./", False, load_cache=False,
+                                       save_cache=True)
+        tm.add_tournament("test", strategies, repetitions=2, turns=10, noise=0.)
+        tm.run_tournaments()
+
+        tm = axelrod.TournamentManager("./", False, load_cache=True,
+                                       save_cache=True)
         tm.add_tournament("test", strategies, repetitions=2, turns=10, noise=0.)
         tm.run_tournaments()
 
