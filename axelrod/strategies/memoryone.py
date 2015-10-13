@@ -1,42 +1,8 @@
-import random
+from random import random
 
 from axelrod import Player
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
-
-
-class WinStayLoseShift(Player):
-    """Win-Stay Lose-Shift, also called Pavlov."""
-
-    name = 'Win-Stay Lose-Shift'
-    classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector = (1, 0, 0, 1)
-        'stochastic': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def __init__(self, initial='C'):
-        Player.__init__(self)
-        self.response_dict = {
-            ('C', 'C'): 'C',
-            ('C', 'D'): 'D',
-            ('D', 'C'): 'D',
-            ('D', 'D'): 'C',
-        }
-        self.classifier['stochastic'] = False
-        self._initial = initial
-        self.init_args = (initial,)
-
-    def strategy(self, opponent):
-        """Switches if it doesn't get the best payout, traditionally equivalent
-        to a Memory one strategy of [1,0,0,1], but this implementation does not
-        require random draws."""
-        if not opponent.history:
-            return self._initial
-        last_round = (self.history[-1], opponent.history[-1])
-        return self.response_dict[last_round]
 
 
 class MemoryOnePlayer(Player):
@@ -71,21 +37,33 @@ class MemoryOnePlayer(Player):
         self.init_args = (four_vector, initial)
 
     def set_four_vector(self, four_vector):
+        if not all(0 <= p <= 1 for p in four_vector):
+            raise ValueError('An element in the probability vector, %s, is not between 0 and 1.' % str(four_vector))
+
         self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent):
         if not hasattr(self, "_four_vector"):
-            raise ValueError("Fourvector not yet set")
-        if not len(opponent.history):
+            raise ValueError("_four_vector not yet set")
+        if len(opponent.history) == 0:
             return self._initial
         # Determine which probability to use
         p = self._four_vector[(self.history[-1], opponent.history[-1])]
         # Draw a random number in [0,1] to decide
-        r = random.random()
-        if r < p:
-            return 'C'
-        return 'D'
+        return 'C' if random() < p else 'D'
+
+
+class WinStayLoseShift(MemoryOnePlayer):
+    """Win-Stay Lose-Shift, also called Pavlov."""
+
+    name = 'Win-Stay Lose-Shift'
+
+    def __init__(self, initial='C'):
+        Player.__init__(self)
+        self.set_four_vector([1,0,0,1])
+        self._initial = initial
+        self.init_args = (initial,)
 
 
 class GTFT(MemoryOnePlayer):
@@ -106,7 +84,7 @@ class GTFT(MemoryOnePlayer):
 
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
-        if not self.p:
+        if self.p is None:
             self.p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
         four_vector = [1, self.p, 1, self.p]
         self.set_four_vector(four_vector)
