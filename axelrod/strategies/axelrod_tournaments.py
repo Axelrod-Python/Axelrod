@@ -94,7 +94,7 @@ class Feld(Player):
                    self._end_coop_prob)
 
     def strategy(self, opponent):
-        if not self.history:
+        if not opponent.history:
             return 'C'
         if opponent.history[-1] == 'D':
             return 'D'
@@ -295,7 +295,7 @@ class Eatherley(Player):
 
     def strategy(self, opponent):
         # Cooperate on the first move
-        if not len(self.history):
+        if not len(opponent.history):
             return 'C'
         # Reciprocate cooperation
         if opponent.history[-1] == 'C':
