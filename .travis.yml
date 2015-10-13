@@ -10,14 +10,14 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 install:
   - pip install -r requirements.txt
+  - pip install sphinx
   - pip install coverage
   - pip install coveralls
-  - pip install sphinx
 script:
+  # Build the documentation
+  - cd docs; make html
   # Run the test suit with coverage
   - coverage run --source=axelrod -m unittest discover
-  # Build the documentation
-  - coveralls debug
-  - cd docs; make html
+  - coverage report -m
 after_success:
   - coveralls
