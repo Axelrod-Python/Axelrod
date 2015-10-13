@@ -1,9 +1,7 @@
 import math
 import csv
 
-from numpy import median, mean, std
-
-from .eigen import *
+#from .eigen import *
 from axelrod import payoff as ap, cooperation as ac
 
 try:
@@ -51,19 +49,19 @@ class ResultSet(object):
         self.eigenmoses_rating = None
 
         if 'payoff' in self.results:
-            self.scores = ap.scores(
-                self.results['payoff'], len(players), repetitions)
+            payoff = self.results['payoff']
+            self.scores = ap.scores(payoff, len(players), repetitions)
             self.normalised_scores = ap.normalised_scores(
                 self.scores, len(players), turns)
             self.ranking = ap.ranking(self.scores, len(players))
             self.ranked_names = ap.ranked_names(players, self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff(
-                self.results['payoff'], turns, repetitions))
-            self.wins = ap.wins(
-                self.results['payoff'], len(players), repetitions)
-            
-            self.payoff_diffs_matrix = self._payoff_diffs_matrix(self.results['payoff'])
-            self.score_diffs = self._score_diffs(self.results['payoff'])
+                payoff, turns, repetitions))
+            self.wins = ap.wins(payoff, len(players), repetitions)
+            self.payoff_diffs_means = ap.payoff_diffs_means(payoff, len(players),
+                                                            repetitions, turns)
+            self.score_diffs = ap.score_diffs(payoff, len(players), repetitions,
+                                              turns)
 
         if 'cooperation' in self.results and with_morality:
             self.cooperation = ac.cooperation_matrix(
@@ -140,71 +138,6 @@ class ResultSet(object):
                         matrix[i][j][index] = result_matrix[i][j]
                 results[result_type] = matrix
         return results
-
-    def _score_diffs(self, payoff):
-        """
-        Args:
-            payoff (list): a matrix of the form:
-
-                [
-                    [[a, j], [b, k], [c, l]],
-                    [[d, m], [e, n], [f, o]],
-                    [[g, p], [h, q], [i, r]],
-                ]
-
-            i.e. one row per player, containing one element per opponent (in
-            order of player index) which lists payoffs for each repetition.
-
-        Returns:
-            A matrix of the form:
-
-                [
-                    [a + b + c - (j + k + l)],
-                    [d + e + f - (m + n + o)],
-                    [h + h + i - (p + q + r)],
-                ]
-
-            i.e. one row per player which lists the total payoff difference
-            for each repetition.
-        """
-        diffs = [
-            [] for p in range(self.nplayers)]
-        for player in range(self.nplayers):
-            for opponent in range(self.nplayers):
-                for repetition in range(self.repetitions):
-                    diff = (payoff[player][opponent][repetition] - payoff[opponent][player][repetition]) / float(self.turns)
-                    diffs[player].append(diff)
-
-        return diffs
-
-    def _payoff_diffs_matrix(self, payoff):
-        """
-        Args:
-            payoff (list): a matrix of the form:
-
-                [
-                    [[a, j], [b, k], [c, l]],
-                    [[d, m], [e, n], [f, o]],
-                    [[g, p], [h, q], [i, r]],
-                ]
-
-            i.e. one row per player, containing one element per opponent (in
-            order of player index) which lists payoffs for each repetition.
-
-        Returns:
-            A per-player payoff differences matrix, averaged over repetitions.
-        """
-
-        diffs_matrix = numpy.zeros((self.nplayers, self.nplayers))
-        for player in range(self.nplayers):
-            for opponent in range(self.nplayers):
-                diffs = []
-                for repetition in range(self.repetitions):
-                    diff = (payoff[player][opponent][repetition] - payoff[opponent][player][repetition]) / float(self.turns)
-                    diffs.append(diff)
-                diffs_matrix[player][opponent] = mean(diffs)
-
-        return diffs_matrix
 
     def csv(self):
         csv_string = StringIO()

@@ -80,14 +80,6 @@ class TestPayoff(unittest.TestCase):
         scores = ap.normalised_scores(self.expected_scores, 3, 5)
         self.assertEqual(scores, self.expected_normalised_scores)
 
-    def test_median(self):
-        median = ap.median([])
-        self.assertEqual(median, None)
-        median = ap.median([1, 2, 4, 6])
-        self.assertEqual(median, 3.0)
-        median = ap.median(self.expected_scores)
-        self.assertEqual(median, [27, 20])
-
     def test_ranking(self):
         ranking = ap.ranking(self.expected_scores, 3)
         self.assertEqual(ranking, self.expected_ranking)

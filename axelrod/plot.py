@@ -180,7 +180,7 @@ class Plot(object):
     def _pdplot_dataset(self):
         # Order like the sdv_plot
         ordering = self._sd_ordering
-        pdm = self.result_set.payoff_diffs_matrix
+        pdm = self.result_set.payoff_diffs_means
         # Reorder and grab names
         matrix = [[pdm[r1][r2] for r2 in ordering]
                   for r1 in ordering]
