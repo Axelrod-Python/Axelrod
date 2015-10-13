@@ -19,20 +19,13 @@ class Plot(object):
 
     ## Abstract Box and Violin plots
 
-    def _boxplot(self, data, names=None, title=None):
+    def _boxplot(self, data, names, title=None):
         """For making boxplots."""
         if not self.matplotlib_installed:
             return None
-
-        if not names:
-            names = self._boxplot_xticks_labels
-
         figure = plt.figure()
         plt.boxplot(data)
-        plt.xticks(
-            self._boxplot_xticks_locations,
-            names,
-            rotation=90)
+        plt.xticks(self._boxplot_xticks_locations, names, rotation=90)
         plt.tick_params(axis='both', which='both', labelsize=7)
         if title:
             plt.title(title)
@@ -43,16 +36,14 @@ class Plot(object):
         if not self.matplotlib_installed:
             return None
         nplayers = self.result_set.nplayers
-        width = max(nplayers / 2, 12)
+        width = max(nplayers / 3, 12)
         height = width / 2
         figure = plt.figure(figsize=(width, height))
         spacing = 4
         positions = spacing * arange(1, nplayers + 1, 1)
-        plt.violinplot(data, positions=positions, widths=spacing / 2)
-        plt.xticks(
-            positions,
-            names,
-            rotation=90)
+        plt.violinplot(data, positions=positions, widths=spacing/2,
+                       showmedians=True, showextrema=False)
+        plt.xticks(positions, names, rotation=90)
         plt.xlim(0, spacing * (nplayers + 1))
         plt.tick_params(axis='both', which='both', labelsize=7)
         if title:
@@ -64,12 +55,6 @@ class Plot(object):
     @property
     def _boxplot_dataset(self):
         return [self.result_set.normalised_scores[ir] for ir in self.result_set.ranking]
-
-    @property
-    def _payoff_dataset(self):
-        return [[self.result_set.payoff_matrix[r1][r2]
-                for r2 in self.result_set.ranking]
-                for r1 in self.result_set.ranking]
 
     @property
     def _boxplot_xticks_locations(self):
@@ -183,6 +168,12 @@ class Plot(object):
     ## Payoff heatmaps
 
     @property
+    def _payoff_dataset(self):
+        return [[self.result_set.payoff_matrix[r1][r2]
+                for r2 in self.result_set.ranking]
+                for r1 in self.result_set.ranking]
+
+    @property
     def _pdplot_dataset(self):
         # Order like the sdv_plot
         ordering = self._sd_ordering
@@ -194,45 +185,39 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return matrix, ranked_names
 
+    def _payoff_heatmap(self, data, names, title=None):
+        """Generic heatmap plot"""
+        if not self.matplotlib_installed:
+            return None
+        figure, ax = plt.subplots()
+        mat = ax.matshow(data, cmap='YlGnBu')
+        plt.xticks(range(self.result_set.nplayers))
+        plt.yticks(range(self.result_set.nplayers))
+        ax.set_xticklabels(names, rotation=90)
+        ax.set_yticklabels(names)
+        plt.tick_params(axis='both', which='both', labelsize=6)
+        # Make the colorbar match up with the plot
+        divider = make_axes_locatable(plt.gca())
+        cax = divider.append_axes("right", "5%", pad="3%")
+        plt.colorbar(mat, cax=cax)
+        if title:
+            plt.title(title)
+        return figure
+
     def pdplot(self):
         """Payoff difference heatmap to visualize the distributions of how
         players attain their payoffs."""
-        if not self.matplotlib_installed:
-            return None
-
-        matrix, ranked_names = self._pdplot_dataset
-        figure, ax = plt.subplots()
-        mat = ax.matshow(matrix, cmap='YlGnBu')
-        plt.xticks(range(self.result_set.nplayers))
-        plt.yticks(range(self.result_set.nplayers))
-        ax.set_xticklabels(ranked_names, rotation=90)
-        ax.set_yticklabels(ranked_names)
-        plt.tick_params(axis='both', which='both', labelsize=6)
-        # Make the colorbar match up with the plot
-        divider = make_axes_locatable(plt.gca())
-        cax = divider.append_axes("right", "5%", pad="3%")
-        plt.colorbar(mat, cax=cax)
-        return figure
+        matrix, names = self._pdplot_dataset
+        return self._payoff_heatmap(matrix, names)
 
     def payoff(self):
+        """Payoff heatmap to visualize the distributions of how
+        players attain their payoffs."""
+        data = self._payoff_dataset
+        names = self.result_set.ranked_names
+        return self._payoff_heatmap(data, names)
 
-        if not self.matplotlib_installed:
-            return None
-
-        figure, ax = plt.subplots()
-        mat = ax.matshow(self._payoff_dataset, cmap='YlGnBu')
-        plt.xticks(range(self.result_set.nplayers))
-        plt.yticks(range(self.result_set.nplayers))
-        ax.set_xticklabels(self.result_set.ranked_names, rotation=90)
-        ax.set_yticklabels(self.result_set.ranked_names)
-        plt.tick_params(axis='both', which='both', labelsize=6)
-        # Make the colorbar match up with the plot
-        divider = make_axes_locatable(plt.gca())
-        cax = divider.append_axes("right", "5%", pad="3%")
-        plt.colorbar(mat, cax=cax)
-        return figure
-
-    ## Ecological Plots
+    ## Ecological Plot
 
     def stackplot(self, populations):
 
