@@ -307,7 +307,7 @@ For any tournament, a plot of the distribution of wins is created, much like the
 plot for the distribution of mean scores. For the demo strategies we create the
 plot as follows::
 
-    import axelrodmean
+    import axelrod
     strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies, game=Game(30, 0, 50, 10))
     results = tournament.play()
