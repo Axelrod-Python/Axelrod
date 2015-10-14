@@ -63,7 +63,7 @@ class Bully(Player):
 
     name = "Bully"
     classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,   # Four-Vector = (0, 1, 0, 1)
         'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
