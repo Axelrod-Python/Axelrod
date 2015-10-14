@@ -1,6 +1,7 @@
 import math
 import csv
-from .eigen import *
+
+#from .eigen import *
 from axelrod import payoff as ap, cooperation as ac
 
 try:
@@ -46,17 +47,22 @@ class ResultSet(object):
         self.good_partner_rating = None
         self.eigenjesus_rating = None
         self.eigenmoses_rating = None
+
         if 'payoff' in self.results:
-            self.scores = ap.scores(
-                self.results['payoff'], len(players), repetitions)
+            payoff = self.results['payoff']
+            self.scores = ap.scores(payoff, len(players), repetitions)
             self.normalised_scores = ap.normalised_scores(
                 self.scores, len(players), turns)
             self.ranking = ap.ranking(self.scores, len(players))
             self.ranked_names = ap.ranked_names(players, self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff(
-                self.results['payoff'], turns, repetitions))
-            self.wins = ap.wins(
-                self.results['payoff'], len(players), repetitions)
+                payoff, turns, repetitions))
+            self.wins = ap.wins(payoff, len(players), repetitions)
+            self.payoff_diffs_means = ap.payoff_diffs_means(payoff, len(players),
+                                                            repetitions, turns)
+            self.score_diffs = ap.score_diffs(payoff, len(players), repetitions,
+                                              turns)
+
         if 'cooperation' in self.results and with_morality:
             self.cooperation = ac.cooperation_matrix(
                 self.results['cooperation'])
