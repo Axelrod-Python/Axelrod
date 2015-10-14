@@ -90,10 +90,15 @@ version of the results:
 
 .. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
 
+.. image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
+
+See the [tournament repository](https://github.com/Axelrod-Python/tournament)
+for many additional plots.
+
 Contributing
 ============
 
-All contributions are welcome: with a particular emphasis on
+All contributions are welcome, with a particular emphasis on
 contributing further strategies.
 
 You can find helpful instructions about contributing in the
