@@ -29,6 +29,19 @@ class MemoryOnePlayer(Player):
             ( P(C|CC), P(C|CD), P(C|DC), P(C|DD) )
         initial, 'C' or 'D'
             The initial move
+
+        Special Cases
+        -------------
+        Alternator is equivalent to MemoryOnePlayer((0, 0, 1, 1), C)
+        Cooperator is equivalent to MemoryOnePlayer((1, 1, 1, 1), C)
+        Defector   is equivalent to MemoryOnePlayer((0, 0, 0, 0), C)
+        Random     is equivalent to MemoryOnePlayer((0.5, 0.5, 0.5, 0.5))
+           (with a random choice for the initial state)
+        TitForTat  is equivalent to MemoryOnePlayer((1, 0, 1, 0), C)
+        WinStayLoseShift is equivalent to MemoryOnePlayer((1, 0, 0, 1), C)
+        See also: The remaining strategies in this file
+                  Multiple strategies in titfortat.py
+                  Grofman, Joss in axelrod_tournaments.py
         """
         Player.__init__(self)
         self._initial = initial
@@ -77,6 +90,10 @@ class GTFT(MemoryOnePlayer):
         ----------
         p, float
             A parameter used to compute the four-vector
+
+        Special Cases
+        -------------
+        TitForTat is equivalent to GTFT(0)
         """
         self.p = p
         super(self.__class__, self).__init__()
@@ -117,6 +134,10 @@ class StochasticWSLS(MemoryOnePlayer):
         ep, float
             A parameter used to compute the four-vector -- the probability of
             cooperating when the previous round was CD or DC
+
+        Special Cases
+        -------------
+        WinStayLoseShift is equivalent to StochasticWSLS(0)
         """
 
         self.ep = ep
@@ -232,6 +253,11 @@ class SoftJoss(MemoryOnePlayer):
         ----------
         q, float
             A parameter used to compute the four-vector
+
+        Special Cases
+        -------------
+        Cooperator is equivalent to SoftJoss(0)
+        TitForTat  is equivalent to SoftJoss(1)
         """
         self.q = q
         four_vector = (1., 1 - q, 1, 1 - q)
