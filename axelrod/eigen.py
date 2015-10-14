@@ -12,17 +12,13 @@ def normalise(nvec):
     """Normalises the given numpy array."""
     return nvec / numpy.sqrt(numpy.dot(nvec, nvec))
 
-
-def squared_error(vector_1, vector_2, sqrt=True):
+def squared_error(vector_1, vector_2):
     """Computes the squared error between two numpy arrays."""
     diff = vector_1 - vector_2
     s = numpy.dot(diff, diff)
-    if sqrt:
-        return numpy.sqrt(s)
-    return s
+    return numpy.sqrt(s)
 
-
-def power_iteration(mat, initial=None):
+def power_iteration(mat, initial):
     """
     Generator of successive approximations.
 
@@ -38,14 +34,10 @@ def power_iteration(mat, initial=None):
     Successive powers (mat ^ k) * initial
     """
 
-    if initial is None:
-        size = mat.shape[0]
-        initial = normalise(numpy.ones(size))
     vec = initial
     while True:
         vec = normalise(numpy.dot(mat, vec))
         yield vec
-
 
 def principal_eigenvector(mat, maximum_iterations=None, max_error=1e-8):
     """
