@@ -354,6 +354,17 @@ present dimensions but if you create a new dimension you do not **need** to re
 classify all the other strategies (but feel free to! :)), but please do add it
 to the :code:`default_classifier` in the :code:`axelrod/player.py` parent class.
 
+Rewriting Existing Strategies
+'''''''''''''''''''''''''''''
+
+Several strategies are special cases of other strategies. For example, both
+`Cooperator` and `Defector` are special cases of `Random`, `Random(1)` and
+`Random(0)` respectively. While we could eliminate `Cooperator` in its current
+form, these strategies are intentionally left as is as simple examples for new
+users and contributors. Nevertheless, please feel free to update the docstrings
+of strategies like `Random` to point out such cases.
+
+
 How to run tests
 ''''''''''''''''
 

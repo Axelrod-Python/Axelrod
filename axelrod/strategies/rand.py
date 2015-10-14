@@ -20,6 +20,11 @@ class Random(Player):
         ----------
         p, float
             The probability to cooperate
+
+        Special Cases
+        -------------
+        Random(0) is equivalent to Defector
+        Random(1) is equivalent to Cooperator
         """
         Player.__init__(self)
         self.p = p
