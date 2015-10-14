@@ -22,10 +22,10 @@ class TestDarwin(TestPlayer):
     def test_strategy(self):
         p1 = self.player()
         p2 = axelrod.Cooperator()
-        self.assertEqual(p1.strategy(p2), D) # Always cooperate first.
+        self.assertEqual(p1.strategy(p2), C) # Always cooperate first.
         for i in range(10):
             p1.play(p2)
-        self.assertEqual(p1.strategy(p2), D)
+        self.assertEqual(p1.strategy(p2), C)
 
         p1 = self.player()
         p2 = axelrod.Defector()
