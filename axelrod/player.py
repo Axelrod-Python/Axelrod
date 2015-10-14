@@ -2,9 +2,11 @@ import inspect
 import random
 import copy
 
+from axelrod import Actions
 from .game import DefaultGame
 
-C, D = 'C', 'D'
+
+C, D = Actions.C, Actions.D
 flip_dict = {C: D, D: C}
 
 

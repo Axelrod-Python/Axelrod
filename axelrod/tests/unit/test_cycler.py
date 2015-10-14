@@ -4,7 +4,7 @@ import itertools
 import axelrod
 from .test_player import TestPlayer, test_four_vector
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestAntiCycler(TestPlayer):

@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Grumpy(Player):
     """A player that defects after a ceratin level of grumpiness.
@@ -49,14 +50,14 @@ class Grumpy(Player):
         if self.state == 'Nice':
             if self.grumpiness > self.grumpy_threshold:
                 self.state = 'Grumpy'
-                return 'D'
-            return 'C'
+                return D
+            return C
 
         if self.state == 'Grumpy':
             if self.grumpiness < self.nice_threshold:
                 self.state = 'Nice'
-                return 'C'
-            return 'D'
+                return C
+            return D
 
     def reset(self):
         """Resets score, history and state for the next round of the tournement."""

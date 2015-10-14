@@ -1,5 +1,5 @@
 
-from axelrod import Player, random_choice
+from axelrod import Player, random_choice, Actions
 import random
 
 
@@ -43,6 +43,6 @@ class NiceAverageCopier(Player):
     @staticmethod
     def strategy(opponent):
         if len(opponent.history) == 0:
-            return 'C'
+            return Actions.C
         p = opponent.cooperations // len(opponent.history)
         return random_choice(p)

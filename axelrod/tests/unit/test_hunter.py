@@ -8,7 +8,7 @@ import axelrod
 from .test_player import TestPlayer
 from axelrod.strategies.hunter import detect_cycle
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestCycleDetection(unittest.TestCase):
@@ -112,14 +112,14 @@ class TestCycleHunter(TestPlayer):
             player.reset()
             for i in range(30):
                 player.play(opponent)
-            self.assertEqual(player.history[-1], 'D')
+            self.assertEqual(player.history[-1], D)
         # Test against non-cyclers
         for opponent in [axelrod.Random(), axelrod.AntiCycler(),
                          axelrod.Cooperator(), axelrod.Defector()]:
             player.reset()
             for i in range(30):
                 player.play(opponent)
-            self.assertEqual(player.history[-1], 'C')
+            self.assertEqual(player.history[-1], C)
 
 
 class TestEventualCycleHunter(TestPlayer):
@@ -143,13 +143,13 @@ class TestEventualCycleHunter(TestPlayer):
             player.reset()
             for i in range(50):
                 player.play(opponent)
-            self.assertEqual(player.history[-1], 'D')
+            self.assertEqual(player.history[-1], D)
         # Test against non-cyclers and cooperators
         for opponent in [axelrod.Random(), axelrod.AntiCycler(), axelrod.DoubleCrosser(), axelrod.Cooperator()]:
             player.reset()
             for i in range(50):
                 player.play(opponent)
-            self.assertEqual(player.history[-1], 'C')
+            self.assertEqual(player.history[-1], C)
 
 
 class TestMathConstantHunter(TestPlayer):

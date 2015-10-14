@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Appeaser(Player):
     """A player who tries to guess what the opponent wants.
@@ -19,11 +20,11 @@ class Appeaser(Player):
 
     def strategy(self, opponent):
         if not len(self.history):
-            self.move = 'C'
+            self.move = C
         else:
-            if opponent.history[-1] == 'D':
-                if self.move == 'C':
-                    self.move = 'D'
+            if opponent.history[-1] == D:
+                if self.move == C:
+                    self.move = D
                 else:
-                    self.move = 'C'
+                    self.move = C
         return self.move
