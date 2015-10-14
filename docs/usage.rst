@@ -307,7 +307,7 @@ For any tournament, a plot of the distribution of wins is created, much like the
 plot for the distribution of mean scores. For the demo strategies we create the
 plot as follows::
 
-    import axelrod
+    import axelrodmean
     strategies = [s() for s in axelrod.demo_strategies]
     tournament = axelrod.Tournament(strategies, game=Game(30, 0, 50, 10))
     results = tournament.play()
@@ -322,7 +322,9 @@ This produces:
    :align: center
 
 In this case most of the strategies are deterministic, so there is not much
-variation in the distributions. See below for a more complex example. Similarly, there are additional plots for the score differences.
+variation in the distributions. See below for a more complex example. Similarly, there are additional plots for the score differences: `plot.sdvplot()` gives
+violin or boxplots for the score differences, and `plot.pdplot()` which
+gives a heatmap of the mean payoff differences (like the payoff image above).
 
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^
