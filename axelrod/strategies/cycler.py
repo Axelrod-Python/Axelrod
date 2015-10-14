@@ -1,5 +1,5 @@
 
-from axelrod import Player
+from axelrod import Player, Actions
 
 
 class AntiCycler(Player):
@@ -25,11 +25,11 @@ class AntiCycler(Player):
     def strategy(self, opponent):
         if self.cycle_counter < self.cycle_length:
             self.cycle_counter += 1
-            return 'C'
+            return Actions.C
         else:
             self.cycle_length += 1
             self.cycle_counter = 0
-            return 'D'
+            return Actions.D
 
     def reset(self):
         Player.reset(self)

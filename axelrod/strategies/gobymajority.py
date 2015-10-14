@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class GoByMajority(Player):
     """A player examines the history of the opponent: if the opponent has more
@@ -43,16 +44,16 @@ class GoByMajority(Player):
 
         memory = self.classifier['memory_depth']
         history = opponent.history[-memory:]
-        defections = sum([s == 'D' for s in history])
-        cooperations = sum([s == 'C' for s in history])
+        defections = sum([s == D for s in history])
+        cooperations = sum([s == C for s in history])
         if defections > cooperations:
-            return 'D'
+            return D
         if defections == cooperations:
             if self.soft:
-                return 'C'
+                return C
             else:
-                return 'D'
-        return 'C'
+                return D
+        return C
 
     def __repr__(self):
         """The string method for the strategy."""

@@ -1,4 +1,5 @@
 from __future__ import division
+from axelrod import Actions
 
 class RoundRobin(object):
     """A class to define play a round robin game of players"""
@@ -123,4 +124,4 @@ class RoundRobin(object):
             not (p1.classifier['stochastic'] or p2.classifier['stochastic']))
 
     def _calculate_cooperation(self, player):
-        return player.history.count('C')
+        return player.history.count(Actions.C)

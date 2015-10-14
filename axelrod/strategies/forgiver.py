@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Forgiver(Player):
     """
@@ -22,8 +23,8 @@ class Forgiver(Player):
         Begins by playing C, then plays D if the opponent has defected more than 10 percent of the time
         """
         if opponent.defections > len(opponent.history) / 10.:
-            return 'D'
-        return 'C'
+            return D
+        return C
 
 
 class ForgivingTitForTat(Player):
@@ -51,4 +52,4 @@ class ForgivingTitForTat(Player):
         """
         if opponent.defections > len(opponent.history) / 10.:
             return opponent.history[-1]
-        return 'C'
+        return C
