@@ -5,7 +5,7 @@ All contributions to this repository are welcome via pull request on the `github
 
 The project follows the following guidelines:
 
-1. Use the base Python library unless completely necessary. Numpy is ok.
+1. Use the base Python library unless completely necessary. A few external libraries (such as numpy) have been included in requirements.txt -- feel free to use these as needed.
 2. If a non base Python library is deemed necessary, it should not hinder the running or contribution of the package when using the base Python library.
    For example, the `matplotlib library <http://matplotlib.org/>`_ is used in a variety of classes to be able to show results, such as this one:
    This has been done carefully with tests that are skipped if the library is not installed and also without any crashes if something using the library was run.
