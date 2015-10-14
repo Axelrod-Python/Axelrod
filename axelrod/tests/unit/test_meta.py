@@ -88,6 +88,11 @@ class TestMetaMinority(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    def test_team(self):
+        team = [axelrod.Cooperator]
+        player = self.player(team=team)
+        self.assertEqual(len(player.team), 1)
+
     def test_strategy(self):
 
         P1 = axelrod.MetaMinority()
@@ -159,6 +164,10 @@ class TestMetaHunter(TestMetaPlayer):
         self.responses_test([C] * 6, [C, D] * 3, [D])
         self.responses_test([C] * 8, [C, C, C, D, C, C, C, D], [D])
         self.responses_test([C] * 100, [random.choice([C, D]) for i in range(100)],[D])
+        # Test post 100 rounds responses
+        self.responses_test([C] * 101, [C] * 101, [C])
+        self.responses_test([C] * 101, [C] * 100 + [D], [D])
+
 
 
 class TestMetaMajorityMemoryOne(TestMetaPlayer):

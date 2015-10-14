@@ -69,5 +69,5 @@ class Darwin(Player):
 
     def mutate(self, outcome, trial):
         """ Select response according to outcome. """
-        if outcome < 0 and (len(self.__class__.genome) >= trial):
+        if outcome[0] < 3 and (len(self.__class__.genome) >= trial):
             self.response = 'D' if self.__class__.genome[trial-1] == 'C' else 'C'

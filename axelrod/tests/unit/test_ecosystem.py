@@ -61,6 +61,11 @@ class TestEcosystem(unittest.TestCase):
         # If passed list has negative values
         self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators, population=[.7, -.2, .03, .2])
 
+    def test_fitness(self):
+        fitness = lambda p: 2 * p
+        eco = axelrod.Ecosystem(self.res_cooperators, fitness=fitness)
+        self.assertTrue(eco.fitness(10), 20)
+
     def test_cooperators(self):
         """Are cooperators stable over time?"""
 

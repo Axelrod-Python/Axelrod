@@ -43,13 +43,6 @@ def simulate_play(P1, P2, h1=None, h2=None):
     else:
         s1 = P1.strategy(P2)
         s2 = P2.strategy(P1)
-        # If P1 or P2 is axelrod.Player, they will return None, change to
-        # s1 or s2 to 'C' if that case.
-        if not s1:
-            s1 = C
-        if not s2:
-            s2 = C
         # Record history
-        # Update Cooperation / Defection counts
         update_histories(P1, P2, s1, s2)
         return (s1, s2)
