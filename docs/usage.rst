@@ -322,7 +322,7 @@ This produces:
    :align: center
 
 In this case most of the strategies are deterministic, so there is not much
-variation in the distributions. See below for a more complex example.
+variation in the distributions. See below for a more complex example. Similarly, there are additional plots for the score differences.
 
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^
