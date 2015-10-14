@@ -2,7 +2,7 @@ import unittest
 
 import axelrod
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestGame(unittest.TestCase):

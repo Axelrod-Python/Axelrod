@@ -1,7 +1,9 @@
 import unittest
-from axelrod import Game
+from axelrod import Game, Actions
 import axelrod.payoff as ap
 
+
+C, D = Actions.C, Actions.D
 
 class TestPayoff(unittest.TestCase):
 
@@ -12,19 +14,19 @@ class TestPayoff(unittest.TestCase):
 
         cls.interactions = [
             [
-                [('C', 'C'), ('D', 'D'), ('C', 'C'), ('D', 'D'), ('C', 'C')],
-                [('C', 'C'), ('D', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D')],
-                [('C', 'C'), ('D', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D')]
+                [(C, C), (D, D), (C, C), (D, D), (C, C)],
+                [(C, C), (D, C), (C, D), (D, C), (C, D)],
+                [(C, C), (D, C), (C, D), (D, C), (C, D)]
             ],
             [
-                [('C', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D'), ('D', 'C')],
-                [('C', 'C'), ('C', 'C'), ('C', 'C'), ('C', 'C'), ('C', 'C')],
-                [('C', 'D'), ('D', 'D'), ('D', 'C'), ('C', 'D'), ('D', 'C')]
+                [(C, C), (C, D), (D, C), (C, D), (D, C)],
+                [(C, C), (C, C), (C, C), (C, C), (C, C)],
+                [(C, D), (D, D), (D, C), (C, D), (D, C)]
             ],
             [
-                [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('D', 'C')],
-                [('D', 'C'), ('D', 'D'), ('D', 'D'), ('C', 'D'), ('D', 'C')],
-                [('D', 'C'), ('D', 'D'), ('D', 'C'), ('D', 'D'), ('D', 'D')]
+                [(D, C), (C, D), (C, C), (C, D), (D, C)],
+                [(D, C), (D, D), (D, D), (C, D), (D, C)],
+                [(D, C), (D, D), (D, C), (D, D), (D, D)]
             ]
         ]
 

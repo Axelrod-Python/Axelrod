@@ -1,6 +1,6 @@
 import itertools
 
-from axelrod import Player
+from axelrod import Player, Actions
 from .axelrod_tournaments import Joss
 from .hunter import detect_cycle
 
@@ -37,10 +37,10 @@ class Calculator(Player):
 
     def extended_strategy(self, opponent):
         if self.cycle:
-            return 'D'
+            return Actions.D
         else:
             # TFT
-            return 'D' if opponent.history[-1:] == ['D'] else 'C'
+            return Actions.D if opponent.history[-1:] == [Actions.D] else Actions.C
 
     def reset(self):
         Player.reset(self)

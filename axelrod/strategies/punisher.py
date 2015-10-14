@@ -1,12 +1,13 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Punisher(Player):
     """
     A player starts by cooperating however will defect if at any point the
     opponent has defected, but forgets after meme_length matches, with
     1<=mem_length<=20 proportional to the amount of time the opponent has
-    played 'D', punishing that player for playing 'D' too often.
+    played D, punishing that player for playing D too often.
     """
 
     name = 'Punisher'
@@ -30,7 +31,7 @@ class Punisher(Player):
     def strategy(self, opponent):
         """
         Begins by playing C, then plays D for an amount of rounds proportional
-        to the opponents historical '%' of playing 'D' if the opponent ever
+        to the opponents historical '%' of playing D if the opponent ever
         plays D
         """
 
@@ -40,12 +41,12 @@ class Punisher(Player):
 
         if self.grudged:
             self.grudge_memory += 1
-            return 'D'
-        elif 'D' in opponent.history[-1:]:
+            return D
+        elif D in opponent.history[-1:]:
             self.mem_length = (opponent.defections * 20) // len(opponent.history)
             self.grudged = True
-            return 'D'
-        return 'C'
+            return D
+        return C
 
     def reset(self):
         """
@@ -62,7 +63,7 @@ class InversePunisher(Player):
     A player starts by cooperating however will defect if at any point the
     opponent has defected, but forgets after meme_length matches, with
     1<=mem_length<=20 proportional to the amount of time the opponent has
-    played 'C'. The inverse of Punisher
+    played C. The inverse of Punisher
     """
 
     name = 'Inverse Punisher'
@@ -86,7 +87,7 @@ class InversePunisher(Player):
 
     def strategy(self, opponent):
         """
-        Begins by playing C, then plays D for an amount of rounds proportional to the opponents historical '%' of playing 'C' if the opponent ever plays D
+        Begins by playing C, then plays D for an amount of rounds proportional to the opponents historical '%' of playing C if the opponent ever plays D
         """
 
         if self.grudge_memory >= self.mem_length:
@@ -95,14 +96,14 @@ class InversePunisher(Player):
 
         if self.grudged:
             self.grudge_memory += 1
-            return 'D'
-        elif 'D' in opponent.history[-1:]:
+            return D
+        elif D in opponent.history[-1:]:
             self.mem_length = (opponent.cooperations * 20) // len(opponent.history)
             if self.mem_length == 0:
                 self.mem_length += 1
             self.grudged = True
-            return 'D'
-        return 'C'
+            return D
+        return C
 
     def reset(self):
         """

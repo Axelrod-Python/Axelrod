@@ -1,9 +1,10 @@
 from random import random
 
-from axelrod import Player
+from axelrod import Player, Actions
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
+C, D = Actions.C, Actions.D
 
 class MemoryOnePlayer(Player):
     """Uses a four-vector for strategies based on the last round of play,
@@ -20,14 +21,14 @@ class MemoryOnePlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, four_vector=None, initial='C'):
+    def __init__(self, four_vector=None, initial=C):
         """
         Parameters
         ----------
         fourvector, list or tuple of floats of length 4
             The response probabilities to the preceeding round of play
             ( P(C|CC), P(C|CD), P(C|DC), P(C|DD) )
-        initial, 'C' or 'D'
+        initial, C or D
             The initial move
 
         Special Cases
@@ -53,7 +54,7 @@ class MemoryOnePlayer(Player):
         if not all(0 <= p <= 1 for p in four_vector):
             raise ValueError('An element in the probability vector, %s, is not between 0 and 1.' % str(four_vector))
 
-        self._four_vector = dict(zip([('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')], map(float, four_vector)))
+        self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)], map(float, four_vector)))
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent):
@@ -64,7 +65,7 @@ class MemoryOnePlayer(Player):
         # Determine which probability to use
         p = self._four_vector[(self.history[-1], opponent.history[-1])]
         # Draw a random number in [0,1] to decide
-        return 'C' if random() < p else 'D'
+        return C if random() < p else D
 
 
 class WinStayLoseShift(MemoryOnePlayer):
@@ -72,7 +73,7 @@ class WinStayLoseShift(MemoryOnePlayer):
 
     name = 'Win-Stay Lose-Shift'
 
-    def __init__(self, initial='C'):
+    def __init__(self, initial=C):
         Player.__init__(self)
         self.set_four_vector([1,0,0,1])
         self._initial = initial

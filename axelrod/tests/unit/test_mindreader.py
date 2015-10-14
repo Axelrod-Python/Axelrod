@@ -5,7 +5,7 @@ import axelrod
 from .test_player import TestPlayer
 from axelrod.strategies.mindreader import simulate_match
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestMindReader(TestPlayer):
