@@ -7,7 +7,7 @@ from axelrod import Game
 from axelrod.strategies.memoryone import MemoryOnePlayer, ZeroDeterminantPlayer
 from .test_player import TestPlayer, test_four_vector
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestWinStayLoseShift(TestPlayer):

@@ -1,6 +1,7 @@
 import inspect
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Darwin(Player):
     """ A strategy which accumulates a record (the 'genome') of what the most
@@ -28,7 +29,7 @@ class Darwin(Player):
         'manipulates_state': True  # Does not reset properly.
     }
 
-    genome = ['C']
+    genome = [C]
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
     def __init__(self):
@@ -42,7 +43,7 @@ class Darwin(Player):
         # Frustrate psychics and ensure that simulated rounds
         # do not influence genome.
         if inspect.stack()[1][3] not in self.__class__.valid_callers:
-            return 'C'
+            return C
 
         trial = len(self.history)
 
@@ -65,9 +66,9 @@ class Darwin(Player):
     def reset(self):
         """ Reset instance properties. """
         Player.reset(self)
-        self.__class__.genome[0] = 'C' # Ensure initial Cooperate
+        self.__class__.genome[0] = C # Ensure initial Cooperate
 
     def mutate(self, outcome, trial):
         """ Select response according to outcome. """
         if outcome[0] < 3 and (len(self.__class__.genome) >= trial):
-            self.response = 'D' if self.__class__.genome[trial-1] == 'C' else 'C'
+            self.response = D if self.__class__.genome[trial-1] == C else C

@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class BackStabber(Player):
     """
@@ -18,12 +19,12 @@ class BackStabber(Player):
 
     def strategy(self, opponent):
         if not opponent.history:
-            return 'C'
+            return C
         if len(opponent.history) > (self.tournament_attributes['length'] - 3):
-            return 'D'
+            return D
         if opponent.defections > 3:
-            return 'D'
-        return 'C'
+            return D
+        return C
 
 
 class DoubleCrosser(Player):
@@ -47,14 +48,14 @@ class DoubleCrosser(Player):
         cutoff = 6
 
         if not opponent.history:
-            return 'C'
+            return C
         if len(opponent.history) > (self.tournament_attributes['length'] - 3):
-            return 'D'
+            return D
         if len(opponent.history) < 180:
             if len(opponent.history) > cutoff:
-                if 'D' not in opponent.history[:cutoff + 1]:
-                    if opponent.history[-2:] != ['D', 'D']:  # Fail safe
-                        return 'C'
+                if D not in opponent.history[:cutoff + 1]:
+                    if opponent.history[-2:] != [D, D]:  # Fail safe
+                        return C
         if opponent.defections > 3:
-            return 'D'
-        return 'C'
+            return D
+        return C

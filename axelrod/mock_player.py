@@ -2,9 +2,9 @@ import copy
 
 import axelrod
 
-from axelrod import Player, update_histories
+from axelrod import Player, update_histories, Actions
 
-C, D = 'C', 'D'
+C, D = Actions.C, Actions.D
 
 
 class MockPlayer(Player):

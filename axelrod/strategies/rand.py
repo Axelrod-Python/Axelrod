@@ -1,4 +1,4 @@
-from axelrod import Player
+from axelrod import Player, Actions
 import random
 
 
@@ -33,8 +33,8 @@ class Random(Player):
     def strategy(self, opponent):
         r = random.random()
         if r > self.p:
-            return 'D'
-        return 'C'
+            return Actions.D
+        return Actions.C
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))

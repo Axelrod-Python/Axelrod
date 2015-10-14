@@ -1,8 +1,9 @@
 import copy
 import inspect
 
-from axelrod import Player, RoundRobin, update_histories
+from axelrod import Player, RoundRobin, update_histories, Actions
 
+C, D = Actions.C, Actions.D
 
 def simulate_match(player_1, player_2, strategy, rounds=10):
     """Simulates a number of matches."""
@@ -15,9 +16,9 @@ def roll_back_history(player, rounds):
     """Undo the last `rounds` rounds as sufficiently as possible."""
     for i in range(rounds):
         play = player.history.pop(-1)
-        if play == 'C':
+        if play == C:
             player.cooperations -= 1
-        elif play == 'D':
+        elif play == D:
             player.defections -= 1
 
 def look_ahead(player_1, player_2, game, rounds=10):
@@ -25,7 +26,7 @@ def look_ahead(player_1, player_2, game, rounds=10):
     results = []
 
     # Simulate plays for `rounds` rounds
-    strategies = ['C', 'D']
+    strategies = [C, D]
     for strategy in strategies:
         opponent_ = copy.deepcopy(player_2) # need deepcopy here
         round_robin = RoundRobin(players=[player_1, opponent_], game=game,
@@ -66,7 +67,7 @@ class MindReader(Player):
         calname = calframe[1][3]
 
         if calname in ('strategy', 'simulate_match'):
-            return 'D'
+            return D
 
         game = self.tournament_attributes["game"]
 
@@ -122,6 +123,6 @@ class MirrorMindReader(ProtectedMindReader):
         calname = calframe[1][3]
 
         if calname in ('strategy', 'simulate_match'):
-            return 'C'
+            return C
 
         return opponent.strategy(self)

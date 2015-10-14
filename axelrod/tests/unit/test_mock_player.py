@@ -4,7 +4,7 @@ import axelrod
 from axelrod import MockPlayer, simulate_play, update_histories
 from axelrod.tests.unit.test_player import TestOpponent
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestMockPlayer(unittest.TestCase):

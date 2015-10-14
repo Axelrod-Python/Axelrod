@@ -2,7 +2,7 @@ import axelrod
 
 from .test_player import TestPlayer
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestBackStabber(TestPlayer):
 

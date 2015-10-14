@@ -1,4 +1,4 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
 
 class Alternator(Player):
@@ -15,7 +15,7 @@ class Alternator(Player):
 
     def strategy(self, opponent):
         if len(self.history) == 0:
-            return 'C'
-        if self.history[-1] == 'C':
-            return 'D'
-        return 'C'
+            return Actions.C
+        if self.history[-1] == Actions.C:
+            return Actions.D
+        return Actions.C

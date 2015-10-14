@@ -86,7 +86,7 @@ Let us take a look at the :code:`TitForTat` class (located in the :code:`axelrod
             try:
                 return opponent.history[-1]
             except IndexError:
-                return 'C'
+                return C
 
 The first thing that is needed is a docstring that explains what the strategy does::
 
@@ -111,7 +111,7 @@ opponent has not played yet) will cooperate::
         try:
             return opponent.history[-1]
         except IndexError:
-            return 'C'
+            return C
 
 If your strategy creates any particular attribute along the way you need to make
 sure that there is a :code:`reset` method that takes account of it.  An example
@@ -235,6 +235,7 @@ As an example, you code write tests for Tit-For-Tat as follows::
 
     from test_player import TestPlayer
 
+    C, D = axelrod.Actions.C, axelrod.Actions.D
 
     class TestTitForTat(TestPlayer):
 
@@ -252,7 +253,7 @@ As an example, you code write tests for Tit-For-Tat as follows::
             """Starts by cooperating."""
             P1 = axelrod.TitForTat()
             P2 = axelrod.Player()
-            self.assertEqual(P1.strategy(P2), 'C')
+            self.assertEqual(P1.strategy(P2), C)
 
         def test_effect_of_strategy(self):
             """
@@ -260,10 +261,10 @@ As an example, you code write tests for Tit-For-Tat as follows::
             """
             P1 = axelrod.TitForTat()
             P2 = axelrod.Player()
-            P2.history = ['C', 'C', 'C', 'C']
-            self.assertEqual(P1.strategy(P2), 'C')
-            P2.history = ['C', 'C', 'C', 'C', 'D']
-            self.assertEqual(P1.strategy(P2), 'D')
+            P2.history = [C, C, C, C]
+            self.assertEqual(P1.strategy(P2), C)
+            P2.history = [C, C, C, C, D]
+            self.assertEqual(P1.strategy(P2), D)
 
 The :code:`test_effect_of_strategy` method mainly checks that the :code:`strategy` method in the :code:`TitForTat` class works as expected:
 
