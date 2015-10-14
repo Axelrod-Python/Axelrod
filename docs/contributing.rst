@@ -113,6 +113,8 @@ opponent has not played yet) will cooperate::
         except IndexError:
             return C
 
+The variables :code:`C` and :code:`D` represent the cooperate and defect actions respectively, and are importable from the main axelrod namespace.  
+
 If your strategy creates any particular attribute along the way you need to make
 sure that there is a :code:`reset` method that takes account of it.  An example
 of this is the :code:`ForgetfulGrudger` strategy which creates a boolean
