@@ -104,7 +104,7 @@ which gives::
 
 Finally, to obtain the ranking in a helpful format with all the names::
 
-    results.ranked_names
+    ranks = results.ranked_names
 
 which gives::
 
