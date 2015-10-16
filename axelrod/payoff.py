@@ -161,7 +161,7 @@ def normalised_scores(scores, turns):
         [1.0 * s / normalisation for s in r] for r in scores]
 
 
-def ranking(scores, nplayers):
+def ranking(scores):
     """
     Parameters
     ----------
@@ -176,6 +176,7 @@ def ranking(scores, nplayers):
         A list of players (their index within the players list rather than
         a player instance) ordered by median score
     """
+    nplayers = len(scores)
     ranking = sorted(
         range(nplayers),
         key=lambda i: -median(scores[i]))
