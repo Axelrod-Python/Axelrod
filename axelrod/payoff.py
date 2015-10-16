@@ -98,11 +98,6 @@ def scores(payoff):
         i.e. one row per player, containing one element per opponent (in
         order of player index) which lists payoffs for each repetition.
 
-    nplayers : integer
-        The number of players in the tournament.
-    repetitions : integer
-        The number of repetitions in the tournament.
-
     Returns
     -------
     list
@@ -140,8 +135,6 @@ def normalised_scores(scores, turns):
     ----------
     scores : list
         A scores matrix (S) of the form returned by the scores function.
-    nplayers : integer
-        The number of players in the tournament.
     turns : integer
         The number of turns in each round robin.
 
@@ -167,8 +160,6 @@ def ranking(scores):
     ----------
     scores : list
         A scores matrix (S) of the form returned by the scores function.
-    nplayers : integer
-        The number of players in the tournament.
 
     Returns
     -------
@@ -219,8 +210,6 @@ def normalised_payoff(payoff_matrix, turns):
 
     turns : integer
         The number of turns in each round robin.
-    repetitions : integer
-        The number of repetitions in the tournament.
 
     Returns
     -------
@@ -282,11 +271,6 @@ def wins(payoff):
         i.e. one row per player, containing one element per opponent (in
         order of player index) which lists payoffs for each repetition.
 
-    nplayers : integer
-        The number of players in the tournament.
-    repetitions : integer
-        The number of repetitions in the tournament.
-
     Returns
     -------
     list
@@ -334,10 +318,6 @@ def payoff_diffs_means(payoff, turns):
         i.e. one row per player, containing one element per opponent (in
         order of player index) which lists payoffs for each repetition.
 
-    nplayers : integer
-        The number of players in the tournament.
-    repetitions : integer
-        The number of repetitions in the tournament.
     turns : integer
         The number of turns in each round robin.
 
