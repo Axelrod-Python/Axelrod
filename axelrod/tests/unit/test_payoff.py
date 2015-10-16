@@ -86,6 +86,10 @@ class TestPayoff(unittest.TestCase):
         payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
         self.assertEqual(payoff_matrix, self.expected_payoff_matrix)
 
+    def test_interaction_payoff(self):
+        payoff = ap.interaction_payoff(self.interactions[2][2], Game())
+        self.assertEqual(payoff, (13, 3))
+
     def test_scores(self):
         scores = ap.scores(self.expected_payoff, 3, 2)
         self.assertEqual(scores, self.expected_scores)
@@ -103,8 +107,6 @@ class TestPayoff(unittest.TestCase):
             self.players, self.expected_ranking,)
         self.assertEqual(ranked_names, self.expected_ranked_names)
 
-
-
     def test_payoff_diffs_means(self):
         #payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
         diff_means = ap.payoff_diffs_means(self.expected_payoff, 3, 2, 5)
@@ -114,7 +116,6 @@ class TestPayoff(unittest.TestCase):
         #payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
         score_diffs = ap.score_diffs(self.expected_payoff, 3, 2, 5)
         self.assertEqual(score_diffs, self.expected_score_diffs)
-
 
     @staticmethod
     def round_matrix(matrix, precision):

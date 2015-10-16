@@ -57,6 +57,31 @@ def payoff_matrix(interactions, game, nplayers, turns):
     return payoff
 
 
+def interaction_payoff(actions, game):
+    """
+    Parameters
+    ----------
+    actions : list
+        A list of tuples of the form:
+
+        [(C, C), (C, C)], [(C, D), (C, D)]
+
+    game : axelrod.Game
+        The game object to score the actions.
+
+    Returns
+    -------
+    tuple
+        A pair of payoffs for each of the two players in the interaction.
+    """
+    player1_payoff, player2_payoff = 0, 0
+    for turn in actions:
+        score = game.score(turn)
+        player1_payoff += score[0]
+        player2_payoff += score[1]
+    return (player1_payoff, player2_payoff)
+
+
 def scores(payoff, nplayers, repetitions):
     """
     Parameters
