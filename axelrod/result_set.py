@@ -57,8 +57,7 @@ class ResultSet(object):
             self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff(
                 payoff, turns))
             self.wins = ap.wins(payoff)
-            self.payoff_diffs_means = ap.payoff_diffs_means(payoff, len(players),
-                                                            repetitions, turns)
+            self.payoff_diffs_means = ap.payoff_diffs_means(payoff, turns)
             self.score_diffs = ap.score_diffs(payoff, len(players), repetitions,
                                               turns)
 
