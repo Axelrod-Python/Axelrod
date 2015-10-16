@@ -50,18 +50,15 @@ class ResultSet(object):
 
         if 'payoff' in self.results:
             payoff = self.results['payoff']
-            self.scores = ap.scores(payoff, len(players), repetitions)
-            self.normalised_scores = ap.normalised_scores(
-                self.scores, len(players), turns)
-            self.ranking = ap.ranking(self.scores, len(players))
+            self.scores = ap.scores(payoff)
+            self.normalised_scores = ap.normalised_scores(self.scores, turns)
+            self.ranking = ap.ranking(self.scores)
             self.ranked_names = ap.ranked_names(players, self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff(
-                payoff, turns, repetitions))
-            self.wins = ap.wins(payoff, len(players), repetitions)
-            self.payoff_diffs_means = ap.payoff_diffs_means(payoff, len(players),
-                                                            repetitions, turns)
-            self.score_diffs = ap.score_diffs(payoff, len(players), repetitions,
-                                              turns)
+                payoff, turns))
+            self.wins = ap.wins(payoff)
+            self.payoff_diffs_means = ap.payoff_diffs_means(payoff, turns)
+            self.score_diffs = ap.score_diffs(payoff, turns)
 
         if 'cooperation' in self.results and with_morality:
             self.cooperation = ac.cooperation_matrix(
