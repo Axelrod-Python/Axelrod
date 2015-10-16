@@ -47,14 +47,13 @@ def payoff_matrix(interactions, game, nplayers, turns):
         and column (j) represents an individual player and the the value Pij
         is the payoff value for player (i) versus player (j).
     """
-    payoff = [[0 for i in range(nplayers)] for j in range(nplayers)]
+    payoffs = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for p1 in range(nplayers):
         for p2 in range(nplayers):
-            for turn in range(turns):
-                score = game.score(interactions[p1][p2][turn])
-                payoff[p1][p2] += score[0]
-                payoff[p2][p1] += score[1]
-    return payoff
+            payoff = interaction_payoff(interactions[p1][p2], game)
+            payoffs[p1][p2] += payoff[0]
+            payoffs[p2][p1] += payoff[1]
+    return payoffs
 
 
 def interaction_payoff(actions, game):
