@@ -1,5 +1,8 @@
 import math
 from numpy import median, mean
+from axelrod import Actions
+
+C, D = Actions.C, Actions.D
 
 
 def payoff_matrix(interactions, game, nplayers, turns):
@@ -14,8 +17,8 @@ def payoff_matrix(interactions, game, nplayers, turns):
         e.g. for a tournament between Cooperator and Defector with 2 turns per
         round:
         [
-            [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
-            [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
+            [(C, C), (C, C)], [(C, D), (C, D)],
+            [(D, C), (D, C)], [(D, D), (D, D)]
         ]
 
         i.e. one list per player, containing one list per opponent (in order of
