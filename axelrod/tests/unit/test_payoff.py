@@ -83,7 +83,7 @@ class TestPayoff(unittest.TestCase):
         ]
 
     def test_payoff_matrix(self):
-        payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
+        payoff_matrix = ap.payoff_matrix(self.interactions, Game())
         self.assertEqual(payoff_matrix, self.expected_payoff_matrix)
 
     def test_interaction_payoff(self):
