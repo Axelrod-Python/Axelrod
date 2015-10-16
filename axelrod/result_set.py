@@ -51,8 +51,7 @@ class ResultSet(object):
         if 'payoff' in self.results:
             payoff = self.results['payoff']
             self.scores = ap.scores(payoff)
-            self.normalised_scores = ap.normalised_scores(
-                self.scores, len(players), turns)
+            self.normalised_scores = ap.normalised_scores(self.scores, turns)
             self.ranking = ap.ranking(self.scores, len(players))
             self.ranked_names = ap.ranked_names(players, self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff(
