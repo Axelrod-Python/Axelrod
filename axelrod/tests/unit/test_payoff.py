@@ -122,7 +122,7 @@ class TestPayoff(unittest.TestCase):
         return [[round(x, precision) for x in row] for row in matrix]
 
     def test_normalised_payoff(self):
-        averages, stddevs = ap.normalised_payoff(self.expected_payoff, 5, 2)
+        averages, stddevs = ap.normalised_payoff(self.expected_payoff, 5)
         self.assertEqual(
             self.round_matrix(averages, 2), self.expected_normalised_payoff)
         self.assertEqual(
