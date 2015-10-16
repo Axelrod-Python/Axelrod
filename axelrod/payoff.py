@@ -266,7 +266,7 @@ def winning_player(players, payoffs):
         return winner
 
 
-def wins(payoff, nplayers, repetitions):
+def wins(payoff):
     """
     Parameters
     ----------
@@ -301,6 +301,8 @@ def wins(payoff, nplayers, repetitions):
         i.e. one row per player which lists the total wins for that player
         in each repetition.
     """
+    nplayers = len(payoff)
+    repetitions = len(payoff[0][0])
     wins = [
         [0 for r in range(repetitions)] for p in range(nplayers)]
     for player in range(nplayers):

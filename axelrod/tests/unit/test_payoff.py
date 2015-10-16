@@ -141,5 +141,5 @@ class TestPayoff(unittest.TestCase):
         self.assertEqual(winner, None)
 
     def test_wins(self):
-        wins = ap.wins(self.expected_payoff, 3, 2)
+        wins = ap.wins(self.expected_payoff)
         self.assertEqual(wins, self.expected_wins)

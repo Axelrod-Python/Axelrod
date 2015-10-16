@@ -56,7 +56,7 @@ class ResultSet(object):
             self.ranked_names = ap.ranked_names(players, self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff(
                 payoff, turns))
-            self.wins = ap.wins(payoff, len(players), repetitions)
+            self.wins = ap.wins(payoff)
             self.payoff_diffs_means = ap.payoff_diffs_means(payoff, len(players),
                                                             repetitions, turns)
             self.score_diffs = ap.score_diffs(payoff, len(players), repetitions,
