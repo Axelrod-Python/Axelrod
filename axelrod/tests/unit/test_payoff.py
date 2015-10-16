@@ -99,7 +99,7 @@ class TestPayoff(unittest.TestCase):
         self.assertEqual(scores, self.expected_normalised_scores)
 
     def test_ranking(self):
-        ranking = ap.ranking(self.expected_scores, 3)
+        ranking = ap.ranking(self.expected_scores)
         self.assertEqual(ranking, self.expected_ranking)
 
     def test_ranked_names(self):
