@@ -318,7 +318,7 @@ def wins(payoff):
     return wins
 
 
-def payoff_diffs_means(payoff, nplayers, repetitions, turns):
+def payoff_diffs_means(payoff, turns):
     """
     Parameters
     ----------
@@ -352,7 +352,8 @@ def payoff_diffs_means(payoff, nplayers, repetitions, turns):
         normalized by the number of turns. I.e. the nplayers x nplayers
         matrix of mean payoff differences between each player and opponent.
     """
-
+    nplayers = len(payoff)
+    repetitions = len(payoff[0][0])
     diffs_matrix = [[0] * nplayers for _ in range(nplayers)]
     for player in range(nplayers):
         for opponent in range(nplayers):
