@@ -82,7 +82,7 @@ def interaction_payoff(actions, game):
     return (player1_payoff, player2_payoff)
 
 
-def scores(payoff, nplayers, repetitions):
+def scores(payoff):
     """
     Parameters
     ----------
@@ -121,6 +121,8 @@ def scores(payoff, nplayers, repetitions):
         (e.g. player 1 versus player 1) and so these are also excluded from the
         scores here by the condition on ip and ires.
     """
+    nplayers = len(payoff)
+    repetitions = len(payoff[0][0])
     scores = []
     for ires, res in enumerate(payoff):
         scores.append([])
