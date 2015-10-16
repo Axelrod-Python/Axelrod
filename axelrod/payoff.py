@@ -1,7 +1,5 @@
 import math
-
-import numpy
-from numpy import median, mean, std
+from numpy import median, mean
 
 
 def payoff_matrix(interactions, game, nplayers, turns):
