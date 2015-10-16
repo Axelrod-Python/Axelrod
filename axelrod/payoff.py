@@ -201,7 +201,7 @@ def ranked_names(players, ranking):
     return ranked_names
 
 
-def normalised_payoff(payoff_matrix, turns, repetitions):
+def normalised_payoff(payoff_matrix, turns):
     """
     Parameters
     ----------
@@ -227,6 +227,7 @@ def normalised_payoff(payoff_matrix, turns, repetitions):
     list
         A per-turn averaged payoff matrix and its standard deviations.
     """
+    repetitions = len(payoff_matrix[0][0])
     averages = []
     stddevs = []
     for res in payoff_matrix:
