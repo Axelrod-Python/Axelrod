@@ -346,7 +346,7 @@ def payoff_diffs_means(payoff, turns):
     return diffs_matrix
 
 
-def score_diffs(payoff, nplayers, repetitions, turns):
+def score_diffs(payoff, turns):
     """
     Parameters
     ----------
@@ -362,10 +362,6 @@ def score_diffs(payoff, nplayers, repetitions, turns):
         i.e. one row per player, containing one element per opponent (in
         order of player index) which lists payoffs for each repetition.
 
-    nplayers : integer
-        The number of players in the tournament.
-    repetitions : integer
-        The number of repetitions in the tournament.
     turns : integer
         The number of turns in each round robin.
 
@@ -377,6 +373,8 @@ def score_diffs(payoff, nplayers, repetitions, turns):
         where the payoffs have been normalized by the number of turns and summed
         over the repititions.
     """
+    nplayers = len(payoff)
+    repetitions = len(payoff[0][0])
     diffs = [
         [] for p in range(nplayers)]
     for player in range(nplayers):
