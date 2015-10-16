@@ -5,7 +5,7 @@ from axelrod import Actions
 C, D = Actions.C, Actions.D
 
 
-def payoff_matrix(interactions, game, nplayers, turns):
+def payoff_matrix(interactions, game):
     """
     The payoff matrix from a single round robin.
 
@@ -27,10 +27,6 @@ def payoff_matrix(interactions, game, nplayers, turns):
 
     game : axelrod.Game
         The game object to score the tournament.
-    nplayers : integer
-        The number of players in the tournament.
-    turns : integer
-        The number of turns in each round robin.
 
     Returns
     -------
@@ -47,6 +43,7 @@ def payoff_matrix(interactions, game, nplayers, turns):
         and column (j) represents an individual player and the the value Pij
         is the payoff value for player (i) versus player (j).
     """
+    nplayers = len(interactions)
     payoffs = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for p1 in range(nplayers):
         for p2 in range(nplayers):
