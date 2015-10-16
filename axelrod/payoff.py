@@ -46,10 +46,11 @@ def payoff_matrix(interactions, game):
     nplayers = len(interactions)
     payoffs = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for p1 in range(nplayers):
-        for p2 in range(nplayers):
+        for p2 in range(p1, nplayers):
             payoff = interaction_payoff(interactions[p1][p2], game)
             payoffs[p1][p2] += payoff[0]
-            payoffs[p2][p1] += payoff[1]
+            if p1 != p2:
+                payoffs[p2][p1] += payoff[1]
     return payoffs
 
 
