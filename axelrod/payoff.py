@@ -69,6 +69,10 @@ def interaction_payoff(actions, game):
     -------
     tuple
         A pair of payoffs for each of the two players in the interaction.
+
+        i.e. for the actions list quoted above, the resulting payoff returned
+        would be:
+            (6, 16)
     """
     player1_payoff, player2_payoff = 0, 0
     for turn in actions:
