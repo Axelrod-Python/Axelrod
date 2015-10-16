@@ -114,7 +114,7 @@ class TestPayoff(unittest.TestCase):
 
     def test_score_diffs(self):
         #payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
-        score_diffs = ap.score_diffs(self.expected_payoff, 3, 2, 5)
+        score_diffs = ap.score_diffs(self.expected_payoff, 5)
         self.assertEqual(score_diffs, self.expected_score_diffs)
 
     @staticmethod

@@ -58,8 +58,6 @@ class ResultSet(object):
                 payoff, turns))
             self.wins = ap.wins(payoff)
             self.payoff_diffs_means = ap.payoff_diffs_means(payoff, turns)
-            self.score_diffs = ap.score_diffs(payoff, len(players), repetitions,
-                                              turns)
 
         if 'cooperation' in self.results and with_morality:
             self.cooperation = ac.cooperation_matrix(
