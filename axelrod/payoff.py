@@ -134,7 +134,7 @@ def scores(payoff):
     return scores
 
 
-def normalised_scores(scores, nplayers, turns):
+def normalised_scores(scores, turns):
     """
     Parameters
     ----------
@@ -155,6 +155,7 @@ def normalised_scores(scores, nplayers, turns):
         where t is the total number of turns played per repetition for a given
         player excluding self-interactions.
     """
+    nplayers = len(scores)
     normalisation = turns * (nplayers - 1)
     return [
         [1.0 * s / normalisation for s in r] for r in scores]
