@@ -91,7 +91,7 @@ class TestPayoff(unittest.TestCase):
         self.assertEqual(payoff, (13, 3))
 
     def test_scores(self):
-        scores = ap.scores(self.expected_payoff, 3, 2)
+        scores = ap.scores(self.expected_payoff)
         self.assertEqual(scores, self.expected_scores)
 
     def test_normalised_scores(self):
