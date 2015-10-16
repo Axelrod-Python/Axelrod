@@ -53,6 +53,7 @@ def payoff_matrix(interactions, game, nplayers, turns):
                 payoff[p2][p1] += score[1]
     return payoff
 
+
 def scores(payoff, nplayers, repetitions):
     """
     Parameters
@@ -102,6 +103,7 @@ def scores(payoff, nplayers, repetitions):
                     scores[-1][-1] += res[ip][irep]
     return scores
 
+
 def normalised_scores(scores, nplayers, turns):
     """
     Parameters
@@ -127,6 +129,7 @@ def normalised_scores(scores, nplayers, turns):
     return [
         [1.0 * s / normalisation for s in r] for r in scores]
 
+
 def ranking(scores, nplayers):
     """
     Parameters
@@ -147,6 +150,7 @@ def ranking(scores, nplayers):
         key=lambda i: -median(scores[i]))
     return ranking
 
+
 def ranked_names(players, ranking):
     """
     Parameters
@@ -163,6 +167,7 @@ def ranked_names(players, ranking):
     """
     ranked_names = [str(players[i]) for i in ranking]
     return ranked_names
+
 
 def normalised_payoff(payoff_matrix, turns, repetitions):
     """
@@ -204,6 +209,7 @@ def normalised_payoff(payoff_matrix, turns, repetitions):
             stddevs[-1].append(dev)
     return averages, stddevs
 
+
 def winning_player(players, payoffs):
     """
     Parameters
@@ -225,6 +231,7 @@ def winning_player(players, payoffs):
         winning_payoff_index = payoffs.index(winning_payoff)
         winner = players[winning_payoff_index]
         return winner
+
 
 def wins(payoff, nplayers, repetitions):
     """
