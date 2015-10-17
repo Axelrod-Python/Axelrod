@@ -22,8 +22,9 @@ spirit of the 'competition' :-)
 import inspect
 import random
 
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Geller(Player):
     """Observes what the player will do in the next round and adjust.
@@ -32,7 +33,7 @@ class Geller(Player):
     """
 
     name = 'Geller'
-    default = lambda self: 'C' if random.random() > 0.5 else 'D'
+    default = lambda self: C if random.random() > 0.5 else D
     classifier = {
         'memory_depth': -1,
         'stochastic': True,
@@ -61,7 +62,7 @@ class GellerCooperator(Geller):
     will cooperate.
     """
     name = 'Geller Cooperator'
-    default = lambda self: 'C'
+    default = lambda self: C
     classifier = {
         'memory_depth': -1,
         'stochastic': False,
@@ -76,7 +77,7 @@ class GellerDefector(Geller):
     will defect.
     """
     name = 'Geller Defector'
-    default = lambda self: 'D'
+    default = lambda self: D
     classifier = {
         'memory_depth': -1,
         'stochastic': False,

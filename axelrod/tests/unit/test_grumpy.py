@@ -3,7 +3,7 @@
 import axelrod
 from .test_player import TestPlayer, test_responses, TestOpponent
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestGrumpy(TestPlayer):

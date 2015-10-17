@@ -7,7 +7,7 @@ import axelrod
 from axelrod import DefaultGame, Game, Player, simulate_play
 
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 def cooperate(self):

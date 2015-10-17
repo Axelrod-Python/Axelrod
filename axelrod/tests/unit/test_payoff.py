@@ -1,7 +1,9 @@
 import unittest
-from axelrod import Game
+from axelrod import Game, Actions
 import axelrod.payoff as ap
 
+
+C, D = Actions.C, Actions.D
 
 class TestPayoff(unittest.TestCase):
 
@@ -12,26 +14,26 @@ class TestPayoff(unittest.TestCase):
 
         cls.interactions = [
             [
-                [('C', 'C'), ('D', 'D'), ('C', 'C'), ('D', 'D'), ('C', 'C')],
-                [('C', 'C'), ('D', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D')],
-                [('C', 'C'), ('D', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D')]
+                [(C, C), (D, D), (C, C), (D, D), (C, C)],
+                [(C, C), (D, C), (C, D), (D, C), (C, D)],
+                [(C, C), (D, C), (C, D), (D, C), (C, D)]
             ],
             [
-                [('C', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D'), ('D', 'C')],
-                [('C', 'C'), ('C', 'C'), ('C', 'C'), ('C', 'C'), ('C', 'C')],
-                [('C', 'D'), ('D', 'D'), ('D', 'C'), ('C', 'D'), ('D', 'C')]
+                [(C, C), (C, D), (D, C), (C, D), (D, C)],
+                [(C, C), (C, C), (C, C), (C, C), (C, C)],
+                [(C, D), (D, D), (D, C), (C, D), (D, C)]
             ],
             [
-                [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('D', 'C')],
-                [('D', 'C'), ('D', 'D'), ('D', 'D'), ('C', 'D'), ('D', 'C')],
-                [('D', 'C'), ('D', 'D'), ('D', 'C'), ('D', 'D'), ('D', 'D')]
+                [(C, C), (C, D), (D, C), (C, D), (D, C)],
+                [(D, C), (D, D), (C, D), (D, C), (C, D)],
+                [(D, C), (D, D), (D, C), (D, D), (D, D)]
             ]
         ]
 
         cls.expected_payoff_matrix = [
-            [22, 26, 26],
-            [26, 30, 18],
-            [26, 23, 16]
+            [11, 13, 13],
+            [13, 15, 11],
+            [13, 11, 13]
         ]
 
         cls.expected_payoff = [
@@ -68,28 +70,36 @@ class TestPayoff(unittest.TestCase):
 
         cls.expected_wins = [[2, 0], [0, 0], [0, 2]]
 
+        cls.diff_means = [
+            [ 0. ,  0. ,  0.5],
+            [ 0. ,  0. , -0.5],
+            [-0.5,  0.5,  0. ]
+        ]
+
+        cls.expected_score_diffs = [
+            [0.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0, -1.0],
+            [-1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+        ]
+
     def test_payoff_matrix(self):
-        payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
+        payoff_matrix = ap.payoff_matrix(self.interactions, Game())
         self.assertEqual(payoff_matrix, self.expected_payoff_matrix)
 
+    def test_interaction_payoff(self):
+        payoff = ap.interaction_payoff(self.interactions[2][2], Game())
+        self.assertEqual(payoff, (13, 3))
+
     def test_scores(self):
-        scores = ap.scores(self.expected_payoff, 3, 2)
+        scores = ap.scores(self.expected_payoff)
         self.assertEqual(scores, self.expected_scores)
 
     def test_normalised_scores(self):
-        scores = ap.normalised_scores(self.expected_scores, 3, 5)
+        scores = ap.normalised_scores(self.expected_scores, 5)
         self.assertEqual(scores, self.expected_normalised_scores)
 
-    def test_median(self):
-        median = ap.median([])
-        self.assertEqual(median, None)
-        median = ap.median([1, 2, 4, 6])
-        self.assertEqual(median, 3.0)
-        median = ap.median(self.expected_scores)
-        self.assertEqual(median, [27, 20])
-
     def test_ranking(self):
-        ranking = ap.ranking(self.expected_scores, 3)
+        ranking = ap.ranking(self.expected_scores)
         self.assertEqual(ranking, self.expected_ranking)
 
     def test_ranked_names(self):
@@ -97,12 +107,22 @@ class TestPayoff(unittest.TestCase):
             self.players, self.expected_ranking,)
         self.assertEqual(ranked_names, self.expected_ranked_names)
 
+    def test_payoff_diffs_means(self):
+        #payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
+        diff_means = ap.payoff_diffs_means(self.expected_payoff, 5)
+        self.assertEqual(diff_means, self.diff_means)
+
+    def test_score_diffs(self):
+        #payoff_matrix = ap.payoff_matrix(self.interactions, Game(), 3, 5)
+        score_diffs = ap.score_diffs(self.expected_payoff, 5)
+        self.assertEqual(score_diffs, self.expected_score_diffs)
+
     @staticmethod
     def round_matrix(matrix, precision):
         return [[round(x, precision) for x in row] for row in matrix]
 
     def test_normalised_payoff(self):
-        averages, stddevs = ap.normalised_payoff(self.expected_payoff, 5, 2)
+        averages, stddevs = ap.normalised_payoff(self.expected_payoff, 5)
         self.assertEqual(
             self.round_matrix(averages, 2), self.expected_normalised_payoff)
         self.assertEqual(
@@ -121,5 +141,5 @@ class TestPayoff(unittest.TestCase):
         self.assertEqual(winner, None)
 
     def test_wins(self):
-        wins = ap.wins(self.expected_payoff, 3, 2)
+        wins = ap.wins(self.expected_payoff)
         self.assertEqual(wins, self.expected_wins)

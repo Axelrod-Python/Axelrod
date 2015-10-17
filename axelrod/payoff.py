@@ -1,6 +1,11 @@
 import math
+from numpy import median, mean
+from axelrod import Actions
 
-def payoff_matrix(interactions, game, nplayers, turns):
+C, D = Actions.C, Actions.D
+
+
+def payoff_matrix(interactions, game):
     """
     The payoff matrix from a single round robin.
 
@@ -12,8 +17,8 @@ def payoff_matrix(interactions, game, nplayers, turns):
         e.g. for a tournament between Cooperator and Defector with 2 turns per
         round:
         [
-            [('C', 'C'), ('C', 'C')], [('C', 'D'), ('C', 'D')],
-            [('D', 'C'), ('D', 'C')], [('D', 'D'), ('D', 'D')]
+            [(C, C), (C, C)], [(C, D), (C, D)],
+            [(D, C), (D, C)], [(D, D), (D, D)]
         ]
 
         i.e. one list per player, containing one list per opponent (in order of
@@ -22,10 +27,6 @@ def payoff_matrix(interactions, game, nplayers, turns):
 
     game : axelrod.Game
         The game object to score the tournament.
-    nplayers : integer
-        The number of players in the tournament.
-    turns : integer
-        The number of turns in each round robin.
 
     Returns
     -------
@@ -42,16 +43,47 @@ def payoff_matrix(interactions, game, nplayers, turns):
         and column (j) represents an individual player and the the value Pij
         is the payoff value for player (i) versus player (j).
     """
-    payoff = [[0 for i in range(nplayers)] for j in range(nplayers)]
+    nplayers = len(interactions)
+    payoffs = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for p1 in range(nplayers):
-        for p2 in range(nplayers):
-            for turn in range(turns):
-                score = game.score(interactions[p1][p2][turn])
-                payoff[p1][p2] += score[0]
-                payoff[p2][p1] += score[1]
-    return payoff
+        for p2 in range(p1, nplayers):
+            payoff = interaction_payoff(interactions[p1][p2], game)
+            payoffs[p1][p2] += payoff[0]
+            if p1 != p2:
+                payoffs[p2][p1] += payoff[1]
+    return payoffs
 
-def scores(payoff, nplayers, repetitions):
+
+def interaction_payoff(actions, game):
+    """
+    Parameters
+    ----------
+    actions : list
+        A list of tuples of the form:
+
+        [(C, C), (C, C)], [(C, D), (C, D)]
+
+    game : axelrod.Game
+        The game object to score the actions.
+
+    Returns
+    -------
+    tuple
+        A pair of payoffs for each of the two players in the interaction.
+
+        i.e. for the actions list quoted above, the resulting payoff returned
+        would be:
+            (6, 16)
+    """
+    player1_payoff, player2_payoff = 0, 0
+    for turn in actions:
+        score = game.score(turn)
+        player1_payoff += score[0]
+        player2_payoff += score[1]
+    return (player1_payoff, player2_payoff)
+
+
+def scores(payoff):
     """
     Parameters
     ----------
@@ -66,11 +98,6 @@ def scores(payoff, nplayers, repetitions):
 
         i.e. one row per player, containing one element per opponent (in
         order of player index) which lists payoffs for each repetition.
-
-    nplayers : integer
-        The number of players in the tournament.
-    repetitions : integer
-        The number of repetitions in the tournament.
 
     Returns
     -------
@@ -90,6 +117,8 @@ def scores(payoff, nplayers, repetitions):
         (e.g. player 1 versus player 1) and so these are also excluded from the
         scores here by the condition on ip and ires.
     """
+    nplayers = len(payoff)
+    repetitions = len(payoff[0][0])
     scores = []
     for ires, res in enumerate(payoff):
         scores.append([])
@@ -100,14 +129,13 @@ def scores(payoff, nplayers, repetitions):
                     scores[-1][-1] += res[ip][irep]
     return scores
 
-def normalised_scores(scores, nplayers, turns):
+
+def normalised_scores(scores, turns):
     """
     Parameters
     ----------
     scores : list
         A scores matrix (S) of the form returned by the scores function.
-    nplayers : integer
-        The number of players in the tournament.
     turns : integer
         The number of turns in each round robin.
 
@@ -121,38 +149,18 @@ def normalised_scores(scores, nplayers, turns):
         where t is the total number of turns played per repetition for a given
         player excluding self-interactions.
     """
+    nplayers = len(scores)
     normalisation = turns * (nplayers - 1)
     return [
         [1.0 * s / normalisation for s in r] for r in scores]
 
-def median(list):
-    """
-    Parameters
-    ----------
-    list : list
-        A list of numeric values
 
-    Returns
-    -------
-    float
-        The median value of the list.
-    """
-    list = sorted(list)
-    if len(list) < 1:
-        return None
-    if len(list) % 2 == 1:
-        return list[((len(list) + 1) // 2) - 1]
-    if len(list) % 2 == 0:
-        return float(sum(list[(len(list) // 2) - 1:(len(list) // 2) + 1])) / 2.0
-
-def ranking(scores, nplayers):
+def ranking(scores):
     """
     Parameters
     ----------
     scores : list
         A scores matrix (S) of the form returned by the scores function.
-    nplayers : integer
-        The number of players in the tournament.
 
     Returns
     -------
@@ -160,10 +168,12 @@ def ranking(scores, nplayers):
         A list of players (their index within the players list rather than
         a player instance) ordered by median score
     """
+    nplayers = len(scores)
     ranking = sorted(
         range(nplayers),
         key=lambda i: -median(scores[i]))
     return ranking
+
 
 def ranked_names(players, ranking):
     """
@@ -182,7 +192,8 @@ def ranked_names(players, ranking):
     ranked_names = [str(players[i]) for i in ranking]
     return ranked_names
 
-def normalised_payoff(payoff_matrix, turns, repetitions):
+
+def normalised_payoff(payoff_matrix, turns):
     """
     Parameters
     ----------
@@ -200,14 +211,13 @@ def normalised_payoff(payoff_matrix, turns, repetitions):
 
     turns : integer
         The number of turns in each round robin.
-    repetitions : integer
-        The number of repetitions in the tournament.
 
     Returns
     -------
     list
         A per-turn averaged payoff matrix and its standard deviations.
     """
+    repetitions = len(payoff_matrix[0][0])
     averages = []
     stddevs = []
     for res in payoff_matrix:
@@ -221,6 +231,7 @@ def normalised_payoff(payoff_matrix, turns, repetitions):
             averages[-1].append(avg)
             stddevs[-1].append(dev)
     return averages, stddevs
+
 
 def winning_player(players, payoffs):
     """
@@ -244,7 +255,8 @@ def winning_player(players, payoffs):
         winner = players[winning_payoff_index]
         return winner
 
-def wins(payoff, nplayers, repetitions):
+
+def wins(payoff):
     """
     Parameters
     ----------
@@ -260,11 +272,6 @@ def wins(payoff, nplayers, repetitions):
         i.e. one row per player, containing one element per opponent (in
         order of player index) which lists payoffs for each repetition.
 
-    nplayers : integer
-        The number of players in the tournament.
-    repetitions : integer
-        The number of repetitions in the tournament.
-
     Returns
     -------
     list
@@ -279,6 +286,8 @@ def wins(payoff, nplayers, repetitions):
         i.e. one row per player which lists the total wins for that player
         in each repetition.
     """
+    nplayers = len(payoff)
+    repetitions = len(payoff[0][0])
     wins = [
         [0 for r in range(repetitions)] for p in range(nplayers)]
     for player in range(nplayers):
@@ -292,3 +301,87 @@ def wins(payoff, nplayers, repetitions):
                 if winner is not None:
                     wins[winner][repetition] += 1
     return wins
+
+
+def payoff_diffs_means(payoff, turns):
+    """
+    Parameters
+    ----------
+    payoff : list
+        A matrix of the form:
+
+        [
+            [[a, j], [b, k], [c, l]],
+            [[d, m], [e, n], [f, o]],
+            [[g, p], [h, q], [i, r]],
+        ]
+
+        i.e. one row per player, containing one element per opponent (in
+        order of player index) which lists payoffs for each repetition.
+
+    turns : integer
+        The number of turns in each round robin.
+
+    Returns
+    -------
+    list (of lists)
+        A matrix of mean payoff differences of the form with i, j entry:
+        mean([player_i payoff - player_j payoff in repetition1,
+         player_i payoff - player_j payoff in repetition2,
+         ...])
+
+        normalized by the number of turns. I.e. the nplayers x nplayers
+        matrix of mean payoff differences between each player and opponent.
+    """
+    nplayers = len(payoff)
+    repetitions = len(payoff[0][0])
+    diffs_matrix = [[0] * nplayers for _ in range(nplayers)]
+    for player in range(nplayers):
+        for opponent in range(nplayers):
+            diffs = []
+            for repetition in range(repetitions):
+                diff = (payoff[player][opponent][repetition] - payoff[opponent][player][repetition]) / float(turns)
+                diffs.append(diff)
+            diffs_matrix[player][opponent] = mean(diffs)
+
+    return diffs_matrix
+
+
+def score_diffs(payoff, turns):
+    """
+    Parameters
+    ----------
+    payoff : list
+        A matrix of the form:
+
+        [
+            [[a, j], [b, k], [c, l]],
+            [[d, m], [e, n], [f, o]],
+            [[g, p], [h, q], [i, r]],
+        ]
+
+        i.e. one row per player, containing one element per opponent (in
+        order of player index) which lists payoffs for each repetition.
+
+    turns : integer
+        The number of turns in each round robin.
+
+    Returns
+    -------
+    list (of lists of lists)
+        A matrix of payoff differences of the form with i, j entry:
+        [player_i payoff - player_j payoff for each j and each repetition]
+        where the payoffs have been normalized by the number of turns and summed
+        over the repititions.
+    """
+    nplayers = len(payoff)
+    repetitions = len(payoff[0][0])
+    diffs = [
+        [] for p in range(nplayers)]
+    for player in range(nplayers):
+        for opponent in range(nplayers):
+            for repetition in range(repetitions):
+                diff = (payoff[player][opponent][repetition] - payoff[opponent][player][repetition]) / float(turns)
+                diffs[player].append(diff)
+
+    return diffs

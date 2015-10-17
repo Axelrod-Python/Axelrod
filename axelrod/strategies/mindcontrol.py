@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class MindController(Player):
     """A player that changes the opponents strategy to cooperate."""
@@ -21,9 +22,9 @@ class MindController(Player):
         advantage of this
         """
 
-        opponent.strategy = lambda opponent: 'C'
+        opponent.strategy = lambda opponent: C
 
-        return 'D'
+        return D
 
 
 class MindWarper(Player):
@@ -49,8 +50,8 @@ class MindWarper(Player):
 
     @staticmethod
     def strategy(opponent):
-        opponent.strategy = lambda opponent: 'C'
-        return 'D'
+        opponent.strategy = lambda opponent: C
+        return D
 
 
 class MindBender(MindWarper):
@@ -70,5 +71,5 @@ class MindBender(MindWarper):
 
     @staticmethod
     def strategy(opponent):
-        opponent.__dict__['strategy'] = lambda opponent: 'C'
-        return 'D'
+        opponent.__dict__['strategy'] = lambda opponent: C
+        return D

@@ -5,12 +5,16 @@ All contributions to this repository are welcome via pull request on the `github
 
 The project follows the following guidelines:
 
-1. Use the base Python library unless completely necessary.
+1. Use the base Python library unless completely necessary. A few external libraries (such as numpy) have been included in requirements.txt -- feel free to use these as needed.
 2. If a non base Python library is deemed necessary, it should not hinder the running or contribution of the package when using the base Python library.
    For example, the `matplotlib library <http://matplotlib.org/>`_ is used in a variety of classes to be able to show results, such as this one:
    This has been done carefully with tests that are skipped if the library is not installed and also without any crashes if something using the library was run.
 3. Try as best as possible to follow `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ which includes **using descriptive variable names**.
-4. Testing: the project uses the `unittest <https://docs.python.org/2/library/unittest.html>`_ library and has a nice testing suite that makes some things very easy to write tests for.
+4. Testing: the project uses the `unittest <https://docs.python.org/2/library/unittest.html>`_ library and has a nice testing suite that makes some things very easy to write tests for. Please try to increase the test coverage on pull requests.
+5. Merging pull-requests: We require two of the (currently four) core-team
+maintainers to merge (and preferrably not the submitted). Opening a PR for early
+feedback or to check test coverage is OK, just indicate that the PR is not ready
+to merge (and update when it is).
 
 The rest of this page will consider two aspects:
 
@@ -82,7 +86,7 @@ Let us take a look at the :code:`TitForTat` class (located in the :code:`axelrod
             try:
                 return opponent.history[-1]
             except IndexError:
-                return 'C'
+                return C
 
 The first thing that is needed is a docstring that explains what the strategy does::
 
@@ -107,7 +111,9 @@ opponent has not played yet) will cooperate::
         try:
             return opponent.history[-1]
         except IndexError:
-            return 'C'
+            return C
+
+The variables :code:`C` and :code:`D` represent the cooperate and defect actions respectively, and are importable from the main axelrod namespace.  
 
 If your strategy creates any particular attribute along the way you need to make
 sure that there is a :code:`reset` method that takes account of it.  An example
@@ -231,6 +237,7 @@ As an example, you code write tests for Tit-For-Tat as follows::
 
     from test_player import TestPlayer
 
+    C, D = axelrod.Actions.C, axelrod.Actions.D
 
     class TestTitForTat(TestPlayer):
 
@@ -248,7 +255,7 @@ As an example, you code write tests for Tit-For-Tat as follows::
             """Starts by cooperating."""
             P1 = axelrod.TitForTat()
             P2 = axelrod.Player()
-            self.assertEqual(P1.strategy(P2), 'C')
+            self.assertEqual(P1.strategy(P2), C)
 
         def test_effect_of_strategy(self):
             """
@@ -256,10 +263,10 @@ As an example, you code write tests for Tit-For-Tat as follows::
             """
             P1 = axelrod.TitForTat()
             P2 = axelrod.Player()
-            P2.history = ['C', 'C', 'C', 'C']
-            self.assertEqual(P1.strategy(P2), 'C')
-            P2.history = ['C', 'C', 'C', 'C', 'D']
-            self.assertEqual(P1.strategy(P2), 'D')
+            P2.history = [C, C, C, C]
+            self.assertEqual(P1.strategy(P2), C)
+            P2.history = [C, C, C, C, D]
+            self.assertEqual(P1.strategy(P2), D)
 
 The :code:`test_effect_of_strategy` method mainly checks that the :code:`strategy` method in the :code:`TitForTat` class works as expected:
 
@@ -354,6 +361,17 @@ present dimensions but if you create a new dimension you do not **need** to re
 classify all the other strategies (but feel free to! :)), but please do add it
 to the :code:`default_classifier` in the :code:`axelrod/player.py` parent class.
 
+Rewriting Existing Strategies
+'''''''''''''''''''''''''''''
+
+Several strategies are special cases of other strategies. For example, both
+`Cooperator` and `Defector` are special cases of `Random`, `Random(1)` and
+`Random(0)` respectively. While we could eliminate `Cooperator` in its current
+form, these strategies are intentionally left as is as simple examples for new
+users and contributors. Nevertheless, please feel free to update the docstrings
+of strategies like `Random` to point out such cases.
+
+
 How to run tests
 ''''''''''''''''
 
@@ -396,4 +414,4 @@ Contributing to the library
 
 All contributions (docs, tests, etc) are very welcome, if there is a specific functionality that you would like to add the please open an `issue <https://github.com/Axelrod-Python/Axelrod/issues>`_ (or indeed take a look at the ones already there and jump in the conversation!).
 
-In general follow this library aims to follow the guidelines mentioned at the top of this page.
+In general this library aims to follow the guidelines mentioned at the top of this page.
