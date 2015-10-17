@@ -43,6 +43,3 @@ class FunctionCases(unittest.TestCase):
         self.assertAlmostEqual(evalue, 3, places=3)
         assert_array_almost_equal(evector, numpy.dot(mat, evector) / evalue)
         assert_array_almost_equal(evector, normalise([0, 0, 0, 1]), decimal=4)
-
-if __name__ == "__main__":
-    unittest.main()

@@ -1,4 +1,4 @@
-from axelrod import Player
+from axelrod import Player, Actions
 import random
 
 
@@ -20,6 +20,11 @@ class Random(Player):
         ----------
         p, float
             The probability to cooperate
+
+        Special Cases
+        -------------
+        Random(0) is equivalent to Defector
+        Random(1) is equivalent to Cooperator
         """
         Player.__init__(self)
         self.p = p
@@ -28,8 +33,8 @@ class Random(Player):
     def strategy(self, opponent):
         r = random.random()
         if r > self.p:
-            return 'D'
-        return 'C'
+            return Actions.D
+        return Actions.C
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))

@@ -1,11 +1,11 @@
-from axelrod import Player, obey_axelrod
+from axelrod import Player, obey_axelrod, Actions
 from ._strategies import strategies
 from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter, EventualCycleHunter
 from .cooperator import Cooperator
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in strategies if obey_axelrod(s)]
-
+C, D = Actions.C, Actions.D
 
 class MetaPlayer(Player):
     """A generic player that has its own team of players."""
@@ -77,9 +77,9 @@ class MetaMajority(MetaPlayer):
         self.init_args = (team,)
 
     def meta_strategy(self, results, opponent):
-        if results.count('D') > results.count('C'):
-            return 'D'
-        return 'C'
+        if results.count(D) > results.count(C):
+            return D
+        return C
 
 
 class MetaMinority(MetaPlayer):
@@ -97,9 +97,9 @@ class MetaMinority(MetaPlayer):
         self.init_args = (team,)
 
     def meta_strategy(self, results, opponent):
-        if results.count('D') < results.count('C'):
-            return 'D'
-        return 'C'
+        if results.count(D) < results.count(C):
+            return D
+        return C
 
 
 class MetaWinner(MetaPlayer):
@@ -151,7 +151,7 @@ class MetaWinner(MetaPlayer):
 
         if opponent.defections == 0:
             # Don't poke the bear
-            return 'C'
+            return C
 
         return bestresult
 
@@ -182,16 +182,16 @@ class MetaHunter(MetaPlayer):
     def meta_strategy(results, opponent):
 
         # If any of the hunters smells prey, then defect!
-        if 'D' in results:
-            return 'D'
+        if D in results:
+            return D
 
         # Tit-for-tat might seem like a better default choice, but in many cases it complicates
         # the heuristics of hunting and creates fale-positives. So go ahead and use it, but only
         # for longer histories.
         if len(opponent.history) > 100:
-            return 'D' if opponent.history[-1:] == ['D'] else 'C'
+            return D if opponent.history[-1:] == [D] else C
         else:
-            return 'C'
+            return C
 
 
 class MetaMajorityMemoryOne(MetaMajority):

@@ -1,6 +1,7 @@
-from axelrod import Player
+from axelrod import Player, Actions
 import random
 
+C, D = Actions.C, Actions.D
 
 class Inverse(Player):
     """A player who defects with a probability that diminishes relative to how
@@ -22,13 +23,13 @@ class Inverse(Player):
         If so, player defection is inversely proportional to when this occurred.
         """
 
-        index = next((index for index, value in enumerate(opponent.history, start=1) if value == 'D'), None)
+        index = next((index for index, value in enumerate(opponent.history, start=1) if value == D), None)
 
         if index is None:
-            return 'C'
+            return C
 
         rnd_num = random.random()
 
         if rnd_num < 1 / float(abs(index)):
-            return 'D'
-        return 'C'
+            return D
+        return C

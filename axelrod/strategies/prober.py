@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Prober(Player):
     """
@@ -19,17 +20,17 @@ class Prober(Player):
     def strategy(self, opponent):
         turn = len(self.history)
         if turn == 0:
-            return 'D'
+            return D
         if turn == 1:
-            return 'C'
+            return C
         if turn == 2:
-            return 'C'
+            return C
         if turn > 2:
-            if opponent.history[1: 3] == ['C', 'C']:
-                return 'D'
+            if opponent.history[1: 3] == [C, C]:
+                return D
             else:
                 # TFT
-                return 'D' if opponent.history[-1:] == ['D'] else 'C'
+                return D if opponent.history[-1:] == [D] else C
 
 
 class Prober2(Player):
@@ -50,17 +51,17 @@ class Prober2(Player):
     def strategy(self, opponent):
         turn = len(self.history)
         if turn == 0:
-            return 'D'
+            return D
         if turn == 1:
-            return 'C'
+            return C
         if turn == 2:
-            return 'C'
+            return C
         if turn > 2:
-            if opponent.history[1: 3] == ['D', 'C']:
-                return 'C'
+            if opponent.history[1: 3] == [D, C]:
+                return C
             else:
                 # TFT
-                return 'D' if opponent.history[-1:] == ['D'] else 'C'
+                return D if opponent.history[-1:] == [D] else C
 
 
 class Prober3(Player):
@@ -81,15 +82,15 @@ class Prober3(Player):
     def strategy(self, opponent):
         turn = len(self.history)
         if turn == 0:
-            return 'D'
+            return D
         if turn == 1:
-            return 'C'
+            return C
         if turn > 1:
-            if opponent.history[1] == 'C':
-                return 'D'
+            if opponent.history[1] == C:
+                return D
             else:
                 # TFT
-                return 'D' if opponent.history[-1:] == ['D'] else 'C'
+                return D if opponent.history[-1:] == [D] else C
 
 
 class HardProber(Player):
@@ -110,16 +111,16 @@ class HardProber(Player):
     def strategy(self, opponent):
         turn = len(self.history)
         if turn == 0:
-            return 'D'
+            return D
         if turn == 1:
-            return 'D'
+            return D
         if turn == 2:
-            return 'C'
+            return C
         if turn == 3:
-            return 'C'
+            return C
         if turn > 3:
-            if opponent.history[1: 3] == ['C', 'C']:
-                return 'D'
+            if opponent.history[1: 3] == [C, C]:
+                return D
             else:
                 # TFT
-                return 'D' if opponent.history[-1:] == ['D'] else 'C'
+                return D if opponent.history[-1:] == [D] else C

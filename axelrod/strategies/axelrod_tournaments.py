@@ -4,11 +4,12 @@ Additional strategies from Axelrod's two tournaments.
 
 import random
 
-from axelrod import Player
+from axelrod import Player, Actions
 from.memoryone import MemoryOnePlayer
 
+C, D = Actions.C, Actions.D
 
-flip_dict = {'C': 'D', 'D': 'C'}
+flip_dict = {C: D, D: C}
 
 
 ## First Tournament
@@ -41,10 +42,10 @@ class Davis(Player):
         """Begins by playing C, then plays D for the remaining rounds if the
         opponent ever plays D."""
         if len(self.history) < self._rounds_to_cooperate:
-            return 'C'
+            return C
         if opponent.defections:
-            return 'D'
-        return 'C'
+            return D
+        return C
 
 
 class Feld(Player):
@@ -95,14 +96,14 @@ class Feld(Player):
 
     def strategy(self, opponent):
         if not opponent.history:
-            return 'C'
-        if opponent.history[-1] == 'D':
-            return 'D'
+            return C
+        if opponent.history[-1] == D:
+            return D
         p = self._cooperation_probability()
         r = random.random()
         if r < p:
-            return 'C'
-        return 'D'
+            return C
+        return D
 
 
 class Grofman(MemoryOnePlayer):
@@ -176,26 +177,26 @@ class Shubik(Player):
 
     def strategy(self, opponent):
         if not opponent.history:
-            return 'C'
-        if opponent.history[-1] == 'D':
+            return C
+        if opponent.history[-1] == D:
             # Retaliate against defections
-            if self.history[-1] == 'C': # it's on now!
+            if self.history[-1] == C: # it's on now!
                 # Lengthen the retaliation period
                 self.is_retaliating = True
                 self.retaliation_length += 1
                 self.retaliation_remaining = self.retaliation_length
                 self._decrease_retaliation_counter()
-                return 'D'
+                return D
             else:
                 # Just retaliate
                 if self.is_retaliating:
                     self._decrease_retaliation_counter()
-                return 'D'
+                return D
         if self.is_retaliating:
             # Are we retaliating still?
             self._decrease_retaliation_counter()
-            return 'D'
-        return 'C'
+            return D
+        return C
 
     def reset(self):
         Player.reset(self)
@@ -233,14 +234,14 @@ class Tullock(Player):
     def strategy(self, opponent):
         rounds = self._rounds_to_cooperate
         if len(self.history) < rounds:
-            return 'C'
-        cooperate_count = opponent.history[-rounds:].count('C')
+            return C
+        cooperate_count = opponent.history[-rounds:].count(C)
         prop_cooperate = cooperate_count / float(rounds)
         prob_cooperate = max(0, prop_cooperate - 0.10)
         r = random.random()
         if r < prob_cooperate:
-            return 'C'
-        return 'D'
+            return C
+        return D
 
 
 ## Second Tournament
@@ -264,19 +265,19 @@ class Champion(Player):
         expected_length = self.tournament_attributes['length']
         # Cooperate for the first 1/20-th of the game
         if current_round == 0:
-            return 'C'
+            return C
         if current_round < expected_length / 20.:
-            return 'C'
+            return C
         # Mirror partner for the next phase
         if current_round < expected_length * 5 / 40.:
             return opponent.history[-1]
         # Now cooperate unless all of the necessary conditions are true
         defection_prop = float(opponent.defections) / len(opponent.history)
-        if opponent.history[-1] == 'D':
+        if opponent.history[-1] == D:
             r = random.random()
             if defection_prop > max(0.4, r):
-                return 'D'
-        return 'C'
+                return D
+        return C
 
 
 class Eatherley(Player):
@@ -296,17 +297,17 @@ class Eatherley(Player):
     def strategy(self, opponent):
         # Cooperate on the first move
         if not len(opponent.history):
-            return 'C'
+            return C
         # Reciprocate cooperation
-        if opponent.history[-1] == 'C':
-            return 'C'
+        if opponent.history[-1] == C:
+            return C
         # Respond to defections with probability equal to opponent's total
         # proportion of defections
         defection_prop = float(opponent.defections) / len(opponent.history)
         r = random.random()
         if r < defection_prop:
-            return 'D'
-        return 'C'
+            return D
+        return C
 
 
 class Tester(Player):
@@ -333,17 +334,17 @@ class Tester(Player):
     def strategy(self, opponent):
         # Defect on the first move
         if not opponent.history:
-            return 'D'
+            return D
         # Am I TFT?
         if self.is_TFT:
-            return 'D' if opponent.history[-1:] == ['D'] else 'C'
+            return D if opponent.history[-1:] == [D] else C
         else:
             # Did opponent defect?
-            if opponent.history[-1] == 'D':
+            if opponent.history[-1] == D:
                 self.is_TFT = True
-                return 'C'
+                return C
             if len(self.history) in [1, 2]:
-                return 'C'
+                return C
             # Alternate C and D
             return flip_dict[self.history[-1]]
 

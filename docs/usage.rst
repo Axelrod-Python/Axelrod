@@ -104,7 +104,7 @@ which gives::
 
 Finally, to obtain the ranking in a helpful format with all the names::
 
-    results.ranked_names
+    ranks = results.ranked_names
 
 which gives::
 
@@ -322,7 +322,9 @@ This produces:
    :align: center
 
 In this case most of the strategies are deterministic, so there is not much
-variation in the distributions. See below for a more complex example.
+variation in the distributions. See below for a more complex example. Similarly, there are additional plots for the score differences: `plot.sdvplot()` gives
+violin or boxplots for the score differences, and `plot.pdplot()` which
+gives a heatmap of the mean payoff differences (like the payoff image above).
 
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^

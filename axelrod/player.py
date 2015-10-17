@@ -2,9 +2,11 @@ import inspect
 import random
 import copy
 
+from axelrod import Actions
 from .game import DefaultGame
 
-C, D = 'C', 'D'
+
+C, D = Actions.C, Actions.D
 flip_dict = {C: D, D: C}
 
 
@@ -119,6 +121,10 @@ class Player(object):
         """Clones the player without history, reapplying configuration
         parameters as necessary."""
 
+        # You may be tempted to reimplement using the `copy` module
+        # Note that this would require a deepcopy in some cases and there may
+        # be significant changes required throughout the library.
+        # Consider overriding in special cases only if necessary
         cls = self.__class__
         new_player = cls(*self.init_args)
         new_player.tournament_attributes = copy.copy(self.tournament_attributes)

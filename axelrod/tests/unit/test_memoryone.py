@@ -7,7 +7,7 @@ from axelrod import Game
 from axelrod.strategies.memoryone import MemoryOnePlayer, ZeroDeterminantPlayer
 from .test_player import TestPlayer, test_four_vector
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestWinStayLoseShift(TestPlayer):
@@ -30,7 +30,6 @@ class TestWinStayLoseShift(TestPlayer):
         """Check that switches if does not get best payoff."""
         self.markov_test([C, D, D, C])
 
-
 class TestGTFT(TestPlayer):
 
     name = "GTFT: 0.33"
@@ -52,6 +51,11 @@ class TestGTFT(TestPlayer):
         p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
         expected_dictionary = {(C, C): 1., (C, D): p, (D, C): 1., (D, D): p}
         test_four_vector(self, expected_dictionary)
+
+    def test_allow_for_zero_probability(self):
+        player = self.player(p=0)
+        expected = {(C, C): 1., (C, D): 0, (D, C): 1., (D, D): 0}
+        self.assertAlmostEqual(player._four_vector, expected)
 
 
 class TestStochasticCooperator(TestPlayer):
@@ -118,11 +122,17 @@ class TestStochasticWSLS(TestPlayer):
 
 class TestMemoryOnePlayer(unittest.TestCase):
 
-    def test_exception(self):
+    def test_exception_if_four_vector_not_set(self):
         player = MemoryOnePlayer()
         opponent = axelrod.Player()
         with self.assertRaises(ValueError):
             player.strategy(opponent)
+
+    def test_exception_if_probability_vector_outside_valid_values(self):
+        player = MemoryOnePlayer()
+        x = 2.
+        with self.assertRaises(ValueError):
+            player.set_four_vector([0.1, x, 0.5, 0.1])
 
 
 class TestZeroDeterminantPlayer(unittest.TestCase):
