@@ -294,7 +294,8 @@ class Eatherley(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         # Cooperate on the first move
         if not len(opponent.history):
             return C
