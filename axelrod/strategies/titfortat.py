@@ -1,6 +1,7 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
-flip_dict = {'C': 'D', 'D': 'C'}
+C, D = Actions.C, Actions.D
+flip_dict = {C: D, D: C}
 
 
 class TitForTat(Player):
@@ -17,7 +18,7 @@ class TitForTat(Player):
 
     @staticmethod
     def strategy(opponent):
-        return 'D' if opponent.history[-1:] == ['D'] else 'C'
+        return D if opponent.history[-1:] == [D] else C
 
 
 class TitFor2Tats(Player):
@@ -34,7 +35,7 @@ class TitFor2Tats(Player):
 
     @staticmethod
     def strategy(opponent):
-        return 'D' if opponent.history[-2:] == ['D', 'D'] else 'C'
+        return D if opponent.history[-2:] == [D, D] else C
 
 
 class TwoTitsForTat(Player):
@@ -51,7 +52,7 @@ class TwoTitsForTat(Player):
 
     @staticmethod
     def strategy(opponent):
-        return 'D' if 'D' in opponent.history[-2:] else 'C'
+        return D if D in opponent.history[-2:] else C
 
 
 class Bully(Player):
@@ -63,7 +64,7 @@ class Bully(Player):
 
     name = "Bully"
     classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,   # Four-Vector = (0, 1, 0, 1)
         'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -72,7 +73,7 @@ class Bully(Player):
 
     @staticmethod
     def strategy(opponent):
-        return 'C' if opponent.history[-1:] == ['D'] else 'D'
+        return C if opponent.history[-1:] == [D] else D
 
 
 class SneakyTitForTat(Player):
@@ -90,9 +91,9 @@ class SneakyTitForTat(Player):
     def strategy(self, opponent):
         if len(self.history) < 2:
             return "C"
-        if 'D' not in opponent.history:
-            return 'D'
-        if opponent.history[-1] == 'D' and self.history[-2] == 'D':
+        if D not in opponent.history:
+            return D
+        if opponent.history[-1] == D and self.history[-2] == D:
             return "C"
         return opponent.history[-1]
 
@@ -111,7 +112,7 @@ class SuspiciousTitForTat(Player):
 
     @staticmethod
     def strategy(opponent):
-        return 'C' if opponent.history[-1:] == ['C'] else 'D'
+        return C if opponent.history[-1:] == [C] else D
 
 
 class AntiTitForTat(Player):
@@ -129,7 +130,7 @@ class AntiTitForTat(Player):
 
     @staticmethod
     def strategy(opponent):
-        return 'D' if opponent.history[-1:] == ['C'] else 'C'
+        return D if opponent.history[-1:] == [C] else C
 
 
 class HardTitForTat(Player):
@@ -148,12 +149,12 @@ class HardTitForTat(Player):
     def strategy(opponent):
         # Cooperate on the first move
         if not opponent.history:
-            return 'C'
-        # Defects if 'D' in the opponent's last three moves
-        if 'D' in opponent.history[-3:]:
-            return 'D'
+            return C
+        # Defects if D in the opponent's last three moves
+        if D in opponent.history[-3:]:
+            return D
         # Otherwise cooperates
-        return 'C'
+        return C
 
 
 class HardTitFor2Tats(Player):
@@ -173,10 +174,10 @@ class HardTitFor2Tats(Player):
     def strategy(opponent):
         # Cooperate on the first move
         if not opponent.history:
-            return 'C'
-        # Defects if two consecutive 'D' in the opponent's last three moves
+            return C
+        # Defects if two consecutive D in the opponent's last three moves
         history_string = "".join(opponent.history[-3:])
         if 'DD' in history_string:
-            return 'D'
+            return D
         # Otherwise cooperates
-        return 'C'
+        return C

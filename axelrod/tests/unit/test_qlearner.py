@@ -7,7 +7,7 @@ from axelrod import simulate_play, Game
 
 from .test_player import TestPlayer, test_responses
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestRiskyQLearner(TestPlayer):
@@ -24,7 +24,7 @@ class TestRiskyQLearner(TestPlayer):
 
     def test_payoff_matrix(self):
         (R, P, S, T) = Game().RPST()
-        payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': P}}
+        payoff_matrix = {C: {C: R, D: S}, D: {C: T, D: P}}
         p1 = self.player()
         self.assertEqual(p1.payoff_matrix, payoff_matrix)
 
@@ -91,6 +91,7 @@ class TestArrogantQLearner(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
+        'manipulates_source': False,
         'manipulates_state': False
     }
 
@@ -161,6 +162,7 @@ class TestHesitantQLearner(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
+        'manipulates_source': False,
         'manipulates_state': False
     }
 
@@ -231,6 +233,7 @@ class TestCautiousQLearner(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
+        'manipulates_source': False,
         'manipulates_state': False
     }
 

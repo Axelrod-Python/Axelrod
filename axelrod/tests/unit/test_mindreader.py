@@ -5,7 +5,7 @@ import axelrod
 from .test_player import TestPlayer
 from axelrod.strategies.mindreader import simulate_match
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestMindReader(TestPlayer):
@@ -16,8 +16,8 @@ class TestMindReader(TestPlayer):
         'memory_depth': -10,
         'stochastic': False,
         'inspects_source': True,
-        'manipulates_state': False,
-        'manipulates_state': True
+        'manipulates_source': False,
+        'manipulates_state': False
     }
 
     def test_strategy(self):
@@ -129,3 +129,30 @@ class TestProtectedMindReader(TestPlayer):
         P3 = axelrod.Cooperator()
         P2.strategy(P1)
         self.assertEqual(P1.strategy(P3), D)
+
+class TestMirrorMindReader(TestPlayer):
+
+    name = 'Mirror Mind Reader'
+    player = axelrod.MirrorMindReader
+    expected_classifier = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_source': True, # reading and copying the source of the component 
+        'manipulates_source': True, # changing own source dynamically
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        P1 = axelrod.MirrorMindReader()
+        P2 = axelrod.Cooperator()
+        self.assertEqual(P1.strategy(P2), C)
+
+    def test_vs_defector(self):
+        P1 = axelrod.MirrorMindReader()
+        P2 = axelrod.Defector()
+        self.assertEqual(P1.strategy(P2), D)
+
+    def test_nice_with_itself(self):
+        P1 = axelrod.MirrorMindReader()
+        P2 = axelrod.MirrorMindReader()
+        self.assertEqual(P1.strategy(P2), C)

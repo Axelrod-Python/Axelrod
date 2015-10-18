@@ -2,6 +2,7 @@ import unittest
 import random
 import axelrod
 
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestRoundRobin(unittest.TestCase):
 
@@ -35,7 +36,7 @@ class TestRoundRobin(unittest.TestCase):
     def test_deterministic_cache(self):
         p1, p2, p3 = axelrod.Cooperator(), axelrod.Defector(), axelrod.Random()
         rr = axelrod.RoundRobin(players=[p1, p2, p3], game=self.game, turns=20)
-        self.assertEquals(rr.deterministic_cache, {})
+        self.assertEqual(rr.deterministic_cache, {})
         rr.play()
         self.assertEqual(rr.deterministic_cache[
             (axelrod.Defector, axelrod.Defector)]['scores'], (20, 20))
@@ -62,9 +63,9 @@ class TestRoundRobin(unittest.TestCase):
     def test_calculate_score_for_mix(self):
         """Test that scores are calculated correctly."""
         P1 = axelrod.Defector()
-        P1.history = ['C', 'C', 'D']
+        P1.history = [C, C, D]
         P2 = axelrod.Defector()
-        P2.history = ['C', 'D', 'D']
+        P2.history = [C, D, D]
         round_robin = axelrod.RoundRobin(
             players=[P1, P2], game=self.game, turns=200)
         self.assertEqual(round_robin._calculate_scores(P1, P2), (4, 9))
@@ -72,9 +73,9 @@ class TestRoundRobin(unittest.TestCase):
     def test_calculate_score_for_all_cooperate(self):
         """Test that scores are calculated correctly."""
         P1 = axelrod.Player()
-        P1.history = ['C', 'C', 'C']
+        P1.history = [C, C, C]
         P2 = axelrod.Player()
-        P2.history = ['C', 'C', 'C']
+        P2.history = [C, C, C]
         round_robin = axelrod.RoundRobin(
             players=[P1, P2], game=self.game, turns=200)
         self.assertEqual(round_robin._calculate_scores(P1, P2), (9, 9))
@@ -82,9 +83,9 @@ class TestRoundRobin(unittest.TestCase):
     def test_calculate_score_for_all_defect(self):
         """Test that scores are calculated correctly."""
         P1 = axelrod.Player()
-        P1.history = ['D', 'D', 'D']
+        P1.history = [D, D, D]
         P2 = axelrod.Player()
-        P2.history = ['D', 'D', 'D']
+        P2.history = [D, D, D]
         round_robin = axelrod.RoundRobin(
             players=[P1, P2], game=self.game, turns=200)
         self.assertEqual(round_robin._calculate_scores(P1, P2), (3, 3))

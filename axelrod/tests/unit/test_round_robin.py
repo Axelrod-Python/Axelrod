@@ -2,6 +2,7 @@ import unittest
 import random
 import axelrod
 
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestRoundRobin(unittest.TestCase):
 
@@ -15,7 +16,7 @@ class TestRoundRobin(unittest.TestCase):
             players=[p1, p2], game=self.game, turns=20, noise=0.2)
         self.assertEqual(rr.players, [p1, p2])
         self.assertEqual(rr.nplayers, 2)
-        self.assertEqual(rr.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(rr.game.score((C, C)), (3, 3))
         self.assertEqual(rr.turns, 20)
         self.assertEqual(rr.deterministic_cache, {})
         self.assertEqual(rr.cache_mutable, True)
@@ -132,8 +133,8 @@ class TestRoundRobin(unittest.TestCase):
 
     def test_calculate_scores(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
-        p1.history = ['C', 'C', 'D', 'D']
-        p2.history = ['C', 'D', 'C', 'D']
+        p1.history = [C, C, D, D]
+        p2.history = [C, D, C, D]
         rr = axelrod.RoundRobin(
             players=[p1, p2], game=self.game, turns=20)
         result = rr._calculate_scores(p1, p2)
@@ -155,7 +156,7 @@ class TestRoundRobin(unittest.TestCase):
 
     def test_calculate_cooperation(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
-        p1.history = ['C', 'C', 'D', 'D']
+        p1.history = [C, C, D, D]
         rr = axelrod.RoundRobin(
             players=[p1, p2], game=self.game, turns=20)
         result = rr._calculate_cooperation(p1)

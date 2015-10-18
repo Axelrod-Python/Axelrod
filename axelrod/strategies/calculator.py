@@ -1,8 +1,8 @@
 import itertools
 
-from axelrod import Player
+from axelrod import Player, Actions
 from .axelrod_tournaments import Joss
-
+from .hunter import detect_cycle
 
 class Calculator(Player):
     """
@@ -23,20 +23,10 @@ class Calculator(Player):
         Player.__init__(self)
         self.joss_instance = Joss()
 
-    @staticmethod
-    def detect_cycle(history):
-        """Detects if there is a cycle in the opponent's history."""
-        for i in range(len(history) // 2):
-            cycle = itertools.cycle(history[0: i + 1])
-            cycle_list = list(itertools.islice(cycle, 0, len(history)))
-            if list(history) == cycle_list:
-                return True
-        return False
-
     def strategy(self, opponent):
         turn = len(self.history)
         if turn == 20:
-            self.cycle = self.detect_cycle(opponent.history)
+            self.cycle = detect_cycle(opponent.history)
             return self.extended_strategy(opponent)
         if turn > 20:
             return self.extended_strategy(opponent)
@@ -47,10 +37,10 @@ class Calculator(Player):
 
     def extended_strategy(self, opponent):
         if self.cycle:
-            return 'D'
+            return Actions.D
         else:
             # TFT
-            return 'D' if opponent.history[-1:] == ['D'] else 'C'
+            return Actions.D if opponent.history[-1:] == [Actions.D] else Actions.C
 
     def reset(self):
         Player.reset(self)

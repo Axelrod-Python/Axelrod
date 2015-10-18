@@ -47,6 +47,17 @@ Otherwise::
     $ cd Axelrod
     $ python setup.py install
 
+You might need to install the libraries in `requirements.txt`::
+
+    pip install -r requirements.txt
+
+Note that on Ubuntu [some
+users](https://github.com/Axelrod-Python/Axelrod/issues/309) have had problems
+installing matplotlib. This seems to help with that::
+
+    sudo apt-get install libfreetype6-dev
+    sudo apt-get install libpng12-0-dev
+
 Usage
 -----
 
@@ -79,10 +90,15 @@ version of the results:
 
 .. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
 
+.. image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
+
+See the [tournament repository](https://github.com/Axelrod-Python/tournament)
+for many additional plots.
+
 Contributing
 ============
 
-All contributions are welcome: with a particular emphasis on
+All contributions are welcome, with a particular emphasis on
 contributing further strategies.
 
 You can find helpful instructions about contributing in the
@@ -92,24 +108,6 @@ http://axelrod.readthedocs.org/en/latest/contributing.html.
 .. image:: https://graphs.waffle.io/Axelrod-Python/Axelrod/throughput.svg
  :target: https://waffle.io/Axelrod-Python/Axelrod/metrics
   :alt: 'Throughput Graph'
-
-Contributors
-============
-
--  `JasYoung314 <https://github.com/JasYoung314>`__
--  `Karlos78 <https://github.com/Karlos78>`__
--  `drvinceknight <https://twitter.com/drvinceknight>`__
--  `geraintpalmer <https://github.com/geraintpalmer>`__
--  `hollymarissa <https://github.com/hollymarissa>`__
--  `jomuel <https://github.com/jomuel>`__
--  `langner <https://github.com/langner>`__
--  `marcharper <https://github.com/marcharper>`__
--  `martinjc <https://github.com/martinjc>`__
--  `meatballs <https://github.com/meatballs>`__
--  `theref <https://github.com/theref>`__
--  `timothyf1 <https://github.com/timothyf1>`__
--  `uglyfruitcake <https://github.com/uglyfruitcake>`__
--  `pmslavin <https://github.com/pmslavin>`__
 
 Projects that use this library
 ==============================

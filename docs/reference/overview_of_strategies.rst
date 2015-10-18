@@ -6,32 +6,49 @@ Axelrod's first tournament
 
 Axelrod's first tournament is described in his 1980 paper entitled `'Effective
 choice in the Prisoner's Dilemma' <http://www.jstor.org/stable/173932>`_. This
-tournament included 14 strategies and they are listed below, (ranked in the
-order in which they appeared).
+tournament included 14 strategies (plus a random "strategy") and they are listed
+below, (ranked in the order in which they appeared).
 
 An indication is given as to whether or not this strategy is implemented in the
 :code:`axelrod` library. If this strategy is not implemented please do send us a
 `pull request <https://github.com/Axelrod-Python/Axelrod/pulls>`_.
 
-The following strategies are included in the library:
+Strategies in the Axelrod's first tournament:
 
-+----------------+--------------------------+--------------------------+
-| Name           | Long name                | Axelrod Library Name     |
-+================+==========================+==========================+
-| `Tit For Tat`_ | Always Cooperate         | :code:`Cooperator`       |
-+----------------+--------------------------+--------------------------+
-| `Grofman`_     | Grofman (name of author) | :code:`Grofman`          |
-+----------------+--------------------------+--------------------------+
-| `Shubik`_      | Shubik (name of author)  | :code:`Shubik`           |
-+----------------+--------------------------+--------------------------+
-| `Grudger`_     | Grudger (name of author) | :code:`Grudger`          |
-+----------------+--------------------------+--------------------------+
-| `Davis`_       | Davis (name of author)   | :code:`Davis`            |
-+----------------+--------------------------+--------------------------+
-| `Joss`_        | Feld (name of author)    | :code:`Feld`             |
-+----------------+--------------------------+--------------------------+
-| `Tullock`_     | Tullock (name of author) | :code:`Tullock`          |
-+----------------+--------------------------+--------------------------+
++--------------------------+-------------------------------------------+--------------------------+
+| Name                     | Long name                                 | Axelrod Library Name     |
++==========================+===========================================+==========================+
+| `Tit For Tat`_           | Tit For Tat                               | :code:`TitForTat`        |
++--------------------------+-------------------------------------------+--------------------------+
+| `Tideman and Chieruzzi`_ | Tideman and Chieruzzi (authors' names)    | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Nydegger`_              | Nydegger (author's name)                  | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Grofman`_               | Grofman (author's name)                   | :code:`Grofman`          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Shubik`_                | Shubik (author's name)                    | :code:`Shubik`           |
++--------------------------+-------------------------------------------+--------------------------+
+| `Stein and Rapoport`_    | Stein and Rapoport (authors' names)       | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Grudger`_               | Grudger (by Friedman)                     | :code:`Grudger`          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Davis`_                 | Davis (author's name)                     | :code:`Davis`            |
++--------------------------+-------------------------------------------+--------------------------+
+| `Graaskamp`_             | Graaskamp (author's name)                 | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Downing`_               | Downing (author's name)                   | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Feld`_                  | Feld (author's name)                      | :code:`Feld`             |
++--------------------------+-------------------------------------------+--------------------------+
+| `Joss`_                  | Joss (author's name)                      | :code:`Joss`             |
++--------------------------+-------------------------------------------+--------------------------+
+| `Tullock`_               | Tullock (author's name)                   | :code:`Tullock`          |
++--------------------------+-------------------------------------------+--------------------------+
+| `Unnamed Strategy`_      | Unnamed Strategy (by a Grad Student in    | Not Implemented          |
+|                          | Political Science)                        |                          |
++--------------------------+-------------------------------------------+--------------------------+
+| :ref:`random-strategy`   | Random                                    | :code:`Random`           |
++--------------------------+-------------------------------------------+--------------------------+
 
 Tit for Tat
 ^^^^^^^^^^^
@@ -74,8 +91,10 @@ which gives::
 
 We see that after cooperating once, Tit For Tat defects at every step.
 
-**Not implemented**: Tideman and Chieruzzi
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Tideman and Chieruzzi
+^^^^^^^^^^^^^^^^^^^^^
+
+**Not implemented yet**
 
 This strategy begins by playing Tit For Tat and then things get slightly
 complicated:
@@ -96,8 +115,10 @@ the game has just started (everything is forgotten).
 
 *This strategy came 2nd in Axelrod's original tournament.*
 
-**Not implemented**: Nydegger
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Nydegger
+^^^^^^^^
+
+**Not implemented yet**
 
 This strategy begins by playing Tit For Tat for the first 3 rounds with the
 following modifications:
@@ -200,8 +221,10 @@ The increasing retaliation periods are visible in the output. Note that
 Shubik defects if both players defected in the previous round but does
 not increase the retaliation period.
 
-**Not implemented**: Stein
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Stein and Rapoport
+^^^^^^^^^^^^^^^^^^
+
+**Not implemented yet**
 
 This strategy plays a modification of Tit For Tat.
 
@@ -270,8 +293,10 @@ Grudger::
     ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
     ['D', 'C', 'D', 'D', 'C', 'D', 'D', 'C', 'D', 'C', 'D', 'D', 'C', 'C', 'D']
 
-**Not implemented**: Graaskamp
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Graaskamp
+^^^^^^^^^
+
+**Not implemented yet**
 
 This strategy follows the following rules:
 
@@ -287,8 +312,10 @@ This strategy follows the following rules:
 
 *This strategy came 9th in Axelrod's original tournament.*
 
-**Not implemented**: Downing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Downing
+^^^^^^^
+
+**Not implemented yet**
 
 This strategy attempts to estimate the next move of the opponent by estimating
 the probability of cooperating given that they defected (:math:`p(C|D)`) or
@@ -390,16 +417,21 @@ This gives::
 
 We have 10 rounds of cooperation and some apparently random plays afterward.
 
-**Not implemented**: 'Grad Student in Political Science'
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Unnamed Strategy
+^^^^^^^^^^^^^^^^
 
-This strategy cooperates with a given probability :math:`P`. This probability
+**Not implemented yet**
+
+Apparently written by a grad student in political science whose name was withheld,
+this strategy cooperates with a given probability :math:`P`. This probability
 (which has initial value .3) is updated every 10 rounds based on whether the
 opponent seems to be random, very cooperative or very uncooperative.
 Furthermore, if after round 130 the strategy is losing then :math:`P` is also
 adjusted.
 
 *This strategy came 14th in Axelrod's original tournament.*
+
+.. _random-strategy:
 
 Random
 ^^^^^^

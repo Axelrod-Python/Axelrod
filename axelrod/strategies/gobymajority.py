@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class GoByMajority(Player):
     """A player examines the history of the opponent: if the opponent has more
@@ -18,9 +19,21 @@ class GoByMajority(Player):
     }
 
     def __init__(self, memory_depth=0, soft=True):
+        """
+        Parameters
+        ----------
+        memory_depth, int >= 0
+            The number of rounds to use for the calculation of the cooperation
+            and defection probabilities of the opponent.
+        soft, bool
+            Indicates whether to cooperate or not in the case that the
+            cooperation and defection probabilities are equal.
+        """
+
         Player.__init__(self)
         self.soft = soft
         self.classifier['memory_depth'] = memory_depth
+        self.init_args = (memory_depth, soft)
 
     def strategy(self, opponent):
         """This is affected by the history of the opponent.
@@ -31,16 +44,16 @@ class GoByMajority(Player):
 
         memory = self.classifier['memory_depth']
         history = opponent.history[-memory:]
-        defections = sum([s == 'D' for s in history])
-        cooperations = sum([s == 'C' for s in history])
+        defections = sum([s == D for s in history])
+        cooperations = sum([s == C for s in history])
         if defections > cooperations:
-            return 'D'
+            return D
         if defections == cooperations:
             if self.soft:
-                return 'C'
+                return C
             else:
-                return 'D'
-        return 'C'
+                return D
+        return C
 
     def __repr__(self):
         """The string method for the strategy."""
@@ -58,8 +71,9 @@ class GoByMajority40(GoByMajority):
     GoByMajority player with a memory of 40.
     """
 
-    def __init__(self, memory_depth=40):
-        super(self.__class__, self).__init__(memory_depth=memory_depth)
+    def __init__(self, memory_depth=40, soft=True):
+        super(self.__class__, self).__init__(memory_depth=memory_depth,
+                                             soft=soft)
 
 
 class GoByMajority20(GoByMajority):
@@ -67,23 +81,24 @@ class GoByMajority20(GoByMajority):
     GoByMajority player with a memory of 20.
     """
 
-    def __init__(self, memory_depth=20):
-        super(self.__class__, self).__init__(memory_depth=memory_depth)
-
+    def __init__(self, memory_depth=20, soft=True):
+        super(self.__class__, self).__init__(memory_depth=memory_depth,
+                                             soft=soft)
 
 class GoByMajority10(GoByMajority):
     """
     GoByMajority player with a memory of 10.
     """
 
-    def __init__(self, memory_depth=10):
-        super(self.__class__, self).__init__(memory_depth=memory_depth)
-
+    def __init__(self, memory_depth=10, soft=True):
+        super(self.__class__, self).__init__(memory_depth=memory_depth,
+                                             soft=soft)
 
 class GoByMajority5(GoByMajority):
     """
     GoByMajority player with a memory of 5.
     """
 
-    def __init__(self, memory_depth=5):
-        super(self.__class__, self).__init__(memory_depth=memory_depth)
+    def __init__(self, memory_depth=5, soft=True):
+        super(self.__class__, self).__init__(memory_depth=memory_depth,
+                                             soft=soft)

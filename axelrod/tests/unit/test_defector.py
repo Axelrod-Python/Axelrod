@@ -4,7 +4,7 @@ import axelrod
 
 from .test_player import TestPlayer
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestDefector(TestPlayer):
@@ -15,7 +15,8 @@ class TestDefector(TestPlayer):
         'memory_depth': 0,
         'stochastic': False,
         'inspects_source': False,
-        'manipulates_state': False
+        'manipulates_state': False,
+        'manipulates_source': False
     }
 
     def test_strategy(self):

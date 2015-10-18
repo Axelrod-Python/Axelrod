@@ -1,12 +1,13 @@
 import copy
+import inspect
 import random
 import unittest
+
 import axelrod
+from axelrod import DefaultGame, Game, Player, simulate_play
 
-from axelrod import simulate_play, Player
 
-
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 def cooperate(self):
@@ -64,6 +65,9 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p1.history[0], D)
         self.assertEqual(p2.history[0], D)
 
+    def test_strategy(self):
+        self.assertRaises(NotImplementedError, self.player().strategy, self.player())
+
 
 def test_responses(test_class, P1, P2, history_1, history_2,
                    responses, random_seed=None):
@@ -89,31 +93,48 @@ def test_responses(test_class, P1, P2, history_1, history_2,
         test_class.assertEqual(s1, response)
 
 
+class TestOpponent(Player):
+    """A player who only exists so we have something to test against"""
+
+    name = 'TestPlayer'
+    classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @staticmethod
+    def strategy(opponent):
+        return 'C'
+
+
 class TestPlayer(unittest.TestCase):
     "A Test class from which other player test classes are inherited"
-
-    name = "Player"
-    player = Player
-    expected_classifier ={
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'inspects_source': None,
-        'manipulates_state': None
-    }
+    player = TestOpponent
 
     def test_initialisation(self):
         """Test that the player initiates correctly."""
-        player = self.player()
-        self.assertEqual(player.history, [])
-        self.assertEqual(player.tournament_attributes,
-            {'length': -1, 'game': None})
-        self.assertEqual(player.cooperations, 0)
-        self.assertEqual(player.defections, 0)
-        self.classifier_test()
+        if self.__class__ != TestPlayer:
+            player = self.player()
+            self.assertEqual(player.history, [])
+            self.assertEqual(player.tournament_attributes,
+                {'length': -1, 'game': DefaultGame})
+            self.assertEqual(player.cooperations, 0)
+            self.assertEqual(player.defections, 0)
+            self.classifier_test()
 
     def test_repr(self):
         """Test that the representation is correct."""
-        self.assertEqual(str(self.player()), self.name)
+        if self.__class__ != TestPlayer:
+            self.assertEqual(str(self.player()), self.name)
+
+    def test_tournament_attributes(self):
+        player = self.player()
+        player.set_tournament_attributes(length=200)
+        t_attrs = player.tournament_attributes
+        self.assertEqual(t_attrs['length'], 200)
 
     def test_reset(self):
         """Make sure reseting works correctly."""
@@ -124,14 +145,23 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player().cooperations, 0)
         self.assertEqual(self.player().defections, 0)
 
-    def test_strategy(self):
-        """Test that strategy method."""
-        self.assertEqual(self.player().strategy(self.player()), None)
+    def test_clone(self):
+        # Make sure that self.init_args has the right number of arguments
+        p1 = self.player()
+        argspec = inspect.getargspec(p1.__init__)
+        self.assertEqual(len(argspec.args) - 1, len(p1.init_args))
+        # Test that the player is cloned correctly
+        p2 = p1.clone()
+        self.assertEqual(len(p2.history), 0)
+        self.assertEqual(p2.cooperations, 0)
+        self.assertEqual(p2.defections, 0)
+        self.assertEqual(p2.classifier, p1.classifier)
+        self.assertEqual(p2.tournament_attributes, p1.tournament_attributes)
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
         P1 = self.player()
-        P2 = Player()
+        P2 = TestOpponent()
         test_responses(
             self, P1, P2, [], [], [play],
             random_seed=random_seed)
@@ -146,7 +176,7 @@ class TestPlayer(unittest.TestCase):
         for i, history in enumerate(histories):
             # Needs to be in the inner loop in case player retains some state
             P1 = self.player()
-            P2 = Player()
+            P2 = TestOpponent()
             test_responses(self, P1, P2, history[0], history[1], responses[i],
                            random_seed=random_seed)
 
@@ -159,7 +189,7 @@ class TestPlayer(unittest.TestCase):
         """
         P1 = self.player()
         P1.tournament_attributes['length'] = tournament_length
-        P2 = Player()
+        P2 = TestOpponent()
         P2.tournament_attributes['length'] = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
@@ -175,7 +205,7 @@ class TestPlayer(unittest.TestCase):
                         msg="memory_depth not in classifier")
         self.assertTrue('stochastic' in player.classifier,
                         msg="stochastic not in classifier")
-        for key in self.expected_classifier:
+        for key in TestOpponent.classifier:
             self.assertEqual(player.classifier[key],
                              self.expected_classifier[key],
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
