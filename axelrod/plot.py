@@ -1,6 +1,7 @@
 
 from numpy.linalg import LinAlgError
 from numpy import arange, mean, median
+from warnings import warn
 
 matplotlib_installed = True
 try:
@@ -228,10 +229,16 @@ class Plot(object):
 
     ## Ecological Plot
 
-    def stackplot(self, populations):
+    def stackplot(self, eco):
 
         if not self.matplotlib_installed:
             return None
+
+        if type(eco) is list:
+            warn("""Passing the population sizes as an argument is depreciated and will be removed, please pass the Ecosystem directly""")
+            populations = eco
+        else:
+            populations = eco.population_sizes
 
         figure, ax = plt.subplots()
         turns = range(len(populations))
