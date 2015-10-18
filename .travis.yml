@@ -22,6 +22,5 @@ script:
   - coverage report -m
   # Run the doctests
   - sh doctest
->>>>>>> master
 after_success:
   - coveralls
