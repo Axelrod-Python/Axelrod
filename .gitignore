@@ -5,3 +5,4 @@ _build/
 *.log
 dist/
 MANIFEST
+Axelrod.egg-info
