@@ -16,6 +16,7 @@ Contents:
    getting_started.rst
    payoff_matrix.rst
    visualising_results.rst
+   noisy_tournaments.rst
 
 
 Indices and tables
