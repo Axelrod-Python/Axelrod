@@ -6,7 +6,8 @@
 Getting Started
 ===============
 
-This section contains a variety of tutorials related to the Axelrod library.
+This section contains a variety of tutorials that should help get you started
+with the Axelrod library.
 
 Contents:
 
