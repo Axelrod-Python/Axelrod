@@ -1,9 +1,7 @@
 import inspect
-from axelrod import Player, Game
+from axelrod import Player, Actions
 
-
-(R, P, S, T) = Game().RPST()
-
+C, D = Actions.C, Actions.D
 
 class Darwin(Player):
     """ A strategy which accumulates a record (the 'genome') of what the most
@@ -31,29 +29,26 @@ class Darwin(Player):
         'manipulates_state': True  # Does not reset properly.
     }
 
-    genome = ['C']
+    genome = [C]
     valid_callers = ["play"]    # What functions may invoke our strategy.
-    outcomes = { ('C','C') : R,
-                 ('C','D') : S,
-                 ('D','C') : T,
-                 ('D','D') : P
-               }
 
     def __init__(self):
         super(Darwin, self).__init__()
         self.response = self.__class__.genome[0]
 
+    def receive_tournament_attributes(self):
+        self.outcomes = self.tournament_attributes["game"].scores
 
     def strategy(self, opponent):
         # Frustrate psychics and ensure that simulated rounds
         # do not influence genome.
         if inspect.stack()[1][3] not in self.__class__.valid_callers:
-            return 'C'
+            return C
 
         trial = len(self.history)
 
         if trial > 0:
-            outcome = self.__class__.outcomes[(self.history[-1], opponent.history[-1])]
+            outcome = self.outcomes[(self.history[-1], opponent.history[-1])]
             self.mutate(outcome, trial)
             # Update genome with selected response
             self.__class__.genome[trial-1] = self.response
@@ -68,14 +63,12 @@ class Darwin(Player):
 
         return current
 
-
     def reset(self):
         """ Reset instance properties. """
         Player.reset(self)
-        self.__class__.genome[0] = 'C' # Ensure initial Cooperate
-
+        self.__class__.genome[0] = C # Ensure initial Cooperate
 
     def mutate(self, outcome, trial):
         """ Select response according to outcome. """
-        if outcome < 0 and (len(self.__class__.genome) >= trial):
-            self.response = 'D' if self.__class__.genome[trial-1] == 'C' else 'C'
+        if outcome[0] < 3 and (len(self.__class__.genome) >= trial):
+            self.response = D if self.__class__.genome[trial-1] == C else C

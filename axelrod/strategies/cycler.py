@@ -1,5 +1,5 @@
 
-from axelrod import Player
+from axelrod import Player, Actions
 
 
 class AntiCycler(Player):
@@ -25,11 +25,11 @@ class AntiCycler(Player):
     def strategy(self, opponent):
         if self.cycle_counter < self.cycle_length:
             self.cycle_counter += 1
-            return 'C'
+            return Actions.C
         else:
             self.cycle_length += 1
             self.cycle_counter = 0
-            return 'D'
+            return Actions.D
 
     def reset(self):
         Player.reset(self)
@@ -50,10 +50,21 @@ class Cycler(Player):
     }
 
     def __init__(self, cycle="CCD"):
+        """This strategy will repeat the parameter `cycle` endlessly,
+        e.g. C C D C C D C C D ...
+
+        Special Cases
+        -------------
+        Cooperator is equivalent to Cycler("C")
+        Defector   is equivalent to Cycler("D")
+        Alternator is equivalent to Cycler("CD")
+
+        """
         Player.__init__(self)
         self.cycle = cycle
         self.name += " " + cycle
         self.classifier['memory_depth'] = len(cycle) - 1
+        self.init_args = (cycle,)
 
     def strategy(self, opponent):
         curent_round = len(self.history)

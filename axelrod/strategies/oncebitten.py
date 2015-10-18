@@ -1,6 +1,7 @@
 import random
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class OnceBitten(Player):
     """
@@ -35,15 +36,15 @@ class OnceBitten(Player):
             self.grudged = False
 
         if len(opponent.history) < 2:
-            return 'C'
+            return C
 
         if self.grudged:
             self.grudge_memory += 1
-            return 'D'
-        elif not ('C' in opponent.history[-2:]):
+            return D
+        elif not (C in opponent.history[-2:]):
             self.grudged = True
-            return 'D'
-        return 'C'
+            return D
+        return C
 
     def reset(self):
         """
@@ -74,10 +75,10 @@ class FoolMeOnce(Player):
 
     def strategy(self, opponent):
         if not opponent.history:
-            return 'C'
+            return C
         if opponent.defections > 1:
-            return 'D'
-        return 'C'
+            return D
+        return C
 
 
 class ForgetfulFoolMeOnce(Player):
@@ -96,22 +97,29 @@ class ForgetfulFoolMeOnce(Player):
     }
 
     def __init__(self, forget_probability = 0.05):
+        """
+        Parameters
+        ----------
+        forget_probability, float
+            The probability of forgetting the count of opponent defections.
+        """
         Player.__init__(self)
         self.D_count = 0
-        self._initial = 'C'
+        self._initial = C
         self.forget_probability = forget_probability
+        self.init_args = (forget_probability,)
 
     def strategy(self, opponent):
         r = random.random()
         if not opponent.history:
             return self._initial
-        if opponent.history[-1] == 'D':
+        if opponent.history[-1] == D:
             self.D_count += 1
         if r < self.forget_probability:
             self.D_count = 0
         if self.D_count > 1:
-            return 'D'
-        return 'C'
+            return D
+        return C
 
     def reset(self):
         Player.reset(self)
@@ -133,11 +141,7 @@ class FoolMeForever(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
-        Player.__init__(self)
-        self.classifier['stochastic'] = False
-
     def strategy(self, opponent):
         if opponent.defections > 0:
-            return 'C'
-        return 'D'
+            return C
+        return D

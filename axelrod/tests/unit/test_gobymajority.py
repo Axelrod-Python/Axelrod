@@ -4,7 +4,7 @@ import axelrod
 
 from .test_player import TestPlayer
 
-C, D = 'C', 'D'
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestGoByMajority(TestPlayer):
@@ -30,6 +30,12 @@ class TestGoByMajority(TestPlayer):
         """
         self.responses_test([C, D, D, D], [D, D, C, C], [C])
         self.responses_test([C, C, D, D, C], [D, D, C, C, D], [D])
+
+        # Test tie break rule for soft=False
+        player = self.player(soft=False)
+        opponent = axelrod.Cooperator()
+        self.assertEqual('D', player.strategy(opponent))
+
 
     def test_repr(self):
         player = self.player(soft=True)

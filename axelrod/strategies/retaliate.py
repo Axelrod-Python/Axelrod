@@ -1,7 +1,8 @@
 from collections import defaultdict
 
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Retaliate(Player):
     """
@@ -27,6 +28,7 @@ class Retaliate(Player):
             'Retaliate (' +
             str(self.retaliation_threshold) + ')')
         self.play_counts = defaultdict(int)
+        self.init_args = (retaliation_threshold,)
 
     def strategy(self, opponent):
         """
@@ -37,11 +39,11 @@ class Retaliate(Player):
         if len(self.history):
             last_round = (self.history[-1], opponent.history[-1])
             self.play_counts[last_round] += 1
-        CD_count = self.play_counts[('C', 'D')]
-        DC_count = self.play_counts[('D', 'C')]
+        CD_count = self.play_counts[(C, D)]
+        DC_count = self.play_counts[(D, C)]
         if CD_count > DC_count * self.retaliation_threshold:
-                return 'D'
-        return 'C'
+                return D
+        return C
 
     def reset(self):
         Player.reset(self)
@@ -83,10 +85,16 @@ class LimitedRetaliate(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, retaliation_threshold = 0.1, retaliation_limit = 20,):
+    def __init__(self, retaliation_threshold=0.1, retaliation_limit=20):
         """
-        Uses the basic init from the Player class, but also set the name to
-        include the retaliation setting.
+        Parameters
+        ----------
+        retaliation_threshold, float
+            The threshold of the difference in defections, previous rounds of
+            (C, D) versus (D, C)
+        retaliation_limit, int
+            The maximum number of retaliations until the strategy returns to
+            cooperation
         """
         Player.__init__(self)
         self.retaliating = False
@@ -94,6 +102,7 @@ class LimitedRetaliate(Player):
         self.retaliation_threshold = retaliation_threshold
         self.retaliation_limit = retaliation_limit
         self.play_counts = defaultdict(int)
+        self.init_args = (retaliation_threshold, retaliation_limit)
 
         self.name = (
             'Limited Retaliate (' +
@@ -110,32 +119,23 @@ class LimitedRetaliate(Player):
         if len(self.history):
             last_round = (self.history[-1], opponent.history[-1])
             self.play_counts[last_round] += 1
-        CD_count = self.play_counts[('C', 'D')]
-        DC_count = self.play_counts[('D', 'C')]
+        CD_count = self.play_counts[(C, D)]
+        DC_count = self.play_counts[(D, C)]
         if CD_count > DC_count * self.retaliation_threshold:
             self.retaliating = True
         else:
             self.retaliating = False
             self.retaliation_count = 0
 
-        #history = list(zip(self.history, opponent.history))
-
-        #if history.count(('C', 'D')) > (
-           #history.count(('D', 'C')) * self.retaliation_threshold):
-            #self.retaliating = True
-        #else:
-            #self.retaliating = False
-            #self.retaliation_count = 0
-
         if self.retaliating:
             if self.retaliation_count < self.retaliation_limit:
                 self.retaliation_count += 1
-                return 'D'
+                return D
             else:
                 self.retaliation_count = 0
                 self.retaliating = False
 
-        return 'C'
+        return C
 
     def reset(self):
         Player.reset(self)

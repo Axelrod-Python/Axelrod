@@ -1,4 +1,5 @@
 import random
+from axelrod import Actions
 
 def random_choice(p=0.5):
     """
@@ -9,5 +10,5 @@ def random_choice(p=0.5):
 
     r = random.random()
     if r < p:
-        return 'C'
-    return 'D'
+        return Actions.C
+    return Actions.D

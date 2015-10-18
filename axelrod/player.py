@@ -2,7 +2,11 @@ import inspect
 import random
 import copy
 
-C, D = 'C', 'D'
+from axelrod import Actions
+from .game import DefaultGame
+
+
+C, D = Actions.C, Actions.D
 flip_dict = {C: D, D: C}
 
 
@@ -19,15 +23,14 @@ def is_basic(s):
     manipulates_state = s.classifier['manipulates_state']
     return (not stochastic) and (not inspects_source) and (not manipulates_source) and (not manipulates_state) and (depth in (0, 1))
 
-def is_cheater(s):
+def obey_axelrod(s):
     """
-    A function to check if a strategy cheats.
+    A function to check if a strategy obeys Axelrod's original tournament rules.
     """
     classifier = s.classifier
-    return classifier['inspects_source'] or\
+    return not (classifier['inspects_source'] or\
            classifier['manipulates_source'] or\
-           classifier['manipulates_state']
-
+           classifier['manipulates_state'])
 
 def update_histories(player1, player2, move1, move2):
     """Updates histories and cooperation / defections counts following play."""
@@ -70,9 +73,25 @@ class Player(object):
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
-        self.tournament_attributes = {'length': -1, 'game': None}
         self.cooperations = 0
         self.defections = 0
+        self.init_args = ()
+        self.set_tournament_attributes()
+
+    def receive_tournament_attributes(self):
+        # Overwrite this function if your strategy needs
+        # to make use of tournament_attributes such as
+        # the game matrix or the number of rounds
+        pass
+
+    def set_tournament_attributes(self, length=-1, game=None):
+        if not game:
+            game = DefaultGame
+        self.tournament_attributes = {
+            "length": length,
+            "game": game
+        }
+        self.receive_tournament_attributes()
 
     def __repr__(self):
         """The string method for the strategy."""
@@ -89,7 +108,7 @@ class Player(object):
 
     def strategy(self, opponent):
         """This is a placeholder strategy."""
-        return None
+        raise NotImplementedError()
 
     def play(self, opponent, noise=0):
         """This pits two players against each other."""
@@ -97,6 +116,19 @@ class Player(object):
         if noise:
             s1, s2 = self._add_noise(noise, s1, s2)
         update_histories(self, opponent, s1, s2)
+
+    def clone(self):
+        """Clones the player without history, reapplying configuration
+        parameters as necessary."""
+
+        # You may be tempted to reimplement using the `copy` module
+        # Note that this would require a deepcopy in some cases and there may
+        # be significant changes required throughout the library.
+        # Consider overriding in special cases only if necessary
+        cls = self.__class__
+        new_player = cls(*self.init_args)
+        new_player.tournament_attributes = copy.copy(self.tournament_attributes)
+        return new_player
 
     def reset(self):
         """Resets history.

@@ -1,8 +1,9 @@
 import copy
 import inspect
 
-from axelrod import Player, RoundRobin, Game, update_histories
+from axelrod import Player, RoundRobin, update_histories, Actions
 
+C, D = Actions.C, Actions.D
 
 def simulate_match(player_1, player_2, strategy, rounds=10):
     """Simulates a number of matches."""
@@ -15,21 +16,19 @@ def roll_back_history(player, rounds):
     """Undo the last `rounds` rounds as sufficiently as possible."""
     for i in range(rounds):
         play = player.history.pop(-1)
-        if play == 'C':
+        if play == C:
             player.cooperations -= 1
-        elif play == 'D':
+        elif play == D:
             player.defections -= 1
 
-def look_ahead(player_1, player_2, rounds=10):
+def look_ahead(player_1, player_2, game, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
     results = []
-    game = Game()
 
     # Simulate plays for `rounds` rounds
-    strategies = ['C', 'D']
+    strategies = [C, D]
     for strategy in strategies:
-        #opponent_ = copy.deepcopy(player_2) # need deepcopy here
-        opponent_ = player_2
+        opponent_ = copy.deepcopy(player_2) # need deepcopy here
         round_robin = RoundRobin(players=[player_1, opponent_], game=game,
                                  turns=rounds)
         simulate_match(player_1, opponent_, strategy, rounds)
@@ -37,7 +36,6 @@ def look_ahead(player_1, player_2, rounds=10):
 
         # Restore histories and counts
         roll_back_history(player_1, rounds)
-        roll_back_history(player_2, rounds)
 
     return strategies[results.index(max(results))]
 
@@ -51,11 +49,8 @@ class MindReader(Player):
         'stochastic': False,
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': False,
-        'manipulates_state': True
+        'manipulates_state': False
     }
-
-    def __init__(self):
-        Player.__init__(self)
 
     def strategy(self, opponent):
         """Pretends to play the opponent a number of times before each match.
@@ -72,9 +67,11 @@ class MindReader(Player):
         calname = calframe[1][3]
 
         if calname in ('strategy', 'simulate_match'):
-            return 'D'
+            return D
 
-        best_strategy = look_ahead(self, opponent)
+        game = self.tournament_attributes["game"]
+
+        best_strategy = look_ahead(self, opponent, game)
 
         return best_strategy
 
@@ -99,3 +96,33 @@ class ProtectedMindReader(MindReader):
             pass
         else:
             self.__dict__[name] = val
+
+class MirrorMindReader(ProtectedMindReader):
+    """A player that will mirror whatever strategy it is playing against by cheating
+    and calling the opponent's strategy function instead of its own."""
+
+    name = 'Mirror Mind Reader'
+
+    classifier = {
+        'memory_depth': -10,
+        'stochastic': False,
+        'inspects_source': True, # reading and copying the source of the component 
+        'manipulates_source': True, # changing own source dynamically
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        """Will read the mind of the opponent and play the opponent's strategy.
+
+        Also avoid infinite recursion when called by itself or another mind reader
+        or bender by cooperating.
+        """
+
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        calname = calframe[1][3]
+
+        if calname in ('strategy', 'simulate_match'):
+            return C
+
+        return opponent.strategy(self)

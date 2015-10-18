@@ -1,9 +1,9 @@
 from collections import OrderedDict
-
 import random
 
-from axelrod import Game, Player, random_choice
+from axelrod import Player, random_choice, Actions
 
+C, D = Actions.C, Actions.D
 
 class RiskyQLearner(Player):
     """A player who learns the best strategies through the q-learning algorithm.
@@ -36,19 +36,20 @@ class RiskyQLearner(Player):
         self.prev_action = random_choice()
         self.history = []
         self.score = 0
-        self.Qs = OrderedDict({'':  OrderedDict(zip(['C', 'D'], [0, 0])) })
+        self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0])) })
         self.Vs = OrderedDict({'': 0})
         self.prev_state = ''
-        (R, P, S, T) = Game().RPST()
-        self.payoff_matrix = {'C': {'C': R, 'D': S}, 'D': {'C': T, 'D': P}}
 
+    def receive_tournament_attributes(self):
+        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        self.payoff_matrix = {C: {C: R, D: S}, D: {C: T, D: P}}
 
     def strategy(self, opponent):
         """Runs a qlearn algorithm while the tournament is running."""
         state = self.find_state(opponent)
         reward = self.find_reward(opponent)
         if state not in self.Qs:
-            self.Qs[state] = OrderedDict(zip(['C', 'D'], [0, 0]))
+            self.Qs[state] = OrderedDict(zip([C, D], [0, 0]))
             self.Vs[state] = 0
         self.perform_q_learning(self.prev_state, state, self.prev_action, reward)
         if state not in self.Qs:
@@ -71,7 +72,7 @@ class RiskyQLearner(Player):
 
     def find_state(self, opponent):
         """
-        Finds the my_state (the opponents last n moves +  its previous proportion of playing 'C') as a hashable state
+        Finds the my_state (the opponents last n moves +  its previous proportion of playing C) as a hashable state
         """
         prob = '{:.1f}'.format(opponent.cooperations)
         return ''.join(opponent.history[-self.memory_length:]) + prob
@@ -100,7 +101,7 @@ class RiskyQLearner(Player):
         """
         Player.reset(self)
 
-        self.Qs = {'': {'C': 0, 'D': 0}}
+        self.Qs = {'': {C: 0, D: 0}}
         self.Vs = {'': 0}
         self.prev_state = ''
         self.prev_action = random_choice()

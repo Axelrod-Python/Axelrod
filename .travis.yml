@@ -1,17 +1,27 @@
+
 language: python
 python:
   - 2.7
   - 3.3
   - 3.4
+  - 3.5
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 install:
   - pip install -r requirements.txt
+  - pip install sphinx
   - pip install coverage
   - pip install coveralls
 script:
+  # Build the documentation
+  - cd docs; make html
+  # Run the test suit with coverage
+  - cd ..
   - coverage run --source=axelrod -m unittest discover
+  - coverage report -m
+  # Run the doctests
   - sh doctest
+>>>>>>> master
 after_success:
   - coveralls

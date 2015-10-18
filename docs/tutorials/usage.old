@@ -31,6 +31,11 @@ You can also build it from source if you would like to::
     cd Axelrod
     python setup.py install
 
+You will also need to install the dependencies if you have not already got
+them::
+
+    pip install -r requirements.txt
+
 Note also that you can use this package without needing to install it at all.
 Simple unzip the tarbell available here:
 `<https://pypi.python.org/packages/source/A/Axelrod/Axelrod-0.0.5.tar.gz>`_
@@ -99,7 +104,7 @@ which gives::
 
 Finally, to obtain the ranking in a helpful format with all the names::
 
-    results.ranked_names
+    ranks = results.ranked_names
 
 which gives::
 
@@ -252,7 +257,6 @@ this is shown here:
    :width: 50%
    :align: center
 
-
 As an aside we can use this matrix with `gambit <http://gambit.sourceforge.net/>`_ or `sagemath <http://sagemath.org/>`_ to compute the Nash equilibria for the corresponding normal form game. Here is how to do this in Sage::
 
     # This is not part of the Axelrod module (run in Sage)
@@ -278,6 +282,49 @@ Recall the ordering of the players::
     [Alternator, Cooperator, Defector, Random, Tit For Tat, Defector]
 
 Thus we see that there are multiple Nash equilibria for this game. Two pure equilibria that involve both players playing :code:`Defector` and both players playing :code:`TitForTat`.
+
+The ResultSet object also includes the 'wins' attribute, which is derived from the payoff matrix and lists the number of wins for each player::
+
+  import axelrod
+  strategies = [s() for s in axelrod.demo_strategies]
+  tournament = axelrod.Tournament(strategies)
+  results = tournament.play()
+  results.wins
+
+The resulting wins matrix is::
+
+  [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+  [4, 2, 2, 2, 4, 4, 4, 4, 4, 4]
+  ]
+
+which shows, for example, that Cooperator had 0 wins, Defector won 8 times in each repetition and Random won 4 times in the first repetition and twice in the second.
+
+For any tournament, a plot of the distribution of wins is created, much like the
+plot for the distribution of mean scores. For the demo strategies we create the
+plot as follows::
+
+    import axelrod
+    strategies = [s() for s in axelrod.demo_strategies]
+    tournament = axelrod.Tournament(strategies, game=Game(30, 0, 50, 10))
+    results = tournament.play()
+    plot = axelrod.Plot(results)
+    p = plot.winplot()
+    p.show()
+
+This produces:
+
+.. image:: _static/usage/demo_strategies_winplot.svg
+   :width: 50%
+   :align: center
+
+In this case most of the strategies are deterministic, so there is not much
+variation in the distributions. See below for a more complex example. Similarly, there are additional plots for the score differences: `plot.sdvplot()` gives
+violin or boxplots for the score differences, and `plot.pdplot()` which
+gives a heatmap of the mean payoff differences (like the payoff image above).
 
 Noisy Tournaments
 ^^^^^^^^^^^^^^^^^
@@ -340,6 +387,23 @@ and accordingly to the ranking of strategies overall:
 +--------------------+-------------------+
 | |boxplot_no_noise| | |boxplot_5_noise| |
 +--------------------+-------------------+
+
+as well as the distributions of wins:
+
+.. |winplot_no_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
+   :width: 75%
+   :align: middle
+   :alt: Strategy performance without noise
+
+.. |winplot_5_noise| image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot_noise_5.svg
+   :width: 75%
+   :align: middle
+   :alt: Strategy performance with 5% noise
+
++--------------------+-------------------+
+| |winplot_no_noise| | |winplot_5_noise| |
++--------------------+-------------------+
+
 
 To run a noisy tournament, just use the keyword argument `noise` when
 creating tournaments. Both `run_axelrod` and the utility function
@@ -491,7 +555,8 @@ Particular parameters can also be changed:
 - The output directory for the plot and csv files.
 - The number of turns and repetitions for the tournament.
 
-Here is a command that will run the whole tournament, excluding the cheating strategies and using all available CPUS::
+Here is a command that will run the whole tournament, excluding the strategies
+that do not obey Axelrod's original rules and using all available CPUS::
 
     run_axelrod --xc -p 0
 
@@ -502,6 +567,13 @@ The results from the tournament itself (ordered by median score):
 .. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
    :width: 50%
    :align: center
+
+The distributions of head-to-head wins for each strategy:
+
+.. image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
+   :width: 50%
+   :align: center
+
 
 The payoff matrix from that tournament:
 

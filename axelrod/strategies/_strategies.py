@@ -19,15 +19,15 @@ from .gobymajority import (
 from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
 from .grumpy import Grumpy
 from .hunter import (
-    DefectorHunter, CooperatorHunter, AlternatorHunter, MathConstantHunter,
-    RandomHunter)
+    DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
+    MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     WinStayLoseShift,GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
     ZDExtort2, SoftJoss, MemoryOnePlayer)
 from .mindcontrol import MindController, MindWarper, MindBender
-from .mindreader import MindReader, ProtectedMindReader
+from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
 from .prober import Prober, Prober2, Prober3, HardProber
 from .punisher import Punisher, InversePunisher
@@ -59,6 +59,7 @@ strategies = [
     Champion,
     Cooperator,
     CooperatorHunter,
+    CycleHunter,
     CyclerCCCCCD,
     CyclerCCCD,
     CyclerCCD,
@@ -68,6 +69,7 @@ strategies = [
     DefectorHunter,
     DoubleCrosser,
     Eatherley,
+    EventualCycleHunter,
     Feld,
     FoolMeForever,
     FoolMeOnce,
@@ -103,6 +105,7 @@ strategies = [
     MindController,
     MindReader,
     MindWarper,
+    MirrorMindReader,
     NiceAverageCopier,
     OnceBitten,
     OppositeGrudger,

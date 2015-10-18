@@ -1,5 +1,6 @@
-from axelrod import Player
+from axelrod import Player, Actions
 
+C, D = Actions.C, Actions.D
 
 class Grudger(Player):
     """A player starts by cooperating however will defect if at any point the opponent has defected."""
@@ -16,8 +17,8 @@ class Grudger(Player):
     def strategy(self, opponent):
         """Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D."""
         if opponent.defections:
-            return 'D'
-        return 'C'
+            return D
+        return C
 
 
 class ForgetfulGrudger(Player):
@@ -48,11 +49,11 @@ class ForgetfulGrudger(Player):
 
         if self.grudged:
             self.grudge_memory += 1
-            return 'D'
-        elif 'D' in opponent.history[-1:]:
+            return D
+        elif D in opponent.history[-1:]:
             self.grudged = True
-            return 'D'
-        return 'C'
+            return D
+        return C
 
     def reset(self):
         """Resets scores and history."""
@@ -76,8 +77,8 @@ class OppositeGrudger(Player):
     def strategy(self, opponent):
         """Begins by playing D, then plays C for the remaining rounds if the opponent ever plays C."""
         if opponent.cooperations:
-            return 'C'
-        return 'D'
+            return C
+        return D
 
 
 class Aggravater(Player):
@@ -95,7 +96,7 @@ class Aggravater(Player):
     @staticmethod
     def strategy(opponent):
         if len(opponent.history) < 3:
-            return 'D'
+            return D
         elif opponent.defections:
-            return 'D'
-        return 'C'
+            return D
+        return C
