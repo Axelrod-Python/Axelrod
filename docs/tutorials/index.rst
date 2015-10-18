@@ -15,6 +15,8 @@ Contents:
 
    getting_started/index.rst
    further_topics/index.rst
+   advanced/index.rst
+   contributing/index.rst
 
 Indices and tables
 ==================
