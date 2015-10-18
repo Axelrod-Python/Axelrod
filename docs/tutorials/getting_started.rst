@@ -19,6 +19,9 @@ You can also build it from source if you would like to::
     $ cd Axelrod
     $ python setup.py install
 
+If you do this you will need to also install the dependencies::
+
+    $ pip install -r requirements.txt
 
 Creating and running a simple tournament
 ----------------------------------------
