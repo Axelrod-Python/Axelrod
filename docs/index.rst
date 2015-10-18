@@ -6,8 +6,6 @@
 Welcome to the documentation for the Axelrod Python library
 ===========================================================
 
-lipsum
-
 .. toctree::
    :maxdepth: 2
 
