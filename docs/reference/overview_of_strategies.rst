@@ -64,29 +64,22 @@ Implementation
 
 Here is a quick implementation of this in the library::
 
-   import axelrod
-   p1 = axelrod.TitForTat()  # Create a player that plays tit for tat
-   p2 = axelrod.Cooperator()  # Create a player that always cooperates
-   for round in range(5):
-       p1.play(p2)
-
-   print p1.history
-
-which gives::
-
+   >>> import axelrod
+   >>> p1 = axelrod.TitForTat()  # Create a player that plays tit for tat
+   >>> p2 = axelrod.Cooperator()  # Create a player that always cooperates
+   >>> for round in range(5):
+   ...     p1.play(p2)
+   >>> p1.history
    ['C', 'C', 'C', 'C', 'C']
 
 We see that Tit for Tat cooperated every time, let us see how things change
 when it plays against a player that always defects::
 
-   p1 = axelrod.TitForTat()  # Create a player that plays tit for tat
-   p3 = axelrod.Defector()  # Create a player that always defects
-   for round in range(5):
-       p1.play(p3)
-   print p1.history
-
-which gives::
-
+   >>> p1 = axelrod.TitForTat()  # Create a player that plays tit for tat
+   >>> p3 = axelrod.Defector()  # Create a player that always defects
+   >>> for round in range(5):
+   ...     p1.play(p3)
+   >>> p1.history
    ['C', 'D', 'D', 'D', 'D']
 
 We see that after cooperating once, Tit For Tat defects at every step.
@@ -151,8 +144,10 @@ Finally this strategy defects if and only if:
 Grofman
 ^^^^^^^
 
-This is a pretty simple strategy: it cooperates with probability :math:`\frac{2}{7}`. In contemporary terminology, this is a memory-one player
-with all four conditional probabilities of cooperation equal to :math:`\frac{2}{7}`.
+This is a pretty simple strategy: it cooperates with probability
+:math:`\frac{2}{7}`. In contemporary terminology, this is a memory-one player
+with all four conditional probabilities of cooperation equal to
+:math:`\frac{2}{7}`.
 
 *This strategy came 4th in Axelrod's original tournament.*
 
@@ -161,33 +156,13 @@ Implementation
 
 Here is how Grofman is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Grofman()  # Create a Grofman player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
-
-    print p1.history
-
-which gives::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Grofman()  # Create a Grofman player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history   # doctest: +SKIP
     ['C', 'C', 'D', 'D', 'D']
-
-Over a longer number of rounds::
-
-    from collections import Counter
-    for round in range(5):
-        p1.play(p2)
-    counter = Counter(p1.history)
-    print(counter)
-    Counter({'D': 367, 'C': 138})
-    print float(counter['C']) / (counter['C'] + counter['D'])
-    print 2./7
-
-We have that Grofman cooperates roughly in :math:`\frac{2}{7}`-ths of the rounds::
-
-    0.2732673267326733 # Grofman
-    0.2857142857142857 # 2./7
 
 Shubik
 ^^^^^^
@@ -203,18 +178,14 @@ Implementation
 
 Here is how Shubik is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Shubik()  # Create a Shubik player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(13):
-        p1.play(p2)
-
-    print p1.history
-    print p2.history
-
-This yields the following history of play::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Shubik()  # Create a Shubik player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(13):
+    ...     p1.play(p2)
+    >>> p1.history  # doctest: +SKIP
     ['C', 'D', 'C', 'D', 'D', 'D', 'C', 'C', 'C', 'D', 'D', 'D', 'C']
+    >>> p2.history  # doctest: +SKIP
     ['D', 'C', 'D', 'C', 'D', 'C', 'C', 'C', 'D', 'C', 'C', 'C', 'D']
 
 The increasing retaliation periods are visible in the output. Note that
@@ -248,19 +219,15 @@ Implementation
 
 Here is how this is implemented in the library::
 
-   import axelrod
-   p1 = axelrod.Grudger()  # Create a player that grudger
-   p2 = axelrod.Random()  # Create a player that plays randomly
-   for round in range(5):
-       p1.play(p2)
-
-   print p1.history
-   print p2.history
-
-which gives (for the random seed used)::
-
-    ['C', 'C', 'D', 'D', 'D']
-    ['C', 'D', 'C', 'D', 'D']
+   >>> import axelrod
+   >>> p1 = axelrod.Grudger()  # Create a player that grudger
+   >>> p2 = axelrod.Random()  # Create a player that plays randomly
+   >>> for round in range(5):
+   ...     p1.play(p2)
+   >>> p1.history  # doctest: +SKIP
+   ['C', 'C', 'D', 'D', 'D']
+   >>> p2.history  # doctest: +SKIP
+   ['C', 'D', 'C', 'D', 'D']
 
 We see that as soon as :code:`p2` defected :code:`p1` defected for the rest of
 the play.
@@ -278,19 +245,14 @@ Implementation
 
 Davis is implemented as follows::
 
-    import axelrod
-    p1 = axelrod.Davis()  # Create a Davis player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(15):
-       p1.play(p2)
-
-    print p1.history
-    print p2.history
-
-This always produces (at least) 10 rounds of attempted cooperation followed by
-Grudger::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Davis()  # Create a Davis player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(15):
+    ...     p1.play(p2)
+    >>> p1.history # doctest: +SKIP
     ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
+    >>> p2.history # doctest: +SKIP
     ['D', 'C', 'D', 'D', 'C', 'D', 'D', 'C', 'D', 'C', 'D', 'D', 'C', 'C', 'D']
 
 Graaskamp
@@ -341,18 +303,14 @@ Implementation
 
 Feld is implemented in the library as follows::
 
-    import axelrod
-    p1 = axelrod.Feld()  # Create a Feld player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(10):
-        p1.play(p2)
-
-    print p1.history
-    print p2.history
-
-We can see from the output that Feld defects when its opponent does::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Feld()  # Create a Feld player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(10):
+    ...     p1.play(p2)
+    >>> p1.history  # doctest: +SKIP
     ['C', 'D', 'C', 'D', 'D', 'D', 'D', 'C', 'D', 'D']
+    >>> p2.history  # doctest: +SKIP
     ['D', 'C', 'D', 'D', 'D', 'D', 'C', 'D', 'D', 'D']
 
 The defection times lengthen each time the opponent defects when Feld
@@ -372,18 +330,14 @@ Implementation
 This is a memory-one strategy with four-vector :math:`(0.9, 0, 1, 0)`. Here is
 how Joss is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Joss()  # Create a Joss player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(10):
-        p1.play(p2)
-
-    print p1.history
-    print p2.history
-
-This gives::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Joss()  # Create a Joss player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(10):
+    ...     p1.play(p2)
+    >>> p1.history  # doctest: +SKIP
     ['C', 'C', 'C', 'D', 'C', 'D', 'C', 'C', 'C', 'C']
+    >>> p2.history  # doctest: +SKIP
     ['C', 'C', 'D', 'C', 'D', 'C', 'C', 'C', 'C', 'D']
 
 Which is the same as Tit-For-Tat for these 10 rounds.
@@ -401,18 +355,14 @@ Implementation
 
 Tullock is implemented in the library as follows::
 
-    import axelrod
-    p1 = axelrod.Tullock()  # Create a Tullock player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(15):
-        p1.play(p2)
-
-    print p1.history
-    print p2.history
-
-This gives::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Tullock()  # Create a Tullock player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(15):
+    ...     p1.play(p2)
+    >>> p1.history  # doctest: +SKIP
     ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'C', 'D']
+    >>> p2.history  # doctest: +SKIP
     ['D', 'C', 'C', 'D', 'D', 'C', 'C', 'D', 'D', 'D', 'C', 'D', 'C', 'D', 'C']
 
 We have 10 rounds of cooperation and some apparently random plays afterward.
@@ -445,19 +395,15 @@ Implementation
 
 Here is how this is implemented in the library::
 
-   import axelrod
-   p1 = axelrod.Random()  # Create a player that plays randomly
-   p2 = axelrod.Random()  # Create a player that plays randomly
-   for round in range(5):
-       p1.play(p2)
-
-   print p1.history
-   print p2.history
-
-which gives (for the random seed used)::
-
-    ['D', 'D', 'C', 'C', 'C']
-    ['D', 'C', 'D', 'D', 'C']
+   >>> import axelrod
+   >>> p1 = axelrod.Random()  # Create a player that plays randomly
+   >>> p2 = axelrod.Random()  # Create a player that plays randomly
+   >>> for round in range(5):
+   ...     p1.play(p2)
+   >>> p1.history  # doctest: +SKIP
+   ['D', 'D', 'C', 'C', 'C']
+   >>> p2.history  # doctest: +SKIP
+   ['D', 'C', 'D', 'D', 'C']
 
 Axelrod's second tournament
 ---------------------------
@@ -479,20 +425,16 @@ Implementation
 
 Here is how Eatherley is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Eatherley()  # Create a Eatherley player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
+    >>> import axelrod
+    >>> p1 = axelrod.Eatherley()  # Create a Eatherley player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(5):
+    ...     p1.play(p2)
 
-    print p1.history
-    print p2.history
-
-which gives (for a particular random seed)::
-
+    >>> p1.history  # doctest: +SKIP
     ['C', 'C', 'C', 'D', 'C']
+    >>> p2.history  # doctest: +SKIP
     ['C', 'D', 'D', 'C', 'C']
-
 
 CHAMPION
 ^^^^^^^^
@@ -511,20 +453,15 @@ Implementation
 
 Here is how Champion is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Champion()  # Create a Champion player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
-
-    print p1.history
-    print p2.history
-
-which gives (for a particular random seed)::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Champion()  # Create a Champion player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history  # doctest: +SKIP
     ['C', 'C', 'C', 'C', 'C']
+    >>> p2.history  # doctest: +SKIP
     ['D', 'C', 'D', 'D', 'C']
-
 
 TESTER
 ^^^^^^
@@ -541,21 +478,15 @@ Implementation
 
 Here is how this is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Tester()  # Create a Tester player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
-
-    print p1.history
-    print p2.history
-
-which gives (for a particular random seed)::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Tester()  # Create a Tester player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history  # doctest: +SKIP
     ['D', 'C', 'C', 'D', 'D']
+    >>> p2.history  # doctest: +SKIP
     ['C', 'D', 'D', 'D', 'C']
-
-
 
 Stewart and Plotkin's Tournament (2012)
 ---------------------------------------
@@ -650,17 +581,13 @@ Implementation
 
 Here is a quick implementation of this in the library::
 
-   import axelrod
-   p1 = axelrod.GTFT()  # Create a player that plays GTFT
-   p2 = axelrod.Defector()  # Create a player that always defects
-   for round in range(10):
-       p1.play(p2)
-
-   print p1.history
-
-this gives (for the random seed used)::
-
-    ['C', 'D', 'D', 'C', 'D', 'D', 'D', 'D', 'D', 'D']
+   >>> import axelrod
+   >>> p1 = axelrod.GTFT()  # Create a player that plays GTFT
+   >>> p2 = axelrod.Defector()  # Create a player that always defects
+   >>> for round in range(10):
+   ...     p1.play(p2)
+   >>> p1.history  # doctest: +SKIP
+   ['C', 'D', 'D', 'C', 'D', 'D', 'D', 'D', 'D', 'D']
 
 which shows that :code:`GTFT` tried to forgive :code:`Defector`.
 
@@ -677,17 +604,13 @@ Implementation
 
 Here is the implementation of this in the library::
 
-   import axelrod
-   p1 = axelrod.TitFor2Tats()  # Create a player that plays TF2T
-   p2 = axelrod.Defector()  # Create a player that always defects
-   for round in range(3):
-       p1.play(p2)
-
-   print p1.history
-
-which gives::
-
-    ['C', 'C', 'D']
+   >>> import axelrod
+   >>> p1 = axelrod.TitFor2Tats()  # Create a player that plays TF2T
+   >>> p2 = axelrod.Defector()  # Create a player that always defects
+   >>> for round in range(3):
+   ...     p1.play(p2)
+   >>> p1.history
+   ['C', 'C', 'D']
 
 we see that it takes 2 defections to trigger a defection by :code:`TitFor2Tats`.
 
@@ -710,17 +633,13 @@ Implementation
 
 Here is a quick implementation of this in the library::
 
-   import axelrod
-   p1 = axelrod.WinStayLoseShift()  # Create a player that plays WSLS
-   p2 = axelrod.Alternator()  # Create a player that alternates
-   for round in range(5):
-       p1.play(p2)
-
-   print p1.history
-
-this gives::
-
-    ['C', 'C', 'D', 'D', 'C']
+   >>> import axelrod
+   >>> p1 = axelrod.WinStayLoseShift()  # Create a player that plays WSLS
+   >>> p2 = axelrod.Alternator()  # Create a player that alternates
+   >>> for round in range(5):
+   ...     p1.play(p2)
+   >>> p1.history
+   ['C', 'C', 'D', 'D', 'C']
 
 which shows that :code:`WSLS` will choose the strategy that was a best response
 in the previous round.
@@ -755,18 +674,14 @@ Implementation
 
 Here is how ZDGTFT-2 is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.ZDGTFT2()  # Create a ZDGTFT-2 player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
-
-    print p2.history
-    print p1.history
-
-which gives (for the particular random seed used)::
-
+    >>> import axelrod
+    >>> p1 = axelrod.ZDGTFT2()  # Create a ZDGTFT-2 player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p2.history  # doctest: +SKIP
     ['D', 'D', 'D', 'C', 'C', 'D', 'C', 'D', 'D', 'D']
+    >>> p1.history  # doctest: +SKIP
     ['C', 'C', 'D', 'D', 'C', 'C', 'D', 'C', 'D', 'D']
 
 looking closely (and repeating the above) will show that the above
@@ -790,18 +705,14 @@ Implementation
 
 Here is how EXTORT-2 is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.ZDExtort2()  # Create a EXTORT-2 player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(10):
-        p1.play(p2)
-
-    print p2.history
-    print p1.history
-
-which gives (for the particular seed used)::
-
+    >>> import axelrod
+    >>> p1 = axelrod.ZDExtort2()  # Create a EXTORT-2 player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(10):
+    ...     p1.play(p2)
+    >>> p2.history  # doctest: +SKIP
     ['D', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'C', 'D']
+    >>> p1.history  # doctest: +SKIP
     ['C', 'C', 'D', 'C', 'C', 'D', 'D', 'D', 'D', 'D']
 
 you can see that :code:`ZDExtort2` never cooperates after both strategies defect.
@@ -821,16 +732,12 @@ Implementation
 
 Here is how GRIM is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Grudger()  # Create a GRIM player
-    p2 = axelrod.Defector()  # Create a player that always defects
-    for round in range(5):
-        p1.play(p2)
-
-    print p1.history
-
-this gives::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Grudger()  # Create a GRIM player
+    >>> p2 = axelrod.Defector()  # Create a player that always defects
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history
     ['C', 'D', 'D', 'D', 'D']
 
 HARD_JOSS
@@ -867,22 +774,18 @@ Implementation
 
 HARD_MAJO is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.GoByMajority()  # Create a HARD_TFT player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
-
-    print p2.history
-    print p1.history
-
-which gives (for this seed)::
-
-
+    >>> import axelrod
+    >>> p1 = axelrod.GoByMajority()  # Create a HARD_TFT player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p2.history  # doctest: +SKIP
     ['D', 'C', 'C', 'D', 'D']
+    >>> p1.history  # doctest: +SKIP
     ['C', 'D', 'C', 'C', 'C']
 
-we see that following the third round (at which point the opponent has cooperated a lot), :code:`GoByMajority` cooperates.
+we see that following the third round (at which point the opponent has
+cooperated a lot), :code:`GoByMajority` cooperates.
 
 HARD_TFT
 ^^^^^^^^
@@ -900,20 +803,16 @@ Implementation
 
 HARD_TFT is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.HardTitForTat()  # Create a HARD_TFT player
-    p2 = axelrod.Alternator()  # Create a player that alternates
-    for round in range(5):
-        p1.play(p2)
-
-    print p1.history
-
-which gives::
-
+    >>> import axelrod
+    >>> p1 = axelrod.HardTitForTat()  # Create a HARD_TFT player
+    >>> p2 = axelrod.Alternator()  # Create a player that alternates
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history
     ['C', 'C', 'D', 'D', 'D']
 
 we see that :code:`HardTitForTat` cooperates for the first two moves but then
-constantly defetcts as there is always a defection in it's opponent's recent
+constantly defects as there is always a defection in it's opponent's recent
 history.
 
 HARD_TF2T
@@ -931,18 +830,15 @@ Implementation
 
 HARD_TF2T is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.HardTitFor2Tats()  # Create a HARD_TF2T player
-    p2 = axelrod.Random()  # Create a player that plays randomly
-    for round in range(5):
-        p1.play(p2)
+    >>> import axelrod
+    >>> p1 = axelrod.HardTitFor2Tats()  # Create a HARD_TF2T player
+    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> for round in range(5):
+    ...     p1.play(p2)
 
-    print p2.history
-    print p1.history
-
-which gives (for this particular seed)::
-
+    >>> p2.history  # doctest: +SKIP
     ['D', 'D', 'C', 'D', 'C']
+    >>> p1.history  # doctest: +SKIP
     ['C', 'C', 'D', 'D', 'C']
 
 we see that :code:`HardTitFor2Tats` waited for 2 defects before defecting, but
@@ -958,20 +854,16 @@ Calculator attempts to detect a cycle in the opponents history, and defects
 unconditionally thereafter if a cycle is found. Otherwise Calculator plays like
 TFT for the remaining rounds.
 
-Calculator is implemented in the library as follows:
+Calculator is implemented in the library as follows::
 
-    import axelrod
-    p1 = axelrod.Calculator()  # Create a HARD_TF2T player
-    p2 = axelrod.Cooperator()  # Create a player that always cooperates
-    for round in range(5):
-        p1.play(p2)
-
-    print p1.history
-    print p2.history
-
-This returns (for a particular random seed)::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Calculator()  # Create a HARD_TF2T player
+    >>> p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history  # doctest: +SKIP
     ['C', 'C', 'C', 'C', 'C']
+    >>> p2.history  # doctest: +SKIP
     ['C', 'C', 'C', 'C', 'C']
 
 Prober
@@ -989,18 +881,14 @@ Implementation
 
 Prober is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Prober()  # Create a Prober player
-    p2 = axelrod.Cooperator()  # Create a player that always cooperates
-    for round in range(5):
-        p1.play(p2)
-
-    print p2.history
-    print p1.history
-
-which gives::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Prober()  # Create a Prober player
+    >>> p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history
     ['D', 'C', 'C', 'D', 'D']
+    >>> p2.history
     ['C', 'C', 'C', 'C', 'C']
 
 Prober2
@@ -1018,18 +906,14 @@ Implementation
 
 Prober2 is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Prober2()  # Create a Prober2 player
-    p2 = axelrod.Cooperator()  # Create a player that always cooperates
-    for round in range(5):
-        p1.play(p2)
-
-    print p2.history
-    print p1.history
-
-which gives::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Prober2()  # Create a Prober2 player
+    >>> p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history
     ['D', 'C', 'C', 'C', 'C']
+    >>> p2.history
     ['C', 'C', 'C', 'C', 'C']
 
 Prober3
@@ -1047,18 +931,14 @@ Implementation
 
 Prober3 is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.Prober3()  # Create a Prober3 player
-    p2 = axelrod.Cooperator()  # Create a player that always cooperates
-    for round in range(5):
-        p1.play(p2)
-
-    print p2.history
-    print p1.history
-
-which gives::
-
+    >>> import axelrod
+    >>> p1 = axelrod.Prober3()  # Create a Prober3 player
+    >>> p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history
     ['D', 'C', 'D', 'D', 'D']
+    >>> p2.history
     ['C', 'C', 'C', 'C', 'C']
 
 HardProber
@@ -1076,58 +956,63 @@ Implementation
 
 HardProber is implemented in the library::
 
-    import axelrod
-    p1 = axelrod.HardProber()  # Create a Prober3 player
-    p2 = axelrod.Cooperator()  # Create a player that always cooperates
-    for round in range(5):
-        p1.play(p2)
+    >>> import axelrod
+    >>> p1 = axelrod.HardProber()  # Create a Prober3 player
+    >>> p2 = axelrod.Cooperator()  # Create a player that always cooperates
+    >>> for round in range(5):
+    ...     p1.play(p2)
 
-    print p2.history
-    print p1.history
-
-which gives::
-
+    >>> p1.history
     ['D', 'D', 'C', 'C', 'D']
+    >>> p2.history
     ['C', 'C', 'C', 'C', 'C']
 
 
 Strategies implemented in the module
 ------------------------------------
 
-There are several original strategies which have been created as part of this project and have never (to our knowledge) appeared in previous tournaments.
+There are several original strategies which have been created as part of this
+project and have never (to our knowledge) appeared in previous tournaments.
 
 Fool Me Once
-^^^^^^^^^^^
+^^^^^^^^^^^^
 
-This strategy begins by cooperating but will defect if at any point the opponent has defected more than once.
+This strategy begins by cooperating but will defect if at any point the opponent
+has defected more than once.
 
 Forgetful Fool Me Once
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Like Fool Me Once, this strategy defects if the opponent ever defects, but sometimes
-forgets that the opponent had defected, cooperating again until another defection.
+Like Fool Me Once, this strategy defects if the opponent ever defects, but
+sometimes forgets that the opponent had defected, cooperating again until
+another defection.
 
 Fool Me Forever
 ^^^^^^^^^^^^^^^
 
-This strategy defects until the opponent defects, and then cooperates there after.
-Note that this strategy is different than opposite grudger, which cooperates
-indefinitely after an opponent cooperation.
+This strategy defects until the opponent defects, and then cooperates there
+after.  Note that this strategy is different than opposite grudger, which
+cooperates indefinitely after an opponent cooperation.
 
 Backstabber
 ^^^^^^^^^^^
 
-Forgives the first 3 defections but on the fourth will defect forever. Defects after the 198th round unconditionally.
+Forgives the first 3 defections but on the fourth will defect forever. Defects
+after the 198th round unconditionally.
 
 DoubleCrosser
 ^^^^^^^^^^^^^
 
-Forgives the first 3 defections but on the fourth will defect forever. If the opponent did not defect in the first 6 rounds the player will cooperate until the 180th round. Defects after the 198th round unconditionally.
+Forgives the first 3 defections but on the fourth will defect forever. If the
+opponent did not defect in the first 6 rounds the player will cooperate until
+the 180th round. Defects after the 198th round unconditionally.
 
 Aggravater
 ^^^^^^^^^^
 
-This strategy begins by defecting 3 times and then will cooperate until the opponent defects. After the opponent defects it will defect unconditionally. Essentially Grudger, but begins by defecting 3 times.
+This strategy begins by defecting 3 times and then will cooperate until the
+opponent defects. After the opponent defects it will defect unconditionally.
+Essentially Grudger, but begins by defecting 3 times.
 
 Alternator
 ^^^^^^^^^^

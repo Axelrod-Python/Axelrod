@@ -10,6 +10,7 @@ Welcome to the documentation for the Axelrod Python library
    :maxdepth: 2
 
    tutorials/index.rst
+   reference/index.rst
 
 
 Indices and tables
