@@ -28,6 +28,18 @@ We can view these results (which helps visualise the stochastic effects)::
    :width: 50%
    :align: center
 
+Visualising the distributions of wins
+-------------------------------------
+
+We can view the distributions of wins for each player::
+
+    >>> p = plot.winplot()
+    >>> p.show()
+
+.. image:: _static/visualising_results/demo_strategies_winplot.svg
+   :width: 50%
+   :align: center
+
 Visualising the payoff matrix
 -----------------------------
 
