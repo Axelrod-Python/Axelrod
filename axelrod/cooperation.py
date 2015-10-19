@@ -1,10 +1,6 @@
 from . import eigen
 
-# This function will eventually be called 'cooperation_matrix' in line with
-# the naming within payoff.py. However, that name is currently in use and,
-# until RoundRobin, ResultSet and Tournament have been refactored to use the
-# interactions dictionary, this function will use a temporary name.
-def temp_cooperation_matrix(interactions, nplayers):
+def cooperation_matrix(interactions, nplayers):
     """
     The cooperation matrix from a single round robin.
 
@@ -48,7 +44,7 @@ def temp_cooperation_matrix(interactions, nplayers):
     """
     pass
 
-def cooperation_matrix(results):
+def cooperation(results):
     """
     Parameters
     ----------
