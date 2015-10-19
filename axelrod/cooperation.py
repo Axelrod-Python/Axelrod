@@ -3,6 +3,7 @@ from axelrod import Actions
 
 C, D = Actions.C, Actions.D
 
+# As yet unused until RoundRobin returns interactions
 def cooperation_matrix(interactions, nplayers):
     """
     The cooperation matrix from a single round robin.
