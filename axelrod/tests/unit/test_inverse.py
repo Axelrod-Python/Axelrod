@@ -50,7 +50,7 @@ class TestInverse(TestPlayer):
         P1 = axelrod.Inverse()
         P2 = axelrod.Player()
 
-        self.responses_test([C] * 4, [C, D, C, D], [C], random_seed=5)
+        self.responses_test([C] * 4, [C, D, C, D], [C], random_seed=6)
         self.responses_test([C] * 6, [C, C, C, C, D, D], [C])
         self.responses_test([C] * 9, [D] * 8 + [C], [D])
-        self.responses_test([C] * 9, [D] * 8 + [C], [D], random_seed=5)
+        self.responses_test([C] * 9, [D] * 8 + [C], [D], random_seed=6)

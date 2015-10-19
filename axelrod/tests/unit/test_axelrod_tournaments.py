@@ -247,7 +247,7 @@ class TestChampion(TestPlayer):
                             [D], random_seed=40)
 
 
-class TestEatherly(TestPlayer):
+class TestEatherley(TestPlayer):
 
     name = "Eatherley"
     player = axelrod.Eatherley
@@ -270,7 +270,7 @@ class TestEatherly(TestPlayer):
         # Test defection after opponent defection
         self.responses_test([D], [D], [D])
         self.responses_test([D, D], [D, D], [D])
-        self.responses_test([D, C, C, D], [D, C, C, D], [D, C], random_seed=10)
+        self.responses_test([D, C, C, D], [D, C, C, D], [D, C], random_seed=9)
 
 
 class TestTester(TestPlayer):

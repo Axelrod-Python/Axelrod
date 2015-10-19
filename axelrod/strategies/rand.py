@@ -1,4 +1,4 @@
-from axelrod import Player, Actions
+from axelrod import Player, Actions, random_choice
 
 
 class Random(Player):
