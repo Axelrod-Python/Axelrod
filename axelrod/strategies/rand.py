@@ -1,5 +1,4 @@
 from axelrod import Player, Actions
-import random
 
 
 class Random(Player):

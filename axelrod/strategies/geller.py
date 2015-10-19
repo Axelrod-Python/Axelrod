@@ -20,7 +20,6 @@ spirit of the 'competition' :-)
 """
 
 import inspect
-import random
 
 from axelrod import Player, Actions, random_choice
 
