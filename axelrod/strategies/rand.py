@@ -31,10 +31,7 @@ class Random(Player):
         self.init_args = (p,)
 
     def strategy(self, opponent):
-        r = random.random()
-        if r > self.p:
-            return Actions.D
-        return Actions.C
+        return random_choice(self.p)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
