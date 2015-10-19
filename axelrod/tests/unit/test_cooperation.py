@@ -19,13 +19,19 @@ class TestCooperation(unittest.TestCase):
 
         }
 
+        cls.expected_cooperation_matrix = [
+            [3, 3, 3],
+            [3, 5, 2],
+            [3, 2, 0]
+        ]
+
         cls.expected_cooperation_results = [
             [[3, 3], [3, 3], [3, 3]],
             [[3, 3], [5, 5], [4, 2]],
             [[4, 3], [4, 1], [1, 4]]
         ]
 
-        cls.expected_cooperation_matrix = [
+        cls.expected_cooperation = [
             [6, 6, 6],
             [6, 10, 6],
             [7, 5, 5]
@@ -66,11 +72,11 @@ class TestCooperation(unittest.TestCase):
 
     def test_cooperation(self):
         cooperation_matrix = ac.cooperation(self.expected_cooperation_results)
-        self.assertEqual(cooperation_matrix, self.expected_cooperation_matrix)
+        self.assertEqual(cooperation_matrix, self.expected_cooperation)
 
     def test_normalised_cooperation(self):
         normalised_cooperation = ac.normalised_cooperation(
-            self.expected_cooperation_matrix, 5, 2
+            self.expected_cooperation, 5, 2
         )
         self.assertEqual(
             normalised_cooperation, self.expected_normalised_cooperation
@@ -95,7 +101,7 @@ class TestCooperation(unittest.TestCase):
 
     def test_cooperating_rating(self):
         cooperating_rating = ac.cooperating_rating(
-            self.expected_cooperation_matrix, 3, 5, 2
+            self.expected_cooperation, 3, 5, 2
         )
         self.assertEqual(
             self.round_rating(cooperating_rating, 2),
@@ -123,7 +129,7 @@ class TestCooperation(unittest.TestCase):
         self.assertEqual(good_partner_rating, self.expected_good_partner_rating)
 
     def test_eigenvector(self):
-        eigenvector = ac.eigenvector(self.expected_cooperation_matrix)
+        eigenvector = ac.eigenvector(self.expected_cooperation)
         self.assertEqual(
             self.round_rating(eigenvector, 2), self.expected_eigenvector
         )

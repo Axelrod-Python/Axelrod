@@ -1,4 +1,7 @@
 from . import eigen
+from axelrod import Actions
+
+C, D = Actions.C, Actions.D
 
 def cooperation_matrix(interactions, nplayers):
     """
@@ -42,7 +45,16 @@ def cooperation_matrix(interactions, nplayers):
         and column (j) represents an individual player and the the value Cij
         is the number of times player i cooperated against opponent j.
     """
-    pass
+    cooperation = [[0 for i in range(nplayers)] for j in range(nplayers)]
+    for players, actions in interactions.items():
+        p1_actions, p2_actions = zip(*actions)
+        p1_cooperation = p1_actions.count(Actions.C)
+        p2_cooperation = p2_actions.count(Actions.C)
+        cooperation[players[0]][players[1]] = p1_cooperation
+        if players[0] != players[1]:
+            cooperation[players[1]][players[0]] = p2_cooperation
+    return cooperation
+
 
 def cooperation(results):
     """
@@ -78,6 +90,7 @@ def cooperation(results):
     """
     return[[sum(element) for element in row] for row in results]
 
+
 def normalised_cooperation(cooperation, turns, repetitions):
     """
     Parameters
@@ -103,6 +116,7 @@ def normalised_cooperation(cooperation, turns, repetitions):
         [1.0 * element / turns for element in row]
         for row in cooperation]
 
+
 def vengeful_cooperation(cooperation):
     """
     Parameters
@@ -118,6 +132,7 @@ def vengeful_cooperation(cooperation):
             Dij = 2(Cij -0.5)
     """
     return [[2 * (element - 0.5) for element in row] for row in cooperation]
+
 
 def cooperating_rating(cooperation, nplayers, turns, repetitions):
     """
@@ -140,6 +155,7 @@ def cooperating_rating(cooperation, nplayers, turns, repetitions):
     total_turns = turns * repetitions * nplayers
     return [1.0 * sum(row) / total_turns for row in cooperation]
 
+
 def null_matrix(nplayers):
     """
     Parameters
@@ -153,6 +169,7 @@ def null_matrix(nplayers):
     """
     plist = list(range(nplayers))
     return [[0 for j in plist] for i in plist]
+
 
 def good_partner_matrix(results, nplayers, repetitions):
     """
@@ -200,6 +217,7 @@ def good_partner_matrix(results, nplayers, repetitions):
                     matrix[i][j] += 1
     return matrix
 
+
 def n_interactions(nplayers, repetitions):
     """
     Parameters
@@ -215,6 +233,7 @@ def n_interactions(nplayers, repetitions):
         The number of interactions between players excluding self-interactions.
     """
     return repetitions * (nplayers - 1)
+
 
 def good_partner_rating(good_partner_matrix, nplayers, repetitions):
     """
@@ -233,7 +252,7 @@ def good_partner_rating(good_partner_matrix, nplayers, repetitions):
         A list of good partner ratings ordered by player index.
     """
     return [1.0 * sum(row) / n_interactions(nplayers, repetitions)
-        for row in good_partner_matrix]
+            for row in good_partner_matrix]
 
 
 def eigenvector(cooperation_matrix):
