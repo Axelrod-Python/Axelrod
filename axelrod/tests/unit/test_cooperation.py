@@ -1,11 +1,23 @@
 import unittest
+from axelrod import Actions
 import axelrod.cooperation as ac
 
+C, D = Actions.C, Actions.D
 
 class TestCooperation(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+
+        cls.interactions = {
+            (0, 0): [(C, C), (D, D), (C, C), (D, D), (C, C)],
+            (0, 1): [(C, C), (D, C), (C, D), (D, C), (C, D)],
+            (0, 2): [(C, C), (D, C), (C, D), (D, C), (C, D)],
+            (1, 1): [(C, C), (C, C), (C, C), (C, C), (C, C)],
+            (1, 2): [(C, D), (D, D), (D, C), (C, D), (D, C)],
+            (2, 2): [(D, C), (D, D), (D, C), (D, D), (D, D)]
+
+        }
 
         cls.expected_cooperation_results = [
             [[3, 3], [3, 3], [3, 3]],
@@ -47,6 +59,10 @@ class TestCooperation(unittest.TestCase):
         cls.expected_good_partner_rating = [0.75, 1.0, 0.75]
 
         cls.expected_eigenvector = [0.54, 0.68, 0.5]
+
+    def test_temp_cooperation_matrix(self):
+        cooperation_matrix = ac.temp_cooperation_matrix(self.interactions, 3)
+        self.assertEqual(cooperation_matrix, self.expected_cooperation_matrix)
 
     def test_cooperation_matrix(self):
         cooperation_matrix = ac.cooperation_matrix(
