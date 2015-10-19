@@ -96,6 +96,8 @@ def cooperation(results):
 
 def normalised_cooperation(cooperation, turns, repetitions):
     """
+    The per-turn normalised cooperation matrix for a tournament of n repetitions.
+
     Parameters
     ----------
     cooperation : list
@@ -122,6 +124,8 @@ def normalised_cooperation(cooperation, turns, repetitions):
 
 def vengeful_cooperation(cooperation):
     """
+    The vengeful cooperation matrix derived from the cooperation matrix.
+
     Parameters
     ----------
     cooperation : list
@@ -139,6 +143,8 @@ def vengeful_cooperation(cooperation):
 
 def cooperating_rating(cooperation, nplayers, turns, repetitions):
     """
+    A list of cooperation ratings for each player
+
     Parameters
     ----------
     cooperation : list
@@ -161,6 +167,8 @@ def cooperating_rating(cooperation, nplayers, turns, repetitions):
 
 def null_matrix(nplayers):
     """
+    A null n by n matrix for n players
+
     Parameters
     ----------
     nplayers : integer
@@ -176,6 +184,8 @@ def null_matrix(nplayers):
 
 def good_partner_matrix(results, nplayers, repetitions):
     """
+    An n by n matrix of good partner ratings for n players
+
     Parameters
     ----------
     results : list
@@ -223,6 +233,8 @@ def good_partner_matrix(results, nplayers, repetitions):
 
 def n_interactions(nplayers, repetitions):
     """
+    The number of interactions between n players
+
     Parameters
     ----------
     nplayers : integer
@@ -240,6 +252,8 @@ def n_interactions(nplayers, repetitions):
 
 def good_partner_rating(good_partner_matrix, nplayers, repetitions):
     """
+    A list of good partner ratings for n players in order of rating
+
     Parameters
     ----------
     good_partner_matrix : list
@@ -260,6 +274,8 @@ def good_partner_rating(good_partner_matrix, nplayers, repetitions):
 
 def eigenvector(cooperation_matrix):
     """
+    The principal eigenvector of the cooperation matrix
+
     Parameters
     ----------
     cooperation_matrix : list
