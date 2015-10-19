@@ -9,3 +9,4 @@ Contents:
    :maxdepth: 2
 
    overview_of_strategies.rst
+   glossary.rst
