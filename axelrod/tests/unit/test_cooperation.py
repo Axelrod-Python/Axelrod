@@ -60,14 +60,12 @@ class TestCooperation(unittest.TestCase):
 
         cls.expected_eigenvector = [0.54, 0.68, 0.5]
 
-    def test_temp_cooperation_matrix(self):
-        cooperation_matrix = ac.temp_cooperation_matrix(self.interactions, 3)
+    def test_cooperation_matrix(self):
+        cooperation_matrix = ac.cooperation_matrix(self.interactions, 3)
         self.assertEqual(cooperation_matrix, self.expected_cooperation_matrix)
 
-    def test_cooperation_matrix(self):
-        cooperation_matrix = ac.cooperation_matrix(
-            self.expected_cooperation_results
-        )
+    def test_cooperation(self):
+        cooperation_matrix = ac.cooperation(self.expected_cooperation_results)
         self.assertEqual(cooperation_matrix, self.expected_cooperation_matrix)
 
     def test_normalised_cooperation(self):
