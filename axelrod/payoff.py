@@ -93,6 +93,8 @@ def interaction_payoff(actions, game):
 
 def scores(payoff):
     """
+    The scores matrix excluding self-interactions
+
     Parameters
     ----------
     payoff : list
@@ -140,6 +142,8 @@ def scores(payoff):
 
 def normalised_scores(scores, turns):
     """
+    The per-turn normalised scores matrix
+
     Parameters
     ----------
     scores : list
@@ -165,6 +169,8 @@ def normalised_scores(scores, turns):
 
 def ranking(scores):
     """
+    Player index numbers listed by order of median score
+
     Parameters
     ----------
     scores : list
@@ -185,6 +191,8 @@ def ranking(scores):
 
 def ranked_names(players, ranking):
     """
+    Player names listed by their ranked order
+
     Parameters
     ----------
     players : list
@@ -203,6 +211,8 @@ def ranked_names(players, ranking):
 
 def normalised_payoff(payoff_matrix, turns):
     """
+    The per-turn averaged payoff matrix and standard deviations
+
     Parameters
     ----------
     payoff : list
@@ -243,6 +253,8 @@ def normalised_payoff(payoff_matrix, turns):
 
 def winning_player(players, payoffs):
     """
+    The index of a winning player from a pair of payoff values
+
     Parameters
     ----------
     players : tuple
@@ -266,6 +278,8 @@ def winning_player(players, payoffs):
 
 def wins(payoff):
     """
+    An n by n matrix of win counts for n players
+
     Parameters
     ----------
     payoff : list
@@ -313,6 +327,8 @@ def wins(payoff):
 
 def payoff_diffs_means(payoff, turns):
     """
+    An n by n matrix of mean payoff differences for n players
+
     Parameters
     ----------
     payoff : list
@@ -357,6 +373,8 @@ def payoff_diffs_means(payoff, turns):
 
 def score_diffs(payoff, turns):
     """
+    An n by n matrix of per-turn normalised payoff differences for n players
+
     Parameters
     ----------
     payoff : list
