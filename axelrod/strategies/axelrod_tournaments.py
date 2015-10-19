@@ -235,8 +235,7 @@ class Tullock(Player):
         cooperate_count = opponent.history[-rounds:].count(C)
         prop_cooperate = cooperate_count / float(rounds)
         prob_cooperate = max(0, prop_cooperate - 0.10)
-        r = random.random()
-        random_choice(prob_cooperate)
+        return random_choice(prob_cooperate)
 
 
 ## Second Tournament
@@ -300,7 +299,7 @@ class Eatherley(Player):
         # Respond to defections with probability equal to opponent's total
         # proportion of defections
         defection_prop = float(opponent.defections) / len(opponent.history)
-        random_choice(1 - defection_prop)
+        return random_choice(1 - defection_prop)
 
 
 class Tester(Player):
