@@ -235,7 +235,7 @@ class Plot(object):
             return None
 
         if type(eco) is list:
-            warn("""Passing the population sizes as an argument is depreciated and will be removed, please pass the Ecosystem directly""")
+            warn("""Passing the population sizes as an argument is deprecated and will be removed, please pass the Ecosystem directly""")
             populations = eco
         else:
             populations = eco.population_sizes
