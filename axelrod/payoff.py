@@ -5,7 +5,7 @@ from axelrod import Actions
 C, D = Actions.C, Actions.D
 
 
-def payoff_matrix(interactions, game):
+def payoff_matrix(interactions, nplayers, game):
     """
     The payoff matrix from a single round robin.
 
@@ -17,15 +17,20 @@ def payoff_matrix(interactions, game):
         e.g. for a round robin between Cooperator, Defector and Alternator
         with 2 turns per round:
         {
+            (0, 0): [(C, C), (C, C)].
             (0, 1): [(C, D), (C, D)],
             (0, 2): [(C, C), (C, D)],
-            (1, 2): [(D, C), (D, D)]
+            (1, 1): [(D, D), (D, D)],
+            (1, 2): [(D, C), (D, D)],
+            (2, 2): [(C, C), (D, D)]
         }
 
         i.e. the key is a pair of player index numbers and the value, a list of
         plays. The list contains one pair per turn in the round robin.
         The dictionary contains one entry for each combination of players.
 
+    nplayers : integer
+        The number of players in the round robin
     game : axelrod.Game
         The game object to score the tournament.
 
@@ -44,14 +49,12 @@ def payoff_matrix(interactions, game):
         and column (j) represents an individual player and the the value Pij
         is the payoff value for player (i) versus player (j).
     """
-    nplayers = len(interactions)
     payoffs = [[0 for i in range(nplayers)] for j in range(nplayers)]
-    for p1 in range(nplayers):
-        for p2 in range(p1, nplayers):
-            payoff = interaction_payoff(interactions[p1][p2], game)
-            payoffs[p1][p2] += payoff[0]
-            if p1 != p2:
-                payoffs[p2][p1] += payoff[1]
+    for players, actions in interactions.items():
+        payoff = interaction_payoff(actions, game)
+        payoffs[players[0]][players[1]] += payoff[0]
+        if players[0] != players[1]:
+            payoffs[players[1]][players[0]] += payoff[1]
     return payoffs
 
 
