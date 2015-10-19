@@ -1,5 +1,4 @@
-from axelrod import Player, Actions
-import random
+from axelrod import Player, Actions, random_choice
 
 C, D = Actions.C, Actions.D
 
@@ -28,8 +27,4 @@ class Inverse(Player):
         if index is None:
             return C
 
-        rnd_num = random.random()
-
-        if rnd_num < 1 / float(abs(index)):
-            return D
-        return C
+        return random_choice(1 - 1 / float(abs(index)))
