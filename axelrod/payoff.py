@@ -62,6 +62,8 @@ def payoff_matrix(interactions, nplayers, game):
 # As yet unused until RoundRobin returns interactions
 def interaction_payoff(actions, game):
     """
+    The payoff values for a single interaction of n turns between two players.
+
     Parameters
     ----------
     actions : list
