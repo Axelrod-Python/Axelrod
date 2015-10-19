@@ -5,6 +5,7 @@ from axelrod import Actions
 C, D = Actions.C, Actions.D
 
 
+# As yet unused until RoundRobin returns interactions
 def payoff_matrix(interactions, nplayers, game):
     """
     The payoff matrix from a single round robin.
