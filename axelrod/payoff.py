@@ -59,6 +59,7 @@ def payoff_matrix(interactions, nplayers, game):
     return payoffs
 
 
+# As yet unused until RoundRobin returns interactions
 def interaction_payoff(actions, game):
     """
     Parameters
