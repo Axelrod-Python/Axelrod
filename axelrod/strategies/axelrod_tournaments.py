@@ -4,12 +4,11 @@ Additional strategies from Axelrod's two tournaments.
 
 import random
 
-from axelrod import Player, Actions, random_choice
+from axelrod import Player, Actions, reverse_action, random_choice
 from.memoryone import MemoryOnePlayer
 
 C, D = Actions.C, Actions.D
 
-flip_dict = {C: D, D: C}
 
 
 ## First Tournament
@@ -338,7 +337,7 @@ class Tester(Player):
             if len(self.history) in [1, 2]:
                 return C
             # Alternate C and D
-            return flip_dict[self.history[-1]]
+            return reverse_action(self.history[-1])
 
     def reset(self):
         Player.reset(self)
