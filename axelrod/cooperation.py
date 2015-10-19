@@ -1,5 +1,53 @@
 from . import eigen
 
+# This function will eventually be called 'cooperation_matrix' in line with
+# the naming within payoff.py. However, that name is currently in use and,
+# until RoundRobin, ResultSet and Tournament have been refactored to use the
+# interactions dictionary, this function will use a temporary name.
+def temp_cooperation_matrix(interactions, nplayers):
+    """
+    The cooperation matrix from a single round robin.
+
+    Parameters
+    ----------
+    interactions : dictionary
+        A dictionary of the form:
+
+        e.g. for a round robin between Cooperator, Defector and Alternator
+        with 2 turns per round:
+        {
+            (0, 0): [(C, C), (C, C)].
+            (0, 1): [(C, D), (C, D)],
+            (0, 2): [(C, C), (C, D)],
+            (1, 1): [(D, D), (D, D)],
+            (1, 2): [(D, C), (D, D)],
+            (2, 2): [(C, C), (D, D)]
+        }
+
+        i.e. the key is a pair of player index numbers and the value, a list of
+        plays. The list contains one pair per turn in the round robin.
+        The dictionary contains one entry for each combination of players.
+
+    nplayers : integer
+        The number of players in the round robin
+
+    Returns
+    -------
+    list
+        The cooperation matrix (C) of the form:
+
+            [
+                [a, b, c],
+                [d, e, f],
+                [g, h, i],
+            ]
+
+        i.e. an n by n matrix where n is the number of players. Each row (i)
+        and column (j) represents an individual player and the the value Cij
+        is the number of times player i cooperated against opponent j.
+    """
+    pass
+
 def cooperation_matrix(results):
     """
     Parameters
