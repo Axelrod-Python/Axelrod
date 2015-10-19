@@ -58,6 +58,8 @@ def cooperation_matrix(interactions, nplayers):
 
 def cooperation(results):
     """
+    The total cooperation matrix from a tournament of multiple repetitions.
+
     Parameters
     ----------
     results : list
