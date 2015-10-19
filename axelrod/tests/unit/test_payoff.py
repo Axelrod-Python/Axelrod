@@ -21,22 +21,6 @@ class TestPayoff(unittest.TestCase):
             (2, 2): [(D, C), (D, D), (D, C), (D, D), (D, D)]
 
         }
-        #     [
-        #         [(C, C), (D, D), (C, C), (D, D), (C, C)],
-        #         [(C, C), (D, C), (C, D), (D, C), (C, D)],
-        #         [(C, C), (D, C), (C, D), (D, C), (C, D)]
-        #     ],
-        #     [
-        #         [(C, C), (C, D), (D, C), (C, D), (D, C)],
-        #         [(C, C), (C, C), (C, C), (C, C), (C, C)],
-        #         [(C, D), (D, D), (D, C), (C, D), (D, C)]
-        #     ],
-        #     [
-        #         [(C, C), (C, D), (D, C), (C, D), (D, C)],
-        #         [(D, C), (D, D), (C, D), (D, C), (C, D)],
-        #         [(D, C), (D, D), (D, C), (D, D), (D, D)]
-        #     ]
-        # ]
 
         cls.expected_payoff_matrix = [
             [11, 13, 13],
