@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 # The order of imports matters!
-from .actions import Actions
+from .actions import Actions, reverse_action
 from .random_ import random_choice
 from .plot import Plot
 from .game import DefaultGame, Game
