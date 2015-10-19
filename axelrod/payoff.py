@@ -11,19 +11,20 @@ def payoff_matrix(interactions, game):
 
     Parameters
     ----------
-    interactions : list
-        A matrix of the form:
+    interactions : dictionary
+        A dictionary of the form:
 
-        e.g. for a tournament between Cooperator and Defector with 2 turns per
-        round:
-        [
-            [(C, C), (C, C)], [(C, D), (C, D)],
-            [(D, C), (D, C)], [(D, D), (D, D)]
-        ]
+        e.g. for a round robin between Cooperator, Defector and Alternator
+        with 2 turns per round:
+        {
+            (0, 1): [(C, D), (C, D)],
+            (0, 2): [(C, C), (C, D)],
+            (1, 2): [(D, C), (D, D)]
+        }
 
-        i.e. one list per player, containing one list per opponent (in order of
-        player index) which contains a pair of interactions for each turn in a
-        round robin.
+        i.e. the key is a pair of player index numbers and the value, a list of
+        plays. The list contains one pair per turn in the round robin.
+        The dictionary contains one entry for each combination of players.
 
     game : axelrod.Game
         The game object to score the tournament.
