@@ -5,26 +5,33 @@ from axelrod import Actions
 C, D = Actions.C, Actions.D
 
 
-def payoff_matrix(interactions, game):
+# As yet unused until RoundRobin returns interactions
+def payoff_matrix(interactions, nplayers, game):
     """
     The payoff matrix from a single round robin.
 
     Parameters
     ----------
-    interactions : list
-        A matrix of the form:
+    interactions : dictionary
+        A dictionary of the form:
 
-        e.g. for a tournament between Cooperator and Defector with 2 turns per
-        round:
-        [
-            [(C, C), (C, C)], [(C, D), (C, D)],
-            [(D, C), (D, C)], [(D, D), (D, D)]
-        ]
+        e.g. for a round robin between Cooperator, Defector and Alternator
+        with 2 turns per round:
+        {
+            (0, 0): [(C, C), (C, C)].
+            (0, 1): [(C, D), (C, D)],
+            (0, 2): [(C, C), (C, D)],
+            (1, 1): [(D, D), (D, D)],
+            (1, 2): [(D, C), (D, D)],
+            (2, 2): [(C, C), (D, D)]
+        }
 
-        i.e. one list per player, containing one list per opponent (in order of
-        player index) which contains a pair of interactions for each turn in a
-        round robin.
+        i.e. the key is a pair of player index numbers and the value, a list of
+        plays. The list contains one pair per turn in the round robin.
+        The dictionary contains one entry for each combination of players.
 
+    nplayers : integer
+        The number of players in the round robin
     game : axelrod.Game
         The game object to score the tournament.
 
@@ -43,19 +50,20 @@ def payoff_matrix(interactions, game):
         and column (j) represents an individual player and the the value Pij
         is the payoff value for player (i) versus player (j).
     """
-    nplayers = len(interactions)
     payoffs = [[0 for i in range(nplayers)] for j in range(nplayers)]
-    for p1 in range(nplayers):
-        for p2 in range(p1, nplayers):
-            payoff = interaction_payoff(interactions[p1][p2], game)
-            payoffs[p1][p2] += payoff[0]
-            if p1 != p2:
-                payoffs[p2][p1] += payoff[1]
+    for players, actions in interactions.items():
+        payoff = interaction_payoff(actions, game)
+        payoffs[players[0]][players[1]] += payoff[0]
+        if players[0] != players[1]:
+            payoffs[players[1]][players[0]] += payoff[1]
     return payoffs
 
 
+# As yet unused until RoundRobin returns interactions
 def interaction_payoff(actions, game):
     """
+    The payoff values for a single interaction of n turns between two players.
+
     Parameters
     ----------
     actions : list
@@ -85,6 +93,8 @@ def interaction_payoff(actions, game):
 
 def scores(payoff):
     """
+    The scores matrix excluding self-interactions
+
     Parameters
     ----------
     payoff : list
@@ -132,6 +142,8 @@ def scores(payoff):
 
 def normalised_scores(scores, turns):
     """
+    The per-turn normalised scores matrix
+
     Parameters
     ----------
     scores : list
@@ -157,6 +169,8 @@ def normalised_scores(scores, turns):
 
 def ranking(scores):
     """
+    Player index numbers listed by order of median score
+
     Parameters
     ----------
     scores : list
@@ -177,6 +191,8 @@ def ranking(scores):
 
 def ranked_names(players, ranking):
     """
+    Player names listed by their ranked order
+
     Parameters
     ----------
     players : list
@@ -195,6 +211,8 @@ def ranked_names(players, ranking):
 
 def normalised_payoff(payoff_matrix, turns):
     """
+    The per-turn averaged payoff matrix and standard deviations
+
     Parameters
     ----------
     payoff : list
@@ -235,6 +253,8 @@ def normalised_payoff(payoff_matrix, turns):
 
 def winning_player(players, payoffs):
     """
+    The index of a winning player from a pair of payoff values
+
     Parameters
     ----------
     players : tuple
@@ -258,6 +278,8 @@ def winning_player(players, payoffs):
 
 def wins(payoff):
     """
+    An n by n matrix of win counts for n players
+
     Parameters
     ----------
     payoff : list
@@ -305,6 +327,8 @@ def wins(payoff):
 
 def payoff_diffs_means(payoff, turns):
     """
+    An n by n matrix of mean payoff differences for n players
+
     Parameters
     ----------
     payoff : list
@@ -349,6 +373,8 @@ def payoff_diffs_means(payoff, turns):
 
 def score_diffs(payoff, turns):
     """
+    An n by n matrix of per-turn normalised payoff differences for n players
+
     Parameters
     ----------
     payoff : list
