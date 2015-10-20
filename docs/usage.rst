@@ -440,7 +440,7 @@ An ecological variant of the tournament can be run with this library which allow
     eco = axelrod.Ecosystem(results)
     eco.reproduce(100) # Evolve the population over 100 time steps
     plot = axelrod.Plot(results)
-    p = plot.stackplot(eco.population_sizes)
+    p = plot.stackplot(eco)
     p.show()
 
 We see the output here:
