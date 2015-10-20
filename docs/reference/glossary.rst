@@ -25,11 +25,17 @@ In terms of code this is equivalent to::
     >>> p1, p2 = axl.Cooperator(), axl.Defector()
     >>> p1.play(p2)  # This constitues two 'plays' (p1 plays and p2 plays).
 
+This is equivalent to :code:`p2.play(p1)`. Either function invokes both
+:code:`p1.strategy(p2)` and :code:`p2.strategy(p1)`.
+
 A turn
 ------
 
 A **turn** is a 1 shot interaction between two players. It is in effect a
 composition of two **plays**.
+
+Each turn has four possible outcomes of a play: :code:`(C, C)`, :code:`(C, D)`,
+:code:`(D, C)`, or :code:`(D, D)`.
 
 A match
 -------
