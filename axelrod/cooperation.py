@@ -48,7 +48,7 @@ def cooperation_matrix(interactions):
         and column (j) represents an individual player and the the value Cij
         is the number of times player i cooperated against opponent j.
     """
-    nplayers = int((sqrt(len(interactions) * 8 +1) - 1) / 2)
+    nplayers = int((sqrt(len(interactions) * 8 + 1) - 1) / 2)
     cooperation = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for players, actions in interactions.items():
         p1_actions, p2_actions = zip(*actions)
