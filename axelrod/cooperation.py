@@ -1,7 +1,93 @@
+from math import sqrt
 from . import eigen
+from axelrod import Actions
 
-def cooperation_matrix(results):
+C, D = Actions.C, Actions.D
+
+
+# As yet unused until RoundRobin returns interactions
+def cooperation_matrix(interactions):
     """
+    The cooperation matrix from a single round robin.
+
+    Parameters
+    ----------
+    interactions : dictionary
+        A dictionary of the form:
+
+        e.g. for a round robin between Cooperator, Defector and Alternator
+        with 2 turns per round:
+        {
+            (0, 0): [(C, C), (C, C)].
+            (0, 1): [(C, D), (C, D)],
+            (0, 2): [(C, C), (C, D)],
+            (1, 1): [(D, D), (D, D)],
+            (1, 2): [(D, C), (D, D)],
+            (2, 2): [(C, C), (D, D)]
+        }
+
+        i.e. the key is a pair of player index numbers and the value, a list of
+        plays. The list contains one pair per turn in the round robin.
+        The dictionary contains one entry for each combination of players.
+
+    nplayers : integer
+        The number of players in the round robin
+
+    Returns
+    -------
+    list
+        The cooperation matrix (C) of the form:
+
+            [
+                [a, b, c],
+                [d, e, f],
+                [g, h, i],
+            ]
+
+        i.e. an n by n matrix where n is the number of players. Each row (i)
+        and column (j) represents an individual player and the the value Cij
+        is the number of times player i cooperated against opponent j.
+    """
+
+    # The number of ways (c) to select groups of r members from a set of n
+    # members is given by:
+    #
+    #     c = n! / r!(n - r)!
+    #
+    # In this case, we are selecting pairs of players (p) and thus r = 2,
+    # giving:
+    #
+    #     p = n(n-1) / 2 or p = (n^2 - n) / 2
+    #
+    # However, we also have the case where each player plays itself gving:
+    #
+    #     p = (n^2 + n) / 2
+    #
+    # Using the quadratic equation to rearrange for n gives:
+    #
+    #     n = (-1 +- sqrt(1 + 8p)) / 2
+    #
+    # Taking only the real roots allows us to derive the number of players
+    # given the number of pairs:
+    #
+    #     n = (sqrt(8p + 1) -1) / 2
+
+    nplayers = int((sqrt(len(interactions) * 8 + 1) - 1) / 2)
+    cooperation = [[0 for i in range(nplayers)] for j in range(nplayers)]
+    for players, actions in interactions.items():
+        p1_actions, p2_actions = zip(*actions)
+        p1_cooperation = p1_actions.count(C)
+        p2_cooperation = p2_actions.count(C)
+        cooperation[players[0]][players[1]] = p1_cooperation
+        if players[0] != players[1]:
+            cooperation[players[1]][players[0]] = p2_cooperation
+    return cooperation
+
+
+def cooperation(results):
+    """
+    The total cooperation matrix from a tournament of multiple repetitions.
+
     Parameters
     ----------
     results : list
@@ -34,8 +120,11 @@ def cooperation_matrix(results):
     """
     return[[sum(element) for element in row] for row in results]
 
+
 def normalised_cooperation(cooperation, turns, repetitions):
     """
+    The per-turn normalised cooperation matrix for a tournament of n repetitions.
+
     Parameters
     ----------
     cooperation : list
@@ -59,8 +148,11 @@ def normalised_cooperation(cooperation, turns, repetitions):
         [1.0 * element / turns for element in row]
         for row in cooperation]
 
+
 def vengeful_cooperation(cooperation):
     """
+    The vengeful cooperation matrix derived from the cooperation matrix.
+
     Parameters
     ----------
     cooperation : list
@@ -75,8 +167,11 @@ def vengeful_cooperation(cooperation):
     """
     return [[2 * (element - 0.5) for element in row] for row in cooperation]
 
+
 def cooperating_rating(cooperation, nplayers, turns, repetitions):
     """
+    A list of cooperation ratings for each player
+
     Parameters
     ----------
     cooperation : list
@@ -96,8 +191,11 @@ def cooperating_rating(cooperation, nplayers, turns, repetitions):
     total_turns = turns * repetitions * nplayers
     return [1.0 * sum(row) / total_turns for row in cooperation]
 
+
 def null_matrix(nplayers):
     """
+    A null n by n matrix for n players
+
     Parameters
     ----------
     nplayers : integer
@@ -110,8 +208,11 @@ def null_matrix(nplayers):
     plist = list(range(nplayers))
     return [[0 for j in plist] for i in plist]
 
+
 def good_partner_matrix(results, nplayers, repetitions):
     """
+    An n by n matrix of good partner ratings for n players
+
     Parameters
     ----------
     results : list
@@ -156,8 +257,11 @@ def good_partner_matrix(results, nplayers, repetitions):
                     matrix[i][j] += 1
     return matrix
 
+
 def n_interactions(nplayers, repetitions):
     """
+    The number of interactions between n players
+
     Parameters
     ----------
     nplayers : integer
@@ -172,8 +276,11 @@ def n_interactions(nplayers, repetitions):
     """
     return repetitions * (nplayers - 1)
 
+
 def good_partner_rating(good_partner_matrix, nplayers, repetitions):
     """
+    A list of good partner ratings for n players in order of rating
+
     Parameters
     ----------
     good_partner_matrix : list
@@ -189,11 +296,13 @@ def good_partner_rating(good_partner_matrix, nplayers, repetitions):
         A list of good partner ratings ordered by player index.
     """
     return [1.0 * sum(row) / n_interactions(nplayers, repetitions)
-        for row in good_partner_matrix]
+            for row in good_partner_matrix]
 
 
 def eigenvector(cooperation_matrix):
     """
+    The principal eigenvector of the cooperation matrix
+
     Parameters
     ----------
     cooperation_matrix : list

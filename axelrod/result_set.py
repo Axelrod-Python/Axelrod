@@ -61,8 +61,7 @@ class ResultSet(object):
             self.score_diffs = ap.score_diffs(payoff, turns)
 
         if 'cooperation' in self.results and with_morality:
-            self.cooperation = ac.cooperation_matrix(
-                self.results['cooperation'])
+            self.cooperation = ac.cooperation(self.results['cooperation'])
             self.normalised_cooperation = ac.normalised_cooperation(
                 self.cooperation, turns, repetitions)
             self.vengeful_cooperation = ac.vengeful_cooperation(

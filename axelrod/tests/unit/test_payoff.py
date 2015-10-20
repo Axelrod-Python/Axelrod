@@ -12,23 +12,15 @@ class TestPayoff(unittest.TestCase):
 
         cls.players = ('Alternator', 'TitForTat', 'Random')
 
-        cls.interactions = [
-            [
-                [(C, C), (D, D), (C, C), (D, D), (C, C)],
-                [(C, C), (D, C), (C, D), (D, C), (C, D)],
-                [(C, C), (D, C), (C, D), (D, C), (C, D)]
-            ],
-            [
-                [(C, C), (C, D), (D, C), (C, D), (D, C)],
-                [(C, C), (C, C), (C, C), (C, C), (C, C)],
-                [(C, D), (D, D), (D, C), (C, D), (D, C)]
-            ],
-            [
-                [(C, C), (C, D), (D, C), (C, D), (D, C)],
-                [(D, C), (D, D), (C, D), (D, C), (C, D)],
-                [(D, C), (D, D), (D, C), (D, D), (D, D)]
-            ]
-        ]
+        cls.interactions = {
+            (0, 0): [(C, C), (D, D), (C, C), (D, D), (C, C)],
+            (0, 1): [(C, C), (D, C), (C, D), (D, C), (C, D)],
+            (0, 2): [(C, C), (D, C), (C, D), (D, C), (C, D)],
+            (1, 1): [(C, C), (C, C), (C, C), (C, C), (C, C)],
+            (1, 2): [(C, D), (D, D), (D, C), (C, D), (D, C)],
+            (2, 2): [(D, C), (D, D), (D, C), (D, D), (D, D)]
+
+        }
 
         cls.expected_payoff_matrix = [
             [11, 13, 13],
@@ -83,11 +75,11 @@ class TestPayoff(unittest.TestCase):
         ]
 
     def test_payoff_matrix(self):
-        payoff_matrix = ap.payoff_matrix(self.interactions, Game())
+        payoff_matrix = ap.payoff_matrix(self.interactions, 3, Game())
         self.assertEqual(payoff_matrix, self.expected_payoff_matrix)
 
     def test_interaction_payoff(self):
-        payoff = ap.interaction_payoff(self.interactions[2][2], Game())
+        payoff = ap.interaction_payoff(self.interactions[(2, 2)], Game())
         self.assertEqual(payoff, (13, 3))
 
     def test_scores(self):
