@@ -46,4 +46,4 @@ To contribute a strategy you need to follow as many of the following steps as po
 7. Send us a pull request.
 
 **If you would like a hand with any of the above please do get in touch: we're
-always delight to have new strategies.**
+always delighted to have new strategies.**
