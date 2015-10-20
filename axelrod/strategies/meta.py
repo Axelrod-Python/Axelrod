@@ -140,7 +140,7 @@ class MetaWinner(MetaPlayer):
     def meta_strategy(self, results, opponent):
 
         scores = [pl.score for pl in self.team]
-        bestscore = min(scores)
+        bestscore = max(scores)
         beststrategies = [i for i, pl in enumerate(self.team) if pl.score == bestscore]
         bestproposals = [results[i] for i in beststrategies]
         bestresult = "C" if "C" in bestproposals else "D"
