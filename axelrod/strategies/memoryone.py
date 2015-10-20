@@ -1,6 +1,4 @@
-from random import random
-
-from axelrod import Player, Actions
+from axelrod import Player, Actions, random_choice
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
@@ -65,7 +63,7 @@ class MemoryOnePlayer(Player):
         # Determine which probability to use
         p = self._four_vector[(self.history[-1], opponent.history[-1])]
         # Draw a random number in [0,1] to decide
-        return C if random() < p else D
+        return random_choice(p)
 
 
 class WinStayLoseShift(MemoryOnePlayer):

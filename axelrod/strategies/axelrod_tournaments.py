@@ -4,7 +4,7 @@ Additional strategies from Axelrod's two tournaments.
 
 import random
 
-from axelrod import Player, Actions
+from axelrod import Player, Actions, random_choice
 from.memoryone import MemoryOnePlayer
 
 C, D = Actions.C, Actions.D
@@ -100,10 +100,7 @@ class Feld(Player):
         if opponent.history[-1] == D:
             return D
         p = self._cooperation_probability()
-        r = random.random()
-        if r < p:
-            return C
-        return D
+        return random_choice(p)
 
 
 class Grofman(MemoryOnePlayer):
@@ -238,10 +235,7 @@ class Tullock(Player):
         cooperate_count = opponent.history[-rounds:].count(C)
         prop_cooperate = cooperate_count / float(rounds)
         prob_cooperate = max(0, prop_cooperate - 0.10)
-        r = random.random()
-        if r < prob_cooperate:
-            return C
-        return D
+        return random_choice(prob_cooperate)
 
 
 ## Second Tournament
@@ -305,10 +299,7 @@ class Eatherley(Player):
         # Respond to defections with probability equal to opponent's total
         # proportion of defections
         defection_prop = float(opponent.defections) / len(opponent.history)
-        r = random.random()
-        if r < defection_prop:
-            return D
-        return C
+        return random_choice(1 - defection_prop)
 
 
 class Tester(Player):

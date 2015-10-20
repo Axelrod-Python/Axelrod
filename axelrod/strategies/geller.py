@@ -20,9 +20,8 @@ spirit of the 'competition' :-)
 """
 
 import inspect
-import random
 
-from axelrod import Player, Actions
+from axelrod import Player, Actions, random_choice
 
 C, D = Actions.C, Actions.D
 
@@ -33,7 +32,7 @@ class Geller(Player):
     """
 
     name = 'Geller'
-    default = lambda self: C if random.random() > 0.5 else D
+    default = lambda self: random_choice(0.5)
     classifier = {
         'memory_depth': -1,
         'stochastic': True,
