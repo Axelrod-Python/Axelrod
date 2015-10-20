@@ -49,8 +49,8 @@ def cooperation_matrix(interactions, nplayers):
     cooperation = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for players, actions in interactions.items():
         p1_actions, p2_actions = zip(*actions)
-        p1_cooperation = p1_actions.count(Actions.C)
-        p2_cooperation = p2_actions.count(Actions.C)
+        p1_cooperation = p1_actions.count(C)
+        p2_cooperation = p2_actions.count(C)
         cooperation[players[0]][players[1]] = p1_cooperation
         if players[0] != players[1]:
             cooperation[players[1]][players[0]] = p2_cooperation
