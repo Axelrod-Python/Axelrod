@@ -61,7 +61,7 @@ def cooperation_matrix(interactions):
     #
     # However, we also have the case where each player plays itself gving:
     #
-    #     p = (n(n-1) / 2) + n or p = (n^2 + n) / 2
+    #     p = (n^2 + n) / 2
     #
     # Using the quadratic equation to rearrange for n gives:
     #
