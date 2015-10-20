@@ -67,7 +67,7 @@ def cooperation_matrix(interactions):
     #
     #     n = (-1 +- sqrt(1 + 8p)) / 2
     #
-    # Taking the real roots only allows us to derive the number of players
+    # Taking only the real roots allows us to derive the number of players
     # given the number of pairs:
     #
     #     n = (sqrt(8p + 1) -1) / 2
