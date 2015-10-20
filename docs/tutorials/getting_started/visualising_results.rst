@@ -1,8 +1,6 @@
 Visualising results
 ===================
 
-lipsum
-
 This tutorial will show you briefly how to visualise some basic results
 
 Visualising the results of the tournament
