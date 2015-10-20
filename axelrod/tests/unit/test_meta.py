@@ -137,6 +137,23 @@ class TestMetaWinner(TestMetaPlayer):
         P1.team[1].score = 1
         self.assertEqual(P1.strategy(P2), C)
 
+        opponent = axelrod.Cooperator()
+        player = axelrod.MetaWinner(team = [axelrod.Cooperator, axelrod.Defector])
+        for _ in range(5):
+            player.play(opponent)
+        self.assertEqual(player.history[-1], C)
+
+        opponent = axelrod.Defector()
+        player = axelrod.MetaWinner(team = [axelrod.Defector])
+        for _ in range(20):
+            player.play(opponent)
+        self.assertEqual(player.history[-1], D)
+
+        opponent = axelrod.Defector()
+        player = axelrod.MetaWinner(team = [axelrod.Cooperator, axelrod.Defector])
+        for _ in range(20):
+            player.play(opponent)
+        self.assertEqual(player.history[-1], D)
 
 class TestMetaHunter(TestMetaPlayer):
 

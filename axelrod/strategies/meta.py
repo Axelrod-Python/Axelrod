@@ -143,7 +143,7 @@ class MetaWinner(MetaPlayer):
         bestscore = max(scores)
         beststrategies = [i for i, pl in enumerate(self.team) if pl.score == bestscore]
         bestproposals = [results[i] for i in beststrategies]
-        bestresult = "C" if "C" in bestproposals else "D"
+        bestresult = C if C in bestproposals else D
 
         # Update each player's proposed history with his proposed result, but always after
         # the new result has been settled based on scores accumulated until now.
