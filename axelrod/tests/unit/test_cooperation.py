@@ -67,7 +67,7 @@ class TestCooperation(unittest.TestCase):
         cls.expected_eigenvector = [0.54, 0.68, 0.5]
 
     def test_cooperation_matrix(self):
-        cooperation_matrix = ac.cooperation_matrix(self.interactions, 3)
+        cooperation_matrix = ac.cooperation_matrix(self.interactions)
         self.assertEqual(cooperation_matrix, self.expected_cooperation_matrix)
 
     def test_cooperation(self):
