@@ -18,7 +18,7 @@ class TestMetaPlayer(TestPlayer):
     name = "Meta Player"
     player = axelrod.MetaPlayer
     expected_classifier = {
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'manipulates_source': False,
         'inspects_source': False,
@@ -31,8 +31,8 @@ class TestMetaPlayer(TestPlayer):
         for key in ['stochastic', 'inspects_source', 'manipulates_source',
                     'manipulates_state']:
             classifier[key] = (any([t.classifier[key] for t in player.team]))
-        classifier['memory_depth'] = max([t.classifier['memory_depth']
-                                          for t in player.team])
+        classifier['memory_depth'] = float('inf')
+
         for key in classifier:
             self.assertEqual(player.classifier[key],
                              classifier[key],
@@ -137,6 +137,23 @@ class TestMetaWinner(TestMetaPlayer):
         P1.team[1].score = 1
         self.assertEqual(P1.strategy(P2), C)
 
+        opponent = axelrod.Cooperator()
+        player = axelrod.MetaWinner(team = [axelrod.Cooperator, axelrod.Defector])
+        for _ in range(5):
+            player.play(opponent)
+        self.assertEqual(player.history[-1], C)
+
+        opponent = axelrod.Defector()
+        player = axelrod.MetaWinner(team = [axelrod.Defector])
+        for _ in range(20):
+            player.play(opponent)
+        self.assertEqual(player.history[-1], D)
+
+        opponent = axelrod.Defector()
+        player = axelrod.MetaWinner(team = [axelrod.Cooperator, axelrod.Defector])
+        for _ in range(20):
+            player.play(opponent)
+        self.assertEqual(player.history[-1], D)
 
 class TestMetaHunter(TestMetaPlayer):
 
@@ -174,7 +191,7 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
     name = "Meta Majority Memory One"
     player = axelrod.MetaMajorityMemoryOne
     expected_classifier = {
-        'memory_depth': 1,  # Long memory
+        'memory_depth': float('inf'),  # Long memory
         'stochastic' : True,
         'inspects_source': False,
         'manipulates_source': False,
@@ -189,7 +206,7 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
     name = "Meta Winner Memory One"
     player = axelrod.MetaWinnerMemoryOne
     expected_classifier = {
-        'memory_depth': 1,  # Long memory
+        'memory_depth': float('inf'),  # Long memory
         'stochastic' : True,
         'inspects_source': False,
         'manipulates_source': False,
@@ -204,7 +221,7 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     name = "Meta Majority Finite Memory"
     player = axelrod.MetaMajorityFiniteMemory
     expected_classifier = {
-        'memory_depth': 200,  # Long memory
+        'memory_depth': float('inf'),  # Long memory
         'stochastic' : True,
         'inspects_source': False,
         'manipulates_source': False,
@@ -219,7 +236,7 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
     name = "Meta Winner Finite Memory"
     player = axelrod.MetaWinnerFiniteMemory
     expected_classifier = {
-        'memory_depth': 200,  # Long memory
+        'memory_depth': float('inf'),  # Long memory
         'stochastic' : True,
         'inspects_source': False,
         'manipulates_source': False,

@@ -36,8 +36,6 @@ class MetaPlayer(Player):
         for key in ['stochastic', 'inspects_source', 'manipulates_source',
                     'manipulates_state']:
             self.classifier[key] = (any([t.classifier[key] for t in self.team]))
-        self.classifier['memory_depth'] = max([t.classifier['memory_depth'] for
-                                               t in self.team])
 
     def strategy(self, opponent):
 
@@ -75,6 +73,7 @@ class MetaMajority(MetaPlayer):
             self.team = ordinary_strategies
         super(MetaMajority, self).__init__()
         self.init_args = (team,)
+        self.classifier['memory_depth'] = float('inf')
 
     def meta_strategy(self, results, opponent):
         if results.count(D) > results.count(C):
@@ -95,6 +94,7 @@ class MetaMinority(MetaPlayer):
             self.team = ordinary_strategies
         super(MetaMinority, self).__init__()
         self.init_args = (team,)
+        self.classifier['memory_depth'] = float('inf')
 
     def meta_strategy(self, results, opponent):
         if results.count(D) < results.count(C):
@@ -132,17 +132,18 @@ class MetaWinner(MetaPlayer):
         if len(self.history):
             for player in self.team:
                 game = self.tournament_attributes["game"]
-                s = game.scores[(player.proposed_history[-1], opponent.history[-1])][0]
+                last_round = (player.proposed_history[-1], opponent.history[-1])
+                s = game.scores[last_round][0]
                 player.score += s
         return super(MetaWinner, self).strategy(opponent)
 
     def meta_strategy(self, results, opponent):
 
         scores = [pl.score for pl in self.team]
-        bestscore = min(scores)
+        bestscore = max(scores)
         beststrategies = [i for i, pl in enumerate(self.team) if pl.score == bestscore]
         bestproposals = [results[i] for i in beststrategies]
-        bestresult = "C" if "C" in bestproposals else "D"
+        bestresult = C if C in bestproposals else D
 
         # Update each player's proposed history with his proposed result, but always after
         # the new result has been settled based on scores accumulated until now.
