@@ -14,3 +14,4 @@ Contents:
    adding_the_new_strategy.rst
    classifying_the_new_strategy.rst
    writing_test_for_the_new_strategy.rst
+   running_tests.rst
