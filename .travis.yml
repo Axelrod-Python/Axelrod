@@ -20,6 +20,7 @@ script:
   - cd ..
   - coverage run --source=axelrod -m unittest discover
   - coverage report -m
+  # Run the doctests
   - sh doctest
 after_success:
   - coveralls
