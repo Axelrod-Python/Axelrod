@@ -6,9 +6,10 @@ strategy according to certain dimensions::
 
 Let us take a look at :code:`TitForTat`::
 
+    >>> import axelrod
     >>> classifier = axelrod.TitForTat.classifier
     >>> for key in classifier:
-    ....    print key, classifier[key]
+    ...    print key, classifier[key]
     manipulates_state False
     stochastic False
     manipulates_source False

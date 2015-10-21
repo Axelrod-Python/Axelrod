@@ -2,3 +2,4 @@
 python -m doctest docs/tutorials/getting_started/*rst
 python -m doctest docs/tutorials/further_topics/*rst
 python -m doctest docs/reference/*rst
+python -m doctest docs/tutorials/contributing/strategy/*rst
