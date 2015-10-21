@@ -1,6 +1,30 @@
 Writing the new strategy
 ========================
 
+Identify a new strategy
+-----------------------
+
+The library has a large number of strategies::
+
+    >>> import axelrod as axl
+    >>> len(axl.strategies)
+    103
+
+If you're not sure if you have a strategy that has already been implemented
+please get in touch: `via the gitter room
+<https://gitter.im/Axelrod-Python/Axelrod>`_ or `open an issue
+<https://github.com/Axelrod-Python/Axelrod/issues>`_.
+
+Several strategies are special cases of other strategies. For example, both
+`Cooperator` and `Defector` are special cases of `Random`, `Random(1)` and
+`Random(0)` respectively. While we could eliminate `Cooperator` in its current
+form, these strategies are intentionally left as is as simple examples for new
+users and contributors. Nevertheless, please feel free to update the docstrings
+of strategies like `Random` to point out such cases.
+
+The code
+--------
+
 There are a couple of things that need to be created in a strategy.py file.  Let
 us take a look at the :code:`TitForTat` class (located in the
 :code:`axelrod/strategies/titfortat.py` file)::
