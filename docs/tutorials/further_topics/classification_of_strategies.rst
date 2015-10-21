@@ -27,10 +27,10 @@ strategies::
     31
 
 Or indeed find out how many strategy have only use 1 turn worth of memory to
-make a decision:
+make a decision::
 
     >>> len([s for s in axl.strategies if s().classifier['memory_depth']==1])
-    15
+    13
 
 Similarly, strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`

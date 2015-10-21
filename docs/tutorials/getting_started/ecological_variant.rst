@@ -16,7 +16,7 @@ ecosystem based on the payoff matrix of a tournament::
 Here is how we obtain a nice stackplot of the system evolving over time::
 
     >>> plot = axl.Plot(results)
-    >>> p = plot.stackplot(eco.population_sizes)
+    >>> p = plot.stackplot(eco)
     >>> p.show()
 
 .. image:: _static/visualising_results/demo_strategies_stackplot.svg
