@@ -4,7 +4,7 @@ class Actions(object):
     D = 'D'
 
 
-def reverse_action(action):
+def flip_action(action):
     if action == Actions.C:
         return Actions.D
     elif action == Actions.D:
