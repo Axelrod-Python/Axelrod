@@ -16,3 +16,4 @@ Contents:
 
    instructions.rst
    writing_the_new_strategy.rst
+   adding_the_new_strategy.rst
