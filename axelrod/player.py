@@ -2,7 +2,7 @@ import inspect
 import random
 import copy
 
-from axelrod import Actions, 
+from axelrod import Actions, flip_action
 from .game import DefaultGame
 
 
