@@ -2,7 +2,7 @@ import inspect
 import random
 import copy
 
-from axelrod import Actions, reverse_action
+from axelrod import Actions, 
 from .game import DefaultGame
 
 
@@ -98,10 +98,10 @@ class Player(object):
     def _add_noise(self, noise, s1, s2):
         r = random.random()
         if r < noise:
-            s1 = reverse_action(s1)
+            s1 = flip_action(s1)
         r = random.random()
         if r < noise:
-            s2 = reverse_action(s2)
+            s2 = flip_action(s2)
         return s1, s2
 
     def strategy(self, opponent):
