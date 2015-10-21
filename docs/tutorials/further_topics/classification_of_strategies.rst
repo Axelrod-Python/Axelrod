@@ -1,3 +1,5 @@
+.. _classification-of-strategies:
+
 Classification of strategies
 ============================
 

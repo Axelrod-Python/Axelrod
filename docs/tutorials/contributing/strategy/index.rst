@@ -15,3 +15,4 @@ Contents:
    :maxdepth: 2
 
    instructions.rst
+   writing_the_new_strategy.rst
