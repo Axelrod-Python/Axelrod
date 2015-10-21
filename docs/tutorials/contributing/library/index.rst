@@ -1,15 +1,9 @@
-.. Axelrod documentation master file, created by
-   sphinx-quickstart on Sat Mar  7 07:05:57 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Contributing to the library
 ===========================
 
-This section contains a variety of tutorials that should help you contribute to
-the library.
+All contributions (docs, tests, etc) are very welcome, if there is a specific
+functionality that you would like to add the please open an issue (or indeed
+take a look at the ones already there and jump in the conversation!).
 
-Contents:
-
-.. toctree::
-   :maxdepth: 2
+If you want to work on documentation please keep in mind that doctests are
+encouraged to help keep the documentation up to date.
