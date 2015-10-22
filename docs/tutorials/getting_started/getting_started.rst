@@ -1,9 +1,6 @@
 Getting started
 ===============
 
-lipsum
-
-
 Installation
 ------------
 
