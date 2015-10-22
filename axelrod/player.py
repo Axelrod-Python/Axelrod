@@ -2,12 +2,11 @@ import inspect
 import random
 import copy
 
-from axelrod import Actions
+from axelrod import Actions, flip_action
 from .game import DefaultGame
 
 
 C, D = Actions.C, Actions.D
-flip_dict = {C: D, D: C}
 
 
 # Strategy classifiers
@@ -46,7 +45,6 @@ def update_histories(player1, player2, move1, move2):
         player2.cooperations += 1
     elif move2 == D:
         player2.defections += 1
-
 
 class Player(object):
     """A class for a player in the tournament.
@@ -100,10 +98,10 @@ class Player(object):
     def _add_noise(self, noise, s1, s2):
         r = random.random()
         if r < noise:
-            s1 = flip_dict[s1]
+            s1 = flip_action(s1)
         r = random.random()
         if r < noise:
-            s2 = flip_dict[s2]
+            s2 = flip_action(s2)
         return s1, s2
 
     def strategy(self, opponent):

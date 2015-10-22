@@ -1,7 +1,6 @@
-from axelrod import Player, Actions
+from axelrod import Player, Actions, flip_action
 
 C, D = Actions.C, Actions.D
-flip_dict = {C: D, D: C}
 
 
 class TitForTat(Player):
