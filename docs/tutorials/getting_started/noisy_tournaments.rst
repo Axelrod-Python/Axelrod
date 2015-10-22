@@ -6,7 +6,7 @@ stochasticity in the choice of plays, simply called noise. This noise is
 introduced by flipping plays between ‘C’ and ‘D’ with some probability that is
 applied to all plays after they are delivered by the player.
 
-The presence of this persistant bakground noise causes some strategies to
+The presence of this persistent background noise causes some strategies to
 behave substantially differently. For example, TitForTat can fall into
 defection loops with itself when there is noise. While TitForTat would usually
 cooperate well with itself::
