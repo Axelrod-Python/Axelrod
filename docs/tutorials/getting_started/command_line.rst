@@ -2,7 +2,7 @@ Using the command line tool
 ===========================
 
 Once :code:`axelrod` is installed you have access to a `run_axelrod` script that
-can help run some of the tournaments, include the tournament that involves all
+can help run some of the tournaments, including the tournament that involves all
 of the strategies from the library. You can view them on this repository:
 `https://github.com/Axelrod-Python/tournament/`_
 
@@ -10,7 +10,7 @@ To view the help for the :code:`run_axelrod` file run::
 
     $ run_axelrod.py -h
 
-Note that if you have not installed the package you can still used this script
+Note that if you have not installed the package you can still use this script
 directly from the repository::
 
     $ python run_axelrod -h

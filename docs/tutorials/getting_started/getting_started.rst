@@ -34,8 +34,8 @@ The following lines of code create a simple list of strategies::
     >>> strategies
     [Cooperator, Defector, Tit For Tat, Grudger]
 
-We can now create a tournament, play it, saving the results and viewing the
-ranks of each player::
+We can now create a tournament, play it, save the results and view the rank of
+each player::
 
     >>> tournament = axl.Tournament(strategies)
     >>> results = tournament.play()
