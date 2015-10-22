@@ -15,7 +15,7 @@ directly from the repository::
 
     $ python run_axelrod -h
 
-There are a variety of options that include:
+There is a variety of options that include:
 
 - Excluding certain strategy sets.
 - Not running the ecological variant.
