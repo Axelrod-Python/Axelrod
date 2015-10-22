@@ -1,3 +1,5 @@
+.. _visualising-results:
+
 Visualising results
 ===================
 

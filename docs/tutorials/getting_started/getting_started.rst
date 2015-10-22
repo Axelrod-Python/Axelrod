@@ -39,7 +39,7 @@ each player::
     >>> results.ranked_names
     ['Defector', 'Tit For Tat', 'Grudger', 'Cooperator']
 
-We can also plot these results (which helps visualise the stochastic effects)::
+We can also plot these results::
 
     >>> plot = axl.Plot(results)
     >>> p = plot.boxplot()
@@ -48,3 +48,7 @@ We can also plot these results (which helps visualise the stochastic effects)::
 .. image:: _static/getting_started/demo_deterministic_strategies_boxplot.svg
    :width: 50%
    :align: center
+
+Note that in this case none of our strategies are stochastic so the boxplot
+shows that there is no variation. Take a look at the :ref:`visualising-results`
+section to see plots showing a stochastic effect.
