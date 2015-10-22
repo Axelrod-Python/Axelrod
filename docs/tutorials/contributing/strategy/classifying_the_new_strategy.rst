@@ -8,13 +8,13 @@ Let us take a look at :code:`TitForTat`::
 
     >>> import axelrod
     >>> classifier = axelrod.TitForTat.classifier
-    >>> for key in classifier:
-    ...    print(key, classifier[key])
-    ('manipulates_state', False)
-    ('stochastic', False)
-    ('manipulates_source', False)
-    ('inspects_source', False)
-    ('memory_depth', 1)
+    >>> for key in sorted(classifier.keys()):
+    ...    print("{}: {}".format(key, classifier[key]))
+    inspects_source: False
+    manipulates_source: False
+    manipulates_state: False
+    memory_depth: 1
+    stochastic: False
 
 You can read more about this in the :ref:`classification-of-strategies` section
 but here are some tips about fill this part in correctly.
