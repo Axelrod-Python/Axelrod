@@ -1,7 +1,5 @@
-
 from axelrod import Player, random_choice, Actions
 import random
-
 
 
 class AverageCopier(Player):
