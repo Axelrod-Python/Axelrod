@@ -10,7 +10,6 @@ from.memoryone import MemoryOnePlayer
 C, D = Actions.C, Actions.D
 
 
-
 ## First Tournament
 
 class Davis(Player):
