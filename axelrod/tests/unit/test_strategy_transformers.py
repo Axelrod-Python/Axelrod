@@ -18,6 +18,14 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(cls.__name__, "FlippedCooperator")
         self.assertEqual(p1.name, "Flipped Cooperator")
 
+    def test_cloning(self):
+        # Test that cloning preserves transform
+        p1 = axelrod.Cooperator()
+        p2 = FlipTransformer(axelrod.Cooperator)() # Defector
+        p3 = p2.clone()
+        self.assertEqual(simulate_play(p1, p3), (C, D))
+        self.assertEqual(simulate_play(p1, p3), (C, D))
+
     def test_flip_transformer(self):
         # Cooperator to Defector
         p1 = axelrod.Cooperator()
@@ -26,13 +34,14 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(simulate_play(p1, p2), (C, D))
         self.assertEqual(simulate_play(p1, p2), (C, D))
 
-    def test_cloning(self):
-        # Test that cloning preserves transform
+    def test_noisy_transformer(self):
+        random.seed(5)
+        # Cooperator to Defector
         p1 = axelrod.Cooperator()
-        p2 = FlipTransformer(axelrod.Cooperator)() # Defector
-        p3 = p2.clone()
-        self.assertEqual(simulate_play(p1, p3), (C, D))
-        self.assertEqual(simulate_play(p1, p3), (C, D))
+        p2 = NoisyTransformer(0.5)(axelrod.Cooperator)() # Defector
+        for _ in range(10):
+            p1.play(p2)
+        self.assertEqual(p2.history, [C, C, C, C, C, C, D, D, C, C])
 
     def test_forgiving(self):
         random.seed(10)
