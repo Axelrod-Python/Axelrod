@@ -114,6 +114,21 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, D, C, C, D, D, D])
 
+    def test_retailiation(self):
+        RUA = RetailiateUntilApologyTransformer()
+        TFT = RUA(axelrod.Cooperator)
+        p1 = TFT()
+        p2 = axelrod.Cooperator()
+        p1.play(p2)
+        p1.play(p2)
+        self.assertEqual(p1.history, [C, C])
+
+        p1 = TFT()
+        p2 = axelrod.Defector()
+        p1.play(p2)
+        p1.play(p2)
+        self.assertEqual(p1.history, [C, D])
+
 
 ## Test that RUA(Cooperator) is the same as TitForTat
 ## reusing the TFT tests. Since TFT is completely specified by its tests,

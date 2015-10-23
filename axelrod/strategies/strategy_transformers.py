@@ -181,7 +181,7 @@ class RetaliationWrapper(object):
     def __call__(self, player, opponent, action):
         if len(player.history) == 0:
             return action
-        if opponent.history[-1]:
+        if opponent.history[-1] == D:
             self.is_retaliating = True
         if self.is_retaliating:
             if opponent.history[-1] == C:
