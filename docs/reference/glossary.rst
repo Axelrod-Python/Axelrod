@@ -53,8 +53,8 @@ used in the tournament is 200. Here is a single match between two players over
 A win
 -----
 
-A **win** is the positive outcome of a match. For the example above,
-:code:`Defector` would win that match.
+A **win** is attributed to the player who has the higher total score at the end
+of a match. For the example above, :code:`Defector` would win that match.
 
 A round robin
 -------------
