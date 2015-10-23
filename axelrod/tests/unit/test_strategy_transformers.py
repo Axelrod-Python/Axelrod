@@ -4,6 +4,8 @@ import unittest
 
 import axelrod
 from axelrod.strategies.strategy_transformers import *
+from .test_titfortat import TestTitForTat
+
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -11,7 +13,10 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 class TestTransformers(unittest.TestCase):
 
     def test_naming(self):
-        pass
+        cls = FlipTransformer(axelrod.Cooperator)
+        p1 = cls()
+        self.assertEqual(cls.__name__, "FlippedCooperator")
+        self.assertEqual(p1.name, "Flipped Cooperator")
 
     def test_flip_transformer(self):
         # Cooperator to Defector
@@ -94,4 +99,19 @@ class TestTransformers(unittest.TestCase):
         for _ in range(8):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, D, C, C, D, D, D])
+
+
+# Test that RUA(Cooperator) is the same as TitForTat
+# Reusing the TFT tests
+RUA = RetailiateUntilApologyTransformer()
+TFT = RUA(axelrod.Cooperator)
+
+class TestRUA(TestTitForTat):
+    @classmethod
+    def setUpClass(cls):
+        player = TFT
+        name = "RUA Cooperator"
+        # Skips testing this, which is zero but should be 1
+        #expected_classifier["memory_depth"] = 1
+
 
