@@ -2,8 +2,8 @@ import random
 import unittest
 
 import axelrod
+from axelrod import simulate_play
 from axelrod.strategies.strategy_transformers import *
-
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -24,6 +24,15 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(simulate_play(p1, p3), (C, D))
         self.assertEqual(simulate_play(p1, p3), (C, D))
 
+    def test_generic(self):
+        # Test that the generic wrapper does nothing
+        transformer = StrategyTransformerFactory(generic_strategy_wrapper)
+        Cooperator2 = transformer(axelrod.Cooperator)
+        p1 = Cooperator2()
+        p2 = axelrod.Cooperator()
+        self.assertEqual(simulate_play(p1, p2), (C, C))
+        self.assertEqual(simulate_play(p1, p2), (C, C))
+
     def test_flip_transformer(self):
         # Cooperator to Defector
         p1 = axelrod.Cooperator()
@@ -33,6 +42,7 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(simulate_play(p1, p2), (C, D))
 
     def test_noisy_transformer(self):
+        # Test Noisy transformer
         random.seed(5)
         # Cooperator to Defector
         p1 = axelrod.Cooperator()
@@ -42,12 +52,13 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p2.history, [C, C, C, C, C, C, D, D, C, C])
 
     def test_forgiving(self):
+        # Test Forgiving transformer
         random.seed(10)
-        p1 = ForgiverTransformer(0.5)(axelrod.Defector)()
+        p1 = ForgiverTransformer(0.5)(axelrod.Alternator)()
         p2 = axelrod.Defector()
         for _ in range(10):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, C, D, C, D, D, D, C, D, C])
+        self.assertEqual(p1.history, [C, D, C, C, D, C, C, D, C, D])
 
     def test_cycler(self):
         # Difference between Alternator and CyclerCD
@@ -57,6 +68,14 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, D, C])
         self.assertEqual(p2.history, [D, C, D, C, D])
+
+        p1 = axelrod.Alternator()
+        p2 = FlipTransformer(axelrod.Alternator)()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, D, C, D, C])
+        self.assertEqual(p2.history, [D, D, D, D, D])
+
 
     def test_initial_transformer(self):
         # Initial play transformer
@@ -128,6 +147,14 @@ class TestTransformers(unittest.TestCase):
         p1.play(p2)
         p1.play(p2)
         self.assertEqual(p1.history, [C, D])
+
+        random.seed(12)
+        p1 = TFT()
+        p2 = axelrod.Random()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, C, D, D, C])
+
 
 
 ## Test that RUA(Cooperator) is the same as TitForTat
