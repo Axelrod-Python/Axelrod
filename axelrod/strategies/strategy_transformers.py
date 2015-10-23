@@ -9,8 +9,7 @@ See the various Meta strategies for another type of transformation.
 import random
 from types import FunctionType
 
-import axelrod
-from axelrod import flip_action, random_choice, simulate_play, Actions
+from axelrod import flip_action, random_choice, Actions
 C, D = Actions.C, Actions.D
 
 # Note: After a transformation is applied,
@@ -150,13 +149,10 @@ def InitialTransformer(seq=None):
 def final_sequence(player, opponent, action, seq):
     """Play the moves in `seq` first, ignoring the strategy's
     moves until the list is exhausted."""
-    try:
-        length = player.tournament_attributes["length"]
-    except KeyError:
+    length = player.tournament_attributes["length"]
+
+    if length < 0: # default is -1
         return action
-    finally:
-        if length < 0: # default is -1
-            return action
 
     index = length - len(player.history)
     if index <= len(seq):
