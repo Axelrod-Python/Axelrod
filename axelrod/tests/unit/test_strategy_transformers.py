@@ -4,7 +4,8 @@ import unittest
 
 import axelrod
 from axelrod.strategies.strategy_transformers import *
-from .test_titfortat import TestTitForTat
+import test_titfortat
+import test_cooperator
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -91,6 +92,13 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p2.history, [C, C, C, C, C, C])
 
+    def test_history_track(self):
+        p1 = axelrod.Cooperator()
+        p2 = TrackHistoryTransformer(axelrod.Random)()
+        for _ in range(6):
+            p1.play(p2)
+        self.assertEqual(p2.history, p2._recorded_history)
+
     def test_composition(self):
         cls1 = InitialTransformer()(axelrod.Cooperator)
         cls2 = FinalTransformer()(cls1)
@@ -111,16 +119,24 @@ class TestTransformers(unittest.TestCase):
 
 
 # Test that RUA(Cooperator) is the same as TitForTat
-# Reusing the TFT tests
+# reusing the TFT tests. Since TFT is completely specified by its tests,
+# this is actually a proof that they are equal!
 RUA = RetailiateUntilApologyTransformer()
 TFT = RUA(axelrod.Cooperator)
+TFT.name = "Tit For Tat"
+TFT.classifier["memory_depth"] = 1
 
-class TestRUA(TestTitForTat):
-    @classmethod
-    def setUpClass(cls):
-        player = TFT
-        name = "RUA Cooperator"
-        # Skips testing this, which is zero but should be 1
-        #expected_classifier["memory_depth"] = 1
+class TestRUAisTFT(test_titfortat.TestTitForTat):
+    # This runs the 7 TFT tests when unittest is invoked
+    player = TFT
+
+
+# Test that FlipTransformer(Defector) == Cooperator
+Cooperator = FlipTransformer(axelrod.Defector)
+Cooperator.name = "Cooperator"
+
+class TestFlipDefector(test_cooperator.TestCooperator):
+    # This runs the 7 TFT tests when unittest is invoked
+    player = Cooperator
 
 

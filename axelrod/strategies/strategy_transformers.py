@@ -3,15 +3,7 @@
 Strategy Transformers -- class decorators that transform the behavior of any
 strategy.
 
-Run Axelrod one tournament
-Noisy
-
-Memory-depth inference
-
-As Decorators
-
-Meta Strategies
-
+See the various Meta strategies for another type of transformation.
 """
 
 import random
@@ -59,6 +51,8 @@ def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(), wrapper_kwargs
     ----------
     strategy_wrapper: function
         A function of the form `strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)`
+        Can also use a class that implements
+            def __call__(self, player, opponent, action)
     wrapper_args: tuple
         Any arguments to pass to the wrapper
     wrapper_kwargs: dict
@@ -174,6 +168,8 @@ def FinalTransformer(seq=None):
 
 # Strategy wrapper as a class example
 class RetaliationWrapper(object):
+    """Enforces the TFT rule that the opponent pay back a defection with a
+    cooperation for the player to stop defecting."""
     def __init__(self):
         self.is_retaliating = False
 
@@ -193,5 +189,13 @@ def RetailiateUntilApologyTransformer():
     strategy_wrapper = RetaliationWrapper()
     return StrategyTransformerFactory(strategy_wrapper, name_prefix="RUA")
 
+def history_track_wrapper(player, opponent, action):
+    # Record action
+    try:
+        player._recorded_history.append(action)
+    except AttributeError:
+        player._recorded_history = [action]
+    return action
 
-
+TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper,
+                                        name_prefix="HistoryTracking")
