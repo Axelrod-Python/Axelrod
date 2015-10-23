@@ -89,9 +89,13 @@ def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(), wrapper_kwargs
 
         # Define a new class and wrap the strategy method
         # Modify the PlayerClass name
-        new_class_name = name_prefix + PlayerClass.__name__
-        # Modify the Player name (class variable inherited from Player)
-        name = name_prefix + ' ' + PlayerClass.name
+        new_class_name = PlayerClass.__name__
+        name = PlayerClass.name
+        if name_prefix:
+            # Modify the Player name (class variable inherited from Player)
+            new_class_name = name_prefix + PlayerClass.__name__
+            # Modify the Player name (class variable inherited from Player)
+            name = name_prefix + ' ' + PlayerClass.name
         # Dynamically create the new class
         new_class = type(new_class_name, (PlayerClass,),
                          {"name": name, "strategy": strategy})
@@ -163,7 +167,7 @@ def FinalTransformer(seq=None):
     if not seq:
         seq = [D] * 3
     transformer = StrategyTransformerFactory(final_sequence, wrapper_args=(seq,),
-                                             name_prefix="Final")
+                                             name_prefix="")
     return transformer
 
 # Strategy wrapper as a class example

@@ -1,7 +1,10 @@
 from axelrod import Player, Actions
 
+from strategy_transformers import FinalTransformer
+
 C, D = Actions.C, Actions.D
 
+@FinalTransformer([D, D, D]) # End with three defections
 class BackStabber(Player):
     """
     Forgives the first 3 defections but on the fourth
@@ -20,8 +23,6 @@ class BackStabber(Player):
     def strategy(self, opponent):
         if not opponent.history:
             return C
-        if len(opponent.history) > (self.tournament_attributes['length'] - 3):
-            return D
         if opponent.defections > 3:
             return D
         return C

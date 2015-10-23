@@ -130,7 +130,6 @@ class TestRUAisTFT(test_titfortat.TestTitForTat):
     # This runs the 7 TFT tests when unittest is invoked
     player = TFT
 
-
 # Test that FlipTransformer(Defector) == Cooperator
 Cooperator = FlipTransformer(axelrod.Defector)
 Cooperator.name = "Cooperator"
@@ -138,5 +137,3 @@ Cooperator.name = "Cooperator"
 class TestFlipDefector(test_cooperator.TestCooperator):
     # This runs the 7 TFT tests when unittest is invoked
     player = Cooperator
-
-
