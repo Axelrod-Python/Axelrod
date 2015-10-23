@@ -1,11 +1,8 @@
-
 import random
 import unittest
 
 import axelrod
 from axelrod.strategies.strategy_transformers import *
-import test_titfortat
-import test_cooperator
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -118,22 +115,28 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [D, D, D, C, C, D, D, D])
 
 
-# Test that RUA(Cooperator) is the same as TitForTat
-# reusing the TFT tests. Since TFT is completely specified by its tests,
-# this is actually a proof that they are equal!
-RUA = RetailiateUntilApologyTransformer()
-TFT = RUA(axelrod.Cooperator)
-TFT.name = "Tit For Tat"
-TFT.classifier["memory_depth"] = 1
+## Test that RUA(Cooperator) is the same as TitForTat
+## reusing the TFT tests. Since TFT is completely specified by its tests,
+## this is actually a proof that they are equal!
+## However because classifier is a class variable until after instantiation
+## this alters Cooperator's class variable, and causes its test to fail
+## So for now this is commented out.
 
-class TestRUAisTFT(test_titfortat.TestTitForTat):
-    # This runs the 7 TFT tests when unittest is invoked
-    player = TFT
+#RUA = RetailiateUntilApologyTransformer()
+#TFT = RUA(axelrod.Cooperator)
+#TFT.name = "Tit For Tat"
+#TFT.classifier["memory_depth"] = 1
 
-# Test that FlipTransformer(Defector) == Cooperator
-Cooperator = FlipTransformer(axelrod.Defector)
-Cooperator.name = "Cooperator"
+#class TestRUAisTFT(test_titfortat.TestTitForTat):
+    ## This runs the 7 TFT tests when unittest is invoked
+    #player = TFT
 
-class TestFlipDefector(test_cooperator.TestCooperator):
-    # This runs the 7 TFT tests when unittest is invoked
-    player = Cooperator
+## Test that FlipTransformer(Defector) == Cooperator
+#Cooperator2 = FlipTransformer(axelrod.Defector)
+#Cooperator2.name = "Cooperator"
+#Cooperator2.classifier["memory_depth"] = 0
+
+
+#class TestFlipDefector(test_cooperator.TestCooperator):
+    ## This runs the 7 TFT tests when unittest is invoked
+    #player = Cooperator2

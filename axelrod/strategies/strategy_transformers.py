@@ -13,10 +13,11 @@ import axelrod
 from axelrod import flip_action, random_choice, simulate_play, Actions
 C, D = Actions.C, Actions.D
 
-# Note: the history is overwritten with the modified history
-# Just like in the Noisy case
+# Note: After a transformation is applied,
+# the player's history is overwritten with the modified history
+# just like in the noisy tournament case
 # This can lead to unexpected behavior, such as when
-# Flip transform is applied to Alternator
+# FlipTransform is applied to Alternator
 
 
 def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
@@ -79,7 +80,7 @@ def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(), wrapper_kwargs
         # with `strategy_wrapper`
         def strategy(self, opponent):
             # Is the original strategy method a static method?
-            if isinstance(PlayerClass.strategy, FunctionType):
+            if isinstance(PlayerClass.__dict__["strategy"], staticmethod):
                 proposed_action = PlayerClass.strategy(opponent)
             else:
                 proposed_action = PlayerClass.strategy(self, opponent)

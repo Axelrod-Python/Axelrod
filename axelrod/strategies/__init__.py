@@ -1,7 +1,7 @@
 from ..player import is_basic, obey_axelrod
 from ._strategies import *
 
-import strategy_transformers
+from . import strategy_transformers
 
 # `from ._strategies import *` import the collection `strategies`
 # Now import the Meta strategies. This cannot be done in _strategies
