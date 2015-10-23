@@ -50,6 +50,12 @@ used in the tournament is 200. Here is a single match between two players over
     >>> p1.history, p2.history
     (['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'], ['D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D'])
 
+A win
+-----
+
+A **win** is the positive outcome of a match. For the example above,
+:code:`Defector` would win that match.
+
 A round robin
 -------------
 
