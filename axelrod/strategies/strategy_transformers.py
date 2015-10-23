@@ -62,7 +62,7 @@ def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)
     return proposed_action
 
 def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(), wrapper_kwargs={},
-                        name_prefix="Transformed "):
+                        name_prefix="Transformed"):
     """Modify an existing strategy dynamically by wrapping the strategy
     method with the argument `strategy_wrapper`.
 
@@ -108,7 +108,7 @@ def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(), wrapper_kwargs
         # Modify the PlayerClass name
         new_class_name = name_prefix + PlayerClass.__name__
         # Modify the Player name (class variable inherited from Player)
-        name = name_prefix + PlayerClass.name
+        name = name_prefix + ' ' + PlayerClass.name
         # Dynamically create the new class
         new_class = type(new_class_name, (PlayerClass,),
                          {"name": name, "strategy": strategy})
@@ -119,7 +119,7 @@ def flip_wrapper(player, opponent, action):
     """Applies flip_action at the class level."""
     return flip_action(action)
 
-FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="Flipped ")
+FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="Flipped")
 
 def forgiver_wrapper(player, opponent, action, p):
     """If a strategy wants to defect, flip to cooperate with the given
@@ -144,7 +144,7 @@ def InitialTransformer(seq=None):
     if not seq:
         seq = [D] * 3
     transformer = StrategyTransformerFactory(initial_sequence, wrapper_args=(seq,),
-                                      name_prefix="Initial ")
+                                             name_prefix="Initial")
     return transformer
 
 def final_sequence(player, opponent, action, seq):
@@ -167,7 +167,8 @@ def final_sequence(player, opponent, action, seq):
 def FinalTransformer(seq=None):
     if not seq:
         seq = [D] * 3
-    transformer = StrategyTransformerFactory(final_sequence, wrapper_args=(seq,))
+    transformer = StrategyTransformerFactory(final_sequence, wrapper_args=(seq,),
+                                             name_prefix="Final")
     return transformer
 
 
@@ -181,7 +182,6 @@ class RetaliationWrapper(object):
             return action
         if opponent.history[-1]:
             self.is_retaliating = True
-            return D
         if self.is_retaliating:
             if opponent.history[-1] == C:
                 self.is_retaliating = False
@@ -191,7 +191,7 @@ class RetaliationWrapper(object):
 
 def RetailiateUntilApologyTransformer():
     strategy_wrapper = RetaliationWrapper()
-    return StrategyTransformerFactory(strategy_wrapper, name_prefix="RUA ")
+    return StrategyTransformerFactory(strategy_wrapper, name_prefix="RUA")
 
 
 
