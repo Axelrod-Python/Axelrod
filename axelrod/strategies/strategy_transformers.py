@@ -4,18 +4,7 @@ Strategy Transformers -- class decorators that transform the behavior of any
 strategy.
 
 Run Axelrod one tournament
-
-Flip Action
-Forgiver
-Initial Sequence
-Final Sequence
-
-TFT -- force a repayment, return to other strategy
-
 Noisy
-RetaliateUntilApology
-
-Compose.
 
 Memory-depth inference
 
@@ -121,6 +110,18 @@ def flip_wrapper(player, opponent, action):
 
 FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="Flipped")
 
+def noisy_wrapper(player, opponent, action, noise=0.05):
+    """Applies flip_action at the class level."""
+    r = random.random()
+    if r < noise:
+        return flip_action(action)
+    return action
+
+def NoisyTransformer(noise):
+    return StrategyTransformerFactory(noisy_wrapper,
+                                      wrapper_args=(noise,),
+                                      name_prefix="Noisy")
+
 def forgiver_wrapper(player, opponent, action, p):
     """If a strategy wants to defect, flip to cooperate with the given
     probability."""
@@ -171,7 +172,6 @@ def FinalTransformer(seq=None):
                                              name_prefix="Final")
     return transformer
 
-
 # Strategy wrapper as a class example
 class RetaliationWrapper(object):
     def __init__(self):
@@ -193,80 +193,5 @@ def RetailiateUntilApologyTransformer():
     strategy_wrapper = RetaliationWrapper()
     return StrategyTransformerFactory(strategy_wrapper, name_prefix="RUA")
 
-
-
-#if __name__ == "__main__":
-    ## Cooperator to Defector
-    #p1 = axelrod.Cooperator()
-    #p2 = FlipTransformer(axelrod.Cooperator)() # Defector
-    #print p1, p2
-    #print simulate_play(p1, p2)
-    #print simulate_play(p1, p2)
-
-    ## Test that cloning preserves transform
-    #p3 = p2.clone()
-    #print simulate_play(p1, p3)
-    #print simulate_play(p1, p3)
-
-    ## Forgiving example
-    #p1 = ForgiverTransformer(axelrod.Defector)()
-    #print simulate_play(p1, p2)
-    #print simulate_play(p1, p2)
-    #print simulate_play(p1, p2)
-    #print simulate_play(p1, p2)
-    #print simulate_play(p1, p2)
-    #print simulate_play(p1, p2)
-
-    ## Difference between Alternator and CyclerCD
-    #p1 = axelrod.Cycler(cycle="CD")
-    #p2 = FlipTransformer(axelrod.Cycler)(cycle="CD")
-    #for _ in range(5):
-        #p1.play(p2)
-    #print p1.history, p2.history
-
-    ## Initial play transformer
-    #p1 = axelrod.Cooperator()
-    #p2 = InitialTransformer()(axelrod.Cooperator)()
-
-    #for _ in range(6):
-        #p1.play(p2)
-    #print p1.history, p2.history
-
-    ## Final Play transformer
-    #p1 = FinalTransformer()(axelrod.Cooperator)()
-    #p2 = axelrod.Cooperator()
-    #p1.tournament_attributes["length"] = 6
-
-    #for _ in range(6):
-        #p1.play(p2)
-    #print p1.history, p2.history
-
-
-    ## Composition
-    #cls1 = InitialTransformer()(axelrod.Cooperator)
-    #cls2 = FinalTransformer()(cls1)
-    #p1 = cls2()
-
-    #p2 = axelrod.Cooperator()
-    #p1.tournament_attributes["length"] = 8
-
-    #for _ in range(8):
-        #p1.play(p2)
-    #print p1.history
-
-    ## Composition
-    ##cls2 = FinalTransformer()(InitialTransformer(axelrod.Cooperator))
-    ##p1 = cls2()
-
-    #cls1 = InitialTransformer([D, D, D])(axelrod.Cooperator)
-    #cls2 = FinalTransformer([D, D])(cls1)
-    #p1 = cls2()
-
-    #p2 = axelrod.Cooperator()
-    #p1.tournament_attributes["length"] = 8
-
-    #for _ in range(8):
-        #p1.play(p2)
-    #print p1.history
 
 
