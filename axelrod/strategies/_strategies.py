@@ -8,7 +8,7 @@ from .axelrod_tournaments import (
 from .backstabber import BackStabber, DoubleCrosser
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
-from .cycler import AntiCycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD
+from .cycler import AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD
 from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .forgiver import Forgiver, ForgivingTitForTat
