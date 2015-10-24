@@ -4,7 +4,7 @@ from .strategy_transformers import FinalTransformer
 
 C, D = Actions.C, Actions.D
 
-@FinalTransformer([D, D, D]) # End with three defections
+@FinalTransformer([D, D]) # End with three defections
 class BackStabber(Player):
     """
     Forgives the first 3 defections but on the fourth
