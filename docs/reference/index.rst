@@ -1,0 +1,12 @@
+Reference
+=========
+
+This section is the reference guide for the various components of the library.
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   overview_of_strategies.rst
+   glossary.rst

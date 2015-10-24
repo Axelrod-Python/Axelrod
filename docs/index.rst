@@ -3,25 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the documentation for an implementation of Axelrod's tournament in Python
-====================================================================================
-
-This project is both:
-
-* A python library that reproduces Axelrod's tournament.
-* A github experiment allowing anyone to contribute a strategy.
-
-
-Contents:
+Welcome to the documentation for the Axelrod Python library
+===========================================================
 
 .. toctree::
    :maxdepth: 2
 
-   background
-   usage
-   overview_of_strategies
-   index_of_strategies
-   contributing
+   tutorials/index.rst
+   reference/index.rst
 
 
 Indices and tables
