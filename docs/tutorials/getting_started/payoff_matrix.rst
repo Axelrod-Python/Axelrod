@@ -1,8 +1,6 @@
 Accessing the payoff matrix
 ===========================
 
-lipsum
-
 This tutorial will show you briefly how to access the payoff matrix
 corresponding to the tournament.
 
