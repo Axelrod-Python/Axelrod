@@ -23,7 +23,8 @@ If you do this you will need to also install the dependencies::
 Creating and running a simple tournament
 ----------------------------------------
 
-The following lines of code create a simple list of strategies::
+The following lines of code creates a list players playing simple
+strategies::
 
     >>> import axelrod as axl
     >>> strategies = [axl.Cooperator(), axl.Defector(),
