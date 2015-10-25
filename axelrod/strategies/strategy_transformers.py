@@ -116,6 +116,10 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
     return action
 
 def NoisyTransformer(noise):
+    """Creates a function that takes an axelrod.Player class as an argument
+    and alters the play of the Player in the following way. The player's
+    intended action is flipped with probability noise."""
+
     return StrategyTransformerFactory(noisy_wrapper,
                                       wrapper_args=(noise,),
                                       name_prefix="Noisy")
@@ -128,11 +132,16 @@ def forgiver_wrapper(player, opponent, action, p):
     return C
 
 def ForgiverTransformer(p):
+    """Creates a function that takes an axelrod.Player class as an argument
+    and alters the play of the Player in the following way. The player's
+    defections are flipped with probability p."""
+
     return StrategyTransformerFactory(forgiver_wrapper, wrapper_args=(p,))
 
 def initial_sequence(player, opponent, action, initial_seq):
     """Play the moves in `seq` first (must be a list), ignoring the strategy's
     moves until the list is exhausted."""
+
     index = len(player.history)
     if index < len(initial_seq):
         return initial_seq[index]
@@ -140,6 +149,10 @@ def initial_sequence(player, opponent, action, initial_seq):
 
 ## Defection initially three times
 def InitialTransformer(seq=None):
+    """Creates a function that takes an axelrod.Player class as an argument
+    and alters the play of the Player in the following way. The player starts
+    with the actions in the argument seq and then proceeds to play normally."""
+
     if not seq:
         seq = [D] * 3
     transformer = StrategyTransformerFactory(initial_sequence, wrapper_args=(seq,),
@@ -147,8 +160,9 @@ def InitialTransformer(seq=None):
     return transformer
 
 def final_sequence(player, opponent, action, seq):
-    """Play the moves in `seq` first, ignoring the strategy's
-    moves until the list is exhausted."""
+    """Play the moves in `seq` first, ignoring the strategy's moves until the
+    list is exhausted."""
+
     length = player.tournament_attributes["length"]
 
     if length < 0: # default is -1
@@ -159,8 +173,12 @@ def final_sequence(player, opponent, action, seq):
         return seq[-index]
     return action
 
-# Defect on last N actions
 def FinalTransformer(seq=None):
+    """Creates a function that takes an axelrod.Player class as an argument
+    and alters the play of the Player in the following way. If the tournament
+    length is known, the play ends with the actions in the argument seq.
+    Otherwise the player's actions are unaltered. """
+
     if not seq:
         seq = [D] * 3
     transformer = StrategyTransformerFactory(final_sequence, wrapper_args=(seq,),
@@ -187,11 +205,16 @@ class RetaliationWrapper(object):
         return action
 
 def RetailiateUntilApologyTransformer():
+    """Creates a function that takes an axelrod.Player class as an argument
+    and alters the play of the Player in the following way. If the opponent
+    defects, the player will retaliate with defections until the opponent
+    cooperates. Otherwise the player's actions are unaltered."""
+
     strategy_wrapper = RetaliationWrapper()
     return StrategyTransformerFactory(strategy_wrapper, name_prefix="RUA")
 
 def history_track_wrapper(player, opponent, action):
-    # Record action
+    """Wrapper to track a player's history in a variable `._recorded_history`."""
     try:
         player._recorded_history.append(action)
     except AttributeError:
