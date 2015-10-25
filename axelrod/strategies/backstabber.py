@@ -1,6 +1,6 @@
 from axelrod import Player, Actions
 
-from .strategy_transformers import FinalTransformer
+from axelrod.strategy_transformers import FinalTransformer
 
 C, D = Actions.C, Actions.D
 
