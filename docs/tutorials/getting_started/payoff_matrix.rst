@@ -4,7 +4,7 @@ Accessing the payoff matrix
 This tutorial will show you briefly how to access the payoff matrix
 corresponding to the tournament.
 
-As shown in `Getting_started`_ let us create a tournament::
+As shown in :ref:`getting-started` let us create a tournament::
 
     >>> import axelrod as axl
     >>> strategies = [axl.Cooperator(), axl.Defector(),
