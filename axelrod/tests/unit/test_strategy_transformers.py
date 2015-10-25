@@ -3,7 +3,7 @@ import unittest
 
 import axelrod
 from axelrod import simulate_play
-from axelrod.strategies.strategy_transformers import *
+from axelrod.strategy_transformers import *
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -48,7 +48,7 @@ class TestTransformers(unittest.TestCase):
         random.seed(5)
         # Cooperator to Defector
         p1 = axelrod.Cooperator()
-        p2 = NoisyTransformer(0.5)(axelrod.Cooperator)() # Defector
+        p2 = NoisyTransformer(0.5)(axelrod.Cooperator)()
         for _ in range(10):
             p1.play(p2)
         self.assertEqual(p2.history, [C, C, C, C, C, C, D, D, C, C])
@@ -94,7 +94,7 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p2.history, [D, D, C, D, C])
 
-    def test_final_transformer(self):\
+    def test_final_transformer(self):
         """Tests the FinalTransformer when tournament length is known."""
         # Final play transformer
         p1 = axelrod.Cooperator()

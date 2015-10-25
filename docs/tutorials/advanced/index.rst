@@ -8,3 +8,5 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   strategy_transformers.rst
