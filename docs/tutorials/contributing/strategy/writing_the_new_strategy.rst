@@ -110,8 +110,8 @@ sure that there is a :code:`reset` method that takes account of it.  An example
 of this is the :code:`ForgetfulGrudger` strategy.
 
 You can also modify the name of the strategy with the `__repr__` method, which
-is invoked when `str` is applied to a player instance. For example, the player
-`Random` takes a parameter `p` for how often it cooperates, and the `__repr__`
+is invoked when `str` is applied to a player instance. For example, the `Random`
+strategy takes a parameter `p` for how often it cooperates, and the `__repr__`
 method adds the value of this parameter to the name::
 
     def __repr__(self):
