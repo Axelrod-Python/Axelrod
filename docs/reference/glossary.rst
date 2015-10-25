@@ -56,6 +56,31 @@ A win
 A **win** is attributed to the player who has the higher total score at the end
 of a match. For the example above, :code:`Defector` would win that match.
 
+A strategy
+----------
+
+A **strategy** is a set of instructions that dictate how to play given one's own
+strategy and the strategy of an opponent. In the library these correspond to the
+strategy classes: `TitForTat`, `Grudger`, `Cooperator` etc...
+
+When appropriate to do so this will be used interchangeable with `A player`_.
+
+A player
+--------
+
+A **player** is a single agent using a given strategy. Players are the
+participants of tournament, usually they each represent one strategy but of
+course you can have multiple players choosing the same strategy. In the library
+these correspond to __instances__ of classes::
+
+    >>> p1, p2 = axl.Cooperator(), axl.Defector()
+    >>> p1
+    Cooperator
+    >>> p2
+    Defector
+
+When appropriate to do so this will be used interchangeable with `A strategy`_.
+
 A round robin
 -------------
 
