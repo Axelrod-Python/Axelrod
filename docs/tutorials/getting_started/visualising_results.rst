@@ -8,7 +8,7 @@ This tutorial will show you briefly how to visualise some basic results
 Visualising the results of the tournament
 -----------------------------------------
 
-As shown in `Getting_started`_ let us create a tournament, but this time we will
+As shown in :ref:`getting-started` let us create a tournament, but this time we will
 include a strategy that acts randomly::
 
     >>> import axelrod as axl
@@ -31,7 +31,7 @@ We can view these results (which helps visualise the stochastic effects)::
 Visualising the distributions of wins
 -------------------------------------
 
-We can view the distributions of wins for each player::
+We can view the distributions of wins for each strategy::
 
     >>> p = plot.winplot()
     >>> p.show()
