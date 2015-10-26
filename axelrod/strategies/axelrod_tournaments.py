@@ -10,9 +10,6 @@ from.memoryone import MemoryOnePlayer
 C, D = Actions.C, Actions.D
 
 
-
-## First Tournament
-
 class Davis(Player):
     """A player starts by cooperating for 10 rounds then plays Grudger,
     defecting if at any point the opponent has defected."""
