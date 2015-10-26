@@ -49,7 +49,7 @@ us take a look at the :code:`TitForTat` class (located in the
             'manipulates_state': False
         }
 
-        def strategy(opponent):
+        def strategy(self, opponent):
             """This is the actual strategy"""
             # First move
             if len(self.history) == 0:

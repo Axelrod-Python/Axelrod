@@ -4,8 +4,16 @@ C, D = Actions.C, Actions.D
 
 
 class TitForTat(Player):
-    """A player starts by cooperating and then mimics previous move by opponent."""
+    """
+    A player starts by cooperating and then mimics previous move by
+    opponent.
 
+    Note that the code for this strategy is written in a fairly verbose
+    way. This is done so that it can serve as an example strategy for
+    those who might be new to Python.
+    """
+
+    # These are various properties for the strategy
     name = 'Tit For Tat'
     classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
@@ -15,9 +23,16 @@ class TitForTat(Player):
         'manipulates_state': False
     }
 
-    @staticmethod
-    def strategy(opponent):
-        return D if opponent.history[-1:] == [D] else C
+    def strategy(self, opponent):
+        """This is the actual strategy"""
+        # First move
+        if len(self.history) == 0:
+            return C
+        # React to the opponent's last move
+        if opponent.history[-1] == D:
+            return D
+        return C
+
 
 
 class TitFor2Tats(Player):
