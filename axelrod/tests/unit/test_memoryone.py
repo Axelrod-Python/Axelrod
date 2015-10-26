@@ -30,6 +30,7 @@ class TestWinStayLoseShift(TestPlayer):
         """Check that switches if does not get best payoff."""
         self.markov_test([C, D, D, C])
 
+
 class TestGTFT(TestPlayer):
 
     name = "GTFT: 0.33"

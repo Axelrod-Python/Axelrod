@@ -130,6 +130,7 @@ class TestProtectedMindReader(TestPlayer):
         P2.strategy(P1)
         self.assertEqual(P1.strategy(P3), D)
 
+
 class TestMirrorMindReader(TestPlayer):
 
     name = 'Mirror Mind Reader'

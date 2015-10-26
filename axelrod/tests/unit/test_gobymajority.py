@@ -36,7 +36,6 @@ class TestGoByMajority(TestPlayer):
         opponent = axelrod.Cooperator()
         self.assertEqual('D', player.strategy(opponent))
 
-
     def test_repr(self):
         player = self.player(soft=True)
         name = str(player)
@@ -44,6 +43,7 @@ class TestGoByMajority(TestPlayer):
         player = self.player(soft=False)
         name = str(player)
         self.assertEqual(name, "Hard Go By Majority")
+
 
 def factory_TestGoByRecentMajority(L):
 

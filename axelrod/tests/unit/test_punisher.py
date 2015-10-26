@@ -7,10 +7,6 @@ from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
-def set_history(player, history):
-    player.history = history
-    player.cooperations = history.count(C)
-    player.defections = history.count(D)
 
 class TestPunisher(TestPlayer):
 
@@ -33,80 +29,23 @@ class TestPunisher(TestPlayer):
         self.assertEqual(P1.grudge_memory, 1)
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        self.responses_test([], [], [C], attrs={"grudged": False})
+        self.responses_test([C], [C], [C], attrs={"grudged": False})
+        self.responses_test([C], [D], [D], attrs={"grudged": True})
+        for i in range(10):
+            self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [D],
+                                attrs={"grudged": True, "grudge_memory": i,
+                                       "mem_length": 10})
+        # Eventually the grudge is dropped
+        i = 11
+        self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [C],
+                            attrs={"grudged": False, "grudge_memory": 0,
+                                    "mem_length": 10})
 
-        random.seed(4)
-
-        P1 = axelrod.Punisher()
-        P2 = axelrod.Player()
-        history = [C, C, D, D, D, C]
-        set_history(P2, history)
-
-        self.assertEqual(P1.mem_length, 1)
-        self.assertEqual(P1.grudged, False)
-
-        # Starts by playing C
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(C)
-        set_history(P2, history)
-
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(D)
-        set_history(P2, history)
-
-        self.assertEqual(P2.history, [C, C, D, D, D, C, C, D])
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.grudged, True)
-
-        for turn in range(P1.mem_length-1):
-            self.assertEqual(P1.mem_length, 10)
-            self.assertEqual(P1.strategy(P2), D)
-            # Doesn't matter what opponent plays now
-            history.append(random.choice([C, D]))
-            set_history(P2, history)
-            self.assertEqual(P1.grudged, True)
-
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.grudged, True)
-        history.append(C)
-        set_history(P2, history)
-
-        # Back to being not grudged
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(C)
-        set_history(P2, history)
-
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(D)
-        set_history(P2, history)
-
-        # Now grudges again
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.mem_length, 8)
-        self.assertEqual(P1.grudged, True)
-        history.append(C)
-        set_history(P2, history)
-
-        for turn in range(P1.mem_length-1):
-            self.assertEqual(P1.mem_length, 8)
-            self.assertEqual(P1.strategy(P2), D)
-            # Doesn't matter what opponent plays now
-            history.append(random.choice([C, D]))
-            set_history(P2, history)
-            self.assertEqual(P1.grudged, True)
-
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.grudged, True)
-        history.append(C)
-        set_history(P2, history)
-
-        # Back to being not grudged
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
+        # Grudged again on opponent's D
+        self.responses_test([C, C] + [D] * i + [C], [C, D] + [C] * i + [D], [D],
+                            attrs={"grudged": True, "grudge_memory": 0,
+                                   "mem_length": 2})
 
     def test_reset_method(self):
         """Tests the reset method."""
@@ -141,82 +80,27 @@ class TestInversePunisher(TestPlayer):
         self.assertEqual(P1.grudge_memory, 1)
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        self.responses_test([], [], [C], attrs={"grudged": False})
+        self.responses_test([C], [C], [C], attrs={"grudged": False})
+        self.responses_test([C], [D], [D], attrs={"grudged": True})
+        for i in range(10):
+            self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [D],
+                                attrs={"grudged": True, "grudge_memory": i,
+                                       "mem_length": 10})
+        # Eventually the grudge is dropped
+        i = 11
+        self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [C],
+                            attrs={"grudged": False, "grudge_memory": 0,
+                                    "mem_length": 10})
+        # Grudged again on opponent's D
+        self.responses_test([C, C] + [D] * i + [C], [C, D] + [C] * i + [D], [D],
+                            attrs={"grudged": True, "grudge_memory": 0,
+                                   "mem_length": 17})
 
-        random.seed(4)
-
-        P1 = axelrod.InversePunisher()
-        P2 = axelrod.Player()
-        history = [C, C, D, D, D, C]
-        set_history(P2, history)
-
-        self.assertEqual(P1.mem_length, 1)
-        self.assertEqual(P1.grudged, False)
-
-        # Starts by playing C
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(C)
-        set_history(P2, history)
-
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(D)
-        set_history(P2, history)
-
-        self.assertEqual(P2.history, [C, C, D, D, D, C, C, D])
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.grudged, True)
-
-        for turn in range(P1.mem_length - 1):
-            self.assertEqual(P1.mem_length, 10)
-            self.assertEqual(P1.strategy(P2), D)
-            # Doesn't matter what opponent plays now
-            history.append(random.choice([C, D]))
-            set_history(P2, history)
-            self.assertEqual(P1.grudged, True)
-
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.grudged, True)
-        history.append(C)
-        set_history(P2, history)
-
-        # Back to being not grudged
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(C)
-        set_history(P2, history)
-
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(D)
-        set_history(P2, history)
-
-        # Now grudges again
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.mem_length, 12)
-        self.assertEqual(P1.grudged, True)
-        history.append(C)
-        set_history(P2, history)
-
-        for turn in range(P1.mem_length-1):
-            self.assertEqual(P1.mem_length, 12)
-            self.assertEqual(P1.strategy(P2), D)
-            # Doesn't matter what opponent plays now
-            history.append(random.choice([C, D]))
-            set_history(P2, history)
-            self.assertEqual(P1.grudged, True)
-
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.grudged, True)
-        history.append(C)
-        set_history(P2, history)
-
-        # Back to being not grudged
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        history.append(C)
-        set_history(P2, history)
+        # Test a different grudge length period
+        self.responses_test([C] * 5, [C] * 4 + [D],
+                            [D], attrs={"grudged": True, "grudge_memory": 0,
+                                        "mem_length": 16})
 
     def test_reset_method(self):
         """

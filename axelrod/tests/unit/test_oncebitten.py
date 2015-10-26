@@ -21,62 +21,38 @@ class TestOnceBitten(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_initial_strategy(self):
-        """Starts by cooperating."""
-        P1 = axelrod.OnceBitten()
-        P2 = axelrod.Player()
-        self.assertEqual(P1.strategy(P2), C)
-
     def test_strategy(self):
         """If opponent defects at any point then the player will defect
         forever."""
-        P1 = axelrod.OnceBitten()
-        P2 = axelrod.Player()
-        # Starts by playing C
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        P2.history.append(C)
+        # Become grudged if the opponent defects twice in a row
+        self.responses_test([], [], [C], attrs={"grudged": False})
+        self.responses_test([C], [C], [C], attrs={"grudged": False})
+        self.responses_test([C, C], [C, C], [C], attrs={"grudged": False})
+        self.responses_test([C, C, C], [C, C, D], [C], attrs={"grudged": False})
+        self.responses_test([C, C, C, C], [C, C, D, D], [D],
+                            attrs={"grudged": True})
 
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        P2.history.append(C)
-
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        P2.history.append(D)
-
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.grudged, False)
-        P2.history.append(D)
-
-        self.assertEqual(P2.history, [C, C, D, D])
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.grudged, True)
-
-        for turn in range(P1.mem_length-1):
-            self.assertEqual(P1.strategy(P2), D)
-            # Doesn't matter what opponent plays now
-            P2.history.append(C)
-            self.assertEqual(P1.grudged, True)
-            P2.history.append(D)
-            self.assertEqual(P1.grudged, True)
-
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P1.grudge_memory, 10)
-        self.assertEqual(P1.grudged, True)
-        P2.history.append(C)
+        mem_length = self.player().mem_length
+        for i in range(mem_length - 1):
+            self.responses_test([C, C, C, C] + [D] * i, [C, C, D, D] + [D] * i,
+                                [D], attrs={"grudged": True,
+                                            "grudge_memory": i})
+        i = mem_length + 1
+        self.responses_test([C, C, C, C] + [D] * i, [C, C, D, D] + [C] * i,
+                            [C], attrs={"grudged": False,
+                                        "grudge_memory": 0})
 
     def test_reset(self):
         """Check that grudged gets reset properly"""
-        P1 = self.player()
-        P1.history = [C, D]
-        P2 = axelrod.Player()
-        P2.history = [D, D]
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertTrue(P1.grudged)
-        P1.reset()
-        self.assertFalse(P1.grudged)
-        self.assertEqual(P1.history, [])
+        p1 = self.player()
+        p2 = axelrod.Defector()
+        p1.play(p2)
+        p1.play(p2)
+        p1.play(p2)
+        self.assertTrue(p1.grudged)
+        p1.reset()
+        self.assertFalse(p1.grudged)
+        self.assertEqual(p1.history, [])
 
 
 class TestFoolMeOnce(TestPlayer):
@@ -123,11 +99,11 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         """Test that will forgive one D but will grudge after 2 Ds, randomly
         forgets count"""
         random.seed(2)
-
         self.responses_test([C], [D], [C])
         self.responses_test([C, C], [D, D], [D])
         # Sometime eventually forget count:
-        self.responses_test([C, C], [D, D], [D] * 13 + [C])
+        self.responses_test([C, C], [D, D], [D] * 13 + [C],
+                            attrs={"D_count": 0})
 
     def test_reset(self):
         """Check that count gets reset properly"""

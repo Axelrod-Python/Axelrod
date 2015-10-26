@@ -46,6 +46,7 @@ def update_histories(player1, player2, move1, move2):
     elif move2 == D:
         player2.defections += 1
 
+
 class Player(object):
     """A class for a player in the tournament.
 

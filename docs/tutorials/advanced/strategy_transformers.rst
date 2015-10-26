@@ -175,6 +175,7 @@ the following signature::
         # This example just passes through the proposed_action
         return proposed_action
 
+
 The proposed action will be the outcome of::
 
     self.strategy(player)
