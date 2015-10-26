@@ -30,6 +30,7 @@ class and player::
     'Flipped Cooperator'
 
 This behavor can be supressed by setting the :code:`name_prefix` argument::
+
     FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="")
 
 Note carefully that the transformer returns a class, not an instance of a class.
@@ -56,38 +57,45 @@ Included Transformers
 The library includes the following transformers:
 
 * :code:`FlipTransformer`: Flips all actions::
+
     >>> import axelrod
     >>> from axelrod.strategy_transformers import FlipTransformer
     >>> FlippedCooperator = FlipTransformer(axelrod.Cooperator)
     >>> player = FlippedCooperator()
 
 * :code:`NoisyTransformer(noise)`: Flips actions with probability :code:`noise`::
+
     >>> import axelrod
     >>> from axelrod.strategy_transformers import NoisyTransformer
     >>> player = NoisyTransformer(0.5)(axelrod.Cooperator)()
 
 * :code:`ForgiverTransformer(p)`: Flips defections with probability :code:`p`::
+
     >>> import axelrod
     >>> from axelrod.strategy_transformers import ForgiverTransformer
     >>> player = ForgiverTransformer(0.1)(axelrod.Defector)()
 
 * :code:`InitialTransformer(seq=None)`: First plays the moves in the sequence :code:`seq`, then plays as usual. For example, to obtain a defector that cooperates on the first two rounds::
+
     >>> import axelrod
     >>> from axelrod.strategy_transformers import InitialTransformer
     >>> player = InitialTransformer([C, C])(axelrod.Defector)()
 
 * :code:`FinalTransformer(seq=None)`: Ends the tournament with the moves in the sequence :code:`seq`, if the tournament_length is known. For example, to obtain a cooperator that defects on the last two rounds::
+
     >>> import axelrod
     >>> from axelrod.strategy_transformers import FinalTransformer
     >>> player = FinalTransformer([D, D])(axelrod.Cooperator)()
 
 * :code:`RetailiateUntilApologyTransformer()`: adds TitForTat-style retaliation::
+
     >>> import axelrod
     >>> from axelrod.strategy_transformers import RetailiateUntilApologyTransformer
     >>> RUA = RetailiateUntilApologyTransformer()
     >>> TFT = RUA(axelrod.Cooperator)
 
 * :code:`TrackHistoryTransformer`: Tracks History internally in the :code:`Player` instance in a variable :code:`_recorded_history`. This allows a player to e.g. detect noise.::
+
     >>> import axelrod
     >>> from axelrod.strategy_transformers import TrackHistoryTransformer
     >>> player = TrackHistoryTransformer(axelrod.Random)()
@@ -159,6 +167,7 @@ has full access to the player and the opponent objects and can have arguments.
 
 To make a transformer from the :code:`strategy_wrapper` function, use
 :code:`StrategyTransformerFactory`, which has signature::
+
     def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(),
                                 wrapper_kwargs={}, name_prefix=""):
         """Modify an existing strategy dynamically by wrapping the strategy
@@ -184,4 +193,3 @@ So we use :code:`StrategyTransformerFactory` with :code:`strategy_wrapper`::
     Cooperator2 = TransformedClass(axelrod.Cooperator)
 
 For more examples, see :code:`axelrod/strategy_transformers.py`.
-
