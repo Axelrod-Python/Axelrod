@@ -195,3 +195,65 @@ class HardTitFor2Tats(Player):
             return D
         # Otherwise cooperates
         return C
+
+class OmegaTFT(Player):
+
+    name = "Omega TFT"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        Player.__init__(self)
+        self.deadlock_threshold = 3
+        self.randomness_threshold = 8
+        self.randomness_counter = 0
+        self.deadlock_counter = 0
+
+    def strategy(self, opponent):
+        # Cooperate on the first move
+        if len(self.history) == 0:
+            return C
+        # TFT on round 2
+        if len(self.history) == 1:
+            return D if opponent.history[-1:] == [D] else C
+
+        # Are we deadlocked? (in a CD -> DC loop)
+        if (self.deadlock_counter >= self.deadlock_threshold):
+            self.move = C
+            if self.deadlock_counter == self.deadlock_threshold:
+                self.deadlock_counter = self.deadlock_threshold + 1
+            else:
+                self.deadlock_counter = 0
+        else:
+            # Update counters
+            if opponent.history[-2:] == [C, C]:
+                self.randomness_counter -= 1
+            # If the opponent's move changed, increase the counter
+            if opponent.history[-2] != opponent.history[-1]:
+                self.randomness_counter += 1
+            # If the opponent's last move differed from mine, increase the counter
+            if self.history[-1] == opponent.history[-1]:
+                self.randomness_counter+= 1
+            # Compare counts to thresholds
+            # If randomness_counter exceeds Y, Defect for the remainder
+            if self.randomness_counter >= 8:
+                self.move = D
+            else:
+                # TFT
+                self.move = D if opponent.history[-1:] == [D] else C
+                # Check for deadlock
+                if opponent.history[-2] != opponent.history[-1]:
+                    self.deadlock_counter += 1
+                else:
+                    self.deadlock_counter = 0
+        return self.move
+
+    def reset(self):
+        Player.reset(self)
+        self.randomness_counter = 0
+        self.deadlock_counter = 0
