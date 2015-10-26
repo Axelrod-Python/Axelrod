@@ -5,7 +5,7 @@ C, D = Actions.C, Actions.D
 
 class TitForTat(Player):
     """
-    A player starts by cooperating and then mimics previous move by
+    A player starts by cooperating and then mimics the previous action of the
     opponent.
 
     Note that the code for this strategy is written in a fairly verbose
