@@ -28,6 +28,7 @@ class TestCooperator(TestPlayer):
         """Simply does the opposite to what the strategy did last time."""
         self.markov_test([C, C, C, C])
 
+
 class TestTrickyCooperator(TestPlayer):
 
     name = "Tricky Cooperator"

@@ -69,8 +69,8 @@ class TestPlayerClass(unittest.TestCase):
         self.assertRaises(NotImplementedError, self.player().strategy, self.player())
 
 
-def test_responses(test_class, P1, P2, history_1, history_2,
-                   responses, random_seed=None, attrs=None):
+def test_responses(test_class, P1, P2, history_1, history_2, responses,
+                   random_seed=None, attrs=None):
     """
     Test responses to arbitrary histories. Used for the following tests
     in TestPlayer: first_play_test, markov_test, and responses_test.
@@ -93,7 +93,7 @@ def test_responses(test_class, P1, P2, history_1, history_2,
         test_class.assertEqual(s1, response)
     if attrs:
         for attr, value in attrs.items():
-            test_class.assertTrue(getattr(P1, attr), value)
+            test_class.assertEqual(getattr(P1, attr), value)
 
 
 class TestOpponent(Player):
@@ -183,9 +183,8 @@ class TestPlayer(unittest.TestCase):
             test_responses(self, P1, P2, history[0], history[1], responses[i],
                            random_seed=random_seed)
 
-    def responses_test(self, history_1, history_2, responses,
-                       random_seed=None, tournament_length=200,
-                       attrs=None):
+    def responses_test(self, history_1, history_2, responses, random_seed=None,
+                       tournament_length=200, attrs=None):
         """Test responses to arbitrary histories. Input response_list is a
         list of lists, each of which consists of a list for the history of
         player 1, a list for the history of player 2, and a list for the

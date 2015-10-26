@@ -82,6 +82,7 @@ class TestMindWarper(TestMindController):
         self.assertEqual(play1, 'D')
         self.assertEqual(play2, 'C')
 
+
 class TestMindBender(TestMindController):
 
     name = "Mind Bender"

@@ -21,7 +21,7 @@ class TestAPavlov2006(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         self.responses_test([C] * 6, [C] * 6, [C],
-                            attrs={"opponent_class": "cooperative"})
+                            attrs={"opponent_class": "Cooperative"})
         self.responses_test([C, D, D, D, D, D], [D] * 6, [D],
                             attrs={"opponent_class": "ALLD"})
         self.responses_test([C, D, C, D, C, D], [D, C, D, C, D, C], [C, C],

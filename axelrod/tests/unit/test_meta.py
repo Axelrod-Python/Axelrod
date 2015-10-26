@@ -155,6 +155,7 @@ class TestMetaWinner(TestMetaPlayer):
             player.play(opponent)
         self.assertEqual(player.history[-1], D)
 
+
 class TestMetaHunter(TestMetaPlayer):
 
     name = "Meta Hunter"
@@ -184,7 +185,6 @@ class TestMetaHunter(TestMetaPlayer):
         # Test post 100 rounds responses
         self.responses_test([C] * 101, [C] * 101, [C])
         self.responses_test([C] * 101, [C] * 100 + [D], [D])
-
 
 
 class TestMetaMajorityMemoryOne(TestMetaPlayer):
@@ -275,4 +275,3 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-

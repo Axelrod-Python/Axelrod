@@ -61,9 +61,9 @@ class Punisher(Player):
 class InversePunisher(Player):
     """
     A player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after meme_length matches, with
-    1<=mem_length<=20 proportional to the amount of time the opponent has
-    played C. The inverse of Punisher
+    opponent has defected, but forgets after mem_length matches, with
+    1 <= mem_length <= 20 proportional to the amount of time the opponent
+    has played C. The inverse of Punisher.
     """
 
     name = 'Inverse Punisher'
@@ -76,9 +76,6 @@ class InversePunisher(Player):
     }
 
     def __init__(self):
-        """
-        Initialised the player
-        """
         super(InversePunisher, self).__init__()
         self.history = []
         self.mem_length = 1
@@ -106,9 +103,7 @@ class InversePunisher(Player):
         return C
 
     def reset(self):
-        """
-        Resets scores and history
-        """
+        """Resets internal variables and history"""
         Player.reset(self)
         self.grudged = False
         self.grudge_memory = 0

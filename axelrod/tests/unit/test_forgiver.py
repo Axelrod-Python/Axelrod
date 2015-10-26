@@ -50,4 +50,3 @@ class TestForgivingTitForTat(TestPlayer):
         self.responses_test([C, C, C, C], [C, C, C, C], [C])
         self.responses_test([C, C, C, C, D], [C, C, C, D, C], [C])
         self.responses_test([C] * 11, [C] * 9 + [D] * 2, [D])
-
