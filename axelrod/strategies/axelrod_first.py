@@ -47,7 +47,10 @@ class Davis(Player):
 
 
 class RevisedDowning(Player):
-    """Revised Downing."""
+    """Revised Downing attempts to determine if players are cooperative or not.
+    If so, it cooperates with them. This strategy would have won Axelrod's first
+    tournament.
+    """
 
     name = "Revised Downing"
 
@@ -115,8 +118,8 @@ class RevisedDowning(Player):
         self.bad = 0.0
         self.nice1 = 0
         self.nice2 = 0
-        self.total_C = 0 # note the same as self.cooperations
-        self.total_D = 0 # note the same as self.defections
+        self.total_C = 0 # not the same as self.cooperations
+        self.total_D = 0 # not the same as self.defections
 
 
 class Feld(Player):
@@ -401,7 +404,8 @@ class UnnamedStrategy(Player):
     therefore the rule appeared random to many other players.
     -- Axelrod, "Effective Choice in the Prisoner's Dilemma"
 
-    Warning: This strategy is incomplete.
+    Warning: This strategy is not identical to the original strategy (source
+    unavailable) and was written based on published descriptions.
     """
 
     name = "Unnamed Strategy"
