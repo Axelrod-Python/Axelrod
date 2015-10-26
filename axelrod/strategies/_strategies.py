@@ -3,8 +3,9 @@ from __future__ import absolute_import
 from .alternator import Alternator
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
-from .axelrod_tournaments import (
-    Davis, Feld, Grofman, Joss, Shubik, Tullock, Champion, Eatherley, Tester)
+from .axelrod_first import (Davis, RevisedDowning, Feld, Grofman, Nydegger,
+                            Joss, Shubik, Tullock, UnnamedStrategy)
+from .axelrod_second import Champion, Eatherley, Tester
 from .backstabber import BackStabber, DoubleCrosser
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
@@ -24,7 +25,7 @@ from .hunter import (
 from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
-    WinStayLoseShift,GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
+    WinStayLoseShift, GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
     ZDExtort2, SoftJoss, MemoryOnePlayer)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
@@ -107,6 +108,7 @@ strategies = [
     MindWarper,
     MirrorMindReader,
     NiceAverageCopier,
+    Nydegger,
     OnceBitten,
     OppositeGrudger,
     Pi,

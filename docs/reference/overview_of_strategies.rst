@@ -22,7 +22,7 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | `Tideman and Chieruzzi`_ | Tideman and Chieruzzi (authors' names)    | Not Implemented          |
 +--------------------------+-------------------------------------------+--------------------------+
-| `Nydegger`_              | Nydegger (author's name)                  | Not Implemented          |
+| `Nydegger`_              | Nydegger (author's name)                  | :code:`Nydegger`         |
 +--------------------------+-------------------------------------------+--------------------------+
 | `Grofman`_               | Grofman (author's name)                   | :code:`Grofman`          |
 +--------------------------+-------------------------------------------+--------------------------+
@@ -36,7 +36,7 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | `Graaskamp`_             | Graaskamp (author's name)                 | Not Implemented          |
 +--------------------------+-------------------------------------------+--------------------------+
-| `Downing`_               | Downing (author's name)                   | Not Implemented          |
+| `Downing`_               | Downing (author's name)                   | :code:`RevisedDowning    |
 +--------------------------+-------------------------------------------+--------------------------+
 | `Feld`_                  | Feld (author's name)                      | :code:`Feld`             |
 +--------------------------+-------------------------------------------+--------------------------+
@@ -44,7 +44,7 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | `Tullock`_               | Tullock (author's name)                   | :code:`Tullock`          |
 +--------------------------+-------------------------------------------+--------------------------+
-| `Unnamed Strategy`_      | Unnamed Strategy (by a Grad Student in    | Not Implemented          |
+| `Unnamed Strategy`_      | Unnamed Strategy (by a Grad Student in    | :code:`UnnamedStrategy`  |
 |                          | Political Science)                        |                          |
 +--------------------------+-------------------------------------------+--------------------------+
 | :ref:`random-strategy`   | Random                                    | :code:`Random`           |
@@ -111,8 +111,6 @@ the game has just started (everything is forgotten).
 Nydegger
 ^^^^^^^^
 
-**Not implemented yet**
-
 This strategy begins by playing Tit For Tat for the first 3 rounds with the
 following modifications:
 
@@ -141,12 +139,23 @@ Finally this strategy defects if and only if:
 
 *This strategy came 3rd in Axelrod's original tournament.*
 
+Here is how Nydegger is implemented in the library::
+
+    >>> import axelrod
+    >>> p1 = axelrod.Nydegger()  # Create a Grofman player
+    >>> p2 = axelrod.Defector()  # Create a player that always defects
+    >>> for round in range(5):
+    ...     p1.play(p2)
+    >>> p1.history
+    ['C', 'D', 'D', 'C', 'C']
+
 Grofman
 ^^^^^^^
 
-This is a pretty simple strategy: it cooperates with probability
-:math:`\frac{2}{7}`. In contemporary terminology, this is a memory-one player
-with all four conditional probabilities of cooperation equal to
+This is a pretty simple strategy: it cooperates on the first two rounds and
+returns the opponent's last action for the next 5. For the rest of the game
+Grofman cooperates if both players selected the same action in the previous
+round, and otherwise cooperates randomly with probability
 :math:`\frac{2}{7}`.
 
 *This strategy came 4th in Axelrod's original tournament.*
@@ -158,7 +167,7 @@ Here is how Grofman is implemented in the library::
 
     >>> import axelrod
     >>> p1 = axelrod.Grofman()  # Create a Grofman player
-    >>> p2 = axelrod.Random()  # Create a player that plays randomly
+    >>> p2 = axelrod.Defector()  # Create a player that plays randomly
     >>> for round in range(5):
     ...     p1.play(p2)
     >>> p1.history   # doctest: +SKIP
@@ -276,18 +285,27 @@ This strategy follows the following rules:
 
 Downing
 ^^^^^^^
-
-**Not implemented yet**
-
 This strategy attempts to estimate the next move of the opponent by estimating
 the probability of cooperating given that they defected (:math:`p(C|D)`) or
 cooperated on the previous round (:math:`p(C|C)`). These probabilities are
 continuously updated during play and the strategy attempts to maximise the long
-term play.
+term play. Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
 
-Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
+Downing is implemented as `RevisedDowning`. Apparently in the first tournament
+the strategy was implemented incorrectly and defected on the first two rounds.
+This can be controlled by setting `revised=True` to prevent the initial defections.
 
 *This strategy came 10th in Axelrod's original tournament.*
+
+Davis is implemented as follows::
+
+    >>> import axelrod
+    >>> p1 = axelrod.RevisedDowning()  # Create a RevisedDowing player
+    >>> p2 = axelrod.Defector()  # Create a player that always defects
+    >>> for round in range(10):
+    ...     p1.play(p2)
+    >>> p1.history # doctest:
+    ['C', 'C', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D']
 
 Feld
 ^^^^
@@ -370,8 +388,6 @@ We have 10 rounds of cooperation and some apparently random plays afterward.
 Unnamed Strategy
 ^^^^^^^^^^^^^^^^
 
-**Not implemented yet**
-
 Apparently written by a grad student in political science whose name was withheld,
 this strategy cooperates with a given probability :math:`P`. This probability
 (which has initial value .3) is updated every 10 rounds based on whether the
@@ -379,9 +395,26 @@ opponent seems to be random, very cooperative or very uncooperative.
 Furthermore, if after round 130 the strategy is losing then :math:`P` is also
 adjusted.
 
+Since the original code is not available and was apparently complicated, we have
+implemented this strategy based published descriptions. The strategy cooperates
+with a random probability between 0.3 and 0.7.
+
 *This strategy came 14th in Axelrod's original tournament.*
 
 .. _random-strategy:
+
+Here is how this is implemented in the library::
+
+   >>> import axelrod
+   >>> p1 = axelrod.UnnamedStrategy()
+   >>> p2 = axelrod.Random()  # Create a player that plays randomly
+   >>> for round in range(5):
+   ...     p1.play(p2)
+   >>> p1.history  # doctest: +SKIP
+   ['C', 'C', 'C', 'D', 'D']
+   >>> p2.history  # doctest: +SKIP
+   ['D', 'C', 'D', 'D', 'C']
+
 
 Random
 ^^^^^^
