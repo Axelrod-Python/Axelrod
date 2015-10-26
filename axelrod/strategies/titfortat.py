@@ -197,6 +197,11 @@ class HardTitFor2Tats(Player):
         return C
 
 class OmegaTFT(Player):
+    """OmegaTFT modifies TFT in two ways:
+       -- checks for deadlock loops of alternating rounds of (C, D) and (D, C),
+       and attempting to break them
+       -- uses a more sophisticated retaliation mechanism that is noise tolerant.
+    """
 
     name = "Omega TFT"
     classifier = {
