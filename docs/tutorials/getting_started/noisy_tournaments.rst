@@ -2,7 +2,7 @@ Noisy tournaments
 =================
 
 A common variation on iterated prisoner’s dilemma tournaments is to add
-stochasticity in the choice of plays, simply called noise. This noise is
+stochasticity in the choice of actions, simply called noise. This noise is
 introduced by flipping plays between ‘C’ and ‘D’ with some probability that is
 applied to all plays after they are delivered by the player.
 
