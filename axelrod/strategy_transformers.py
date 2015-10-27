@@ -69,6 +69,10 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
         def __init__(self, *args, **kwargs):
             self.args = args
             self.kwargs = kwargs
+            if "name_prefix" in kwargs:
+                self.name_prefix = kwargs["name_prefix"]
+            else:
+                self.name_prefix = name_prefix
 
         def __call__(self, PlayerClass):
             """
@@ -104,6 +108,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             # Modify the PlayerClass name
             new_class_name = PlayerClass.__name__
             name = PlayerClass.name
+            name_prefix = self.name_prefix
             if name_prefix:
                 # Modify the Player name (class variable inherited from Player)
                 new_class_name = name_prefix + PlayerClass.__name__
@@ -115,11 +120,23 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             return new_class
     return Decorator
 
+def compose_transformers(t1, t2):
+    """Compose transformers without having to invoke the first on
+    a PlayerClass."""
+    class Composition(object):
+        def __init__(self):
+            self.t1 = t1
+            self.t2 = t2
+        def __call__(self, PlayerClass):
+            return t1(t2(PlayerClass))
+    return Composition()
+
 def flip_wrapper(player, opponent, action):
     """Applies flip_action at the class level."""
     return flip_action(action)
 
-FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="Flipped")()
+FlipTransformer = StrategyTransformerFactory(flip_wrapper,
+                                             name_prefix="Flipped")()
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
     """Applies flip_action at the class level."""
@@ -199,3 +216,6 @@ def history_track_wrapper(player, opponent, action):
 
 TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper,
                                         name_prefix="HistoryTracking")()
+
+
+
