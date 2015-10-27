@@ -1,2 +1,3 @@
 numpy==1.9.2
 matplotlib==1.4.2
+cloudpickle==0.1.1
