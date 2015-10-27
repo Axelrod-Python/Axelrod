@@ -36,7 +36,7 @@ To contribute a strategy you need to follow as many of the following steps as po
    simple thing.)
 3. Update the :code:`./axelrod/strategies/_strategies.py` file (you need to
    write the import statement and add the strategy to the relevant python list).
-4. Update :code:`./axelrod/docs/overview_of_strategies.rst` with a description
+4. Update :code:`./axelrod/docs/reference/overview_of_strategies.rst` with a description
    of what the strategy does and include an example of it working. If relevant
    please also add a source for the strategy (if it is not an original one).
 5. This one is optional: write some unit tests in the :code:`./axelrod/tests/`
