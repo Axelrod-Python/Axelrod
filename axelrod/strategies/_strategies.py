@@ -113,6 +113,7 @@ strategies = [
     MirrorMindReader,
     NiceAverageCopier,
     Nydegger,
+    OmegaTFT,
     OnceBitten,
     OppositeGrudger,
     Pi,
