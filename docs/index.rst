@@ -11,6 +11,7 @@ Welcome to the documentation for the Axelrod Python library
 
    tutorials/index.rst
    reference/index.rst
+   citing_the_library.rst
 
 
 Indices and tables
