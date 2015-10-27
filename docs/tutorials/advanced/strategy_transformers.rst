@@ -11,7 +11,7 @@ example, :code:`FlipTransformer` takes a strategy and flips the actions from
 C to D and D to C::
 
     >>> import axelrod
-    >>> from axelrod.strategy_transformers import FlipTransformer
+    >>> from axelrod.strategy_transformers import *
     >>> FlippedCooperator = FlipTransformer(axelrod.Cooperator)
     >>> player = FlippedCooperator()
     >>> opponent = axelrod.Cooperator()
@@ -103,17 +103,16 @@ Composing Transformers
 Transformers can be composed to form new composers, in two ways. You can
 simply chain together multiple transformers::
 
-    cls1 = FinalTransformer([D,D])(InitialTransformer([D,D])(axelrod.Cooperator))
-    p1 = cls1()
+    >>> cls1 = FinalTransformer([D,D])(InitialTransformer([D,D])(axelrod.Cooperator))
+    >>> p1 = cls1()
 
 This defines a strategy that cooperates except on the first two and last two
 rounds. Alternatively, you can make a new class using
 :code:`compose_transformers`::
 
-    cls1 = compose_transformers(FinalTransformer([D, D]),
-                                InitialTransformer([D, D]))
-    p1 = cls1(axelrod.Cooperator)()
-    p2 = cls1(axelrod.Defector)()
+    >>> cls1 = compose_transformers(FinalTransformer([D, D]), InitialTransformer([D, D]))
+    >>> p1 = cls1(axelrod.Cooperator)()
+    >>> p2 = cls1(axelrod.Defector)()
 
 
 Usage as Class Decorators
@@ -177,7 +176,9 @@ the following signature::
         return proposed_action
 
 The proposed action will be the outcome of::
+
     self.strategy(player)
+
 in the underlying class (the one that is transformed). The strategy_wrapper still
 has full access to the player and the opponent objects and can have arguments.
 
@@ -205,7 +206,7 @@ So we use :code:`StrategyTransformerFactory` with :code:`strategy_wrapper`::
 
 If your wrapper requires no arguments, you can simply proceed as follows::
 
-    TransformedClass = StrategyTransformerFactory(generic_strategy_wrapper)()
-    Cooperator2 = TransformedClass(axelrod.Cooperator)
+    >>> TransformedClass = StrategyTransformerFactory(generic_strategy_wrapper)()
+    >>> Cooperator2 = TransformedClass(axelrod.Cooperator)
 
 For more examples, see :code:`axelrod/strategy_transformers.py`.
