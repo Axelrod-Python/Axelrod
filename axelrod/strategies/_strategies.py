@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from .alternator import Alternator
+from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (Davis, RevisedDowning, Feld, Grofman, Nydegger,
@@ -50,6 +51,8 @@ strategies = [
     AlternatorHunter,
     AntiCycler,
     AntiTitForTat,
+    APavlov2006,
+    APavlov2011,
     Appeaser,
     ArrogantQLearner,
     AverageCopier,

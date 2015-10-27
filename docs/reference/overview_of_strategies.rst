@@ -690,7 +690,7 @@ Random is a strategy that was defined in `Axelrod's first tournament`_, note tha
 *RANDOM came 8th in average score and 8th in wins in S&P's tournament.*
 
 ZDGTFT-2
-^^^^^^^
+^^^^^^^^
 
 This memory-one strategy is defined by the following four conditional
 probabilities based on the last round of play:
@@ -1066,3 +1066,18 @@ Anti-Cycler
 AntiCycler plays a sequence that contains no cycles::
 
     C CD CCD CCCD CCCCD CCCCCD ...
+
+APavlov2006
+^^^^^^^^^^^
+
+Also called [Adaptive Pavlov](http://www.cs.nott.ac.uk/~pszjl/index_files/chapter4.pdf),
+this strategy that attempts to classify opponents and respond in a manner that
+encourages cooperation. Winner of a 2005 tournament.
+
+
+APavlov2011
+^^^^^^^^^^^
+
+A [variant of APavlov](http://www.graham-kendall.com/papers/lhk2011.pdf)
+that attempts to classify opponents and respond in a manner that encourages
+cooperation.
