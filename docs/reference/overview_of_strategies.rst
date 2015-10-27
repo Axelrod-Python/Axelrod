@@ -1033,3 +1033,10 @@ Anti-Cycler
 AntiCycler plays a sequence that contains no cycles::
 
     C CD CCD CCCD CCCCD CCCCCD ...
+
+
+LookerUp
+^^^^^^^^
+
+LookerUp uses a lookup table to decide what to play based on the last few rounds plus
+the first few plays made by the opponent at the start of the match.
