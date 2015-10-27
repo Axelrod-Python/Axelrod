@@ -1067,6 +1067,7 @@ AntiCycler plays a sequence that contains no cycles::
 
     C CD CCD CCCD CCCCD CCCCCD ...
 
+
 APavlov2006
 ^^^^^^^^^^^
 
@@ -1074,10 +1075,18 @@ Also called [Adaptive Pavlov](http://www.cs.nott.ac.uk/~pszjl/index_files/chapte
 this strategy that attempts to classify opponents and respond in a manner that
 encourages cooperation. Winner of a 2005 tournament.
 
-
 APavlov2011
 ^^^^^^^^^^^
 
 A [variant of APavlov](http://www.graham-kendall.com/papers/lhk2011.pdf)
 that attempts to classify opponents and respond in a manner that encourages
 cooperation.
+
+OmegaTFT
+^^^^^^^^
+
+OmegaTFT plays as described in [this paper](http://arxiv.org/pdf/cs/0609017.pdf). It cooperates and retaliates like TitForTat, and keeps
+counters of how often the opponent changes actions. When the counter
+exceeds a threshold, OmegaTFT defects for the rest of the rounds. OmegaTFT
+also keeps a counter to break deadlocks (C D to D C cycles) against
+strategies like SuspiciousTitForTat.

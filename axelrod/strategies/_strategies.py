@@ -40,7 +40,8 @@ from .retaliate import (
     LimitedRetaliate3)
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
-    SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats)
+    SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
+    OmegaTFT)
 
 
 # Note: Meta* strategies are handled in .__init__.py
