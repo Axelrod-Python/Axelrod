@@ -43,14 +43,6 @@ create a new instance::
 
 rather than :code:`NoisyTransformer(0.5)(axelrod.Cooperator())` or just :code:`NoisyTransformer(0.5)(axelrod.Cooperator)`.
 
-You can also chain together multiple transformers::
-
-    cls1 = FinalTransformer([D,D])(InitialTransformer([D,D])(axelrod.Cooperator))
-    p1 = cls1()
-
-This defines a strategy that cooperates except on the first two and last two rounds.
-
-
 Included Transformers
 ---------------------
 
@@ -103,6 +95,26 @@ The library includes the following transformers:
     >>> import axelrod
     >>> from axelrod.strategy_transformers import TrackHistoryTransformer
     >>> player = TrackHistoryTransformer(axelrod.Random)()
+
+
+Composing Transformers
+----------------------
+
+Transformers can be composed to form new composers, in two ways. You can
+simply chain together multiple transformers::
+
+    cls1 = FinalTransformer([D,D])(InitialTransformer([D,D])(axelrod.Cooperator))
+    p1 = cls1()
+
+This defines a strategy that cooperates except on the first two and last two
+rounds. Alternatively, you can make a new class using
+:code:`compose_transformers`::
+
+    cls1 = compose_transformers(FinalTransformer([D, D]),
+                                InitialTransformer([D, D]))
+    p1 = cls1(axelrod.Cooperator)()
+    p2 = cls1(axelrod.Defector)()
+
 
 Usage as Class Decorators
 -------------------------
@@ -191,7 +203,7 @@ So we use :code:`StrategyTransformerFactory` with :code:`strategy_wrapper`::
     TransformedClass = StrategyTransformerFactory(generic_strategy_wrapper)
     Cooperator2 = TransformedClass(*args, **kwargs)(axelrod.Cooperator)
 
-If your wrapper requires no arguments, you can simply as follows::
+If your wrapper requires no arguments, you can simply proceed as follows::
 
     TransformedClass = StrategyTransformerFactory(generic_strategy_wrapper)()
     Cooperator2 = TransformedClass(axelrod.Cooperator)
