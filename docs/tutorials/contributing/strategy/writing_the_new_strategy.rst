@@ -4,12 +4,6 @@ Writing the new strategy
 Identify a new strategy
 -----------------------
 
-The library has a large number of strategies::
-
-    >>> import axelrod as axl
-    >>> len(axl.strategies) # doctest: +SKIP
-    103
-
 If you're not sure if you have a strategy that has already been implemented
 please get in touch: `via the gitter room
 <https://gitter.im/Axelrod-Python/Axelrod>`_ or `open an issue
