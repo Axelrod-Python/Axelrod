@@ -95,6 +95,11 @@ rounds) then cooperate.
 
 
 class EvolvedLookerUp(LookerUp):
+    """
+    A LookerUp strategy that uses a lookup table generated using an evolutionary algorithm. 
+    //TODO: update this docstring with a link to a blog post once I've written about it :-)
+    """
+
     def __init__(self):
         plys = 2
         opponent_start_plys = 2
