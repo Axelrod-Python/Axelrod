@@ -28,7 +28,7 @@ class TestTransformers(unittest.TestCase):
 
     def test_generic(self):
         """Test that the generic wrapper does nothing."""
-        transformer = StrategyTransformerFactory(generic_strategy_wrapper)
+        transformer = StrategyTransformerFactory(generic_strategy_wrapper)()
         Cooperator2 = transformer(axelrod.Cooperator)
         p1 = Cooperator2()
         p2 = axelrod.Cooperator()
@@ -107,7 +107,7 @@ class TestTransformers(unittest.TestCase):
     def test_final_transformer2(self):
         """Tests the FinalTransformer when tournament length is not known."""
         p1 = axelrod.Cooperator()
-        p2 = FinalTransformer()(axelrod.Cooperator)()
+        p2 = FinalTransformer([D, D])(axelrod.Cooperator)()
         for _ in range(6):
             p1.play(p2)
         self.assertEqual(p2.history, [C, C, C, C, C, C])
@@ -122,27 +122,26 @@ class TestTransformers(unittest.TestCase):
 
     def test_composition(self):
         """Tests that transformations can be chained or composed."""
-        cls1 = InitialTransformer()(axelrod.Cooperator)
-        cls2 = FinalTransformer()(cls1)
+        cls1 = InitialTransformer([D, D])(axelrod.Cooperator)
+        cls2 = FinalTransformer([D, D])(cls1)
         p1 = cls2()
         p2 = axelrod.Cooperator()
         p1.tournament_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, D, D, C, C, D, D, D])
+        self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
 
-        cls1 = FinalTransformer()(InitialTransformer()(axelrod.Cooperator))
+        cls1 = FinalTransformer([D, D])(InitialTransformer([D, D])(axelrod.Cooperator))
         p1 = cls1()
         p2 = axelrod.Cooperator()
         p1.tournament_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, D, D, C, C, D, D, D])
+        self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
 
     def test_retailiation(self):
         """Tests the RetailiateUntilApologyTransformer."""
-        RUA = RetailiateUntilApologyTransformer()
-        TFT = RUA(axelrod.Cooperator)
+        TFT = RetailiateUntilApologyTransformer(axelrod.Cooperator)
         p1 = TFT()
         p2 = axelrod.Cooperator()
         p1.play(p2)
