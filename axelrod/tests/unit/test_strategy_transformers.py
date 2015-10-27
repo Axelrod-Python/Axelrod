@@ -17,6 +17,16 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(cls.__name__, "FlippedCooperator")
         self.assertEqual(p1.name, "Flipped Cooperator")
 
+        cls = ForgiverTransformer(0.5)(axelrod.Alternator)
+        p1 = cls()
+        self.assertEqual(cls.__name__, "ForgivingAlternator")
+        self.assertEqual(p1.name, "Forgiving Alternator")
+
+        cls = ForgiverTransformer(0.5, name_prefix="")(axelrod.Alternator)
+        p1 = cls()
+        self.assertEqual(cls.__name__, "Alternator")
+        self.assertEqual(p1.name, "Alternator")
+
     def test_cloning(self):
         """Tests that Player.clone preserves the application of transformations.
         """

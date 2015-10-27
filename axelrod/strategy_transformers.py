@@ -120,6 +120,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             return new_class
     return Decorator
 
+
 def compose_transformers(t1, t2):
     """Compose transformers without having to invoke the first on
     a PlayerClass."""
