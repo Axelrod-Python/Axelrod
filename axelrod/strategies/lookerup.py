@@ -9,12 +9,13 @@ decide what to do based on a combination of the last m rounds and the opponent's
 opening n moves. If there isn't enough history to do this (i.e. for the first m
 rounds) then cooperate.
 
-    The lookup table is implemented as a dict. They keys are 3-tuples giving the
+    The lookup table is implemented as a dict. The keys are 3-tuples giving the
     opponents first n moves, self's last m moves, and opponents last m moves,
     all as strings. The values are the moves to play on this round.  For
     example, if
 
-        - the opponent started by playing C  my last move was a C the opponents
+        - the opponent started by playing C  
+        - my last move was a C the opponents
         - last move was a D
 
     the corresponding key would be
@@ -37,7 +38,7 @@ rounds) then cooperate.
         ('', 'D', 'C') : 'C',     
     }
 
-    where m=1 and n=0
+    where m=1 and n=0.
     
     """
     }
