@@ -14,34 +14,32 @@ As an example, the tests for Tit-For-Tat are as follows::
 
     C, D = axelrod.Actions.C, axelrod.Actions.D
 
-    class TestTitForTat(TestPlayer):
+class TestTitForTat(TestPlayer):
+    """
+    Note that this test is referred to in the documentation as an example on
+    writing tests.  If you modify the tests here please also modify the
+    documentation.
+    """
 
-        name = "Tit For Tat"
-        player = axelrod.TitForTat
-        expected_classifier = {
-            'memory_depth': 1,
-            'stochastic': False,
-            'inspects_source': False,
-            'manipulates_source': False,
-            'manipulates_state': False
-        }
+    name = "Tit For Tat"
+    player = axelrod.TitForTat
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
-        def test_strategy(self):
-            """Starts by cooperating."""
-            P1 = axelrod.TitForTat()
-            P2 = axelrod.Player()
-            self.assertEqual(P1.strategy(P2), C)
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
 
-        def test_effect_of_strategy(self):
-            """
-            Repeats last action of opponent history
-            """
-            P1 = axelrod.TitForTat()
-            P2 = axelrod.Player()
-            P2.history = [C, C, C, C]
-            self.assertEqual(P1.strategy(P2), C)
-            P2.history = [C, C, C, C, D]
-            self.assertEqual(P1.strategy(P2), D)
+    def test_effect_of_strategy(self):
+        """Repeats last action of opponent history."""
+        self.markov_test([C, D, C, D])
+        self.responses_test([C] * 4, [C, C, C, C], [C])
+        self.responses_test([C] * 5, [C, C, C, C, D], [D])
 
 The :code:`test_effect_of_strategy` method mainly checks that the
 :code:`strategy` method in the :code:`TitForTat` class works as expected:
@@ -49,14 +47,12 @@ The :code:`test_effect_of_strategy` method mainly checks that the
 1. If the opponent's last strategy was :code:`C`: then :code:`TitForTat` should
    cooperate::
 
-    P2.history = ['C', 'C', 'C', 'C']
-    self.assertEqual(P1.strategy(P2), 'C')
+    self.responses_test([C] * 4, [C, C, C, C], [C])
 
 2. If the opponent's last strategy was :code:`D`: then :code:`TitForTat` should
    defect::
 
-    P2.history = ['C', 'C', 'C', 'C', 'D']
-    self.assertEqual(P1.strategy(P2), 'D')
+    self.responses_test([C] * 5, [C, C, C, C, D], [D])
 
 We have added some convenience member functions to the :code:`TestPlayer` class.
 All three of these functions can take an optional keyword argument
