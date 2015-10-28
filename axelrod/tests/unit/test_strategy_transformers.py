@@ -237,24 +237,46 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [C, D, D, D, D, D, D, D])
         self.assertEqual(p2.history, [C, C, C, C, D, D, D, D])
 
+    def test_nilpotency(self):
+        """Show that some of the transformers are (sometimes) nilpotent, i.e.
+        that transfomer(transformer(PlayerClass)) == PlayerClass"""
+        for transformer in [IdentityTransformer,
+                            FlipTransformer,
+                            TrackHistoryTransformer]:
+            for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
+                for third_player in [axelrod.Cooperator(), axelrod.Defector()]:
+                    player = PlayerClass()
+                    transformed = transformer(transformer(PlayerClass))()
+                    for _ in range(5):
+                        self.assertEqual(player.strategy(third_player),
+                                        transformed.strategy(third_player))
+                        player.play(third_player)
+                        third_player.history.pop(-1)
+                        transformed.play(third_player)
+
     def test_idempotency(self):
-        """Show that some of the transformers are (sometimes) idempotent."""
-        for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
-            for transformer in [FinalTransformer([C]),
-                                FinalTransformer([D]),
-                                FlipTransformer,
-                                RetaliateUntilApologyTransformer,
-                                RetaliationTransformer(1),
-                                ]:
-                player = PlayerClass()
-                third_player = PlayerClass()
-                transformed = transformer(transformer(PlayerClass))()
-                for _ in range(5):
-                    self.assertEqual(player.strategy(third_player),
-                                     transformed.strategy(third_player))
-                    player.play(third_player)
-                    third_player.history.pop(-1)
-                    transformed.play(third_player)
+        """Show that these transformers are idempotent, i.e. that
+        transfomer(transformer(PlayerClass)) == transformer(PlayerClass).
+        That means that the transformer is a projection on the set of
+        strategies."""
+        for transformer in [IdentityTransformer, GrudgeTransformer(1),
+                            FinalTransformer([C]), FinalTransformer([D]),
+                            InitialTransformer([C]), InitialTransformer([D]),
+                            DeadlockBreakingTransformer,
+                            RetaliationTransformer(1),
+                            RetaliateUntilApologyTransformer,
+                            TrackHistoryTransformer,
+                            ApologyTransformer([D], [C])]:
+            for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
+                for third_player in [axelrod.Cooperator(), axelrod.Defector()]:
+                    player = transformer(PlayerClass)()
+                    transformed = transformer(transformer(PlayerClass))()
+                    for i in range(5):
+                        self.assertEqual(player.strategy(third_player),
+                                        transformed.strategy(third_player))
+                        player.play(third_player)
+                        third_player.history.pop(-1)
+                        transformed.play(third_player)
 
     def test_implementation(self):
         """A test that demonstrates the difference in outcomes if
