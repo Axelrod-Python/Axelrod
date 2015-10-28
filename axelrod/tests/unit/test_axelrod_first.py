@@ -44,6 +44,42 @@ class TestDavis(TestPlayer):
                             [C, D, C, C, C], [D])
 
 
+class TestRevisedDowning(TestPlayer):
+
+    name = "Revised Downing"
+    player = axelrod.RevisedDowning
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        self.responses_test([C], [C], [C])
+        self.responses_test([C], [D], [C])
+        self.responses_test([C, C], [C, C], [C])
+        self.responses_test([C, C], [C, D], [D])
+        self.responses_test([C, C], [D, C], [C])
+        self.responses_test([C, C], [D, D], [D])
+        self.responses_test([C, C, D], [C, D, C], [D])
+        self.responses_test([C, C, C], [D, C, C], [C])
+        self.responses_test([C, C, D], [C, D, D], [D])
+        self.responses_test([C, C, C], [D, C, D], [C])
+        self.responses_test([C, C, D, D], [C, D, D, D], [D])
+        self.responses_test([C, C, C, C], [D, C, D, C], [C])
+
+    def test_not_revised(self):
+        # Test not revised
+        p1 = self.player(revised=False)
+        p2 = axelrod.Cooperator()
+        p1.play(p2)
+        p1.play(p2)
+        self.assertEqual(p1.history, [D, D])
+
+
 class TestFeld(TestPlayer):
 
     name = "Feld"
@@ -90,21 +126,22 @@ class TestGrofman(TestPlayer):
     name = "Grofman"
     player = axelrod.Grofman
     expected_classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
-    def test_four_vector(self):
-        p = float(2) / 7
-        expected_dictionary = {(C, C): p, (C, D): p, (D, C): p, (D, D): p}
-        test_four_vector(self, expected_dictionary)
-
     def test_strategy(self):
-        self.responses_test([C], [C], [D, D, C], random_seed=2)
-        self.responses_test([C], [D], [C, D, D])
+        self.responses_test([], [], [C, C])
+        self.responses_test([C, C], [C, C], [C])
+        self.responses_test([C, C], [C, D], [D])
+        self.responses_test([C] * 6, [C] * 6, [C])
+        self.responses_test([C] * 6, [D] * 6, [D])
+        self.responses_test([C] * 7, [C] * 7, [C])
+        self.responses_test([C] * 7, [D] * 7, [C], random_seed=1)
+        self.responses_test([C] * 7, [D] * 7, [D], random_seed=2)
 
 
 class TestJoss(TestPlayer):
@@ -126,6 +163,56 @@ class TestJoss(TestPlayer):
     def test_strategy(self):
         self.responses_test([C], [C], [D], random_seed=2)
         self.responses_test([C], [D], [D], random_seed=4)
+
+
+class TestNydegger(TestPlayer):
+
+    name = "Nydegger"
+    player = axelrod.Nydegger
+    expected_classifier = {
+        'memory_depth': 3,
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_score_history(self):
+        """Tests many (but not all) possible combinations."""
+        player = self.player()
+        score_map = player.score_map
+        score = player.score_history([C, C, C], [C, C, C], score_map)
+        self.assertEqual(score, 0)
+        score = player.score_history([D, C, C], [C, C, C], score_map)
+        self.assertEqual(score, 1)
+        score = player.score_history([C, C, C], [D, C, C], score_map)
+        self.assertEqual(score, 2)
+        score = player.score_history([D, D, C], [D, C, C], score_map)
+        self.assertEqual(score, 7)
+        score = player.score_history([C, D, C], [C, D, C], score_map)
+        self.assertEqual(score, 12)
+        score = player.score_history([D, C, D], [C, C, C], score_map)
+        self.assertEqual(score, 17)
+        score = player.score_history([D, D, D], [D, D, D], score_map)
+        self.assertEqual(score, 63)
+
+    def test_strategy(self):
+        # Test TFT-type initial play
+        self.first_play_test(C)
+        self.responses_test([C], [C], [C])
+        self.responses_test([C, C], [C, C], [C])
+        self.responses_test([C], [D], [D])
+        self.responses_test([C, D], [D, C], [D])
+        self.responses_test([C, D], [D, D], [D])
+
+        # Test trailing post-round 3 play
+        for i in range(4, 9):
+            self.responses_test([C] * i, [C] * i, [C])
+            self.responses_test([D] * i, [D] * i, [C])
+            self.responses_test([C] * i + [C, D, C], [C] * i + [C, D, C], [C])
+            self.responses_test([C] * i + [D, C, D], [C] * i + [C, C, C], [D])
+            self.responses_test([C] * i + [D, C, C], [C] * i + [C, C, C], [D])
+            self.responses_test([C] * i + [C, C, C], [C] * i + [D, C, C], [C])
 
 
 class TestShubik(TestPlayer):
@@ -178,7 +265,6 @@ class TestTullock(TestPlayer):
         'manipulates_state': False
     }
 
-
     def test_strategy(self):
         """Cooperates for first ten rounds"""
         self.first_play_test(C)
@@ -202,57 +288,12 @@ class TestTullock(TestPlayer):
         self.responses_test(history_1, history_2, [C, D, D, C], random_seed=25)
 
 
-class TestChampion(TestPlayer):
-    name = "Champion"
-    player = axelrod.Champion
+class TestUnnamedStrategy(TestPlayer):
+
+    name = "Unnamed Strategy"
+    player = axelrod.UnnamedStrategy
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-
-    def test_strategy(self):
-        # Initially cooperates
-        self.first_play_test(C)
-        # Cooperates for num_rounds / 20 (10 by default)
-        random.seed(3)
-        random_sample = []
-        for i in range(10):
-            random_sample.append(random.choice([C, D]))
-            self.responses_test([C] * i, random_sample, [C])
-
-        # Mirror opponent in the next stage (15 rounds by default)
-        my_responses = [C] * 10
-        for i in range(15):
-            self.responses_test(my_responses, random_sample,
-                                [random_sample[-1]])
-            my_responses.append(random_sample[-1])
-            random_sample.append(random.choice([C,D]))
-
-        # Cooperate unless the opponent defected, has defected at least 40% of
-        # the time, and with a random choice
-        for i in range(5):
-            my_responses.append(C)
-            random_sample.append(C)
-            self.responses_test(my_responses, random_sample, [C])
-
-        self.responses_test(my_responses + [C], random_sample + [D], [C],
-                            random_seed=50)
-        self.responses_test(my_responses + [C], random_sample + [D], [C],
-                            random_seed=30)
-        self.responses_test(my_responses + [C] * 40, random_sample + [D] * 40,
-                            [D], random_seed=40)
-
-
-class TestEatherley(TestPlayer):
-
-    name = "Eatherley"
-    player = axelrod.Eatherley
-    expected_classifier = {
-        'memory_depth': float('inf'),
+        'memory_depth': 0,
         'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
@@ -260,49 +301,5 @@ class TestEatherley(TestPlayer):
     }
 
     def test_strategy(self):
-        # Initially cooperates
-        self.first_play_test(C)
-        # Test cooperate after opponent cooperates
-        self.responses_test([C], [C], [C])
-        self.responses_test([C, C], [C, C], [C])
-        self.responses_test([D, C], [D, C], [C])
-        self.responses_test([D, C, C], [D, C, C], [C])
-        # Test defection after opponent defection
-        self.responses_test([D], [D], [D])
-        self.responses_test([D, D], [D, D], [D])
-        self.responses_test([D, C, C, D], [D, C, C, D], [D, C], random_seed=8)
-
-
-class TestTester(TestPlayer):
-
-    name = "Tester"
-    player = axelrod.Tester
-    expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def test_strategy(self):
-        """Starts by defecting."""
-        self.first_play_test(D)
-
-    def test_effect_of_strategy(self):
-
-        # Test Alternating CD
-        self.responses_test([D], [C], [C])
-        self.responses_test([D, C], [C, C], [C])
-        self.responses_test([D, C, C], [C, C, C], [D])
-        self.responses_test([D, C, C, D], [C, C, C, C], [C])
-        self.responses_test([D, C, C, D, C], [C, C, C, C, C], [D])
-
-        # Test cooperation after opponent defection
-        self.responses_test([D, C], [D, C], [C])
-
-        # Test TFT after defection
-        self.responses_test([D, C, C], [D, C, C], [C])
-        self.responses_test([D, C, C, C], [D, C, C, C], [C])
-        self.responses_test([D, C, D], [D, D, D], [D])
-        self.responses_test([D, C, C], [D, C, D], [D])
+        random.seed(10)
+        self.responses_test([], [], [C, C, D, C, C, D])

@@ -1,5 +1,5 @@
 import unittest
-from axelrod import Actions
+from axelrod import Actions, flip_action
 
 class TestAction(unittest.TestCase):
 
@@ -9,3 +9,11 @@ class TestAction(unittest.TestCase):
         self.assertNotEqual(Actions.D, 'd')
         self.assertNotEqual(Actions.C, 'c')
         self.assertNotEqual(Actions.C, Actions.D)
+
+
+    def test_flip_action(self):
+        self.assertEqual(flip_action(Actions.D), Actions.C)
+        self.assertEqual(flip_action(Actions.C), Actions.D)
+
+        with self.assertRaises(ValueError):
+            flip_action('R')

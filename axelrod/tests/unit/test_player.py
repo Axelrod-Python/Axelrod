@@ -70,7 +70,7 @@ class TestPlayerClass(unittest.TestCase):
 
 
 def test_responses(test_class, P1, P2, history_1, history_2,
-                   responses, random_seed=None):
+                   responses, random_seed=None, attrs=None):
     """
     Test responses to arbitrary histories. Used for the following tests
     in TestPlayer: first_play_test, markov_test, and responses_test.
@@ -91,6 +91,9 @@ def test_responses(test_class, P1, P2, history_1, history_2,
     for response in responses:
         s1, s2 = simulate_play(P1, P2)
         test_class.assertEqual(s1, response)
+    if attrs:
+        for attr, value in attrs.items():
+            test_class.assertTrue(getattr(P1, attr), value)
 
 
 class TestOpponent(Player):
@@ -181,7 +184,8 @@ class TestPlayer(unittest.TestCase):
                            random_seed=random_seed)
 
     def responses_test(self, history_1, history_2, responses,
-                       random_seed=None, tournament_length=200):
+                       random_seed=None, tournament_length=200,
+                       attrs=None):
         """Test responses to arbitrary histories. Input response_list is a
         list of lists, each of which consists of a list for the history of
         player 1, a list for the history of player 2, and a list for the
@@ -193,7 +197,7 @@ class TestPlayer(unittest.TestCase):
         P2.tournament_attributes['length'] = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
-            random_seed=random_seed)
+            random_seed=random_seed, attrs=attrs)
 
     def classifier_test(self):
         """Test that the keys in the expected_classifier dictionary give the
