@@ -11,7 +11,7 @@ example, :code:`FlipTransformer` takes a strategy and flips the actions from
 C to D and D to C::
 
     >>> import axelrod
-    >>> from axelrod.strategy_transformers import FlipTransformer
+    >>> from axelrod.strategy_transformers import *
     >>> FlippedCooperator = FlipTransformer(axelrod.Cooperator)
     >>> player = FlippedCooperator()
     >>> opponent = axelrod.Cooperator()
@@ -31,7 +31,7 @@ class and player::
 
 This behavor can be supressed by setting the :code:`name_prefix` argument::
 
-    FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="")
+    FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="")()
 
 Note carefully that the transformer returns a class, not an instance of a class.
 This means that you need to use the Transformed class as you would normally to
@@ -42,14 +42,6 @@ create a new instance::
     >>> player = NoisyTransformer(0.5)(axelrod.Cooperator)()
 
 rather than :code:`NoisyTransformer(0.5)(axelrod.Cooperator())` or just :code:`NoisyTransformer(0.5)(axelrod.Cooperator)`.
-
-You can also chain together multiple transformers::
-
-    cls1 = FinalTransformer([D,D])(InitialTransformer([D,D])(axelrod.Cooperator))
-    p1 = cls1()
-
-This defines a strategy that cooperates except on the first two and last two rounds.
-
 
 Included Transformers
 ---------------------
@@ -67,38 +59,61 @@ The library includes the following transformers:
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import NoisyTransformer
-    >>> player = NoisyTransformer(0.5)(axelrod.Cooperator)()
+    >>> NoisyCooperator = NoisyTransformer(0.5)(axelrod.Cooperator)
+    >>> player = NoisyCooperator()
 
 * :code:`ForgiverTransformer(p)`: Flips defections with probability :code:`p`::
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import ForgiverTransformer
-    >>> player = ForgiverTransformer(0.1)(axelrod.Defector)()
+    >>> ForgivinDefector = ForgiverTransformer(0.1)(axelrod.Defector)
+    >>> player = ForgivinDefector()
 
 * :code:`InitialTransformer(seq=None)`: First plays the moves in the sequence :code:`seq`, then plays as usual. For example, to obtain a defector that cooperates on the first two rounds::
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import InitialTransformer
-    >>> player = InitialTransformer([C, C])(axelrod.Defector)()
+    >>> InitiallyCooperatingDefector = InitialTransformer([C, C])(axelrod.Defector)
+    >>> player = InitiallyCooperatingDefector()
 
 * :code:`FinalTransformer(seq=None)`: Ends the tournament with the moves in the sequence :code:`seq`, if the tournament_length is known. For example, to obtain a cooperator that defects on the last two rounds::
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import FinalTransformer
-    >>> player = FinalTransformer([D, D])(axelrod.Cooperator)()
+    >>> FinallyDefectingCooperator = FinalTransformer([D, D])(axelrod.Cooperator)
+    >>> player = FinallyDefectingCooperator()
 
 * :code:`RetailiateUntilApologyTransformer()`: adds TitForTat-style retaliation::
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import RetailiateUntilApologyTransformer
-    >>> RUA = RetailiateUntilApologyTransformer()
-    >>> TFT = RUA(axelrod.Cooperator)
+    >>> TFT = RetailiateUntilApologyTransformer(axelrod.Cooperator)
+    >>> player = TFT()
 
 * :code:`TrackHistoryTransformer`: Tracks History internally in the :code:`Player` instance in a variable :code:`_recorded_history`. This allows a player to e.g. detect noise.::
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import TrackHistoryTransformer
     >>> player = TrackHistoryTransformer(axelrod.Random)()
+
+
+Composing Transformers
+----------------------
+
+Transformers can be composed to form new composers, in two ways. You can
+simply chain together multiple transformers::
+
+    >>> cls1 = FinalTransformer([D,D])(InitialTransformer([D,D])(axelrod.Cooperator))
+    >>> p1 = cls1()
+
+This defines a strategy that cooperates except on the first two and last two
+rounds. Alternatively, you can make a new class using
+:code:`compose_transformers`::
+
+    >>> cls1 = compose_transformers(FinalTransformer([D, D]), InitialTransformer([D, D]))
+    >>> p1 = cls1(axelrod.Cooperator)()
+    >>> p2 = cls1(axelrod.Defector)()
+
 
 Usage as Class Decorators
 -------------------------
@@ -107,7 +122,7 @@ Transformers can also be used to decorate existing strategies. For example,
 the strategy :code:`BackStabber` defects on the last two rounds. We can encode this
 behavior with a transformer as a class decorator::
 
-    @FinalTransformer([D, D]) # End with three defections
+    @FinalTransformer([D, D]) # End with two defections
     class BackStabber(Player):
         """
         Forgives the first 3 defections but on the fourth
@@ -161,15 +176,16 @@ the following signature::
         return proposed_action
 
 The proposed action will be the outcome of::
+
     self.strategy(player)
+
 in the underlying class (the one that is transformed). The strategy_wrapper still
 has full access to the player and the opponent objects and can have arguments.
 
 To make a transformer from the :code:`strategy_wrapper` function, use
 :code:`StrategyTransformerFactory`, which has signature::
 
-    def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(),
-                                wrapper_kwargs={}, name_prefix=""):
+    def StrategyTransformerFactory(strategy_wrapper, name_prefix=""):
         """Modify an existing strategy dynamically by wrapping the strategy
         method with the argument `strategy_wrapper`.
 
@@ -179,10 +195,6 @@ To make a transformer from the :code:`strategy_wrapper` function, use
             A function of the form `strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)`
             Can also use a class that implements
                 def __call__(self, player, opponent, action)
-        wrapper_args: tuple
-            Any arguments to pass to the wrapper
-        wrapper_kwargs: dict
-            Any keyword arguments to pass to the wrapper
         name_prefix: string, "Transformed "
             A string to prepend to the strategy and class name
         """
@@ -190,6 +202,11 @@ To make a transformer from the :code:`strategy_wrapper` function, use
 So we use :code:`StrategyTransformerFactory` with :code:`strategy_wrapper`::
 
     TransformedClass = StrategyTransformerFactory(generic_strategy_wrapper)
-    Cooperator2 = TransformedClass(axelrod.Cooperator)
+    Cooperator2 = TransformedClass(*args, **kwargs)(axelrod.Cooperator)
+
+If your wrapper requires no arguments, you can simply proceed as follows::
+
+    >>> TransformedClass = StrategyTransformerFactory(generic_strategy_wrapper)()
+    >>> Cooperator2 = TransformedClass(axelrod.Cooperator)
 
 For more examples, see :code:`axelrod/strategy_transformers.py`.

@@ -43,8 +43,7 @@ def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)
     # This example just passes through the proposed_action
     return proposed_action
 
-def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(),
-                               wrapper_kwargs={}, name_prefix=None):
+def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
     """Modify an existing strategy dynamically by wrapping the strategy
     method with the argument `strategy_wrapper`.
 
@@ -62,55 +61,83 @@ def StrategyTransformerFactory(strategy_wrapper, wrapper_args=(),
         A string to prepend to the strategy and class name
     """
 
-    # Create a function that applies a wrapper function to the strategy method
-    # of a given class
-    def decorate(PlayerClass, name_prefix=name_prefix):
-        """
-        Parameters
-        ----------
-        PlayerClass: A subclass of axelrod.Player, e.g. Cooperator
-            The Player Class to modify
-        name_prefix: str
-            A string to prepend to the Player and Class name
+    # Create a class that applies a wrapper function to the strategy method
+    # of a given class. We use a class here instead of a function so that the
+    # decorator can have arguments.
 
-        Returns
-        -------
-        new_class, class object
-            A class object that can create instances of the modified PlayerClass
-        """
-
-        # Define the new strategy method, wrapping the existing method
-        # with `strategy_wrapper`
-        def strategy(self, opponent):
-            # Is the original strategy method a static method?
-            if isinstance(PlayerClass.__dict__["strategy"], staticmethod):
-                proposed_action = PlayerClass.strategy(opponent)
+    class Decorator(object):
+        def __init__(self, *args, **kwargs):
+            self.args = args
+            self.kwargs = kwargs
+            if "name_prefix" in kwargs:
+                self.name_prefix = kwargs["name_prefix"]
             else:
-                proposed_action = PlayerClass.strategy(self, opponent)
-            # Apply the wrapper
-            return strategy_wrapper(self, opponent, proposed_action,
-                                    *wrapper_args, **wrapper_kwargs)
+                self.name_prefix = name_prefix
 
-        # Define a new class and wrap the strategy method
-        # Modify the PlayerClass name
-        new_class_name = PlayerClass.__name__
-        name = PlayerClass.name
-        if name_prefix:
-            # Modify the Player name (class variable inherited from Player)
-            new_class_name = name_prefix + PlayerClass.__name__
-            # Modify the Player name (class variable inherited from Player)
-            name = name_prefix + ' ' + PlayerClass.name
-        # Dynamically create the new class
-        new_class = type(new_class_name, (PlayerClass,),
-                         {"name": name, "strategy": strategy})
-        return new_class
-    return decorate
+        def __call__(self, PlayerClass):
+            """
+            Parameters
+            ----------
+            PlayerClass: A subclass of axelrod.Player, e.g. Cooperator
+                The Player Class to modify
+            name_prefix: str
+                A string to prepend to the Player and Class name
+
+            Returns
+            -------
+            new_class, class object
+                A class object that can create instances of the modified PlayerClass
+            """
+
+            args = self.args
+            kwargs = self.kwargs
+
+            # Define the new strategy method, wrapping the existing method
+            # with `strategy_wrapper`
+            def strategy(self, opponent):
+                # Is the original strategy method a static method?
+                if isinstance(PlayerClass.__dict__["strategy"], staticmethod):
+                    proposed_action = PlayerClass.strategy(opponent)
+                else:
+                    proposed_action = PlayerClass.strategy(self, opponent)
+                # Apply the wrapper
+                return strategy_wrapper(self, opponent, proposed_action,
+                                        *args, **kwargs)
+
+            # Define a new class and wrap the strategy method
+            # Modify the PlayerClass name
+            new_class_name = PlayerClass.__name__
+            name = PlayerClass.name
+            name_prefix = self.name_prefix
+            if name_prefix:
+                # Modify the Player name (class variable inherited from Player)
+                new_class_name = name_prefix + PlayerClass.__name__
+                # Modify the Player name (class variable inherited from Player)
+                name = name_prefix + ' ' + PlayerClass.name
+            # Dynamically create the new class
+            new_class = type(new_class_name, (PlayerClass,),
+                            {"name": name, "strategy": strategy})
+            return new_class
+    return Decorator
+
+
+def compose_transformers(t1, t2):
+    """Compose transformers without having to invoke the first on
+    a PlayerClass."""
+    class Composition(object):
+        def __init__(self):
+            self.t1 = t1
+            self.t2 = t2
+        def __call__(self, PlayerClass):
+            return t1(t2(PlayerClass))
+    return Composition()
 
 def flip_wrapper(player, opponent, action):
     """Applies flip_action at the class level."""
     return flip_action(action)
 
-FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="Flipped")
+FlipTransformer = StrategyTransformerFactory(flip_wrapper,
+                                             name_prefix="Flipped")()
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
     """Applies flip_action at the class level."""
@@ -119,14 +146,7 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
         return flip_action(action)
     return action
 
-def NoisyTransformer(noise, name_prefix="Noisy"):
-    """Creates a function that takes an axelrod.Player class as an argument
-    and alters the play of the Player in the following way. The player's
-    intended action is flipped with probability noise."""
-
-    return StrategyTransformerFactory(noisy_wrapper,
-                                      wrapper_args=(noise,),
-                                      name_prefix=name_prefix)
+NoisyTransformer = StrategyTransformerFactory(noisy_wrapper, name_prefix="Noisy")
 
 def forgiver_wrapper(player, opponent, action, p):
     """If a strategy wants to defect, flip to cooperate with the given
@@ -135,13 +155,8 @@ def forgiver_wrapper(player, opponent, action, p):
         return random_choice(p)
     return C
 
-def ForgiverTransformer(p, name_prefix="Forgiving"):
-    """Creates a function that takes an axelrod.Player class as an argument
-    and alters the play of the Player in the following way. The player's
-    defections are flipped with probability p."""
-
-    return StrategyTransformerFactory(forgiver_wrapper, wrapper_args=(p,),
-                                      name_prefix=name_prefix)
+ForgiverTransformer = StrategyTransformerFactory(forgiver_wrapper,
+                                              name_prefix="Forgiving")
 
 def initial_sequence(player, opponent, action, initial_seq):
     """Play the moves in `seq` first (must be a list), ignoring the strategy's
@@ -152,17 +167,7 @@ def initial_sequence(player, opponent, action, initial_seq):
         return initial_seq[index]
     return action
 
-## Defection initially three times
-def InitialTransformer(seq=None):
-    """Creates a function that takes an axelrod.Player class as an argument
-    and alters the play of the Player in the following way. The player starts
-    with the actions in the argument seq and then proceeds to play normally."""
-
-    if not seq:
-        seq = [D] * 3
-    transformer = StrategyTransformerFactory(initial_sequence,
-                                             wrapper_args=(seq,))
-    return transformer
+InitialTransformer = StrategyTransformerFactory(initial_sequence)
 
 def final_sequence(player, opponent, action, seq):
     """Play the moves in `seq` first, ignoring the strategy's moves until the
@@ -178,17 +183,7 @@ def final_sequence(player, opponent, action, seq):
         return seq[-index]
     return action
 
-def FinalTransformer(seq=None):
-    """Creates a function that takes an axelrod.Player class as an argument
-    and alters the play of the Player in the following way. If the tournament
-    length is known, the play ends with the actions in the argument seq.
-    Otherwise the player's actions are unaltered. """
-
-    if not seq:
-        seq = [D] * 3
-    transformer = StrategyTransformerFactory(final_sequence,
-                                             wrapper_args=(seq,))
-    return transformer
+FinalTransformer = StrategyTransformerFactory(final_sequence)
 
 # Strategy wrapper as a class example
 class RetaliationWrapper(object):
@@ -209,14 +204,8 @@ class RetaliationWrapper(object):
             return D
         return action
 
-def RetailiateUntilApologyTransformer(name_prefix="RUA"):
-    """Creates a function that takes an axelrod.Player class as an argument
-    and alters the play of the Player in the following way. If the opponent
-    defects, the player will retaliate with defections until the opponent
-    cooperates. Otherwise the player's actions are unaltered."""
-
-    strategy_wrapper = RetaliationWrapper()
-    return StrategyTransformerFactory(strategy_wrapper, name_prefix=name_prefix)
+RetailiateUntilApologyTransformer = StrategyTransformerFactory(
+    RetaliationWrapper(), name_prefix="RUA")()
 
 def history_track_wrapper(player, opponent, action):
     """Wrapper to track a player's history in a variable `._recorded_history`."""
@@ -227,4 +216,7 @@ def history_track_wrapper(player, opponent, action):
     return action
 
 TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper,
-                                        name_prefix="HistoryTracking")
+                                        name_prefix="HistoryTracking")()
+
+
+
