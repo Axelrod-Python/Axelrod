@@ -36,7 +36,7 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | `Graaskamp`_             | Graaskamp (author's name)                 | Not Implemented          |
 +--------------------------+-------------------------------------------+--------------------------+
-| `Downing`_               | Downing (author's name)                   | :code:`RevisedDowning    |
+| `Downing`_               | Downing (author's name)                   | :code:`RevisedDowning`   |
 +--------------------------+-------------------------------------------+--------------------------+
 | `Feld`_                  | Feld (author's name)                      | :code:`Feld`             |
 +--------------------------+-------------------------------------------+--------------------------+
@@ -558,7 +558,7 @@ The following classical strategies are included in the library:
 +--------------+----------------------+--------------------------+
 | `GRIM`_      | Grim                 | :code:`Grudger`          |
 +--------------+----------------------+--------------------------+
-| `GTFT`_      | Generous Tit-For-Tat | :code:`GTFT`|
+| `GTFT`_      | Generous Tit-For-Tat | :code:`GTFT`             |
 +--------------+----------------------+--------------------------+
 | `TF2T`_      | Tit-For-Two-Tats     | :code:`TitFor2Tats`      |
 +--------------+----------------------+--------------------------+
