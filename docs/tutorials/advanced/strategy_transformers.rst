@@ -101,7 +101,15 @@ The library includes the following transformers:
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import ApologyTransformer
-    >>> ApologizingDefector = ApologyTransformer(axelrod.Defector)
+    >>> ApologizingDefector = ApologyTransformer([D], [C])(axelrod.Defector)
+    >>> player = ApologizingDefector()
+
+You can pass any two sequences in. In this example the player would apologize
+after two consequtive rounds of `(D, C)`::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import ApologyTransformer
+    >>> ApologizingDefector = ApologyTransformer([D, D], [C, C])(axelrod.Defector)
     >>> player = ApologizingDefector()
 
 * :code:`DeadlockBreakingTransformer`: Attempts to break :code:`(D, C) -> (C, D)`

@@ -189,12 +189,18 @@ class TestTransformers(unittest.TestCase):
 
     def test_apology(self):
         """Tests the ApologyTransformer."""
-        ApologizingDefector = ApologyTransformer(axelrod.Defector)
+        ApologizingDefector = ApologyTransformer([D], [C])(axelrod.Defector)
         p1 = ApologizingDefector()
         p2 = axelrod.Cooperator()
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p1.history, [D, C, D, C, D])
+        ApologizingDefector = ApologyTransformer([D, D], [C, C])(axelrod.Defector)
+        p1 = ApologizingDefector()
+        p2 = axelrod.Cooperator()
+        for _ in range(6):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, D, C, D, D, C])
 
     def test_deadlock(self):
         """Test the DeadlockBreakingTransformer."""
@@ -238,7 +244,6 @@ class TestTransformers(unittest.TestCase):
                                 FinalTransformer([D]),
                                 FlipTransformer,
                                 RetaliateUntilApologyTransformer,
-                                ApologyTransformer,
                                 RetaliationTransformer(1),
                                 ]:
                 player = PlayerClass()
