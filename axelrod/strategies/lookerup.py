@@ -81,7 +81,7 @@ rounds) then cooperate.
         if self.opponent_start_plays == 0:
             self.classifier['memory_depth'] = self.plays
 
-        self.init_args = (lookup_table)
+        self.init_args = (lookup_table,)
 
     def strategy(self, opponent):
         """
