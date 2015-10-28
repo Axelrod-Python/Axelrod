@@ -17,6 +17,16 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(cls.__name__, "FlippedCooperator")
         self.assertEqual(p1.name, "Flipped Cooperator")
 
+        cls = ForgiverTransformer(0.5)(axelrod.Alternator)
+        p1 = cls()
+        self.assertEqual(cls.__name__, "ForgivingAlternator")
+        self.assertEqual(p1.name, "Forgiving Alternator")
+
+        cls = ForgiverTransformer(0.5, name_prefix="")(axelrod.Alternator)
+        p1 = cls()
+        self.assertEqual(cls.__name__, "Alternator")
+        self.assertEqual(p1.name, "Alternator")
+
     def test_cloning(self):
         """Tests that Player.clone preserves the application of transformations.
         """
@@ -28,7 +38,8 @@ class TestTransformers(unittest.TestCase):
 
     def test_generic(self):
         """Test that the generic wrapper does nothing."""
-        transformer = StrategyTransformerFactory(generic_strategy_wrapper)
+        # This is the identity transformer
+        transformer = StrategyTransformerFactory(generic_strategy_wrapper)()
         Cooperator2 = transformer(axelrod.Cooperator)
         p1 = Cooperator2()
         p2 = axelrod.Cooperator()
@@ -62,24 +73,6 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, C, D, C, C, D, C, D])
 
-    def test_cycler(self):
-        """A test that demonstrates the difference in outcomes if
-        FlipTransformer is applied to Alternator and CyclerCD."""
-        # Difference between Alternator and CyclerCD
-        p1 = axelrod.Cycler(cycle="CD")
-        p2 = FlipTransformer(axelrod.Cycler)(cycle="CD")
-        for _ in range(5):
-            p1.play(p2)
-        self.assertEqual(p1.history, [C, D, C, D, C])
-        self.assertEqual(p2.history, [D, C, D, C, D])
-
-        p1 = axelrod.Alternator()
-        p2 = FlipTransformer(axelrod.Alternator)()
-        for _ in range(5):
-            p1.play(p2)
-        self.assertEqual(p1.history, [C, D, C, D, C])
-        self.assertEqual(p2.history, [D, D, D, D, D])
-
     def test_initial_transformer(self):
         """Tests the InitialTransformer."""
         p1 = axelrod.Cooperator()
@@ -107,7 +100,7 @@ class TestTransformers(unittest.TestCase):
     def test_final_transformer2(self):
         """Tests the FinalTransformer when tournament length is not known."""
         p1 = axelrod.Cooperator()
-        p2 = FinalTransformer()(axelrod.Cooperator)()
+        p2 = FinalTransformer([D, D])(axelrod.Cooperator)()
         for _ in range(6):
             p1.play(p2)
         self.assertEqual(p2.history, [C, C, C, C, C, C])
@@ -122,27 +115,35 @@ class TestTransformers(unittest.TestCase):
 
     def test_composition(self):
         """Tests that transformations can be chained or composed."""
-        cls1 = InitialTransformer()(axelrod.Cooperator)
-        cls2 = FinalTransformer()(cls1)
+        cls1 = InitialTransformer([D, D])(axelrod.Cooperator)
+        cls2 = FinalTransformer([D, D])(cls1)
         p1 = cls2()
         p2 = axelrod.Cooperator()
         p1.tournament_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, D, D, C, C, D, D, D])
+        self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
 
-        cls1 = FinalTransformer()(InitialTransformer()(axelrod.Cooperator))
+        cls1 = FinalTransformer([D, D])(InitialTransformer([D, D])(axelrod.Cooperator))
         p1 = cls1()
         p2 = axelrod.Cooperator()
         p1.tournament_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, D, D, C, C, D, D, D])
+        self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
+
+    def test_compose_transformers(self):
+        cls1 = compose_transformers(FinalTransformer([D, D]), InitialTransformer([D, D]))
+        p1 = cls1(axelrod.Cooperator)()
+        p2 = axelrod.Cooperator()
+        p1.tournament_attributes["length"] = 8
+        for _ in range(8):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
 
     def test_retailiation(self):
         """Tests the RetailiateUntilApologyTransformer."""
-        RUA = RetailiateUntilApologyTransformer()
-        TFT = RUA(axelrod.Cooperator)
+        TFT = RetailiateUntilApologyTransformer(axelrod.Cooperator)
         p1 = TFT()
         p2 = axelrod.Cooperator()
         p1.play(p2)
@@ -161,6 +162,37 @@ class TestTransformers(unittest.TestCase):
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p1.history, [C, C, D, D, C])
+
+    def test_idempotency(self):
+        """Show that some of the transformers are idempotent."""
+        for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
+            for transformer in [FinalTransformer([C]),
+                                FinalTransformer([D]),
+                                FlipTransformer]:
+                player = PlayerClass()
+                third_player = axelrod.Cooperator()
+                transformed = transformer(transformer(PlayerClass))()
+                self.assertEqual(player.strategy(third_player),
+                                 transformed.strategy(third_player))
+
+    def test_implementation(self):
+        """A test that demonstrates the difference in outcomes if
+        FlipTransformer is applied to Alternator and CyclerCD. In other words,
+        the implementation matters, not just the outcomes."""
+        # Difference between Alternator and CyclerCD
+        p1 = axelrod.Cycler(cycle="CD")
+        p2 = FlipTransformer(axelrod.Cycler)(cycle="CD")
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, D, C, D, C])
+        self.assertEqual(p2.history, [D, C, D, C, D])
+
+        p1 = axelrod.Alternator()
+        p2 = FlipTransformer(axelrod.Alternator)()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, D, C, D, C])
+        self.assertEqual(p2.history, [D, D, D, D, D])
 
 
 
