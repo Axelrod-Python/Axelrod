@@ -265,18 +265,15 @@ class RetaliationUntilApologyWrapper(object):
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
     RetaliationUntilApologyWrapper(), name_prefix="RUA")()
 
-
-# Strategy wrapper as a class example
-class ApologyWrapper(object):
-    """Apologies with a single C after a round of (D, C)"""
-    def __call__(self, player, opponent, action):
-        if len(player.history) == 0:
-            return action
-        last_round = (player.history[-1], opponent.history[-1])
-        if last_round == (D, C):
-            return C
+def apology_wrapper(player, opponent, action, myseq, opseq):
+    length = len(myseq)
+    if len(player.history) < length:
         return action
+    if (myseq == player.history[-length:]) and \
+        (opseq == opponent.history[-length:]):
+        return C
+    return action
 
-ApologyTransformer = StrategyTransformerFactory(ApologyWrapper(),
-                                                name_prefix="Apologizing")()
+ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
+                                                name_prefix="Apologizing")
 
