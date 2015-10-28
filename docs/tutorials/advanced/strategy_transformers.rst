@@ -120,6 +120,13 @@ deadlocks by cooperating::
     >>> DeadlockBreakingTFT = DeadlockBreakingTransformer(axelrod.TitForTat)
     >>> player = DeadlockBreakingTFT()
 
+* :code:`GrudgeTransformer(N)`: Defections unconditionally after more than N defections::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import GrudgeTransformer
+    >>> GrudgingCooperator = GrudgeTransformer(2)(axelrod.Cooperator)
+    >>> player = GrudgingCooperator()
+
 * :code:`TrackHistoryTransformer`: Tracks History internally in the :code:`Player` instance in a variable :code:`_recorded_history`. This allows a player to e.g. detect noise.::
 
     >>> import axelrod
