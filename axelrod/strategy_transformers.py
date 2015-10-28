@@ -185,8 +185,66 @@ def final_sequence(player, opponent, action, seq):
 
 FinalTransformer = StrategyTransformerFactory(final_sequence)
 
-# Strategy wrapper as a class example
+def history_track_wrapper(player, opponent, action):
+    """Wrapper to track a player's history in a variable `._recorded_history`."""
+    try:
+        player._recorded_history.append(action)
+    except AttributeError:
+        player._recorded_history = [action]
+    return action
+
+TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper,
+                                        name_prefix="HistoryTracking")()
+
+def deadlock_break_wrapper(player, opponent, action):
+    """Detect and attempt to break deadlocks by cooperating."""
+    if len(player.history) < 2:
+        return action
+    last_round = (player.history[-1], opponent.history[-1])
+    penultimate_round = (player.history[-2], opponent.history[-2])
+    if (penultimate_round, last_round) == ((C, D), (D, C)) or \
+       (penultimate_round, last_round) == ((D, C), (C, D)):
+        # attempt to break deadlock by Cooperating
+        return C
+    return action
+
+DeadlockBreakingTransformer = StrategyTransformerFactory(deadlock_break_wrapper,
+                                              name_prefix="DeadlockBreaking")()
+
+def grudge_wrapper(player, opponent, action, grudges):
+    """After `grudges` defections, defect forever."""
+    if opponent.defections > grudges:
+        return D
+    return action
+
+GrudgeTransformer = StrategyTransformerFactory(grudge_wrapper,
+                                              name_prefix="Grudging")
+
+# Strategy wrappers as classes
+
 class RetaliationWrapper(object):
+    """Retaliates `retaliations` times after a defection (cumulative)."""
+
+    def __init__(self):
+        self.retaliation_count = 0
+
+    def __call__(self, player, opponent, action, retaliations):
+        if len(player.history) == 0:
+            return action
+        if opponent.history[-1] == D:
+            self.retaliation_count += retaliations - 1
+            return D
+        if self.retaliation_count == 0:
+            return action
+        if self.retaliation_count > 0:
+            self.retaliation_count -= 1
+            return D
+
+RetaliationTransformer = StrategyTransformerFactory(
+    RetaliationWrapper(), name_prefix="Retaliating")
+
+
+class RetaliationUntilApologyWrapper(object):
     """Enforces the TFT rule that the opponent pay back a defection with a
     cooperation for the player to stop defecting."""
     def __init__(self):
@@ -204,19 +262,21 @@ class RetaliationWrapper(object):
             return D
         return action
 
-RetailiateUntilApologyTransformer = StrategyTransformerFactory(
-    RetaliationWrapper(), name_prefix="RUA")()
-
-def history_track_wrapper(player, opponent, action):
-    """Wrapper to track a player's history in a variable `._recorded_history`."""
-    try:
-        player._recorded_history.append(action)
-    except AttributeError:
-        player._recorded_history = [action]
-    return action
-
-TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper,
-                                        name_prefix="HistoryTracking")()
+RetaliateUntilApologyTransformer = StrategyTransformerFactory(
+    RetaliationUntilApologyWrapper(), name_prefix="RUA")()
 
 
+# Strategy wrapper as a class example
+class ApologyWrapper(object):
+    """Apologies with a single C after a round of (D, C)"""
+    def __call__(self, player, opponent, action):
+        if len(player.history) == 0:
+            return action
+        last_round = (player.history[-1], opponent.history[-1])
+        if last_round == (D, C):
+            return C
+        return action
+
+ApologyTransformer = StrategyTransformerFactory(ApologyWrapper(),
+                                                name_prefix="Apologizing")()
 
