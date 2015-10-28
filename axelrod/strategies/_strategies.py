@@ -1,14 +1,16 @@
 from __future__ import absolute_import
 
 from .alternator import Alternator
+from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
-from .axelrod_tournaments import (
-    Davis, Feld, Grofman, Joss, Shubik, Tullock, Champion, Eatherley, Tester)
+from .axelrod_first import (Davis, RevisedDowning, Feld, Grofman, Nydegger,
+                            Joss, Shubik, Tullock, UnnamedStrategy)
+from .axelrod_second import Champion, Eatherley, Tester
 from .backstabber import BackStabber, DoubleCrosser
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
-from .cycler import AntiCycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD
+from .cycler import AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD
 from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .forgiver import Forgiver, ForgivingTitForTat
@@ -24,7 +26,7 @@ from .hunter import (
 from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
-    WinStayLoseShift,GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
+    WinStayLoseShift, GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
     ZDExtort2, SoftJoss, MemoryOnePlayer)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
@@ -38,7 +40,8 @@ from .retaliate import (
     LimitedRetaliate3)
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
-    SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats)
+    SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
+    OmegaTFT)
 
 
 # Note: Meta* strategies are handled in .__init__.py
@@ -49,6 +52,8 @@ strategies = [
     AlternatorHunter,
     AntiCycler,
     AntiTitForTat,
+    APavlov2006,
+    APavlov2011,
     Appeaser,
     ArrogantQLearner,
     AverageCopier,
@@ -107,6 +112,8 @@ strategies = [
     MindWarper,
     MirrorMindReader,
     NiceAverageCopier,
+    Nydegger,
+    OmegaTFT,
     OnceBitten,
     OppositeGrudger,
     Pi,

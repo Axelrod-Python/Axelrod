@@ -1,7 +1,7 @@
 import itertools
 
 from axelrod import Player, Actions
-from .axelrod_tournaments import Joss
+from .axelrod_first import Joss
 from .hunter import detect_cycle
 
 class Calculator(Player):

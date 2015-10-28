@@ -2,6 +2,7 @@
 
 import axelrod
 from .test_player import TestPlayer
+from .test_player import TestHeadsUp
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -190,7 +191,7 @@ class TestHardTitFor2Tats(TestPlayer):
     name = "Hard Tit For 2 Tats"
     player = axelrod.HardTitFor2Tats
     expected_classifier = {
-        'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 3,
         'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -215,3 +216,43 @@ class TestHardTitFor2Tats(TestPlayer):
         self.responses_test([C, C, C, C], [D, C, C, C], [C])
         self.responses_test([C, C, C, C], [D, D, C, C], [C])
         self.responses_test([C, C, C, C], [C, D, D, C], [D])
+
+
+class OmegaTFT(TestPlayer):
+
+    name = "Omega TFT"
+    player = axelrod.OmegaTFT
+
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+        for i in range(10):
+            self.responses_test([C] * i, [C] * i, [C])
+
+    def test_reset(self):
+        player = self.player()
+        opponent = axelrod.Defector()
+        [player.play(opponent) for _ in range(10)]
+        player.reset()
+        self.assertEqual(player.randomness_counter, 0)
+        self.assertEqual(player.deadlock_counter, 0)
+
+
+class TestOmegaTFTvsSTFT(TestHeadsUp):
+    def test_rounds(self):
+        outcomes = zip([C, D, C, D, C, C, C, C, C], [D, C, D, C, D, C, C, C, C])
+        self.versus_test(axelrod.OmegaTFT, axelrod.SuspiciousTitForTat, outcomes)
+
+class TestOmegaTFTvsAlternator(TestHeadsUp):
+    def test_rounds(self):
+        outcomes = zip([C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D],
+                       [C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D])
+        self.versus_test(axelrod.OmegaTFT, axelrod.Alternator, outcomes)
