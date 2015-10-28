@@ -36,7 +36,7 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | `Graaskamp`_             | Graaskamp (author's name)                 | Not Implemented          |
 +--------------------------+-------------------------------------------+--------------------------+
-| `Downing`_               | Downing (author's name)                   | :code:`RevisedDowning    |
+| `Downing`_               | Downing (author's name)                   | :code:`RevisedDowning`   |
 +--------------------------+-------------------------------------------+--------------------------+
 | `Feld`_                  | Feld (author's name)                      | :code:`Feld`             |
 +--------------------------+-------------------------------------------+--------------------------+
@@ -396,7 +396,7 @@ Furthermore, if after round 130 the strategy is losing then :math:`P` is also
 adjusted.
 
 Since the original code is not available and was apparently complicated, we have
-implemented this strategy based published descriptions. The strategy cooperates
+implemented this strategy based on published descriptions. The strategy cooperates
 with a random probability between 0.3 and 0.7.
 
 *This strategy came 14th in Axelrod's original tournament.*
@@ -558,7 +558,7 @@ The following classical strategies are included in the library:
 +--------------+----------------------+--------------------------+
 | `GRIM`_      | Grim                 | :code:`Grudger`          |
 +--------------+----------------------+--------------------------+
-| `GTFT`_      | Generous Tit-For-Tat | :code:`GenerousTitForTat`|
+| `GTFT`_      | Generous Tit-For-Tat | :code:`GTFT`             |
 +--------------+----------------------+--------------------------+
 | `TF2T`_      | Tit-For-Two-Tats     | :code:`TitFor2Tats`      |
 +--------------+----------------------+--------------------------+
