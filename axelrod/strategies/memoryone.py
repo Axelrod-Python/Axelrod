@@ -95,7 +95,7 @@ class GTFT(MemoryOnePlayer):
         TitForTat is equivalent to GTFT(0)
         """
         self.p = p
-        super(self.__class__, self).__init__()
+        super(GTFT, self).__init__()
         self.init_args = (p,)
 
     def receive_tournament_attributes(self):
@@ -141,7 +141,7 @@ class StochasticWSLS(MemoryOnePlayer):
 
         self.ep = ep
         four_vector = (1.-ep, ep, ep, 1.-ep)
-        super(self.__class__, self).__init__(four_vector)
+        super(StochasticWSLS, self).__init__(four_vector)
         self.init_args = (ep,)
         self.set_four_vector(four_vector)
 
@@ -199,13 +199,13 @@ class ZDGTFT2(ZeroDeterminantPlayer):
         """
         self.phi = phi
         self.s = s
-        super(self.__class__, self).__init__()
+        super(ZDGTFT2, self).__init__()
         self.init_args = (phi, s)
 
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         self.l = R
-        super(self.__class__, self).receive_tournament_attributes(self.phi,
+        super(ZDGTFT2, self).receive_tournament_attributes(self.phi,
                                                                   self.s,
                                                                   self.l)
 
@@ -224,13 +224,13 @@ class ZDExtort2(ZeroDeterminantPlayer):
         """
         self.phi = phi
         self.s = s
-        super(self.__class__, self).__init__()
+        super(ZDExtort2, self).__init__()
         self.init_args = (phi, s)
 
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         self.l = P
-        super(self.__class__, self).receive_tournament_attributes(self.phi,
+        super(ZDExtort2, self).receive_tournament_attributes(self.phi,
                                                                   self.s,
                                                                   self.l)
 
@@ -260,7 +260,7 @@ class SoftJoss(MemoryOnePlayer):
         """
         self.q = q
         four_vector = (1., 1 - q, 1, 1 - q)
-        super(self.__class__, self).__init__(four_vector)
+        super(SoftJoss, self).__init__(four_vector)
         self.init_args = (q,)
 
     def __repr__(self):
