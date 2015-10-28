@@ -72,7 +72,7 @@ class GoByMajority40(GoByMajority):
     """
 
     def __init__(self, memory_depth=40, soft=True):
-        super(self.__class__, self).__init__(memory_depth=memory_depth,
+        super(GoByMajority40, self).__init__(memory_depth=memory_depth,
                                              soft=soft)
 
 
@@ -82,7 +82,7 @@ class GoByMajority20(GoByMajority):
     """
 
     def __init__(self, memory_depth=20, soft=True):
-        super(self.__class__, self).__init__(memory_depth=memory_depth,
+        super(GoByMajority20, self).__init__(memory_depth=memory_depth,
                                              soft=soft)
 
 class GoByMajority10(GoByMajority):
@@ -91,7 +91,7 @@ class GoByMajority10(GoByMajority):
     """
 
     def __init__(self, memory_depth=10, soft=True):
-        super(self.__class__, self).__init__(memory_depth=memory_depth,
+        super(GoByMajority10, self).__init__(memory_depth=memory_depth,
                                              soft=soft)
 
 class GoByMajority5(GoByMajority):
@@ -100,5 +100,5 @@ class GoByMajority5(GoByMajority):
     """
 
     def __init__(self, memory_depth=5, soft=True):
-        super(self.__class__, self).__init__(memory_depth=memory_depth,
+        super(GoByMajority5, self).__init__(memory_depth=memory_depth,
                                              soft=soft)
