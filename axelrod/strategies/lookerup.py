@@ -54,11 +54,22 @@ rounds) then cooperate.
         'manipulates_state': False
     }
 
-    def __init__(self, lookup_table):
+    def __init__(self, lookup_table=None):
         """
+        If no lookup table is provided to the constructor, then use the TFT one
         """
         Player.__init__(self)
+
+        if not lookup_table:
+            lookup_table = { 
+            ('', 'C', 'D') : 'D',         
+            ('', 'D', 'D') : 'D',         
+            ('', 'C', 'C') : 'C',
+            ('', 'D', 'C') : 'C',     
+        }
+
         self.lookup_table = lookup_table
+
 
         # rather than pass number of previous rounds to consider in as a separate variable, figure it out
         # the number of rounds is the length of the second element of any given key in the dict 
@@ -70,7 +81,7 @@ rounds) then cooperate.
         if self.opponent_start_plays == 0:
             self.classifier['memory_depth'] = self.plays
 
-        self.init_args = ()
+        self.init_args = (lookup_table)
 
     def strategy(self, opponent):
         """
