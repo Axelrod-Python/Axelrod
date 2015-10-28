@@ -594,7 +594,7 @@ The following classical strategies are included in the library:
 +--------------+----------------------+--------------------------+
 | `GRIM`_      | Grim                 | :code:`Grudger`          |
 +--------------+----------------------+--------------------------+
-| `GTFT`_      | Generous Tit-For-Tat | :code:`GenerousTitForTat`|
+| `GTFT`_      | Generous Tit-For-Tat | :code:`GTFT`|
 +--------------+----------------------+--------------------------+
 | `TF2T`_      | Tit-For-Two-Tats     | :code:`TitFor2Tats`      |
 +--------------+----------------------+--------------------------+
