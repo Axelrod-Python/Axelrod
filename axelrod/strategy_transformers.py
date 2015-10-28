@@ -20,28 +20,6 @@ C, D = Actions.C, Actions.D
 # This can lead to unexpected behavior, such as when
 # FlipTransform is applied to Alternator
 
-def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
-    """
-    Strategy wrapper functions should be of the following form.
-
-    Parameters
-    ----------
-    player: Player object or subclass (self)
-    opponent: Player object or subclass
-    proposed_action: an axelrod.Action, C or D
-        The proposed action by the wrapped strategy
-        proposed_action = Player.strategy(...)
-    args, kwargs:
-        Any additional arguments that you need.
-
-    Returns
-    -------
-    action: an axelrod.Action, C or D
-
-    """
-
-    # This example just passes through the proposed_action
-    return proposed_action
 
 def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
     """Modify an existing strategy dynamically by wrapping the strategy
@@ -132,6 +110,31 @@ def compose_transformers(t1, t2):
             return t1(t2(PlayerClass))
     return Composition()
 
+def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
+    """
+    Strategy wrapper functions should be of the following form.
+
+    Parameters
+    ----------
+    player: Player object or subclass (self)
+    opponent: Player object or subclass
+    proposed_action: an axelrod.Action, C or D
+        The proposed action by the wrapped strategy
+        proposed_action = Player.strategy(...)
+    args, kwargs:
+        Any additional arguments that you need.
+
+    Returns
+    -------
+    action: an axelrod.Action, C or D
+
+    """
+
+    # This example just passes through the proposed_action
+    return proposed_action
+
+IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)()
+
 def flip_wrapper(player, opponent, action):
     """Applies flip_action at the class level."""
     return flip_action(action)
@@ -220,16 +223,26 @@ def grudge_wrapper(player, opponent, action, grudges):
 GrudgeTransformer = StrategyTransformerFactory(grudge_wrapper,
                                               name_prefix="Grudging")
 
+def apology_wrapper(player, opponent, action, myseq, opseq):
+    length = len(myseq)
+    if len(player.history) < length:
+        return action
+    if (myseq == player.history[-length:]) and \
+        (opseq == opponent.history[-length:]):
+        return C
+    return action
+
+ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
+                                                name_prefix="Apologizing")
+
 # Strategy wrappers as classes
 
 class RetaliationWrapper(object):
     """Retaliates `retaliations` times after a defection (cumulative)."""
 
-    def __init__(self):
-        self.retaliation_count = 0
-
     def __call__(self, player, opponent, action, retaliations):
         if len(player.history) == 0:
+            self.retaliation_count = 0
             return action
         if opponent.history[-1] == D:
             self.retaliation_count += retaliations - 1
@@ -243,15 +256,12 @@ class RetaliationWrapper(object):
 RetaliationTransformer = StrategyTransformerFactory(
     RetaliationWrapper(), name_prefix="Retaliating")
 
-
 class RetaliationUntilApologyWrapper(object):
     """Enforces the TFT rule that the opponent pay back a defection with a
     cooperation for the player to stop defecting."""
-    def __init__(self):
-        self.is_retaliating = False
-
     def __call__(self, player, opponent, action):
         if len(player.history) == 0:
+            self.is_retaliating = False
             return action
         if opponent.history[-1] == D:
             self.is_retaliating = True
@@ -264,16 +274,3 @@ class RetaliationUntilApologyWrapper(object):
 
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
     RetaliationUntilApologyWrapper(), name_prefix="RUA")()
-
-def apology_wrapper(player, opponent, action, myseq, opseq):
-    length = len(myseq)
-    if len(player.history) < length:
-        return action
-    if (myseq == player.history[-length:]) and \
-        (opseq == opponent.history[-length:]):
-        return C
-    return action
-
-ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
-                                                name_prefix="Apologizing")
-
