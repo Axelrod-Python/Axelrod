@@ -26,8 +26,8 @@ from .hunter import (
 from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
-    WinStayLoseShift, GTFT, StochasticCooperator, StochasticWSLS, ZDGTFT2,
-    ZDExtort2, SoftJoss, MemoryOnePlayer)
+    MemoryOnePlayer, GTFT, SoftJoss, StochasticCooperator, StochasticWSLS,
+    ZDExtort2, ZDExtort2v2, ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
@@ -142,6 +142,9 @@ strategies = [
     TwoTitsForTat,
     WinStayLoseShift,
     ZDExtort2,
+    ZDExtort2v2,
+    ZDGen2,
     ZDGTFT2,
+    ZDSet2,
     e,
 ]
