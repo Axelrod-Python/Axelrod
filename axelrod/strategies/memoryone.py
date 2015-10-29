@@ -147,13 +147,18 @@ class StochasticWSLS(MemoryOnePlayer):
 
 
 class LRPlayer(MemoryOnePlayer):
-    """Abstraction for ZD players. The correct formula is Equation 14 in
-    http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886 .
-    These players enforce a linear difference in stationary payoffs
-    s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and
-    generous strategies when l = R and s > 0"""
+    """Abstraction for Linear Relation players. These players enforce a linear
+    difference in stationary payoffs s * (S_xy - l) = S_yx - l, with 0 <= l <= R.
+    The parameter `s` is called the slope and the parameter `l` the
+    baseline payoff. For extortionate strategies, the extortion factor is the
+    inverse of the slope.
 
-    name = 'ZD ABC'
+    This parameterization is Equation 14 in
+    http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886.
+    See Figure 2 of the article for a more in-depth explanation.
+    """
+
+    name = 'LinearRelation'
 
     def receive_tournament_attributes(self, phi=0, s=None, l=None):
         """
@@ -161,7 +166,7 @@ class LRPlayer(MemoryOnePlayer):
         ----------
         phi, s, l: floats
             Parameter used to compute the four-vector according to the
-            parameterization of Zero Determinant strategies below.
+            parameterization of the strategies below.
         """
 
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
@@ -185,7 +190,7 @@ class LRPlayer(MemoryOnePlayer):
 
 
 class ZDExtort2(LRPlayer):
-    """An Extortionate Zero Determinant Strategy."""
+    """An Extortionate Zero Determinant Strategy with l=P."""
 
     name = 'ZD-Extort-2'
 
@@ -210,7 +215,7 @@ class ZDExtort2(LRPlayer):
 
 
 class ZDExtort2v2(LRPlayer):
-    """An Extortionate Zero Determinant Strategy."""
+    """An Extortionate Zero Determinant Strategy with l=1."""
 
     name = 'ZD-Extort-2 v2'
 
@@ -234,7 +239,7 @@ class ZDExtort2v2(LRPlayer):
 
 
 class ZDGen2(LRPlayer):
-    """An Extortionate Zero Determinant Strategy."""
+    """A Generous Zero Determinant Strategy with l=3."""
 
     name = 'ZD-GEN-2'
 
@@ -258,7 +263,7 @@ class ZDGen2(LRPlayer):
 
 
 class ZDGTFT2(LRPlayer):
-    """A Generous Zero Determinant Strategy."""
+    """A Generous Zero Determinant Strategy with l=R."""
 
     name = 'ZD-GTFT-2'
 
@@ -283,7 +288,7 @@ class ZDGTFT2(LRPlayer):
 
 
 class ZDSet2(LRPlayer):
-    """An Extortionate Zero Determinant Strategy."""
+    """A Generous Zero Determinant Strategy with l=2."""
 
     name = 'ZD-SET-2'
 
