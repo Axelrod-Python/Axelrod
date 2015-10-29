@@ -146,7 +146,7 @@ class StochasticWSLS(MemoryOnePlayer):
         self.set_four_vector(four_vector)
 
 
-class ZeroDeterminantPlayer(MemoryOnePlayer):
+class LRPlayer(MemoryOnePlayer):
     """Abstraction for ZD players. The correct formula is Equation 14 in
     http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886 .
     These players enforce a linear difference in stationary payoffs
@@ -184,7 +184,80 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
         self.set_four_vector(four_vector)
 
 
-class ZDGTFT2(ZeroDeterminantPlayer):
+class ZDExtort2(LRPlayer):
+    """An Extortionate Zero Determinant Strategy."""
+
+    name = 'ZD-Extort-2'
+
+    def __init__(self, phi=1./9, s=0.5):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        super(self.__class__, self).__init__()
+        self.init_args = (phi, s)
+
+    def receive_tournament_attributes(self):
+        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        self.l = P
+        super(ZDExtort2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
+class ZDExtort2v2(LRPlayer):
+    """An Extortionate Zero Determinant Strategy."""
+
+    name = 'ZD-Extort-2 v2'
+
+    def __init__(self, phi=1./8, s=0.5, l=1):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super(ZDExtort2v2, self).__init__()
+        self.init_args = (phi, s, l)
+
+    def receive_tournament_attributes(self):
+        super(ZDExtort2v2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
+class ZDGen2(LRPlayer):
+    """An Extortionate Zero Determinant Strategy."""
+
+    name = 'ZD-GEN-2'
+
+    def __init__(self, phi=1./8, s=0.5, l=3):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super(ZDGen2, self).__init__()
+        self.init_args = (phi, s, l)
+
+    def receive_tournament_attributes(self):
+        super(ZDGen2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
+class ZDGTFT2(LRPlayer):
     """A Generous Zero Determinant Strategy."""
 
     name = 'ZD-GTFT-2'
@@ -194,7 +267,7 @@ class ZDGTFT2(ZeroDeterminantPlayer):
         Parameters
         ----------
         phi, s: floats
-            Parameters passed through to ZeroDeterminantPlayer to determine
+            Parameters passed through to LRPlayer to determine
             the four vector.
         """
         self.phi = phi
@@ -205,25 +278,26 @@ class ZDGTFT2(ZeroDeterminantPlayer):
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         self.l = R
-        super(ZDGTFT2, self).receive_tournament_attributes(self.phi,
-                                                                  self.s,
-                                                                  self.l)
+        super(ZDGTFT2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
 
-class ZDExtort2(ZeroDeterminantPlayer):
+
+class ZDSet2(LRPlayer):
     """An Extortionate Zero Determinant Strategy."""
 
-    name = 'ZD-Extort-2'
+    name = 'ZD-SET-2'
 
-    def __init__(self, phi=1./9, s=0.5):
+    def __init__(self, phi=1./4, s=0., l=2):
         """
         Parameters
         ----------
         phi, s: floats
-            Parameters passed through to ZeroDeterminantPlayer to determine
+            Parameters passed through to LRPlayer to determine
             the four vector.
         """
         self.phi = phi
         self.s = s
+<<<<<<< HEAD
         super(ZDExtort2, self).__init__()
         self.init_args = (phi, s)
 
@@ -233,6 +307,15 @@ class ZDExtort2(ZeroDeterminantPlayer):
         super(ZDExtort2, self).receive_tournament_attributes(self.phi,
                                                                   self.s,
                                                                   self.l)
+=======
+        self.l = l
+        super(ZDSet2, self).__init__()
+        self.init_args = (phi, s, l)
+
+    def receive_tournament_attributes(self):
+        super(ZDSet2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+>>>>>>> aa75e80... New Zero Determinant Stategies
 
 
 ### Strategies for recreating tournaments
