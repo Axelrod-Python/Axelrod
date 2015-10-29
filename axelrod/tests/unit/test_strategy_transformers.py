@@ -142,8 +142,32 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
 
     def test_retailiation(self):
-        """Tests the RetailiateUntilApologyTransformer."""
-        TFT = RetailiateUntilApologyTransformer(axelrod.Cooperator)
+        """Tests the RetaliateTransformer."""
+        p1 = RetaliationTransformer(1)(axelrod.Cooperator)()
+        p2 = axelrod.Defector()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, D, D, D, D])
+        self.assertEqual(p2.history, [D, D, D, D, D])
+
+        p1 = RetaliationTransformer(1)(axelrod.Cooperator)()
+        p2 = axelrod.Alternator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, C, D, C, D])
+        self.assertEqual(p2.history, [C, D, C, D, C])
+
+        TwoTitsForTat = RetaliationTransformer(2)(axelrod.Cooperator)
+        p1 = TwoTitsForTat()
+        p2 = axelrod.CyclerCCD()
+        for _ in range(9):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, C, C, D, D, C, D, D, C])
+        self.assertEqual(p2.history, [C, C, D, C, C, D, C, C, D])
+
+    def test_retaliation_until_apology(self):
+        """Tests the RetaliateUntilApologyTransformer."""
+        TFT = RetaliateUntilApologyTransformer(axelrod.Cooperator)
         p1 = TFT()
         p2 = axelrod.Cooperator()
         p1.play(p2)
@@ -163,17 +187,96 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [C, C, D, D, C])
 
+    def test_apology(self):
+        """Tests the ApologyTransformer."""
+        ApologizingDefector = ApologyTransformer([D], [C])(axelrod.Defector)
+        p1 = ApologizingDefector()
+        p2 = axelrod.Cooperator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, C, D, C, D])
+        ApologizingDefector = ApologyTransformer([D, D], [C, C])(axelrod.Defector)
+        p1 = ApologizingDefector()
+        p2 = axelrod.Cooperator()
+        for _ in range(6):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, D, C, D, D, C])
+
+    def test_deadlock(self):
+        """Test the DeadlockBreakingTransformer."""
+        # We can induce a deadlock by alterting TFT to defect first
+        p1 = axelrod.TitForTat()
+        p2 = InitialTransformer([D])(axelrod.TitForTat)()
+        for _ in range(4):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, D, C, D])
+        self.assertEqual(p2.history, [D, C, D, C])
+
+        # Now let's use the transformer to break the deadlock to achieve
+        # Mutual cooperation
+        p1 = axelrod.TitForTat()
+        p2 = DeadlockBreakingTransformer(InitialTransformer([D])(axelrod.TitForTat))()
+        for _ in range(4):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, D, C, C])
+        self.assertEqual(p2.history, [D, C, C, C])
+
+    def test_grudging(self):
+        """Test the GrudgeTransformer."""
+        p1 = axelrod.Defector()
+        p2 = GrudgeTransformer(1)(axelrod.Cooperator)()
+        for _ in range(4):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, D, D, D])
+        self.assertEqual(p2.history, [C, C, D, D])
+
+        p1 = InitialTransformer([C])(axelrod.Defector)()
+        p2 = GrudgeTransformer(2)(axelrod.Cooperator)()
+        for _ in range(8):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, D, D, D, D, D, D, D])
+        self.assertEqual(p2.history, [C, C, C, C, D, D, D, D])
+
+    def test_nilpotency(self):
+        """Show that some of the transformers are (sometimes) nilpotent, i.e.
+        that transfomer(transformer(PlayerClass)) == PlayerClass"""
+        for transformer in [IdentityTransformer,
+                            FlipTransformer,
+                            TrackHistoryTransformer]:
+            for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
+                for third_player in [axelrod.Cooperator(), axelrod.Defector()]:
+                    player = PlayerClass()
+                    transformed = transformer(transformer(PlayerClass))()
+                    for _ in range(5):
+                        self.assertEqual(player.strategy(third_player),
+                                        transformed.strategy(third_player))
+                        player.play(third_player)
+                        third_player.history.pop(-1)
+                        transformed.play(third_player)
+
     def test_idempotency(self):
-        """Show that some of the transformers are idempotent."""
-        for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
-            for transformer in [FinalTransformer([C]),
-                                FinalTransformer([D]),
-                                FlipTransformer]:
-                player = PlayerClass()
-                third_player = axelrod.Cooperator()
-                transformed = transformer(transformer(PlayerClass))()
-                self.assertEqual(player.strategy(third_player),
-                                 transformed.strategy(third_player))
+        """Show that these transformers are idempotent, i.e. that
+        transfomer(transformer(PlayerClass)) == transformer(PlayerClass).
+        That means that the transformer is a projection on the set of
+        strategies."""
+        for transformer in [IdentityTransformer, GrudgeTransformer(1),
+                            FinalTransformer([C]), FinalTransformer([D]),
+                            InitialTransformer([C]), InitialTransformer([D]),
+                            DeadlockBreakingTransformer,
+                            RetaliationTransformer(1),
+                            RetaliateUntilApologyTransformer,
+                            TrackHistoryTransformer,
+                            ApologyTransformer([D], [C])]:
+            for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
+                for third_player in [axelrod.Cooperator(), axelrod.Defector()]:
+                    player = transformer(PlayerClass)()
+                    transformed = transformer(transformer(PlayerClass))()
+                    for i in range(5):
+                        self.assertEqual(player.strategy(third_player),
+                                        transformed.strategy(third_player))
+                        player.play(third_player)
+                        third_player.history.pop(-1)
+                        transformed.play(third_player)
 
     def test_implementation(self):
         """A test that demonstrates the difference in outcomes if
@@ -203,7 +306,7 @@ class TestTransformers(unittest.TestCase):
 ## this alters Cooperator's class variable, and causes its test to fail
 ## So for now this is commented out.
 
-#RUA = RetailiateUntilApologyTransformer()
+#RUA = RetaliateUntilApologyTransformer()
 #TFT = RUA(axelrod.Cooperator)
 #TFT.name = "Tit For Tat"
 #TFT.classifier["memory_depth"] = 1

@@ -20,28 +20,6 @@ C, D = Actions.C, Actions.D
 # This can lead to unexpected behavior, such as when
 # FlipTransform is applied to Alternator
 
-def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
-    """
-    Strategy wrapper functions should be of the following form.
-
-    Parameters
-    ----------
-    player: Player object or subclass (self)
-    opponent: Player object or subclass
-    proposed_action: an axelrod.Action, C or D
-        The proposed action by the wrapped strategy
-        proposed_action = Player.strategy(...)
-    args, kwargs:
-        Any additional arguments that you need.
-
-    Returns
-    -------
-    action: an axelrod.Action, C or D
-
-    """
-
-    # This example just passes through the proposed_action
-    return proposed_action
 
 def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
     """Modify an existing strategy dynamically by wrapping the strategy
@@ -132,6 +110,31 @@ def compose_transformers(t1, t2):
             return t1(t2(PlayerClass))
     return Composition()
 
+def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
+    """
+    Strategy wrapper functions should be of the following form.
+
+    Parameters
+    ----------
+    player: Player object or subclass (self)
+    opponent: Player object or subclass
+    proposed_action: an axelrod.Action, C or D
+        The proposed action by the wrapped strategy
+        proposed_action = Player.strategy(...)
+    args, kwargs:
+        Any additional arguments that you need.
+
+    Returns
+    -------
+    action: an axelrod.Action, C or D
+
+    """
+
+    # This example just passes through the proposed_action
+    return proposed_action
+
+IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)()
+
 def flip_wrapper(player, opponent, action):
     """Applies flip_action at the class level."""
     return flip_action(action)
@@ -185,28 +188,6 @@ def final_sequence(player, opponent, action, seq):
 
 FinalTransformer = StrategyTransformerFactory(final_sequence)
 
-# Strategy wrapper as a class example
-class RetaliationWrapper(object):
-    """Enforces the TFT rule that the opponent pay back a defection with a
-    cooperation for the player to stop defecting."""
-    def __init__(self):
-        self.is_retaliating = False
-
-    def __call__(self, player, opponent, action):
-        if len(player.history) == 0:
-            return action
-        if opponent.history[-1] == D:
-            self.is_retaliating = True
-        if self.is_retaliating:
-            if opponent.history[-1] == C:
-                self.is_retaliating = False
-                return C
-            return D
-        return action
-
-RetailiateUntilApologyTransformer = StrategyTransformerFactory(
-    RetaliationWrapper(), name_prefix="RUA")()
-
 def history_track_wrapper(player, opponent, action):
     """Wrapper to track a player's history in a variable `._recorded_history`."""
     try:
@@ -218,5 +199,78 @@ def history_track_wrapper(player, opponent, action):
 TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper,
                                         name_prefix="HistoryTracking")()
 
+def deadlock_break_wrapper(player, opponent, action):
+    """Detect and attempt to break deadlocks by cooperating."""
+    if len(player.history) < 2:
+        return action
+    last_round = (player.history[-1], opponent.history[-1])
+    penultimate_round = (player.history[-2], opponent.history[-2])
+    if (penultimate_round, last_round) == ((C, D), (D, C)) or \
+       (penultimate_round, last_round) == ((D, C), (C, D)):
+        # attempt to break deadlock by Cooperating
+        return C
+    return action
 
+DeadlockBreakingTransformer = StrategyTransformerFactory(deadlock_break_wrapper,
+                                              name_prefix="DeadlockBreaking")()
 
+def grudge_wrapper(player, opponent, action, grudges):
+    """After `grudges` defections, defect forever."""
+    if opponent.defections > grudges:
+        return D
+    return action
+
+GrudgeTransformer = StrategyTransformerFactory(grudge_wrapper,
+                                              name_prefix="Grudging")
+
+def apology_wrapper(player, opponent, action, myseq, opseq):
+    length = len(myseq)
+    if len(player.history) < length:
+        return action
+    if (myseq == player.history[-length:]) and \
+        (opseq == opponent.history[-length:]):
+        return C
+    return action
+
+ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
+                                                name_prefix="Apologizing")
+
+# Strategy wrappers as classes
+
+class RetaliationWrapper(object):
+    """Retaliates `retaliations` times after a defection (cumulative)."""
+
+    def __call__(self, player, opponent, action, retaliations):
+        if len(player.history) == 0:
+            self.retaliation_count = 0
+            return action
+        if opponent.history[-1] == D:
+            self.retaliation_count += retaliations - 1
+            return D
+        if self.retaliation_count == 0:
+            return action
+        if self.retaliation_count > 0:
+            self.retaliation_count -= 1
+            return D
+
+RetaliationTransformer = StrategyTransformerFactory(
+    RetaliationWrapper(), name_prefix="Retaliating")
+
+class RetaliationUntilApologyWrapper(object):
+    """Enforces the TFT rule that the opponent pay back a defection with a
+    cooperation for the player to stop defecting."""
+    def __call__(self, player, opponent, action):
+        if len(player.history) == 0:
+            self.is_retaliating = False
+            return action
+        if opponent.history[-1] == D:
+            self.is_retaliating = True
+        if self.is_retaliating:
+            if opponent.history[-1] == C:
+                self.is_retaliating = False
+                return C
+            return D
+        return action
+
+RetaliateUntilApologyTransformer = StrategyTransformerFactory(
+    RetaliationUntilApologyWrapper(), name_prefix="RUA")()

@@ -83,12 +83,49 @@ The library includes the following transformers:
     >>> FinallyDefectingCooperator = FinalTransformer([D, D])(axelrod.Cooperator)
     >>> player = FinallyDefectingCooperator()
 
-* :code:`RetailiateUntilApologyTransformer()`: adds TitForTat-style retaliation::
+* :code:`RetaliateTransformer(N)`: Retaliation N times after a defection::
 
     >>> import axelrod
-    >>> from axelrod.strategy_transformers import RetailiateUntilApologyTransformer
-    >>> TFT = RetailiateUntilApologyTransformer(axelrod.Cooperator)
+    >>> from axelrod.strategy_transformers import RetaliationTransformer
+    >>> TwoTitsForTat = RetaliationTransformer(2)(axelrod.Cooperator)
+    >>> player = TwoTitsForTat()
+
+* :code:`RetaliateUntilApologyTransformer()`: adds TitForTat-style retaliation::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import RetaliateUntilApologyTransformer
+    >>> TFT = RetaliateUntilApologyTransformer(axelrod.Cooperator)
     >>> player = TFT()
+
+* :code:`ApologizingTransformer`: Apologizes after a round of :code:`(D, C)`::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import ApologyTransformer
+    >>> ApologizingDefector = ApologyTransformer([D], [C])(axelrod.Defector)
+    >>> player = ApologizingDefector()
+
+You can pass any two sequences in. In this example the player would apologize
+after two consequtive rounds of `(D, C)`::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import ApologyTransformer
+    >>> ApologizingDefector = ApologyTransformer([D, D], [C, C])(axelrod.Defector)
+    >>> player = ApologizingDefector()
+
+* :code:`DeadlockBreakingTransformer`: Attempts to break :code:`(D, C) -> (C, D)`
+deadlocks by cooperating::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import DeadlockBreakingTransformer
+    >>> DeadlockBreakingTFT = DeadlockBreakingTransformer(axelrod.TitForTat)
+    >>> player = DeadlockBreakingTFT()
+
+* :code:`GrudgeTransformer(N)`: Defections unconditionally after more than N defections::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import GrudgeTransformer
+    >>> GrudgingCooperator = GrudgeTransformer(2)(axelrod.Cooperator)
+    >>> player = GrudgingCooperator()
 
 * :code:`TrackHistoryTransformer`: Tracks History internally in the :code:`Player` instance in a variable :code:`_recorded_history`. This allows a player to e.g. detect noise.::
 
