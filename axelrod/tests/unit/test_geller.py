@@ -6,6 +6,7 @@ from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
+
 class TestGeller(TestPlayer):
 
     name = "Geller"
@@ -18,7 +19,6 @@ class TestGeller(TestPlayer):
         'manipulates_source': False
     }
 
-
     def test_strategy(self):
         """Should cooperate against cooperaters and defect against defectors."""
 
@@ -29,6 +29,7 @@ class TestGeller(TestPlayer):
         P1 = self.player()
         P2 = axelrod.Defector()
         self.assertEqual(P1.strategy(P2), D)
+
 
 class TestGellerCooperator(TestGeller):
 
@@ -42,11 +43,11 @@ class TestGellerCooperator(TestGeller):
         'manipulates_state': False
     }
 
-
     def test_against_self(self):
         P1 = self.player()
         P2 = self.player()
         self.assertEqual(P1.strategy(P2), C)
+
 
 class TestGellerDefector(TestGeller):
 
@@ -59,7 +60,6 @@ class TestGellerDefector(TestGeller):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
 
     def test_against_self(self):
         P1 = self.player()

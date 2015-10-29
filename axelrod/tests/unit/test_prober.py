@@ -118,11 +118,9 @@ class TestHardProber(TestPlayer):
         self.responses_test([D, D, C, C], [D, C, C, D], [D] * 10)
 
         # Otherwise it plays like TFT
-
         self.responses_test([D, D, C, C], [C, C, D, C], [C, C])
         self.responses_test([D, D, C, C], [C, C, D, D], [D])
         self.responses_test([D, D, C, C], [D, D, C, C], [C, C])
         self.responses_test([D, D, C, C], [D, D, C, D], [D])
-
         self.responses_test([D, D, C, C, D], [C, C, D, D], [D])
         self.responses_test([D, D, C, C, D], [D, D, C, C], [C])

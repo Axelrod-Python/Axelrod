@@ -52,4 +52,3 @@ class TestTrickyDefector(TestPlayer):
         history = [C, C, C, D, D] + [C] * 11
         opponent_history = [C, C, C, C, D] + [D] + [C] * 10
         self.responses_test(history, opponent_history,[D])
-

@@ -34,7 +34,6 @@ class TitForTat(Player):
         return C
 
 
-
 class TitFor2Tats(Player):
     """A player starts by cooperating and then defects only after two defects by opponent."""
 
@@ -195,6 +194,7 @@ class HardTitFor2Tats(Player):
             return D
         # Otherwise cooperates
         return C
+
 
 class OmegaTFT(Player):
     """OmegaTFT modifies TFT in two ways:
