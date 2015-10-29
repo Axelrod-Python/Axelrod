@@ -4,21 +4,20 @@ import itertools
 C, D = Actions.C, Actions.D
 
 class LookerUp(Player):     
-
     """     
-A strategy that uses a lookup table to
-decide what to do based on a combination of the last m rounds and the opponent's
-opening n moves. If there isn't enough history to do this (i.e. for the first m
-rounds) then cooperate.
+    A strategy that uses a lookup table to
+    decide what to do based on a combination of the last m rounds and the opponent's
+    opening n moves. If there isn't enough history to do this (i.e. for the first m
+    rounds) then cooperate.
 
     The lookup table is implemented as a dict. The keys are 3-tuples giving the
     opponents first n moves, self's last m moves, and opponents last m moves,
     all as strings. The values are the moves to play on this round.  For
     example, if
 
-        - the opponent started by playing C  
-        - my last move was a C the opponents
-        - last move was a D
+    - the opponent started by playing C  
+    - my last move was a C the opponents
+    - last move was a D
 
     the corresponding key would be
 
@@ -41,7 +40,22 @@ rounds) then cooperate.
     }
 
     where m=1 and n=0.
-    
+
+    Lookup tables where the move depends on the opponent's first moves (as
+    opposed to most recent moves) will have a non-empty first string in the
+    tuple. For example, this fragment of a dict:
+
+    {          
+        ...         
+        ('C', 'C', 'C') : 'C'.
+        ('D', 'C', 'C') : 'D',
+        ...            
+    }
+
+    states that if self and opponent both cooperated on the previous turn, we
+    should cooperate this turn unless the opponent started by defecting, in
+    which case we should defect.
+
     """
     
 
@@ -117,6 +131,7 @@ class EvolvedLookerUp(LookerUp):
     """
 
     def __init__(self):
+        self.name = "EvolvedLookerUp"
         plays = 2
         opponent_start_plays = 2
 
