@@ -192,6 +192,27 @@ class TestZDExtort2v2(TestPlayer):
         self.first_play_test(C)
 
 
+class TestZDExtort4(TestPlayer):
+
+    name = "ZD-Extort-4"
+    player = axelrod.ZDExtort4
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_four_vector(self):
+        expected_dictionary = {(C, C): 11./17, (C, D): 0, (D, C): 8./17,
+                               (D, D): 0.}
+        test_four_vector(self, expected_dictionary)
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
 class TestZDGen2(TestPlayer):
 
     name = "ZD-GEN-2"

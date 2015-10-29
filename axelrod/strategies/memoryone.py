@@ -238,6 +238,31 @@ class ZDExtort2v2(LRPlayer):
             self.phi, self.s, self.l)
 
 
+class ZDExtort4(LRPlayer):
+    """An Extortionate Zero Determinant Strategy with l=1, s=1/4. TFT is the
+    other extreme (with l=3, s=1)"""
+
+    name = 'ZD-Extort-4'
+
+    def __init__(self, phi=4./17, s=0.25, l=1):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super(ZDExtort4, self).__init__()
+        self.init_args = (phi, s, l)
+
+    def receive_tournament_attributes(self):
+        super(ZDExtort4, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
 class ZDGen2(LRPlayer):
     """A Generous Zero Determinant Strategy with l=3."""
 
