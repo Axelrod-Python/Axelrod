@@ -30,7 +30,13 @@ class TestLookerUp(TestPlayer):
         self.responses_test([C] * 5, [C, C, C, C, D], [D])
 
     def test_defector_table(self):
-        """Testing a lookup table that always defects if there is enough history"""
+        """
+        Testing a lookup table that always defects if there is enough history.
+        In order for the testing framework to be able to construct new player objects
+        for the test, self.player needs to be callable with no arguments, thus we 
+        use a lambda expression which will call the constructor with the lookup table 
+        we want.
+        """
         defector_table = { 
             ('', 'C', 'D') : 'D',         
             ('', 'D', 'D') : 'D',         
