@@ -41,3 +41,35 @@ class TestLookerUp(TestPlayer):
         self.responses_test([C,C], [C,C], [D]) 
         self.responses_test([C,D], [D,C], [D]) 
         self.responses_test([D,D], [D,D], [D]) 
+
+    def test_starting_move(self):
+        """A lookup table that always repeats the opponent's first move"""
+        
+        first_move_table = { 
+            # if oppponent started by cooperating
+            ('C', 'C', 'D') : 'C',         
+            ('C', 'D', 'D') : 'C',         
+            ('C', 'C', 'C') : 'C',
+            ('C', 'D', 'C') : 'C',
+
+            # if opponent started by defecting
+            ('D', 'C', 'D') : 'D',         
+            ('D', 'D', 'D') : 'D',         
+            ('D', 'C', 'C') : 'D',
+            ('D', 'D', 'C') : 'D',        
+        }
+
+        self.player = lambda : axelrod.LookerUp(first_move_table)
+
+        # if the opponent started by cooperating, we should always cooperate
+        self.responses_test([C,C,C], [C,C,C], [C]) 
+        self.responses_test([D,D,D], [C,C,C], [C]) 
+        self.responses_test([C,C,C], [C,D,C], [C]) 
+        self.responses_test([C,C,D], [C,D,C], [C]) 
+
+        # if the opponent started by defecting, we should always defect
+        self.responses_test([C,C,C], [D,C,C], [D]) 
+        self.responses_test([D,D,D], [D,C,C], [D]) 
+        self.responses_test([C,C,C], [D,D,C], [D]) 
+        self.responses_test([C,C,D], [D,D,C], [D]) 
+        
