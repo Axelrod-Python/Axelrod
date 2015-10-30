@@ -130,7 +130,7 @@ class EvolvedLookerUp(LookerUp):
     //TODO: update this docstring with a link to a blog post once I've written about it :-)
     """
 
-    def __init__(self):
+    def __init__(self, lookup_table=None):
         self.name = "EvolvedLookerUp"
         plays = 2
         opponent_start_plays = 2
