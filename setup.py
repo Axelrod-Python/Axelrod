@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='Axelrod',
-    version='0.0.16',
+    version='0.0.17',
     author='Vince Knight, Owen Campbell, Karol Langner, Marc Harper',
     author_email=('axelrod-python@googlegroups.com'),
     packages=['axelrod', 'axelrod.strategies', 'axelrod.tests'],
