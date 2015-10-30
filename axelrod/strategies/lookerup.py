@@ -87,10 +87,10 @@ class LookerUp(Player):
 
         # rather than pass number of previous rounds to consider in as a separate variable, figure it out
         # the number of rounds is the length of the second element of any given key in the dict 
-        self.plays = len(self.lookup_table.keys()[0][1]) 
+        self.plays = len(list(self.lookup_table.keys())[0][1]) 
 
         # the number of opponent starting moves is the lgnth of the first element of any given key in the dict
-        self.opponent_start_plays = len(self.lookup_table.keys()[0][0])
+        self.opponent_start_plays = len(list(self.lookup_table.keys())[0][0])
 
         if self.opponent_start_plays == 0:
             self.classifier['memory_depth'] = self.plays
