@@ -10,6 +10,14 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestTransformers(unittest.TestCase):
 
+    def test_all_strategies(self):
+        # Attempt to transform each strategy to ensure that implemenation
+        # choices (like use of super) do not cause issues
+        for s in axelrod.ordinary_strategies:
+            opponent = axelrod.Cooperator()
+            player = IdentityTransformer(s)()
+            player.play(opponent)
+
     def test_naming(self):
         """Tests that the player and class names are properly modified."""
         cls = FlipTransformer(axelrod.Cooperator)
