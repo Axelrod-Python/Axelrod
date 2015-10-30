@@ -1028,7 +1028,9 @@ following four-vectors :math:`(P(C \,|\, CC), P(C \,|\, CD), P(C \,|\, DC), P(C 
 
 The library also implements a generic LR-strategy as described in
 [this paper](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886).
-The Zero-Determinant strategies are all special cases.
+The Zero-Determinant strategies are all special cases. The library also contains
+a strategy called `ALLCorALLD` that results from setting :math:`phi=0` in the LR
+parameterization.
 
 Fool Me Once
 ^^^^^^^^^^^^

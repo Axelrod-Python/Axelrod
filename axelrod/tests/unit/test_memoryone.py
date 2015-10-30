@@ -301,3 +301,23 @@ class TestSoftJoss(TestPlayer):
     def test_strategy(self):
         self.responses_test([C], [C], [C], random_seed=2)
         self.responses_test([C], [D], [D], random_seed=5)
+
+
+class TestALLCorALLD(TestPlayer):
+
+    name = "ALLCorALLD"
+    player = axelrod.ALLCorALLD
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.responses_test([], [], [D] * 10, random_seed=2)
+        self.responses_test([], [], [C] * 10, random_seed=3)
+        self.responses_test([], [], [C] * 10, random_seed=4)
+        self.responses_test([], [], [D] * 10, random_seed=5)
+        self.responses_test([], [], [D] * 10, random_seed=6)
