@@ -55,7 +55,7 @@ class Retaliate2(Retaliate):
     """
 
     def __init__(self, retaliation_threshold=0.08):
-        super(self.__class__, self).__init__(
+        super(Retaliate2, self).__init__(
             retaliation_threshold=retaliation_threshold)
 
 
@@ -65,7 +65,7 @@ class Retaliate3(Retaliate):
     """
 
     def __init__(self, retaliation_threshold=0.05):
-        super(self.__class__, self).__init__(
+        super(Retaliate3, self).__init__(
             retaliation_threshold=retaliation_threshold)
 
 
@@ -151,7 +151,7 @@ class LimitedRetaliate2(LimitedRetaliate):
     """
 
     def __init__(self, retaliation_threshold=0.08, retaliation_limit=15):
-        super(self.__class__, self).__init__(
+        super(LimitedRetaliate2, self).__init__(
             retaliation_threshold=retaliation_threshold,
             retaliation_limit=retaliation_limit)
 
@@ -163,6 +163,6 @@ class LimitedRetaliate3(LimitedRetaliate):
     """
 
     def __init__(self, retaliation_threshold=0.05, retaliation_limit=20):
-        super(self.__class__, self).__init__(
+        super(LimitedRetaliate3, self).__init__(
             retaliation_threshold=retaliation_threshold,
             retaliation_limit=retaliation_limit)

@@ -223,7 +223,7 @@ class Joss(MemoryOnePlayer):
         """
         four_vector = (p, 0, p, 0)
         self.p = p
-        super(self.__class__, self).__init__(four_vector)
+        super(Joss, self).__init__(four_vector)
         self.init_args = (p,)
 
     def __repr__(self):
@@ -265,7 +265,7 @@ class Nydegger(Player):
                           (C, D): 2,
                           (D, C): 1,
                           (D, D): 3}
-        super(self.__class__, self).__init__()
+        super(Nydegger, self).__init__()
 
     @staticmethod
     def score_history(my_history, opponent_history, score_map):

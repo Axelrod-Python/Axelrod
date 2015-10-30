@@ -6,6 +6,7 @@ strategy.
 See the various Meta strategies for another type of transformation.
 """
 
+import inspect
 import random
 from types import FunctionType
 
@@ -74,10 +75,12 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             # with `strategy_wrapper`
             def strategy(self, opponent):
                 # Is the original strategy method a static method?
-                if isinstance(PlayerClass.__dict__["strategy"], staticmethod):
-                    proposed_action = PlayerClass.strategy(opponent)
-                else:
+                argspec = inspect.getargspec(getattr(PlayerClass, "strategy"))
+                if 'self' in argspec.args:
+                    # it's not a static method
                     proposed_action = PlayerClass.strategy(self, opponent)
+                else:
+                    proposed_action = PlayerClass.strategy(opponent)
                 # Apply the wrapper
                 return strategy_wrapper(self, opponent, proposed_action,
                                         *args, **kwargs)
