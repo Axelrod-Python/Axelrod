@@ -25,7 +25,7 @@ from .hunter import (
     MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
 from .mathematicalconstants import Golden, Pi, e
-from .memoryone import (
+from .memoryone import (ALLCorALLD,
     MemoryOnePlayer, GTFT, SoftJoss, StochasticCooperator, StochasticWSLS,
     ZDExtort2, ZDExtort2v2, ZDExtort4, ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift)
 from .mindcontrol import MindController, MindWarper, MindBender
@@ -48,6 +48,7 @@ from .titfortat import (
 
 strategies = [
     Aggravater,
+    ALLCorALLD,
     Alternator,
     AlternatorHunter,
     AntiCycler,

@@ -116,7 +116,7 @@ class StochasticCooperator(MemoryOnePlayer):
 
     def __init__(self):
         four_vector = (0.935, 0.229, 0.266, 0.42)
-        super(self.__class__, self).__init__(four_vector)
+        super(StochasticCooperator, self).__init__(four_vector)
         self.init_args = ()
         self.set_four_vector(four_vector)
 
@@ -204,7 +204,7 @@ class ZDExtort2(LRPlayer):
         """
         self.phi = phi
         self.s = s
-        super(self.__class__, self).__init__()
+        super(ZDExtort2, self).__init__()
         self.init_args = (phi, s)
 
     def receive_tournament_attributes(self):
@@ -327,17 +327,6 @@ class ZDSet2(LRPlayer):
         """
         self.phi = phi
         self.s = s
-<<<<<<< HEAD
-        super(ZDExtort2, self).__init__()
-        self.init_args = (phi, s)
-
-    def receive_tournament_attributes(self):
-        (R, P, S, T) = self.tournament_attributes["game"].RPST()
-        self.l = P
-        super(ZDExtort2, self).receive_tournament_attributes(self.phi,
-                                                                  self.s,
-                                                                  self.l)
-=======
         self.l = l
         super(ZDSet2, self).__init__()
         self.init_args = (phi, s, l)
@@ -345,7 +334,6 @@ class ZDSet2(LRPlayer):
     def receive_tournament_attributes(self):
         super(ZDSet2, self).receive_tournament_attributes(
             self.phi, self.s, self.l)
->>>>>>> aa75e80... New Zero Determinant Stategies
 
 
 ### Strategies for recreating tournaments
@@ -378,3 +366,27 @@ class SoftJoss(MemoryOnePlayer):
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.q, 2))
+
+
+class ALLCorALLD(Player):
+    """This strategy is at the parameter extreme of the ZD strategies (phi = 0).
+    It simply repeats its last move, and so mimics ALLC or ALLD after round one.
+    If the tournament is noisy, there will be long runs of C and D.
+
+    For now starting choice is random of 0.6, but that was an arbitrary choice
+    at implementation time.
+    """
+
+    name = "ALLCorALLD"
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector (1, 1, 0, 0)
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        if len(self.history) == 0:
+            return random_choice(0.6)
+        return self.history[-1]
