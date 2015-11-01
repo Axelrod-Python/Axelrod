@@ -103,7 +103,7 @@ contributing further strategies.
 
 You can find helpful instructions about contributing in the
 documentation:
-http://axelrod.readthedocs.org/en/latest/contributing.html.
+http://axelrod.readthedocs.org/en/latest/tutorials/contributing/index.html
 
 .. image:: https://graphs.waffle.io/Axelrod-Python/Axelrod/throughput.svg
  :target: https://waffle.io/Axelrod-Python/Axelrod/metrics
