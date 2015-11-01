@@ -132,7 +132,7 @@ class TournamentManager(object):
                 tournament.name + '_' + plot_type, image_format)
             self._save_plot(figure, file_name)
         if ecosystem is not None:
-            figure = plot.stackplot(ecosystem.population_sizes)
+            figure = plot.stackplot(ecosystem)
             file_name = self._output_file_path(
                     tournament.name + '_reproduce', image_format)
             self._save_plot(figure, file_name)
