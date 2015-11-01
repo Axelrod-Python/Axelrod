@@ -131,8 +131,8 @@ Contributors
 ============
 
 The library has had many awesome contributions from many [great
-contributors](https://github.com/Axelrod-Python/Axelrod/graphs/contributors),
-the Core developers of the project are:
+contributors](https://github.com/Axelrod-Python/Axelrod/graphs/contributors).
+The Core developers of the project are:
 
 - [drvinceknight](https://github.com/drvinceknight)
 - [langner](https://github.com/langner)
