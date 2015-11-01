@@ -127,8 +127,8 @@ paper please list it here:
   <http://www.thomascampbell.me.uk/category/axelrod.html>`_
   by `Uglyfruitcake <https://github.com/uglyfruitcake>`_.
 
-Core Team
-=========
+Contributors
+============
 
 The library has had many awesome contributions from many [great
 contributors](https://github.com/Axelrod-Python/Axelrod/graphs/contributors),
