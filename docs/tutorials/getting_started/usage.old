@@ -461,7 +461,7 @@ We can see how this differs when the initial population contains a large number 
     eco = axelrod.Ecosystem(results, population=[.1, .05, .7, .1, .05])
     eco.reproduce(50) # Evolve the population over 50 time steps
     plot = axelrod.Plot(results)
-    p = plot.stackplot(eco.population_sizes)
+    p = plot.stackplot(eco)
     p.show()
 
 We see the output here:
@@ -479,7 +479,7 @@ Here is a with an even larger initial number of :code:`Defector` (note that it t
     eco = axelrod.Ecosystem(results, population=[.1, .05, 7, .1, .05])
     eco.reproduce(140) # Evolve the population over 140 time steps
     plot = axelrod.Plot(results)
-    p = plot.stackplot(eco.population_sizes)
+    p = plot.stackplot(eco)
     p.show()
 
 The output is shown here:
