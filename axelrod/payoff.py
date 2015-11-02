@@ -4,7 +4,7 @@ from axelrod import Actions
 
 C, D = Actions.C, Actions.D
 
-def nplayers(interactions):
+def player_count(interactions):
     """
     The number of players derived from a dictionary of interactions
 
@@ -61,7 +61,7 @@ def nplayers(interactions):
 
 
 # As yet unused until RoundRobin returns interactions
-def payoff_matrix(interactions, nplayers, game):
+def payoff_matrix(interactions, game):
     """
     The payoff matrix from a single round robin.
 
@@ -105,6 +105,7 @@ def payoff_matrix(interactions, nplayers, game):
         and column (j) represents an individual player and the the value Pij
         is the payoff value for player (i) versus player (j).
     """
+    nplayers = player_count(interactions)
     payoffs = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for players, actions in interactions.items():
         payoff = interaction_payoff(actions, game)
