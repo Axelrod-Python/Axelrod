@@ -63,9 +63,9 @@ class TestPayoff(unittest.TestCase):
         cls.expected_wins = [[2, 0], [0, 0], [0, 2]]
 
         cls.diff_means = [
-            [ 0. ,  0. ,  0.5],
-            [ 0. ,  0. , -0.5],
-            [-0.5,  0.5,  0. ]
+            [0.0,  0.0,  0.5],
+            [0.0,  0.0, -0.5],
+            [-0.5,  0.5,  0.0]
         ]
 
         cls.expected_score_diffs = [
