@@ -26,7 +26,7 @@ strategies::
     >>> len([s for s in axl.strategies if s().classifier['stochastic']])
     36
 
-Or indeed find out how many strategy have only use 1 turn worth of memory to
+Or indeed find out how many strategy only use 1 turn worth of memory to
 make a decision::
 
     >>> len([s for s in axl.strategies if s().classifier['memory_depth']==1])
