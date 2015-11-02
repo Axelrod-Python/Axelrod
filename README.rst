@@ -127,5 +127,17 @@ paper please list it here:
   <http://www.thomascampbell.me.uk/category/axelrod.html>`_
   by `Uglyfruitcake <https://github.com/uglyfruitcake>`_.
 
+Contributors
+============
+
+The library has had many awesome contributions from many [great
+contributors](https://github.com/Axelrod-Python/Axelrod/graphs/contributors).
+The Core developers of the project are:
+
+- [drvinceknight](https://github.com/drvinceknight)
+- [langner](https://github.com/langner)
+- [marcharper](https://github.com/marcharper)
+- [meatballs](https://github.com/meatballs)
+
 .. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
