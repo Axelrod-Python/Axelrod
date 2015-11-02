@@ -76,7 +76,7 @@ class TestPayoff(unittest.TestCase):
 
     def test_nplayers(self):
         nplayers = ap.nplayers(self.interactions)
-        self.assertEqual(nplayers, 5)
+        self.assertEqual(nplayers, 3)
 
     def test_payoff_matrix(self):
         payoff_matrix = ap.payoff_matrix(self.interactions, 3, Game())
@@ -87,7 +87,7 @@ class TestPayoff(unittest.TestCase):
         self.assertEqual(payoff, (13, 3))
 
     def test_scores_matrix(self):
-        scores = ap.normalised_scores(self.interactions, Game())
+        scores = ap.scores_matrix(self.interactions, Game())
         self.assertEqual(scores, self.expected_scores)
 
     def test_scores(self):
