@@ -1004,8 +1004,33 @@ HardProber is implemented in the library::
 Strategies implemented in the module
 ------------------------------------
 
-There are several original strategies which have been created as part of this
-project and have never (to our knowledge) appeared in previous tournaments.
+Zero Determinant Srategies
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are five zero determinant strategies implemented in the library, with the
+following four-vectors :math:`(P(C \,|\, CC), P(C \,|\, CD), P(C \,|\, DC), P(C \,|\, DD))`:
+
++------------------+-----------------------+--------------------------+
+| Name             | Four-vector           | Axelrod Library Name     |
++==================+=======================+==========================+
+| `ZD-Extort-2`_   | (8/9, 1/2, 1/3, 0)    | :code:`ZDExtort2`        |
++------------------+-----------------------+--------------------------+
+| `ZD-Extort-2v2`_ | (7/8, 7/16, 3/8, 0)   | :code:`ZDExtort2v2`      |
++------------------+-----------------------+--------------------------+
+| `ZD-Extort-4`_   | (11/17, 0, 8/17, 0)   | :code:`ZDExtort4`        |
++------------------+-----------------------+--------------------------+
+| `ZD-Gen-2`_      | (1, 9/16, 1/2, 1/8)   | :code:`ZDGen2`           |
++------------------+-----------------------+--------------------------+
+| `ZD-GTFT-2`_     | (1, 1/8, 1, 1/4)      | :code:`ZDGTFT2`          |
++------------------+-----------------------+--------------------------+
+| `ZD-SET-2`_      | (3/4, 1/4, 1/2, 1/4)  | :code:`ZDSet2`           |
++------------------+-----------------------+--------------------------+
+
+The library also implements a generic LR-strategy as described in
+[this paper](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886).
+The Zero-Determinant strategies are all special cases. The library also contains
+a strategy called `ALLCorALLD` that results from setting :math:`phi=0` in the LR
+parameterization.
 
 Fool Me Once
 ^^^^^^^^^^^^
