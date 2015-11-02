@@ -4,6 +4,61 @@ from axelrod import Actions
 
 C, D = Actions.C, Actions.D
 
+def nplayers(interactions):
+    """
+    The number of players derived from a dictionary of interactions
+
+    Parameters
+    ----------
+    interactions : dictionary
+        A dictionary of the form:
+
+        e.g. for a round robin between Cooperator, Defector and Alternator
+        with 2 turns per round:
+        {
+            (0, 0): [(C, C), (C, C)].
+            (0, 1): [(C, D), (C, D)],
+            (0, 2): [(C, C), (C, D)],
+            (1, 1): [(D, D), (D, D)],
+            (1, 2): [(D, C), (D, D)],
+            (2, 2): [(C, C), (D, D)]
+        }
+
+        i.e. the key is a pair of player index numbers and the value, a list of
+        plays. The list contains one pair per turn in the round robin.
+        The dictionary contains one entry for each combination of players.
+
+    Returns
+    -------
+    nplayers : integer
+        The number of players in the round robin
+
+        The number of ways (c) to select groups of r members from a set of n
+        members is given by:
+
+            c = n! / r!(n - r)!
+
+        In this case, we are selecting pairs of players (p) and thus r = 2,
+        giving:
+
+            p = n(n-1) / 2 or p = (n^2 - n) / 2
+
+        However, we also have the case where each player plays itself gving:
+
+            p = (n^2 + n) / 2
+
+        Using the quadratic equation to rearrange for n gives:
+
+            n = (-1 +- sqrt(1 + 8p)) / 2
+
+        Taking only the real roots allows us to derive the number of players
+        given the number of pairs:
+
+            n = (sqrt(8p + 1) -1) / 2
+    """
+
+    return int((math.sqrt(len(interactions) * 8 + 1) - 1) / 2)
+
 
 # As yet unused until RoundRobin returns interactions
 def payoff_matrix(interactions, nplayers, game):
@@ -89,6 +144,15 @@ def interaction_payoff(actions, game):
         player1_payoff += score[0]
         player2_payoff += score[1]
     return (player1_payoff, player2_payoff)
+
+
+# As yet unused until RoundRobin returns interactions
+def scores_matrix(actions, game):
+    """
+
+    """
+    scores = []
+    return scores
 
 
 def scores(payoff):
