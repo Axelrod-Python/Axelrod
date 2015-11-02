@@ -1,6 +1,7 @@
 from math import sqrt
 from . import eigen
 from axelrod import Actions
+from axelrod.payoff import player_count
 
 C, D = Actions.C, Actions.D
 
@@ -48,31 +49,7 @@ def cooperation_matrix(interactions):
         and column (j) represents an individual player and the the value Cij
         is the number of times player i cooperated against opponent j.
     """
-
-    # The number of ways (c) to select groups of r members from a set of n
-    # members is given by:
-    #
-    #     c = n! / r!(n - r)!
-    #
-    # In this case, we are selecting pairs of players (p) and thus r = 2,
-    # giving:
-    #
-    #     p = n(n-1) / 2 or p = (n^2 - n) / 2
-    #
-    # However, we also have the case where each player plays itself gving:
-    #
-    #     p = (n^2 + n) / 2
-    #
-    # Using the quadratic equation to rearrange for n gives:
-    #
-    #     n = (-1 +- sqrt(1 + 8p)) / 2
-    #
-    # Taking only the real roots allows us to derive the number of players
-    # given the number of pairs:
-    #
-    #     n = (sqrt(8p + 1) -1) / 2
-
-    nplayers = int((sqrt(len(interactions) * 8 + 1) - 1) / 2)
+    nplayers = player_count(interactions)
     cooperation = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for players, actions in interactions.items():
         p1_actions, p2_actions = zip(*actions)
