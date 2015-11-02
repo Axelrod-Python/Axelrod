@@ -4,6 +4,7 @@ from axelrod import Actions
 
 C, D = Actions.C, Actions.D
 
+
 def player_count(interactions):
     """
     The number of players derived from a dictionary of interactions
@@ -56,7 +57,6 @@ def player_count(interactions):
 
             n = (sqrt(8p + 1) -1) / 2
     """
-
     return int((math.sqrt(len(interactions) * 8 + 1) - 1) / 2)
 
 
@@ -148,11 +148,45 @@ def interaction_payoff(actions, game):
 
 
 # As yet unused until RoundRobin returns interactions
-def scores_matrix(actions, game):
+def scores_matrix(interactions, game):
     """
+    Parameters
+    ----------
+    interactions : list
+        A list containing an interactions dictionary for each repetition in a
+        tournmament.
 
+    game : axelrod.Game
+        The game object to score the tournament.
+
+    Returns
+    -------
+    list
+        A scores matrix of the form:
+
+            [
+                [a, b, c],
+                [d, e, f],
+                [g, h, i],
+            ]
+
+        i.e. one row per player which lists the total score for each
+        repetition.
+
+        In Axelrod's original tournament, there were no self-interactions
+        (e.g. player 1 versus player 1) and so these are also excluded from the
+        scores here.
     """
-    scores = []
+    nplayers = player_count(interactions[0])
+    repetitions = len(interactions)
+    scores = [
+        [0 for repetition in range(repetitions)] for player in range(nplayers)]
+    for repetition in range(repetitions):
+        payoff = payoff_matrix(interactions[repetition], game)
+        for player in range(nplayers):
+            for opponent in range(nplayers):
+                if player != opponent:
+                    scores[player][repetition] += payoff[player][opponent]
     return scores
 
 

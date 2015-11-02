@@ -28,6 +28,12 @@ class TestPayoff(unittest.TestCase):
             [13, 11, 13]
         ]
 
+        cls.expected_scores_matrix = [
+            [26, 26],
+            [24, 24],
+            [24, 24]
+        ]
+
         cls.expected_payoff = [
             [[11.0, 11.0], [13, 13], [15, 12]],
             [[13, 13], [15.0, 15.0], [14, 7]],
@@ -87,8 +93,9 @@ class TestPayoff(unittest.TestCase):
         self.assertEqual(payoff, (13, 3))
 
     def test_scores_matrix(self):
-        scores = ap.scores_matrix(self.interactions, Game())
-        self.assertEqual(scores, self.expected_scores)
+        interactions = [self.interactions, self.interactions]
+        scores = ap.scores_matrix(interactions, Game())
+        self.assertEqual(scores, self.expected_scores_matrix)
 
     def test_scores(self):
         scores = ap.scores(self.expected_payoff)
