@@ -116,7 +116,7 @@ class StochasticCooperator(MemoryOnePlayer):
 
     def __init__(self):
         four_vector = (0.935, 0.229, 0.266, 0.42)
-        super(self.__class__, self).__init__(four_vector)
+        super(StochasticCooperator, self).__init__(four_vector)
         self.init_args = ()
         self.set_four_vector(four_vector)
 
@@ -146,14 +146,19 @@ class StochasticWSLS(MemoryOnePlayer):
         self.set_four_vector(four_vector)
 
 
-class ZeroDeterminantPlayer(MemoryOnePlayer):
-    """Abstraction for ZD players. The correct formula is Equation 14 in
-    http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886 .
-    These players enforce a linear difference in stationary payoffs
-    s * (S_xy - l) = S_yx - l, yielding extortionate strategies with l = P and
-    generous strategies when l = R and s > 0"""
+class LRPlayer(MemoryOnePlayer):
+    """Abstraction for Linear Relation players. These players enforce a linear
+    difference in stationary payoffs s * (S_xy - l) = S_yx - l, with 0 <= l <= R.
+    The parameter `s` is called the slope and the parameter `l` the
+    baseline payoff. For extortionate strategies, the extortion factor is the
+    inverse of the slope.
 
-    name = 'ZD ABC'
+    This parameterization is Equation 14 in
+    http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886.
+    See Figure 2 of the article for a more in-depth explanation.
+    """
+
+    name = 'LinearRelation'
 
     def receive_tournament_attributes(self, phi=0, s=None, l=None):
         """
@@ -161,7 +166,7 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
         ----------
         phi, s, l: floats
             Parameter used to compute the four-vector according to the
-            parameterization of Zero Determinant strategies below.
+            parameterization of the strategies below.
         """
 
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
@@ -184,33 +189,8 @@ class ZeroDeterminantPlayer(MemoryOnePlayer):
         self.set_four_vector(four_vector)
 
 
-class ZDGTFT2(ZeroDeterminantPlayer):
-    """A Generous Zero Determinant Strategy."""
-
-    name = 'ZD-GTFT-2'
-
-    def __init__(self, phi=0.25, s=0.5):
-        """
-        Parameters
-        ----------
-        phi, s: floats
-            Parameters passed through to ZeroDeterminantPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        super(ZDGTFT2, self).__init__()
-        self.init_args = (phi, s)
-
-    def receive_tournament_attributes(self):
-        (R, P, S, T) = self.tournament_attributes["game"].RPST()
-        self.l = R
-        super(ZDGTFT2, self).receive_tournament_attributes(self.phi,
-                                                                  self.s,
-                                                                  self.l)
-
-class ZDExtort2(ZeroDeterminantPlayer):
-    """An Extortionate Zero Determinant Strategy."""
+class ZDExtort2(LRPlayer):
+    """An Extortionate Zero Determinant Strategy with l=P."""
 
     name = 'ZD-Extort-2'
 
@@ -219,7 +199,7 @@ class ZDExtort2(ZeroDeterminantPlayer):
         Parameters
         ----------
         phi, s: floats
-            Parameters passed through to ZeroDeterminantPlayer to determine
+            Parameters passed through to LRPlayer to determine
             the four vector.
         """
         self.phi = phi
@@ -230,9 +210,130 @@ class ZDExtort2(ZeroDeterminantPlayer):
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         self.l = P
-        super(ZDExtort2, self).receive_tournament_attributes(self.phi,
-                                                                  self.s,
-                                                                  self.l)
+        super(ZDExtort2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
+class ZDExtort2v2(LRPlayer):
+    """An Extortionate Zero Determinant Strategy with l=1."""
+
+    name = 'ZD-Extort-2 v2'
+
+    def __init__(self, phi=1./8, s=0.5, l=1):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super(ZDExtort2v2, self).__init__()
+        self.init_args = (phi, s, l)
+
+    def receive_tournament_attributes(self):
+        super(ZDExtort2v2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
+class ZDExtort4(LRPlayer):
+    """An Extortionate Zero Determinant Strategy with l=1, s=1/4. TFT is the
+    other extreme (with l=3, s=1)"""
+
+    name = 'ZD-Extort-4'
+
+    def __init__(self, phi=4./17, s=0.25, l=1):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super(ZDExtort4, self).__init__()
+        self.init_args = (phi, s, l)
+
+    def receive_tournament_attributes(self):
+        super(ZDExtort4, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
+class ZDGen2(LRPlayer):
+    """A Generous Zero Determinant Strategy with l=3."""
+
+    name = 'ZD-GEN-2'
+
+    def __init__(self, phi=1./8, s=0.5, l=3):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super(ZDGen2, self).__init__()
+        self.init_args = (phi, s, l)
+
+    def receive_tournament_attributes(self):
+        super(ZDGen2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
+class ZDGTFT2(LRPlayer):
+    """A Generous Zero Determinant Strategy with l=R."""
+
+    name = 'ZD-GTFT-2'
+
+    def __init__(self, phi=0.25, s=0.5):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        super(ZDGTFT2, self).__init__()
+        self.init_args = (phi, s)
+
+    def receive_tournament_attributes(self):
+        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        self.l = R
+        super(ZDGTFT2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
+
+
+class ZDSet2(LRPlayer):
+    """A Generous Zero Determinant Strategy with l=2."""
+
+    name = 'ZD-SET-2'
+
+    def __init__(self, phi=1./4, s=0., l=2):
+        """
+        Parameters
+        ----------
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super(ZDSet2, self).__init__()
+        self.init_args = (phi, s, l)
+
+    def receive_tournament_attributes(self):
+        super(ZDSet2, self).receive_tournament_attributes(
+            self.phi, self.s, self.l)
 
 
 ### Strategies for recreating tournaments
@@ -265,3 +366,27 @@ class SoftJoss(MemoryOnePlayer):
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.q, 2))
+
+
+class ALLCorALLD(Player):
+    """This strategy is at the parameter extreme of the ZD strategies (phi = 0).
+    It simply repeats its last move, and so mimics ALLC or ALLD after round one.
+    If the tournament is noisy, there will be long runs of C and D.
+
+    For now starting choice is random of 0.6, but that was an arbitrary choice
+    at implementation time.
+    """
+
+    name = "ALLCorALLD"
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector (1, 1, 0, 0)
+        'stochastic': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        if len(self.history) == 0:
+            return random_choice(0.6)
+        return self.history[-1]
