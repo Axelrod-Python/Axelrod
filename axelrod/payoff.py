@@ -147,49 +147,6 @@ def interaction_payoff(actions, game):
     return (player1_payoff, player2_payoff)
 
 
-# As yet unused until RoundRobin returns interactions
-def scores_matrix(interactions, game):
-    """
-    Parameters
-    ----------
-    interactions : list
-        A list containing an interactions dictionary for each repetition in a
-        tournmament.
-
-    game : axelrod.Game
-        The game object to score the tournament.
-
-    Returns
-    -------
-    list
-        A scores matrix of the form:
-
-            [
-                [a, b, c],
-                [d, e, f],
-                [g, h, i],
-            ]
-
-        i.e. one row per player which lists the total score for each
-        repetition.
-
-        In Axelrod's original tournament, there were no self-interactions
-        (e.g. player 1 versus player 1) and so these are also excluded from the
-        scores here.
-    """
-    nplayers = player_count(interactions[0])
-    repetitions = len(interactions)
-    scores = [
-        [0 for repetition in range(repetitions)] for player in range(nplayers)]
-    for repetition in range(repetitions):
-        payoff = payoff_matrix(interactions[repetition], game)
-        for player in range(nplayers):
-            for opponent in range(nplayers):
-                if player != opponent:
-                    scores[player][repetition] += payoff[player][opponent]
-    return scores
-
-
 def scores(payoff):
     """
     The scores matrix excluding self-interactions
