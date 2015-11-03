@@ -51,7 +51,28 @@ class RoundRobin(object):
                 pass
         return
 
-    def _single_interaction(self, player1_index, player2_index):
+    def _single_match(self, player1_index, player2_index):
+        """
+        Plays two players against each other and returns the list of actions.
+
+        Parameters
+        ----------
+        player1_index : integer
+            The index within the players list for player 1.
+
+        player2_index : integer
+            The index within the players list for player 2.
+
+        Returns
+        -------
+        A list of the form:
+
+        e.g. for a 2 turn match between Cooperator and Defector:
+
+            [(C, C), (C, D)]
+
+        i.e. One entry per turn containing a pair of actions.
+        """
         player1, player2, classes = self._pair_of_players(
             player1_index, player2_index)
         play_required = (
