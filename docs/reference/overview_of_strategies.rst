@@ -1067,7 +1067,6 @@ AntiCycler plays a sequence that contains no cycles::
 
     C CD CCD CCCD CCCCD CCCCCD ...
 
-
 APavlov2006
 ^^^^^^^^^^^
 
@@ -1090,3 +1089,11 @@ counters of how often the opponent changes actions. When the counter
 exceeds a threshold, OmegaTFT defects for the rest of the rounds. OmegaTFT
 also keeps a counter to break deadlocks (C D to D C cycles) against
 strategies like SuspiciousTitForTat.
+=======
+=======
+
+LookerUp
+^^^^^^^^
+
+LookerUp uses a lookup table to decide what to play based on the last few rounds plus
+the first few plays made by the opponent at the start of the match.
