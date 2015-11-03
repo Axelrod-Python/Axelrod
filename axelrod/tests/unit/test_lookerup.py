@@ -87,7 +87,7 @@ class TestLookerUp(TestPlayer):
         self.responses_test([C, C, D], [D, D, C], [D])
 
 
-class TestLookerUp(TestPlayer):
+class TestEvolvedLookerUp(TestPlayer):
 
     name = "EvolvedLookerUp"
     player = axelrod.EvolvedLookerUp
