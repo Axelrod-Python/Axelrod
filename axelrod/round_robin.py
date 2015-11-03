@@ -19,15 +19,32 @@ class RoundRobin(object):
         self._noise = noise
 
     def play(self):
-        """Plays a round robin where each match lasts turns.
+        """
+        Plays each player against all other players in a round robin.
 
-        We cache scores for pairs of deterministic strategies, since the
-        outcome will always be the same.
+        Strictly speaking, this is not a round robin since each player also
+        plays a copy of itself. These so-called self-interactions are necessary
+        for the ecological variant of a tournament, are included in the payoff
+        matrix but are excluded from the scores.
 
-        Notice also that we need to handle self-interactions with some special
-        exceptions due to the way gameplay is coded within Player.
+        Returns
+        -------
+        An interactions dictionary of the form:
 
-        Returns the total payoff matrix.
+        e.g. for a round robin between Cooperator, Defector and Alternator
+        with 2 turns per match:
+        {
+            (0, 0): [(C, C), (C, C)].
+            (0, 1): [(C, D), (C, D)],
+            (0, 2): [(C, C), (C, D)],
+            (1, 1): [(D, D), (D, D)],
+            (1, 2): [(D, C), (D, D)],
+            (2, 2): [(C, C), (D, D)]
+        }
+
+        i.e. The key is a pair of player index numbers and the value, a list of
+        plays. The list contains one pair per turn in the match. The dictionary
+        contains one entry for each combination of players.
         """
         for player1_index in range(self.nplayers):
             for player2_index in range(player1_index, self.nplayers):
