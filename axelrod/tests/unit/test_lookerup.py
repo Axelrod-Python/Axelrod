@@ -24,6 +24,15 @@ class TestLookerUp(TestPlayer):
         player = self.player(dict())
         opponent = axelrod.Cooperator()
         self.assertEqual(player.strategy(opponent), C)
+        # Test default table
+        player = self.player()
+        expected_lookup_table = {
+            ('', 'C', 'D') : D,
+            ('', 'D', 'D') : D,
+            ('', 'C', 'C') : C,
+            ('', 'D', 'C') : C,
+        }
+        self.assertEqual(player.lookup_table, expected_lookup_table)
         # Test malformed tables
         table = {(C, C): C, ('DD', 'DD'): C}
         with self.assertRaises(ValueError):
