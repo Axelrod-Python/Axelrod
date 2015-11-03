@@ -63,9 +63,9 @@ class TestPayoff(unittest.TestCase):
         cls.expected_wins = [[2, 0], [0, 0], [0, 2]]
 
         cls.diff_means = [
-            [ 0. ,  0. ,  0.5],
-            [ 0. ,  0. , -0.5],
-            [-0.5,  0.5,  0. ]
+            [0.0,  0.0,  0.5],
+            [0.0,  0.0, -0.5],
+            [-0.5,  0.5,  0.0]
         ]
 
         cls.expected_score_diffs = [
@@ -74,8 +74,14 @@ class TestPayoff(unittest.TestCase):
             [-1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
         ]
 
+    def test_player_count(self):
+        nplayers = ap.player_count(self.interactions)
+        self.assertEqual(nplayers, 3)
+        nplayers = ap.player_count({'test': 'test'})
+        self.assertEqual(nplayers, 1)
+
     def test_payoff_matrix(self):
-        payoff_matrix = ap.payoff_matrix(self.interactions, 3, Game())
+        payoff_matrix = ap.payoff_matrix(self.interactions, Game())
         self.assertEqual(payoff_matrix, self.expected_payoff_matrix)
 
     def test_interaction_payoff(self):

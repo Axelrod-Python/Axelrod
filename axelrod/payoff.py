@@ -5,8 +5,63 @@ from axelrod import Actions
 C, D = Actions.C, Actions.D
 
 
+def player_count(interactions):
+    """
+    The number of players derived from a dictionary of interactions
+
+    Parameters
+    ----------
+    interactions : dictionary
+        A dictionary of the form:
+
+        e.g. for a round robin between Cooperator, Defector and Alternator
+        with 2 turns per round:
+        {
+            (0, 0): [(C, C), (C, C)].
+            (0, 1): [(C, D), (C, D)],
+            (0, 2): [(C, C), (C, D)],
+            (1, 1): [(D, D), (D, D)],
+            (1, 2): [(D, C), (D, D)],
+            (2, 2): [(C, C), (D, D)]
+        }
+
+        i.e. the key is a pair of player index numbers and the value, a list of
+        plays. The list contains one pair per turn in the round robin.
+        The dictionary contains one entry for each combination of players.
+
+    Returns
+    -------
+    nplayers : integer
+        The number of players in the round robin
+
+        The number of ways (c) to select groups of r members from a set of n
+        members is given by:
+
+            c = n! / r!(n - r)!
+
+        In this case, we are selecting pairs of players (p) and thus r = 2,
+        giving:
+
+            p = n(n-1) / 2 or p = (n^2 - n) / 2
+
+        However, we also have the case where each player plays itself gving:
+
+            p = (n^2 + n) / 2
+
+        Using the quadratic equation to rearrange for n gives:
+
+            n = (-1 +- sqrt(1 + 8p)) / 2
+
+        Taking only the real roots allows us to derive the number of players
+        given the number of pairs:
+
+            n = (sqrt(8p + 1) -1) / 2
+    """
+    return int((math.sqrt(len(interactions) * 8 + 1) - 1) / 2)
+
+
 # As yet unused until RoundRobin returns interactions
-def payoff_matrix(interactions, nplayers, game):
+def payoff_matrix(interactions, game):
     """
     The payoff matrix from a single round robin.
 
@@ -50,6 +105,7 @@ def payoff_matrix(interactions, nplayers, game):
         and column (j) represents an individual player and the the value Pij
         is the payoff value for player (i) versus player (j).
     """
+    nplayers = player_count(interactions)
     payoffs = [[0 for i in range(nplayers)] for j in range(nplayers)]
     for players, actions in interactions.items():
         payoff = interaction_payoff(actions, game)
