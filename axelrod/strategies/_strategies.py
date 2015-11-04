@@ -24,6 +24,7 @@ from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
     MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
+from .lookerup import LookerUp, EvolvedLookerUp
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (ALLCorALLD,
     MemoryOnePlayer, GTFT, SoftJoss, StochasticCooperator, StochasticWSLS,
@@ -106,6 +107,7 @@ strategies = [
     LimitedRetaliate,
     LimitedRetaliate2,
     LimitedRetaliate3,
+    EvolvedLookerUp,
     MathConstantHunter,
     MindBender,
     MindController,
