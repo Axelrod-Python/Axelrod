@@ -1,170 +1,111 @@
-def actions(players, player1_index, player2_index, turns,
-            deterministic_cache=None, cache_mutable=True, noise=0):
-    """
-    The resulting list of actions from a match between two players.
+class Match(object):
 
-    This function determines whether the actions list can be obtained from
-    the deterministic cache and returns it from there if so. If not, it calls
-    the play_match function and returns the list from there.
+    def __init__(self, players, turns, deterministic_cache=None,
+                 cache_mutable=True, noise=0):
+        """
+        Parameters
+        ----------
+        players : tuple
+            A pair of axelrod.Player objects
+        turns : integer
+                The number of turns per match
+        deterministic_cache : dictionary
+            A cache of resulting actions for stochastic matches
+        cache_mutable : boolean
+            Whether the deterministic cache can be updated or not
+        noise : float
+            The probability that a player's intended action should be flipped
+        """
+        self._player1 = players[0]
+        self._player2 = players[1]
+        self._classes = (players[0].__class__, players[1].__class__)
+        self._turns = turns
+        if deterministic_cache == None:
+            self._cache = {}
+        else:
+            self._cache = deterministic_cache
+        self._cache_mutable = cache_mutable
+        self._noise = noise
 
-    Parameters
-    ----------
-    players : list
-        A list of Axelrod.Player instances
-    player1_index : integer
-        The index within the players list for player 1
-    player2_index : integer
-        The index within the players list for player 2
-    turns : integer
-        The number of turns per match
-    deterministic_cache : dictionary
-        A cache of resulting actions for stochastic matches
-    cache_mutable : boolean
-        Whether the deterministic cache can be updated or not
-    noise : float
-        The probability that a player's intended action should be flipped
+    @property
+    def _stochastic(self):
+        """
+        A boolean to show whether a match between two players would be
+        stochastic
+        """
+        return (
+            self._noise or
+            self._player1.classifier['stochastic'] or
+            self._player2.classifier['stochastic'])
 
-    Returns
-    -------
-    A list of the form:
-
-    e.g. for a 2 turn match between Cooperator and Defector:
-
-        [(C, C), (C, D)]
-
-    i.e. One entry per turn containing a pair of actions.
-    """
-    player1, player2, classes = pair_of_players(player1_index, player2_index)
-    play_required = (
-        is_stochastic_match(player1, player2, noise) or
-        classes not in deterministic_cache)
-    if play_required:
-        pass
-    else:
-        pass
-    return
-
-
-def pair_of_players(players, player1_index, player2_index):
-    """
-    A pair of player objects and their classes
-
-    This function returns the player instances from the players list given
-    their indices within that list. It also returns a pair of classes which are
-    used as the key within the deterministic cache dictionary.
-
-    Parameters
-    ----------
-    players : list
-        A list of Axelrod.Player instances
-    player1_index : integer
-        The index within the players list for player 1.
-    player2_index : integer
-        The index within the players list for player 2.
-
-    Returns
-    -------
-    Two Axelrod.Player instances and a tuple of their classes
-    """
-    player1 = players[player1_index]
-    class1 = player1.__class__
-    if player1_index == player2_index:
-        player2 = player1.clone()
-    else:
-        player2 = players[player2_index]
-    class2 = player2.__class__
-    return player1, player2, (class1, class2)
+    @property
+    def _play_required(self):
+        """
+        A boolean to show whether the play method has to be called
+        """
+        return(self._stochastic or self._classes not in self._cache)
 
 
-def is_stochastic_match(player1, player2, noise):
-    """
-    A boolean to show whether a match between two players would be stochastic
+    @property
+    def _cache_update_required(self):
+        """
+        A boolean to show whether the determinstic cache should be updated
+        """
+        return (
+            not self._noise and
+            self._cache_mutable and not (
+                self._player1.classifier['stochastic']
+                or self._player2.classifier['stochastic'])
+        )
 
-    Parameters
-    ----------
-    player1 : axelrod.Player
-    player2 : axelrod.Player
-    noise : float
-        The probability that a player's intended action should be flipped
+    @property
+    def results(self):
+        """
+        The resulting list of actions from a match between two players.
 
-    Returns
-    -------
-    boolean
+        This function determines whether the actions list can be obtained from
+        the deterministic cache and returns it from there if so. If not, it
+        calls the play method and returns the list from there.
 
-    """
-    return (
-        noise or
-        player1.classifier['stochastic'] or
-        player2.classifier['stochastic'])
+        Returns
+        -------
+        A list of the form:
 
+        e.g. for a 2 turn match between Cooperator and Defector:
 
-def play_match(players, player1_index, player2_index, turns,
-               deterministic_cache, cache_mutable, noise):
-    """
-    Plays a match between two players and returns the resulting list of actions
+            [(C, C), (C, D)]
 
-    This function is called by the actions function if the deterministic cache
-    cannot be used.
+        i.e. One entry per turn containing a pair of actions.
+        """
+        if self._play_required:
+            pass
+        else:
+            pass
+        return
 
-    Parameters
-    ----------
-    players : list
-        A list of Axelrod.Player instances
-    player1_index : integer
-        The index within the players list for player 1
-    player2_index : integer
-        The index within the players list for player 2
-    turns : integer
-        The number of turns per match
-    deterministic_cache : dictionary
-        A cache of resulting actions for stochastic matches
-    cache_mutable : boolean
-        Whether the deterministic cache can be updated or not
-    noise : float
-        The probability that a player's intended action should be flipped
+    def play(self):
+        """
+        Plays the match and returns the resulting list of actions
 
-    Returns
-    -------
-    A list of the form:
+        This function is called by the results method if the deterministic
+        cache cannot be used.
 
-    e.g. for a 2 turn match between Cooperator and Defector:
+        Returns
+        -------
+        A list of the form:
 
-        [(C, C), (C, D)]
+        e.g. for a 2 turn match between Cooperator and Defector:
 
-    i.e. One entry per turn containing a pair of actions.
-    """
-    turn = 0
-    player1, player2, classes = pair_of_players(player1_index, player2_index)
-    player1.reset()
-    player2.reset()
-    while turn < turns:
-        turn += 1
-        player1.play(player2, noise)
-    if cache_update_required(player1, player2, noise):
-        deterministic_cache[classes] = {}
-    return
+            [(C, C), (C, D)]
 
-
-def cache_update_required(player1, player2, cache_mutable, noise):
-    """
-    A boolean to show whether the determinstic cache should be updated
-
-    Parameters
-    ----------
-    player1 : axelrod.Player
-    player2 : axelrod.Player
-    cache_mutable : boolean
-        Whether the deterministic cache can be updated or not
-    noise : float
-        The probability that a player's intended action should be flipped
-
-    Returns
-    -------
-    boolean
-    """
-    return (
-        not noise and
-        cache_mutable and not (
-            player1.classifier['stochastic']
-            or player2.classifier['stochastic'])
-    )
+        i.e. One entry per turn containing a pair of actions.
+        """
+        turn = 0
+        self._player1.reset()
+        self._player2.reset()
+        while turn < self._turns:
+            turn += 1
+            self._player1.play(self._player2, self._noise)
+        if self._cache_update_required:
+            self._cache[self._classes] = {}
+        return
