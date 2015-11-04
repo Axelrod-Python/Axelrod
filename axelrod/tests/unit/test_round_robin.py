@@ -45,6 +45,14 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(results['payoff'], expected_payoff)
         self.assertEqual(results['cooperation'], expected_cooperation)
 
+    def test_empty_matrix(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        result = rr._empty_matrix(2, 2)
+        expected = [[0, 0], [0, 0]]
+        self.assertEqual(result, expected)
+
     def test_score_single_interaction(self):
         players = [
             axelrod.Alternator(), axelrod.Defector(), axelrod.TitForTat()]
@@ -59,6 +67,22 @@ class TestRoundRobin(unittest.TestCase):
     # TODO
     # Use MagicMock to test that _play_single_interaction is called / not
     # called in the correct cirucumstances.
+
+    def test_update_matrices(self):
+        players = [
+            axelrod.Alternator(), axelrod.Defector(), axelrod.TitForTat()]
+        rr = axelrod.RoundRobin(
+            players=players, game=self.game, turns=20)
+        scores = (53, 48)
+        cooperation_rates = (0.5, 0.55)
+        payoffs = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        cooperation = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        rr._update_matrices(
+            0, 2, scores, payoffs, cooperation_rates, cooperation)
+        expected_payoffs = [[0, 0, 53], [0, 0, 0], [48, 0, 0]]
+        expected_cooperation = [[0, 0, 0.5], [0, 0, 0], [0.55, 0, 0]]
+        self.assertEqual(expected_payoffs, payoffs)
+        self.assertEqual(expected_cooperation, cooperation)
 
     def test_pair_of_players(self):
         players = [
@@ -107,6 +131,16 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(expected_scores, scores)
         self.assertEqual(expected_cooperation_rates, cooperation_rates)
 
+    def test_calculate_scores(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        p1.history = [C, C, D, D]
+        p2.history = [C, D, C, D]
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        result = rr._calculate_scores(p1, p2)
+        expected = (9, 9)
+        self.assertEqual(result, expected)
+
     def test_cache_update_required(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
         rr = axelrod.RoundRobin(
@@ -119,3 +153,12 @@ class TestRoundRobin(unittest.TestCase):
         rr = axelrod.RoundRobin(
             players=[p1, p2], game=self.game, turns=20)
         self.assertFalse(rr._cache_update_required(p1, p2))
+
+    def test_calculate_cooperation(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        p1.history = [C, C, D, D]
+        rr = axelrod.RoundRobin(
+            players=[p1, p2], game=self.game, turns=20)
+        result = rr._calculate_cooperation(p1)
+        expected = 2
+        self.assertEqual(result, expected)
