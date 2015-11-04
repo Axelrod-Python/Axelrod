@@ -45,7 +45,6 @@ class Match(object):
         """
         return(self._stochastic or self._classes not in self._cache)
 
-
     @property
     def _cache_update_required(self):
         """
