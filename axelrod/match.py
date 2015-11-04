@@ -59,7 +59,7 @@ class Match(object):
         )
 
     @property
-    def results(self):
+    def result(self):
         """
         The resulting list of actions from a match between two players.
 
@@ -78,10 +78,9 @@ class Match(object):
         i.e. One entry per turn containing a pair of actions.
         """
         if self._play_required:
-            pass
+            return self.play()
         else:
-            pass
-        return
+            return self._cache[self._classes]
 
     def play(self):
         """
@@ -106,6 +105,7 @@ class Match(object):
         while turn < self._turns:
             turn += 1
             self._player1.play(self._player2, self._noise)
+        result = zip(self._player1.history, self._player2.history)
         if self._cache_update_required:
             self._cache[self._classes] = {}
-        return
+        return result
