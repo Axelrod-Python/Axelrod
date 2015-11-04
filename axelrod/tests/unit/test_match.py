@@ -65,7 +65,10 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.result, expected_result)
 
     def test_play(self):
+        cache = {}
         players = (axelrod.Cooperator(), axelrod.Defector())
-        match = axelrod.Match(players, 3)
+        match = axelrod.Match(players, 3, cache)
         expected_result = [(C, D), (C, D), (C, D)]
         self.assertEqual(match.play(), expected_result)
+        self.assertEqual(
+            cache[(axelrod.Cooperator, axelrod.Defector)], expected_result)
