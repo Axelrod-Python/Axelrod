@@ -1,5 +1,8 @@
 import unittest
 import axelrod
+from axelrod import Actions
+
+C, D = Actions.C, Actions.D
 
 
 class TestMatch(unittest.TestCase):
@@ -49,8 +52,11 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((p1, p2), 5)
         self.assertFalse(match._cache_update_required)
 
-    def test_results(self):
+    def test_result(self):
         pass
 
     def test_play(self):
-        pass
+        players = (axelrod.Cooperator(), axelrod.Defector())
+        match = axelrod.Match(players, 3)
+        expected_result = [(C, D), (C, D), (C, D)]
+        self.assertEqual(match.play(), expected_result)
