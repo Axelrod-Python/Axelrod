@@ -19,70 +19,61 @@ class RoundRobin(object):
         self._noise = noise
 
     def play(self):
+        """Plays a round robin where each match lasts turns.
+
+        We cache scores for pairs of deterministic strategies, since the
+        outcome will always be the same.
+
+        Notice also that we need to handle self-interactions with some special
+        exceptions due to the way gameplay is coded within Player.
+
+        Returns the total payoff matrix.
         """
-        Plays each player against all other players in a round robin.
 
-        Strictly speaking, this is not a round robin since each player also
-        plays a copy of itself. These so-called self-interactions are necessary
-        for the ecological variant of a tournament, are included in the payoff
-        matrix but are excluded from the scores.
+        payoff = self._empty_matrix(self.nplayers, self.nplayers)
+        cooperation = self._empty_matrix(self.nplayers, self.nplayers)
 
-        Returns
-        -------
-        An interactions dictionary of the form:
-
-        e.g. for a round robin between Cooperator, Defector and Alternator
-        with 2 turns per match:
-        {
-            (0, 0): [(C, C), (C, C)].
-            (0, 1): [(C, D), (C, D)],
-            (0, 2): [(C, C), (C, D)],
-            (1, 1): [(D, D), (D, D)],
-            (1, 2): [(D, C), (D, D)],
-            (2, 2): [(C, C), (D, D)]
-        }
-
-        i.e. The key is a pair of player index numbers and the value, a list of
-        plays. The list contains one pair per turn in the match. The dictionary
-        contains one entry for each combination of players.
-        """
         for player1_index in range(self.nplayers):
             for player2_index in range(player1_index, self.nplayers):
-                pass
-        return
+                scores, cooperation_rates = self._score_single_interaction(
+                    player1_index, player2_index)
+                self._update_matrices(
+                    player1_index, player2_index, scores, payoff,
+                    cooperation_rates, cooperation)
 
-    def _single_match(self, player1_index, player2_index):
-        """
-        Plays two players against each other and returns the list of actions.
+        return {'payoff': payoff, 'cooperation': cooperation}
 
-        Parameters
-        ----------
-        player1_index : integer
-            The index within the players list for player 1.
+    def _empty_matrix(self, rows, columns):
+        return [[0 for j in range(columns)] for i in range(rows)]
 
-        player2_index : integer
-            The index within the players list for player 2.
-
-        Returns
-        -------
-        A list of the form:
-
-        e.g. for a 2 turn match between Cooperator and Defector:
-
-            [(C, C), (C, D)]
-
-        i.e. One entry per turn containing a pair of actions.
-        """
+    def _score_single_interaction(self, player1_index, player2_index):
         player1, player2, classes = self._pair_of_players(
             player1_index, player2_index)
         play_required = (
             self._stochastic_interaction(player1, player2) or
             classes not in self.deterministic_cache)
         if play_required:
-            pass
+            scores, cooperation_rates = self._play_single_interaction(
+                player1, player2, classes)
         else:
-            pass
-        return
+            scores = self.deterministic_cache[classes]['scores']
+            cooperation_rates = (
+                self.deterministic_cache[classes]['cooperation_rates'])
+        return scores, cooperation_rates
+
+    def _update_matrices(self, player1_index, player2_index, scores,
+                         payoffs, cooperation_rates, cooperation):
+        # For self-interactions we can take the average of the two
+        # sides, which should improve the averaging a bit.
+        if not self._noise and player1_index == player2_index:
+            payoffs[player1_index][player2_index] = (
+                0.5 * (scores[0] + scores[1]))
+        else:
+            payoffs[player1_index][player2_index] = scores[0]
+            payoffs[player2_index][player1_index] = scores[1]
+
+        cooperation[player1_index][player2_index] = cooperation_rates[0]
+        cooperation[player2_index][player1_index] = cooperation_rates[1]
 
     def _pair_of_players(self, player1_index, player2_index):
         player1 = self.players[player1_index]
@@ -107,12 +98,30 @@ class RoundRobin(object):
         while turn < self.turns:
             turn += 1
             player1.play(player2, self._noise)
+        scores = self._calculate_scores(player1, player2)
+        cooperation_rates = (
+            self._calculate_cooperation(player1),
+            self._calculate_cooperation(player2))
         if self._cache_update_required(player1, player2):
-            self.deterministic_cache[classes] = {}
-        return
+            self.deterministic_cache[classes] = {
+                'scores': scores,
+                'cooperation_rates': cooperation_rates}
+        return scores, cooperation_rates
+
+    def _calculate_scores(self, p1, p2):
+        """Calculates the score for two players based their history"""
+        s1, s2 = 0, 0
+        for pair in zip(p1.history, p2.history):
+            score = self.game.score(pair)
+            s1 += score[0]
+            s2 += score[1]
+        return s1, s2
 
     def _cache_update_required(self, p1, p2):
         return (
             not self._noise and
             self.cache_mutable and
             not (p1.classifier['stochastic'] or p2.classifier['stochastic']))
+
+    def _calculate_cooperation(self, player):
+        return player.history.count(Actions.C)
