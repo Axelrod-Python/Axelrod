@@ -53,7 +53,16 @@ class TestMatch(unittest.TestCase):
         self.assertFalse(match._cache_update_required)
 
     def test_result(self):
-        pass
+        players = (axelrod.Cooperator(), axelrod.Defector())
+        match = axelrod.Match(players, 3)
+        expected_result = [(C, D), (C, D), (C, D)]
+        self.assertEqual(match.result, expected_result)
+
+        # a deliberately incorrect result so we can tell it came from the cache
+        expected_result = [(C, C), (D, D), (D, C)]
+        cache = {(axelrod.Cooperator, axelrod.Defector): expected_result}
+        match = axelrod.Match(players, 3, cache)
+        self.assertEqual(match.result, expected_result)
 
     def test_play(self):
         players = (axelrod.Cooperator(), axelrod.Defector())
