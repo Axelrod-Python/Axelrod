@@ -107,5 +107,5 @@ class Match(object):
             self._player1.play(self._player2, self._noise)
         result = zip(self._player1.history, self._player2.history)
         if self._cache_update_required:
-            self._cache[self._classes] = {}
+            self._cache[self._classes] = result
         return result
