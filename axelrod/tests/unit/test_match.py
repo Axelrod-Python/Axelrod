@@ -1,44 +1,56 @@
 import unittest
-import axelrod.match as am
 import axelrod
 
 
 class TestMatch(unittest.TestCase):
 
-    def test_actions(self):
-        pass
-
-    def test_pair_of_players(self):
-        players = [
-            axelrod.Cooperator(), axelrod.Defector(), axelrod.TitForTat()]
-        player1, player2, key = am.pair_of_players(players, 0, 2)
-        self.assertEqual(player1.name, 'Cooperator')
-        self.assertEqual(player2.name, 'Tit For Tat')
-        self.assertEqual(key[0], axelrod.Cooperator)
-        self.assertEqual(key[1], axelrod.TitForTat)
-        player1, player2, key = am.pair_of_players(players, 0, 0)
-        self.assertEqual(player1.name, player2.name)
-        self.assertEqual(key[0], key[1])
-        self.assertNotEqual(player1, player2)
-        # Check that the two player instances are wholly independent
-        player1.name = 'player 1'
-        player2.name = 'player 2'
-        self.assertNotEqual(player1.name, player2.name)
-
-    def test_is_stochastic_match(self):
+    def test_init(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
-        self.assertTrue(am.is_stochastic_match(p1, p2, 0.2))
-        self.assertFalse(am.is_stochastic_match(p1, p2, 0))
-        p1 = axelrod.Random()
-        self.assertTrue(am.is_stochastic_match(p1, p2, 0))
+        match = axelrod.Match((p1, p2), 5)
+        self.assertEqual(match._player1, p1)
 
-    def test_play_match(self):
-        pass
+    def test_stochastic(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        match = axelrod.Match((p1, p2), 5)
+        self.assertFalse(match._stochastic)
+
+        match = axelrod.Match((p1, p2), 5, noise=0.2)
+        self.assertTrue(match._stochastic)
+
+        p1 = axelrod.Random()
+        match = axelrod.Match((p1, p2), 5)
+        self.assertTrue(match._stochastic)
+
+    def test_play_required(self):
+        p1, p2 = axelrod.Player(), axelrod.Player()
+        match = axelrod.Match((p1, p2), 5)
+        self.assertTrue(match._play_required)
+
+        cache = {(axelrod.Player, axelrod.Player): 'test'}
+        match = axelrod.Match((p1, p2), 5, cache)
+        self.assertFalse(match._play_required)
+
+        p1 = axelrod.Random()
+        match = axelrod.Match((p1, p2), 5)
+        self.assertTrue(match._play_required)
 
     def test_cache_update_required(self):
         p1, p2 = axelrod.Player(), axelrod.Player()
-        self.assertFalse(am.cache_update_required(p1, p2, True, 0.2))
-        self.assertFalse(am.cache_update_required(p1, p2, False, 0))
-        self.assertTrue(am.cache_update_required(p1, p2, True, 0))
+        match = axelrod.Match((p1, p2), 5, noise=0.2)
+        self.assertFalse(match._cache_update_required)
+
+        match = axelrod.Match((p1, p2), 5, cache_mutable=False)
+        self.assertFalse(match._cache_update_required)
+
+        match = axelrod.Match((p1, p2), 5)
+        self.assertTrue(match._cache_update_required)
+
         p1 = axelrod.Random()
-        self.assertFalse(am.cache_update_required(p1, p2, True, 0))
+        match = axelrod.Match((p1, p2), 5)
+        self.assertFalse(match._cache_update_required)
+
+    def test_results(self):
+        pass
+
+    def test_play(self):
+        pass
