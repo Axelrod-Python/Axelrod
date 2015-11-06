@@ -105,7 +105,6 @@ class TestClassification(unittest.TestCase):
                        axelrod.Bully,
                        axelrod.Cooperator,
                        axelrod.Defector,
-                       axelrod.GoByMajority,
                        axelrod.SuspiciousTitForTat,
                        axelrod.TitForTat,
                        axelrod.WinStayLoseShift]
