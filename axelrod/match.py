@@ -104,7 +104,7 @@ class Match(object):
         while turn < self._turns:
             turn += 1
             self._player1.play(self._player2, self._noise)
-        result = zip(self._player1.history, self._player2.history)
+        result = list(zip(self._player1.history, self._player2.history))
         if self._cache_update_required:
             self._cache[self._classes] = result
         return result
