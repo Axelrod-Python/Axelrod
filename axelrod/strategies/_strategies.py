@@ -15,9 +15,11 @@ from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
-from .gobymajority import (
-    GoByMajority, GoByMajority10, GoByMajority20, GoByMajority40,
-    GoByMajority5)
+from .gobymajority import (GoByMajority,
+    GoByMajority10, GoByMajority20, GoByMajority40,
+    GoByMajority5,
+    HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
+    HardGoByMajority5)
 from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
 from .grumpy import Grumpy
 from .hunter import (
@@ -93,6 +95,11 @@ strategies = [
     GoByMajority20,
     GoByMajority40,
     GoByMajority5,
+    HardGoByMajority,
+    HardGoByMajority10,
+    HardGoByMajority20,
+    HardGoByMajority40,
+    HardGoByMajority5,
     Golden,
     Grofman,
     Grudger,
