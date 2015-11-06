@@ -2,9 +2,15 @@ from axelrod import Player, Actions
 
 C, D = Actions.C, Actions.D
 
+
 class GoByMajority(Player):
     """A player examines the history of the opponent: if the opponent has more
     defections than cooperations then the player defects.
+
+    In case of equal
+    number of defections and cooperations this player will Cooperate. Passing
+    the `soft=False` keyword argument when initialising will create a
+    HardGoByMajority which Defects in case of equality.
 
     An optional memory attribute will limit the number of turns remembered (by
     default this is 0)
@@ -15,10 +21,10 @@ class GoByMajority(Player):
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False,
-        'memory_depth': 0 # memory_depth may be altered by __init__
+        'memory_depth': float('inf')  # memory_depth may be altered by __init__
     }
 
-    def __init__(self, memory_depth=0, soft=True):
+    def __init__(self, memory_depth=float('inf'), soft=True):
         """
         Parameters
         ----------
@@ -33,17 +39,21 @@ class GoByMajority(Player):
         Player.__init__(self)
         self.soft = soft
         self.classifier['memory_depth'] = memory_depth
+        if self.classifier['memory_depth'] < float('inf'):
+            self.memory = self.classifier['memory_depth']
+        else:
+            self.memory = 0
         self.init_args = (memory_depth, soft)
 
     def strategy(self, opponent):
         """This is affected by the history of the opponent.
 
-        As long as the opponent cooperates at least as often as they defect then the player will cooperate.
-        If at any point the opponent has more defections than cooperations in memory the player defects.
+        As long as the opponent cooperates at least as often as they defect then
+        the player will cooperate.  If at any point the opponent has more
+        defections than cooperations in memory the player defects.
         """
 
-        memory = self.classifier['memory_depth']
-        history = opponent.history[-memory:]
+        history = opponent.history[-self.memory:]
         defections = sum([s == D for s in history])
         cooperations = sum([s == C for s in history])
         if defections > cooperations:
@@ -57,8 +67,7 @@ class GoByMajority(Player):
 
     def __repr__(self):
         """The string method for the strategy."""
-        memory = self.classifier['memory_depth']
-        name = 'Go By Majority' + (memory > 0) * (": %i" % memory)
+        name = 'Go By Majority' + (self.memory > 0) * (": %i" % self.memory)
         if self.soft:
             name = "Soft " + name
         else:
@@ -83,7 +92,8 @@ class GoByMajority20(GoByMajority):
 
     def __init__(self, memory_depth=20, soft=True):
         super(GoByMajority20, self).__init__(memory_depth=memory_depth,
-                                             soft=soft)
+                                                 soft=soft)
+
 
 class GoByMajority10(GoByMajority):
     """
@@ -92,7 +102,8 @@ class GoByMajority10(GoByMajority):
 
     def __init__(self, memory_depth=10, soft=True):
         super(GoByMajority10, self).__init__(memory_depth=memory_depth,
-                                             soft=soft)
+                                                 soft=soft)
+
 
 class GoByMajority5(GoByMajority):
     """
@@ -101,4 +112,53 @@ class GoByMajority5(GoByMajority):
 
     def __init__(self, memory_depth=5, soft=True):
         super(GoByMajority5, self).__init__(memory_depth=memory_depth,
-                                             soft=soft)
+                                                soft=soft)
+
+
+class HardGoByMajority(GoByMajority):
+    """A player examines the history of the opponent: if the opponent has more
+    defections than cooperations then the player defects. In case of equal
+    number of defections and cooperations this player will Defect.
+
+    An optional memory attribute will limit the number of turns remembered (by
+    default this is 0)
+    """
+    def __init__(self, memory_depth=float('inf'), soft=False):
+        super(HardGoByMajority, self).__init__(memory_depth=memory_depth,
+                                               soft=soft)
+
+
+class HardGoByMajority40(HardGoByMajority):
+    """
+    HardGoByMajority player with a memory of 40.
+    """
+    def __init__(self, memory_depth=40, soft=False):
+        super(HardGoByMajority40, self).__init__(memory_depth=memory_depth,
+                                                 soft=soft)
+
+
+class HardGoByMajority20(HardGoByMajority):
+    """
+    HardGoByMajority player with a memory of 20.
+    """
+    def __init__(self, memory_depth=20, soft=False):
+        super(HardGoByMajority20, self).__init__(memory_depth=memory_depth,
+                                                 soft=soft)
+
+
+class HardGoByMajority10(HardGoByMajority):
+    """
+    HardGoByMajority player with a memory of 10.
+    """
+    def __init__(self, memory_depth=10, soft=False):
+        super(HardGoByMajority10, self).__init__(memory_depth=memory_depth,
+                                                 soft=soft)
+
+
+class HardGoByMajority5(HardGoByMajority):
+    """
+    HardGoByMajority player with a memory of 5.
+    """
+    def __init__(self, memory_depth=5, soft=False):
+        super(HardGoByMajority5, self).__init__(memory_depth=memory_depth,
+                                                soft=soft)
