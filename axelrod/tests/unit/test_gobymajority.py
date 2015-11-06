@@ -14,7 +14,7 @@ class TestGoByMajority(TestPlayer):
 
     expected_classifier = {
         'stochastic': False,
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
