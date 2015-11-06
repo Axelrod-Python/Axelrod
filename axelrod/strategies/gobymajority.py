@@ -21,10 +21,10 @@ class GoByMajority(Player):
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False,
-        'memory_depth': 0  # memory_depth may be altered by __init__
+        'memory_depth': float('inf')  # memory_depth may be altered by __init__
     }
 
-    def __init__(self, memory_depth=0, soft=True):
+    def __init__(self, memory_depth=float('inf'), soft=True):
         """
         Parameters
         ----------
@@ -39,6 +39,10 @@ class GoByMajority(Player):
         Player.__init__(self)
         self.soft = soft
         self.classifier['memory_depth'] = memory_depth
+        if self.classifier['memory_depth'] < float('inf'):
+            self.memory = self.classifier['memory_depth']
+        else:
+            self.memory = 0
         self.init_args = (memory_depth, soft)
 
     def strategy(self, opponent):
@@ -49,8 +53,7 @@ class GoByMajority(Player):
         defections than cooperations in memory the player defects.
         """
 
-        memory = self.classifier['memory_depth']
-        history = opponent.history[-memory:]
+        history = opponent.history[-self.memory:]
         defections = sum([s == D for s in history])
         cooperations = sum([s == C for s in history])
         if defections > cooperations:
@@ -64,8 +67,7 @@ class GoByMajority(Player):
 
     def __repr__(self):
         """The string method for the strategy."""
-        memory = self.classifier['memory_depth']
-        name = 'Go By Majority' + (memory > 0) * (": %i" % memory)
+        name = 'Go By Majority' + (self.memory > 0) * (": %i" % self.memory)
         if self.soft:
             name = "Soft " + name
         else:
@@ -80,7 +82,7 @@ class GoByMajority40(GoByMajority):
 
     def __init__(self, memory_depth=40, soft=True):
         super(GoByMajority40, self).__init__(memory_depth=memory_depth,
-                                                 soft=soft)
+                                             soft=soft)
 
 
 class GoByMajority20(GoByMajority):
@@ -121,7 +123,7 @@ class HardGoByMajority(GoByMajority):
     An optional memory attribute will limit the number of turns remembered (by
     default this is 0)
     """
-    def __init__(self, memory_depth=0, soft=False):
+    def __init__(self, memory_depth=float('inf'), soft=False):
         super(HardGoByMajority, self).__init__(memory_depth=memory_depth,
                                                soft=soft)
 
