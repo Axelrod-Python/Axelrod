@@ -31,20 +31,15 @@ def obey_axelrod(s):
            classifier['manipulates_source'] or\
            classifier['manipulates_state'])
 
-def update_histories(player1, player2, move1, move2):
+def update_history(player, move):
     """Updates histories and cooperation / defections counts following play."""
     # Update histories
-    player1.history.append(move1)
-    player2.history.append(move2)
+    player.history.append(move)
     # Update player counts of cooperation and defection
-    if move1 == C:
-        player1.cooperations += 1
-    elif move1 == D:
-        player1.defections += 1
-    if move2 == C:
-        player2.cooperations += 1
-    elif move2 == D:
-        player2.defections += 1
+    if move == C:
+        player.cooperations += 1
+    elif move == D:
+        player.defections += 1
 
 
 class Player(object):
@@ -114,7 +109,8 @@ class Player(object):
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         if noise:
             s1, s2 = self._add_noise(noise, s1, s2)
-        update_histories(self, opponent, s1, s2)
+        update_history(self, s1)
+        update_history(opponent, s2)
 
     def clone(self):
         """Clones the player without history, reapplying configuration
