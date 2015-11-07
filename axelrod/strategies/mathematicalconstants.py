@@ -1,5 +1,6 @@
-from axelrod import Player, Actions
-from math import sqrt, pi, e
+from math import e, pi, sqrt
+
+from axelrod import Actions, Player
 
 
 class CotoDeRatio(Player):
@@ -15,15 +16,12 @@ class CotoDeRatio(Player):
     }
 
     def strategy(self, opponent):
-
         # Initially cooperate
         if len(opponent.history) == 0:
             return Actions.C
-
         # Avoid initial division by zero
         if not opponent.defections:
             return Actions.D
-
         # Otherwise compare ratio to golden mean
         cooperations = opponent.cooperations + self.cooperations
         defections = float(opponent.defections + self.defections)

@@ -1,7 +1,7 @@
 import copy
 import inspect
 
-from axelrod import Player, RoundRobin, update_history, Actions
+from axelrod import Actions, Player, RoundRobin, update_history
 
 C, D = Actions.C, Actions.D
 

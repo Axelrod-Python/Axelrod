@@ -1,8 +1,9 @@
 from collections import defaultdict
 
-from axelrod import Player, Actions
+from axelrod import Actions, Player, init_args
 
 C, D = Actions.C, Actions.D
+
 
 class Retaliate(Player):
     """
@@ -17,6 +18,7 @@ class Retaliate(Player):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, retaliation_threshold=0.1):
         """
         Uses the basic init from the Player class, but also set the name to
@@ -28,7 +30,6 @@ class Retaliate(Player):
             'Retaliate (' +
             str(self.retaliation_threshold) + ')')
         self.play_counts = defaultdict(int)
-        self.init_args = (retaliation_threshold,)
 
     def strategy(self, opponent):
         """
@@ -85,6 +86,7 @@ class LimitedRetaliate(Player):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, retaliation_threshold=0.1, retaliation_limit=20):
         """
         Parameters

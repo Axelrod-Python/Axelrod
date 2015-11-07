@@ -1,8 +1,8 @@
-from axelrod import Player, Actions
-
+from axelrod import Actions, Player
 from axelrod.strategy_transformers import FinalTransformer
 
 C, D = Actions.C, Actions.D
+
 
 @FinalTransformer([D, D]) # End with two defections
 class BackStabber(Player):
