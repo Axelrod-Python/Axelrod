@@ -1,5 +1,4 @@
-
-from axelrod import Player, Actions
+from axelrod import Actions, Player, init_args
 
 
 class AntiCycler(Player):
@@ -49,6 +48,7 @@ class Cycler(Player):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, cycle="CCD"):
         """This strategy will repeat the parameter `cycle` endlessly,
         e.g. C C D C C D C C D ...
@@ -64,7 +64,6 @@ class Cycler(Player):
         self.cycle = cycle
         self.name += " " + cycle
         self.classifier['memory_depth'] = len(cycle) - 1
-        self.init_args = (cycle,)
 
     def strategy(self, opponent):
         curent_round = len(self.history)
@@ -73,15 +72,18 @@ class Cycler(Player):
 
 
 class CyclerCCD(Cycler):
+    @init_args
     def __init__(self, cycle="CCD"):
         Cycler.__init__(self, cycle=cycle)
 
 
 class CyclerCCCD(Cycler):
+    @init_args
     def __init__(self, cycle="CCCD"):
         Cycler.__init__(self, cycle=cycle)
 
 
 class CyclerCCCCCD(Cycler):
+    @init_args
     def __init__(self, cycle="CCCCCD"):
         Cycler.__init__(self, cycle=cycle)

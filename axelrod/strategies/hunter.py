@@ -1,9 +1,4 @@
-from __future__ import absolute_import
-
-import itertools
-
-from axelrod import Player, Actions
-
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -155,7 +150,6 @@ class MathConstantHunter(Player):
 
         n = len(self.history)
         if n >= 8 and opponent.cooperations and opponent.defections:
-
             start1, end1 = 0, n // 2
             start2, end2 = n // 4, 3 * n // 4
             start3, end3 = n // 2, n
@@ -167,7 +161,6 @@ class MathConstantHunter(Player):
             ratio3 = 0.5 * count3 / (end3 - start3)
             if abs(ratio1 - ratio2) < 0.2 and abs(ratio1 - ratio3) < 0.2:
                 return D
-
         return C
 
 
@@ -202,5 +195,4 @@ class RandomHunter(Player):
 
             if probabilities and all([abs(p - 0.5) < 0.25 for p in probabilities]):
                 return D
-
         return C

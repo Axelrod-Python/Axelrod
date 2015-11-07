@@ -1,4 +1,4 @@
-from axelrod import Player, Actions
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 

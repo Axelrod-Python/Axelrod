@@ -1,3 +1,4 @@
+from functools import wraps
 import inspect
 import random
 import copy
@@ -40,6 +41,21 @@ def update_history(player, move):
         player.cooperations += 1
     elif move == D:
         player.defections += 1
+
+def init_args(func):
+    """Decorator to simplify the handling of init_args. Use whenever overriding
+    Player.__init__ in subclasses of Player that require arguments as follows:
+
+    @init_args
+    def __init__(self, myarg1, ...)
+    """
+
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        r = func(self, *args, **kwargs)
+        self.init_args = args
+        return r
+    return wrapper
 
 
 class Player(object):

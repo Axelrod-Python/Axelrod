@@ -150,10 +150,17 @@ class TestPlayer(unittest.TestCase):
 
     def test_clone(self):
         # Make sure that self.init_args has the right number of arguments
-        p1 = self.player()
-        argspec = inspect.getargspec(p1.__init__)
-        self.assertEqual(len(argspec.args) - 1, len(p1.init_args))
+        PlayerClass = self.player
+        argspec = inspect.getargspec(PlayerClass.__init__)
+        # Does the class use the init_args decorator?
+        if argspec.varargs == "args":
+            self.assertEqual(len(argspec.args), 1)
+        else:
+            player = PlayerClass()
+            self.assertEqual(len(argspec.args) - 1, len(player.init_args))
+
         # Test that the player is cloned correctly
+        p1 = self.player()
         p2 = p1.clone()
         self.assertEqual(len(p2.history), 0)
         self.assertEqual(p2.cooperations, 0)

@@ -1,4 +1,4 @@
-from axelrod import Player, Actions, random_choice
+from axelrod import Actions, Player, init_args, random_choice
 
 
 class Random(Player):
@@ -13,6 +13,7 @@ class Random(Player):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, p=0.5):
         """
         Parameters
@@ -27,7 +28,6 @@ class Random(Player):
         """
         Player.__init__(self)
         self.p = p
-        self.init_args = (p,)
 
     def strategy(self, opponent):
         return random_choice(self.p)

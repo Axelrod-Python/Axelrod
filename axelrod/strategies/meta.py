@@ -1,4 +1,4 @@
-from axelrod import Player, obey_axelrod, Actions
+from axelrod import Actions, Player, obey_axelrod
 from ._strategies import strategies
 from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter, EventualCycleHunter
 from .cooperator import Cooperator
