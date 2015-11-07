@@ -26,6 +26,7 @@ class Match(object):
             self._cache = deterministic_cache
         self._cache_mutable = cache_mutable
         self._noise = noise
+        self._result = self._generate_result()
 
     @property
     def _stochastic(self):
@@ -37,13 +38,6 @@ class Match(object):
             self._noise or
             self._player1.classifier['stochastic'] or
             self._player2.classifier['stochastic'])
-
-    @property
-    def _play_required(self):
-        """
-        A boolean to show whether the play method has to be called
-        """
-        return(self._stochastic or self._classes not in self._cache)
 
     @property
     def _cache_update_required(self):
@@ -59,12 +53,18 @@ class Match(object):
 
     @property
     def result(self):
+        return self._result
+
+    def _generate_result(self):
         """
         The resulting list of actions from a match between two players.
 
         This function determines whether the actions list can be obtained from
         the deterministic cache and returns it from there if so. If not, it
         calls the play method and returns the list from there.
+
+        This is implemented as an ordinary method rather than a property setter
+        because we aren't passing in a value.
 
         Returns
         -------
@@ -76,12 +76,12 @@ class Match(object):
 
         i.e. One entry per turn containing a pair of actions.
         """
-        if self._play_required:
-            return self.play()
+        if (self._stochastic or self._classes not in self._cache):
+            return self._play()
         else:
             return self._cache[self._classes]
 
-    def play(self):
+    def _play(self):
         """
         Plays the match and returns the resulting list of actions
 

@@ -8,12 +8,13 @@ C, D = Actions.C, Actions.D
 class TestMatch(unittest.TestCase):
 
     def test_init(self):
-        p1, p2 = axelrod.Player(), axelrod.Player()
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match = axelrod.Match((p1, p2), 5)
         self.assertEqual(match._player1, p1)
+        self.assertEqual(match._classes, (axelrod.Cooperator, axelrod.Cooperator))
 
     def test_stochastic(self):
-        p1, p2 = axelrod.Player(), axelrod.Player()
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match = axelrod.Match((p1, p2), 5)
         self.assertFalse(match._stochastic)
 
@@ -24,21 +25,8 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((p1, p2), 5)
         self.assertTrue(match._stochastic)
 
-    def test_play_required(self):
-        p1, p2 = axelrod.Player(), axelrod.Player()
-        match = axelrod.Match((p1, p2), 5)
-        self.assertTrue(match._play_required)
-
-        cache = {(axelrod.Player, axelrod.Player): 'test'}
-        match = axelrod.Match((p1, p2), 5, cache)
-        self.assertFalse(match._play_required)
-
-        p1 = axelrod.Random()
-        match = axelrod.Match((p1, p2), 5)
-        self.assertTrue(match._play_required)
-
     def test_cache_update_required(self):
-        p1, p2 = axelrod.Player(), axelrod.Player()
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match = axelrod.Match((p1, p2), 5, noise=0.2)
         self.assertFalse(match._cache_update_required)
 
@@ -69,6 +57,6 @@ class TestMatch(unittest.TestCase):
         players = (axelrod.Cooperator(), axelrod.Defector())
         match = axelrod.Match(players, 3, cache)
         expected_result = [(C, D), (C, D), (C, D)]
-        self.assertEqual(match.play(), expected_result)
+        self.assertEqual(match._play(), expected_result)
         self.assertEqual(
             cache[(axelrod.Cooperator, axelrod.Defector)], expected_result)
