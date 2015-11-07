@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 import axelrod
 from axelrod import Actions
@@ -60,3 +62,9 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match._play(), expected_result)
         self.assertEqual(
             cache[(axelrod.Cooperator, axelrod.Defector)], expected_result)
+
+    def test_sparklines(self):
+        players = (axelrod.Cooperator(), axelrod.Alternator())
+        match = axelrod.Match(players, 4)
+        expected_sparklines = u'████\n█ █ '
+        self.assertEqual(match.sparklines, expected_sparklines)
