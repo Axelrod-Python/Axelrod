@@ -20,7 +20,7 @@ class Match(object):
         self._player2 = players[1]
         self._classes = (players[0].__class__, players[1].__class__)
         self._turns = turns
-        if deterministic_cache == None:
+        if deterministic_cache is None:
             self._cache = {}
         else:
             self._cache = deterministic_cache
