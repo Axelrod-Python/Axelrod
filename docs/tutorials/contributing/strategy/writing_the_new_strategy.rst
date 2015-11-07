@@ -125,6 +125,10 @@ This helps distinguish players in tournaments that have multiple instances of th
 same strategy. If you modify the `__repr__` method of player, be sure to add an
 appropriate test.
 
+Similarly, if your strategy's `__init__` method takes any parameters other than
+`self`, you can decorate it with `@init_args` to ensure that when it is cloned that
+the correct parameter values will be applied. (This will trip a test if ommitted.)
+
 There are various examples of helpful functions and properties that make
 writing strategies easier. Do not hesitate to get in touch with the
 Axelrod-Python team for guidance.
