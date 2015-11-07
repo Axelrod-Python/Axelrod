@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+
+
+def sparkline(actions):
+    return u''.join([u'█' if play == 'C' else u' ' for play in actions])
+
+
 class Match(object):
 
     def __init__(self, players, turns, deterministic_cache=None,
@@ -108,3 +115,10 @@ class Match(object):
         if self._cache_update_required:
             self._cache[self._classes] = result
         return result
+
+    @property
+    def sparklines(self):
+        return (
+            sparkline(self._player1.history) +
+            u'\n' +
+            sparkline(self._player2.history))
