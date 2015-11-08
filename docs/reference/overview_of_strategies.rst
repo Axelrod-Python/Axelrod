@@ -546,7 +546,7 @@ The following classical strategies are included in the library:
 +--------------+----------------------+--------------------------+
 | `EXTORT-2`_  | Extort-2             | :code:`ZDExtort2`        |
 +--------------+----------------------+--------------------------+
-| `HARD_MAJO`_ | Hard majority        | :code:`GoByMajority`     |
+| `HARD_MAJO`_ | Hard majority        | :code:`HardGoByMajority` |
 +--------------+----------------------+--------------------------+
 | `HARD_JOSS`_ | Hard Joss            | :code:`Joss`             |
 +--------------+----------------------+--------------------------+
@@ -808,17 +808,18 @@ Implementation
 HARD_MAJO is implemented in the library::
 
     >>> import axelrod
-    >>> p1 = axelrod.GoByMajority()  # Create a HARD_TFT player
+    >>> p1 = axelrod.HardGoByMajority()  # Create a Hard Go By Majority Player
     >>> p2 = axelrod.Random()  # Create a player that plays randomly
     >>> for round in range(5):
     ...     p1.play(p2)
     >>> p2.history  # doctest: +SKIP
     ['D', 'C', 'C', 'D', 'D']
     >>> p1.history  # doctest: +SKIP
-    ['C', 'D', 'C', 'C', 'C']
+    ['C', 'D', 'D', 'C', 'D']
 
 we see that following the third round (at which point the opponent has
-cooperated a lot), :code:`GoByMajority` cooperates.
+cooperated a lot), :code:`GoByMajority` cooperates but in every instance where
+the number of cooperations and defections is equal it defects.
 
 HARD_TFT
 ^^^^^^^^
