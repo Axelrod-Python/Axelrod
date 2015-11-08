@@ -126,23 +126,24 @@ class TestEvolvedLookerUp(TestPlayer):
 # Some heads up tests for EvolvedLookerUp
 class EvolvedLookerUpvsDefector(TestHeadsUp):
     def test_vs(self):
-        outcomes = zip([C, C, D], [D, D, D])
-        self.versus_test(axelrod.EvolvedLookerUp, axelrod.Defector, outcomes)
+        self.versus_test(axelrod.EvolvedLookerUp(), axelrod.Defector(),
+                         [C, C, D], [D, D, D])
 
 
 class EvolvedLookerUpvsCooperator(TestHeadsUp):
     def test_vs(self):
-        outcomes = zip([C] * 10, [C] * 10)
-        self.versus_test(axelrod.EvolvedLookerUp, axelrod.Cooperator, outcomes)
+        self.versus_test(axelrod.EvolvedLookerUp(), axelrod.Cooperator(),
+                         [C] * 10, [C] * 10)
 
 
 class EvolvedLookerUpvsTFT(TestHeadsUp):
     def test_vs(self):
-        outcomes = zip([C] * 10, [C] * 10)
-        self.versus_test(axelrod.EvolvedLookerUp, axelrod.TitForTat, outcomes)
+        outcomes = zip()
+        self.versus_test(axelrod.EvolvedLookerUp(), axelrod.TitForTat(),
+                         [C] * 10, [C] * 10)
 
 
 class EvolvedLookerUpvsAlternator(TestHeadsUp):
     def test_vs(self):
-        outcomes = zip([C, C, D, D, D, D], [C, D, C, D, C, D])
-        self.versus_test(axelrod.EvolvedLookerUp, axelrod.Alternator, outcomes)
+        self.versus_test(axelrod.EvolvedLookerUp(), axelrod.Alternator(),
+                         [C, C, D, D, D, D], [C, D, C, D, C, D])

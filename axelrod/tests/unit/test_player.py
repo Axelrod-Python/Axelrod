@@ -225,26 +225,16 @@ class TestPlayer(unittest.TestCase):
 class TestHeadsUp(unittest.TestCase):
     """Test class for heads up play between two given players."""
 
-    def versus_test(self, player_1_class, player_2_class, outcomes,
-                    player_1_history=None, player_2_history=None,
-                    random_seed=None):
+    def versus_test(self, player_1, player_2, expected_actions1,
+                    expected_actions2, random_seed=None):
         """Tests a sequence of outcomes for two given players."""
         if random_seed:
             random.seed(random_seed)
-        player_1 = player_1_class()
-        player_2 = player_2_class()
-        # Set histories
-        if player_1_history is None:
-            player_1_history = []
-        player_1.history = player_1_history
-        if player_2_history is None:
-            player_2_history = []
-        player_2.history = player_2_history
         # Test sequence of play
-        for outcome_1, outcome_2 in outcomes:
+        for outcome_1, outcome_2 in zip(expected_actions1, expected_actions2):
             player_1.play(player_2)
-            self.assertEqual(player_1_history[-1], outcome_1)
-            self.assertEqual(player_2_history[-1], outcome_2)
+            self.assertEqual(player_1.history[-1], outcome_1)
+            self.assertEqual(player_2.history[-1], outcome_2)
 
 
 def test_four_vector(test_class, expected_dictionary):
