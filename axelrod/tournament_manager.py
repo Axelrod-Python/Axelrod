@@ -13,7 +13,7 @@ class TournamentManager(object):
 
     def __init__(self, output_directory, with_ecological,
                  pass_cache=True, load_cache=True, save_cache=False,
-                 cache_file='./cache.txt'):
+                 cache_file='./cache.txt', image_format="svg"):
         self._tournaments = []
         self._ecological_variants = []
         self._logger = logging.getLogger(__name__)
@@ -25,6 +25,7 @@ class TournamentManager(object):
         self._deterministic_cache = {}
         self._cache_valid_for_turns = None
         self._load_cache = False
+        self._image_format=image_format
 
         if load_cache and not save_cache:
             self.load_cache = self._load_cache_from_file(cache_file)
@@ -110,7 +111,8 @@ class TournamentManager(object):
 
     def _generate_output_files(self, tournament, ecosystem=None):
         self._save_csv(tournament)
-        self._save_plots(tournament, ecosystem)
+        self._save_plots(tournament, ecosystem,
+                         image_format=self._image_format)
 
     def _save_csv(self, tournament):
         csv = tournament.result_set.csv()

@@ -45,7 +45,8 @@ def run_tournaments(cache_file='./cache.txt',
                     exclude_basic=False,
                     exclude_cheating=False,
                     exclude_ordinary=False,
-                    noise=0):
+                    noise=0,
+                    image_format="svg"):
 
     exclusions_dict = {
         'basic_strategies': exclude_basic,
@@ -64,6 +65,7 @@ def run_tournaments(cache_file='./cache.txt',
         processes=processes,
         turns=turns,
         repetitions=repetitions,
-        noise=noise)
+        noise=noise,
+        image_format=image_format)
 
     manager.run_tournaments()
