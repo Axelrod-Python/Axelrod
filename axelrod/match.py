@@ -23,6 +23,7 @@ class Match(object):
         noise : float
             The probability that a player's intended action should be flipped
         """
+        self.result = []
         self._player1 = players[0]
         self._player2 = players[1]
         self._classes = (players[0].__class__, players[1].__class__)
@@ -33,7 +34,6 @@ class Match(object):
             self._cache = deterministic_cache
         self._cache_mutable = cache_mutable
         self._noise = noise
-        self._result = self._generate_result()
 
     @property
     def _stochastic(self):
@@ -58,20 +58,13 @@ class Match(object):
                 or self._player2.classifier['stochastic'])
         )
 
-    @property
-    def result(self):
-        return self._result
-
-    def _generate_result(self):
+    def play(self):
         """
         The resulting list of actions from a match between two players.
 
-        This function determines whether the actions list can be obtained from
+        This method determines whether the actions list can be obtained from
         the deterministic cache and returns it from there if so. If not, it
-        calls the play method and returns the list from there.
-
-        This is implemented as an ordinary method rather than a property setter
-        because we aren't passing in a value.
+        calls the play method for player1 and returns the list from there.
 
         Returns
         -------
@@ -84,36 +77,20 @@ class Match(object):
         i.e. One entry per turn containing a pair of actions.
         """
         if (self._stochastic or self._classes not in self._cache):
-            return self._play()
+            turn = 0
+            self._player1.reset()
+            self._player2.reset()
+            while turn < self._turns:
+                turn += 1
+                self._player1.play(self._player2, self._noise)
+            result = list(zip(self._player1.history, self._player2.history))
+
+            if self._cache_update_required:
+                self._cache[self._classes] = result
         else:
-            return self._cache[self._classes]
+            result = self._cache[self._classes]
 
-    def _play(self):
-        """
-        Plays the match and returns the resulting list of actions
-
-        This function is called by the results method if the deterministic
-        cache cannot be used.
-
-        Returns
-        -------
-        A list of the form:
-
-        e.g. for a 2 turn match between Cooperator and Defector:
-
-            [(C, C), (C, D)]
-
-        i.e. One entry per turn containing a pair of actions.
-        """
-        turn = 0
-        self._player1.reset()
-        self._player2.reset()
-        while turn < self._turns:
-            turn += 1
-            self._player1.play(self._player2, self._noise)
-        result = list(zip(self._player1.history, self._player2.history))
-        if self._cache_update_required:
-            self._cache[self._classes] = result
+        self.result = result
         return result
 
     @property
