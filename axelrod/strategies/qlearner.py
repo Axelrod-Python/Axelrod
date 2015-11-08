@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import random
 
-from axelrod import Player, random_choice, Actions
+from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
 

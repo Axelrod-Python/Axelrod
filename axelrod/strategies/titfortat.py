@@ -1,4 +1,4 @@
-from axelrod import Player, Actions, flip_action
+from axelrod import Actions, Player, init_args, flip_action
 
 C, D = Actions.C, Actions.D
 
@@ -212,10 +212,11 @@ class OmegaTFT(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    @init_args
+    def __init__(self, deadlock_threshold=3, randomness_threshold=8):
         Player.__init__(self)
-        self.deadlock_threshold = 3
-        self.randomness_threshold = 8
+        self.deadlock_threshold = deadlock_threshold
+        self.randomness_threshold = randomness_threshold
         self.randomness_counter = 0
         self.deadlock_counter = 0
 

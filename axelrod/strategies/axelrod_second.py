@@ -1,14 +1,12 @@
 """
-Additional strategies from Axelrod's two tournaments.
+Additional strategies from Axelrod's second tournament.
 """
 
 import random
 
-from axelrod import Player, Actions, random_choice
+from axelrod import Actions, Player, flip_action, random_choice
 
 C, D = Actions.C, Actions.D
-
-flip_dict = {C: D, D: C}
 
 
 class Champion(Player):
@@ -109,7 +107,7 @@ class Tester(Player):
             if len(self.history) in [1, 2]:
                 return C
             # Alternate C and D
-            return flip_dict[self.history[-1]]
+            return flip_action(self.history[-1])
 
     def reset(self):
         Player.reset(self)

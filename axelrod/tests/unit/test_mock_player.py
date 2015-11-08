@@ -1,7 +1,7 @@
 import unittest
 import axelrod
 
-from axelrod import MockPlayer, simulate_play, update_histories
+from axelrod import MockPlayer, simulate_play, update_history
 from axelrod.tests.unit.test_player import TestOpponent
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -38,7 +38,8 @@ class TestUpdateHistories(unittest.TestCase):
     def test_various(self):
         p1 = TestOpponent()
         p2 = TestOpponent()
-        update_histories(p1, p2, C, C)
+        update_history(p1, C)
+        update_history(p2, C)
         self.assertEqual(p1.history, [C])
         self.assertEqual(p2.history, [C])
         self.assertEqual(p1.cooperations, 1)
@@ -46,7 +47,8 @@ class TestUpdateHistories(unittest.TestCase):
         self.assertEqual(p1.defections, 0)
         self.assertEqual(p2.defections, 0)
 
-        update_histories(p1, p2, D, D)
+        update_history(p1, D)
+        update_history(p2, D)
         self.assertEqual(p1.history, [C, D])
         self.assertEqual(p2.history, [C, D])
         self.assertEqual(p1.cooperations, 1)
@@ -91,6 +93,3 @@ class TestSimulatePlay(unittest.TestCase):
 
         self.assertEqual(p1.history, [C] * 2)
         self.assertEqual(p2.history, [D] * 2)
-
-
-

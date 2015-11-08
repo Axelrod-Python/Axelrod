@@ -1,7 +1,8 @@
-from axelrod import Player, Actions
+from axelrod import Actions, Player, init_args
 from itertools import product
 
 C, D = Actions.C, Actions.D
+
 
 class LookerUp(Player):
     """
@@ -71,6 +72,7 @@ class LookerUp(Player):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, lookup_table=None):
         """
         If no lookup table is provided to the constructor, then use the TFT one.
@@ -97,7 +99,6 @@ class LookerUp(Player):
         # then the memory classification is adjusted
         if self.opponent_start_plays == 0:
             self.classifier['memory_depth'] = self.plays
-        self.init_args = (lookup_table,)
 
         # Ensure that table is well-formed
         for k, v in lookup_table.items():
@@ -132,7 +133,7 @@ class EvolvedLookerUp(LookerUp):
 
     name = "EvolvedLookerUp"
 
-    def __init__(self, lookup_table=None):
+    def __init__(self):
         plays = 2
         opponent_start_plays = 2
 
