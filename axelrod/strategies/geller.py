@@ -21,7 +21,7 @@ spirit of the 'competition' :-)
 
 import inspect
 
-from axelrod import Player, Actions, random_choice
+from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
 

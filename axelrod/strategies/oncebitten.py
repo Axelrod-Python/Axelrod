@@ -1,5 +1,5 @@
 import random
-from axelrod import Player, Actions
+from axelrod import Actions, Player, init_args
 
 C, D = Actions.C, Actions.D
 
@@ -64,10 +64,6 @@ class FoolMeOnce(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
-        Player.__init__(self)
-        self.classifier['stochastic'] = False
-
     def strategy(self, opponent):
         if not opponent.history:
             return C
@@ -91,6 +87,7 @@ class ForgetfulFoolMeOnce(Player):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, forget_probability = 0.05):
         """
         Parameters
@@ -102,7 +99,6 @@ class ForgetfulFoolMeOnce(Player):
         self.D_count = 0
         self._initial = C
         self.forget_probability = forget_probability
-        self.init_args = (forget_probability,)
 
     def strategy(self, opponent):
         r = random.random()

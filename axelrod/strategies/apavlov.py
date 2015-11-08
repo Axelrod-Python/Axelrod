@@ -1,4 +1,4 @@
-from axelrod import Player, Actions, flip_action
+from axelrod import Actions, Player, flip_action
 
 C, D = Actions.C, Actions.D
 

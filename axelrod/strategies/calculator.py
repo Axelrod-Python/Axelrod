@@ -1,6 +1,6 @@
 import itertools
 
-from axelrod import Player, Actions
+from axelrod import Actions, Player
 from .axelrod_first import Joss
 from .hunter import detect_cycle
 
