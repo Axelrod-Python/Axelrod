@@ -15,3 +15,4 @@ v0.0.14, 2015-09-28 -- Change to use distutils, mirror strategy and readthedocs 
 v0.0.15, 2015-10-13 -- Distribution of wins plots, and is_cheater becomes obey_axelrod
 v0.0.16, 2015-10-25 -- Tidying strategies, action classes, flip action method and new docs
 v0.0.17, 2015-10-30 -- Strategy transforms and bug fixes
+v0.0.18, 2015-11-04 -- New strategies
