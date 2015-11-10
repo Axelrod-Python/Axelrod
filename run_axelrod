@@ -100,6 +100,12 @@ if __name__ == "__main__":
         default=0,
         help='Noise level')
 
+    parser.add_argument(
+        '-i', '--image_format',
+        type=str,
+        default="svg",
+        help='Image format for matplotlib, e.g. svg, jpeg, png')
+
     args = parser.parse_args()
 
     if all([args.exclude_basic,
