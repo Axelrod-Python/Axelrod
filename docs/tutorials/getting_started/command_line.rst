@@ -26,6 +26,7 @@ Particular parameters can also be changed:
 
 - The output directory for the plot and csv files.
 - The number of turns and repetitions for the tournament.
+- The format of created images
 
 Here is a command that will run the whole tournament, excluding the strategies
 that do not obey Axelrod's original rules and using all available CPUS (this can

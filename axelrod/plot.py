@@ -5,11 +5,21 @@ from warnings import warn
 
 matplotlib_installed = True
 try:
+    import matplotlib
     import matplotlib.pyplot as plt
     import matplotlib.transforms as transforms
     from mpl_toolkits.axes_grid1 import make_axes_locatable
 except ImportError:
     matplotlib_installed = False
+
+
+def default_cmap():
+    """Sets a default matplotlib colormap based on the version."""
+    s = matplotlib.__version__.split('.')
+    if int(s[0]) >= 1 and int(s[1]) >= 5:
+        return "viridis"
+    else:
+        return 'YlGnBu'
 
 
 class Plot(object):
@@ -200,7 +210,8 @@ class Plot(object):
         figure, ax = plt.subplots()
         figure.set_figwidth(width)
         figure.set_figheight(height)
-        mat = ax.matshow(data, cmap='YlGnBu')
+        cmap = default_cmap()
+        mat = ax.matshow(data, cmap=cmap)
         plt.xticks(range(self.result_set.nplayers))
         plt.yticks(range(self.result_set.nplayers))
         ax.set_xticklabels(names, rotation=90)
