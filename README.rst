@@ -126,6 +126,9 @@ paper please list it here:
 - `Axelrod-Python related blog articles
   <http://www.thomascampbell.me.uk/category/axelrod.html>`_
   by `Uglyfruitcake <https://github.com/uglyfruitcake>`_.
+- `Evolving strategies for an Iterated Prisoner's Dilemma tournament
+  <http://mojones.net/evolving-strategies-for-an-iterated-prisoners-dilemma-tournament.html>`_
+  by `mojones <https://github.com/mojones>`_.
 
 Contributors
 ============
