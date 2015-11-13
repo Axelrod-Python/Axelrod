@@ -148,7 +148,7 @@ class EvolvedLookerUp(LookerUp):
                                          other_histories))
 
         # Pattern of values determed previously with an evolutionary algorithm.
-        pattern='CDCCDCCCDCDDDDDCCDCCCDDDCDDDDDDCDDDDCDDDDCCDDCDDCDDDCCCDCDCDDDDD'
+        pattern='CDCCDCCCDCDDDDDCCDCCDDDDDCDCDDDCDDDDCCCDDCCDDDDDCDCDDDCDCDDDDDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
