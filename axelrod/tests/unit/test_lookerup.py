@@ -111,8 +111,8 @@ class TestEvolvedLookerUp(TestPlayer):
 
     def test_init(self):
         # Check for a few known keys
-        known_pairs = {('DD', 'CC', 'CD'): 'D', ('DC', 'CD', 'CD'): 'D',
-                        ('DD', 'CD', 'CD'): 'C', ('DC', 'DC', 'DC'): 'C',
+        known_pairs = {('DD', 'CC', 'CD'): 'D', ('DC', 'CD', 'CD'): 'C',
+                        ('DD', 'CD', 'CD'): 'D', ('DC', 'DC', 'DC'): 'C',
                         ('DD', 'DD', 'CC'): 'D', ('CD', 'CC', 'DC'): 'C'}
         player = self.player()
         for k, v in known_pairs.items():
