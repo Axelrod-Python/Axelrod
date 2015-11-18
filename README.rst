@@ -51,8 +51,8 @@ You might need to install the libraries in `requirements.txt`::
 
     pip install -r requirements.txt
 
-Note that on Ubuntu [some
-users](https://github.com/Axelrod-Python/Axelrod/issues/309) have had problems
+Note that on Ubuntu `some
+users <https://github.com/Axelrod-Python/Axelrod/issues/309>`_ have had problems
 installing matplotlib. This seems to help with that::
 
     sudo apt-get install libfreetype6-dev
@@ -133,14 +133,14 @@ paper please list it here:
 Contributors
 ============
 
-The library has had many awesome contributions from many [great
-contributors](https://github.com/Axelrod-Python/Axelrod/graphs/contributors).
+The library has had many awesome contributions from many `great
+contributors <https://github.com/Axelrod-Python/Axelrod/graphs/contributors>`_.
 The Core developers of the project are:
 
-- [drvinceknight](https://github.com/drvinceknight)
-- [langner](https://github.com/langner)
-- [marcharper](https://github.com/marcharper)
-- [meatballs](https://github.com/meatballs)
+- `drvinceknight`_
+- `langner <https://github.com/langner>`_
+- `marcharper <https://github.com/marcharper>`_
+- `meatballs <https://github.com/meatballs>`_
 
 .. |Join the chat at https://gitter.im/Axelrod-Python/Axelrod| image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/Axelrod-Python/Axelrod?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
