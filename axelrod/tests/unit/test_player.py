@@ -123,7 +123,7 @@ class TestPlayer(unittest.TestCase):
             player = self.player()
             self.assertEqual(player.history, [])
             self.assertEqual(player.tournament_attributes,
-                {'length': -1, 'game': DefaultGame})
+                    {'length': -1, 'game': DefaultGame, 'noise': 0})
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
             self.classifier_test()
@@ -135,9 +135,24 @@ class TestPlayer(unittest.TestCase):
 
     def test_tournament_attributes(self):
         player = self.player()
+        # Default
+        player.set_tournament_attributes()
+        t_attrs = player.tournament_attributes
+        self.assertEqual(t_attrs['length'], -1)
+        self.assertEqual(t_attrs['noise'], 0)
+        self.assertEqual(t_attrs['game'].RPST(), (3, 1, 0, 5))
+
+        # Common
         player.set_tournament_attributes(length=200)
         t_attrs = player.tournament_attributes
         self.assertEqual(t_attrs['length'], 200)
+        self.assertEqual(t_attrs['noise'], 0)
+        self.assertEqual(t_attrs['game'].RPST(), (3, 1, 0, 5))
+
+        # Noisy
+        player.set_tournament_attributes(length=200, noise=.5)
+        t_attrs = player.tournament_attributes
+        self.assertEqual(t_attrs['noise'], .5)
 
     def test_reset(self):
         """Make sure reseting works correctly."""
