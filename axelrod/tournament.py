@@ -16,14 +16,14 @@ class Tournament(object):
                  noise=0, with_morality=True):
         self.name = name
         self.turns = turns
-        self.players = players
-        self.nplayers = len(self.players)
+        self.noise = noise
         if game is not None:
             self.game = game
+        self.players = players
+        self.nplayers = len(self.players)
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = {}
-        self.noise = noise
         self._with_morality = with_morality
         self._parallel_repetitions = repetitions
         self._processes = processes
@@ -39,7 +39,8 @@ class Tournament(object):
         newplayers = []
         for player in players:
             player.set_tournament_attributes(length=self.turns,
-                                             game= self.game)
+                                             game=self.game,
+                                             noise=self.noise)
             newplayers.append(player)
         self._players = newplayers
 
