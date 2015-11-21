@@ -16,6 +16,7 @@ class TestDavis(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -51,6 +52,7 @@ class TestRevisedDowning(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -87,6 +89,7 @@ class TestFeld(TestPlayer):
     expected_classifier = {
         'memory_depth': 200,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -128,6 +131,7 @@ class TestGrofman(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -151,6 +155,7 @@ class TestJoss(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -172,6 +177,7 @@ class TestNydegger(TestPlayer):
     expected_classifier = {
         'memory_depth': 3,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -222,6 +228,7 @@ class TestShubik(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -260,6 +267,7 @@ class TestTullock(TestPlayer):
     expected_classifier = {
         'memory_depth': 11,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -295,6 +303,7 @@ class TestUnnamedStrategy(TestPlayer):
     expected_classifier = {
         'memory_depth': 0,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -103,6 +103,7 @@ class TestOpponent(Player):
     classifier = {
         'memory_depth': 0,
         'stochastic': False,
+        'makes_use_of': None,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -14,6 +14,7 @@ class TestAlternator(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

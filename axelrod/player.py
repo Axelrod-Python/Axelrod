@@ -69,6 +69,7 @@ class Player(object):
     default_classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),
+        'makes_use_of': None,
         'inspects_source': None,
         'manipulates_source': None,
         'manipulates_state': None
@@ -91,7 +92,7 @@ class Player(object):
     def receive_tournament_attributes(self):
         # Overwrite this function if your strategy needs
         # to make use of tournament_attributes such as
-        # the game matrix or the number of rounds
+        # the game matrix, the number of rounds or the noise
         pass
 
     def set_tournament_attributes(self, length=-1, game=None, noise=0):

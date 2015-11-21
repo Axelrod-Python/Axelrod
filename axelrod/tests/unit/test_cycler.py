@@ -14,6 +14,7 @@ class TestAntiCycler(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -34,6 +35,7 @@ def test_cycler_factory(cycle):
         expected_classifier = {
             'memory_depth': len(cycle) - 1,
             'stochastic': False,
+            'makes_use_of': set(),
             'inspects_source': False,
             'manipulates_source': False,
             'manipulates_state': False
