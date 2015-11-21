@@ -89,8 +89,10 @@ https://github.com/Axelrod-Python/tournament. Here is the latest graphical
 version of the results:
 
 .. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
+   :width: 100%
 
 .. image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
+   :width: 100%
 
 See the [tournament repository](https://github.com/Axelrod-Python/tournament)
 for many additional plots.
