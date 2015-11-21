@@ -11,6 +11,7 @@ class AntiCycler(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -43,6 +44,7 @@ class Cycler(Player):
     classifier = {
         'memory_depth': 1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

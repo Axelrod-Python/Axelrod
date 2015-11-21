@@ -14,6 +14,7 @@ class TestDefector(TestPlayer):
     expected_classifier = {
         'memory_depth': 0,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_state': False,
         'manipulates_source': False
@@ -35,6 +36,7 @@ class TestTrickyDefector(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

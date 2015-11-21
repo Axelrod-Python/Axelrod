@@ -16,6 +16,7 @@ class TestProber(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -44,6 +45,7 @@ class TestProber2(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -72,6 +74,7 @@ class TestProber3(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -101,6 +104,7 @@ class TestHardProber(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

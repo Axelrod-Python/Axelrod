@@ -19,6 +19,7 @@ class GoByMajority(Player):
     classifier = {
         'stochastic': False,
         'inspects_source': False,
+        'makes_use_of': set(),
         'manipulates_source': False,
         'manipulates_state': False,
         'memory_depth': float('inf')  # memory_depth may be altered by __init__

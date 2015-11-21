@@ -14,6 +14,7 @@ class TestMindController(TestPlayer):
     expected_classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': True,  # Finds out what opponent will do
         'manipulates_state': False
@@ -65,6 +66,7 @@ class TestMindWarper(TestMindController):
     expected_classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': True,  # Finds out what opponent will do
         'manipulates_state': False
@@ -90,6 +92,7 @@ class TestMindBender(TestMindController):
     expected_classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': True,  # Finds out what opponent will do
         'manipulates_state': False
