@@ -18,6 +18,7 @@ class TestTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -41,6 +42,7 @@ class TestTitFor2Tats(TestPlayer):
     expected_classifier = {
         'memory_depth': 2,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -63,6 +65,7 @@ class TestTwoTitsForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 2,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -87,6 +90,7 @@ class TestBully(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -108,6 +112,7 @@ class TestSneakyTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -130,6 +135,7 @@ class TestSuspiciousTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -151,6 +157,7 @@ class TestAntiTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -172,6 +179,7 @@ class TestHardTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -197,6 +205,7 @@ class TestHardTitFor2Tats(TestPlayer):
     expected_classifier = {
         'memory_depth': 3,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -230,6 +239,7 @@ class OmegaTFT(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

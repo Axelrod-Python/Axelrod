@@ -10,6 +10,7 @@ class CotoDeRatio(Player):
     classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

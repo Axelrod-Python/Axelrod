@@ -17,6 +17,7 @@ class TestWinStayLoseShift(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -38,6 +39,7 @@ class TestGTFT(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(["game"]),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -66,6 +68,7 @@ class TestStochasticCooperator(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -96,6 +99,7 @@ class TestStochasticWSLS(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -151,6 +155,7 @@ class TestZDExtort2(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(["game"]),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -178,6 +183,7 @@ class TestZDExtort2v2(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(["game"]),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -199,6 +205,7 @@ class TestZDExtort4(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(["game"]),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -220,6 +227,7 @@ class TestZDGen2(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(["game"]),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -241,6 +249,7 @@ class TestZDGTFT2(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(["game"]),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -268,6 +277,7 @@ class TestZDSet2(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(["game"]),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -289,6 +299,7 @@ class TestSoftJoss(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -310,6 +321,7 @@ class TestALLCorALLD(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -33,7 +33,9 @@ class MetaPlayer(Player):
         self.team = [t() for t in self.team]
 
         # This player inherits the classifiers of its team.
-        for key in ['stochastic', 'inspects_source', 'manipulates_source',
+        for key in ['stochastic',
+                    'inspects_source',
+                    'manipulates_source',
                     'manipulates_state']:
             self.classifier[key] = (any([t.classifier[key] for t in self.team]))
 
