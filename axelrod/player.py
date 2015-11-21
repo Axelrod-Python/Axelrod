@@ -94,12 +94,13 @@ class Player(object):
         # the game matrix or the number of rounds
         pass
 
-    def set_tournament_attributes(self, length=-1, game=None):
+    def set_tournament_attributes(self, length=-1, game=None, noise=0):
         if not game:
             game = DefaultGame
         self.tournament_attributes = {
             "length": length,
-            "game": game
+            "game": game,
+            "noise": noise
         }
         self.receive_tournament_attributes()
 
