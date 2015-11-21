@@ -38,6 +38,7 @@ class TestDefectorHunter(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -57,6 +58,7 @@ class TestCooperatorHunter(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -77,6 +79,7 @@ class TestAlternatorHunter(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
         'inspects_source': False,
+        'makes_use_of': set(),
         'manipulates_source': False,
         'manipulates_state': False
     }
@@ -98,6 +101,7 @@ class TestCycleHunter(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -129,6 +133,7 @@ class TestEventualCycleHunter(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -159,6 +164,7 @@ class TestMathConstantHunter(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -175,6 +181,7 @@ class TestRandomHunter(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic' : False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -16,6 +16,7 @@ class TestGrudger(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -42,6 +43,7 @@ class TestForgetfulGrudger(TestPlayer):
     expected_classifier = {
         'memory_depth': 10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -81,6 +83,7 @@ class TestOppositeGrudger(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -104,6 +107,7 @@ class TestAggravater(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

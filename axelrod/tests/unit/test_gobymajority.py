@@ -15,6 +15,7 @@ class TestGoByMajority(TestPlayer):
     expected_classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -79,6 +80,7 @@ def factory_TestGoByRecentMajority(L, soft=True):
         expected_classifier = {
             'stochastic': False,
             'memory_depth': L,
+            'makes_use_of': set(),
             'inspects_source': False,
             'manipulates_source': False,
             'manipulates_state': False

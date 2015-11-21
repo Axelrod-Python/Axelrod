@@ -14,6 +14,7 @@ class TestForgiver(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -37,6 +38,7 @@ class TestForgivingTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -20,6 +20,7 @@ class Davis(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -57,6 +58,7 @@ class RevisedDowning(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -132,6 +134,7 @@ class Feld(Player):
     classifier = {
         'memory_depth': 200, # Varies actually, eventually becomes depth 1
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -186,6 +189,7 @@ class Grofman(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -251,6 +255,7 @@ class Nydegger(Player):
     classifier = {
         'memory_depth': 3,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -304,6 +309,7 @@ class Shubik(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -362,6 +368,7 @@ class Tullock(Player):
     classifier = {
         'memory_depth': 11, # long memory, modified by init
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -390,7 +397,12 @@ class Tullock(Player):
 
 
 class UnnamedStrategy(Player):
-    """Apparently written by a grad student in political science whose name was withheld, this strategy cooperates with a given probability P. This probability (which has initial value .3) is updated every 10 rounds based on whether the opponent seems to be random, very cooperative or very uncooperative. Furthermore, if after round 130 the strategy is losing then P is also adjusted.
+    """Apparently written by a grad student in political science whose name was
+    withheld, this strategy cooperates with a given probability P. This
+    probability (which has initial value .3) is updated every 10 rounds based on
+    whether the opponent seems to be random, very cooperative or very
+    uncooperative. Furthermore, if after round 130 the strategy is losing then P
+    is also adjusted.
 
     Fourteenth Place with 282.2 points is a 77-line program by a graduate
     student of political science whose dissertation is in game theory. This rule has
@@ -410,6 +422,7 @@ class UnnamedStrategy(Player):
     classifier = {
         'memory_depth': 0,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
