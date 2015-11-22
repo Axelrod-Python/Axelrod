@@ -20,6 +20,7 @@ class TestMetaPlayer(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'manipulates_source': False,
         'inspects_source': False,
         'manipulates_state': False
@@ -28,10 +29,17 @@ class TestMetaPlayer(TestPlayer):
     def test_meta_classifiers(self):
         player = self.player()
         classifier = dict()
-        for key in ['stochastic', 'inspects_source', 'manipulates_source',
+        for key in ['stochastic',
+                    'inspects_source', 'manipulates_source',
                     'manipulates_state']:
             classifier[key] = (any([t.classifier[key] for t in player.team]))
         classifier['memory_depth'] = float('inf')
+
+        for t in player.team:
+            try:
+                classifier['makes_use_of'].update(t.classifier['makes_use_of'])
+            except AttributeError:
+                pass
 
         for key in classifier:
             self.assertEqual(player.classifier[key],
@@ -207,7 +215,8 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
     player = axelrod.MetaWinnerMemoryOne
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : True,
+        'stochastic': True,
+        'makes_use_of': set(['game']),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
