@@ -26,7 +26,7 @@ class TestMetaPlayer(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_meta_classifiers(self):
+    def classifier_test(self):
         player = self.player()
         classifier = dict()
         for key in ['stochastic',
@@ -38,7 +38,7 @@ class TestMetaPlayer(TestPlayer):
         for t in player.team:
             try:
                 classifier['makes_use_of'].update(t.classifier['makes_use_of'])
-            except AttributeError:
+            except KeyError:
                 pass
 
         for key in classifier:
