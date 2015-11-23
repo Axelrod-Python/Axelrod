@@ -43,11 +43,8 @@ class MetaPlayer(Player):
         for t in self.team:
             try:
                 self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
-            except AttributeError:
+            except KeyError:
                 pass
-
-        #for t in self.team:
-            #self.classifier['makes_use_of'].update(t.classificer['makes_use_of'])
 
     def strategy(self, opponent):
 
