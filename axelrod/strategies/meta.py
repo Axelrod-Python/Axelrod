@@ -41,10 +41,7 @@ class MetaPlayer(Player):
             self.classifier[key] = (any([t.classifier[key] for t in self.team]))
 
         for t in self.team:
-            try:
-                self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
-            except KeyError:
-                pass
+            self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
 
     def strategy(self, opponent):
 
