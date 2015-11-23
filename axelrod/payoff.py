@@ -378,6 +378,8 @@ def wins(payoff):
                 winner = winning_player(players, payoffs)
                 if winner is not None:
                     wins[winner][repetition] += 1
+    # This actually double counts the wins
+    wins = [[win / 2 for win in player] for player in wins]
     return wins
 
 
