@@ -4,7 +4,7 @@ C, D = Actions.C, Actions.D
 
 
 class Grumpy(Player):
-    """A player that defects after a ceratin level of grumpiness.
+    """A player that defects after a certain level of grumpiness.
     Grumpiness increases when the opponent defects and decreases
     when the opponent co-operates."""
 
@@ -12,6 +12,7 @@ class Grumpy(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

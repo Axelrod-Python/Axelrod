@@ -13,6 +13,7 @@ class TestRandom(TestPlayer):
     expected_classifier = {
         'memory_depth': 0,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

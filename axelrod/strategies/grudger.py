@@ -9,6 +9,7 @@ class Grudger(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -29,6 +30,7 @@ class ForgetfulGrudger(Player):
     classifier = {
         'memory_depth': 10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -69,6 +71,7 @@ class OppositeGrudger(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -88,6 +91,7 @@ class Aggravater(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

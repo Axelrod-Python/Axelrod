@@ -1,4 +1,5 @@
 from axelrod import Actions, Player, init_args, random_choice
+import copy
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
@@ -14,6 +15,7 @@ class MemoryOnePlayer(Player):
     classifier = {
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -82,6 +84,14 @@ class GTFT(MemoryOnePlayer):
     """Generous Tit-For-Tat Strategy."""
 
     name = 'GTFT'
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector
+        'stochastic': True,
+        'makes_use_of': set(["game"]),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, p=None):
         """
@@ -159,6 +169,15 @@ class LRPlayer(MemoryOnePlayer):
     """
 
     name = 'LinearRelation'
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector
+        'stochastic': True,
+        'makes_use_of': set(["game"]),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
 
     def receive_tournament_attributes(self, phi=0, s=None, l=None):
         """
@@ -381,6 +400,7 @@ class ALLCorALLD(Player):
     classifier = {
         'memory_depth': 1,  # Memory-one Four-Vector (1, 1, 0, 0)
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -16,6 +16,7 @@ class MetaPlayer(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -33,9 +34,14 @@ class MetaPlayer(Player):
         self.team = [t() for t in self.team]
 
         # This player inherits the classifiers of its team.
-        for key in ['stochastic', 'inspects_source', 'manipulates_source',
+        for key in ['stochastic',
+                    'inspects_source',
+                    'manipulates_source',
                     'manipulates_state']:
             self.classifier[key] = (any([t.classifier[key] for t in self.team]))
+
+        for t in self.team:
+            self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
 
     def strategy(self, opponent):
 
@@ -164,6 +170,7 @@ class MetaHunter(MetaPlayer):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

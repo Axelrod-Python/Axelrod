@@ -16,6 +16,7 @@ class TestOnceBitten(TestPlayer):
     expected_classifier = {
         'memory_depth': 12,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -62,6 +63,7 @@ class TestFoolMeOnce(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -87,6 +89,7 @@ class TestForgetfulFoolMeOnce(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -126,6 +129,7 @@ class TestFoolMeForever(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -48,6 +48,7 @@ class MindReader(Player):
     classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': False,
         'manipulates_state': False
@@ -85,6 +86,7 @@ class ProtectedMindReader(MindReader):
     classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': True,  # Stops opponent's strategy
         'manipulates_state': False
@@ -107,7 +109,8 @@ class MirrorMindReader(ProtectedMindReader):
     classifier = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_source': True, # reading and copying the source of the component 
+        'makes_use_of': set(),
+        'inspects_source': True, # reading and copying the source of the component
         'manipulates_source': True, # changing own source dynamically
         'manipulates_state': False
     }
