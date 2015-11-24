@@ -10,9 +10,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 install:
   - pip install -r requirements.txt
-  - pip install sphinx
-  - pip install coverage
-  - pip install coveralls
+  - pip install -r requirements-test.txt
 script:
   # Build the documentation
   - cd docs; make html
