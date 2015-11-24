@@ -3,8 +3,7 @@ Using the command line tool
 
 Once :code:`axelrod` is installed you have access to a `run_axelrod` script that
 can help run some of the tournaments, including the tournament that involves all
-of the strategies from the library. You can view them on this repository:
-`https://github.com/Axelrod-Python/tournament/`_
+of the strategies from the library. You can view them at `Axelrod-Python/tournament on GitHub <https://github.com/Axelrod-Python/tournament/>`_
 
 To view the help for the :code:`run_axelrod` file run::
 
