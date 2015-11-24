@@ -131,6 +131,9 @@ paper please list it here:
 - `Evolving strategies for an Iterated Prisoner's Dilemma tournament
   <http://mojones.net/evolving-strategies-for-an-iterated-prisoners-dilemma-tournament.html>`_
   by `mojones <https://github.com/mojones>`_.
+- `An Exploratory Data Analysis of the Iterated Prisoner's Dilemma, Part I
+  <http://marcharper.codes/2015-11-16/ipd.html>`_ and `Part II <http://marcharper.codes/2015-11-17/ipd2.html>`_
+  by `marcharper <https://github.com/marcharper>`_.
 
 Contributors
 ============
