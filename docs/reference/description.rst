@@ -1,8 +1,7 @@
 Background to Axelrod's Tournament
 ==================================
 
-In the 1980s, professor of Political Science Robert Axelrod ran a tournament inviting strategies from collaborators all over the world for the **Iterated Prisoner's Dilemma**.
-You can read about this more `here <http://en.wikipedia.org/wiki/The_Evolution_of_Cooperation#Axelrod.27s_tournaments>`_.
+`In the 1980s, professor of Political Science Robert Axelrod ran a tournament inviting strategies from collaborators all over the world for the Iterated Prisoner's Dilemma <http://en.wikipedia.org/wiki/The_Evolution_of_Cooperation#Axelrod.27s_tournaments>`_.
 
 Another nice write up of Axelrod's work and this tournament on github was put together by `Artem Kaznatcheev <https://plus.google.com/101780559173703781847/posts>`_ `here <https://egtheory.wordpress.com/2015/03/02/ipd/>`_.
 
