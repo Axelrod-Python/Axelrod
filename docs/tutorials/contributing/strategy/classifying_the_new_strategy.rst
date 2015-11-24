@@ -11,6 +11,7 @@ Let us take a look at :code:`TitForTat`::
     >>> for key in sorted(classifier.keys()):
     ...    print("{}: {}".format(key, classifier[key]))
     inspects_source: False
+    makes_use_of: set([])
     manipulates_source: False
     manipulates_state: False
     memory_depth: 1
