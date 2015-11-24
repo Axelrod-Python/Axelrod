@@ -401,8 +401,6 @@ with a random probability between 0.3 and 0.7.
 
 *This strategy came 14th in Axelrod's original tournament.*
 
-.. _random-strategy:
-
 Here is how this is implemented in the library::
 
    >>> import axelrod
@@ -415,6 +413,8 @@ Here is how this is implemented in the library::
    >>> p2.history  # doctest: +SKIP
    ['D', 'C', 'D', 'D', 'C']
 
+
+.. _random-strategy:
 
 Random
 ^^^^^^
