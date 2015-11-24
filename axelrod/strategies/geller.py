@@ -36,6 +36,7 @@ class Geller(Player):
     classifier = {
         'memory_depth': -1,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': False,
         'manipulates_state': False
@@ -65,6 +66,7 @@ class GellerCooperator(Geller):
     classifier = {
         'memory_depth': -1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': False,
         'manipulates_state': False
@@ -80,6 +82,7 @@ class GellerDefector(Geller):
     classifier = {
         'memory_depth': -1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': False,
         'manipulates_state': False
