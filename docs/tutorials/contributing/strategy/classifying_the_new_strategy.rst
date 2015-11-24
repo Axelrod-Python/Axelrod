@@ -4,18 +4,18 @@ Classifying the new strategy
 Every class has a classifier dictionary that gives some classification of the
 strategy according to certain dimensions::
 
-Let us take a look at :code:`TitForTat`::
+Let us take a look at the dimensions available by looking at :code:`TitForTat`::
 
     >>> import axelrod
     >>> classifier = axelrod.TitForTat.classifier
     >>> for key in sorted(classifier.keys()):
-    ...    print("{}: {}".format(key, classifier[key]))
-    inspects_source: False
-    makes_use_of: set([])
-    manipulates_source: False
-    manipulates_state: False
-    memory_depth: 1
-    stochastic: False
+    ...    print(key)
+    inspects_source
+    makes_use_of
+    manipulates_source
+    manipulates_state
+    memory_depth
+    stochastic
 
 You can read more about this in the :ref:`classification-of-strategies` section
 but here are some tips about fill this part in correctly.
