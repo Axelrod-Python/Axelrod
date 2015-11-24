@@ -112,8 +112,7 @@ after two consequtive rounds of `(D, C)`::
     >>> ApologizingDefector = ApologyTransformer([D, D], [C, C])(axelrod.Defector)
     >>> player = ApologizingDefector()
 
-* :code:`DeadlockBreakingTransformer`: Attempts to break :code:`(D, C) -> (C, D)`
-deadlocks by cooperating::
+* :code:`DeadlockBreakingTransformer`: Attempts to break :code:`(D, C) -> (C, D)` deadlocks by cooperating::
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import DeadlockBreakingTransformer
