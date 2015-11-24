@@ -10,7 +10,7 @@ various dimensions.
 Here is the :code:`classifier` for the :code:`Cooperator` strategy::
 
     >>> import axelrod as axl
-    >>> expected_dictionary = {'manipulates_state': False, 'stochastic': False, 'manipulates_source': False, 'inspects_source': False, 'memory_depth': 0}  # Order of this dictionary might be different on your machine
+    >>> expected_dictionary = {'manipulates_state': False, 'makes_use_of': set([]), 'stochastic': False, 'manipulates_source': False, 'inspects_source': False, 'memory_depth': 0}  # Order of this dictionary might be different on your machine
     >>> axl.Cooperator.classifier == expected_dictionary
     True
 
