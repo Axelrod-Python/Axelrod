@@ -94,7 +94,7 @@ version of the results:
 .. image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
    :width: 100%
 
-See the [tournament repository](https://github.com/Axelrod-Python/tournament)
+See the `tournament repository <https://github.com/Axelrod-Python/tournament>`_
 for many additional plots.
 
 Contributing
