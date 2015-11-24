@@ -369,7 +369,7 @@ def wins(payoff):
     wins = [
         [0 for r in range(repetitions)] for p in range(nplayers)]
     for player in range(nplayers):
-        for opponent in range(nplayers):
+        for opponent in range(player + 1):  # Ensures we don't count wins twice
             players = (player, opponent)
             for repetition in range(repetitions):
                 payoffs = (
