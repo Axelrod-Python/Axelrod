@@ -21,11 +21,6 @@ script:
   - coverage run --source=axelrod -m unittest discover
   - coverage report -m
   # Run the doctests
-  #- sh doctest
-  - python -m doctest docs/tutorials/getting_started/*rst
-  - python -m doctest docs/tutorials/further_topics/*rst
-  - python -m doctest docs/reference/*rst
-  - python -m doctest docs/tutorials/contributing/strategy/*rst
-  - python -m doctest docs/tutorials/advanced/strategy_transformers.rst
+  - python doctests.py
 after_success:
   - coveralls
