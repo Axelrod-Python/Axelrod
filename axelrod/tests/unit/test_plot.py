@@ -30,7 +30,7 @@ class TestPlot(unittest.TestCase):
             [0.0, 3.2, 3.2],
             [4.2, 0.0, 2.0],
             [3.6, 1.8, 0.0]]
-        cls.expected_winplot_dataset = ([[2, 4], [0, 2], [0, 0]],
+        cls.expected_winplot_dataset = ([[1, 2], [0, 1], [0, 0]],
                                         ['Player1', 'Player2', 'Player3'])
         cls.expected_winplot_title = "Distributions of wins: 5 turns repeated 2 times (3 strategies)"
 
