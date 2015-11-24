@@ -2,7 +2,7 @@ Classifying the new strategy
 ============================
 
 Every class has a classifier dictionary that gives some classification of the
-strategy according to certain dimensions::
+strategy according to certain dimensions.
 
 Let us take a look at :code:`TitForTat`::
 
