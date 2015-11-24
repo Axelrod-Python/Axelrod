@@ -32,6 +32,19 @@ make a decision::
     >>> len([s for s in axl.strategies if s().classifier['memory_depth']==1])
     17
 
+We can also identify strategies that make use of particular properties of the
+tournament. For example, here is the number of strategies that  make use of the
+length of each match of the tournament::
+
+    >>> len([s() for s in axl.strategies if 'length' in s().classifier['makes_use_of']])
+    8
+
+Here are how many of the strategies that make use of the particular game being
+played (whether or not it's the default Prisoner's dilemma)::
+
+    >>> len([s() for s in axl.strategies if 'game' in s().classifier['makes_use_of']])
+    20
+
 Similarly, strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`
 function::
