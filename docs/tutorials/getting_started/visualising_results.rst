@@ -43,7 +43,7 @@ We can view the distributions of wins for each strategy::
 Visualising the payoff matrix
 -----------------------------
 
-We can also easily view the payoff matrix described in `Payoff_matrix`_, this
+We can also easily view the payoff matrix described in :doc:`payoff_matrix`, this
 becomes particularly useful when viewing the outputs of tournaments with a large
 number of strategies::
 
