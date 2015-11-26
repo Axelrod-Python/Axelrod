@@ -19,7 +19,7 @@ By default, a match will not be noisy, but you can introduce noise if you wish::
     >>> import axelrod as axl
     >>> players = (axl.Cooperator(), axl.Alternator())
     >>> match = axl.Match(players=players, turns=5, noise=0.2)
-    >>> match.play()
+    >>> match.play() # doctest: +SKIP
     [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
 
 The result of the match is held as an attribute within the :code:`Match` class.
@@ -29,13 +29,13 @@ attribute::
     >>> import axelrod as axl
     >>> players = (axl.Cooperator(), axl.Alternator())
     >>> match = axl.Match(players=players, turns=5, noise=0.2)
-    >>> match.play()
+    >>> match.play()  # doctest: +SKIP
     [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
-    >>> match.result
+    >>> match.result # doctest: +SKIP
     [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
-    >>> match.play()
+    >>> match.play() # doctest: +SKIP
     [('D', 'C'), ('D', 'C'), ('C', 'D'), ('C', 'D'), ('C', 'C')]
-    >>> match.result
+    >>> match.result # doctest: +SKIP
     [('D', 'C'), ('D', 'C'), ('C', 'D'), ('C', 'D'), ('C', 'C')]
 
 
@@ -49,6 +49,6 @@ way to view the result and can be useful for spotting patterns::
     >>> match = axl.Match(players, 25)
     >>> match.play()
     [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
-    >>> print(match.sparklines)
+    >>> print(match.sparklines) # doctest: +SKIP
     █████████████████████████
     █ █ █ █ █ █ █ █ █ █ █ █ █
