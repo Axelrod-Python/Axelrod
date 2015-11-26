@@ -1,4 +1,4 @@
-from axelrod import Player, Actions, random_choice
+from axelrod import Actions, Player, init_args, random_choice
 
 
 class Random(Player):
@@ -8,11 +8,13 @@ class Random(Player):
     classifier = {
         'memory_depth': 0,  # Memory-one Four-Vector = (p, p, p, p)
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, p=0.5):
         """
         Parameters
@@ -27,7 +29,6 @@ class Random(Player):
         """
         Player.__init__(self)
         self.p = p
-        self.init_args = (p,)
 
     def strategy(self, opponent):
         return random_choice(self.p)

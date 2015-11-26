@@ -111,8 +111,8 @@ All three of these functions can take an optional keyword argument
     if the player's internal variable :code:`opponent_class` is set to
     :code:`"Cooperative"`::
 
-    self.responses_test([C] * 6, [C] * 6, [C],
-                    attrs={"opponent_class": "Cooperative"})
+        self.responses_test([C] * 6, [C] * 6, [C],
+                        attrs={"opponent_class": "Cooperative"})
 
 Finally, there is a :code:`TestHeadsUp` class that streamlines the testing of
 two strategies playing each other using a test function :code:`versus_test`. For

@@ -1,4 +1,4 @@
-from axelrod import Player, Actions, flip_action
+from axelrod import Actions, Player, init_args, flip_action
 
 C, D = Actions.C, Actions.D
 
@@ -18,6 +18,7 @@ class TitForTat(Player):
     classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -41,6 +42,7 @@ class TitFor2Tats(Player):
     classifier = {
         'memory_depth': 2,  # Long memory, memory-2
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -58,6 +60,7 @@ class TwoTitsForTat(Player):
     classifier = {
         'memory_depth': 2,  # Long memory, memory-2
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -72,13 +75,14 @@ class Bully(Player):
     """A player that behaves opposite to Tit For Tat, including first move.
 
     Starts by defecting and then does the opposite of opponent's previous move.
-    This the complete opposite of TIT FOR TAT, also called BULLY in literature.
+    This is the complete opposite of TIT FOR TAT, also called BULLY in literature.
     """
 
     name = "Bully"
     classifier = {
         'memory_depth': 1,   # Four-Vector = (0, 1, 0, 1)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -96,6 +100,7 @@ class SneakyTitForTat(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -118,6 +123,7 @@ class SuspiciousTitForTat(Player):
     classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -136,6 +142,7 @@ class AntiTitForTat(Player):
     classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -153,6 +160,7 @@ class HardTitForTat(Player):
     classifier = {
         'memory_depth': 3,  # memory-three
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -178,6 +186,7 @@ class HardTitFor2Tats(Player):
     classifier = {
         'memory_depth': 3,  # memory-three
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -207,15 +216,17 @@ class OmegaTFT(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
-    def __init__(self):
+    @init_args
+    def __init__(self, deadlock_threshold=3, randomness_threshold=8):
         Player.__init__(self)
-        self.deadlock_threshold = 3
-        self.randomness_threshold = 8
+        self.deadlock_threshold = deadlock_threshold
+        self.randomness_threshold = randomness_threshold
         self.randomness_counter = 0
         self.deadlock_counter = 0
 

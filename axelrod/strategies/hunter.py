@@ -1,9 +1,4 @@
-from __future__ import absolute_import
-
-import itertools
-
-from axelrod import Player, Actions
-
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -40,6 +35,7 @@ class DefectorHunter(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -58,6 +54,7 @@ class CooperatorHunter(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -76,6 +73,7 @@ class AlternatorHunter(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -96,6 +94,7 @@ class CycleHunter(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -117,6 +116,7 @@ class EventualCycleHunter(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -140,6 +140,7 @@ class MathConstantHunter(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -155,7 +156,6 @@ class MathConstantHunter(Player):
 
         n = len(self.history)
         if n >= 8 and opponent.cooperations and opponent.defections:
-
             start1, end1 = 0, n // 2
             start2, end2 = n // 4, 3 * n // 4
             start3, end3 = n // 2, n
@@ -167,7 +167,6 @@ class MathConstantHunter(Player):
             ratio3 = 0.5 * count3 / (end3 - start3)
             if abs(ratio1 - ratio2) < 0.2 and abs(ratio1 - ratio3) < 0.2:
                 return D
-
         return C
 
 
@@ -178,10 +177,16 @@ class RandomHunter(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    def __init__(self):
+        self.countCC = 0
+        self.countDD = 0
+        Player.__init__(self)
 
     def strategy(self, opponent):
         """
@@ -189,18 +194,25 @@ class RandomHunter(Player):
         of cooperation after cooperation, and defection after defections, should
         be close to 50%... although how close is debatable.
         """
+        # Update counts
+        if len(self.history) > 1:
+            if self.history[-2] == C and opponent.history[-1] == C:
+                self.countCC += 1
+            if self.history[-2] == D and opponent.history[-1] == D:
+                self.countDD += 1
 
         n = len(self.history)
         if n > 10:
             probabilities = []
-            if self.history[:-1].count(C) > 5:
-                countCC = len([i for i in range(n-1) if self.history[i] == "C" and opponent.history[i+1] == "C"])
-                probabilities.append(1.0 * countCC / self.history[:-1].count("C"))
-            if self.history[:-1].count(D) > 5:
-                countDD = len([i for i in range(n-1) if self.history[i] == "D" and opponent.history[i+1] == "D"])
-                probabilities.append(1.0 * countDD / self.history[:-1].count("D"))
-
+            if self.cooperations > 5:
+                probabilities.append(1.0 * self.countCC / self.cooperations)
+            if self.defections > 5:
+                probabilities.append(1.0 * self.countDD / self.defections)
             if probabilities and all([abs(p - 0.5) < 0.25 for p in probabilities]):
                 return D
-
         return C
+
+    def reset(self):
+        self.countCC = 0
+        self.countDD = 0
+        Player.reset(self)

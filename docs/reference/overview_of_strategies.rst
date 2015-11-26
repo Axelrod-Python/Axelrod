@@ -211,7 +211,7 @@ This strategy plays a modification of Tit For Tat.
 1. It cooperates for the first 4 moves.
 2. It defects on the last 2 moves.
 3. Every 15 moves it makes use of a `chi-squared
-   test<http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
+   test <http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
    opponent is playing randomly.
 
 *This strategy came 6th in Axelrod's original tournament.*
@@ -401,8 +401,6 @@ with a random probability between 0.3 and 0.7.
 
 *This strategy came 14th in Axelrod's original tournament.*
 
-.. _random-strategy:
-
 Here is how this is implemented in the library::
 
    >>> import axelrod
@@ -415,6 +413,8 @@ Here is how this is implemented in the library::
    >>> p2.history  # doctest: +SKIP
    ['D', 'C', 'D', 'D', 'C']
 
+
+.. _random-strategy:
 
 Random
 ^^^^^^
@@ -1014,17 +1014,17 @@ following four-vectors :math:`(P(C \,|\, CC), P(C \,|\, CD), P(C \,|\, DC), P(C 
 +------------------+-----------------------+--------------------------+
 | Name             | Four-vector           | Axelrod Library Name     |
 +==================+=======================+==========================+
-| `ZD-Extort-2`_   | (8/9, 1/2, 1/3, 0)    | :code:`ZDExtort2`        |
+| ZD-Extort-2      | (8/9, 1/2, 1/3, 0)    | :code:`ZDExtort2`        |
 +------------------+-----------------------+--------------------------+
-| `ZD-Extort-2v2`_ | (7/8, 7/16, 3/8, 0)   | :code:`ZDExtort2v2`      |
+| ZD-Extort-2v2    | (7/8, 7/16, 3/8, 0)   | :code:`ZDExtort2v2`      |
 +------------------+-----------------------+--------------------------+
-| `ZD-Extort-4`_   | (11/17, 0, 8/17, 0)   | :code:`ZDExtort4`        |
+| ZD-Extort-4      | (11/17, 0, 8/17, 0)   | :code:`ZDExtort4`        |
 +------------------+-----------------------+--------------------------+
-| `ZD-Gen-2`_      | (1, 9/16, 1/2, 1/8)   | :code:`ZDGen2`           |
+| ZD-Gen-2         | (1, 9/16, 1/2, 1/8)   | :code:`ZDGen2`           |
 +------------------+-----------------------+--------------------------+
-| `ZD-GTFT-2`_     | (1, 1/8, 1, 1/4)      | :code:`ZDGTFT2`          |
+| ZD-GTFT-2        | (1, 1/8, 1, 1/4)      | :code:`ZDGTFT2`          |
 +------------------+-----------------------+--------------------------+
-| `ZD-SET-2`_      | (3/4, 1/4, 1/2, 1/4)  | :code:`ZDSet2`           |
+| ZD-SET-2         | (3/4, 1/4, 1/2, 1/4)  | :code:`ZDSet2`           |
 +------------------+-----------------------+--------------------------+
 
 The library also implements a generic LR-strategy as described in

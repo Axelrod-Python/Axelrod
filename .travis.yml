@@ -21,6 +21,6 @@ script:
   - coverage run --source=axelrod -m unittest discover
   - coverage report -m
   # Run the doctests
-  - sh doctest
+  - python doctests.py
 after_success:
   - coveralls

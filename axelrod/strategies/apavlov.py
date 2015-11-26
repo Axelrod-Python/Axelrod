@@ -1,4 +1,4 @@
-from axelrod import Player, Actions, flip_action
+from axelrod import Actions, Player, flip_action
 
 C, D = Actions.C, Actions.D
 
@@ -18,6 +18,7 @@ class APavlov2006(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -81,6 +82,7 @@ class APavlov2011(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

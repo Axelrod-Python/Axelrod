@@ -103,6 +103,7 @@ class TestOpponent(Player):
     classifier = {
         'memory_depth': 0,
         'stochastic': False,
+        'makes_use_of': None,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -123,7 +124,7 @@ class TestPlayer(unittest.TestCase):
             player = self.player()
             self.assertEqual(player.history, [])
             self.assertEqual(player.tournament_attributes,
-                {'length': -1, 'game': DefaultGame})
+                    {'length': -1, 'game': DefaultGame, 'noise': 0})
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
             self.classifier_test()
@@ -135,9 +136,24 @@ class TestPlayer(unittest.TestCase):
 
     def test_tournament_attributes(self):
         player = self.player()
+        # Default
+        player.set_tournament_attributes()
+        t_attrs = player.tournament_attributes
+        self.assertEqual(t_attrs['length'], -1)
+        self.assertEqual(t_attrs['noise'], 0)
+        self.assertEqual(t_attrs['game'].RPST(), (3, 1, 0, 5))
+
+        # Common
         player.set_tournament_attributes(length=200)
         t_attrs = player.tournament_attributes
         self.assertEqual(t_attrs['length'], 200)
+        self.assertEqual(t_attrs['noise'], 0)
+        self.assertEqual(t_attrs['game'].RPST(), (3, 1, 0, 5))
+
+        # Noisy
+        player.set_tournament_attributes(length=200, noise=.5)
+        t_attrs = player.tournament_attributes
+        self.assertEqual(t_attrs['noise'], .5)
 
     def test_reset(self):
         """Make sure reseting works correctly."""
@@ -150,10 +166,17 @@ class TestPlayer(unittest.TestCase):
 
     def test_clone(self):
         # Make sure that self.init_args has the right number of arguments
-        p1 = self.player()
-        argspec = inspect.getargspec(p1.__init__)
-        self.assertEqual(len(argspec.args) - 1, len(p1.init_args))
+        PlayerClass = self.player
+        argspec = inspect.getargspec(PlayerClass.__init__)
+        # Does the class use the init_args decorator?
+        if argspec.varargs == "args":
+            self.assertEqual(len(argspec.args), 1)
+        else:
+            player = PlayerClass()
+            self.assertEqual(len(argspec.args) - 1, len(player.init_args))
+
         # Test that the player is cloned correctly
+        p1 = self.player()
         p2 = p1.clone()
         self.assertEqual(len(p2.history), 0)
         self.assertEqual(p2.cooperations, 0)
@@ -218,26 +241,16 @@ class TestPlayer(unittest.TestCase):
 class TestHeadsUp(unittest.TestCase):
     """Test class for heads up play between two given players."""
 
-    def versus_test(self, player_1_class, player_2_class, outcomes,
-                    player_1_history=None, player_2_history=None,
-                    random_seed=None):
+    def versus_test(self, player_1, player_2, expected_actions1,
+                    expected_actions2, random_seed=None):
         """Tests a sequence of outcomes for two given players."""
         if random_seed:
             random.seed(random_seed)
-        player_1 = player_1_class()
-        player_2 = player_2_class()
-        # Set histories
-        if player_1_history is None:
-            player_1_history = []
-        player_1.history = player_1_history
-        if player_2_history is None:
-            player_2_history = []
-        player_2.history = player_2_history
         # Test sequence of play
-        for outcome_1, outcome_2 in outcomes:
+        for outcome_1, outcome_2 in zip(expected_actions1, expected_actions2):
             player_1.play(player_2)
-            self.assertEqual(player_1_history[-1], outcome_1)
-            self.assertEqual(player_2_history[-1], outcome_2)
+            self.assertEqual(player_1.history[-1], outcome_1)
+            self.assertEqual(player_2.history[-1], outcome_2)
 
 
 def test_four_vector(test_class, expected_dictionary):

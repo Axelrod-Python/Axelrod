@@ -1,5 +1,5 @@
 import random
-from axelrod import Player, Actions
+from axelrod import Actions, Player, init_args
 
 C, D = Actions.C, Actions.D
 
@@ -12,6 +12,7 @@ class OnceBitten(Player):
     classifier = {
         'memory_depth': 12,  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -59,14 +60,11 @@ class FoolMeOnce(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    def __init__(self):
-        Player.__init__(self)
-        self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         if not opponent.history:
@@ -78,19 +76,22 @@ class FoolMeOnce(Player):
 
 class ForgetfulFoolMeOnce(Player):
     """
-    Forgives one D then retaliates forever on a second D. Sometimes randomly forgets the defection count, and so keeps a secondary count separate from the the
-    standard count in Player.
+    Forgives one D then retaliates forever on a second D. Sometimes randomly
+    forgets the defection count, and so keeps a secondary count separate from
+    the standard count in Player.
     """
 
     name = 'Forgetful Fool Me Once'
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, forget_probability = 0.05):
         """
         Parameters
@@ -102,7 +103,6 @@ class ForgetfulFoolMeOnce(Player):
         self.D_count = 0
         self._initial = C
         self.forget_probability = forget_probability
-        self.init_args = (forget_probability,)
 
     def strategy(self, opponent):
         r = random.random()
@@ -131,6 +131,7 @@ class FoolMeForever(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

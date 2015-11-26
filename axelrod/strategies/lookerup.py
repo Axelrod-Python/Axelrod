@@ -1,7 +1,8 @@
-from axelrod import Player, Actions
+from axelrod import Actions, Player, init_args
 from itertools import product
 
 C, D = Actions.C, Actions.D
+
 
 class LookerUp(Player):
     """
@@ -66,11 +67,13 @@ class LookerUp(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, lookup_table=None):
         """
         If no lookup table is provided to the constructor, then use the TFT one.
@@ -97,7 +100,6 @@ class LookerUp(Player):
         # then the memory classification is adjusted
         if self.opponent_start_plays == 0:
             self.classifier['memory_depth'] = self.plays
-        self.init_args = (lookup_table,)
 
         # Ensure that table is well-formed
         for k, v in lookup_table.items():
@@ -132,7 +134,7 @@ class EvolvedLookerUp(LookerUp):
 
     name = "EvolvedLookerUp"
 
-    def __init__(self, lookup_table=None):
+    def __init__(self):
         plays = 2
         opponent_start_plays = 2
 
@@ -147,7 +149,7 @@ class EvolvedLookerUp(LookerUp):
                                          other_histories))
 
         # Pattern of values determed previously with an evolutionary algorithm.
-        pattern='CDCCDCCCDCDDDDDCCDCCCDDDCDDDDDDCDDDDCDDDDCCDDCDDCDDDCCCDCDCDDDDD'
+        pattern='CDCCDCCCDCDDDDDCCDCCDDDDDCDCDDDCDDDDCCCDDCCDDDDDCDCDDDCDCDDDDDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)

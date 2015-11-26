@@ -1,8 +1,8 @@
-from axelrod import Player, Actions
-
+from axelrod import Actions, Player
 from axelrod.strategy_transformers import FinalTransformer
 
 C, D = Actions.C, Actions.D
+
 
 @FinalTransformer([D, D]) # End with two defections
 class BackStabber(Player):
@@ -15,6 +15,7 @@ class BackStabber(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(['length']),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -40,6 +41,7 @@ class DoubleCrosser(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(['length']),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

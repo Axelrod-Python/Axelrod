@@ -1,6 +1,7 @@
-from axelrod import Player, Actions
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
+
 
 class Prober(Player):
     """
@@ -12,6 +13,7 @@ class Prober(Player):
     classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -43,6 +45,7 @@ class Prober2(Player):
     classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -74,6 +77,7 @@ class Prober3(Player):
     classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -103,6 +107,7 @@ class HardProber(Player):
     classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

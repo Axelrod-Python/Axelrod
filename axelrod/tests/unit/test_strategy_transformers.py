@@ -4,6 +4,8 @@ import unittest
 import axelrod
 from axelrod import simulate_play
 from axelrod.strategy_transformers import *
+from .test_titfortat import TestTitForTat
+from .test_cooperator import TestCooperator
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -307,28 +309,32 @@ class TestTransformers(unittest.TestCase):
 
 
 
-## Test that RUA(Cooperator) is the same as TitForTat
-## reusing the TFT tests. Since TFT is completely specified by its tests,
-## this is actually a proof that they are equal!
-## However because classifier is a class variable until after instantiation
-## this alters Cooperator's class variable, and causes its test to fail
-## So for now this is commented out.
+# Test that RUA(Cooperator) is the same as TitForTat
+# reusing the TFT tests. Since TFT is completely specified by its tests,
+# this is actually a proof that they are equal!
+# However because classifier is a class variable until after instantiation
+# this alters Cooperator's class variable, and causes its test to fail
+# So for now this is commented out.
 
-#RUA = RetaliateUntilApologyTransformer()
-#TFT = RUA(axelrod.Cooperator)
-#TFT.name = "Tit For Tat"
-#TFT.classifier["memory_depth"] = 1
+TFT = RetaliateUntilApologyTransformer(axelrod.Cooperator)
 
-#class TestRUAisTFT(test_titfortat.TestTitForTat):
-    ## This runs the 7 TFT tests when unittest is invoked
-    #player = TFT
+class TestRUAisTFT(TestTitForTat):
+    # This runs the 7 TFT tests when unittest is invoked
+    player = TFT
+    name = "RUA Cooperator"
+    expected_classifier = {
+        'memory_depth': 0, # really 1
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
-## Test that FlipTransformer(Defector) == Cooperator
-#Cooperator2 = FlipTransformer(axelrod.Defector)
-#Cooperator2.name = "Cooperator"
-#Cooperator2.classifier["memory_depth"] = 0
+# Test that FlipTransformer(Defector) == Cooperator
+Cooperator2 = FlipTransformer(axelrod.Defector)
 
-
-#class TestFlipDefector(test_cooperator.TestCooperator):
-    ## This runs the 7 TFT tests when unittest is invoked
-    #player = Cooperator2
+class TestFlipDefector(TestCooperator):
+    # This runs the 7 TFT tests when unittest is invoked
+    name = "Flipped Defector"
+    player = Cooperator2

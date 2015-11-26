@@ -2,7 +2,7 @@ import copy
 
 import axelrod
 
-from axelrod import Player, update_histories, Actions
+from axelrod import Player, update_history, Actions
 
 C, D = Actions.C, Actions.D
 
@@ -38,11 +38,13 @@ def simulate_play(P1, P2, h1=None, h2=None):
         s2 = P2.strategy(MockPlayer(P1, h1))
         # Record intended history
         # Update Cooperation / Defection counts
-        update_histories(P1, P2, h1, h2)
+        update_history(P1, h1)
+        update_history(P2, h2)
         return (h1, h2)
     else:
         s1 = P1.strategy(P2)
         s2 = P2.strategy(P1)
         # Record history
-        update_histories(P1, P2, s1, s2)
+        update_history(P1, s1)
+        update_history(P2, s2)
         return (s1, s2)
