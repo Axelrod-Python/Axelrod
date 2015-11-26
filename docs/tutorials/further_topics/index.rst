@@ -12,4 +12,3 @@ Contents:
    classification_of_strategies.rst
    morality_metrics.rst
    creating_matches.rst
-****
