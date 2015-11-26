@@ -31,10 +31,7 @@ attribute::
 
     >>> import axelrod as axl
     >>> players = (axl.Cooperator(), axl.Alternator())
-    >>> match = axl.Match(
-            players=players,
-            turns=5,
-            noise=0.2)
+    >>> match = axl.Match(players=players, turns=5, noise=0.2)
     >>> match.play()
     [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
     >>> match.result
