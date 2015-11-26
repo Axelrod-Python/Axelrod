@@ -1,5 +1,6 @@
-from axelrod import Player, random_choice, Actions
 import random
+
+from axelrod import Actions, Player, random_choice
 
 
 class AverageCopier(Player):
@@ -12,6 +13,7 @@ class AverageCopier(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -33,6 +35,7 @@ class NiceAverageCopier(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

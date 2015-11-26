@@ -1,6 +1,6 @@
 import itertools
 
-from axelrod import Player, Actions
+from axelrod import Actions, Player
 from .axelrod_first import Joss
 from .hunter import detect_cycle
 
@@ -14,6 +14,7 @@ class Calculator(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

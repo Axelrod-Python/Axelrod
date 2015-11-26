@@ -1,8 +1,7 @@
 """Test for the tit for tat strategies."""
 
 import axelrod
-from .test_player import TestPlayer
-from .test_player import TestHeadsUp
+from .test_player import TestHeadsUp, TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -19,6 +18,7 @@ class TestTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -42,6 +42,7 @@ class TestTitFor2Tats(TestPlayer):
     expected_classifier = {
         'memory_depth': 2,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -64,6 +65,7 @@ class TestTwoTitsForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 2,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -88,6 +90,7 @@ class TestBully(TestPlayer):
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -109,6 +112,7 @@ class TestSneakyTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -131,6 +135,7 @@ class TestSuspiciousTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -152,6 +157,7 @@ class TestAntiTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -173,6 +179,7 @@ class TestHardTitForTat(TestPlayer):
     expected_classifier = {
         'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -198,6 +205,7 @@ class TestHardTitFor2Tats(TestPlayer):
     expected_classifier = {
         'memory_depth': 3,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -231,6 +239,7 @@ class OmegaTFT(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -253,11 +262,13 @@ class OmegaTFT(TestPlayer):
 
 class TestOmegaTFTvsSTFT(TestHeadsUp):
     def test_rounds(self):
-        outcomes = zip([C, D, C, D, C, C, C, C, C], [D, C, D, C, D, C, C, C, C])
-        self.versus_test(axelrod.OmegaTFT, axelrod.SuspiciousTitForTat, outcomes)
+        outcomes = zip()
+        self.versus_test(axelrod.OmegaTFT(), axelrod.SuspiciousTitForTat(),
+                         [C, D, C, D, C, C, C, C, C],
+                         [D, C, D, C, D, C, C, C, C])
 
 class TestOmegaTFTvsAlternator(TestHeadsUp):
     def test_rounds(self):
-        outcomes = zip([C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D],
-                       [C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D])
-        self.versus_test(axelrod.OmegaTFT, axelrod.Alternator, outcomes)
+        self.versus_test(axelrod.OmegaTFT(), axelrod.Alternator(),
+                         [C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D],
+                         [C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D])

@@ -1,5 +1,5 @@
 import inspect
-from axelrod import Player, Actions
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -25,6 +25,7 @@ class Darwin(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
+        'makes_use_of': set(),
         'manipulates_source': False,
         'manipulates_state': True  # Does not reset properly.
     }

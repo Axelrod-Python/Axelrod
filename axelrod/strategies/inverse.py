@@ -1,4 +1,4 @@
-from axelrod import Player, Actions, random_choice
+from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
 
@@ -10,6 +10,7 @@ class Inverse(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

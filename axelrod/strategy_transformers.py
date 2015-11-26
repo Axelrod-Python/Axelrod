@@ -180,6 +180,7 @@ def final_sequence(player, opponent, action, seq):
     list is exhausted."""
 
     length = player.tournament_attributes["length"]
+    player.classifier["makes_use_of"].update(["length"])
 
     if length < 0: # default is -1
         return action

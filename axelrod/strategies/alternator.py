@@ -1,4 +1,4 @@
-from axelrod import Player, Actions
+from axelrod import Actions, Player
 
 
 class Alternator(Player):
@@ -8,6 +8,7 @@ class Alternator(Player):
     classifier = {
         'memory_depth': 1,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

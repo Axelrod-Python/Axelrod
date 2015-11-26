@@ -1,11 +1,11 @@
 """
-Additional strategies from Axelrod's two tournaments.
+Additional strategies from Axelrod's first tournament.
 """
 
 from math import sqrt
 import random
 
-from axelrod import Game, Player, Actions, random_choice, flip_action
+from axelrod import Actions, Game, Player, init_args, flip_action, random_choice
 
 from.memoryone import MemoryOnePlayer
 
@@ -20,11 +20,13 @@ class Davis(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, rounds_to_cooperate=10):
         """
         Parameters
@@ -34,7 +36,6 @@ class Davis(Player):
         """
         Player.__init__(self)
         self._rounds_to_cooperate = rounds_to_cooperate
-        self.init_args = (self._rounds_to_cooperate,)
 
     def strategy(self, opponent):
         """Begins by playing C, then plays D for the remaining rounds if the
@@ -57,11 +58,13 @@ class RevisedDowning(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, revised=True):
         Player.__init__(self)
         self.revised = revised
@@ -71,7 +74,6 @@ class RevisedDowning(Player):
         self.nice2 = 0
         self.total_C = 0 # note the same as self.cooperations
         self.total_D = 0 # note the same as self.defections
-        self.init_args = (revised,)
 
     def strategy(self, opponent):
         round_number = len(self.history) + 1
@@ -132,11 +134,13 @@ class Feld(Player):
     classifier = {
         'memory_depth': 200, # Varies actually, eventually becomes depth 1
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
                  rounds_of_decay=200):
         """
@@ -154,9 +158,6 @@ class Feld(Player):
         self._start_coop_prob = start_coop_prob
         self._end_coop_prob = end_coop_prob
         self._rounds_of_decay = rounds_of_decay
-        self.init_args = (start_coop_prob,
-                          end_coop_prob,
-                          rounds_of_decay)
 
     def _cooperation_probability(self):
         """It's not clear what the interpolating function is, so we'll do
@@ -188,6 +189,7 @@ class Grofman(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -213,6 +215,7 @@ class Joss(MemoryOnePlayer):
 
     name = "Joss"
 
+    @init_args
     def __init__(self, p=0.9):
         """
         Parameters
@@ -224,7 +227,6 @@ class Joss(MemoryOnePlayer):
         four_vector = (p, 0, p, 0)
         self.p = p
         super(Joss, self).__init__(four_vector)
-        self.init_args = (p,)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -253,6 +255,7 @@ class Nydegger(Player):
     classifier = {
         'memory_depth': 3,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -306,6 +309,7 @@ class Shubik(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -364,11 +368,13 @@ class Tullock(Player):
     classifier = {
         'memory_depth': 11, # long memory, modified by init
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, rounds_to_cooperate=11):
         """
         Parameters
@@ -379,7 +385,6 @@ class Tullock(Player):
         Player.__init__(self)
         self._rounds_to_cooperate = rounds_to_cooperate
         self.__class__.memory_depth = rounds_to_cooperate
-        self.init_args = (rounds_to_cooperate,)
 
     def strategy(self, opponent):
         rounds = self._rounds_to_cooperate
@@ -392,7 +397,12 @@ class Tullock(Player):
 
 
 class UnnamedStrategy(Player):
-    """Apparently written by a grad student in political science whose name was withheld, this strategy cooperates with a given probability P. This probability (which has initial value .3) is updated every 10 rounds based on whether the opponent seems to be random, very cooperative or very uncooperative. Furthermore, if after round 130 the strategy is losing then P is also adjusted.
+    """Apparently written by a grad student in political science whose name was
+    withheld, this strategy cooperates with a given probability P. This
+    probability (which has initial value .3) is updated every 10 rounds based on
+    whether the opponent seems to be random, very cooperative or very
+    uncooperative. Furthermore, if after round 130 the strategy is losing then P
+    is also adjusted.
 
     Fourteenth Place with 282.2 points is a 77-line program by a graduate
     student of political science whose dissertation is in game theory. This rule has
@@ -412,6 +422,7 @@ class UnnamedStrategy(Player):
     classifier = {
         'memory_depth': 0,
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

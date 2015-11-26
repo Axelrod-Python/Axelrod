@@ -8,5 +8,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   description.rst
+   play_contexts.rst
    overview_of_strategies.rst
    glossary.rst

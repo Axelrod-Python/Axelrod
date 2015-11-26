@@ -1,7 +1,7 @@
 import copy
 import inspect
 
-from axelrod import Player, RoundRobin, update_histories, Actions
+from axelrod import Actions, Player, RoundRobin, update_history
 
 C, D = Actions.C, Actions.D
 
@@ -10,7 +10,8 @@ def simulate_match(player_1, player_2, strategy, rounds=10):
     for match in range(rounds):
         play_1, play_2 = strategy, player_2.strategy(player_1)
         # Update histories and counts
-        update_histories(player_1, player_2, play_1, play_2)
+        update_history(player_1, play_1)
+        update_history(player_2, play_2)
 
 def roll_back_history(player, rounds):
     """Undo the last `rounds` rounds as sufficiently as possible."""
@@ -47,6 +48,7 @@ class MindReader(Player):
     classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': False,
         'manipulates_state': False
@@ -84,6 +86,7 @@ class ProtectedMindReader(MindReader):
     classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': True,  # Stops opponent's strategy
         'manipulates_state': False
@@ -106,7 +109,8 @@ class MirrorMindReader(ProtectedMindReader):
     classifier = {
         'memory_depth': -10,
         'stochastic': False,
-        'inspects_source': True, # reading and copying the source of the component 
+        'makes_use_of': set(),
+        'inspects_source': True, # reading and copying the source of the component
         'manipulates_source': True, # changing own source dynamically
         'manipulates_state': False
     }

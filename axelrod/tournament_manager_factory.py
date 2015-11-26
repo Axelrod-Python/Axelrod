@@ -19,20 +19,22 @@ class TournamentManagerFactory(object):
             processes,
             turns,
             repetitions,
-            noise):
+            noise,
+            image_format="svg"):
 
         kwargs = {
             'processes': processes,
             'turns': turns,
             'repetitions': repetitions,
-            'noise': noise
+            'noise': noise,
         }
 
         manager = axelrod.TournamentManager(
             output_directory=output_directory,
             with_ecological=not no_ecological,
             save_cache=rebuild_cache,
-            cache_file=cache_file)
+            cache_file=cache_file,
+            image_format=image_format)
 
         cls._add_tournaments(manager, exclusions, kwargs)
 

@@ -1,3 +1,4 @@
+from functools import wraps
 import inspect
 import random
 import copy
@@ -31,20 +32,30 @@ def obey_axelrod(s):
            classifier['manipulates_source'] or\
            classifier['manipulates_state'])
 
-def update_histories(player1, player2, move1, move2):
+def update_history(player, move):
     """Updates histories and cooperation / defections counts following play."""
     # Update histories
-    player1.history.append(move1)
-    player2.history.append(move2)
+    player.history.append(move)
     # Update player counts of cooperation and defection
-    if move1 == C:
-        player1.cooperations += 1
-    elif move1 == D:
-        player1.defections += 1
-    if move2 == C:
-        player2.cooperations += 1
-    elif move2 == D:
-        player2.defections += 1
+    if move == C:
+        player.cooperations += 1
+    elif move == D:
+        player.defections += 1
+
+def init_args(func):
+    """Decorator to simplify the handling of init_args. Use whenever overriding
+    Player.__init__ in subclasses of Player that require arguments as follows:
+
+    @init_args
+    def __init__(self, myarg1, ...)
+    """
+
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        r = func(self, *args, **kwargs)
+        self.init_args = args
+        return r
+    return wrapper
 
 
 class Player(object):
@@ -58,6 +69,7 @@ class Player(object):
     default_classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),
+        'makes_use_of': None,
         'inspects_source': None,
         'manipulates_source': None,
         'manipulates_state': None
@@ -66,7 +78,7 @@ class Player(object):
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
-        self.classifier = copy.copy(self.classifier)
+        self.classifier = copy.deepcopy(self.classifier)
         if self.name == "Player":
             self.classifier['stochastic'] = False
         for dimension in self.default_classifier:
@@ -80,15 +92,16 @@ class Player(object):
     def receive_tournament_attributes(self):
         # Overwrite this function if your strategy needs
         # to make use of tournament_attributes such as
-        # the game matrix or the number of rounds
+        # the game matrix, the number of rounds or the noise
         pass
 
-    def set_tournament_attributes(self, length=-1, game=None):
+    def set_tournament_attributes(self, length=-1, game=None, noise=0):
         if not game:
             game = DefaultGame
         self.tournament_attributes = {
             "length": length,
-            "game": game
+            "game": game,
+            "noise": noise
         }
         self.receive_tournament_attributes()
 
@@ -114,7 +127,8 @@ class Player(object):
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         if noise:
             s1, s2 = self._add_noise(noise, s1, s2)
-        update_histories(self, opponent, s1, s2)
+        update_history(self, s1)
+        update_history(opponent, s2)
 
     def clone(self):
         """Clones the player without history, reapplying configuration

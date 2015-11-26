@@ -1,4 +1,4 @@
-from axelrod import Player, Actions
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -9,6 +9,7 @@ class MindController(Player):
     classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': True,  # Finds out what opponent will do
         'manipulates_state': False
@@ -23,7 +24,6 @@ class MindController(Player):
         """
 
         opponent.strategy = lambda opponent: C
-
         return D
 
 
@@ -37,6 +37,7 @@ class MindWarper(Player):
     classifier = {
         'memory_depth': -10,
         'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': True,  # changes what opponent will do
         'manipulates_state': False
@@ -63,6 +64,7 @@ class MindBender(MindWarper):
     name = 'Mind Bender'
     classifier = {
         'memory_depth': -10,
+        'makes_use_of': set(),
         'stochastic': False,
         'inspects_source': False,
         'manipulates_source': True,  # changes what opponent will do

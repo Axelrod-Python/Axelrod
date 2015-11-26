@@ -1,4 +1,5 @@
-from axelrod import Player, Actions, random_choice
+from axelrod import Actions, Player, init_args, random_choice
+import copy
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
@@ -14,11 +15,13 @@ class MemoryOnePlayer(Player):
     classifier = {
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, four_vector=None, initial=C):
         """
         Parameters
@@ -46,7 +49,6 @@ class MemoryOnePlayer(Player):
         self._initial = initial
         if four_vector:
             self.set_four_vector(four_vector)
-        self.init_args = (four_vector, initial)
 
     def set_four_vector(self, four_vector):
         if not all(0 <= p <= 1 for p in four_vector):
@@ -71,17 +73,25 @@ class WinStayLoseShift(MemoryOnePlayer):
 
     name = 'Win-Stay Lose-Shift'
 
+    @init_args
     def __init__(self, initial=C):
         Player.__init__(self)
         self.set_four_vector([1,0,0,1])
         self._initial = initial
-        self.init_args = (initial,)
 
 
 class GTFT(MemoryOnePlayer):
     """Generous Tit-For-Tat Strategy."""
 
     name = 'GTFT'
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector
+        'stochastic': True,
+        'makes_use_of': set(["game"]),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, p=None):
         """
@@ -114,10 +124,10 @@ class StochasticCooperator(MemoryOnePlayer):
 
     name = 'Stochastic Cooperator'
 
+    @init_args
     def __init__(self):
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super(StochasticCooperator, self).__init__(four_vector)
-        self.init_args = ()
         self.set_four_vector(four_vector)
 
 
@@ -126,6 +136,7 @@ class StochasticWSLS(MemoryOnePlayer):
 
     name = 'Stochastic WSLS'
 
+    @init_args
     def __init__(self, ep=0.05):
         """
         Parameters
@@ -142,7 +153,6 @@ class StochasticWSLS(MemoryOnePlayer):
         self.ep = ep
         four_vector = (1.-ep, ep, ep, 1.-ep)
         super(StochasticWSLS, self).__init__(four_vector)
-        self.init_args = (ep,)
         self.set_four_vector(four_vector)
 
 
@@ -159,6 +169,15 @@ class LRPlayer(MemoryOnePlayer):
     """
 
     name = 'LinearRelation'
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector
+        'stochastic': True,
+        'makes_use_of': set(["game"]),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
 
     def receive_tournament_attributes(self, phi=0, s=None, l=None):
         """
@@ -194,6 +213,7 @@ class ZDExtort2(LRPlayer):
 
     name = 'ZD-Extort-2'
 
+    @init_args
     def __init__(self, phi=1./9, s=0.5):
         """
         Parameters
@@ -205,7 +225,6 @@ class ZDExtort2(LRPlayer):
         self.phi = phi
         self.s = s
         super(ZDExtort2, self).__init__()
-        self.init_args = (phi, s)
 
     def receive_tournament_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
@@ -219,6 +238,7 @@ class ZDExtort2v2(LRPlayer):
 
     name = 'ZD-Extort-2 v2'
 
+    @init_args
     def __init__(self, phi=1./8, s=0.5, l=1):
         """
         Parameters
@@ -231,7 +251,6 @@ class ZDExtort2v2(LRPlayer):
         self.s = s
         self.l = l
         super(ZDExtort2v2, self).__init__()
-        self.init_args = (phi, s, l)
 
     def receive_tournament_attributes(self):
         super(ZDExtort2v2, self).receive_tournament_attributes(
@@ -244,6 +263,7 @@ class ZDExtort4(LRPlayer):
 
     name = 'ZD-Extort-4'
 
+    @init_args
     def __init__(self, phi=4./17, s=0.25, l=1):
         """
         Parameters
@@ -256,7 +276,6 @@ class ZDExtort4(LRPlayer):
         self.s = s
         self.l = l
         super(ZDExtort4, self).__init__()
-        self.init_args = (phi, s, l)
 
     def receive_tournament_attributes(self):
         super(ZDExtort4, self).receive_tournament_attributes(
@@ -268,6 +287,7 @@ class ZDGen2(LRPlayer):
 
     name = 'ZD-GEN-2'
 
+    @init_args
     def __init__(self, phi=1./8, s=0.5, l=3):
         """
         Parameters
@@ -280,7 +300,6 @@ class ZDGen2(LRPlayer):
         self.s = s
         self.l = l
         super(ZDGen2, self).__init__()
-        self.init_args = (phi, s, l)
 
     def receive_tournament_attributes(self):
         super(ZDGen2, self).receive_tournament_attributes(
@@ -317,6 +336,7 @@ class ZDSet2(LRPlayer):
 
     name = 'ZD-SET-2'
 
+    @init_args
     def __init__(self, phi=1./4, s=0., l=2):
         """
         Parameters
@@ -329,7 +349,6 @@ class ZDSet2(LRPlayer):
         self.s = s
         self.l = l
         super(ZDSet2, self).__init__()
-        self.init_args = (phi, s, l)
 
     def receive_tournament_attributes(self):
         super(ZDSet2, self).receive_tournament_attributes(
@@ -347,6 +366,7 @@ class SoftJoss(MemoryOnePlayer):
 
     name = "Soft Joss"
 
+    @init_args
     def __init__(self, q=0.9):
         """
         Parameters
@@ -362,7 +382,6 @@ class SoftJoss(MemoryOnePlayer):
         self.q = q
         four_vector = (1., 1 - q, 1, 1 - q)
         super(SoftJoss, self).__init__(four_vector)
-        self.init_args = (q,)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.q, 2))
@@ -381,6 +400,7 @@ class ALLCorALLD(Player):
     classifier = {
         'memory_depth': 1,  # Memory-one Four-Vector (1, 1, 0, 0)
         'stochastic': True,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
