@@ -61,6 +61,6 @@ but you can use any characters you like::
     >>> match = axl.Match(players, 25)
     >>> match.play()
     [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
-    >>> print(match.sparklines(c_character='|', d_character='-'))
+    >>> print(match.sparklines(c_symbol='|', d_symbol='-'))
     |||||||||||||||||||||||||
     |-|-|-|-|-|-|-|-|-|-|-|-|
