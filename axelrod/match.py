@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-def sparkline(actions):
-    return u''.join([u'█' if play == 'C' else u' ' for play in actions])
+def sparkline(actions, c_character=u'█', d_character=u' '):
+    return u''.join([
+        c_character if play == 'C' else d_character for play in actions])
 
 
 class Match(object):
@@ -54,8 +55,8 @@ class Match(object):
         return (
             not self._noise and
             self._cache_mutable and not (
-                self._player1.classifier['stochastic']
-                or self._player2.classifier['stochastic'])
+                self._player1.classifier['stochastic'] or
+                self._player2.classifier['stochastic'])
         )
 
     def play(self):
@@ -94,8 +95,8 @@ class Match(object):
         return result
 
     @property
-    def sparklines(self):
+    def sparklines(self,c_character=u'█', d_character=u' '):
         return (
-            sparkline(self._player1.history) +
+            sparkline(self._player1.history, c_character, d_character) +
             u'\n' +
-            sparkline(self._player2.history))
+            sparkline(self._player2.history, c_character, d_character))
