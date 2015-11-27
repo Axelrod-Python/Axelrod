@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-def sparkline(actions):
-    return u''.join([u'█' if play == 'C' else u' ' for play in actions])
+def sparkline(actions, symbol=u'█'):
+    return u''.join([symbol if play == 'C' else u' ' for play in actions])
 
 
 class Match(object):
@@ -58,7 +58,7 @@ class Match(object):
                 or self._player2.classifier['stochastic'])
         )
 
-    def play(self):
+    def play(self, symbol=u'█'):
         """
         The resulting list of actions from a match between two players.
 
@@ -93,9 +93,8 @@ class Match(object):
         self.result = result
         return result
 
-    @property
-    def sparklines(self):
+    def sparklines(self, symbol=u'█'):
         return (
-            sparkline(self._player1.history) +
+            sparkline(self._player1.history, symbol=symbol) +
             u'\n' +
-            sparkline(self._player2.history))
+            sparkline(self._player2.history, symbol=symbol))

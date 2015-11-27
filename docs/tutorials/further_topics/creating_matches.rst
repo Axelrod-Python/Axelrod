@@ -49,6 +49,12 @@ way to view the result and can be useful for spotting patterns::
     >>> match = axl.Match(players, 25)
     >>> match.play()
     [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
-    >>> print(match.sparklines) # doctest: +SKIP
+    >>> print(match.sparklines()) # doctest: +SKIP
     █████████████████████████
     █ █ █ █ █ █ █ █ █ █ █ █ █
+
+Note that it is possible to create sparklines using a symbol of your choice::
+
+    >>> print(match.sparklines(symbol='X'))
+    XXXXXXXXXXXXXXXXXXXXXXXXX
+    X X X X X X X X X X X X X
