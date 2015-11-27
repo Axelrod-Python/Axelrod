@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-def sparkline(actions, c_character=u'█', d_character=u' '):
+def sparkline(actions, c_symbol=u'█', d_symbol=u' '):
     return u''.join([
-        c_character if play == 'C' else d_character for play in actions])
+        c_symbol if play == 'C' else d_symbol for play in actions])
 
 
 class Match(object):
@@ -94,8 +94,8 @@ class Match(object):
         self.result = result
         return result
 
-    def sparklines(self, c_character=u'█', d_character=u' '):
+    def sparklines(self, c_symbol=u'█', d_symbol=u' '):
         return (
-            sparkline(self._player1.history, c_character, d_character) +
+            sparkline(self._player1.history, c_symbol, d_symbol) +
             u'\n' +
-            sparkline(self._player2.history, c_character, d_character))
+            sparkline(self._player2.history, c_symbol, d_symbol))
