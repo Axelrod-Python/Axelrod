@@ -18,7 +18,7 @@ class Match(object):
         turns : integer
                 The number of turns per match
         deterministic_cache : dictionary
-            A cache of resulting actions for stochastic matches
+            A cache of resulting actions for deterministic matches
         cache_mutable : boolean
             Whether the deterministic cache can be updated or not
         noise : float
