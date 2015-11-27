@@ -94,8 +94,7 @@ class Match(object):
         self.result = result
         return result
 
-    @property
-    def sparklines(self,c_character=u'█', d_character=u' '):
+    def sparklines(self, c_character=u'█', d_character=u' '):
         return (
             sparkline(self._player1.history, c_character, d_character) +
             u'\n' +
