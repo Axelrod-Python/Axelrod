@@ -69,4 +69,7 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match(players, 4)
         match.play()
         expected_sparklines = u'████\n█ █ '
-        self.assertEqual(match.sparklines, expected_sparklines)
+        self.assertEqual(match.sparklines(), expected_sparklines)
+        expected_sparklines = u'XXXX\nXYXY'
+        self.assertEqual(match.sparklines('X', 'Y'), expected_sparklines)
+
