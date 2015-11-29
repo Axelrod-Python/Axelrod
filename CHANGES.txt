@@ -18,3 +18,4 @@ v0.0.17, 2015-10-30 -- Strategy transforms and bug fixes
 v0.0.18, 2015-11-04 -- New strategies
 v0.0.19, 2015-11-21 -- Efficiency improvements, new default colour maps
 v0.0.20, 2015-11-21 -- Strategies have 'makes_use_of' attribute, improved docs/doctests,
+v0.0.21, 2015-11-29 -- Match class with sparklines.
