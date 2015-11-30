@@ -24,3 +24,8 @@ script:
   - python doctests.py
 after_success:
   - coveralls
+notifications:
+    webhooks:
+        urls:
+            - https://webhooks.gitter.im/e/3cc093037c0df458209d
+
