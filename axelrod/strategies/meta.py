@@ -2,6 +2,7 @@ from axelrod import Actions, Player, obey_axelrod
 from ._strategies import strategies
 from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter, EventualCycleHunter
 from .cooperator import Cooperator
+from numpy.random import choice
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in strategies if obey_axelrod(s)]
@@ -266,3 +267,40 @@ class MetaWinnerLongMemory(MetaWinner):
                 == float('inf')]
         super(MetaWinnerLongMemory, self).__init__(team=team)
         self.init_args = ()
+
+
+class MetaMutater(MetaPlayer):
+    """A player who randomly switch between a team of players.
+    If no distribution is passed then the player will uniformly choose between
+    sub players.
+
+    Parameters
+    ----------
+    team : list of strategy classes, optional
+        Team of strategies that are to be randomly played
+        If none is passed will select the ordinary strategies.
+    distribution : list representing a probability distribution, optional
+        This gives the distribution from which to select the players.
+        If none is passed will select uniformly.
+    """
+
+    name = "Meta Mutater"
+
+    def __init__(self, team=None, distribution=None):
+
+        # The default is to use all strategies available, but we need to import the list
+        # at runtime, since _strategies import also _this_ module before defining the list.
+        if team:
+            self.team = team
+        else:
+            # Needs to be computed manually to prevent circular dependency
+            self.team = ordinary_strategies
+
+        self.distribution = distribution
+
+        super(MetaMutater, self).__init__()
+        self.init_args = (team, distribution)
+
+    def meta_strategy(self, results, opponent):
+        """Using the numpy.random choice function to sample with weights"""
+        return choice(results, p=self.distribution)
