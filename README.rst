@@ -10,6 +10,9 @@
 .. image:: https://travis-ci.org/Axelrod-Python/Axelrod.svg?branch=packaging
     :target: https://travis-ci.org/Axelrod-Python/Axelrod
 
+.. image:: https://zenodo.org/badge/19509/Axelrod-Python/Axelrod.svg
+    :target: https://zenodo.org/badge/latestdoi/19509/Axelrod-Python/Axelrod
+
 |Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
 
 Axelrod
