@@ -9,6 +9,7 @@ See the various Meta strategies for another type of transformation.
 import inspect
 import random
 from types import FunctionType
+from numpy.random import choice
 
 from .actions import Actions, flip_action
 from .random_ import random_choice
@@ -239,6 +240,31 @@ def apology_wrapper(player, opponent, action, myseq, opseq):
 ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
                                                 name_prefix="Apologizing")
 
+
+def mutate_wrapper(player, opponent, action, probability, m_player):
+    """"""
+
+    # If a single probability, player is passed
+    if type(probability) in [float, int]:
+        m_player = [m_player]
+        probability = [probability]
+
+    # If a probability distribution, players is passed
+    if type(probability) == type(m_player) is list:
+        mutate_prob = sum(probability)  # Prob of mutation
+        if mutate_prob > 0:
+            # Distribution of choice of mutation:
+            normalised_prob = [prob / float(mutate_prob)
+                               for prob in probability]
+            if random.random() < mutate_prob:
+                p = choice(m_player, p=normalised_prob)()
+                p.history = player.history
+                return p.strategy(opponent)
+
+    return action
+
+MutateTransformer = StrategyTransformerFactory(mutate_wrapper, name_prefix="Mutated")
+
 # Strategy wrappers as classes
 
 class RetaliationWrapper(object):
@@ -259,6 +285,7 @@ class RetaliationWrapper(object):
 
 RetaliationTransformer = StrategyTransformerFactory(
     RetaliationWrapper(), name_prefix="Retaliating")
+
 
 class RetaliationUntilApologyWrapper(object):
     """Enforces the TFT rule that the opponent pay back a defection with a
