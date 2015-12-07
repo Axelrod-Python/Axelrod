@@ -242,7 +242,8 @@ ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
 
 
 def mutate_wrapper(player, opponent, action, probability, m_player):
-    """"""
+    """Randomly picks a strategy to play, either from a distribution on a list
+    of players or a single player."""
 
     # If a single probability, player is passed
     if type(probability) in [float, int]:
