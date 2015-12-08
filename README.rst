@@ -1,6 +1,3 @@
-.. image:: https://badge.waffle.io/Axelrod-Python/Axelrod.svg?label=ready&title=Ready
-    :target: https://waffle.io/Axelrod-Python/Axelrod
-
 .. image:: https://coveralls.io/repos/Axelrod-Python/Axelrod/badge.svg
     :target: https://coveralls.io/r/Axelrod-Python/Axelrod
 
