@@ -241,9 +241,12 @@ ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
                                                 name_prefix="Apologizing")
 
 
-def mutate_wrapper(player, opponent, action, probability, m_player):
+def mixed_wrapper(player, opponent, action, probability, m_player):
     """Randomly picks a strategy to play, either from a distribution on a list
-    of players or a single player."""
+    of players or a single player.
+
+    In essence creating a mixed strategy.
+    """
 
     # If a single probability, player is passed
     if type(probability) in [float, int]:
@@ -264,7 +267,7 @@ def mutate_wrapper(player, opponent, action, probability, m_player):
 
     return action
 
-MutateTransformer = StrategyTransformerFactory(mutate_wrapper, name_prefix="Mutated")
+MixedTransformer = StrategyTransformerFactory(mixed_wrapper, name_prefix="Mutated")
 
 # Strategy wrappers as classes
 
