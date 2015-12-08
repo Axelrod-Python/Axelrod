@@ -9,13 +9,13 @@ from .meta import (
     MetaPlayer, MetaMajority, MetaMinority, MetaWinner, MetaHunter,
     MetaMajorityMemoryOne, MetaWinnerMemoryOne, MetaMajorityFiniteMemory,
     MetaWinnerFiniteMemory, MetaMajorityLongMemory, MetaWinnerLongMemory,
-    MetaMutater
+    MetaMixer
     )
 
 strategies.extend((MetaHunter, MetaMajority, MetaMinority, MetaWinner,
                    MetaMajorityMemoryOne, MetaWinnerMemoryOne,
                    MetaMajorityFiniteMemory, MetaWinnerFiniteMemory,
-                   MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMutater))
+                   MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMixer))
 
 # Distinguished strategy collections in addition to
 # `strategies` from _strategies.py
