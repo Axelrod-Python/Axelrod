@@ -249,12 +249,12 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
     """
 
     # If a single probability, player is passed
-    if type(probability) in [float, int]:
+    if isinstance(probability, float) or isinstance(probability, int):
         m_player = [m_player]
         probability = [probability]
 
     # If a probability distribution, players is passed
-    if type(probability) == type(m_player) is list:
+    if isinstance(probability, list) and isinstance(m_player, list):
         mutate_prob = sum(probability)  # Prob of mutation
         if mutate_prob > 0:
             # Distribution of choice of mutation:
