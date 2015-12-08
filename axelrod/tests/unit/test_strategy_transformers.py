@@ -213,9 +213,9 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [D, D, C, D, D, C])
 
     def test_mutate(self):
-        """Tests the MutateTransformer."""
+        """Tests the MixedTransformer."""
         probability = 1
-        MD = MutateTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
+        MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
 
         p1 = MD()
         p2 = axelrod.Cooperator()
@@ -224,7 +224,7 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [C, C, C, C, C])
 
         probability = 0
-        MD = MutateTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
+        MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
 
         p1 = MD()
         p2 = axelrod.Cooperator()
@@ -238,7 +238,7 @@ class TestTransformers(unittest.TestCase):
         # 'nice'
         probability = [.3, .2, 0]
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
-        MD = MutateTransformer(probability, strategies)(axelrod.Cooperator)
+        MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
 
         p1 = MD()
         # Against a cooperator we see that we only cooperate
@@ -250,7 +250,7 @@ class TestTransformers(unittest.TestCase):
         # Decorate a cooperator putting all weight on Defector
         probability = [0, 0, 1]
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
-        MD = MutateTransformer(probability, strategies)(axelrod.Cooperator)
+        MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
 
         p1 = MD()
         # Against a cooperator we see that we only cooperate
