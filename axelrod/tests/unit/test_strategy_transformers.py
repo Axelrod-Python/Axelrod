@@ -212,7 +212,7 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, C, D, D, C])
 
-    def test_mutate(self):
+    def test_mixed(self):
         """Tests the MixedTransformer."""
         probability = 1
         MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
@@ -248,7 +248,7 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [C, C, C, C, C])
 
         # Decorate a cooperator putting all weight on Defector
-        probability = [0, 0, 1]
+        probability = (0, 0, 1)  # Note can also pass tuple
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
         MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
 
