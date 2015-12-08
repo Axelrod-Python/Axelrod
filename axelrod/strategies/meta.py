@@ -269,10 +269,12 @@ class MetaWinnerLongMemory(MetaWinner):
         self.init_args = ()
 
 
-class MetaMutater(MetaPlayer):
-    """A player who randomly switch between a team of players.
+class MetaMixer(MetaPlayer):
+    """A player who randomly switches between a team of players.
     If no distribution is passed then the player will uniformly choose between
     sub players.
+
+    In essence this is creating a Mixed strategy.
 
     Parameters
     ----------
@@ -284,7 +286,7 @@ class MetaMutater(MetaPlayer):
         If none is passed will select uniformly.
     """
 
-    name = "Meta Mutater"
+    name = "Meta Mixer"
 
     def __init__(self, team=None, distribution=None):
 
@@ -298,7 +300,7 @@ class MetaMutater(MetaPlayer):
 
         self.distribution = distribution
 
-        super(MetaMutater, self).__init__()
+        super(MetaMixer, self).__init__()
         self.init_args = (team, distribution)
 
     def meta_strategy(self, results, opponent):
