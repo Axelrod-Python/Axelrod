@@ -8,7 +8,7 @@ See the various Meta strategies for another type of transformation.
 
 import inspect
 import random
-from types import FunctionType
+import collections
 from numpy.random import choice
 
 from .actions import Actions, flip_action
@@ -246,6 +246,16 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
     of players or a single player.
 
     In essence creating a mixed strategy.
+
+    Parameters
+    ----------
+
+    probability: a float (or integer: 0 or 1) OR an iterable representing a
+        an incomplete probability distribution (entries to do not have to sum to
+        1). Eg: 0, 1, [.5,.5], (.5,.3)
+    m_players: a single player class or iterable representing set of player
+        classes to mix from.
+        Eg: axelrod.TitForTat, [axelod.Cooperator, axelrod.Defector]
     """
 
     # If a single probability, player is passed
@@ -254,14 +264,15 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
         probability = [probability]
 
     # If a probability distribution, players is passed
-    if isinstance(probability, list) and isinstance(m_player, list):
+    if isinstance(probability, collections.Iterable) and \
+            isinstance(m_player, collections.Iterable):
         mutate_prob = sum(probability)  # Prob of mutation
         if mutate_prob > 0:
             # Distribution of choice of mutation:
             normalised_prob = [prob / float(mutate_prob)
                                for prob in probability]
             if random.random() < mutate_prob:
-                p = choice(m_player, p=normalised_prob)()
+                p = choice(list(m_player), p=normalised_prob)()
                 p.history = player.history
                 return p.strategy(opponent)
 
