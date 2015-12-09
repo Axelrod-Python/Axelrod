@@ -7,7 +7,7 @@ Welcome to the documentation for the Axelrod Python library
 ===========================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    tutorials/index.rst
    reference/index.rst
