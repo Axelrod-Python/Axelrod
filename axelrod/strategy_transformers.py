@@ -8,7 +8,8 @@ See the various Meta strategies for another type of transformation.
 
 import inspect
 import random
-from types import FunctionType
+import collections
+from numpy.random import choice
 
 from .actions import Actions, flip_action
 from .random_ import random_choice
@@ -239,6 +240,46 @@ def apology_wrapper(player, opponent, action, myseq, opseq):
 ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
                                                 name_prefix="Apologizing")
 
+
+def mixed_wrapper(player, opponent, action, probability, m_player):
+    """Randomly picks a strategy to play, either from a distribution on a list
+    of players or a single player.
+
+    In essence creating a mixed strategy.
+
+    Parameters
+    ----------
+
+    probability: a float (or integer: 0 or 1) OR an iterable representing a
+        an incomplete probability distribution (entries to do not have to sum to
+        1). Eg: 0, 1, [.5,.5], (.5,.3)
+    m_players: a single player class or iterable representing set of player
+        classes to mix from.
+        Eg: axelrod.TitForTat, [axelod.Cooperator, axelrod.Defector]
+    """
+
+    # If a single probability, player is passed
+    if isinstance(probability, float) or isinstance(probability, int):
+        m_player = [m_player]
+        probability = [probability]
+
+    # If a probability distribution, players is passed
+    if isinstance(probability, collections.Iterable) and \
+            isinstance(m_player, collections.Iterable):
+        mutate_prob = sum(probability)  # Prob of mutation
+        if mutate_prob > 0:
+            # Distribution of choice of mutation:
+            normalised_prob = [prob / float(mutate_prob)
+                               for prob in probability]
+            if random.random() < mutate_prob:
+                p = choice(list(m_player), p=normalised_prob)()
+                p.history = player.history
+                return p.strategy(opponent)
+
+    return action
+
+MixedTransformer = StrategyTransformerFactory(mixed_wrapper, name_prefix="Mutated")
+
 # Strategy wrappers as classes
 
 class RetaliationWrapper(object):
@@ -259,6 +300,7 @@ class RetaliationWrapper(object):
 
 RetaliationTransformer = StrategyTransformerFactory(
     RetaliationWrapper(), name_prefix="Retaliating")
+
 
 class RetaliationUntilApologyWrapper(object):
     """Enforces the TFT rule that the opponent pay back a defection with a
