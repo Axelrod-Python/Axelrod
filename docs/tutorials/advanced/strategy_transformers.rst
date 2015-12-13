@@ -132,6 +132,23 @@ after two consequtive rounds of `(D, C)`::
     >>> from axelrod.strategy_transformers import TrackHistoryTransformer
     >>> player = TrackHistoryTransformer(axelrod.Random)()
 
+* :code:`MixedTransformer`: Randomly plays a mutation to another strategy (or
+  set of strategies. Here is the syntax to do this with a set of strategies::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import MixedTransformer
+    >>> strategies = [axelrod.Grudger, axelrod.TitForTat]
+    >>> probability = [.2, .3]  # .5 chance of mutated to one of above
+    >>> player =  MixedTransformer(probability, strategies)(axelrod.Cooperator)
+
+  Here is the syntax when passing a single strategy::
+
+    >>> import axelrod
+    >>> from axelrod.strategy_transformers import MixedTransformer
+    >>> strategy = axelrod.Grudger
+    >>> probability = .2
+    >>> player =  MixedTransformer(probability, strategy)(axelrod.Cooperator)
+
 
 Composing Transformers
 ----------------------

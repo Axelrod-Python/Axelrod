@@ -13,7 +13,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 class TestTransformers(unittest.TestCase):
 
     def test_all_strategies(self):
-        # Attempt to transform each strategy to ensure that implemenation
+        # Attempt to transform each strategy to ensure that implementation
         # choices (like use of super) do not cause issues
         for s in axelrod.ordinary_strategies:
             opponent = axelrod.Cooperator()
@@ -211,6 +211,53 @@ class TestTransformers(unittest.TestCase):
         for _ in range(6):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, C, D, D, C])
+
+    def test_mixed(self):
+        """Tests the MixedTransformer."""
+        probability = 1
+        MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
+
+        p1 = MD()
+        p2 = axelrod.Cooperator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, C, C, C, C])
+
+        probability = 0
+        MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
+
+        p1 = MD()
+        p2 = axelrod.Cooperator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, D, D, D, D])
+
+        # Decorating with list and distribution
+
+        # Decorate a cooperator putting all weight on other strategies that are
+        # 'nice'
+        probability = [.3, .2, 0]
+        strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
+        MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
+
+        p1 = MD()
+        # Against a cooperator we see that we only cooperate
+        p2 = axelrod.Cooperator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, C, C, C, C])
+
+        # Decorate a cooperator putting all weight on Defector
+        probability = (0, 0, 1)  # Note can also pass tuple
+        strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
+        MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
+
+        p1 = MD()
+        # Against a cooperator we see that we only cooperate
+        p2 = axelrod.Cooperator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, D, D, D, D])
 
     def test_deadlock(self):
         """Test the DeadlockBreakingTransformer."""

@@ -284,3 +284,51 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
+
+
+class TestMetaMixer(TestMetaPlayer):
+
+    name = "Meta Mixer"
+    player = axelrod.MetaMixer
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'manipulates_source': False,
+        'inspects_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+
+        team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
+        distribution = [.2, .5, .3]
+
+        P1 = axelrod.MetaMixer(team, distribution)
+        P2 = axelrod.Cooperator()
+
+        for k in range(100):
+            self.assertEqual(P1.strategy(P2), C)
+
+        team.append(axelrod.Defector)
+        distribution = [.2, .5, .3, 0]  # If add a defector but does not occur
+
+        P1 = axelrod.MetaMixer(team, distribution)
+
+        for k in range(100):
+            self.assertEqual(P1.strategy(P2), C)
+
+        distribution = [0, 0, 0, 1]  # If defector is only one that is played
+
+        P1 = axelrod.MetaMixer(team, distribution)
+
+        for k in range(100):
+            self.assertEqual(P1.strategy(P2), D)
+
+    def test_raise_error_in_distribution(self):
+        team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
+        distribution = [.2, .5, .5]  # Not a valid probability distribution
+
+        P1 = axelrod.MetaMixer(team, distribution)
+        P2 = axelrod.Cooperator()
+
+        self.assertRaises(ValueError, P1.strategy, P2)
