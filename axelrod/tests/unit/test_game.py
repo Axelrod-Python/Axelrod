@@ -30,25 +30,21 @@ class TestGame(unittest.TestCase):
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
     def test_property_init(self, r, p, s, t):
-        """Use the hypothesis library to test properties using the hypothesis
-        library"""
+        """Use the hypothesis library to test init"""
         expected_scores = {(C, D): (s, t), (D, C): (t, s),
                            (D, D): (p, p), (C, C): (r, r)}
         game = axelrod.Game(r, s, t, p)
         self.assertEqual(game.scores, expected_scores)
 
-
     @given(r=integers(), p=integers(), s=integers(), t=integers())
     def test_property_RPST(self, r, p, s, t):
-        """Use the hypothesis library to test properties using the hypothesis
-        library"""
+        """Use the hypothesis library to test RPST"""
         game = axelrod.Game(r, s, t, p)
         self.assertEqual(game.RPST(), (r, p, s, t))
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
     def test_property_score(self, r, p, s, t):
-        """Use the hypothesis library to test properties using the hypothesis
-        library"""
+        """Use the hypothesis library to test score"""
         game = axelrod.Game(r, s, t, p)
         self.assertEqual(game.score((C, C)), (r, r))
         self.assertEqual(game.score((D, D)), (p, p))
