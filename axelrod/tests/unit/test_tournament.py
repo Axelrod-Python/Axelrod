@@ -5,6 +5,9 @@ import axelrod
 import logging
 import multiprocessing
 
+from hypothesis import given
+from hypothesis.strategies import lists, sampled_from, Settings
+
 try:
     # Python 3
     from unittest.mock import MagicMock
@@ -98,6 +101,26 @@ class TestTournament(unittest.TestCase):
         tournament._run_serial_repetitions.assert_called_once_with(
             {'cooperation': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned is less than 2 strategies
+                   max_size=10, unique=True), settings=Settings(max_examples=5))
+    def test_property_serial_play(self, s):
+        """Test serial play using hypothesis"""
+        # Test that we get an instance of ResultSet
+        players = [strat() for strat in s]
+
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(len(results.cooperation), len(players))
+        self.assertEqual(results.nplayers, len(players))
+        self.assertEqual(results.players, players)
 
     def test_parallel_play(self):
         # Test that we get an instance of ResultSet
