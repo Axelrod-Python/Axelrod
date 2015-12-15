@@ -107,7 +107,7 @@ class TestTournament(unittest.TestCase):
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
     @given(s=lists(sampled_from(axelrod.strategies),
-                   min_size=2,  # Errors are returned is less than 2 strategies
+                   min_size=2,  # Errors are returned if less than 2 strategies
                    max_size=5, unique=True),
            turns=integers(min_value=2, max_value=50),
            repetitions=integers(min_value=2, max_value=4),
