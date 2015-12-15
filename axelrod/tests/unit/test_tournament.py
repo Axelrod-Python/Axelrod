@@ -106,16 +106,17 @@ class TestTournament(unittest.TestCase):
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned is less than 2 strategies
                    max_size=5, unique=True),
+           turns=integers(min_value=2, max_value=50),
+           repetitions=integers(min_value=2, max_value=4),
            seed=integers(),
-           settings=Settings(max_examples=10,
+           settings=Settings(max_examples=50,
                              timeout=0))
-    def test_property_serial_play(self, s, seed):
+    def test_property_serial_play(self, s, turns, repetitions, seed):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
         try:
-            # Make test use a seed
-            # Because of the given, if the test failed, Hypothesis would tell us
-            # what seed it failed on...
+            # Make test use a seed Because of the given, if the test failed,
+            # Hypothesis would tell us what seed it failed on...
             state = random.getstate()
             random.seed(seed)
 
@@ -126,8 +127,8 @@ class TestTournament(unittest.TestCase):
                 name=self.test_name,
                 players=players,
                 game=self.game,
-                turns=200,
-                repetitions=self.test_repetitions)
+                turns=turns,
+                repetitions=repetitions)
             results = tournament.play()
             self.assertIsInstance(results, axelrod.ResultSet)
             self.assertEqual(len(results.cooperation), len(players))
