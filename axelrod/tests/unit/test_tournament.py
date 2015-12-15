@@ -1,12 +1,13 @@
 """Tests for the main tournament class."""
 
-import unittest
 import axelrod
 import logging
 import multiprocessing
+import random
+import unittest
 
 from hypothesis import given
-from hypothesis.strategies import lists, sampled_from, Settings
+from hypothesis.strategies import integers, lists, sampled_from, Settings
 
 try:
     # Python 3
@@ -104,23 +105,36 @@ class TestTournament(unittest.TestCase):
 
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned is less than 2 strategies
-                   max_size=10, unique=True), settings=Settings(max_examples=5))
-    def test_property_serial_play(self, s):
+                   max_size=5, unique=True),
+           seed=integers(),
+           settings=Settings(max_examples=10,
+                             timeout=0))
+    def test_property_serial_play(self, s, seed):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
-        players = [strat() for strat in s]
+        try:
+            # Make test use a seed
+            # Because of the given, if the test failed, Hypothesis would tell us
+            # what seed it failed on...
+            state = random.getstate()
+            random.seed(seed)
 
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        results = tournament.play()
-        self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(len(results.cooperation), len(players))
-        self.assertEqual(results.nplayers, len(players))
-        self.assertEqual(results.players, players)
+            # The actual test
+            players = [strat() for strat in s]
+
+            tournament = axelrod.Tournament(
+                name=self.test_name,
+                players=players,
+                game=self.game,
+                turns=200,
+                repetitions=self.test_repetitions)
+            results = tournament.play()
+            self.assertIsInstance(results, axelrod.ResultSet)
+            self.assertEqual(len(results.cooperation), len(players))
+            self.assertEqual(results.nplayers, len(players))
+            self.assertEqual(results.players, players)
+        finally:
+            random.setstate(state)
 
     def test_parallel_play(self):
         # Test that we get an instance of ResultSet
