@@ -6,7 +6,7 @@ import multiprocessing
 import random
 import unittest
 
-from hypothesis import given
+from hypothesis import given, example
 from hypothesis.strategies import integers, lists, sampled_from, Settings
 
 try:
@@ -16,21 +16,24 @@ except ImportError:
     # Python 2
     from mock import MagicMock
 
+test_strategies = [axelrod.Cooperator,
+                   axelrod.TitForTat,
+                   axelrod.Defector,
+                   axelrod.Grudger,
+                   axelrod.GoByMajority]
+test_repetitions = 5
+test_turns = 100
+
 
 class TestTournament(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.game = axelrod.Game()
-        cls.players = [
-            axelrod.Cooperator(),
-            axelrod.TitForTat(),
-            axelrod.Defector(),
-            axelrod.Grudger(),
-            axelrod.GoByMajority()]
+        cls.players = [s() for s in test_strategies]
         cls.test_name = 'test'
-        cls.test_repetitions = 5
-        cls.test_turns = 100
+        cls.test_repetitions = test_repetitions
+        cls.test_turns = test_turns
 
         cls.expected_payoff = [
             [600, 600, 0, 600, 600],
@@ -111,6 +114,8 @@ class TestTournament(unittest.TestCase):
            seed=integers(),
            settings=Settings(max_examples=50,
                              timeout=0))
+    @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
+             seed=integers())
     def test_property_serial_play(self, s, turns, repetitions, seed):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
