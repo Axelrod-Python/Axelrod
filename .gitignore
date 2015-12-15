@@ -6,4 +6,4 @@ _build/
 dist/
 MANIFEST
 Axelrod.egg-info
-.hypothesis/
+.hypothesis/eval_source/
