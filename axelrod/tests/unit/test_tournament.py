@@ -3,11 +3,12 @@
 import axelrod
 import logging
 import multiprocessing
-import random
 import unittest
 
 from hypothesis import given, example
-from hypothesis.strategies import integers, lists, sampled_from, Settings
+from hypothesis.strategies import (integers, lists,
+                                   sampled_from, random_module,
+                                   Settings)
 
 try:
     # Python 3
@@ -111,36 +112,28 @@ class TestTournament(unittest.TestCase):
                    max_size=5, unique=True),
            turns=integers(min_value=2, max_value=50),
            repetitions=integers(min_value=2, max_value=4),
-           seed=integers(),
            settings=Settings(max_examples=50,
-                             timeout=0))
+                             timeout=0),
+           rm=random_module())
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
-             seed=integers())
-    def test_property_serial_play(self, s, turns, repetitions, seed):
+             rm=random_module())
+    def test_property_serial_play(self, s, turns, repetitions, rm):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
-        try:
-            # Make test use a seed Because of the given, if the test failed,
-            # Hypothesis would tell us what seed it failed on...
-            state = random.getstate()
-            random.seed(seed)
+        players = [strat() for strat in s]
 
-            # The actual test
-            players = [strat() for strat in s]
-
-            tournament = axelrod.Tournament(
-                name=self.test_name,
-                players=players,
-                game=self.game,
-                turns=turns,
-                repetitions=repetitions)
-            results = tournament.play()
-            self.assertIsInstance(results, axelrod.ResultSet)
-            self.assertEqual(len(results.cooperation), len(players))
-            self.assertEqual(results.nplayers, len(players))
-            self.assertEqual(results.players, players)
-        finally:
-            random.setstate(state)
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=turns,
+            repetitions=repetitions)
+        results = tournament.play()
+        self.assertEqual(2, len(players))  # Tmp test to see test rm
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(len(results.cooperation), len(players))
+        self.assertEqual(results.nplayers, len(players))
+        self.assertEqual(results.players, players)
 
     def test_parallel_play(self):
         # Test that we get an instance of ResultSet
