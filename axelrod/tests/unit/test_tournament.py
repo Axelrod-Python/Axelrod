@@ -4,6 +4,7 @@ import axelrod
 import logging
 import multiprocessing
 import unittest
+import random
 
 from hypothesis import given, example
 from hypothesis.strategies import (integers, lists,
@@ -116,7 +117,7 @@ class TestTournament(unittest.TestCase):
                              timeout=0),
            rm=random_module())
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
-             rm=random_module())
+             rm=random.seed(0))
     def test_property_serial_play(self, s, turns, repetitions, rm):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
@@ -129,7 +130,6 @@ class TestTournament(unittest.TestCase):
             turns=turns,
             repetitions=repetitions)
         results = tournament.play()
-        self.assertEqual(2, len(players))  # Tmp test to see test rm
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(len(results.cooperation), len(players))
         self.assertEqual(results.nplayers, len(players))
