@@ -119,6 +119,19 @@ class GTFT(MemoryOnePlayer):
         return "%s: %s" % (self.name, round(self.p, 2))
 
 
+class FirmButFair(MemoryOnePlayer):
+    """A Classical Strategy described in this paper (and earlier):
+    http://www.math.ubc.ca/~hauert/publications/reprints/hauert_jtb02b.pdf"""
+
+    name = 'Firm But Fair'
+
+    @init_args
+    def __init__(self):
+        four_vector = (1, 0, 1, 2./3)
+        super(FirmButFair, self).__init__(four_vector)
+        self.set_four_vector(four_vector)
+
+
 class StochasticCooperator(MemoryOnePlayer):
     """Stochastic Cooperator, http://www.nature.com/ncomms/2013/130801/ncomms3193/full/ncomms3193.html."""
 
