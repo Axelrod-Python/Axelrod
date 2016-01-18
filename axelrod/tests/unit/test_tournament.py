@@ -1,9 +1,15 @@
 """Tests for the main tournament class."""
 
-import unittest
 import axelrod
 import logging
 import multiprocessing
+import unittest
+import random
+
+from hypothesis import given, example
+from hypothesis.strategies import (integers, lists,
+                                   sampled_from, random_module,
+                                   Settings)
 
 try:
     # Python 3
@@ -12,21 +18,24 @@ except ImportError:
     # Python 2
     from mock import MagicMock
 
+test_strategies = [axelrod.Cooperator,
+                   axelrod.TitForTat,
+                   axelrod.Defector,
+                   axelrod.Grudger,
+                   axelrod.GoByMajority]
+test_repetitions = 5
+test_turns = 100
+
 
 class TestTournament(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.game = axelrod.Game()
-        cls.players = [
-            axelrod.Cooperator(),
-            axelrod.TitForTat(),
-            axelrod.Defector(),
-            axelrod.Grudger(),
-            axelrod.GoByMajority()]
+        cls.players = [s() for s in test_strategies]
         cls.test_name = 'test'
-        cls.test_repetitions = 5
-        cls.test_turns = 100
+        cls.test_repetitions = test_repetitions
+        cls.test_turns = test_turns
 
         cls.expected_payoff = [
             [600, 600, 0, 600, 600],
@@ -98,6 +107,33 @@ class TestTournament(unittest.TestCase):
         tournament._run_serial_repetitions.assert_called_once_with(
             {'cooperation': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           turns=integers(min_value=2, max_value=50),
+           repetitions=integers(min_value=2, max_value=4),
+           settings=Settings(max_examples=50,
+                             timeout=0),
+           rm=random_module())
+    @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
+             rm=random.seed(0))
+    def test_property_serial_play(self, s, turns, repetitions, rm):
+        """Test serial play using hypothesis"""
+        # Test that we get an instance of ResultSet
+        players = [strat() for strat in s]
+
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=turns,
+            repetitions=repetitions)
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(len(results.cooperation), len(players))
+        self.assertEqual(results.nplayers, len(players))
+        self.assertEqual(results.players, players)
 
     def test_parallel_play(self):
         # Test that we get an instance of ResultSet
