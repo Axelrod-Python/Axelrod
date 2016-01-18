@@ -28,9 +28,10 @@ from .hunter import (
 from .inverse import Inverse
 from .lookerup import LookerUp, EvolvedLookerUp
 from .mathematicalconstants import Golden, Pi, e
-from .memoryone import (ALLCorALLD,
-    MemoryOnePlayer, GTFT, SoftJoss, StochasticCooperator, StochasticWSLS,
-    ZDExtort2, ZDExtort2v2, ZDExtort4, ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift)
+from .memoryone import (
+    MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
+    StochasticCooperator, StochasticWSLS, ZDExtort2, ZDExtort2v2, ZDExtort4,
+    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
@@ -80,6 +81,7 @@ strategies = [
     Eatherley,
     EventualCycleHunter,
     Feld,
+    FirmButFair,
     FoolMeForever,
     FoolMeOnce,
     ForgetfulFoolMeOnce,

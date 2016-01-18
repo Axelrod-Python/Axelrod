@@ -61,6 +61,31 @@ class TestGTFT(TestPlayer):
         self.assertAlmostEqual(player._four_vector, expected)
 
 
+class TestFirmButFair(TestPlayer):
+
+    name = "Firm But Fair"
+    player = axelrod.FirmButFair
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_four_vector(self):
+        expected_dictionary = {(C, C): 1, (C, D): 0, (D, C): 1, (D, D): 2./3}
+        test_four_vector(self, expected_dictionary)
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        self.responses_test([C], [C], [C])
+        self.responses_test([C], [D], [D])
+        self.responses_test([D], [C], [C])
+        self.responses_test([D], [D], [C], random_seed=1)
+        self.responses_test([D], [D], [D], random_seed=2)
+
 class TestStochasticCooperator(TestPlayer):
 
     name = "Stochastic Cooperator"
