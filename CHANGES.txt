@@ -22,3 +22,4 @@ v0.0.21, 2015-11-29 -- Match class with sparklines.
 v0.0.22, 2015-12-07 -- Including a DOI.
 v0.0.23, 2015-12-14 -- Mixed strategies (decorator and meta player)
 v0.0.24, 2016-01-19 -- New strategy (FirmButFair) and hypothesis testing
+v0.0.24, 2016-01-26 -- Minor documentation changes.
