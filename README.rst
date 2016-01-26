@@ -85,17 +85,9 @@ Results
 =======
 
 A tournament with the full set of strategies from the library can be found at
-https://github.com/Axelrod-Python/tournament. Here is the latest graphical
-version of the results:
+https://github.com/Axelrod-Python/tournament. These results can be easily viewed
+at http://axelrod-tournament.readthedocs.org.
 
-.. image:: http://axelrod-python.github.io/tournament/assets/strategies_boxplot.svg
-   :width: 100%
-
-.. image:: http://axelrod-python.github.io/tournament/assets/strategies_winplot.svg
-   :width: 100%
-
-See the `tournament repository <https://github.com/Axelrod-Python/tournament>`_
-for many additional plots.
 
 Contributing
 ============
