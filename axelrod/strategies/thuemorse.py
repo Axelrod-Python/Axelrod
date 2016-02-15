@@ -11,7 +11,7 @@ class ThueMorse(Player):
     name = 'ThueMorse'
     round_number = 0
     classifier = {
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -44,7 +44,7 @@ class ThueMorseInverse(ThueMorse):
     name = 'ThueMorseInverse'
     round_number = 0
     classifier = {
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
