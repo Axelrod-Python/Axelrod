@@ -1123,3 +1123,13 @@ LookerUp
 
 LookerUp uses a lookup table to decide what to play based on the last few rounds plus
 the first few plays made by the opponent at the start of the match.
+
+ThueMorse
+^^^^^^^^^
+
+This strategy uses the [Thue-Morse sequence](http://mathworld.wolfram.com/Thue-MorseSequence.html) in order to determine its actions. It will Cooperate on a 1 and Defect on a 0.
+
+ThueMorseInverse
+^^^^^^^^^^^^^^^^
+
+This does the opposite of the ThueMorse strategy, Cooperating on a 0 and Defecting on a 1.
