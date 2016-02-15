@@ -573,14 +573,14 @@ ALLC, ALLD, TFT and RANDOM are defined above. The remaining classical
 strategies are defined below. The tournament also included two Zero Determinant
 strategies, both implemented in the library. The full table of strategies and
 results is `available
-online <http://www.pnas.org/content/109/26/10134/F1.expansion.html)>`_.
+online <http://www.pnas.org/content/109/26/10134/F1.expansion.html>`_.
 
 Memory one strategies
 ^^^^^^^^^^^^^^^^^^^^^
 
 In 2012 `Press and Dyson <http://www.pnas.org/content/109/26/10409.full.pdf>`_
 showed interesting results with regards to so called memory one strategies.
-Stewart and Poltkin implemented a number of these. A memory one strategy is
+Stewart and Plotkin implemented a number of these. A memory one strategy is
 simply a probabilistic strategy that is defined by 4 parameters.  These four
 parameters dictate the probability of cooperating given 1 of 4 possible
 outcomes of the previous round:
@@ -1008,8 +1008,8 @@ Strategies implemented in the module
 Zero Determinant Srategies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There are five zero determinant strategies implemented in the library, with the
-following four-vectors :math:`(P(C \,|\, CC), P(C \,|\, CD), P(C \,|\, DC), P(C \,|\, DD))`:
+There are at least six zero determinant strategies implemented in the library,
+with the following four-vectors :math:`(P(C \,|\, CC), P(C \,|\, CD), P(C \,|\, DC), P(C \,|\, DD))`:
 
 +------------------+-----------------------+--------------------------+
 | Name             | Four-vector           | Axelrod Library Name     |
@@ -1027,11 +1027,11 @@ following four-vectors :math:`(P(C \,|\, CC), P(C \,|\, CD), P(C \,|\, DC), P(C 
 | ZD-SET-2         | (3/4, 1/4, 1/2, 1/4)  | :code:`ZDSet2`           |
 +------------------+-----------------------+--------------------------+
 
-The library also implements a generic LR-strategy as described in
+The library also implements a generic LR-strategy (of which zero determinant
+strategies are a special case) as described in
 [this paper](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886).
-The Zero-Determinant strategies are all special cases. The library also contains
-a strategy called `ALLCorALLD` that results from setting :math:`phi=0` in the LR
-parameterization.
+The library also contains a strategy called `ALLCorALLD` that results from
+setting :math:`phi=0` in the LR parameterization.
 
 Fool Me Once
 ^^^^^^^^^^^^
@@ -1110,13 +1110,12 @@ cooperation.
 OmegaTFT
 ^^^^^^^^
 
-OmegaTFT plays as described in [this paper](http://arxiv.org/pdf/cs/0609017.pdf). It cooperates and retaliates like TitForTat, and keeps
+OmegaTFT plays as described in [this paper](http://arxiv.org/pdf/cs/0609017.pdf).
+It cooperates and retaliates like TitForTat, and keeps
 counters of how often the opponent changes actions. When the counter
 exceeds a threshold, OmegaTFT defects for the rest of the rounds. OmegaTFT
 also keeps a counter to break deadlocks (C D to D C cycles) against
 strategies like SuspiciousTitForTat.
-=======
-=======
 
 LookerUp
 ^^^^^^^^
