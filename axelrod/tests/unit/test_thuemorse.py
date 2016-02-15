@@ -11,7 +11,7 @@ class TestThueMorse(TestPlayer):
     name = 'ThueMorse'
     player = axelrod.ThueMorse
     expected_classifier = {
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -39,7 +39,7 @@ class TestThueMorseInverse(TestPlayer):
     name = 'ThueMorseInverse'
     player = axelrod.ThueMorseInverse
     expected_classifier = {
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
