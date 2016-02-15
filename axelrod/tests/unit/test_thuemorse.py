@@ -11,7 +11,7 @@ class TestThueMorse(TestPlayer):
     name = 'ThueMorse'
     player = axelrod.ThueMorse
     expected_classifier = {
-        'memory_depth': float('Inf'),
+        'memory_depth': 0,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -39,7 +39,7 @@ class TestThueMorseInverse(TestPlayer):
     name = 'ThueMorseInverse'
     player = axelrod.ThueMorseInverse
     expected_classifier = {
-        'memory_depth': float('Inf'),
+        'memory_depth': 0,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -48,7 +48,7 @@ class TestThueMorseInverse(TestPlayer):
     }
 
     def test_strategy(self):
-        """Test that strategy is randomly picked (not affected by history)."""
+        """Test that strategy always picks C first."""
         self.first_play_test(C)
         self.first_play_test(C)
 
