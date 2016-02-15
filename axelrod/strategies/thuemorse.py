@@ -13,17 +13,17 @@ class ThueMorse(Player):
         'manipulates_state': False
     }
 
-    def thuemorse_sequence(self, x):
-	    if x == 0:
-	        return 0
-	    if x%2==0:
-	        return self.thuemorse_sequence(x/2)
-	    if x%2==1:
-	        f = x-1
-	        return 1 - self.thuemorse_sequence(f/2)
+    def thuemorse_sequence(self, round_number):
+        """The recursive definition of the Thue-Morse sequence"""
+        if round_number == 0:
+            return 0
+        if round_number % 2 == 0:
+            return self.thuemorse_sequence(round_number/2)
+        if round_number % 2 == 1:
+            return 1 - self.thuemorse_sequence((round_number - 1) / 2)
 
     def strategy(self, opponent):
-        n = len(self.history)
+        n = len(self.history) # Finds what round we are on
         if self.thuemorse_sequence(n) == 1:
             return Actions.C
         return Actions.D
@@ -31,7 +31,7 @@ class ThueMorse(Player):
 
 
 
-class ThueMorseInverse(Player):
+class ThueMorseInverse(ThueMorse):
     """A player who defects or cooperates according to the Thue-Morse sequence (Inverse of ThueMorse)."""
 
     name = 'ThueMorseInverse'
@@ -44,17 +44,8 @@ class ThueMorseInverse(Player):
         'manipulates_state': False
     }
 
-    def thuemorse_sequence(self, x):
-	    if x == 0:
-	        return 0
-	    if x%2==0:
-	        return self.thuemorse_sequence(x/2)
-	    if x%2==1:
-	        f = x-1
-	        return 1 - self.thuemorse_sequence(f/2)
-
     def strategy(self, opponent):
-        n = len(self.history)
+        n = len(self.history) # Find what round we are on
         if self.thuemorse_sequence(n) == 1:
             return Actions.D
         return Actions.C
