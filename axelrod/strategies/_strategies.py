@@ -42,11 +42,12 @@ from .rand import Random
 from .retaliate import (
     Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
     LimitedRetaliate3)
+from .thuemorse import(
+    ThueMorse, ThueMorseInverse)
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT)
-
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -146,6 +147,8 @@ strategies = [
     StochasticWSLS,
     SuspiciousTitForTat,
     Tester,
+    ThueMorse,
+    ThueMorseInverse,
     TitForTat,
     TitFor2Tats,
     TrickyCooperator,
