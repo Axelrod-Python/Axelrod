@@ -64,3 +64,19 @@ but you can use any characters you like::
     >>> print(match.sparklines(c_symbol='|', d_symbol='-'))
     |||||||||||||||||||||||||
     |-|-|-|-|-|-|-|-|-|-|-|-|
+
+It is also possible to create matches that that have a given probability of
+ending after certain number of turns::
+
+    >>> import axelrod as axl
+    >>> players = (axl.Cooperator(), axl.Alternator())
+    >>> match = axl.Match(players, 25, prob_end=.4)
+    >>> match.play() # doctest: +SKIP
+    [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
+
+In that particular instance the probability of any turn being the last is .4 so the mean length of a match would in fact be :math:`1/0.6\approx 1.667`. Note that you can also pass an infinite amount of turns when passing an ending probability::
+
+    >>> players = (axl.Cooperator(), axl.Alternator())
+    >>> match = axl.Match(players, turns=float("inf"), prob_end=.4)
+    >>> match.play() # doctest: +SKIP
+    [('C', 'C'), ('C', 'D')]
