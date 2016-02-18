@@ -117,8 +117,10 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match(players, turns, prob_end=1)
         self.assertEqual(len(match.play()), 1)
 
-        # If only have prob match ending
-        assume(prob_end > 0)
+    @given(prob_end=floats(min_value=0.25, max_value=0.75),
+           rm=random_module())
+    def test_prob_end_play_with_no_turns(self, prob_end, rm):
+        players = (axelrod.Cooperator(), axelrod.Defector())
         match = axelrod.Match(players, float("inf"), prob_end=prob_end)
         self.assertTrue(0 <= len(match.play()))
 
