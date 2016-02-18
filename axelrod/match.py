@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from random import random
+import random
 from math import log, ceil
 
 
@@ -91,7 +91,8 @@ class Match(object):
             # Which gives for given x = F(n) (ie the random sample) gives n:
             # n = ceil((ln(1-x)/ln(1-p)))
             try:
-                end_turn = ceil(log(1 - random()) / log(1 - self._prob_end))
+                x = random.random()
+                end_turn = ceil(log(1 - x) / log(1 - self._prob_end))
             except ZeroDivisionError:
                 end_turn = float("inf")
             except ValueError:
