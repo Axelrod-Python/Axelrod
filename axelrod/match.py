@@ -82,7 +82,7 @@ class Match(object):
 
         i.e. One entry per turn containing a pair of actions.
         """
-        if 1 > self._prob_end > 0:
+        if self._prob_end is not None:
             # If using a probabilistic end: sample the length of the game.
             # This is using inverse random sample on a pdf given by:
             # f(n) = p_end * (1 - p_end) ^ (n - 1)
@@ -90,9 +90,12 @@ class Match(object):
             # F(n) = 1 - (1 - p) ^ n
             # Which gives for given x = F(n) (ie the random sample) gives n:
             # n = ceil((ln(1-x)/ln(1-p)))
-            end_turn = ceil(log(1 - random()) / log(1 - self._prob_end))
-        elif self._prob_end == 1:
-            end_turn = 1
+            try:
+                end_turn = ceil(log(1 - random()) / log(1 - self._prob_end))
+            except ZeroDivisionError:
+                end_turn = float("inf")
+            except ValueError:
+                end_turn = 1
         else:
             end_turn = float("inf")
 
