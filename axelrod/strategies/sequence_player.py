@@ -27,20 +27,22 @@ class SequencePlayer(Player):
             return Actions.C
 
     def strategy(self, opponent):
+        # Iterate through the sequence and apply the meta strategy
         for s in self.sequence_generator:
             return self.meta_strategy(s)
 
     def reset(self):
+        # Be sure to reset the sequence generator
         Player.reset(self)
         self.sequence_generator = self.generator_function(*self.generator_args)
 
 
 class Memoized(object):
-   '''Decorator. Caches a function's return value each time it is called.
+   """Decorator. Caches a function's return value each time it is called.
    If called later with the same arguments, the cached value is returned
    (not reevaluated). From:
    https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
-   '''
+   """
    def __init__(self, func):
         self.func = func
         self.cache = {}
@@ -58,11 +60,11 @@ class Memoized(object):
             return value
 
    def __repr__(self):
-        '''Return the function's docstring.'''
+        """Return the function's docstring."""
         return self.func.__doc__
 
    def __get__(self, obj, objtype):
-        '''Support instance methods.'''
+        """Support instance methods."""
         return functools.partial(self.__call__, obj)
 
 
@@ -90,7 +92,7 @@ class ThueMorse(SequencePlayer):
     """
     A player who cooperates or defects according to the Thue-Morse sequence.
 
-    The first few terms of the Thue-Morse sequence are:::
+    The first few terms of the Thue-Morse sequence are:
     0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . .
     """
 
@@ -128,6 +130,7 @@ class ThueMorseInverse(ThueMorse):
         SequencePlayer.__init__(self, thue_morse_generator, (0,))
 
     def meta_strategy(self, value):
+        # Switch the default cooperate and defect action on 0 or 1
         if value == 0:
             return Actions.C
         else:
