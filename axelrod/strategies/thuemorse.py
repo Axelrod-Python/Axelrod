@@ -1,6 +1,92 @@
-from axelrod import Actions, Player
+import collections
+import functools
+import itertools
 
-class ThueMorse(Player):
+from axelrod import Actions, Player, init_args
+
+
+class SequencePlayer(Player):
+    """Abstract base class for players that use a generated sequence to
+    determine their plays."""
+
+    @init_args
+    def __init__(self, generator_function, generator_args=None):
+        Player.__init__(self)
+        # Initialize the sequence generator
+        self.generator_function = generator_function
+        self.generator_args = generator_args
+        self.sequence_generator = self.generator_function(*self.generator_args)
+
+    def meta_strategy(self, value):
+        """Determines how to map the sequence value to cooperate or defect.
+        By default, treat values like python truth values. Override in child
+        classes for alternate behaviors."""
+        if value == 0:
+            return Actions.D
+        else:
+            return Actions.C
+
+    def strategy(self, opponent):
+        for s in self.sequence_generator:
+            return self.meta_strategy(s)
+
+    def reset(self):
+        Player.reset(self)
+        self.sequence_generator = self.generator_function(*self.generator_args)
+
+
+class Memoized(object):
+   '''Decorator. Caches a function's return value each time it is called.
+   If called later with the same arguments, the cached value is returned
+   (not reevaluated). From:
+   https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
+   '''
+   def __init__(self, func):
+        self.func = func
+        self.cache = {}
+
+   def __call__(self, *args):
+        if not isinstance(args, collections.Hashable):
+            # uncacheable. a list, for instance.
+            # better to not cache than blow up.
+            return self.func(*args)
+        if args in self.cache:
+            return self.cache[args]
+        else:
+            value = self.func(*args)
+            self.cache[args] = value
+            return value
+
+   def __repr__(self):
+        '''Return the function's docstring.'''
+        return self.func.__doc__
+
+   def __get__(self, obj, objtype):
+        '''Support instance methods.'''
+        return functools.partial(self.__call__, obj)
+
+
+@Memoized
+def recursive_thue_morse(n):
+    """The recursive definition of the Thue-Morse sequence. The first few terms
+    of the Thue-Morse sequence are:
+    0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . ."""
+
+    if n == 0:
+        return 0
+    if n % 2 == 0:
+        return recursive_thue_morse(n / 2)
+    if n % 2 == 1:
+        return 1 - recursive_thue_morse((n - 1) / 2)
+
+def thue_morse_generator(start=0):
+    """A generator for the Thue-Morse sequence."""
+
+    for n in itertools.count(start):
+        yield recursive_thue_morse(n)
+
+
+class ThueMorse(SequencePlayer):
     """
     A player who cooperates or defects according to the Thue-Morse sequence.
 
@@ -9,7 +95,6 @@ class ThueMorse(Player):
     """
 
     name = 'ThueMorse'
-    round_number = 0
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -19,30 +104,16 @@ class ThueMorse(Player):
         'manipulates_state': False
     }
 
-    def thuemorse_sequence(self, n):
-        """The recursive definition of the Thue-Morse sequence"""
-        if n == 0:
-            return 0
-        if n % 2 == 0:
-            return self.thuemorse_sequence(n/2)
-        if n % 2 == 1:
-            return 1 - self.thuemorse_sequence((n - 1) / 2)
-
-    def strategy(self, opponent):
-        ThMo = self.thuemorse_sequence(self.round_number)
-        self.round_number += 1
-        if ThMo == 1:
-            return Actions.C
-        return Actions.D
-
-
+    @init_args
+    def __init__(self):
+        SequencePlayer.__init__(self, thue_morse_generator, (0,))
 
 
 class ThueMorseInverse(ThueMorse):
-    """A player who defects or cooperates according to the Thue-Morse sequence (Inverse of ThueMorse)."""
+    """A player who defects or cooperates according to the Thue-Morse sequence
+    (Inverse of ThueMorse)."""
 
     name = 'ThueMorseInverse'
-    round_number = 0
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -52,9 +123,13 @@ class ThueMorseInverse(ThueMorse):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
-        ThMo = self.thuemorse_sequence(self.round_number)
-        self.round_number += 1
-        if ThMo == 1:
+    @init_args
+    def __init__(self):
+        SequencePlayer.__init__(self, thue_morse_generator, (0,))
+
+    def meta_strategy(self, value):
+        if value == 0:
+            return Actions.C
+        else:
             return Actions.D
-        return Actions.C
+
