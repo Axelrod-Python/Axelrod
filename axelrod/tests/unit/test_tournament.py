@@ -7,7 +7,7 @@ import unittest
 import random
 
 from hypothesis import given, example, settings
-from hypothesis.strategies import integers, lists, sampled_from, random_module
+from hypothesis.strategies import integers, lists, sampled_from, random_module, assume
 
 try:
     # Python 3
@@ -106,10 +106,10 @@ class TestTournament(unittest.TestCase):
             {'cooperation': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
-    #@given(s=lists(sampled_from(axelrod.strategies),
-    # Removing this as Hypothesis seems to have found a py2 bug.
-    # This is a temporary fix. For some reason mind reader seems to fail a test.
-    @given(s=lists(sampled_from([s for s in axelrod.strategies if s not in axelrod.cheating_strategies]),
+    # The @given below will run tests if the examples on lines 123... are
+    # commented out.
+    #  @given(s=lists(sampled_from([s for s in axelrod.strategies if s !=  axelrod.MindReader]),
+    @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
                    max_size=5, unique=True),
            turns=integers(min_value=2, max_value=50),
@@ -118,9 +118,17 @@ class TestTournament(unittest.TestCase):
     @settings(max_examples=50, timeout=0)
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
              rm=random.seed(0))
+
+    # These two examples fail on BOTH py2 and py3
+    # Comment out the first one to see failure on second
+    @example(s=[axelrod.BackStabber, axelrod.MindReader], turns=2, repetitions=1,
+             rm=random.seed(0))
+    @example(s=[axelrod.ThueMorse, axelrod.MindReader], turns=2, repetitions=1,
+             rm=random.seed(0))
     def test_property_serial_play(self, s, turns, repetitions, rm):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
+
         players = [strat() for strat in s]
 
         tournament = axelrod.Tournament(
