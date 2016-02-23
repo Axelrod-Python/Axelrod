@@ -7,7 +7,7 @@ import unittest
 import random
 
 from hypothesis import given, example, settings
-from hypothesis.strategies import integers, lists, sampled_from, random_module, assume
+from hypothesis.strategies import integers, lists, sampled_from, random_module
 
 try:
     # Python 3
