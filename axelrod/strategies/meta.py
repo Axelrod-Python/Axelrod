@@ -39,7 +39,7 @@ class MetaPlayer(Player):
                     'inspects_source',
                     'manipulates_source',
                     'manipulates_state']:
-            self.classifier[key] = (any([t.classifier[key] for t in self.team]))
+            self.classifier[key] = (any(t.classifier[key] for t in self.team))
 
         for t in self.team:
             self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])

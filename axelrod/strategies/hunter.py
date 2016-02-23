@@ -17,8 +17,8 @@ def detect_cycle(history, min_size=1, offset=0):
     history_tail = history[-offset:]
     for i in range(min_size, len(history_tail) // 2):
         cycle = tuple(history_tail[:i])
-        for j in range(len(history_tail)):
-            if history_tail[j] != cycle[j % len(cycle)]:
+        for j,  elem in enumerate(history_tail):
+            if elem != cycle[j % len(cycle)]:
                 break
         if j == len(history_tail) - 1:
             # We made it to the end, is the cycle itself a cycle?
