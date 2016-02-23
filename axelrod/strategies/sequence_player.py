@@ -10,7 +10,7 @@ class SequencePlayer(Player):
     determine their plays."""
 
     @init_args
-    def __init__(self, generator_function, generator_args=None):
+    def __init__(self, generator_function, generator_args=()):
         Player.__init__(self)
         # Initialize the sequence generator
         self.generator_function = generator_function

@@ -2,8 +2,8 @@
 import unittest
 
 import axelrod
-from .test_player import TestPlayer
-from axelrod.strategies.thuemorse import recursive_thue_morse
+from .test_player import TestPlayer, TestOpponent
+from axelrod.strategies.sequence_player import recursive_thue_morse, SequencePlayer
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -13,6 +13,16 @@ class TestThueMoreGenerator(unittest.TestCase):
         expected = [0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0]
         for i, e in enumerate(expected):
             self.assertEqual(recursive_thue_morse(i), e)
+
+
+class TestSequencePlayer(unittest.TestCase):
+    def test_sequence_player(self):
+        """Basic test for SequencePlayer."""
+        def cooperate_gen():
+            yield C
+        player = SequencePlayer(cooperate_gen)
+        opponent = TestOpponent()
+        self.assertEqual(C, player.strategy(opponent))
 
 
 class TestThueMorse(TestPlayer):
