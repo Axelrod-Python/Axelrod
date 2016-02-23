@@ -109,7 +109,8 @@ class Player(object):
         """The string method for the strategy."""
         return self.name
 
-    def _add_noise(self, noise, s1, s2):
+    @staticmethod
+    def _add_noise(noise, s1, s2):
         r = random.random()
         if r < noise:
             s1 = flip_action(s1)

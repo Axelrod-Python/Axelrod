@@ -82,7 +82,8 @@ class MetaMajority(MetaPlayer):
         self.init_args = (team,)
         self.classifier['memory_depth'] = float('inf')
 
-    def meta_strategy(self, results, opponent):
+    @staticmethod
+    def meta_strategy(results, opponent):
         if results.count(D) > results.count(C):
             return D
         return C
@@ -103,7 +104,8 @@ class MetaMinority(MetaPlayer):
         self.init_args = (team,)
         self.classifier['memory_depth'] = float('inf')
 
-    def meta_strategy(self, results, opponent):
+    @staticmethod
+    def meta_strategy(results, opponent):
         if results.count(D) < results.count(C):
             return D
         return C

@@ -428,6 +428,7 @@ class UnnamedStrategy(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         r = random.uniform(3, 7) / float(10)
         return random_choice(r)
