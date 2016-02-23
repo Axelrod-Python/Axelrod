@@ -68,7 +68,6 @@ class TestPlayerClass(unittest.TestCase):
     def test_strategy(self):
         self.assertRaises(NotImplementedError, self.player().strategy, self.player())
 
-
 def test_responses(test_class, P1, P2, history_1, history_2, responses,
                    random_seed=None, attrs=None):
     """
@@ -220,6 +219,23 @@ class TestPlayer(unittest.TestCase):
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed, attrs=attrs)
+
+        # Test that we get the same sequence after a reset
+        P1.reset()
+        P2 = TestOpponent()
+        P2.tournament_attributes['length'] = tournament_length
+        test_responses(
+            self, P1, P2, history_1, history_2, responses,
+            random_seed=random_seed, attrs=attrs)
+
+        # Test that we get the same sequence after a clone
+        P1 = P1.clone()
+        P2 = TestOpponent()
+        P2.tournament_attributes['length'] = tournament_length
+        test_responses(
+            self, P1, P2, history_1, history_2, responses,
+            random_seed=random_seed, attrs=attrs)
+
 
     def classifier_test(self):
         """Test that the keys in the expected_classifier dictionary give the
