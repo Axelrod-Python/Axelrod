@@ -310,5 +310,4 @@ class TestUnnamedStrategy(TestPlayer):
     }
 
     def test_strategy(self):
-        random.seed(10)
-        self.responses_test([], [], [C, C, D, C, C, D])
+        self.responses_test([], [], [C, C, D, C, C, D], random_seed=10)

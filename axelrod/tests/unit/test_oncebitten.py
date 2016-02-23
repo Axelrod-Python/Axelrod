@@ -105,8 +105,8 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         self.responses_test([C], [D], [C])
         self.responses_test([C, C], [D, D], [D])
         # Sometime eventually forget count:
-        self.responses_test([C, C], [D, D], [D] * 13 + [C],
-                            attrs={"D_count": 0})
+        self.responses_test([C, C], [D, D], [D] * 18 + [C],
+                            attrs={"D_count": 0}, random_seed=2)
 
     def test_reset(self):
         """Check that count gets reset properly"""
