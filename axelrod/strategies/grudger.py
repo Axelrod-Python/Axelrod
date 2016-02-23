@@ -15,7 +15,8 @@ class Grudger(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         """Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D."""
         if opponent.defections:
             return D
@@ -77,7 +78,8 @@ class OppositeGrudger(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         """Begins by playing D, then plays C for the remaining rounds if the opponent ever plays C."""
         if opponent.cooperations:
             return C

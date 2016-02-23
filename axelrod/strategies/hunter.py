@@ -122,7 +122,8 @@ class EventualCycleHunter(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         if len(opponent.history) < 10:
             return C
         if len(opponent.history) == opponent.cooperations:
