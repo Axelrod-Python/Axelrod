@@ -39,10 +39,7 @@ class TestThueMorse(TestPlayer):
     }
 
     def test_strategy(self):
-        """Test that strategy is randomly picked (not affected by history)."""
         self.first_play_test(D)
-
-    def test_effect_of_strategy(self):
         self.markov_test([C, C, C, C])
         self.responses_test([], [], [D, C, C, D, C, D, D, C, C, D, D, C, D, C,
                                      C, D])
@@ -68,11 +65,7 @@ class TestThueMorseInverse(TestPlayer):
     }
 
     def test_strategy(self):
-        """Test that strategy always picks C first."""
         self.first_play_test(C)
-        self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
         self.markov_test([D, D, D, D])
         self.responses_test([], [], [C, D, D, C, D, C, C, D, D, C, C, D, C, D,
                                      D, C])
