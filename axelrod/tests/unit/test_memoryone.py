@@ -196,9 +196,9 @@ class TestZDExtort2(TestPlayer):
 
     def test_effect_of_strategy(self):
         self.responses_test([C], [C], [D, D, C, C], random_seed=2)
-        self.responses_test([C], [D], [D, D, D, C])
-        self.responses_test([D], [C], [D, D, D, C])
-        self.responses_test([D], [D], [D, D, D, D])
+        self.responses_test([C], [D], [D, D, C, C], random_seed=2)
+        self.responses_test([D], [C], [D, D, C, C], random_seed=2)
+        self.responses_test([D], [D], [D, D, C, C], random_seed=2)
 
 
 class TestZDExtort2v2(TestPlayer):
@@ -290,9 +290,9 @@ class TestZDGTFT2(TestPlayer):
 
     def test_effect_of_strategy(self):
         self.responses_test([C], [C], [C, C, C, C], random_seed=2)
-        self.responses_test([C], [D], [D])
-        self.responses_test([D], [C], [C, C, C, C])
-        self.responses_test([D], [D], [D])
+        self.responses_test([C], [D], [D], random_seed=2)
+        self.responses_test([D], [C], [C, C, C, C], random_seed=2)
+        self.responses_test([D], [D], [D], random_seed=2)
 
 
 class TestZDSet2(TestPlayer):
