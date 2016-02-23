@@ -32,7 +32,7 @@ class TestMetaPlayer(TestPlayer):
         for key in ['stochastic',
                     'inspects_source', 'manipulates_source',
                     'manipulates_state']:
-            classifier[key] = (any([t.classifier[key] for t in player.team]))
+            classifier[key] = (any(t.classifier[key] for t in player.team))
         classifier['memory_depth'] = float('inf')
 
         for t in player.team:
