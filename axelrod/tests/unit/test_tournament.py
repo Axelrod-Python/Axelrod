@@ -6,10 +6,8 @@ import multiprocessing
 import unittest
 import random
 
-from hypothesis import given, example
-from hypothesis.strategies import (integers, lists,
-                                   sampled_from, random_module,
-                                   Settings)
+from hypothesis import given, example, settings
+from hypothesis.strategies import integers, lists, sampled_from, random_module
 
 try:
     # Python 3
@@ -113,9 +111,8 @@ class TestTournament(unittest.TestCase):
                    max_size=5, unique=True),
            turns=integers(min_value=2, max_value=50),
            repetitions=integers(min_value=2, max_value=4),
-           settings=Settings(max_examples=50,
-                             timeout=0),
            rm=random_module())
+    @settings(max_examples=50, timeout=0)
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
              rm=random.seed(0))
     def test_property_serial_play(self, s, turns, repetitions, rm):
