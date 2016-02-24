@@ -187,6 +187,12 @@ def final_sequence(player, opponent, action, seq):
         return action
 
     index = length - len(player.history)
+    # If for some reason we've overrun the expected game length, just pass
+    # the intended action through
+    if len(player.history) >= length:
+        return action
+    # Check if we're near the end and need to start passing the actions
+    # from seq for the final few rounds.
     if index <= len(seq):
         return seq[-index]
     return action
