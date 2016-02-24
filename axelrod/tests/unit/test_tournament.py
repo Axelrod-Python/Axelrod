@@ -106,10 +106,7 @@ class TestTournament(unittest.TestCase):
             {'cooperation': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
-    #@given(s=lists(sampled_from(axelrod.strategies),
-    # Removing this as Hypothesis seems to have found a py2 bug.
-    # This is a temporary fix. For some reason mind reader seems to fail a test.
-    @given(s=lists(sampled_from([s for s in axelrod.strategies if s not in axelrod.cheating_strategies]),
+    @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
                    max_size=5, unique=True),
            turns=integers(min_value=2, max_value=50),
@@ -118,9 +115,18 @@ class TestTournament(unittest.TestCase):
     @settings(max_examples=50, timeout=0)
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
              rm=random.seed(0))
+
+    # These two examples are to make sure #465 is fixed.
+    # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
+    # these two examples were identified by hypothesis.
+    @example(s=[axelrod.BackStabber, axelrod.MindReader], turns=2, repetitions=1,
+             rm=random.seed(0))
+    @example(s=[axelrod.ThueMorse, axelrod.MindReader], turns=2, repetitions=1,
+             rm=random.seed(0))
     def test_property_serial_play(self, s, turns, repetitions, rm):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
+
         players = [strat() for strat in s]
 
         tournament = axelrod.Tournament(

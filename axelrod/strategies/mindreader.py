@@ -2,25 +2,23 @@ import copy
 import inspect
 
 from axelrod import Actions, Player, RoundRobin, update_history
+from .cycler import Cycler
 
 C, D = Actions.C, Actions.D
+
+def limited_simulate_play(player_1, player_2, h1):
+    """Here we want to replay player_1's history to player_2, allowing
+    player_2's strategy method to set any internal variables as needed. If you
+    need a more complete simulation, see `simulate_play` in player.py. This
+    function is specifically designed for the needs of MindReader."""
+    h2 = player_2.strategy(player_1)
+    update_history(player_1, h1)
+    update_history(player_2, h2)
 
 def simulate_match(player_1, player_2, strategy, rounds=10):
     """Simulates a number of matches."""
     for match in range(rounds):
-        play_1, play_2 = strategy, player_2.strategy(player_1)
-        # Update histories and counts
-        update_history(player_1, play_1)
-        update_history(player_2, play_2)
-
-def roll_back_history(player, rounds):
-    """Undo the last `rounds` rounds as sufficiently as possible."""
-    for i in range(rounds):
-        play = player.history.pop(-1)
-        if play == C:
-            player.cooperations -= 1
-        elif play == D:
-            player.defections -= 1
+        limited_simulate_play(player_1, player_2, strategy)
 
 def look_ahead(player_1, player_2, game, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
@@ -29,14 +27,16 @@ def look_ahead(player_1, player_2, game, rounds=10):
     # Simulate plays for `rounds` rounds
     strategies = [C, D]
     for strategy in strategies:
-        opponent_ = copy.deepcopy(player_2) # need deepcopy here
-        round_robin = RoundRobin(players=[player_1, opponent_], game=game,
-                                 turns=rounds)
-        simulate_match(player_1, opponent_, strategy, rounds)
-        results.append(round_robin._calculate_scores(player_1, opponent_)[0])
+        # Instead of a deepcopy, create a new opponent and play out the history
+        opponent_ = player_2.clone()
+        player_ = Cycler(strategy) # Either cooperator or defector
+        for h1 in player_1.history:
+            limited_simulate_play(player_, opponent_, h1)
 
-        # Restore histories and counts
-        roll_back_history(player_1, rounds)
+        round_robin = RoundRobin(players=[player_, opponent_], game=game,
+                                 turns=rounds)
+        simulate_match(player_, opponent_, strategy, rounds)
+        results.append(round_robin._calculate_scores(player_, opponent_)[0])
 
     return strategies[results.index(max(results))]
 
