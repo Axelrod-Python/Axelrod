@@ -66,7 +66,8 @@ class FoolMeOnce(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         if not opponent.history:
             return C
         if opponent.defections > 1:
@@ -137,7 +138,8 @@ class FoolMeForever(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         if opponent.defections > 0:
             return C
         return D

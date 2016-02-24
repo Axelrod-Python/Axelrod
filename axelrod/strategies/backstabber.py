@@ -21,7 +21,8 @@ class BackStabber(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    @staticmethod
+    def strategy(opponent):
         if not opponent.history:
             return C
         if opponent.defections > 3:
