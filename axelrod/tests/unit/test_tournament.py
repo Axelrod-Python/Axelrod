@@ -106,9 +106,6 @@ class TestTournament(unittest.TestCase):
             {'cooperation': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
-    # The @given below will run tests if the examples on lines 123... are
-    # commented out.
-    #  @given(s=lists(sampled_from([s for s in axelrod.strategies if s !=  axelrod.MindReader]),
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
                    max_size=5, unique=True),
@@ -119,8 +116,9 @@ class TestTournament(unittest.TestCase):
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
              rm=random.seed(0))
 
-    # These two examples fail on BOTH py2 and py3
-    # Comment out the first one to see failure on second
+    # These two examples are to make sure #465 is fixed.
+    # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
+    # these two examples were identified by hypothesis.
     @example(s=[axelrod.BackStabber, axelrod.MindReader], turns=2, repetitions=1,
              rm=random.seed(0))
     @example(s=[axelrod.ThueMorse, axelrod.MindReader], turns=2, repetitions=1,
