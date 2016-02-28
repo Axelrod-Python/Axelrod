@@ -6,7 +6,7 @@ def detect_cycle(history, min_size=1, offset=0):
     """Detects cycles in the sequence history.
 
     Parameters
-    ----------
+
     history: sequence of C and D
         The sequence to look for cycles within
     min_size: int, 1

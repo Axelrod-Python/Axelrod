@@ -19,20 +19,24 @@ class LookerUp(Player):
     - my last action was a C the opponents
     - last action was a D
     then the corresponding key would be
+
         ('C', 'C', 'D')
+
     and the value would contain the action to play on this turn.
 
     Some well-known strategies can be expressed as special cases; for example
     Cooperator is given by the dict:
+
         {('', '', '') : C}
+
     where m and n are both zero. Tit-For-Tat is given by:
 
-    {
+        {
         ('', 'C', 'D') : D,
         ('', 'D', 'D') : D,
         ('', 'C', 'C') : C,
         ('', 'D', 'C') : C,
-    }
+        }
 
     where m=1 and n=0.
 
@@ -40,12 +44,14 @@ class LookerUp(Player):
     opposed to most recent actions) will have a non-empty first string in the
     tuple. For example, this fragment of a dict:
 
-    {
+        {
+
         ...
         ('C', 'C', 'C') : C.
         ('D', 'C', 'C') : D,
         ...
-    }
+
+        }
 
     states that if self and opponent both cooperated on the previous turn, we
     should cooperate this turn unless the opponent started by defecting, in
@@ -55,12 +61,14 @@ class LookerUp(Player):
     (so m or n are greater than 1), simply concatenate the strings together.
     Below is an incomplete example where m=3 and n=2.
 
-    {
+        {
+
         ...
         ('CC', 'CDD', 'CCC') : C.
         ('CD', 'CCD', 'CCC') : D,
         ...
-    }
+
+        }
     """
 
     name = 'LookerUp'
