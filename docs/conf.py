@@ -17,12 +17,15 @@ import os
 
 import mock
 
-MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.random', 'matplotlib.pyplot', 'matplotlib', 'matplotlib.transforms', 'mpl_toolkits.axes_grid1']
+MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.random', 'matplotlib.pyplot', 'matplotlib', 'matplotlib.transforms', 'mpl_toolkits.axes_grid1', 'cloudpickle']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
 # Adds absolute path to axelrod module
 sys.path.insert(0, os.path.abspath('../'))  # Adding path to module
+
+# Import the library (for automodule)
+import axelrod
 
 # -- General configuration ------------------------------------------------
 
