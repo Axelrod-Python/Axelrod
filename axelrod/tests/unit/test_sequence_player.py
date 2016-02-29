@@ -3,7 +3,8 @@ import unittest
 
 import axelrod
 from .test_player import TestPlayer, TestOpponent
-from axelrod.strategies.sequence_player import recursive_thue_morse, SequencePlayer
+from axelrod.strategies.sequence_player import SequencePlayer
+from axelrod._strategy_utils import recursive_thue_morse
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D

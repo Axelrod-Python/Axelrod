@@ -20,3 +20,7 @@ have::
 Once you have done that (**and you need to do this even if you have added a
 strategy to an already existing file**), you need to add the class itself to
 the :code:`strategies` list.
+
+Finally, if you have created a new module (a new :code:`<strategy.py>` file)
+please add it to the `docs/references/all_strategies.rst` file so that it will
+automatically be documented.

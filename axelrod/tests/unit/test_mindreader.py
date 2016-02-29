@@ -3,7 +3,7 @@
 import axelrod
 
 from .test_player import TestPlayer
-from axelrod.strategies.mindreader import simulate_match
+from axelrod._strategy_utils import simulate_match
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 

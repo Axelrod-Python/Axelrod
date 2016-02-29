@@ -279,7 +279,7 @@ class MetaMixer(MetaPlayer):
     In essence this is creating a Mixed strategy.
 
     Parameters
-    ----------
+
     team : list of strategy classes, optional
         Team of strategies that are to be randomly played
         If none is passed will select the ordinary strategies.
