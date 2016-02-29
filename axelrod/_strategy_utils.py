@@ -1,4 +1,8 @@
 """Utilities used by various strategies"""
+import functools
+import collections
+import itertools
+
 from axelrod import RoundRobin, update_history
 from axelrod import Actions
 
@@ -67,3 +71,55 @@ def look_ahead(player_1, player_2, game, rounds=10):
         results.append(round_robin._calculate_scores(player_, opponent_)[0])
 
     return strategies[results.index(max(results))]
+
+
+class Memoized(object):
+   """Decorator. Caches a function's return value each time it is called.
+   If called later with the same arguments, the cached value is returned
+   (not reevaluated). From:
+   https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
+   """
+   def __init__(self, func):
+        self.func = func
+        self.cache = {}
+
+   def __call__(self, *args):
+        if not isinstance(args, collections.Hashable):
+            # uncacheable. a list, for instance.
+            # better to not cache than blow up.
+            return self.func(*args)
+        if args in self.cache:
+            return self.cache[args]
+        else:
+            value = self.func(*args)
+            self.cache[args] = value
+            return value
+
+   def __repr__(self):
+        """Return the function's docstring."""
+        return self.func.__doc__
+
+   def __get__(self, obj, objtype):
+        """Support instance methods."""
+        return functools.partial(self.__call__, obj)
+
+
+@Memoized
+def recursive_thue_morse(n):
+    """The recursive definition of the Thue-Morse sequence. The first few terms
+    of the Thue-Morse sequence are:
+    0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . ."""
+
+    if n == 0:
+        return 0
+    if n % 2 == 0:
+        return recursive_thue_morse(n / 2)
+    if n % 2 == 1:
+        return 1 - recursive_thue_morse((n - 1) / 2)
+
+
+def thue_morse_generator(start=0):
+    """A generator for the Thue-Morse sequence."""
+
+    for n in itertools.count(start):
+        yield recursive_thue_morse(n)
