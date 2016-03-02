@@ -16,6 +16,28 @@ class Tournament(object):
     def __init__(self, players, name='axelrod', game=None, turns=200,
                  repetitions=10, processes=None, prebuilt_cache=False,
                  noise=0, with_morality=True):
+        """
+        Parameters
+        ----------
+        players : tuple
+            A pair of axelrod.Player objects
+        name : string
+            A name for the tournament
+        game : axelrod.Game
+            The game object used to score the tournament
+        turns : integer
+            The number of turns per match
+        repetitions : integer
+            The number of times the round robin should be repeated
+        processes : integer
+            The number of processes to be used for parallel processing
+        prebuilt_cache : boolean
+            Whether a cache has been passed in from an external object
+        noise : float
+            The probability that a player's intended action should be flipped
+        with_morality : boolean
+            Whether morality metrics should be calculated
+        """
         self.name = name
         self.turns = turns
         self.noise = noise
