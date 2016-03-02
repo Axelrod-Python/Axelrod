@@ -3,7 +3,7 @@ import functools
 import collections
 import itertools
 
-from axelrod import RoundRobin, update_history
+from axelrod import update_history
 from axelrod import Actions
 
 from axelrod.strategies.cycler import Cycler
@@ -55,6 +55,16 @@ def simulate_match(player_1, player_2, strategy, rounds=10):
         limited_simulate_play(player_1, player_2, strategy)
 
 
+def calculate_scores(p1, p2, game):
+    """Calculates the score for two players based their history"""
+    s1, s2 = 0, 0
+    for pair in zip(p1.history, p2.history):
+        score = game.score(pair)
+        s1 += score[0]
+        s2 += score[1]
+    return s1, s2
+
+
 def look_ahead(player_1, player_2, game, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
     results = []
@@ -68,10 +78,8 @@ def look_ahead(player_1, player_2, game, rounds=10):
         for h1 in player_1.history:
             limited_simulate_play(player_, opponent_, h1)
 
-        round_robin = RoundRobin(players=[player_, opponent_], game=game,
-                                 turns=rounds)
         simulate_match(player_, opponent_, strategy, rounds)
-        results.append(round_robin._calculate_scores(player_, opponent_)[0])
+        results.append(calculate_scores(player_, opponent_, game))
 
     return strategies[results.index(max(results))]
 
