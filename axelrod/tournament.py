@@ -5,8 +5,9 @@ import multiprocessing
 
 from .game import *
 from .result_set import *
-from .round_robin import *
-
+from .match import Match
+from .payoff import payoff_matrix
+from .cooperation import cooperation_matrix
 
 class Tournament(object):
     game = Game()
@@ -136,11 +137,18 @@ class Tournament(object):
         return True
 
     def _play_round_robin(self, cache_mutable=True):
-        round_robin = RoundRobin(
-            players=self.players,
-            game=self.game,
-            turns=self.turns,
-            deterministic_cache=self.deterministic_cache,
-            cache_mutable=cache_mutable,
-            noise=self.noise)
-        return round_robin.play()
+        interactions = {}
+        for player1_index in range(self.nplayers):
+            for player2_index in range(player1_index, self.nplayers):
+                match = Match(
+                    self.players,
+                    self.turns,
+                    self.deterministic_cache,
+                    cache_mutable,
+                    self.noise)
+                interactions[(player1_index, player2_index)] = match.play()
+
+        payoff = payoff_matrix(interactions, self.game)
+        cooperation = cooperation_matrix(interactions)
+
+        return {'payoff': payoff, 'cooperation': cooperation}
