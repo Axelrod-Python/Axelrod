@@ -140,8 +140,10 @@ class Tournament(object):
         interactions = {}
         for player1_index in range(self.nplayers):
             for player2_index in range(player1_index, self.nplayers):
+                player1 = self.players[player1_index]
+                player2 = self.players[player2_index]
                 match = Match(
-                    self.players,
+                    (player1, player2),
                     self.turns,
                     self.deterministic_cache,
                     cache_mutable,
