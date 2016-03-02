@@ -1,8 +1,8 @@
 import unittest
-import random
 import axelrod
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
 
 class TestRoundRobin(unittest.TestCase):
 
@@ -45,11 +45,13 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(rr.deterministic_cache[
             (axelrod.Cooperator, axelrod.Cooperator)]['scores'], (60, 60))
         self.assertEqual(rr.deterministic_cache[
-            (axelrod.Cooperator, axelrod.Cooperator)]['cooperation_rates'], (20, 20))
+            (axelrod.Cooperator, axelrod.Cooperator)]['cooperation_rates'],
+            (20, 20))
         self.assertEqual(rr.deterministic_cache[
             (axelrod.Cooperator, axelrod.Defector)]['scores'], (0, 100))
         self.assertEqual(rr.deterministic_cache[
-            (axelrod.Cooperator, axelrod.Defector)]['cooperation_rates'], (20, 0))
+            (axelrod.Cooperator, axelrod.Defector)]['cooperation_rates'],
+            (20, 0))
         self.assertFalse(
             (axelrod.Random, axelrod.Random) in rr.deterministic_cache)
 
