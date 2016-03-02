@@ -9,6 +9,7 @@ from .match import Match
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
 
+
 class Tournament(object):
     game = Game()
 
