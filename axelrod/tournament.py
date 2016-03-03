@@ -241,33 +241,6 @@ class Tournament(object):
         done_queue.put('STOP')
         return True
 
-    def _build_round_robin(self, cache_mutable=True):
-        """
-        Create a list of matches for a round robin tournament.
-
-        Parameters
-        ----------
-        cache_mutable : boolean
-            Whether the deterministic cache should be updated
-
-        Returns
-        -------
-        dictionary
-            A dictionary whose key is a tuple of player index numbers and the
-            corresponding value is an axelrod Match object
-        """
-        matches = {}
-        for player1_index in range(self.nplayers):
-            for player2_index in range(player1_index, self.nplayers):
-                players = self._pair_of_players(player1_index, player2_index)
-                match = Match(
-                    players,
-                    self.turns,
-                    self.deterministic_cache,
-                    cache_mutable,
-                    self.noise)
-                matches[(player1_index, player2_index)] = match
-        return matches
 
     def _play_matches(self, matches):
         """
@@ -292,59 +265,4 @@ class Tournament(object):
 
         return {'payoff': payoff, 'cooperation': cooperation}
 
-    def _play_round_robin(self, cache_mutable=True):
-        """
-        Create and play a single round robin of matches between all players.
 
-        Parameters
-        ----------
-        cache_mutable : boolean
-            Whether the deterministic cache should be updated
-
-        Returns
-        -------
-        dictionary
-            Containing the payoff and cooperation matrices
-        """
-        interactions = {}
-        for player1_index in range(self.nplayers):
-            for player2_index in range(player1_index, self.nplayers):
-                players = self._pair_of_players(player1_index, player2_index)
-                match = Match(
-                    players,
-                    self.turns,
-                    self.deterministic_cache,
-                    cache_mutable,
-                    self.noise)
-                interactions[(player1_index, player2_index)] = match.play()
-
-        payoff = payoff_matrix(interactions, self.game)
-        cooperation = cooperation_matrix(interactions)
-
-        return {'payoff': payoff, 'cooperation': cooperation}
-
-    def _pair_of_players(self, player1_index, player2_index):
-        """
-        Return a tuple of Player objects from their index numbers.
-
-        If the two index numbers are the same, the second player object is
-        created using the clone method of the first.
-
-        Parameters
-        ----------
-        player_1_index : integer
-            index number of player 1 within self.players list
-        player_2_index : integer
-            index number of player 2 within self.players list
-
-        Returns
-        -------
-        tuple
-            A pair of axelrod.Player objects
-        """
-        player1 = self.players[player1_index]
-        if player1_index == player2_index:
-            player2 = player1.clone()
-        else:
-            player2 = self.players[player2_index]
-        return (player1, player2)

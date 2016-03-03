@@ -394,35 +394,6 @@ class TestTournament(unittest.TestCase):
         queue_stop = done_queue.get()
         self.assertEqual(queue_stop, 'STOP')
 
-    def test_build_round_robin(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        matches = tournament._build_round_robin()
-        match_definitions = [
-            (match) for match in matches]
-        expected_match_definitions = [
-            (0, 0),
-            (0, 1),
-            (0, 2),
-            (0, 3),
-            (0, 4),
-            (1, 1),
-            (1, 2),
-            (1, 3),
-            (1, 4),
-            (2, 2),
-            (2, 3),
-            (2, 4),
-            (3, 3),
-            (3, 4),
-            (4, 4)
-        ]
-        self.assertEqual(sorted(match_definitions), expected_match_definitions)
-
     def test_play_matches(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -449,45 +420,3 @@ class TestTournament(unittest.TestCase):
         }
         results = tournament._play_matches(matches)
         self.assertEqual(results['payoff'], self.expected_payoff)
-
-    def test_play_round_robin_mutable(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        output = tournament._play_round_robin()
-        self.assertEqual(output['payoff'], self.expected_payoff)
-        self.assertTrue(
-            (axelrod.Cooperator, axelrod.Defector) in
-            tournament.deterministic_cache)
-
-    def test_play_round_robin_immutable(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        output = tournament._play_round_robin(cache_mutable=False)
-        self.assertEqual(output['payoff'], self.expected_payoff)
-        self.assertEqual(tournament.deterministic_cache, {})
-
-    def test_pair_of_players(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        pair = tournament._pair_of_players(0, 2)
-        self.assertEqual(pair[0].name, 'Cooperator')
-        self.assertEqual(pair[1].name, 'Defector')
-        pair = tournament._pair_of_players(0, 0)
-        self.assertEqual(pair[0].name, pair[1].name)
-        self.assertNotEqual(pair[0], pair[1])
-        # Check that the two player instances are wholly independent
-        pair[0].name = 'player 1'
-        pair[1].name = 'player 2'
-        self.assertNotEqual(pair[0].name, pair[1].name)
