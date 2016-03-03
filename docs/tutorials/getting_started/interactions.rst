@@ -35,4 +35,4 @@ so we'll add a sort to show the entries in a sensible order).::
 
 The dictionary key (e.g. (0, 1)) is a tuple containing the index numbers of the
 players within the strategies list. i.e. Line 2 shown above is for a
-match between the player 0 (Cooperator) and player 1 (Defector).
+match between player 0 (Cooperator) and player 1 (Defector).
