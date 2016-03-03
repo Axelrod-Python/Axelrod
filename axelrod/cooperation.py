@@ -1,4 +1,3 @@
-from math import sqrt
 from . import eigen
 from axelrod import Actions
 from axelrod.payoff import player_count
