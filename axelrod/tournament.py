@@ -60,6 +60,7 @@ class Tournament(object):
         self._processes = processes
         self._logger = logging.getLogger(__name__)
         self._outcome = {'payoff': [], 'cooperation': []}
+        self.interactions = None
 
     @property
     def players(self):
@@ -283,6 +284,6 @@ class Tournament(object):
 
         outcome = {'payoff': payoff, 'cooperation': cooperation}
         if self._with_interactions:
-            outcome['interactions'] = interactions
+            self.interactions = interactions
 
         return outcome
