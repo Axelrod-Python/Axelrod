@@ -241,6 +241,57 @@ class Tournament(object):
         done_queue.put('STOP')
         return True
 
+    def _build_round_robin(self, cache_mutable=True):
+        """
+        Create a list of matches for a round robin tournament.
+
+        Parameters
+        ----------
+        cache_mutable : boolean
+            Whether the deterministic cache should be updated
+
+        Returns
+        -------
+        dictionary
+            A dictionary whose key is a tuple of player index numbers and the
+            corresponding value is an axelrod Match object
+        """
+        matches = {}
+        for player1_index in range(self.nplayers):
+            for player2_index in range(player1_index, self.nplayers):
+                players = self._pair_of_players(player1_index, player2_index)
+                match = Match(
+                    players,
+                    self.turns,
+                    self.deterministic_cache,
+                    cache_mutable,
+                    self.noise)
+                matches[(player1_index, player2_index)] = match
+        return matches
+
+    def _play_matches(self, matches):
+        """
+        Play the supplied matches.
+
+        Parameters
+        ----------
+        matches : list
+            A list of axelrod.Match objects
+
+        Returns
+        -------
+        dictionary
+            Containing the payoff and cooperation matrices
+        """
+        interactions = {}
+        for key, match in matches.items():
+            interactions[key] = match.play()
+
+        payoff = payoff_matrix(interactions, self.game)
+        cooperation = cooperation_matrix(interactions)
+
+        return {'payoff': payoff, 'cooperation': cooperation}
+
     def _play_round_robin(self, cache_mutable=True):
         """
         Create and play a single round robin of matches between all players.
