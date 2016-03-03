@@ -5,7 +5,6 @@ import multiprocessing
 
 from .game import Game
 from .result_set import ResultSet
-from .match import Match
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
 
@@ -241,7 +240,6 @@ class Tournament(object):
         done_queue.put('STOP')
         return True
 
-
     def _play_matches(self, matches):
         """
         Play the supplied matches.
@@ -264,5 +262,3 @@ class Tournament(object):
         cooperation = cooperation_matrix(interactions)
 
         return {'payoff': payoff, 'cooperation': cooperation}
-
-
