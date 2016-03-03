@@ -19,8 +19,8 @@ class Tournament(object):
         """
         Parameters
         ----------
-        players : tuple
-            A pair of axelrod.Player objects
+        players : list
+            A list of axelrod.Player objects
         name : string
             A name for the tournament
         game : axelrod.Game
