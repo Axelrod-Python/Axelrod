@@ -259,6 +259,24 @@ class Tournament(object):
         return {'payoff': payoff, 'cooperation': cooperation}
 
     def _pair_of_players(self, player1_index, player2_index):
+        """
+        Return a tuple of Player objects from their index numbers.
+
+        If the two index numbers are the same, the second player object is
+        created using the clone method of the first.
+
+        Parameters
+        ----------
+        player_1_index : integer
+            index number of player 1 within self.players list
+        player_2_index : integer
+            index number of player 2 within self.players list
+
+        Returns
+        -------
+        tuple
+            A pair of axelrod.Player objects
+        """
         player1 = self.players[player1_index]
         if player1_index == player2_index:
             player2 = player1.clone()
