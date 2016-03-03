@@ -47,7 +47,6 @@ class ResultSet(object):
         self.good_partner_rating = None
         self.eigenjesus_rating = None
         self.eigenmoses_rating = None
-        self.interactions = None
 
         if 'payoff' in self.results:
             payoff = self.results['payoff']
@@ -75,9 +74,6 @@ class ResultSet(object):
                 self.good_partner_matrix, len(players), repetitions)
             self.eigenjesus_rating = ac.eigenvector(self.normalised_cooperation)
             self.eigenmoses_rating = ac.eigenvector(self.vengeful_cooperation)
-
-        if 'interactions' in self.results:
-            self.interactions = self.results['interactions']
 
     @property
     def _null_results_matrix(self):
