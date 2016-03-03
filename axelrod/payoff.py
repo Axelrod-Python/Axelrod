@@ -60,7 +60,6 @@ def player_count(interactions):
     return int((math.sqrt(len(interactions) * 8 + 1) - 1) / 2)
 
 
-# As yet unused until RoundRobin returns interactions
 def payoff_matrix(interactions, game):
     """
     The payoff matrix from a single round robin.
@@ -115,7 +114,6 @@ def payoff_matrix(interactions, game):
     return payoffs
 
 
-# As yet unused until RoundRobin returns interactions
 def interaction_payoff(actions, game):
     """
     The payoff values for a single interaction of n turns between two players.

@@ -6,7 +6,6 @@ from axelrod.payoff import player_count
 C, D = Actions.C, Actions.D
 
 
-# As yet unused until RoundRobin returns interactions
 def cooperation_matrix(interactions):
     """
     The cooperation matrix from a single round robin.
