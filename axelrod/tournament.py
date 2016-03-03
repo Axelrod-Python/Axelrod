@@ -44,7 +44,6 @@ class Tournament(object):
         if game is not None:
             self.game = game
         self.players = players
-        self.nplayers = len(self.players)
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = {}
