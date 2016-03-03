@@ -419,4 +419,51 @@ class TestTournament(unittest.TestCase):
             (4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=200),
         }
         results = tournament._play_matches(matches)
+        self.assertNotIn('interactions', results)
         self.assertEqual(results['payoff'], self.expected_payoff)
+
+    def test_with_interactions(self):
+        self.maxDiff = None
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=3,
+            repetitions=self.test_repetitions,
+            with_interactions=True)
+        matches = {
+            (0, 0): axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=3),
+            (0, 1): axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=3),
+            (0, 2): axelrod.Match((axelrod.Cooperator(), axelrod.Defector()), turns=3),
+            (0, 3): axelrod.Match((axelrod.Cooperator(), axelrod.Grudger()), turns=3),
+            (0, 4): axelrod.Match((axelrod.Cooperator(), axelrod.GoByMajority()), turns=3),
+            (1, 1): axelrod.Match((axelrod.TitForTat(), axelrod.TitForTat()), turns=3),
+            (1, 2): axelrod.Match((axelrod.TitForTat(), axelrod.Defector()), turns=3),
+            (1, 3): axelrod.Match((axelrod.TitForTat(), axelrod.Grudger()), turns=3),
+            (1, 4): axelrod.Match((axelrod.TitForTat(), axelrod.GoByMajority()), turns=3),
+            (2, 2): axelrod.Match((axelrod.Defector(), axelrod.Defector()), turns=3),
+            (2, 3): axelrod.Match((axelrod.Defector(), axelrod.Grudger()), turns=3),
+            (2, 4): axelrod.Match((axelrod.Defector(), axelrod.GoByMajority()), turns=3),
+            (3, 3): axelrod.Match((axelrod.Grudger(), axelrod.Grudger()), turns=3),
+            (3, 4): axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=3),
+            (4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=3),
+        }
+        expected_interactions = {
+            (0, 0): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (0, 1): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (0, 2): [('C', 'D'), ('C', 'D'), ('C', 'D')],
+            (0, 3): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (0, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (1, 1): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (1, 2): [('C', 'D'), ('D', 'D'), ('D', 'D')],
+            (1, 3): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (1, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (2, 2): [('D', 'D'), ('D', 'D'), ('D', 'D')],
+            (2, 3): [('D', 'C'), ('D', 'D'), ('D', 'D')],
+            (2, 4): [('D', 'C'), ('D', 'D'), ('D', 'D')],
+            (3, 3): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (3, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')],
+            (4, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')]
+        }
+        results = tournament._play_matches(matches)
+        self.assertEqual(results['interactions'], expected_interactions)

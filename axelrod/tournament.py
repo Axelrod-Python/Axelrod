@@ -16,7 +16,7 @@ class Tournament(object):
     def __init__(self, players, type=None, name='axelrod',
                  game=None, turns=200,
                  repetitions=10, processes=None, prebuilt_cache=False,
-                 noise=0, with_morality=True):
+                 noise=0, with_morality=True, with_interactions=False):
         """
         Parameters
         ----------
@@ -38,6 +38,8 @@ class Tournament(object):
             The probability that a player's intended action should be flipped
         with_morality : boolean
             Whether morality metrics should be calculated
+        with_interactions : boolean
+            Whether interaction results should be included in the output
         """
         self.name = name
         if type is not None:
@@ -53,6 +55,7 @@ class Tournament(object):
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = {}
         self._with_morality = with_morality
+        self._with_interactions = with_interactions
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
@@ -278,4 +281,8 @@ class Tournament(object):
         payoff = payoff_matrix(interactions, self.game)
         cooperation = cooperation_matrix(interactions)
 
-        return {'payoff': payoff, 'cooperation': cooperation}
+        outcome = {'payoff': payoff, 'cooperation': cooperation}
+        if self._with_interactions:
+            outcome['interactions'] = interactions
+
+        return outcome
