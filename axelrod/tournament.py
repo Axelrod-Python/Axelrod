@@ -3,8 +3,8 @@ from __future__ import absolute_import
 import logging
 import multiprocessing
 
-from .game import *
-from .result_set import *
+from .game import Game
+from .result_set import ResultSet
 from .match import Match
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
