@@ -5,15 +5,16 @@ import multiprocessing
 
 from .game import Game
 from .result_set import ResultSet
+from .tournament_type import round_robin
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
-from .tournament_type import round_robin
 
 
 class Tournament(object):
     game = Game()
 
-    def __init__(self, players, name='axelrod', game=None, turns=200,
+    def __init__(self, players, type=None, name='axelrod',
+                 game=None, turns=200,
                  repetitions=10, processes=None, prebuilt_cache=False,
                  noise=0, with_morality=True):
         """
@@ -39,6 +40,10 @@ class Tournament(object):
             Whether morality metrics should be calculated
         """
         self.name = name
+        if type is not None:
+            self.type = type
+        else:
+            self.type = round_robin
         self.turns = turns
         self.noise = noise
         if game is not None:
@@ -120,7 +125,7 @@ class Tournament(object):
         """
         Runs a single round robin and updates the outcome dictionary.
         """
-        matches = round_robin(
+        matches = self.type(
             players=self.players,
             turns=self.turns,
             deterministic_cache=self.deterministic_cache,
@@ -241,7 +246,7 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for repetition in iter(work_queue.get, 'STOP'):
-            matches = round_robin(
+            matches = self.type(
                 players=self.players,
                 turns=self.turns,
                 deterministic_cache=self.deterministic_cache,
