@@ -29,8 +29,8 @@ class TestTournamentType(unittest.TestCase):
         pair[1].name = 'player 2'
         self.assertNotEqual(pair[0].name, pair[1].name)
 
-    def test_build_round_robin(self):
-        matches = axelrod.tournament_type.build_round_robin(
+    def test_round_robin(self):
+        matches = axelrod.tournament_type.round_robin(
             players=self.players,
             turns=test_turns,
             deterministic_cache={}

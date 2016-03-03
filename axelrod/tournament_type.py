@@ -30,8 +30,8 @@ def pair_of_players(players, player1_index, player2_index):
     return (player1, player2)
 
 
-def build_round_robin(players, turns, deterministic_cache,
-                      cache_mutable=True, noise=0):
+def round_robin(players, turns, deterministic_cache,
+                cache_mutable=True, noise=0):
     """
     Create a list of matches for a round robin tournament.
 
