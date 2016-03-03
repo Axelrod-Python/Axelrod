@@ -244,15 +244,9 @@ class Tournament(object):
         interactions = {}
         for player1_index in range(self.nplayers):
             for player2_index in range(player1_index, self.nplayers):
-                player1 = self.players[player1_index]
-
-                if player1_index == player2_index:
-                    player2 = player1.clone()
-                else:
-                    player2 = self.players[player2_index]
-
+                players = self._pair_of_players(player1_index, player2_index)
                 match = Match(
-                    (player1, player2),
+                    players,
                     self.turns,
                     self.deterministic_cache,
                     cache_mutable,
@@ -263,3 +257,12 @@ class Tournament(object):
         cooperation = cooperation_matrix(interactions)
 
         return {'payoff': payoff, 'cooperation': cooperation}
+
+
+    def _pair_of_players(self, player1_index, player2_index):
+        player1 = self.players[player1_index]
+        if player1_index == player2_index:
+            player2 = player1.clone()
+        else:
+            player2 = self.players[player2_index]
+        return (player1, player2)
