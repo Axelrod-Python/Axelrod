@@ -423,7 +423,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(results['payoff'], self.expected_payoff)
 
     def test_with_interactions(self):
-        self.maxDiff = None
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -465,5 +464,5 @@ class TestTournament(unittest.TestCase):
             (3, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')],
             (4, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')]
         }
-        results = tournament._play_matches(matches)
-        self.assertEqual(results['interactions'], expected_interactions)
+        tournament._play_matches(matches)
+        self.assertEqual(tournament.interactions, expected_interactions)
