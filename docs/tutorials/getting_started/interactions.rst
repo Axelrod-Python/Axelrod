@@ -21,7 +21,7 @@ for each turn in each match. (The interactions are stored within a dictionary,
 so we'll add a sort to show the entries in a sensible order).::
 
     >>> for key in sorted(tournament.interactions):
-    >>>     print('%s: %s' % (key, tournament.interactions[key]))
+    ...     print('%s: %s' % (key, tournament.interactions[key]))
     (0, 0): [('C', 'C'), ('C', 'C'), ('C', 'C')]
     (0, 1): [('C', 'D'), ('C', 'D'), ('C', 'D')]
     (0, 2): [('C', 'C'), ('C', 'C'), ('C', 'C')]
