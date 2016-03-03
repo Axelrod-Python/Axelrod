@@ -418,7 +418,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(output['payoff'], self.expected_payoff)
         self.assertEqual(tournament.deterministic_cache, {})
 
-
     def test_pair_of_players(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
