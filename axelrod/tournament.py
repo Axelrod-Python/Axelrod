@@ -258,7 +258,6 @@ class Tournament(object):
 
         return {'payoff': payoff, 'cooperation': cooperation}
 
-
     def _pair_of_players(self, player1_index, player2_index):
         player1 = self.players[player1_index]
         if player1_index == player2_index:
