@@ -107,6 +107,11 @@ class Tournament(object):
         """
         For parallel processing, this runs a single round robin in order to
         build the deterministic cache.
+
+        Parameters
+        ----------
+        outcome : dictionary
+            The outcome dictionary to update with results
         """
         self._logger.debug('Playing first round robin to build cache')
         self._run_single_repetition(outcome)
@@ -123,6 +128,11 @@ class Tournament(object):
     def _run_serial_repetitions(self, outcome):
         """
         Runs all repetitions of the round robin in serial.
+
+        Parameters
+        ----------
+        outcome : dictionary
+            The outcome dictionary to update with results
         """
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
@@ -131,8 +141,12 @@ class Tournament(object):
 
     def _run_parallel_repetitions(self, outcome):
         """
-        Runs a single round robin to build the deterministic cache and then
-        runs the remaining repetitions in parallel.
+        Run all except the first round robin using parallel processing.
+
+        Parameters
+        ----------
+        outcome : dictionary
+            The outcome dictionary to update with results
         """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
@@ -198,7 +212,7 @@ class Tournament(object):
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
         outcome : dictionary
-           The outcome dictionary to update
+           The outcome dictionary to update with results
         """
         stops = 0
         while stops < workers:
