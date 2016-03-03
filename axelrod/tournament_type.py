@@ -33,7 +33,7 @@ def pair_of_players(players, player1_index, player2_index):
 def round_robin(players, turns, deterministic_cache,
                 cache_mutable=True, noise=0):
     """
-    Create a list of matches for a round robin tournament.
+    Create the match objects for a round robin tournament.
 
     Parameters
     ----------
