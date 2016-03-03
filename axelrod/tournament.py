@@ -7,6 +7,7 @@ from .game import Game
 from .result_set import ResultSet
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
+from .tournament_type import round_robin
 
 
 class Tournament(object):
@@ -120,7 +121,13 @@ class Tournament(object):
         """
         Runs a single round robin and updates the outcome dictionary.
         """
-        output = self._play_round_robin()
+        matches = round_robin(
+            players=self.players,
+            turns=self.turns,
+            deterministic_cache=self.deterministic_cache,
+            cache_mutable=True,
+            noise=self.noise)
+        output = self._play_matches(matches)
         outcome['payoff'].append(output['payoff'])
         outcome['cooperation'].append(output['cooperation'])
 
@@ -235,7 +242,13 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for repetition in iter(work_queue.get, 'STOP'):
-            output = self._play_round_robin(cache_mutable=False)
+            matches = round_robin(
+                players=self.players,
+                turns=self.turns,
+                deterministic_cache=self.deterministic_cache,
+                cache_mutable=False,
+                noise=self.noise)
+            output = self._play_matches(matches)
             done_queue.put(output)
         done_queue.put('STOP')
         return True
