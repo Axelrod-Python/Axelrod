@@ -435,4 +435,3 @@ class TestTournament(unittest.TestCase):
         pair[0].name = 'player 1'
         pair[1].name = 'player 2'
         self.assertNotEqual(pair[0].name, pair[1].name)
-
