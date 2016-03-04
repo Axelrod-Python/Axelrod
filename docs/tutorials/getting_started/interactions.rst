@@ -13,7 +13,7 @@ the number of turns per match to 3 and we'll run only a single repetition)::
     ...     axl.Cooperator(), axl.Defector(),
     ...     axl.TitForTat(), axl.Grudger()]
     >>> tournament = axl.Tournament(
-    ...     strategies, turns=3, repetitions=1, with_interactions=True)
+    ...     strategies, turns=3, repetitions=1, keep_matches=True)
     >>> results = tournament.play()
 
 The detailed interactions are now available to us. The tournament object has
