@@ -25,7 +25,7 @@ that match and the history of their interactions::
     >>> for match in tournament.matches[0]:
     ...     player1 = match.player1.name
     ...     player2 = match.player2.name
-    ...     print('%s vs %s: %s' % (player1, player2, match.result))
+    ...     print('%s vs %s: %s' % (player1, player2, match.result)) # doctest: +SKIP
     Cooperator vs Defector: [('C', 'D'), ('C', 'D'), ('C', 'D')]
     Defector vs Tit For Tat: [('D', 'C'), ('D', 'D'), ('D', 'D')]
     Cooperator vs Cooperator: [('C', 'C'), ('C', 'C'), ('C', 'C')]
