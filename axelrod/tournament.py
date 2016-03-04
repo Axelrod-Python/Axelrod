@@ -216,8 +216,7 @@ class Tournament(object):
             process.start()
         return True
 
-    @staticmethod
-    def _process_done_queue(workers, done_queue, outcome):
+    def _process_done_queue(self, workers, done_queue, outcome):
         """
         Retrieves the outcome dictionaries from the parallel sub-processes
 
