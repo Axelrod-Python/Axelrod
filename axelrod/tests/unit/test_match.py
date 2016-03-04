@@ -19,8 +19,8 @@ class TestMatch(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match = axelrod.Match((p1, p2), turns, prob_end=prob_end)
         self.assertEqual(match.result, [])
-        self.assertEqual(match._player1, p1)
-        self.assertEqual(match._player2, p2)
+        self.assertEqual(match.player1, p1)
+        self.assertEqual(match.player2, p2)
         self.assertEqual(
             match._classes, (axelrod.Cooperator, axelrod.Cooperator))
         self.assertEqual(match._turns, turns)
@@ -32,8 +32,8 @@ class TestMatch(unittest.TestCase):
         # Checking that prob_end has default None
         match = axelrod.Match((p1, p2), turns)
         self.assertEqual(match.result, [])
-        self.assertEqual(match._player1, p1)
-        self.assertEqual(match._player2, p2)
+        self.assertEqual(match.player1, p1)
+        self.assertEqual(match.player2, p2)
         self.assertEqual(
             match._classes, (axelrod.Cooperator, axelrod.Cooperator))
         self.assertEqual(match._turns, turns)
