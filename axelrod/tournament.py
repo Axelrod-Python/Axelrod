@@ -16,7 +16,7 @@ class Tournament(object):
     def __init__(self, players, type=None, name='axelrod',
                  game=None, turns=200,
                  repetitions=10, processes=None, prebuilt_cache=False,
-                 noise=0, with_morality=True, with_interactions=False):
+                 noise=0, with_morality=True, keep_matches=False):
         """
         Parameters
         ----------
@@ -55,12 +55,12 @@ class Tournament(object):
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = {}
         self._with_morality = with_morality
-        self._with_interactions = with_interactions
+        self._keep_matches = keep_matches
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
         self._outcome = {'payoff': [], 'cooperation': []}
-        self.interactions = None
+        self.matches = []
 
     @property
     def players(self):
@@ -138,6 +138,8 @@ class Tournament(object):
         output = self._play_matches(matches)
         outcome['payoff'].append(output['payoff'])
         outcome['cooperation'].append(output['cooperation'])
+        if self._keep_matches:
+            self.matches.append(outcome['matches'])
 
     def _run_serial_repetitions(self, outcome):
         """
@@ -236,6 +238,8 @@ class Tournament(object):
             else:
                 outcome['payoff'].append(output['payoff'])
                 outcome['cooperation'].append(output['cooperation'])
+                if self._keep_matches:
+                    self.matches.append(outcome['matches'])
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -267,8 +271,9 @@ class Tournament(object):
 
         Parameters
         ----------
-        matches : list
-            A list of axelrod.Match objects
+        dictionary
+        A dictionary whose key is a tuple of player index numbers and the
+        corresponding value is an axelrod Match object
 
         Returns
         -------
@@ -276,14 +281,17 @@ class Tournament(object):
             Containing the payoff and cooperation matrices
         """
         interactions = {}
+        matches_to_keep = []
+
         for key, match in matches.items():
             interactions[key] = match.play()
+            if self._keep_matches:
+                matches_to_keep.append(match)
 
         payoff = payoff_matrix(interactions, self.game)
         cooperation = cooperation_matrix(interactions)
 
-        outcome = {'payoff': payoff, 'cooperation': cooperation}
-        if self._with_interactions:
-            self.interactions = interactions
-
-        return outcome
+        output = {'payoff': payoff, 'cooperation': cooperation}
+        if self._keep_matches:
+            output['matches'] = matches_to_keep
+        return output
