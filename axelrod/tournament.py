@@ -139,7 +139,7 @@ class Tournament(object):
         outcome['payoff'].append(output['payoff'])
         outcome['cooperation'].append(output['cooperation'])
         if self._keep_matches:
-            self.matches.append(outcome['matches'])
+            self.matches.append(output['matches'])
 
     def _run_serial_repetitions(self, outcome):
         """
