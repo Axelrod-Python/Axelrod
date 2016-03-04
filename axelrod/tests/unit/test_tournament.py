@@ -78,6 +78,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament._parallel_repetitions, 10)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
+        self.assertFalse(tournament._keep_matches)
 
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
@@ -258,6 +259,23 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(outcome['cooperation']), 1)
         self.assertEqual(outcome['payoff'][0], self.expected_payoff)
         self.assertEqual(outcome['cooperation'][0], self.expected_cooperation)
+        self.assertEqual(len(tournament.matches), 0)
+
+    def test_run_single_repetition_with_keep_matches(self):
+        outcome = {'payoff': [], 'cooperation': []}
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            keep_matches=True)
+        tournament._run_single_repetition(outcome)
+        self.assertEqual(len(outcome['payoff']), 1)
+        self.assertEqual(len(outcome['cooperation']), 1)
+        self.assertEqual(outcome['payoff'][0], self.expected_payoff)
+        self.assertEqual(outcome['cooperation'][0], self.expected_cooperation)
+        self.assertEqual(len(tournament.matches[0]), 15)
 
     def test_run_serial_repetitions(self):
         outcome = {'payoff': [], 'cooperation': []}
@@ -419,17 +437,17 @@ class TestTournament(unittest.TestCase):
             (4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=200),
         }
         results = tournament._play_matches(matches)
-        self.assertNotIn('interactions', results)
+        self.assertNotIn('matches', results)
         self.assertEqual(results['payoff'], self.expected_payoff)
 
-    def test_with_interactions(self):
+    def test_keep_matches(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=3,
             repetitions=self.test_repetitions,
-            with_interactions=True)
+            keep_matches=True)
         matches = {
             (0, 0): axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=3),
             (0, 1): axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=3),
@@ -447,22 +465,5 @@ class TestTournament(unittest.TestCase):
             (3, 4): axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=3),
             (4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=3),
         }
-        expected_interactions = {
-            (0, 0): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (0, 1): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (0, 2): [('C', 'D'), ('C', 'D'), ('C', 'D')],
-            (0, 3): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (0, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (1, 1): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (1, 2): [('C', 'D'), ('D', 'D'), ('D', 'D')],
-            (1, 3): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (1, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (2, 2): [('D', 'D'), ('D', 'D'), ('D', 'D')],
-            (2, 3): [('D', 'C'), ('D', 'D'), ('D', 'D')],
-            (2, 4): [('D', 'C'), ('D', 'D'), ('D', 'D')],
-            (3, 3): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (3, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')],
-            (4, 4): [('C', 'C'), ('C', 'C'), ('C', 'C')]
-        }
-        tournament._play_matches(matches)
-        self.assertEqual(tournament.interactions, expected_interactions)
+        output = tournament._play_matches(matches)
+        self.assertEqual(len(output['matches']), 15)
