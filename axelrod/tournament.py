@@ -13,7 +13,7 @@ from .cooperation import cooperation_matrix
 class Tournament(object):
     game = Game()
 
-    def __init__(self, players, type=None, name='axelrod',
+    def __init__(self, players, tournament_type=None, name='axelrod',
                  game=None, turns=200,
                  repetitions=10, processes=None, prebuilt_cache=False,
                  noise=0, with_morality=True, keep_matches=False):
@@ -42,10 +42,10 @@ class Tournament(object):
             Whether interaction results should be included in the output
         """
         self.name = name
-        if type is not None:
-            self.type = type
+        if tournament_type is not None:
+            self.tournament_type = tournament_type
         else:
-            self.type = round_robin
+            self.tournament_type = round_robin
         self.turns = turns
         self.noise = noise
         if game is not None:
@@ -129,7 +129,7 @@ class Tournament(object):
         """
         Runs a single round robin and updates the outcome dictionary.
         """
-        matches = self.type(
+        matches = self.tournament_type(
             players=self.players,
             turns=self.turns,
             deterministic_cache=self.deterministic_cache,
@@ -253,7 +253,7 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for repetition in iter(work_queue.get, 'STOP'):
-            matches = self.type(
+            matches = self.tournament_type(
                 players=self.players,
                 turns=self.turns,
                 deterministic_cache=self.deterministic_cache,
