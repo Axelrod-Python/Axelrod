@@ -12,9 +12,9 @@ def pair_of_players(players, player1_index, player2_index):
     ----------
     players : list
         A list of axelrod.Player objects
-    player_1_index : integer
+    player1_index : integer
         index number of player 1 within self.players list
-    player_2_index : integer
+    player2_index : integer
         index number of player 2 within self.players list
 
     Returns
@@ -51,8 +51,7 @@ def round_robin(players, turns, deterministic_cache,
     Returns
     -------
     dictionary
-        A dictionary whose key is a tuple of player index numbers and the
-        corresponding value is an axelrod Match object
+        Mapping a tuple of player index numbers to an axelrod Match object
     """
     matches = {}
     for player1_index in range(len(players)):

@@ -270,9 +270,8 @@ class Tournament(object):
 
         Parameters
         ----------
-        dictionary
-        A dictionary whose key is a tuple of player index numbers and the
-        corresponding value is an axelrod Match object
+        matches : dictionary
+            Mapping a tuple of player index numbers to an axelrod Match object
 
         Returns
         -------
