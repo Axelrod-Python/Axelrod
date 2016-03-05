@@ -4,9 +4,9 @@ Accessing the interactions
 This tutorial will show you briefly how to access the detailed interaction
 results corresponding to the tournament.
 
-As shown in :ref:`getting-started` let us create a tournament except that,
-this time, we will set the with_interactions parameter. (We will also reduce
-the number of turns per match to 3 and we'll run only a single repetition)::
+To access the detailed interaction results we create a tournament as usual
+(see :ref:`getting-started`), setting the keep_matches=True parameter to save
+the interactions.::
 
     >>> import axelrod as axl
     >>> strategies = [
