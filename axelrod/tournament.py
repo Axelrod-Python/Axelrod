@@ -279,7 +279,8 @@ class Tournament(object):
             Containing the payoff and cooperation matrices
         """
         interactions = {}
-        matches_to_keep = []
+        if self._keep_matches:
+            matches_to_keep = []
 
         for key, match in matches.items():
             interactions[key] = match.play()
