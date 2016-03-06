@@ -1,3 +1,5 @@
+.. _creating_matches:
+
 Creating Matches
 ================
 

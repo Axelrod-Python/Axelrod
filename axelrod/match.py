@@ -27,8 +27,8 @@ class Match(object):
             The probability that a player's intended action should be flipped
         """
         self.result = []
-        self._player1 = players[0]
-        self._player2 = players[1]
+        self.player1 = players[0]
+        self.player2 = players[1]
         self._classes = (players[0].__class__, players[1].__class__)
         self._turns = turns
         self._prob_end = prob_end
@@ -48,8 +48,8 @@ class Match(object):
         return (
             self._prob_end or
             self._noise or
-            self._player1.classifier['stochastic'] or
-            self._player2.classifier['stochastic'])
+            self.player1.classifier['stochastic'] or
+            self.player2.classifier['stochastic'])
 
     @property
     def _cache_update_required(self):
@@ -60,8 +60,8 @@ class Match(object):
             not self._prob_end and
             not self._noise and
             self._cache_mutable and not (
-                self._player1.classifier['stochastic'] or
-                self._player2.classifier['stochastic'])
+                self.player1.classifier['stochastic'] or
+                self.player2.classifier['stochastic'])
         )
 
     def play(self):
@@ -102,12 +102,12 @@ class Match(object):
 
         if (self._stochastic or self._classes not in self._cache):
             turn = 0
-            self._player1.reset()
-            self._player2.reset()
+            self.player1.reset()
+            self.player2.reset()
             while turn < min(self._turns, end_turn):
                 turn += 1
-                self._player1.play(self._player2, self._noise)
-            result = list(zip(self._player1.history, self._player2.history))
+                self.player1.play(self.player2, self._noise)
+            result = list(zip(self.player1.history, self.player2.history))
 
             if self._cache_update_required:
                 self._cache[self._classes] = result
@@ -119,6 +119,6 @@ class Match(object):
 
     def sparklines(self, c_symbol=u'█', d_symbol=u' '):
         return (
-            sparkline(self._player1.history, c_symbol, d_symbol) +
+            sparkline(self.player1.history, c_symbol, d_symbol) +
             u'\n' +
-            sparkline(self._player2.history, c_symbol, d_symbol))
+            sparkline(self.player2.history, c_symbol, d_symbol))

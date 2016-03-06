@@ -38,14 +38,14 @@ class TestTournament(unittest.TestCase):
         cls.expected_payoff = [
             [600, 600, 0, 600, 600],
             [600, 600, 199, 600, 600],
-            [1000, 204, 200.0, 204, 204],
-            [600, 600, 199, 600.0, 600],
+            [1000, 204, 200, 204, 204],
+            [600, 600, 199, 600, 600],
             [600, 600, 199, 600, 600]]
 
         cls.expected_cooperation = [
             [200, 200, 200, 200, 200],
             [200, 200, 1, 200, 200],
-            [0.0, 0.0, 0.0, 0.0, 0.0],
+            [0, 0, 0, 0, 0],
             [200, 200, 1, 200, 200],
             [200, 200, 1, 200, 200]]
 
@@ -57,7 +57,7 @@ class TestTournament(unittest.TestCase):
             turns=self.test_turns,
             processes=4,
             noise=0.2)
-        self.assertEqual(len(tournament.players), len(self.players))
+        self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(
             tournament.players[0].tournament_attributes['length'],
             self.test_turns
@@ -78,6 +78,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament._parallel_repetitions, 10)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
+        self.assertFalse(tournament._keep_matches)
 
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
@@ -258,6 +259,23 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(outcome['cooperation']), 1)
         self.assertEqual(outcome['payoff'][0], self.expected_payoff)
         self.assertEqual(outcome['cooperation'][0], self.expected_cooperation)
+        self.assertEqual(len(tournament.matches), 0)
+
+    def test_run_single_repetition_with_keep_matches(self):
+        outcome = {'payoff': [], 'cooperation': []}
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            keep_matches=True)
+        tournament._run_single_repetition(outcome)
+        self.assertEqual(len(outcome['payoff']), 1)
+        self.assertEqual(len(outcome['cooperation']), 1)
+        self.assertEqual(outcome['payoff'][0], self.expected_payoff)
+        self.assertEqual(outcome['cooperation'][0], self.expected_cooperation)
+        self.assertEqual(len(tournament.matches[0]), 15)
 
     def test_run_serial_repetitions(self):
         outcome = {'payoff': [], 'cooperation': []}
@@ -394,26 +412,58 @@ class TestTournament(unittest.TestCase):
         queue_stop = done_queue.get()
         self.assertEqual(queue_stop, 'STOP')
 
-    def test_play_round_robin_mutable(self):
+    def test_play_matches(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        output = tournament._play_round_robin()
-        self.assertEqual(output['payoff'], self.expected_payoff)
-        self.assertTrue(
-            (axelrod.Cooperator, axelrod.Defector) in
-            tournament.deterministic_cache)
+        matches = {
+            (0, 0): axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=200),
+            (0, 1): axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=200),
+            (0, 2): axelrod.Match((axelrod.Cooperator(), axelrod.Defector()), turns=200),
+            (0, 3): axelrod.Match((axelrod.Cooperator(), axelrod.Grudger()), turns=200),
+            (0, 4): axelrod.Match((axelrod.Cooperator(), axelrod.GoByMajority()), turns=200),
+            (1, 1): axelrod.Match((axelrod.TitForTat(), axelrod.TitForTat()), turns=200),
+            (1, 2): axelrod.Match((axelrod.TitForTat(), axelrod.Defector()), turns=200),
+            (1, 3): axelrod.Match((axelrod.TitForTat(), axelrod.Grudger()), turns=200),
+            (1, 4): axelrod.Match((axelrod.TitForTat(), axelrod.GoByMajority()), turns=200),
+            (2, 2): axelrod.Match((axelrod.Defector(), axelrod.Defector()), turns=200),
+            (2, 3): axelrod.Match((axelrod.Defector(), axelrod.Grudger()), turns=200),
+            (2, 4): axelrod.Match((axelrod.Defector(), axelrod.GoByMajority()), turns=200),
+            (3, 3): axelrod.Match((axelrod.Grudger(), axelrod.Grudger()), turns=200),
+            (3, 4): axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=200),
+            (4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=200),
+        }
+        results = tournament._play_matches(matches)
+        self.assertNotIn('matches', results)
+        self.assertEqual(results['payoff'], self.expected_payoff)
 
-    def test_play_round_robin_immutable(self):
+    def test_keep_matches(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        output = tournament._play_round_robin(cache_mutable=False)
-        self.assertEqual(output['payoff'], self.expected_payoff)
-        self.assertEqual(tournament.deterministic_cache, {})
+            turns=3,
+            repetitions=self.test_repetitions,
+            keep_matches=True)
+        matches = {
+            (0, 0): axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=3),
+            (0, 1): axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=3),
+            (0, 2): axelrod.Match((axelrod.Cooperator(), axelrod.Defector()), turns=3),
+            (0, 3): axelrod.Match((axelrod.Cooperator(), axelrod.Grudger()), turns=3),
+            (0, 4): axelrod.Match((axelrod.Cooperator(), axelrod.GoByMajority()), turns=3),
+            (1, 1): axelrod.Match((axelrod.TitForTat(), axelrod.TitForTat()), turns=3),
+            (1, 2): axelrod.Match((axelrod.TitForTat(), axelrod.Defector()), turns=3),
+            (1, 3): axelrod.Match((axelrod.TitForTat(), axelrod.Grudger()), turns=3),
+            (1, 4): axelrod.Match((axelrod.TitForTat(), axelrod.GoByMajority()), turns=3),
+            (2, 2): axelrod.Match((axelrod.Defector(), axelrod.Defector()), turns=3),
+            (2, 3): axelrod.Match((axelrod.Defector(), axelrod.Grudger()), turns=3),
+            (2, 4): axelrod.Match((axelrod.Defector(), axelrod.GoByMajority()), turns=3),
+            (3, 3): axelrod.Match((axelrod.Grudger(), axelrod.Grudger()), turns=3),
+            (3, 4): axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=3),
+            (4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=3),
+        }
+        output = tournament._play_matches(matches)
+        self.assertEqual(len(output['matches']), 15)

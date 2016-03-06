@@ -3,12 +3,13 @@ import functools
 import collections
 import itertools
 
-from axelrod import RoundRobin, update_history
+from axelrod import update_history
 from axelrod import Actions
 
 from axelrod.strategies.cycler import Cycler
 
 C, D = Actions.C, Actions.D
+
 
 def detect_cycle(history, min_size=1, offset=0):
     """Detects cycles in the sequence history.
@@ -47,10 +48,22 @@ def limited_simulate_play(player_1, player_2, h1):
     update_history(player_1, h1)
     update_history(player_2, h2)
 
+
 def simulate_match(player_1, player_2, strategy, rounds=10):
     """Simulates a number of matches."""
     for match in range(rounds):
         limited_simulate_play(player_1, player_2, strategy)
+
+
+def calculate_scores(p1, p2, game):
+    """Calculates the score for two players based their history"""
+    s1, s2 = 0, 0
+    for pair in zip(p1.history, p2.history):
+        score = game.score(pair)
+        s1 += score[0]
+        s2 += score[1]
+    return s1, s2
+
 
 def look_ahead(player_1, player_2, game, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
@@ -61,29 +74,28 @@ def look_ahead(player_1, player_2, game, rounds=10):
     for strategy in strategies:
         # Instead of a deepcopy, create a new opponent and play out the history
         opponent_ = player_2.clone()
-        player_ = Cycler(strategy) # Either cooperator or defector
+        player_ = Cycler(strategy)  # Either cooperator or defector
         for h1 in player_1.history:
             limited_simulate_play(player_, opponent_, h1)
 
-        round_robin = RoundRobin(players=[player_, opponent_], game=game,
-                                 turns=rounds)
         simulate_match(player_, opponent_, strategy, rounds)
-        results.append(round_robin._calculate_scores(player_, opponent_)[0])
+        results.append(calculate_scores(player_, opponent_, game))
 
     return strategies[results.index(max(results))]
 
 
 class Memoized(object):
-   """Decorator. Caches a function's return value each time it is called.
-   If called later with the same arguments, the cached value is returned
-   (not reevaluated). From:
-   https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
-   """
-   def __init__(self, func):
+    """Decorator. Caches a function's return value each time it is called.
+    If called later with the same arguments, the cached value is returned
+    (not reevaluated). From:
+    https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
+    """
+
+    def __init__(self, func):
         self.func = func
         self.cache = {}
 
-   def __call__(self, *args):
+    def __call__(self, *args):
         if not isinstance(args, collections.Hashable):
             # uncacheable. a list, for instance.
             # better to not cache than blow up.
@@ -95,11 +107,11 @@ class Memoized(object):
             self.cache[args] = value
             return value
 
-   def __repr__(self):
+    def __repr__(self):
         """Return the function's docstring."""
         return self.func.__doc__
 
-   def __get__(self, obj, objtype):
+    def __get__(self, obj, objtype):
         """Support instance methods."""
         return functools.partial(self.__call__, obj)
 

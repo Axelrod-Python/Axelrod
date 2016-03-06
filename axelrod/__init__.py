@@ -8,8 +8,8 @@ from .game import DefaultGame, Game
 from .player import init_args, is_basic, obey_axelrod, update_history, Player
 from .mock_player import MockPlayer, simulate_play
 from .match import Match
-from .round_robin import RoundRobin
 from .strategies import *
+from .tournament_type import *
 from .tournament import Tournament
 from .tournament_manager import TournamentManager
 from .tournament_manager_factory import TournamentManagerFactory

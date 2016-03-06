@@ -1,7 +1,5 @@
-import math
 import csv
 
-#from .eigen import *
 from axelrod import payoff as ap, cooperation as ac
 
 try:
@@ -22,7 +20,7 @@ class ResultSet(object):
             players (list): a list of player objects.
             turns (int): the number of turns per interaction.
             repetitions (int): the number of time the round robin was repeated.
-            outcome (dict): returned from the RoundRobin class and containing
+            outcome (dict): returned from the Tournament class and containing
                 various sets of results for processing by this class.
             with_morality (bool): a flag to determine whether morality metrics
                 should be calculated.
