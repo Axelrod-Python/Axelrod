@@ -22,6 +22,9 @@ class Tournament(object):
         ----------
         players : list
             A list of axelrod.Player objects
+        tournament_type : function
+            Returning a dictionary mapping a tuple of player index numbers to
+            an axelrod Match object
         name : string
             A name for the tournament
         game : axelrod.Game
