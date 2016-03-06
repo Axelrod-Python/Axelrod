@@ -13,7 +13,7 @@ from .cooperation import cooperation_matrix
 class Tournament(object):
     game = Game()
 
-    def __init__(self, players, tournament_type=None, name='axelrod',
+    def __init__(self, players, tournament_type=round_robin, name='axelrod',
                  game=None, turns=200,
                  repetitions=10, processes=None, prebuilt_cache=False,
                  noise=0, with_morality=True, keep_matches=False):
@@ -45,10 +45,7 @@ class Tournament(object):
             Whether interaction results should be included in the output
         """
         self.name = name
-        if tournament_type is not None:
-            self.tournament_type = tournament_type
-        else:
-            self.tournament_type = round_robin
+        self.tournament_type = tournament_type
         self.turns = turns
         self.noise = noise
         if game is not None:
