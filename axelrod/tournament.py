@@ -27,7 +27,7 @@ class Tournament(object):
             an axelrod Match object
         name : string
             A name for the tournament
-        clone_opponents: boolean
+        clone_opponents : boolean
             Whether the players should be cloned to form the opposing players
         game : axelrod.Game
             The game object used to score the tournament
