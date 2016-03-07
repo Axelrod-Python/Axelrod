@@ -10,13 +10,17 @@ import numpy
 
 def normalise(nvec):
     """Normalises the given numpy array."""
-    return nvec / numpy.sqrt(numpy.dot(nvec, nvec))
+    with numpy.errstate(invalid='ignore'):
+        result = nvec / numpy.sqrt(numpy.dot(nvec, nvec))
+    return result
+
 
 def squared_error(vector_1, vector_2):
     """Computes the squared error between two numpy arrays."""
     diff = vector_1 - vector_2
     s = numpy.dot(diff, diff)
     return numpy.sqrt(s)
+
 
 def power_iteration(mat, initial):
     """
@@ -38,6 +42,7 @@ def power_iteration(mat, initial):
     while True:
         vec = normalise(numpy.dot(mat, vec))
         yield vec
+
 
 def principal_eigenvector(mat, maximum_iterations=None, max_error=1e-8):
     """

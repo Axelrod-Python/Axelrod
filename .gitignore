@@ -6,4 +6,7 @@ _build/
 dist/
 MANIFEST
 Axelrod.egg-info
-.hypothesis/eval_source/
+.hypothesis/
+basic_strategies.csv
+cache.txt
+test.csv

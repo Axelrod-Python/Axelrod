@@ -2,7 +2,7 @@ import itertools
 
 from axelrod import Actions, Player
 from .axelrod_first import Joss
-from .hunter import detect_cycle
+from axelrod._strategy_utils import detect_cycle
 
 class Calculator(Player):
     """

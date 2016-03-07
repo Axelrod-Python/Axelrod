@@ -25,7 +25,7 @@ class MemoryOnePlayer(Player):
     def __init__(self, four_vector=None, initial=C):
         """
         Parameters
-        ----------
+
         fourvector, list or tuple of floats of length 4
             The response probabilities to the preceeding round of play
             ( P(C|CC), P(C|CD), P(C|DC), P(C|DD) )
@@ -33,7 +33,7 @@ class MemoryOnePlayer(Player):
             The initial move
 
         Special Cases
-        -------------
+
         Alternator is equivalent to MemoryOnePlayer((0, 0, 1, 1), C)
         Cooperator is equivalent to MemoryOnePlayer((1, 1, 1, 1), C)
         Defector   is equivalent to MemoryOnePlayer((0, 0, 0, 0), C)
@@ -96,12 +96,12 @@ class GTFT(MemoryOnePlayer):
     def __init__(self, p=None):
         """
         Parameters
-        ----------
+
         p, float
             A parameter used to compute the four-vector
 
         Special Cases
-        -------------
+
         TitForTat is equivalent to GTFT(0)
         """
         self.p = p
@@ -153,13 +153,13 @@ class StochasticWSLS(MemoryOnePlayer):
     def __init__(self, ep=0.05):
         """
         Parameters
-        ----------
+
         ep, float
             A parameter used to compute the four-vector -- the probability of
             cooperating when the previous round was CD or DC
 
         Special Cases
-        -------------
+
         WinStayLoseShift is equivalent to StochasticWSLS(0)
         """
 
@@ -195,7 +195,7 @@ class LRPlayer(MemoryOnePlayer):
     def receive_tournament_attributes(self, phi=0, s=None, l=None):
         """
         Parameters
-        ----------
+
         phi, s, l: floats
             Parameter used to compute the four-vector according to the
             parameterization of the strategies below.
@@ -230,7 +230,7 @@ class ZDExtort2(LRPlayer):
     def __init__(self, phi=1./9, s=0.5):
         """
         Parameters
-        ----------
+
         phi, s: floats
             Parameters passed through to LRPlayer to determine
             the four vector.
@@ -255,7 +255,7 @@ class ZDExtort2v2(LRPlayer):
     def __init__(self, phi=1./8, s=0.5, l=1):
         """
         Parameters
-        ----------
+
         phi, s: floats
             Parameters passed through to LRPlayer to determine
             the four vector.
@@ -280,7 +280,7 @@ class ZDExtort4(LRPlayer):
     def __init__(self, phi=4./17, s=0.25, l=1):
         """
         Parameters
-        ----------
+
         phi, s: floats
             Parameters passed through to LRPlayer to determine
             the four vector.
@@ -304,7 +304,7 @@ class ZDGen2(LRPlayer):
     def __init__(self, phi=1./8, s=0.5, l=3):
         """
         Parameters
-        ----------
+
         phi, s: floats
             Parameters passed through to LRPlayer to determine
             the four vector.
@@ -327,7 +327,7 @@ class ZDGTFT2(LRPlayer):
     def __init__(self, phi=0.25, s=0.5):
         """
         Parameters
-        ----------
+
         phi, s: floats
             Parameters passed through to LRPlayer to determine
             the four vector.
@@ -353,7 +353,7 @@ class ZDSet2(LRPlayer):
     def __init__(self, phi=1./4, s=0., l=2):
         """
         Parameters
-        ----------
+
         phi, s: floats
             Parameters passed through to LRPlayer to determine
             the four vector.
@@ -383,12 +383,12 @@ class SoftJoss(MemoryOnePlayer):
     def __init__(self, q=0.9):
         """
         Parameters
-        ----------
+
         q, float
             A parameter used to compute the four-vector
 
         Special Cases
-        -------------
+
         Cooperator is equivalent to SoftJoss(0)
         TitForTat  is equivalent to SoftJoss(1)
         """

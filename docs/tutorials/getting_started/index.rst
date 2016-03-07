@@ -11,6 +11,7 @@ Contents:
 
    getting_started.rst
    payoff_matrix.rst
+   interactions.rst
    visualising_results.rst
    noisy_tournaments.rst
    ecological_variant.rst
