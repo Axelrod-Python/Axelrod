@@ -14,9 +14,9 @@ class Tournament(object):
     game = Game()
 
     def __init__(self, players, tournament_type=round_robin, name='axelrod',
-                 clone_opponents=True, game=None, turns=200,
-                 repetitions=10, processes=None, prebuilt_cache=False,
-                 noise=0, with_morality=True, keep_matches=False):
+                 game=None, turns=200, repetitions=10, processes=None,
+                 prebuilt_cache=False, noise=0, with_morality=True,
+                 keep_matches=False, clone_opponents=True):
         """
         Parameters
         ----------
@@ -27,10 +27,6 @@ class Tournament(object):
             an axelrod Match object
         name : string
             A name for the tournament
-        clone_opponents : boolean
-            Whether the players should be cloned to form the opposing players.
-            Set this to True if the tournament includes matches between players
-            of the same class.
         game : axelrod.Game
             The game object used to score the tournament
         turns : integer
@@ -47,6 +43,10 @@ class Tournament(object):
             Whether morality metrics should be calculated
         with_interactions : boolean
             Whether interaction results should be included in the output
+        clone_opponents : boolean
+            Whether the players should be cloned to form the opposing players.
+            Only set this to Flase if the tournament does not include matches
+            between players of the same class.
         """
         self.name = name
         self.tournament_type = tournament_type
