@@ -14,7 +14,7 @@ class Tournament(object):
     game = Game()
 
     def __init__(self, players, tournament_type=round_robin, name='axelrod',
-                 game=None, turns=200,
+                 clone_opponents=True, game=None, turns=200,
                  repetitions=10, processes=None, prebuilt_cache=False,
                  noise=0, with_morality=True, keep_matches=False):
         """
@@ -27,6 +27,8 @@ class Tournament(object):
             an axelrod Match object
         name : string
             A name for the tournament
+        clone_opponents: boolean
+            Whether the players should be cloned to form the opposing players
         game : axelrod.Game
             The game object used to score the tournament
         turns : integer
@@ -51,6 +53,10 @@ class Tournament(object):
         if game is not None:
             self.game = game
         self.players = players
+        if clone_opponents:
+            self.opponents = self._cloned_opponents(self.players)
+        else:
+            self.opponents = self.players
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = {}
@@ -77,6 +83,25 @@ class Tournament(object):
                  noise=self.noise)
             newplayers.append(player)
         self._players = newplayers
+
+    def _cloned_opponents(self, players):
+        """
+        Call the clone method for each player to produce the list of opponents
+
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+
+        Returns
+        -------
+        list
+            Of cloned axelrod.Player objects
+        """
+        opponents = []
+        for player in players:
+            opponents.append(player.clone())
+        return opponents
 
     def play(self):
         """
@@ -131,6 +156,7 @@ class Tournament(object):
         """
         matches = self.tournament_type(
             players=self.players,
+            opponents=self.opponents,
             turns=self.turns,
             deterministic_cache=self.deterministic_cache,
             cache_mutable=True,
@@ -255,6 +281,7 @@ class Tournament(object):
         for repetition in iter(work_queue.get, 'STOP'):
             matches = self.tournament_type(
                 players=self.players,
+                opponents=self.opponents,
                 turns=self.turns,
                 deterministic_cache=self.deterministic_cache,
                 cache_mutable=False,
