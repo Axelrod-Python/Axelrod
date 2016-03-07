@@ -28,7 +28,9 @@ class Tournament(object):
         name : string
             A name for the tournament
         clone_opponents : boolean
-            Whether the players should be cloned to form the opposing players
+            Whether the players should be cloned to form the opposing players.
+            Set this to True if the tournament includes matches between players
+            of the same class.
         game : axelrod.Game
             The game object used to score the tournament
         turns : integer
