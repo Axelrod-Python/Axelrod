@@ -17,21 +17,10 @@ class TestTournamentType(unittest.TestCase):
     def setUpClass(cls):
         cls.players = [s() for s in test_strategies]
 
-    def test_pair_of_players(self):
-        pair = axelrod.tournament_type.pair_of_players(self.players, 0, 2)
-        self.assertEqual(pair[0].name, 'Cooperator')
-        self.assertEqual(pair[1].name, 'Defector')
-        pair = axelrod.tournament_type.pair_of_players(self.players, 0, 0)
-        self.assertEqual(pair[0].name, pair[1].name)
-        self.assertNotEqual(pair[0], pair[1])
-        # Check that the two player instances are wholly independent
-        pair[0].name = 'player 1'
-        pair[1].name = 'player 2'
-        self.assertNotEqual(pair[0].name, pair[1].name)
-
     def test_round_robin(self):
         matches = axelrod.tournament_type.round_robin(
             players=self.players,
+            opponents=self.players,
             turns=test_turns,
             deterministic_cache={}
         )
