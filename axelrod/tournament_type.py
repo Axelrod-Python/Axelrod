@@ -6,6 +6,19 @@ class TournamentType(object):
     clone_opponents = True
 
     def __init__(self, players, turns, deterministic_cache):
+        """
+        A class to represent a type of tournament and build the set of matches
+        accordingly.
+
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+        turns : integer
+            The number of turns per match
+        deterministic_cache : dictionary
+            A cache of resulting actions for deterministic matches
+        """
         self.players = players
         self.turns = turns
         self.deterministic_cache = deterministic_cache
@@ -39,14 +52,6 @@ class RoundRobin(TournamentType):
 
         Parameters
         ----------
-        players : list
-            A list of axelrod.Player objects
-        opponents : list
-            A list of axelrod.Player objects
-        turns : integer
-            The number of turns per match
-        deterministic_cache : dictionary
-            A cache of resulting actions for deterministic matches
         cache_mutable : boolean
             Whether the deterministic cache should be updated
         noise : float
