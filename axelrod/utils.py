@@ -10,15 +10,18 @@ def timed_message(message, start_time):
     elapsed_time = time.time() - start_time
     return message + " in %.1fs" % elapsed_time
 
+
 def setup_logging(logging_destination='console', verbosity='INFO'):
     """Sets up logging. Call this outside of run_tournaments to avoid
     accumulating logging handlers."""
     logHandlers = {
-        'console': logging.StreamHandler(),
-        'none': logging.NullHandler(),
-        'file': logging.FileHandler('./axelrod.log')
+        'console': logging.StreamHandler,
+        'none': logging.NullHandler,
     }
-    logHandler = logHandlers[logging_destination]
+    if logging_destination == 'file':
+        logHandler = logging.FileHandler('./axelrod.log')
+    else:
+        logHandler = logHandlers[logging_destination]()
 
     logFormatters = {
         'console': '%(message)s',
@@ -29,7 +32,6 @@ def setup_logging(logging_destination='console', verbosity='INFO'):
 
     logHandler.setFormatter(logFormatter)
     logger = logging.getLogger('axelrod')
-    level = logging.getLevelName(verbosity.upper())
     logger.setLevel(verbosity.upper())
     logger.addHandler(logHandler)
 
