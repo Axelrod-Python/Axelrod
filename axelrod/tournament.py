@@ -5,7 +5,7 @@ import multiprocessing
 
 from .game import Game
 from .result_set import ResultSet
-from .tournament_type import round_robin
+from .tournament_type import RoundRobin
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
 
@@ -13,18 +13,17 @@ from .cooperation import cooperation_matrix
 class Tournament(object):
     game = Game()
 
-    def __init__(self, players, tournament_type=round_robin, name='axelrod',
-                 game=None, turns=200,
-                 repetitions=10, processes=None, prebuilt_cache=False,
-                 noise=0, with_morality=True, keep_matches=False):
+    def __init__(self, players, tournament_type=RoundRobin, name='axelrod',
+                 game=None, turns=200, repetitions=10, processes=None,
+                 prebuilt_cache=False, noise=0, with_morality=True,
+                 keep_matches=False):
         """
         Parameters
         ----------
         players : list
             A list of axelrod.Player objects
-        tournament_type : function
-            Returning a dictionary mapping a tuple of player index numbers to
-            an axelrod Match object
+        tournament_type : class
+            A class that must be descended from axelrod.TournamentType
         name : string
             A name for the tournament
         game : axelrod.Game
@@ -41,11 +40,10 @@ class Tournament(object):
             The probability that a player's intended action should be flipped
         with_morality : boolean
             Whether morality metrics should be calculated
-        with_interactions : boolean
+        keep_matches : boolean
             Whether interaction results should be included in the output
         """
         self.name = name
-        self.tournament_type = tournament_type
         self.turns = turns
         self.noise = noise
         if game is not None:
@@ -54,6 +52,8 @@ class Tournament(object):
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = {}
+        self.tournament_type = tournament_type(
+            players, turns, self.deterministic_cache)
         self._with_morality = with_morality
         self._keep_matches = keep_matches
         self._parallel_repetitions = repetitions
@@ -129,12 +129,8 @@ class Tournament(object):
         """
         Runs a single round robin and updates the outcome dictionary.
         """
-        matches = self.tournament_type(
-            players=self.players,
-            turns=self.turns,
-            deterministic_cache=self.deterministic_cache,
-            cache_mutable=True,
-            noise=self.noise)
+        matches = self.tournament_type.build_matches(
+            cache_mutable=True, noise=self.noise)
         output = self._play_matches(matches)
         outcome['payoff'].append(output['payoff'])
         outcome['cooperation'].append(output['cooperation'])
@@ -253,12 +249,8 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for repetition in iter(work_queue.get, 'STOP'):
-            matches = self.tournament_type(
-                players=self.players,
-                turns=self.turns,
-                deterministic_cache=self.deterministic_cache,
-                cache_mutable=False,
-                noise=self.noise)
+            matches = self.tournament_type.build_matches(
+                cache_mutable=False, noise=self.noise)
             output = self._play_matches(matches)
             done_queue.put(output)
         done_queue.put('STOP')
