@@ -1,63 +1,74 @@
 from .match import Match
 
 
-def pair_of_players(players, player1_index, player2_index):
-    """
-    Create a pair of Player objects.
+class TournamentType(object):
 
-    If the two index numbers are the same, the second player object is
-    created using the clone method of the first.
+    clone_opponents = True
 
-    Parameters
-    ----------
-    players : list
-        A list of axelrod.Player objects
-    player1_index : integer
-        index number of player 1 within self.players list
-    player2_index : integer
-        index number of player 2 within self.players list
+    def __init__(self, players, turns, deterministic_cache):
+        """
+        A class to represent a type of tournament and build the set of matches
+        accordingly.
 
-    Returns
-    -------
-    tuple
-        A pair of axelrod.Player objects
-    """
-    player1 = players[player1_index]
-    if player1_index == player2_index:
-        player2 = player1.clone()
-    else:
-        player2 = players[player2_index]
-    return (player1, player2)
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+        turns : integer
+            The number of turns per match
+        deterministic_cache : dictionary
+            A cache of resulting actions for deterministic matches
+        """
+        self.players = players
+        self.turns = turns
+        self.deterministic_cache = deterministic_cache
+        self.opponents = players
+
+    @property
+    def opponents(self):
+        return self._opponents
+
+    @opponents.setter
+    def opponents(self, players):
+        if self.clone_opponents:
+            opponents = []
+            for player in players:
+                opponents.append(player.clone())
+        else:
+            opponents = players
+        self._opponents = opponents
+
+    def build_matches():
+        raise NotImplementedError()
 
 
-def round_robin(players, turns, deterministic_cache,
-                cache_mutable=True, noise=0):
-    """
-    Create a dictionary of match objects for a round robin tournament.
+class RoundRobin(TournamentType):
 
-    Parameters
-    ----------
-    players : list
-        A list of axelrod.Player objects
-    turns : integer
-        The number of turns per match
-    deterministic_cache : dictionary
-        A cache of resulting actions for deterministic matches
-    cache_mutable : boolean
-        Whether the deterministic cache should be updated
-    noise : float
-        The probability that a player's intended action should be flipped
+    clone_opponents = True
 
-    Returns
-    -------
-    dictionary
-        Mapping a tuple of player index numbers to an axelrod Match object
-    """
-    matches = {}
-    for player1_index in range(len(players)):
-        for player2_index in range(player1_index, len(players)):
-            pair = pair_of_players(players, player1_index, player2_index)
-            match = Match(
-                pair, turns, deterministic_cache, cache_mutable, noise)
-            matches[(player1_index, player2_index)] = match
-    return matches
+    def build_matches(self, cache_mutable=True, noise=0):
+        """
+        Create a dictionary of match objects for a round robin tournament.
+
+        Parameters
+        ----------
+        cache_mutable : boolean
+            Whether the deterministic cache should be updated
+        noise : float
+            The probability that a player's intended action should be flipped
+
+        Returns
+        -------
+        dictionary
+            Mapping a tuple of player index numbers to an axelrod Match object
+        """
+        matches = {}
+        for player1_index in range(len(self.players)):
+            for player2_index in range(player1_index, len(self.players)):
+                pair = (
+                    self.players[player1_index], self.opponents[player2_index])
+                match = Match(
+                    pair, self.turns, self.deterministic_cache,
+                    cache_mutable, noise)
+                matches[(player1_index, player2_index)] = match
+        return matches
