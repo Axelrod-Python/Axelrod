@@ -17,7 +17,7 @@ class TournamentType(object):
 
     @opponents.setter
     def opponents(self, players):
-        if self._clone_opponents:
+        if self.clone_opponents:
             opponents = []
             for player in players:
                 opponents.append(player.clone())
