@@ -15,7 +15,7 @@ class TournamentType(object):
     def opponents(self):
         return self._opponents
 
-    @property.setter
+    @opponents.setter
     def opponents(self, players):
         if self._clone_opponents:
             opponents = []
