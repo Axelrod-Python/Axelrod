@@ -40,12 +40,8 @@ class Tournament(object):
             The probability that a player's intended action should be flipped
         with_morality : boolean
             Whether morality metrics should be calculated
-        with_interactions : boolean
+        keep_matches : boolean
             Whether interaction results should be included in the output
-        clone_opponents : boolean
-            Whether the players should be cloned to form the opposing players.
-            Only set this to Flase if the tournament does not include matches
-            between players of the same class.
         """
         self.name = name
         self.turns = turns
