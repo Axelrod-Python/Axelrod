@@ -3,10 +3,10 @@ import axelrod
 
 test_strategies = [
     axelrod.Cooperator,
-   axelrod.TitForTat,
-   axelrod.Defector,
-   axelrod.Grudger,
-   axelrod.GoByMajority
+    axelrod.TitForTat,
+    axelrod.Defector,
+    axelrod.Grudger,
+    axelrod.GoByMajority
 ]
 test_turns = 100
 
@@ -17,13 +17,28 @@ class TestTournamentType(unittest.TestCase):
     def setUpClass(cls):
         cls.players = [s() for s in test_strategies]
 
-    def test_round_robin(self):
-        matches = axelrod.tournament_type.round_robin(
-            players=self.players,
-            opponents=self.players,
-            turns=test_turns,
-            deterministic_cache={}
-        )
+    def test_init_with_clone(self):
+        tt = axelrod.TournamentType(self.players, test_turns, {})
+        self.assertEqual(tt.players, self.players)
+        self.assertEqual(tt.turns, test_turns)
+        player = tt.players[0]
+        opponent = tt.opponents[0]
+        self.assertEqual(player.name, opponent.name)
+        self.assertNotEqual(player, opponent)
+        # Check that the two player instances are wholly independent
+        opponent.name = 'Test'
+        self.assertNotEqual(player.name, opponent.name)
+
+
+class TestRoundRobin(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.players = [s() for s in test_strategies]
+
+    def test_build_matches(self):
+        rr = axelrod.RoundRobin(self.players, test_turns, {})
+        matches = rr.build_matches()
         match_definitions = [
             (match) for match in matches]
         expected_match_definitions = [
