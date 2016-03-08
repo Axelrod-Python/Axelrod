@@ -80,21 +80,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(anonymous_tournament.name, 'axelrod')
         self.assertFalse(tournament._keep_matches)
 
-    def test_cloned_opponents(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        player = tournament.players[0]
-        opponent = tournament.opponents[0]
-        self.assertEqual(player.name, opponent.name)
-        self.assertNotEqual(player, opponent)
-        # Check that the two player instances are wholly independent
-        opponent.name = 'Test'
-        self.assertNotEqual(player.name, opponent.name)
-
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(

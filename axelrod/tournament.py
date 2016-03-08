@@ -16,15 +16,14 @@ class Tournament(object):
     def __init__(self, players, tournament_type=RoundRobin, name='axelrod',
                  game=None, turns=200, repetitions=10, processes=None,
                  prebuilt_cache=False, noise=0, with_morality=True,
-                 keep_matches=False, clone_opponents=True):
+                 keep_matches=False):
         """
         Parameters
         ----------
         players : list
             A list of axelrod.Player objects
-        tournament_type : function
-            Returning a dictionary mapping a tuple of player index numbers to
-            an axelrod Match object
+        tournament_type : class
+            A class that must be descended from axelrod.TournamentType
         name : string
             A name for the tournament
         game : axelrod.Game
@@ -54,10 +53,6 @@ class Tournament(object):
         if game is not None:
             self.game = game
         self.players = players
-        if clone_opponents:
-            self.opponents = self._cloned_opponents(self.players)
-        else:
-            self.opponents = self.players
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = {}
@@ -86,25 +81,6 @@ class Tournament(object):
                  noise=self.noise)
             newplayers.append(player)
         self._players = newplayers
-
-    def _cloned_opponents(self, players):
-        """
-        Call the clone method for each player to produce the list of opponents
-
-        Parameters
-        ----------
-        players : list
-            A list of axelrod.Player objects
-
-        Returns
-        -------
-        list
-            Of cloned axelrod.Player objects
-        """
-        opponents = []
-        for player in players:
-            opponents.append(player.clone())
-        return opponents
 
     def play(self):
         """
