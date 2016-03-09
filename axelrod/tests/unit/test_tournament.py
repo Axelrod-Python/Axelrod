@@ -440,12 +440,14 @@ class TestTournament(unittest.TestCase):
         self.assertNotIn('matches', results)
         self.assertEqual(results['payoff'], self.expected_payoff)
 
-    def test_keep_matches(self):
+    @given(turns=integers(min_value=1, max_value=200))
+    @example(turns=3)
+    @example(turns=200)
+    def test_keep_matches(self, turns):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=3,
             repetitions=self.test_repetitions,
             keep_matches=True)
         matches = {
