@@ -13,4 +13,11 @@ class TestTimedMessage(unittest.TestCase):
                              allow_infinity=False),
            message=text())
     def test_time_message(self, start_time, message):
-        self.assertIsInstance(axelrod.utils.timed_message(message, start_time), str)
+        timed_message = axelrod.utils.timed_message(message, start_time)
+        self.assertIsInstance(timed_message, str)
+        self.assertEqual(timed_message[:len(message)], message)
+
+class TestSetupLogging(unittest.TestCase):
+
+    def test_setup_logging(self):
+        axelrod.utils.setup_logging(logging_destination='console', verbosity='INFO')
