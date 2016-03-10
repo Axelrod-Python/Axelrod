@@ -5,7 +5,10 @@ C, D = Actions.C, Actions.D
 
 
 class Gambler(Player):
-
+    """
+    Most comments and structure come from the LookerUp class.
+    New comments start with GK
+    """
     name = 'Gambler'
     classifier = {
         'memory_depth': float('inf'),
@@ -68,7 +71,7 @@ class Gambler(Player):
         key = (opponent_start, my_history, opponent_history)
         # Look up the action number associated with that tuple in the lookup table.
         action = float(self.lookup_table[key])
-        # Depending on the action number return a choice
+        # GK: Depending on the action number return a choice
         return random_choice(action)
 
 
@@ -95,12 +98,12 @@ class PSOGambler(Gambler):
         lookup_table_keys = list(product(opponent_starts, self_histories,
                                          other_histories))
 
-        # Pattern of values determed previously with a pso algorithm.
+        # GK: Pattern of values determined previously with a pso algorithm.
         pattern_pso = [1.0 ,0.0,1.0,1.0 ,0.0 ,1.0,1.0,1.0,0.0 ,1.0 ,0.0,0.0,0.0,0.0,0.0,1.0 ,
                        0.93,0.0,1.0,0.67,0.42,0.0,0.0,0.0,0.0 ,1.0 ,0.0,1.0,0.0,0.0,0.0,0.48,
                        0.0 ,0.0,0.0,0.0 ,1.0 ,1.0,1.0,0.0,0.19,1.0 ,1.0,0.0,0.0,0.0,0.0,0.0 ,
                        1.0 ,0.0,1.0,0.0 ,0.0 ,0.0,1.0,0.0,1.0 ,0.36,0.0,0.0,0.0,0.0,0.0,0.0 ]
 
         # Zip together the keys and the action pattern to get the lookup table.
-        lookup_table = dict(zip(lookup_table_keys, pattern))
+        lookup_table = dict(zip(lookup_table_keys, pattern_pso))
         Gambler.__init__(self, lookup_table=lookup_table)
