@@ -57,7 +57,7 @@ class Gambler(Player):
         # If there isn't enough history to lookup an action, cooperate.
         if len(self.history) < max(self.plays, self.opponent_start_plays):
             return C
-        # GK: Defect Last 2 turns
+        # GK: Defect Last 2 turns, Idea came from the Backstabber class
         if len(opponent.history) > (self.tournament_attributes['length'] - 3):
             return D
         # Count backward m turns to get my own recent history.
