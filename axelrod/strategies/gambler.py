@@ -1,3 +1,9 @@
+from axelrod import Actions, Player, init_args, random_choice
+from itertools import product
+
+C, D = Actions.C, Actions.D
+
+
 class Gambler(Player):
 
     name = 'Gambler'
