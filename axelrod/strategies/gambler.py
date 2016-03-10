@@ -10,7 +10,7 @@ class Gambler(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
-        'makes_use_of': set(),
+        'makes_use_of': set(['length']),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
