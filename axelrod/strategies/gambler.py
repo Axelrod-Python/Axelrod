@@ -8,9 +8,11 @@ class Gambler(Player):
     """
     A LookerUp class player which will select randomly an action in some cases.
     It will always defect the last 2 turns.
-    Most comments and structure come from the LookerUp class.
-    New comments start with GK
     """
+    
+    # Most comments and structure come from the LookerUp class.
+    # New comments start with GK
+    
     name = 'Gambler'
     classifier = {
         'memory_depth': float('inf'),
