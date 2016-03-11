@@ -43,6 +43,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.forgiver
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.gambler
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.geller
    :members:
    :undoc-members:

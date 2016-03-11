@@ -6,6 +6,8 @@ C, D = Actions.C, Actions.D
 
 class Gambler(Player):
     """
+    A LookerUp class player which will select randomly an action in some cases.
+    It will always defect the last 2 turns.
     Most comments and structure come from the LookerUp class.
     New comments start with GK
     """
@@ -84,7 +86,7 @@ class PSOGambler(Gambler):
 
     name = "PSO Gambler"
 
-    def __init__(self,pattern):
+    def __init__(self):
         plays = 2
         opponent_start_plays = 2
 
