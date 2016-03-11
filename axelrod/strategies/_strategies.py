@@ -15,6 +15,7 @@ from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
+from .gambler import Gambler, PSOGambler
 from .gobymajority import (GoByMajority,
     GoByMajority10, GoByMajority20, GoByMajority40,
     GoByMajority5,
@@ -88,6 +89,7 @@ strategies = [
     ForgetfulGrudger,
     Forgiver,
     ForgivingTitForTat,
+    PSOGambler,
     GTFT,
     Geller,
     GellerCooperator,

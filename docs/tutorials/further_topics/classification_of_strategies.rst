@@ -24,7 +24,7 @@ This allows us to, for example, quickly identify all the stochastic
 strategies::
 
     >>> len([s for s in axl.strategies if s().classifier['stochastic']])
-    38
+    39
 
 Or indeed find out how many strategy only use 1 turn worth of memory to
 make a decision::
@@ -37,7 +37,7 @@ tournament. For example, here is the number of strategies that  make use of the
 length of each match of the tournament::
 
     >>> len([s() for s in axl.strategies if 'length' in s().classifier['makes_use_of']])
-    9
+    10
 
 Here are how many of the strategies that make use of the particular game being
 played (whether or not it's the default Prisoner's dilemma)::
