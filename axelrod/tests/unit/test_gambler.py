@@ -1,4 +1,7 @@
-"""Test for the Gambler strategy."""
+"""
+Test for the Gambler strategy.
+Most tests come form the LookerUp test suite
+"""
 
 import axelrod
 import random
@@ -91,10 +94,11 @@ class TestPSOGambler(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        # Defects on the last two rounds no matter what
+        # Defects on the last two rounds no matter what, from Backstabber test suite
         self.responses_test([C] * 197 , [C] * 197, [C, D, D],
                             tournament_length=200)
 
+    # Test from Random test suite
     def test_return_values(self):
         self.assertEqual(random_choice(1), C)
         self.assertEqual(random_choice(0), D)
