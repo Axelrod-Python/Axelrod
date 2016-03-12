@@ -17,8 +17,15 @@ class TestTimedMessage(unittest.TestCase):
            message=text())
     def test_time_message(self, start_time, message):
         timed_message = axelrod.utils.timed_message(message, start_time)
-        self.assertIsInstance(timed_message, str)
         self.assertEqual(timed_message[:len(message)], message)
+
+    def test_time_message_example(self):
+        message = "Full tournament"
+        start_time = 0
+        timed_message = axelrod.utils.timed_message(message, start_time)
+        self.assertEqual(timed_message[:len(message)], message)
+        self.assertGreaterEqual(float(timed_message[len(message)+4:-1]), 0)
+
 
 
 class TestSetupLogging(unittest.TestCase):
