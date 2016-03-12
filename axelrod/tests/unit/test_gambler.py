@@ -69,7 +69,6 @@ class TestGambler(TestPlayer):
         self.responses_test([D, D], [D, D], [D])
 
 
-
 class TestPSOGambler(TestPlayer):
 
     name = "PSO Gambler"
@@ -94,18 +93,10 @@ class TestPSOGambler(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        # Defects on the last two rounds no matter what, from Backstabber test suite
+        # Defects on the last two rounds
         self.responses_test([C] * 197 , [C] * 197, [C, D, D],
                             tournament_length=200)
 
-    # Test from Random test suite
-    def test_return_values(self):
-        self.assertEqual(random_choice(1), C)
-        self.assertEqual(random_choice(0), D)
-        random.seed(1)
-        self.assertEqual(random_choice(), C)
-        random.seed(2)
-        self.assertEqual(random_choice(), D)
 
 # Some heads up tests for PSOGambler
 class PSOGamblervsDefector(TestHeadsUp):
@@ -117,14 +108,14 @@ class PSOGamblervsDefector(TestHeadsUp):
 class PSOGamblervsCooperator(TestHeadsUp):
     def test_vs(self):
         self.versus_test(axelrod.PSOGambler(), axelrod.Cooperator(),
-                         [C, C, D, D], [C, C, C, C])
+                         [C, C, C, C], [C, C, C, C])
 
 
 class PSOGamblervsTFT(TestHeadsUp):
     def test_vs(self):
         outcomes = zip()
         self.versus_test(axelrod.PSOGambler(), axelrod.TitForTat(),
-                         [C, C, D, D] , [C, C, C, D])
+                         [C, C, C, C], [C, C, C, C])
 
 
 class PSOGamblervsAlternator(TestHeadsUp):

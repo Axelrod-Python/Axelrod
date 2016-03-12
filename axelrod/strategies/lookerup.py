@@ -82,7 +82,7 @@ class LookerUp(Player):
     }
 
     @init_args
-    def __init__(self, lookup_table=None):
+    def __init__(self, lookup_table=None, value_length=1):
         """
         If no lookup table is provided to the constructor, then use the TFT one.
         """
@@ -94,7 +94,7 @@ class LookerUp(Player):
             ('', 'D', 'D') : D,
             ('', 'C', 'C') : C,
             ('', 'D', 'C') : C,
-        }
+            }
 
         self.lookup_table = lookup_table
         # Rather than pass the number of previous turns (m) to consider in as a
@@ -113,8 +113,9 @@ class LookerUp(Player):
         for k, v in lookup_table.items():
             if (len(k[1]) != self.plays) or (len(k[0]) != self.opponent_start_plays):
                 raise ValueError("All table elements must have the same size")
-            if len(v) > 1:
-                raise ValueError("Table values should be of length one, C or D")
+            if value_length is not None:
+                if len(v) > value_length:
+                    raise ValueError("Table values should be of length one, C or D")
 
     def strategy(self, opponent):
         # If there isn't enough history to lookup an action, cooperate.
@@ -134,6 +135,17 @@ class LookerUp(Player):
         return action
 
 
+def create_lookup_table_keys(plays=2, opponent_start_plays=2):
+    """Creates the keys for a lookup table."""
+    self_histories = [''.join(x) for x in product('CD', repeat=plays)]
+    other_histories = [''.join(x) for x in product('CD', repeat=plays)]
+    opponent_starts = [''.join(x) for x in
+                       product('CD', repeat=opponent_start_plays)]
+    lookup_table_keys = list(product(opponent_starts, self_histories,
+                                         other_histories))
+    return lookup_table_keys
+
+
 class EvolvedLookerUp(LookerUp):
     """
     A LookerUp strategy that uses a lookup table generated using an evolutionary
@@ -143,18 +155,8 @@ class EvolvedLookerUp(LookerUp):
     name = "EvolvedLookerUp"
 
     def __init__(self):
-        plays = 2
-        opponent_start_plays = 2
-
-        # Generate the list of possible tuples, i.e. all possible combinations
-        # of m actions for me, m actions for opponent, and n starting actions
-        # for opponent.
-        self_histories = [''.join(x) for x in product('CD', repeat=plays)]
-        other_histories = [''.join(x) for x in product('CD', repeat=plays)]
-        opponent_starts = [''.join(x) for x in
-                           product('CD', repeat=opponent_start_plays)]
-        lookup_table_keys = list(product(opponent_starts, self_histories,
-                                         other_histories))
+        lookup_table_keys = create_lookup_table_keys(plays=2,
+                                                     opponent_start_plays=2)
 
         # Pattern of values determed previously with an evolutionary algorithm.
         pattern='CDCCDCCCDCDDDDDCCDCCDDDDDCDCDDDCDDDDCCCDDCCDDDDDCDCDDDCDCDDDDDDD'

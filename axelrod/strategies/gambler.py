@@ -1,18 +1,20 @@
-from axelrod import Actions, Player, init_args, random_choice
 from itertools import product
+
+from axelrod import Actions, Player, init_args, random_choice
+from axelrod.strategy_transformers import FinalTransformer
+from .lookerup import LookerUp, create_lookup_table_keys
+
 
 C, D = Actions.C, Actions.D
 
 
-class Gambler(Player):
+@FinalTransformer((D, D)) # End with two defections if tournament length is known
+class Gambler(LookerUp):
     """
     A LookerUp class player which will select randomly an action in some cases.
     It will always defect the last 2 turns.
     """
-    
-    # Most comments and structure come from the LookerUp class.
-    # New comments start with GK
-    
+
     name = 'Gambler'
     classifier = {
         'memory_depth': float('inf'),
@@ -28,85 +30,42 @@ class Gambler(Player):
         """
         If no lookup table is provided to the constructor, then use the TFT one.
         """
-        Player.__init__(self)
-
         if not lookup_table:
             lookup_table = {
             ('', 'C', 'D') : 0,
             ('', 'D', 'D') : 0,
             ('', 'C', 'C') : 1,
             ('', 'D', 'C') : 1,
-        }
-
-        self.lookup_table = lookup_table
-        # Rather than pass the number of previous turns (m) to consider in as a
-        # separate variable, figure it out. The number of turns is the length
-        # of the second element of any given key in the dict.
-        self.plays = len(list(self.lookup_table.keys())[0][1])
-        # The number of opponent starting actions is the length of the first
-        # element of any given key in the dict.
-        self.opponent_start_plays = len(list(self.lookup_table.keys())[0][0])
-        # If the table dictates to ignore the opening actions of the opponent
-        # then the memory classification is adjusted
-        if self.opponent_start_plays == 0:
-            self.classifier['memory_depth'] = self.plays
-
-        # Ensure that table is well-formed
-        for k, v in lookup_table.items():
-            if (len(k[1]) != self.plays) or (len(k[0]) != self.opponent_start_plays):
-                raise ValueError("All table elements must have the same size")
-
+            }
+        LookerUp.__init__(self, lookup_table=lookup_table, value_length=None)
 
     def strategy(self, opponent):
-        # If there isn't enough history to lookup an action, cooperate.
-        if len(self.history) < max(self.plays, self.opponent_start_plays):
-            return C
-        # GK: Defect Last 2 turns, Idea came from the Backstabber class
-        if len(opponent.history) > (self.tournament_attributes['length'] - 3):
-            return D
-        # Count backward m turns to get my own recent history.
-        history_start = -1 * self.plays
-        my_history = ''.join(self.history[history_start:])
-        # Do the same for the opponent.
-        opponent_history = ''.join(opponent.history[history_start:])
-        # Get the opponents first n actions.
-        opponent_start = ''.join(opponent.history[:self.opponent_start_plays])
-        # Put these three strings together in a tuple.
-        key = (opponent_start, my_history, opponent_history)
-        # Look up the action number associated with that tuple in the lookup table.
-        action = float(self.lookup_table[key])
-        # GK: Depending on the action number return a choice
+        action = LookerUp.strategy(self, opponent)
+        # action could be 'C' or a float
+        if action in [C, D]:
+            return action
         return random_choice(action)
-
 
 
 class PSOGambler(Gambler):
     """
-    A LookerUp strategy that uses a lookup table with probability numbers generated using 
-    a Particle Swarm Optimisation (PSO) algorithm.
+    A LookerUp strategy that uses a lookup table with probability numbers
+    generated using a Particle Swarm Optimisation (PSO) algorithm.
     """
 
     name = "PSO Gambler"
 
     def __init__(self):
-        plays = 2
-        opponent_start_plays = 2
-
-        # Generate the list of possible tuples, i.e. all possible combinations
-        # of m actions for me, m actions for opponent, and n starting actions
-        # for opponent.
-        self_histories = [''.join(x) for x in product('CD', repeat=plays)]
-        other_histories = [''.join(x) for x in product('CD', repeat=plays)]
-        opponent_starts = [''.join(x) for x in
-                           product('CD', repeat=opponent_start_plays)]
-        lookup_table_keys = list(product(opponent_starts, self_histories,
-                                         other_histories))
+        lookup_table_keys = create_lookup_table_keys(plays=2,
+                                                     opponent_start_plays=2)
 
         # GK: Pattern of values determined previously with a pso algorithm.
-        pattern_pso = [1.0 ,0.0,1.0,1.0 ,0.0 ,1.0,1.0,1.0,0.0 ,1.0 ,0.0,0.0,0.0,0.0,0.0,1.0 ,
-                       0.93,0.0,1.0,0.67,0.42,0.0,0.0,0.0,0.0 ,1.0 ,0.0,1.0,0.0,0.0,0.0,0.48,
-                       0.0 ,0.0,0.0,0.0 ,1.0 ,1.0,1.0,0.0,0.19,1.0 ,1.0,0.0,0.0,0.0,0.0,0.0 ,
-                       1.0 ,0.0,1.0,0.0 ,0.0 ,0.0,1.0,0.0,1.0 ,0.36,0.0,0.0,0.0,0.0,0.0,0.0 ]
+        pattern_pso = [1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 0.0, 1.0, 0.93, 0.0, 1.0, 0.67, 0.42, 0.0,
+                       0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.48, 0.0,
+                       0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.19, 1.0, 1.0, 0.0,
+                       0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+                       0.0, 1.0, 0.36, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern_pso))
