@@ -7,8 +7,7 @@ from hypothesis import given
 from hypothesis.strategies import floats, text
 
 import logging
-from testfixtures import Comparison as C, compare
-import sys
+from testfixtures import compare
 
 class TestTimedMessage(unittest.TestCase):
 
