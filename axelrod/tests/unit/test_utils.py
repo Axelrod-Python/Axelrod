@@ -42,14 +42,3 @@ class TestSetupLogging(unittest.TestCase):
             axelrod.utils.setup_logging(logging_destination='console',
                                         verbosity=level)
             compare(logger.level, levels[level])
-
-        # Removing this as it doesn't seem to work on travis.
-        #compare([
-            #C('logging.StreamHandler',
-              #stream=sys.stderr,
-              #formatter=C('logging.Formatter',
-                          #_fmt='%(message)s',
-                          #strict=False),
-              #level=logging.NOTSET,
-              #strict=False)
-            #], logger.handlers)
