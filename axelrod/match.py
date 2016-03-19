@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import random
 from math import log, ceil
+import random
 
+from .game import Game
 
 def sparkline(actions, c_symbol=u'█', d_symbol=u' '):
     return u''.join([
@@ -116,6 +117,14 @@ class Match(object):
 
         self.result = result
         return result
+
+    def scores(self, game=None):
+        """Returns the scores of the previous Match plays."""
+        if not game:
+            game = Game()
+        scores = [game.score(plays) for plays in self.result]
+        return scores
+
 
     def sparklines(self, c_symbol=u'█', d_symbol=u' '):
         return (
