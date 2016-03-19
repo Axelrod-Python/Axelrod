@@ -12,7 +12,7 @@ def sparkline(actions, c_symbol=u'█', d_symbol=u' '):
 class Match(object):
 
     def __init__(self, players, turns, deterministic_cache=None,
-                 cache_mutable=True, noise=0, prob_end=None):
+                 cache_mutable=True, noise=0):
         """
         Parameters
         ----------
@@ -32,7 +32,6 @@ class Match(object):
         self.player2 = players[1]
         self._classes = (players[0].__class__, players[1].__class__)
         self._turns = turns
-        self._prob_end = prob_end
         if deterministic_cache is None:
             self._cache = {}
         else:
@@ -47,7 +46,6 @@ class Match(object):
         stochastic
         """
         return (
-            self._prob_end or
             self._noise or
             self.player1.classifier['stochastic'] or
             self.player2.classifier['stochastic'])
@@ -58,7 +56,6 @@ class Match(object):
         A boolean to show whether the deterministic cache should be updated
         """
         return (
-            not self._prob_end and
             not self._noise and
             self._cache_mutable and not (
                 self.player1.classifier['stochastic'] or
@@ -83,29 +80,11 @@ class Match(object):
 
         i.e. One entry per turn containing a pair of actions.
         """
-        if self._prob_end is not None:
-            # If using a probabilistic end: sample the length of the game.
-            # This is using inverse random sample on a pdf given by:
-            # f(n) = p_end * (1 - p_end) ^ (n - 1)
-            # Which gives cdf:
-            # F(n) = 1 - (1 - p) ^ n
-            # Which gives for given x = F(n) (ie the random sample) gives n:
-            # n = ceil((ln(1-x)/ln(1-p)))
-            try:
-                x = random.random()
-                end_turn = ceil(log(1 - x) / log(1 - self._prob_end))
-            except ZeroDivisionError:
-                end_turn = float("inf")
-            except ValueError:
-                end_turn = 1
-        else:
-            end_turn = float("inf")
-
         if (self._stochastic or self._classes not in self._cache):
             turn = 0
             self.player1.reset()
             self.player2.reset()
-            while turn < min(self._turns, end_turn):
+            while turn < self._turns:
                 turn += 1
                 self.player1.play(self.player2, self._noise)
             result = list(zip(self.player1.history, self.player2.history))
