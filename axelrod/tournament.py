@@ -5,7 +5,7 @@ import multiprocessing
 
 from .game import Game
 from .result_set import ResultSet
-from .tournament_type import RoundRobin
+from .tournament_type import RoundRobin, ProbEndRoundRobin
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
 
@@ -286,3 +286,57 @@ class Tournament(object):
         if self._keep_matches:
             output['matches'] = matches_to_keep
         return output
+
+
+class ProbEndTournament(Tournament):
+    """
+    A tournament in which the player don't know the length of a given match
+    (currently implemented by setting this to be infinite). The length of a
+    match is equivalent to randomly sampling after each round whether or not to
+    continue.
+    """
+    def __init__(self, players, tournament_type=ProbEndRoundRobin, name='axelrod',
+                 game=None, prob_end=.5, repetitions=10, processes=None,
+                 prebuilt_cache=False, noise=0, with_morality=True,
+                 keep_matches=False):
+        """
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+        tournament_type : class
+            A class that must be descended from axelrod.TournamentType
+        name : string
+            A name for the tournament
+        game : axelrod.Game
+            The game object used to score the tournament
+        prob_end : a float
+            The probability of a given match ending
+        repetitions : integer
+            The number of times the round robin should be repeated
+        processes : integer
+            The number of processes to be used for parallel processing
+        prebuilt_cache : boolean
+            Whether a cache has been passed in from an external object
+        noise : float
+            The probability that a player's intended action should be flipped
+        with_morality : boolean
+            Whether morality metrics should be calculated
+        keep_matches : boolean
+            Whether interaction results should be included in the output
+        """
+        super(ProbEndTournament, self).__init__(players, tournament_type=ProbEndRoundRobin,
+                                                name=name, game=game, turns=float("inf"),
+                                                repetitions=repetitions, processes=processes,
+                                                prebuilt_cache=prebuilt_cache,
+                                                noise=noise, with_morality=with_morality,
+                                                keep_matches=keep_matches)
+
+        self.prob_end = prob_end
+
+
+    def _build_cache_required(self):
+        """
+        A cache is never required (as every Match length can be different)
+        """
+        return False

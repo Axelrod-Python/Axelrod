@@ -10,7 +10,7 @@ from .mock_player import MockPlayer, simulate_play
 from .match import Match
 from .strategies import *
 from .tournament_type import *
-from .tournament import Tournament
+from .tournament import Tournament, ProbEndTournament
 from .tournament_manager import TournamentManager
 from .tournament_manager_factory import TournamentManagerFactory
 from .result_set import ResultSet
