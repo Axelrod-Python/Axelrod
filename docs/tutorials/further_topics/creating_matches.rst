@@ -67,6 +67,17 @@ but you can use any characters you like::
     |||||||||||||||||||||||||
     |-|-|-|-|-|-|-|-|-|-|-|-|
 
+A `Match` class can also score the individual turns of a match. Just call
+`match.scores()` after play::
+
+    >>> import axelrod as axl
+    >>> players = (axl.Cooperator(), axl.Alternator())
+    >>> match = axl.Match(players, 25)
+    >>> match.play()
+    [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
+    >>> match.scores()
+    [(3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3)]
+
 It is also possible to create matches that that have a given probability of
 ending after certain number of turns::
 

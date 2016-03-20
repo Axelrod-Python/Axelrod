@@ -124,6 +124,14 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match(players, float("inf"), prob_end=prob_end)
         self.assertTrue(0 <= len(match.play()))
 
+    def test_scores(self):
+        player1 = axelrod.TitForTat()
+        player2 = axelrod.Defector()
+        match = axelrod.Match((player1, player2), 3)
+        self.assertEqual(match.scores(), [])
+        match.play()
+        self.assertEqual(match.scores(), [(0, 5), (1, 1), (1, 1)])
+
     def test_sparklines(self):
         players = (axelrod.Cooperator(), axelrod.Alternator())
         match = axelrod.Match(players, 4)
