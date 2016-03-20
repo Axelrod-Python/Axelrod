@@ -12,24 +12,10 @@ C, D = Actions.C, Actions.D
 
 class TestMatch(unittest.TestCase):
 
-    @given(turns=integers(min_value=1, max_value=200),
-           prob_end=floats(min_value=0, max_value=1))
-    @example(turns=5, prob_end=None)
-    def test_init(self, turns, prob_end):
+    @given(turns=integers(min_value=1, max_value=200))
+    @example(turns=5)
+    def test_init(self, turns):
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
-        match = axelrod.Match((p1, p2), turns, prob_end=prob_end)
-        self.assertEqual(match.result, [])
-        self.assertEqual(match.player1, p1)
-        self.assertEqual(match.player2, p2)
-        self.assertEqual(
-            match._classes, (axelrod.Cooperator, axelrod.Cooperator))
-        self.assertEqual(match._turns, turns)
-        self.assertEqual(match._prob_end, prob_end)
-        self.assertEqual(match._cache, {})
-        self.assertEqual(match._cache_mutable, True)
-        self.assertEqual(match._noise, 0)
-
-        # Checking that prob_end has default None
         match = axelrod.Match((p1, p2), turns)
         self.assertEqual(match.result, [])
         self.assertEqual(match.player1, p1)
@@ -37,7 +23,6 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(
             match._classes, (axelrod.Cooperator, axelrod.Cooperator))
         self.assertEqual(match._turns, turns)
-        self.assertEqual(match._prob_end, None)
         self.assertEqual(match._cache, {})
         self.assertEqual(match._cache_mutable, True)
         self.assertEqual(match._noise, 0)
@@ -55,9 +40,6 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((p1, p2), 5, noise=p)
         self.assertTrue(match._stochastic)
 
-        match = axelrod.Match((p1, p2), 5, prob_end=p)
-        self.assertTrue(match._stochastic)
-
         p1 = axelrod.Random()
         match = axelrod.Match((p1, p2), 5)
         self.assertTrue(match._stochastic)
@@ -70,9 +52,6 @@ class TestMatch(unittest.TestCase):
 
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match = axelrod.Match((p1, p2), 5, noise=p)
-        self.assertFalse(match._cache_update_required)
-
-        match = axelrod.Match((p1, p2), 5, prob_end=p)
         self.assertFalse(match._cache_update_required)
 
         match = axelrod.Match((p1, p2), 5, cache_mutable=False)
@@ -99,30 +78,6 @@ class TestMatch(unittest.TestCase):
         cache = {(axelrod.Cooperator, axelrod.Defector): expected_result}
         match = axelrod.Match(players, 3, cache)
         self.assertEqual(match.play(), expected_result)
-
-    @given(turns=integers(min_value=1, max_value=200),
-           prob_end=floats(min_value=0, max_value=1),
-           rm=random_module())
-    def test_prob_end_play(self, turns, prob_end, rm):
-
-        players = (axelrod.Cooperator(), axelrod.Defector())
-        match = axelrod.Match(players, turns, prob_end=prob_end)
-        self.assertTrue(0 <= len(match.play()))
-
-        # If game has no ending the length will be turns
-        match = axelrod.Match(players, turns, prob_end=0)
-        self.assertEqual(len(match.play()), turns)
-
-        # If game has 1 prob of ending it lasts only one turn
-        match = axelrod.Match(players, turns, prob_end=1)
-        self.assertEqual(len(match.play()), 1)
-
-    @given(prob_end=floats(min_value=0.25, max_value=0.75),
-           rm=random_module())
-    def test_prob_end_play_with_no_turns(self, prob_end, rm):
-        players = (axelrod.Cooperator(), axelrod.Defector())
-        match = axelrod.Match(players, float("inf"), prob_end=prob_end)
-        self.assertTrue(0 <= len(match.play()))
 
     def test_scores(self):
         player1 = axelrod.TitForTat()
