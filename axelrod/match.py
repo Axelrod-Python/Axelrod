@@ -107,3 +107,6 @@ class Match(object):
             sparkline(self.player1.history, c_symbol, d_symbol) +
             u'\n' +
             sparkline(self.player2.history, c_symbol, d_symbol))
+
+    def __len__(self):
+        return self._turns

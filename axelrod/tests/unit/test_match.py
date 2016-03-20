@@ -27,6 +27,13 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match._cache_mutable, True)
         self.assertEqual(match._noise, 0)
 
+    @given(turns=integers(min_value=1, max_value=200))
+    @example(turns=5)
+    def test_len(self, turns):
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+        match = axelrod.Match((p1, p2), turns)
+        self.assertEqual(len(match), turns)
+
     @given(p=floats(min_value=0, max_value=1),
            rm=random_module())
     def test_stochastic(self, p, rm):
