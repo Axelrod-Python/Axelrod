@@ -39,6 +39,13 @@ class TestRoundRobin(unittest.TestCase):
     def setUpClass(cls):
         cls.players = [s() for s in test_strategies]
 
+    def test_build_single_match(self):
+        rr = axelrod.RoundRobin(self.players, test_turns, {})
+        match = rr.build_single_match((self.players[0], self.players[1]))
+        self.assertIsInstance(match, axelrod.Match)
+        self.assertEqual(len(match), rr.turns)
+
+
     def test_build_matches(self):
         rr = axelrod.RoundRobin(self.players, test_turns, {})
         matches = rr.build_matches()
@@ -117,3 +124,12 @@ class TestProbEndRoundRobin(unittest.TestCase):
             self.assertIsInstance(rr.sample_length(prob_end), int)
         except AssertionError:
             self.assertEqual(rr.sample_length(prob_end), float("inf"))
+
+    @given(prob_end=floats(min_value=.1, max_value=1), rm=random_module())
+    def test_build_single_match(self, prob_end, rm):
+        rr = axelrod.ProbEndRoundRobin(self.players, prob_end, {})
+        match = rr.build_single_match((self.players[0], self.players[1]))
+
+        self.assertIsInstance(match, axelrod.Match)
+        self.assertGreaterEqual(len(match), 1)
+        self.assertLessEqual(len(match), float("inf"))

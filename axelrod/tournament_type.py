@@ -44,6 +44,9 @@ class TournamentType(object):
     def build_matches():
         raise NotImplementedError()
 
+    def build_single_match():
+        raise NotImplementedError()
+
 
 class RoundRobin(TournamentType):
 
@@ -70,14 +73,18 @@ class RoundRobin(TournamentType):
             for player2_index in range(player1_index, len(self.players)):
                 pair = (
                     self.players[player1_index], self.opponents[player2_index])
-                match = Match(
-                    pair, self.turns, self.deterministic_cache,
-                    cache_mutable, noise)
+                match = self.build_single_match(pair, cache_mutable, noise)
                 matches[(player1_index, player2_index)] = match
         return matches
 
+    def build_single_match(self, pair, cache_mutable=True, noise=0):
+        """Create a single match for a given pair"""
+        return Match(pair, self.turns, self.deterministic_cache,
+                     cache_mutable, noise)
 
-class ProbEndRoundRobin(TournamentType):
+
+
+class ProbEndRoundRobin(RoundRobin):
 
     clone_opponents = True
 
@@ -96,38 +103,14 @@ class ProbEndRoundRobin(TournamentType):
         deterministic_cache : dictionary
             A cache of resulting actions for deterministic matches
         """
-        self.players = players
+        super(ProbEndRoundRobin, self).__init__(players, turns=float("inf"),
+                                                deterministic_cache=deterministic_cache)
         self.prob_end = prob_end
-        self.turns = float("inf")
-        self.deterministic_cache = deterministic_cache
-        self.opponents = players
 
-    def build_matches(self, cache_mutable=True, noise=0):
-        """
-        Create a dictionary of match objects for a round robin tournament.
-
-        Parameters
-        ----------
-        cache_mutable : boolean
-            Whether the deterministic cache should be updated
-        noise : float
-            The probability that a player's intended action should be flipped
-
-        Returns
-        -------
-        dictionary
-            Mapping a tuple of player index numbers to an axelrod Match object
-        """
-        matches = {}
-        for player1_index in range(len(self.players)):
-            for player2_index in range(player1_index, len(self.players)):
-                pair = (
-                    self.players[player1_index], self.opponents[player2_index])
-                match = Match(
-                    pair, self.sample_length(self.prob_end),
-                    self.deterministic_cache, cache_mutable, noise)
-                matches[(player1_index, player2_index)] = match
-        return matches
+    def build_single_match(self, pair, cache_mutable=True, noise=0):
+        """Create a single match for a given pair"""
+        return Match(pair, self.sample_length(self.prob_end),
+                     self.deterministic_cache, cache_mutable, noise)
 
     def sample_length(self, prob_end):
         """
