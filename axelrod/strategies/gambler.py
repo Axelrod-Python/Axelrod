@@ -51,6 +51,10 @@ class PSOGambler(Gambler):
     """
     A LookerUp strategy that uses a lookup table with probability numbers
     generated using a Particle Swarm Optimisation (PSO) algorithm.
+
+
+    A description of how this strategy was trained is given here:
+    https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
     """
 
     name = "PSO Gambler"

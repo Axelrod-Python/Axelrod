@@ -150,6 +150,9 @@ class EvolvedLookerUp(LookerUp):
     """
     A LookerUp strategy that uses a lookup table generated using an evolutionary
     algorithm.
+
+    A description of how this strategy was trained is given here:
+    http://mojones.net/evolving-strategies-for-an-iterated-prisoners-dilemma-tournament.html
     """
 
     name = "EvolvedLookerUp"
