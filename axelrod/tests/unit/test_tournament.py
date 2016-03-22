@@ -681,3 +681,297 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertEqual(len(outcome['payoff']), 1)
         self.assertEqual(len(outcome['cooperation']), 1)
         self.assertEqual(len(tournament.matches), 0)
+
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           prob_end=floats(min_value=.1, max_value=.9),
+           repetitions=integers(min_value=2, max_value=4),
+           rm=random_module())
+    @settings(max_examples=50, timeout=0)
+    @example(s=test_strategies, prob_end=test_prob_end,
+             repetitions=test_repetitions,
+             rm=random.seed(0))
+    def test_run_single_repetition_with_keep_matches(self, s, prob_end,
+                                                     repetitions, rm):
+        outcome = {'payoff': [], 'cooperation': []}
+        tournament = axelrod.ProbEndTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            prob_end=prob_end,
+            repetitions=self.test_repetitions,
+            keep_matches=True)
+        tournament._run_single_repetition(outcome)
+        self.assertEqual(len(outcome['payoff']), 1)
+        self.assertEqual(len(outcome['cooperation']), 1)
+        #self.assertEqual(outcome['payoff'][0], self.expected_payoff)
+        #self.assertEqual(outcome['cooperation'][0], self.expected_cooperation)
+        self.assertEqual(len(tournament.matches[0]), 15)
+
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           prob_end=floats(min_value=.1, max_value=.9),
+           repetitions=integers(min_value=2, max_value=4),
+           rm=random_module())
+    @settings(max_examples=50, timeout=0)
+    @example(s=test_strategies, prob_end=test_prob_end,
+             repetitions=test_repetitions,
+             rm=random.seed(0))
+    def test_run_serial_repetitions(self,s, prob_end, repetitions, rm):
+        outcome = {'payoff': [], 'cooperation': []}
+        tournament = axelrod.ProbEndTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            prob_end=prob_end,
+            repetitions=self.test_repetitions)
+        tournament._run_serial_repetitions(outcome)
+        self.assertEqual(len(outcome['payoff']), self.test_repetitions)
+        self.assertEqual(len(outcome['cooperation']), self.test_repetitions)
+        #for r in range(self.test_repetitions):
+            #self.assertEqual(outcome['payoff'][r], self.expected_payoff)
+            #self.assertEqual(
+                #outcome['cooperation'][r], self.expected_cooperation)
+
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           prob_end=floats(min_value=.1, max_value=.9),
+           repetitions=integers(min_value=2, max_value=4),
+           rm=random_module())
+    @settings(max_examples=50, timeout=0)
+    @example(s=test_strategies, prob_end=test_prob_end,
+             repetitions=test_repetitions,
+             rm=random.seed(0))
+    def test_run_parallel_repetitions(self, s, prob_end, repetitions, rm):
+        outcome = {'payoff': [], 'cooperation': []}
+        tournament = axelrod.ProbEndTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            prob_end=prob_end,
+            repetitions=self.test_repetitions,
+            processes=2)
+        tournament._run_parallel_repetitions(outcome)
+        self.assertEqual(len(outcome['payoff']), self.test_repetitions)
+        self.assertEqual(len(outcome['cooperation']), self.test_repetitions)
+        #for r in range(self.test_repetitions):
+            #self.assertEqual(outcome['payoff'][r], self.expected_payoff)
+            #self.assertEqual(
+                #outcome['cooperation'][r], self.expected_cooperation)
+
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           prob_end=floats(min_value=.1, max_value=.9),
+           repetitions=integers(min_value=2, max_value=4),
+           rm=random_module())
+    @settings(max_examples=50, timeout=0)
+    @example(s=test_strategies, prob_end=test_prob_end,
+             repetitions=test_repetitions,
+             rm=random.seed(0))
+    def test_n_workers(self, s, prob_end, repetitions, rm):
+        max_processes = multiprocessing.cpu_count()
+
+        tournament = axelrod.ProbEndTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            prob_end=prob_end,
+            repetitions=self.test_repetitions,
+            processes=1)
+        self.assertEqual(tournament._n_workers(), max_processes)
+
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=max_processes + 2)
+        self.assertEqual(tournament._n_workers(), max_processes)
+
+
+    @unittest.skipIf(
+        multiprocessing.cpu_count() < 2,
+        "not supported on single processor machines")
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           prob_end=floats(min_value=.1, max_value=.9),
+           repetitions=integers(min_value=2, max_value=4),
+           rm=random_module())
+    @settings(max_examples=50, timeout=0)
+    @example(s=test_strategies, prob_end=test_prob_end,
+             repetitions=test_repetitions,
+             rm=random.seed(0))
+    def test_2_workers(self, s, prob_end, repetitions, rm):
+        # This is a separate test with a skip condition because we
+        # cannot guarantee that the tests will always run on a machine
+        # with more than one processor
+        tournament = axelrod.ProbEndTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            prob_end=prob_end,
+            repetitions=self.test_repetitions,
+            processes=2)
+        self.assertEqual(tournament._n_workers(), 2)
+
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           prob_end=floats(min_value=.1, max_value=.9),
+           repetitions=integers(min_value=2, max_value=4),
+           rm=random_module())
+    @settings(max_examples=50, timeout=0)
+    @example(s=test_strategies, prob_end=test_prob_end,
+             repetitions=test_repetitions,
+             rm=random.seed(0))
+    def test_start_workers(self, s, prob_end, repetitions, rm):
+        workers = 2
+        work_queue = multiprocessing.Queue()
+        done_queue = multiprocessing.Queue()
+        for repetition in range(self.test_repetitions):
+            work_queue.put(repetition)
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        tournament._start_workers(workers, work_queue, done_queue)
+
+        stops = 0
+        while stops < workers:
+            payoffs = done_queue.get()
+            if payoffs == 'STOP':
+                stops += 1
+        self.assertEqual(stops, workers)
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           prob_end=floats(min_value=.1, max_value=.9),
+           repetitions=integers(min_value=2, max_value=4),
+           rm=random_module())
+    @settings(max_examples=50, timeout=0)
+    @example(s=test_strategies, prob_end=test_prob_end,
+             repetitions=test_repetitions,
+             rm=random.seed(0))
+    def test_process_done_queue(self, s, prob_end, repetitions, rm):
+        workers = 2
+        done_queue = multiprocessing.Queue()
+        outcome = {'payoff': [], 'cooperation': []}
+        tournament = axelrod.ProbEndTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            prob_end=prob_end,
+            repetitions=self.test_repetitions)
+        for r in range(self.test_repetitions):
+            done_queue.put(
+                {'payoff': 'test_payoffs', 'cooperation': 'test_cooperation'})
+        for w in range(workers):
+            done_queue.put('STOP')
+        tournament._process_done_queue(workers, done_queue, outcome)
+        self.assertEqual(len(outcome['payoff']), self.test_repetitions)
+        self.assertEqual(len(outcome['cooperation']), self.test_repetitions)
+        for repetition in range(self.test_repetitions):
+            self.assertEqual(outcome['payoff'][r], 'test_payoffs')
+            self.assertEqual(outcome['cooperation'][r], 'test_cooperation')
+
+    #@given(s=lists(sampled_from(axelrod.strategies),
+                   #min_size=2,  # Errors are returned if less than 2 strategies
+                   #max_size=5, unique=True),
+           #prob_end=floats(min_value=.1, max_value=.9),
+           #repetitions=integers(min_value=2, max_value=4),
+           #rm=random_module())
+    #@settings(max_examples=50, timeout=0)
+    #@example(s=test_strategies, prob_end=test_prob_end,
+             #repetitions=test_repetitions,
+             #rm=random.seed(0))
+    #def test_worker(self, s, prob_end, repetitions, rm):
+        #tournament = axelrod.ProbEndTournament(
+            #name=self.test_name,
+            #players=self.players,
+            #game=self.game,
+            #prob_end=prob_end,
+            #repetitions=self.test_repetitions)
+
+        #work_queue = multiprocessing.Queue()
+        #for repetition in range(self.test_repetitions):
+            #work_queue.put(repetition)
+        #work_queue.put('STOP')
+
+        #done_queue = multiprocessing.Queue()
+        #tournament._worker(work_queue, done_queue)
+        #for r in range(self.test_repetitions):
+            #output = done_queue.get()
+            #self.assertEqual(output['payoff'], self.expected_payoff)
+            #self.assertEqual(output['cooperation'], self.expected_cooperation)
+        #queue_stop = done_queue.get()
+        #self.assertEqual(queue_stop, 'STOP')
+
+    def test_play_matches(self):
+        tournament = axelrod.ProbEndTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            prob_end=.5,
+            repetitions=self.test_repetitions)
+        matches = {
+            (0, 0): axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=4),
+            (0, 1): axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=4),
+            (0, 2): axelrod.Match((axelrod.Cooperator(), axelrod.Defector()), turns=4),
+            (0, 3): axelrod.Match((axelrod.Cooperator(), axelrod.Grudger()), turns=4),
+            (0, 4): axelrod.Match((axelrod.Cooperator(), axelrod.GoByMajority()), turns=4),
+            (1, 1): axelrod.Match((axelrod.TitForTat(), axelrod.TitForTat()), turns=4),
+            (1, 2): axelrod.Match((axelrod.TitForTat(), axelrod.Defector()), turns=4),
+            (1, 3): axelrod.Match((axelrod.TitForTat(), axelrod.Grudger()), turns=4),
+            (1, 4): axelrod.Match((axelrod.TitForTat(), axelrod.GoByMajority()), turns=4),
+            (2, 2): axelrod.Match((axelrod.Defector(), axelrod.Defector()), turns=4),
+            (2, 3): axelrod.Match((axelrod.Defector(), axelrod.Grudger()), turns=4),
+            (2, 4): axelrod.Match((axelrod.Defector(), axelrod.GoByMajority()), turns=4),
+            (3, 3): axelrod.Match((axelrod.Grudger(), axelrod.Grudger()), turns=4),
+            (3, 4): axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=4),
+            (4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=4),
+        }
+        results = tournament._play_matches(matches)
+        self.assertNotIn('matches', results)
+        #self.assertEqual(results['payoff'], self.expected_payoff)
+
+    #def test_keep_matches(self):
+        #tournament = axelrod.ProbEndTournament(
+            #name=self.test_name,
+            #players=self.players,
+            #game=self.game,
+            #prob_end=.5,
+            #repetitions=self.test_repetitions,
+            #keep_matches=True)
+        #matches = {
+            #(0, 0): axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=4),
+            #(0, 1): axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=4),
+            #(0, 2): axelrod.Match((axelrod.Cooperator(), axelrod.Defector()), turns=4),
+            #(0, 4): axelrod.Match((axelrod.Cooperator(), axelrod.Grudger()), turns=4),
+            #(0, 4): axelrod.Match((axelrod.Cooperator(), axelrod.GoByMajority()), turns=4),
+            #(1, 1): axelrod.Match((axelrod.TitForTat(), axelrod.TitForTat()), turns=4),
+            #(1, 2): axelrod.Match((axelrod.TitForTat(), axelrod.Defector()), turns=4),
+            #(1, 4): axelrod.Match((axelrod.TitForTat(), axelrod.Grudger()), turns=4),
+            #(1, 4): axelrod.Match((axelrod.TitForTat(), axelrod.GoByMajority()), turns=4),
+            #(2, 2): axelrod.Match((axelrod.Defector(), axelrod.Defector()), turns=4),
+            #(2, 4): axelrod.Match((axelrod.Defector(), axelrod.Grudger()), turns=4),
+            #(2, 4): axelrod.Match((axelrod.Defector(), axelrod.GoByMajority()), turns=4),
+            #(4, 4): axelrod.Match((axelrod.Grudger(), axelrod.Grudger()), turns=4),
+            #(4, 4): axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=4),
+            #(4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=4),
+        #}
+        #output = tournament._play_matches(matches)
+        #self.assertEqual(len(output['matches']), 15)
