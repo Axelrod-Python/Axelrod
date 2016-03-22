@@ -46,6 +46,12 @@ class GoByMajority(Player):
         else:
             self.memory = 0
 
+        self.name = 'Go By Majority' + (self.memory > 0) * (": %i" % self.memory)
+        if self.soft:
+            self.name = "Soft " + self.name
+        else:
+            self.name = "Hard " + self.name
+
     def strategy(self, opponent):
         """This is affected by the history of the opponent.
 
@@ -65,15 +71,6 @@ class GoByMajority(Player):
             else:
                 return D
         return C
-
-    def __repr__(self):
-        """The string method for the strategy."""
-        name = 'Go By Majority' + (self.memory > 0) * (": %i" % self.memory)
-        if self.soft:
-            name = "Soft " + name
-        else:
-            name = "Hard " + name
-        return name
 
 
 class GoByMajority40(GoByMajority):
