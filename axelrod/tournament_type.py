@@ -116,17 +116,27 @@ class ProbEndRoundRobin(RoundRobin):
         """
         Sample length of a game.
 
-        This is using inverse random sample on a pdf given by:
+        This is using inverse random sample on a probability density function
+        <https://en.wikipedia.org/wiki/Probability_density_function> given by:
 
         f(n) = p_end * (1 - p_end) ^ (n - 1)
 
-        Which gives cdf:
+        (So the probability of length n is given by f(n))
 
-        F(n) = 1 - (1 - p) ^ n
+        Which gives cumulative distribution function
+        <https://en.wikipedia.org/wiki/Cumulative_distribution_function>:
+
+        F(n) = 1 - (1 - p_end) ^ n
+
+        (So the probability of length less than or equal to n is given by F(n))
 
         Which gives for given x = F(n) (ie the random sample) gives n:
 
-        n = ceil((ln(1-x)/ln(1-p)))
+        n = ceil((ln(1-x)/ln(1-p_end)))
+
+        This approach of sampling from a distribution is called inverse
+        transform sampling
+        <https://en.wikipedia.org/wiki/Inverse_transform_sampling>.
 
         Note that this corresponds to sampling at the end of every turn whether
         or not the Match ends.
