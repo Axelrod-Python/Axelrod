@@ -11,6 +11,7 @@ class TestGoByMajority(TestPlayer):
 
     name = "Soft Go By Majority"
     player = axelrod.GoByMajority
+    default_soft = True
 
     expected_classifier = {
         'stochastic': False,
@@ -38,6 +39,22 @@ class TestGoByMajority(TestPlayer):
         opponent = axelrod.Cooperator()
         self.assertEqual('D', player.strategy(opponent))
 
+    def test_default_soft(self):
+        player = self.player()
+        self.assertEqual(player.soft, self.default_soft)
+
+    def test_soft(self):
+        player = self.player(soft=True)
+        self.assertTrue(player.soft)
+        player = self.player(soft=False)
+        self.assertFalse(player.soft)
+
+    def test_name(self):
+        player = self.player(soft=True)
+        self.assertEqual(player.name, "Soft Go By Majority")
+        player = self.player(soft=False)
+        self.assertEqual(player.name, "Hard Go By Majority")
+
     def test_repr(self):
         player = self.player(soft=True)
         name = str(player)
@@ -51,6 +68,7 @@ class TestHardGoByMajority(TestGoByMajority):
 
     name = "Hard Go By Majority"
     player = axelrod.HardGoByMajority
+    default_soft = False
 
     def test_initial_strategy(self):
         """Starts by defecting"""
