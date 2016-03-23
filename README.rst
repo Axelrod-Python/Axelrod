@@ -103,6 +103,12 @@ http://axelrod.readthedocs.org/en/latest/tutorials/contributing/index.html
  :target: https://waffle.io/Axelrod-Python/Axelrod/metrics
   :alt: 'Throughput Graph'
 
+Example notebooks
+=================
+
+https://github.com/Axelrod-Python/Axelrod-notebooks contains a set of example
+Jupyter notebooks.
+
 Projects that use this library
 ==============================
 
@@ -126,6 +132,10 @@ paper please list it here:
 - `An Exploratory Data Analysis of the Iterated Prisoner's Dilemma, Part I
   <http://marcharper.codes/2015-11-16/ipd.html>`_ and `Part II <http://marcharper.codes/2015-11-17/ipd2.html>`_
   by `marcharper <https://github.com/marcharper>`_.
+- `Survival of the fittest: Experimenting with a high performing strategy in
+  other environments
+  <http://vknight.org/unpeudemath/gametheory/2015/11/28/Experimenting-with-a-high-performing-evolved-strategy-in-other-environments.html>`_
+  by `drvinceknight <https://twitter.com/drvinceknight>`_
 
 Contributors
 ============
