@@ -28,6 +28,7 @@ class Match(object):
         self.result = []
         self.player1 = players[0]
         self.player2 = players[1]
+        self.players = players
         self._classes = (players[0].__class__, players[1].__class__)
         self._turns = turns
         if deterministic_cache is None:
