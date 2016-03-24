@@ -333,6 +333,8 @@ class ProbEndTournament(Tournament):
                                                 keep_matches=keep_matches)
 
         self.prob_end = prob_end
+        self.tournament_type = tournament_type(
+            players, prob_end, self.deterministic_cache)
 
 
     def _build_cache_required(self):

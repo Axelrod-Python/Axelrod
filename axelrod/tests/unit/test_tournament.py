@@ -505,6 +505,7 @@ class TestProbEndTournament(unittest.TestCase):
             prob_end=self.test_prob_end,
             processes=4,
             noise=0.2)
+        self.assertEqual(tournament.tournament_type.prob_end, tournament.prob_end)
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(
             tournament.players[0].tournament_attributes['length'],
