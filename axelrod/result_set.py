@@ -143,3 +143,27 @@ class ResultSet(object):
                     for rank in self.ranking]
             writer.writerow(list(map(str, data)))
         return csv_string.getvalue()
+
+
+class ProbEndResultSet(ResultSet):
+    """A class to hold the results of a tournament."""
+
+    def __init__(self, players, repetitions, outcome,
+                 with_morality=True):
+        """
+        Args:
+            players (list): a list of player objects.
+            match_lengths (list): list of lists of all match lengths
+            outcome (dict): returned from the Tournament class and containing
+                various sets of results for processing by this class.
+            with_morality (bool): a flag to determine whether morality metrics
+                should be calculated.
+        """
+        super(ProbEndResultSet, self).__init__(players,
+                                               turns=float("inf"),
+                                               repetitions=repetitions,
+                                               outcome=outcome,
+                                               with_morality=with_morality)
+
+    def _results(self, outcome):
+        return []

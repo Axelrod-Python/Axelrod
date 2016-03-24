@@ -4,7 +4,7 @@ import logging
 import multiprocessing
 
 from .game import Game
-from .result_set import ResultSet
+from .result_set import ResultSet ,ProbEndResultSet
 from .tournament_type import RoundRobin, ProbEndRoundRobin
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
@@ -346,11 +346,41 @@ class ProbEndTournament(Tournament):
         self.prob_end = prob_end
         self.tournament_type = ProbEndRoundRobin(
             players, prob_end, self.deterministic_cache)
-        #self._outcome = {'payoff': [], 'cooperation': [], 'match_lengths': []}
-
+        self._outcome['match_lengths'] = []
 
     def _build_cache_required(self):
         """
         A cache is never required (as every Match length can be different)
         """
         return False
+
+    def _build_result_set(self):
+        """
+        Build the result set (used by the play method)
+
+        Returns
+        -------
+        axelrod.ResultSet
+        """
+        result_set = ProbEndResultSet(
+            players=self.players,
+            outcome=self._outcome,
+            repetitions=self.repetitions,
+            with_morality=self._with_morality)
+        return result_set
+
+    def _run_single_repetition(self, outcome):
+        """
+        Runs a single round robin and updates the outcome dictionary.
+        """
+        matches = self.tournament_type.build_matches(
+            cache_mutable=True, noise=self.noise)
+        output = self._play_matches(matches)
+
+        outcome['payoff'].append(output['payoff'])
+        outcome['cooperation'].append(output['cooperation'])
+        match_lengths = [len(m) for m in matches]
+        outcome['match_lengths'].append(match_lengths)
+
+        if self._keep_matches:
+            self.matches.append(output['matches'])

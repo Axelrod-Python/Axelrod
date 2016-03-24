@@ -105,7 +105,7 @@ class TestTournament(unittest.TestCase):
             name='_run_parallel_repetitions')
         tournament.play()
         tournament._run_serial_repetitions.assert_called_once_with(
-            {'cooperation': [], 'payoff': []})
+                {'cooperation': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
     @given(s=lists(sampled_from(axelrod.strategies),
@@ -249,7 +249,7 @@ class TestTournament(unittest.TestCase):
             tournament._parallel_repetitions, self.test_repetitions - 1)
 
     def test_run_single_repetition(self):
-        outcome = {'payoff': [], 'cooperation': []}
+        outcome = {'payoff': [], 'match_lengths': [], 'cooperation': []}
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -264,7 +264,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(tournament.matches), 0)
 
     def test_run_single_repetition_with_keep_matches(self):
-        outcome = {'payoff': [], 'cooperation': []}
+        outcome = {'payoff': [], 'match_lengths': [], 'cooperation': []}
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -442,6 +442,16 @@ class TestTournament(unittest.TestCase):
         self.assertNotIn('matches', results)
         self.assertEqual(results['payoff'], self.expected_payoff)
 
+    def test_build_result_set(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        results = tournament._build_result_set()
+        self.assertIsInstance(results, axelrod.ResultSet)
+
     @given(turns=integers(min_value=1, max_value=200))
     @example(turns=3)
     @example(turns=200)
@@ -563,7 +573,7 @@ class TestProbEndTournament(unittest.TestCase):
             name='_run_parallel_repetitions')
         tournament.play()
         tournament._run_serial_repetitions.assert_called_once_with(
-            {'cooperation': [], 'payoff': []})
+                {'cooperation': [], 'match_lengths': [], 'payoff': []})
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
 
@@ -669,7 +679,7 @@ class TestProbEndTournament(unittest.TestCase):
              repetitions=test_repetitions,
              rm=random.seed(0))
     def test_run_single_repetition(self, s, prob_end, repetitions, rm):
-        outcome = {'payoff': [], 'cooperation': []}
+        outcome = {'payoff': [], 'match_lengths': [], 'cooperation': []}
         players = [strat() for strat in s]
 
         tournament = axelrod.ProbEndTournament(
@@ -696,7 +706,7 @@ class TestProbEndTournament(unittest.TestCase):
              rm=random.seed(0))
     def test_run_single_repetition_with_keep_matches(self, s, prob_end,
                                                      repetitions, rm):
-        outcome = {'payoff': [], 'cooperation': []}
+        outcome = {'payoff': [], 'match_lengths': [], 'cooperation': []}
         tournament = axelrod.ProbEndTournament(
             name=self.test_name,
             players=self.players,
@@ -723,7 +733,7 @@ class TestProbEndTournament(unittest.TestCase):
              repetitions=test_repetitions,
              rm=random.seed(0))
     def test_run_serial_repetitions(self,s, prob_end, repetitions, rm):
-        outcome = {'payoff': [], 'cooperation': []}
+        outcome = {'payoff': [], 'match_lengths': [], 'cooperation': []}
         tournament = axelrod.ProbEndTournament(
             name=self.test_name,
             players=self.players,
@@ -750,7 +760,7 @@ class TestProbEndTournament(unittest.TestCase):
              repetitions=test_repetitions,
              rm=random.seed(0))
     def test_run_parallel_repetitions(self, s, prob_end, repetitions, rm):
-        outcome = {'payoff': [], 'cooperation': []}
+        outcome = {'payoff': [], 'match_lengths': [], 'cooperation': []}
         tournament = axelrod.ProbEndTournament(
             name=self.test_name,
             players=self.players,
@@ -870,7 +880,7 @@ class TestProbEndTournament(unittest.TestCase):
     def test_process_done_queue(self, s, prob_end, repetitions, rm):
         workers = 2
         done_queue = multiprocessing.Queue()
-        outcome = {'payoff': [], 'cooperation': []}
+        outcome = {'payoff': [], 'match_lengths': [], 'cooperation': []}
         tournament = axelrod.ProbEndTournament(
             name=self.test_name,
             players=self.players,
@@ -976,3 +986,13 @@ class TestProbEndTournament(unittest.TestCase):
         #}
         #output = tournament._play_matches(matches)
         #self.assertEqual(len(output['matches']), 15)
+
+    #def test_build_result_set(self):
+        #tournament = axelrod.ProbEndTournament(
+            #name=self.test_name,
+            #players=self.players,
+            #game=self.game,
+            #prob_end=0.5,
+            #repetitions=self.test_repetitions)
+        #results = tournament._build_result_set()
+        #self.assertIsInstance(results, axelrod.ProbEndResultSet)
