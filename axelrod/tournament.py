@@ -93,13 +93,24 @@ class Tournament(object):
                 self._build_cache(self._outcome)
             self._run_parallel_repetitions(self._outcome)
 
-        self.result_set = ResultSet(
+        self.result_set = self._build_result_set()
+        return self.result_set
+
+    def _build_result_set(self):
+        """
+        Build the result set (used by the play method)
+
+        Returns
+        -------
+        axelrod.ResultSet
+        """
+        result_set = ResultSet(
             players=self.players,
             turns=self.turns,
             repetitions=self.repetitions,
             outcome=self._outcome,
             with_morality=self._with_morality)
-        return self.result_set
+        return result_set
 
     def _build_cache_required(self):
         """
