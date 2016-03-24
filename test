@@ -1,3 +1,14 @@
 #!/usr/bin/env bash
 python -m unittest discover axelrod/tests/
+rm basic_strategies_boxplot.svg
+rm basic_strategies_payoff.svg
+rm basic_strategies_pdplot.svg
+rm basic_strategies_reproduce.svg
+rm basic_strategies_sdvplot.svg
+rm basic_strategies_winplot.svg
+rm test_boxplot.svg
+rm test_payoff.svg
+rm test_pdplot.svg
+rm test_sdvplot.svg
+rm test_winplot.svg
 python doctests.py
