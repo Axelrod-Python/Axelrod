@@ -336,7 +336,7 @@ class ProbEndTournament(Tournament):
         keep_matches : boolean
             Whether interaction results should be included in the output
         """
-        super(ProbEndTournament, self).__init__(players, tournament_type=ProbEndRoundRobin,
+        super(ProbEndTournament, self).__init__(players,
                                                 name=name, game=game, turns=float("inf"),
                                                 repetitions=repetitions, processes=processes,
                                                 prebuilt_cache=prebuilt_cache,
@@ -344,8 +344,9 @@ class ProbEndTournament(Tournament):
                                                 keep_matches=keep_matches)
 
         self.prob_end = prob_end
-        self.tournament_type = tournament_type(
+        self.tournament_type = ProbEndRoundRobin(
             players, prob_end, self.deterministic_cache)
+        #self._outcome = {'payoff': [], 'cooperation': [], 'match_lengths': []}
 
 
     def _build_cache_required(self):
