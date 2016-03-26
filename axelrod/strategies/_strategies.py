@@ -44,6 +44,7 @@ from .inverse import Inverse
 from .lookerup import (
     LookerUp, EvolvedLookerUp1_0, EvolvedLookerUp1_1, EvolvedLookerUp1_2,
     EvolvedLookerUp2_1, EvolvedLookerUp2_2, EvolvedLookerUp3_3)
+EvolvedLookerUp = EvolvedLookerUp2_2
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
