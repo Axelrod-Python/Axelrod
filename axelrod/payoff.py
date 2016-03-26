@@ -354,7 +354,7 @@ def normalised_payoff_diff_length(payoff_matrix, match_lengths):
     nplayers = len(payoff_matrix[0])
     scores_per_round = []
     for player in range(nplayers):
-        scores_per_round.append([[n / d for n, d in zip(p, l)] for
+        scores_per_round.append([[float(n) / d for n, d in zip(p, l)] for
                               p, l in zip(payoff_matrix[player], match_lengths[player])])
     averages = []
     stddevs = []
