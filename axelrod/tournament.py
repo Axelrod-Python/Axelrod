@@ -336,6 +336,10 @@ class ProbEndTournament(Tournament):
         keep_matches : boolean
             Whether interaction results should be included in the output
         """
+        if processes is not None:
+            raise NotImplementedError("Parallel processing of Probabilistic" +
+                                      " Ending Tournaments is not implemented")
+
         super(ProbEndTournament, self).__init__(players,
                                                 name=name, game=game, turns=float("inf"),
                                                 repetitions=repetitions, processes=processes,
@@ -360,10 +364,11 @@ class ProbEndTournament(Tournament):
 
         Returns
         -------
-        axelrod.ResultSet
+        axelrod.ProbtEndResultSet
         """
         result_set = ProbEndResultSet(
             players=self.players,
+            prob_end=self.prob_end,
             outcome=self._outcome,
             repetitions=self.repetitions,
             with_morality=self._with_morality)
@@ -373,14 +378,29 @@ class ProbEndTournament(Tournament):
         """
         Runs a single round robin and updates the outcome dictionary.
         """
-        matches = self.tournament_type.build_matches(
-            cache_mutable=True, noise=self.noise)
+        matches = self.tournament_type.build_matches(noise=self.noise)
         output = self._play_matches(matches)
 
         outcome['payoff'].append(output['payoff'])
         outcome['cooperation'].append(output['cooperation'])
-        match_lengths = [len(m) for m in matches]
+
+        match_lengths = self._count_match_lengths(matches)
         outcome['match_lengths'].append(match_lengths)
 
         if self._keep_matches:
             self.matches.append(output['matches'])
+
+    def _count_match_lengths(self, matches):
+        """Obtain match lengths"""
+        nplayers = len(self.players)
+        match_lengths = [[0] * i1 + [len(matches[(i1, i2)]) for i2 in
+                                     range(i1, nplayers)] for i1 in range(nplayers)]
+
+        # Copy top right to be in bottom left (creating a symmetric matrix)
+        # Length of Match between A and B is same as length of Match between B
+        # and A.
+        for i2 in range(nplayers):
+            for i1 in range(0, i2 + 1):
+                match_lengths[i2][i1] = match_lengths[i1][i2]
+
+        return match_lengths
