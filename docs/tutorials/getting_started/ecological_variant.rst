@@ -1,3 +1,5 @@
+.. _ecological-variant:
+
 Ecological Variant
 ==================
 

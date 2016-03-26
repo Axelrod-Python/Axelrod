@@ -10,5 +10,6 @@ Contents:
    :maxdepth: 2
 
    classification_of_strategies.rst
-   morality_metrics.rst
    creating_matches.rst
+   morality_metrics.rst
+   probabilistict_end_tournaments.rst
