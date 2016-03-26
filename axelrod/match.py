@@ -26,9 +26,7 @@ class Match(object):
             The probability that a player's intended action should be flipped
         """
         self.result = []
-        self.player1 = players[0]
-        self.player2 = players[1]
-        self.players = players
+        self.players = list(players)
         self._classes = (players[0].__class__, players[1].__class__)
         self._turns = turns
         if deterministic_cache is None:
@@ -46,8 +44,8 @@ class Match(object):
         """
         return (
             self._noise or
-            self.player1.classifier['stochastic'] or
-            self.player2.classifier['stochastic'])
+            any(p.classifier['stochastic'] for p in self.players)
+            )
 
     @property
     def _cache_update_required(self):
@@ -57,8 +55,8 @@ class Match(object):
         return (
             not self._noise and
             self._cache_mutable and not (
-                self.player1.classifier['stochastic'] or
-                self.player2.classifier['stochastic'])
+                any(p.classifier['stochastic'] for p in self.players)
+                )
         )
 
     def play(self):
@@ -81,12 +79,12 @@ class Match(object):
         """
         if (self._stochastic or self._classes not in self._cache):
             turn = 0
-            self.player1.reset()
-            self.player2.reset()
+            for p in self.players:
+                p.reset()
             while turn < self._turns:
                 turn += 1
-                self.player1.play(self.player2, self._noise)
-            result = list(zip(self.player1.history, self.player2.history))
+                self.players[0].play(self.players[1], self._noise)
+            result = list(zip(self.players[0].history, self.players[1].history))
 
             if self._cache_update_required:
                 self._cache[self._classes] = result
@@ -105,9 +103,9 @@ class Match(object):
 
     def sparklines(self, c_symbol=u'█', d_symbol=u' '):
         return (
-            sparkline(self.player1.history, c_symbol, d_symbol) +
+            sparkline(self.players[0].history, c_symbol, d_symbol) +
             u'\n' +
-            sparkline(self.player2.history, c_symbol, d_symbol))
+            sparkline(self.players[1].history, c_symbol, d_symbol))
 
     def __len__(self):
         return self._turns

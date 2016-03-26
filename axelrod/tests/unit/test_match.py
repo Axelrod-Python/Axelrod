@@ -18,8 +18,7 @@ class TestMatch(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match = axelrod.Match((p1, p2), turns)
         self.assertEqual(match.result, [])
-        self.assertEqual(match.player1, p1)
-        self.assertEqual(match.player2, p2)
+        self.assertEqual(match.players, [p1, p2])
         self.assertEqual(
             match._classes, (axelrod.Cooperator, axelrod.Cooperator))
         self.assertEqual(match._turns, turns)
