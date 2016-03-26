@@ -153,8 +153,7 @@ class ProbEndResultSet(ResultSet):
     """A class to hold the results of a tournament."""
 
     def __init__(self, players, prob_end, repetitions,
-                 outcome,
-                 with_morality=True):
+                 outcome, with_morality=True):
         """
         Args:
             players (list): a list of player objects.
