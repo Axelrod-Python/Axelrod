@@ -80,11 +80,18 @@ class Plot(object):
 
     @property
     def _boxplot_title(self):
-        return ("Mean score per stage game over {} "
-                "turns repeated {} times ({} strategies)").format(
-            self.result_set.turns,
-            self.result_set.repetitions,
-            len(self.result_set.ranking))
+        try:
+            return ("Mean score per stage game over {} "
+                    "turns repeated {} times ({} strategies)").format(
+                self.result_set.turns,
+                self.result_set.repetitions,
+                len(self.result_set.ranking))
+        except AttributeError:
+            return ("Mean score per stage game ({} probability of "
+                    "Match ending) repeated {} times ({} strategies)").format(
+                self.result_set.prob_end,
+                self.result_set.repetitions,
+                len(self.result_set.ranking))
 
     def boxplot(self):
         """For the specific mean score boxplot."""
@@ -115,11 +122,18 @@ class Plot(object):
 
     @property
     def _winplot_title(self):
-        return ("Distributions of wins:"
-                " {} turns repeated {} times ({} strategies)").format(
-            self.result_set.turns,
-            self.result_set.repetitions,
-            len(self.result_set.ranking))
+        try:
+            return ("Distributions of wins:"
+                    " {} turns repeated {} times ({} strategies)").format(
+                self.result_set.turns,
+                self.result_set.repetitions,
+                len(self.result_set.ranking))
+        except AttributeError:
+            return ("Distributions of wins ({} probability of "
+                    "Match ending): repeated {} times ({} strategies)").format(
+                self.result_set.prob_end,
+                self.result_set.repetitions,
+                len(self.result_set.ranking))
 
     def winplot(self):
         """Plots the distributions for the number of wins for each strategy."""
