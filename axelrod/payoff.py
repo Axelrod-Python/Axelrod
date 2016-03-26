@@ -1,5 +1,5 @@
 import math
-from numpy import median, mean
+from numpy import median, mean, std
 from axelrod import Actions
 
 C, D = Actions.C, Actions.D
@@ -52,8 +52,8 @@ def player_count(interactions):
 
             n = (-1 +- sqrt(1 + 8p)) / 2
 
-        Taking only the real roots allows us to derive the number of players
-        given the number of pairs:
+        Taking only the non negative root allows us to derive the number of
+        players given the number of pairs:
 
             n = (sqrt(8p + 1) -1) / 2
     """
@@ -221,6 +221,30 @@ def normalised_scores(scores, turns):
         [1.0 * s / normalisation for s in r] for r in scores]
 
 
+def normalised_scores_diff_length(scores, match_lengths):
+    """
+    The per-turn normalised scores matrix in the case where the number of turns
+    per match is not the same
+
+    Parameters
+    ----------
+    scores : list
+        A scores matrix (S) of the form returned by the scores function.
+    match_lengths : list
+        A match lengths list as returned by ProbEndTournament._format_match_lengths.
+
+    Returns
+    -------
+    list
+        A normalised scores matrix (N) such that:
+
+            N = S / t
+    """
+    nplayers = len(scores)
+    return [
+        [1.0 * s / (match_lengths[i][j] * (nplayers - 1)) for j, s in enumerate(r)] for i, r in enumerate(scores)]
+
+
 def ranking(scores):
     """
     Player index numbers listed by order of median score
@@ -304,6 +328,40 @@ def normalised_payoff(payoff_matrix, turns):
             stddevs[-1].append(dev)
     return averages, stddevs
 
+def normalised_payoff_diff_length(payoff_matrix, match_lengths):
+    """
+    The per-turn averaged payoff matrix in the case where the number of turns
+    per match is not the same
+
+    Parameters
+    ----------
+    payoff : list
+        A matrix of the form:
+
+        [
+            [[a, j], [b, k], [c, l]],
+            [[d, m], [e, n], [f, o]],
+            [[g, p], [h, q], [i, r]],
+        ]
+    match_lengths : list
+        A matrix of the same form as the payoff.
+
+    Returns
+    -------
+    list
+        A per-turn averaged payoff matrix and its standard deviations.
+    """
+    nplayers = len(payoff_matrix[0])
+    scores_per_round = []
+    for player in range(nplayers):
+        scores_per_round.append([[n / d for n, d in zip(p, l)] for
+                              p, l in zip(payoff_matrix[player], match_lengths[player])])
+    averages = []
+    stddevs = []
+    for scores in scores_per_round:
+        averages.append([mean(row) for row in scores])
+        stddevs.append([std(row) for row in scores])
+    return averages, stddevs
 
 def winning_player(players, payoffs):
     """
