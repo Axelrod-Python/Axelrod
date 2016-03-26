@@ -176,8 +176,8 @@ class ProbEndResultSet(ResultSet):
 
         payoff = self.results['payoff']
         self.scores = ap.scores(payoff)
-        self.normalised_scores = ap.normalised_scores_diff_length(self.scores,
-                                                          self.match_lengths)
+        self.normalised_scores = ap.normalised_scores_diff_length(payoff,
+                                                          self.results['match_lengths'])
         self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff_diff_length(
                                                    payoff, self.results['match_lengths']))
         self.ranking = ap.ranking(self.normalised_scores)

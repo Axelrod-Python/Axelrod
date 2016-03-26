@@ -98,18 +98,16 @@ class TestPayoff(unittest.TestCase):
         self.assertEqual(scores, self.expected_normalised_scores)
 
     def test_normalised_scores_diff_length(self):
-        scores = [[8, 9, 34], [16, 15, 32], [13, 18, 20]]
-        lengths = [[4, 5, 12], [6, 7, 14], [4, 6, 8]]
-        expected_normalised_scores = [[1.0, 0.9, 1.4167],
-                                      [1.3333, 1.0715, 1.1429],
-                                      [1.625, 1.5, 1.25]]
+        scores = [[[1, 1], [5, 5], [5, 5]],
+                  [[0, 0], [3, 3], [3, 3]],
+                  [[0, 0], [3, 3], [3, 3]]]
+        lengths = [[[1, 1], [1, 1], [1, 1]],
+                   [[1, 1], [1, 1], [1, 1]],
+                   [[1, 1], [1, 1], [1, 1]]]
+        expected_normalised_scores = [[5.0, 5.0], [1.5, 1.5], [1.5, 1.5]]
         normalised_scores = ap.normalised_scores_diff_length(scores, lengths)
 
-        # Check approximate equality of all elements
-        for i, row in enumerate(normalised_scores):
-            for j, col in enumerate(row):
-                self.assertAlmostEqual(col, expected_normalised_scores[i][j],
-                                       places=3)
+        self.assertEqual(normalised_scores, expected_normalised_scores)
 
     def test_normalised_payoff_diff_length(self):
         scores = [[[7, 7, 4], [8, 8, 23], [0, 1, 11]],

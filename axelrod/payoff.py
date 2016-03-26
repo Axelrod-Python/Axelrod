@@ -228,10 +228,16 @@ def normalised_scores_diff_length(scores, match_lengths):
 
     Parameters
     ----------
-    scores : list
-        A scores matrix (S) of the form returned by the scores function.
+    payoff : list
+        A matrix of the form:
+
+        [
+            [[a, j], [b, k], [c, l]],
+            [[d, m], [e, n], [f, o]],
+            [[g, p], [h, q], [i, r]],
+        ]
     match_lengths : list
-        A match lengths list as returned by ProbEndTournament._format_match_lengths.
+        A matrix of the same form as the payoff.
 
     Returns
     -------
@@ -240,9 +246,13 @@ def normalised_scores_diff_length(scores, match_lengths):
 
             N = S / t
     """
-    nplayers = len(scores)
-    return [
-        [1.0 * s / (match_lengths[i][j] * (nplayers - 1)) for j, s in enumerate(r)] for i, r in enumerate(scores)]
+    scores_per_round = [[[p / l for p, l in zip(po, lh)] for
+                         po, lh in zip(payoff, length)] for
+                        payoff, length in zip(scores, match_lengths)]
+    scores_per_round_against_opponents = [[opponent for
+                        j, opponent in enumerate(player) if j != i] for
+                       i, player in enumerate(scores_per_round)]
+    return [[mean(match) for match in zip(*player)] for player in scores_per_round_against_opponents]
 
 
 def ranking(scores):
