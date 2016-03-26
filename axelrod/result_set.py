@@ -49,13 +49,17 @@ class ResultSet(object):
         if 'payoff' in self.results:
             payoff = self.results['payoff']
             self.scores = ap.scores(payoff)
+
             self.normalised_scores = ap.normalised_scores(self.scores, turns)
+
             self.ranking = ap.ranking(self.scores)
             self.ranked_names = ap.ranked_names(players, self.ranking)
             self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff(
                 payoff, turns))
             self.wins = ap.wins(payoff)
+
             self.payoff_diffs_means = ap.payoff_diffs_means(payoff, turns)
+
             self.score_diffs = ap.score_diffs(payoff, turns)
 
         if 'cooperation' in self.results and with_morality:
@@ -148,7 +152,8 @@ class ResultSet(object):
 class ProbEndResultSet(ResultSet):
     """A class to hold the results of a tournament."""
 
-    def __init__(self, players, repetitions, outcome,
+    def __init__(self, players, prob_end, repetitions,
+                 outcome,
                  with_morality=True):
         """
         Args:
@@ -159,11 +164,33 @@ class ProbEndResultSet(ResultSet):
             with_morality (bool): a flag to determine whether morality metrics
                 should be calculated.
         """
-        super(ProbEndResultSet, self).__init__(players,
-                                               turns=float("inf"),
-                                               repetitions=repetitions,
-                                               outcome=outcome,
-                                               with_morality=with_morality)
+        self.players = players
+        self.nplayers = len(players)
+        self.prob_end = prob_end
+        self.repetitions = repetitions
+        self.outcome = outcome
+        self.results = self._results(outcome)
 
-    def _results(self, outcome):
-        return []
+        match_lengths = self.outcome['match_lengths']
+        self.match_lengths = self._format_match_length(match_lengths)
+
+        payoff = self.results['payoff']
+        self.scores = ap.scores(payoff)
+        self.normalised_scores = ap.normalised_scores_diff_length(self.scores,
+                                                          self.match_lengths)
+        self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff_diff_length(
+                                                   payoff, self.results['match_lengths']))
+        self.ranking = ap.ranking(self.normalised_scores)
+        self.ranked_names = ap.ranked_names(players, self.ranking)
+        self.wins = ap.wins(payoff)
+
+    def _format_match_length(self, match_lengths):
+        """
+        Take a match lengths list containing upper triangular matrices where
+        the i,jth element is the length of the match between player i and j.
+
+        Returns a list of lists showing the match lengths for each player in
+        each repetition.
+        """
+        lengths = [[sum([rep[p1][p2] for p2 in range(self.nplayers) if p1 != p2]) for rep in match_lengths] for p1 in range(self.nplayers)]
+        return lengths
