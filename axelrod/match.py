@@ -101,6 +101,28 @@ class Match(object):
         scores = [game.score(plays) for plays in self.result]
         return scores
 
+    def final_score(self, game=None):
+        """Returns the final score for a Match"""
+        scores = self.scores(game)
+
+        if len(scores) == 0:
+            return None
+
+        final_score = tuple(sum([score[playeri] for score in scores])
+                            for playeri in [0, 1])
+        return final_score
+
+    def winner(self, game=None):
+        """Returns the winner of the Match"""
+        scores = self.final_score(game)
+
+        if scores is not None:
+            if scores[0] == scores[1]:
+                return False  # No winner
+            return sorted(self.players,
+                          key=lambda x: scores[self.players.index(x)])[-1]
+        return None
+
     def sparklines(self, c_symbol=u'█', d_symbol=u' '):
         return (
             sparkline(self.players[0].history, c_symbol, d_symbol) +

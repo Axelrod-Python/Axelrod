@@ -93,6 +93,40 @@ class TestMatch(unittest.TestCase):
         match.play()
         self.assertEqual(match.scores(), [(0, 5), (1, 1), (1, 1)])
 
+    def test_final_score(self):
+        player1 = axelrod.TitForTat()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), 3)
+        self.assertEqual(match.final_score(), None)
+        match.play()
+        self.assertEqual(match.final_score(), (2, 7))
+
+        match = axelrod.Match((player2, player1), 3)
+        self.assertEqual(match.final_score(), None)
+        match.play()
+        self.assertEqual(match.final_score(), (7, 2))
+
+    def test_winner(self):
+        player1 = axelrod.TitForTat()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), 3)
+        self.assertEqual(match.winner(), None)
+        match.play()
+        self.assertEqual(match.winner(), player2)
+
+        match = axelrod.Match((player2, player1), 3)
+        self.assertEqual(match.winner(), None)
+        match.play()
+        self.assertEqual(match.winner(), player2)
+
+        player1 = axelrod.Defector()
+        match = axelrod.Match((player1, player2), 3)
+        self.assertEqual(match.winner(), None)
+        match.play()
+        self.assertEqual(match.winner(), False)
+
     def test_sparklines(self):
         players = (axelrod.Cooperator(), axelrod.Alternator())
         match = axelrod.Match(players, 4)
