@@ -85,11 +85,11 @@ class Tournament(object):
         axelrod.ResultSet
         """
         if self._processes is None:
-            self._run_serial_repetitions(self._outcome)
+            self._run_serial_repetitions(self.matches)
         else:
             if self._build_cache_required():
-                self._build_cache(self._outcome)
-            self._run_parallel_repetitions(self._outcome)
+                self._build_cache(self.matches)
+            self._run_parallel_repetitions(self.matches)
 
         self.result_set = self._build_result_set()
         return self.result_set
@@ -120,53 +120,51 @@ class Tournament(object):
                 len(self.deterministic_cache) == 0 or
                 not self.prebuilt_cache))
 
-    def _build_cache(self, outcome):
+    def _build_cache(self, matches):
         """
         For parallel processing, this runs a single round robin in order to
         build the deterministic cache.
 
         Parameters
         ----------
-        outcome : dictionary
-            The outcome dictionary to update with results
+        matches : list
+            The list of matches to update
         """
         self._logger.debug('Playing first round robin to build cache')
-        self._run_single_repetition(outcome)
+        self._run_single_repetition(matches)
         self._parallel_repetitions -= 1
 
-    def _run_single_repetition(self, outcome):
+    def _run_single_repetition(self, matches):
         """
-        Runs a single round robin and updates the outcome dictionary.
+        Runs a single round robin and updates the matches list.
         """
-        matches = self.tournament_type.build_matches(
+        new_matches = self.tournament_type.build_matches(
             cache_mutable=True, noise=self.noise)
-        output = self._play_matches(matches)
-        outcome['payoff'].append(output['payoff'])
-        outcome['cooperation'].append(output['cooperation'])
-        self.matches.append(output['matches'])
+        self._play_matches(new_matches)
+        self.matches.append(new_matches)
 
-    def _run_serial_repetitions(self, outcome):
+    def _run_serial_repetitions(self, matches):
         """
         Runs all repetitions of the round robin in serial.
 
         Parameters
         ----------
-        outcome : dictionary
-            The outcome dictionary to update with results
+        matches : list
+            The list of matches per repetition to update with results
         """
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            self._run_single_repetition(outcome)
+            self._run_single_repetition(matches)
         return True
 
-    def _run_parallel_repetitions(self, outcome):
+    def _run_parallel_repetitions(self, matches):
         """
         Run all except the first round robin using parallel processing.
 
         Parameters
         ----------
-        outcome : dictionary
-            The outcome dictionary to update with results
+        matches : list
+            The list of matches per repetition to update with results
         """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
@@ -182,7 +180,7 @@ class Tournament(object):
             'Playing %d round robins with %d parallel processes' %
             (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, outcome)
+        self._process_done_queue(workers, done_queue, matches)
 
         return True
 
@@ -220,9 +218,9 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, outcome):
+    def _process_done_queue(self, workers, done_queue, matches):
         """
-        Retrieves the outcome dictionaries from the parallel sub-processes
+        Retrieves the matches from the parallel sub-processes
 
         Parameters
         ----------
@@ -230,18 +228,16 @@ class Tournament(object):
             The number of sub-processes in existence
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
-        outcome : dictionary
-           The outcome dictionary to update with results
+        matches : list
+            The list of matches per repetition to update with results
         """
         stops = 0
         while stops < workers:
-            output = done_queue.get()
-            if output == 'STOP':
+            new_matches = done_queue.get()
+            if new_matches == 'STOP':
                 stops += 1
             else:
-                outcome['payoff'].append(output['payoff'])
-                outcome['cooperation'].append(output['cooperation'])
-                self.matches.append(outcome['matches'])
+                matches.append(new_matches)
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -256,10 +252,10 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for repetition in iter(work_queue.get, 'STOP'):
-            matches = self.tournament_type.build_matches(
+            new_matches = self.tournament_type.build_matches(
                 cache_mutable=False, noise=self.noise)
-            output = self._play_matches(matches)
-            done_queue.put(output)
+            self._play_matches(new_matches)
+            done_queue.put(new_matches)
         done_queue.put('STOP')
         return True
 
@@ -272,24 +268,9 @@ class Tournament(object):
         matches : dictionary
             Mapping a tuple of player index numbers to an axelrod Match object
 
-        Returns
-        -------
-        dictionary
-            Containing the payoff and cooperation matrices
         """
-        interactions = {}
-        matches_to_keep = []
-
-        for key, match in matches.items():
-            interactions[key] = match.play()
-            matches_to_keep.append(match)
-
-        payoff = payoff_matrix(interactions, self.game)
-        cooperation = cooperation_matrix(interactions)
-
-        output = {'payoff': payoff, 'cooperation': cooperation}
-        output['matches'] = matches_to_keep
-        return output
+        for match in matches.values():
+            match.play()
 
 
 class ProbEndTournament(Tournament):
