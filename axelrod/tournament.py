@@ -4,7 +4,7 @@ import logging
 import multiprocessing
 
 from .game import Game
-from .result_set import ResultSet ,ProbEndResultSet
+from .result_set import ResultSet#, ProbEndResultSet
 from .tournament_type import RoundRobin, ProbEndRoundRobin
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
@@ -104,9 +104,7 @@ class Tournament(object):
         """
         result_set = ResultSet(
             players=self.players,
-            turns=self.turns,
-            repetitions=self.repetitions,
-            outcome=self._outcome,
+            matches=self.matches,
             with_morality=self._with_morality)
         return result_set
 
