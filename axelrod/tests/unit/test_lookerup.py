@@ -2,6 +2,7 @@
 
 import axelrod
 from .test_player import TestPlayer, TestHeadsUp
+from axelrod.strategies.lookerup import create_lookup_table_keys
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -65,6 +66,18 @@ class TestLookerUp(TestPlayer):
         self.responses_test([C, C], [C, C], [D])
         self.responses_test([C, D], [D, C], [D])
         self.responses_test([D, D], [D, D], [D])
+
+    def test_zero_tables(self):
+        """Test the corner case where n=0."""
+        pattern = "CD"
+        lookup_table_keys = create_lookup_table_keys(plays=0,
+                                                     opponent_start_plays=1)
+
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        player = axelrod.LookerUp(lookup_table)
+        opp = axelrod.Cooperator()
+        player.play(opp)
+
 
     def test_starting_move(self):
         """A lookup table that always repeats the opponent's first move."""
