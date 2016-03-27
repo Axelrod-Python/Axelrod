@@ -5,22 +5,19 @@ This tutorial will show you briefly how to access the detailed interaction
 results corresponding to the tournament.
 
 To access the detailed interaction results we create a tournament as usual
-(see :ref:`getting-started`), setting the keep_matches=True parameter to save
-the interactions.::
+(see :ref:`getting-started`)::
 
     >>> import axelrod as axl
     >>> strategies = [
     ...     axl.Cooperator(), axl.Defector(),
     ...     axl.TitForTat(), axl.Grudger()]
-    >>> tournament = axl.Tournament(
-    ...     strategies, turns=3, repetitions=1, keep_matches=True)
+    >>> tournament = axl.Tournament(strategies, turns=3, repetitions=1)
     >>> results = tournament.play()
 
-The detailed interactions are now available to us. The tournament object has
-a 'matches' attribute which is a list of axelrod.Match objects. (Actually, it's
-a list of lists: one list for each repetition which, in turn, has a list of
-Match objects). Each match object holds the pair of axelrod.Player objects for
-that match and the history of their interactions::
+The tournament object has a 'matches' attribute which is a list of axelrod.Match
+objects. (Actually, it's a list of lists: one list for each repetition which, in
+turn, has a list of Match objects). Each match object holds the pair of
+axelrod.Player objects for that match and the history of their interactions::
 
     >>> for match in tournament.matches[0]:
     ...     player1 = match.player1.name

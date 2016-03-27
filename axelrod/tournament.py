@@ -15,8 +15,7 @@ class Tournament(object):
 
     def __init__(self, players, tournament_type=RoundRobin, name='axelrod',
                  game=None, turns=200, repetitions=10, processes=None,
-                 prebuilt_cache=False, noise=0, with_morality=True,
-                 keep_matches=False):
+                 prebuilt_cache=False, noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -55,11 +54,10 @@ class Tournament(object):
         self.tournament_type = tournament_type(
             players, turns, self.deterministic_cache)
         self._with_morality = with_morality
-        self._keep_matches = keep_matches
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self._outcome = {'payoff': [], 'cooperation': []}
+        self._outcome = {'payoff': [], 'cooperation': [], 'matches': []}
         self.matches = []
 
     @property
@@ -145,8 +143,7 @@ class Tournament(object):
         output = self._play_matches(matches)
         outcome['payoff'].append(output['payoff'])
         outcome['cooperation'].append(output['cooperation'])
-        if self._keep_matches:
-            self.matches.append(output['matches'])
+        self.matches.append(output['matches'])
 
     def _run_serial_repetitions(self, outcome):
         """
@@ -244,8 +241,7 @@ class Tournament(object):
             else:
                 outcome['payoff'].append(output['payoff'])
                 outcome['cooperation'].append(output['cooperation'])
-                if self._keep_matches:
-                    self.matches.append(outcome['matches'])
+                self.matches.append(outcome['matches'])
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -282,20 +278,17 @@ class Tournament(object):
             Containing the payoff and cooperation matrices
         """
         interactions = {}
-        if self._keep_matches:
-            matches_to_keep = []
+        matches_to_keep = []
 
         for key, match in matches.items():
             interactions[key] = match.play()
-            if self._keep_matches:
-                matches_to_keep.append(match)
+            matches_to_keep.append(match)
 
         payoff = payoff_matrix(interactions, self.game)
         cooperation = cooperation_matrix(interactions)
 
         output = {'payoff': payoff, 'cooperation': cooperation}
-        if self._keep_matches:
-            output['matches'] = matches_to_keep
+        output['matches'] = matches_to_keep
         return output
 
 
@@ -308,8 +301,7 @@ class ProbEndTournament(Tournament):
     """
     def __init__(self, players, tournament_type=ProbEndRoundRobin, name='axelrod',
                  game=None, prob_end=.5, repetitions=10, processes=None,
-                 prebuilt_cache=False, noise=0, with_morality=True,
-                 keep_matches=False):
+                 prebuilt_cache=False, noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -333,8 +325,6 @@ class ProbEndTournament(Tournament):
             The probability that a player's intended action should be flipped
         with_morality : boolean
             Whether morality metrics should be calculated
-        keep_matches : boolean
-            Whether interaction results should be included in the output
         """
         if processes is not None:
             raise NotImplementedError("Parallel processing of Probabilistic" +
@@ -344,8 +334,7 @@ class ProbEndTournament(Tournament):
                                                 name=name, game=game, turns=float("inf"),
                                                 repetitions=repetitions, processes=processes,
                                                 prebuilt_cache=prebuilt_cache,
-                                                noise=noise, with_morality=with_morality,
-                                                keep_matches=keep_matches)
+                                                noise=noise, with_morality=with_morality)
 
         self.prob_end = prob_end
         self.tournament_type = ProbEndRoundRobin(
@@ -387,8 +376,7 @@ class ProbEndTournament(Tournament):
         match_lengths = self._count_match_lengths(matches)
         outcome['match_lengths'].append(match_lengths)
 
-        if self._keep_matches:
-            self.matches.append(output['matches'])
+        self.matches.append(output['matches'])
 
     def _count_match_lengths(self, matches):
         """Obtain match lengths"""
