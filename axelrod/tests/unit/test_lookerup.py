@@ -75,8 +75,11 @@ class TestLookerUp(TestPlayer):
 
         lookup_table = dict(zip(lookup_table_keys, pattern))
         player = axelrod.LookerUp(lookup_table)
+        self.assertEqual(player.plays, 0)
         opp = axelrod.Cooperator()
-        player.play(opp)
+        # This shouldn't throw an exception.
+        for _ in range(5):
+            player.play(opp)
 
 
     def test_starting_move(self):
