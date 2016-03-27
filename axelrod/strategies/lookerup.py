@@ -122,11 +122,15 @@ class LookerUp(Player):
         if len(self.history) < max(self.plays, self.opponent_start_plays):
             return C
         # Count backward m turns to get my own recent history.
-        history_start = -1 * self.plays
-        my_history = ''.join(self.history[history_start:])
-        # Do the same for the opponent.
-        opponent_history = ''.join(opponent.history[history_start:])
-        # Get the opponents first n actions.
+        if self.plays == 0:
+            my_history = ''
+            opponent_history = ''
+        else:
+            history_start = -1 * self.plays
+            my_history = ''.join(self.history[history_start:])
+            # Do the same for the opponent.
+            opponent_history = ''.join(opponent.history[history_start:])
+            # Get the opponents first n actions.
         opponent_start = ''.join(opponent.history[:self.opponent_start_plays])
         # Put these three strings together in a tuple.
         key = (opponent_start, my_history, opponent_history)
