@@ -153,7 +153,7 @@ class Match(object):
         if len(self.result) == 0:
             return None
 
-        normalised_cooperation = tuple([c / self._turns for c in cooperation])
+        normalised_cooperation = tuple([c / float(self._turns) for c in cooperation])
 
         return normalised_cooperation
 
