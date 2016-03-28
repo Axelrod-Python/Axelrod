@@ -176,29 +176,29 @@ class EvolvedLookerUp0_2(LookerUp):
                                                      opponent_start_plays=2)
 
         # Pattern of values determined previously with an evolutionary algorithm.
-        pattern = 'CDDDCDDD'
+        pattern = 'CDCD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
 
 
-#class EvolvedLookerUp0_3(LookerUp):
-    #"""
-    #A LookerUp strategy that uses a lookup table generated using an evolutionary
-    #algorithm.
-    #"""
+class EvolvedLookerUp0_3(LookerUp):
+    """
+    A LookerUp strategy that uses a lookup table generated using an evolutionary
+    algorithm.
+    """
 
-    #name = "EvolvedLookerUp0_3"
+    name = "EvolvedLookerUp0_3"
 
-    #def __init__(self):
-        #lookup_table_keys = create_lookup_table_keys(plays=0,
-                                                     #opponent_start_plays=3)
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=0,
+                                                     opponent_start_plays=3)
 
-        ## Pattern of values determined previously with an evolutionary algorithm.
-        #pattern = ''
-        ## Zip together the keys and the action pattern to get the lookup table.
-        #lookup_table = dict(zip(lookup_table_keys, pattern))
-        #LookerUp.__init__(self, lookup_table=lookup_table)
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern = 'CDDDCDDD'
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
 
 
 class EvolvedLookerUp1_0(LookerUp):
@@ -271,7 +271,26 @@ class EvolvedLookerUp1_3(LookerUp):
                                                      opponent_start_plays=3)
 
         # Pattern of values determined previously with an evolutionary algorithm.
-        pattern = 'CDDDDDDDCDDDDDDDDCCDCDDDDCDDDDDD'
+        pattern = 'CDDDDDDDDDDDCDDDDCCDCDDDDCDDDDDD'
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
+
+
+class EvolvedLookerUp1_4(LookerUp):
+    """
+    A LookerUp strategy that uses a lookup table generated using an evolutionary
+    algorithm.
+    """
+
+    name = "EvolvedLookerUp1_4"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=1,
+                                                     opponent_start_plays=4)
+
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern = 'CDCCDDDDCDDDDDCCDCDCDDDDDCDDDDDDDCCDCDCDDDDDCDDDDCDDDDDDCDDDCDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
@@ -315,6 +334,7 @@ class EvolvedLookerUp2_1(LookerUp):
         LookerUp.__init__(self, lookup_table=lookup_table)
 
 
+# The original EvolvedLookerUp
 class EvolvedLookerUp2_2(LookerUp):
     """
     A LookerUp strategy that uses a lookup table generated using an evolutionary
@@ -337,6 +357,50 @@ class EvolvedLookerUp2_2(LookerUp):
         LookerUp.__init__(self, lookup_table=lookup_table)
 
 
+class EvolvedLookerUp2_3(LookerUp):
+    """
+    A LookerUp strategy that uses a lookup table generated using an evolutionary
+    algorithm.
+
+    A description of how this strategy was trained is given here:
+    http://mojones.net/evolving-strategies-for-an-iterated-prisoners-dilemma-tournament.html
+    """
+
+    name = "EvolvedLookerUp2_3"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=2,
+                                                     opponent_start_plays=3)
+
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern='CDCCDCCCDCDCDDDCCDCCCDCCDDDCDDDDDDCCCDDCDCDCDDDCCDCDCCDDCCCCDDDCDDCDCCDDCCDDDDDDCDDDDDCDCDDDDDDDDCDCDCDCCDDDDDDDCCCDCDDDDCDDDDDD'
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
+
+
+class EvolvedLookerUp2_4(LookerUp):
+    """
+    A LookerUp strategy that uses a lookup table generated using an evolutionary
+    algorithm.
+
+    A description of how this strategy was trained is given here:
+    http://mojones.net/evolving-strategies-for-an-iterated-prisoners-dilemma-tournament.html
+    """
+
+    name = "EvolvedLookerUp2_4"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=2,
+                                                     opponent_start_plays=4)
+
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern='CDCCDCCCDCDCDDDCCDCCDDCDDCDCDDDCDCCCCDCCDCDCDDDCCCCDCDDDCDCCCDDCDDDCCDCDDCCCDDDCDDDDCDDDDCDCDDDCDDCCCCDDCCCCDCDCCDCDDDCDDCCCDCDCDCCDCCCDCCCCDDDDCDCCDCCDCDDDDDDDDDDCDCCCDDCDDDDDCDCDCCDDDCCDDDDDDDCDDDDDDCCDDDDDCCDDDCCCCCDDDDDDCDCDCDDCDCDDDDDCCCDDCDDDDDCDDDDD'
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
+
+
 class EvolvedLookerUp3_1(LookerUp):
     """
     A LookerUp strategy that uses a lookup table generated using an evolutionary
@@ -350,7 +414,26 @@ class EvolvedLookerUp3_1(LookerUp):
                                                      opponent_start_plays=1)
 
         # Pattern of values determined previously with an evolutionary algorithm.
-        pattern='CDDDCDCDCDCDCCCDCDDCCCCCDCDCDCDCDCCDDCCCCDDCDDCDDDDDDDDCDDDDDDDCDDCCCCDDCDCCCDDDCCCCDDDDDCDDDDDDDDCCCCCDCDCCCCDDDCCDCCDDDDDDDDDD'
+        pattern='CDDDCDCCCCCCDDDDDDCDDCDCDDDCCDDCDDCCDCCCDDDDCCDDDDCCDDCCDDDDDDDCCDCDDDDDCCDDCDDDDCCDCDCCCCCDCDDDDDCCCDCCCCCDDDCDDDDDDCDCDDDDDDDD'
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
+
+
+class EvolvedLookerUp3_2(LookerUp):
+    """
+    A LookerUp strategy that uses a lookup table generated using an evolutionary
+    algorithm.
+    """
+
+    name = "EvolvedLookerUp3_1"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=3,
+                                                     opponent_start_plays=2)
+
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern='CDCCCCCCCDCCCDCCDDDDDCDCDDDDCDDCDDCCCCCCDDDDCCCDDDDDDDDCDDDDDDDCCDDDCDCCCCCCCDDDDDCCCCDCDCDCCCDCDCCDDDCCCDDCDDCCDCCCCCDCDDDDDDDDDDDDDDDCDCCDCCCDCCDDDDDDCCDDDCCDCDDCDCDDCCDDDDCDCDDCDCDDDDDDDDDDCDDDCCDDDCCCDCDDDDCDDCCDCCCDCCDDDCDDCCCCDCDCDCDDDDDCCDDCDDDDDDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
@@ -368,7 +451,47 @@ class EvolvedLookerUp3_3(LookerUp):
                                                      opponent_start_plays=3)
 
         # Pattern of values determined previously with an evolutionary algorithm.
-        pattern="CDCCCCCCDDCDCDCDDDDCCCCCDCDCDCDCDCCCCCCCCDCDCDCCCDCCCDCCDDDCDDCCCDCDDCDDDDDDCDCCDDDCDDCDDCCDDDDCCDCDDDDCCDCCCDCCCDCCCCDDDDDCDCDCDCDCCCDCDDCCDDCCCCDDDDDDDCDCDCCDDCDCDCDDCDCCCCCCDDCDCCDCDDDDDDDDCDCDDDDDDDDDCCCDDDCDDCCCCCDDCCDCCDDCDCDCCCDCCDDDDCCCCDDCDDDDDDDDCDCDDCDDCCDCCDDDDCCDCDDCDCCDCCDDDDCCCCDCCDCDDCDCCDDCDDCCCCDCCDCDDCDDCCDCDDCDDDCCCCCDDDCDDCDCCCDDCCDCCDDCCDDCDDCDCCCDDDCCDDDDDDDDCCDDDCCDDDCCDDDDCDCCDDCCCCDCCCDDDDDDDDCCDCCDCDCDDDCDDDDDCCCDDDDDCCCDDCDDDDCDDCDDCDDCCDCCCCCDCCDDDDDDDDCCDDCDDDDCDCCCCDDCDDDDDDDD"
+        pattern="CDCCCCCCCCCCDDCDDDCCDCDCDDCDDCCCCDCCCCCCCCDCDCDCDCDCCCDDDDDCDDDDCDCCCCCCCDCDDCDCDDDDDCDCDDDCCCCCDDCCCDCCCDDDDCCCDDDCCCDCDDDDDDDDCDDCCDDCDDCDCDCDCDDCDCDCDDDDDCDDDDCDCDCCDCDDCCCCDCCCDCDDDDDDDDDCCCCDCCCCCDDCCDCDCCCCDCDCDDDDDDDCDCCCDDCCCCDDCDDDCDCDCDCCDDDDDDDDCCCCDCDDCCDDCCDCDCCDDDCDDDDDDCDDDDCCCDDDCDCCDCCDDDCCDCDDCDDDDDDDCDCCDDDDDDDDDCDDDCCDCDCCDDCDCCCDCCDCDCCDDDDCDDDDCDDDDCCDDDDDDDDDCDDDCCDCCCDDDCDDCDDDDDCDDDCDCCDDCDCDDDDDCDDCDDCDDDDCDDDDDDDDDDDDCCCCCDDDDCCCDCDDCDDCCCDCCDCCCDDDCDCDDDDCCDDDDDDCCDCDCDCCDDDDDDDD"
+
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
+
+
+class EvolvedLookerUp4_1(LookerUp):
+    """
+    A LookerUp strategy that uses a lookup table generated using an evolutionary
+    algorithm.
+    """
+
+    name = "EvolvedLookerUp4_1"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=4,
+                                                     opponent_start_plays=1)
+
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern="CDDDDCDDCDDCCDCCDDCCDDDCDDCCDCDDCCDCCCCCCDCDDDDCDDDDCCDCDDDCDDDCCCCCCCDDDDCCDCCCDDDCCCCDCDDCCDCCCDDDCCCDDDDCDCDDDDDDDDDCCCDDDCCDCDDCCDCCCCCDCDCCCDDDDCCDDDDCDDCDDCDCCCCCCDCDCCDCDDCCCCCCCDDCDDDDDCCCCDDCDCDDCDCCCDDDCCDCDDCCCDDDDCDCDCDCDDDDCDDCDDDDDDDDDDDDDDDCCCCCCCCCDDCCCDCDDDCDCCCDCDCDDCCDCCDCCDDCDDDDCDDDCCDDCCCDDDDDCCDDDDCDDDDCCCDCDCDCDDCDCDDDCCDDDCCDCDCCCDDDDCCDCDDCCDCCCDCCDDDDDCCDDCCDDDCDCDDDDDDDCDDDDCCCDCDDDDCDDCCDCCCDCDDCCCCDDCDCDCDCDDDCDDDDCCDDDCCDDCDCCCCDCCCCCCCDDDDDDDCDCDDCCCCDDCDDCCDCDDDDDDDDDDDDDDDD"
+
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
+
+
+class EvolvedLookerUp4_2(LookerUp):
+    """
+    A LookerUp strategy that uses a lookup table generated using an evolutionary
+    algorithm.
+    """
+
+    name = "EvolvedLookerUp4_2"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=4,
+                                                     opponent_start_plays=2)
+
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern="CDDDCCCCCDCCCCCCDDDCDCCDCDCCCCDCDDCDCDDCDCCCDDDCDDCCDCDCDDCCDDDCDDCCCDCCCCDDCCCCDDCCCDDCCDCCDDDDCDCCDCDCCDCCDDCDDDDDDCDDDDDCCDCCCCDCCCDCCDCDCCCCCDDCCDDDCCDCCCDDCDCDDCDCDCDDCDDCCCCDCCDDDDDCCDCDDDDCDCDCDDDDDCCCDCDDCDCDDCCDDCCDDCCDCDDCDDDCDCCCDDDCDDDDDDDDDDDCCCDDDDCDCCDDDDDCCDCDCCDCCDDDCCCDDDCDDCDDCCCDCCDCDCDDCDDDCDDDDDDCDDDCDDCCCDDDCCCCDDCDCDCDCCDDCCCDDCDCCDCCDCDCDDCCCDDCDDCCCCDCDDDCCDDDCCDDDCDDCDDDCDDDDDDCCCCCCDCDCCDDCCDDDDCDCCDCCCDCDCCDDCCDCDDDDCDDCCCCCCDDDDCCCCDCCDCCCDCDCCCCDDDCCCCCDDCDDCCCDDDDDDDDDDDDDDDDCCDDDDCDDCCDDDDDCDDDDCDDDCDCDDDDDCCCCCDCDDCDCCCDCCDDDCDDDCDCDDCDDDCDCDDDCCDDDCCDCCCCCCDCCDCDCCDCCDCDCCCDDCDCCCDDCCCCDDDDCCDCDCCDCCCDCCDCCDCCDDCCCDCCDDDDCDDCCCDDCCDDCCDCDDCCCDCDDDDCDCDCDDCDCDDDCCDDCDCCCDCDCCDDDCDCDCDCCDCDDCCCCDCDCCDDDCDCDDDDDDDDDDDDDDDDDDDDCDDDCDCDCCCDCDCDCDCCDDDDDCDDCCCDDDDCDDDDDDDCDDDCCCDCCCCDCCDDDDDDDDDCDDDCDDDDCDCDCCCDDDDCCCDCDCCCDCCCDCDDDCCDDDCDDDDCCCCDCCDCDDDDCCCCDDCDDCDDDCDCDDCDDCDCCDCCDCCDCDCDCCDCCDCCDCCCDDDDDCCDDDDDDCDCCCCCDDCDCCDCDDDDDCDDDDDDCDDDDDDDCDCDDDDDCCDDCCCCDDDDDDDDDDDDDDDD"
 
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))

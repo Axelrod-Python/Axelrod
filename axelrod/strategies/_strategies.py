@@ -41,11 +41,13 @@ from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
     MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
-from .lookerup import (
-    LookerUp, EvolvedLookerUp0_1, EvolvedLookerUp0_2,
-    EvolvedLookerUp1_0, EvolvedLookerUp1_1, EvolvedLookerUp1_2, EvolvedLookerUp1_3,
-    EvolvedLookerUp2_0, EvolvedLookerUp2_1, EvolvedLookerUp2_2,
-    EvolvedLookerUp3_1, EvolvedLookerUp3_3)
+from .lookerup import (LookerUp,
+    EvolvedLookerUp0_1, EvolvedLookerUp0_2, EvolvedLookerUp0_3,
+    EvolvedLookerUp1_0, EvolvedLookerUp1_1, EvolvedLookerUp1_2,
+    EvolvedLookerUp1_3, EvolvedLookerUp1_4, EvolvedLookerUp2_0,
+    EvolvedLookerUp2_1, EvolvedLookerUp2_2, EvolvedLookerUp2_3,
+    EvolvedLookerUp2_4, EvolvedLookerUp3_1, EvolvedLookerUp3_3,
+    EvolvedLookerUp4_1, EvolvedLookerUp4_2)
 EvolvedLookerUp = EvolvedLookerUp2_2
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
@@ -119,11 +121,23 @@ all_strategies = [
     EasyGo,
     Eatherley,
     EventualCycleHunter,
-    EvolvedANN,
-    EvolvedANN2,
-    EvolvedANN05,
-    EvolvedANNMoran,
-    EvolvedLookerUp,
+    EvolvedLookerUp0_1,
+    EvolvedLookerUp0_2,
+    EvolvedLookerUp0_3,
+    EvolvedLookerUp1_0,
+    EvolvedLookerUp1_1,
+    EvolvedLookerUp1_2,
+    EvolvedLookerUp1_3,
+    EvolvedLookerUp1_4,
+    EvolvedLookerUp2_0,
+    EvolvedLookerUp2_1,
+    EvolvedLookerUp2_2,
+    EvolvedLookerUp2_3,
+    EvolvedLookerUp2_4,
+    EvolvedLookerUp3_1,
+    EvolvedLookerUp3_3,
+    EvolvedLookerUp4_1,
+    EvolvedLookerUp4_2,
     Feld,
     FirmButFair,
     FoolMeForever,
