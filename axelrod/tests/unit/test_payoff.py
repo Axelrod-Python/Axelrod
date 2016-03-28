@@ -54,6 +54,7 @@ class TestPayoff(unittest.TestCase):
             [2.6, 3.0, 2.1],
             [2.2, 2.6, 2.25]
         ]
+
         cls.expected_payoff_stddevs = [
             [0.0, 0.0, 0.3],
             [0.0, 0.0, 0.7],
@@ -95,6 +96,41 @@ class TestPayoff(unittest.TestCase):
     def test_normalised_scores(self):
         scores = ap.normalised_scores(self.expected_scores, 5)
         self.assertEqual(scores, self.expected_normalised_scores)
+
+    def test_normalised_scores_diff_length(self):
+        scores = [[[1, 1], [5, 5], [5, 5]],
+                  [[0, 0], [3, 3], [3, 3]],
+                  [[0, 0], [3, 3], [3, 3]]]
+        lengths = [[[1, 1], [1, 1], [1, 1]],
+                   [[1, 1], [1, 1], [1, 1]],
+                   [[1, 1], [1, 1], [1, 1]]]
+        expected_normalised_scores = [[5.0, 5.0], [1.5, 1.5], [1.5, 1.5]]
+        normalised_scores = ap.normalised_scores_diff_length(scores, lengths)
+
+        self.assertEqual(normalised_scores, expected_normalised_scores)
+
+    def test_normalised_payoff_diff_length(self):
+        scores = [[[7, 7, 4], [8, 8, 23], [0, 1, 11]],
+                  [[8, 8, 23], [18, 3, 6], [8, 7, 9]],
+                  [[5, 6, 6], [8, 12, 14], [8, 12, 9]]]
+        lengths = [[[3, 3, 2], [3, 3, 9], [1, 2, 3]],
+                   [[3, 3, 9], [6, 1, 2], [3, 4, 5]],
+                   [[1, 2, 3], [3, 4, 5], [3, 6, 3]]]
+        expected_payoff_matrix = [[2.2223, 2.6296, 1.3889],
+                                  [2.6296, 3.0, 2.0722],
+                                  [3.3334, 2.8222, 2.5556]]
+        expected_payoff_stddevs = [[0.1574, 0.0524, 1.6235],
+                                   [0.0524, 0.0, 0.4208],
+                                   [1.2472, 0.1370, 0.4157]]
+        normalised_payoff, normalised_std = ap.normalised_payoff_diff_length(scores, lengths)
+
+        # Check approximate equality of all elements
+        for i, row in enumerate(normalised_payoff):
+            for j, col in enumerate(row):
+                self.assertAlmostEqual(col, expected_payoff_matrix[i][j],
+                                       places=3)
+                self.assertAlmostEqual(normalised_std[i][j], expected_payoff_stddevs[i][j],
+                                       places=3)
 
     def test_ranking(self):
         ranking = ap.ranking(self.expected_scores)

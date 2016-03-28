@@ -18,7 +18,14 @@ class TestPlot(unittest.TestCase):
                 [[0, 10, 21], [10, 0, 16], [16, 16, 0]],
                 [[0, 10, 21], [8, 0, 20], [16, 16, 0]],
             ],
-            'cooperation': []
+            'cooperation': [],
+             'match_lengths': [
+                    [[1, 6, 5],
+                     [6, 1, 2],
+                     [5, 2, 2]],
+                    [[9, 7, 1],
+                     [7, 1, 3],
+                     [1, 3, 8]]],
         }
         cls.test_result_set = axelrod.ResultSet(players, 5, 2, test_outcome)
         cls.expected_boxplot_dataset = [[3.2, 3.2], [3.1, 3.1], [2.6, 2.8]]
@@ -34,8 +41,17 @@ class TestPlot(unittest.TestCase):
                                         ['Player1', 'Player2', 'Player3'])
         cls.expected_winplot_title = "Distributions of wins: 5 turns repeated 2 times (3 strategies)"
 
+        cls.test_prob_end_result_set = axelrod.ProbEndResultSet(players, .5, 2, test_outcome)
+        cls.expected_prob_end_boxplot_title = ('Mean score per stage game'
+                                               ' (0.5 probability of Match'
+                                               ' ending) repeated 2 times (3'
+                                               ' strategies)')
+        cls.expected_prob_end_winplot_title = ('Distributions of wins'
+                                               ' (0.5 probability of Match'
+                                               ' ending): repeated 2 times (3'
+                                               ' strategies)')
+
     def test_init(self):
-        result_set = self.test_result_set
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)
         self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
@@ -62,6 +78,11 @@ class TestPlot(unittest.TestCase):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot._boxplot_title, self.expected_boxplot_title)
 
+    def test_prob_end_boxplot_title(self):
+        plot = axelrod.Plot(self.test_prob_end_result_set)
+        self.assertEqual(plot._boxplot_title,
+                         self.expected_prob_end_boxplot_title)
+
     def test_boxplot(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
@@ -78,6 +99,11 @@ class TestPlot(unittest.TestCase):
     def test_winplot_title(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot._winplot_title, self.expected_winplot_title)
+
+    def test_prob_end_winplot_title(self):
+        plot = axelrod.Plot(self.test_prob_end_result_set)
+        self.assertEqual(plot._winplot_title,
+                         self.expected_prob_end_winplot_title)
 
     def test_winplot(self):
         if matplotlib_installed:

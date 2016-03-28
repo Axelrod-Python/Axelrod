@@ -4,8 +4,8 @@ import logging
 import multiprocessing
 
 from .game import Game
-from .result_set import ResultSet
-from .tournament_type import RoundRobin
+from .result_set import ResultSet ,ProbEndResultSet
+from .tournament_type import RoundRobin, ProbEndRoundRobin
 from .payoff import payoff_matrix
 from .cooperation import cooperation_matrix
 
@@ -93,13 +93,24 @@ class Tournament(object):
                 self._build_cache(self._outcome)
             self._run_parallel_repetitions(self._outcome)
 
-        self.result_set = ResultSet(
+        self.result_set = self._build_result_set()
+        return self.result_set
+
+    def _build_result_set(self):
+        """
+        Build the result set (used by the play method)
+
+        Returns
+        -------
+        axelrod.ResultSet
+        """
+        result_set = ResultSet(
             players=self.players,
             turns=self.turns,
             repetitions=self.repetitions,
             outcome=self._outcome,
             with_morality=self._with_morality)
-        return self.result_set
+        return result_set
 
     def _build_cache_required(self):
         """
@@ -286,3 +297,110 @@ class Tournament(object):
         if self._keep_matches:
             output['matches'] = matches_to_keep
         return output
+
+
+class ProbEndTournament(Tournament):
+    """
+    A tournament in which the player don't know the length of a given match
+    (currently implemented by setting this to be infinite). The length of a
+    match is equivalent to randomly sampling after each round whether or not to
+    continue.
+    """
+    def __init__(self, players, tournament_type=ProbEndRoundRobin, name='axelrod',
+                 game=None, prob_end=.5, repetitions=10, processes=None,
+                 prebuilt_cache=False, noise=0, with_morality=True,
+                 keep_matches=False):
+        """
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+        tournament_type : class
+            A class that must be descended from axelrod.TournamentType
+        name : string
+            A name for the tournament
+        game : axelrod.Game
+            The game object used to score the tournament
+        prob_end : a float
+            The probability of a given match ending
+        repetitions : integer
+            The number of times the round robin should be repeated
+        processes : integer
+            The number of processes to be used for parallel processing
+        prebuilt_cache : boolean
+            Whether a cache has been passed in from an external object
+        noise : float
+            The probability that a player's intended action should be flipped
+        with_morality : boolean
+            Whether morality metrics should be calculated
+        keep_matches : boolean
+            Whether interaction results should be included in the output
+        """
+        if processes is not None:
+            raise NotImplementedError("Parallel processing of Probabilistic" +
+                                      " Ending Tournaments is not implemented")
+
+        super(ProbEndTournament, self).__init__(players,
+                                                name=name, game=game, turns=float("inf"),
+                                                repetitions=repetitions, processes=processes,
+                                                prebuilt_cache=prebuilt_cache,
+                                                noise=noise, with_morality=with_morality,
+                                                keep_matches=keep_matches)
+
+        self.prob_end = prob_end
+        self.tournament_type = ProbEndRoundRobin(
+            players, prob_end, self.deterministic_cache)
+        self._outcome['match_lengths'] = []
+
+    def _build_cache_required(self):
+        """
+        A cache is never required (as every Match length can be different)
+        """
+        return False
+
+    def _build_result_set(self):
+        """
+        Build the result set (used by the play method)
+
+        Returns
+        -------
+        axelrod.ProbtEndResultSet
+        """
+        result_set = ProbEndResultSet(
+            players=self.players,
+            prob_end=self.prob_end,
+            outcome=self._outcome,
+            repetitions=self.repetitions,
+            with_morality=self._with_morality)
+        return result_set
+
+    def _run_single_repetition(self, outcome):
+        """
+        Runs a single round robin and updates the outcome dictionary.
+        """
+        matches = self.tournament_type.build_matches(noise=self.noise)
+        output = self._play_matches(matches)
+
+        outcome['payoff'].append(output['payoff'])
+        outcome['cooperation'].append(output['cooperation'])
+
+        match_lengths = self._count_match_lengths(matches)
+        outcome['match_lengths'].append(match_lengths)
+
+        if self._keep_matches:
+            self.matches.append(output['matches'])
+
+    def _count_match_lengths(self, matches):
+        """Obtain match lengths"""
+        nplayers = len(self.players)
+        match_lengths = [[0] * i1 + [len(matches[(i1, i2)]) for i2 in
+                                     range(i1, nplayers)] for i1 in range(nplayers)]
+
+        # Copy top right to be in bottom left (creating a symmetric matrix)
+        # Length of Match between A and B is same as length of Match between B
+        # and A.
+        for i2 in range(nplayers):
+            for i1 in range(0, i2 + 1):
+                match_lengths[i2][i1] = match_lengths[i1][i2]
+
+        return match_lengths

@@ -18,14 +18,20 @@ class TestMatch(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match = axelrod.Match((p1, p2), turns)
         self.assertEqual(match.result, [])
-        self.assertEqual(match.player1, p1)
-        self.assertEqual(match.player2, p2)
+        self.assertEqual(match.players, [p1, p2])
         self.assertEqual(
             match._classes, (axelrod.Cooperator, axelrod.Cooperator))
         self.assertEqual(match._turns, turns)
         self.assertEqual(match._cache, {})
         self.assertEqual(match._cache_mutable, True)
         self.assertEqual(match._noise, 0)
+
+    @given(turns=integers(min_value=1, max_value=200))
+    @example(turns=5)
+    def test_len(self, turns):
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+        match = axelrod.Match((p1, p2), turns)
+        self.assertEqual(len(match), turns)
 
     @given(p=floats(min_value=0, max_value=1),
            rm=random_module())
