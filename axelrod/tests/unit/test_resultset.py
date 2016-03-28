@@ -171,16 +171,6 @@ class TestResultSet(unittest.TestCase):
                 self.assertIsInstance(match, axelrod.Match)
                 self.assertEqual(len(match), self.turns)
 
-        self.assertEqual(rs.player_to_match_dicts,
-                         self.expected_players_to_match_dicts)
-
-    def test_map_players_to_match(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
-        self.assertIsInstance(rs.player_to_match_dicts, list)
-        self.assertEqual(len(rs.player_to_match_dicts), rs.nrepetitions)
-        self.assertEqual(rs.player_to_match_dicts,
-                         self.expected_players_to_match_dicts)
-
     def test_null_results_matrix(self):
         rs = axelrod.ResultSet(self.players, self.matches)
         self.assertEqual(

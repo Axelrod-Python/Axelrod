@@ -28,27 +28,6 @@ class ResultSet(object):
         self.matches = matches  # List of dicts mapping tuples of players to matches
         self.nrepetitions = len(matches)
 
-        # List of dicts mapping index of player to list of matches
-        self.player_to_match_dicts = self._map_player_to_matches(matches)
-
-    def _map_player_to_matches(self, matches):
-        """
-        Create a list of dictionaries (1 for every repetition) that maps players
-        to a list of matches in which they participate. For a given repetition,
-        each individual match will appear twice.
-
-        Args:
-            Matches: list of dictionaries (1 for every repetition) that maps
-            player index pairs to matches.
-        """
-        player_to_matchs = []
-        for rep in matches:
-            player_to_matchs.append({})
-            for player in range(self.nplayers):
-                player_to_matchs[-1][player] = [match for index_pair, match in
-                                                rep.items() if player in index_pair]
-        return player_to_matchs
-
     @property
     def _null_results_matrix(self):
         """
