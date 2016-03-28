@@ -323,6 +323,51 @@ class ResultSet(object):
         return payoff_stddevs
 
     @property
+    def score_diffs(self):
+        """
+        Payoff diffs (matrix of lists)
+        """
+        plist = list(range(self.nplayers))
+        score_diffs = [[[0] * self.nrepetitions for j in plist] for i in plist]
+
+        for i in plist:
+            for j in plist:
+                for r, rep in enumerate(self.matches):
+                    if (i, j) in rep:
+                        scores = rep[(i, j)].final_score_per_turn()
+                        diff = (scores[0] - scores[1])
+                        score_diffs[i][j][r] = diff
+                    if (j, i) in rep:
+                        scores = rep[(j, i)].final_score_per_turn()
+                        diff = (scores[1] - scores[0])
+                        score_diffs[i][j][r] = diff
+        return score_diffs
+
+    @property
+    def payoff_diffs_means(self):
+        """
+        Mean payoff diffs (matrix of means)
+        """
+        plist = list(range(self.nplayers))
+        payoff_diffs_means = [[0 for j in plist] for i in plist]
+
+        for i in plist:
+            for j in plist:
+                diffs = []
+                for rep in self.matches:
+                    if (i, j) in rep:
+                        scores = rep[(i, j)].final_score_per_turn()
+                        diffs.append(scores[0] - scores[1])
+                    if (j, i) in rep:
+                        scores = rep[(j, i)].final_score_per_turn()
+                        diffs.append(scores[1] - scores[0])
+                if diffs:
+                    payoff_diffs_means[i][j] = mean(diffs)
+                else:
+                    payoff_diffs_means[i][j] = 0
+        return payoff_diffs_means
+
+    @property
     def cooperation(self):
         """
         Obtain the list of cooperation counts

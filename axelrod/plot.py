@@ -179,30 +179,31 @@ class Plot(object):
         #ordering = [x[-1] for x in to_sort]
         #return ordering
 
-    #@property
-    #def _sdv_plot_dataset(self):
-        #ordering = self._sd_ordering
-        #diffs = self.result_set.score_diffs
-        #players = self.result_set.players
-        ## Reorder and grab names
-        #diffs = [diffs[i] for i in ordering]
-        #ranked_names = [str(players[i]) for i in ordering]
-        #return diffs, ranked_names
+    @property
+    def _sdv_plot_dataset(self):
+        ordering = self._sd_ordering
+        diffs = self.result_set.score_diffs
+        players = self.result_set.players
+        # Reorder and grab names
+        diffs = [diffs[i] for i in ordering]
+        ranked_names = [str(players[i]) for i in ordering]
+        return diffs, ranked_names
 
-    #def sdvplot(self):
-        #"""Score difference violinplots to visualize the distributions of how
-        #players attain their payoffs."""
-        #diffs, ranked_names = self._sdv_plot_dataset
-        ##title = self._sdv_plot_title
-        ##figure = self._violinplot(diffs, ranked_names, title)
-        #figure = self._violinplot(diffs, ranked_names)
-        #return figure
+    def sdvplot(self):
+        """Score difference violinplots to visualize the distributions of how
+        players attain their payoffs."""
+        diffs, ranked_names = self._sdv_plot_dataset
+        #title = self._sdv_plot_title
+        #figure = self._violinplot(diffs, ranked_names, title)
+        figure = self._violinplot(diffs, ranked_names)
+        return figure
 
     ## Payoff heatmaps
 
     @property
     def _payoff_dataset(self):
-        return [[self.result_set.payoff_matrix[r1][r2]
+        pm = self.result_set.payoff_matrix
+        return [[pm[r1][r2]
                  for r2 in self.result_set.ranking]
                 for r1 in self.result_set.ranking]
 

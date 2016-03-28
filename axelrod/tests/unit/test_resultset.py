@@ -74,6 +74,25 @@ class TestResultSet(unittest.TestCase):
             [[17/5.0 for _ in range(3)], [9/5.0 for _ in range(3)], []]
         ]
 
+        norm_scores = cls.expected_normalised_scores
+        cls.expected_score_diffs = [
+            [[0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [-3.0, -3.0, -3.0]],
+            [[0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [-1.0, -1.0, -1.0]],
+            [[3.0, 3.0, 3.0],
+             [1.0, 1.0, 1.0],
+             [0.0, 0.0, 0.0]],
+        ]
+
+        cls.expected_payoff_diffs_means = [
+            [0.0, 0.0, -3.0],
+            [0.0, 0.0, -1.0],
+            [3.0, 1.0, 0.0]
+        ]
+
         # Recalculating to deal with numeric imprecision
         cls.expected_payoff_matrix = [
             [0, mean([13/5.0 for _ in range(3)]), mean([2/5.0 for _ in range(3)])],
@@ -228,6 +247,25 @@ class TestResultSet(unittest.TestCase):
         self.assertIsInstance(rs.payoff_matrix, list)
         self.assertEqual(len(rs.payoff_matrix), rs.nplayers)
         self.assertEqual(rs.payoff_matrix, self.expected_payoff_matrix)
+
+    def test_score_diffs(self):
+        rs = axelrod.ResultSet(self.players, self.matches)
+        self.assertIsInstance(rs.score_diffs, list)
+        self.assertEqual(len(rs.score_diffs), rs.nplayers)
+        for i, row in enumerate(rs.score_diffs):
+            for j, col in enumerate(row):
+                for k, score in enumerate(col):
+                    self.assertAlmostEqual(score,
+                                     self.expected_score_diffs[i][j][k])
+
+    def test_payoff_diffs_means(self):
+        rs = axelrod.ResultSet(self.players, self.matches)
+        self.assertIsInstance(rs.payoff_diffs_means, list)
+        self.assertEqual(len(rs.payoff_diffs_means), rs.nplayers)
+        for i, row in enumerate(rs.payoff_diffs_means):
+            for j, col in enumerate(row):
+                self.assertAlmostEqual(col,
+                                 self.expected_payoff_diffs_means[i][j])
 
     def test_payoff_stddevs(self):
         rs = axelrod.ResultSet(self.players, self.matches)
