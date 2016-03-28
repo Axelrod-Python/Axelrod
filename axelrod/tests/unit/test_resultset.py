@@ -34,6 +34,12 @@ class TestResultSet(unittest.TestCase):
                                                 for rep in cls.matches
                                               ]
 
+
+        cls.expected_match_lengths =[
+               [[0, 5, 5], [5, 0, 5], [5, 5, 0]]
+               for _ in range(3)
+                ]
+
         cls.expected_scores =[
                [15, 15, 15],
                [17, 17, 17],
@@ -96,7 +102,7 @@ class TestResultSet(unittest.TestCase):
         cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
                                    for row in cls.expected_normalised_cooperation]
 
-        cls.expected_cooperation_rating = [
+        cls.expected_cooperating_rating = [
                 18.0 / 30,
                 12.0 / 30,
                 0
@@ -165,20 +171,21 @@ class TestResultSet(unittest.TestCase):
         rs = axelrod.ResultSet(self.players, self.matches)
         self.assertIsInstance(rs.match_lengths, list)
         self.assertEqual(len(rs.match_lengths), rs.nrepetitions)
+        self.assertEqual(rs.match_lengths, self.expected_match_lengths)
 
-        for rep in rs.match_lengths:
-            self.assertIsInstance(rep, list)
-            self.assertEqual(len(rep), len(self.players))
+        #for rep in rs.match_lengths:
+            #self.assertIsInstance(rep, list)
+            #self.assertEqual(len(rep), len(self.players))
 
-            for i, opp in enumerate(rep):
-                self.assertIsInstance(opp, list)
-                self.assertEqual(len(opp), len(self.players))
+            #for i, opp in enumerate(rep):
+                #self.assertIsInstance(opp, list)
+                #self.assertEqual(len(opp), len(self.players))
 
-                for j, length in enumerate(opp):
-                    if i == j:  # Specific test for example match setup
-                        self.assertEqual(length, 0)
-                    else:
-                        self.assertEqual(length, self.turns)
+                #for j, length in enumerate(opp):
+                    #if i == j:  # Specific test for example match setup
+                        #self.assertEqual(length, 0)
+                    #else:
+                        #self.assertEqual(length, self.turns)
 
     def test_scores(self):
         rs = axelrod.ResultSet(self.players, self.matches)
@@ -248,12 +255,12 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.vengeful_cooperation,
                          self.expected_vengeful_cooperation)
 
-    def test_cooperation_rating(self):
+    def test_cooperating_rating(self):
         rs = axelrod.ResultSet(self.players, self.matches)
-        self.assertIsInstance(rs.cooperation_rating, list)
-        self.assertEqual(len(rs.cooperation_rating), rs.nplayers)
-        self.assertEqual(rs.cooperation_rating,
-                         self.expected_cooperation_rating)
+        self.assertIsInstance(rs.cooperating_rating, list)
+        self.assertEqual(len(rs.cooperating_rating), rs.nplayers)
+        self.assertEqual(rs.cooperating_rating,
+                         self.expected_cooperating_rating)
 
     def test_good_partner_matrix(self):
         rs = axelrod.ResultSet(self.players, self.matches)

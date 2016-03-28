@@ -63,7 +63,7 @@ class ResultSet(object):
         """
         plist = list(range(self.nplayers))
         replist = list(range(self.nrepetitions))
-        return [[[0 for r in replist] for j in plist] for i in plist]
+        return [[[0 for j in plist] for i in plist] for r in replist]
 
     @property
     def match_lengths(self):
@@ -126,19 +126,6 @@ class ResultSet(object):
                         scores[player_index][rep] += player_score
 
         return scores
-
-    @property
-    def ranking(self):
-        """
-        Returns the ranking. List of the form:
-
-        [R1, R2, R3..., Rn]
-
-        Where n is the number of players and Rj is the rank of the jth player
-        (based on median score).
-        """
-        return sorted(range(self.nplayers),
-                      key=lambda i: -median(self.scores[i]))
 
     @property
     def ranked_names(self):
@@ -217,6 +204,19 @@ class ResultSet(object):
 
 
         return normalised_scores
+
+    @property
+    def ranking(self):
+        """
+        Returns the ranking. List of the form:
+
+        [R1, R2, R3..., Rn]
+
+        Where n is the number of players and Rj is the rank of the jth player
+        (based on median score).
+        """
+        return sorted(range(self.nplayers),
+                      key=lambda i: -median(self.normalised_scores[i]))
 
     @property
     def payoffs(self):
@@ -342,17 +342,18 @@ class ResultSet(object):
 
         for i in plist:
             for j in plist:
-                for rep in self.matches:
-                    coop_count = 0
+                if i != j:
+                    for rep in self.matches:
+                        coop_count = 0
 
-                    if (i, j) in rep:
-                        match = rep[(i, j)]
-                        coop_count = match.cooperation()[0]
-                    if (j, i) in rep:
-                        match = rep[(j, i)]
-                        coop_count = match.cooperation()[1]
+                        if (i, j) in rep:
+                            match = rep[(i, j)]
+                            coop_count = match.cooperation()[0]
+                        if (j, i) in rep:
+                            match = rep[(j, i)]
+                            coop_count = match.cooperation()[1]
 
-                    cooperations[i][j] += coop_count
+                        cooperations[i][j] += coop_count
         return cooperations
 
     @property
@@ -382,6 +383,7 @@ class ResultSet(object):
                     if (i, j) in rep:
                         match = rep[(i, j)]
                         coop_counts.append(match.normalised_cooperation()[0])
+
                     if (j, i) in rep:
                         match = rep[(j, i)]
                         coop_counts.append(match.normalised_cooperation()[1])
@@ -405,7 +407,7 @@ class ResultSet(object):
                 for row in self.normalised_cooperation]
 
     @property
-    def cooperation_rating(self):
+    def cooperating_rating(self):
         """
         Obtain the list of cooperation counts
         List of the form:
@@ -425,7 +427,8 @@ class ResultSet(object):
         total_length_v_opponent = [zip(*[rep[playeri] for
                                          rep in self.match_lengths])
                                    for playeri in plist]
-        lengths = [[sum(e) for e in row] for row in total_length_v_opponent]
+        lengths = [[sum(e) for j, e in enumerate(row) if i != j] for i, row in
+                    enumerate(total_length_v_opponent)]
         return [sum(cs) / float(sum(ls)) for cs, ls
                 in zip(self.cooperation, lengths)]
 
@@ -444,19 +447,20 @@ class ResultSet(object):
 
         for i in plist:
             for j in plist:
-                for rep in self.matches:
+                if i != j:
+                    for rep in self.matches:
 
-                    if (i, j) in rep:
-                        match = rep[(i, j)]
-                        coops = match.cooperation()
-                        if coops[0] >= coops[1]:
-                            good_partner_matrix[i][j] += 1
+                        if (i, j) in rep:
+                            match = rep[(i, j)]
+                            coops = match.cooperation()
+                            if coops[0] >= coops[1]:
+                                good_partner_matrix[i][j] += 1
 
-                    if (j, i) in rep:
-                        match = rep[(j, i)]
-                        coops = match.cooperation()
-                        if coops[0] <= coops[1]:
-                            good_partner_matrix[i][j] += 1
+                        if (j, i) in rep:
+                            match = rep[(j, i)]
+                            coops = match.cooperation()
+                            if coops[0] <= coops[1]:
+                                good_partner_matrix[i][j] += 1
 
         return good_partner_matrix
 
@@ -471,7 +475,7 @@ class ResultSet(object):
         for playeri in plist:
             total_interactions = 0
             for rep in self.matches:
-                total_interactions += len([pair for pair in rep.keys() if playeri in pair])
+                total_interactions += len([pair for pair in rep.keys() if playeri in pair and pair[0] != pair[1]])
             rating = sum(self.good_partner_matrix[playeri]) / float(total_interactions)
             good_partner_rating.append(rating)
 

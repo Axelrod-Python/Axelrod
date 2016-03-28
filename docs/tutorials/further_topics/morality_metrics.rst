@@ -23,7 +23,7 @@ A matrix of cooperation rates is available within a tournament's ResultSet::
     ...               axl.TitForTat(), axl.Grudger()]
     >>> tournament = axl.Tournament(strategies)
     >>> results = tournament.play()
-    >>> results.normalised_cooperation
+    >>> [[round(float(ele), 3) for ele in row] for row in results.normalised_cooperation]
     [[1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0], [1.0, 0.005, 1.0, 1.0], [1.0, 0.005, 1.0, 1.0]]
 
 There is also a 'good partner' matrix showing how often a player cooperated at
@@ -35,7 +35,7 @@ least as much as its opponent::
 Each of the metrics described in Tyler's paper is available as follows (here they are rounded to 2 digits)::
 
     >>> [round(ele, 2) for ele in results.cooperating_rating]
-    [1.0, 0.0, 0.75, 0.75]
+    [1.0, 0.0, 0.67, 0.67]
     >>> [round(ele, 2) for ele in results.good_partner_rating]
     [1.0, 0.0, 1.0, 1.0]
     >>> [round(ele, 2) for ele in results.eigenjesus_rating]
