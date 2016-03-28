@@ -28,6 +28,29 @@ class ResultSet(object):
         self.matches = matches  # List of dicts mapping tuples of players to matches
         self.nrepetitions = len(matches)
 
+        # Calculate all attributes:
+        self.wins = self.build_wins()
+        self.match_lengths = self.build_match_lengths()
+
+        self.scores = self.build_scores()
+        self.normalised_scores = self.build_normalised_scores()
+        self.ranking = self.build_ranking()
+        self.ranked_names = self.build_ranked_names()
+        self.payoffs = self.build_payoffs()
+        self.payoff_matrix = self.build_payoff_matrix()
+        self.payoff_stddevs = self.build_payoff_stddevs()
+        self.score_diffs = self.build_score_diffs()
+        self.payoff_diffs_means = self.build_payoff_diffs_means()
+
+        self.cooperation = self.build_cooperation()
+        self.normalised_cooperation = self.build_normalised_cooperation()
+        self.vengeful_cooperation = self.build_vengeful_cooperation()
+        self.cooperating_rating = self.build_cooperating_rating()
+        self.good_partner_matrix = self.build_good_partner_matrix()
+        self.good_partner_rating = self.build_good_partner_rating()
+        self.eigenmoses_rating = self.build_eigenmoses_rating()
+        self.eigenjesus_rating = self.build_eigenjesus_rating()
+
     @property
     def _null_results_matrix(self):
         """
@@ -44,8 +67,7 @@ class ResultSet(object):
         replist = list(range(self.nrepetitions))
         return [[[0 for j in plist] for i in plist] for r in replist]
 
-    @property
-    def match_lengths(self):
+    def build_match_lengths(self):
         """
         Returns the match lengths. List of the form:
 
@@ -75,8 +97,7 @@ class ResultSet(object):
 
         return match_lengths
 
-    @property
-    def scores(self):
+    def build_scores(self):
         """
         Returns the total scores per player for each repetition lengths.
         List of the form:
@@ -106,15 +127,13 @@ class ResultSet(object):
 
         return scores
 
-    @property
-    def ranked_names(self):
+    def build_ranked_names(self):
         """
         Returns the ranked names. A list of names.
         """
         return [str(self.players[i]) for i in self.ranking]
 
-    @property
-    def wins(self):
+    def build_wins(self):
         """
         Returns the total wins per player for each repetition lengths.
         List of the form:
@@ -145,8 +164,7 @@ class ResultSet(object):
 
         return wins
 
-    @property
-    def normalised_scores(self):
+    def build_normalised_scores(self):
         """
         Returns the total mean scores per turn per layer for each repetition
         lengths.  List of the form:
@@ -184,8 +202,7 @@ class ResultSet(object):
 
         return normalised_scores
 
-    @property
-    def ranking(self):
+    def build_ranking(self):
         """
         Returns the ranking. List of the form:
 
@@ -197,8 +214,7 @@ class ResultSet(object):
         return sorted(range(self.nplayers),
                       key=lambda i: -median(self.normalised_scores[i]))
 
-    @property
-    def payoffs(self):
+    def build_payoffs(self):
         """
         Obtain the list of per turn payoffs
         List of the form:
@@ -234,8 +250,7 @@ class ResultSet(object):
                     payoffs[i][j] = utilities
         return payoffs
 
-    @property
-    def payoff_matrix(self):
+    def build_payoff_matrix(self):
         """
         Obtain the mean of per turn payoffs
         List of the form:
@@ -267,8 +282,7 @@ class ResultSet(object):
 
         return payoff_matrix
 
-    @property
-    def payoff_stddevs(self):
+    def build_payoff_stddevs(self):
         """
         Obtain the mean of per turn payoffs
         List of the form:
@@ -301,8 +315,7 @@ class ResultSet(object):
 
         return payoff_stddevs
 
-    @property
-    def score_diffs(self):
+    def build_score_diffs(self):
         """
         Payoff diffs (matrix of lists)
         """
@@ -322,8 +335,7 @@ class ResultSet(object):
                         score_diffs[i][j][r] = diff
         return score_diffs
 
-    @property
-    def payoff_diffs_means(self):
+    def build_payoff_diffs_means(self):
         """
         Mean payoff diffs (matrix of means)
         """
@@ -346,8 +358,7 @@ class ResultSet(object):
                     payoff_diffs_means[i][j] = 0
         return payoff_diffs_means
 
-    @property
-    def cooperation(self):
+    def build_cooperation(self):
         """
         Obtain the list of cooperation counts
         List of the form:
@@ -380,8 +391,7 @@ class ResultSet(object):
                         cooperations[i][j] += coop_count
         return cooperations
 
-    @property
-    def normalised_cooperation(self):
+    def build_normalised_cooperation(self):
         """
         Obtain the list of per turn cooperation counts
         List of the form:
@@ -419,8 +429,7 @@ class ResultSet(object):
                     normalised_cooperations[i][j] = mean(coop_counts)
         return normalised_cooperations
 
-    @property
-    def vengeful_cooperation(self):
+    def build_vengeful_cooperation(self):
         """
         The vengeful cooperation matrix derived from the
         normalised cooperation matrix:
@@ -430,8 +439,7 @@ class ResultSet(object):
         return [[2 * (element - 0.5) for element in row]
                 for row in self.normalised_cooperation]
 
-    @property
-    def cooperating_rating(self):
+    def build_cooperating_rating(self):
         """
         Obtain the list of cooperation counts
         List of the form:
@@ -456,8 +464,7 @@ class ResultSet(object):
         return [sum(cs) / float(sum(ls)) for cs, ls
                 in zip(self.cooperation, lengths)]
 
-    @property
-    def good_partner_matrix(self):
+    def build_good_partner_matrix(self):
         """
         An n by n matrix of good partner ratings for n players
         i.e. an n by n matrix where n is the number of players. Each row (i)
@@ -488,8 +495,7 @@ class ResultSet(object):
 
         return good_partner_matrix
 
-    @property
-    def good_partner_rating(self):
+    def build_good_partner_rating(self):
         """
         Good partner rating
         """
@@ -505,12 +511,10 @@ class ResultSet(object):
 
         return good_partner_rating
 
-    @property
-    def eigenjesus_rating(self):
+    def build_eigenjesus_rating(self):
         return ac.eigenvector(self.normalised_cooperation)
 
-    @property
-    def eigenmoses_rating(self):
+    def build_eigenmoses_rating(self):
         return ac.eigenvector(self.vengeful_cooperation)
 
     def csv(self):
