@@ -43,6 +43,17 @@ We can plot the results::
    :width: 50%
    :align: center
 
+We can also view the length of the matches player by each player (here plotted
+with a high number of repetitions we see that the expected length of Match is
+obtained :math:`\approx 4`)::
+
+    >>> p = plot.lengthplot()
+    >>> p.show()
+
+.. image:: _static/prob_end_tournaments/prob_end_lengthplot.svg
+   :width: 50%
+   :align: center
+
 Just as for a constant length tournament and as described in
 :ref:`ecological-variant` we can look at the strategies in an evolutionary
 context::
