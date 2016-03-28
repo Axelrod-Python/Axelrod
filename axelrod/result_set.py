@@ -1,5 +1,5 @@
 import csv
-from axelrod import payoff as ap, cooperation as ac
+from axelrod import cooperation as ac
 
 from numpy import mean, median, std
 
@@ -42,14 +42,15 @@ class ResultSet(object):
         self.score_diffs = self.build_score_diffs()
         self.payoff_diffs_means = self.build_payoff_diffs_means()
 
-        self.cooperation = self.build_cooperation()
-        self.normalised_cooperation = self.build_normalised_cooperation()
-        self.vengeful_cooperation = self.build_vengeful_cooperation()
-        self.cooperating_rating = self.build_cooperating_rating()
-        self.good_partner_matrix = self.build_good_partner_matrix()
-        self.good_partner_rating = self.build_good_partner_rating()
-        self.eigenmoses_rating = self.build_eigenmoses_rating()
-        self.eigenjesus_rating = self.build_eigenjesus_rating()
+        if with_morality:
+            self.cooperation = self.build_cooperation()
+            self.normalised_cooperation = self.build_normalised_cooperation()
+            self.vengeful_cooperation = self.build_vengeful_cooperation()
+            self.cooperating_rating = self.build_cooperating_rating()
+            self.good_partner_matrix = self.build_good_partner_matrix()
+            self.good_partner_rating = self.build_good_partner_rating()
+            self.eigenmoses_rating = self.build_eigenmoses_rating()
+            self.eigenjesus_rating = self.build_eigenjesus_rating()
 
     @property
     def _null_results_matrix(self):
@@ -129,7 +130,7 @@ class ResultSet(object):
 
     def build_ranked_names(self):
         """
-        Returns the ranked names. A list of names.
+        Returns the ranked names. A list of names as calculated by self.ranking.
         """
         return [str(self.players[i]) for i in self.ranking]
 
@@ -209,7 +210,7 @@ class ResultSet(object):
         [R1, R2, R3..., Rn]
 
         Where n is the number of players and Rj is the rank of the jth player
-        (based on median score).
+        (based on median normalised score).
         """
         return sorted(range(self.nplayers),
                       key=lambda i: -median(self.normalised_scores[i]))
@@ -317,7 +318,21 @@ class ResultSet(object):
 
     def build_score_diffs(self):
         """
-        Payoff diffs (matrix of lists)
+        Obtain the score differences between players
+        List of the form:
+
+        [ML1, ML2, ML3..., MLn]
+
+        Where n is the number of players and MLi is a list of the form:
+
+        [pi1, pi2, pi3, ..., pim]
+
+        Where m is the number of players and pij is a list of the form:
+
+        [uij1, uij2, ..., uijk]
+
+        Where k is the number of repetitions and uijm is the difference of the
+        scores per turn between player i and j in repetition m.
         """
         plist = list(range(self.nplayers))
         score_diffs = [[[0] * self.nrepetitions for j in plist] for i in plist]
@@ -337,7 +352,17 @@ class ResultSet(object):
 
     def build_payoff_diffs_means(self):
         """
-        Mean payoff diffs (matrix of means)
+        Obtain the score differences between players
+        List of the form:
+
+        [ML1, ML2, ML3..., MLn]
+
+        Where n is the number of players and MLi is a list of the form:
+
+        [pi1, pi2, pi3, ..., pim]
+
+        Where pij is the mean difference of the
+        scores per turn between player i and j in repetition m.
         """
         plist = list(range(self.nplayers))
         payoff_diffs_means = [[0 for j in plist] for i in plist]
@@ -499,7 +524,7 @@ class ResultSet(object):
 
     def build_good_partner_rating(self):
         """
-        Good partner rating
+        Returns: A list of good partner ratings ordered by player index.
         """
         plist = list(range(self.nplayers))
         good_partner_rating = []
@@ -515,9 +540,16 @@ class ResultSet(object):
         return good_partner_rating
 
     def build_eigenjesus_rating(self):
+        """
+        Obtain the eigenjesus rating as defined in:
+        http://www.scottaaronson.com/morality.pdf
+        """
         return ac.eigenvector(self.normalised_cooperation)
 
     def build_eigenmoses_rating(self):
+        """Obtain the eigenmoses rating as defined in:
+        http://www.scottaaronson.com/morality.pdf
+        """
         return ac.eigenvector(self.vengeful_cooperation)
 
     def csv(self):
@@ -530,50 +562,3 @@ class ResultSet(object):
                     for rank in self.ranking]
             writer.writerow(list(map(str, data)))
         return csv_string.getvalue()
-
-
-#class ProbEndResultSet(ResultSet):
-    #"""A class to hold the results of a tournament."""
-
-    #def __init__(self, players, prob_end, repetitions,
-                 #outcome, with_morality=True):
-        #"""
-        #Args:
-            #players (list): a list of player objects.
-            #match_lengths (list): list of lists of all match lengths
-            #outcome (dict): returned from the Tournament class and containing
-                #various sets of results for processing by this class.
-            #with_morality (bool): a flag to determine whether morality metrics
-                #should be calculated.
-        #"""
-        #self.players = players
-        #self.nplayers = len(players)
-        #self.prob_end = prob_end
-        #self.repetitions = repetitions
-        #self.outcome = outcome
-        #self.results = self._results(outcome)
-
-        #match_lengths = self.outcome['match_lengths']
-        #self.match_lengths = self._format_match_length(match_lengths)
-
-        #if 'payoff' in self.results:
-            #payoff = self.results['payoff']
-            #self.scores = ap.scores(payoff)
-            #self.normalised_scores = ap.normalised_scores_diff_length(payoff,
-                                                              #self.results['match_lengths'])
-            #self.payoff_matrix, self.payoff_stddevs = (ap.normalised_payoff_diff_length(
-                                                       #payoff, self.results['match_lengths']))
-            #self.ranking = ap.ranking(self.normalised_scores)
-            #self.ranked_names = ap.ranked_names(players, self.ranking)
-            #self.wins = ap.wins(payoff)
-
-    #def _format_match_length(self, match_lengths):
-        #"""
-        #Take a match lengths list containing upper triangular matrices where
-        #the i,jth element is the length of the match between player i and j.
-
-        #Returns a list of lists showing the match lengths for each player in
-        #each repetition.
-        #"""
-        #lengths = [[sum([rep[p1][p2] for p2 in range(self.nplayers) if p1 != p2]) for rep in match_lengths] for p1 in range(self.nplayers)]
-        #return lengths
