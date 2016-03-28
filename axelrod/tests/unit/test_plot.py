@@ -40,6 +40,11 @@ class TestPlot(unittest.TestCase):
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]
         cls.expected_boxplot_xticks_labels = ['Defector', 'Tit For Tat', 'Alternator']
 
+        cls.expected_lengthplot_dataset = [
+               [cls.turns for _ in range(3)],
+               [cls.turns for _ in range(3)],
+               [cls.turns for _ in range(3)],
+               ]
 
         cls.expected_payoff_dataset = [
             [0, mean([9/5.0 for _ in range(3)]), mean([17/5.0 for _ in range(3)])],
@@ -72,15 +77,6 @@ class TestPlot(unittest.TestCase):
             plot._boxplot_xticks_labels,
             self.expected_boxplot_xticks_labels)
 
-    #def test_boxplot_title(self):
-        #plot = axelrod.Plot(self.test_result_set)
-        #self.assertEqual(plot._boxplot_title, self.expected_boxplot_title)
-
-    #def test_prob_end_boxplot_title(self):
-        #plot = axelrod.Plot(self.test_prob_end_result_set)
-        #self.assertEqual(plot._boxplot_title,
-                         #self.expected_prob_end_boxplot_title)
-
     def test_boxplot(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
@@ -94,19 +90,23 @@ class TestPlot(unittest.TestCase):
             plot._winplot_dataset,
             self.expected_winplot_dataset)
 
-    #def test_winplot_title(self):
-        #plot = axelrod.Plot(self.test_result_set)
-        #self.assertEqual(plot._winplot_title, self.expected_winplot_title)
-
-    #def test_prob_end_winplot_title(self):
-        #plot = axelrod.Plot(self.test_prob_end_result_set)
-        #self.assertEqual(plot._winplot_title,
-                         #self.expected_prob_end_winplot_title)
-
     def test_winplot(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
             self.assertIsInstance(plot.winplot(), matplotlib.pyplot.Figure)
+        else:
+            self.skipTest('matplotlib not installed')
+
+    def test_lengthplot_dataset(self):
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertSequenceEqual(
+            plot._winplot_dataset,
+            self.expected_winplot_dataset)
+
+    def test_lengthplot(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.lengthplot(), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 

@@ -64,7 +64,8 @@ class Plot(object):
             plt.title(title)
         return figure
 
-    ## Box and Violin plots for mean score, score diferrences, and wins
+    ## Box and Violin plots for mean score, score differences, wins, and match
+    ## lengths
 
     @property
     def _boxplot_dataset(self):
@@ -150,6 +151,27 @@ class Plot(object):
         players attain their payoffs."""
         diffs, ranked_names = self._sdv_plot_dataset
         figure = self._violinplot(diffs, ranked_names, title)
+        return figure
+
+    @property
+    def _lengthplot_dataset(self):
+        match_lengths = self.result_set.match_lengths
+        return [[length for rep in match_lengths
+                 for length in rep[playeri]] for playeri in
+                self.result_set.ranking]
+
+    def lengthplot(self, title=None):
+        """For the specific match length boxplot."""
+        data = self._lengthplot_dataset
+        names = self._boxplot_xticks_labels
+        try:
+            figure = self._violinplot(data, names, title=title)
+        except LinAlgError:
+            # Matplotlib doesn't handle single point distributions well
+            # in violin plots. Should be fixed in next release:
+            # https://github.com/matplotlib/matplotlib/pull/4816
+            # Fall back to boxplot
+            figure = self._boxplot(data, names, title=title)
         return figure
 
     ## Payoff heatmaps
