@@ -461,7 +461,9 @@ class ResultSet(object):
                                    for playeri in plist]
         lengths = [[sum(e) for j, e in enumerate(row) if i != j] for i, row in
                     enumerate(total_length_v_opponent)]
-        return [sum(cs) / float(sum(ls)) for cs, ls
+
+        # Max is to deal with edge cases of matches that have no turns
+        return [sum(cs) / max(1, float(sum(ls))) for cs, ls
                 in zip(self.cooperation, lengths)]
 
     def build_good_partner_matrix(self):
@@ -506,7 +508,8 @@ class ResultSet(object):
             total_interactions = 0
             for rep in self.matches:
                 total_interactions += len([pair for pair in rep.keys() if playeri in pair and pair[0] != pair[1]])
-            rating = sum(self.good_partner_matrix[playeri]) / float(total_interactions)
+            # Max is to deal with edge case of matchs with no turns
+            rating = sum(self.good_partner_matrix[playeri]) / max(1, float(total_interactions))
             good_partner_rating.append(rating)
 
         return good_partner_rating
