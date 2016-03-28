@@ -449,13 +449,13 @@ class ResultSet(object):
                     if (i, j) in rep:
                         match = rep[(i, j)]
                         coops = match.cooperation()
-                        if coops[0] > coops[1]:
+                        if coops[0] >= coops[1]:
                             good_partner_matrix[i][j] += 1
 
                     if (j, i) in rep:
                         match = rep[(j, i)]
                         coops = match.cooperation()
-                        if coops[0] < coops[1]:
+                        if coops[0] <= coops[1]:
                             good_partner_matrix[i][j] += 1
 
         return good_partner_matrix

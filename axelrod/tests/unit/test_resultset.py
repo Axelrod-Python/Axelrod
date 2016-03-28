@@ -103,14 +103,14 @@ class TestResultSet(unittest.TestCase):
             ]
 
         cls.expected_good_partner_matrix = [
-                [0, 0, 3],
-                [0, 0, 3],
+                [0, 3, 3],
+                [3, 0, 3],
                 [0, 0, 0]
             ]
 
         cls.expected_good_partner_rating = [
-                3 / 6.0,
-                3 / 6.0,
+                1.0,
+                1.0,
                 0
             ]
 
