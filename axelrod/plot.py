@@ -78,34 +78,36 @@ class Plot(object):
     def _boxplot_xticks_labels(self):
         return [str(n) for n in self.result_set.ranked_names]
 
-    @property
-    def _boxplot_title(self):
-        try:
-            return ("Mean score per stage game over {} "
-                    "turns repeated {} times ({} strategies)").format(
-                self.result_set.turns,
-                self.result_set.repetitions,
-                len(self.result_set.ranking))
-        except AttributeError:
-            return ("Mean score per stage game ({} probability of "
-                    "Match ending) repeated {} times ({} strategies)").format(
-                self.result_set.prob_end,
-                self.result_set.repetitions,
-                len(self.result_set.ranking))
+    #@property
+    #def _boxplot_title(self):
+        #try:
+            #return ("Mean score per stage game over {} "
+                    #"turns repeated {} times ({} strategies)").format(
+                #self.result_set.turns,
+                #self.result_set.repetitions,
+                #len(self.result_set.ranking))
+        #except AttributeError:
+            #return ("Mean score per stage game ({} probability of "
+                    #"Match ending) repeated {} times ({} strategies)").format(
+                #self.result_set.prob_end,
+                #self.result_set.repetitions,
+                #len(self.result_set.ranking))
 
     def boxplot(self):
         """For the specific mean score boxplot."""
         data = self._boxplot_dataset
         names = self._boxplot_xticks_labels
-        title = self._boxplot_title
+        #title = self._boxplot_title
         try:
-            figure = self._violinplot(data, names, title=title)
+            #figure = self._violinplot(data, names, title=title)
+            figure = self._violinplot(data, names)
         except LinAlgError:
             # Matplotlib doesn't handle single point distributions well
             # in violin plots. Should be fixed in next release:
             # https://github.com/matplotlib/matplotlib/pull/4816
             # Fall back to boxplot
-            figure = self._boxplot(data, names, title=title)
+            #figure = self._boxplot(data, names, title=title)
+            figure = self._boxplot(data, names)
         return figure
 
     @property
@@ -120,20 +122,20 @@ class Plot(object):
         ranked_names = [str(players[x[-1]]) for x in medians]
         return wins, ranked_names
 
-    @property
-    def _winplot_title(self):
-        try:
-            return ("Distributions of wins:"
-                    " {} turns repeated {} times ({} strategies)").format(
-                self.result_set.turns,
-                self.result_set.repetitions,
-                len(self.result_set.ranking))
-        except AttributeError:
-            return ("Distributions of wins ({} probability of "
-                    "Match ending): repeated {} times ({} strategies)").format(
-                self.result_set.prob_end,
-                self.result_set.repetitions,
-                len(self.result_set.ranking))
+    #@property
+    #def _winplot_title(self):
+        #try:
+            #return ("Distributions of wins:"
+                    #" {} turns repeated {} times ({} strategies)").format(
+                #self.result_set.turns,
+                #self.result_set.repetitions,
+                #len(self.result_set.ranking))
+        #except AttributeError:
+            #return ("Distributions of wins ({} probability of "
+                    #"Match ending): repeated {} times ({} strategies)").format(
+                #self.result_set.prob_end,
+                #self.result_set.repetitions,
+                #len(self.result_set.ranking))
 
     def winplot(self):
         """Plots the distributions for the number of wins for each strategy."""
@@ -141,27 +143,29 @@ class Plot(object):
             return None
 
         data, names = self._winplot_dataset
-        title = self._winplot_title
+        #title = self._winplot_title
         try:
-            figure = self._violinplot(data, names, title)
+            #figure = self._violinplot(data, names, title)
+            figure = self._violinplot(data, names)
         except LinAlgError:
             # Matplotlib doesn't handle single point distributions well
             # in violin plots. Should be fixed in next release:
             # https://github.com/matplotlib/matplotlib/pull/4816
             # Fall back to boxplot
-            figure = self._boxplot(data, names, title)
+            #figure = self._boxplot(data, names, title)
+            figure = self._boxplot(data, names)
         # Expand ylim a bit
         maximum = max(max(w) for w in data)
         plt.ylim(-0.5, 0.5 + maximum)
         return figure
 
-    @property
-    def _sdv_plot_title(self):
-        return ("Distributions of payoff differences per stage game over {} "
-                "turns repeated {} times ({} strategies)").format(
-            self.result_set.turns,
-            self.result_set.repetitions,
-            len(self.result_set.ranking))
+    #@property
+    #def _sdv_plot_title(self):
+        #return ("Distributions of payoff differences per stage game over {} "
+                #"turns repeated {} times ({} strategies)").format(
+            #self.result_set.turns,
+            #self.result_set.repetitions,
+            #len(self.result_set.ranking))
 
     @property
     def _sd_ordering(self):
@@ -175,30 +179,31 @@ class Plot(object):
         #ordering = [x[-1] for x in to_sort]
         #return ordering
 
-    @property
-    def _sdv_plot_dataset(self):
-        ordering = self._sd_ordering
-        diffs = self.result_set.score_diffs
-        players = self.result_set.players
-        # Reorder and grab names
-        diffs = [diffs[i] for i in ordering]
-        ranked_names = [str(players[i]) for i in ordering]
-        return diffs, ranked_names
+    #@property
+    #def _sdv_plot_dataset(self):
+        #ordering = self._sd_ordering
+        #diffs = self.result_set.score_diffs
+        #players = self.result_set.players
+        ## Reorder and grab names
+        #diffs = [diffs[i] for i in ordering]
+        #ranked_names = [str(players[i]) for i in ordering]
+        #return diffs, ranked_names
 
-    def sdvplot(self):
-        """Score difference violinplots to visualize the distributions of how
-        players attain their payoffs."""
-        diffs, ranked_names = self._sdv_plot_dataset
-        title = self._sdv_plot_title
-        figure = self._violinplot(diffs, ranked_names, title)
-        return figure
+    #def sdvplot(self):
+        #"""Score difference violinplots to visualize the distributions of how
+        #players attain their payoffs."""
+        #diffs, ranked_names = self._sdv_plot_dataset
+        ##title = self._sdv_plot_title
+        ##figure = self._violinplot(diffs, ranked_names, title)
+        #figure = self._violinplot(diffs, ranked_names)
+        #return figure
 
     ## Payoff heatmaps
 
     @property
     def _payoff_dataset(self):
         return [[self.result_set.payoff_matrix[r1][r2]
-                for r2 in self.result_set.ranking]
+                 for r2 in self.result_set.ranking]
                 for r1 in self.result_set.ranking]
 
     @property
