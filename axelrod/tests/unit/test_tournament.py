@@ -469,3 +469,39 @@ class TestProbEndTournament(unittest.TestCase):
             prob_end=prob_end,
             repetitions=repetitions)
         self.assertFalse(tournament._build_cache_required())
+
+
+    @given(s=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           prob_end=floats(min_value=.1, max_value=.9),
+           repetitions=integers(min_value=2, max_value=4),
+           rm=random_module())
+    @settings(max_examples=50, timeout=10)
+    @example(s=test_strategies, prob_end=.2, repetitions=test_repetitions,
+             rm=random.seed(0))
+
+    # These two examples are to make sure #465 is fixed.
+    # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
+    # these two examples were identified by hypothesis.
+    @example(s=[axelrod.BackStabber, axelrod.MindReader], prob_end=.2, repetitions=1,
+             rm=random.seed(0))
+    @example(s=[axelrod.ThueMorse, axelrod.MindReader], prob_end=.2, repetitions=1,
+             rm=random.seed(0))
+    def test_property_serial_play(self, s, prob_end, repetitions, rm):
+        """Test serial play using hypothesis"""
+        # Test that we get an instance of ResultSet
+
+        players = [strat() for strat in s]
+
+        tournament = axelrod.ProbEndTournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            prob_end=prob_end,
+            repetitions=repetitions)
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(results.nplayers, len(players))
+        self.assertEqual(results.players, players)
+        self.assertEqual(len(results.matches), repetitions)
