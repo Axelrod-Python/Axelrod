@@ -21,14 +21,15 @@ class ResultSet(object):
             players : list
                 a list of player objects.
             matches : list
-                a list of list of completed matches (1 for each repetition)
+                a list of dictionaries mapping tuples of player indices to
+                completed matches (1 for each repetition)
             with_morality : bool
                 a flag to determine whether morality metrics should be
                 calculated.
         """
         self.players = players
         self.nplayers = len(players)
-        self.matches = matches  # List of dicts mapping tuples of players to matches
+        self.matches = matches
         self.nrepetitions = len(matches)
 
         # Calculate all attributes:
@@ -58,9 +59,8 @@ class ResultSet(object):
     @property
     def _null_results_matrix(self):
         """
-        A method used by other methods in this class.
-
         Returns:
+        --------
             A null matrix (i.e. fully populated with zero values) using
             lists of the form required for the results dictionary.
 
@@ -73,20 +73,22 @@ class ResultSet(object):
 
     def build_match_lengths(self):
         """
-        Returns the match lengths. List of the form:
+        Returns:
+        --------
+            The match lengths. List of the form:
 
-        [ML1, ML2, ML3..., MLn]
+            [ML1, ML2, ML3..., MLn]
 
-        Where n is the number of repetitions and MLi is a list of the form:
+            Where n is the number of repetitions and MLi is a list of the form:
 
-        [Pli1, PLi2, Pli3, ..., Plim]
+            [Pli1, PLi2, Pli3, ..., Plim]
 
-        Where m is the number of players and Plij is of the form:
+            Where m is the number of players and Plij is of the form:
 
-        [aij1, aij2, aij3, ..., aijk]
+            [aij1, aij2, aij3, ..., aijk]
 
-        Where k is the number of players and aijk is the length of the match
-        between player j and k in repetition i.
+            Where k is the number of players and aijk is the length of the match
+            between player j and k in repetition i.
         """
         match_lengths = self._null_results_matrix
 
@@ -103,20 +105,22 @@ class ResultSet(object):
 
     def build_scores(self):
         """
-        Returns the total scores per player for each repetition lengths.
-        List of the form:
+        Returns:
+        --------
+            The total scores per player for each repetition lengths.
+            List of the form:
 
-        [ML1, ML2, ML3..., MLn]
+            [ML1, ML2, ML3..., MLn]
 
-        Where n is the number of players and MLi is a list of the form:
+            Where n is the number of players and MLi is a list of the form:
 
-        [pi1, pi2, pi3, ..., pim]
+            [pi1, pi2, pi3, ..., pim]
 
-        Where m is the number of repetitions and pij is the total score obtained by
-        each player in repetition j.
+            Where m is the number of repetitions and pij is the total score
+            obtained by each player in repetition j.
 
-        In Axelrod's original tournament, there were no self-interactions
-        (e.g. player 1 versus player 1) and so these are also ignored.
+            In Axelrod's original tournament, there were no self-interactions
+            (e.g. player 1 versus player 1) and so these are also ignored.
         """
         scores = [[0 for rep in range(self.nrepetitions)] for _ in
                   range(self.nplayers)]
@@ -133,29 +137,35 @@ class ResultSet(object):
 
     def build_ranked_names(self):
         """
-        Returns the ranked names. A list of names as calculated by self.ranking.
+        Returns:
+        --------
+            Returns the ranked names. A list of names as calculated by
+            self.ranking.
         """
         return [str(self.players[i]) for i in self.ranking]
 
     def build_wins(self):
         """
-        Returns the total wins per player for each repetition lengths.
-        List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            The total wins per player for each repetition lengths.
+            List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pim]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where m is the number of repetitions and pij is the total wins obtained by
-        each player in repetition j.
+            [pi1, pi2, pi3, ..., pim]
 
-        In Axelrod's original tournament, there were no self-interactions
-        (e.g. player 1 versus player 1) and so these are also ignored.
+            Where m is the number of repetitions and pij is the total wins
+            obtained by each player in repetition j.
+
+            In Axelrod's original tournament, there were no self-interactions
+            (e.g. player 1 versus player 1) and so these are also ignored.
         """
         wins = [[0 for rep in range(self.nrepetitions)] for _ in
-                 range(self.nplayers)]
+                range(self.nplayers)]
 
         for rep, matches_dict in enumerate(self.matches):
             for index_pair, match in matches_dict.items():
@@ -170,20 +180,23 @@ class ResultSet(object):
 
     def build_normalised_scores(self):
         """
-        Returns the total mean scores per turn per layer for each repetition
-        lengths.  List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            The total mean scores per turn per layer for each repetition
+            lengths.  List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pim]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where m is the number of repetitions and pij is the mean scores per turn
-        obtained by each player in repetition j.
+            [pi1, pi2, pi3, ..., pim]
 
-        In Axelrod's original tournament, there were no self-interactions
-        (e.g. player 1 versus player 1) and so these are also ignored.
+            Where m is the number of repetitions and pij is the mean scores per
+            turn obtained by each player in repetition j.
+
+            In Axelrod's original tournament, there were no self-interactions
+            (e.g. player 1 versus player 1) and so these are also ignored.
         """
         normalised_scores = [
             [[] for rep in range(self.nrepetitions)] for _ in
@@ -208,33 +221,39 @@ class ResultSet(object):
 
     def build_ranking(self):
         """
-        Returns the ranking. List of the form:
+        Returns:
+        --------
 
-        [R1, R2, R3..., Rn]
+            The ranking. List of the form:
 
-        Where n is the number of players and Rj is the rank of the jth player
-        (based on median normalised score).
+            [R1, R2, R3..., Rn]
+
+            Where n is the number of players and Rj is the rank of the jth player
+            (based on median normalised score).
         """
         return sorted(range(self.nplayers),
                       key=lambda i: -median(self.normalised_scores[i]))
 
     def build_payoffs(self):
         """
-        Obtain the list of per turn payoffs
-        List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            The list of per turn payoffs.
+            List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pim]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where m is the number of players and pij is a list of the form:
+            [pi1, pi2, pi3, ..., pim]
 
-        [uij1, uij2, ..., uijk]
+            Where m is the number of players and pij is a list of the form:
 
-        Where k is the number of repetitions and uijk is the list of utilities
-        obtained by player i against player j in each repetition.
+            [uij1, uij2, ..., uijk]
+
+            Where k is the number of repetitions and uijk is the list of utilities
+            obtained by player i against player j in each repetition.
         """
         plist = list(range(self.nplayers))
         payoffs = [[[] for j in plist] for i in plist]
@@ -256,21 +275,23 @@ class ResultSet(object):
 
     def build_payoff_matrix(self):
         """
-        Obtain the mean of per turn payoffs
-        List of the form:
+        Returns:
+        --------
+            The mean of per turn payoffs.
+            List of the form:
 
-        [ML1, ML2, ML3..., MLn]
+            [ML1, ML2, ML3..., MLn]
 
-        Where n is the number of players and MLi is a list of the form:
+            Where n is the number of players and MLi is a list of the form:
 
-        [pi1, pi2, pi3, ..., pim]
+            [pi1, pi2, pi3, ..., pim]
 
-        Where m is the number of players and pij is a list of the form:
+            Where m is the number of players and pij is a list of the form:
 
-        [uij1, uij2, ..., uijk]
+            [uij1, uij2, ..., uijk]
 
-        Where k is the number of repetitions and u is the mean utility (over
-        all repetitions) obtained by player i against player j.
+            Where k is the number of repetitions and u is the mean utility (over
+            all repetitions) obtained by player i against player j.
         """
         plist = list(range(self.nplayers))
         payoff_matrix = [[[0] for j in plist] for i in plist]
@@ -288,22 +309,25 @@ class ResultSet(object):
 
     def build_payoff_stddevs(self):
         """
-        Obtain the mean of per turn payoffs
-        List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            The mean of per turn payoffs.
+            List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pim]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where m is the number of players and pij is a list of the form:
+            [pi1, pi2, pi3, ..., pim]
 
-        [uij1, uij2, ..., uijk]
+            Where m is the number of players and pij is a list of the form:
 
-        Where k is the number of repetitions and u is the standard deviation of
-        the utility (over all repetitions) obtained by player i against player
-        j.
+            [uij1, uij2, ..., uijk]
+
+            Where k is the number of repetitions and u is the standard
+            deviation of the utility (over all repetitions) obtained by player
+            i against player j.
         """
         plist = list(range(self.nplayers))
         payoff_stddevs = [[[0] for j in plist] for i in plist]
@@ -321,21 +345,24 @@ class ResultSet(object):
 
     def build_score_diffs(self):
         """
-        Obtain the score differences between players
-        List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            Returns the score differences between players.
+            List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pim]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where m is the number of players and pij is a list of the form:
+            [pi1, pi2, pi3, ..., pim]
 
-        [uij1, uij2, ..., uijk]
+            Where m is the number of players and pij is a list of the form:
 
-        Where k is the number of repetitions and uijm is the difference of the
-        scores per turn between player i and j in repetition m.
+            [uij1, uij2, ..., uijk]
+
+            Where k is the number of repetitions and uijm is the difference of the
+            scores per turn between player i and j in repetition m.
         """
         plist = list(range(self.nplayers))
         score_diffs = [[[0] * self.nrepetitions for j in plist] for i in plist]
@@ -355,17 +382,20 @@ class ResultSet(object):
 
     def build_payoff_diffs_means(self):
         """
-        Obtain the score differences between players
-        List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            The score differences between players.
+            List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pim]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where pij is the mean difference of the
-        scores per turn between player i and j in repetition m.
+            [pi1, pi2, pi3, ..., pim]
+
+            Where pij is the mean difference of the
+            scores per turn between player i and j in repetition m.
         """
         plist = list(range(self.nplayers))
         payoff_diffs_means = [[0 for j in plist] for i in plist]
@@ -388,17 +418,20 @@ class ResultSet(object):
 
     def build_cooperation(self):
         """
-        Obtain the list of cooperation counts
-        List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            The list of cooperation counts.
+            List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pim]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where pij is the total number of cooperations over all repetitions
-        played by player i against player j.
+            [pi1, pi2, pi3, ..., pim]
+
+            Where pij is the total number of cooperations over all repetitions
+            played by player i against player j.
         """
         plist = list(range(self.nplayers))
         cooperations = [[0 for j in plist] for i in plist]
@@ -421,18 +454,21 @@ class ResultSet(object):
 
     def build_normalised_cooperation(self):
         """
-        Obtain the list of per turn cooperation counts
-        List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            The list of per turn cooperation counts.
+            List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pin]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where pij is the mean number of
-        cooperations per turn played by player i against player j in each
-        repetition.
+            [pi1, pi2, pi3, ..., pin]
+
+            Where pij is the mean number of
+            cooperations per turn played by player i against player j in each
+            repetition.
         """
         plist = list(range(self.nplayers))
         normalised_cooperations = [[0 for j in plist] for i in plist]
@@ -459,28 +495,34 @@ class ResultSet(object):
 
     def build_vengeful_cooperation(self):
         """
-        The vengeful cooperation matrix derived from the
-        normalised cooperation matrix:
+        Returns:
+        --------
 
-            Dij = 2(Cij - 0.5)
+            The vengeful cooperation matrix derived from the
+            normalised cooperation matrix:
+
+                Dij = 2(Cij - 0.5)
         """
         return [[2 * (element - 0.5) for element in row]
                 for row in self.normalised_cooperation]
 
     def build_cooperating_rating(self):
         """
-        Obtain the list of cooperation counts
-        List of the form:
+        Returns:
+        --------
 
-        [ML1, ML2, ML3..., MLn]
+            The list of cooperation counts
+            List of the form:
 
-        Where n is the number of players and MLi is a list of the form:
+            [ML1, ML2, ML3..., MLn]
 
-        [pi1, pi2, pi3, ..., pim]
+            Where n is the number of players and MLi is a list of the form:
 
-        Where pij is the total number of cooperations divided by the total
-        number of turns over all repetitions played by player i against player
-        j.
+            [pi1, pi2, pi3, ..., pim]
+
+            Where pij is the total number of cooperations divided by the total
+            number of turns over all repetitions played by player i against
+            player j.
         """
 
         plist = list(range(self.nplayers))
@@ -496,11 +538,14 @@ class ResultSet(object):
 
     def build_good_partner_matrix(self):
         """
-        An n by n matrix of good partner ratings for n players
-        i.e. an n by n matrix where n is the number of players. Each row (i)
-        and column (j) represents an individual player and the the value Pij
-        is the sum of the number of repetitions where player i cooperated as
-        often or more than opponent j.
+        Returns:
+        --------
+
+            An n by n matrix of good partner ratings for n players i.e. an n by
+            n matrix where n is the number of players. Each row (i) and column
+            (j) represents an individual player and the value Pij is the sum of
+            the number of repetitions where player i cooperated as often or
+            more than opponent j.
         """
 
         plist = list(range(self.nplayers))
@@ -527,7 +572,10 @@ class ResultSet(object):
 
     def build_good_partner_rating(self):
         """
-        Returns: A list of good partner ratings ordered by player index.
+        Returns:
+        --------
+
+        A list of good partner ratings ordered by player index.
         """
         plist = list(range(self.nplayers))
         good_partner_rating = []
@@ -546,7 +594,10 @@ class ResultSet(object):
 
     def build_eigenjesus_rating(self):
         """
-        Obtain the eigenjesus rating as defined in:
+        Returns:
+        --------
+
+        The eigenjesus rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
         eigenvector, eigenvalue = eigen.principal_eigenvector(
@@ -554,7 +605,11 @@ class ResultSet(object):
         return eigenvector.tolist()
 
     def build_eigenmoses_rating(self):
-        """Obtain the eigenmoses rating as defined in:
+        """
+        Returns:
+        --------
+
+        The eigenmoses rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
         eigenvector, eigenvalue = eigen.principal_eigenvector(
@@ -562,6 +617,13 @@ class ResultSet(object):
         return eigenvector.tolist()
 
     def csv(self):
+        """
+        Returns:
+        --------
+
+        The string of the total scores per player (columns) per repetition
+        (rows).
+        """
         csv_string = StringIO()
         header = ",".join(self.ranked_names) + "\n"
         csv_string.write(header)
