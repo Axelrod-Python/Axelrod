@@ -275,9 +275,11 @@ class ProbEndTournament(Tournament):
     match is equivalent to randomly sampling after each round whether or not to
     continue.
     """
-    def __init__(self, players, tournament_type=ProbEndRoundRobin, name='axelrod',
-                 game=None, prob_end=.5, repetitions=10, processes=None,
-                 prebuilt_cache=False, noise=0, with_morality=True):
+
+    def __init__(self, players, tournament_type=ProbEndRoundRobin,
+                 name='axelrod', game=None, prob_end=.5, repetitions=10,
+                 processes=None, prebuilt_cache=False, noise=0,
+                 with_morality=True):
         """
         Parameters
         ----------
@@ -302,11 +304,11 @@ class ProbEndTournament(Tournament):
         with_morality : boolean
             Whether morality metrics should be calculated
         """
-        super(ProbEndTournament, self).__init__(players,
-                                                name=name, game=game, turns=float("inf"),
-                                                repetitions=repetitions, processes=processes,
-                                                prebuilt_cache=prebuilt_cache,
-                                                noise=noise, with_morality=with_morality)
+        super(ProbEndTournament, self).__init__(
+            players, name=name, game=game, turns=float("inf"),
+            repetitions=repetitions, processes=processes,
+            prebuilt_cache=prebuilt_cache, noise=noise,
+            with_morality=with_morality)
 
         self.prob_end = prob_end
         self.tournament_type = ProbEndRoundRobin(

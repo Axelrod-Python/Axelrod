@@ -1,6 +1,5 @@
-
 from numpy.linalg import LinAlgError
-from numpy import arange, mean, median
+from numpy import arange, median
 from warnings import warn
 
 matplotlib_installed = True
@@ -28,7 +27,7 @@ class Plot(object):
         self.result_set = result_set
         self.matplotlib_installed = matplotlib_installed
 
-    ## Abstract Box and Violin plots
+    # Abstract Box and Violin plots
 
     def _boxplot(self, data, names, title=None):
         """For making boxplots."""
@@ -64,12 +63,13 @@ class Plot(object):
             plt.title(title)
         return figure
 
-    ## Box and Violin plots for mean score, score differences, wins, and match
-    ## lengths
+    # Box and Violin plots for mean score, score differences, wins, and match
+    # lengths
 
     @property
     def _boxplot_dataset(self):
-        return [self.result_set.normalised_scores[ir] for ir in self.result_set.ranking]
+        return [self.result_set.normalised_scores[ir]
+                for ir in self.result_set.ranking]
 
     @property
     def _boxplot_xticks_locations(self):
@@ -99,7 +99,8 @@ class Plot(object):
         wins = self.result_set.wins
         players = self.result_set.players
         medians = map(median, wins)
-        medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
+        medians = sorted(
+            [(m, i) for (i, m) in enumerate(medians)], reverse=True)
         # Reorder and grab names
         wins = [wins[x[-1]] for x in medians]
         ranked_names = [str(players[x[-1]]) for x in medians]
@@ -128,13 +129,13 @@ class Plot(object):
     def _sd_ordering(self):
         return self.result_set.ranking
 
-        ## Sort by median then max
-        #from operator import itemgetter
-        #diffs = self.result_set.score_diffs
-        #to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
-        #to_sort.sort(reverse=True, key=itemgetter(0, 1))
-        #ordering = [x[-1] for x in to_sort]
-        #return ordering
+        # Sort by median then max
+        # from operator import itemgetter
+        # diffs = self.result_set.score_diffs
+        # to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
+        # to_sort.sort(reverse=True, key=itemgetter(0, 1))
+        # ordering = [x[-1] for x in to_sort]
+        # return ordering
 
     @property
     def _sdv_plot_dataset(self):
@@ -174,7 +175,7 @@ class Plot(object):
             figure = self._boxplot(data, names, title=title)
         return figure
 
-    ## Payoff heatmaps
+    # Payoff heatmaps
 
     @property
     def _payoff_dataset(self):
@@ -234,7 +235,7 @@ class Plot(object):
         names = self.result_set.ranked_names
         return self._payoff_heatmap(data, names)
 
-    ## Ecological Plot
+    # Ecological Plot
 
     def stackplot(self, eco):
 

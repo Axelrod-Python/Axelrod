@@ -120,7 +120,7 @@ class ResultSet(object):
 
         for rep, matches_dict in enumerate(self.matches):
             for index_pair, match in matches_dict.items():
-                if index_pair[0] != index_pair[1]:  # Ignoring self interactions
+                if index_pair[0] != index_pair[1]: # Ignoring self interactions
                     for player in range(2):
                         player_index = index_pair[player]
                         player_score = match.final_score()[player]
@@ -156,7 +156,7 @@ class ResultSet(object):
 
         for rep, matches_dict in enumerate(self.matches):
             for index_pair, match in matches_dict.items():
-                if index_pair[0] != index_pair[1]:  # Ignoring self interactions
+                if index_pair[0] != index_pair[1]:  # Ignore self interactions
                     for player in range(2):
                         player_index = index_pair[player]
 
@@ -182,13 +182,14 @@ class ResultSet(object):
         In Axelrod's original tournament, there were no self-interactions
         (e.g. player 1 versus player 1) and so these are also ignored.
         """
-        normalised_scores = [[[] for rep in range(self.nrepetitions)] for _ in
-                 range(self.nplayers)]
+        normalised_scores = [
+            [[] for rep in range(self.nrepetitions)] for _ in
+            range(self.nplayers)]
 
         # Getting list of all per turn scores for each player for each rep
         for rep, matches_dict in enumerate(self.matches):
             for index_pair, match in matches_dict.items():
-                if index_pair[0] != index_pair[1]:  # Ignoring self interactions
+                if index_pair[0] != index_pair[1]:  # Ignore self interactions
                     for player in range(2):
                         player_index = index_pair[player]
                         score_per_turn = match.final_score_per_turn()[player]
@@ -199,7 +200,6 @@ class ResultSet(object):
         for i, rep in enumerate(normalised_scores):
             for j, player_scores in enumerate(rep):
                 normalised_scores[i][j] = mean(player_scores)
-
 
         return normalised_scores
 
@@ -485,7 +485,7 @@ class ResultSet(object):
                                          rep in self.match_lengths])
                                    for playeri in plist]
         lengths = [[sum(e) for j, e in enumerate(row) if i != j] for i, row in
-                    enumerate(total_length_v_opponent)]
+                   enumerate(total_length_v_opponent)]
 
         # Max is to deal with edge cases of matches that have no turns
         return [sum(cs) / max(1, float(sum(ls))) for cs, ls
@@ -532,7 +532,9 @@ class ResultSet(object):
         for playeri in plist:
             total_interactions = 0
             for rep in self.matches:
-                total_interactions += len([pair for pair in rep.keys() if playeri in pair and pair[0] != pair[1]])
+                total_interactions += len(
+                    [pair for pair in rep.keys()
+                     if playeri in pair and pair[0] != pair[1]])
             # Max is to deal with edge case of matchs with no turns
             rating = sum(self.good_partner_matrix[playeri]) / max(1, float(total_interactions))
             good_partner_rating.append(rating)
@@ -544,7 +546,7 @@ class ResultSet(object):
         Obtain the eigenjesus rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
-        #return ac.eigenvector(self.normalised_cooperation)
+        # return ac.eigenvector(self.normalised_cooperation)
         eigenvector, eigenvalue = eigen.principal_eigenvector(
                 self.normalised_cooperation)
         return eigenvector.tolist()

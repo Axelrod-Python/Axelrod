@@ -4,6 +4,7 @@ from axelrod import Actions
 
 C, D = Actions.C, Actions.D
 
+
 def sparkline(actions, c_symbol=u'█', d_symbol=u' '):
     return u''.join([
         c_symbol if play == 'C' else d_symbol for play in actions])
@@ -86,7 +87,8 @@ class Match(object):
             while turn < self._turns:
                 turn += 1
                 self.players[0].play(self.players[1], self._noise)
-            result = list(zip(self.players[0].history, self.players[1].history))
+            result = list(
+                zip(self.players[0].history, self.players[1].history))
 
             if self._cache_update_required:
                 self._cache[self._classes] = result
@@ -121,8 +123,9 @@ class Match(object):
         if len(scores) == 0:
             return None
 
-        final_score_per_turn = tuple(sum([score[playeri] for score in scores]) /
-                            (float(self._turns)) for playeri in [0, 1])
+        final_score_per_turn = tuple(
+            sum([score[playeri] for score in scores]) / (float(self._turns))
+            for playeri in [0, 1])
         return final_score_per_turn
 
     def winner(self, game=None):
@@ -143,7 +146,7 @@ class Match(object):
             return None
 
         cooperation = tuple(sum([play[playeri] == C for play in self.result])
-                                 for playeri in [0, 1])
+                            for playeri in [0, 1])
         return cooperation
 
     def normalised_cooperation(self):
@@ -153,7 +156,8 @@ class Match(object):
         if len(self.result) == 0:
             return None
 
-        normalised_cooperation = tuple([c / float(self._turns) for c in cooperation])
+        normalised_cooperation = tuple(
+            [c / float(self._turns) for c in cooperation])
 
         return normalised_cooperation
 

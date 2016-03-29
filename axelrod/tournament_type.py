@@ -83,7 +83,6 @@ class RoundRobin(TournamentType):
                      cache_mutable, noise)
 
 
-
 class ProbEndRoundRobin(RoundRobin):
 
     clone_opponents = True
@@ -103,8 +102,9 @@ class ProbEndRoundRobin(RoundRobin):
         deterministic_cache : dictionary
             A cache of resulting actions for deterministic matches
         """
-        super(ProbEndRoundRobin, self).__init__(players, turns=float("inf"),
-                                                deterministic_cache=deterministic_cache)
+        super(ProbEndRoundRobin, self).__init__(
+            players, turns=float("inf"),
+            deterministic_cache=deterministic_cache)
         self.prob_end = prob_end
 
     def build_matches(self, cache_mutable=False, noise=0):
