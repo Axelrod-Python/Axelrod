@@ -1,6 +1,5 @@
-
 from numpy.linalg import LinAlgError
-from numpy import arange, mean, median
+from numpy import arange, median
 from warnings import warn
 
 matplotlib_installed = True
@@ -28,7 +27,7 @@ class Plot(object):
         self.result_set = result_set
         self.matplotlib_installed = matplotlib_installed
 
-    ## Abstract Box and Violin plots
+    # Abstract Box and Violin plots
 
     def _boxplot(self, data, names, title=None):
         """For making boxplots."""
@@ -64,11 +63,13 @@ class Plot(object):
             plt.title(title)
         return figure
 
-    ## Box and Violin plots for mean score, score diferrences, and wins
+    # Box and Violin plots for mean score, score differences, wins, and match
+    # lengths
 
     @property
     def _boxplot_dataset(self):
-        return [self.result_set.normalised_scores[ir] for ir in self.result_set.ranking]
+        return [self.result_set.normalised_scores[ir]
+                for ir in self.result_set.ranking]
 
     @property
     def _boxplot_xticks_locations(self):
@@ -78,19 +79,10 @@ class Plot(object):
     def _boxplot_xticks_labels(self):
         return [str(n) for n in self.result_set.ranked_names]
 
-    @property
-    def _boxplot_title(self):
-        return ("Mean score per stage game over {} "
-                "turns repeated {} times ({} strategies)").format(
-            self.result_set.turns,
-            self.result_set.repetitions,
-            len(self.result_set.ranking))
-
-    def boxplot(self):
+    def boxplot(self, title=None):
         """For the specific mean score boxplot."""
         data = self._boxplot_dataset
         names = self._boxplot_xticks_labels
-        title = self._boxplot_title
         try:
             figure = self._violinplot(data, names, title=title)
         except LinAlgError:
@@ -107,27 +99,19 @@ class Plot(object):
         wins = self.result_set.wins
         players = self.result_set.players
         medians = map(median, wins)
-        medians = sorted([(m, i) for (i, m) in enumerate(medians)], reverse=True)
+        medians = sorted(
+            [(m, i) for (i, m) in enumerate(medians)], reverse=True)
         # Reorder and grab names
         wins = [wins[x[-1]] for x in medians]
         ranked_names = [str(players[x[-1]]) for x in medians]
         return wins, ranked_names
 
-    @property
-    def _winplot_title(self):
-        return ("Distributions of wins:"
-                " {} turns repeated {} times ({} strategies)").format(
-            self.result_set.turns,
-            self.result_set.repetitions,
-            len(self.result_set.ranking))
-
-    def winplot(self):
+    def winplot(self, title=None):
         """Plots the distributions for the number of wins for each strategy."""
         if not self.matplotlib_installed:
             return None
 
         data, names = self._winplot_dataset
-        title = self._winplot_title
         try:
             figure = self._violinplot(data, names, title)
         except LinAlgError:
@@ -142,24 +126,16 @@ class Plot(object):
         return figure
 
     @property
-    def _sdv_plot_title(self):
-        return ("Distributions of payoff differences per stage game over {} "
-                "turns repeated {} times ({} strategies)").format(
-            self.result_set.turns,
-            self.result_set.repetitions,
-            len(self.result_set.ranking))
-
-    @property
     def _sd_ordering(self):
         return self.result_set.ranking
 
-        ## Sort by median then max
-        #from operator import itemgetter
-        #diffs = self.result_set.score_diffs
-        #to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
-        #to_sort.sort(reverse=True, key=itemgetter(0, 1))
-        #ordering = [x[-1] for x in to_sort]
-        #return ordering
+        # Sort by median then max
+        # from operator import itemgetter
+        # diffs = self.result_set.score_diffs
+        # to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
+        # to_sort.sort(reverse=True, key=itemgetter(0, 1))
+        # ordering = [x[-1] for x in to_sort]
+        # return ordering
 
     @property
     def _sdv_plot_dataset(self):
@@ -171,20 +147,41 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return diffs, ranked_names
 
-    def sdvplot(self):
+    def sdvplot(self, title=None):
         """Score difference violinplots to visualize the distributions of how
         players attain their payoffs."""
         diffs, ranked_names = self._sdv_plot_dataset
-        title = self._sdv_plot_title
         figure = self._violinplot(diffs, ranked_names, title)
         return figure
 
-    ## Payoff heatmaps
+    @property
+    def _lengthplot_dataset(self):
+        match_lengths = self.result_set.match_lengths
+        return [[length for rep in match_lengths
+                 for length in rep[playeri]] for playeri in
+                self.result_set.ranking]
+
+    def lengthplot(self, title=None):
+        """For the specific match length boxplot."""
+        data = self._lengthplot_dataset
+        names = self._boxplot_xticks_labels
+        try:
+            figure = self._violinplot(data, names, title=title)
+        except LinAlgError:
+            # Matplotlib doesn't handle single point distributions well
+            # in violin plots. Should be fixed in next release:
+            # https://github.com/matplotlib/matplotlib/pull/4816
+            # Fall back to boxplot
+            figure = self._boxplot(data, names, title=title)
+        return figure
+
+    # Payoff heatmaps
 
     @property
     def _payoff_dataset(self):
-        return [[self.result_set.payoff_matrix[r1][r2]
-                for r2 in self.result_set.ranking]
+        pm = self.result_set.payoff_matrix
+        return [[pm[r1][r2]
+                 for r2 in self.result_set.ranking]
                 for r1 in self.result_set.ranking]
 
     @property
@@ -238,7 +235,7 @@ class Plot(object):
         names = self.result_set.ranked_names
         return self._payoff_heatmap(data, names)
 
-    ## Ecological Plot
+    # Ecological Plot
 
     def stackplot(self, eco):
 

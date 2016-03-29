@@ -5,9 +5,7 @@ import multiprocessing
 
 from .game import Game
 from .result_set import ResultSet
-from .tournament_type import RoundRobin
-from .payoff import payoff_matrix
-from .cooperation import cooperation_matrix
+from .tournament_type import RoundRobin, ProbEndRoundRobin
 
 
 class Tournament(object):
@@ -15,8 +13,7 @@ class Tournament(object):
 
     def __init__(self, players, tournament_type=RoundRobin, name='axelrod',
                  game=None, turns=200, repetitions=10, processes=None,
-                 prebuilt_cache=False, noise=0, with_morality=True,
-                 keep_matches=False):
+                 prebuilt_cache=False, noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -55,11 +52,9 @@ class Tournament(object):
         self.tournament_type = tournament_type(
             players, turns, self.deterministic_cache)
         self._with_morality = with_morality
-        self._keep_matches = keep_matches
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self._outcome = {'payoff': [], 'cooperation': []}
         self.matches = []
 
     @property
@@ -87,19 +82,28 @@ class Tournament(object):
         axelrod.ResultSet
         """
         if self._processes is None:
-            self._run_serial_repetitions(self._outcome)
+            self._run_serial_repetitions(self.matches)
         else:
             if self._build_cache_required():
-                self._build_cache(self._outcome)
-            self._run_parallel_repetitions(self._outcome)
+                self._build_cache(self.matches)
+            self._run_parallel_repetitions(self.matches)
 
-        self.result_set = ResultSet(
-            players=self.players,
-            turns=self.turns,
-            repetitions=self.repetitions,
-            outcome=self._outcome,
-            with_morality=self._with_morality)
+        self.result_set = self._build_result_set()
         return self.result_set
+
+    def _build_result_set(self):
+        """
+        Build the result set (used by the play method)
+
+        Returns
+        -------
+        axelrod.ResultSet
+        """
+        result_set = ResultSet(
+            players=self.players,
+            matches=self.matches,
+            with_morality=self._with_morality)
+        return result_set
 
     def _build_cache_required(self):
         """
@@ -111,54 +115,51 @@ class Tournament(object):
                 len(self.deterministic_cache) == 0 or
                 not self.prebuilt_cache))
 
-    def _build_cache(self, outcome):
+    def _build_cache(self, matches):
         """
         For parallel processing, this runs a single round robin in order to
         build the deterministic cache.
 
         Parameters
         ----------
-        outcome : dictionary
-            The outcome dictionary to update with results
+        matches : list
+            The list of matches to update
         """
         self._logger.debug('Playing first round robin to build cache')
-        self._run_single_repetition(outcome)
+        self._run_single_repetition(matches)
         self._parallel_repetitions -= 1
 
-    def _run_single_repetition(self, outcome):
+    def _run_single_repetition(self, matches):
         """
-        Runs a single round robin and updates the outcome dictionary.
+        Runs a single round robin and updates the matches list.
         """
-        matches = self.tournament_type.build_matches(
+        new_matches = self.tournament_type.build_matches(
             cache_mutable=True, noise=self.noise)
-        output = self._play_matches(matches)
-        outcome['payoff'].append(output['payoff'])
-        outcome['cooperation'].append(output['cooperation'])
-        if self._keep_matches:
-            self.matches.append(output['matches'])
+        self._play_matches(new_matches)
+        self.matches.append(new_matches)
 
-    def _run_serial_repetitions(self, outcome):
+    def _run_serial_repetitions(self, matches):
         """
         Runs all repetitions of the round robin in serial.
 
         Parameters
         ----------
-        outcome : dictionary
-            The outcome dictionary to update with results
+        matches : list
+            The list of matches per repetition to update with results
         """
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            self._run_single_repetition(outcome)
+            self._run_single_repetition(matches)
         return True
 
-    def _run_parallel_repetitions(self, outcome):
+    def _run_parallel_repetitions(self, matches):
         """
         Run all except the first round robin using parallel processing.
 
         Parameters
         ----------
-        outcome : dictionary
-            The outcome dictionary to update with results
+        matches : list
+            The list of matches per repetition to update with results
         """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
@@ -174,7 +175,7 @@ class Tournament(object):
             'Playing %d round robins with %d parallel processes' %
             (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, outcome)
+        self._process_done_queue(workers, done_queue, matches)
 
         return True
 
@@ -212,9 +213,9 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, outcome):
+    def _process_done_queue(self, workers, done_queue, matches):
         """
-        Retrieves the outcome dictionaries from the parallel sub-processes
+        Retrieves the matches from the parallel sub-processes
 
         Parameters
         ----------
@@ -222,19 +223,16 @@ class Tournament(object):
             The number of sub-processes in existence
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
-        outcome : dictionary
-           The outcome dictionary to update with results
+        matches : list
+            The list of matches per repetition to update with results
         """
         stops = 0
         while stops < workers:
-            output = done_queue.get()
-            if output == 'STOP':
+            new_matches = done_queue.get()
+            if new_matches == 'STOP':
                 stops += 1
             else:
-                outcome['payoff'].append(output['payoff'])
-                outcome['cooperation'].append(output['cooperation'])
-                if self._keep_matches:
-                    self.matches.append(outcome['matches'])
+                matches.append(new_matches)
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -249,10 +247,10 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for repetition in iter(work_queue.get, 'STOP'):
-            matches = self.tournament_type.build_matches(
+            new_matches = self.tournament_type.build_matches(
                 cache_mutable=False, noise=self.noise)
-            output = self._play_matches(matches)
-            done_queue.put(output)
+            self._play_matches(new_matches)
+            done_queue.put(new_matches)
         done_queue.put('STOP')
         return True
 
@@ -265,24 +263,59 @@ class Tournament(object):
         matches : dictionary
             Mapping a tuple of player index numbers to an axelrod Match object
 
-        Returns
-        -------
-        dictionary
-            Containing the payoff and cooperation matrices
         """
-        interactions = {}
-        if self._keep_matches:
-            matches_to_keep = []
+        for match in matches.values():
+            match.play()
 
-        for key, match in matches.items():
-            interactions[key] = match.play()
-            if self._keep_matches:
-                matches_to_keep.append(match)
 
-        payoff = payoff_matrix(interactions, self.game)
-        cooperation = cooperation_matrix(interactions)
+class ProbEndTournament(Tournament):
+    """
+    A tournament in which the player don't know the length of a given match
+    (currently implemented by setting this to be infinite). The length of a
+    match is equivalent to randomly sampling after each round whether or not to
+    continue.
+    """
 
-        output = {'payoff': payoff, 'cooperation': cooperation}
-        if self._keep_matches:
-            output['matches'] = matches_to_keep
-        return output
+    def __init__(self, players, tournament_type=ProbEndRoundRobin,
+                 name='axelrod', game=None, prob_end=.5, repetitions=10,
+                 processes=None, prebuilt_cache=False, noise=0,
+                 with_morality=True):
+        """
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+        tournament_type : class
+            A class that must be descended from axelrod.TournamentType
+        name : string
+            A name for the tournament
+        game : axelrod.Game
+            The game object used to score the tournament
+        prob_end : a float
+            The probability of a given match ending
+        repetitions : integer
+            The number of times the round robin should be repeated
+        processes : integer
+            The number of processes to be used for parallel processing
+        prebuilt_cache : boolean
+            Whether a cache has been passed in from an external object
+        noise : float
+            The probability that a player's intended action should be flipped
+        with_morality : boolean
+            Whether morality metrics should be calculated
+        """
+        super(ProbEndTournament, self).__init__(
+            players, name=name, game=game, turns=float("inf"),
+            repetitions=repetitions, processes=processes,
+            prebuilt_cache=prebuilt_cache, noise=noise,
+            with_morality=with_morality)
+
+        self.prob_end = prob_end
+        self.tournament_type = ProbEndRoundRobin(
+            players, prob_end, self.deterministic_cache)
+
+    def _build_cache_required(self):
+        """
+        A cache is never required (as every Match length can be different)
+        """
+        return False

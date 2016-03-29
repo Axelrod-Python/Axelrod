@@ -18,14 +18,20 @@ class TestMatch(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match = axelrod.Match((p1, p2), turns)
         self.assertEqual(match.result, [])
-        self.assertEqual(match.player1, p1)
-        self.assertEqual(match.player2, p2)
+        self.assertEqual(match.players, [p1, p2])
         self.assertEqual(
             match._classes, (axelrod.Cooperator, axelrod.Cooperator))
         self.assertEqual(match._turns, turns)
         self.assertEqual(match._cache, {})
         self.assertEqual(match._cache_mutable, True)
         self.assertEqual(match._noise, 0)
+
+    @given(turns=integers(min_value=1, max_value=200))
+    @example(turns=5)
+    def test_len(self, turns):
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+        match = axelrod.Match((p1, p2), turns)
+        self.assertEqual(len(match), turns)
 
     @given(p=floats(min_value=0, max_value=1),
            rm=random_module())
@@ -86,6 +92,91 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.scores(), [])
         match.play()
         self.assertEqual(match.scores(), [(0, 5), (1, 1), (1, 1)])
+
+    def test_final_score(self):
+        player1 = axelrod.TitForTat()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), 3)
+        self.assertEqual(match.final_score(), None)
+        match.play()
+        self.assertEqual(match.final_score(), (2, 7))
+
+        match = axelrod.Match((player2, player1), 3)
+        self.assertEqual(match.final_score(), None)
+        match.play()
+        self.assertEqual(match.final_score(), (7, 2))
+
+    def test_final_score_per_turn(self):
+        turns = 3.0
+        player1 = axelrod.TitForTat()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.final_score_per_turn(), None)
+        match.play()
+        self.assertEqual(match.final_score_per_turn(), (2/turns, 7/turns))
+
+        match = axelrod.Match((player2, player1), turns)
+        self.assertEqual(match.final_score_per_turn(), None)
+        match.play()
+        self.assertEqual(match.final_score_per_turn(), (7/turns, 2/turns))
+
+    def test_winner(self):
+        player1 = axelrod.TitForTat()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), 3)
+        self.assertEqual(match.winner(), None)
+        match.play()
+        self.assertEqual(match.winner(), player2)
+
+        match = axelrod.Match((player2, player1), 3)
+        self.assertEqual(match.winner(), None)
+        match.play()
+        self.assertEqual(match.winner(), player2)
+
+        player1 = axelrod.Defector()
+        match = axelrod.Match((player1, player2), 3)
+        self.assertEqual(match.winner(), None)
+        match.play()
+        self.assertEqual(match.winner(), False)
+
+    def test_cooperation(self):
+        turns = 3.0
+        player1 = axelrod.Cooperator()
+        player2 = axelrod.Alternator()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.cooperation(), None)
+        match.play()
+        self.assertEqual(match.cooperation(), (3, 2))
+
+        player1 = axelrod.Alternator()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.cooperation(), None)
+        match.play()
+        self.assertEqual(match.cooperation(), (2, 0))
+
+    def test_normalised_cooperation(self):
+        turns = 3.0
+        player1 = axelrod.Cooperator()
+        player2 = axelrod.Alternator()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.normalised_cooperation(), None)
+        match.play()
+        self.assertEqual(match.normalised_cooperation(), (3/turns, 2/turns))
+
+        player1 = axelrod.Alternator()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.normalised_cooperation(), None)
+        match.play()
+        self.assertEqual(match.normalised_cooperation(), (2/turns, 0/turns))
 
     def test_sparklines(self):
         players = (axelrod.Cooperator(), axelrod.Alternator())

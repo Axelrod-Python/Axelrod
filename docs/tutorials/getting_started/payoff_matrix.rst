@@ -1,3 +1,5 @@
+.. _payoff-matrix:
+
 Accessing the payoff matrix
 ===========================
 
