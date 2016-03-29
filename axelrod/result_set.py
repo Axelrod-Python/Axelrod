@@ -16,12 +16,15 @@ class ResultSet(object):
 
     def __init__(self, players, matches, with_morality=True):
         """
-        Args:
-            players (list): a list of player objects.
-            matches (list): a list of list of completed matches
-                            (1 for each repetition)
-            with_morality (bool): a flag to determine whether morality metrics
-                should be calculated.
+        Parameters
+        ----------
+            players : list
+                a list of player objects.
+            matches : list
+                a list of list of completed matches (1 for each repetition)
+            with_morality : bool
+                a flag to determine whether morality metrics should be
+                calculated.
         """
         self.players = players
         self.nplayers = len(players)
