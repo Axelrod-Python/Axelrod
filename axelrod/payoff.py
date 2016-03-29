@@ -52,7 +52,7 @@ def player_count(interactions):
 
             n = (-1 +- sqrt(1 + 8p)) / 2
 
-        Taking only the non negative root allows us to derive the number of
+        Taking only the nonnegative root allows us to derive the number of
         players given the number of pairs:
 
             n = (sqrt(8p + 1) -1) / 2
