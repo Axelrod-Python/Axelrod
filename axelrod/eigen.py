@@ -44,7 +44,7 @@ def power_iteration(mat, initial):
         yield vec
 
 
-def principal_eigenvector(mat, maximum_iterations=None, max_error=1e-8):
+def principal_eigenvector(mat, maximum_iterations=1000, max_error=1e-3):
     """
     Computes the (normalised) principal eigenvector of the given matrix.
 

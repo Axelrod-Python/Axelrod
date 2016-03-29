@@ -6,8 +6,6 @@ import multiprocessing
 from .game import Game
 from .result_set import ResultSet
 from .tournament_type import RoundRobin, ProbEndRoundRobin
-from .payoff import payoff_matrix
-from .cooperation import cooperation_matrix
 
 
 class Tournament(object):
@@ -57,7 +55,6 @@ class Tournament(object):
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self._outcome = {'payoff': [], 'cooperation': [], 'matches': []}
         self.matches = []
 
     @property
@@ -314,7 +311,6 @@ class ProbEndTournament(Tournament):
         self.prob_end = prob_end
         self.tournament_type = ProbEndRoundRobin(
             players, prob_end, self.deterministic_cache)
-        self._outcome['match_lengths'] = []
 
     def _build_cache_required(self):
         """

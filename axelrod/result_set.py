@@ -1,5 +1,5 @@
 import csv
-from axelrod import cooperation as ac
+from . import eigen
 
 from numpy import mean, median, std
 
@@ -544,13 +544,18 @@ class ResultSet(object):
         Obtain the eigenjesus rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
-        return ac.eigenvector(self.normalised_cooperation)
+        #return ac.eigenvector(self.normalised_cooperation)
+        eigenvector, eigenvalue = eigen.principal_eigenvector(
+                self.normalised_cooperation)
+        return eigenvector.tolist()
 
     def build_eigenmoses_rating(self):
         """Obtain the eigenmoses rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
-        return ac.eigenvector(self.vengeful_cooperation)
+        eigenvector, eigenvalue = eigen.principal_eigenvector(
+                self.vengeful_cooperation)
+        return eigenvector.tolist()
 
     def csv(self):
         csv_string = StringIO()
