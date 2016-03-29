@@ -546,7 +546,6 @@ class ResultSet(object):
         Obtain the eigenjesus rating as defined in:
         http://www.scottaaronson.com/morality.pdf
         """
-        # return ac.eigenvector(self.normalised_cooperation)
         eigenvector, eigenvalue = eigen.principal_eigenvector(
                 self.normalised_cooperation)
         return eigenvector.tolist()
