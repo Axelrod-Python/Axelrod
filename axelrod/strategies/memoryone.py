@@ -72,6 +72,14 @@ class WinStayLoseShift(MemoryOnePlayer):
     """Win-Stay Lose-Shift, also called Pavlov."""
 
     name = 'Win-Stay Lose-Shift'
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     @init_args
     def __init__(self, initial=C):
