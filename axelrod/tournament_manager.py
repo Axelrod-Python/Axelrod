@@ -11,6 +11,10 @@ from .utils import *
 
 class TournamentManager(object):
 
+    plot_types = {'boxplot': "Payoffs. ", 'payoff': "Payoffs. ",
+                  'winplot': "Wins. ", 'sdvplot': "Std Payoffs. ",
+                  'pdplot': "Payoff differences. ", 'lengthplot': "Lengths. "}
+
     def __init__(self, output_directory, with_ecological,
                  pass_cache=True, load_cache=True, save_cache=False,
                  cache_file='./cache.txt', image_format="svg"):
@@ -128,16 +132,23 @@ class TournamentManager(object):
             self._logger.error('The matplotlib library is not installed. '
                             'No plots will be produced')
             return
-        for plot_type in ('boxplot', 'payoff', 'winplot', 'sdvplot', 'pdplot'):
-            figure = getattr(plot, plot_type)()
+        label = self._tournament_label(tournament)
+        for plot_type, name in self.plot_types.items():
+            title = name + label
+            figure = getattr(plot, plot_type)(title=title)
             file_name = self._output_file_path(
                 tournament.name + '_' + plot_type, image_format)
             self._save_plot(figure, file_name)
         if ecosystem is not None:
-            figure = plot.stackplot(ecosystem)
+            figure = plot.stackplot(ecosystem, title=title)
             file_name = self._output_file_path(
                     tournament.name + '_reproduce', image_format)
             self._save_plot(figure, file_name)
+
+    def _tournament_label(self, tournament):
+        """A label for the tournament for the corresponding title plots"""
+        return "Turns: {}, Repetitions: {}".format(tournament.turns,
+                tournament.repetitions)
 
     def _output_file_path(self, file_name, file_extension):
         return os.path.join(
