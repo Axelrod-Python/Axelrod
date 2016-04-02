@@ -213,8 +213,9 @@ class ProbEndTournamentManager(TournamentManager):
 
     def _tournament_label(self, tournament):
         """A label for the tournament for the corresponding title plots"""
-        return "Prob end: {}, Repetitions: {}".format(tournament.prob_end,
-                                                      tournament.repetitions)
+        return "Prob end: {}, Repetitions: {}, Strategies: {}.".format(tournament.prob_end,
+                                                       tournament.repetitions,
+                                                       len(tournament.players))
 
 
 class DeterministicCache(object):
