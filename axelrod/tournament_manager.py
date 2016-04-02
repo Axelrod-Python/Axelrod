@@ -16,6 +16,13 @@ class TournamentManager(object):
                   'winplot': "Wins. ", 'sdvplot': "Std Payoffs. ",
                   'pdplot': "Payoff differences. ", 'lengthplot': "Lengths. "}
 
+    ecoturns = {
+            'basic_strategies': 1000,
+            'cheating_strategies': 10,
+            'strategies': 1000,
+            'all_strategies': 10,
+        }
+
     def __init__(self, output_directory, with_ecological,
                  pass_cache=True, load_cache=True, save_cache=False,
                  cache_file='./cache.txt', image_format="svg"):
@@ -104,13 +111,7 @@ class TournamentManager(object):
         self._logger.debug(
             'Starting ecological variant of %s' % tournament.name)
         t0 = time.time()
-        ecoturns = {
-            'basic_strategies': 1000,
-            'cheating_strategies': 10,
-            'strategies': 1000,
-            'all_strategies': 10,
-        }
-        ecosystem.reproduce(ecoturns.get(tournament.name))
+        ecosystem.reproduce(self.ecoturns.get(tournament.name))
         self._logger.debug(
             timed_message('Finished ecological variant of %s' % tournament.name, t0))
 
@@ -189,6 +190,14 @@ class TournamentManager(object):
 
 class ProbEndTournamentManager(TournamentManager):
     """A class to manage and create probabilistic ending tournaments."""
+
+    ecoturns = {
+            'basic_strategies_prob_end': 1000,
+            'cheating_strategies_prob_end': 10,
+            'strategies_prob_end': 1000,
+            'all_strategies_prob_end': 10,
+        }
+
     def add_tournament(self, name, players, game=None, prob_end=.01,
                        repetitions=10, processes=None, noise=0,
                        with_morality=True):

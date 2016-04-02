@@ -16,4 +16,4 @@ from .tournament_manager_factory import (TournamentManagerFactory,
                                          ProbEndTournamentManagerFactory)
 from .result_set import ResultSet
 from .ecosystem import Ecosystem
-from .utils import run_tournaments, setup_logging
+from .utils import run_tournaments, run_prob_end_tournaments, setup_logging

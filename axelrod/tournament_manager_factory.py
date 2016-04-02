@@ -101,3 +101,24 @@ class ProbEndTournamentManagerFactory(TournamentManagerFactory):
         cls._add_tournaments(manager, exclusions, kwargs)
 
         return manager
+
+    @staticmethod
+    def _tournaments_dict(exclusions=None):
+        if exclusions is None:
+            exclusions = []
+
+        tournaments = OrderedDict([
+            ('basic_strategies', axelrod.basic_strategies),
+            ('strategies',
+                axelrod.ordinary_strategies),
+            ('cheating_strategies', axelrod.cheating_strategies),
+            ('all_strategies',
+                axelrod.ordinary_strategies +
+                axelrod.cheating_strategies)
+        ])
+
+        return OrderedDict([
+            (key+'_prob_end', value) for
+            key, value in tournaments.items() if key not in exclusions
+        ])
+
