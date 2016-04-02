@@ -70,6 +70,7 @@ class TestTournamentManager(unittest.TestCase):
         mgr = axelrod.TournamentManager(
             output_directory=self.test_output_directory,
             with_ecological=self.test_with_ecological, load_cache=False)
-        expected_label = "Turns: {}, Repetitions: {}".format(tournament.turns,
-                tournament.repetitions)
+        expected_label = "Turns: {}, Repetitions: {}, Strategies: {}.".format(tournament.turns,
+                tournament.repetitions, len(tournament.players))
+
         self.assertEqual(mgr._tournament_label(tournament), expected_label)
