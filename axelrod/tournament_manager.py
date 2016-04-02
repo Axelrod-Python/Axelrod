@@ -19,8 +19,8 @@ class TournamentManager(object):
     ecoturns = {
             'basic_strategies': 1000,
             'cheating_strategies': 10,
-            'strategies': 1000,
-            'all_strategies': 10,
+            'ordinary_strategies': 1000,
+            'strategies': 10,
         }
 
     def __init__(self, output_directory, with_ecological,
@@ -194,8 +194,8 @@ class ProbEndTournamentManager(TournamentManager):
     ecoturns = {
             'basic_strategies_prob_end': 1000,
             'cheating_strategies_prob_end': 10,
-            'strategies_prob_end': 1000,
-            'all_strategies_prob_end': 10,
+            'ordinary_strategies_prob_end': 1000,
+            'strategies_prob_end': 10,
         }
 
     def add_tournament(self, name, players, game=None, prob_end=.01,

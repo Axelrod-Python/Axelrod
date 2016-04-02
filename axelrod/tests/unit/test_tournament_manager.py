@@ -108,6 +108,7 @@ class TestProbEndTournamentManager(unittest.TestCase):
         mgr = self.mgr_class(
             output_directory=self.test_output_directory,
             with_ecological=self.test_with_ecological, load_cache=False)
-        expected_label = "Prob end: {}, Repetitions: {}".format(tournament.prob_end,
-                tournament.repetitions)
+        expected_label = "Prob end: {}, Repetitions: {}, Strategies: {}.".format(tournament.prob_end,
+                    tournament.repetitions,
+                    len(tournament.players))
         self.assertEqual(mgr._tournament_label(tournament), expected_label)

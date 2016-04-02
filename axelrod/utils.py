@@ -37,6 +37,17 @@ def setup_logging(logging_destination='console', verbosity='INFO'):
     logger.addHandler(logHandler)
 
 
+def build_exclusions_dict(exclude_basic, exclude_ordinary,
+                          exclude_cheating, exclude_combined):
+    """A utility function to return a dictionary mapping tournament string names
+    to booleans."""
+    return {
+        'basic_strategies': exclude_basic,
+        'strategies': exclude_ordinary,
+        'cheating_strategies': exclude_cheating,
+        'all_strategies': exclude_combined}
+
+
 def run_tournaments(cache_file='./cache.txt',
                     output_directory='./',
                     repetitions=10,
@@ -51,11 +62,8 @@ def run_tournaments(cache_file='./cache.txt',
                     noise=0,
                     image_format="svg"):
 
-    exclusions_dict = {
-        'basic_strategies': exclude_basic,
-        'strategies': exclude_ordinary,
-        'cheating_strategies': exclude_cheating,
-        'all_strategies': exclude_combined}
+    exclusions_dict = build_exclusions_dict(exclude_basic, exclude_ordinary,
+                                            exclude_cheating, exclude_combined)
 
     exclusions = [key for key, value in exclusions_dict.items() if value]
 
@@ -88,11 +96,8 @@ def run_prob_end_tournaments(cache_file='./cache.txt',
                     noise=0,
                     image_format="svg"):
 
-    exclusions_dict = {
-        'basic_strategies': exclude_basic,
-        'strategies': exclude_ordinary,
-        'cheating_strategies': exclude_cheating,
-        'all_strategies': exclude_combined}
+    exclusions_dict = build_exclusions_dict(exclude_basic, exclude_ordinary,
+                                            exclude_cheating, exclude_combined)
 
     exclusions = [key for key, value in exclusions_dict.items() if value]
 

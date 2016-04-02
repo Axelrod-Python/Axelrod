@@ -8,6 +8,17 @@ from .tournament_manager import *
 
 class TournamentManagerFactory(object):
 
+
+    tournaments = OrderedDict([
+        ('basic_strategies', axelrod.basic_strategies),
+        ('ordinary_strategies',
+            axelrod.ordinary_strategies),
+        ('cheating_strategies', axelrod.cheating_strategies),
+        ('strategies',
+            axelrod.ordinary_strategies +
+            axelrod.cheating_strategies)
+    ])
+
     @classmethod
     def create_tournament_manager(
             cls,
@@ -47,24 +58,14 @@ class TournamentManagerFactory(object):
             manager.add_tournament(
                 name=name, players=players, **kwargs)
 
-    @staticmethod
-    def _tournaments_dict(exclusions=None):
+    @classmethod
+    def _tournaments_dict(cls, exclusions=None):
         if exclusions is None:
             exclusions = []
 
-        tournaments = OrderedDict([
-            ('basic_strategies', axelrod.basic_strategies),
-            ('strategies',
-                axelrod.ordinary_strategies),
-            ('cheating_strategies', axelrod.cheating_strategies),
-            ('all_strategies',
-                axelrod.ordinary_strategies +
-                axelrod.cheating_strategies)
-        ])
-
         return OrderedDict([
             (key, value) for
-            key, value in tournaments.items() if key not in exclusions
+            key, value in cls.tournaments.items() if key not in exclusions
         ])
 
 
@@ -102,23 +103,12 @@ class ProbEndTournamentManagerFactory(TournamentManagerFactory):
 
         return manager
 
-    @staticmethod
-    def _tournaments_dict(exclusions=None):
+    @classmethod
+    def _tournaments_dict(cls, exclusions=None):
         if exclusions is None:
             exclusions = []
 
-        tournaments = OrderedDict([
-            ('basic_strategies', axelrod.basic_strategies),
-            ('strategies',
-                axelrod.ordinary_strategies),
-            ('cheating_strategies', axelrod.cheating_strategies),
-            ('all_strategies',
-                axelrod.ordinary_strategies +
-                axelrod.cheating_strategies)
-        ])
-
         return OrderedDict([
             (key+'_prob_end', value) for
-            key, value in tournaments.items() if key not in exclusions
+            key, value in cls.tournaments.items() if key not in exclusions
         ])
-

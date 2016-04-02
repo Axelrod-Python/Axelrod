@@ -21,10 +21,10 @@ class TestTournamentManagerFactory(unittest.TestCase):
         }
 
         cls.expected_basic_strategies = axelrod.basic_strategies
-        cls.expected_strategies = (
+        cls.expected_ordinary_strategies = (
             axelrod.ordinary_strategies)
         cls.expected_cheating_strategies = axelrod.cheating_strategies
-        cls.expected_all_strategies = (
+        cls.expected_strategies = (
             axelrod.ordinary_strategies +
             axelrod.cheating_strategies)
 
@@ -37,14 +37,14 @@ class TestTournamentManagerFactory(unittest.TestCase):
         actual_strategies = self.tmf._tournaments_dict()['strategies']
         actual_cheating_strategies = (
             self.tmf._tournaments_dict()['cheating_strategies'])
-        actual_all_strategies = self.tmf._tournaments_dict()['all_strategies']
+        actual_all_strategies = self.tmf._tournaments_dict()['strategies']
 
         self.assertEqual(
             actual_basic_strategies, self.expected_basic_strategies)
         self.assertEqual(actual_strategies, self.expected_strategies)
         self.assertEqual(
             actual_cheating_strategies, self.expected_cheating_strategies)
-        self.assertEqual(actual_all_strategies, self.expected_all_strategies)
+        self.assertEqual(actual_all_strategies, self.expected_strategies)
 
         # Tests to ensure that the exclusions list works as intended
         with_exclusions = self.tmf._tournaments_dict(self.test_exclusions)
@@ -61,7 +61,7 @@ class TestTournamentManagerFactory(unittest.TestCase):
         self.tmf._add_tournaments(mgr, self.test_exclusions, self.test_kwargs)
         self.assertEqual(len(mgr._tournaments), 2)
         self.assertIsInstance(mgr._tournaments[0], axelrod.Tournament)
-        self.assertEqual(mgr._tournaments[0].name, 'strategies')
+        self.assertEqual(mgr._tournaments[0].name, 'ordinary_strategies')
 
     def test_create_tournament_manager(self):
         mgr = self.tmf.create_tournament_manager(
@@ -98,10 +98,10 @@ class TestProbEndTournamentManagerFactory(unittest.TestCase):
         }
 
         cls.expected_basic_strategies = axelrod.basic_strategies
-        cls.expected_strategies = (
+        cls.expected_ordinary_strategies = (
             axelrod.ordinary_strategies)
         cls.expected_cheating_strategies = axelrod.cheating_strategies
-        cls.expected_all_strategies = (
+        cls.expected_strategies = (
             axelrod.ordinary_strategies +
             axelrod.cheating_strategies)
 
@@ -110,25 +110,25 @@ class TestProbEndTournamentManagerFactory(unittest.TestCase):
         # Tests to ensure that the tournaments dictionary contains the correct
         # keys and values
         actual_basic_strategies = (
-            self.tmf._tournaments_dict()['basic_strategies'])
-        actual_strategies = self.tmf._tournaments_dict()['strategies']
+            self.tmf._tournaments_dict()['basic_strategies_prob_end'])
+        actual_ordinary_strategies = self.tmf._tournaments_dict()['ordinary_strategies_prob_end']
         actual_cheating_strategies = (
-            self.tmf._tournaments_dict()['cheating_strategies'])
-        actual_all_strategies = self.tmf._tournaments_dict()['all_strategies']
+            self.tmf._tournaments_dict()['cheating_strategies_prob_end'])
+        actual_all_strategies = self.tmf._tournaments_dict()['strategies_prob_end']
 
         self.assertEqual(
             actual_basic_strategies, self.expected_basic_strategies)
-        self.assertEqual(actual_strategies, self.expected_strategies)
+        self.assertEqual(actual_ordinary_strategies, self.expected_ordinary_strategies)
         self.assertEqual(
             actual_cheating_strategies, self.expected_cheating_strategies)
-        self.assertEqual(actual_all_strategies, self.expected_all_strategies)
+        self.assertEqual(actual_all_strategies, self.expected_strategies)
 
         # Tests to ensure that the exclusions list works as intended
         with_exclusions = self.tmf._tournaments_dict(self.test_exclusions)
         self.assertFalse('basic_strategies' in with_exclusions)
         self.assertFalse('cheating_strategies' in with_exclusions)
         self.assertEqual(
-            with_exclusions['strategies'], self.expected_strategies)
+            with_exclusions['strategies_prob_end'], self.expected_strategies)
 
     def test_add_tournaments(self):
         mgr = axelrod.ProbEndTournamentManager(
@@ -138,7 +138,7 @@ class TestProbEndTournamentManagerFactory(unittest.TestCase):
         self.tmf._add_tournaments(mgr, self.test_exclusions, self.test_kwargs)
         self.assertEqual(len(mgr._tournaments), 2)
         self.assertIsInstance(mgr._tournaments[0], axelrod.Tournament)
-        self.assertEqual(mgr._tournaments[0].name, 'strategies')
+        self.assertEqual(mgr._tournaments[0].name, 'ordinary_strategies_prob_end')
 
     def test_create_tournament_manager(self):
         mgr = self.tmf.create_tournament_manager(

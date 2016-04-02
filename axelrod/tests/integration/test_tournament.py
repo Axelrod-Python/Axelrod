@@ -109,7 +109,7 @@ class TestProbEndTournamentManager(unittest.TestCase):
     def test_tournament_manager(self):
         strategies = [s() for s in axelrod.demo_strategies]
         tm = axelrod.ProbEndTournamentManager("./", False, save_cache=False)
-        tm.add_tournament("test-prob-end", strategies, repetitions=2, prob_end=.1,
+        tm.add_tournament("test-prob-end", strategies, repetitions=2, prob_end=.5,
                           noise=0.05)
         tm.run_tournaments()
 
@@ -117,13 +117,13 @@ class TestProbEndTournamentManager(unittest.TestCase):
         tm = axelrod.ProbEndTournamentManager("./", False, load_cache=False,
                                               save_cache=True)
         tm.add_tournament("test-prob-end", strategies, repetitions=2,
-                          prob_end=.1, noise=0.)
+                          prob_end=.5, noise=0.)
         tm.run_tournaments()
 
         tm = axelrod.ProbEndTournamentManager("./", False, load_cache=True,
                                               save_cache=True)
         tm.add_tournament("test-prob-end", strategies, repetitions=2,
-                          prob_end=.1, noise=0.)
+                          prob_end=.5, noise=0.)
         tm.run_tournaments()
 
     def test_utils(self):
@@ -131,7 +131,7 @@ class TestProbEndTournamentManager(unittest.TestCase):
         run_prob_end_tournaments(cache_file='./cache.txt',
                                  output_directory='./',
                                  repetitions=2,
-                                 prob_end=.1,
+                                 prob_end=.5,
                                  processes=None,
                                  no_ecological=False,
                                  rebuild_cache=False,
