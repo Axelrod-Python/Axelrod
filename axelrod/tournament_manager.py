@@ -10,6 +10,7 @@ from .utils import *
 
 
 class TournamentManager(object):
+    """A class to manage and create tournaments."""
 
     plot_types = {'boxplot': "Payoffs. ", 'payoff': "Payoffs. ",
                   'winplot': "Wins. ", 'sdvplot': "Std Payoffs. ",
@@ -61,8 +62,8 @@ class TournamentManager(object):
 
     def _run_single_tournament(self, tournament):
         self._logger.info(
-            'Starting %s tournament with %d round robins of %d turns per pair.'
-            % (tournament.name, tournament.repetitions, tournament.turns))
+                'Starting %s tournament: ' + self._tournament_label(tournament)
+            )
 
         t0 = time.time()
 
@@ -184,6 +185,27 @@ class TournamentManager(object):
         except IOError:
             self._logger.debug('Cache file not found. Starting with empty cache')
             return False
+
+
+class ProbEndTournamentManager(TournamentManager):
+    """A class to manage and create probabilistic ending tournaments."""
+    def add_tournament(self, name, players, game=None, prob_end=.01,
+                       repetitions=10, processes=None, noise=0,
+                       with_morality=True):
+        tournament = ProbEndTournament(
+            name=name,
+            players=players,
+            prob_end=prob_end,
+            repetitions=repetitions,
+            processes=processes,
+            noise=noise,
+            with_morality=with_morality)
+        self._tournaments.append(tournament)
+
+    def _tournament_label(self, tournament):
+        """A label for the tournament for the corresponding title plots"""
+        return "Prob end: {}, Repetitions: {}".format(tournament.prob_end,
+                                                      tournament.repetitions)
 
 
 class DeterministicCache(object):
