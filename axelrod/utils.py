@@ -43,9 +43,9 @@ def build_exclusions_dict(exclude_basic, exclude_ordinary,
     to booleans."""
     return {
         'basic_strategies': exclude_basic,
-        'strategies': exclude_ordinary,
+        'ordinary_strategies': exclude_ordinary,
         'cheating_strategies': exclude_cheating,
-        'all_strategies': exclude_combined}
+        'strategies': exclude_combined}
 
 
 def run_tournaments(cache_file='./cache.txt',

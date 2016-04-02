@@ -51,8 +51,8 @@ class TestBuildExclusionsDict(unittest.TestCase):
         for (eb, eo, ec, eco) in itertools.product(bools, repeat=4):
             expected_dict = {
                 'basic_strategies': eb,
-                'strategies': eo,
+                'ordinary_strategies': eo,
                 'cheating_strategies': ec,
-                'all_strategies': eco}
+                'strategies': eco}
             self.assertEqual(axelrod.utils.build_exclusions_dict(eb, eo, ec, eco),
                              expected_dict)
