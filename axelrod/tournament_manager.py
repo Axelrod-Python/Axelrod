@@ -148,8 +148,9 @@ class TournamentManager(object):
 
     def _tournament_label(self, tournament):
         """A label for the tournament for the corresponding title plots"""
-        return "Turns: {}, Repetitions: {}".format(tournament.turns,
-                tournament.repetitions)
+        return "Turns: {}, Repetitions: {}, Strategies: {}.".format(tournament.turns,
+                                                       tournament.repetitions,
+                                                       len(tournament.players))
 
     def _output_file_path(self, file_name, file_extension):
         return os.path.join(
