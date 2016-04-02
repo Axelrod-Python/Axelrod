@@ -48,7 +48,7 @@ class TestBuildExclusionsDict(unittest.TestCase):
         """This is really a regression test to make sure the names of the
         tournaments stay consistent"""
         bools = [True, False]
-        for (eb, eo, ec, eco) in itertools.product(*[bools for _ in range(4)]):
+        for (eb, eo, ec, eco) in itertools.product(bools, repeat=4):
             expected_dict = {
                 'basic_strategies': eb,
                 'strategies': eo,
