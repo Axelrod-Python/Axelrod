@@ -66,3 +66,38 @@ class TournamentManagerFactory(object):
             (key, value) for
             key, value in tournaments.items() if key not in exclusions
         ])
+
+
+class ProbEndTournamentManagerFactory(TournamentManagerFactory):
+
+    @classmethod
+    def create_tournament_manager(
+            cls,
+            output_directory,
+            no_ecological,
+            rebuild_cache,
+            cache_file,
+            exclusions,
+            processes,
+            prob_end,
+            repetitions,
+            noise,
+            image_format="svg"):
+
+        kwargs = {
+            'processes': processes,
+            'prob_end': prob_end,
+            'repetitions': repetitions,
+            'noise': noise,
+        }
+
+        manager = axelrod.ProbEndTournamentManager(
+            output_directory=output_directory,
+            with_ecological=not no_ecological,
+            save_cache=rebuild_cache,
+            cache_file=cache_file,
+            image_format=image_format)
+
+        cls._add_tournaments(manager, exclusions, kwargs)
+
+        return manager

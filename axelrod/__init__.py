@@ -12,7 +12,8 @@ from .strategies import *
 from .tournament_type import *
 from .tournament import Tournament, ProbEndTournament
 from .tournament_manager import TournamentManager, ProbEndTournamentManager
-from .tournament_manager_factory import TournamentManagerFactory
+from .tournament_manager_factory import (TournamentManagerFactory,
+                                         ProbEndTournamentManagerFactory)
 from .result_set import ResultSet
 from .ecosystem import Ecosystem
 from .utils import run_tournaments, setup_logging

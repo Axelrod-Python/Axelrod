@@ -62,7 +62,7 @@ class TournamentManager(object):
 
     def _run_single_tournament(self, tournament):
         self._logger.info(
-                'Starting %s tournament: ' + self._tournament_label(tournament)
+                'Starting {} tournament: '.format(tournament.name) + self._tournament_label(tournament)
             )
 
         t0 = time.time()
