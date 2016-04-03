@@ -228,10 +228,16 @@ class Tournament(object):
         """
         stops = 0
         while stops < workers:
-            new_matches = done_queue.get()
-            if new_matches == 'STOP':
+            results = done_queue.get()
+
+            if results == 'STOP':
                 stops += 1
             else:
+                new_matches = self.tournament_type.build_matches(
+                    cache_mutable=False, noise=self.noise)
+                for index_pair, result in results.items():
+                    new_matches[index_pair].result = result
+
                 matches.append(new_matches)
         return True
 
@@ -250,7 +256,10 @@ class Tournament(object):
             new_matches = self.tournament_type.build_matches(
                 cache_mutable=False, noise=self.noise)
             self._play_matches(new_matches)
-            done_queue.put(new_matches)
+
+            results = {index_pair: match.result for
+                       index_pair, match in new_matches.items()}
+            done_queue.put(results)
         done_queue.put('STOP')
         return True
 

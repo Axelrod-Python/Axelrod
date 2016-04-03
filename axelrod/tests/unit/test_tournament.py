@@ -152,6 +152,20 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
 
+        # The following relates to #516
+        players = [axelrod.Cooperator(), axelrod.Defector(),
+                   axelrod.BackStabber(), axelrod.PSOGambler(),
+                   axelrod.ThueMorse()]
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=20,
+            repetitions=self.test_repetitions,
+            processes=2)
+        scores = tournament.play().scores
+        self.assertEqual(len(scores), len(players))
+
     def test_build_cache_required(self):
         # Noisy, no prebuilt cache, empty deterministic cache
         tournament = axelrod.Tournament(
@@ -331,7 +345,7 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions)
         for r in range(self.test_repetitions):
-            done_queue.put([])
+            done_queue.put({})
         for w in range(workers):
             done_queue.put('STOP')
         tournament._process_done_queue(workers, done_queue, matches)
@@ -357,7 +371,7 @@ class TestTournament(unittest.TestCase):
             self.assertEqual(len(new_matches), 15)
             for index_pair, match in new_matches.items():
                 self.assertIsInstance(index_pair, tuple)
-                self.assertIsInstance(match, axelrod.Match)
+                self.assertIsInstance(match, list)
         queue_stop = done_queue.get()
         self.assertEqual(queue_stop, 'STOP')
 
