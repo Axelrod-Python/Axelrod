@@ -233,10 +233,11 @@ class Tournament(object):
             if results == 'STOP':
                 stops += 1
             else:
-                # Because of the Multiprocessing issue described in `def _worker`
-                # we have to rebuild the matches so that they can be handled in
-                # a consistent way by the results class.
-                # Rebuild the matches with the data:
+
+                # Because of the Multiprocessing issue described in `def
+                # _worker` we have to rebuild the matches so that they can be
+                # handled in a consistent way by the results class.  Rebuild
+                # the matches with the data:
                 new_matches = self.tournament_type.build_matches(
                     cache_mutable=False, noise=self.noise)
                 for index_pair, result in results.items():
