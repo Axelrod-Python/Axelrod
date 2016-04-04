@@ -63,3 +63,14 @@ class TestTournamentManager(unittest.TestCase):
         mgr._cache_valid_for_turns = 500
         self.assertFalse(mgr._valid_cache(200))
         self.assertTrue(mgr._valid_cache(500))
+
+    def test_tournament_label(self):
+        tournament = axelrod.Tournament(self.test_players, turns=20,
+                                        repetitions=2)
+        mgr = axelrod.TournamentManager(
+            output_directory=self.test_output_directory,
+            with_ecological=self.test_with_ecological, load_cache=False)
+        expected_label = "Turns: {}, Repetitions: {}, Strategies: {}.".format(tournament.turns,
+                tournament.repetitions, len(tournament.players))
+
+        self.assertEqual(mgr._tournament_label(tournament), expected_label)

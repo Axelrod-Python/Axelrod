@@ -214,30 +214,30 @@ class Plot(object):
         ax.set_xticklabels(names, rotation=90)
         ax.set_yticklabels(names)
         plt.tick_params(axis='both', which='both', labelsize=16)
+        if title:
+            plt.xlabel(title)
         # Make the colorbar match up with the plot
         divider = make_axes_locatable(plt.gca())
         cax = divider.append_axes("right", "5%", pad="3%")
         plt.colorbar(mat, cax=cax)
-        if title:
-            plt.title(title)
         return figure
 
-    def pdplot(self):
+    def pdplot(self, title=None):
         """Payoff difference heatmap to visualize the distributions of how
         players attain their payoffs."""
         matrix, names = self._pdplot_dataset
-        return self._payoff_heatmap(matrix, names)
+        return self._payoff_heatmap(matrix, names, title)
 
-    def payoff(self):
+    def payoff(self, title=None):
         """Payoff heatmap to visualize the distributions of how
         players attain their payoffs."""
         data = self._payoff_dataset
         names = self.result_set.ranked_names
-        return self._payoff_heatmap(data, names)
+        return self._payoff_heatmap(data, names, title)
 
     # Ecological Plot
 
-    def stackplot(self, eco):
+    def stackplot(self, eco, title=None):
 
         if not self.matplotlib_installed:
             return None
@@ -260,7 +260,8 @@ class Plot(object):
         plt.ylim([0.0, 1.0])
         plt.ylabel('Relative population size')
         plt.xlabel('Turn')
-        plt.title("Strategy population dynamics based on average payoffs")
+        if title is not None:
+            plt.title(title)
 
         trans = transforms.blended_transform_factory(ax.transAxes, ax.transData)
         ticks = []
