@@ -19,7 +19,8 @@ There is a variety of options that include:
 - Excluding certain strategy sets.
 - Not running the ecological variant.
 - Running the rounds of the tournament in parallel.
-- Include background noise
+- Include background noise.
+- Running probabilistic ending tournament.
 
 Particular parameters can also be changed:
 

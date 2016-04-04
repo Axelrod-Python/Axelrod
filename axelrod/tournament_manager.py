@@ -10,10 +10,18 @@ from .utils import *
 
 
 class TournamentManager(object):
+    """A class to manage and create tournaments."""
 
     plot_types = {'boxplot': "Payoffs. ", 'payoff': "Payoffs. ",
                   'winplot': "Wins. ", 'sdvplot': "Std Payoffs. ",
                   'pdplot': "Payoff differences. ", 'lengthplot': "Lengths. "}
+
+    ecoturns = {
+            'basic_strategies': 1000,
+            'cheating_strategies': 10,
+            'ordinary_strategies': 1000,
+            'strategies': 10,
+        }
 
     def __init__(self, output_directory, with_ecological,
                  pass_cache=True, load_cache=True, save_cache=False,
@@ -61,8 +69,8 @@ class TournamentManager(object):
 
     def _run_single_tournament(self, tournament):
         self._logger.info(
-            'Starting %s tournament with %d round robins of %d turns per pair.'
-            % (tournament.name, tournament.repetitions, tournament.turns))
+                'Starting {} tournament: '.format(tournament.name) + self._tournament_label(tournament)
+            )
 
         t0 = time.time()
 
@@ -103,13 +111,7 @@ class TournamentManager(object):
         self._logger.debug(
             'Starting ecological variant of %s' % tournament.name)
         t0 = time.time()
-        ecoturns = {
-            'basic_strategies': 1000,
-            'cheating_strategies': 10,
-            'strategies': 1000,
-            'all_strategies': 10,
-        }
-        ecosystem.reproduce(ecoturns.get(tournament.name))
+        ecosystem.reproduce(self.ecoturns.get(tournament.name))
         self._logger.debug(
             timed_message('Finished ecological variant of %s' % tournament.name, t0))
 
@@ -184,6 +186,36 @@ class TournamentManager(object):
         except IOError:
             self._logger.debug('Cache file not found. Starting with empty cache')
             return False
+
+
+class ProbEndTournamentManager(TournamentManager):
+    """A class to manage and create probabilistic ending tournaments."""
+
+    ecoturns = {
+            'basic_strategies_prob_end': 1000,
+            'cheating_strategies_prob_end': 10,
+            'ordinary_strategies_prob_end': 1000,
+            'strategies_prob_end': 10,
+        }
+
+    def add_tournament(self, name, players, game=None, prob_end=.01,
+                       repetitions=10, processes=None, noise=0,
+                       with_morality=True):
+        tournament = ProbEndTournament(
+            name=name,
+            players=players,
+            prob_end=prob_end,
+            repetitions=repetitions,
+            processes=processes,
+            noise=noise,
+            with_morality=with_morality)
+        self._tournaments.append(tournament)
+
+    def _tournament_label(self, tournament):
+        """A label for the tournament for the corresponding title plots"""
+        return "Prob end: {}, Repetitions: {}, Strategies: {}.".format(tournament.prob_end,
+                                                       tournament.repetitions,
+                                                       len(tournament.players))
 
 
 class DeterministicCache(object):

@@ -1,14 +1,50 @@
 #!/usr/bin/env bash
 python -m unittest discover axelrod/tests/
+python doctests.py
+
+# Deleting outputs:
+
 rm basic_strategies_boxplot.svg
+rm basic_strategies_lengthplot.svg
 rm basic_strategies_payoff.svg
 rm basic_strategies_pdplot.svg
+rm basic_strategies_prob_end.csv
+rm basic_strategies_prob_end_boxplot.svg
+rm basic_strategies_prob_end_lengthplot.svg
+rm basic_strategies_prob_end_payoff.svg
+rm basic_strategies_prob_end_pdplot.svg
+rm basic_strategies_prob_end_reproduce.svg
+rm basic_strategies_prob_end_sdvplot.svg
+rm basic_strategies_prob_end_winplot.svg
 rm basic_strategies_reproduce.svg
 rm basic_strategies_sdvplot.svg
 rm basic_strategies_winplot.svg
+rm ordinary_strategies.csv
+rm ordinary_strategies_boxplot.svg
+rm ordinary_strategies_lengthplot.svg
+rm ordinary_strategies_payoff.svg
+rm ordinary_strategies_pdplot.svg
+rm ordinary_strategies_prob_end.csv
+rm ordinary_strategies_prob_end_boxplot.svg
+rm ordinary_strategies_prob_end_lengthplot.svg
+rm ordinary_strategies_prob_end_payoff.svg
+rm ordinary_strategies_prob_end_pdplot.svg
+rm ordinary_strategies_prob_end_reproduce.svg
+rm ordinary_strategies_prob_end_sdvplot.svg
+rm ordinary_strategies_prob_end_winplot.svg
+rm ordinary_strategies_reproduce.svg
+rm ordinary_strategies_sdvplot.svg
+rm ordinary_strategies_winplot.svg
+rm test-prob-end.csv
+rm test-prob-end_boxplot.svg
+rm test-prob-end_lengthplot.svg
+rm test-prob-end_payoff.svg
+rm test-prob-end_pdplot.svg
+rm test-prob-end_sdvplot.svg
+rm test-prob-end_winplot.svg
 rm test_boxplot.svg
+rm test_lengthplot.svg
 rm test_payoff.svg
 rm test_pdplot.svg
 rm test_sdvplot.svg
 rm test_winplot.svg
-python doctests.py

@@ -1,7 +1,7 @@
 import unittest
 import axelrod
 
-from axelrod.utils import setup_logging, run_tournaments
+from axelrod.utils import setup_logging, run_tournaments, run_prob_end_tournaments
 
 class TestTournament(unittest.TestCase):
 
@@ -96,3 +96,46 @@ class TestTournamentManager(unittest.TestCase):
                     exclude_cheating=True,
                     exclude_ordinary=True,
                     noise=0)
+
+
+class TestProbEndTournamentManager(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.game = axelrod.Game()
+        cls.players = [s() for s in axelrod.demo_strategies]
+
+    def test_tournament_manager(self):
+        strategies = [s() for s in axelrod.demo_strategies]
+        tm = axelrod.ProbEndTournamentManager("./", False, save_cache=False)
+        tm.add_tournament("test-prob-end", strategies, repetitions=2, prob_end=.5,
+                          noise=0.05)
+        tm.run_tournaments()
+
+        strategies = [s() for s in axelrod.basic_strategies]
+        tm = axelrod.ProbEndTournamentManager("./", False, load_cache=False,
+                                              save_cache=True)
+        tm.add_tournament("test-prob-end", strategies, repetitions=2,
+                          prob_end=.5, noise=0.)
+        tm.run_tournaments()
+
+        tm = axelrod.ProbEndTournamentManager("./", False, load_cache=True,
+                                              save_cache=True)
+        tm.add_tournament("test-prob-end", strategies, repetitions=2,
+                          prob_end=.5, noise=0.)
+        tm.run_tournaments()
+
+    def test_utils(self):
+        setup_logging(logging_destination="none")
+        run_prob_end_tournaments(cache_file='./cache.txt',
+                                 output_directory='./',
+                                 repetitions=2,
+                                 prob_end=.5,
+                                 processes=None,
+                                 no_ecological=False,
+                                 rebuild_cache=False,
+                                 exclude_combined=True,
+                                 exclude_basic=False,
+                                 exclude_cheating=True,
+                                 exclude_ordinary=True,
+                                 noise=0)
