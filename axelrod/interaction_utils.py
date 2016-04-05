@@ -80,3 +80,20 @@ def get_normalised_cooperation(interactions):
     normalised_cooperation = tuple([c / float(nturns) for c in cooperation])
 
     return normalised_cooperation
+
+
+def sparkline(actions, c_symbol=u'█', d_symbol=u' '):
+    return u''.join([
+        c_symbol if play == 'C' else d_symbol for play in actions])
+
+
+def get_sparklines(interactions, c_symbol=u'█', d_symbol=u' '):
+    """Returns the sparklines for a set of interactions"""
+    if len(interactions) == 0:
+        return None
+
+    histories = list(zip(*interactions))
+    return (
+        sparkline(histories[0], c_symbol, d_symbol) +
+        u'\n' +
+        sparkline(histories[1], c_symbol, d_symbol))
