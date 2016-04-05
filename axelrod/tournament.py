@@ -133,9 +133,8 @@ class Tournament(object):
         """
         new_matches = self.tournament_type.build_matches(
             cache_mutable=True, noise=self.noise)
-        self._play_matches(new_matches)
-        results = self._get_interactions_from_matches(new_matches)
-        self.interactions.append(results)
+        interactions = self._play_matches(new_matches)
+        self.interactions.append(interactions)
 
     def _run_serial_repetitions(self, interactions):
         """
@@ -249,17 +248,10 @@ class Tournament(object):
         for repetition in iter(work_queue.get, 'STOP'):
             new_matches = self.tournament_type.build_matches(
                 cache_mutable=False, noise=self.noise)
-            self._play_matches(new_matches)
-
-            results = self._get_interactions_from_matches(new_matches)
-            done_queue.put(results)
+            interactions = self._play_matches(new_matches)
+            done_queue.put(interactions)
         done_queue.put('STOP')
         return True
-
-    def _get_interactions_from_matches(self, matches_dict):
-        interactions_dict = {index_pair: match.result for
-                        index_pair, match in matches_dict.items()}
-        return interactions_dict
 
     def _play_matches(self, matches):
         """
@@ -267,12 +259,21 @@ class Tournament(object):
 
         Parameters
         ----------
-        matches : dictionary
-            Mapping a tuple of player index numbers to an axelrod Match object
+        matches : generator
+            Generator of tuples: player index pair, match
 
+        Returns
+        -------
+        interactions : dictionary
+            Mapping player index pairs to results of matches:
+
+                (0, 1) -> [('C', 'D'), ('D', 'C'),...]
         """
-        for match in matches.values():
+        interactions = {}
+        for index_pair, match in matches:
             match.play()
+            interactions[index_pair] = match.result
+        return interactions
 
 
 class ProbEndTournament(Tournament):
