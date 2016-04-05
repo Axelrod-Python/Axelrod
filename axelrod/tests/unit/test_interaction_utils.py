@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 import axelrod.interaction_utils as iu
 from axelrod import Actions
