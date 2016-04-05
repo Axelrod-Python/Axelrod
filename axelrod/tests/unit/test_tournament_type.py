@@ -50,7 +50,7 @@ class TestRoundRobin(unittest.TestCase):
         rr = axelrod.RoundRobin(self.players, test_turns, {})
         matches = rr.build_matches()
         match_definitions = [
-            (match) for match in matches]
+            (index_pair) for index_pair, match in matches]
         expected_match_definitions = [
             (0, 0),
             (0, 1),
@@ -82,7 +82,7 @@ class TestProbEndRoundRobin(unittest.TestCase):
         rr = axelrod.ProbEndRoundRobin(self.players, prob_end, {})
         matches = rr.build_matches()
         match_definitions = [
-            (match) for match in matches]
+            (index_pair) for index_pair, match in matches]
         expected_match_definitions = [
             (0, 0),
             (0, 1),
@@ -113,7 +113,7 @@ class TestProbEndRoundRobin(unittest.TestCase):
         """
         rr = axelrod.ProbEndRoundRobin(self.players, prob_end, {})
         matches = rr.build_matches()
-        match_lengths = [len(m) for m in matches.values()]
+        match_lengths = [len(match) for index_pair, match in matches]
         self.assertNotEqual(min(match_lengths), max(match_lengths))
 
     @given(prob_end=floats(min_value=0, max_value=1), rm=random_module())

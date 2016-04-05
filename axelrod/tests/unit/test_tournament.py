@@ -240,30 +240,30 @@ class TestTournament(unittest.TestCase):
             tournament._parallel_repetitions, self.test_repetitions - 1)
 
     def test_run_single_repetition(self):
-        matches = []
+        interactions = []
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        tournament._run_single_repetition(matches)
-        self.assertEqual(len(tournament.matches), 1)
-        self.assertEqual(len(tournament.matches[0]), 15)
+        tournament._run_single_repetition(interactions)
+        self.assertEqual(len(tournament.interactions), 1)
+        self.assertEqual(len(tournament.interactions[0]), 15)
 
     def test_run_serial_repetitions(self):
-        matches = []
+        interactions = []
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        tournament._run_serial_repetitions(matches)
-        self.assertEqual(len(tournament.matches), self.test_repetitions)
+        tournament._run_serial_repetitions(interactions)
+        self.assertEqual(len(tournament.interactions), self.test_repetitions)
 
     def test_run_parallel_repetitions(self):
-        matches = []
+        interactions = []
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -271,9 +271,9 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions,
             processes=2)
-        tournament._run_parallel_repetitions(matches)
-        self.assertEqual(len(matches), self.test_repetitions)
-        for r in matches:
+        tournament._run_parallel_repetitions(interactions)
+        self.assertEqual(len(interactions), self.test_repetitions)
+        for r in interactions:
             self.assertEqual(len(r.values()), 15)
 
     def test_n_workers(self):
@@ -518,4 +518,4 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(players))
         self.assertEqual(results.players, players)
-        self.assertEqual(len(results.matches), repetitions)
+        self.assertEqual(len(results.interactions), repetitions)

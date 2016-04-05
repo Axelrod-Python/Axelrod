@@ -54,7 +54,8 @@ class RoundRobin(TournamentType):
 
     def build_matches(self, cache_mutable=True, noise=0):
         """
-        Create a dictionary of match objects for a round robin tournament.
+        A generator that returns player index pairs and match objects for a
+        round robin tournament.
 
         Parameters
         ----------
@@ -63,19 +64,17 @@ class RoundRobin(TournamentType):
         noise : float
             The probability that a player's intended action should be flipped
 
-        Returns
+        Yields
         -------
-        dictionary
-            Mapping a tuple of player index numbers to an axelrod Match object
+        tuple
+            player pair index, match object
         """
-        matches = {}
         for player1_index in range(len(self.players)):
             for player2_index in range(player1_index, len(self.players)):
                 pair = (
                     self.players[player1_index], self.opponents[player2_index])
                 match = self.build_single_match(pair, cache_mutable, noise)
-                matches[(player1_index, player2_index)] = match
-        return matches
+                yield (player1_index, player2_index), match
 
     def build_single_match(self, pair, cache_mutable=True, noise=0):
         """Create a single match for a given pair"""

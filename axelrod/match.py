@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from .game import Game
 from axelrod import Actions
+from .interaction_utils import *
 
 C, D = Actions.C, Actions.D
 
@@ -100,66 +100,35 @@ class Match(object):
 
     def scores(self, game=None):
         """Returns the scores of the previous Match plays."""
-        if not game:
-            game = Game()
-        scores = [game.score(plays) for plays in self.result]
+        scores = get_scores(self.result, game)
         return scores
 
     def final_score(self, game=None):
         """Returns the final score for a Match"""
-        scores = self.scores(game)
-
-        if len(scores) == 0:
-            return None
-
-        final_score = tuple(sum([score[playeri] for score in scores])
-                            for playeri in [0, 1])
+        final_score = get_final_score(self.result, game)
         return final_score
 
     def final_score_per_turn(self, game=None):
         """Returns the mean score per round for a Match"""
-        scores = self.scores(game)
-
-        if len(scores) == 0:
-            return None
-
-        final_score_per_turn = tuple(
-            sum([score[playeri] for score in scores]) / (float(self._turns))
-            for playeri in [0, 1])
+        final_score_per_turn = get_final_score_per_turn(self.result, game)
         return final_score_per_turn
 
     def winner(self, game=None):
         """Returns the winner of the Match"""
-        scores = self.final_score(game)
-
-        if scores is not None:
-            if scores[0] == scores[1]:
-                return False  # No winner
-            return sorted(self.players,
-                          key=lambda x: scores[self.players.index(x)])[-1]
-        return None
+        winner_index = get_winner_index(self.result, game)
+        if winner_index is False:  # No winner
+            return False
+        if winner_index is None:  # No plays
+            return None
+        return self.players[winner_index]
 
     def cooperation(self):
         """Returns the count of cooperations by each player"""
-
-        if len(self.result) == 0:
-            return None
-
-        cooperation = tuple(sum([play[playeri] == C for play in self.result])
-                            for playeri in [0, 1])
-        return cooperation
+        return get_cooperations(self.result)
 
     def normalised_cooperation(self):
         """Returns the count of cooperations by each player per turn"""
-        cooperation = self.cooperation()
-
-        if len(self.result) == 0:
-            return None
-
-        normalised_cooperation = tuple(
-            [c / float(self._turns) for c in cooperation])
-
-        return normalised_cooperation
+        return get_normalised_cooperation(self.result)
 
     def sparklines(self, c_symbol=u'█', d_symbol=u' '):
         return (
