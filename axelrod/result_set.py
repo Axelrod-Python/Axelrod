@@ -1,7 +1,7 @@
 import csv
 from . import eigen
 
-from .interaction_utils import *
+import axelrod.interaction_utils as iu
 
 from numpy import mean, median, std
 
@@ -130,7 +130,7 @@ class ResultSet(object):
         for rep, inter_dict in enumerate(self.interactions):
             for index_pair, interactions in inter_dict.items():
                 if index_pair[0] != index_pair[1]: # Ignoring self interactions
-                    final_scores = get_final_score(interactions)
+                    final_scores = iu.get_final_score(interactions)
                     for player in range(2):
                         player_index = index_pair[player]
                         player_score = final_scores[player]
@@ -176,7 +176,7 @@ class ResultSet(object):
                     for player in range(2):
                         player_index = index_pair[player]
 
-                        winner_index = get_winner_index(interactions)
+                        winner_index = iu.get_winner_index(interactions)
                         if winner_index is not False and player == winner_index:
                             wins[player_index][rep] += 1
 
@@ -210,7 +210,7 @@ class ResultSet(object):
         for rep, inter_dict in enumerate(self.interactions):
             for index_pair, interactions in inter_dict.items():
                 if index_pair[0] != index_pair[1]:  # Ignore self interactions
-                    scores_per_turn = get_final_score_per_turn(interactions)
+                    scores_per_turn = iu.get_final_score_per_turn(interactions)
                     for player in range(2):
                         player_index = index_pair[player]
                         score_per_turn = scores_per_turn[player]
@@ -270,10 +270,10 @@ class ResultSet(object):
 
                     if (i, j) in rep:
                         interactions = rep[(i, j)]
-                        utilities.append(get_final_score_per_turn(interactions)[0])
+                        utilities.append(iu.get_final_score_per_turn(interactions)[0])
                     if (j, i) in rep:
                         interactions = rep[(j, i)]
-                        utilities.append(get_final_score_per_turn(interactions)[1])
+                        utilities.append(iu.get_final_score_per_turn(interactions)[1])
 
                     payoffs[i][j] = utilities
         return payoffs
@@ -376,11 +376,11 @@ class ResultSet(object):
             for j in plist:
                 for r, rep in enumerate(self.interactions):
                     if (i, j) in rep:
-                        scores = get_final_score_per_turn(rep[(i, j)])
+                        scores = iu.get_final_score_per_turn(rep[(i, j)])
                         diff = (scores[0] - scores[1])
                         score_diffs[i][j][r] = diff
                     if (j, i) in rep:
-                        scores = get_final_score_per_turn(rep[(j, i)])
+                        scores = iu.get_final_score_per_turn(rep[(j, i)])
                         diff = (scores[1] - scores[0])
                         score_diffs[i][j][r] = diff
         return score_diffs
@@ -410,10 +410,10 @@ class ResultSet(object):
                 diffs = []
                 for rep in self.interactions:
                     if (i, j) in rep:
-                        scores = get_final_score_per_turn(rep[(i, j)])
+                        scores = iu.get_final_score_per_turn(rep[(i, j)])
                         diffs.append(scores[0] - scores[1])
                     if (j, i) in rep:
-                        scores = get_final_score_per_turn(rep[(j, i)])
+                        scores = iu.get_final_score_per_turn(rep[(j, i)])
                         diffs.append(scores[1] - scores[0])
                 if diffs:
                     payoff_diffs_means[i][j] = mean(diffs)
@@ -449,10 +449,10 @@ class ResultSet(object):
 
                         if (i, j) in rep:
                             interactions = rep[(i, j)]
-                            coop_count = get_cooperations(interactions)[0]
+                            coop_count = iu.get_cooperations(interactions)[0]
                         if (j, i) in rep:
                             interactions = rep[(j, i)]
-                            coop_count = get_cooperations(interactions)[1]
+                            coop_count = iu.get_cooperations(interactions)[1]
 
                         cooperations[i][j] += coop_count
         return cooperations
@@ -485,11 +485,11 @@ class ResultSet(object):
 
                     if (i, j) in rep:
                         interactions = rep[(i, j)]
-                        coop_counts.append(get_normalised_cooperation(interactions)[0])
+                        coop_counts.append(iu.get_normalised_cooperation(interactions)[0])
 
                     if (j, i) in rep:
                         interactions = rep[(j, i)]
-                        coop_counts.append(get_normalised_cooperation(interactions)[1])
+                        coop_counts.append(iu.get_normalised_cooperation(interactions)[1])
 
                     if ((i, j) not in rep) and ((j, i) not in rep):
                         coop_counts.append(0)
@@ -563,13 +563,13 @@ class ResultSet(object):
 
                         if (i, j) in rep:
                             interaction = rep[(i, j)]
-                            coops = get_cooperations(interaction)
+                            coops = iu.get_cooperations(interaction)
                             if coops[0] >= coops[1]:
                                 good_partner_matrix[i][j] += 1
 
                         if (j, i) in rep:
                             interaction = rep[(j, i)]
-                            coops = get_cooperations(interaction)
+                            coops = iu.get_cooperations(interaction)
                             if coops[0] <= coops[1]:
                                 good_partner_matrix[i][j] += 1
 
