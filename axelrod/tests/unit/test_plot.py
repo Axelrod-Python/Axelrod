@@ -31,7 +31,12 @@ class TestPlot(unittest.TestCase):
             for match in rep.values():
                 match.play()
 
-        cls.test_result_set = axelrod.ResultSet(cls.players, cls.matches)
+        cls.interactions = []
+        for rep in cls.matches:
+            cls.interactions.append({index_pair: match.result for
+                                     index_pair, match in rep.items()})
+
+        cls.test_result_set = axelrod.ResultSet(cls.players, cls.interactions)
         cls.expected_boxplot_dataset = [
                [(17.0 / 5 + 9.0 / 5) / 2 for _ in range(3)],
                [(13.0 / 5 + 4.0 / 5) / 2 for _ in range(3)],
