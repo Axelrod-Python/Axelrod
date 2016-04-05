@@ -394,30 +394,38 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             repetitions=self.test_repetitions)
-        matches = {
-            (0, 0): axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=turns),
-            (0, 1): axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=turns),
-            (0, 2): axelrod.Match((axelrod.Cooperator(), axelrod.Defector()), turns=turns),
-            (0, 3): axelrod.Match((axelrod.Cooperator(), axelrod.Grudger()), turns=turns),
-            (0, 4): axelrod.Match((axelrod.Cooperator(), axelrod.GoByMajority()), turns=turns),
-            (1, 1): axelrod.Match((axelrod.TitForTat(), axelrod.TitForTat()), turns=turns),
-            (1, 2): axelrod.Match((axelrod.TitForTat(), axelrod.Defector()), turns=turns),
-            (1, 3): axelrod.Match((axelrod.TitForTat(), axelrod.Grudger()), turns=turns),
-            (1, 4): axelrod.Match((axelrod.TitForTat(), axelrod.GoByMajority()), turns=turns),
-            (2, 2): axelrod.Match((axelrod.Defector(), axelrod.Defector()), turns=turns),
-            (2, 3): axelrod.Match((axelrod.Defector(), axelrod.Grudger()), turns=turns),
-            (2, 4): axelrod.Match((axelrod.Defector(), axelrod.GoByMajority()), turns=turns),
-            (3, 3): axelrod.Match((axelrod.Grudger(), axelrod.Grudger()), turns=turns),
-            (3, 4): axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=turns),
-            (4, 4): axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=turns),
-        }
-        tournament._play_matches(matches)
-        for m in matches.values():
-            self.assertEqual(len(m), turns)
-            # Check that the name of the winner is in the list of names of
-            # players in the tournament (the way the matches are created these
-            # are not the same players).
-            self.assertIn(str(m.winner()), [str(p) for p in tournament.players] + ['False'])
+
+        matches = [
+            ((0, 0), axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=turns)),
+            ((0, 1), axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=turns)),
+            ((0, 2), axelrod.Match((axelrod.Cooperator(), axelrod.Defector()), turns=turns)),
+            ((0, 3), axelrod.Match((axelrod.Cooperator(), axelrod.Grudger()), turns=turns)),
+            ((0, 4), axelrod.Match((axelrod.Cooperator(), axelrod.GoByMajority()), turns=turns)),
+            ((1, 1), axelrod.Match((axelrod.TitForTat(), axelrod.TitForTat()), turns=turns)),
+            ((1, 2), axelrod.Match((axelrod.TitForTat(), axelrod.Defector()), turns=turns)),
+            ((1, 3), axelrod.Match((axelrod.TitForTat(), axelrod.Grudger()), turns=turns)),
+            ((1, 4), axelrod.Match((axelrod.TitForTat(), axelrod.GoByMajority()), turns=turns)),
+            ((2, 2), axelrod.Match((axelrod.Defector(), axelrod.Defector()), turns=turns)),
+            ((2, 3), axelrod.Match((axelrod.Defector(), axelrod.Grudger()), turns=turns)),
+            ((2, 4), axelrod.Match((axelrod.Defector(), axelrod.GoByMajority()), turns=turns)),
+            ((3, 3), axelrod.Match((axelrod.Grudger(), axelrod.Grudger()), turns=turns)),
+            ((3, 4), axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=turns)),
+            ((4, 4), axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=turns)),
+        ]
+        matches_generator = (element for element in matches)
+
+        self.assertEqual((len(list(matches_generator))), len(matches))
+
+        interactions = tournament._play_matches(matches_generator)
+        for index_pair, inter in interactions.items():
+            self.assertEqual(len(inter), turns)
+            self.assertEqual(len(index_pair), 2)
+            for plays in inter:
+                self.assertIsInstance(plays, tuple)
+                self.assertEqual(len(plays), 2)
+
+        # Check that matches no longer exist?
+        self.assertEqual((len(list(matches_generator))), 0)
 
 
 class TestProbEndTournament(unittest.TestCase):
