@@ -79,3 +79,8 @@ class TestMatch(unittest.TestCase):
     def test_get_sparklines(self):
         for inter, spark in zip(self.interactions, self.sparklines):
             self.assertEqual(spark, iu.get_sparklines(inter))
+
+    def test_string_to_interactions(self):
+        string = 'CDCDDD'
+        interactions = [('C', 'D'), ('C', 'D'), ('D', 'D')]
+        self.assertEqual(iu.string_to_interactions(string), interactions)

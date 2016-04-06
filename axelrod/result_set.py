@@ -729,10 +729,4 @@ class ResultSetFromFile(ResultSet):
 
         'CDCDDD' -> [('C', 'D'), ('C', 'D'), ('D', 'D')]
         """
-        interactions = []
-        interactions_list = list(string)
-        while interactions_list:
-            p1action = interactions_list.pop(0)
-            p2action = interactions_list.pop(0)
-            interactions.append((p1action, p2action))
-        return interactions
+        return iu.string_to_interactions(string)
