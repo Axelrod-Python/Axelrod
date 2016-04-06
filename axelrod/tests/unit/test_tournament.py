@@ -2,7 +2,7 @@
 
 import axelrod
 import logging
-from pathos.mulitprocess import Queue, cpu_count
+from multiprocess import Queue, cpu_count
 import unittest
 import random
 

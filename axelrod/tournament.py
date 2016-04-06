@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 import logging
-from pathos.mulitprocess import Process, Queue, cpu_count
+from multiprocess import Process, Queue, cpu_count
 
 from .game import Game
 from .result_set import ResultSet
