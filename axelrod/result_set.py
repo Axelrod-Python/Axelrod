@@ -35,6 +35,11 @@ class ResultSet(object):
         self.nrepetitions = len(interactions)
 
         # Calculate all attributes:
+        self.build_all(with_morality)
+
+    def build_all(self, with_morality):
+        """Build all the results. In a seperate method to make inheritance more
+        straightforward"""
         self.wins = self.build_wins()
         self.match_lengths = self.build_match_lengths()
 
@@ -638,3 +643,96 @@ class ResultSet(object):
                     for rank in self.ranking]
             writer.writerow(list(map(str, data)))
         return csv_string.getvalue()
+
+
+class ResultSetFromFile(ResultSet):
+    """A class to hold the results of a tournament.
+
+    Initialised by a csv file of the format:
+
+
+    [p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
+    ...]
+    [0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...]
+    [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
+    [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
+    """
+
+    def __init__(self, filename, with_morality=True):
+        """
+        Parameters
+        ----------
+            filename : string
+                name of a file of the correct file.
+            with_morality : bool
+                a flag to determine whether morality metrics should be
+                calculated.
+        """
+        self.players, self.interactions = self._read_csv(filename)
+        self.nplayers = len(self.players)
+        self.nrepetitions = len(self.interactions)
+
+        # Calculate all attributes:
+        self.build_all(with_morality)
+
+    def _read_csv(self, filename):
+        """
+        Returns
+        -------
+
+            A tuple:
+                - First element: list of player names
+                - Second element: interactions (list of dictionaries mapping
+                  index indices to interactions)
+        """
+        players_d = {}
+        interactions_d = {}
+        with open(filename, 'r') as f:
+            for row in csv.reader(f):
+                index_pair = (int(row[0]), int(row[1]))
+                players = (row[2], row[3])
+                inters = row[4:]
+
+                # Build a dictionary mapping indices to players
+                # This is temporary to make sure the ordering of the players
+                # matches the indices
+                for index, player in zip(index_pair, players):
+                    if index not in players:
+                        players_d[index] = player
+
+                # Build a dictionary mapping indices to list of interactions
+                # This is temporary (as we do not know the number of
+                # interactions at this point.
+                interactions_d[index_pair] = [self._string_to_interactions(inter)
+                                              for inter in inters]
+        nreps = len(inters)
+
+        # Create an ordered list of players
+        players = []
+        for i in range(len(players_d)):
+            players.append(players_d[i])
+
+        # Create a list of dictionaries
+        interactions = []
+        for rep in range(nreps):
+            pair_to_interactions_d = {}
+            for index_pair, inters in interactions_d.items():
+                pair_to_interactions_d[index_pair] = inters[rep]
+            interactions.append(pair_to_interactions_d)
+
+        return players, interactions
+
+    def _string_to_interactions(self, string):
+        """
+        Converts a compact string representation of an interaction to an
+        interaction:
+
+        'CDCDDD' -> [('C', 'D'), ('C', 'D'), ('D', 'D')]
+        """
+        interactions = []
+        interactions_list = list(string)
+        while interactions_list:
+            p1action = interactions_list.pop(0)
+            p2action = interactions_list.pop(0)
+            interactions.append((p1action, p2action))
+        return interactions

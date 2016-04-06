@@ -3,6 +3,8 @@ import axelrod
 
 from numpy import mean, std
 
+import tempfile
+
 from hypothesis import given
 from hypothesis.strategies import floats, integers
 
@@ -326,3 +328,32 @@ class TestResultSet(unittest.TestCase):
     def test_csv(self):
         rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertEqual(rs.csv(), self.expected_csv)
+
+
+class TestResultSetFromFile(unittest.TestCase):
+    tournament = axelrod.Tournament(
+        players=[axelrod.Cooperator(),
+                 axelrod.TitForTat(),
+                 axelrod.Defector()],
+        turns=2,
+        repetitions=2)
+    tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+    tournament.play(filename=tmp_file.name)
+    tmp_file.close()
+
+
+    def test_init(self):
+        rs = axelrod.ResultSetFromFile(self.tmp_file.name)
+        players = ['Cooperator', 'Tit For Tat', 'Defector']
+        self.assertEqual(rs.players, players)
+        self.assertEqual(rs.nplayers, len(players))
+        self.assertEqual(rs.nrepetitions, 2)
+
+        expected_interactions = [{(0, 1): [('C', 'C'), ('C', 'C')], (1, 2): [('C', 'D'), ('D', 'D')], (0, 0): [('C', 'C'), ('C', 'C')], (2, 2): [('D', 'D'), ('D', 'D')], (0, 2): [('C', 'D'), ('C', 'D')], (1, 1): [('C', 'C'), ('C', 'C')]}, {(0, 1): [('C', 'C'), ('C', 'C')], (1, 2): [('C', 'D'), ('D', 'D')], (0, 0): [('C', 'C'), ('C', 'C')], (2, 2): [('D', 'D'), ('D', 'D')], (0, 2): [('C', 'D'), ('C', 'D')], (1, 1): [('C', 'C'), ('C', 'C')]}]
+        self.assertEqual(rs.interactions, expected_interactions)
+
+    def test_string_to_interactions(self):
+        rs = axelrod.ResultSetFromFile(self.tmp_file.name)
+        string = 'CDCDDD'
+        interactions = [('C', 'D'), ('C', 'D'), ('D', 'D')]
+        self.assertEqual(rs._string_to_interactions(string), interactions)
