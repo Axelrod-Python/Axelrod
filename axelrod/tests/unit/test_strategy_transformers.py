@@ -1,5 +1,6 @@
 import random
 import unittest
+import dill
 
 import axelrod
 from axelrod import simulate_play
@@ -8,6 +9,11 @@ from .test_titfortat import TestTitForTat
 from .test_cooperator import TestCooperator
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
+
+@IdentityTransformer
+class TestClass(object):
+    name = 'Test Class'
 
 
 class TestTransformers(unittest.TestCase):
@@ -354,6 +360,25 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [C, D, C, D, C])
         self.assertEqual(p2.history, [D, D, D, D, D])
 
+    def test_namespace(self):
+        test_object = TestClass()
+        self.assertEqual(
+            test_object.__class__,
+            axelrod.tests.unit.test_strategy_transformers.TestClass)
+
+    # Test that decorated classes can be pickled as this caused issue 516
+    def test_pickle(self):
+        p1 = axelrod.BackStabber()
+        dump = dill.dumps(p1)
+        self.assertGreater(len(dump), 0)
+
+        p2 = axelrod.ThueMorse()
+        dump = dill.dumps(p2)
+        self.assertGreater(len(dump), 0)
+
+        p3 = axelrod.PSOGambler()
+        dump = dill.dumps(p3)
+        self.assertGreater(len(dump), 0)
 
 
 # Test that RUA(Cooperator) is the same as TitForTat
