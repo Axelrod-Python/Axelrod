@@ -461,7 +461,7 @@ class TestTournament(unittest.TestCase):
                              [3, 4, 'Grudger', 'Soft Go By Majority',
                               'CCCC', 'CCCC'],
                              [0, 2, 'Cooperator', 'Defector', 'CDCD', 'CDCD']]
-            self.assertEqual(written_data, expected_data)
+            self.assertEqual(sorted(written_data), sorted(expected_data))
 
     def test_write_to_csv(self):
         tournament = axelrod.Tournament(
@@ -495,7 +495,7 @@ class TestTournament(unittest.TestCase):
                              [3, 4, 'Grudger', 'Soft Go By Majority',
                               'CCCC', 'CCCC'],
                              [0, 2, 'Cooperator', 'Defector', 'CDCD', 'CDCD']]
-            self.assertEqual(written_data, expected_data)
+            self.assertEqual(sorted(written_data), sorted(expected_data))
 
     def test_data_for_csv(self):
         tournament = axelrod.Tournament(
@@ -526,7 +526,7 @@ class TestTournament(unittest.TestCase):
                           'CCCC', 'CCCC'],
                          [0, 2, 'Cooperator', 'Defector', 'CDCD', 'CDCD']]
         generator_data = tournament._data_for_csv()
-        for row, expected_row in zip(generator_data, expected_data):
+        for row, expected_row in zip(sorted(generator_data), sorted(expected_data)):
             self.assertEqual(row, expected_row)
 
 
