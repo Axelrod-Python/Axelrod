@@ -2,7 +2,7 @@
 
 import axelrod
 import logging
-import multiprocessing
+from pathos.mulitprocess import Queue, cpu_count
 import unittest
 import random
 
@@ -277,7 +277,7 @@ class TestTournament(unittest.TestCase):
             self.assertEqual(len(r.values()), 15)
 
     def test_n_workers(self):
-        max_processes = multiprocessing.cpu_count()
+        max_processes = cpu_count()
 
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -298,7 +298,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament._n_workers(), max_processes)
 
     @unittest.skipIf(
-        multiprocessing.cpu_count() < 2,
+        cpu_count() < 2,
         "not supported on single processor machines")
     def test_2_workers(self):
         # This is a separate test with a skip condition because we
@@ -315,8 +315,8 @@ class TestTournament(unittest.TestCase):
 
     def test_start_workers(self):
         workers = 2
-        work_queue = multiprocessing.Queue()
-        done_queue = multiprocessing.Queue()
+        work_queue = Queue()
+        done_queue = Queue()
         for repetition in range(self.test_repetitions):
             work_queue.put(repetition)
         tournament = axelrod.Tournament(
@@ -336,7 +336,7 @@ class TestTournament(unittest.TestCase):
 
     def test_process_done_queue(self):
         workers = 2
-        done_queue = multiprocessing.Queue()
+        done_queue = Queue()
         matches = []
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -359,12 +359,12 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions)
 
-        work_queue = multiprocessing.Queue()
+        work_queue = Queue()
         for repetition in range(self.test_repetitions):
             work_queue.put(repetition)
         work_queue.put('STOP')
 
-        done_queue = multiprocessing.Queue()
+        done_queue = Queue()
         tournament._worker(work_queue, done_queue)
         for r in range(self.test_repetitions):
             new_matches = done_queue.get()
