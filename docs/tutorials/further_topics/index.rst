@@ -13,3 +13,4 @@ Contents:
    creating_matches.rst
    morality_metrics.rst
    probabilistict_end_tournaments.rst
+   reading_and_writing_interactions.rst

@@ -98,3 +98,19 @@ def get_sparklines(interactions, c_symbol=u'█', d_symbol=u' '):
         sparkline(histories[0], c_symbol, d_symbol) +
         u'\n' +
         sparkline(histories[1], c_symbol, d_symbol))
+
+
+def string_to_interactions(string):
+    """
+    Converts a compact string representation of an interaction to an
+    interaction:
+
+    'CDCDDD' -> [('C', 'D'), ('C', 'D'), ('D', 'D')]
+    """
+    interactions = []
+    interactions_list = list(string)
+    while interactions_list:
+        p1action = interactions_list.pop(0)
+        p2action = interactions_list.pop(0)
+        interactions.append((p1action, p2action))
+    return interactions
