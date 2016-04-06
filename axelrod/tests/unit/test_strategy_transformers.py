@@ -1,6 +1,6 @@
 import random
 import unittest
-import pickle
+import dill
 
 import axelrod
 from axelrod import simulate_play
@@ -358,15 +358,15 @@ class TestTransformers(unittest.TestCase):
     # Test that decorated classes can be pickled as this caused issue 516
     def test_pickle(self):
         p1 = axelrod.BackStabber()
-        dump = pickle.dumps(p1)
+        dump = dill.dumps(p1)
         self.assertGreater(len(dump), 0)
 
         p2 = axelrod.ThueMorse()
-        dump = pickle.dumps(p2)
+        dump = dill.dumps(p2)
         self.assertGreater(len(dump), 0)
 
         p3 = axelrod.PSOGambler()
-        dump = pickle.dumps(p3)
+        dump = dill.dumps(p3)
         self.assertGreater(len(dump), 0)
 
 
