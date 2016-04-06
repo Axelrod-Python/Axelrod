@@ -11,6 +11,11 @@ from .test_cooperator import TestCooperator
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
+@IdentityTransformer
+class TestClass(object):
+    name = 'Test Class'
+
+
 class TestTransformers(unittest.TestCase):
 
     def test_all_strategies(self):
@@ -354,6 +359,12 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, D, C])
         self.assertEqual(p2.history, [D, D, D, D, D])
+
+    def test_namespace(self):
+        test_object = TestClass()
+        self.assertEqual(
+            test_object.__class__,
+            axelrod.tests.unit.test_strategy_transformers.TestClass)
 
     # Test that decorated classes can be pickled as this caused issue 516
     def test_pickle(self):
