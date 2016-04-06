@@ -2,6 +2,7 @@ import unittest
 import axelrod
 
 from numpy import mean
+import tempfile
 
 matplotlib_installed = True
 try:
@@ -31,7 +32,12 @@ class TestPlot(unittest.TestCase):
             for match in rep.values():
                 match.play()
 
-        cls.test_result_set = axelrod.ResultSet(cls.players, cls.matches)
+        cls.interactions = []
+        for rep in cls.matches:
+            cls.interactions.append({index_pair: match.result for
+                                     index_pair, match in rep.items()})
+
+        cls.test_result_set = axelrod.ResultSet(cls.players, cls.interactions)
         cls.expected_boxplot_dataset = [
                [(17.0 / 5 + 9.0 / 5) / 2 for _ in range(3)],
                [(13.0 / 5 + 4.0 / 5) / 2 for _ in range(3)],
@@ -57,6 +63,22 @@ class TestPlot(unittest.TestCase):
     def test_init(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)
+        self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
+
+    def test_init_from_resulsetfromfile(self):
+        tournament = axelrod.Tournament(
+            players=[axelrod.Cooperator(),
+                     axelrod.TitForTat(),
+                     axelrod.Defector()],
+            turns=2,
+            repetitions=2)
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        tournament.play(filename=tmp_file.name)
+        tmp_file.close()
+        rs = axelrod.ResultSetFromFile(tmp_file.name)
+
+        plot = axelrod.Plot(rs)
+        self.assertEqual(plot.result_set, rs)
         self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
 
     def test_boxplot_dataset(self):

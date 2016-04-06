@@ -77,3 +77,16 @@ A `Match` class can also score the individual turns of a match. Just call
     [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
     >>> match.scores()
     [(3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3)]
+
+There are various further methods::
+
+    >>> match.final_score()
+    (39, 99)
+    >>> match.final_score_per_turn()
+    (1.56, 3.96)
+    >>> match.winner()
+    Alternator
+    >>> match.cooperation()  # The count of cooperations
+    (25, 13)
+    >>> match.normalised_cooperation()  # The count of cooperations per turn
+    (1.0, 0.52)
