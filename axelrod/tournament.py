@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import logging
 import multiprocessing
+import csv
 
 from .game import Game
 from .result_set import ResultSet
@@ -71,7 +72,7 @@ class Tournament(object):
             newplayers.append(player)
         self._players = newplayers
 
-    def play(self):
+    def play(self, filename=False):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -86,8 +87,10 @@ class Tournament(object):
                 self._build_cache(self.interactions)
             self._run_parallel_repetitions(self.interactions)
 
-        self.result_set = self._build_result_set()
-        return self.result_set
+        if filename is False:
+            self.result_set = self._build_result_set()
+            return self.result_set
+        self._write_to_csv(filename)
 
     def _build_result_set(self):
         """
@@ -274,6 +277,39 @@ class Tournament(object):
             match.play()
             interactions[index_pair] = match.result
         return interactions
+
+    def _write_to_csv(self, filename):
+        """Write the interactions to csv."""
+        with open(filename, 'w') as f:
+            writer = csv.writer(f)
+            for row in self._data_for_csv():
+                writer.writerow(row)
+
+    def _data_for_csv(self):
+        """
+        Returns
+        -------
+        A generator of the interactions to a list of lists of the form:
+
+        [p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
+        ...]
+        [0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...]
+        [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
+        [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
+        """
+        index_pairs = self.interactions[0].keys()
+        for index_pair in index_pairs:
+            p1, p2 = index_pair
+            row = [p1, p2, self.players[p1].name, self.players[p2].name]
+            for rep in self.interactions:
+                interaction = rep[index_pair]
+                matchstringrep = ''.join([act for inter in interaction
+                                          for act in inter])
+                row.append(matchstringrep)
+            yield row
+
+
+
 
 
 class ProbEndTournament(Tournament):
