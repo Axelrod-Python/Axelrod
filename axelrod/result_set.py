@@ -102,11 +102,11 @@ class ResultSet(object):
         for rep in range(self.nrepetitions):
 
             for player_pair_index, interactions in self.interactions[rep].items():
-                i, j = player_pair_index
-                match_lengths[rep][i][j] = len(interactions)
+                player, opponent = player_pair_index
+                match_lengths[rep][player][opponent] = len(interactions)
 
-                if i != j:  # Match lengths are symmetric
-                    match_lengths[rep][j][i] = len(interactions)
+                if player != opponent:  # Match lengths are symmetric
+                    match_lengths[rep][opponent][player] = len(interactions)
 
         return match_lengths
 
@@ -266,21 +266,21 @@ class ResultSet(object):
             obtained by player i against player j in each repetition.
         """
         plist = list(range(self.nplayers))
-        payoffs = [[[] for j in plist] for i in plist]
+        payoffs = [[[] for opponent in plist] for player in plist]
 
-        for i in plist:
-            for j in plist:
+        for player in plist:
+            for opponent in plist:
                 utilities = []
                 for rep in self.interactions:
 
-                    if (i, j) in rep:
-                        interactions = rep[(i, j)]
+                    if (player, opponent) in rep:
+                        interactions = rep[(player, opponent)]
                         utilities.append(iu.compute_final_score_per_turn(interactions)[0])
-                    if (j, i) in rep:
-                        interactions = rep[(j, i)]
+                    if (opponent, player) in rep:
+                        interactions = rep[(opponent, player)]
                         utilities.append(iu.compute_final_score_per_turn(interactions)[1])
 
-                    payoffs[i][j] = utilities
+                    payoffs[player][opponent] = utilities
         return payoffs
 
     def build_payoff_matrix(self):
@@ -304,16 +304,16 @@ class ResultSet(object):
             all repetitions) obtained by player i against player j.
         """
         plist = list(range(self.nplayers))
-        payoff_matrix = [[[0] for j in plist] for i in plist]
+        payoff_matrix = [[[] for opponent in plist] for player in plist]
 
-        for i in plist:
-            for j in plist:
-                utilities = self.payoffs[i][j]
+        for player in plist:
+            for opponent in plist:
+                utilities = self.payoffs[player][opponent]
 
                 if utilities:
-                    payoff_matrix[i][j] = mean(utilities)
+                    payoff_matrix[player][opponent] = mean(utilities)
                 else:
-                    payoff_matrix[i][j] = 0
+                    payoff_matrix[player][opponent] = 0
 
         return payoff_matrix
 
@@ -340,16 +340,16 @@ class ResultSet(object):
             i against player j.
         """
         plist = list(range(self.nplayers))
-        payoff_stddevs = [[[0] for j in plist] for i in plist]
+        payoff_stddevs = [[[0] for opponent in plist] for player in plist]
 
-        for i in plist:
-            for j in plist:
-                utilities = self.payoffs[i][j]
+        for player in plist:
+            for opponent in plist:
+                utilities = self.payoffs[player][opponent]
 
                 if utilities:
-                    payoff_stddevs[i][j] = std(utilities)
+                    payoff_stddevs[player][opponent] = std(utilities)
                 else:
-                    payoff_stddevs[i][j] = 0
+                    payoff_stddevs[player][opponent] = 0
 
         return payoff_stddevs
 
@@ -375,19 +375,22 @@ class ResultSet(object):
             scores per turn between player i and j in repetition m.
         """
         plist = list(range(self.nplayers))
-        score_diffs = [[[0] * self.nrepetitions for j in plist] for i in plist]
+        score_diffs = [[[0] * self.nrepetitions for opponent in plist]
+                       for player in plist]
 
-        for i in plist:
-            for j in plist:
+        for player in plist:
+            for opponent in plist:
                 for r, rep in enumerate(self.interactions):
-                    if (i, j) in rep:
-                        scores = iu.compute_final_score_per_turn(rep[(i, j)])
+                    if (player, opponent) in rep:
+                        scores = iu.compute_final_score_per_turn(rep[(player,
+                                                                      opponent)])
                         diff = (scores[0] - scores[1])
-                        score_diffs[i][j][r] = diff
-                    if (j, i) in rep:
-                        scores = iu.compute_final_score_per_turn(rep[(j, i)])
+                        score_diffs[player][opponent][r] = diff
+                    if (opponent, player) in rep:
+                        scores = iu.compute_final_score_per_turn(rep[(opponent,
+                                                                      player)])
                         diff = (scores[1] - scores[0])
-                        score_diffs[i][j][r] = diff
+                        score_diffs[player][opponent][r] = diff
         return score_diffs
 
     def build_payoff_diffs_means(self):
@@ -408,22 +411,24 @@ class ResultSet(object):
             scores per turn between player i and j in repetition m.
         """
         plist = list(range(self.nplayers))
-        payoff_diffs_means = [[0 for j in plist] for i in plist]
+        payoff_diffs_means = [[0 for opponent in plist] for player in plist]
 
-        for i in plist:
-            for j in plist:
+        for player in plist:
+            for opponent in plist:
                 diffs = []
                 for rep in self.interactions:
-                    if (i, j) in rep:
-                        scores = iu.compute_final_score_per_turn(rep[(i, j)])
+                    if (player, opponent) in rep:
+                        scores = iu.compute_final_score_per_turn(rep[(player,
+                                                                      opponent)])
                         diffs.append(scores[0] - scores[1])
-                    if (j, i) in rep:
-                        scores = iu.compute_final_score_per_turn(rep[(j, i)])
+                    if (opponent, player) in rep:
+                        scores = iu.compute_final_score_per_turn(rep[(opponent,
+                                                                      player)])
                         diffs.append(scores[1] - scores[0])
                 if diffs:
-                    payoff_diffs_means[i][j] = mean(diffs)
+                    payoff_diffs_means[player][opponent] = mean(diffs)
                 else:
-                    payoff_diffs_means[i][j] = 0
+                    payoff_diffs_means[player][opponent] = 0
         return payoff_diffs_means
 
     def build_cooperation(self):
@@ -444,22 +449,22 @@ class ResultSet(object):
             played by player i against player j.
         """
         plist = list(range(self.nplayers))
-        cooperations = [[0 for j in plist] for i in plist]
+        cooperations = [[0 for opponent in plist] for player in plist]
 
-        for i in plist:
-            for j in plist:
-                if i != j:
+        for player in plist:
+            for opponent in plist:
+                if player != opponent:
                     for rep in self.interactions:
                         coop_count = 0
 
-                        if (i, j) in rep:
-                            interactions = rep[(i, j)]
+                        if (player, opponent) in rep:
+                            interactions = rep[(player, opponent)]
                             coop_count = iu.compute_cooperations(interactions)[0]
-                        if (j, i) in rep:
-                            interactions = rep[(j, i)]
+                        if (opponent, player) in rep:
+                            interactions = rep[(opponent, player)]
                             coop_count = iu.compute_cooperations(interactions)[1]
 
-                        cooperations[i][j] += coop_count
+                        cooperations[player][opponent] += coop_count
         return cooperations
 
     def build_normalised_cooperation(self):
@@ -481,26 +486,26 @@ class ResultSet(object):
             repetition.
         """
         plist = list(range(self.nplayers))
-        normalised_cooperations = [[0 for j in plist] for i in plist]
+        normalised_cooperations = [[0 for opponent in plist] for player in plist]
 
-        for i in plist:
-            for j in plist:
+        for player in plist:
+            for opponent in plist:
                 coop_counts = []
                 for rep in self.interactions:
 
-                    if (i, j) in rep:
-                        interactions = rep[(i, j)]
+                    if (player, opponent) in rep:
+                        interactions = rep[(player, opponent)]
                         coop_counts.append(iu.compute_normalised_cooperation(interactions)[0])
 
-                    if (j, i) in rep:
-                        interactions = rep[(j, i)]
+                    if (opponent, player) in rep:
+                        interactions = rep[(opponent, player)]
                         coop_counts.append(iu.compute_normalised_cooperation(interactions)[1])
 
-                    if ((i, j) not in rep) and ((j, i) not in rep):
+                    if ((player, opponent) not in rep) and ((opponent, player) not in rep):
                         coop_counts.append(0)
 
                     # Mean over all reps:
-                    normalised_cooperations[i][j] = mean(coop_counts)
+                    normalised_cooperations[player][opponent] = mean(coop_counts)
         return normalised_cooperations
 
     def build_vengeful_cooperation(self):
@@ -536,9 +541,9 @@ class ResultSet(object):
         """
 
         plist = list(range(self.nplayers))
-        total_length_v_opponent = [zip(*[rep[playeri] for
+        total_length_v_opponent = [zip(*[rep[player_index] for
                                          rep in self.match_lengths])
-                                   for playeri in plist]
+                                   for player_index in plist]
         lengths = [[sum(e) for j, e in enumerate(row) if i != j] for i, row in
                    enumerate(total_length_v_opponent)]
 
@@ -559,24 +564,24 @@ class ResultSet(object):
         """
 
         plist = list(range(self.nplayers))
-        good_partner_matrix = [[0 for j in plist] for i in plist]
+        good_partner_matrix = [[0 for opponent in plist] for player in plist]
 
-        for i in plist:
-            for j in plist:
-                if i != j:
+        for player in plist:
+            for opponent in plist:
+                if player != opponent:
                     for rep in self.interactions:
 
-                        if (i, j) in rep:
-                            interaction = rep[(i, j)]
+                        if (player, opponent) in rep:
+                            interaction = rep[(player, opponent)]
                             coops = iu.compute_cooperations(interaction)
                             if coops[0] >= coops[1]:
-                                good_partner_matrix[i][j] += 1
+                                good_partner_matrix[player][opponent] += 1
 
-                        if (j, i) in rep:
-                            interaction = rep[(j, i)]
+                        if (opponent, player) in rep:
+                            interaction = rep[(opponent, player)]
                             coops = iu.compute_cooperations(interaction)
                             if coops[0] <= coops[1]:
-                                good_partner_matrix[i][j] += 1
+                                good_partner_matrix[player][opponent] += 1
 
         return good_partner_matrix
 
@@ -590,14 +595,14 @@ class ResultSet(object):
         plist = list(range(self.nplayers))
         good_partner_rating = []
 
-        for playeri in plist:
+        for player_index in plist:
             total_interactions = 0
             for rep in self.interactions:
                 total_interactions += len(
                     [pair for pair in rep.keys()
-                     if playeri in pair and pair[0] != pair[1]])
+                     if player_index in pair and pair[0] != pair[1]])
             # Max is to deal with edge case of matchs with no turns
-            rating = sum(self.good_partner_matrix[playeri]) / max(1, float(total_interactions))
+            rating = sum(self.good_partner_matrix[player_index]) / max(1, float(total_interactions))
             good_partner_rating.append(rating)
 
         return good_partner_rating
@@ -677,6 +682,14 @@ class ResultSetFromFile(ResultSet):
 
     def _read_csv(self, filename):
         """
+        Reads from a csv file of the format:
+
+        p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
+        ...
+        0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...
+        0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...
+        1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...
+
         Returns
         -------
 
