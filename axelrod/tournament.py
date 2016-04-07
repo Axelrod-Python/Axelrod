@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import logging
 from multiprocess import Process, Queue, cpu_count
+import csv
 
 from .game import Game
 from .result_set import ResultSet
@@ -37,8 +38,6 @@ class Tournament(object):
             The probability that a player's intended action should be flipped
         with_morality : boolean
             Whether morality metrics should be calculated
-        keep_matches : boolean
-            Whether interaction results should be included in the output
         """
         self.name = name
         self.turns = turns
@@ -55,7 +54,7 @@ class Tournament(object):
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self.matches = []
+        self.interactions = []
 
     @property
     def players(self):
@@ -73,7 +72,7 @@ class Tournament(object):
             newplayers.append(player)
         self._players = newplayers
 
-    def play(self):
+    def play(self, filename=None):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -82,14 +81,16 @@ class Tournament(object):
         axelrod.ResultSet
         """
         if self._processes is None:
-            self._run_serial_repetitions(self.matches)
+            self._run_serial_repetitions(self.interactions)
         else:
             if self._build_cache_required():
-                self._build_cache(self.matches)
-            self._run_parallel_repetitions(self.matches)
+                self._build_cache(self.interactions)
+            self._run_parallel_repetitions(self.interactions)
 
-        self.result_set = self._build_result_set()
-        return self.result_set
+        if filename is None:
+            self.result_set = self._build_result_set()
+            return self.result_set
+        self._write_to_csv(filename)
 
     def _build_result_set(self):
         """
@@ -101,7 +102,7 @@ class Tournament(object):
         """
         result_set = ResultSet(
             players=self.players,
-            matches=self.matches,
+            interactions=self.interactions,
             with_morality=self._with_morality)
         return result_set
 
@@ -129,37 +130,37 @@ class Tournament(object):
         self._run_single_repetition(matches)
         self._parallel_repetitions -= 1
 
-    def _run_single_repetition(self, matches):
+    def _run_single_repetition(self, interactions):
         """
         Runs a single round robin and updates the matches list.
         """
         new_matches = self.tournament_type.build_matches(
             cache_mutable=True, noise=self.noise)
-        self._play_matches(new_matches)
-        self.matches.append(new_matches)
+        interactions = self._play_matches(new_matches)
+        self.interactions.append(interactions)
 
-    def _run_serial_repetitions(self, matches):
+    def _run_serial_repetitions(self, interactions):
         """
         Runs all repetitions of the round robin in serial.
 
         Parameters
         ----------
-        matches : list
-            The list of matches per repetition to update with results
+        ineractions : list
+            The list of interactions per repetition to update with results
         """
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            self._run_single_repetition(matches)
+            self._run_single_repetition(interactions)
         return True
 
-    def _run_parallel_repetitions(self, matches):
+    def _run_parallel_repetitions(self, interactions):
         """
         Run all except the first round robin using parallel processing.
 
         Parameters
         ----------
-        matches : list
-            The list of matches per repetition to update with results
+        interactions : list
+            The list of interactions per repetition to update with results
         """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
@@ -175,7 +176,7 @@ class Tournament(object):
             'Playing %d round robins with %d parallel processes' %
             (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, matches)
+        self._process_done_queue(workers, done_queue, interactions)
 
         return True
 
@@ -213,7 +214,7 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, matches):
+    def _process_done_queue(self, workers, done_queue, interactions):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -223,8 +224,8 @@ class Tournament(object):
             The number of sub-processes in existence
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
-        matches : list
-            The list of matches per repetition to update with results
+        interactions : list
+            The list of interactions per repetition to update with results
         """
         stops = 0
         while stops < workers:
@@ -233,12 +234,7 @@ class Tournament(object):
             if results == 'STOP':
                 stops += 1
             else:
-                new_matches = self.tournament_type.build_matches(
-                    cache_mutable=False, noise=self.noise)
-                for index_pair, result in results.items():
-                    new_matches[index_pair].result = result
-
-                matches.append(new_matches)
+                interactions.append(results)
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -255,11 +251,8 @@ class Tournament(object):
         for repetition in iter(work_queue.get, 'STOP'):
             new_matches = self.tournament_type.build_matches(
                 cache_mutable=False, noise=self.noise)
-            self._play_matches(new_matches)
-
-            results = {index_pair: match.result for
-                       index_pair, match in new_matches.items()}
-            done_queue.put(results)
+            interactions = self._play_matches(new_matches)
+            done_queue.put(interactions)
         done_queue.put('STOP')
         return True
 
@@ -269,12 +262,54 @@ class Tournament(object):
 
         Parameters
         ----------
-        matches : dictionary
-            Mapping a tuple of player index numbers to an axelrod Match object
+        matches : generator
+            Generator of tuples: player index pair, match
 
+        Returns
+        -------
+        interactions : dictionary
+            Mapping player index pairs to results of matches:
+
+                (0, 1) -> [('C', 'D'), ('D', 'C'),...]
         """
-        for match in matches.values():
+        interactions = {}
+        for index_pair, match in matches:
             match.play()
+            interactions[index_pair] = match.result
+        return interactions
+
+    def _write_to_csv(self, filename):
+        """Write the interactions to csv."""
+        with open(filename, 'w') as csvfile:
+            writer = csv.writer(csvfile)
+            for row in self._data_for_csv():
+                writer.writerow(row)
+
+    def _data_for_csv(self):
+        """
+        Returns
+        -------
+        A generator of the interactions to a list of lists of the form:
+
+        [p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
+        ...]
+        [0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...]
+        [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
+        [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
+        """
+        index_pairs = self.interactions[0].keys()
+        for index_pair in index_pairs:
+            p1, p2 = index_pair
+            row = [p1, p2, self.players[p1].name, self.players[p2].name]
+            for rep in self.interactions:
+                interaction = rep[index_pair]
+                matchstringrep = ''.join([act for inter in interaction
+                                          for act in inter])
+                row.append(matchstringrep)
+            yield row
+
+
+
 
 
 class ProbEndTournament(Tournament):

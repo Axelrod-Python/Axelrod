@@ -3,6 +3,8 @@ import axelrod
 
 from numpy import mean, std
 
+import tempfile
+
 from hypothesis import given
 from hypothesis.strategies import floats, integers
 
@@ -27,6 +29,11 @@ class TestResultSet(unittest.TestCase):
         for rep in cls.matches:
             for match in rep.values():
                 match.play()
+
+        cls.interactions = []
+        for rep in cls.matches:
+            cls.interactions.append({index_pair: match.result for
+                                     index_pair, match in rep.items()})
 
         cls.expected_players_to_match_dicts = [{0: [rep[(0, 1)], rep[(0, 2)]],
                                                 1: [rep[(0, 1)], rep[(1, 2)]],
@@ -156,28 +163,28 @@ class TestResultSet(unittest.TestCase):
             'Defector,Tit For Tat,Alternator\n2.6,1.7,1.5\n2.6,1.7,1.5\n2.6,1.7,1.5\n')
 
     def test_init(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertEqual(rs.players, self.players)
         self.assertEqual(rs.nplayers, len(self.players))
-        self.assertEqual(rs.matches, self.matches)
-        self.assertEqual(rs.nrepetitions, len(self.matches))
+        self.assertEqual(rs.interactions, self.interactions)
+        self.assertEqual(rs.nrepetitions, len(self.interactions))
 
         # Test structure of matches
         # This is really a test of the test
-        for rep in rs.matches:
+        for rep in rs.interactions:
             self.assertIsInstance(rep, dict)
-            for index_pair, match in rep.items():
+            for index_pair, inter in rep.items():
                 self.assertIsInstance(index_pair, tuple)
-                self.assertIsInstance(match, axelrod.Match)
-                self.assertEqual(len(match), self.turns)
+                self.assertIsInstance(inter, list)
+                self.assertEqual(len(inter), self.turns)
 
     def test_null_results_matrix(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertEqual(
             rs._null_results_matrix, self.expected_null_results_matrix)
 
     def test_match_lengths(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.match_lengths, list)
         self.assertEqual(len(rs.match_lengths), rs.nrepetitions)
         self.assertEqual(rs.match_lengths, self.expected_match_lengths)
@@ -197,49 +204,49 @@ class TestResultSet(unittest.TestCase):
                         #self.assertEqual(length, self.turns)
 
     def test_scores(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.scores, list)
         self.assertEqual(len(rs.scores), rs.nplayers)
         self.assertEqual(rs.scores, self.expected_scores)
 
     def test_ranking(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.ranking, list)
         self.assertEqual(len(rs.ranking), rs.nplayers)
         self.assertEqual(rs.ranking, self.expected_ranking)
 
     def test_ranked_names(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.ranked_names, list)
         self.assertEqual(len(rs.ranked_names), rs.nplayers)
         self.assertEqual(rs.ranked_names, self.expected_ranked_names)
 
     def test_wins(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.wins, list)
         self.assertEqual(len(rs.wins), rs.nplayers)
         self.assertEqual(rs.wins, self.expected_wins)
 
     def test_normalised_scores(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.normalised_scores, list)
         self.assertEqual(len(rs.normalised_scores), rs.nplayers)
         self.assertEqual(rs.normalised_scores, self.expected_normalised_scores)
 
     def test_payoffs(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.payoffs, list)
         self.assertEqual(len(rs.payoffs), rs.nplayers)
         self.assertEqual(rs.payoffs, self.expected_payoffs)
 
     def test_payoff_matrix(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.payoff_matrix, list)
         self.assertEqual(len(rs.payoff_matrix), rs.nplayers)
         self.assertEqual(rs.payoff_matrix, self.expected_payoff_matrix)
 
     def test_score_diffs(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.score_diffs, list)
         self.assertEqual(len(rs.score_diffs), rs.nplayers)
         for i, row in enumerate(rs.score_diffs):
@@ -249,7 +256,7 @@ class TestResultSet(unittest.TestCase):
                                      self.expected_score_diffs[i][j][k])
 
     def test_payoff_diffs_means(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.payoff_diffs_means, list)
         self.assertEqual(len(rs.payoff_diffs_means), rs.nplayers)
         for i, row in enumerate(rs.payoff_diffs_means):
@@ -258,66 +265,95 @@ class TestResultSet(unittest.TestCase):
                                  self.expected_payoff_diffs_means[i][j])
 
     def test_payoff_stddevs(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.payoff_stddevs, list)
         self.assertEqual(len(rs.payoff_stddevs), rs.nplayers)
         self.assertEqual(rs.payoff_stddevs, self.expected_payoff_stddevs)
 
     def test_cooperation(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.cooperation, list)
         self.assertEqual(len(rs.cooperation), rs.nplayers)
         self.assertEqual(rs.cooperation, self.expected_cooperation)
 
     def test_normalised_cooperation(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.normalised_cooperation, list)
         self.assertEqual(len(rs.normalised_cooperation), rs.nplayers)
         self.assertEqual(rs.normalised_cooperation,
                          self.expected_normalised_cooperation)
 
     def test_vengeful_cooperation(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.vengeful_cooperation, list)
         self.assertEqual(len(rs.vengeful_cooperation), rs.nplayers)
         self.assertEqual(rs.vengeful_cooperation,
                          self.expected_vengeful_cooperation)
 
     def test_cooperating_rating(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.cooperating_rating, list)
         self.assertEqual(len(rs.cooperating_rating), rs.nplayers)
         self.assertEqual(rs.cooperating_rating,
                          self.expected_cooperating_rating)
 
     def test_good_partner_matrix(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.good_partner_matrix, list)
         self.assertEqual(len(rs.good_partner_matrix), rs.nplayers)
         self.assertEqual(rs.good_partner_matrix,
                          self.expected_good_partner_matrix)
 
     def test_good_partner_rating(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.good_partner_rating, list)
         self.assertEqual(len(rs.good_partner_rating), rs.nplayers)
         self.assertEqual(rs.good_partner_rating,
                          self.expected_good_partner_rating)
 
     def test_eigenjesus_rating(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.eigenjesus_rating, list)
         self.assertEqual(len(rs.eigenjesus_rating), rs.nplayers)
         for j, rate in enumerate(rs.eigenjesus_rating):
             self.assertAlmostEqual(rate, self.expected_eigenjesus_rating[j])
 
     def test_eigenmoses_rating(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertIsInstance(rs.eigenmoses_rating, list)
         self.assertEqual(len(rs.eigenmoses_rating), rs.nplayers)
         for j, rate in enumerate(rs.eigenmoses_rating):
             self.assertAlmostEqual(rate, self.expected_eigenmoses_rating[j])
 
     def test_csv(self):
-        rs = axelrod.ResultSet(self.players, self.matches)
+        rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertEqual(rs.csv(), self.expected_csv)
+
+
+class TestResultSetFromFile(unittest.TestCase):
+    tournament = axelrod.Tournament(
+        players=[axelrod.Cooperator(),
+                 axelrod.TitForTat(),
+                 axelrod.Defector()],
+        turns=2,
+        repetitions=2)
+    tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+    tournament.play(filename=tmp_file.name)
+    tmp_file.close()
+
+
+    def test_init(self):
+        rs = axelrod.ResultSetFromFile(self.tmp_file.name)
+        players = ['Cooperator', 'Tit For Tat', 'Defector']
+        self.assertEqual(rs.players, players)
+        self.assertEqual(rs.nplayers, len(players))
+        self.assertEqual(rs.nrepetitions, 2)
+
+        expected_interactions = [{(0, 1): [('C', 'C'), ('C', 'C')], (1, 2): [('C', 'D'), ('D', 'D')], (0, 0): [('C', 'C'), ('C', 'C')], (2, 2): [('D', 'D'), ('D', 'D')], (0, 2): [('C', 'D'), ('C', 'D')], (1, 1): [('C', 'C'), ('C', 'C')]}, {(0, 1): [('C', 'C'), ('C', 'C')], (1, 2): [('C', 'D'), ('D', 'D')], (0, 0): [('C', 'C'), ('C', 'C')], (2, 2): [('D', 'D'), ('D', 'D')], (0, 2): [('C', 'D'), ('C', 'D')], (1, 1): [('C', 'C'), ('C', 'C')]}]
+        self.assertEqual(rs.interactions, expected_interactions)
+
+    def test_string_to_interactions(self):
+        rs = axelrod.ResultSetFromFile(self.tmp_file.name)
+        string = 'CDCDDD'
+        interactions = [('C', 'D'), ('C', 'D'), ('D', 'D')]
+        self.assertEqual(rs._string_to_interactions(string), interactions)
