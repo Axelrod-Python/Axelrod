@@ -1,3 +1,0 @@
-The library has a DOI number provided by zenodo.org. Please see this page:
-https://zenodo.org/badge/latestdoi/19509/Axelrod-Python/Axelrod for full
-citation instructions.
