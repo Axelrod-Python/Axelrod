@@ -7,47 +7,14 @@ C, D = Actions.C, Actions.D
 
 
 class TestMatch(unittest.TestCase):
-    interactions = [
-            [(C, D), (D, C)],
-            [(D, C), (D, C)],
-            [(C, C), (C, D)],
-            [],
-            ]
-
-
-    scores = [
-            [(0, 5), (5, 0)],
-            [(5, 0), (5, 0)],
-            [(3, 3), (0, 5)],
-            [],
-            ]
-
-
-    final_scores = [
-            (5, 5),
-            (10, 0),
-            (3, 8),
-            None,
-            ]
-
-
-    final_score_per_turn = [
-            (2.5, 2.5),
-            (5, 0),
-            (1.5, 4),
-            None,
-            ]
-
+    interactions = [ [(C, D), (D, C)], [(D, C), (D, C)], [(C, C), (C, D)], []]
+    scores = [ [(0, 5), (5, 0)], [(5, 0), (5, 0)], [(3, 3), (0, 5)], []]
+    final_scores = [ (5, 5), (10, 0), (3, 8), None]
+    final_score_per_turn = [ (2.5, 2.5), (5, 0), (1.5, 4), None]
     winners = [False, 0, 1, None]
     cooperations = [(1, 1), (0, 2), (2, 1), None]
     normalised_cooperations = [(.5, .5), (0, 1), (1, .5), None]
-
-    sparklines = [
-            u'█ \n █',
-            u'  \n██',
-            u'██\n█ ',
-            None
-            ]
+    sparklines = [ u'█ \n █', u'  \n██', u'██\n█ ', None ]
 
 
     def test_compute_scores(self):
