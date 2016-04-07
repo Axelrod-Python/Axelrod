@@ -3,3 +3,4 @@ matplotlib>=1.4.2
 cloudpickle==0.1.1
 hypothesis>=3.0
 testfixtures==4.9.1
+multiprocess>=0.70.4

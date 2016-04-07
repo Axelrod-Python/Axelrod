@@ -17,7 +17,7 @@ import os
 
 import mock
 
-MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.random', 'matplotlib.pyplot', 'matplotlib', 'matplotlib.transforms', 'mpl_toolkits.axes_grid1', 'cloudpickle']
+MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.random', 'matplotlib.pyplot', 'matplotlib', 'matplotlib.transforms', 'mpl_toolkits.axes_grid1', 'cloudpickle', 'multiprocess']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 

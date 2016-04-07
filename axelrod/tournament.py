@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 import logging
-import multiprocessing
+from multiprocess import Process, Queue, cpu_count
 import csv
 
 from .game import Game
@@ -165,8 +165,8 @@ class Tournament(object):
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
-        work_queue = multiprocessing.Queue()
-        done_queue = multiprocessing.Queue()
+        work_queue = Queue()
+        done_queue = Queue()
         workers = self._n_workers()
 
         for repetition in range(self._parallel_repetitions):
@@ -188,10 +188,10 @@ class Tournament(object):
         -------
         integer
         """
-        if (2 <= self._processes <= multiprocessing.cpu_count()):
+        if (2 <= self._processes <= cpu_count()):
             n_workers = self._processes
         else:
-            n_workers = multiprocessing.cpu_count()
+            n_workers = cpu_count()
         return n_workers
 
     def _start_workers(self, workers, work_queue, done_queue):
@@ -208,7 +208,7 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for worker in range(workers):
-            process = multiprocessing.Process(
+            process = Process(
                 target=self._worker, args=(work_queue, done_queue))
             work_queue.put('STOP')
             process.start()

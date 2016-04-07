@@ -97,8 +97,13 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 # Modify the Player name (class variable inherited from Player)
                 name = name_prefix + ' ' + PlayerClass.name
             # Dynamically create the new class
-            new_class = type(new_class_name, (PlayerClass,),
-                            {"name": name, "strategy": strategy})
+            new_class = type(
+                new_class_name, (PlayerClass,),
+                {
+                    "name": name,
+                    "strategy": strategy,
+                    "__module__": PlayerClass.__module__
+                })
             return new_class
     return Decorator
 
@@ -110,9 +115,11 @@ def compose_transformers(t1, t2):
         def __init__(self):
             self.t1 = t1
             self.t2 = t2
+
         def __call__(self, PlayerClass):
             return t1(t2(PlayerClass))
     return Composition()
+
 
 def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
     """
@@ -139,12 +146,14 @@ def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)
 
 IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)()
 
+
 def flip_wrapper(player, opponent, action):
     """Applies flip_action at the class level."""
     return flip_action(action)
 
-FlipTransformer = StrategyTransformerFactory(flip_wrapper,
-                                             name_prefix="Flipped")()
+FlipTransformer = StrategyTransformerFactory(
+    flip_wrapper, name_prefix="Flipped")()
+
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
     """Applies flip_action at the class level."""
@@ -153,7 +162,9 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
         return flip_action(action)
     return action
 
-NoisyTransformer = StrategyTransformerFactory(noisy_wrapper, name_prefix="Noisy")
+NoisyTransformer = StrategyTransformerFactory(
+    noisy_wrapper, name_prefix="Noisy")
+
 
 def forgiver_wrapper(player, opponent, action, p):
     """If a strategy wants to defect, flip to cooperate with the given
@@ -162,8 +173,8 @@ def forgiver_wrapper(player, opponent, action, p):
         return random_choice(p)
     return C
 
-ForgiverTransformer = StrategyTransformerFactory(forgiver_wrapper,
-                                              name_prefix="Forgiving")
+ForgiverTransformer = StrategyTransformerFactory(
+    forgiver_wrapper, name_prefix="Forgiving")
 
 def initial_sequence(player, opponent, action, initial_seq):
     """Play the moves in `seq` first (must be a list), ignoring the strategy's
@@ -176,6 +187,7 @@ def initial_sequence(player, opponent, action, initial_seq):
 
 InitialTransformer = StrategyTransformerFactory(initial_sequence)
 
+
 def final_sequence(player, opponent, action, seq):
     """Play the moves in `seq` first, ignoring the strategy's moves until the
     list is exhausted."""
@@ -183,7 +195,7 @@ def final_sequence(player, opponent, action, seq):
     length = player.tournament_attributes["length"]
     player.classifier["makes_use_of"].update(["length"])
 
-    if length < 0: # default is -1
+    if length < 0:  # default is -1
         return action
 
     index = length - len(player.history)
@@ -199,6 +211,7 @@ def final_sequence(player, opponent, action, seq):
 
 FinalTransformer = StrategyTransformerFactory(final_sequence)
 
+
 def history_track_wrapper(player, opponent, action):
     """Wrapper to track a player's history in a variable `._recorded_history`."""
     try:
@@ -209,6 +222,7 @@ def history_track_wrapper(player, opponent, action):
 
 TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper,
                                         name_prefix="HistoryTracking")()
+
 
 def deadlock_break_wrapper(player, opponent, action):
     """Detect and attempt to break deadlocks by cooperating."""
@@ -222,8 +236,8 @@ def deadlock_break_wrapper(player, opponent, action):
         return C
     return action
 
-DeadlockBreakingTransformer = StrategyTransformerFactory(deadlock_break_wrapper,
-                                              name_prefix="DeadlockBreaking")()
+DeadlockBreakingTransformer = StrategyTransformerFactory(
+    deadlock_break_wrapper, name_prefix="DeadlockBreaking")()
 
 def grudge_wrapper(player, opponent, action, grudges):
     """After `grudges` defections, defect forever."""
@@ -231,20 +245,21 @@ def grudge_wrapper(player, opponent, action, grudges):
         return D
     return action
 
-GrudgeTransformer = StrategyTransformerFactory(grudge_wrapper,
-                                              name_prefix="Grudging")
+GrudgeTransformer = StrategyTransformerFactory(
+    grudge_wrapper, name_prefix="Grudging")
+
 
 def apology_wrapper(player, opponent, action, myseq, opseq):
     length = len(myseq)
     if len(player.history) < length:
         return action
     if (myseq == player.history[-length:]) and \
-        (opseq == opponent.history[-length:]):
+       (opseq == opponent.history[-length:]):
         return C
     return action
 
-ApologyTransformer = StrategyTransformerFactory(apology_wrapper,
-                                                name_prefix="Apologizing")
+ApologyTransformer = StrategyTransformerFactory(
+    apology_wrapper, name_prefix="Apologizing")
 
 
 def mixed_wrapper(player, opponent, action, probability, m_player):
@@ -284,9 +299,11 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
 
     return action
 
-MixedTransformer = StrategyTransformerFactory(mixed_wrapper, name_prefix="Mutated")
+MixedTransformer = StrategyTransformerFactory(
+    mixed_wrapper, name_prefix="Mutated")
 
 # Strategy wrappers as classes
+
 
 class RetaliationWrapper(object):
     """Retaliates `retaliations` times after a defection (cumulative)."""
@@ -311,6 +328,7 @@ RetaliationTransformer = StrategyTransformerFactory(
 class RetaliationUntilApologyWrapper(object):
     """Enforces the TFT rule that the opponent pay back a defection with a
     cooperation for the player to stop defecting."""
+
     def __call__(self, player, opponent, action):
         if len(player.history) == 0:
             self.is_retaliating = False
