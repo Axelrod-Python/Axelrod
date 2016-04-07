@@ -398,23 +398,14 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             repetitions=self.test_repetitions)
 
-        matches = [
-            ((0, 0), axelrod.Match((axelrod.Cooperator(), axelrod.Cooperator()), turns=turns)),
-            ((0, 1), axelrod.Match((axelrod.Cooperator(), axelrod.TitForTat()), turns=turns)),
-            ((0, 2), axelrod.Match((axelrod.Cooperator(), axelrod.Defector()), turns=turns)),
-            ((0, 3), axelrod.Match((axelrod.Cooperator(), axelrod.Grudger()), turns=turns)),
-            ((0, 4), axelrod.Match((axelrod.Cooperator(), axelrod.GoByMajority()), turns=turns)),
-            ((1, 1), axelrod.Match((axelrod.TitForTat(), axelrod.TitForTat()), turns=turns)),
-            ((1, 2), axelrod.Match((axelrod.TitForTat(), axelrod.Defector()), turns=turns)),
-            ((1, 3), axelrod.Match((axelrod.TitForTat(), axelrod.Grudger()), turns=turns)),
-            ((1, 4), axelrod.Match((axelrod.TitForTat(), axelrod.GoByMajority()), turns=turns)),
-            ((2, 2), axelrod.Match((axelrod.Defector(), axelrod.Defector()), turns=turns)),
-            ((2, 3), axelrod.Match((axelrod.Defector(), axelrod.Grudger()), turns=turns)),
-            ((2, 4), axelrod.Match((axelrod.Defector(), axelrod.GoByMajority()), turns=turns)),
-            ((3, 3), axelrod.Match((axelrod.Grudger(), axelrod.Grudger()), turns=turns)),
-            ((3, 4), axelrod.Match((axelrod.Grudger(), axelrod.GoByMajority()), turns=turns)),
-            ((4, 4), axelrod.Match((axelrod.GoByMajority(), axelrod.GoByMajority()), turns=turns)),
-        ]
+        player_classes = [axelrod.Cooperator, axelrod.TitForTat,
+                          axelrod.Defector, axelrod.Grudger]
+        matches = []
+        for i, player_cls in enumerate(player_classes):
+            for j, opponent_cls in enumerate(player_classes):
+                players = (player_cls(), opponent_cls())
+                match = axelrod.Match(players, turns=turns)
+                matches.append(((i, j), match))
         matches_generator = (element for element in matches)
 
         self.assertEqual((len(list(matches_generator))), len(matches))

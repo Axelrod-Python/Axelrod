@@ -72,7 +72,7 @@ class Tournament(object):
             newplayers.append(player)
         self._players = newplayers
 
-    def play(self, filename=False):
+    def play(self, filename=None):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -87,7 +87,7 @@ class Tournament(object):
                 self._build_cache(self.interactions)
             self._run_parallel_repetitions(self.interactions)
 
-        if filename is False:
+        if filename is None:
             self.result_set = self._build_result_set()
             return self.result_set
         self._write_to_csv(filename)
@@ -280,8 +280,8 @@ class Tournament(object):
 
     def _write_to_csv(self, filename):
         """Write the interactions to csv."""
-        with open(filename, 'w') as f:
-            writer = csv.writer(f)
+        with open(filename, 'w') as csvfile:
+            writer = csv.writer(csvfile)
             for row in self._data_for_csv():
                 writer.writerow(row)
 
