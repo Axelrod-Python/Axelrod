@@ -50,35 +50,35 @@ class TestMatch(unittest.TestCase):
             ]
 
 
-    def test_get_scores(self):
+    def test_compute_scores(self):
         for inter, score in zip(self.interactions, self.scores):
-            self.assertEqual(score, iu.get_scores(inter))
+            self.assertEqual(score, iu.compute_scores(inter))
 
-    def test_get_final_score(self):
+    def test_compute_final_score(self):
         for inter, final_score in zip(self.interactions, self.final_scores):
-            self.assertEqual(final_score, iu.get_final_score(inter))
+            self.assertEqual(final_score, iu.compute_final_score(inter))
 
-    def test_get_final_score_per_turn(self):
+    def test_compute_final_score_per_turn(self):
         for inter, final_score_per_round in zip(self.interactions,
                                                 self.final_score_per_turn):
             self.assertEqual(final_score_per_round,
-                             iu.get_final_score_per_turn(inter))
+                             iu.compute_final_score_per_turn(inter))
 
-    def test_get_winner_index(self):
+    def test_compute_winner_index(self):
         for inter, winner in zip(self.interactions, self.winners):
-            self.assertEqual(winner, iu.get_winner_index(inter))
+            self.assertEqual(winner, iu.compute_winner_index(inter))
 
-    def test_get_cooperations(self):
+    def test_compute_cooperations(self):
         for inter, coop in zip(self.interactions, self.cooperations):
-            self.assertEqual(coop, iu.get_cooperations(inter))
+            self.assertEqual(coop, iu.compute_cooperations(inter))
 
-    def test_get_normalised_cooperations(self):
+    def test_compute_normalised_cooperations(self):
         for inter, coop in zip(self.interactions, self.normalised_cooperations):
-            self.assertEqual(coop, iu.get_normalised_cooperation(inter))
+            self.assertEqual(coop, iu.compute_normalised_cooperation(inter))
 
-    def test_get_sparklines(self):
+    def test_compute_sparklines(self):
         for inter, spark in zip(self.interactions, self.sparklines):
-            self.assertEqual(spark, iu.get_sparklines(inter))
+            self.assertEqual(spark, iu.compute_sparklines(inter))
 
     def test_string_to_interactions(self):
         string = 'CDCDDD'

@@ -96,22 +96,22 @@ class Match(object):
 
     def scores(self, game=None):
         """Returns the scores of the previous Match plays."""
-        scores = iu.get_scores(self.result, game)
+        scores = iu.compute_scores(self.result, game)
         return scores
 
     def final_score(self, game=None):
         """Returns the final score for a Match"""
-        final_score = iu.get_final_score(self.result, game)
+        final_score = iu.compute_final_score(self.result, game)
         return final_score
 
     def final_score_per_turn(self, game=None):
         """Returns the mean score per round for a Match"""
-        final_score_per_turn = iu.get_final_score_per_turn(self.result, game)
+        final_score_per_turn = iu.compute_final_score_per_turn(self.result, game)
         return final_score_per_turn
 
     def winner(self, game=None):
         """Returns the winner of the Match"""
-        winner_index = iu.get_winner_index(self.result, game)
+        winner_index = iu.compute_winner_index(self.result, game)
         if winner_index is False:  # No winner
             return False
         if winner_index is None:  # No plays
@@ -120,14 +120,14 @@ class Match(object):
 
     def cooperation(self):
         """Returns the count of cooperations by each player"""
-        return iu.get_cooperations(self.result)
+        return iu.compute_cooperations(self.result)
 
     def normalised_cooperation(self):
         """Returns the count of cooperations by each player per turn"""
-        return iu.get_normalised_cooperation(self.result)
+        return iu.compute_normalised_cooperation(self.result)
 
     def sparklines(self, c_symbol=u'█', d_symbol=u' '):
-        return iu.get_sparklines(self.result, c_symbol, d_symbol)
+        return iu.compute_sparklines(self.result, c_symbol, d_symbol)
 
     def __len__(self):
         return self._turns
