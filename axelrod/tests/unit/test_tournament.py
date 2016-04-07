@@ -398,19 +398,23 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             repetitions=self.test_repetitions)
 
-        player_classes = [axelrod.Cooperator, axelrod.TitForTat,
-                          axelrod.Defector, axelrod.Grudger]
-        matches = []
-        for i, player_cls in enumerate(player_classes):
-            for j, opponent_cls in enumerate(player_classes):
-                players = (player_cls(), opponent_cls())
-                match = axelrod.Match(players, turns=turns)
-                matches.append(((i, j), match))
-        matches_generator = (element for element in matches)
 
-        self.assertEqual((len(list(matches_generator))), len(matches))
+        def make_generator():
+            """Return a generator used by this method"""
+            player_classes = [axelrod.Cooperator, axelrod.TitForTat,
+                              axelrod.Defector, axelrod.Grudger]
+            for i, player_cls in enumerate(player_classes):
+                for j, opponent_cls in enumerate(player_classes):
+                    if j >= i:  # These matches correspond to a round robin
+                        players = (player_cls(), opponent_cls())
+                        match = axelrod.Match(players, turns=turns)
+                        yield ((i, j), match)
 
+        matches_generator = make_generator()
         interactions = tournament._play_matches(matches_generator)
+
+        self.assertEqual(len(interactions), 10)
+
         for index_pair, inter in interactions.items():
             self.assertEqual(len(inter), turns)
             self.assertEqual(len(index_pair), 2)
