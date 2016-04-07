@@ -96,18 +96,15 @@ class Match(object):
 
     def scores(self, game=None):
         """Returns the scores of the previous Match plays."""
-        scores = iu.compute_scores(self.result, game)
-        return scores
+        return iu.compute_scores(self.result, game)
 
     def final_score(self, game=None):
         """Returns the final score for a Match"""
-        final_score = iu.compute_final_score(self.result, game)
-        return final_score
+        return iu.compute_final_score(self.result, game)
 
     def final_score_per_turn(self, game=None):
         """Returns the mean score per round for a Match"""
-        final_score_per_turn = iu.compute_final_score_per_turn(self.result, game)
-        return final_score_per_turn
+        return iu.compute_final_score_per_turn(self.result, game)
 
     def winner(self, game=None):
         """Returns the winner of the Match"""
