@@ -12,6 +12,8 @@ class TestDeterministicCache(unittest.TestCase):
         cls.test_save_file = 'test_cache_save.txt'
         cls.test_load_file = 'test_cache_load.txt'
         cls.test_pickle = b'\x80\x03}q\x00caxelrod.strategies.titfortat\nTitForTat\nq\x01caxelrod.strategies.defector\nDefector\nq\x02\x86q\x03]q\x04(X\x01\x00\x00\x00Cq\x05X\x01\x00\x00\x00Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'
+        with open(cls.test_load_file, 'wb') as f:
+            f.write(cls.test_pickle)
 
     @classmethod
     def tearDownClass(cls):
@@ -24,8 +26,6 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertEqual(cache.turns, None)
 
     def test_init_from_file(self):
-        with open(self.test_load_file, 'wb') as f:
-            f.write(self.test_pickle)
         cache = DeterministicCache(file_name=self.test_load_file)
         self.assertEqual(cache[self.test_key], self.test_value)
         self.assertEqual(cache.turns, 3)
@@ -73,8 +73,6 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertEqual(text, self.test_pickle)
 
     def test_load(self):
-        with open(self.test_load_file, 'wb') as f:
-            f.write(self.test_pickle)
         cache = DeterministicCache()
         cache.load(self.test_load_file)
         self.assertEqual(cache[self.test_key], self.test_value)
