@@ -47,7 +47,7 @@ class DeterministicCache(UserDict):
     def _is_valid_key(self, key):
         """Validate a proposed dictionary key
 
-         Parameters
+        Parameters
         ----------
         key : object
 
@@ -79,7 +79,7 @@ class DeterministicCache(UserDict):
     def _is_valid_value(self, value):
         """Validate a proposed dictionary value
 
-         Parameters
+        Parameters
         ----------
         value : object
 
