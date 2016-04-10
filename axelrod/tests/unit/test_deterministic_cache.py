@@ -1,5 +1,6 @@
 import unittest
 import os
+import sys
 from axelrod import DeterministicCache, TitForTat, Defector
 
 
@@ -11,7 +12,12 @@ class TestDeterministicCache(unittest.TestCase):
         cls.test_value = [('C', 'D'), ('D', 'D'), ('D', 'D')]
         cls.test_save_file = 'test_cache_save.txt'
         cls.test_load_file = 'test_cache_load.txt'
-        cls.test_pickle = b'\x80\x03}q\x00caxelrod.strategies.titfortat\nTitForTat\nq\x01caxelrod.strategies.defector\nDefector\nq\x02\x86q\x03]q\x04(X\x01\x00\x00\x00Cq\x05X\x01\x00\x00\x00Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'
+        if sys.version_info[0] == 2:
+            # Python 2.x
+            cls.test_pickle = b'\x80\x02}q\x00caxelrod.strategies.titfortat\nTitForTat\nq\x01caxelrod.strategies.defector\nDefector\nq\x02\x86q\x03]q\x04(U\x01Cq\x05U\x01Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'
+        else:
+            # Python 3.x
+            cls.test_pickle = b'\x80\x03}q\x00caxelrod.strategies.titfortat\nTitForTat\nq\x01caxelrod.strategies.defector\nDefector\nq\x02\x86q\x03]q\x04(X\x01\x00\x00\x00Cq\x05X\x01\x00\x00\x00Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'
         with open(cls.test_load_file, 'wb') as f:
             f.write(cls.test_pickle)
 
