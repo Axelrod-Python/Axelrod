@@ -1,7 +1,7 @@
 import unittest
 import os
 import sys
-from axelrod import DeterministicCache, TitForTat, Defector
+from axelrod import DeterministicCache, TitForTat, Defector, Random
 
 
 class TestDeterministicCache(unittest.TestCase):
@@ -60,6 +60,9 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertFalse(cache._is_valid_key(('test', 'test')))
         self.assertFalse(cache._is_valid_key((TitForTat, 'test')))
         self.assertFalse(cache._is_valid_key(('test', TitForTat)))
+        # Should return false if either player class is stochastic
+        self.assertFalse(cache._is_valid_key((Random, TitForTat)))
+        self.assertFalse(cache._is_valid_key((TitForTat, Random)))
 
     def test_is_valid_value(self):
         cache = DeterministicCache()

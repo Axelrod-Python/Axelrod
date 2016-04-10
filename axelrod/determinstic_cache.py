@@ -23,7 +23,8 @@ class DeterministicCache(UserDict):
             raise ValueError('Cannot update cache unles mutable is True.')
 
         if not self._is_valid_key(key):
-            raise ValueError('Key must be a pair of axelrod Player classes')
+            raise ValueError(
+                'Key must be a pair of deterministic axelrod Player classes')
 
         if not self._is_valid_value(value):
             raise ValueError(
@@ -48,6 +49,10 @@ class DeterministicCache(UserDict):
             if not (issubclass(key[0], Player) and issubclass(key[1], Player)):
                 return False
         except TypeError:
+            return False
+
+        # Each Player class should be deterministic
+        if key[0].classifier['stochastic'] or key[1].classifier['stochastic']:
             return False
 
         return True
