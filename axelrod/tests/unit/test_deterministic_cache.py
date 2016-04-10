@@ -24,7 +24,11 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertEqual(cache.turns, None)
 
     def test_init_from_file(self):
-        pass
+        with open(self.test_load_file, 'wb') as f:
+            f.write(self.test_pickle)
+        cache = DeterministicCache(file_name=self.test_load_file)
+        self.assertEqual(cache[self.test_key], self.test_value)
+        self.assertEqual(cache.turns, 3)
 
     def test_setitem(self):
         cache = DeterministicCache()
