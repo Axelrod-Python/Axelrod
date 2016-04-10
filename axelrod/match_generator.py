@@ -4,14 +4,14 @@ from math import ceil, log
 from .match import Match
 
 
-class TournamentType(object):
+class MatchGenerator(object):
 
     clone_opponents = True
 
     def __init__(self, players, turns, deterministic_cache):
         """
-        A class to represent a type of tournament and build the set of matches
-        accordingly.
+        A class to generate matches. This is used by the Tournament class which
+        is in charge of playing the matches and collecting the results.
 
         Parameters
         ----------
@@ -48,11 +48,11 @@ class TournamentType(object):
         raise NotImplementedError()
 
 
-class RoundRobin(TournamentType):
+class RoundRobinMatches(MatchGenerator):
 
     clone_opponents = True
 
-    def build_matches(self, noise=0):
+    def build_matches(self, cache_mutable=True, noise=0):
         """
         A generator that returns player index pairs and match objects for a
         round robin tournament.
@@ -73,21 +73,22 @@ class RoundRobin(TournamentType):
             for player2_index in range(player1_index, len(self.players)):
                 pair = (
                     self.players[player1_index], self.opponents[player2_index])
-                match = self.build_single_match(pair, noise)
+                match = self.build_single_match(pair, cache_mutable, noise)
                 yield (player1_index, player2_index), match
 
-    def build_single_match(self, pair, noise=0):
+    def build_single_match(self, pair, cache_mutable=True, noise=0):
         """Create a single match for a given pair"""
-        return Match(pair, self.turns, self.deterministic_cache, noise)
+        return Match(pair, self.turns, self.deterministic_cache,
+                     cache_mutable, noise)
 
 
-class ProbEndRoundRobin(RoundRobin):
+class ProbEndRoundRobinMatches(RoundRobinMatches):
 
     clone_opponents = True
 
     def __init__(self, players, prob_end, deterministic_cache):
         """
-        A class to represent a tournament type for which the players do not
+        A class that generates matches for which the players do not
         know the length of the Match (to their knowledge it is infinite) but
         that ends with given probability.
 
@@ -100,16 +101,19 @@ class ProbEndRoundRobin(RoundRobin):
         deterministic_cache : dictionary
             A cache of resulting actions for deterministic matches
         """
-        super(ProbEndRoundRobin, self).__init__(
+        super(ProbEndRoundRobinMatches, self).__init__(
             players, turns=float("inf"),
             deterministic_cache=deterministic_cache)
-        self.deterministic_cache.mutable = False
         self.prob_end = prob_end
 
-    def build_single_match(self, pair, noise=0):
+    def build_matches(self, cache_mutable=False, noise=0):
+        """Build the matches but with cache_mutable False"""
+        return super(ProbEndRoundRobinMatches, self).build_matches(False, noise)
+
+    def build_single_match(self, pair, cache_mutable=False, noise=0):
         """Create a single match for a given pair"""
         return Match(pair, self.sample_length(self.prob_end),
-                     self.deterministic_cache, noise)
+                     self.deterministic_cache, cache_mutable, noise)
 
     def sample_length(self, prob_end):
         """

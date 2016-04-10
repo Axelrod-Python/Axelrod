@@ -6,14 +6,14 @@ import csv
 
 from .game import Game
 from .result_set import ResultSet
-from .tournament_type import RoundRobin, ProbEndRoundRobin
 from .deterministic_cache import DeterministicCache
+from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
 
 
 class Tournament(object):
     game = Game()
 
-    def __init__(self, players, tournament_type=RoundRobin, name='axelrod',
+    def __init__(self, players, match_generator=RoundRobinMatches, name='axelrod',
                  game=None, turns=200, repetitions=10, processes=None,
                  prebuilt_cache=False, noise=0, with_morality=True):
         """
@@ -21,8 +21,8 @@ class Tournament(object):
         ----------
         players : list
             A list of axelrod.Player objects
-        tournament_type : class
-            A class that must be descended from axelrod.TournamentType
+        match_generator : class
+            A class that must be descended from axelrod.MatchGenerator
         name : string
             A name for the tournament
         game : axelrod.Game
@@ -49,7 +49,7 @@ class Tournament(object):
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = DeterministicCache()
-        self.tournament_type = tournament_type(
+        self.match_generator = match_generator(
             players, turns, self.deterministic_cache)
         self._with_morality = with_morality
         self._parallel_repetitions = repetitions
@@ -135,7 +135,7 @@ class Tournament(object):
         """
         Runs a single round robin and updates the matches list.
         """
-        new_matches = self.tournament_type.build_matches(noise=self.noise)
+        new_matches = self.match_generator.build_matches(noise=self.noise)
         interactions = self._play_matches(new_matches)
         self.interactions.append(interactions)
 
@@ -250,7 +250,7 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for repetition in iter(work_queue.get, 'STOP'):
-            new_matches = self.tournament_type.build_matches(noise=self.noise)
+            new_matches = self.match_generator.build_matches(noise=self.noise)
             interactions = self._play_matches(new_matches)
             done_queue.put(interactions)
         done_queue.put('STOP')
@@ -317,7 +317,7 @@ class ProbEndTournament(Tournament):
     continue.
     """
 
-    def __init__(self, players, tournament_type=ProbEndRoundRobin,
+    def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
                  name='axelrod', game=None, prob_end=.5, repetitions=10,
                  processes=None, prebuilt_cache=False, noise=0,
                  with_morality=True):
@@ -326,8 +326,8 @@ class ProbEndTournament(Tournament):
         ----------
         players : list
             A list of axelrod.Player objects
-        tournament_type : class
-            A class that must be descended from axelrod.TournamentType
+        match_generator : class
+            A class that must be descended from axelrod.MatchGenerator
         name : string
             A name for the tournament
         game : axelrod.Game
@@ -352,7 +352,7 @@ class ProbEndTournament(Tournament):
             with_morality=with_morality)
 
         self.prob_end = prob_end
-        self.tournament_type = ProbEndRoundRobin(
+        self.match_generator = ProbEndRoundRobinMatches(
             players, prob_end, self.deterministic_cache)
 
     def _build_cache_required(self):

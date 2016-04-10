@@ -10,7 +10,7 @@ from .mock_player import MockPlayer, simulate_play
 from .match import Match
 from .strategies import *
 from .deterministic_cache import DeterministicCache
-from .tournament_type import *
+from .match_generator import *
 from .tournament import Tournament, ProbEndTournament
 from .tournament_manager import TournamentManager, ProbEndTournamentManager
 from .tournament_manager_factory import (TournamentManagerFactory,
