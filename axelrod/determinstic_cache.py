@@ -10,8 +10,15 @@ from axelrod import Player
 
 
 class DeterministicCache(UserDict):
+    """A class to cache the results of deterministic matches"""
 
     def __init__(self, file_name=None):
+        """
+        Parameters
+        ----------
+        file_name : string
+            Path to a previously saved cache file
+        """
         UserDict.__init__(self)
         self.mutable = True
         self.turns = None
@@ -19,6 +26,8 @@ class DeterministicCache(UserDict):
             self.load(file_name)
 
     def __setitem__(self, key, value):
+        """Overrides the UserDict.__setitem__ method in order to validate
+        the key/value and also to set the turns attribute"""
         if not self.mutable:
             raise ValueError('Cannot update cache unles mutable is True.')
 
@@ -36,6 +45,16 @@ class DeterministicCache(UserDict):
             self.turns = len(value)
 
     def _is_valid_key(self, key):
+        """Validate a proposed dictionary key
+
+         Parameters
+        ----------
+        key : object
+
+        Returns
+        -------
+        boolean
+        """
         # The key should be a tuple
         if not isinstance(key, tuple):
             return False
@@ -58,6 +77,16 @@ class DeterministicCache(UserDict):
         return True
 
     def _is_valid_value(self, value):
+        """Validate a proposed dictionary value
+
+         Parameters
+        ----------
+        value : object
+
+        Returns
+        -------
+        boolean
+        """
         # The value should be a list
         if not isinstance(value, list):
             return False
@@ -70,11 +99,25 @@ class DeterministicCache(UserDict):
         return True
 
     def save(self, file_name):
+        """Serialise the cache dictionary to a file
+
+        Parameters
+        ----------
+        file_name : string
+            File path to which the cache should be saved
+        """
         with open(file_name, 'wb') as io:
             dill.dump(self.data, io)
         return True
 
     def load(self, file_name):
+        """Load a previously saved cache into the dictionary
+
+        Parameters
+        ----------
+        file_name : string
+            Path to a previously saved cache file
+        """
         with open(file_name, 'rb') as io:
             self.data = dill.load(io)
 
