@@ -40,7 +40,7 @@ class DeterministicCache(UserDict):
             return False
 
         try:
-            if not issubclass(key[0], Player) or not issubclass(key[1], Player):
+            if not (issubclass(key[0], Player) and issubclass(key[1], Player)):
                 return False
         except TypeError:
             return False
