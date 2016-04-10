@@ -1,7 +1,9 @@
 try:
-    from collections import UserDict
-except ImportError:
+    # Python 2.x
     from UserDict import UserDict
+except ImportError:
+    # Python 3.x
+    from collections import UserDict
 import dill
 
 from axelrod import Player
@@ -64,3 +66,11 @@ class DeterministicCache(UserDict):
     def load(self, file_name):
         with open(file_name, 'rb') as io:
             self.data = dill.load(io)
+        try:
+            # Python 2.x
+            turns = len(self.data.itervalues().next())
+        except AttributeError:
+            # Python 3.x
+            turns = len(next(iter(self.data.values())))
+
+        self.turns = turns
