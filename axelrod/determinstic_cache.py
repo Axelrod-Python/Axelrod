@@ -35,12 +35,15 @@ class DeterministicCache(UserDict):
             self.turns = len(value)
 
     def _is_valid_key(self, key):
+        # The key should be a tuple
         if not isinstance(key, tuple):
             return False
 
+        # The tuple should be a pair
         if len(key) != 2:
             return False
 
+        # Each item in the pair should be a subclass of axelrod.Player
         try:
             if not (issubclass(key[0], Player) and issubclass(key[1], Player)):
                 return False
@@ -50,9 +53,12 @@ class DeterministicCache(UserDict):
         return True
 
     def _is_valid_value(self, value):
+        # The value should be a list
         if not isinstance(value, list):
             return False
 
+        # If the turns attribute has been set, the length of the list should
+        # match it
         if self.turns is not None and len(value) != self.turns:
             return False
 
