@@ -21,7 +21,8 @@ class TestTournamentType(unittest.TestCase):
         cls.players = [s() for s in test_strategies]
 
     def test_init_with_clone(self):
-        tt = axelrod.TournamentType(self.players, test_turns, {})
+        tt = axelrod.TournamentType(
+            self.players, test_turns, axelrod.DeterministicCache())
         self.assertEqual(tt.players, self.players)
         self.assertEqual(tt.turns, test_turns)
         player = tt.players[0]
@@ -40,14 +41,16 @@ class TestRoundRobin(unittest.TestCase):
         cls.players = [s() for s in test_strategies]
 
     def test_build_single_match(self):
-        rr = axelrod.RoundRobin(self.players, test_turns, {})
+        rr = axelrod.RoundRobin(
+            self.players, test_turns, axelrod.DeterministicCache())
         match = rr.build_single_match((self.players[0], self.players[1]))
         self.assertIsInstance(match, axelrod.Match)
         self.assertEqual(len(match), rr.turns)
 
 
     def test_build_matches(self):
-        rr = axelrod.RoundRobin(self.players, test_turns, {})
+        rr = axelrod.RoundRobin(
+            self.players, test_turns, axelrod.DeterministicCache())
         matches = rr.build_matches()
         match_definitions = [
             (index_pair) for index_pair, match in matches]
@@ -79,7 +82,8 @@ class TestProbEndRoundRobin(unittest.TestCase):
 
     @given(prob_end=floats(min_value=0, max_value=1), rm=random_module())
     def test_build_matches(self, prob_end, rm):
-        rr = axelrod.ProbEndRoundRobin(self.players, prob_end, {})
+        rr = axelrod.ProbEndRoundRobin(
+            self.players, prob_end, axelrod.DeterministicCache())
         matches = rr.build_matches()
         match_definitions = [
             (index_pair) for index_pair, match in matches]
@@ -111,14 +115,16 @@ class TestProbEndRoundRobin(unittest.TestCase):
         Theoretically, this test could fail as it's probabilistically possible
         to sample all games with same length.
         """
-        rr = axelrod.ProbEndRoundRobin(self.players, prob_end, {})
+        rr = axelrod.ProbEndRoundRobin(
+            self.players, prob_end, axelrod.DeterministicCache())
         matches = rr.build_matches()
         match_lengths = [len(match) for index_pair, match in matches]
         self.assertNotEqual(min(match_lengths), max(match_lengths))
 
     @given(prob_end=floats(min_value=0, max_value=1), rm=random_module())
     def test_sample_length(self, prob_end, rm):
-        rr = axelrod.ProbEndRoundRobin(self.players, prob_end, {})
+        rr = axelrod.ProbEndRoundRobin(
+            self.players, prob_end, axelrod.DeterministicCache())
         self.assertGreaterEqual(rr.sample_length(prob_end), 1)
         try:
             self.assertIsInstance(rr.sample_length(prob_end), int)
@@ -127,7 +133,8 @@ class TestProbEndRoundRobin(unittest.TestCase):
 
     @given(prob_end=floats(min_value=.1, max_value=1), rm=random_module())
     def test_build_single_match(self, prob_end, rm):
-        rr = axelrod.ProbEndRoundRobin(self.players, prob_end, {})
+        rr = axelrod.ProbEndRoundRobin(
+            self.players, prob_end, axelrod.DeterministicCache())
         match = rr.build_single_match((self.players[0], self.players[1]))
 
         self.assertIsInstance(match, axelrod.Match)
