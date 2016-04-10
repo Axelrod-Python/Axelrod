@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from axelrod import Actions
+from .deterministic_cache import DeterministicCache
 
 import axelrod.interaction_utils as iu
 
@@ -8,8 +9,7 @@ C, D = Actions.C, Actions.D
 
 class Match(object):
 
-    def __init__(self, players, turns, deterministic_cache=None,
-                 cache_mutable=True, noise=0):
+    def __init__(self, players, turns, deterministic_cache=None, noise=0):
         """
         Parameters
         ----------
@@ -29,10 +29,9 @@ class Match(object):
         self._classes = (players[0].__class__, players[1].__class__)
         self._turns = turns
         if deterministic_cache is None:
-            self._cache = {}
+            self._cache = DeterministicCache()
         else:
             self._cache = deterministic_cache
-        self._cache_mutable = cache_mutable
         self._noise = noise
 
     @property
@@ -53,7 +52,7 @@ class Match(object):
         """
         return (
             not self._noise and
-            self._cache_mutable and not (
+            self._cache.mutable and not (
                 any(p.classifier['stochastic'] for p in self.players)
                 )
         )
