@@ -77,10 +77,12 @@ class DeterministicCache(UserDict):
     def load(self, file_name):
         with open(file_name, 'rb') as io:
             self.data = dill.load(io)
+
         try:
             # Python 2.x
             self.turns = len(self.data.itervalues().next())
         except AttributeError:
             # Python 3.x
             self.turns = len(next(iter(self.data.values())))
+
         return True
