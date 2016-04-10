@@ -83,3 +83,4 @@ class DeterministicCache(UserDict):
         except AttributeError:
             # Python 3.x
             self.turns = len(next(iter(self.data.values())))
+        return True
