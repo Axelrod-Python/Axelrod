@@ -39,7 +39,13 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertFalse(cache._is_valid_key(('test', 'test')))
 
     def test_is_valid_value(self):
-        pass
+        cache = DeterministicCache()
+        self.assertTrue(cache._is_valid_value(self.test_value1))
+        # Should return false if value is not a list
+        self.assertFalse(cache._is_valid_value('test'))
+        # Should return false if length does not match turns attribute
+        cache.turns = 20
+        self.assertFalse(cache._is_valid_value(self.test_value1))
 
     def test_save(self):
         pass
