@@ -21,6 +21,8 @@ class TestDeterministicCache(unittest.TestCase):
         cache = DeterministicCache()
         cache[self.test_key1] = self.test_value1
         self.assertEqual(cache[self.test_key1], self.test_value1)
+        # The first cached entry should set the turns attribute
+        self.assertEqual(cache.turns, 3)
 
     def test_set_immutable_cache(self):
         cache = DeterministicCache()
@@ -37,6 +39,8 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertFalse(cache._is_valid_key(('test', 'test', 'test')))
         # Should return false if contents of tuple are not axelrod Players
         self.assertFalse(cache._is_valid_key(('test', 'test')))
+        self.assertFalse(cache._is_valid_key((TitForTat, 'test')))
+        self.assertFalse(cache._is_valid_key(('test', TitForTat)))
 
     def test_is_valid_value(self):
         cache = DeterministicCache()

@@ -4,6 +4,8 @@ except ImportError:
     from UserDict import UserDict
 import dill
 
+from axelrod import Player
+
 
 class DeterministicCache(UserDict):
 
@@ -27,7 +29,22 @@ class DeterministicCache(UserDict):
 
         UserDict.__setitem__(self, key, value)
 
+        if self.turns is None:
+            self.turns = len(value)
+
     def _is_valid_key(self, key):
+        if not isinstance(key, tuple):
+            return False
+
+        if len(key) != 2:
+            return False
+
+        try:
+            if not issubclass(key[0], Player) or not issubclass(key[1], Player):
+                return False
+        except TypeError:
+            return False
+
         return True
 
     def _is_valid_value(self, value):
