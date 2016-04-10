@@ -48,6 +48,12 @@ class DeterministicCache(UserDict):
         return True
 
     def _is_valid_value(self, value):
+        if not isinstance(value, list):
+            return False
+
+        if self.turns is not None and len(value) != self.turns:
+            return False
+
         return True
 
     def save(self, file_name):
