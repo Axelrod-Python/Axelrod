@@ -75,5 +75,3 @@ class TestDeterministicCache(unittest.TestCase):
         cache.load(self.test_load_file)
         self.assertEqual(cache[self.test_key], self.test_value)
         self.assertEqual(cache.turns, 3)
-
-
