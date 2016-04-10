@@ -28,7 +28,7 @@ class DeterministicCache(UserDict):
 
         if not self._is_valid_value(value):
             raise ValueError(
-                'Value must be a list with length of turns attribute')
+                'Value must be a list with length equal to turns attribute')
 
         UserDict.__setitem__(self, key, value)
 
