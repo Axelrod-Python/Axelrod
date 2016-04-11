@@ -29,6 +29,7 @@ test_turns = 100
 
 test_prob_end = .5
 
+
 class TestTournament(unittest.TestCase):
 
     @classmethod
@@ -115,7 +116,7 @@ class TestTournament(unittest.TestCase):
            turns=integers(min_value=2, max_value=50),
            repetitions=integers(min_value=2, max_value=4),
            rm=random_module())
-    @settings(max_examples=50, timeout=10)
+    @settings(max_examples=50, timeout=0)
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
              rm=random.seed(0))
 
@@ -158,7 +159,7 @@ class TestTournament(unittest.TestCase):
         # The following relates to #516
         players = [axelrod.Cooperator(), axelrod.Defector(),
                    axelrod.BackStabber(), axelrod.PSOGambler(),
-                   axelrod.ThueMorse()]
+                   axelrod.ThueMorse(), axelrod.DoubleCrosser()]
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=players,
@@ -596,7 +597,7 @@ class TestProbEndTournament(unittest.TestCase):
            prob_end=floats(min_value=.1, max_value=.9),
            repetitions=integers(min_value=2, max_value=4),
            rm=random_module())
-    @settings(max_examples=50, timeout=10)
+    @settings(max_examples=50, timeout=0)
     @example(s=test_strategies, prob_end=.2, repetitions=test_repetitions,
              rm=random.seed(0))
 

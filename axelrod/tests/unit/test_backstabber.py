@@ -80,6 +80,5 @@ class TestDoubleCrosser(TestPlayer):
                             tournament_length=200)
 
         # Defects on rounds 199, and 200 no matter what
-        self.responses_test([C] * 198 , [C] * 198, [D, D, D],
+        self.responses_test([C] * 197 , [C] * 197, [C, D, D],
                             tournament_length=200)
-
