@@ -29,6 +29,7 @@ test_turns = 100
 
 test_prob_end = .5
 
+
 class TestTournament(unittest.TestCase):
 
     @classmethod
@@ -158,7 +159,7 @@ class TestTournament(unittest.TestCase):
         # The following relates to #516
         players = [axelrod.Cooperator(), axelrod.Defector(),
                    axelrod.BackStabber(), axelrod.PSOGambler(),
-                   axelrod.ThueMorse()]
+                   axelrod.ThueMorse(), axelrod.DoubleCrosser()]
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=players,
