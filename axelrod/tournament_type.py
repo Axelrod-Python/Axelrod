@@ -106,10 +106,6 @@ class ProbEndRoundRobin(RoundRobin):
         self.deterministic_cache.mutable = False
         self.prob_end = prob_end
 
-    # def build_matches(self, noise=0):
-    #     """Build the matches but with cache.mutable False"""
-    #     return super(ProbEndRoundRobin, self).build_matches(noise)
-
     def build_single_match(self, pair, noise=0):
         """Create a single match for a given pair"""
         return Match(pair, self.sample_length(self.prob_end),
