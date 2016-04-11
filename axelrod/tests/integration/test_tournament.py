@@ -1,7 +1,9 @@
 import unittest
+import os
 import axelrod
 
 from axelrod.utils import setup_logging, run_tournaments, run_prob_end_tournaments
+
 
 class TestTournament(unittest.TestCase):
 
@@ -66,7 +68,8 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_tournament_manager(self):
         strategies = [s() for s in axelrod.demo_strategies]
-        tm = axelrod.TournamentManager("./", False, save_cache=False)
+        tm = axelrod.TournamentManager(
+            "./", False, load_cache=False, save_cache=False)
         tm.add_tournament("test", strategies, repetitions=2, turns=10,
                           noise=0.05)
         tm.run_tournaments()
@@ -84,7 +87,7 @@ class TestTournamentManager(unittest.TestCase):
 
     def test_utils(self):
         setup_logging(logging_destination="none")
-        run_tournaments(cache_file='./cache.txt',
+        run_tournaments(cache_file='',
                     output_directory='./',
                     repetitions=2,
                     turns=10,
@@ -105,9 +108,15 @@ class TestProbEndTournamentManager(unittest.TestCase):
         cls.game = axelrod.Game()
         cls.players = [s() for s in axelrod.demo_strategies]
 
+    @classmethod
+    def tearDownClass(cls):
+        os.remove('./basic_strategies_prob_end.csv')
+        os.remove('./test-prob-end.csv')
+
     def test_tournament_manager(self):
         strategies = [s() for s in axelrod.demo_strategies]
-        tm = axelrod.ProbEndTournamentManager("./", False, save_cache=False)
+        tm = axelrod.ProbEndTournamentManager(
+            "./", False, load_cache=False, save_cache=False)
         tm.add_tournament("test-prob-end", strategies, repetitions=2, prob_end=.5,
                           noise=0.05)
         tm.run_tournaments()
@@ -127,7 +136,7 @@ class TestProbEndTournamentManager(unittest.TestCase):
 
     def test_utils(self):
         setup_logging(logging_destination="none")
-        run_prob_end_tournaments(cache_file='./cache.txt',
+        run_prob_end_tournaments(cache_file='',
                                  output_directory='./',
                                  repetitions=2,
                                  prob_end=.5,

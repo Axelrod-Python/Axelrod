@@ -21,7 +21,7 @@ class TestTournamentManager(unittest.TestCase):
         mgr = self.mgr_class(
             self.test_output_directory,
             self.test_with_ecological,
-            load_cache = False)
+            load_cache=False)
         self.assertEqual(mgr._output_directory, self.test_output_directory)
         self.assertEqual(mgr._tournaments, [])
         self.assertEqual(mgr._with_ecological, self.test_with_ecological)
@@ -31,7 +31,7 @@ class TestTournamentManager(unittest.TestCase):
         mgr = self.mgr_class(
             self.test_output_directory,
             self.test_with_ecological,
-            load_cache = False)
+            load_cache=False)
         players = mgr.one_player_per_strategy(self.test_strategies)
         self.assertIsInstance(players[0], axelrod.Defector)
         self.assertIsInstance(players[1], axelrod.Cooperator)
@@ -40,7 +40,7 @@ class TestTournamentManager(unittest.TestCase):
         mgr = self.mgr_class(
             self.test_output_directory,
             self.test_with_ecological,
-            load_cache = False)
+            load_cache=False)
         output_file_path = mgr._output_file_path(
             self.test_file_name, self.test_file_extenstion)
         self.assertEqual(output_file_path, self.expected_output_file_path)
@@ -49,7 +49,7 @@ class TestTournamentManager(unittest.TestCase):
         mgr = self.mgr_class(
             self.test_output_directory,
             self.test_with_ecological,
-            load_cache = False)
+            load_cache=False)
         mgr.add_tournament(
             players=self.test_players, name=self.test_tournament_name)
         self.assertEqual(len(mgr._tournaments), 1)
@@ -101,7 +101,7 @@ class TestProbEndTournamentManager(unittest.TestCase):
         mgr = self.mgr_class(
             self.test_output_directory,
             self.test_with_ecological,
-            load_cache = False)
+            load_cache=False)
         mgr.add_tournament(
             players=self.test_players, name=self.test_tournament_name)
         self.assertEqual(len(mgr._tournaments), 1)
