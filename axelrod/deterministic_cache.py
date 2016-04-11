@@ -119,7 +119,12 @@ class DeterministicCache(UserDict):
             Path to a previously saved cache file
         """
         with open(file_name, 'rb') as io:
-            self.data = dill.load(io)
+            data = dill.load(io)
+
+        if isinstance(data, dict):
+            self.data = data
+        else:
+            raise ValueError('Cannot read file into cache')
 
         try:
             # Python 2.x
