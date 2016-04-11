@@ -1,9 +1,9 @@
 from __future__ import absolute_import, unicode_literals, print_function
 
 import os
-import cloudpickle as pickle
 
 from .tournament import *
+from .deterministic_cache import DeterministicCache
 from .plot import *
 from .ecosystem import *
 from .utils import *
@@ -34,10 +34,9 @@ class TournamentManager(object):
         self._pass_cache = pass_cache
         self._save_cache = save_cache
         self._cache_file = cache_file
-        self._deterministic_cache = {}
-        self._cache_valid_for_turns = None
+        self._deterministic_cache = DeterministicCache()
         self._load_cache = False
-        self._image_format=image_format
+        self._image_format = image_format
 
         if load_cache and not save_cache:
             self.load_cache = self._load_cache_from_file(cache_file)
@@ -105,7 +104,7 @@ class TournamentManager(object):
     def _valid_cache(self, turns):
         return ((len(self._deterministic_cache) == 0) or
                 (len(self._deterministic_cache) > 0) and
-                turns == self._cache_valid_for_turns)
+                turns == self._deterministic_cache.turns)
 
     def run_ecological_variant(self, tournament, ecosystem):
         self._logger.debug(
@@ -168,18 +167,12 @@ class TournamentManager(object):
     def _save_cache_to_file(self, cache, file_name):
         self._logger.debug(
             'Saving cache with %d entries to %s' % (len(cache), file_name))
-        deterministic_cache = DeterministicCache(
-            cache, self._cache_valid_for_turns)
-        with open(file_name, 'wb') as io:
-            pickle.dump(deterministic_cache, io)
+        cache.save(file_name)
         return True
 
     def _load_cache_from_file(self, file_name):
         try:
-            with open(file_name, 'rb') as io:
-                deterministic_cache = pickle.load(io)
-            self._deterministic_cache = deterministic_cache.cache
-            self._cache_valid_for_turns = deterministic_cache.turns
+            self._deterministic_cache.load(file_name)
             self._logger.debug(
                 'Loaded cache with %d entries' % len(self._deterministic_cache))
             return True
@@ -216,10 +209,3 @@ class ProbEndTournamentManager(TournamentManager):
         return "Prob end: {}, Repetitions: {}, Strategies: {}.".format(tournament.prob_end,
                                                        tournament.repetitions,
                                                        len(tournament.players))
-
-
-class DeterministicCache(object):
-
-    def __init__(self, cache, turns):
-        self.cache = cache
-        self.turns = turns
