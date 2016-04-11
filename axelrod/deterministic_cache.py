@@ -10,7 +10,29 @@ from axelrod import Player
 
 
 class DeterministicCache(UserDict):
-    """A class to cache the results of deterministic matches"""
+    """A class to cache the results of deterministic matches
+
+    For fixed length matches with no noise between pairs of deterministic
+    players, the results will always be the same. We can hold those results
+    in this class so as to avoid repeatedly generating them in tournaments
+    of multiple repetitions.
+
+    By also storing those cached results in a file, we can re-use the cache
+    between multiple tournaments if necessary.
+
+    The cache is a dictionary mapping pairs of Player classes to a list of
+    resulting interactions. e.g. for a 3 turn Match between Cooperator and
+    Alternator, the dictionary entry would be:
+
+    (axelrod.Cooperator, axelrod.Alternator): [('C', 'C'), ('C', 'D'), ('C', 'C')]
+
+    Most of the functionality is provided by the UserDict class (which uses an
+    instance of dict as the 'data' attribute to hold the dictionary entries).
+
+    This class overrides the __init__ and __setitem__ methods in order to limit
+    and validate the keys and values to be as described above. It also adds
+    methods to save/load the cache to/from a file.
+    """
 
     def __init__(self, file_name=None):
         """
