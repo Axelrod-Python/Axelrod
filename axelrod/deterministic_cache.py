@@ -146,7 +146,8 @@ class DeterministicCache(UserDict):
         if isinstance(data, dict):
             self.data = data
         else:
-            raise ValueError('Cannot read file into cache')
+            raise ValueError(
+                'Cache file exists but is not the correct format. Try deleting and re-building the cache file.')
 
         self.turns = len(list(data.values())[0])
 
