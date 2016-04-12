@@ -1,5 +1,5 @@
 from numpy.linalg import LinAlgError
-from numpy import arange, median
+from numpy import arange, median, nan_to_num
 from warnings import warn
 
 matplotlib_installed = True
@@ -68,7 +68,7 @@ class Plot(object):
 
     @property
     def _boxplot_dataset(self):
-        return [self.result_set.normalised_scores[ir]
+        return [list(nan_to_num(self.result_set.normalised_scores[ir]))
                 for ir in self.result_set.ranking]
 
     @property
