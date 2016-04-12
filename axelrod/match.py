@@ -19,8 +19,6 @@ class Match(object):
                 The number of turns per match
         deterministic_cache : dictionary
             A cache of resulting actions for deterministic matches
-        cache_mutable : boolean
-            Whether the deterministic cache can be updated or not
         noise : float
             The probability that a player's intended action should be flipped
         """

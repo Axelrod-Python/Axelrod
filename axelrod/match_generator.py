@@ -19,7 +19,8 @@ class MatchGenerator(object):
             A list of axelrod.Player objects
         turns : integer
             The number of turns per match
-        deterministic_cache : dictionary
+        deterministic_cache : an instance of axelrod.DeterministicCache
+        class
             A cache of resulting actions for deterministic matches
         """
         self.players = players
@@ -52,15 +53,13 @@ class RoundRobinMatches(MatchGenerator):
 
     clone_opponents = True
 
-    def build_matches(self, cache_mutable=True, noise=0):
+    def build_matches(self, noise=0):
         """
         A generator that returns player index pairs and match objects for a
         round robin tournament.
 
         Parameters
         ----------
-        cache_mutable : boolean
-            Whether the deterministic cache should be updated
         noise : float
             The probability that a player's intended action should be flipped
 
@@ -73,13 +72,12 @@ class RoundRobinMatches(MatchGenerator):
             for player2_index in range(player1_index, len(self.players)):
                 pair = (
                     self.players[player1_index], self.opponents[player2_index])
-                match = self.build_single_match(pair, cache_mutable, noise)
+                match = self.build_single_match(pair, noise)
                 yield (player1_index, player2_index), match
 
-    def build_single_match(self, pair, cache_mutable=True, noise=0):
+    def build_single_match(self, pair, noise=0):
         """Create a single match for a given pair"""
-        return Match(pair, self.turns, self.deterministic_cache,
-                     cache_mutable, noise)
+        return Match(pair, self.turns, self.deterministic_cache, noise)
 
 
 class ProbEndRoundRobinMatches(RoundRobinMatches):
@@ -98,22 +96,19 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             A list of axelrod.Player objects
         prob_end : float
             The probability that a turn of a Match is the last
-        deterministic_cache : dictionary
+        deterministic_cache : an instance of axelrod.DeterministicCache
             A cache of resulting actions for deterministic matches
         """
         super(ProbEndRoundRobinMatches, self).__init__(
             players, turns=float("inf"),
             deterministic_cache=deterministic_cache)
+        self.deterministic_cache.mutable = False
         self.prob_end = prob_end
 
-    def build_matches(self, cache_mutable=False, noise=0):
-        """Build the matches but with cache_mutable False"""
-        return super(ProbEndRoundRobinMatches, self).build_matches(False, noise)
-
-    def build_single_match(self, pair, cache_mutable=False, noise=0):
+    def build_single_match(self, pair, noise=0):
         """Create a single match for a given pair"""
         return Match(pair, self.sample_length(self.prob_end),
-                     self.deterministic_cache, cache_mutable, noise)
+                     self.deterministic_cache, noise)
 
     def sample_length(self, prob_end):
         """

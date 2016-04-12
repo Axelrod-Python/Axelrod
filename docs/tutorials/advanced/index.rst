@@ -10,3 +10,4 @@ Contents:
    :maxdepth: 2
 
    strategy_transformers.rst
+   making_tournaments.rst
