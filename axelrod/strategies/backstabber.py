@@ -29,7 +29,7 @@ class BackStabber(Player):
             return D
         return C
 
-
+@FinalTransformer((D, D)) # End with two defections
 class DoubleCrosser(Player):
     """
     Forgives the first 3 defections but on the fourth
@@ -53,8 +53,6 @@ class DoubleCrosser(Player):
 
         if not opponent.history:
             return C
-        if len(opponent.history) > (self.tournament_attributes['length'] - 3):
-            return D
         if len(opponent.history) < 180:
             if len(opponent.history) > cutoff:
                 if D not in opponent.history[:cutoff + 1]:
