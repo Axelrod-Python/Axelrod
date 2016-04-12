@@ -148,11 +148,6 @@ class DeterministicCache(UserDict):
         else:
             raise ValueError('Cannot read file into cache')
 
-        try:
-            # Python 2.x
-            self.turns = len(self.data.itervalues().next())
-        except AttributeError:
-            # Python 3.x
-            self.turns = len(next(iter(self.data.values())))
+        self.turns = len(list(data.values())[0])
 
         return True
