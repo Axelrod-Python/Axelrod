@@ -9,6 +9,7 @@ from .player import init_args, is_basic, obey_axelrod, update_history, Player
 from .mock_player import MockPlayer, simulate_play
 from .match import Match
 from .strategies import *
+from .deterministic_cache import DeterministicCache
 from .tournament_type import *
 from .tournament import Tournament, ProbEndTournament
 from .tournament_manager import TournamentManager, ProbEndTournamentManager

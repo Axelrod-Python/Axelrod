@@ -1,6 +1,17 @@
 import unittest
+import sys
+import os
 import axelrod
 
+
+def test_pickle():
+    if sys.version_info[0] == 2:
+        # Python 2.x
+        test_pickle = b'\x80\x02}q\x00caxelrod.strategies.titfortat\nTitForTat\nq\x01caxelrod.strategies.defector\nDefector\nq\x02\x86q\x03]q\x04(U\x01Cq\x05U\x01Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'
+    else:
+        # Python 3.x
+        test_pickle = b'\x80\x03}q\x00caxelrod.strategies.titfortat\nTitForTat\nq\x01caxelrod.strategies.defector\nDefector\nq\x02\x86q\x03]q\x04(X\x01\x00\x00\x00Cq\x05X\x01\x00\x00\x00Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'
+    return test_pickle
 
 class TestTournamentManagerFactory(unittest.TestCase):
 
@@ -11,7 +22,11 @@ class TestTournamentManagerFactory(unittest.TestCase):
         cls.test_output_directory = './assets/'
         cls.test_with_ecological = True
         cls.test_rebuild_cache = False
-        cls.test_cache_file = './cache.txt'
+        cls.test_cache_file = './test_cache.txt'
+
+        with open(cls.test_cache_file, 'wb') as f:
+            f.write(test_pickle())
+
         cls.test_exclusions = ['basic_strategies', 'cheating_strategies']
         cls.test_kwargs = {
             'processes': 2,
@@ -27,6 +42,10 @@ class TestTournamentManagerFactory(unittest.TestCase):
         cls.expected_strategies = (
             axelrod.ordinary_strategies +
             axelrod.cheating_strategies)
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove(cls.test_cache_file)
 
     def test_tournaments_dict(self):
 
@@ -56,7 +75,8 @@ class TestTournamentManagerFactory(unittest.TestCase):
     def test_add_tournaments(self):
         mgr = axelrod.TournamentManager(
             self.test_output_directory,
-            self.test_with_ecological)
+            self.test_with_ecological,
+            cache_file=self.test_cache_file)
 
         self.tmf._add_tournaments(mgr, self.test_exclusions, self.test_kwargs)
         self.assertEqual(len(mgr._tournaments), 2)
@@ -88,7 +108,18 @@ class TestProbEndTournamentManagerFactory(unittest.TestCase):
         cls.test_output_directory = './assets/'
         cls.test_with_ecological = True
         cls.test_rebuild_cache = False
-        cls.test_cache_file = './cache.txt'
+        cls.test_cache_file = './test_cache.txt'
+
+        with open(cls.test_cache_file, 'wb') as f:
+            f.write(test_pickle())
+
+        cls.test_exclusions = ['basic_strategies', 'cheating_strategies']
+        cls.test_kwargs = {
+            'processes': 2,
+            'turns': 10,
+            'repetitions': 200,
+            'noise': 0
+        }
         cls.test_exclusions = ['basic_strategies', 'cheating_strategies']
         cls.test_kwargs = {
             'processes': 2,
@@ -104,6 +135,10 @@ class TestProbEndTournamentManagerFactory(unittest.TestCase):
         cls.expected_strategies = (
             axelrod.ordinary_strategies +
             axelrod.cheating_strategies)
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove(cls.test_cache_file)
 
     def test_tournaments_dict(self):
 
@@ -133,7 +168,8 @@ class TestProbEndTournamentManagerFactory(unittest.TestCase):
     def test_add_tournaments(self):
         mgr = axelrod.ProbEndTournamentManager(
             self.test_output_directory,
-            self.test_with_ecological)
+            self.test_with_ecological,
+            cache_file=self.test_cache_file)
 
         self.tmf._add_tournaments(mgr, self.test_exclusions, self.test_kwargs)
         self.assertEqual(len(mgr._tournaments), 2)

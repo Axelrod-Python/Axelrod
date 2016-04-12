@@ -8,7 +8,6 @@ from .tournament_manager import *
 
 class TournamentManagerFactory(object):
 
-
     tournaments = OrderedDict([
         ('basic_strategies', axelrod.basic_strategies),
         ('ordinary_strategies',

@@ -7,6 +7,7 @@ import csv
 from .game import Game
 from .result_set import ResultSet
 from .tournament_type import RoundRobin, ProbEndRoundRobin
+from .deterministic_cache import DeterministicCache
 
 
 class Tournament(object):
@@ -47,7 +48,7 @@ class Tournament(object):
         self.players = players
         self.repetitions = repetitions
         self.prebuilt_cache = prebuilt_cache
-        self.deterministic_cache = {}
+        self.deterministic_cache = DeterministicCache()
         self.tournament_type = tournament_type(
             players, turns, self.deterministic_cache)
         self._with_morality = with_morality
@@ -134,8 +135,7 @@ class Tournament(object):
         """
         Runs a single round robin and updates the matches list.
         """
-        new_matches = self.tournament_type.build_matches(
-            cache_mutable=True, noise=self.noise)
+        new_matches = self.tournament_type.build_matches(noise=self.noise)
         interactions = self._play_matches(new_matches)
         self.interactions.append(interactions)
 
@@ -207,6 +207,7 @@ class Tournament(object):
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
         """
+        self.deterministic_cache.mutable = False
         for worker in range(workers):
             process = Process(
                 target=self._worker, args=(work_queue, done_queue))
@@ -249,8 +250,7 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for repetition in iter(work_queue.get, 'STOP'):
-            new_matches = self.tournament_type.build_matches(
-                cache_mutable=False, noise=self.noise)
+            new_matches = self.tournament_type.build_matches(noise=self.noise)
             interactions = self._play_matches(new_matches)
             done_queue.put(interactions)
         done_queue.put('STOP')
@@ -307,9 +307,6 @@ class Tournament(object):
                                           for act in inter])
                 row.append(matchstringrep)
             yield row
-
-
-
 
 
 class ProbEndTournament(Tournament):
