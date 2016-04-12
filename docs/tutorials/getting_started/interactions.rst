@@ -53,9 +53,7 @@ As an example let us view all winners of each match (:code:`False` indicates a
 tie):
 
     >>> for match in matches:
-    ...     print("{} v {}, winner: {}".format(match.players[0],
-    ... 									   match.players[1],
-    ...									       match.winner()))  #doctest: +SKIP
+    ...     print("{} v {}, winner: {}".format(match.players[0], match.players[1], match.winner()))  #doctest: +SKIP
 	Cooperator v Defector, winner: Defector
     Defector v Tit For Tat, winner: Defector
     Cooperator v Cooperator, winner: False

@@ -4,14 +4,14 @@ from math import ceil, log
 from .match import Match
 
 
-class TournamentType(object):
+class MatchGenerator(object):
 
     clone_opponents = True
 
     def __init__(self, players, turns, deterministic_cache):
         """
-        A class to represent a type of tournament and build the set of matches
-        accordingly.
+        A class to generate matches. This is used by the Tournament class which
+        is in charge of playing the matches and collecting the results.
 
         Parameters
         ----------
@@ -19,7 +19,8 @@ class TournamentType(object):
             A list of axelrod.Player objects
         turns : integer
             The number of turns per match
-        deterministic_cache : dictionary
+        deterministic_cache : an instance of axelrod.DeterministicCache
+        class
             A cache of resulting actions for deterministic matches
         """
         self.players = players
@@ -48,7 +49,7 @@ class TournamentType(object):
         raise NotImplementedError()
 
 
-class RoundRobin(TournamentType):
+class RoundRobinMatches(MatchGenerator):
 
     clone_opponents = True
 
@@ -59,8 +60,6 @@ class RoundRobin(TournamentType):
 
         Parameters
         ----------
-        cache_mutable : boolean
-            Whether the deterministic cache should be updated
         noise : float
             The probability that a player's intended action should be flipped
 
@@ -81,13 +80,13 @@ class RoundRobin(TournamentType):
         return Match(pair, self.turns, self.deterministic_cache, noise)
 
 
-class ProbEndRoundRobin(RoundRobin):
+class ProbEndRoundRobinMatches(RoundRobinMatches):
 
     clone_opponents = True
 
     def __init__(self, players, prob_end, deterministic_cache):
         """
-        A class to represent a tournament type for which the players do not
+        A class that generates matches for which the players do not
         know the length of the Match (to their knowledge it is infinite) but
         that ends with given probability.
 
@@ -97,10 +96,10 @@ class ProbEndRoundRobin(RoundRobin):
             A list of axelrod.Player objects
         prob_end : float
             The probability that a turn of a Match is the last
-        deterministic_cache : dictionary
+        deterministic_cache : an instance of axelrod.DeterministicCache
             A cache of resulting actions for deterministic matches
         """
-        super(ProbEndRoundRobin, self).__init__(
+        super(ProbEndRoundRobinMatches, self).__init__(
             players, turns=float("inf"),
             deterministic_cache=deterministic_cache)
         self.deterministic_cache.mutable = False

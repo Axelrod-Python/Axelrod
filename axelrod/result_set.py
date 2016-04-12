@@ -3,7 +3,7 @@ from . import eigen
 
 import axelrod.interaction_utils as iu
 
-from numpy import mean, median, std
+from numpy import mean, nanmedian, std
 
 try:
     # Python 2
@@ -242,7 +242,7 @@ class ResultSet(object):
             (based on median normalised score).
         """
         return sorted(range(self.nplayers),
-                      key=lambda i: -median(self.normalised_scores[i]))
+                      key=lambda i: -nanmedian(self.normalised_scores[i]))
 
     def build_payoffs(self):
         """
