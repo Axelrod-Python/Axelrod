@@ -7,6 +7,11 @@ import axelrod.interaction_utils as iu
 C, D = Actions.C, Actions.D
 
 
+def is_stochastic(players, noise):
+    """Determines if a match is stochastic -- true if there is noise or if any
+    of the players involved is stochastic."""
+    return (noise or any(p.classifier['stochastic'] for p in players))
+
 class Match(object):
 
     def __init__(self, players, turns, deterministic_cache=None, noise=0):
@@ -38,10 +43,7 @@ class Match(object):
         A boolean to show whether a match between two players would be
         stochastic
         """
-        return (
-            self._noise or
-            any(p.classifier['stochastic'] for p in self.players)
-            )
+        return is_stochastic(self.players, self._noise)
 
     @property
     def _cache_update_required(self):

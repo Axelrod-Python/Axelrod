@@ -25,9 +25,8 @@ the library, proceed as follows::
     >>> players = [axl.Cooperator(), axl.Defector(),
     ...               axl.TitForTat(), axl.Grudger()]
     >>> mp = axl.MoranProcess(players)
+    >>> mp.winning_strategy_name   # doctest: +SKIP
     >>> mp.play()
-    >>> mp.winner   # doctest: +SKIP
-
     Defector
 
 You can access some attributes of the process, such as the number of rounds::
@@ -48,8 +47,8 @@ The sequence of populations::
 
 The scores in each round::
 
-    >>> import pprint
-    >>> pprint.pprint(mp.score_history)  # doctest: +SKIP
+    >>> for row in mp.score_history: # doctest: +SKIP
+    ...     print([round(element, 1) for element in row])
     [[6.0, 7.0800000000000001, 6.9900000000000002, 6.9900000000000002],
     [6.0, 7.0800000000000001, 6.9900000000000002, 6.9900000000000002],
     [3.0, 7.04, 7.04, 4.9800000000000004],

@@ -5,7 +5,7 @@ import random
 import numpy as np
 
 from .deterministic_cache import DeterministicCache
-from .match import Match
+from .match import Match, is_stochastic
 from .player import Player
 from .random_ import randrange
 
@@ -35,7 +35,7 @@ class MoranProcess(object):
         self.turns = turns
         self.noise = noise
         self.players = list(players) # initial population
-        self.winner = None
+        self.winning_strategy_name = None
         self.populations = []
         self.populations.append(self.population_distribution())
         self.score_history = []
@@ -47,10 +47,7 @@ class MoranProcess(object):
         A boolean to show whether a match between two players would be
         stochastic
         """
-        if self.noise:
-            return True
-        else:
-            return any(p.classifier['stochastic'] for p in self.players)
+        is_stochastic(self.players, self.noise)
 
     def __next__(self):
         """Iterate the population:
@@ -63,7 +60,7 @@ class MoranProcess(object):
         population = self.populations[-1]
         classes = set(p.__class__ for p in self.players)
         if len(classes) == 1:
-            self.winner = str(self.players[0])
+            self.winning_strategy_name = str(self.players[0])
             raise StopIteration
         scores = self._play_next_round()
         # Update the population
@@ -107,7 +104,7 @@ class MoranProcess(object):
 
     def reset(self):
         """Reset the process to replay."""
-        self.winner = None
+        self.winning_strategy_name = None
         self.populations = [self.populations[0]]
         self.score_history = []
 
