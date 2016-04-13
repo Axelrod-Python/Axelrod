@@ -3,10 +3,15 @@ Moran Process
 
 The strategies in the library can be pitted against one another in the
 [Moran process](https://en.wikipedia.org/wiki/Moran_process), a population
-process simulating natural selection. The process works as follows. Given an
+process simulating natural selection. Given the evolutionary basis of the Moran
+process it can be compared to the [ecological variant](../ecological_variant.rst).
+While that variant was used by Axelrod in his original works, the Moran process
+is now much more widely studied in the literature.
+
+The process works as follows. Given an
 initial population of players, the population is iterated in rounds consisting
 of:
-- matched played between each pair of players, with the cumulative total
+- matches played between each pair of players, with the cumulative total
 scores recored
 - a player is chosen to reproduce proportional to the player's score in the
 round
@@ -26,10 +31,12 @@ the library, proceed as follows::
     Defector
 
 You can access some attributes of the process, such as the number of rounds::
+
     >>> len(mp)  # doctest: +SKIP
     6
 
 The sequence of populations::
+
     >>> import pprint
     >>> pprint.pprint(mp.populations)  # doctest: +SKIP
     [Counter({'Defector': 1, 'Cooperator': 1, 'Grudger': 1, 'Tit For Tat': 1}),
@@ -40,6 +47,7 @@ The sequence of populations::
     Counter({'Defector': 4})]
 
 The scores in each round::
+
     >>> import pprint
     >>> pprint.pprint(mp.score_history)  # doctest: +SKIP
     [[6.0, 7.0800000000000001, 6.9900000000000002, 6.9900000000000002],

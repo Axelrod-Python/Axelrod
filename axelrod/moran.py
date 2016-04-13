@@ -11,7 +11,17 @@ from .random_ import randrange
 
 
 def fitness_proportionate_selection(scores):
-    """Randomly selects an individual proportionally to score."""
+    """Randomly selects an individual proportionally to score.
+
+    Parameters
+    ----------
+    scores: Any sequence of real numbers
+
+    Returns
+    -------
+    An index of the above list selected at random proportionally to the list
+    element divided by the total.
+    """
     csums = np.cumsum(scores)
     total = csums[-1]
     r = random.random() * total
@@ -29,6 +39,7 @@ class MoranProcess(object):
         self.populations = []
         self.populations.append(self.population_distribution())
         self.score_history = []
+        self.num_players = len(self.players)
 
     @property
     def _stochastic(self):
@@ -67,7 +78,7 @@ class MoranProcess(object):
     def _play_next_round(self):
         """Plays the next round of the process. Every player is paired up
         against every other player and the total scores are recorded."""
-        N = len(self.players)
+        N = self.num_players
         scores = [0] * N
         for i in range(N):
             for j in range(i + 1, N):
@@ -102,7 +113,7 @@ class MoranProcess(object):
 
     def play(self):
         """Play the process out to completion."""
-        while True: # O_o
+        while True:
             try:
                 self.__next__()
             except StopIteration:
