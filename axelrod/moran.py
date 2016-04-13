@@ -7,6 +7,7 @@ import numpy as np
 from .deterministic_cache import DeterministicCache
 from .match import Match
 from .player import Player
+from .random_ import randrange
 
 
 def fitness_proportionate_selection(scores):
@@ -58,7 +59,7 @@ class MoranProcess(object):
         # Fitness proportionate selection
         j = fitness_proportionate_selection(scores)
         # Randomly remove a strategy
-        i = random.randrange(0, len(self.players))
+        i = randrange(0, len(self.players))
         # Replace player i with clone of player j
         self.players[i] = self.players[j].clone()
         self.populations.append(self.population_distribution())

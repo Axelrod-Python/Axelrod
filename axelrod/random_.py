@@ -12,3 +12,9 @@ def random_choice(p=0.5):
     if r < p:
         return Actions.C
     return Actions.D
+
+def randrange(a, b):
+    """Python 2 / 3 compatible randrange."""
+    c = b - a
+    r = c * random.random()
+    return a + int(r)
