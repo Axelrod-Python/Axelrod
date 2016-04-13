@@ -16,3 +16,4 @@ Contents:
    noisy_tournaments.rst
    ecological_variant.rst
    command_line.rst
+   moran.rst
