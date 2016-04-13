@@ -6,6 +6,9 @@ import axelrod
 from axelrod import MoranProcess
 from axelrod.moran import fitness_proportionate_selection
 
+from hypothesis import given, example, settings
+from hypothesis.strategies import integers, lists, sampled_from, random_module, floats
+
 
 class TestMoranProcess(unittest.TestCase):
 
@@ -57,6 +60,24 @@ class TestMoranProcess(unittest.TestCase):
         mp.play()
         self.assertEqual(len(mp), 9)
         self.assertEqual(mp.winner, str(axelrod.Defector()))
+
+    @given(strategies=lists(sampled_from(axelrod.strategies),
+                   min_size=2,  # Errors are returned if less than 2 strategies
+                   max_size=5, unique=True),
+           rm=random_module())
+    @settings(max_examples=5, timeout=0)  # Very low number of examples
+
+    # Two specific examples relating to cloning of strategies
+    @example(strategies=[axelrod.BackStabber, axelrod.MindReader],
+             rm=random.seed(0))
+    @example(strategies=[axelrod.ThueMorse, axelrod.MindReader],
+             rm=random.seed(0))
+    def test_property_players(self, strategies, rm):
+        """Hypothesis test that randomly checks players"""
+        players = [s() for s in strategies]
+        mp = MoranProcess(players)
+        mp.play()
+        self.assertIn(mp.winner, [str(p) for p in players])
 
     def test_reset(self):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
