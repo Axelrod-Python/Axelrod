@@ -41,7 +41,7 @@ class TestMoranProcess(unittest.TestCase):
         mp = MoranProcess((p1, p2))
         mp.play()
         self.assertEqual(len(mp), 5)
-        self.assertEqual(mp.winner, str(p2))
+        self.assertEqual(mp.winning_strategy_name, str(p2))
 
     def test_three_players(self):
         players = [axelrod.Cooperator(), axelrod.Cooperator(),
@@ -50,7 +50,7 @@ class TestMoranProcess(unittest.TestCase):
         mp = MoranProcess(players)
         mp.play()
         self.assertEqual(len(mp), 7)
-        self.assertEqual(mp.winner, str(axelrod.Defector()))
+        self.assertEqual(mp.winning_strategy_name, str(axelrod.Defector()))
 
     def test_four_players(self):
         players = [axelrod.Cooperator() for _ in range(3)]
@@ -59,7 +59,7 @@ class TestMoranProcess(unittest.TestCase):
         mp = MoranProcess(players)
         mp.play()
         self.assertEqual(len(mp), 9)
-        self.assertEqual(mp.winner, str(axelrod.Defector()))
+        self.assertEqual(mp.winning_strategy_name, str(axelrod.Defector()))
 
     @given(strategies=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
@@ -77,7 +77,7 @@ class TestMoranProcess(unittest.TestCase):
         players = [s() for s in strategies]
         mp = MoranProcess(players)
         mp.play()
-        self.assertIn(mp.winner, [str(p) for p in players])
+        self.assertIn(mp.winning_strategy_name, [str(p) for p in players])
 
     def test_reset(self):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
@@ -88,5 +88,5 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(len(mp.score_history), 3)
         mp.reset()
         self.assertEqual(len(mp), 1)
-        self.assertEqual(mp.winner, None)
+        self.assertEqual(mp.winning_strategy_name, None)
         self.assertEqual(mp.score_history, [])

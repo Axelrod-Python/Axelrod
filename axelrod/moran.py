@@ -47,7 +47,7 @@ class MoranProcess(object):
         A boolean to show whether a match between two players would be
         stochastic
         """
-        is_stochastic(self.players, self.noise)
+        return is_stochastic(self.players, self.noise)
 
     def __next__(self):
         """Iterate the population:

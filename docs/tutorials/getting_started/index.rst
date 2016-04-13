@@ -15,5 +15,4 @@ Contents:
    visualising_results.rst
    noisy_tournaments.rst
    ecological_variant.rst
-   moran.rst
    command_line.rst

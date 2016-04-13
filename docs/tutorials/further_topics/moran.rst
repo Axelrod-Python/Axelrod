@@ -25,8 +25,8 @@ the library, proceed as follows::
     >>> players = [axl.Cooperator(), axl.Defector(),
     ...               axl.TitForTat(), axl.Grudger()]
     >>> mp = axl.MoranProcess(players)
-    >>> mp.winning_strategy_name   # doctest: +SKIP
     >>> mp.play()
+    >>> mp.winning_strategy_name   # doctest: +SKIP
     Defector
 
 You can access some attributes of the process, such as the number of rounds::
