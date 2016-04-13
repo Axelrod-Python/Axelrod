@@ -4,7 +4,7 @@ Moran Process
 The strategies in the library can be pitted against one another in the
 [Moran process](https://en.wikipedia.org/wiki/Moran_process), a population
 process simulating natural selection. Given the evolutionary basis of the Moran
-process it can be compared to the [ecological variant](../ecological_variant.rst).
+process it can be compared to the :ref:`ecological-variant`.
 While that variant was used by Axelrod in his original works, the Moran process
 is now much more widely studied in the literature.
 
