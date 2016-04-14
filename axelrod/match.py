@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from axelrod import Actions
+from axelrod import Actions, Game
 from .deterministic_cache import DeterministicCache
 
 import axelrod.interaction_utils as iu
@@ -12,9 +12,11 @@ def is_stochastic(players, noise):
     of the players involved is stochastic."""
     return (noise or any(p.classifier['stochastic'] for p in players))
 
+
 class Match(object):
 
-    def __init__(self, players, turns, deterministic_cache=None, noise=0):
+    def __init__(
+        self, players, turns, game=None, deterministic_cache=None, noise=0):
         """
         Parameters
         ----------
@@ -22,6 +24,8 @@ class Match(object):
             A pair of axelrod.Player objects
         turns : integer
                 The number of turns per match
+        game : axelrod.Game
+            The game object used to score the match
         deterministic_cache : dictionary
             A cache of resulting actions for deterministic matches
         noise : float
@@ -31,11 +35,31 @@ class Match(object):
         self.players = list(players)
         self._classes = (players[0].__class__, players[1].__class__)
         self._turns = turns
+        if game is None:
+            self.game = Game()
+        else:
+            self.game = game
         if deterministic_cache is None:
             self._cache = DeterministicCache()
         else:
             self._cache = deterministic_cache
         self._noise = noise
+
+    @property
+    def players(self):
+        return self._players
+
+    @players.setter
+    def players(self, players):
+        """Ensure that players are passed the match attributes"""
+        newplayers = []
+        for player in players:
+            player.set_match_attributes(
+                length=self.turns,
+                game=self.game,
+                noise=self.noise)
+            newplayers.append(player)
+        self._players = newplayers
 
     @property
     def _stochastic(self):
@@ -93,21 +117,21 @@ class Match(object):
         self.result = result
         return result
 
-    def scores(self, game=None):
+    def scores(self):
         """Returns the scores of the previous Match plays."""
-        return iu.compute_scores(self.result, game)
+        return iu.compute_scores(self.result, self.game)
 
-    def final_score(self, game=None):
+    def final_score(self):
         """Returns the final score for a Match"""
-        return iu.compute_final_score(self.result, game)
+        return iu.compute_final_score(self.result, self.game)
 
-    def final_score_per_turn(self, game=None):
+    def final_score_per_turn(self):
         """Returns the mean score per round for a Match"""
-        return iu.compute_final_score_per_turn(self.result, game)
+        return iu.compute_final_score_per_turn(self.result, self.game)
 
-    def winner(self, game=None):
+    def winner(self):
         """Returns the winner of the Match"""
-        winner_index = iu.compute_winner_index(self.result, game)
+        winner_index = iu.compute_winner_index(self.result, self.game)
         if winner_index is False:  # No winner
             return False
         if winner_index is None:  # No plays
