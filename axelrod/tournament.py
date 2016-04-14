@@ -13,9 +13,10 @@ from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
 class Tournament(object):
     game = Game()
 
-    def __init__(self, players, match_generator=RoundRobinMatches, name='axelrod',
-                 game=None, turns=200, repetitions=10, processes=None,
-                 prebuilt_cache=False, noise=0, with_morality=True):
+    def __init__(self, players, match_generator=RoundRobinMatches,
+                 name='axelrod', game=None, turns=200, repetitions=10,
+                 processes=None, prebuilt_cache=False, noise=0,
+                 with_morality=True):
         """
         Parameters
         ----------
@@ -50,28 +51,12 @@ class Tournament(object):
         self.prebuilt_cache = prebuilt_cache
         self.deterministic_cache = DeterministicCache()
         self.match_generator = match_generator(
-            players, turns, self.deterministic_cache)
+            players, turns, self.game, self.deterministic_cache)
         self._with_morality = with_morality
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
         self.interactions = []
-
-    @property
-    def players(self):
-        return self._players
-
-    @players.setter
-    def players(self, players):
-        """Ensure that players are passed the tournament attributes"""
-        newplayers = []
-        for player in players:
-            player.set_tournament_attributes(
-                length=self.turns,
-                 game=self.game,
-                 noise=self.noise)
-            newplayers.append(player)
-        self._players = newplayers
 
     def play(self, filename=None):
         """
@@ -353,7 +338,7 @@ class ProbEndTournament(Tournament):
 
         self.prob_end = prob_end
         self.match_generator = ProbEndRoundRobinMatches(
-            players, prob_end, self.deterministic_cache)
+            players, prob_end, self.game, self.deterministic_cache)
 
     def _build_cache_required(self):
         """

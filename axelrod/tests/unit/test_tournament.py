@@ -63,12 +63,8 @@ class TestTournament(unittest.TestCase):
             processes=4,
             noise=0.2)
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertEqual(
-            tournament.players[0].tournament_attributes['length'],
-            self.test_turns
-        )
         self.assertIsInstance(
-            tournament.players[0].tournament_attributes['game'], axelrod.Game
+            tournament.players[0].match_attributes['game'], axelrod.Game
         )
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, self.test_turns)
@@ -545,13 +541,6 @@ class TestProbEndTournament(unittest.TestCase):
             noise=0.2)
         self.assertEqual(tournament.match_generator.prob_end, tournament.prob_end)
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertEqual(
-            tournament.players[0].tournament_attributes['length'],
-            float("inf")
-        )
-        self.assertIsInstance(
-            tournament.players[0].tournament_attributes['game'], axelrod.Game
-        )
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, float("inf"))
         self.assertEqual(tournament.repetitions, 10)
