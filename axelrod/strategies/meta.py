@@ -140,7 +140,7 @@ class MetaWinner(MetaPlayer):
         # Update the running score for each player, before determining the next move.
         if len(self.history):
             for player in self.team:
-                game = self.tournament_attributes["game"]
+                game = self.match_attributes["game"]
                 last_round = (player.proposed_history[-1], opponent.history[-1])
                 s = game.scores[last_round][0]
                 player.score += s

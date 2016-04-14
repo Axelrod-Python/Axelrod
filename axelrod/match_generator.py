@@ -8,7 +8,7 @@ class MatchGenerator(object):
 
     clone_opponents = True
 
-    def __init__(self, players, turns, deterministic_cache):
+    def __init__(self, players, turns, game, deterministic_cache):
         """
         A class to generate matches. This is used by the Tournament class which
         is in charge of playing the matches and collecting the results.
@@ -19,12 +19,15 @@ class MatchGenerator(object):
             A list of axelrod.Player objects
         turns : integer
             The number of turns per match
+        game : axelrod.Game
+            The game object used to score the match
         deterministic_cache : an instance of axelrod.DeterministicCache
         class
             A cache of resulting actions for deterministic matches
         """
         self.players = players
         self.turns = turns
+        self.game = game
         self.deterministic_cache = deterministic_cache
         self.opponents = players
 
@@ -77,14 +80,15 @@ class RoundRobinMatches(MatchGenerator):
 
     def build_single_match(self, pair, noise=0):
         """Create a single match for a given pair"""
-        return Match(pair, self.turns, self.deterministic_cache, noise)
+        return Match(
+            pair, self.turns, self.game, self.deterministic_cache, noise)
 
 
 class ProbEndRoundRobinMatches(RoundRobinMatches):
 
     clone_opponents = True
 
-    def __init__(self, players, prob_end, deterministic_cache):
+    def __init__(self, players, prob_end, game, deterministic_cache):
         """
         A class that generates matches for which the players do not
         know the length of the Match (to their knowledge it is infinite) but
@@ -96,18 +100,20 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             A list of axelrod.Player objects
         prob_end : float
             The probability that a turn of a Match is the last
+        game : axelrod.Game
+            The game object used to score the match
         deterministic_cache : an instance of axelrod.DeterministicCache
             A cache of resulting actions for deterministic matches
         """
         super(ProbEndRoundRobinMatches, self).__init__(
-            players, turns=float("inf"),
+            players, turns=float("inf"), game=game,
             deterministic_cache=deterministic_cache)
         self.deterministic_cache.mutable = False
         self.prob_end = prob_end
 
     def build_single_match(self, pair, noise=0):
         """Create a single match for a given pair"""
-        return Match(pair, self.sample_length(self.prob_end),
+        return Match(pair, self.sample_length(self.prob_end), self.game,
                      self.deterministic_cache, noise)
 
     def sample_length(self, prob_end):

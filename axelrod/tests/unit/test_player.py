@@ -122,7 +122,7 @@ class TestPlayer(unittest.TestCase):
         if self.__class__ != TestPlayer:
             player = self.player()
             self.assertEqual(player.history, [])
-            self.assertEqual(player.tournament_attributes,
+            self.assertEqual(player.match_attributes,
                     {'length': -1, 'game': DefaultGame, 'noise': 0})
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
@@ -133,25 +133,25 @@ class TestPlayer(unittest.TestCase):
         if self.__class__ != TestPlayer:
             self.assertEqual(str(self.player()), self.name)
 
-    def test_tournament_attributes(self):
+    def test_match_attributes(self):
         player = self.player()
         # Default
-        player.set_tournament_attributes()
-        t_attrs = player.tournament_attributes
+        player.set_match_attributes()
+        t_attrs = player.match_attributes
         self.assertEqual(t_attrs['length'], -1)
         self.assertEqual(t_attrs['noise'], 0)
         self.assertEqual(t_attrs['game'].RPST(), (3, 1, 0, 5))
 
         # Common
-        player.set_tournament_attributes(length=200)
-        t_attrs = player.tournament_attributes
+        player.set_match_attributes(length=200)
+        t_attrs = player.match_attributes
         self.assertEqual(t_attrs['length'], 200)
         self.assertEqual(t_attrs['noise'], 0)
         self.assertEqual(t_attrs['game'].RPST(), (3, 1, 0, 5))
 
         # Noisy
-        player.set_tournament_attributes(length=200, noise=.5)
-        t_attrs = player.tournament_attributes
+        player.set_match_attributes(length=200, noise=.5)
+        t_attrs = player.match_attributes
         self.assertEqual(t_attrs['noise'], .5)
 
     def test_reset(self):
@@ -181,7 +181,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(p2.cooperations, 0)
         self.assertEqual(p2.defections, 0)
         self.assertEqual(p2.classifier, p1.classifier)
-        self.assertEqual(p2.tournament_attributes, p1.tournament_attributes)
+        self.assertEqual(p2.match_attributes, p1.match_attributes)
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""
@@ -213,9 +213,9 @@ class TestPlayer(unittest.TestCase):
         subsequent moves by player one to test.
         """
         P1 = self.player()
-        P1.tournament_attributes['length'] = tournament_length
+        P1.match_attributes['length'] = tournament_length
         P2 = TestOpponent()
-        P2.tournament_attributes['length'] = tournament_length
+        P2.match_attributes['length'] = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed, attrs=attrs)
@@ -223,7 +223,7 @@ class TestPlayer(unittest.TestCase):
         # Test that we get the same sequence after a reset
         P1.reset()
         P2 = TestOpponent()
-        P2.tournament_attributes['length'] = tournament_length
+        P2.match_attributes['length'] = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed, attrs=attrs)
@@ -231,7 +231,7 @@ class TestPlayer(unittest.TestCase):
         # Test that we get the same sequence after a clone
         P1 = P1.clone()
         P2 = TestOpponent()
-        P2.tournament_attributes['length'] = tournament_length
+        P2.match_attributes['length'] = tournament_length
         test_responses(
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed, attrs=attrs)

@@ -174,7 +174,7 @@ class TestLRPlayer(unittest.TestCase):
     def test_exception(self):
         player = LRPlayer()
         with self.assertRaises(ValueError):
-            player.receive_tournament_attributes(0, 0, -float("inf"))
+            player.receive_match_attributes(0, 0, -float("inf"))
 
 
 class TestZDExtort2(TestPlayer):

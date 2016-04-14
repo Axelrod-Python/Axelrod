@@ -87,23 +87,23 @@ class Player(object):
         self.cooperations = 0
         self.defections = 0
         self.init_args = ()
-        self.set_tournament_attributes()
+        self.set_match_attributes()
 
-    def receive_tournament_attributes(self):
+    def receive_match_attributes(self):
         # Overwrite this function if your strategy needs
-        # to make use of tournament_attributes such as
+        # to make use of match_attributes such as
         # the game matrix, the number of rounds or the noise
         pass
 
-    def set_tournament_attributes(self, length=-1, game=None, noise=0):
+    def set_match_attributes(self, length=-1, game=None, noise=0):
         if not game:
             game = DefaultGame
-        self.tournament_attributes = {
+        self.match_attributes = {
             "length": length,
             "game": game,
             "noise": noise
         }
-        self.receive_tournament_attributes()
+        self.receive_match_attributes()
 
     def __repr__(self):
         """The string method for the strategy."""
@@ -141,7 +141,7 @@ class Player(object):
         # Consider overriding in special cases only if necessary
         cls = self.__class__
         new_player = cls(*self.init_args)
-        new_player.tournament_attributes = copy.copy(self.tournament_attributes)
+        new_player.match_attributes = copy.copy(self.match_attributes)
         return new_player
 
     def reset(self):

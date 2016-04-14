@@ -36,7 +36,7 @@ class MindReader(Player):
         if calname in ('strategy', 'simulate_match'):
             return D
 
-        game = self.tournament_attributes["game"]
+        game = self.match_attributes["game"]
 
         best_strategy = look_ahead(self, opponent, game)
 

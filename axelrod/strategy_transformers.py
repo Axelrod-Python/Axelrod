@@ -192,7 +192,7 @@ def final_sequence(player, opponent, action, seq):
     """Play the moves in `seq` first, ignoring the strategy's moves until the
     list is exhausted."""
 
-    length = player.tournament_attributes["length"]
+    length = player.match_attributes["length"]
     player.classifier["makes_use_of"].update(["length"])
 
     if length < 0:  # default is -1

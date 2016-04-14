@@ -41,8 +41,8 @@ class RiskyQLearner(Player):
         self.Vs = OrderedDict({'': 0})
         self.prev_state = ''
 
-    def receive_tournament_attributes(self):
-        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+    def receive_match_attributes(self):
+        (R, P, S, T) = self.match_attributes["game"].RPST()
         self.payoff_matrix = {C: {C: R, D: S}, D: {C: T, D: P}}
 
     def strategy(self, opponent):

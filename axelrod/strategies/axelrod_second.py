@@ -26,7 +26,7 @@ class Champion(Player):
 
     def strategy(self, opponent):
         current_round = len(self.history)
-        expected_length = self.tournament_attributes['length']
+        expected_length = self.match_attributes['length']
         # Cooperate for the first 1/20-th of the game
         if current_round == 0:
             return C
