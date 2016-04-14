@@ -62,7 +62,7 @@ class TestMatch(unittest.TestCase):
 
         cache = DeterministicCache()
         cache.mutable = False
-        match = axelrod.Match((p1, p2), 5, cache)
+        match = axelrod.Match((p1, p2), 5, deterministic_cache=cache)
         self.assertFalse(match._cache_update_required)
 
         match = axelrod.Match((p1, p2), 5)
@@ -84,7 +84,7 @@ class TestMatch(unittest.TestCase):
         # a deliberately incorrect result so we can tell it came from the cache
         expected_result = [(C, C), (D, D), (D, C)]
         cache[(axelrod.Cooperator, axelrod.Defector)] = expected_result
-        match = axelrod.Match(players, 3, cache)
+        match = axelrod.Match(players, 3, deterministic_cache=cache)
         self.assertEqual(match.play(), expected_result)
 
     def test_scores(self):
