@@ -103,7 +103,7 @@ class Player(object):
             "game": game,
             "noise": noise
         }
-        self.receive_tournament_attributes()
+        self.receive_match_attributes()
 
     def __repr__(self):
         """The string method for the strategy."""

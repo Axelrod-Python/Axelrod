@@ -116,7 +116,7 @@ class GTFT(MemoryOnePlayer):
         super(GTFT, self).__init__()
         self.init_args = (p,)
 
-    def receive_tournament_attributes(self):
+    def receive_match_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         if self.p is None:
             self.p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
@@ -200,7 +200,7 @@ class LRPlayer(MemoryOnePlayer):
     }
 
 
-    def receive_tournament_attributes(self, phi=0, s=None, l=None):
+    def receive_match_attributes(self, phi=0, s=None, l=None):
         """
         Parameters
 
@@ -247,10 +247,10 @@ class ZDExtort2(LRPlayer):
         self.s = s
         super(ZDExtort2, self).__init__()
 
-    def receive_tournament_attributes(self):
+    def receive_match_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         self.l = P
-        super(ZDExtort2, self).receive_tournament_attributes(
+        super(ZDExtort2, self).receive_match_attributes(
             self.phi, self.s, self.l)
 
 
@@ -273,8 +273,8 @@ class ZDExtort2v2(LRPlayer):
         self.l = l
         super(ZDExtort2v2, self).__init__()
 
-    def receive_tournament_attributes(self):
-        super(ZDExtort2v2, self).receive_tournament_attributes(
+    def receive_match_attributes(self):
+        super(ZDExtort2v2, self).receive_match_attributes(
             self.phi, self.s, self.l)
 
 
@@ -298,8 +298,8 @@ class ZDExtort4(LRPlayer):
         self.l = l
         super(ZDExtort4, self).__init__()
 
-    def receive_tournament_attributes(self):
-        super(ZDExtort4, self).receive_tournament_attributes(
+    def receive_match_attributes(self):
+        super(ZDExtort4, self).receive_match_attributes(
             self.phi, self.s, self.l)
 
 
@@ -322,8 +322,8 @@ class ZDGen2(LRPlayer):
         self.l = l
         super(ZDGen2, self).__init__()
 
-    def receive_tournament_attributes(self):
-        super(ZDGen2, self).receive_tournament_attributes(
+    def receive_match_attributes(self):
+        super(ZDGen2, self).receive_match_attributes(
             self.phi, self.s, self.l)
 
 
@@ -345,10 +345,10 @@ class ZDGTFT2(LRPlayer):
         super(ZDGTFT2, self).__init__()
         self.init_args = (phi, s)
 
-    def receive_tournament_attributes(self):
+    def receive_match_attributes(self):
         (R, P, S, T) = self.tournament_attributes["game"].RPST()
         self.l = R
-        super(ZDGTFT2, self).receive_tournament_attributes(
+        super(ZDGTFT2, self).receive_match_attributes(
             self.phi, self.s, self.l)
 
 
@@ -371,8 +371,8 @@ class ZDSet2(LRPlayer):
         self.l = l
         super(ZDSet2, self).__init__()
 
-    def receive_tournament_attributes(self):
-        super(ZDSet2, self).receive_tournament_attributes(
+    def receive_match_attributes(self):
+        super(ZDSet2, self).receive_match_attributes(
             self.phi, self.s, self.l)
 
 

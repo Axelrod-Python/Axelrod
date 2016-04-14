@@ -37,7 +37,7 @@ class Darwin(Player):
         super(Darwin, self).__init__()
         self.response = Darwin.genome[0]
 
-    def receive_tournament_attributes(self):
+    def receive_match_attributes(self):
         self.outcomes = self.tournament_attributes["game"].scores
 
     def strategy(self, opponent):
