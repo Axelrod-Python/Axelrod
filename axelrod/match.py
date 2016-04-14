@@ -15,8 +15,8 @@ def is_stochastic(players, noise):
 
 class Match(object):
 
-    def __init__(
-        self, players, turns, game=None, deterministic_cache=None, noise=0):
+    def __init__(self, players, turns, game=None, deterministic_cache=None,
+                 noise=0):
         """
         Parameters
         ----------
@@ -32,18 +32,18 @@ class Match(object):
             The probability that a player's intended action should be flipped
         """
         self.result = []
-        self.players = list(players)
+        self.turns = turns
         self._classes = (players[0].__class__, players[1].__class__)
-        self._turns = turns
         if game is None:
             self.game = Game()
         else:
             self.game = game
+        self.noise = noise
+        self.players = list(players)
         if deterministic_cache is None:
             self._cache = DeterministicCache()
         else:
             self._cache = deterministic_cache
-        self._noise = noise
 
     @property
     def players(self):
@@ -67,7 +67,7 @@ class Match(object):
         A boolean to show whether a match between two players would be
         stochastic
         """
-        return is_stochastic(self.players, self._noise)
+        return is_stochastic(self.players, self.noise)
 
     @property
     def _cache_update_required(self):
@@ -75,7 +75,7 @@ class Match(object):
         A boolean to show whether the deterministic cache should be updated
         """
         return (
-            not self._noise and
+            not self.noise and
             self._cache.mutable and not (
                 any(p.classifier['stochastic'] for p in self.players)
                 )
@@ -103,9 +103,9 @@ class Match(object):
             turn = 0
             for p in self.players:
                 p.reset()
-            while turn < self._turns:
+            while turn < self.turns:
                 turn += 1
-                self.players[0].play(self.players[1], self._noise)
+                self.players[0].play(self.players[1], self.noise)
             result = list(
                 zip(self.players[0].history, self.players[1].history))
 
@@ -150,4 +150,4 @@ class Match(object):
         return iu.compute_sparklines(self.result, c_symbol, d_symbol)
 
     def __len__(self):
-        return self._turns
+        return self.turns

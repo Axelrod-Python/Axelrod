@@ -22,9 +22,9 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.players, [p1, p2])
         self.assertEqual(
             match._classes, (axelrod.Cooperator, axelrod.Cooperator))
-        self.assertEqual(match._turns, turns)
+        self.assertEqual(match.turns, turns)
         self.assertEqual(match._cache, {})
-        self.assertEqual(match._noise, 0)
+        self.assertEqual(match.noise, 0)
 
     @given(turns=integers(min_value=1, max_value=200))
     @example(turns=5)
@@ -75,7 +75,7 @@ class TestMatch(unittest.TestCase):
     def test_play(self):
         cache = DeterministicCache()
         players = (axelrod.Cooperator(), axelrod.Defector())
-        match = axelrod.Match(players, 3, cache)
+        match = axelrod.Match(players, 3, deterministic_cache=cache)
         expected_result = [(C, D), (C, D), (C, D)]
         self.assertEqual(match.play(), expected_result)
         self.assertEqual(
