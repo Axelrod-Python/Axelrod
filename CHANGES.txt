@@ -28,3 +28,4 @@ v0.0.27, 2016-03-06 -- Minor fixes, rewrite of tournament engine: interactions n
 v0.0.28, 2016-03-29 -- New strategy, enhanced matches and prob end tournaments.
 v0.0.29, 2016-04-04 -- Bug fix with parallel processing.
 v0.0.30, 2016-04-08 -- Reading and writing tournaments to file, better pickling.
+v0.0.31, 2016-04-18 -- Moran processes, better caching architecture and match generator
