@@ -108,7 +108,7 @@ class TestTransformers(unittest.TestCase):
         # Final play transformer
         p1 = axelrod.Cooperator()
         p2 = FinalTransformer([D, D, D])(axelrod.Cooperator)()
-        p2.tournament_attributes["length"] = 6
+        p2.match_attributes["length"] = 6
         for _ in range(6):
             p1.play(p2)
         self.assertEqual(p2.history, [C, C, C, D, D, D])
@@ -135,7 +135,7 @@ class TestTransformers(unittest.TestCase):
         cls2 = FinalTransformer([D, D])(cls1)
         p1 = cls2()
         p2 = axelrod.Cooperator()
-        p1.tournament_attributes["length"] = 8
+        p1.match_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
@@ -143,7 +143,7 @@ class TestTransformers(unittest.TestCase):
         cls1 = FinalTransformer([D, D])(InitialTransformer([D, D])(axelrod.Cooperator))
         p1 = cls1()
         p2 = axelrod.Cooperator()
-        p1.tournament_attributes["length"] = 8
+        p1.match_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
@@ -152,7 +152,7 @@ class TestTransformers(unittest.TestCase):
         cls1 = compose_transformers(FinalTransformer([D, D]), InitialTransformer([D, D]))
         p1 = cls1(axelrod.Cooperator)()
         p2 = axelrod.Cooperator()
-        p1.tournament_attributes["length"] = 8
+        p1.match_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
