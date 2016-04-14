@@ -141,7 +141,7 @@ class Player(object):
         # Consider overriding in special cases only if necessary
         cls = self.__class__
         new_player = cls(*self.init_args)
-        new_player.tournament_attributes = copy.copy(self.tournament_attributes)
+        new_player.match_attributes = copy.copy(self.match_attributes)
         return new_player
 
     def reset(self):
