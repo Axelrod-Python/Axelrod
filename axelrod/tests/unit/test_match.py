@@ -21,6 +21,10 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.result, [])
         self.assertEqual(match.players, [p1, p2])
         self.assertEqual(
+            match.players[0].match_attributes['length'],
+            turns
+        )
+        self.assertEqual(
             match._classes, (axelrod.Cooperator, axelrod.Cooperator))
         self.assertEqual(match.turns, turns)
         self.assertEqual(match._cache, {})

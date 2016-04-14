@@ -98,7 +98,7 @@ class Player(object):
     def set_match_attributes(self, length=-1, game=None, noise=0):
         if not game:
             game = DefaultGame
-        self.tournament_attributes = {
+        self.match_attributes = {
             "length": length,
             "game": game,
             "noise": noise

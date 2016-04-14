@@ -117,7 +117,7 @@ class GTFT(MemoryOnePlayer):
         self.init_args = (p,)
 
     def receive_match_attributes(self):
-        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        (R, P, S, T) = self.match_attributes["game"].RPST()
         if self.p is None:
             self.p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
         four_vector = [1, self.p, 1, self.p]
@@ -209,7 +209,7 @@ class LRPlayer(MemoryOnePlayer):
             parameterization of the strategies below.
         """
 
-        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        (R, P, S, T) = self.match_attributes["game"].RPST()
         if s is None:
             s = 1
         if l is None:
@@ -248,7 +248,7 @@ class ZDExtort2(LRPlayer):
         super(ZDExtort2, self).__init__()
 
     def receive_match_attributes(self):
-        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        (R, P, S, T) = self.match_attributes["game"].RPST()
         self.l = P
         super(ZDExtort2, self).receive_match_attributes(
             self.phi, self.s, self.l)
@@ -346,7 +346,7 @@ class ZDGTFT2(LRPlayer):
         self.init_args = (phi, s)
 
     def receive_match_attributes(self):
-        (R, P, S, T) = self.tournament_attributes["game"].RPST()
+        (R, P, S, T) = self.match_attributes["game"].RPST()
         self.l = R
         super(ZDGTFT2, self).receive_match_attributes(
             self.phi, self.s, self.l)

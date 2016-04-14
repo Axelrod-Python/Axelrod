@@ -38,7 +38,7 @@ class Darwin(Player):
         self.response = Darwin.genome[0]
 
     def receive_match_attributes(self):
-        self.outcomes = self.tournament_attributes["game"].scores
+        self.outcomes = self.match_attributes["game"].scores
 
     def strategy(self, opponent):
         # Frustrate psychics and ensure that simulated rounds
