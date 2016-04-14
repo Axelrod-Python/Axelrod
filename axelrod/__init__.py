@@ -8,6 +8,7 @@ from .game import DefaultGame, Game
 from .player import init_args, is_basic, obey_axelrod, update_history, Player
 from .mock_player import MockPlayer, simulate_play
 from .match import Match
+from .moran import MoranProcess
 from .strategies import *
 from .deterministic_cache import DeterministicCache
 from .match_generator import *
