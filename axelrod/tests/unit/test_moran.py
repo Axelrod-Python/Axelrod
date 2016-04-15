@@ -39,8 +39,10 @@ class TestMoranProcess(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         random.seed(5)
         mp = MoranProcess((p1, p2))
-        mp.play()
+        populations = mp.play()
         self.assertEqual(len(mp), 5)
+        self.assertEqual(len(populations), 5)
+        self.assertEqual(populations, mp.populations)
         self.assertEqual(mp.winning_strategy_name, str(p2))
 
     def test_three_players(self):
@@ -48,8 +50,10 @@ class TestMoranProcess(unittest.TestCase):
                    axelrod.Defector()]
         random.seed(5)
         mp = MoranProcess(players)
-        mp.play()
+        populations = mp.play()
         self.assertEqual(len(mp), 7)
+        self.assertEqual(len(populations), 7)
+        self.assertEqual(populations, mp.populations)
         self.assertEqual(mp.winning_strategy_name, str(axelrod.Defector()))
 
     def test_four_players(self):
@@ -57,8 +61,10 @@ class TestMoranProcess(unittest.TestCase):
         players.append(axelrod.Defector())
         random.seed(10)
         mp = MoranProcess(players)
-        mp.play()
+        populations = mp.play()
         self.assertEqual(len(mp), 9)
+        self.assertEqual(len(populations), 9)
+        self.assertEqual(populations, mp.populations)
         self.assertEqual(mp.winning_strategy_name, str(axelrod.Defector()))
 
     @given(strategies=lists(sampled_from(axelrod.strategies),
@@ -76,7 +82,8 @@ class TestMoranProcess(unittest.TestCase):
         """Hypothesis test that randomly checks players"""
         players = [s() for s in strategies]
         mp = MoranProcess(players)
-        mp.play()
+        populations = mp.play()
+        self.assertEqual(populations, mp.populations)
         self.assertIn(mp.winning_strategy_name, [str(p) for p in players])
 
     def test_reset(self):

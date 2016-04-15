@@ -115,6 +115,7 @@ class MoranProcess(object):
                 self.__next__()
             except StopIteration:
                 break
+        return self.populations
 
     def __len__(self):
         return len(self.populations)
