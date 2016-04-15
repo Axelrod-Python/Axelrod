@@ -1,13 +1,14 @@
-Advanced
-========
+Further capabilities in the library
+===================================
 
-This is a section aiming to showcase some problems solved and/or insights gained
-using the Axelrod library. Please be the first to submit such a tutorial!
+This section shows some of the more intricate capabilities of the library.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
+   classification_of_strategies.rst
    strategy_transformers.rst
    making_tournaments.rst
+   reading_and_writing_interactions.rst

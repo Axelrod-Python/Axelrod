@@ -1,20 +1,20 @@
+.. _moran-process:
+
 Moran Process
 =============
 
 The strategies in the library can be pitted against one another in the
-[Moran process](https://en.wikipedia.org/wiki/Moran_process), a population
-process simulating natural selection. Given the evolutionary basis of the Moran
-process it can be compared to the :ref:`ecological-variant`.
-While that variant was used by Axelrod in his original works, the Moran process
-is now much more widely studied in the literature.
+`Moran process <https://en.wikipedia.org/wiki/Moran_process>`_, a population
+process simulating natural selection.
 
 The process works as follows. Given an
 initial population of players, the population is iterated in rounds consisting
 of:
+
 - matches played between each pair of players, with the cumulative total
-scores recored
+  scores recored
 - a player is chosen to reproduce proportional to the player's score in the
-round
+  round
 - a player is chosen at random to be replaced
 
 The process proceeds in rounds until the population consists of a single player
@@ -25,7 +25,7 @@ the library, proceed as follows::
     >>> players = [axl.Cooperator(), axl.Defector(),
     ...               axl.TitForTat(), axl.Grudger()]
     >>> mp = axl.MoranProcess(players)
-    >>> mp.play()
+    >>> populations = mp.play()
     >>> mp.winning_strategy_name   # doctest: +SKIP
     Defector
 
@@ -37,7 +37,7 @@ You can access some attributes of the process, such as the number of rounds::
 The sequence of populations::
 
     >>> import pprint
-    >>> pprint.pprint(mp.populations)  # doctest: +SKIP
+    >>> pprint.pprint(populations)  # doctest: +SKIP
     [Counter({'Defector': 1, 'Cooperator': 1, 'Grudger': 1, 'Tit For Tat': 1}),
     Counter({'Defector': 1, 'Cooperator': 1, 'Grudger': 1, 'Tit For Tat': 1}),
     Counter({'Defector': 2, 'Cooperator': 1, 'Grudger': 1}),

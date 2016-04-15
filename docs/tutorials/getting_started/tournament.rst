@@ -1,43 +1,21 @@
-.. _getting-started:
-
-Getting started
-===============
-
-Installation
-------------
-
-The simplest way to install the package is to obtain it from the PyPi
-repository::
-
-    $ pip install axelrod
-
-
-You can also build it from source if you would like to::
-
-    $ git clone https://github.com/Axelrod-Python/Axelrod.git
-    $ cd Axelrod
-    $ python setup.py install
-
-If you do this you will need to also install the dependencies::
-
-    $ pip install -r requirements.txt
+.. _creating_tournaments:
 
 Creating and running a simple tournament
-----------------------------------------
+========================================
 
 The following lines of code creates a list players playing simple
 strategies::
 
     >>> import axelrod as axl
-    >>> strategies = [axl.Cooperator(), axl.Defector(),
+    >>> players = [axl.Cooperator(), axl.Defector(),
     ...               axl.TitForTat(), axl.Grudger()]
-    >>> strategies
+    >>> players
     [Cooperator, Defector, Tit For Tat, Grudger]
 
 We can now create a tournament, play it, save the results and view the rank of
 each player::
 
-    >>> tournament = axl.Tournament(strategies)
+    >>> tournament = axl.Tournament(players)
     >>> results = tournament.play()
     >>> results.ranked_names
     ['Defector', 'Tit For Tat', 'Grudger', 'Cooperator']

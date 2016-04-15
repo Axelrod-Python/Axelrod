@@ -23,16 +23,16 @@ chain::
 To create a noisy tournament you simply need to add the `noise` argument::
 
     >>> import axelrod as axl
-    >>> strategies = [axl.Cooperator(), axl.Defector(),
-    ...               axl.TitForTat(), axl.Grudger()]
+    >>> players = [axl.Cooperator(), axl.Defector(),
+    ...            axl.TitForTat(), axl.Grudger()]
     >>> noise = 0.1
-    >>> tournament = axl.Tournament(strategies, noise=noise)
+    >>> tournament = axl.Tournament(players, noise=noise)
     >>> results = tournament.play()
     >>> plot = axl.Plot(results)
     >>> p = plot.boxplot()
     >>> p.show()
 
-.. image:: _static/visualising_results/demo_strategies_noisy_boxplot.svg
+.. image:: _static/noisy_tournaments/demo_strategies_noisy_boxplot.svg
    :width: 50%
    :align: center
 
@@ -41,6 +41,6 @@ Here is how the distribution of wins now looks::
     >>> p = plot.winplot()
     >>> p.show()
 
-.. image:: _static/visualising_results/demo_strategies_noisy_winplot.svg
+.. image:: _static/noisy_tournaments/demo_strategies_noisy_winplot.svg
    :width: 50%
    :align: center
