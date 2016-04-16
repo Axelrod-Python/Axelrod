@@ -54,7 +54,7 @@ class DeterministicCache(UserDict):
 
         if not self._is_valid_key(key):
             raise ValueError(
-                'Key must be a pair of deterministic axelrod Player classes')
+                'Key must be a tuple of 2 deterministic axelrod Player classes and an integer')
 
         if not self._is_valid_value(value):
             raise ValueError(
