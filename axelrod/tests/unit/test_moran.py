@@ -100,3 +100,9 @@ class TestMoranProcess(unittest.TestCase):
         # Check that players reset
         for player in mp.players:
             self.assertEqual(len(player.history), 0)
+
+    def test_cache(self):
+        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
+        mp = MoranProcess((p1, p2))
+        mp.play()
+        self.assertEqual(len(mp.deterministic_cache), 1)
