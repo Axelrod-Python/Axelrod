@@ -107,6 +107,9 @@ class MoranProcess(object):
         self.winning_strategy_name = None
         self.populations = [self.populations[0]]
         self.score_history = []
+        # Reset all the players
+        for player in self.players:
+            player.reset()
 
     def play(self):
         """Play the process out to completion."""
