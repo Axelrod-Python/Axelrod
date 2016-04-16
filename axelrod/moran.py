@@ -49,7 +49,8 @@ class MoranProcess(object):
         """Copy the initial players into the first population."""
         self.players = []
         for player in self.initial_players:
-            self.players.append(player.clone())
+            player.reset()
+            self.players.append(player)
         self.populations = [self.population_distribution()]
         self.num_players = len(self.players)
 
