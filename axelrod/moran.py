@@ -31,7 +31,7 @@ def fitness_proportionate_selection(scores):
             return i
 
 class MoranProcess(object):
-    def __init__(self, players, turns=100, noise=0):
+    def __init__(self, players, turns=100, noise=0, deterministic_cache=None):
         self.turns = turns
         self.noise = noise
         self.players = list(players) # initial population
@@ -40,6 +40,10 @@ class MoranProcess(object):
         self.populations.append(self.population_distribution())
         self.score_history = []
         self.num_players = len(self.players)
+        if deterministic_cache:
+            self.deterministic_cache = deterministic_cache
+        else:
+            self.deterministic_cache = DeterministicCache()
 
     @property
     def _stochastic(self):
@@ -83,7 +87,8 @@ class MoranProcess(object):
                 player2 = self.players[j]
                 player1.reset()
                 player2.reset()
-                match = Match((player1, player2), self.turns, noise=self.noise)
+                match = Match((player1, player2), turns=self.turns, noise=self.noise,
+                              deterministic_cache=self.deterministic_cache)
                 match.play()
                 match_scores = np.sum(match.scores(), axis=0) / float(self.turns)
                 scores[i] += match_scores[0]
