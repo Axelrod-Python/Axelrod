@@ -19,9 +19,9 @@ is the total number of turns played.
 A matrix of cooperation rates is available within a tournament's ResultSet::
 
     >>> import axelrod as axl
-    >>> strategies = [axl.Cooperator(), axl.Defector(),
-    ...               axl.TitForTat(), axl.Grudger()]
-    >>> tournament = axl.Tournament(strategies)
+    >>> players = [axl.Cooperator(), axl.Defector(),
+    ...            axl.TitForTat(), axl.Grudger()]
+    >>> tournament = axl.Tournament(players)
     >>> results = tournament.play()
     >>> [[round(float(ele), 3) for ele in row] for row in results.normalised_cooperation]
     [[1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0], [1.0, 0.005, 1.0, 1.0], [1.0, 0.005, 1.0, 1.0]]

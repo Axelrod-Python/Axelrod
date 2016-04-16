@@ -1,5 +1,7 @@
-Strategies
-==========
+.. _strategies-index:
+
+Strategies index
+================
 
 Here are the docstrings of all the strategies in the library.
 

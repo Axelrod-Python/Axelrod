@@ -1,17 +1,15 @@
-Further Topics
-==============
+Research topics
+===============
 
-This section contains a variety of tutorials that show some more in depth
-capabilities of the axelrod library
+This section contains descriptions of particular tools of interest to those
+doing game theoretic research.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-   classification_of_strategies.rst
-   creating_matches.rst
-   moran.rst
-   morality_metrics.rst
+   noisy_tournaments.rst
    probabilistict_end_tournaments.rst
-   reading_and_writing_interactions.rst
+   morality_metrics.rst
+   ecological_variant.rst

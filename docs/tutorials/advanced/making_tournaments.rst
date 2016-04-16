@@ -36,7 +36,6 @@ To do this let us create a new class to generate matches::
     ...                     match = self.build_single_match(pair, noise)
     ...                     yield (player1_index, player2_index), match
 
-
 Using this class we can create a tournament with little effort::
 
     >>> players = [axl.Cooperator(), axl.Defector(), axl.TitForTat(),
@@ -75,3 +74,24 @@ before::
 
     >>> results.ranked_names  # doctest: +SKIP
     ['Defector', 'Alternator', 'Grudger', 'Tit For Tat', 'Cooperator']
+
+Note: the :code:`axelrod.MatchGenerator` also has a :code:`build_single_match`
+method which can be overwritten (similarly to above) if the type of a particular
+match should be changed.
+
+For example the following could be used to create a tournament that randomly
+builds matches that were either 200 turns or single 1 shot games::
+
+    >>> import axelrod as axl
+    >>> import random
+    >>> class OneShotOrRepetitionMatchups(axl.RoundRobinMatches):
+    ...     """Inherit from the `axelrod.match_generator.RoundRobinMatches` class"""
+    ...
+    ...
+    ...     def build_single_match(self, pair, noise=0):
+    ...         """Create a single match for a given pair"""
+    ...         if random.random() < 0.5:
+    ...             return Match(
+    ...                 pair, 200, self.game, self.deterministic_cache, noise)
+    ...         return Match(
+    ...             pair, 1, self.game, self.deterministic_cache, noise)

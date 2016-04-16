@@ -9,9 +9,9 @@ corresponding to the tournament.
 As shown in :ref:`getting-started` let us create a tournament::
 
     >>> import axelrod as axl
-    >>> strategies = [axl.Cooperator(), axl.Defector(),
-    ...               axl.TitForTat(), axl.Grudger()]
-    >>> tournament = axl.Tournament(strategies)
+    >>> players = [axl.Cooperator(), axl.Defector(),
+    ...            axl.TitForTat(), axl.Grudger()]
+    >>> tournament = axl.Tournament(players)
     >>> results = tournament.play()
 
 We can view the payoff matrix of our tournament showing the score of the row-th
