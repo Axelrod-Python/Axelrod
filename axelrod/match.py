@@ -33,7 +33,7 @@ class Match(object):
         """
         self.result = []
         self.turns = turns
-        self._classes = (players[0].__class__, players[1].__class__)
+        self._cache_key = (players[0].__class__, players[1].__class__, turns)
         if game is None:
             self.game = Game()
         else:
@@ -99,7 +99,7 @@ class Match(object):
 
         i.e. One entry per turn containing a pair of actions.
         """
-        if (self._stochastic or self._classes not in self._cache):
+        if (self._stochastic or self._cache_key not in self._cache):
             turn = 0
             for p in self.players:
                 p.reset()
@@ -110,9 +110,9 @@ class Match(object):
                 zip(self.players[0].history, self.players[1].history))
 
             if self._cache_update_required:
-                self._cache[self._classes] = result
+                self._cache[self._cache_key] = result
         else:
-            result = self._cache[self._classes]
+            result = self._cache[self._cache_key]
 
         self.result = result
         return result

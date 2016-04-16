@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import unittest
 import axelrod
 from axelrod import Actions
@@ -25,7 +24,7 @@ class TestMatch(unittest.TestCase):
             turns
         )
         self.assertEqual(
-            match._classes, (axelrod.Cooperator, axelrod.Cooperator))
+            match._cache_key, (axelrod.Cooperator, axelrod.Cooperator, turns))
         self.assertEqual(match.turns, turns)
         self.assertEqual(match._cache, {})
         self.assertEqual(match.noise, 0)
@@ -83,11 +82,11 @@ class TestMatch(unittest.TestCase):
         expected_result = [(C, D), (C, D), (C, D)]
         self.assertEqual(match.play(), expected_result)
         self.assertEqual(
-            cache[(axelrod.Cooperator, axelrod.Defector)], expected_result)
+            cache[(axelrod.Cooperator, axelrod.Defector, 3)], expected_result)
 
         # a deliberately incorrect result so we can tell it came from the cache
         expected_result = [(C, C), (D, D), (D, C)]
-        cache[(axelrod.Cooperator, axelrod.Defector)] = expected_result
+        cache[(axelrod.Cooperator, axelrod.Defector, 3)] = expected_result
         match = axelrod.Match(players, 3, deterministic_cache=cache)
         self.assertEqual(match.play(), expected_result)
 
@@ -114,19 +113,19 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.final_score(), (7, 2))
 
     def test_final_score_per_turn(self):
-        turns = 3.0
+        turns = 3
         player1 = axelrod.TitForTat()
         player2 = axelrod.Defector()
 
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.final_score_per_turn(), None)
         match.play()
-        self.assertEqual(match.final_score_per_turn(), (2/turns, 7/turns))
+        self.assertEqual(match.final_score_per_turn(), (2/float(turns), 7/float(turns)))
 
         match = axelrod.Match((player2, player1), turns)
         self.assertEqual(match.final_score_per_turn(), None)
         match.play()
-        self.assertEqual(match.final_score_per_turn(), (7/turns, 2/turns))
+        self.assertEqual(match.final_score_per_turn(), (7/float(turns), 2/float(turns)))
 
     def test_winner(self):
         player1 = axelrod.TitForTat()
@@ -149,7 +148,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.winner(), False)
 
     def test_cooperation(self):
-        turns = 3.0
+        turns = 3
         player1 = axelrod.Cooperator()
         player2 = axelrod.Alternator()
 
@@ -167,14 +166,14 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.cooperation(), (2, 0))
 
     def test_normalised_cooperation(self):
-        turns = 3.0
+        turns = 3
         player1 = axelrod.Cooperator()
         player2 = axelrod.Alternator()
 
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.normalised_cooperation(), None)
         match.play()
-        self.assertEqual(match.normalised_cooperation(), (3/turns, 2/turns))
+        self.assertEqual(match.normalised_cooperation(), (3/float(turns), 2/float(turns)))
 
         player1 = axelrod.Alternator()
         player2 = axelrod.Defector()
@@ -182,7 +181,7 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.normalised_cooperation(), None)
         match.play()
-        self.assertEqual(match.normalised_cooperation(), (2/turns, 0/turns))
+        self.assertEqual(match.normalised_cooperation(), (2/float(turns), 0/float(turns)))
 
     def test_sparklines(self):
         players = (axelrod.Cooperator(), axelrod.Alternator())

@@ -73,7 +73,7 @@ class TournamentManager(object):
 
         t0 = time.time()
 
-        if not tournament.noise and self._pass_cache and self._valid_cache(tournament.turns):
+        if not tournament.noise and self._pass_cache:
             self._logger.debug('Passing cache with %d entries to %s tournament' %
                             (len(self._deterministic_cache), tournament.name))
             tournament.deterministic_cache = self._deterministic_cache
@@ -100,11 +100,6 @@ class TournamentManager(object):
 
         self._logger.info(
             timed_message('Finished all %s tasks' % tournament.name, t0))
-
-    def _valid_cache(self, turns):
-        return ((len(self._deterministic_cache) == 0) or
-                (len(self._deterministic_cache) > 0) and
-                turns == self._deterministic_cache.turns)
 
     def run_ecological_variant(self, tournament, ecosystem):
         self._logger.debug(
