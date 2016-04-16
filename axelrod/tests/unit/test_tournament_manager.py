@@ -56,20 +56,6 @@ class TestTournamentManager(unittest.TestCase):
         self.assertIsInstance(mgr._tournaments[0], axelrod.Tournament)
         self.assertEqual(mgr._tournaments[0].name, self.test_tournament_name)
 
-    def test_valid_cache(self):
-        mgr = self.mgr_class(
-            output_directory=self.test_output_directory,
-            with_ecological=self.test_with_ecological,
-            load_cache=False)
-        mgr.add_tournament(
-                players=self.test_players, name=self.test_tournament_name)
-        self.assertTrue(mgr._valid_cache(200))
-        mgr._deterministic_cache[(axelrod.Cooperator, axelrod.Defector)] = [('C', 'D')]
-        self.assertFalse(mgr._valid_cache(200))
-        mgr._deterministic_cache.turns = 500
-        self.assertFalse(mgr._valid_cache(200))
-        self.assertTrue(mgr._valid_cache(500))
-
     def test_tournament_label(self):
         tournament = axelrod.Tournament(self.test_players, turns=20,
                                         repetitions=2)
