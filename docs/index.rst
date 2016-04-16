@@ -43,6 +43,9 @@ Study the evolutionary process using a Moran process::
      Counter({'Cooperator': 1, 'Tit For Tat': 2}),
      Counter({'Tit For Tat': 3})]
 
+As well as this, the library has a growing collection of strategies. The
+:ref:`strategies-index` gives a description of them.
+
 For further details there is a library of tutorials available:
 
 Tutorials
