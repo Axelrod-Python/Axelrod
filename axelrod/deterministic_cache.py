@@ -43,7 +43,6 @@ class DeterministicCache(UserDict):
         """
         UserDict.__init__(self)
         self.mutable = True
-        self.turns = None
         if file_name is not None:
             self.load(file_name)
 
@@ -63,9 +62,6 @@ class DeterministicCache(UserDict):
 
         UserDict.__setitem__(self, key, value)
 
-        if self.turns is None:
-            self.turns = len(value)
-
     def _is_valid_key(self, key):
         """Validate a proposed dictionary key
 
@@ -81,13 +77,18 @@ class DeterministicCache(UserDict):
         if not isinstance(key, tuple):
             return False
 
-        # The tuple should be a pair
-        if len(key) != 2:
+        # The tuple should be a triplet
+        if len(key) != 3:
             return False
 
-        # Each item in the pair should be a subclass of axelrod.Player
+        # The tripley should be a pair of axelrod.Player sublclasses and an
+        # integer
         try:
-            if not (issubclass(key[0], Player) and issubclass(key[1], Player)):
+            if not (
+                issubclass(key[0], Player) and
+                issubclass(key[1], Player) and
+                isinstance(key[2], int)
+            ):
                 return False
         except TypeError:
             return False
@@ -111,11 +112,6 @@ class DeterministicCache(UserDict):
         """
         # The value should be a list
         if not isinstance(value, list):
-            return False
-
-        # If the turns attribute has been set, the length of the list should
-        # match it
-        if self.turns is not None and len(value) != self.turns:
             return False
 
         return True
@@ -148,7 +144,5 @@ class DeterministicCache(UserDict):
         else:
             raise ValueError(
                 'Cache file exists but is not the correct format. Try deleting and re-building the cache file.')
-
-        self.turns = len(list(data.values())[0])
 
         return True
