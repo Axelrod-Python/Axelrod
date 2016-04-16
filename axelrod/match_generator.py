@@ -108,7 +108,6 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         super(ProbEndRoundRobinMatches, self).__init__(
             players, turns=float("inf"), game=game,
             deterministic_cache=deterministic_cache)
-        self.deterministic_cache.mutable = False
         self.prob_end = prob_end
 
     def build_single_match(self, pair, noise=0):
