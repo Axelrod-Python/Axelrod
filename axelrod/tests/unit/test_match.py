@@ -25,7 +25,7 @@ class TestMatch(unittest.TestCase):
             turns
         )
         self.assertEqual(
-            match._classes, (axelrod.Cooperator, axelrod.Cooperator))
+            match._cache_key, (axelrod.Cooperator, axelrod.Cooperator, turns))
         self.assertEqual(match.turns, turns)
         self.assertEqual(match._cache, {})
         self.assertEqual(match.noise, 0)
@@ -83,11 +83,11 @@ class TestMatch(unittest.TestCase):
         expected_result = [(C, D), (C, D), (C, D)]
         self.assertEqual(match.play(), expected_result)
         self.assertEqual(
-            cache[(axelrod.Cooperator, axelrod.Defector)], expected_result)
+            cache[(axelrod.Cooperator, axelrod.Defector, 3)], expected_result)
 
         # a deliberately incorrect result so we can tell it came from the cache
         expected_result = [(C, C), (D, D), (D, C)]
-        cache[(axelrod.Cooperator, axelrod.Defector)] = expected_result
+        cache[(axelrod.Cooperator, axelrod.Defector, 3)] = expected_result
         match = axelrod.Match(players, 3, deterministic_cache=cache)
         self.assertEqual(match.play(), expected_result)
 
@@ -114,7 +114,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.final_score(), (7, 2))
 
     def test_final_score_per_turn(self):
-        turns = 3.0
+        turns = 3
         player1 = axelrod.TitForTat()
         player2 = axelrod.Defector()
 
@@ -149,7 +149,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.winner(), False)
 
     def test_cooperation(self):
-        turns = 3.0
+        turns = 3
         player1 = axelrod.Cooperator()
         player2 = axelrod.Alternator()
 
@@ -167,7 +167,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.cooperation(), (2, 0))
 
     def test_normalised_cooperation(self):
-        turns = 3.0
+        turns = 3
         player1 = axelrod.Cooperator()
         player2 = axelrod.Alternator()
 
