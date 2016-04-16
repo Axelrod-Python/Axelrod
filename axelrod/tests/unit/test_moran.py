@@ -98,5 +98,5 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(mp.winning_strategy_name, None)
         self.assertEqual(mp.score_history, [])
         # Check that players reset
-        for player in mp.players
+        for player in mp.players:
             self.assertEqual(len(player.history), 0)
