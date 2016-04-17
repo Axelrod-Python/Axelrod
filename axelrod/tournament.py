@@ -15,8 +15,8 @@ class Tournament(object):
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
-                 processes=None, prebuilt_cache=False, noise=0,
-                 with_morality=True):
+                 processes=None, deterministic_cache=None, prebuilt_cache=False,
+                 noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -34,6 +34,8 @@ class Tournament(object):
             The number of times the round robin should be repeated
         processes : integer
             The number of processes to be used for parallel processing
+        deterministic_cache : instance
+            An instance of the axelrod.DeterministicCache class
         prebuilt_cache : boolean
             Whether a cache has been passed in from an external object
         noise : float
@@ -48,8 +50,12 @@ class Tournament(object):
             self.game = game
         self.players = players
         self.repetitions = repetitions
-        self.prebuilt_cache = prebuilt_cache
-        self.deterministic_cache = DeterministicCache()
+        if deterministic_cache is not None:
+            self.prebuilt_cache = True
+            self.deterministic_cache = deterministic_cache
+        else:
+            self.prebuilt_cache = prebuilt_cache
+            self.deterministic_cache = DeterministicCache()
         self.match_generator = match_generator(
             players, turns, self.game, self.deterministic_cache)
         self._with_morality = with_morality

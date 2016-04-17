@@ -80,6 +80,19 @@ class TestTournament(unittest.TestCase):
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
+        # Test init when passing a cache:
+        cache = axelrod.DeterministicCache()
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=self.test_turns,
+            processes=4,
+            noise=0.2,
+            deterministic_cache=cache)
+        self.assertEqual(tournament.deterministic_cache, cache)
+        self.assertTrue(tournament.prebuilt_cache)
+
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
