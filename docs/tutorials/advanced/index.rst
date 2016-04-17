@@ -12,3 +12,4 @@ Contents:
    strategy_transformers.rst
    making_tournaments.rst
    reading_and_writing_interactions.rst
+   using_the_cache.rst
