@@ -106,3 +106,8 @@ class TestMoranProcess(unittest.TestCase):
         mp = MoranProcess((p1, p2))
         mp.play()
         self.assertEqual(len(mp.deterministic_cache), 1)
+
+        # Check that can pass a pre built cache
+        cache = axelrod.DeterministicCache()
+        mp = MoranProcess((p1, p2), deterministic_cache=cache)
+        self.assertEqual(cache, mp.deterministic_cache)
