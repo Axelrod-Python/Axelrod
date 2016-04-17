@@ -3,8 +3,8 @@
 Using the cache
 ===============
 
-Whilst for stochastic strategies every repetition of a Match will give a
-different result. For deterministic strategies, when there is no noise there is
+Whilst for stochastic strategies, every repetition of a Match will give a
+different result, for deterministic strategies, when there is no noise there is
 no need to re run the match. The library has a :code:`DeterministicCache` class
 that allows us to quickly replay matches.
 
@@ -34,8 +34,8 @@ We can take a look at the cache::
     >>> len(cache)
     1
 
-Note, that is maps triplets of players and match lengths to interactions.
-We can rerun the code and compare the timing::
+This maps a triplet of 2 player classes and the match length to the resulting
+interactions.  We can rerun the code and compare the timing::
 
     >>> time_with_full_cache = timeit.timeit(run_match, number=200)
     >>> time_with_empty_cache  # doctest: +SKIP
