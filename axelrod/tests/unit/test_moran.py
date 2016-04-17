@@ -98,11 +98,5 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(mp.winning_strategy_name, None)
         self.assertEqual(mp.score_history, [])
         # Check that players reset
-        for player, intial_player in zip(mp.players, mp.initial_players):
-            self.assertEqual(str(player), str(intial_player))
-
-    def test_cache(self):
-        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
-        mp = MoranProcess((p1, p2))
-        mp.play()
-        self.assertEqual(len(mp.deterministic_cache), 1)
+        for player in mp.players:
+            self.assertEqual(len(player.history), 0)
