@@ -9,6 +9,7 @@ from .result_set import ResultSet
 from .deterministic_cache import DeterministicCache
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
 
+from tqdm import tqdm
 
 class Tournament(object):
     game = Game()
@@ -64,25 +65,40 @@ class Tournament(object):
         self._logger = logging.getLogger(__name__)
         self.interactions = []
 
-    def play(self, filename=None):
+    def play(self, filename=None, progress_bar=None):
         """
         Plays the tournament and passes the results to the ResultSet class
+        If a filename is passed it write the results to file.
 
         Returns
         -------
         axelrod.ResultSet
+
+        Parameters
+        ----------
+
+        progress_bar : Boolean
+            Whether or not to display a progress bar
         """
+        if progress_bar is not None:  # Create a progress bar
+            progress_bar = tqdm(total=self.repetitions)
+
         if self._processes is None:
-            self._run_serial_repetitions(self.interactions)
+            self._run_serial_repetitions(self.interactions,
+                                         progress_bar=progress_bar)
         else:
             if self._build_cache_required():
-                self._build_cache(self.interactions)
-            self._run_parallel_repetitions(self.interactions)
+                self._build_cache(self.interactions, progress_bar)
+            self._run_parallel_repetitions(self.interactions,
+                                           progress_bar=progress_bar)
 
         if filename is None:
             self.result_set = self._build_result_set()
             return self.result_set
         self._write_to_csv(filename)
+
+        if progress_bar is not None:  # Close the progress bar
+            progress_bar.close()
 
     def _build_result_set(self):
         """
@@ -108,7 +124,7 @@ class Tournament(object):
                 len(self.deterministic_cache) == 0 or
                 not self.prebuilt_cache))
 
-    def _build_cache(self, matches):
+    def _build_cache(self, matches, progress_bar=None):
         """
         For parallel processing, this runs a single round robin in order to
         build the deterministic cache.
@@ -117,34 +133,47 @@ class Tournament(object):
         ----------
         matches : list
             The list of matches to update
+        progress_bar : tqdm.tqdm progress bar object
+            The progress bar being updated
         """
         self._logger.debug('Playing first round robin to build cache')
-        self._run_single_repetition(matches)
+        self._run_single_repetition(matches, progress_bar)
         self._parallel_repetitions -= 1
 
-    def _run_single_repetition(self, interactions):
+    def _run_single_repetition(self, interactions, progress_bar=None):
         """
         Runs a single round robin and updates the matches list.
+
+        Parameters
+        ----------
+        progress_bar : tqdm.tqdm progress bar object
+            The progress bar being updated
         """
         new_matches = self.match_generator.build_matches(noise=self.noise)
         interactions = self._play_matches(new_matches)
         self.interactions.append(interactions)
+        if progress_bar is not None:
+            progress_bar.update(1)
 
-    def _run_serial_repetitions(self, interactions):
+    def _run_serial_repetitions(self, interactions, progress_bar=None):
         """
         Runs all repetitions of the round robin in serial.
 
         Parameters
         ----------
-        ineractions : list
+        interactions : list
             The list of interactions per repetition to update with results
+        progress_bar : tqdm.tqdm progress bar object
+            The progress bar being updated
         """
         self._logger.debug('Playing %d round robins' % self.repetitions)
+
         for repetition in range(self.repetitions):
-            self._run_single_repetition(interactions)
+            self._run_single_repetition(interactions, progress_bar)
+
         return True
 
-    def _run_parallel_repetitions(self, interactions):
+    def _run_parallel_repetitions(self, interactions, progress_bar=None):
         """
         Run all except the first round robin using parallel processing.
 
@@ -152,6 +181,8 @@ class Tournament(object):
         ----------
         interactions : list
             The list of interactions per repetition to update with results
+        progress_bar : tqdm.tqdm progress bar object
+            The progress bar being updated
         """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
@@ -159,7 +190,6 @@ class Tournament(object):
         work_queue = Queue()
         done_queue = Queue()
         workers = self._n_workers()
-
         for repetition in range(self._parallel_repetitions):
             work_queue.put(repetition)
 
@@ -167,7 +197,7 @@ class Tournament(object):
             'Playing %d round robins with %d parallel processes' %
             (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, interactions)
+        self._process_done_queue(workers, done_queue, interactions, progress_bar)
 
         return True
 
@@ -206,7 +236,8 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, interactions):
+    def _process_done_queue(self, workers, done_queue, interactions,
+            progress_bar=None):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -218,6 +249,8 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         interactions : list
             The list of interactions per repetition to update with results
+        progress_bar : tqdm.tqdm progress bar object
+            The progress bar being updated
         """
         stops = 0
         while stops < workers:
@@ -227,9 +260,11 @@ class Tournament(object):
                 stops += 1
             else:
                 interactions.append(results)
+                if progress_bar is not None:
+                    progress_bar.update(1)
         return True
 
-    def _worker(self, work_queue, done_queue):
+    def _worker(self, work_queue, done_queue, progress_bar=None):
         """
         The work for each parallel sub-process to execute.
 
@@ -239,12 +274,17 @@ class Tournament(object):
             A queue containing an entry for each round robin to be processed
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
+        progress_bar : tqdm.tqdm progress bar object
+            The progress bar being updated
         """
+
         for repetition in iter(work_queue.get, 'STOP'):
             new_matches = self.match_generator.build_matches(noise=self.noise)
             interactions = self._play_matches(new_matches)
+
             done_queue.put(interactions)
         done_queue.put('STOP')
+
         return True
 
     def _play_matches(self, matches):

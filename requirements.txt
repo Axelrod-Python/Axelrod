@@ -3,3 +3,4 @@ matplotlib>=1.4.2
 hypothesis>=3.0
 testfixtures==4.9.1
 multiprocess>=0.70.4
+tqdm>=4.4.1
