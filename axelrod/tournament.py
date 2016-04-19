@@ -310,8 +310,8 @@ class ProbEndTournament(Tournament):
 
     def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
                  name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 processes=None, prebuilt_cache=False, noise=0,
-                 with_morality=True):
+                 processes=None, deterministic_cache=None, prebuilt_cache=False,
+                 noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -339,15 +339,10 @@ class ProbEndTournament(Tournament):
         super(ProbEndTournament, self).__init__(
             players, name=name, game=game, turns=float("inf"),
             repetitions=repetitions, processes=processes,
+            deterministic_cache=deterministic_cache,
             prebuilt_cache=prebuilt_cache, noise=noise,
             with_morality=with_morality)
 
         self.prob_end = prob_end
         self.match_generator = ProbEndRoundRobinMatches(
             players, prob_end, self.game, self.deterministic_cache)
-
-    def _build_cache_required(self):
-        """
-        A cache is never required (as every Match length can be different)
-        """
-        return False

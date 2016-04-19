@@ -568,30 +568,18 @@ class TestProbEndTournament(unittest.TestCase):
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
-    @given(s=lists(sampled_from(axelrod.strategies),
-                   min_size=2,  # Errors are returned if less than 2 strategies
-                   max_size=5, unique=True),
-           prob_end=floats(min_value=.1, max_value=.9),
-           repetitions=integers(min_value=2, max_value=4),
-           rm=random_module())
-    @settings(max_examples=50, timeout=0)
-    @example(s=test_strategies, prob_end=test_prob_end,
-             repetitions=test_repetitions,
-             rm=random.seed(0))
-    def test_build_cache_never_required(self, s, prob_end, repetitions, rm):
-        """
-        As the matches have a sampled length a cache is never required.
-        """
-        players = [strat() for strat in s]
-
+        # Test init when passing a cache:
+        cache = axelrod.DeterministicCache()
         tournament = axelrod.ProbEndTournament(
             name=self.test_name,
-            players=players,
+            players=self.players,
             game=self.game,
-            prob_end=prob_end,
-            repetitions=repetitions)
-        self.assertFalse(tournament._build_cache_required())
-
+            prob_end=self.test_prob_end,
+            processes=4,
+            noise=0.2,
+            deterministic_cache=cache)
+        self.assertEqual(tournament.deterministic_cache, cache)
+        self.assertTrue(tournament.prebuilt_cache)
 
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
