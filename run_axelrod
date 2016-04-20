@@ -1,135 +1,147 @@
 #!/usr/bin/env python
+"""Run axelrod
 
-"""A script to run the Axelrod tournament.
+Usage:
+    run_axelrod [-h] [-t TURNS] [-e PROBEND] [-r REPETITIONS] [-n NOISE] [-o
+    OUTPUTDIRECTORY] [-i IMAGE-FORMAT] [-c CACHE] [-p PROCESSES] [--rc] [--xb] [--xo] [--xc] [--xa]
 
-The code for strategies is present in `axelrod/strategies`.
+Options:
+    -h --help                    show a help message
+    -t TURNS                     turns per match [default: 200]
+    -e PROBEND                   probability of a match ending (if provided, overrides turns) [default: ""]
+    -r REPETITIONS               repetitions of each tournament [default: 100]
+    -n NOISE                     noise level [default: 0]
+    -o OUTPUT-DIRECTORY          output directory [default: None]
+    -i IMAGE-FORMAT              image format for output, e.g. svg, jpg, png [default: svg]
+    -c CACHE                     path to cache file [default: None]
+    -p PROCESSES                 number of parallel processes to spwan. 0 uses cpu count [default: None]
+    --rc                         rebuild cache and save to file
+
+    --xb                         exclude basic strategies
+    --xo                         exclude ordinary strategies
+    --xc                         exclude cheating strategies
+    --xa                         exclude combined strategies
 """
+from docopt import docopt
+import axelrod as axl
+import os
 
-from __future__ import division
-import argparse
-from axelrod import run_tournaments, run_prob_end_tournaments, setup_logging
+def all_plots(label, results, filename_suffix, file_format, output_directory):
+    """Obtain all plots"""
+    plot = axl.Plot(results)
 
-if __name__ == "__main__":
+    f = plot.boxplot(title="Payoff " + label)
+    filename = os.path.join(output_directory,
+                            "{}_boxplot.{}".format(filename_suffix, file_format))
+    f.savefig(filename)
 
-    parser = argparse.ArgumentParser(
-        description="Run a recreation of Axelrod's tournament")
+    f = plot.payoff(title="Payoff " + label)
+    filename = os.path.join(output_directory,
+                            "{}_payoff.{}".format(filename_suffix, file_format))
+    f.savefig(filename)
 
-    parser.add_argument(
-        '-l', '--logging',
-        type=str,
-        default='console',
-        dest="logging_destination",
-        help='logging (none, console or file)')
+    f = plot.winplot(title="Wins " + label)
+    filename = os.path.join(output_directory,
+                            "{}_winplot.{}".format(filename_suffix, file_format))
+    f.savefig(filename)
 
-    parser.add_argument(
-        '-v', '--verbosity',
-        type=str,
-        default='INFO',
-        help='Logging level. DEBUG, INFO, ERROR or CRITICAL')
+    f = plot.sdvplot(title="Payoff differences " + label)
+    filename = os.path.join(output_directory,
+                            "{}_sdvplot.{}".format(filename_suffix, file_format))
+    f.savefig(filename)
 
-    parser.add_argument(
-        '-t',
-        '--turns',
-        type=int,
-        default=200,
-        help='turns per pair')
+    f = plot.pdplot(title="Payoff differences " + label)
+    filename = os.path.join(output_directory,
+                            "{}_pdplot.{}".format(filename_suffix, file_format))
+    f.savefig(filename)
 
-    parser.add_argument(
-        '-pe',
-        '--prob_end',
-        type=float,
-        default=None,
-        help='probability of a match ending (if provided overrides turns)')
+    eco = axl.Ecosystem(results)
+    eco.reproduce(1000)
+    f = plot.stackplot(eco, title="Eco " + label)
+    filename = os.path.join(output_directory,
+                            "{}_repdroduce.{}".format(filename_suffix, file_format))
+    f.savefig(filename)
 
-    parser.add_argument(
-        '-r', '--repetitions',
-        type=int,
-        default=10,
-        help='round-robin repetitions')
 
-    parser.add_argument(
-        '-o', '--output_directory',
-        default='./',
-        help='output directory')
+def run_tournament(players, turns=200, repetitions=100, prob_end=None,
+                   noise=None, processes=0, cache=None):
+    """Run a given tournament, returns results set and a label for plots"""
+    print("Running tournament with {} strategies".format(len(players)))
+    if cache is None:
+        cache = axl.DeterministicCache()
 
-    parser.add_argument(
-        '--xb',
-        "--exclude-basic",
-        action='store_true',
-        dest="exclude_basic",
-        help='exclude basic strategies plot')
+    if prob_end is not None:
+        tournament = axl.ProbEndTournament(players, repetitions=repetitions,
+                                           prob_end=prob_end, noise=noise,
+                                           processes=processes,
+                                           deterministic_cache=cache)
+        label = "Prob end: {}, repetitions: {}, noise: {}, strategies: {}. ".format(prob_end, tournament.repetitions, noise, len(tournament.players))
 
-    parser.add_argument(
-        '--xs', "--exclude-ordinary",
-        action='store_true',
-        dest="exclude_ordinary",
-        help='exclude ordinary strategies plot')
-
-    parser.add_argument(
-        '--xc', "--exclude-cheating",
-        action='store_true',
-        dest="exclude_cheating",
-        help='exclude cheating strategies plot')
-
-    parser.add_argument(
-        '--xa', "--exclude-combined",
-        action='store_true',
-        dest="exclude_combined",
-        help='exclude combined strategies plot')
-
-    parser.add_argument(
-        '--ne', "--no-ecological",
-        action='store_true',
-        dest="no_ecological",
-        help='no ecological variant')
-
-    parser.add_argument(
-        '-p', '--processes',
-        type=int,
-        default=None,
-        help='Number of parallel processes to spawn. 0 uses cpu count.')
-
-    parser.add_argument(
-        '--rc', "--rebuild-cache",
-        action='store_true',
-        dest="rebuild_cache",
-        help='rebuild cache and save to file')
-
-    parser.add_argument(
-        '-c', '--cache_file',
-        type=str,
-        default='./cache.txt',
-        help='Path to cache file')
-
-    parser.add_argument(
-        '-n', '--noise',
-        type=float,
-        default=0,
-        help='Noise level')
-
-    parser.add_argument(
-        '-i', '--image_format',
-        type=str,
-        default="svg",
-        help='Image format for matplotlib, e.g. svg, jpeg, png')
-
-    args = parser.parse_args()
-
-    if all([args.exclude_basic,
-            args.exclude_ordinary,
-            args.exclude_cheating,
-            args.exclude_combined]):
-        print("You've excluded everything - nothing for me to do")
     else:
-        setup_logging(args.logging_destination, args.verbosity)
-        # Unravel argparse Namespace object to python keyword arguments.
-        kwargs = vars(args)
-        del kwargs["logging_destination"]
-        del kwargs["verbosity"]
+        tournament = axl.ProbEndTournament(players, repetitions=repetitions,
+                                           turns=turns, noise=noise,
+                                           processes=processes,
+                                           deterministic_cache=cache)
+        label = "Turns: {}, repetitions: {}, noise: {}, strategies: {}. ".format(turns, tournament.repetitions, noise, len(tournament.nplayers))
 
-        if kwargs['prob_end'] is None:
-            del kwargs["prob_end"]
-            run_tournaments(**kwargs)
-        else:
-            del kwargs["turns"]
-            run_prob_end_tournaments(**kwargs)
+    return tournament.play(), label
+
+
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='Run Axelrod 0.1')
+
+    # Parse arguments
+    turns = int(arguments['-t'])
+    repetitions = int(arguments['-r'])
+    prob_end = float(arguments['-e'])
+    noise = float(arguments['-n'])
+    processes = eval(arguments['-p'])
+
+    output_directory = arguments['-o']
+    if output_directory == "None":
+        output_directory = None
+    cache_file = arguments['-c']
+    if cache_file == "None":
+        cache_file = None
+
+    image_format = arguments['-i']
+    rebuild_cache = arguments['--rc']
+    exclude_basic = arguments['--xb']
+    exclude_ordinary = arguments['--xo']
+    exclude_cheaters = arguments['--xc']
+    exclude_combined = arguments['--xa']
+
+    # Build play lists
+    player_lists = []
+    file_suffixes = []
+    if not exclude_basic:  # Basic strategies not excluded
+        player_lists.append([s() for s in axl.basic_strategies])
+        file_suffixes.append("basic_strategies_")
+    if not exclude_ordinary:  # Ordinary strategies not excluded
+        player_lists.append([s() for s in axl.ordinary_strategies])
+        file_suffixes.append("ordinary_strategies_")
+    if not exclude_cheaters:  # Cheating strategies not excluded
+        player_lists.append([s() for s in axl.cheating_strategies])
+        file_suffixes.append("cheating_strategies_")
+    if not exclude_combined:  # All strategies not excluded
+        player_lists.append([s() for s in axl.strategies])
+        file_suffixes.append("strategies_")
+
+    # Build the cache
+    if cache_file and not rebuild_cache:
+        cache = axl.DeterministicCache(cache_file)
+    else:
+        cache = axl.DeterministicCache()
+
+    # run the tournaments
+    for players, suffix in zip(player_lists, file_suffixes):
+        results, label = run_tournament(players, turns=turns,
+                                        repetitions=repetitions, prob_end=prob_end,
+                                        noise=noise, processes=processes,
+                                        cache=cache)
+        all_plots(label, results, suffix, image_format, output_directory)
+
+
+    # save the cache to file
+    if rebuild_cache:
+       cache.save(cache_file)
