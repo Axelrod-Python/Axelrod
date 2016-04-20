@@ -13,9 +13,5 @@ from .strategies import *
 from .deterministic_cache import DeterministicCache
 from .match_generator import *
 from .tournament import Tournament, ProbEndTournament
-from .tournament_manager import TournamentManager, ProbEndTournamentManager
-from .tournament_manager_factory import (TournamentManagerFactory,
-                                         ProbEndTournamentManagerFactory)
 from .result_set import ResultSet, ResultSetFromFile
 from .ecosystem import Ecosystem
-from .utils import run_tournaments, run_prob_end_tournaments, setup_logging

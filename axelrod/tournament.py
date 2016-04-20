@@ -15,8 +15,8 @@ class Tournament(object):
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
-                 processes=None, deterministic_cache=None, prebuilt_cache=False,
-                 noise=0, with_morality=True):
+                 processes=None, deterministic_cache=None, noise=0,
+                 with_morality=True):
         """
         Parameters
         ----------
@@ -36,8 +36,6 @@ class Tournament(object):
             The number of processes to be used for parallel processing
         deterministic_cache : instance
             An instance of the axelrod.DeterministicCache class
-        prebuilt_cache : boolean
-            Whether a cache has been passed in from an external object
         noise : float
             The probability that a player's intended action should be flipped
         with_morality : boolean
@@ -50,12 +48,10 @@ class Tournament(object):
             self.game = game
         self.players = players
         self.repetitions = repetitions
-        if deterministic_cache is not None:
-            self.prebuilt_cache = True
-            self.deterministic_cache = deterministic_cache
-        else:
-            self.prebuilt_cache = prebuilt_cache
+        if deterministic_cache is None:
             self.deterministic_cache = DeterministicCache()
+        else:
+            self.deterministic_cache = deterministic_cache
         self.match_generator = match_generator(
             players, turns, self.game, self.deterministic_cache)
         self._with_morality = with_morality
@@ -104,9 +100,7 @@ class Tournament(object):
         deterministic cache.
         """
         return (
-            not self.noise and (
-                len(self.deterministic_cache) == 0 or
-                not self.prebuilt_cache))
+            not self.noise and len(self.deterministic_cache) == 0)
 
     def _build_cache(self, matches):
         """
@@ -310,8 +304,8 @@ class ProbEndTournament(Tournament):
 
     def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
                  name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 processes=None, deterministic_cache=None, prebuilt_cache=False,
-                 noise=0, with_morality=True):
+                 processes=None, deterministic_cache=None, noise=0,
+                 with_morality=True):
         """
         Parameters
         ----------
@@ -329,10 +323,10 @@ class ProbEndTournament(Tournament):
             The number of times the round robin should be repeated
         processes : integer
             The number of processes to be used for parallel processing
-        prebuilt_cache : boolean
-            Whether a cache has been passed in from an external object
         noise : float
             The probability that a player's intended action should be flipped
+        deterministic_cache : instance
+            An instance of the axelrod.DeterministicCache class
         with_morality : boolean
             Whether morality metrics should be calculated
         """
@@ -340,8 +334,7 @@ class ProbEndTournament(Tournament):
             players, name=name, game=game, turns=float("inf"),
             repetitions=repetitions, processes=processes,
             deterministic_cache=deterministic_cache,
-            prebuilt_cache=prebuilt_cache, noise=noise,
-            with_morality=with_morality)
+            noise=noise, with_morality=with_morality)
 
         self.prob_end = prob_end
         self.match_generator = ProbEndRoundRobinMatches(

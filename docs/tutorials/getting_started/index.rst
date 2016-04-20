@@ -16,4 +16,3 @@ Contents:
    interactions.rst
    visualising_results.rst
    moran.rst
-   command_line.rst
