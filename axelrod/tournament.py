@@ -68,21 +68,31 @@ class Tournament(object):
         """
         Plays the tournament and passes the results to the ResultSet class
 
+        Parameters
+        ----------
+            filename : string
+                A path to write the interactions to file. This can be used to
+                save memory for large tournaments.
+
         Returns
         -------
-        axelrod.ResultSet
+            axelrod.ResultSet
         """
+        if filename is not None:
+            index_pairs = [pair for pair, match in
+                           self.match_generator.build_matches()]
+            self._write_csv_header(filename, index_pairs)
+
         if self._processes is None:
-            self._run_serial_repetitions(self.interactions)
+            self._run_serial_repetitions(self.interactions, filename)
         else:
             if self._build_cache_required():
-                self._build_cache(self.interactions)
-            self._run_parallel_repetitions(self.interactions)
+                self._build_cache(self.interactions, filename)
+            self._run_parallel_repetitions(self.interactions, filename)
 
         if filename is None:
             self.result_set = self._build_result_set()
             return self.result_set
-        self._write_to_csv(filename)
 
     def _build_result_set(self):
         """
@@ -108,7 +118,7 @@ class Tournament(object):
                 len(self.deterministic_cache) == 0 or
                 not self.prebuilt_cache))
 
-    def _build_cache(self, matches):
+    def _build_cache(self, matches, filename=None):
         """
         For parallel processing, this runs a single round robin in order to
         build the deterministic cache.
@@ -117,20 +127,34 @@ class Tournament(object):
         ----------
         matches : list
             The list of matches to update
+
+        filename : string
+            Path to write interactions to file.
         """
         self._logger.debug('Playing first round robin to build cache')
-        self._run_single_repetition(matches)
+        self._run_single_repetition(matches, filename)
         self._parallel_repetitions -= 1
 
-    def _run_single_repetition(self, interactions):
+    def _run_single_repetition(self, interactions, filename=None):
         """
         Runs a single round robin and updates the matches list.
+
+        Parameters
+        ----------
+
+        filename : string
+            Path to write interactions to file.
         """
         new_matches = self.match_generator.build_matches(noise=self.noise)
         interactions = self._play_matches(new_matches)
-        self.interactions.append(interactions)
 
-    def _run_serial_repetitions(self, interactions):
+        if filename is None:
+            self.interactions.append(interactions)
+        else:
+            self._write_csv_interactions(filename, interactions)
+
+
+    def _run_serial_repetitions(self, interactions, filename=None):
         """
         Runs all repetitions of the round robin in serial.
 
@@ -138,13 +162,15 @@ class Tournament(object):
         ----------
         ineractions : list
             The list of interactions per repetition to update with results
+        filename : string
+            Path to write interactions to file.
         """
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
-            self._run_single_repetition(interactions)
+            self._run_single_repetition(interactions, filename)
         return True
 
-    def _run_parallel_repetitions(self, interactions):
+    def _run_parallel_repetitions(self, interactions, filename=None):
         """
         Run all except the first round robin using parallel processing.
 
@@ -152,6 +178,9 @@ class Tournament(object):
         ----------
         interactions : list
             The list of interactions per repetition to update with results
+
+        filename : string
+            Path to write interactions to file.
         """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
@@ -167,7 +196,7 @@ class Tournament(object):
             'Playing %d round robins with %d parallel processes' %
             (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, interactions)
+        self._process_done_queue(workers, done_queue, interactions, filename)
 
         return True
 
@@ -206,7 +235,8 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, interactions):
+    def _process_done_queue(self, workers, done_queue,
+                            interactions, filename=None):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -218,6 +248,8 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         interactions : list
             The list of interactions per repetition to update with results
+        filename : string
+            Path to write interactions to file.
         """
         stops = 0
         while stops < workers:
@@ -226,7 +258,10 @@ class Tournament(object):
             if results == 'STOP':
                 stops += 1
             else:
-                interactions.append(results)
+                if filename is None:
+                    interactions.append(results)
+                else:
+                    self._write_csv_interactions(filename, results)
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -269,35 +304,43 @@ class Tournament(object):
             interactions[index_pair] = match.result
         return interactions
 
-    def _write_to_csv(self, filename):
-        """Write the interactions to csv."""
+    def _write_csv_header(self, filename, index_pairs):
+        """
+        Write the head for the csv file:
+
+        This will be of the form:
+
+        indices, (0, 0), (0, 1), (1, 1), ...
+        names, (Defector, Defector), (Defector, Cooperator),...
+
+        Parameters
+        ----------
+
+        filename : string
+            Path to the filename
+        index_pairs : list
+            A list of player index tuples
+        """
+        index_pairs.sort()
+        player_names = [(self.players[i1], self.players[i2]) for i1, i2 in
+                        index_pairs]
         with open(filename, 'w') as csvfile:
             writer = csv.writer(csvfile)
-            for row in self._data_for_csv():
-                writer.writerow(row)
+            writer.writerow(index_pairs)
+            writer.writerow(player_names)
 
-    def _data_for_csv(self):
-        """
-        Returns
-        -------
-        A generator of the interactions to a list of lists of the form:
-
-        [p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
-        ...]
-        [0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...]
-        [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
-        [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
-        """
-        index_pairs = self.interactions[0].keys()
-        for index_pair in index_pairs:
-            p1, p2 = index_pair
-            row = [p1, p2, self.players[p1].name, self.players[p2].name]
-            for rep in self.interactions:
-                interaction = rep[index_pair]
+    def _write_csv_interactions(self, filename, interactions):
+        """Write interactions to file"""
+        index_pairs = sorted(interactions.keys())
+        with open(filename, 'a') as csvfile:
+            writer = csv.writer(csvfile)
+            row = []
+            for index_pair in index_pairs:
+                interaction = interactions[index_pair]
                 matchstringrep = ''.join([act for inter in interaction
                                           for act in inter])
                 row.append(matchstringrep)
-            yield row
+            writer.writerow(row)
 
 
 class ProbEndTournament(Tournament):
