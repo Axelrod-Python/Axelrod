@@ -684,11 +684,11 @@ class ResultSetFromFile(ResultSet):
         """
         Reads from a csv file of the format:
 
-        p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
-        ...
-        0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...
-        0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...
-        1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...
+
+        indices, (0, 0), (0, 1), (1, 1), ...
+        names, (Defector, Defector), (Defector, Cooperator),...
+        interaction1, DDDD, DCDC,
+        interaction2, DDDD, DCDC
 
         Returns
         -------
@@ -699,26 +699,25 @@ class ResultSetFromFile(ResultSet):
                   index indices to interactions)
         """
         players_d = {}
-        interactions_d = {}
         with open(filename, 'r') as f:
-            for row in csv.reader(f):
-                index_pair = (int(row[0]), int(row[1]))
-                players = (row[2], row[3])
-                inters = row[4:]
+            data = [row for row in csv.reader(f)]
 
-                # Build a dictionary mapping indices to players
-                # This is temporary to make sure the ordering of the players
-                # matches the indices
-                for index, player in zip(index_pair, players):
-                    if index not in players:
-                        players_d[index] = player
+            index_pairs = [eval(row) for row in data[0]]
 
-                # Build a dictionary mapping indices to list of interactions
-                # This is temporary (as we do not know the number of
-                # interactions at this point.
-                interactions_d[index_pair] = [self._string_to_interactions(inter)
-                                              for inter in inters]
-        nreps = len(inters)
+            name_pairs = [tuple(row[1:-1].split(',')) for row in data[1]]
+            name_pairs = [tuple([name.lstrip() for name in pair])
+                          for pair in name_pairs]
+
+            repetitions = [[self._string_to_interactions(i) for i in repetition]
+                      for repetition in data[2:]]
+
+            # Build a dictionary mapping indices to players
+            # This is temporary to make sure the ordering of the players
+            # matches the indices
+            for index_pair, name_pair in zip(index_pairs, name_pairs):
+                for index, name in zip(index_pair, name_pair):
+                    if index not in players_d:
+                        players_d[index] = name
 
         # Create an ordered list of players
         players = []
@@ -727,10 +726,10 @@ class ResultSetFromFile(ResultSet):
 
         # Create a list of dictionaries
         interactions = []
-        for rep in range(nreps):
+        for inters in repetitions:
             pair_to_interactions_d = {}
-            for index_pair, inters in interactions_d.items():
-                pair_to_interactions_d[index_pair] = inters[rep]
+            for index_pair, interaction in zip(index_pairs, inters):
+                pair_to_interactions_d[index_pair] = interaction
             interactions.append(pair_to_interactions_d)
 
         return players, interactions
