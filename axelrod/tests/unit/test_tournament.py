@@ -446,7 +446,24 @@ class TestTournament(unittest.TestCase):
         tournament.play(filename=tmp_file.name)
         with open(tmp_file.name, 'r') as f:
             written_data = [r for r in csv.reader(f)]
-            expected_data = [['(0, 0)', '(0, 1)', '(0, 2)', '(0, 3)', '(0, 4)', '(1, 1)', '(1, 2)', '(1, 3)', '(1, 4)', '(2, 2)', '(2, 3)', '(2, 4)', '(3, 3)', '(3, 4)', '(4, 4)'], ['(Cooperator, Cooperator)', '(Cooperator, Tit For Tat)', '(Cooperator, Defector)', '(Cooperator, Grudger)', '(Cooperator, Soft Go By Majority)', '(Tit For Tat, Tit For Tat)', '(Tit For Tat, Defector)', '(Tit For Tat, Grudger)', '(Tit For Tat, Soft Go By Majority)', '(Defector, Defector)', '(Defector, Grudger)', '(Defector, Soft Go By Majority)', '(Grudger, Grudger)', '(Grudger, Soft Go By Majority)', '(Soft Go By Majority, Soft Go By Majority)'], ['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC', 'CCCC', 'CDDD', 'CCCC', 'CCCC', 'DDDD', 'DCDD', 'DCDD', 'CCCC', 'CCCC', 'CCCC'], ['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC', 'CCCC', 'CDDD', 'CCCC', 'CCCC', 'DDDD', 'DCDD', 'DCDD', 'CCCC', 'CCCC', 'CCCC']]
+            expected_data = [['(0, 0)', '(0, 1)', '(0, 2)', '(0, 3)',
+                              '(0, 4)', '(1, 1)', '(1, 2)', '(1, 3)',
+                              '(1, 4)', '(2, 2)', '(2, 3)', '(2, 4)',
+                              '(3, 3)', '(3, 4)', '(4, 4)'],
+                        ['(Cooperator, Cooperator)', '(Cooperator, Tit For Tat)',
+                         '(Cooperator, Defector)', '(Cooperator, Grudger)',
+                         '(Cooperator, Soft Go By Majority)', '(Tit For Tat, Tit For Tat)',
+                         '(Tit For Tat, Defector)', '(Tit For Tat, Grudger)',
+                         '(Tit For Tat, Soft Go By Majority)', '(Defector, Defector)',
+                         '(Defector, Grudger)', '(Defector, Soft Go By Majority)',
+                         '(Grudger, Grudger)', '(Grudger, Soft Go By Majority)',
+                         '(Soft Go By Majority, Soft Go By Majority)'],
+                        ['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC', 'CCCC',
+                         'CDDD', 'CCCC', 'CCCC', 'DDDD', 'DCDD', 'DCDD',
+                         'CCCC', 'CCCC', 'CCCC'],
+                        ['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC', 'CCCC',
+                         'CDDD', 'CCCC', 'CCCC', 'DDDD', 'DCDD', 'DCDD',
+                         'CCCC', 'CCCC', 'CCCC']]
             self.assertEqual(sorted(written_data), sorted(expected_data))
         # Test that no interactions are kept in memory:
         self.assertEqual(len(tournament.interactions), 0)
@@ -463,7 +480,24 @@ class TestTournament(unittest.TestCase):
         tournament.play(filename=tmp_file.name)
         with open(tmp_file.name, 'r') as f:
             written_data = [r for r in csv.reader(f)]
-            expected_data = [['(0, 0)', '(0, 1)', '(0, 2)', '(0, 3)', '(0, 4)', '(1, 1)', '(1, 2)', '(1, 3)', '(1, 4)', '(2, 2)', '(2, 3)', '(2, 4)', '(3, 3)', '(3, 4)', '(4, 4)'], ['(Cooperator, Cooperator)', '(Cooperator, Tit For Tat)', '(Cooperator, Defector)', '(Cooperator, Grudger)', '(Cooperator, Soft Go By Majority)', '(Tit For Tat, Tit For Tat)', '(Tit For Tat, Defector)', '(Tit For Tat, Grudger)', '(Tit For Tat, Soft Go By Majority)', '(Defector, Defector)', '(Defector, Grudger)', '(Defector, Soft Go By Majority)', '(Grudger, Grudger)', '(Grudger, Soft Go By Majority)', '(Soft Go By Majority, Soft Go By Majority)'], ['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC', 'CCCC', 'CDDD', 'CCCC', 'CCCC', 'DDDD', 'DCDD', 'DCDD', 'CCCC', 'CCCC', 'CCCC'], ['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC', 'CCCC', 'CDDD', 'CCCC', 'CCCC', 'DDDD', 'DCDD', 'DCDD', 'CCCC', 'CCCC', 'CCCC']]
+            expected_data = [['(0, 0)', '(0, 1)', '(0, 2)', '(0, 3)',
+                              '(0, 4)', '(1, 1)', '(1, 2)', '(1, 3)',
+                              '(1, 4)', '(2, 2)', '(2, 3)', '(2, 4)',
+                              '(3, 3)', '(3, 4)', '(4, 4)'],
+                        ['(Cooperator, Cooperator)', '(Cooperator, Tit For Tat)',
+                         '(Cooperator, Defector)', '(Cooperator, Grudger)',
+                         '(Cooperator, Soft Go By Majority)', '(Tit For Tat, Tit For Tat)',
+                         '(Tit For Tat, Defector)', '(Tit For Tat, Grudger)',
+                         '(Tit For Tat, Soft Go By Majority)', '(Defector, Defector)',
+                         '(Defector, Grudger)', '(Defector, Soft Go By Majority)',
+                         '(Grudger, Grudger)', '(Grudger, Soft Go By Majority)',
+                         '(Soft Go By Majority, Soft Go By Majority)'],
+                        ['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC', 'CCCC',
+                         'CDDD', 'CCCC', 'CCCC', 'DDDD', 'DCDD', 'DCDD',
+                         'CCCC', 'CCCC', 'CCCC'],
+                        ['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC', 'CCCC',
+                         'CDDD', 'CCCC', 'CCCC', 'DDDD', 'DCDD', 'DCDD',
+                         'CCCC', 'CCCC', 'CCCC']]
             self.assertEqual(sorted(written_data), sorted(expected_data))
         # Test that no interactions are kept in memory:
         self.assertEqual(len(tournament.interactions), 0)
@@ -481,8 +515,38 @@ class TestTournament(unittest.TestCase):
         tournament._write_csv_header(tmp_file.name, index_pairs)
         with open(tmp_file.name, 'r') as f:
             written_header = [r for r in csv.reader(f)]
-            expected_header = [['(0, 0)', '(0, 1)', '(0, 2)', '(0, 3)', '(0, 4)', '(1, 1)', '(1, 2)', '(1, 3)', '(1, 4)', '(2, 2)', '(2, 3)', '(2, 4)', '(3, 3)', '(3, 4)', '(4, 4)'], ['(Cooperator, Cooperator)', '(Cooperator, Tit For Tat)', '(Cooperator, Defector)', '(Cooperator, Grudger)', '(Cooperator, Soft Go By Majority)', '(Tit For Tat, Tit For Tat)', '(Tit For Tat, Defector)', '(Tit For Tat, Grudger)', '(Tit For Tat, Soft Go By Majority)', '(Defector, Defector)', '(Defector, Grudger)', '(Defector, Soft Go By Majority)', '(Grudger, Grudger)', '(Grudger, Soft Go By Majority)', '(Soft Go By Majority, Soft Go By Majority)']]
+            expected_header = [['(0, 0)', '(0, 1)', '(0, 2)', '(0, 3)',
+                                '(0, 4)', '(1, 1)', '(1, 2)', '(1, 3)',
+                                '(1, 4)', '(2, 2)', '(2, 3)', '(2, 4)',
+                                '(3, 3)', '(3, 4)', '(4, 4)'],
+                          ['(Cooperator, Cooperator)', '(Cooperator, Tit For Tat)',
+                           '(Cooperator, Defector)', '(Cooperator, Grudger)',
+                           '(Cooperator, Soft Go By Majority)', '(Tit For Tat, Tit For Tat)',
+                           '(Tit For Tat, Defector)', '(Tit For Tat, Grudger)',
+                           '(Tit For Tat, Soft Go By Majority)', '(Defector, Defector)',
+                           '(Defector, Grudger)', '(Defector, Soft Go By Majority)',
+                           '(Grudger, Grudger)', '(Grudger, Soft Go By Majority)',
+                           '(Soft Go By Majority, Soft Go By Majority)']]
             self.assertEqual(written_header, expected_header)
+
+    def test_write_csv_interactions(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=2,
+            repetitions=2)
+        tournament.play()
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        interactions = tournament.interactions[0]
+        tournament._write_csv_interactions(tmp_file.name, interactions)
+        with open(tmp_file.name, 'r') as f:
+            written_interactions = [r for r in csv.reader(f)]
+            expected_interactions = [['CCCC', 'CCCC', 'CDCD', 'CCCC', 'CCCC',
+                                      'CCCC', 'CDDD', 'CCCC', 'CCCC', 'DDDD',
+                                      'DCDD', 'DCDD', 'CCCC', 'CCCC', 'CCCC']]
+            self.assertEqual(written_interactions, expected_interactions)
+
 
 
 class TestProbEndTournament(unittest.TestCase):

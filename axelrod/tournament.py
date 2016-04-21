@@ -68,9 +68,15 @@ class Tournament(object):
         """
         Plays the tournament and passes the results to the ResultSet class
 
+        Parameters
+        ----------
+            filename : string
+                A path to write the interactions to file. This can be used to
+                save memory for large tournaments.
+
         Returns
         -------
-        axelrod.ResultSet
+            axelrod.ResultSet
         """
         if filename is not None:
             index_pairs = [pair for pair, match in
@@ -121,6 +127,9 @@ class Tournament(object):
         ----------
         matches : list
             The list of matches to update
+
+        filename : string
+            Path to write interactions to file.
         """
         self._logger.debug('Playing first round robin to build cache')
         self._run_single_repetition(matches, filename)
@@ -129,6 +138,12 @@ class Tournament(object):
     def _run_single_repetition(self, interactions, filename=None):
         """
         Runs a single round robin and updates the matches list.
+
+        Parameters
+        ----------
+
+        filename : string
+            Path to write interactions to file.
         """
         new_matches = self.match_generator.build_matches(noise=self.noise)
         interactions = self._play_matches(new_matches)
@@ -136,7 +151,7 @@ class Tournament(object):
         if filename is None:
             self.interactions.append(interactions)
         else:
-            self._write_csv_interaction(filename, interactions)
+            self._write_csv_interactions(filename, interactions)
 
 
     def _run_serial_repetitions(self, interactions, filename=None):
@@ -147,6 +162,8 @@ class Tournament(object):
         ----------
         ineractions : list
             The list of interactions per repetition to update with results
+        filename : string
+            Path to write interactions to file.
         """
         self._logger.debug('Playing %d round robins' % self.repetitions)
         for repetition in range(self.repetitions):
@@ -161,6 +178,9 @@ class Tournament(object):
         ----------
         interactions : list
             The list of interactions per repetition to update with results
+
+        filename : string
+            Path to write interactions to file.
         """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
@@ -215,7 +235,8 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, interactions, filename=None):
+    def _process_done_queue(self, workers, done_queue,
+                            interactions, filename=None):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -227,6 +248,8 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         interactions : list
             The list of interactions per repetition to update with results
+        filename : string
+            Path to write interactions to file.
         """
         stops = 0
         while stops < workers:
@@ -238,7 +261,7 @@ class Tournament(object):
                 if filename is None:
                     interactions.append(results)
                 else:
-                    self._write_csv_interaction(filename, results)
+                    self._write_csv_interactions(filename, results)
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -306,7 +329,7 @@ class Tournament(object):
             writer.writerow(index_pairs)
             writer.writerow(player_names)
 
-    def _write_csv_interaction(self, filename, interactions):
+    def _write_csv_interactions(self, filename, interactions):
         """Write interactions to file"""
         index_pairs = sorted(interactions.keys())
         with open(filename, 'a') as csvfile:
