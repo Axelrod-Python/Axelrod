@@ -7,6 +7,13 @@ initialize matches.
 
 Matches are parcelled out to maximize the usage of deterministic caching,
 and to keep worker threads fed.
+
+Todo:
+-- format of data returned (players are not enumerated)
+-- modify the library's match generators
+-- compress the on disk data? it compresses a lot
+-- move this code into the library proper (where exactly?)
+-- Tests!
 """
 
 from collections import defaultdict
@@ -45,15 +52,19 @@ def generate_match_parameters(players, turns=100, repetitions=1):
     """
 
     match_chunks = []
-    for player1, player2 in itertools.product(players, players):
-        players = (player1.clone(), player2.clone())
-        turns_generator = generate_turns(turns, repetitions)
-        match_chunks.append((players, turns_generator))
-        if (len(match_chunks) * repetitions > 500) or issubclass(player1.__class__, MetaPlayer):
+    #for player1, player2 in itertools.product(players, players):
+    for i in range(len(players)):
+        for j in range(i, len(players)):
+            player1 = players[i]
+            player2 = players[j]
+            players_ = (player1.clone(), player2.clone())
+            turns_generator = generate_turns(turns, repetitions)
+            match_chunks.append((players_, turns_generator))
+            if (len(match_chunks) * repetitions > 500) or issubclass(player1.__class__, MetaPlayer):
+                yield match_chunks
+                match_chunks = []
+        if len(match_chunks):
             yield match_chunks
-            match_chunks = []
-    if len(match_chunks):
-        yield match_chunks
 
 def process_match_results(match):
     """Manipulate results data for writing to a CSV file."""
