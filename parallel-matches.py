@@ -15,9 +15,10 @@ import itertools
 import random
 import time
 
-from multiprocessing import Process, Queue
+from multiprocessing import Event, Process, Queue
 
 import axelrod as axl
+from axelrod import MetaPlayer
 
 def generate_turns(turns, repetitions=1):
     """This is a constant generator that yields `turns` `repetitions` times."""
@@ -42,25 +43,13 @@ def generate_match_parameters(players, turns=100, repetitions=1):
     so that the deterministic cache can be utilized
     * Grab enough chunks to prevent the worker threads from exiting frequently
     """
-    # Do all the deterministic matches first
-    #match_chunks = []
-    #for player1, player2 in itertools.product(players, players):
-        #if player1.classifier["stochastic"] or player1.classifier["stochastic"]:
-            #continue
-        #players = (player1.clone(), player2.clone())
-        #turns_generator = generate_turns(turns, repetitions)
-        #match_chunks.append((players, turns_generator))
-    #yield match_chunks
 
-    # Now the stochastic
     match_chunks = []
     for player1, player2 in itertools.product(players, players):
-        #if not (player1.classifier["stochastic"] or player1.classifier["stochastic"]):
-            #continue
         players = (player1.clone(), player2.clone())
         turns_generator = generate_turns(turns, repetitions)
         match_chunks.append((players, turns_generator))
-        if len(match_chunks) * repetitions > 1000:
+        if (len(match_chunks) * repetitions > 500) or issubclass(player2.__class__, MetaPlayer):
             yield match_chunks
             match_chunks = []
     if len(match_chunks):
@@ -74,33 +63,66 @@ def process_match_results(match):
     concatenated_histories = list(map(lambda x: "".join(x), zip(*results)))
     return [player1_name, player2_name] + concatenated_histories
 
-def play_matches(queue, match_chunks):
+def play_matches(queue, match_chunks, callback=process_match_results):
     """Plays the matches in each chunk of matches in chunks."""
     for players, turns_generator in match_chunks:
         first_turns = next(turns_generator)
         match = axl.Match(players, first_turns)
         results = match.play()
-        queue.put(process_match_results(match))
+        queue.put(callback(match))
         for turns in turns_generator:
             match.turns = turns
             results = match.play()
-            queue.put(process_match_results(match))
+            queue.put(callback(match))
+        del match
 
-class ProcessManager(object):
-    def __init__(self, matches_generator, queue=None, max_processes=4,
-                 filename=None):
-        self.max_processes = max_processes
-        self.matches_generator = matches_generator
-        if queue:
-            self.queue = queue
-        else:
-            self.queue = Queue()
+class QueueConsumer(Process):
+    """Process the results queue. Using a separate process reduces
+    the total memory footprint because of how python allocates memory
+    for child processes."""
+
+    def __init__(self, queue, filename=None):
+        Process.__init__(self)
+        self.queue = queue
         self.filename = filename
         if filename:
             self.writer = csv.writer(open(filename, 'w'))
         else:
             self.interactions = defaultdict(list)
+        self.shutdown = Event()
+
+    def consume_queue(self):
+        if self.filename:
+            # Write Queue to disk
+            qsize = self.queue.qsize()
+            for _ in range(qsize):
+                results = self.queue.get()
+                self.writer.writerow(results)
+        else:
+            # Keep it in memory
+            qsize = self.queue.qsize()
+            for _ in range(qsize):
+                row = self.queue.get()
+                self.interactions[(row[0], row[1])].append((row[2], row[3]))
+
+    def run(self):
+        while not self.shutdown.is_set():
+            self.consume_queue()
+            # Allow this thread to rest while data is generated
+            time.sleep(0.01)
+        self.consume_queue()
+        if not self.filename:
+            return self.interactions
+
+
+class ProcessManager(Process):
+    def __init__(self, matches_generator, queue_consumer, max_workers=4):
+        Process.__init__(self)
+        self.max_workers = max_workers
+        self.matches_generator = matches_generator
         self.processes = []
+        self.queue_consumer = queue_consumer
+        self.queue = queue_consumer.queue
 
     def clean_pool(self):
         """Remove finished worker threads."""
@@ -112,55 +134,43 @@ class ProcessManager(object):
         for t in terminated:
             self.processes.remove(t)
 
-    def consume_queue(self):
-        if self.filename:
-            # Write Queue to disk
-            qsize = self.queue.qsize()
-            for _ in range(qsize):
-                results = self.queue.get()
-                self.writer.writerow(results)
-        else:
-            qsize = self.queue.qsize()
-            for _ in range(qsize):
-                row = self.queue.get()
-                self.interactions[(row[0], row[1])].append((row[2], row[3]))
+    def spawn_workers(self):
+        # Add new workers
+        if not self.matches_remaining:
+            return
+        #self.clean_pool()
+        for _ in range(self.max_workers - len(self.processes)):
+            try:
+                match_chunks = next(self.matches_generator)
+                p = Process(target=play_matches,
+                            args=(self.queue, match_chunks))
+                self.processes.append(p)
+                p.start()
+            except StopIteration:
+                self.matches_remaining = False
+                break
 
     def run(self):
         """Pass all the required matches out to worker threads."""
-        no_matches_remaining = False
-        while True:
-            # Add new workers
-            while len(self.processes) < self.max_processes:
-                try:
-                    match_chunks = next(self.matches_generator)
-                    p = Process(target=play_matches,
-                                args=(self.queue, match_chunks))
-                    self.processes.append(p)
-                    p.start()
-                except StopIteration:
-                    no_matches_remaining = True
-                    break
-            self.consume_queue()
-            # Allow this thread to rest while data is generated
-            time.sleep(0.1)
-            # Clean Pool
+        self.matches_remaining = True
+        while self.matches_remaining or (len(self.processes) > 0):
             self.clean_pool()
-            # Can we exit? All processes must be finished and we have also
-            # exhausted the generator
-            if (len(self.processes) == 0) & (no_matches_remaining):
-                break
-        self.consume_queue()
-        return self.queueright
+            self.spawn_workers()
+            time.sleep(0.1)
+        # Shutdown the consumer
+        self.queue_consumer.shutdown.set()
 
-
-def play_matches_parallel(matches, queue=None, filename=None, max_processes=4):
-    pm = ProcessManager(matches, queue=queue, filename=filename,
-                        max_processes=max_processes)
-    queue = pm.run()
-    return queue
+def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
+    queue = Queue()
+    qc = QueueConsumer(queue, filename=filename)
+    pm = ProcessManager(matches, queue_consumer=qc, max_workers=max_workers)
+    interactions = qc.start()
+    pm.start()
+    qc.join()
+    return interactions
 
 if __name__ == "__main__":
     players = [s() for s in axl.ordinary_strategies]
-    matches = generate_match_parameters(players, turns=100, repetitions=100)
-    #queue = play_matches_parallel(matches, filename="data.out")
-    queue = play_matches_parallel(matches, filename=None)
+    matches = generate_match_parameters(players, turns=200, repetitions=1)
+    results = play_matches_parallel(matches, filename="data.out")
+    #results = play_matches_parallel(matches, filename=None)
