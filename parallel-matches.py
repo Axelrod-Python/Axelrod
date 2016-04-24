@@ -49,7 +49,7 @@ def generate_match_parameters(players, turns=100, repetitions=1):
         players = (player1.clone(), player2.clone())
         turns_generator = generate_turns(turns, repetitions)
         match_chunks.append((players, turns_generator))
-        if (len(match_chunks) * repetitions > 500) or issubclass(player2.__class__, MetaPlayer):
+        if (len(match_chunks) * repetitions > 500) or issubclass(player1.__class__, MetaPlayer):
             yield match_chunks
             match_chunks = []
     if len(match_chunks):
@@ -171,6 +171,6 @@ def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
 
 if __name__ == "__main__":
     players = [s() for s in axl.ordinary_strategies]
-    matches = generate_match_parameters(players, turns=200, repetitions=1)
+    matches = generate_match_parameters(players, turns=200, repetitions=10)
     results = play_matches_parallel(matches, filename="data.out")
     #results = play_matches_parallel(matches, filename=None)
