@@ -10,7 +10,6 @@ from .test_cooperator import TestCooperator
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
-
 @IdentityTransformer
 class TestClass(object):
     name = 'Test Class'
@@ -367,13 +366,11 @@ class TestTransformers(unittest.TestCase):
             axelrod.tests.unit.test_strategy_transformers.TestClass)
 
     # Test that decorated classes can be pickled as this caused issue 516
+    # That issue was fixed by not needing this pickle: interactions are now
+    # passed back.
     def test_pickle(self):
         p1 = axelrod.BackStabber()
         dump = dill.dumps(p1)
-        self.assertGreater(len(dump), 0)
-
-        p2 = axelrod.ThueMorse()
-        dump = dill.dumps(p2)
         self.assertGreater(len(dump), 0)
 
         p3 = axelrod.PSOGambler()
