@@ -62,7 +62,7 @@ class Tournament(object):
         self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self.interactions = []
+        self.interactions = {}
 
     def play(self, filename=None):
         """
@@ -128,7 +128,12 @@ class Tournament(object):
         """
         new_matches = self.match_generator.build_matches(noise=self.noise)
         interactions = self._play_matches(new_matches)
-        self.interactions.append(interactions)
+
+        for index_pair, interaction in interactions.items():
+            try:
+                self.interactions[index_pair].append(interaction)
+            except KeyError:
+                self.interactions[index_pair] = [interaction]
 
     def _run_serial_repetitions(self, interactions):
         """
@@ -226,7 +231,11 @@ class Tournament(object):
             if results == 'STOP':
                 stops += 1
             else:
-                interactions.append(results)
+                for index_pair, interaction in results.items():
+                    try:
+                        interactions[index_pair].append(interaction)
+                    except KeyError:
+                        interactions[index_pair] = [interaction]
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -288,16 +297,14 @@ class Tournament(object):
         [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
         [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
         """
-        index_pairs = self.interactions[0].keys()
-        for index_pair in index_pairs:
+        for index_pair, repetitions in self.interactions.items():
             p1, p2 = index_pair
-            row = [p1, p2, self.players[p1].name, self.players[p2].name]
-            for rep in self.interactions:
-                interaction = rep[index_pair]
+            for interaction in repetitions:
+                row = [p1, p2, self.players[p1].name, self.players[p2].name]
                 matchstringrep = ''.join([act for inter in interaction
                                           for act in inter])
                 row.append(matchstringrep)
-            yield row
+                yield row
 
 
 class ProbEndTournament(Tournament):
