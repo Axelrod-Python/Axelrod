@@ -15,31 +15,29 @@ class TestResultSet(unittest.TestCase):
 
         cls.players = (axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector())
         cls.turns = 5
-        cls.matches = [
-                       {
-                        (0,1): axelrod.Match((cls.players[0], cls.players[1]),
-                        turns=cls.turns),
-                        (0,2): axelrod.Match((cls.players[0], cls.players[2]),
-                        turns=cls.turns),
-                        (1,2): axelrod.Match((cls.players[1], cls.players[2]),
-                        turns=cls.turns)} for _ in range(3)
-                        ]  # This would not actually be a round robin tournament
+        cls.matches = {
+                        (0,1): [axelrod.Match((cls.players[0], cls.players[1]),
+                        turns=cls.turns) for _ in range(3)],
+                        (0,2): [axelrod.Match((cls.players[0], cls.players[2]),
+                        turns=cls.turns) for _ in range(3)],
+                        (1,2): [axelrod.Match((cls.players[1], cls.players[2]),
+                        turns=cls.turns) for _ in range(3)]}
+                          # This would not actually be a round robin tournament
                            # (no cloned matches)
 
-        for rep in cls.matches:
-            for match in rep.values():
+        cls.interactions = {}
+        for index_pair, matches in cls.matches.items():
+            for match in matches:
                 match.play()
+                try:
+                    cls.interactions[index_pair].append(match.result)
+                except KeyError:
+                    cls.interactions[index_pair] = [match.result]
 
-        cls.interactions = []
-        for rep in cls.matches:
-            cls.interactions.append({index_pair: match.result for
-                                     index_pair, match in rep.items()})
+        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)] + cls.matches[(0, 2)],
+                                               1: cls.matches[(0, 1)] + cls.matches[(1, 2)],
+                                               2: cls.matches[(1, 2)] + cls.matches[(0, 2)]}
 
-        cls.expected_players_to_match_dicts = [{0: [rep[(0, 1)], rep[(0, 2)]],
-                                                1: [rep[(0, 1)], rep[(1, 2)]],
-                                                2: [rep[(1, 2)], rep[(0, 2)]]}
-                                                for rep in cls.matches
-                                              ]
 
 
         cls.expected_match_lengths =[
@@ -171,12 +169,12 @@ class TestResultSet(unittest.TestCase):
 
         # Test structure of matches
         # This is really a test of the test
-        for rep in rs.interactions:
-            self.assertIsInstance(rep, dict)
-            for index_pair, inter in rep.items():
-                self.assertIsInstance(index_pair, tuple)
-                self.assertIsInstance(inter, list)
-                self.assertEqual(len(inter), self.turns)
+        for index_pair, repetitions in rs.interactions.items():
+            self.assertIsInstance(repetitions, list)
+            self.assertIsInstance(index_pair, tuple)
+            for interaction in repetitions:
+                self.assertIsInstance(interaction, list)
+                self.assertEqual(len(interaction), self.turns)
 
     def test_null_results_matrix(self):
         rs = axelrod.ResultSet(self.players, self.interactions)
@@ -189,19 +187,19 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(len(rs.match_lengths), rs.nrepetitions)
         self.assertEqual(rs.match_lengths, self.expected_match_lengths)
 
-        #for rep in rs.match_lengths:
-            #self.assertIsInstance(rep, list)
-            #self.assertEqual(len(rep), len(self.players))
+        for rep in rs.match_lengths:
+            self.assertIsInstance(rep, list)
+            self.assertEqual(len(rep), len(self.players))
 
-            #for i, opp in enumerate(rep):
-                #self.assertIsInstance(opp, list)
-                #self.assertEqual(len(opp), len(self.players))
+            for i, opp in enumerate(rep):
+                self.assertIsInstance(opp, list)
+                self.assertEqual(len(opp), len(self.players))
 
-                #for j, length in enumerate(opp):
-                    #if i == j:  # Specific test for example match setup
-                        #self.assertEqual(length, 0)
-                    #else:
-                        #self.assertEqual(length, self.turns)
+                for j, length in enumerate(opp):
+                    if i == j:  # Specific test for example match setup
+                        self.assertEqual(length, 0)
+                    else:
+                        self.assertEqual(length, self.turns)
 
     def test_scores(self):
         rs = axelrod.ResultSet(self.players, self.interactions)
@@ -336,7 +334,7 @@ class TestResultSetFromFile(unittest.TestCase):
                  axelrod.TitForTat(),
                  axelrod.Defector()],
         turns=2,
-        repetitions=2)
+        repetitions=1)
     tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
     tournament.play(filename=tmp_file.name)
     tmp_file.close()
@@ -347,9 +345,14 @@ class TestResultSetFromFile(unittest.TestCase):
         players = ['Cooperator', 'Tit For Tat', 'Defector']
         self.assertEqual(rs.players, players)
         self.assertEqual(rs.nplayers, len(players))
-        self.assertEqual(rs.nrepetitions, 2)
+        self.assertEqual(rs.nrepetitions, 1)
 
-        expected_interactions = [{(0, 1): [('C', 'C'), ('C', 'C')], (1, 2): [('C', 'D'), ('D', 'D')], (0, 0): [('C', 'C'), ('C', 'C')], (2, 2): [('D', 'D'), ('D', 'D')], (0, 2): [('C', 'D'), ('C', 'D')], (1, 1): [('C', 'C'), ('C', 'C')]}, {(0, 1): [('C', 'C'), ('C', 'C')], (1, 2): [('C', 'D'), ('D', 'D')], (0, 0): [('C', 'C'), ('C', 'C')], (2, 2): [('D', 'D'), ('D', 'D')], (0, 2): [('C', 'D'), ('C', 'D')], (1, 1): [('C', 'C'), ('C', 'C')]}]
+        expected_interactions = {(0, 1): [[('C', 'C'), ('C', 'C')]],
+                                 (1, 2): [[('C', 'D'), ('D', 'D')]],
+                                 (0, 0): [[('C', 'C'), ('C', 'C')]],
+                                 (2, 2): [[('D', 'D'), ('D', 'D')]],
+                                 (0, 2): [[('C', 'D'), ('C', 'D')]],
+                                 (1, 1): [[('C', 'C'), ('C', 'C')]]}
         self.assertEqual(rs.interactions, expected_interactions)
 
     def test_string_to_interactions(self):

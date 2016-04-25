@@ -32,7 +32,7 @@ class ResultSet(object):
         self.players = players
         self.nplayers = len(players)
         self.interactions = interactions
-        self.nrepetitions = len(interactions)
+        self.nrepetitions = len(list(interactions.values())[0])
 
         # Calculate all attributes:
         self.build_all(with_morality)
@@ -99,14 +99,13 @@ class ResultSet(object):
         """
         match_lengths = self._null_results_matrix
 
-        for rep in range(self.nrepetitions):
-
-            for player_pair_index, interactions in self.interactions[rep].items():
-                player, opponent = player_pair_index
-                match_lengths[rep][player][opponent] = len(interactions)
+        for index_pair, repetitions in self.interactions.items():
+            for repetition, interaction in enumerate(repetitions):
+                player, opponent = index_pair
+                match_lengths[repetition][player][opponent] = len(interaction)
 
                 if player != opponent:  # Match lengths are symmetric
-                    match_lengths[rep][opponent][player] = len(interactions)
+                    match_lengths[repetition][opponent][player] = len(interaction)
 
         return match_lengths
 
@@ -132,14 +131,14 @@ class ResultSet(object):
         scores = [[0 for rep in range(self.nrepetitions)] for _ in
                   range(self.nplayers)]
 
-        for rep, inter_dict in enumerate(self.interactions):
-            for index_pair, interactions in inter_dict.items():
-                if index_pair[0] != index_pair[1]: # Ignoring self interactions
-                    final_scores = iu.compute_final_score(interactions)
+        for index_pair, repetitions in self.interactions.items():
+            if index_pair[0] != index_pair[1]:  # Ignoring self interactions
+                for repetition, interaction in enumerate(repetitions):
+                    final_scores = iu.compute_final_score(interaction)
                     for player in range(2):
                         player_index = index_pair[player]
                         player_score = final_scores[player]
-                        scores[player_index][rep] += player_score
+                        scores[player_index][repetition] += player_score
 
         return scores
 
@@ -175,13 +174,13 @@ class ResultSet(object):
         wins = [[0 for rep in range(self.nrepetitions)] for _ in
                 range(self.nplayers)]
 
-        for rep, inter_dict in enumerate(self.interactions):
-            for index_pair, interactions in inter_dict.items():
-                if index_pair[0] != index_pair[1]:  # Ignore self interactions
-                    for player in range(2):
-                        player_index = index_pair[player]
+        for index_pair, repetitions in self.interactions.items():
+            if index_pair[0] != index_pair[1]:  # Ignore self interactions
+                for player in range(2):
+                    player_index = index_pair[player]
 
-                        winner_index = iu.compute_winner_index(interactions)
+                    for rep, interaction in enumerate(repetitions):
+                        winner_index = iu.compute_winner_index(interaction)
                         if winner_index is not False and player == winner_index:
                             wins[player_index][rep] += 1
 
@@ -212,14 +211,14 @@ class ResultSet(object):
             range(self.nplayers)]
 
         # Getting list of all per turn scores for each player for each rep
-        for rep, inter_dict in enumerate(self.interactions):
-            for index_pair, interactions in inter_dict.items():
+        for index_pair, repetitions in self.interactions.items():
+            for repetition, interaction in enumerate(repetitions):
                 if index_pair[0] != index_pair[1]:  # Ignore self interactions
-                    scores_per_turn = iu.compute_final_score_per_turn(interactions)
+                    scores_per_turn = iu.compute_final_score_per_turn(interaction)
                     for player in range(2):
                         player_index = index_pair[player]
                         score_per_turn = scores_per_turn[player]
-                        normalised_scores[player_index][rep].append(score_per_turn)
+                        normalised_scores[player_index][repetition].append(score_per_turn)
 
         # Obtaining mean scores and overwriting corresponding entry in
         # normalised scores
@@ -271,14 +270,14 @@ class ResultSet(object):
         for player in plist:
             for opponent in plist:
                 utilities = []
-                for rep in self.interactions:
+                for index_pair, repetitions in self.interactions.items():
 
-                    if (player, opponent) in rep:
-                        interactions = rep[(player, opponent)]
-                        utilities.append(iu.compute_final_score_per_turn(interactions)[0])
-                    if (opponent, player) in rep:
-                        interactions = rep[(opponent, player)]
-                        utilities.append(iu.compute_final_score_per_turn(interactions)[1])
+                    if (player, opponent) == index_pair:
+                        for interaction in repetitions:
+                            utilities.append(iu.compute_final_score_per_turn(interaction)[0])
+                    if (opponent, player) == index_pair:
+                        for interaction in repetitions:
+                            utilities.append(iu.compute_final_score_per_turn(interaction)[1])
 
                     payoffs[player][opponent] = utilities
         return payoffs
@@ -380,17 +379,17 @@ class ResultSet(object):
 
         for player in plist:
             for opponent in plist:
-                for r, rep in enumerate(self.interactions):
-                    if (player, opponent) in rep:
-                        scores = iu.compute_final_score_per_turn(rep[(player,
-                                                                      opponent)])
+                if (player, opponent) in self.interactions:
+                    for repetition, interaction in enumerate(self.interactions[(player, opponent)]):
+                        scores = iu.compute_final_score_per_turn(interaction)
                         diff = (scores[0] - scores[1])
-                        score_diffs[player][opponent][r] = diff
-                    if (opponent, player) in rep:
-                        scores = iu.compute_final_score_per_turn(rep[(opponent,
-                                                                      player)])
+                        score_diffs[player][opponent][repetition] = diff
+
+                if (opponent, player) in self.interactions:
+                    for repetition, interaction in enumerate(self.interactions[(opponent, player)]):
+                        scores = iu.compute_final_score_per_turn(interaction)
                         diff = (scores[1] - scores[0])
-                        score_diffs[player][opponent][r] = diff
+                        score_diffs[player][opponent][repetition] = diff
         return score_diffs
 
     def build_payoff_diffs_means(self):
@@ -416,15 +415,15 @@ class ResultSet(object):
         for player in plist:
             for opponent in plist:
                 diffs = []
-                for rep in self.interactions:
-                    if (player, opponent) in rep:
-                        scores = iu.compute_final_score_per_turn(rep[(player,
-                                                                      opponent)])
-                        diffs.append(scores[0] - scores[1])
-                    if (opponent, player) in rep:
-                        scores = iu.compute_final_score_per_turn(rep[(opponent,
-                                                                      player)])
-                        diffs.append(scores[1] - scores[0])
+                for index_pair, repetitions in self.interactions.items():
+                    if (player, opponent) == index_pair:
+                        for interaction in repetitions:
+                            scores = iu.compute_final_score_per_turn(interaction)
+                            diffs.append(scores[0] - scores[1])
+                    if (opponent, player) == index_pair:
+                        for interaction in repetitions:
+                            scores = iu.compute_final_score_per_turn(interaction)
+                            diffs.append(scores[1] - scores[0])
                 if diffs:
                     payoff_diffs_means[player][opponent] = mean(diffs)
                 else:
@@ -454,15 +453,15 @@ class ResultSet(object):
         for player in plist:
             for opponent in plist:
                 if player != opponent:
-                    for rep in self.interactions:
+                    for index_pair, repetitions in self.interactions.items():
                         coop_count = 0
 
-                        if (player, opponent) in rep:
-                            interactions = rep[(player, opponent)]
-                            coop_count = iu.compute_cooperations(interactions)[0]
-                        if (opponent, player) in rep:
-                            interactions = rep[(opponent, player)]
-                            coop_count = iu.compute_cooperations(interactions)[1]
+                        if (player, opponent) == index_pair:
+                            for interaction in repetitions:
+                                coop_count += iu.compute_cooperations(interaction)[0]
+                        if (opponent, player) == index_pair:
+                            for interaction in repetitions:
+                                coop_count += iu.compute_cooperations(interaction)[1]
 
                         cooperations[player][opponent] += coop_count
         return cooperations
@@ -491,21 +490,22 @@ class ResultSet(object):
         for player in plist:
             for opponent in plist:
                 coop_counts = []
-                for rep in self.interactions:
 
-                    if (player, opponent) in rep:
-                        interactions = rep[(player, opponent)]
-                        coop_counts.append(iu.compute_normalised_cooperation(interactions)[0])
+                if (player, opponent) in self.interactions:
+                    repetitions = self.interactions[(player, opponent)]
+                    for interaction in repetitions:
+                        coop_counts.append(iu.compute_normalised_cooperation(interaction)[0])
 
-                    if (opponent, player) in rep:
-                        interactions = rep[(opponent, player)]
-                        coop_counts.append(iu.compute_normalised_cooperation(interactions)[1])
+                if (opponent, player) in self.interactions:
+                    repetitions = self.interactions[(opponent, player)]
+                    for interaction in repetitions:
+                        coop_counts.append(iu.compute_normalised_cooperation(interaction)[1])
 
-                    if ((player, opponent) not in rep) and ((opponent, player) not in rep):
-                        coop_counts.append(0)
+                if ((player, opponent) not in self.interactions) and ((opponent, player) not in self.interactions):
+                    coop_counts.append(0)
 
-                    # Mean over all reps:
-                    normalised_cooperations[player][opponent] = mean(coop_counts)
+                # Mean over all reps:
+                normalised_cooperations[player][opponent] = mean(coop_counts)
         return normalised_cooperations
 
     def build_vengeful_cooperation(self):
@@ -569,19 +569,19 @@ class ResultSet(object):
         for player in plist:
             for opponent in plist:
                 if player != opponent:
-                    for rep in self.interactions:
+                    for index_pair, repetitions in self.interactions.items():
 
-                        if (player, opponent) in rep:
-                            interaction = rep[(player, opponent)]
-                            coops = iu.compute_cooperations(interaction)
-                            if coops[0] >= coops[1]:
-                                good_partner_matrix[player][opponent] += 1
+                        if (player, opponent) == index_pair:
+                            for interaction in repetitions:
+                                coops = iu.compute_cooperations(interaction)
+                                if coops[0] >= coops[1]:
+                                    good_partner_matrix[player][opponent] += 1
 
-                        if (opponent, player) in rep:
-                            interaction = rep[(opponent, player)]
-                            coops = iu.compute_cooperations(interaction)
-                            if coops[0] <= coops[1]:
-                                good_partner_matrix[player][opponent] += 1
+                        if (opponent, player) == index_pair:
+                            for interaction in repetitions:
+                                coops = iu.compute_cooperations(interaction)
+                                if coops[0] <= coops[1]:
+                                    good_partner_matrix[player][opponent] += 1
 
         return good_partner_matrix
 
@@ -597,10 +597,9 @@ class ResultSet(object):
 
         for player_index in plist:
             total_interactions = 0
-            for rep in self.interactions:
-                total_interactions += len(
-                    [pair for pair in rep.keys()
-                     if player_index in pair and pair[0] != pair[1]])
+            for index_pair, repetitions in self.interactions.items():
+                if player_index in index_pair and index_pair[0] != index_pair[1]:
+                    total_interactions += len(repetitions)
             # Max is to deal with edge case of matchs with no turns
             rating = sum(self.good_partner_matrix[player_index]) / max(1, float(total_interactions))
             good_partner_rating.append(rating)
@@ -675,7 +674,7 @@ class ResultSetFromFile(ResultSet):
         """
         self.players, self.interactions = self._read_csv(filename)
         self.nplayers = len(self.players)
-        self.nrepetitions = len(self.interactions)
+        self.nrepetitions = len(list(self.interactions.values())[0])
 
         # Calculate all attributes:
         self.build_all(with_morality)
@@ -684,11 +683,17 @@ class ResultSetFromFile(ResultSet):
         """
         Reads from a csv file of the format:
 
-        p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
+        p1index, p2index, p1name, p2name, interaction
         ...
-        0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...
-        0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...
-        1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...
+        0, 1, Defector, Cooperator, DCDCDC
+        0, 1, Defector, Cooperator, DCDCDC
+        0, 1, Defector, Cooperator, DCDCDC
+        0, 2, Defector, Alternator, DCDDDC
+        0, 2, Defector, Alternator, DCDDDC
+        0, 2, Defector, Alternator, DCDDDC
+        1, 2, Cooperator, Alternator, CCCDCC
+        1, 2, Cooperator, Alternator, CCCDCC
+        1, 2, Cooperator, Alternator, CCCDCC
 
         Returns
         -------
@@ -698,14 +703,17 @@ class ResultSetFromFile(ResultSet):
                 - Second element: interactions (list of dictionaries mapping
                   index indices to interactions)
         """
+        interactions = {}
         players_d = {}
-        interactions_d = {}
         with open(filename, 'r') as f:
             for row in csv.reader(f):
                 index_pair = (int(row[0]), int(row[1]))
+                interaction = self._string_to_interactions(row[4])
+                try:
+                    interactions[index_pair].append(interaction)
+                except KeyError:
+                    interactions[index_pair] = [interaction]
                 players = (row[2], row[3])
-                inters = row[4:]
-
                 # Build a dictionary mapping indices to players
                 # This is temporary to make sure the ordering of the players
                 # matches the indices
@@ -713,26 +721,10 @@ class ResultSetFromFile(ResultSet):
                     if index not in players:
                         players_d[index] = player
 
-                # Build a dictionary mapping indices to list of interactions
-                # This is temporary (as we do not know the number of
-                # interactions at this point.
-                interactions_d[index_pair] = [self._string_to_interactions(inter)
-                                              for inter in inters]
-        nreps = len(inters)
-
         # Create an ordered list of players
         players = []
         for i in range(len(players_d)):
             players.append(players_d[i])
-
-        # Create a list of dictionaries
-        interactions = []
-        for rep in range(nreps):
-            pair_to_interactions_d = {}
-            for index_pair, inters in interactions_d.items():
-                pair_to_interactions_d[index_pair] = inters[rep]
-            interactions.append(pair_to_interactions_d)
-
         return players, interactions
 
     def _string_to_interactions(self, string):
