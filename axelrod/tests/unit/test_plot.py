@@ -17,25 +17,24 @@ class TestPlot(unittest.TestCase):
     def setUpClass(cls):
         cls.players = (axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector())
         cls.turns = 5
-        cls.matches = [
-                       {
-                        (0,1): axelrod.Match((cls.players[0], cls.players[1]),
-                        turns=cls.turns),
-                        (0,2): axelrod.Match((cls.players[0], cls.players[2]),
-                        turns=cls.turns),
-                        (1,2): axelrod.Match((cls.players[1], cls.players[2]),
-                        turns=cls.turns)} for _ in range(3)
-                        ]  # This would not actually be a round robin tournament
+        cls.matches = {
+                        (0,1): [axelrod.Match((cls.players[0], cls.players[1]),
+                        turns=cls.turns) for _ in range(3)],
+                        (0,2): [axelrod.Match((cls.players[0], cls.players[2]),
+                        turns=cls.turns) for _ in range(3)],
+                        (1,2): [axelrod.Match((cls.players[1], cls.players[2]),
+                        turns=cls.turns) for _ in range(3)]}
+                          # This would not actually be a round robin tournament
                            # (no cloned matches)
 
-        for rep in cls.matches:
-            for match in rep.values():
+        cls.interactions = {}
+        for index_pair, matches in cls.matches.items():
+            for match in matches:
                 match.play()
-
-        cls.interactions = []
-        for rep in cls.matches:
-            cls.interactions.append({index_pair: match.result for
-                                     index_pair, match in rep.items()})
+                try:
+                    cls.interactions[index_pair].append(match.result)
+                except KeyError:
+                    cls.interactions[index_pair] = [match.result]
 
         cls.test_result_set = axelrod.ResultSet(cls.players, cls.interactions)
         cls.expected_boxplot_dataset = [
