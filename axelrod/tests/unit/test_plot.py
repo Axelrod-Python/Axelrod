@@ -119,6 +119,13 @@ class TestPlot(unittest.TestCase):
         else:
             self.skipTest('matplotlib not installed')
 
+    def test_sdvplot(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.sdvplot(), matplotlib.pyplot.Figure)
+        else:
+            self.skipTest('matplotlib not installed')
+
     def test_lengthplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertSequenceEqual(
@@ -129,6 +136,13 @@ class TestPlot(unittest.TestCase):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
             self.assertIsInstance(plot.lengthplot(), matplotlib.pyplot.Figure)
+        else:
+            self.skipTest('matplotlib not installed')
+
+    def test_pdplot(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.pdplot(), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 

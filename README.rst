@@ -47,10 +47,6 @@ Otherwise::
     $ cd Axelrod
     $ python setup.py install
 
-You might need to install the libraries in `requirements.txt`::
-
-    pip install -r requirements.txt
-
 Note that on Ubuntu `some
 users <https://github.com/Axelrod-Python/Axelrod/issues/309>`_ have had problems
 installing matplotlib. This seems to help with that::
@@ -80,6 +76,9 @@ gives::
 
     ['Meta Hunter', 'Inverse', 'Forgetful Fool Me Once', 'GTFT: 0.33', 'Champion', 'ZD-GTFT-2', 'Eatherley', 'Math Constant Hunter', 'Random Hunter', 'Soft Joss: 0.9', 'Meta Majority', 'Nice Average Copier', 'Feld', 'Meta Minority', 'Grofman', 'Stochastic WSLS', 'ZD-Extort-2', 'Tullock', 'Joss: 0.9', 'Arrogant QLearner', 'Average Copier', 'Cautious QLearner', 'Hesitant QLearner', 'Risky QLearner', 'Random: 0.5', 'Meta Winner']
 
+There is also a `notebooks repository
+<https://github.com/Axelrod-Python/Axelrod-notebooks>`_ which shows further
+examples of using the library.
 
 Results
 =======

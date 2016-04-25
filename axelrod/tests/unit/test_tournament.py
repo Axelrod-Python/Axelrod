@@ -71,7 +71,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
         self.assertEqual(tournament._processes, 4)
-        self.assertFalse(tournament.prebuilt_cache)
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.deterministic_cache, {})
@@ -91,7 +90,6 @@ class TestTournament(unittest.TestCase):
             noise=0.2,
             deterministic_cache=cache)
         self.assertEqual(tournament.deterministic_cache, cache)
-        self.assertTrue(tournament.prebuilt_cache)
 
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
@@ -180,61 +178,46 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(scores), len(players))
 
     def test_build_cache_required(self):
-        # Noisy, no prebuilt cache, empty deterministic cache
+        # Noisy  empty deterministic cache
+        cache = axelrod.DeterministicCache()
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             processes=4,
             noise=0.2,
-            prebuilt_cache=False)
+            deterministic_cache=cache)
         self.assertFalse(tournament._build_cache_required())
 
-        # Noisy, with prebuilt cache, empty deterministic cache
+        # Not noisy, deterministic cache has content
+        key = (axelrod.TitForTat, axelrod.Defector, 3)
+        cache[key] = [('C', 'D'), ('D', 'D'), ('D', 'D')]
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
+            game=self.game,
             processes=4,
             noise=0.2,
-            prebuilt_cache=True)
+            deterministic_cache=cache)
         self.assertFalse(tournament._build_cache_required())
 
-        # Not noisy, with prebuilt cache, deterministic cache has content
+        # Not noisy, deterministic cache has content
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             processes=4,
-            prebuilt_cache=True)
-        tournament.deterministic_cache = {'test': 100}
+            deterministic_cache=cache)
         self.assertFalse(tournament._build_cache_required())
 
-        # Not noisy, no prebuilt cache, deterministic cache has content
+        # Not noisy, empty deterministic cache
+        cache = axelrod.DeterministicCache()
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             processes=4,
-            prebuilt_cache=False)
-        tournament.deterministic_cache = {'test': 100}
-        self.assertTrue(tournament._build_cache_required())
-
-        # Not noisy, with prebuilt cache, empty deterministic cache
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            processes=4,
-            prebuilt_cache=True)
-        self.assertTrue(tournament._build_cache_required())
-
-        # Not noisy, no prebuilt cache, empty deterministic cache
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            processes=4,
-            prebuilt_cache=False)
+            deterministic_cache=cache)
         self.assertTrue(tournament._build_cache_required())
 
     def test_build_cache(self):
@@ -559,7 +542,6 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
         self.assertEqual(tournament._processes, None)
-        self.assertFalse(tournament.prebuilt_cache)
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.deterministic_cache, {})
@@ -579,7 +561,6 @@ class TestProbEndTournament(unittest.TestCase):
             noise=0.2,
             deterministic_cache=cache)
         self.assertEqual(tournament.deterministic_cache, cache)
-        self.assertTrue(tournament.prebuilt_cache)
 
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
