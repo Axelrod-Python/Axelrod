@@ -32,7 +32,7 @@ class ResultSet(object):
         self.players = players
         self.nplayers = len(players)
         self.interactions = interactions
-        self.nrepetitions = len(list(interactions.values())[0])
+        self.nrepetitions = max([len(rep) for rep in list(interactions.values())])
 
         # Calculate all attributes:
         self.build_all(with_morality)
