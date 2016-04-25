@@ -20,7 +20,7 @@ interactions between the players.
 turn, has a list of Match objects). These can be used to view the history of the
 interactions::
 
-    >>> for index_pair, interaction in tournament.interactions[0].items():
+    >>> for index_pair, interaction in tournament.interactions.items():
     ...     player1 = tournament.players[index_pair[0]]
     ...     player2 = tournament.players[index_pair[1]]
     ...     print('%s vs %s: %s' % (player1, player2, interaction)) # doctest: +SKIP
@@ -40,7 +40,7 @@ a variety of available methods for analysis (more information can be found in
 :ref:`creating_matches`)::
 
     >>> matches = []
-    >>> for index_pair, interaction in tournament.interactions[0].items():
+    >>> for index_pair, interaction in tournament.interactions.items():
     ...     player1 = tournament.players[index_pair[0]]
     ...     player2 = tournament.players[index_pair[1]]
     ...     match = axl.Match([player1, player2], turns=3)
