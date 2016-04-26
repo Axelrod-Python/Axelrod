@@ -52,7 +52,6 @@ def generate_match_parameters(players, turns=100, repetitions=1):
     """
 
     match_chunks = []
-    #for player1, player2 in itertools.product(players, players):
     for i in range(len(players)):
         for j in range(i, len(players)):
             player1 = players[i]
@@ -112,7 +111,7 @@ class QueueConsumer(Process):
                 row = self.queue.get()
                 concatenated_histories = list(map(lambda x: "".join(x),
                                                   zip(*row[-1])))
-                self.writer.writerow(results[2:4] + [concatenated_histories])
+                self.writer.writerow(results[:4] + [concatenated_histories])
         else:
             # Keep it in memory
             qsize = self.queue.qsize()
@@ -188,4 +187,6 @@ if __name__ == "__main__":
     players = [s() for s in axl.ordinary_strategies]
     matches = generate_match_parameters(players, turns=200, repetitions=100)
     #results = play_matches_parallel(matches, filename="data.out")
-    results = play_matches_parallel(matches, filename=None)
+    interactions = play_matches_parallel(matches, filename=None)
+    rs = axl.ResultSet(players, interactions)
+

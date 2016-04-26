@@ -683,17 +683,17 @@ class ResultSetFromFile(ResultSet):
         """
         Reads from a csv file of the format:
 
-        p1index, p2index, p1name, p2name, interaction
+        p1index, p2index, p1name, p2name, p1history, p2history
         ...
-        0, 1, Defector, Cooperator, DCDCDC
-        0, 1, Defector, Cooperator, DCDCDC
-        0, 1, Defector, Cooperator, DCDCDC
-        0, 2, Defector, Alternator, DCDDDC
-        0, 2, Defector, Alternator, DCDDDC
-        0, 2, Defector, Alternator, DCDDDC
-        1, 2, Cooperator, Alternator, CCCDCC
-        1, 2, Cooperator, Alternator, CCCDCC
-        1, 2, Cooperator, Alternator, CCCDCC
+        0, 1, Defector, Cooperator, DDDDDD, CCCCCC
+        0, 1, Defector, Cooperator, DDDDDD, CCCCCC
+        0, 1, Defector, Cooperator, DDDDDD, CCCCCC
+        0, 2, Defector, Alternator, DDDDDD, CDCDCD
+        0, 2, Defector, Alternator, DDDDDD, CDCDCD
+        0, 2, Defector, Alternator, DDDDDD, CDCDCD
+        1, 2, Cooperator, Alternator, CCCCCC, CDCDCDC
+        1, 2, Cooperator, Alternator, CCCCCC, CDCDCDC
+        1, 2, Cooperator, Alternator, CCCCCC, CDCDCDC
 
         Returns
         -------
@@ -708,7 +708,7 @@ class ResultSetFromFile(ResultSet):
         with open(filename, 'r') as f:
             for row in csv.reader(f):
                 index_pair = (int(row[0]), int(row[1]))
-                interaction = self._string_to_interactions(row[4])
+                interaction = zip(*row[-2:])
                 try:
                     interactions[index_pair].append(interaction)
                 except KeyError:
@@ -726,12 +726,3 @@ class ResultSetFromFile(ResultSet):
         for i in range(len(players_d)):
             players.append(players_d[i])
         return players, interactions
-
-    def _string_to_interactions(self, string):
-        """
-        Converts a compact string representation of an interaction to an
-        interaction:
-
-        'CDCDDD' -> [('C', 'D'), ('C', 'D'), ('D', 'D')]
-        """
-        return iu.string_to_interactions(string)
