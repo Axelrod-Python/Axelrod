@@ -102,6 +102,16 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
 
+        # Test that no error occurs with progress bar
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        results = tournament.play(progress_bar=True)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
         # Test that _run_serial_repetitions is called with empty matches list
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -114,7 +124,8 @@ class TestTournament(unittest.TestCase):
         tournament._run_parallel_repetitions = MagicMock(
             name='_run_parallel_repetitions')
         tournament.play()
-        tournament._run_serial_repetitions.assert_called_once_with([])
+        tournament._run_serial_repetitions.assert_called_once_with([],
+                                                        progress_bar=None)
         self.assertFalse(tournament._run_parallel_repetitions.called)
 
     @given(s=lists(sampled_from(axelrod.strategies),
@@ -161,6 +172,17 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions,
             processes=2)
         results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        # Test that no error occurs with progress bar
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        results = tournament.play(progress_bar=True)
         self.assertIsInstance(results, axelrod.ResultSet)
 
         # The following relates to #516
@@ -231,7 +253,7 @@ class TestTournament(unittest.TestCase):
         tournament._run_single_repetition = MagicMock(
             name='_run_single_repetition')
         tournament._build_cache([])
-        tournament._run_single_repetition.assert_called_once_with([])
+        tournament._run_single_repetition.assert_called_once_with([], None)
         self.assertEqual(
             tournament._parallel_repetitions, self.test_repetitions - 1)
 
