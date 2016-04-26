@@ -8,24 +8,18 @@ initialize matches.
 Matches are parcelled out to maximize the usage of deterministic caching,
 and to keep worker threads fed.
 
-Todo:
--- format of data returned (players are not enumerated)
--- modify the library's match generators
 -- compress the on disk data? it compresses a lot
--- move this code into the library proper (where exactly?)
 -- Tests!
 """
 
 from collections import defaultdict
 import csv
-import itertools
+from multiprocessing import Event, Process, Queue
 import random
 import time
 
-from multiprocessing import Event, Process, Queue
-
-import axelrod as axl
-from axelrod import MetaPlayer
+from .match import Match
+from .strategies.meta import MetaPlayer
 
 def generate_turns(turns, repetitions=1):
     """This is a constant generator that yields `turns` `repetitions` times."""
@@ -88,7 +82,7 @@ def play_matches(queue, match_chunks, callback=process_match_results):
         first_turns = next(turns_generator)
         first_noise = next(noise_generator)
         first_game = next(game_generator)
-        match = axl.Match(players, first_turns, noise=noise, game=game)
+        match = Match(players, first_turns, noise=noise, game=game)
         results = match.play()
         queue.put(callback(match))
         for turns, noise, game in zip(turns_generator, noise_generator,
@@ -135,7 +129,7 @@ class QueueConsumer(Process):
         while not self.shutdown.is_set():
             self.consume_queue()
             # Allow this thread to rest while data is generated
-            time.sleep(0.01)
+            time.sleep(0.1)
         self.consume_queue()
         if not self.filename:
             return self.interactions
@@ -196,10 +190,10 @@ def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
     qc.join()
     return interactions
 
-if __name__ == "__main__":
-    players = [s() for s in axl.ordinary_strategies]
-    matches = generate_match_parameters(players, turns=200, repetitions=100)
-    #results = play_matches_parallel(matches, filename="data.out")
-    interactions = play_matches_parallel(matches, filename=None)
-    rs = axl.ResultSet(players, interactions)
+#if __name__ == "__main__":
+    #players = [s() for s in axl.ordinary_strategies]
+    #matches = generate_match_parameters(players, turns=200, repetitions=100)
+    ##results = play_matches_parallel(matches, filename="data.out")
+    #interactions = play_matches_parallel(matches, filename=None)
+    #rs = axl.ResultSet(players, interactions)
 
