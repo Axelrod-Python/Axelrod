@@ -57,7 +57,9 @@ def generate_match_parameters(players, turns=100, repetitions=1):
         for j in range(i, len(players)):
             player1 = players[i]
             player2 = players[j]
-            players_ = (player1.clone(), player2.clone())
+            players_ = [player1.clone(), player2.clone()]
+            players_[0].typeid = i
+            players_[1].typeid = j
             turns_generator = generate_turns(turns, repetitions)
             match_chunks.append((players_, turns_generator))
             if (len(match_chunks) * repetitions > 500) or issubclass(player1.__class__, MetaPlayer):
@@ -70,9 +72,9 @@ def process_match_results(match):
     """Manipulate results data for writing to a CSV file."""
     player1_name = str(match.players[0])
     player2_name = str(match.players[1])
-    results = match.result
-    concatenated_histories = list(map(lambda x: "".join(x), zip(*results)))
-    return [player1_name, player2_name] + concatenated_histories
+    result = match.result
+    return [players[0].typeid, players[1].typeid, player1_name, player2_name,
+            result]
 
 def play_matches(queue, match_chunks, callback=process_match_results):
     """Plays the matches in each chunk of matches in chunks."""
@@ -107,14 +109,16 @@ class QueueConsumer(Process):
             # Write Queue to disk
             qsize = self.queue.qsize()
             for _ in range(qsize):
-                results = self.queue.get()
-                self.writer.writerow(results)
+                row = self.queue.get()
+                concatenated_histories = list(map(lambda x: "".join(x),
+                                                  zip(*row[-1])))
+                self.writer.writerow(results[2:4] + [concatenated_histories])
         else:
             # Keep it in memory
             qsize = self.queue.qsize()
             for _ in range(qsize):
                 row = self.queue.get()
-                self.interactions[(row[0], row[1])].append((row[2], row[3]))
+                self.interactions[(row[0], row[1])].append([row[-1])
 
     def run(self):
         while not self.shutdown.is_set():
@@ -182,6 +186,6 @@ def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
 
 if __name__ == "__main__":
     players = [s() for s in axl.ordinary_strategies]
-    matches = generate_match_parameters(players, turns=200, repetitions=10)
-    results = play_matches_parallel(matches, filename="data.out")
-    #results = play_matches_parallel(matches, filename=None)
+    matches = generate_match_parameters(players, turns=200, repetitions=100)
+    #results = play_matches_parallel(matches, filename="data.out")
+    results = play_matches_parallel(matches, filename=None)
