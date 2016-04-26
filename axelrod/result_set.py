@@ -651,15 +651,6 @@ class ResultSet(object):
 
 class ResultSetFromFile(ResultSet):
     """A class to hold the results of a tournament.
-
-    Initialised by a csv file of the format:
-
-
-    [p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
-    ...]
-    [0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...]
-    [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
-    [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
     """
 
     def __init__(self, filename, with_morality=True):

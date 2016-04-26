@@ -44,7 +44,7 @@ def generate_turns_prob(p, repetitions=1):
             return 1
 
 def generate_match_parameters(players, turns=100, repetitions=1, noise=0,
-                              p=None):
+                              p=None, game=None):
     """Generate matches in chunks to feed to worker threads, trying
     to achieve the following:
     * All matches between the same two players are in the same chunk
@@ -65,7 +65,9 @@ def generate_match_parameters(players, turns=100, repetitions=1, noise=0,
             else:
                 turns_generator = generate_turns(turns, repetitions)
             noise_generator = generate_turns(noise, repetitions)
-            match_chunks.append((players_, turns_generator, noise_generator))
+            game_generator = generate_turns(game, repetitions)
+            match_chunks.append((players_, turns_generator, noise_generator,
+                                 game_generator))
             if (len(match_chunks) * repetitions > 500) or issubclass(player1.__class__, MetaPlayer):
                 yield match_chunks
                 match_chunks = []
@@ -82,15 +84,18 @@ def process_match_results(match):
 
 def play_matches(queue, match_chunks, callback=process_match_results):
     """Plays the matches in each chunk of matches in chunks."""
-    for players, turns_generator, noise_generator in match_chunks:
+    for players, turns_generator, noise_generator, game_generator in match_chunks:
         first_turns = next(turns_generator)
         first_noise = next(noise_generator)
-        match = axl.Match(players, first_turns, noise=noise)
+        first_game = next(game_generator)
+        match = axl.Match(players, first_turns, noise=noise, game=game)
         results = match.play()
         queue.put(callback(match))
-        for turns, noise in zip(turns_generator, noise_generator):
+        for turns, noise, game in zip(turns_generator, noise_generator,
+                                      game_generator):
             match.turns = turns
             match.noise = noise
+            match.game = game
             results = match.play()
             queue.put(callback(match))
         del match
@@ -180,6 +185,7 @@ class ProcessManager(Process):
             time.sleep(0.1)
         # Shutdown the consumer
         self.queue_consumer.shutdown.set()
+
 
 def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
     queue = Queue()
