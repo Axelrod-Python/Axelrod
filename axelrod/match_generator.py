@@ -8,7 +8,8 @@ class MatchGenerator(object):
 
     clone_opponents = True
 
-    def __init__(self, players, turns, game, deterministic_cache):
+    def __init__(self, players, turns, game, repetitions, deterministic_cache,
+                 chunk_size=100):
         """
         A class to generate matches. This is used by the Tournament class which
         is in charge of playing the matches and collecting the results.
@@ -24,12 +25,17 @@ class MatchGenerator(object):
         deterministic_cache : an instance of axelrod.DeterministicCache
         class
             A cache of resulting actions for deterministic matches
+        chunk_size : integer
+            the size of the chunks of matches to be generated.
+            Mainly relevant for large tournaments and parallel processing.
         """
         self.players = players
         self.turns = turns
         self.game = game
+        self.repetitions = repetitions
         self.deterministic_cache = deterministic_cache
         self.opponents = players
+        self.chunk_size = chunk_size
 
     @property
     def opponents(self):
@@ -56,7 +62,7 @@ class RoundRobinMatches(MatchGenerator):
 
     clone_opponents = True
 
-    def build_matches(self, noise=0):
+    def build_match_chunks(self, noise=0):
         """
         A generator that returns player index pairs and match objects for a
         round robin tournament.
@@ -71,12 +77,20 @@ class RoundRobinMatches(MatchGenerator):
         tuple
             player pair index, match object
         """
+        chunks, size = [], 0
         for player1_index in range(len(self.players)):
             for player2_index in range(player1_index, len(self.players)):
-                pair = (
-                    self.players[player1_index], self.opponents[player2_index])
-                match = self.build_single_match(pair, noise)
-                yield (player1_index, player2_index), match
+                for _ in range(self.repetitions):
+                    pair = (
+                        self.players[player1_index], self.opponents[player2_index])
+                    match = self.build_single_match(pair, noise)
+                    chunks.append(((player1_index, player2_index), match))
+                    size += 1
+                    if size >= self.chunk_size:
+                        yield chunks
+                        chunks, size = [], 0
+        if size > 0:
+            yield chunks
 
     def build_single_match(self, pair, noise=0):
         """Create a single match for a given pair"""
@@ -88,7 +102,8 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
 
     clone_opponents = True
 
-    def __init__(self, players, prob_end, game, deterministic_cache):
+    def __init__(self, players, prob_end, game, repetitions,
+            deterministic_cache, chunk_size=100):
         """
         A class that generates matches for which the players do not
         know the length of the Match (to their knowledge it is infinite) but
@@ -106,8 +121,8 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             A cache of resulting actions for deterministic matches
         """
         super(ProbEndRoundRobinMatches, self).__init__(
-            players, turns=float("inf"), game=game,
-            deterministic_cache=deterministic_cache)
+            players, turns=float("inf"), game=game, repetitions=repetitions,
+            deterministic_cache=deterministic_cache, chunk_size=chunk_size)
         self.prob_end = prob_end
 
     def build_single_match(self, pair, noise=0):
