@@ -14,7 +14,8 @@ and to keep worker threads fed.
 
 from collections import defaultdict
 import csv
-from multiprocessing import Event, Process, Queue
+from math import ceil, log
+from multiprocessing import Event, Manager, Process, Queue
 import random
 import time
 
@@ -26,16 +27,16 @@ def generate_turns(turns, repetitions=1):
     for _ in range(repetitions):
         yield turns
 
-def generate_turns_prob(p, repetitions=1):
+def generate_turns_prob(prob_end, repetitions=1):
     """Generate probabilistic match lengths."""
-    for _ in repetitions:
+    for _ in range(repetitions):
         try:
             x = random.random()
-            return int(ceil(log(1 - x) / log(1 - self.prob_end)))
+            yield int(ceil(log(1 - x) / log(1 - prob_end)))
         except ZeroDivisionError:
-            return float("inf")
+            yield float("inf")
         except ValueError:
-            return 1
+            yield 1
 
 def generate_match_parameters(players, turns=100, repetitions=1, noise=0,
                               p=None, game=None):
@@ -73,7 +74,7 @@ def process_match_results(match):
     player1_name = str(match.players[0])
     player2_name = str(match.players[1])
     result = match.result
-    return [players[0].typeid, players[1].typeid, player1_name, player2_name,
+    return [match.players[0].typeid, match.players[1].typeid, player1_name, player2_name,
             result]
 
 def play_matches(queue, match_chunks, callback=process_match_results):
@@ -82,7 +83,7 @@ def play_matches(queue, match_chunks, callback=process_match_results):
         first_turns = next(turns_generator)
         first_noise = next(noise_generator)
         first_game = next(game_generator)
-        match = Match(players, first_turns, noise=noise, game=game)
+        match = Match(players, first_turns, noise=first_noise, game=first_game)
         results = match.play()
         queue.put(callback(match))
         for turns, noise, game in zip(turns_generator, noise_generator,
@@ -99,14 +100,15 @@ class QueueConsumer(Process):
     the total memory footprint because of how python allocates memory
     for child processes."""
 
-    def __init__(self, queue, filename=None):
+    def __init__(self, queue, filename=None, interactions=None):
         Process.__init__(self)
         self.queue = queue
         self.filename = filename
+        print(filename)
         if filename:
             self.writer = csv.writer(open(filename, 'w'))
         else:
-            self.interactions = defaultdict(list)
+            self.interactions = interactions
         self.shutdown = Event()
 
     def consume_queue(self):
@@ -117,13 +119,16 @@ class QueueConsumer(Process):
                 row = self.queue.get()
                 concatenated_histories = list(map(lambda x: "".join(x),
                                                   zip(*row[-1])))
-                self.writer.writerow(results[:4] + [concatenated_histories])
+                self.writer.writerow(row[:4] + [concatenated_histories])
         else:
             # Keep it in memory
             qsize = self.queue.qsize()
             for _ in range(qsize):
                 row = self.queue.get()
-                self.interactions[(row[0], row[1])].append([row[-1])
+                try:
+                    self.interactions[(row[0], row[1])].append(row[-1])
+                except KeyError:
+                    self.interactions[(row[0], row[1])] = [row[-1]]
 
     def run(self):
         while not self.shutdown.is_set():
@@ -138,6 +143,8 @@ class QueueConsumer(Process):
 class ProcessManager(Process):
     def __init__(self, matches_generator, queue_consumer, max_workers=4):
         Process.__init__(self)
+        if not max_workers:
+            max_workers = 1
         self.max_workers = max_workers
         self.matches_generator = matches_generator
         self.processes = []
@@ -183,12 +190,16 @@ class ProcessManager(Process):
 
 def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
     queue = Queue()
-    qc = QueueConsumer(queue, filename=filename)
+    manager = Manager()
+    return_dict = manager.dict()
+    qc = QueueConsumer(queue, filename=filename, interactions=return_dict)
     pm = ProcessManager(matches, queue_consumer=qc, max_workers=max_workers)
-    interactions = qc.start()
+    qc.start()
     pm.start()
+    pm.join()
     qc.join()
-    return interactions
+    #print(len(qc.interactions))
+    return return_dict
 
 #if __name__ == "__main__":
     #players = [s() for s in axl.ordinary_strategies]

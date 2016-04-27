@@ -569,7 +569,6 @@ class TestProbEndTournament(unittest.TestCase):
             game=self.game,
             prob_end=self.test_prob_end,
             noise=0.2)
-        self.assertEqual(tournament.match_generator.prob_end, tournament.prob_end)
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
         self.assertEqual(tournament.turns, float("inf"))
@@ -577,10 +576,7 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertEqual(tournament.name, 'test')
         self.assertEqual(tournament._processes, None)
         self.assertTrue(tournament._with_morality)
-        self.assertIsInstance(tournament._logger, logging.Logger)
-        self.assertEqual(tournament.deterministic_cache, {})
         self.assertEqual(tournament.noise, 0.2)
-        self.assertEqual(tournament._parallel_repetitions, 10)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
@@ -594,7 +590,6 @@ class TestProbEndTournament(unittest.TestCase):
             processes=4,
             noise=0.2,
             deterministic_cache=cache)
-        self.assertEqual(tournament.deterministic_cache, cache)
 
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies

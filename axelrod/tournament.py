@@ -1,16 +1,14 @@
 from __future__ import absolute_import
 
-import logging
-
 from .game import Game
-from .result_set import ResultSet
+from .result_set import ResultSet, ResultSetFromFile
 from .parallel_matches import generate_match_parameters, play_matches_parallel
 
 
 class Tournament(object):
     game = Game()
 
-    def __init__(self, players, match_generator=RoundRobinMatches,
+    def __init__(self, players,
                  name='axelrod', game=None, turns=200, repetitions=10,
                  processes=None, deterministic_cache=None, noise=0,
                  with_morality=True):
@@ -47,7 +45,6 @@ class Tournament(object):
         self.repetitions = repetitions
         self._with_morality = with_morality
         self._processes = processes
-        self._logger = logging.getLogger(__name__)
 
     def play(self, filename=None):
         """
@@ -57,8 +54,7 @@ class Tournament(object):
         -------
         axelrod.ResultSet
         """
-
-        matches = generate_match_parameters(players, turns=self.turns,
+        matches = generate_match_parameters(self.players, turns=self.turns,
                                             noise=self.noise,
                                             repetitions=self.repetitions,
                                             game=self.game)
@@ -66,7 +62,9 @@ class Tournament(object):
                                                   filename=filename,
                                                   max_workers=self._processes)
         if self.interactions:
-            self._build_result_set()
+            return self._build_result_set()
+        #else:
+            #return ResultSetFromFile(filename, with_morality=self._with_morality)
 
     def _build_result_set(self):
         """
@@ -91,7 +89,7 @@ class ProbEndTournament(Tournament):
     continue.
     """
 
-    def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
+    def __init__(self, players,
                  name='axelrod', game=None, prob_end=.5, repetitions=10,
                  processes=None, deterministic_cache=None, noise=0,
                  with_morality=True):
@@ -136,11 +134,11 @@ class ProbEndTournament(Tournament):
         axelrod.ResultSet
         """
 
-        matches = generate_match_parameters(players, turns=self.turns,
+        matches = generate_match_parameters(self.players, turns=self.turns,
                                             noise=self.noise,
                                             repetitions=self.repetitions,
                                             game=self.game,
-                                            self.prob_end)
+                                            p=self.prob_end)
         self.interactions = play_matches_parallel(matches,
                                                   filename=filename,
                                                   max_workers=self._processes)
