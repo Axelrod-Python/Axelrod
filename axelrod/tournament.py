@@ -15,8 +15,8 @@ class Tournament(object):
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
-                 processes=None, deterministic_cache=None, noise=0,
-                 with_morality=True):
+                 processes=None, chunk_size=100, deterministic_cache=None,
+                 noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -34,6 +34,8 @@ class Tournament(object):
             The number of times the round robin should be repeated
         processes : integer
             The number of processes to be used for parallel processing
+        chunk_size : integer the size of the chunks of matches to be generated.
+            Mainly relevant for large tournaments and parallel processing.
         deterministic_cache : instance
             An instance of the axelrod.DeterministicCache class
         noise : float
@@ -53,7 +55,8 @@ class Tournament(object):
         else:
             self.deterministic_cache = deterministic_cache
         self.match_generator = match_generator(
-            players, turns, self.game, self.deterministic_cache)
+            players, turns, self.game, self.repetitions,
+            self.deterministic_cache, chunk_size)
         self._with_morality = with_morality
         self._parallel_repetitions = repetitions
         self._processes = processes
@@ -69,16 +72,13 @@ class Tournament(object):
         axelrod.ResultSet
         """
         if self._processes is None:
-            self._run_serial_repetitions(self.interactions)
+            self._run_serial(self.interactions, filename)
         else:
-            if self._build_cache_required():
-                self._build_cache(self.interactions)
-            self._run_parallel_repetitions(self.interactions)
+            self._run_parallel(self.interactions, filename)
 
         if filename is None:
             self.result_set = self._build_result_set()
             return self.result_set
-        self._write_to_csv(filename)
 
     def _build_result_set(self):
         """
@@ -116,20 +116,7 @@ class Tournament(object):
         self._run_single_repetition(matches)
         self._parallel_repetitions -= 1
 
-    def _run_single_repetition(self, interactions):
-        """
-        Runs a single round robin and updates the matches list.
-        """
-        new_matches = self.match_generator.build_matches(noise=self.noise)
-        interactions = self._play_matches(new_matches)
-
-        for index_pair, interaction in interactions.items():
-            try:
-                self.interactions[index_pair].append(interaction)
-            except KeyError:
-                self.interactions[index_pair] = [interaction]
-
-    def _run_serial_repetitions(self, interactions):
+    def _run_serial(self, interactions, filename=None):
         """
         Runs all repetitions of the round robin in serial.
 
@@ -138,12 +125,39 @@ class Tournament(object):
         ineractions : list
             The list of interactions per repetition to update with results
         """
-        self._logger.debug('Playing %d round robins' % self.repetitions)
-        for repetition in range(self.repetitions):
-            self._run_single_repetition(interactions)
+        chunks = self.match_generator.build_match_chunks()
+
+        for matches in chunks:
+            interactions = self._play_matches(matches)
+
+            self._write_interactions(filename, interactions)
+
         return True
 
-    def _run_parallel_repetitions(self, interactions):
+    def _write_interactions(self, interactions, filename):
+        """Either write to memory or to file"""
+        if filename is not None:
+            self._write_to_csv(interactions, filename)
+        else:
+            self._write_to_memory(interactions)
+
+    def _write_to_memory(self, interactions):
+        """Write the given interactions to the interactions attribute"""
+        for index_pair, interaction in interactions.items():
+            try:
+                self.interactions[index_pair].append(interaction)
+            except KeyError:
+                self.interactions[index_pair] = [interaction]
+
+    def _write_to_csv(self, filename, interactions):
+        """Write the interactions to csv."""
+        with open(filename, 'a') as csvfile:
+            writer = csv.writer(csvfile)
+            for index_pair, interaction in interactions.items():
+                row = list(index_pair) + interaction
+                writer.writerow(row)
+
+    def _run_parallel(self, interactions, filename):
         """
         Run all except the first round robin using parallel processing.
 
@@ -159,14 +173,15 @@ class Tournament(object):
         done_queue = Queue()
         workers = self._n_workers()
 
-        for repetition in range(self._parallel_repetitions):
-            work_queue.put(repetition)
 
-        self._logger.debug(
-            'Playing %d round robins with %d parallel processes' %
-            (self._parallel_repetitions, workers))
+        chunks = self.match_generator.build_match_chunks()
+        for chunk in chunks:
+            # This is crap: I'm going through the generator, ideally want the
+            # chunk to be a generator also
+            work_queue.put(chunk)
+
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, interactions)
+        self._process_done_queue(workers, done_queue, filename)
 
         return True
 
@@ -205,7 +220,7 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, interactions):
+    def _process_done_queue(self, workers, done_queue, filename):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -225,11 +240,7 @@ class Tournament(object):
             if results == 'STOP':
                 stops += 1
             else:
-                for index_pair, interaction in results.items():
-                    try:
-                        interactions[index_pair].append(interaction)
-                    except KeyError:
-                        interactions[index_pair] = [interaction]
+                self._write_interactions(filename, results)
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -243,9 +254,8 @@ class Tournament(object):
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
         """
-        for repetition in iter(work_queue.get, 'STOP'):
-            new_matches = self.match_generator.build_matches(noise=self.noise)
-            interactions = self._play_matches(new_matches)
+        for matches in iter(work_queue.get, 'STOP'):
+            interactions = self._play_matches(matches)
             done_queue.put(interactions)
         done_queue.put('STOP')
         return True
@@ -271,34 +281,6 @@ class Tournament(object):
             match.play()
             interactions[index_pair] = match.result
         return interactions
-
-    def _write_to_csv(self, filename):
-        """Write the interactions to csv."""
-        with open(filename, 'w') as csvfile:
-            writer = csv.writer(csvfile)
-            for row in self._data_for_csv():
-                writer.writerow(row)
-
-    def _data_for_csv(self):
-        """
-        Returns
-        -------
-        A generator of the interactions to a list of lists of the form:
-
-        [p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
-        ...]
-        [0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...]
-        [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
-        [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
-        """
-        for index_pair, repetitions in self.interactions.items():
-            p1, p2 = index_pair
-            for interaction in repetitions:
-                row = [p1, p2, self.players[p1].name, self.players[p2].name]
-                matchstringrep = ''.join([act for inter in interaction
-                                          for act in inter])
-                row.append(matchstringrep)
-                yield row
 
 
 class ProbEndTournament(Tournament):
