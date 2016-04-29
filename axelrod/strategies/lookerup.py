@@ -116,6 +116,7 @@ class LookerUp(Player):
             if value_length is not None:
                 if len(v) > value_length:
                     raise ValueError("Table values should be of length one, C or D")
+        self.init_args = (lookup_table, value_length)
 
     def strategy(self, opponent):
         # If there isn't enough history to lookup an action, cooperate.
