@@ -1,3 +1,4 @@
+from collections import defaultdict
 import csv
 from . import eigen
 
@@ -694,16 +695,13 @@ class ResultSetFromFile(ResultSet):
                 - Second element: interactions (list of dictionaries mapping
                   index indices to interactions)
         """
-        interactions = {}
+        interactions = defaultdict(list)
         players_d = {}
         with open(filename, 'r') as f:
             for row in csv.reader(f):
                 index_pair = (int(row[0]), int(row[1]))
-                interaction = zip(*row[-2:])
-                try:
-                    interactions[index_pair].append(interaction)
-                except KeyError:
-                    interactions[index_pair] = [interaction]
+                interaction = list(zip(*row[-2:]))
+                interactions[index_pair].append(interaction)
                 players = (row[2], row[3])
                 # Build a dictionary mapping indices to players
                 # This is temporary to make sure the ordering of the players

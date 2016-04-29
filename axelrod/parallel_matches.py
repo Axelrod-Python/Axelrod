@@ -7,19 +7,20 @@ initialize matches.
 
 Matches are parcelled out to maximize the usage of deterministic caching,
 and to keep worker threads fed.
-
--- compress the on disk data? it compresses a lot
--- Tests!
 """
+
+from __future__ import absolute_import
 
 from collections import defaultdict
 import csv
 from math import ceil, log
 from multiprocessing import Event, Manager, Process, Queue
 import random
+from tempfile import NamedTemporaryFile
 import time
 
 from .match import Match
+from .result_set import ResultSetFromFile
 from .strategies.meta import MetaPlayer
 
 def generate_turns(turns, repetitions=1):
@@ -100,35 +101,20 @@ class QueueConsumer(Process):
     the total memory footprint because of how python allocates memory
     for child processes."""
 
-    def __init__(self, queue, filename=None, interactions=None):
+    def __init__(self, queue, outputfile, interactions=None):
         Process.__init__(self)
         self.queue = queue
-        self.filename = filename
-        print(filename)
-        if filename:
-            self.writer = csv.writer(open(filename, 'w'))
-        else:
-            self.interactions = interactions
+        self.outputfile = outputfile
+        self.writer = csv.writer(outputfile)
         self.shutdown = Event()
 
     def consume_queue(self):
-        if self.filename:
-            # Write Queue to disk
-            qsize = self.queue.qsize()
-            for _ in range(qsize):
-                row = self.queue.get()
-                concatenated_histories = list(map(lambda x: "".join(x),
-                                                  zip(*row[-1])))
-                self.writer.writerow(row[:4] + [concatenated_histories])
-        else:
-            # Keep it in memory
-            qsize = self.queue.qsize()
-            for _ in range(qsize):
-                row = self.queue.get()
-                try:
-                    self.interactions[(row[0], row[1])].append(row[-1])
-                except KeyError:
-                    self.interactions[(row[0], row[1])] = [row[-1]]
+        qsize = self.queue.qsize()
+        for _ in range(qsize):
+            row = self.queue.get()
+            concatenated_histories = list(map(lambda x: "".join(x),
+                                                zip(*row[-1])))
+            self.writer.writerow(row[:4] + concatenated_histories)
 
     def run(self):
         while not self.shutdown.is_set():
@@ -136,8 +122,6 @@ class QueueConsumer(Process):
             # Allow this thread to rest while data is generated
             time.sleep(0.1)
         self.consume_queue()
-        if not self.filename:
-            return self.interactions
 
 
 class ProcessManager(Process):
@@ -192,19 +176,17 @@ def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
     queue = Queue()
     manager = Manager()
     return_dict = manager.dict()
-    qc = QueueConsumer(queue, filename=filename, interactions=return_dict)
+    if filename:
+        outputfile = open(filename, 'w')
+    else:
+        outputfile = NamedTemporaryFile()
+        filename = outputfile.name
+    qc = QueueConsumer(queue, outputfile=outputfile, interactions=return_dict)
     pm = ProcessManager(matches, queue_consumer=qc, max_workers=max_workers)
     qc.start()
     pm.start()
     pm.join()
     qc.join()
-    #print(len(qc.interactions))
-    return return_dict
+    return ResultSetFromFile(filename)
 
-#if __name__ == "__main__":
-    #players = [s() for s in axl.ordinary_strategies]
-    #matches = generate_match_parameters(players, turns=200, repetitions=100)
-    ##results = play_matches_parallel(matches, filename="data.out")
-    #interactions = play_matches_parallel(matches, filename=None)
-    #rs = axl.ResultSet(players, interactions)
 
