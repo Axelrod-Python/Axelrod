@@ -23,6 +23,7 @@ from .match import Match
 from .result_set import ResultSetFromFile
 from .strategies.meta import MetaPlayer
 
+
 def generate_turns(turns, repetitions=1):
     """This is a constant generator that yields `turns` `repetitions` times."""
     for _ in range(repetitions):
@@ -67,8 +68,8 @@ def generate_match_parameters(players, turns=100, repetitions=1, noise=0,
             if (len(match_chunks) * repetitions > 500) or issubclass(player1.__class__, MetaPlayer):
                 yield match_chunks
                 match_chunks = []
-        if len(match_chunks):
-            yield match_chunks
+    if len(match_chunks):
+        yield match_chunks
 
 def process_match_results(match):
     """Manipulate results data for writing to a CSV file."""
@@ -117,15 +118,16 @@ class QueueConsumer(Process):
             self.writer.writerow(row[:4] + concatenated_histories)
 
     def run(self):
-        while not self.shutdown.is_set():
+        while (not self.shutdown.is_set()) or (not self.queue.empty()):
             self.consume_queue()
             # Allow this thread to rest while data is generated
             time.sleep(0.1)
         self.consume_queue()
+        self.outputfile.flush()
 
 
 class ProcessManager(Process):
-    def __init__(self, matches_generator, queue_consumer, max_workers=4):
+    def __init__(self, matches_generator, queue_consumer, max_workers=None):
         Process.__init__(self)
         if not max_workers:
             max_workers = 1
@@ -149,17 +151,16 @@ class ProcessManager(Process):
         # Add new workers
         if not self.matches_remaining:
             return
-        #self.clean_pool()
         for _ in range(self.max_workers - len(self.processes)):
             try:
                 match_chunks = next(self.matches_generator)
-                p = Process(target=play_matches,
-                            args=(self.queue, match_chunks))
-                self.processes.append(p)
-                p.start()
             except StopIteration:
                 self.matches_remaining = False
                 break
+            p = Process(target=play_matches,
+                        args=(self.queue, match_chunks))
+            self.processes.append(p)
+            p.start()
 
     def run(self):
         """Pass all the required matches out to worker threads."""
@@ -179,7 +180,7 @@ def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
     if filename:
         outputfile = open(filename, 'w')
     else:
-        outputfile = NamedTemporaryFile()
+        outputfile = NamedTemporaryFile(mode='w')
         filename = outputfile.name
     qc = QueueConsumer(queue, outputfile=outputfile, interactions=return_dict)
     pm = ProcessManager(matches, queue_consumer=qc, max_workers=max_workers)
@@ -188,5 +189,3 @@ def play_matches_parallel(matches, queue=None, filename=None, max_workers=4):
     pm.join()
     qc.join()
     return ResultSetFromFile(filename)
-
-

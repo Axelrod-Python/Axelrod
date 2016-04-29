@@ -58,27 +58,28 @@ class Tournament(object):
                                             noise=self.noise,
                                             repetitions=self.repetitions,
                                             game=self.game)
-        self.interactions = play_matches_parallel(matches,
-                                                  filename=filename,
-                                                  max_workers=self._processes)
-        if self.interactions:
-            return self._build_result_set()
-        #else:
-            #return ResultSetFromFile(filename, with_morality=self._with_morality)
-
-    def _build_result_set(self):
-        """
-        Build the result set (used by the play method)
-
-        Returns
-        -------
-        axelrod.ResultSet
-        """
-        result_set = ResultSet(
-            players=self.players,
-            interactions=self.interactions,
-            with_morality=self._with_morality)
+        result_set = play_matches_parallel(matches,
+                                           filename=filename,
+                                           max_workers=self._processes)
         return result_set
+        #if self.interactions:
+            #return self._build_result_set()
+        ##else:
+            ##return ResultSetFromFile(filename, with_morality=self._with_morality)
+
+    #def _build_result_set(self):
+        #"""
+        #Build the result set (used by the play method)
+
+        #Returns
+        #-------
+        #axelrod.ResultSet
+        #"""
+        #result_set = ResultSet(
+            #players=self.players,
+            #interactions=self.interactions,
+            #with_morality=self._with_morality)
+        #return result_set
 
 
 class ProbEndTournament(Tournament):
@@ -139,8 +140,9 @@ class ProbEndTournament(Tournament):
                                             repetitions=self.repetitions,
                                             game=self.game,
                                             p=self.prob_end)
-        self.interactions = play_matches_parallel(matches,
-                                                  filename=filename,
-                                                  max_workers=self._processes)
-        if self.interactions:
-            self._build_result_set()
+        result_set = play_matches_parallel(matches,
+                                           filename=filename,
+                                           max_workers=self._processes)
+        #if self.interactions:
+            #self._build_result_set()
+        return result_set
