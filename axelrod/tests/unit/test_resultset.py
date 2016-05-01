@@ -354,9 +354,3 @@ class TestResultSetFromFile(unittest.TestCase):
                                  (0, 2): [[('C', 'D'), ('C', 'D')]],
                                  (1, 1): [[('C', 'C'), ('C', 'C')]]}
         self.assertEqual(rs.interactions, expected_interactions)
-
-    def test_string_to_interactions(self):
-        rs = axelrod.ResultSetFromFile(self.tmp_file.name)
-        string = 'CDCDDD'
-        interactions = [('C', 'D'), ('C', 'D'), ('D', 'D')]
-        self.assertEqual(rs._string_to_interactions(string), interactions)
