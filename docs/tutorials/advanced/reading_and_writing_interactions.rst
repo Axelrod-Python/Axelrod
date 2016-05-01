@@ -13,42 +13,78 @@ a :code:`filename` argument to the :code:`play` method of a tournament::
 This will create a file `basic_tournament.csv` with data that looks something
 like::
 
-    1,2,Anti Tit For Tat,Bully,CDCDCDCD,CDCDCDCD
-    4,7,Defector,Win-Stay Lose-Shift,DCDDDCDD,DCDDDCDD
-    0,0,Alternator,Alternator,CCDDCCDD,CCDDCCDD
-    6,6,Tit For Tat,Tit For Tat,CCCCCCCC,CCCCCCCC
-    4,5,Defector,Suspicious Tit For Tat,DDDDDDDD,DDDDDDDD
-    2,2,Bully,Bully,DDCCDDCC,DDCCDDCC
-    2,7,Bully,Win-Stay Lose-Shift,DCDDCCDC,DCDDCCDC
-    0,7,Alternator,Win-Stay Lose-Shift,CCDCCDDD,CCDCCDDD
-    4,6,Defector,Tit For Tat,DCDDDDDD,DCDDDDDD
-    5,6,Suspicious Tit For Tat,Tit For Tat,DCCDDCCD,DCCDDCCD
-    2,6,Bully,Tit For Tat,DCDDCDCC,DCDDCDCC
-    0,5,Alternator,Suspicious Tit For Tat,CDDCCDDC,CDDCCDDC
-    1,4,Anti Tit For Tat,Defector,CDCDCDCD,CDCDCDCD
-    3,7,Cooperator,Win-Stay Lose-Shift,CCCCCCCC,CCCCCCCC
-    0,4,Alternator,Defector,CDDDCDDD,CDDDCDDD
-    2,5,Bully,Suspicious Tit For Tat,DDCDCCDC,DDCDCCDC
-    5,7,Suspicious Tit For Tat,Win-Stay Lose-Shift,DCCDDDDC,DCCDDDDC
-    0,3,Alternator,Cooperator,CCDCCCDC,CCDCCCDC
-    3,5,Cooperator,Suspicious Tit For Tat,CDCCCCCC,CDCCCCCC
-    0,1,Alternator,Anti Tit For Tat,CCDDCCDD,CCDDCCDD
-    7,7,Win-Stay Lose-Shift,Win-Stay Lose-Shift,CCCCCCCC,CCCCCCCC
-    0,2,Alternator,Bully,CDDDCCDD,CDDDCCDD
-    3,3,Cooperator,Cooperator,CCCCCCCC,CCCCCCCC
-    6,7,Tit For Tat,Win-Stay Lose-Shift,CCCCCCCC,CCCCCCCC
-    0,6,Alternator,Tit For Tat,CCDCCDDC,CCDCCDDC
-    5,5,Suspicious Tit For Tat,Suspicious Tit For Tat,DDDDDDDD,DDDDDDDD
-    4,4,Defector,Defector,DDDDDDDD,DDDDDDDD
-    1,6,Anti Tit For Tat,Tit For Tat,CCDCDDCD,CCDCDDCD
-    1,1,Anti Tit For Tat,Anti Tit For Tat,CCDDCCDD,CCDDCCDD
-    1,5,Anti Tit For Tat,Suspicious Tit For Tat,CDCCDCDD,CDCCDCDD
-    3,6,Cooperator,Tit For Tat,CCCCCCCC,CCCCCCCC
-    1,7,Anti Tit For Tat,Win-Stay Lose-Shift,CCDCDDCC,CCDCDDCC
-    1,3,Anti Tit For Tat,Cooperator,CCDCDCDC,CCDCDCDC
-    2,3,Bully,Cooperator,DCDCDCDC,DCDCDCDC
-    3,4,Cooperator,Defector,CDCDCDCD,CDCDCDCD
-    2,4,Bully,Defector,DDCDCDCD,DDCDCDCD
+    1,2,Anti Tit For Tat,Bully,CDCDCDCD
+    1,2,Anti Tit For Tat,Bully,CDCDCDCD
+    4,7,Defector,Win-Stay Lose-Shift,DCDDDCDD
+    4,7,Defector,Win-Stay Lose-Shift,DCDDDCDD
+    0,0,Alternator,Alternator,CCDDCCDD
+    0,0,Alternator,Alternator,CCDDCCDD
+    6,6,Tit For Tat,Tit For Tat,CCCCCCCC
+    6,6,Tit For Tat,Tit For Tat,CCCCCCCC
+    4,5,Defector,Suspicious Tit For Tat,DDDDDDDD
+    4,5,Defector,Suspicious Tit For Tat,DDDDDDDD
+    2,2,Bully,Bully,DDCCDDCC
+    2,2,Bully,Bully,DDCCDDCC
+    2,7,Bully,Win-Stay Lose-Shift,DCDDCCDC
+    2,7,Bully,Win-Stay Lose-Shift,DCDDCCDC
+    0,7,Alternator,Win-Stay Lose-Shift,CCDCCDDD
+    0,7,Alternator,Win-Stay Lose-Shift,CCDCCDDD
+    4,6,Defector,Tit For Tat,DCDDDDDD
+    4,6,Defector,Tit For Tat,DCDDDDDD
+    5,6,Suspicious Tit For Tat,Tit For Tat,DCCDDCCD
+    5,6,Suspicious Tit For Tat,Tit For Tat,DCCDDCCD
+    2,6,Bully,Tit For Tat,DCDDCDCC
+    2,6,Bully,Tit For Tat,DCDDCDCC
+    0,5,Alternator,Suspicious Tit For Tat,CDDCCDDC
+    0,5,Alternator,Suspicious Tit For Tat,CDDCCDDC
+    1,4,Anti Tit For Tat,Defector,CDCDCDCD
+    1,4,Anti Tit For Tat,Defector,CDCDCDCD
+    3,7,Cooperator,Win-Stay Lose-Shift,CCCCCCCC
+    3,7,Cooperator,Win-Stay Lose-Shift,CCCCCCCC
+    0,4,Alternator,Defector,CDDDCDDD
+    0,4,Alternator,Defector,CDDDCDDD
+    2,5,Bully,Suspicious Tit For Tat,DDCDCCDC
+    2,5,Bully,Suspicious Tit For Tat,DDCDCCDC
+    5,7,Suspicious Tit For Tat,Win-Stay Lose-Shift,DCCDDDDC
+    5,7,Suspicious Tit For Tat,Win-Stay Lose-Shift,DCCDDDDC
+    0,3,Alternator,Cooperator,CCDCCCDC
+    0,3,Alternator,Cooperator,CCDCCCDC
+    3,5,Cooperator,Suspicious Tit For Tat,CDCCCCCC
+    3,5,Cooperator,Suspicious Tit For Tat,CDCCCCCC
+    0,1,Alternator,Anti Tit For Tat,CCDDCCDD
+    0,1,Alternator,Anti Tit For Tat,CCDDCCDD
+    7,7,Win-Stay Lose-Shift,Win-Stay Lose-Shift,CCCCCCCC
+    7,7,Win-Stay Lose-Shift,Win-Stay Lose-Shift,CCCCCCCC
+    0,2,Alternator,Bully,CDDDCCDD
+    0,2,Alternator,Bully,CDDDCCDD
+    3,3,Cooperator,Cooperator,CCCCCCCC
+    3,3,Cooperator,Cooperator,CCCCCCCC
+    6,7,Tit For Tat,Win-Stay Lose-Shift,CCCCCCCC
+    6,7,Tit For Tat,Win-Stay Lose-Shift,CCCCCCCC
+    0,6,Alternator,Tit For Tat,CCDCCDDC
+    0,6,Alternator,Tit For Tat,CCDCCDDC
+    5,5,Suspicious Tit For Tat,Suspicious Tit For Tat,DDDDDDDD
+    5,5,Suspicious Tit For Tat,Suspicious Tit For Tat,DDDDDDDD
+    4,4,Defector,Defector,DDDDDDDD
+    4,4,Defector,Defector,DDDDDDDD
+    1,6,Anti Tit For Tat,Tit For Tat,CCDCDDCD
+    1,6,Anti Tit For Tat,Tit For Tat,CCDCDDCD
+    1,1,Anti Tit For Tat,Anti Tit For Tat,CCDDCCDD
+    1,1,Anti Tit For Tat,Anti Tit For Tat,CCDDCCDD
+    1,5,Anti Tit For Tat,Suspicious Tit For Tat,CDCCDCDD
+    1,5,Anti Tit For Tat,Suspicious Tit For Tat,CDCCDCDD
+    3,6,Cooperator,Tit For Tat,CCCCCCCC
+    3,6,Cooperator,Tit For Tat,CCCCCCCC
+    1,7,Anti Tit For Tat,Win-Stay Lose-Shift,CCDCDDCC
+    1,7,Anti Tit For Tat,Win-Stay Lose-Shift,CCDCDDCC
+    1,3,Anti Tit For Tat,Cooperator,CCDCDCDC
+    1,3,Anti Tit For Tat,Cooperator,CCDCDCDC
+    2,3,Bully,Cooperator,DCDCDCDC
+    2,3,Bully,Cooperator,DCDCDCDC
+    3,4,Cooperator,Defector,CDCDCDCD
+    3,4,Cooperator,Defector,CDCDCDCD
+    2,4,Bully,Defector,DDCDCDCD
+    2,4,Bully,Defector,DDCDCDCD
 
 The columns of this file are of the form:
 
@@ -56,7 +92,10 @@ The columns of this file are of the form:
 2. Index of second player
 3. Name of first player
 4. Name of second player
-5. All further columns are interactions written in a compressed format.
+5. Interaction written in a compressed format
+
+Note that depending on the order in which the matches have been played, the rows
+could also be in a different order.
 
 Alternator versus TitForTat has the following interactions: :code:`CCDCCDDC`:
 
