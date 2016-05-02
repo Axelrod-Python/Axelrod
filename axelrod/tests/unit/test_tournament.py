@@ -235,26 +235,27 @@ class TestTournament(unittest.TestCase):
             processes=2)
         self.assertEqual(tournament._n_workers(), 2)
 
-    #def test_start_workers(self):
-        #workers = 2
-        #work_queue = Queue()
-        #done_queue = Queue()
-        #for repetition in range(self.test_repetitions):
-            #work_queue.put(repetition)
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #turns=200,
-            #repetitions=self.test_repetitions)
-        #tournament._start_workers(workers, work_queue, done_queue)
+    def test_start_workers(self):
+        workers = 2
+        work_queue = Queue()
+        done_queue = Queue()
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        chunks = tournament.match_generator.build_match_chunks()
+        for chunk in chunks:
+            work_queue.put(chunk)
+        tournament._start_workers(workers, work_queue, done_queue)
 
-        #stops = 0
-        #while stops < workers:
-            #payoffs = done_queue.get()
-            #if payoffs == 'STOP':
-                #stops += 1
-        #self.assertEqual(stops, workers)
+        stops = 0
+        while stops < workers:
+            payoffs = done_queue.get()
+            if payoffs == 'STOP':
+                stops += 1
+        self.assertEqual(stops, workers)
 
     #def test_process_done_queue(self):
         #workers = 2
