@@ -279,29 +279,31 @@ class TestTournament(unittest.TestCase):
         tournament._process_done_queue(workers, done_queue, filename=None)
         self.assertEqual(len(tournament.interactions), count)
 
-    #def test_worker(self):
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #turns=200,
-            #repetitions=self.test_repetitions)
+    def test_worker(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
 
-        #work_queue = Queue()
-        #for repetition in range(self.test_repetitions):
-            #work_queue.put(repetition)
-        #work_queue.put('STOP')
+        work_queue = Queue()
+        chunks = tournament.match_generator.build_match_chunks()
+        count = 0
+        for chunk in chunks:
+            work_queue.put(chunk)
+            count += 1
+        work_queue.put('STOP')
 
-        #done_queue = Queue()
-        #tournament._worker(work_queue, done_queue)
-        #for r in range(self.test_repetitions):
-            #new_matches = done_queue.get()
-            #self.assertEqual(len(new_matches), 15)
-            #for index_pair, match in new_matches.items():
-                #self.assertIsInstance(index_pair, tuple)
-                #self.assertIsInstance(match, list)
-        #queue_stop = done_queue.get()
-        #self.assertEqual(queue_stop, 'STOP')
+        done_queue = Queue()
+        tournament._worker(work_queue, done_queue)
+        for r in range(count):
+            new_matches = done_queue.get()
+            for index_pair, matches in new_matches.items():
+                self.assertIsInstance(index_pair, tuple)
+                self.assertEqual(len(matches), self.test_repetitions)
+        queue_stop = done_queue.get()
+        self.assertEqual(queue_stop, 'STOP')
 
     def test_build_result_set(self):
         tournament = axelrod.Tournament(
