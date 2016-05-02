@@ -290,41 +290,62 @@ class TestTournament(unittest.TestCase):
         results = tournament._build_result_set()
         self.assertIsInstance(results, axelrod.ResultSet)
 
-    # @given(turns=integers(min_value=1, max_value=200))
-    # @example(turns=3)
-    # @example(turns=200)
-    # def test_play_matches(self, turns):
-        # tournament = axelrod.Tournament(
-            # name=self.test_name,
-            # players=self.players,
-            # game=self.game,
-            # repetitions=self.test_repetitions)
+    @given(turns=integers(min_value=1, max_value=200))
+    @example(turns=3)
+    @example(turns=200)
+    def test_play_matches(self, turns):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            repetitions=self.test_repetitions)
 
-        # def make_generator():
-            # """Return a generator used by this method"""
-            # player_classes = [axelrod.Cooperator, axelrod.TitForTat,
-                              # axelrod.Defector, axelrod.Grudger]
-            # for i, player_cls in enumerate(player_classes):
-                # for j, opponent_cls in enumerate(player_classes):
-                    # if j >= i:  # These matches correspond to a round robin
-                        # players = (player_cls(), opponent_cls())
-                        # match = axelrod.Match(players, turns=turns)
-                        # yield ((i, j), match)
+        def make_chunk_generator():
+            """
+            A generator that returns player index pairs and match objects for a
+            round robin tournament.
 
-        # matches_generator = make_generator()
-        # interactions = tournament._play_matches(matches_generator)
+            Parameters
+            ----------
+            noise : float, 0
+                The probability that a player's intended action should be flipped
+            chunked : bool, False
+                Yield matches in chunks by repetition or not
 
-        # self.assertEqual(len(interactions), 10)
+            Yields
+            -------
+            tuples
+                ((player1 index, player2 index), match object)
+            """
+            for player1_index in range(len(self.players)):
+                for player2_index in range(player1_index, len(self.players)):
+                    index_pair = (player1_index, player2_index)
+                    match_params = (turns, self.game, None, 0)
+                    yield (index_pair, match_params, self.test_repetitions)
 
-        # for index_pair, inter in interactions.items():
-            # self.assertEqual(len(inter), turns)
-            # self.assertEqual(len(index_pair), 2)
-            # for plays in inter:
-                # self.assertIsInstance(plays, tuple)
-                # self.assertEqual(len(plays), 2)
+        chunk_generator = make_chunk_generator()
+        interactions = {}
+        for chunk in chunk_generator:
+            result = tournament._play_matches(chunk)
+            for index_pair, inters in result.items():
+                try:
+                    interactions[index_pair].append(inters)
+                except KeyError:
+                    interactions[index_pair] = [inters]
 
-        # # Check that matches no longer exist?
-        # self.assertEqual((len(list(matches_generator))), 0)
+        self.assertEqual(len(interactions), 15)
+
+        for index_pair, inter in interactions.items():
+            self.assertEqual(len(index_pair), 2)
+            for plays in inter:
+                # Check that have the expected number of repetitions
+                self.assertEqual(len(plays), self.test_repetitions)
+                for repetition in plays:
+                    # Check that have the correct length for each rep
+                    self.assertEqual(len(repetition), turns)
+
+        # Check that matches no longer exist
+        self.assertEqual((len(list(chunk_generator))), 0)
 
     def test_play_and_write_to_csv(self):
         tournament = axelrod.Tournament(
