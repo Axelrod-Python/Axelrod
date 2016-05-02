@@ -159,32 +159,6 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play().scores
         self.assertEqual(len(scores), len(players))
 
-    #def test_run_single_repetition(self):
-        #interactions = []
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #turns=200,
-            #repetitions=self.test_repetitions)
-        #tournament._run_single_repetition(interactions)
-        #self.assertEqual(len(tournament.interactions), 15)
-        #for repetitions in tournament.interactions.values():
-            #self.assertEqual(len(repetitions), 1)
-
-    #def test_run_serial_repetitions(self):
-        #interactions = []
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #turns=200,
-            #repetitions=self.test_repetitions)
-        #tournament._run_serial_repetitions(interactions)
-        #self.assertEqual(len(tournament.interactions), 15)
-        #for repetitions in tournament.interactions.values():
-            #self.assertEqual(len(repetitions), self.test_repetitions)
-
     def test_run_parallel(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
