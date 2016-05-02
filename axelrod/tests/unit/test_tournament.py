@@ -257,27 +257,27 @@ class TestTournament(unittest.TestCase):
                 stops += 1
         self.assertEqual(stops, workers)
 
-    #def test_process_done_queue(self):
-        #workers = 2
-        #done_queue = Queue()
-        #interactions = {}
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #turns=200,
-            #repetitions=self.test_repetitions)
-        #d = {}
-        #count = 0
-        #for i, _ in enumerate(self.players):
-            #for j, _ in enumerate(self.players):
-                #d[(i, j)] = []
-                #count += 1
-        #done_queue.put(d)
-        #for w in range(workers):
-            #done_queue.put('STOP')
-        #tournament._process_done_queue(workers, done_queue, interactions)
-        #self.assertEqual(len(interactions), count)
+    def test_process_done_queue(self):
+        workers = 2
+        done_queue = Queue()
+        interactions = {}
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+        d = {}
+        count = 0
+        for i, _ in enumerate(self.players):
+            for j, _ in enumerate(self.players):
+                d[(i, j)] = []
+                count += 1
+        done_queue.put(d)
+        for w in range(workers):
+            done_queue.put('STOP')
+        tournament._process_done_queue(workers, done_queue, filename=None)
+        self.assertEqual(len(tournament.interactions), count)
 
     #def test_worker(self):
         #tournament = axelrod.Tournament(
