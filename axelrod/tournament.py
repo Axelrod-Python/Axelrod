@@ -64,9 +64,9 @@ class Tournament(object):
         axelrod.ResultSet
         """
         if self._processes is None:
-            self._run_serial(self.interactions, filename)
+            self._run_serial(filename)
         else:
-            self._run_parallel(self.interactions, filename)
+            self._run_parallel(filename)
 
         if filename is None:
             self.result_set = self._build_result_set()
@@ -86,7 +86,7 @@ class Tournament(object):
             with_morality=self._with_morality)
         return result_set
 
-    def _run_serial(self, interactions, filename=None):
+    def _run_serial(self, filename=None):
         """
         Runs all repetitions of the round robin in serial.
 
@@ -127,7 +127,7 @@ class Tournament(object):
                     row.append(f(map(f, interaction)))
                     writer.writerow(row)
 
-    def _run_parallel(self, interactions, filename):
+    def _run_parallel(self, filename):
         """
         Run all except the first round robin using parallel processing.
 

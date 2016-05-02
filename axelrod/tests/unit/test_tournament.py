@@ -185,19 +185,18 @@ class TestTournament(unittest.TestCase):
         #for repetitions in tournament.interactions.values():
             #self.assertEqual(len(repetitions), self.test_repetitions)
 
-    #def test_run_parallel(self):
-        #interactions = {}
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #turns=200,
-            #repetitions=self.test_repetitions,
-            #processes=2)
-        #tournament._run_parallel(None, interactions)
-        #self.assertEqual(len(interactions), 15)
-        #for r in interactions.values():
-            #self.assertEqual(len(r), self.test_repetitions)
+    def test_run_parallel(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        tournament._run_parallel(None)
+        self.assertEqual(len(tournament.interactions), 15)
+        for r in tournament.interactions.values():
+            self.assertEqual(len(r), self.test_repetitions)
 
     def test_n_workers(self):
         max_processes = cpu_count()
