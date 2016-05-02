@@ -313,41 +313,41 @@ class TestTournament(unittest.TestCase):
         results = tournament._build_result_set()
         self.assertIsInstance(results, axelrod.ResultSet)
 
-    #@given(turns=integers(min_value=1, max_value=200))
-    #@example(turns=3)
-    #@example(turns=200)
-    #def test_play_matches(self, turns):
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #repetitions=self.test_repetitions)
+    # @given(turns=integers(min_value=1, max_value=200))
+    # @example(turns=3)
+    # @example(turns=200)
+    # def test_play_matches(self, turns):
+        # tournament = axelrod.Tournament(
+            # name=self.test_name,
+            # players=self.players,
+            # game=self.game,
+            # repetitions=self.test_repetitions)
 
-        #def make_generator():
-            #"""Return a generator used by this method"""
-            #player_classes = [axelrod.Cooperator, axelrod.TitForTat,
-                              #axelrod.Defector, axelrod.Grudger]
-            #for i, player_cls in enumerate(player_classes):
-                #for j, opponent_cls in enumerate(player_classes):
-                    #if j >= i:  # These matches correspond to a round robin
-                        #players = (player_cls(), opponent_cls())
-                        #match = axelrod.Match(players, turns=turns)
-                        #yield ((i, j), match)
+        # def make_generator():
+            # """Return a generator used by this method"""
+            # player_classes = [axelrod.Cooperator, axelrod.TitForTat,
+                              # axelrod.Defector, axelrod.Grudger]
+            # for i, player_cls in enumerate(player_classes):
+                # for j, opponent_cls in enumerate(player_classes):
+                    # if j >= i:  # These matches correspond to a round robin
+                        # players = (player_cls(), opponent_cls())
+                        # match = axelrod.Match(players, turns=turns)
+                        # yield ((i, j), match)
 
-        #matches_generator = make_generator()
-        #interactions = tournament._play_matches(matches_generator)
+        # matches_generator = make_generator()
+        # interactions = tournament._play_matches(matches_generator)
 
-        #self.assertEqual(len(interactions), 10)
+        # self.assertEqual(len(interactions), 10)
 
-        #for index_pair, inter in interactions.items():
-            #self.assertEqual(len(inter), turns)
-            #self.assertEqual(len(index_pair), 2)
-            #for plays in inter:
-                #self.assertIsInstance(plays, tuple)
-                #self.assertEqual(len(plays), 2)
+        # for index_pair, inter in interactions.items():
+            # self.assertEqual(len(inter), turns)
+            # self.assertEqual(len(index_pair), 2)
+            # for plays in inter:
+                # self.assertIsInstance(plays, tuple)
+                # self.assertEqual(len(plays), 2)
 
-        ## Check that matches no longer exist?
-        #self.assertEqual((len(list(matches_generator))), 0)
+        # # Check that matches no longer exist?
+        # self.assertEqual((len(list(matches_generator))), 0)
 
     def test_play_and_write_to_csv(self):
         tournament = axelrod.Tournament(
@@ -392,49 +392,49 @@ class TestTournament(unittest.TestCase):
                              [0, 2, 'Cooperator', 'Defector', 'CDCD']]
             self.assertEqual(sorted(written_data), sorted(expected_data))
 
-    #def test_write_to_csv(self):
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #turns=2,
-            #repetitions=2)
-        #tournament.play()
-        #tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        #tournament._write_to_csv(tmp_file.name)
-        #with open(tmp_file.name, 'r') as f:
-            #written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
-            #expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CCCC'],
-                             #[0, 1, 'Cooperator', 'Tit For Tat', 'CCCC'],
-                             #[1, 2, 'Tit For Tat', 'Defector', 'CDDD'],
-                             #[1, 2, 'Tit For Tat', 'Defector', 'CDDD'],
-                             #[0, 0, 'Cooperator', 'Cooperator', 'CCCC'],
-                             #[0, 0, 'Cooperator', 'Cooperator', 'CCCC'],
-                             #[3, 3, 'Grudger', 'Grudger', 'CCCC'],
-                             #[3, 3, 'Grudger', 'Grudger', 'CCCC'],
-                             #[2, 2, 'Defector', 'Defector', 'DDDD'],
-                             #[2, 2, 'Defector', 'Defector', 'DDDD'],
-                             #[4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CCCC'],
-                             #[4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CCCC'],
-                             #[1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CCCC'],
-                             #[1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CCCC'],
-                             #[1, 1, 'Tit For Tat', 'Tit For Tat', 'CCCC'],
-                             #[1, 1, 'Tit For Tat', 'Tit For Tat', 'CCCC'],
-                             #[1, 3, 'Tit For Tat', 'Grudger', 'CCCC'],
-                             #[1, 3, 'Tit For Tat', 'Grudger', 'CCCC'],
-                             #[2, 3, 'Defector', 'Grudger', 'DCDD'],
-                             #[2, 3, 'Defector', 'Grudger', 'DCDD'],
-                             #[0, 4, 'Cooperator', 'Soft Go By Majority', 'CCCC'],
-                             #[0, 4, 'Cooperator', 'Soft Go By Majority', 'CCCC'],
-                             #[2, 4, 'Defector', 'Soft Go By Majority', 'DCDD'],
-                             #[2, 4, 'Defector', 'Soft Go By Majority', 'DCDD'],
-                             #[0, 3, 'Cooperator', 'Grudger', 'CCCC'],
-                             #[0, 3, 'Cooperator', 'Grudger', 'CCCC'],
-                             #[3, 4, 'Grudger', 'Soft Go By Majority', 'CCCC'],
-                             #[3, 4, 'Grudger', 'Soft Go By Majority', 'CCCC'],
-                             #[0, 2, 'Cooperator', 'Defector', 'CDCD'],
-                             #[0, 2, 'Cooperator', 'Defector', 'CDCD']]
-            #self.assertEqual(sorted(written_data), sorted(expected_data))
+    def test_write_to_csv(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=2,
+            repetitions=2)
+        tournament.play()
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        tournament._write_to_csv(tmp_file.name, tournament.interactions)
+        with open(tmp_file.name, 'r') as f:
+            written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
+            expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CCCC'],
+                             [0, 1, 'Cooperator', 'Tit For Tat', 'CCCC'],
+                             [1, 2, 'Tit For Tat', 'Defector', 'CDDD'],
+                             [1, 2, 'Tit For Tat', 'Defector', 'CDDD'],
+                             [0, 0, 'Cooperator', 'Cooperator', 'CCCC'],
+                             [0, 0, 'Cooperator', 'Cooperator', 'CCCC'],
+                             [3, 3, 'Grudger', 'Grudger', 'CCCC'],
+                             [3, 3, 'Grudger', 'Grudger', 'CCCC'],
+                             [2, 2, 'Defector', 'Defector', 'DDDD'],
+                             [2, 2, 'Defector', 'Defector', 'DDDD'],
+                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CCCC'],
+                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CCCC'],
+                             [1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CCCC'],
+                             [1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CCCC'],
+                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CCCC'],
+                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CCCC'],
+                             [1, 3, 'Tit For Tat', 'Grudger', 'CCCC'],
+                             [1, 3, 'Tit For Tat', 'Grudger', 'CCCC'],
+                             [2, 3, 'Defector', 'Grudger', 'DCDD'],
+                             [2, 3, 'Defector', 'Grudger', 'DCDD'],
+                             [0, 4, 'Cooperator', 'Soft Go By Majority', 'CCCC'],
+                             [0, 4, 'Cooperator', 'Soft Go By Majority', 'CCCC'],
+                             [2, 4, 'Defector', 'Soft Go By Majority', 'DCDD'],
+                             [2, 4, 'Defector', 'Soft Go By Majority', 'DCDD'],
+                             [0, 3, 'Cooperator', 'Grudger', 'CCCC'],
+                             [0, 3, 'Cooperator', 'Grudger', 'CCCC'],
+                             [3, 4, 'Grudger', 'Soft Go By Majority', 'CCCC'],
+                             [3, 4, 'Grudger', 'Soft Go By Majority', 'CCCC'],
+                             [0, 2, 'Cooperator', 'Defector', 'CDCD'],
+                             [0, 2, 'Cooperator', 'Defector', 'CDCD']]
+            self.assertEqual(sorted(written_data), sorted(expected_data))
 
 
 class TestProbEndTournament(unittest.TestCase):
