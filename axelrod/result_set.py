@@ -716,12 +716,3 @@ class ResultSetFromFile(ResultSet):
         for i in range(len(players_d)):
             players.append(players_d[i])
         return players, interactions
-
-    def _string_to_interactions(self, string):
-        """
-        Converts a compact string representation of an interaction to an
-        interaction:
-
-        'CDCDDD' -> [('C', 'D'), ('C', 'D'), ('D', 'D')]
-        """
-        return iu.string_to_interactions(string)

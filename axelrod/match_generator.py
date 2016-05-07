@@ -59,7 +59,7 @@ class RoundRobinMatches(MatchGenerator):
 
     clone_opponents = True
 
-    def build_match_chunks(self, noise=0, chunked=True):
+    def build_match_chunks(self, noise=0):
         """
         A generator that returns player index pairs and match objects for a
         round robin tournament.
@@ -68,8 +68,6 @@ class RoundRobinMatches(MatchGenerator):
         ----------
         noise : float, 0
             The probability that a player's intended action should be flipped
-        chunked : bool, False
-            Yield matches in chunks by repetition or not
 
         Yields
         -------
@@ -87,14 +85,15 @@ class RoundRobinMatches(MatchGenerator):
         return (self.turns, self.game, None, noise)
 
     def __len__(self):
+        """Calculates the number of matches."""
         n = len(self.players)
         num_matches = n * (n + 1) / 2 + n
         return num_matches
 
     def estimated_size(self):
+        """Estimate of the number of actions that will be saved."""
         size = self.__len__() * self.turns * self.repetitions
         return size
-
 
 
 class ProbEndRoundRobinMatches(RoundRobinMatches):
@@ -164,6 +163,6 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             return 1
 
     def estimated_size(self):
-        # Rough estimate
+        """Rough estimate of the number of actions that will be saved."""
         size = self.__len__() * (1. / self.prob_end) * self.repetitions
         return size
