@@ -1,9 +1,12 @@
 from __future__ import absolute_import
 
+import csv
 from collections import defaultdict
 import logging
+from tempfile import NamedTemporaryFile
+
 from multiprocess import Process, Queue, cpu_count
-import csv
+
 
 from .game import Game
 from .result_set import ResultSet
@@ -15,7 +18,7 @@ class Tournament(object):
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
-                 processes=None, noise=0, with_morality=True):
+                 processes=None, noise=0, with_morality=True, filename=None):
         """
         Parameters
         ----------
@@ -53,7 +56,16 @@ class Tournament(object):
         self._logger = logging.getLogger(__name__)
         self.interactions = defaultdict(list)
 
-    def play(self, filename=None):
+        if not filename:
+            outputfile = NamedTemporaryFile(mode='w')
+            self.writer = csv.writer(outputfile)
+            filename = outputfile.name
+        else:
+            self.writer = csv.writer(open(filename, 'w'))
+        self.filename = filename
+
+
+    def play(self):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -62,13 +74,9 @@ class Tournament(object):
         axelrod.ResultSet
         """
         if self._processes is None:
-            self._run_serial(filename)
+            self._run_serial()
         else:
-            self._run_parallel(filename)
-
-        if filename is None:
-            self.result_set = self._build_result_set()
-            return self.result_set
+            self._run_parallel()
 
     def _build_result_set(self):
         """
@@ -78,13 +86,19 @@ class Tournament(object):
         -------
         axelrod.ResultSet
         """
-        result_set = ResultSet(
-            players=self.players,
-            interactions=self.interactions,
+        #result_set = ResultSet(
+            #players=self.players,
+            #interactions=self.interactions,
+            #with_morality=self._with_morality)
+        #return result_set
+
+        result_set = ResultSetFromFile(
+            filename=self.filename,
             with_morality=self._with_morality)
         return result_set
 
-    def _run_serial(self, filename=None):
+
+    def _run_serial(self):
         """
         Runs all repetitions of the round robin in serial.
 
@@ -97,35 +111,30 @@ class Tournament(object):
 
         for chunk in chunks:
             interactions = self._play_matches(chunk)
-            self._write_interactions(filename, interactions)
+            self._write_interactions(interactions)
         return True
 
-    def _write_interactions(self, filename, interactions):
+    def _write_interactions(self, interactions):
         """Either write to memory or to file"""
-        if filename:
-            self._write_to_csv(filename, interactions)
-        else:
-            self._write_to_memory(interactions)
+        self._write_to_csv(interactions)
 
     def _write_to_memory(self, interactions):
         """Write the given interactions to the interactions attribute"""
         for index_pair, interactions in interactions.items():
             self.interactions[index_pair].extend(interactions)
 
-    def _write_to_csv(self, filename, results):
+    def _write_to_csv(self, results):
         """Write the interactions to csv."""
         f = lambda x: "".join(x)
-        with open(filename, 'a') as csvfile:
-            writer = csv.writer(csvfile)
-            for index_pair, interactions in results.items():
-                for interaction in interactions:
-                    row = list(index_pair)
-                    row.append(str(self.players[index_pair[0]]))
-                    row.append(str(self.players[index_pair[1]]))
-                    row.append(f(map(f, interaction)))
-                    writer.writerow(row)
+        for index_pair, interactions in results.items():
+            for interaction in interactions:
+                row = list(index_pair)
+                row.append(str(self.players[index_pair[0]]))
+                row.append(str(self.players[index_pair[1]]))
+                row.append(f(map(f, interaction)))
+                self.writer.writerow(row)
 
-    def _run_parallel(self, filename):
+    def _run_parallel(self):
         """
         Run all except the first round robin using parallel processing.
 
@@ -148,7 +157,7 @@ class Tournament(object):
             work_queue.put(chunk)
 
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, filename)
+        self._process_done_queue(workers, done_queue)
 
         return True
 
@@ -186,7 +195,7 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, filename):
+    def _process_done_queue(self, workers, done_queue):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -206,7 +215,7 @@ class Tournament(object):
             if results == 'STOP':
                 stops += 1
             else:
-                self._write_interactions(filename, results)
+                self._write_interactions(results)
         return True
 
     def _worker(self, work_queue, done_queue):
