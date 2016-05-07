@@ -1,9 +1,10 @@
+from collections import defaultdict
 import csv
-from . import eigen
-
-import axelrod.interaction_utils as iu
 
 from numpy import mean, nanmedian, std
+
+from . import eigen
+import axelrod.interaction_utils as iu
 
 try:
     # Python 2
@@ -650,16 +651,8 @@ class ResultSet(object):
 
 
 class ResultSetFromFile(ResultSet):
-    """A class to hold the results of a tournament.
-
-    Initialised by a csv file of the format:
-
-
-    [p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
-    ...]
-    [0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...]
-    [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
-    [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
+    """A class to hold the results of a tournament. Reads in a CSV file produced
+    by the tournament class.
     """
 
     def __init__(self, filename, with_morality=True):
@@ -683,17 +676,17 @@ class ResultSetFromFile(ResultSet):
         """
         Reads from a csv file of the format:
 
-        p1index, p2index, p1name, p2name, interaction
+        p1index, p2index, p1name, p2name, history1, history2
         ...
-        0, 1, Defector, Cooperator, DCDCDC
-        0, 1, Defector, Cooperator, DCDCDC
-        0, 1, Defector, Cooperator, DCDCDC
-        0, 2, Defector, Alternator, DCDDDC
-        0, 2, Defector, Alternator, DCDDDC
-        0, 2, Defector, Alternator, DCDDDC
-        1, 2, Cooperator, Alternator, CCCDCC
-        1, 2, Cooperator, Alternator, CCCDCC
-        1, 2, Cooperator, Alternator, CCCDCC
+        0, 1, Defector, Cooperator, DDD, CCC
+        0, 1, Defector, Cooperator, DDD, CCC
+        0, 1, Defector, Cooperator, DDD, CCC
+        0, 2, Defector, Alternator, DDD, CDC
+        0, 2, Defector, Alternator, DDD, CDC
+        0, 2, Defector, Alternator, DDD, CDC
+        1, 2, Cooperator, Alternator, CCC, CDC
+        1, 2, Cooperator, Alternator, CCC, CDC
+        1, 2, Cooperator, Alternator, CCC, CDC
 
         Returns
         -------
@@ -703,17 +696,14 @@ class ResultSetFromFile(ResultSet):
                 - Second element: interactions (list of dictionaries mapping
                   index indices to interactions)
         """
-        interactions = {}
+        interactions = defaultdict(list)
         players_d = {}
         with open(filename, 'r') as f:
             for row in csv.reader(f):
                 index_pair = (int(row[0]), int(row[1]))
-                interaction = self._string_to_interactions(row[4])
-                try:
-                    interactions[index_pair].append(interaction)
-                except KeyError:
-                    interactions[index_pair] = [interaction]
                 players = (row[2], row[3])
+                interaction = list(zip(row[4], row[5]))
+                interactions[index_pair].append(interaction)
                 # Build a dictionary mapping indices to players
                 # This is temporary to make sure the ordering of the players
                 # matches the indices

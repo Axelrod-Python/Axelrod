@@ -9,7 +9,7 @@ from multiprocess import Process, Queue, cpu_count
 
 
 from .game import Game
-from .result_set import ResultSet
+from .result_set import ResultSet, ResultSetFromFile
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
 from .match import Match
 
@@ -77,6 +77,7 @@ class Tournament(object):
             self._run_serial()
         else:
             self._run_parallel()
+        return self._build_result_set()
 
     def _build_result_set(self):
         """
@@ -96,7 +97,6 @@ class Tournament(object):
             filename=self.filename,
             with_morality=self._with_morality)
         return result_set
-
 
     def _run_serial(self):
         """
@@ -125,13 +125,15 @@ class Tournament(object):
 
     def _write_to_csv(self, results):
         """Write the interactions to csv."""
-        f = lambda x: "".join(x)
         for index_pair, interactions in results.items():
             for interaction in interactions:
                 row = list(index_pair)
                 row.append(str(self.players[index_pair[0]]))
                 row.append(str(self.players[index_pair[1]]))
-                row.append(f(map(f, interaction)))
+                history1 = "".join([i[0] for i in interaction])
+                history2 = "".join([i[1] for i in interaction])
+                row.append(history1)
+                row.append(history2)
                 self.writer.writerow(row)
 
     def _run_parallel(self):
