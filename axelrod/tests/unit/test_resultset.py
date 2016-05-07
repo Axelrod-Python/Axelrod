@@ -329,14 +329,15 @@ class TestResultSet(unittest.TestCase):
 
 
 class TestResultSetFromFile(unittest.TestCase):
+    tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
     tournament = axelrod.Tournament(
         players=[axelrod.Cooperator(),
                  axelrod.TitForTat(),
                  axelrod.Defector()],
         turns=2,
-        repetitions=1)
-    tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-    tournament.play(filename=tmp_file.name)
+        repetitions=1,
+        filename=tmp_file.name)
+    tournament.play()
     tmp_file.close()
 
 

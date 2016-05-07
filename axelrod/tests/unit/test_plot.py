@@ -65,14 +65,15 @@ class TestPlot(unittest.TestCase):
         self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
 
     def test_init_from_resulsetfromfile(self):
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         tournament = axelrod.Tournament(
             players=[axelrod.Cooperator(),
                      axelrod.TitForTat(),
                      axelrod.Defector()],
             turns=2,
-            repetitions=2)
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        tournament.play(filename=tmp_file.name)
+            repetitions=2,
+            filename=tmp_file.name)
+        tournament.play()
         tmp_file.close()
         rs = axelrod.ResultSetFromFile(tmp_file.name)
 

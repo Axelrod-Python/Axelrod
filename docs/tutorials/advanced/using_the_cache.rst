@@ -65,25 +65,8 @@ We can write the cache to file::
 Caching a Tournament
 --------------------
 
-We can use a prebuilt cache in a tournament (by default a new cache is used). Firstly,
-let us read in the previous cache from file::
-
-    >>> cache = axl.DeterministicCache("cache.txt")
-    >>> cache  # doctest: +ELLIPSIS
-    {(<class 'axelrod.strategies.gobymajority.GoByMajority'>, <class 'axelrod.strategies.alternator.Alternator'>, 200): [('C', 'C'), ...]}
-
-Let us create a tournament including :code:`GoByMajority` and :code:`Alternator`
-to be able to make use of the cache::
-
-    >>> players = [axl.GoByMajority(), axl.Alternator(), axl.Cooperator()]
-    >>> tournament = axl.Tournament(players, turns=200, repetitions=5, deterministic_cache=cache)
-    >>> results = tournament.play()
-
-The cache has not only been used for this but has now also been updated with the
-new matches::
-
-    >>> len(cache)
-    6
+Tournaments will automatically create caches as needed on a match by match
+basis.
 
 Caching a Moran Process
 -----------------------

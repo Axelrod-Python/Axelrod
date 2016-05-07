@@ -57,13 +57,12 @@ class Tournament(object):
         self.interactions = defaultdict(list)
 
         if not filename:
-            outputfile = NamedTemporaryFile(mode='w')
-            self.writer = csv.writer(outputfile)
-            filename = outputfile.name
+            self.outputfile = NamedTemporaryFile(mode='w')
+            filename = self.outputfile.name
         else:
-            self.writer = csv.writer(open(filename, 'w'))
+            self.outputfile = open(filename, 'w')
+        self.writer = csv.writer(self.outputfile)
         self.filename = filename
-
 
     def play(self):
         """
@@ -77,6 +76,8 @@ class Tournament(object):
             self._run_serial()
         else:
             self._run_parallel()
+        # Make sure that python has finished writing to disk
+        self.outputfile.flush()
         return self._build_result_set()
 
     def _build_result_set(self):
@@ -97,15 +98,11 @@ class Tournament(object):
             filename=self.filename,
             with_morality=self._with_morality)
         return result_set
+        self.outputfile.close()
 
     def _run_serial(self):
         """
         Runs all repetitions of the round robin in serial.
-
-        Parameters
-        ----------
-        ineractions : list
-            The list of interactions per repetition to update with results
         """
         chunks = self.match_generator.build_match_chunks()
 
