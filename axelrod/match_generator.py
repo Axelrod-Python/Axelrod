@@ -86,6 +86,16 @@ class RoundRobinMatches(MatchGenerator):
         """Create a single match for a given pair"""
         return (self.turns, self.game, None, noise)
 
+    def __len__(self):
+        n = len(self.players)
+        num_matches = n * (n + 1) / 2 + n
+        return num_matches
+
+    def estimated_size(self):
+        size = self.__len__() * self.turns * self.repetitions
+        return size
+
+
 
 class ProbEndRoundRobinMatches(RoundRobinMatches):
 
@@ -152,3 +162,8 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             return float("inf")
         except ValueError:
             return 1
+
+    def estimated_size(self):
+        # Rough estimate
+        size = self.__len__() * (1. / self.prob_end) * self.repetitions
+        return size
