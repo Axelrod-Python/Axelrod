@@ -15,7 +15,7 @@ class Tournament(object):
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
-                 processes=None, chunk_size=100, noise=0, with_morality=True):
+                 processes=None, noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -33,8 +33,6 @@ class Tournament(object):
             The number of times the round robin should be repeated
         processes : integer
             The number of processes to be used for parallel processing
-        chunk_size : integer the size of the chunks of matches to be generated.
-            Mainly relevant for large tournaments and parallel processing.
         noise : float
             The probability that a player's intended action should be flipped
         with_morality : boolean
