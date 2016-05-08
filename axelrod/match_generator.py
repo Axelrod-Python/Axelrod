@@ -1,5 +1,6 @@
-import random
+from __future__ import division
 from math import ceil, log
+import random
 
 from .match import Match
 
@@ -87,7 +88,7 @@ class RoundRobinMatches(MatchGenerator):
     def __len__(self):
         """Calculates the number of matches."""
         n = len(self.players)
-        num_matches = n * (n + 1) / 2 + n
+        num_matches = int(n * (n + 1) // 2 + n)
         return num_matches
 
     def estimated_size(self):

@@ -88,17 +88,11 @@ class Tournament(object):
         -------
         axelrod.ResultSet
         """
-        #result_set = ResultSet(
-            #players=self.players,
-            #interactions=self.interactions,
-            #with_morality=self._with_morality)
-        #return result_set
-
         result_set = ResultSetFromFile(
             filename=self.filename,
             with_morality=self._with_morality)
+        #self.outputfile.close()
         return result_set
-        self.outputfile.close()
 
     def _run_serial(self):
         """
@@ -114,11 +108,6 @@ class Tournament(object):
     def _write_interactions(self, interactions):
         """Either write to memory or to file"""
         self._write_to_csv(interactions)
-
-    def _write_to_memory(self, interactions):
-        """Write the given interactions to the interactions attribute"""
-        for index_pair, interactions in interactions.items():
-            self.interactions[index_pair].extend(interactions)
 
     def _write_to_csv(self, results):
         """Write the interactions to csv."""

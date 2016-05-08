@@ -1,8 +1,11 @@
+from __future__ import division
 import unittest
-import axelrod
 
 from hypothesis import given, example
 from hypothesis.strategies import floats, random_module, integers
+
+import axelrod
+
 
 test_strategies = [
     axelrod.Cooperator,
@@ -84,6 +87,15 @@ class TestRoundRobin(unittest.TestCase):
         expected_match_definitions = [(i, j, repetitions) for i in range(5) for j in range(i, 5)]
 
         self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
+
+    def test_len(self):
+        turns = 5
+        repetitions = 10
+        rr = axelrod.RoundRobinMatches(self.players, turns=turns, game=None,
+                                       repetitions=repetitions)
+        n = len(self.players)
+        self.assertEqual(int(n * (n + 1) // 2 + n), len(rr))
+        self.assertEqual(rr.estimated_size(), len(rr) * turns * repetitions)
 
 class TestProbEndRoundRobin(unittest.TestCase):
 
