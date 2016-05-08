@@ -64,7 +64,7 @@ class RoundRobinMatches(MatchGenerator):
         A generator that returns player index pairs and match parameters for a
         round robin tournament.
 
-        Parameters
+        parameters
         ----------
         noise : float, 0
             The probability that a player's intended action should be flipped
@@ -81,7 +81,14 @@ class RoundRobinMatches(MatchGenerator):
                 yield (index_pair, match_params, self.repetitions)
 
     def build_single_match_params(self, noise=0):
-        """Creates a single set of match parameters."""
+        """
+        Creates a single set of match parameters.
+
+        parameters
+        ----------
+        noise : float, 0
+            The probability that a player's intended action should be flipped
+        """
         cache = None
         return (self.turns, self.game, cache, noise)
 
@@ -96,7 +103,7 @@ class RoundRobinMatches(MatchGenerator):
         return num_matches
 
     def estimated_size(self):
-        """Estimate of the number of actions that will be saved."""
+        """Rough estimate of the number of matches that will be generated."""
         size = self.__len__() * self.turns * self.repetitions
         return size
 
@@ -127,7 +134,14 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         self.prob_end = prob_end
 
     def build_single_match_params(self, noise=0):
-        """Create a single match for a given pair"""
+        """
+        Creates a single set of match parameters.
+
+        parameters
+        ----------
+        noise : float, 0
+            The probability that a player's intended action should be flipped
+        """
         return (self.sample_length(self.prob_end), self.game, None, noise)
 
     def sample_length(self, prob_end):
@@ -168,6 +182,6 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             return 1
 
     def estimated_size(self):
-        """Rough estimate of the number of actions that will be saved."""
+        """Rough estimate of the number of matches that will be generated."""
         size = self.__len__() * (1. / self.prob_end) * self.repetitions
         return size

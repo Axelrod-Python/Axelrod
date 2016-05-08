@@ -70,6 +70,13 @@ class Tournament(object):
         """
         Plays the tournament and passes the results to the ResultSet class
 
+        Parameters
+        ----------
+        build_results : bool
+            whether or not to build a results st
+        filename : string
+            name of output file
+
         Returns
         -------
         axelrod.ResultSet
@@ -101,9 +108,7 @@ class Tournament(object):
         return result_set
 
     def _run_serial(self):
-        """
-        Runs all repetitions of the round robin in serial.
-        """
+        """Run all matches in serial"""
         chunks = self.match_generator.build_match_chunks()
 
         for chunk in chunks:
@@ -125,14 +130,7 @@ class Tournament(object):
                 self.writer.writerow(row)
 
     def _run_parallel(self):
-        """
-        Run all except the first round robin using parallel processing.
-
-        Parameters
-        ----------
-        interactions : list
-            The list of interactions per repetition to update with results
-        """
+        """Run all matches in parallel"""
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
@@ -225,12 +223,12 @@ class Tournament(object):
 
     def _play_matches(self, chunk):
         """
-        Play the supplied matches.
+        Play matches in a given chunk.
 
         Parameters
         ----------
-        matches : generator
-            Generator of tuples: player index pair, match
+        chunk : tuple (index pair, match_parameters, repetitions)
+            match_parameters are also a tuple: (turns, game, noise)
 
         Returns
         -------

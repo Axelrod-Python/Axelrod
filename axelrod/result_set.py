@@ -693,8 +693,8 @@ class ResultSetFromFile(ResultSet):
 
             A tuple:
                 - First element: list of player names
-                - Second element: interactions (list of dictionaries mapping
-                  index indices to interactions)
+                - Second element: interactions (a dictionary mapping player pair
+                  indices to lists of histories)
         """
         interactions = defaultdict(list)
         players_d = {}

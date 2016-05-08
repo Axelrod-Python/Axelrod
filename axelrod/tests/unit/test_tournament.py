@@ -88,8 +88,18 @@ class TestTournament(unittest.TestCase):
             turns=10,
             repetitions=1)
         with warnings.catch_warnings(record=True) as w:
+            # Check that a warning is raised if no results set is built and no
+            # filename given
             results = tournament.play(build_results=False)
             self.assertEqual(len(w), 1)
+
+        with warnings.catch_warnings(record=True) as w:
+            # Check that no warning is raised if no results set is built and no
+            # filename given
+            tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+            results = tournament.play(build_results=False,
+                                      filename=tmp_file.name)
+            self.assertEqual(len(w), 0)
 
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
@@ -297,6 +307,22 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions)
         results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+    def test_no_build_result_set(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        results = tournament.play(build_results=False, filename=tmp_file.name)
+        self.assertIsNone(results)
+
+        # Checking that results were written properly
+        results = axelrod.ResultSetFromFile(tmp_file.name)
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(turns=integers(min_value=1, max_value=200))
