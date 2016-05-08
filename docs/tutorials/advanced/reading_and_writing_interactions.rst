@@ -7,8 +7,8 @@ a :code:`filename` argument to the :code:`play` method of a tournament::
 
     >>> import axelrod as axl
     >>> players = [s() for s in axl.basic_strategies]
-    >>> tournament = axl.Tournament(players, turns=4, repetitions=2, filename="basic_tournament.csv")
-    >>> results = tournament.play()
+    >>> tournament = axl.Tournament(players, turns=4, repetitions=2)
+    >>> results = tournament.play(filename="basic_tournament.csv")
 
 This will create a file `basic_tournament.csv` with data that looks something
 like::

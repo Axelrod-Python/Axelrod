@@ -335,9 +335,8 @@ class TestResultSetFromFile(unittest.TestCase):
                  axelrod.TitForTat(),
                  axelrod.Defector()],
         turns=2,
-        repetitions=1,
-        filename=tmp_file.name)
-    tournament.play()
+        repetitions=1)
+    tournament.play(filename=tmp_file.name)
     tmp_file.close()
 
 

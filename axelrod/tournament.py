@@ -3,22 +3,22 @@ from __future__ import absolute_import
 import csv
 from collections import defaultdict
 import logging
-from tempfile import NamedTemporaryFile
-
 from multiprocessing import Process, Queue, cpu_count
-
+from tempfile import NamedTemporaryFile
+import warnings
 
 from .game import Game
-from .result_set import ResultSet, ResultSetFromFile
-from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
 from .match import Match
+from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
+from .result_set import ResultSet, ResultSetFromFile
+
 
 class Tournament(object):
     game = Game()
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
-                 processes=None, noise=0, with_morality=True, filename=None):
+                 processes=None, noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -51,20 +51,22 @@ class Tournament(object):
         self.match_generator = match_generator(players, turns, self.game,
                                                self.repetitions)
         self._with_morality = with_morality
-        self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self.interactions = defaultdict(list)
 
-        if not filename:
+    def setup_output_file(self, filename=None):
+        """Open a CSV writer for tournament output."""
+        if filename:
+            self.outputfile = open(filename, 'a')
+        else:
+            # Setup a temporary file
             self.outputfile = NamedTemporaryFile(mode='w')
             filename = self.outputfile.name
-        else:
-            self.outputfile = open(filename, 'w')
         self.writer = csv.writer(self.outputfile)
+        # Save filename for loading ResultSet later
         self.filename = filename
 
-    def play(self):
+    def play(self, build_results=True, filename=None):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -72,13 +74,18 @@ class Tournament(object):
         -------
         axelrod.ResultSet
         """
+        self.setup_output_file(filename)
+        if build_results and not filename:
+            warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
+            pass
         if self._processes is None:
             self._run_serial()
         else:
             self._run_parallel()
         # Make sure that python has finished writing to disk
         self.outputfile.flush()
-        return self._build_result_set()
+        if build_results:
+            return self._build_result_set()
 
     def _build_result_set(self):
         """

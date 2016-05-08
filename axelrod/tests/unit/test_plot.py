@@ -71,9 +71,8 @@ class TestPlot(unittest.TestCase):
                      axelrod.TitForTat(),
                      axelrod.Defector()],
             turns=2,
-            repetitions=2,
-            filename=tmp_file.name)
-        tournament.play()
+            repetitions=2)
+        tournament.play(filename=tmp_file.name)
         tmp_file.close()
         rs = axelrod.ResultSetFromFile(tmp_file.name)
 

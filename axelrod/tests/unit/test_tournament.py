@@ -74,7 +74,6 @@ class TestTournament(unittest.TestCase):
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.noise, 0.2)
-        self.assertEqual(tournament._parallel_repetitions, 10)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
@@ -331,9 +330,8 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=2,
-            repetitions=2,
-            filename=tmp_file.name)
-        tournament.play()
+            repetitions=2)
+        tournament.play(filename=tmp_file.name)
         tmp_file.close()
         with open(tmp_file.name, 'r') as f:
             written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
@@ -397,7 +395,6 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.noise, 0.2)
-        self.assertEqual(tournament._parallel_repetitions, 10)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 

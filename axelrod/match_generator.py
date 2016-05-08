@@ -83,7 +83,8 @@ class RoundRobinMatches(MatchGenerator):
 
     def build_single_match_params(self, noise=0):
         """Create a single match for a given pair"""
-        return (self.turns, self.game, None, noise)
+        cache = None
+        return (self.turns, self.game, cache, noise)
 
     def __len__(self):
         """Calculates the number of matches."""
