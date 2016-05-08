@@ -5,7 +5,7 @@ from collections import defaultdict
 import logging
 from tempfile import NamedTemporaryFile
 
-from multiprocess import Process, Queue, cpu_count
+from multiprocessing import Process, Queue, cpu_count
 
 
 from .game import Game

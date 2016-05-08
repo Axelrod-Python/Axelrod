@@ -2,7 +2,7 @@
 
 import axelrod
 import logging
-from multiprocess import Queue, cpu_count
+from multiprocessing import Queue, cpu_count
 import unittest
 import random
 
@@ -357,6 +357,7 @@ class TestTournament(unittest.TestCase):
             repetitions=2,
             filename=tmp_file.name)
         tournament.play()
+        tmp_file.close()
         with open(tmp_file.name, 'r') as f:
             written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
             expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
