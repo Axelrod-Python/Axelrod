@@ -131,7 +131,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(players))
-        self.assertEqual(results.players, players)
+        self.assertEqual(results.players, [str(p) for p in players])
 
     def test_parallel_play(self):
         # Test that we get an instance of ResultSet
@@ -364,7 +364,7 @@ class TestTournament(unittest.TestCase):
                              [1, 2, 'Tit For Tat', 'Defector', 'CD', 'DD'],
                              [1, 2, 'Tit For Tat', 'Defector', 'CD', 'DD'],
                              [0, 0, 'Cooperator', 'Cooperator', 'CC', 'CC'],
-                             [0, 0, 'Cooperator', 'Cooperator', 'CC',' CC'],
+                             [0, 0, 'Cooperator', 'Cooperator', 'CC', 'CC'],
                              [3, 3, 'Grudger', 'Grudger', 'CC', 'CC'],
                              [3, 3, 'Grudger', 'Grudger', 'CC', 'CC'],
                              [2, 2, 'Defector', 'Defector', 'DD', 'DD'],
@@ -377,18 +377,18 @@ class TestTournament(unittest.TestCase):
                              [1, 1, 'Tit For Tat', 'Tit For Tat', 'CC', 'CC'],
                              [1, 3, 'Tit For Tat', 'Grudger', 'CC', 'CC'],
                              [1, 3, 'Tit For Tat', 'Grudger', 'CC', 'CC'],
-                             [2, 3, 'Defector', 'Grudger', 'DC', 'DD'],
-                             [2, 3, 'Defector', 'Grudger', 'DC', 'DD'],
+                             [2, 3, 'Defector', 'Grudger', 'DD', 'CD'],
+                             [2, 3, 'Defector', 'Grudger', 'DD', 'CD'],
                              [0, 4, 'Cooperator', 'Soft Go By Majority', 'CC', 'CC'],
                              [0, 4, 'Cooperator', 'Soft Go By Majority', 'CC', 'CC'],
-                             [2, 4, 'Defector', 'Soft Go By Majority', 'DC', 'DD'],
-                             [2, 4, 'Defector', 'Soft Go By Majority', 'DC', 'DD'],
+                             [2, 4, 'Defector', 'Soft Go By Majority', 'DD', 'CD'],
+                             [2, 4, 'Defector', 'Soft Go By Majority', 'DD', 'CD'],
                              [0, 3, 'Cooperator', 'Grudger', 'CC', 'CC'],
                              [0, 3, 'Cooperator', 'Grudger', 'CC', 'CC'],
                              [3, 4, 'Grudger', 'Soft Go By Majority', 'CC', 'CC'],
                              [3, 4, 'Grudger', 'Soft Go By Majority', 'CC', 'CC'],
-                             [0, 2, 'Cooperator', 'Defector', 'CD', 'CD'],
-                             [0, 2, 'Cooperator', 'Defector', 'CD', 'CD']]
+                             [0, 2, 'Cooperator', 'Defector', 'CC', 'DD'],
+                             [0, 2, 'Cooperator', 'Defector', 'CC', 'DD']]
             self.assertEqual(sorted(written_data), sorted(expected_data))
 
 
@@ -455,6 +455,6 @@ class TestProbEndTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(players))
-        self.assertEqual(results.players, players)
+        self.assertEqual(results.players, [str(p) for p in players])
         for rep in results.interactions.values():
             self.assertEqual(len(rep), repetitions)
