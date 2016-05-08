@@ -14,7 +14,7 @@ class TestDeterministicCache(unittest.TestCase):
         cls.test_load_file = 'test_cache_load.txt'
         if sys.version_info[0] == 2:
             # Python 2.x
-            cls.test_pickle = '\x80\x02}q\x00caxelrod.strategies.titfortat\nTitForTat\nq\x01caxelrod.strategies.defector\nDefector\nq\x02K\x03\x87q\x03]q\x04(U\x01Cq\x05U\x01Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'
+            cls.test_pickle = b"""(dp0\n(caxelrod.strategies.titfortat\nTitForTat\np1\ncaxelrod.strategies.defector\nDefector\np2\nI3\ntp3\n(lp4\n(S'C'\np5\nS'D'\np6\ntp7\na(g6\ng6\ntp8\na(g6\ng6\ntp9\nas."""
         else:
             # Python 3.x
             cls.test_pickle = b'\x80\x03}q\x00caxelrod.strategies.titfortat\nTitForTat\nq\x01caxelrod.strategies.defector\nDefector\nq\x02K\x03\x87q\x03]q\x04(X\x01\x00\x00\x00Cq\x05X\x01\x00\x00\x00Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'
