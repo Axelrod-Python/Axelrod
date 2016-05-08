@@ -108,15 +108,11 @@ class Tournament(object):
         chunks = self.match_generator.build_match_chunks()
 
         for chunk in chunks:
-            interactions = self._play_matches(chunk)
-            self._write_interactions(interactions)
+            results = self._play_matches(chunk)
+            self._write_interactions(results)
         return True
 
-    def _write_interactions(self, interactions):
-        """Either write to memory or to file"""
-        self._write_to_csv(interactions)
-
-    def _write_to_csv(self, results):
+    def _write_interactions(self, results):
         """Write the interactions to csv."""
         for index_pair, interactions in results.items():
             for interaction in interactions:
@@ -147,8 +143,6 @@ class Tournament(object):
 
         chunks = self.match_generator.build_match_chunks()
         for chunk in chunks:
-            # This is crap: I'm going through the generator, ideally want the
-            # chunk to be a generator also
             work_queue.put(chunk)
 
         self._start_workers(workers, work_queue, done_queue)

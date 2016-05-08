@@ -82,7 +82,7 @@ class RoundRobinMatches(MatchGenerator):
                 yield (index_pair, match_params, self.repetitions)
 
     def build_single_match_params(self, noise=0):
-        """Create a single match for a given pair"""
+        """Creates a single set of match parameters."""
         cache = None
         return (self.turns, self.game, cache, noise)
 

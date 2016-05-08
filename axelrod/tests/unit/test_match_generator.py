@@ -82,7 +82,6 @@ class TestRoundRobin(unittest.TestCase):
     def test_build_match_chunks(self, repetitions):
         rr = axelrod.RoundRobinMatches(self.players, test_turns, test_game, repetitions)
         chunks = list(rr.build_match_chunks())
-        #match_definitions = [tuple(list(index_pair) + [repetitions]) for (index_pair, match_params, repetitions) in chunks]
         match_definitions = [tuple(list(index_pair) + [repetitions]) for (index_pair, match_params, repetitions) in chunks]
         expected_match_definitions = [(i, j, repetitions) for i in range(5) for j in range(i, 5)]
 

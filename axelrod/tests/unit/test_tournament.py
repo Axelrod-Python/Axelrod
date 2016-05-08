@@ -158,19 +158,6 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play().scores
         self.assertEqual(len(scores), len(players))
 
-    #def test_run_parallel(self):
-        #tournament = axelrod.Tournament(
-            #name=self.test_name,
-            #players=self.players,
-            #game=self.game,
-            #turns=200,
-            #repetitions=self.test_repetitions,
-            #processes=2)
-        #tournament._run_parallel()
-        #self.assertEqual(len(tournament.interactions), 15)
-        #for r in tournament.interactions.values():
-            #self.assertEqual(len(r), self.test_repetitions)
-
     def test_n_workers(self):
         max_processes = cpu_count()
 
@@ -277,22 +264,6 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
 
         def make_chunk_generator():
-            """
-            A generator that returns player index pairs and match objects for a
-            round robin tournament.
-
-            Parameters
-            ----------
-            noise : float, 0
-                The probability that a player's intended action should be flipped
-            chunked : bool, False
-                Yield matches in chunks by repetition or not
-
-            Yields
-            -------
-            tuples
-                ((player1 index, player2 index), match object)
-            """
             for player1_index in range(len(self.players)):
                 for player2_index in range(player1_index, len(self.players)):
                     index_pair = (player1_index, player2_index)
