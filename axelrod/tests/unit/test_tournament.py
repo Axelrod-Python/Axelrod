@@ -158,6 +158,38 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play().scores
         self.assertEqual(len(scores), len(players))
 
+    def test_run_serial(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        tournament._write_interactions = MagicMock(
+                    name='_write_interactions')
+        self.assertTrue(tournament._run_serial())
+
+        # Get the calls made to write_interactions
+        calls = tournament._write_interactions.call_args_list
+        self.assertEqual(len(calls), 15)
+
+    def test_run_parallel(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+        tournament._write_interactions = MagicMock(
+                    name='_write_interactions')
+        self.assertTrue(tournament._run_parallel())
+
+        # Get the calls made to write_interactions
+        calls = tournament._write_interactions.call_args_list
+        self.assertEqual(len(calls), 15)
+
     def test_n_workers(self):
         max_processes = cpu_count()
 
