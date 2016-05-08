@@ -4,7 +4,7 @@ try:
 except ImportError:
     # Python 3.x
     from collections import UserDict
-import dill
+import pickle
 
 from axelrod import Player
 
@@ -125,7 +125,7 @@ class DeterministicCache(UserDict):
             File path to which the cache should be saved
         """
         with open(file_name, 'wb') as io:
-            dill.dump(self.data, io)
+            pickle.dump(self.data, io)
         return True
 
     def load(self, file_name):
@@ -137,7 +137,7 @@ class DeterministicCache(UserDict):
             Path to a previously saved cache file
         """
         with open(file_name, 'rb') as io:
-            data = dill.load(io)
+            data = pickle.load(io)
 
         if isinstance(data, dict):
             self.data = data
