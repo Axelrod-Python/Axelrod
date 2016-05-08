@@ -38,6 +38,24 @@ class TestTournamentType(unittest.TestCase):
         opponent.name = 'Test'
         self.assertNotEqual(player.name, opponent.name)
 
+    def test_len(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            len(tt)
+
+    def test_build_match_params(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            tt.build_match_chunks()
+
+    def test_single_match_params(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            tt.build_single_match_params()
+
 
 class TestRoundRobin(unittest.TestCase):
 
@@ -92,6 +110,7 @@ class TestRoundRobin(unittest.TestCase):
         repetitions = 10
         rr = axelrod.RoundRobinMatches(self.players, turns=turns, game=None,
                                        repetitions=repetitions)
+        self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
         n = len(self.players)
         self.assertEqual(int(n * (n + 1) // 2 + n), len(rr))
         self.assertEqual(rr.estimated_size(), len(rr) * turns * repetitions)
