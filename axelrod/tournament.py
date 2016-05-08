@@ -91,7 +91,7 @@ class Tournament(object):
         result_set = ResultSetFromFile(
             filename=self.filename,
             with_morality=self._with_morality)
-        #self.outputfile.close()
+        self.outputfile.close()
         return result_set
 
     def _run_serial(self):
