@@ -1,16 +1,18 @@
 """Tests for the main tournament class."""
 
-import axelrod
+import csv
 import logging
 from multiprocessing import Queue, cpu_count
-import unittest
 import random
-
 import tempfile
-import csv
+import unittest
+import warnings
 
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers, lists, sampled_from, random_module, floats
+
+import axelrod
+
 
 try:
     # Python 3
@@ -76,6 +78,18 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.noise, 0.2)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
+
+    def test_warning(self):
+        # Test that we get an instance of ResultSet
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=10,
+            repetitions=1)
+        with warnings.catch_warnings(record=True) as w:
+            results = tournament.play(build_results=False)
+            self.assertEqual(len(w), 1)
 
     def test_serial_play(self):
         # Test that we get an instance of ResultSet

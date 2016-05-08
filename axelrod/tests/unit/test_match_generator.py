@@ -111,8 +111,6 @@ class TestRoundRobin(unittest.TestCase):
         rr = axelrod.RoundRobinMatches(self.players, turns=turns, game=None,
                                        repetitions=repetitions)
         self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
-        n = len(self.players)
-        self.assertEqual(int(n * (n - 1) // 2 + n), len(rr))
         self.assertEqual(rr.estimated_size(), len(rr) * turns * repetitions)
 
 class TestProbEndRoundRobin(unittest.TestCase):
@@ -195,3 +193,12 @@ class TestProbEndRoundRobin(unittest.TestCase):
         self.assertIsInstance(match, axelrod.Match)
         self.assertLess(len(match), float('inf'))
         self.assertGreater(len(match), 0)
+
+    @given(prob_end=floats(min_value=.1, max_value=1), rm=random_module())
+    def test_len(self, prob_end, rm):
+        turns = 5
+        repetitions = 10
+        rr = axelrod.ProbEndRoundRobinMatches(self.players, prob_end, game=None,
+                                       repetitions=repetitions)
+        self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
+        self.assertAlmostEqual(rr.estimated_size(), len(rr) * 1. / prob_end * repetitions)

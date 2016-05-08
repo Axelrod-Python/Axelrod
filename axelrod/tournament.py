@@ -77,7 +77,6 @@ class Tournament(object):
         self.setup_output_file(filename)
         if not build_results and not filename:
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
-            pass
         if self._processes is None:
             self._run_serial()
         else:
