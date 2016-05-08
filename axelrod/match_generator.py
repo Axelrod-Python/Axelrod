@@ -45,10 +45,13 @@ class MatchGenerator(object):
             opponents = players
         self._opponents = opponents
 
-    def build_matches():
+    def __len__(self):
         raise NotImplementedError()
 
-    def build_single_match():
+    def build_match_chunks(self):
+        raise NotImplementedError()
+
+    def build_single_match_params(self):
         raise NotImplementedError()
 
 

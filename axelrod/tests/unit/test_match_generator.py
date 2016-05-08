@@ -38,6 +38,24 @@ class TestTournamentType(unittest.TestCase):
         opponent.name = 'Test'
         self.assertNotEqual(player.name, opponent.name)
 
+    def test_len(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            len(tt)
+
+    def test_build_match_params(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            tt.build_match_chunks()
+
+    def test_single_match_params(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            tt.build_single_match_params()
+
 
 class TestRoundRobin(unittest.TestCase):
 
