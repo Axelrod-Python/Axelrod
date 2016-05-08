@@ -75,7 +75,7 @@ class Tournament(object):
         axelrod.ResultSet
         """
         self.setup_output_file(filename)
-        if build_results and not filename:
+        if not build_results and not filename:
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
             pass
         if self._processes is None:
