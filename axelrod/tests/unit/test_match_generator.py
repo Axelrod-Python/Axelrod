@@ -92,6 +92,7 @@ class TestRoundRobin(unittest.TestCase):
         repetitions = 10
         rr = axelrod.RoundRobinMatches(self.players, turns=turns, game=None,
                                        repetitions=repetitions)
+        self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
         n = len(self.players)
         self.assertEqual(int(n * (n + 1) // 2 + n), len(rr))
         self.assertEqual(rr.estimated_size(), len(rr) * turns * repetitions)

@@ -22,12 +22,8 @@ class MatchGenerator(object):
             The number of turns per match
         game : axelrod.Game
             The game object used to score the match
-        deterministic_cache : an instance of axelrod.DeterministicCache
-        class
-            A cache of resulting actions for deterministic matches
-        chunk_size : integer
-            the size of the chunks of matches to be generated.
-            Mainly relevant for large tournaments and parallel processing.
+        repetitions : int
+            The number of repetitions of a given match
         """
         self.players = players
         self.turns = turns
@@ -62,7 +58,7 @@ class RoundRobinMatches(MatchGenerator):
 
     def build_match_chunks(self, noise=0):
         """
-        A generator that returns player index pairs and match objects for a
+        A generator that returns player index pairs and match parameters for a
         round robin tournament.
 
         Parameters
@@ -87,7 +83,11 @@ class RoundRobinMatches(MatchGenerator):
         return (self.turns, self.game, cache, noise)
 
     def __len__(self):
-        """Calculates the number of matches."""
+        """
+        The size of the generator.
+        This corresponds to the number of match chunks as it
+        ignores repetitions.
+        """
         n = len(self.players)
         num_matches = int(n * (n + 1) // 2 + n)
         return num_matches
