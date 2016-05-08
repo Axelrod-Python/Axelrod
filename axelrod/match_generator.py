@@ -92,7 +92,7 @@ class RoundRobinMatches(MatchGenerator):
         ignores repetitions.
         """
         n = len(self.players)
-        num_matches = int(n * (n + 1) // 2 + n)
+        num_matches = int(n * (n - 1) // 2 + n)
         return num_matches
 
     def estimated_size(self):

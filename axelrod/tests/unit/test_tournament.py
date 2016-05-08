@@ -333,13 +333,12 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=2,
-            repetitions=2,
-            filename=tmp_file.name)
+            repetitions=2)
         tournament._write_interactions = MagicMock(
                     name='_write_interactions')
         tournament._build_result_set = MagicMock(
                     name='_build_result_set')  # Mocking this as it is called by play
-        self.assertTrue(tournament.play())
+        self.assertTrue(tournament.play(filename=tmp_file.name))
         tournament.outputfile.close()  # This is normally closed by `build_result_set`
 
         # Get the calls made to write_interactions
