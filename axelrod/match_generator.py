@@ -67,7 +67,7 @@ class RoundRobinMatches(MatchGenerator):
         parameters
         ----------
         noise : float, 0
-            the probability that a player's intended action should be flipped
+            The probability that a player's intended action should be flipped
 
         Yields
         -------
@@ -87,7 +87,7 @@ class RoundRobinMatches(MatchGenerator):
         parameters
         ----------
         noise : float, 0
-            the probability that a player's intended action should be flipped
+            The probability that a player's intended action should be flipped
         """
         cache = None
         return (self.turns, self.game, cache, noise)
@@ -140,7 +140,7 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         parameters
         ----------
         noise : float, 0
-            the probability that a player's intended action should be flipped
+            The probability that a player's intended action should be flipped
         """
         return (self.sample_length(self.prob_end), self.game, None, noise)
 
