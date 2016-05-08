@@ -72,11 +72,10 @@ class Tournament(object):
 
         Parameters
         ----------
-
-            build_results : bool
-                whether or not to build a results st
-            filename : string
-                name of output file
+        build_results : bool
+            whether or not to build a results st
+        filename : string
+            name of output file
 
         Returns
         -------
