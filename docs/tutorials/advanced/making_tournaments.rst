@@ -18,6 +18,7 @@ To do this let us create a new class to generate matches::
 
     >>> import axelrod as axl
     >>> import random
+    >>> random.seed(0)  # Setting a seed
     >>> class StochasticMatchups(axl.RoundRobinMatches):
     ...     """Inherit from the `axelrod.match_generator.RoundRobinMatches` class"""
     ...
@@ -60,8 +61,8 @@ for the first repetition::
 We see that not all possible matches were played (for example `Cooperator` has
 not played `TitForTat`). The results can be viewed as before::
 
-    >>> results.ranked_names  # doctest: +SKIP
-    ['Defector', 'Alternator', 'Grudger', 'Tit For Tat', 'Cooperator']
+    >>> results.ranked_names
+    ['Cooperator', 'Defector', 'Tit For Tat', 'Grudger', 'Alternator']
 
 Note: the :code:`axelrod.MatchGenerator` also has a :code:`build_single_match`
 method which can be overwritten (similarly to above) if the type of a particular
@@ -70,7 +71,6 @@ match should be changed.
 For example the following could be used to create a tournament that randomly
 builds matches that were either 200 turns or single 1 shot games::
 
-    >>> import random
     >>> class OneShotOrRepetitionMatchups(axl.RoundRobinMatches):
     ...     """Inherit from the `axelrod.match_generator.RoundRobinMatches` class"""
     ...
