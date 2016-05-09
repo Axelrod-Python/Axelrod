@@ -30,4 +30,7 @@ class Game(object):
         """
         return self.scores[pair]
 
+    def __repr__(self):
+        return "Axelrod game: (R,P,S,T) = {}".format(self.RPST())
+
 DefaultGame = Game()
