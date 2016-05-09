@@ -122,6 +122,41 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertEqual(len(results.interactions), 15)
 
+    def test_progress_bar_play(self):
+        """Test that tournament plays when asking for progress bar)"""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+
+        # Test with build results
+        results = tournament.play(progress_bar=True)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        # Test without build results
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        results = tournament.play(progress_bar=True, build_results=False,
+                                  filename=tmp_file.name)
+        self.assertIsNone(results)
+        results = axelrod.ResultSetFromFile(tmp_file.name)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+    def test_progress_bar_play_parallel(self):
+        """Test that tournament plays when asking for progress bar for parallel
+        tournament"""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+
+        results = tournament.play(progress_bar=True)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
                    max_size=5, unique=True),
@@ -131,7 +166,6 @@ class TestTournament(unittest.TestCase):
     @settings(max_examples=50, timeout=0)
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
              rm=random.seed(0))
-
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
