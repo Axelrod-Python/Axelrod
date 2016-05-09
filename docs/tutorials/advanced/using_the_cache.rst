@@ -74,6 +74,7 @@ Caching a Moran Process
 A prebuilt cache can also be used in a Moran process (by default a new cache is
 used)::
 
+    >>> cache = axl.DeterministicCache("cache.txt")
     >>> players = [axl.GoByMajority(), axl.Alternator(),
     ...            axl.Cooperator(), axl.Grudger()]
     >>> mp = axl.MoranProcess(players, deterministic_cache=cache)
@@ -81,7 +82,7 @@ used)::
     >>> mp.winning_strategy_name   # doctest: +SKIP
     Defector
 
-Again we see that the cache has been augmented, although note that this
+We see that the cache has been augmented, although note that this
 particular number will depend on the stochastic behaviour of the Moran process::
 
     >>> len(cache)  # doctest: +SKIP
