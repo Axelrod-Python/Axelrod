@@ -68,7 +68,7 @@ class Tournament(object):
         # Save filename for loading ResultSet later
         self.filename = filename
 
-    def play(self, build_results=True, filename=None, progress_bar=False):
+    def play(self, build_results=True, filename=None, progress_bar=True):
         """
         Plays the tournament and passes the results to the ResultSet class
 

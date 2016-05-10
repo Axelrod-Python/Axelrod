@@ -33,11 +33,3 @@ We can also plot these results::
 Note that in this case none of our strategies are stochastic so the boxplot
 shows that there is no variation. Take a look at the :ref:`visualising-results`
 section to see plots showing a stochastic effect.
-
-Progress bar
-============
-
-It is possible to view a progress bar for the play of tournaments::
-
-    >>> results = tournament.play(progress_bar=True)  # doctest: +SKIP
-    50%|████████████████████████                       | 0/10 [00:00<?, ?it/s]
