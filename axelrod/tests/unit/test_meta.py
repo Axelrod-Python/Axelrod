@@ -26,7 +26,7 @@ class TestMetaPlayer(TestPlayer):
         'manipulates_state': False
     }
 
-    def classifier_test(self):
+    def classifier_test(self, expected_class_classifier=None):
         player = self.player()
         classifier = dict()
         for key in ['stochastic',
@@ -46,6 +46,12 @@ class TestMetaPlayer(TestPlayer):
                              classifier[key],
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
                              (key, player.classifier[key], classifier[key]))
+
+        # Test that player has same classifier as it's class unless otherwise
+        # specified
+        if expected_class_classifier is None:
+            expected_class_classifier = player.classifier
+        self.assertEqual(expected_class_classifier, self.player.classifier)
 
     def test_reset(self):
         p1 = self.player()
