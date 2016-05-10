@@ -135,6 +135,9 @@ paper please list it here:
   other environments
   <http://vknight.org/unpeudemath/gametheory/2015/11/28/Experimenting-with-a-high-performing-evolved-strategy-in-other-environments.html>`_
   by `drvinceknight <https://twitter.com/drvinceknight>`_
+- `An open reproducible framework for the study of the iterated prisoner's
+  dilemma <https://arxiv.org/abs/1604.00896>_`: a pre print of a paper describing this
+  library (20 authors).
 
 Contributors
 ============
