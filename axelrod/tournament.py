@@ -7,6 +7,8 @@ from multiprocessing import Process, Queue, cpu_count
 from tempfile import NamedTemporaryFile
 import warnings
 
+import tqdm
+
 from .game import Game
 from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
@@ -66,7 +68,7 @@ class Tournament(object):
         # Save filename for loading ResultSet later
         self.filename = filename
 
-    def play(self, build_results=True, filename=None):
+    def play(self, build_results=True, filename=None, progress_bar=True):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -76,20 +78,28 @@ class Tournament(object):
             whether or not to build a results st
         filename : string
             name of output file
+        progress_bar : bool
+            Whether or not to create a progress bar which will be updated
 
         Returns
         -------
         axelrod.ResultSet
         """
+        if progress_bar:
+            self.progress_bar = tqdm.tqdm(total=len(self.match_generator))
+
         self.setup_output_file(filename)
         if not build_results and not filename:
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
+
         if self._processes is None:
-            self._run_serial()
+            self._run_serial(progress_bar=progress_bar)
         else:
-            self._run_parallel()
+            self._run_parallel(progress_bar=progress_bar)
+
         # Make sure that python has finished writing to disk
         self.outputfile.flush()
+
         if build_results:
             return self._build_result_set()
 
@@ -107,13 +117,25 @@ class Tournament(object):
         self.outputfile.close()
         return result_set
 
-    def _run_serial(self):
-        """Run all matches in serial"""
+    def _run_serial(self, progress_bar=False):
+        """
+        Run all matches in serial
+
+        Parameters
+        ----------
+
+        progress_bar : bool
+            Whether or not to update the tournament progress bar
+        """
         chunks = self.match_generator.build_match_chunks()
 
         for chunk in chunks:
             results = self._play_matches(chunk)
             self._write_interactions(results)
+
+            if progress_bar:
+                self.progress_bar.update(1)
+
         return True
 
     def _write_interactions(self, results):
@@ -129,8 +151,16 @@ class Tournament(object):
                 row.append(history2)
                 self.writer.writerow(row)
 
-    def _run_parallel(self):
-        """Run all matches in parallel"""
+    def _run_parallel(self, progress_bar=False):
+        """
+        Run all matches in parallel
+
+        Parameters
+        ----------
+
+        progress_bar : bool
+            Whether or not to update the tournament progress bar
+        """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
@@ -143,7 +173,7 @@ class Tournament(object):
             work_queue.put(chunk)
 
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue)
+        self._process_done_queue(workers, done_queue, progress_bar=progress_bar)
 
         return True
 
@@ -181,7 +211,7 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue):
+    def _process_done_queue(self, workers, done_queue, progress_bar=False):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -193,6 +223,8 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         interactions : list
             The list of interactions per repetition to update with results
+        progress_bar : bool
+            Whether or not to update the tournament progress bar
         """
         stops = 0
         while stops < workers:
@@ -202,6 +234,9 @@ class Tournament(object):
                 stops += 1
             else:
                 self._write_interactions(results)
+
+                if progress_bar:
+                    self.progress_bar.update(1)
         return True
 
     def _worker(self, work_queue, done_queue):

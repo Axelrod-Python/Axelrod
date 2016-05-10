@@ -90,7 +90,7 @@ class TestTournament(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             # Check that a warning is raised if no results set is built and no
             # filename given
-            results = tournament.play(build_results=False)
+            results = tournament.play(build_results=False, progress_bar=False)
             self.assertEqual(len(w), 1)
 
         with warnings.catch_warnings(record=True) as w:
@@ -98,7 +98,7 @@ class TestTournament(unittest.TestCase):
             # filename given
             tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
             results = tournament.play(build_results=False,
-                                      filename=tmp_file.name)
+                                      filename=tmp_file.name, progress_bar=False)
             self.assertEqual(len(w), 0)
 
     def test_serial_play(self):
@@ -109,7 +109,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
         # Test that _run_serial_repetitions is called with empty matches list
@@ -119,8 +119,77 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertEqual(len(results.interactions), 15)
+
+    def test_no_progress_bar_play(self):
+        """Test that progress bar is not created for progress_bar=False"""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+
+
+        # Test with build results
+        results = tournament.play(progress_bar=False)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        # Check that no progress bar was created
+        call_progress_bar = lambda: tournament.progress_bar.total
+        self.assertRaises(AttributeError, call_progress_bar)
+
+        # Test without build results
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        results = tournament.play(progress_bar=False, build_results=False,
+                                  filename=tmp_file.name)
+        self.assertIsNone(results)
+        results = axelrod.ResultSetFromFile(tmp_file.name)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertRaises(AttributeError, call_progress_bar)
+
+    def test_progress_bar_play(self):
+        """Test that progress bar is created by default and with True argument"""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(tournament.progress_bar.total, 15)
+
+        results = tournament.play(progress_bar=True)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(tournament.progress_bar.total, 15)
+
+        # Test without build results
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        results = tournament.play(progress_bar=True, build_results=False,
+                                  filename=tmp_file.name)
+        self.assertIsNone(results)
+        results = axelrod.ResultSetFromFile(tmp_file.name)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(tournament.progress_bar.total, 15)
+
+    def test_progress_bar_play_parallel(self):
+        """Test that tournament plays when asking for progress bar for parallel
+        tournament"""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions,
+            processes=2)
+
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        results = tournament.play(progress_bar=True)
+        self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
@@ -131,7 +200,6 @@ class TestTournament(unittest.TestCase):
     @settings(max_examples=50, timeout=0)
     @example(s=test_strategies, turns=test_turns, repetitions=test_repetitions,
              rm=random.seed(0))
-
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
@@ -151,7 +219,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=turns,
             repetitions=repetitions)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(players))
         self.assertEqual(results.players, [str(p) for p in players])
@@ -165,7 +233,7 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions,
             processes=2)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
         # The following relates to #516
@@ -179,7 +247,7 @@ class TestTournament(unittest.TestCase):
             turns=20,
             repetitions=self.test_repetitions,
             processes=2)
-        scores = tournament.play().scores
+        scores = tournament.play(progress_bar=False).scores
         self.assertEqual(len(scores), len(players))
 
     def test_run_serial(self):
@@ -306,7 +374,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
     def test_no_build_result_set(self):
@@ -318,7 +386,8 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
 
         tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        results = tournament.play(build_results=False, filename=tmp_file.name)
+        results = tournament.play(build_results=False, filename=tmp_file.name,
+                                  progress_bar=False)
         self.assertIsNone(results)
 
         # Checking that results were written properly
@@ -378,7 +447,8 @@ class TestTournament(unittest.TestCase):
                     name='_write_interactions')
         tournament._build_result_set = MagicMock(
                     name='_build_result_set')  # Mocking this as it is called by play
-        self.assertTrue(tournament.play(filename=tmp_file.name))
+        self.assertTrue(tournament.play(filename=tmp_file.name,
+                                        progress_bar=False))
         tournament.outputfile.close()  # This is normally closed by `build_result_set`
 
         # Get the calls made to write_interactions
@@ -393,7 +463,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=2,
             repetitions=2)
-        tournament.play(filename=tmp_file.name)
+        tournament.play(filename=tmp_file.name, progress_bar=False)
         tmp_file.close()
         with open(tmp_file.name, 'r') as f:
             written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
@@ -489,7 +559,7 @@ class TestProbEndTournament(unittest.TestCase):
             game=self.game,
             prob_end=prob_end,
             repetitions=repetitions)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(players))
         self.assertEqual(results.players, [str(p) for p in players])

@@ -2,3 +2,4 @@ numpy>=1.9.2
 matplotlib>=1.4.2
 hypothesis>=3.0
 testfixtures==4.9.1
+tqdm==3.4.0

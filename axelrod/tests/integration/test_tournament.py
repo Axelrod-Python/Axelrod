@@ -30,7 +30,7 @@ class TestTournament(unittest.TestCase):
         """A test to check that tournament runs with all non cheating strategies."""
         strategies = [strategy() for strategy in axelrod.ordinary_strategies]
         tournament = axelrod.Tournament(name='test', players=strategies, game=self.game, turns=20, repetitions=2)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
     def test_serial_play(self):
@@ -40,7 +40,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=20,
             repetitions=self.test_repetitions)
-        scores = tournament.play().scores
+        scores = tournament.play(progress_bar=False).scores
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
 
@@ -52,6 +52,6 @@ class TestTournament(unittest.TestCase):
             turns=20,
             repetitions=self.test_repetitions,
             processes=2)
-        scores = tournament.play().scores
+        scores = tournament.play(progress_bar=False).scores
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
