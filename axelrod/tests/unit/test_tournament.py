@@ -123,7 +123,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(results.interactions), 15)
 
     def test_progress_bar_play(self):
-        """Test that tournament plays when asking for progress bar)"""
+        """Test that tournament plays when asking for progress bar"""
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -134,6 +134,8 @@ class TestTournament(unittest.TestCase):
         # Test with build results
         results = tournament.play(progress_bar=True)
         self.assertIsInstance(results, axelrod.ResultSet)
+        # Check that progress bar was created and full
+        self.assertEqual(tournament.progress_bar.total, 15)
 
         # Test without build results
         tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
@@ -142,6 +144,27 @@ class TestTournament(unittest.TestCase):
         self.assertIsNone(results)
         results = axelrod.ResultSetFromFile(tmp_file.name)
         self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(tournament.progress_bar.total, 15)
+
+    def test_no_progress_bar_play(self):
+        """Test that no progress bar is created by default"""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+        call_progress_bar = lambda: tournament.progress_bar.total
+        self.assertRaises(AttributeError, call_progress_bar)
+
+        results = tournament.play(progress_bar=False)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        # Check that progress bar was created and full
+        call_progress_bar = lambda: tournament.progress_bar.total
+        self.assertRaises(AttributeError, call_progress_bar)
 
     def test_progress_bar_play_parallel(self):
         """Test that tournament plays when asking for progress bar for parallel

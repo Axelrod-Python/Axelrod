@@ -68,7 +68,7 @@ class Tournament(object):
         # Save filename for loading ResultSet later
         self.filename = filename
 
-    def play(self, build_results=True, filename=None, progress_bar=None):
+    def play(self, build_results=True, filename=None, progress_bar=False):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -85,7 +85,7 @@ class Tournament(object):
         -------
         axelrod.ResultSet
         """
-        if progress_bar is not None:
+        if progress_bar:
             self.progress_bar = tqdm.tqdm(total=len(self.match_generator))
 
         self.setup_output_file(filename)
@@ -117,7 +117,7 @@ class Tournament(object):
         self.outputfile.close()
         return result_set
 
-    def _run_serial(self, progress_bar=None):
+    def _run_serial(self, progress_bar=False):
         """
         Run all matches in serial
 
@@ -133,7 +133,7 @@ class Tournament(object):
             results = self._play_matches(chunk)
             self._write_interactions(results)
 
-            if progress_bar is not None:
+            if progress_bar:
                 self.progress_bar.update(1)
 
         return True
@@ -151,7 +151,7 @@ class Tournament(object):
                 row.append(history2)
                 self.writer.writerow(row)
 
-    def _run_parallel(self, progress_bar=None):
+    def _run_parallel(self, progress_bar=False):
         """
         Run all matches in parallel
 
@@ -211,7 +211,7 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, progress_bar=None):
+    def _process_done_queue(self, workers, done_queue, progress_bar=False):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -235,7 +235,7 @@ class Tournament(object):
             else:
                 self._write_interactions(results)
 
-                if progress_bar is not None:
+                if progress_bar:
                     self.progress_bar.update(1)
         return True
 
