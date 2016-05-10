@@ -1,13 +1,16 @@
 from __future__ import absolute_import
 
-import logging
-from multiprocess import Process, Queue, cpu_count
 import csv
+from collections import defaultdict
+import logging
+from multiprocessing import Process, Queue, cpu_count
+from tempfile import NamedTemporaryFile
+import warnings
 
 from .game import Game
-from .result_set import ResultSet
-from .deterministic_cache import DeterministicCache
+from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
+from .result_set import ResultSet, ResultSetFromFile
 
 
 class Tournament(object):
@@ -15,8 +18,7 @@ class Tournament(object):
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
-                 processes=None, deterministic_cache=None, noise=0,
-                 with_morality=True):
+                 processes=None, noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -34,8 +36,6 @@ class Tournament(object):
             The number of times the round robin should be repeated
         processes : integer
             The number of processes to be used for parallel processing
-        deterministic_cache : instance
-            An instance of the axelrod.DeterministicCache class
         noise : float
             The probability that a player's intended action should be flipped
         with_morality : boolean
@@ -48,37 +48,50 @@ class Tournament(object):
             self.game = game
         self.players = players
         self.repetitions = repetitions
-        if deterministic_cache is None:
-            self.deterministic_cache = DeterministicCache()
-        else:
-            self.deterministic_cache = deterministic_cache
-        self.match_generator = match_generator(
-            players, turns, self.game, self.deterministic_cache)
+        self.match_generator = match_generator(players, turns, self.game,
+                                               self.repetitions)
         self._with_morality = with_morality
-        self._parallel_repetitions = repetitions
         self._processes = processes
         self._logger = logging.getLogger(__name__)
-        self.interactions = []
 
-    def play(self, filename=None):
+    def setup_output_file(self, filename=None):
+        """Open a CSV writer for tournament output."""
+        if filename:
+            self.outputfile = open(filename, 'a')
+        else:
+            # Setup a temporary file
+            self.outputfile = NamedTemporaryFile(mode='w')
+            filename = self.outputfile.name
+        self.writer = csv.writer(self.outputfile)
+        # Save filename for loading ResultSet later
+        self.filename = filename
+
+    def play(self, build_results=True, filename=None):
         """
         Plays the tournament and passes the results to the ResultSet class
+
+        Parameters
+        ----------
+        build_results : bool
+            whether or not to build a results st
+        filename : string
+            name of output file
 
         Returns
         -------
         axelrod.ResultSet
         """
+        self.setup_output_file(filename)
+        if not build_results and not filename:
+            warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
         if self._processes is None:
-            self._run_serial_repetitions(self.interactions)
+            self._run_serial()
         else:
-            if self._build_cache_required():
-                self._build_cache(self.interactions)
-            self._run_parallel_repetitions(self.interactions)
-
-        if filename is None:
-            self.result_set = self._build_result_set()
-            return self.result_set
-        self._write_to_csv(filename)
+            self._run_parallel()
+        # Make sure that python has finished writing to disk
+        self.outputfile.flush()
+        if build_results:
+            return self._build_result_set()
 
     def _build_result_set(self):
         """
@@ -88,65 +101,36 @@ class Tournament(object):
         -------
         axelrod.ResultSet
         """
-        result_set = ResultSet(
-            players=self.players,
-            interactions=self.interactions,
+        result_set = ResultSetFromFile(
+            filename=self.filename,
             with_morality=self._with_morality)
+        self.outputfile.close()
         return result_set
 
-    def _build_cache_required(self):
-        """
-        A boolean to indicate whether it is necessary to build the
-        deterministic cache.
-        """
-        return (
-            not self.noise and len(self.deterministic_cache) == 0)
+    def _run_serial(self):
+        """Run all matches in serial"""
+        chunks = self.match_generator.build_match_chunks()
 
-    def _build_cache(self, matches):
-        """
-        For parallel processing, this runs a single round robin in order to
-        build the deterministic cache.
-
-        Parameters
-        ----------
-        matches : list
-            The list of matches to update
-        """
-        self._logger.debug('Playing first round robin to build cache')
-        self._run_single_repetition(matches)
-        self._parallel_repetitions -= 1
-
-    def _run_single_repetition(self, interactions):
-        """
-        Runs a single round robin and updates the matches list.
-        """
-        new_matches = self.match_generator.build_matches(noise=self.noise)
-        interactions = self._play_matches(new_matches)
-        self.interactions.append(interactions)
-
-    def _run_serial_repetitions(self, interactions):
-        """
-        Runs all repetitions of the round robin in serial.
-
-        Parameters
-        ----------
-        ineractions : list
-            The list of interactions per repetition to update with results
-        """
-        self._logger.debug('Playing %d round robins' % self.repetitions)
-        for repetition in range(self.repetitions):
-            self._run_single_repetition(interactions)
+        for chunk in chunks:
+            results = self._play_matches(chunk)
+            self._write_interactions(results)
         return True
 
-    def _run_parallel_repetitions(self, interactions):
-        """
-        Run all except the first round robin using parallel processing.
+    def _write_interactions(self, results):
+        """Write the interactions to csv."""
+        for index_pair, interactions in results.items():
+            for interaction in interactions:
+                row = list(index_pair)
+                row.append(str(self.players[index_pair[0]]))
+                row.append(str(self.players[index_pair[1]]))
+                history1 = "".join([i[0] for i in interaction])
+                history2 = "".join([i[1] for i in interaction])
+                row.append(history1)
+                row.append(history2)
+                self.writer.writerow(row)
 
-        Parameters
-        ----------
-        interactions : list
-            The list of interactions per repetition to update with results
-        """
+    def _run_parallel(self):
+        """Run all matches in parallel"""
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
@@ -154,14 +138,12 @@ class Tournament(object):
         done_queue = Queue()
         workers = self._n_workers()
 
-        for repetition in range(self._parallel_repetitions):
-            work_queue.put(repetition)
+        chunks = self.match_generator.build_match_chunks()
+        for chunk in chunks:
+            work_queue.put(chunk)
 
-        self._logger.debug(
-            'Playing %d round robins with %d parallel processes' %
-            (self._parallel_repetitions, workers))
         self._start_workers(workers, work_queue, done_queue)
-        self._process_done_queue(workers, done_queue, interactions)
+        self._process_done_queue(workers, done_queue)
 
         return True
 
@@ -192,7 +174,6 @@ class Tournament(object):
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
         """
-        self.deterministic_cache.mutable = False
         for worker in range(workers):
             process = Process(
                 target=self._worker, args=(work_queue, done_queue))
@@ -200,7 +181,7 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers, done_queue, interactions):
+    def _process_done_queue(self, workers, done_queue):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -220,7 +201,7 @@ class Tournament(object):
             if results == 'STOP':
                 stops += 1
             else:
-                interactions.append(results)
+                self._write_interactions(results)
         return True
 
     def _worker(self, work_queue, done_queue):
@@ -234,21 +215,20 @@ class Tournament(object):
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
         """
-        for repetition in iter(work_queue.get, 'STOP'):
-            new_matches = self.match_generator.build_matches(noise=self.noise)
-            interactions = self._play_matches(new_matches)
+        for chunk in iter(work_queue.get, 'STOP'):
+            interactions = self._play_matches(chunk)
             done_queue.put(interactions)
         done_queue.put('STOP')
         return True
 
-    def _play_matches(self, matches):
+    def _play_matches(self, chunk):
         """
-        Play the supplied matches.
+        Play matches in a given chunk.
 
         Parameters
         ----------
-        matches : generator
-            Generator of tuples: player index pair, match
+        chunk : tuple (index pair, match_parameters, repetitions)
+            match_parameters are also a tuple: (turns, game, noise)
 
         Returns
         -------
@@ -257,41 +237,19 @@ class Tournament(object):
 
                 (0, 1) -> [('C', 'D'), ('D', 'C'),...]
         """
-        interactions = {}
-        for index_pair, match in matches:
+        interactions = defaultdict(list)
+        index_pair, match_params, repetitions = chunk
+        p1_index, p2_index = index_pair
+        player1 = self.players[p1_index].clone()
+        player2 = self.players[p2_index].clone()
+        players = (player1, player2)
+        params = [players]
+        params.extend(match_params)
+        match = Match(*params)
+        for _ in range(repetitions):
             match.play()
-            interactions[index_pair] = match.result
+            interactions[index_pair].append(match.result)
         return interactions
-
-    def _write_to_csv(self, filename):
-        """Write the interactions to csv."""
-        with open(filename, 'w') as csvfile:
-            writer = csv.writer(csvfile)
-            for row in self._data_for_csv():
-                writer.writerow(row)
-
-    def _data_for_csv(self):
-        """
-        Returns
-        -------
-        A generator of the interactions to a list of lists of the form:
-
-        [p1index, p2index, p1name, p2name, p1rep1ac1p2rep1ac1p1rep1ac2p2rep1ac2,
-        ...]
-        [0, 1, Defector, Cooperator, DCDCDC, DCDCDC, DCDCDC,...]
-        [0, 2, Defector, Alternator, DCDDDC, DCDDDC, DCDDDC,...]
-        [1, 2, Cooperator, Alternator, CCCDCC, CCCDCC, CCCDCC,...]
-        """
-        index_pairs = self.interactions[0].keys()
-        for index_pair in index_pairs:
-            p1, p2 = index_pair
-            row = [p1, p2, self.players[p1].name, self.players[p2].name]
-            for rep in self.interactions:
-                interaction = rep[index_pair]
-                matchstringrep = ''.join([act for inter in interaction
-                                          for act in inter])
-                row.append(matchstringrep)
-            yield row
 
 
 class ProbEndTournament(Tournament):
@@ -304,7 +262,8 @@ class ProbEndTournament(Tournament):
 
     def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
                  name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 processes=None, deterministic_cache=None, noise=0,
+                 processes=None,
+                 noise=0,
                  with_morality=True):
         """
         Parameters
@@ -325,17 +284,14 @@ class ProbEndTournament(Tournament):
             The number of processes to be used for parallel processing
         noise : float
             The probability that a player's intended action should be flipped
-        deterministic_cache : instance
-            An instance of the axelrod.DeterministicCache class
         with_morality : boolean
             Whether morality metrics should be calculated
         """
         super(ProbEndTournament, self).__init__(
             players, name=name, game=game, turns=float("inf"),
             repetitions=repetitions, processes=processes,
-            deterministic_cache=deterministic_cache,
             noise=noise, with_morality=with_morality)
 
         self.prob_end = prob_end
         self.match_generator = ProbEndRoundRobinMatches(
-            players, prob_end, self.game, self.deterministic_cache)
+            players, prob_end, self.game, repetitions)

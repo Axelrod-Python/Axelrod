@@ -1,6 +1,5 @@
 import random
 import unittest
-import dill
 
 import axelrod
 from axelrod import simulate_play
@@ -364,18 +363,6 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(
             test_object.__class__,
             axelrod.tests.unit.test_strategy_transformers.TestClass)
-
-    # Test that decorated classes can be pickled as this caused issue 516
-    # That issue was fixed by not needing this pickle: interactions are now
-    # passed back.
-    def test_pickle(self):
-        p1 = axelrod.BackStabber()
-        dump = dill.dumps(p1)
-        self.assertGreater(len(dump), 0)
-
-        p3 = axelrod.PSOGambler()
-        dump = dill.dumps(p3)
-        self.assertGreater(len(dump), 0)
 
 
 # Test that RUA(Cooperator) is the same as TitForTat

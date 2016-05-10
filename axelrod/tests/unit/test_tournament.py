@@ -1,16 +1,18 @@
 """Tests for the main tournament class."""
 
-import axelrod
-import logging
-from multiprocess import Queue, cpu_count
-import unittest
-import random
-
-import tempfile
 import csv
+import logging
+from multiprocessing import Queue, cpu_count
+import random
+import tempfile
+import unittest
+import warnings
 
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers, lists, sampled_from, random_module, floats
+
+import axelrod
+
 
 try:
     # Python 3
@@ -73,23 +75,31 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament._processes, 4)
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
-        self.assertEqual(tournament.deterministic_cache, {})
         self.assertEqual(tournament.noise, 0.2)
-        self.assertEqual(tournament._parallel_repetitions, 10)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
-        # Test init when passing a cache:
-        cache = axelrod.DeterministicCache()
+    def test_warning(self):
+        # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=self.test_turns,
-            processes=4,
-            noise=0.2,
-            deterministic_cache=cache)
-        self.assertEqual(tournament.deterministic_cache, cache)
+            turns=10,
+            repetitions=1)
+        with warnings.catch_warnings(record=True) as w:
+            # Check that a warning is raised if no results set is built and no
+            # filename given
+            results = tournament.play(build_results=False)
+            self.assertEqual(len(w), 1)
+
+        with warnings.catch_warnings(record=True) as w:
+            # Check that no warning is raised if no results set is built and no
+            # filename given
+            tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+            results = tournament.play(build_results=False,
+                                      filename=tmp_file.name)
+            self.assertEqual(len(w), 0)
 
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
@@ -109,13 +119,8 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        tournament._run_serial_repetitions = MagicMock(
-            name='_run_serial_repetitions')
-        tournament._run_parallel_repetitions = MagicMock(
-            name='_run_parallel_repetitions')
-        tournament.play()
-        tournament._run_serial_repetitions.assert_called_once_with([])
-        self.assertFalse(tournament._run_parallel_repetitions.called)
+        results = tournament.play()
+        self.assertEqual(len(results.interactions), 15)
 
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
@@ -149,7 +154,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(players))
-        self.assertEqual(results.players, players)
+        self.assertEqual(results.players, [str(p) for p in players])
 
     def test_parallel_play(self):
         # Test that we get an instance of ResultSet
@@ -177,50 +182,7 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play().scores
         self.assertEqual(len(scores), len(players))
 
-    def test_build_cache_required(self):
-        # Noisy  empty deterministic cache
-        cache = axelrod.DeterministicCache()
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            processes=4,
-            noise=0.2,
-            deterministic_cache=cache)
-        self.assertFalse(tournament._build_cache_required())
-
-        # Not noisy, deterministic cache has content
-        key = (axelrod.TitForTat, axelrod.Defector, 3)
-        cache[key] = [('C', 'D'), ('D', 'D'), ('D', 'D')]
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            processes=4,
-            noise=0.2,
-            deterministic_cache=cache)
-        self.assertFalse(tournament._build_cache_required())
-
-        # Not noisy, deterministic cache has content
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            processes=4,
-            deterministic_cache=cache)
-        self.assertFalse(tournament._build_cache_required())
-
-        # Not noisy, empty deterministic cache
-        cache = axelrod.DeterministicCache()
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            processes=4,
-            deterministic_cache=cache)
-        self.assertTrue(tournament._build_cache_required())
-
-    def test_build_cache(self):
+    def test_run_serial(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -228,38 +190,15 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions,
             processes=2)
-        tournament._run_single_repetition = MagicMock(
-            name='_run_single_repetition')
-        tournament._build_cache([])
-        tournament._run_single_repetition.assert_called_once_with([])
-        self.assertEqual(
-            tournament._parallel_repetitions, self.test_repetitions - 1)
+        tournament._write_interactions = MagicMock(
+                    name='_write_interactions')
+        self.assertTrue(tournament._run_serial())
 
-    def test_run_single_repetition(self):
-        interactions = []
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        tournament._run_single_repetition(interactions)
-        self.assertEqual(len(tournament.interactions), 1)
-        self.assertEqual(len(tournament.interactions[0]), 15)
+        # Get the calls made to write_interactions
+        calls = tournament._write_interactions.call_args_list
+        self.assertEqual(len(calls), 15)
 
-    def test_run_serial_repetitions(self):
-        interactions = []
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        tournament._run_serial_repetitions(interactions)
-        self.assertEqual(len(tournament.interactions), self.test_repetitions)
-
-    def test_run_parallel_repetitions(self):
-        interactions = []
+    def test_run_parallel(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -267,10 +206,13 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions,
             processes=2)
-        tournament._run_parallel_repetitions(interactions)
-        self.assertEqual(len(interactions), self.test_repetitions)
-        for r in interactions:
-            self.assertEqual(len(r.values()), 15)
+        tournament._write_interactions = MagicMock(
+                    name='_write_interactions')
+        self.assertTrue(tournament._run_parallel())
+
+        # Get the calls made to write_interactions
+        calls = tournament._write_interactions.call_args_list
+        self.assertEqual(len(calls), 15)
 
     def test_n_workers(self):
         max_processes = cpu_count()
@@ -313,14 +255,15 @@ class TestTournament(unittest.TestCase):
         workers = 2
         work_queue = Queue()
         done_queue = Queue()
-        for repetition in range(self.test_repetitions):
-            work_queue.put(repetition)
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
+        chunks = tournament.match_generator.build_match_chunks()
+        for chunk in chunks:
+            work_queue.put(chunk)
         tournament._start_workers(workers, work_queue, done_queue)
 
         stops = 0
@@ -329,23 +272,6 @@ class TestTournament(unittest.TestCase):
             if payoffs == 'STOP':
                 stops += 1
         self.assertEqual(stops, workers)
-
-    def test_process_done_queue(self):
-        workers = 2
-        done_queue = Queue()
-        matches = []
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=200,
-            repetitions=self.test_repetitions)
-        for r in range(self.test_repetitions):
-            done_queue.put({})
-        for w in range(workers):
-            done_queue.put('STOP')
-        tournament._process_done_queue(workers, done_queue, matches)
-        self.assertEqual(len(matches), self.test_repetitions)
 
     def test_worker(self):
         tournament = axelrod.Tournament(
@@ -356,18 +282,20 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
 
         work_queue = Queue()
-        for repetition in range(self.test_repetitions):
-            work_queue.put(repetition)
+        chunks = tournament.match_generator.build_match_chunks()
+        count = 0
+        for chunk in chunks:
+            work_queue.put(chunk)
+            count += 1
         work_queue.put('STOP')
 
         done_queue = Queue()
         tournament._worker(work_queue, done_queue)
-        for r in range(self.test_repetitions):
+        for r in range(count):
             new_matches = done_queue.get()
-            self.assertEqual(len(new_matches), 15)
-            for index_pair, match in new_matches.items():
+            for index_pair, matches in new_matches.items():
                 self.assertIsInstance(index_pair, tuple)
-                self.assertIsInstance(match, list)
+                self.assertEqual(len(matches), self.test_repetitions)
         queue_stop = done_queue.get()
         self.assertEqual(queue_stop, 'STOP')
 
@@ -378,7 +306,23 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-        results = tournament._build_result_set()
+        results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+    def test_no_build_result_set(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=200,
+            repetitions=self.test_repetitions)
+
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        results = tournament.play(build_results=False, filename=tmp_file.name)
+        self.assertIsNone(results)
+
+        # Checking that results were written properly
+        results = axelrod.ResultSetFromFile(tmp_file.name)
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(turns=integers(min_value=1, max_value=200))
@@ -391,131 +335,99 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             repetitions=self.test_repetitions)
 
+        def make_chunk_generator():
+            for player1_index in range(len(self.players)):
+                for player2_index in range(player1_index, len(self.players)):
+                    index_pair = (player1_index, player2_index)
+                    match_params = (turns, self.game, None, 0)
+                    yield (index_pair, match_params, self.test_repetitions)
 
-        def make_generator():
-            """Return a generator used by this method"""
-            player_classes = [axelrod.Cooperator, axelrod.TitForTat,
-                              axelrod.Defector, axelrod.Grudger]
-            for i, player_cls in enumerate(player_classes):
-                for j, opponent_cls in enumerate(player_classes):
-                    if j >= i:  # These matches correspond to a round robin
-                        players = (player_cls(), opponent_cls())
-                        match = axelrod.Match(players, turns=turns)
-                        yield ((i, j), match)
+        chunk_generator = make_chunk_generator()
+        interactions = {}
+        for chunk in chunk_generator:
+            result = tournament._play_matches(chunk)
+            for index_pair, inters in result.items():
+                try:
+                    interactions[index_pair].append(inters)
+                except KeyError:
+                    interactions[index_pair] = [inters]
 
-        matches_generator = make_generator()
-        interactions = tournament._play_matches(matches_generator)
-
-        self.assertEqual(len(interactions), 10)
+        self.assertEqual(len(interactions), 15)
 
         for index_pair, inter in interactions.items():
-            self.assertEqual(len(inter), turns)
             self.assertEqual(len(index_pair), 2)
             for plays in inter:
-                self.assertIsInstance(plays, tuple)
-                self.assertEqual(len(plays), 2)
+                # Check that have the expected number of repetitions
+                self.assertEqual(len(plays), self.test_repetitions)
+                for repetition in plays:
+                    # Check that have the correct length for each rep
+                    self.assertEqual(len(repetition), turns)
 
-        # Check that matches no longer exist?
-        self.assertEqual((len(list(matches_generator))), 0)
+        # Check that matches no longer exist
+        self.assertEqual((len(list(chunk_generator))), 0)
 
-    def test_play_and_write_to_csv(self):
+    def test_write_interactions(self):
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=2,
             repetitions=2)
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        tournament.play(filename=tmp_file.name)
-        with open(tmp_file.name, 'r') as f:
-            written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
-            expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CCCC', 'CCCC'],
-                             [1, 2, 'Tit For Tat', 'Defector', 'CDDD', 'CDDD'],
-                             [0, 0, 'Cooperator', 'Cooperator', 'CCCC', 'CCCC'],
-                             [3, 3, 'Grudger', 'Grudger', 'CCCC', 'CCCC'],
-                             [2, 2, 'Defector', 'Defector', 'DDDD', 'DDDD'],
-                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority',
-                              'CCCC', 'CCCC'],
-                             [1, 4, 'Tit For Tat', 'Soft Go By Majority',
-                              'CCCC', 'CCCC'],
-                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CCCC', 'CCCC'],
-                             [1, 3, 'Tit For Tat', 'Grudger', 'CCCC', 'CCCC'],
-                             [2, 3, 'Defector', 'Grudger', 'DCDD', 'DCDD'],
-                             [0, 4, 'Cooperator', 'Soft Go By Majority',
-                              'CCCC', 'CCCC'],
-                             [2, 4, 'Defector', 'Soft Go By Majority',
-                              'DCDD', 'DCDD'],
-                             [0, 3, 'Cooperator', 'Grudger', 'CCCC', 'CCCC'],
-                             [3, 4, 'Grudger', 'Soft Go By Majority',
-                              'CCCC', 'CCCC'],
-                             [0, 2, 'Cooperator', 'Defector', 'CDCD', 'CDCD']]
-            self.assertEqual(sorted(written_data), sorted(expected_data))
+        tournament._write_interactions = MagicMock(
+                    name='_write_interactions')
+        tournament._build_result_set = MagicMock(
+                    name='_build_result_set')  # Mocking this as it is called by play
+        self.assertTrue(tournament.play(filename=tmp_file.name))
+        tournament.outputfile.close()  # This is normally closed by `build_result_set`
+
+        # Get the calls made to write_interactions
+        calls = tournament._write_interactions.call_args_list
+        self.assertEqual(len(calls), 15)
 
     def test_write_to_csv(self):
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=2,
             repetitions=2)
-        tournament.play()
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        tournament._write_to_csv(tmp_file.name)
+        tournament.play(filename=tmp_file.name)
+        tmp_file.close()
         with open(tmp_file.name, 'r') as f:
             written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
-            expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CCCC', 'CCCC'],
-                             [1, 2, 'Tit For Tat', 'Defector', 'CDDD', 'CDDD'],
-                             [0, 0, 'Cooperator', 'Cooperator', 'CCCC', 'CCCC'],
-                             [3, 3, 'Grudger', 'Grudger', 'CCCC', 'CCCC'],
-                             [2, 2, 'Defector', 'Defector', 'DDDD', 'DDDD'],
-                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority',
-                              'CCCC', 'CCCC'],
-                             [1, 4, 'Tit For Tat', 'Soft Go By Majority',
-                              'CCCC', 'CCCC'],
-                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CCCC', 'CCCC'],
-                             [1, 3, 'Tit For Tat', 'Grudger', 'CCCC', 'CCCC'],
-                             [2, 3, 'Defector', 'Grudger', 'DCDD', 'DCDD'],
-                             [0, 4, 'Cooperator', 'Soft Go By Majority',
-                              'CCCC', 'CCCC'],
-                             [2, 4, 'Defector', 'Soft Go By Majority',
-                              'DCDD', 'DCDD'],
-                             [0, 3, 'Cooperator', 'Grudger', 'CCCC', 'CCCC'],
-                             [3, 4, 'Grudger', 'Soft Go By Majority',
-                              'CCCC', 'CCCC'],
-                             [0, 2, 'Cooperator', 'Defector', 'CDCD', 'CDCD']]
+            expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
+                             [0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
+                             [1, 2, 'Tit For Tat', 'Defector', 'CD', 'DD'],
+                             [1, 2, 'Tit For Tat', 'Defector', 'CD', 'DD'],
+                             [0, 0, 'Cooperator', 'Cooperator', 'CC', 'CC'],
+                             [0, 0, 'Cooperator', 'Cooperator', 'CC', 'CC'],
+                             [3, 3, 'Grudger', 'Grudger', 'CC', 'CC'],
+                             [3, 3, 'Grudger', 'Grudger', 'CC', 'CC'],
+                             [2, 2, 'Defector', 'Defector', 'DD', 'DD'],
+                             [2, 2, 'Defector', 'Defector', 'DD', 'DD'],
+                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CC', 'CC'],
+                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CC', 'CC'],
+                             [1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CC', 'CC'],
+                             [1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CC', 'CC'],
+                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CC', 'CC'],
+                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CC', 'CC'],
+                             [1, 3, 'Tit For Tat', 'Grudger', 'CC', 'CC'],
+                             [1, 3, 'Tit For Tat', 'Grudger', 'CC', 'CC'],
+                             [2, 3, 'Defector', 'Grudger', 'DD', 'CD'],
+                             [2, 3, 'Defector', 'Grudger', 'DD', 'CD'],
+                             [0, 4, 'Cooperator', 'Soft Go By Majority', 'CC', 'CC'],
+                             [0, 4, 'Cooperator', 'Soft Go By Majority', 'CC', 'CC'],
+                             [2, 4, 'Defector', 'Soft Go By Majority', 'DD', 'CD'],
+                             [2, 4, 'Defector', 'Soft Go By Majority', 'DD', 'CD'],
+                             [0, 3, 'Cooperator', 'Grudger', 'CC', 'CC'],
+                             [0, 3, 'Cooperator', 'Grudger', 'CC', 'CC'],
+                             [3, 4, 'Grudger', 'Soft Go By Majority', 'CC', 'CC'],
+                             [3, 4, 'Grudger', 'Soft Go By Majority', 'CC', 'CC'],
+                             [0, 2, 'Cooperator', 'Defector', 'CC', 'DD'],
+                             [0, 2, 'Cooperator', 'Defector', 'CC', 'DD']]
             self.assertEqual(sorted(written_data), sorted(expected_data))
-
-    def test_data_for_csv(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=2,
-            repetitions=2)
-        tournament.play()
-        expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CCCC', 'CCCC'],
-                         [1, 2, 'Tit For Tat', 'Defector', 'CDDD', 'CDDD'],
-                         [0, 0, 'Cooperator', 'Cooperator', 'CCCC', 'CCCC'],
-                         [3, 3, 'Grudger', 'Grudger', 'CCCC', 'CCCC'],
-                         [2, 2, 'Defector', 'Defector', 'DDDD', 'DDDD'],
-                         [4, 4, 'Soft Go By Majority', 'Soft Go By Majority',
-                          'CCCC', 'CCCC'],
-                         [1, 4, 'Tit For Tat', 'Soft Go By Majority',
-                          'CCCC', 'CCCC'],
-                         [1, 1, 'Tit For Tat', 'Tit For Tat', 'CCCC', 'CCCC'],
-                         [1, 3, 'Tit For Tat', 'Grudger', 'CCCC', 'CCCC'],
-                         [2, 3, 'Defector', 'Grudger', 'DCDD', 'DCDD'],
-                         [0, 4, 'Cooperator', 'Soft Go By Majority',
-                          'CCCC', 'CCCC'],
-                         [2, 4, 'Defector', 'Soft Go By Majority',
-                          'DCDD', 'DCDD'],
-                         [0, 3, 'Cooperator', 'Grudger', 'CCCC', 'CCCC'],
-                         [3, 4, 'Grudger', 'Soft Go By Majority',
-                          'CCCC', 'CCCC'],
-                         [0, 2, 'Cooperator', 'Defector', 'CDCD', 'CDCD']]
-        generator_data = tournament._data_for_csv()
-        for row, expected_row in zip(sorted(generator_data), sorted(expected_data)):
-            self.assertEqual(row, expected_row)
 
 
 class TestProbEndTournament(unittest.TestCase):
@@ -544,23 +456,9 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertEqual(tournament._processes, None)
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
-        self.assertEqual(tournament.deterministic_cache, {})
         self.assertEqual(tournament.noise, 0.2)
-        self.assertEqual(tournament._parallel_repetitions, 10)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
-
-        # Test init when passing a cache:
-        cache = axelrod.DeterministicCache()
-        tournament = axelrod.ProbEndTournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            prob_end=self.test_prob_end,
-            processes=4,
-            noise=0.2,
-            deterministic_cache=cache)
-        self.assertEqual(tournament.deterministic_cache, cache)
 
     @given(s=lists(sampled_from(axelrod.strategies),
                    min_size=2,  # Errors are returned if less than 2 strategies
@@ -594,5 +492,6 @@ class TestProbEndTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(players))
-        self.assertEqual(results.players, players)
-        self.assertEqual(len(results.interactions), repetitions)
+        self.assertEqual(results.players, [str(p) for p in players])
+        for rep in results.interactions.values():
+            self.assertEqual(len(rep), repetitions)

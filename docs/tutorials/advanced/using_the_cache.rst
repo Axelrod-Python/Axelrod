@@ -65,25 +65,8 @@ We can write the cache to file::
 Caching a Tournament
 --------------------
 
-We can use a prebuilt cache in a tournament (by default a new cache is used). Firstly,
-let us read in the previous cache from file::
-
-    >>> cache = axl.DeterministicCache("cache.txt")
-    >>> cache  # doctest: +ELLIPSIS
-    {(<class 'axelrod.strategies.gobymajority.GoByMajority'>, <class 'axelrod.strategies.alternator.Alternator'>, 200): [('C', 'C'), ...]}
-
-Let us create a tournament including :code:`GoByMajority` and :code:`Alternator`
-to be able to make use of the cache::
-
-    >>> players = [axl.GoByMajority(), axl.Alternator(), axl.Cooperator()]
-    >>> tournament = axl.Tournament(players, turns=200, repetitions=5, deterministic_cache=cache)
-    >>> results = tournament.play()
-
-The cache has not only been used for this but has now also been updated with the
-new matches::
-
-    >>> len(cache)
-    6
+Tournaments will automatically create caches as needed on a match by match
+basis.
 
 Caching a Moran Process
 -----------------------
@@ -91,6 +74,7 @@ Caching a Moran Process
 A prebuilt cache can also be used in a Moran process (by default a new cache is
 used)::
 
+    >>> cache = axl.DeterministicCache("cache.txt")
     >>> players = [axl.GoByMajority(), axl.Alternator(),
     ...            axl.Cooperator(), axl.Grudger()]
     >>> mp = axl.MoranProcess(players, deterministic_cache=cache)
@@ -98,7 +82,7 @@ used)::
     >>> mp.winning_strategy_name   # doctest: +SKIP
     Defector
 
-Again we see that the cache has been augmented, although note that this
+We see that the cache has been augmented, although note that this
 particular number will depend on the stochastic behaviour of the Moran process::
 
     >>> len(cache)  # doctest: +SKIP

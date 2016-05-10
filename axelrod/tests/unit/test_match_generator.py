@@ -1,8 +1,11 @@
+from __future__ import division
 import unittest
-import axelrod
 
 from hypothesis import given, example
-from hypothesis.strategies import floats, random_module
+from hypothesis.strategies import floats, random_module, integers
+
+import axelrod
+
 
 test_strategies = [
     axelrod.Cooperator,
@@ -12,6 +15,7 @@ test_strategies = [
     axelrod.GoByMajority
 ]
 test_turns = 100
+test_repetitions = 20
 test_game = axelrod.Game()
 
 
@@ -23,7 +27,7 @@ class TestTournamentType(unittest.TestCase):
 
     def test_init_with_clone(self):
         tt = axelrod.MatchGenerator(
-            self.players, test_turns, test_game, axelrod.DeterministicCache())
+            self.players, test_turns, test_game, test_repetitions)
         self.assertEqual(tt.players, self.players)
         self.assertEqual(tt.turns, test_turns)
         player = tt.players[0]
@@ -34,6 +38,24 @@ class TestTournamentType(unittest.TestCase):
         opponent.name = 'Test'
         self.assertNotEqual(player.name, opponent.name)
 
+    def test_len(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            len(tt)
+
+    def test_build_match_params(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            tt.build_match_chunks()
+
+    def test_single_match_params(self):
+        tt = axelrod.MatchGenerator(
+            self.players, test_turns, test_game, test_repetitions)
+        with self.assertRaises(NotImplementedError):
+            tt.build_single_match_params()
+
 
 class TestRoundRobin(unittest.TestCase):
 
@@ -41,39 +63,55 @@ class TestRoundRobin(unittest.TestCase):
     def setUpClass(cls):
         cls.players = [s() for s in test_strategies]
 
-    def test_build_single_match(self):
+    def test_build_single_match_params(self):
         rr = axelrod.RoundRobinMatches(
-            self.players, test_turns, test_game, axelrod.DeterministicCache())
-        match = rr.build_single_match((self.players[0], self.players[1]))
+            self.players, test_turns, test_game, test_repetitions)
+        match_params = rr.build_single_match_params()
+        self.assertIsInstance(match_params, tuple)
+        self.assertEqual(match_params[0], rr.turns)
+        self.assertEqual(match_params[1], rr.game)
+        self.assertEqual(match_params[2], None)
+        self.assertEqual(match_params[3], 0)
+
+        # Check that can build a match
+        players = [axelrod.Cooperator(), axelrod.Defector()]
+        match_params = [players] + list(match_params)
+        match = axelrod.Match(*match_params)
         self.assertIsInstance(match, axelrod.Match)
-        self.assertEqual(len(match), rr.turns)
+        self.assertEqual(len(match), test_turns)
 
+        # Testing with noise
+        match_params = rr.build_single_match_params(noise=.5)
+        self.assertIsInstance(match_params, tuple)
+        self.assertEqual(match_params[0], rr.turns)
+        self.assertEqual(match_params[1], rr.game)
+        self.assertEqual(match_params[2], None)
+        self.assertEqual(match_params[3], .5)
 
-    def test_build_matches(self):
-        rr = axelrod.RoundRobinMatches(
-            self.players, test_turns, test_game, axelrod.DeterministicCache())
-        matches = rr.build_matches()
-        match_definitions = [
-            (index_pair) for index_pair, match in matches]
-        expected_match_definitions = [
-            (0, 0),
-            (0, 1),
-            (0, 2),
-            (0, 3),
-            (0, 4),
-            (1, 1),
-            (1, 2),
-            (1, 3),
-            (1, 4),
-            (2, 2),
-            (2, 3),
-            (2, 4),
-            (3, 3),
-            (3, 4),
-            (4, 4)
-        ]
-        self.assertEqual(sorted(match_definitions), expected_match_definitions)
+        # Check that can build a match
+        players = [axelrod.Cooperator(), axelrod.Defector()]
+        match_params = [players] + list(match_params)
+        match = axelrod.Match(*match_params)
+        self.assertIsInstance(match, axelrod.Match)
+        self.assertEqual(len(match), test_turns)
 
+    @given(repetitions=integers(min_value=1, max_value=test_repetitions))
+    @example(repetitions=test_repetitions)
+    def test_build_match_chunks(self, repetitions):
+        rr = axelrod.RoundRobinMatches(self.players, test_turns, test_game, repetitions)
+        chunks = list(rr.build_match_chunks())
+        match_definitions = [tuple(list(index_pair) + [repetitions]) for (index_pair, match_params, repetitions) in chunks]
+        expected_match_definitions = [(i, j, repetitions) for i in range(5) for j in range(i, 5)]
+
+        self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
+
+    def test_len(self):
+        turns = 5
+        repetitions = 10
+        rr = axelrod.RoundRobinMatches(self.players, turns=turns, game=None,
+                                       repetitions=repetitions)
+        self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
+        self.assertEqual(rr.estimated_size(), len(rr) * turns * repetitions)
 
 class TestProbEndRoundRobin(unittest.TestCase):
 
@@ -81,31 +119,17 @@ class TestProbEndRoundRobin(unittest.TestCase):
     def setUpClass(cls):
         cls.players = [s() for s in test_strategies]
 
-    @given(prob_end=floats(min_value=0, max_value=1), rm=random_module())
-    def test_build_matches(self, prob_end, rm):
+    @given(repetitions=integers(min_value=1, max_value=test_repetitions),
+           prob_end=floats(min_value=0, max_value=1), rm=random_module())
+    @example(repetitions=test_repetitions, prob_end=.5, rm=random_module())
+    def test_build_match_chunks(self, repetitions, prob_end, rm):
         rr = axelrod.ProbEndRoundRobinMatches(
-            self.players, prob_end, test_game, axelrod.DeterministicCache())
-        matches = rr.build_matches()
-        match_definitions = [
-            (index_pair) for index_pair, match in matches]
-        expected_match_definitions = [
-            (0, 0),
-            (0, 1),
-            (0, 2),
-            (0, 3),
-            (0, 4),
-            (1, 1),
-            (1, 2),
-            (1, 3),
-            (1, 4),
-            (2, 2),
-            (2, 3),
-            (2, 4),
-            (3, 3),
-            (3, 4),
-            (4, 4)
-        ]
-        self.assertEqual(sorted(match_definitions), expected_match_definitions)
+            self.players, prob_end, test_game, repetitions)
+        chunks = list(rr.build_match_chunks())
+        match_definitions = [tuple(list(index_pair) + [repetitions]) for (index_pair, match_params, repetitions) in chunks]
+        expected_match_definitions = [(i, j, repetitions) for i in range(5) for j in range(i, 5)]
+
+        self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
 
     @given(prob_end=floats(min_value=0.1, max_value=0.5), rm=random_module())
     def test_build_matches_different_length(self, prob_end, rm):
@@ -117,15 +141,15 @@ class TestProbEndRoundRobin(unittest.TestCase):
         to sample all games with same length.
         """
         rr = axelrod.ProbEndRoundRobinMatches(
-            self.players, prob_end, test_game, axelrod.DeterministicCache())
-        matches = rr.build_matches()
-        match_lengths = [len(match) for index_pair, match in matches]
+            self.players, prob_end, test_game, test_repetitions)
+        chunks = rr.build_match_chunks()
+        match_lengths = [match_params[0] for (index_pair, match_params, repetitions) in chunks]
         self.assertNotEqual(min(match_lengths), max(match_lengths))
 
     @given(prob_end=floats(min_value=0, max_value=1), rm=random_module())
     def test_sample_length(self, prob_end, rm):
         rr = axelrod.ProbEndRoundRobinMatches(
-            self.players, prob_end, test_game, axelrod.DeterministicCache())
+            self.players, prob_end, test_game, test_repetitions)
         self.assertGreaterEqual(rr.sample_length(prob_end), 1)
         try:
             self.assertIsInstance(rr.sample_length(prob_end), int)
@@ -133,11 +157,48 @@ class TestProbEndRoundRobin(unittest.TestCase):
             self.assertEqual(rr.sample_length(prob_end), float("inf"))
 
     @given(prob_end=floats(min_value=.1, max_value=1), rm=random_module())
-    def test_build_single_match(self, prob_end, rm):
+    def test_build_single_match_params(self, prob_end, rm):
         rr = axelrod.ProbEndRoundRobinMatches(
-            self.players, prob_end, test_game, axelrod.DeterministicCache())
-        match = rr.build_single_match((self.players[0], self.players[1]))
+            self.players, prob_end, test_game, test_repetitions)
+        match_params = rr.build_single_match_params()
+        self.assertIsInstance(match_params, tuple)
+        self.assertIsInstance(match_params[0], int)
+        self.assertLess(match_params[0], float('inf'))
+        self.assertGreater(match_params[0], 0)
+        self.assertEqual(match_params[1], rr.game)
+        self.assertEqual(match_params[2], None)
+        self.assertEqual(match_params[3], 0)
 
+        # Check that can build a match
+        players = [axelrod.Cooperator(), axelrod.Defector()]
+        match_params = [players] + list(match_params)
+        match = axelrod.Match(*match_params)
         self.assertIsInstance(match, axelrod.Match)
-        self.assertGreaterEqual(len(match), 1)
-        self.assertLessEqual(len(match), float("inf"))
+        self.assertLess(len(match), float('inf'))
+        self.assertGreater(len(match), 0)
+
+        # Testing with noise
+        match_params = rr.build_single_match_params(noise=.5)
+        self.assertIsInstance(match_params, tuple)
+        self.assertLess(match_params[0], float('inf'))
+        self.assertGreater(match_params[0], 0)
+        self.assertEqual(match_params[1], rr.game)
+        self.assertEqual(match_params[2], None)
+        self.assertEqual(match_params[3], .5)
+
+        # Check that can build a match
+        players = [axelrod.Cooperator(), axelrod.Defector()]
+        match_params = [players] + list(match_params)
+        match = axelrod.Match(*match_params)
+        self.assertIsInstance(match, axelrod.Match)
+        self.assertLess(len(match), float('inf'))
+        self.assertGreater(len(match), 0)
+
+    @given(prob_end=floats(min_value=.1, max_value=1), rm=random_module())
+    def test_len(self, prob_end, rm):
+        turns = 5
+        repetitions = 10
+        rr = axelrod.ProbEndRoundRobinMatches(self.players, prob_end, game=None,
+                                       repetitions=repetitions)
+        self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
+        self.assertAlmostEqual(rr.estimated_size(), len(rr) * 1. / prob_end * repetitions)
