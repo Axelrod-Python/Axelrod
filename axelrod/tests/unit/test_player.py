@@ -116,6 +116,7 @@ class TestOpponent(Player):
 class TestPlayer(unittest.TestCase):
     "A Test class from which other player test classes are inherited"
     player = TestOpponent
+    expected_class_classifier = None
 
     def test_initialisation(self):
         """Test that the player initiates correctly."""
@@ -126,7 +127,7 @@ class TestPlayer(unittest.TestCase):
                     {'length': -1, 'game': DefaultGame, 'noise': 0})
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
-            self.classifier_test()
+            self.classifier_test(self.expected_class_classifier)
 
     def test_repr(self):
         """Test that the representation is correct."""
@@ -237,12 +238,19 @@ class TestPlayer(unittest.TestCase):
             random_seed=random_seed, attrs=attrs)
 
 
-    def classifier_test(self):
+    def classifier_test(self, expected_class_classifier=None):
         """Test that the keys in the expected_classifier dictionary give the
         expected values in the player classifier dictionary. Also checks that
         two particular keys (memory_depth and stochastic) are in the
         dictionary."""
         player = self.player()
+
+        # Test that player has same classifier as it's class unless otherwise
+        # specified
+        if expected_class_classifier is None:
+            expected_class_classifier = player.classifier
+        self.assertEqual(expected_class_classifier, self.player.classifier)
+
         self.assertTrue('memory_depth' in player.classifier,
                         msg="memory_depth not in classifier")
         self.assertTrue('stochastic' in player.classifier,
