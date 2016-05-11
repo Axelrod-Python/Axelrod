@@ -1,4 +1,3 @@
-from collections import defaultdict
 import csv
 import os
 import shelve
@@ -670,7 +669,7 @@ class ResultSetFromFile(ResultSet):
         """
         self.interactions = interactions
         if not interactions:
-            self.interactions = defaultdict(list)
+            self.interactions = dict()
         self.players, self.interactions = self._read_csv(filename)
         self.nplayers = len(self.players)
         try:
