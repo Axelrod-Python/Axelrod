@@ -658,7 +658,7 @@ class ResultSetFromFile(ResultSet):
     by the tournament class.
     """
 
-    def __init__(self, filename, with_morality=True):
+    def __init__(self, filename, with_morality=True, interactions=None):
         """
         Parameters
         ----------
@@ -668,9 +668,16 @@ class ResultSetFromFile(ResultSet):
                 a flag to determine whether morality metrics should be
                 calculated.
         """
+        self.interactions = interactions
+        if not interactions:
+            self.interactions = defaultdict(list)
         self.players, self.interactions = self._read_csv(filename)
         self.nplayers = len(self.players)
-        self.nrepetitions = len(list(self.interactions.values())[0])
+        try:
+            key = next(self.interactions.keys())
+        except TypeError:
+            key = self.interactions.keys()[0]
+        self.nrepetitions = len(list(self.interactions[key]))
 
         # Calculate all attributes:
         self.build_all(with_morality)
@@ -699,14 +706,17 @@ class ResultSetFromFile(ResultSet):
                 - Second element: interactions (a dictionary mapping player pair
                   indices to lists of histories)
         """
-        interactions = defaultdict(list)
+        interactions = self.interactions
         players_d = {}
         with open(filename, 'r') as f:
             for row in csv.reader(f):
                 index_pair = (int(row[0]), int(row[1]))
                 players = (row[2], row[3])
                 interaction = list(zip(row[4], row[5]))
-                interactions[index_pair].append(interaction)
+                try:
+                    interactions[index_pair].append(interaction)
+                except KeyError:
+                    interactions[index_pair] = [interaction]
                 # Build a dictionary mapping indices to players
                 # This is temporary to make sure the ordering of the players
                 # matches the indices
@@ -762,7 +772,7 @@ class WrappedTemporaryShelve(object):
         return self.shelve.has_key(key)
 
 
-class BigResultSetFromFile(ResultSet):
+class BigResultSetFromFile(ResultSetFromFile):
     """A class to hold the results of a tournament. Reads in a CSV file produced
     by the tournament class into a python shelve to conserve memory."""
 
@@ -776,60 +786,5 @@ class BigResultSetFromFile(ResultSet):
                 a flag to determine whether morality metrics should be
                 calculated.
         """
-        self.players, self.interactions = self._read_csv(filename)
-        self.nplayers = len(self.players)
-        key = next(self.interactions.keys())
-        self.nrepetitions = len(list(self.interactions[key]))
-
-        # Calculate all attributes:
-        self.build_all(with_morality)
-
-    def _read_csv(self, filename):
-        """
-        Reads from a csv file of the format:
-
-        p1index, p2index, p1name, p2name, history1, history2
-        ...
-        0, 1, Defector, Cooperator, DDD, CCC
-        0, 1, Defector, Cooperator, DDD, CCC
-        0, 1, Defector, Cooperator, DDD, CCC
-        0, 2, Defector, Alternator, DDD, CDC
-        0, 2, Defector, Alternator, DDD, CDC
-        0, 2, Defector, Alternator, DDD, CDC
-        1, 2, Cooperator, Alternator, CCC, CDC
-        1, 2, Cooperator, Alternator, CCC, CDC
-        1, 2, Cooperator, Alternator, CCC, CDC
-
-        Returns
-        -------
-
-            A tuple:
-                - First element: list of player names
-                - Second element: interactions (a shelve mapping player pair
-                  indices to lists of histories)
-        """
-
         interactions = WrappedTemporaryShelve()
-
-        players_d = {}
-        with open(filename, 'r') as f:
-            for row in csv.reader(f):
-                index_pair = (int(row[0]), int(row[1]))
-                players = (row[2], row[3])
-                interaction = list(zip(row[4], row[5]))
-                try:
-                    interactions[index_pair].append(interaction)
-                except KeyError:
-                    interactions[index_pair] = [interaction]
-                # Build a dictionary mapping indices to players
-                # This is temporary to make sure the ordering of the players
-                # matches the indices
-                for index, player in zip(index_pair, players):
-                    if index not in players:
-                        players_d[index] = player
-
-        # Create an ordered list of players
-        players = []
-        for i in range(len(players_d)):
-            players.append(players_d[i])
-        return players, interactions
+        ResultSetFromFile.__init__(self, filename, with_morality, interactions)
