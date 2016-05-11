@@ -2,6 +2,8 @@ import unittest
 from hypothesis import given
 from hypothesis.strategies import integers, tuples
 
+from axelrod.tests.property import *
+
 import axelrod
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -50,3 +52,8 @@ class TestGame(unittest.TestCase):
         self.assertEqual(game.score((D, D)), (p, p))
         self.assertEqual(game.score((C, D)), (s, t))
         self.assertEqual(game.score((D, C)), (t, s))
+
+    @given(game=games())
+    def test_repr(self, game):
+        expected_repr = "Axelrod game: (R,P,S,T) = {}".format(game.RPST())
+        self.assertEqual(expected_repr, str(game))

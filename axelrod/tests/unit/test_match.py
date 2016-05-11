@@ -7,16 +7,18 @@ from axelrod.deterministic_cache import DeterministicCache
 from hypothesis import given, example
 from hypothesis.strategies import integers, floats, random_module, assume
 
+from axelrod.tests.property import games
+
 C, D = Actions.C, Actions.D
 
 
 class TestMatch(unittest.TestCase):
 
-    @given(turns=integers(min_value=1, max_value=200))
-    @example(turns=5)
-    def test_init(self, turns):
+    @given(turns=integers(min_value=1, max_value=200), game=games())
+    @example(turns=5, game=axelrod.DefaultGame)
+    def test_init(self, turns, game):
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
-        match = axelrod.Match((p1, p2), turns)
+        match = axelrod.Match((p1, p2), turns, game=game)
         self.assertEqual(match.result, [])
         self.assertEqual(match.players, [p1, p2])
         self.assertEqual(
@@ -28,6 +30,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.turns, turns)
         self.assertEqual(match._cache, {})
         self.assertEqual(match.noise, 0)
+        self.assertEqual(match.game.RPST(), game.RPST())
 
     @given(turns=integers(min_value=1, max_value=200))
     @example(turns=5)
