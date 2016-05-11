@@ -60,8 +60,7 @@ def tournaments(draw, strategies=axelrod.strategies,
                 min_size=1, max_size=10,
                 min_turns=1, max_turns=200,
                 min_noise=0, max_noise=1,
-                min_repetitions=1, max_repetitions=20,
-                max_processes=None):
+                min_repetitions=1, max_repetitions=20):
     """
     A hypothesis decorator to return a tournament and a random seed (to ensure
     reproducibility for strategies that make use of the random module when
@@ -85,8 +84,6 @@ def tournaments(draw, strategies=axelrod.strategies,
         The minimum number of repetitions
     max_repetitions : integer
         The maximum number of repetitions
-    max_processes : bool
-        Maximum number of processes to use
     """
     seed = draw(random_module())
     strategies = draw(strategy_lists(strategies=strategies,
@@ -98,14 +95,8 @@ def tournaments(draw, strategies=axelrod.strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    if max_processes is not None:
-        processes = draw(integers(min_value=1, max_value=max_processes))
-    else:
-        processes = None
-
     tournament = axelrod.Tournament(players, turns=turns,
-                                    repetitions=repetitions, noise=noise,
-                                    processes=processes)
+                                    repetitions=repetitions, noise=noise)
     return tournament, seed
 
 
@@ -114,8 +105,7 @@ def prob_end_tournaments(draw, strategies=axelrod.strategies,
                         min_size=1, max_size=10,
                         min_prob_end=0, max_prob_end=1,
                         min_noise=0, max_noise=1,
-                        min_repetitions=1, max_repetitions=20,
-                        max_processes=None):
+                        min_repetitions=1, max_repetitions=20):
     """
     A hypothesis decorator to return a tournament and a random seed (to ensure
     reproducibility for strategies that make use of the random module when
@@ -139,8 +129,6 @@ def prob_end_tournaments(draw, strategies=axelrod.strategies,
         The minimum number of repetitions
     max_repetitions : integer
         The maximum number of repetitions
-    max_processes : bool
-        Maximum number of processes to use
     """
     seed = draw(random_module())
     strategies = draw(strategy_lists(strategies=strategies,
@@ -152,14 +140,8 @@ def prob_end_tournaments(draw, strategies=axelrod.strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    if max_processes is not None:
-        processes = draw(integers(min_value=1, max_value=max_processes))
-    else:
-        processes = None
-
     tournament = axelrod.ProbEndTournament(players, prob_end=prob_end,
-                                           repetitions=repetitions, noise=noise,
-                                           processes=processes)
+                                           repetitions=repetitions, noise=noise)
     return tournament, seed
 
 
