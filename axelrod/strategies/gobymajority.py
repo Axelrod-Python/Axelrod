@@ -1,5 +1,7 @@
 from axelrod import Actions, Player, init_args
 
+import copy
+
 C, D = Actions.C, Actions.D
 
 
@@ -77,6 +79,8 @@ class GoByMajority40(GoByMajority):
     """
     GoByMajority player with a memory of 40.
     """
+    classifier = copy.copy(GoByMajority.classifier)
+    classifier['memory_depth'] = 40
 
     @init_args
     def __init__(self, memory_depth=40, soft=True):
@@ -88,6 +92,8 @@ class GoByMajority20(GoByMajority):
     """
     GoByMajority player with a memory of 20.
     """
+    classifier = copy.copy(GoByMajority.classifier)
+    classifier['memory_depth'] = 20
 
     @init_args
     def __init__(self, memory_depth=20, soft=True):
@@ -99,6 +105,8 @@ class GoByMajority10(GoByMajority):
     """
     GoByMajority player with a memory of 10.
     """
+    classifier = copy.copy(GoByMajority.classifier)
+    classifier['memory_depth'] = 10
 
     @init_args
     def __init__(self, memory_depth=10, soft=True):
@@ -110,6 +118,8 @@ class GoByMajority5(GoByMajority):
     """
     GoByMajority player with a memory of 5.
     """
+    classifier = copy.copy(GoByMajority.classifier)
+    classifier['memory_depth'] = 5
 
     @init_args
     def __init__(self, memory_depth=5, soft=True):
@@ -136,6 +146,8 @@ class HardGoByMajority40(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 40.
     """
+    classifier = copy.copy(GoByMajority.classifier)
+    classifier['memory_depth'] = 40
 
     @init_args
     def __init__(self, memory_depth=40, soft=False):
@@ -147,6 +159,8 @@ class HardGoByMajority20(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 20.
     """
+    classifier = copy.copy(GoByMajority.classifier)
+    classifier['memory_depth'] = 20
 
     @init_args
     def __init__(self, memory_depth=20, soft=False):
@@ -158,6 +172,8 @@ class HardGoByMajority10(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 10.
     """
+    classifier = copy.copy(GoByMajority.classifier)
+    classifier['memory_depth'] = 10
 
     @init_args
     def __init__(self, memory_depth=10, soft=False):
@@ -169,6 +185,8 @@ class HardGoByMajority5(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 5.
     """
+    classifier = copy.copy(GoByMajority.classifier)
+    classifier['memory_depth'] = 5
 
     @init_args
     def __init__(self, memory_depth=5, soft=False):
