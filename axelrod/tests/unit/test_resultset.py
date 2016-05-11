@@ -354,3 +354,29 @@ class TestResultSetFromFile(unittest.TestCase):
                                  (0, 2): [[('C', 'D'), ('C', 'D')]],
                                  (1, 1): [[('C', 'C'), ('C', 'C')]]}
         self.assertEqual(rs.interactions, expected_interactions)
+
+class TestBigResultSetFromFile(unittest.TestCase):
+    tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+    tournament = axelrod.Tournament(
+        players=[axelrod.Cooperator(),
+                 axelrod.TitForTat(),
+                 axelrod.Defector()],
+        turns=2,
+        repetitions=1)
+    tournament.play(filename=tmp_file.name, build_results=False)
+    tmp_file.close()
+
+    def test_init(self):
+        rs = axelrod.BigResultSetFromFile(self.tmp_file.name)
+        players = ['Cooperator', 'Tit For Tat', 'Defector']
+        self.assertEqual(rs.players, players)
+        self.assertEqual(rs.nplayers, len(players))
+        self.assertEqual(rs.nrepetitions, 1)
+
+        expected_interactions = {(0, 1): [[('C', 'C'), ('C', 'C')]],
+                                 (1, 2): [[('C', 'D'), ('D', 'D')]],
+                                 (0, 0): [[('C', 'C'), ('C', 'C')]],
+                                 (2, 2): [[('D', 'D'), ('D', 'D')]],
+                                 (0, 2): [[('C', 'D'), ('C', 'D')]],
+                                 (1, 1): [[('C', 'C'), ('C', 'C')]]}
+        self.assertEqual(dict(rs.interactions.items()), expected_interactions)
