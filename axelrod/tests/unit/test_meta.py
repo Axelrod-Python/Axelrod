@@ -343,6 +343,9 @@ class TestMetaMixer(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['makes_use_of'] = set()
+
     def test_strategy(self):
 
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
