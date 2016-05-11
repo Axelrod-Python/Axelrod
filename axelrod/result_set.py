@@ -382,13 +382,13 @@ class ResultSet(object):
 
         for player in plist:
             for opponent in plist:
-                if self.interactions.has_key((player, opponent)):
+                if (player, opponent) in self.interactions:
                     for repetition, interaction in enumerate(self.interactions[(player, opponent)]):
                         scores = iu.compute_final_score_per_turn(interaction)
                         diff = (scores[0] - scores[1])
                         score_diffs[player][opponent][repetition] = diff
 
-                if self.interactions.has_key((opponent, player)):
+                if (opponent, player) in self.interactions:
                     for repetition, interaction in enumerate(self.interactions[(opponent, player)]):
                         scores = iu.compute_final_score_per_turn(interaction)
                         diff = (scores[1] - scores[0])
@@ -494,12 +494,12 @@ class ResultSet(object):
             for opponent in plist:
                 coop_counts = []
 
-                if self.interactions.has_key((player, opponent)):
+                if (player, opponent) in self.interactions:
                     repetitions = self.interactions[(player, opponent)]
                     for interaction in repetitions:
                         coop_counts.append(iu.compute_normalised_cooperation(interaction)[0])
 
-                elif self.interactions.has_key((opponent, player)):
+                elif (opponent, player) in self.interactions:
                     repetitions = self.interactions[(opponent, player)]
                     for interaction in repetitions:
                         coop_counts.append(iu.compute_normalised_cooperation(interaction)[1])
@@ -673,7 +673,7 @@ class ResultSetFromFile(ResultSet):
         self.players, self.interactions = self._read_csv(filename)
         self.nplayers = len(self.players)
         try:
-            key = next(self.interactions.keys())
+            key = next(iter(self.interactions.keys()))
         except TypeError:
             key = self.interactions.keys()[0]
         self.nrepetitions = len(list(self.interactions[key]))
@@ -769,6 +769,11 @@ class WrappedTemporaryShelve(object):
     def has_key(self, index_pair):
         key = self.index_pair_to_key(index_pair)
         return self.shelve.has_key(key)
+
+    def __contains__(self, index_pair):
+        key = self.index_pair_to_key(index_pair)
+        return (key in self.shelve)
+        return self.has_key(index_pair)
 
 
 class BigResultSetFromFile(ResultSetFromFile):
