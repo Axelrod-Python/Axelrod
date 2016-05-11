@@ -7,7 +7,9 @@ from axelrod import MoranProcess
 from axelrod.moran import fitness_proportionate_selection
 
 from hypothesis import given, example, settings
-from hypothesis.strategies import integers, lists, sampled_from, random_module, floats
+from hypothesis.strategies import random_module
+
+from axelrod.tests.property import strategy_lists
 
 
 class TestMoranProcess(unittest.TestCase):
@@ -67,9 +69,7 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(populations, mp.populations)
         self.assertEqual(mp.winning_strategy_name, str(axelrod.Defector()))
 
-    @given(strategies=lists(sampled_from(axelrod.strategies),
-                   min_size=2,  # Errors are returned if less than 2 strategies
-                   max_size=5, unique=True),
+    @given(strategies=strategy_lists(min_size=2, max_size=5),
            rm=random_module())
     @settings(max_examples=5, timeout=0)  # Very low number of examples
 
