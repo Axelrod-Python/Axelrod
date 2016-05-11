@@ -20,7 +20,7 @@ class Tournament(object):
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
-                 processes=None, noise=0, with_morality=True):
+                 noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -53,7 +53,6 @@ class Tournament(object):
         self.match_generator = match_generator(players, turns, self.game,
                                                self.repetitions)
         self._with_morality = with_morality
-        self._processes = processes
         self._logger = logging.getLogger(__name__)
 
     def setup_output_file(self, filename=None):
@@ -68,7 +67,7 @@ class Tournament(object):
         # Save filename for loading ResultSet later
         self.filename = filename
 
-    def play(self, build_results=True, filename=None, progress_bar=True):
+    def play(self, build_results=True, filename=None, processes=None, progress_bar=True):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -92,10 +91,10 @@ class Tournament(object):
         if not build_results and not filename:
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
 
-        if self._processes is None:
+        if processes is None:
             self._run_serial(progress_bar=progress_bar)
         else:
-            self._run_parallel(progress_bar=progress_bar)
+            self._run_parallel(processes=processes, progress_bar=progress_bar)
 
         # Make sure that python has finished writing to disk
         self.outputfile.flush()
@@ -151,7 +150,7 @@ class Tournament(object):
                 row.append(history2)
                 self.writer.writerow(row)
 
-    def _run_parallel(self, progress_bar=False):
+    def _run_parallel(self, processes=2, progress_bar=False):
         """
         Run all matches in parallel
 
@@ -166,7 +165,7 @@ class Tournament(object):
         # target functions which can be pickled and instance methods cannot.
         work_queue = Queue()
         done_queue = Queue()
-        workers = self._n_workers()
+        workers = self._n_workers(processes=processes)
 
         chunks = self.match_generator.build_match_chunks()
         for chunk in chunks:
@@ -177,7 +176,7 @@ class Tournament(object):
 
         return True
 
-    def _n_workers(self):
+    def _n_workers(self, processes=2):
         """
         Determines the number of parallel processes to use.
 
@@ -185,8 +184,8 @@ class Tournament(object):
         -------
         integer
         """
-        if (2 <= self._processes <= cpu_count()):
-            n_workers = self._processes
+        if (2 <= processes <= cpu_count()):
+            n_workers = processes
         else:
             n_workers = cpu_count()
         return n_workers
@@ -297,7 +296,6 @@ class ProbEndTournament(Tournament):
 
     def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
                  name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 processes=None,
                  noise=0,
                  with_morality=True):
         """
@@ -324,8 +322,7 @@ class ProbEndTournament(Tournament):
         """
         super(ProbEndTournament, self).__init__(
             players, name=name, game=game, turns=float("inf"),
-            repetitions=repetitions, processes=processes,
-            noise=noise, with_morality=with_morality)
+            repetitions=repetitions, noise=noise, with_morality=with_morality)
 
         self.prob_end = prob_end
         self.match_generator = ProbEndRoundRobinMatches(

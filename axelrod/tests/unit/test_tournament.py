@@ -62,7 +62,6 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=self.test_turns,
-            processes=4,
             noise=0.2)
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertIsInstance(
@@ -72,7 +71,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.turns, self.test_turns)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
-        self.assertEqual(tournament._processes, 4)
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.noise, 0.2)
@@ -182,10 +180,9 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=self.test_repetitions,
-            processes=2)
+            repetitions=self.test_repetitions)
 
-        results = tournament.play()
+        results = tournament.play(processes=2)
         self.assertIsInstance(results, axelrod.ResultSet)
 
         results = tournament.play(progress_bar=True)
@@ -231,9 +228,8 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=self.test_repetitions,
-            processes=2)
-        results = tournament.play(progress_bar=False)
+            repetitions=self.test_repetitions)
+        results = tournament.play(processes=2, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
         # The following relates to #516
@@ -245,9 +241,8 @@ class TestTournament(unittest.TestCase):
             players=players,
             game=self.game,
             turns=20,
-            repetitions=self.test_repetitions,
-            processes=2)
-        scores = tournament.play(progress_bar=False).scores
+            repetitions=self.test_repetitions)
+        scores = tournament.play(processes=2, progress_bar=False).scores
         self.assertEqual(len(scores), len(players))
 
     def test_run_serial(self):
@@ -256,8 +251,7 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=self.test_repetitions,
-            processes=2)
+            repetitions=self.test_repetitions)
         tournament._write_interactions = MagicMock(
                     name='_write_interactions')
         self.assertTrue(tournament._run_serial())
@@ -272,8 +266,7 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=self.test_repetitions,
-            processes=2)
+            repetitions=self.test_repetitions)
         tournament._write_interactions = MagicMock(
                     name='_write_interactions')
         self.assertTrue(tournament._run_parallel())
@@ -290,18 +283,17 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=self.test_repetitions,
-            processes=1)
-        self.assertEqual(tournament._n_workers(), max_processes)
+            repetitions=self.test_repetitions)
+        self.assertEqual(tournament._n_workers(processes=1), max_processes)
 
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=self.test_repetitions,
-            processes=max_processes + 2)
-        self.assertEqual(tournament._n_workers(), max_processes)
+            repetitions=self.test_repetitions)
+        self.assertEqual(tournament._n_workers(processes=max_processes+2),
+                                               max_processes)
 
     @unittest.skipIf(
         cpu_count() < 2,
@@ -315,9 +307,8 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=200,
-            repetitions=self.test_repetitions,
-            processes=2)
-        self.assertEqual(tournament._n_workers(), 2)
+            repetitions=self.test_repetitions,)
+        self.assertEqual(tournament._n_workers(processes=2), 2)
 
     def test_start_workers(self):
         workers = 2
@@ -523,7 +514,6 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertEqual(tournament.turns, float("inf"))
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
-        self.assertEqual(tournament._processes, None)
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.noise, 0.2)
