@@ -3,7 +3,7 @@
 import random
 
 import axelrod
-import unittest
+import copy
 
 from .test_player import TestPlayer
 
@@ -76,6 +76,10 @@ class TestMetaMajority(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
     def test_strategy(self):
 
         P1 = axelrod.MetaMajority()
@@ -101,6 +105,10 @@ class TestMetaMinority(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
 
     def test_team(self):
         team = [axelrod.Cooperator]
@@ -132,6 +140,10 @@ class TestMetaWinner(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
 
@@ -212,6 +224,10 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -228,6 +244,10 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -242,6 +262,11 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -258,6 +283,11 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
+
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -273,6 +303,11 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
+
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -287,6 +322,10 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
