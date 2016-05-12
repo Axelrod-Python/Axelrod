@@ -672,10 +672,7 @@ class ResultSetFromFile(ResultSet):
             self.interactions = dict()
         self.players, self.interactions = self._read_csv(filename)
         self.nplayers = len(self.players)
-        try:
-            key = next(iter(self.interactions.keys()))
-        except TypeError:
-            key = self.interactions.keys()[0]
+        key = next(iter(self.interactions.keys()))
         self.nrepetitions = len(list(self.interactions[key]))
 
         # Calculate all attributes:
@@ -766,14 +763,9 @@ class WrappedTemporaryShelve(object):
             key_ = self.key_to_index_pair(key)
             yield (key_, self.shelve[key])
 
-    def has_key(self, index_pair):
-        key = self.index_pair_to_key(index_pair)
-        return self.shelve.has_key(key)
-
     def __contains__(self, index_pair):
         key = self.index_pair_to_key(index_pair)
         return (key in self.shelve)
-        return self.has_key(index_pair)
 
 
 class BigResultSetFromFile(ResultSetFromFile):
