@@ -40,7 +40,7 @@ class MoranProcess(object):
         self.set_players()
         self.score_history = []
         self.winning_strategy_name = None
-        if deterministic_cache:
+        if deterministic_cache is not None:
             self.deterministic_cache = deterministic_cache
         else:
             self.deterministic_cache = DeterministicCache()
