@@ -105,7 +105,6 @@ class TestTournament(unittest.TestCase):
         self.assertGreaterEqual(tournament.noise, 0)
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
-        self.assertIsNone(tournament._processes)
 
     @given(tournament_and_seed=tournaments(strategies=axelrod.basic_strategies))
     def test_decorator_with_given_strategies(self, tournament_and_seed):
@@ -126,12 +125,6 @@ class TestTournament(unittest.TestCase):
         stochastic_player_names = [str(s()) for s in stochastic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), stochastic_player_names)
-
-    @given(tournament_and_seed=tournaments(max_processes=2))
-    def test_decorator_with_stochastic_strategies(self, tournament_and_seed):
-        tournament, seed = tournament_and_seed
-        self.assertGreaterEqual(tournament._processes, 1)
-        self.assertLessEqual(tournament._processes, 2)
 
 
 class TestProbEndTournament(unittest.TestCase):
@@ -157,7 +150,6 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertGreaterEqual(tournament.noise, 0)
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
-        self.assertIsNone(tournament._processes)
 
     @given(tournament_and_seed=prob_end_tournaments(strategies=axelrod.basic_strategies))
     def test_decorator_with_given_strategies(self, tournament_and_seed):
@@ -178,12 +170,6 @@ class TestProbEndTournament(unittest.TestCase):
         stochastic_player_names = [str(s()) for s in stochastic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), stochastic_player_names)
-
-    @given(tournament_and_seed=prob_end_tournaments(max_processes=2))
-    def test_decorator_with_stochastic_strategies(self, tournament_and_seed):
-        tournament, seed = tournament_and_seed
-        self.assertGreaterEqual(tournament._processes, 1)
-        self.assertLessEqual(tournament._processes, 2)
 
 class TestGame(unittest.TestCase):
 

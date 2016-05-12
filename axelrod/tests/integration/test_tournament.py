@@ -50,8 +50,7 @@ class TestTournament(unittest.TestCase):
             players=self.players,
             game=self.game,
             turns=20,
-            repetitions=self.test_repetitions,
-            processes=2)
-        scores = tournament.play(progress_bar=False).scores
+            repetitions=self.test_repetitions)
+        scores = tournament.play(processes=2, progress_bar=False).scores
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
