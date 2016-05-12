@@ -7,8 +7,6 @@ from .match import Match
 
 class MatchGenerator(object):
 
-    clone_opponents = True
-
     def __init__(self, players, turns, game, repetitions):
         """
         A class to generate matches. This is used by the Tournament class which
@@ -37,12 +35,9 @@ class MatchGenerator(object):
 
     @opponents.setter
     def opponents(self, players):
-        if self.clone_opponents:
-            opponents = []
-            for player in players:
-                opponents.append(player.clone())
-        else:
-            opponents = players
+        opponents = []
+        for player in players:
+            opponents.append(player.clone())
         self._opponents = opponents
 
     def __len__(self):
@@ -56,8 +51,6 @@ class MatchGenerator(object):
 
 
 class RoundRobinMatches(MatchGenerator):
-
-    clone_opponents = True
 
     def build_match_chunks(self, noise=0):
         """
@@ -109,8 +102,6 @@ class RoundRobinMatches(MatchGenerator):
 
 
 class ProbEndRoundRobinMatches(RoundRobinMatches):
-
-    clone_opponents = True
 
     def __init__(self, players, prob_end, game, repetitions):
         """
