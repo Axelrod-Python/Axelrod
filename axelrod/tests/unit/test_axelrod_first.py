@@ -72,6 +72,7 @@ class TestRevisedDowning(TestPlayer):
         self.responses_test([C, C, C], [D, C, D], [C])
         self.responses_test([C, C, D, D], [C, D, D, D], [D])
         self.responses_test([C, C, C, C], [D, C, D, C], [C])
+        self.responses_test([C, D, C, C, D, D], [C, C, C, C, D, D], [C])
 
     def test_not_revised(self):
         # Test not revised
