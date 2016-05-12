@@ -75,6 +75,18 @@ class TestAPavlov2011(TestPlayer):
                             attrs={"opponent_class": "STFT"})
         self.responses_test([C, D, D, D, C, C], [D, D, D, C, C, C], [C],
                             attrs={"opponent_class": "STFT"})
+        self.responses_test([C, D, D, D, C, C], [D, D, D, C, C, C], [C],
+                            attrs={"opponent_class": "STFT"})
+
+        # Specific case for STFT when responding with TFT
+        opponent = axelrod.Player()
+        opponent.history = [D] * 4
+        player = axelrod.APavlov2006()
+        player.opponent_class = "STFT"
+        self.assertEqual(player.strategy(opponent), D)
+        opponent.history.append(C)
+        self.assertEqual(player.strategy(opponent), C)
+
 
         self.responses_test([C, C, C, C, C, D], [C, C, C, C, D, D], [D],
                             attrs={"opponent_class": "Random"})
