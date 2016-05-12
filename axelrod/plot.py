@@ -242,11 +242,7 @@ class Plot(object):
         if not self.matplotlib_installed:
             return None
 
-        if type(eco) is list:
-            warn("""Passing the population sizes as an argument is deprecated and will be removed, please pass the Ecosystem directly""")
-            populations = eco
-        else:
-            populations = eco.population_sizes
+        populations = eco.population_sizes
 
         figure, ax = plt.subplots()
         turns = range(len(populations))
