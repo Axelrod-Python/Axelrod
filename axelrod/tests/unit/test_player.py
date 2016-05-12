@@ -33,6 +33,11 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(noisy_s1, D)
         self.assertEqual(noisy_s2, C)
 
+        noise = 0.9
+        noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
+        self.assertEqual(noisy_s1, D)
+        self.assertEqual(noisy_s2, D)
+
     def test_play(self):
         p1, p2 = self.player(), self.player()
         p1.strategy = cooperate
