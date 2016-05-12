@@ -1,5 +1,7 @@
-from collections import defaultdict
 import csv
+import os
+import shelve
+import tempfile
 
 from numpy import mean, nanmedian, std
 
@@ -497,12 +499,12 @@ class ResultSet(object):
                     for interaction in repetitions:
                         coop_counts.append(iu.compute_normalised_cooperation(interaction)[0])
 
-                if (opponent, player) in self.interactions:
+                elif (opponent, player) in self.interactions:
                     repetitions = self.interactions[(opponent, player)]
                     for interaction in repetitions:
                         coop_counts.append(iu.compute_normalised_cooperation(interaction)[1])
 
-                if ((player, opponent) not in self.interactions) and ((opponent, player) not in self.interactions):
+                else:
                     coop_counts.append(0)
 
                 # Mean over all reps:
@@ -655,7 +657,7 @@ class ResultSetFromFile(ResultSet):
     by the tournament class.
     """
 
-    def __init__(self, filename, with_morality=True):
+    def __init__(self, filename, with_morality=True, interactions=None):
         """
         Parameters
         ----------
@@ -665,9 +667,13 @@ class ResultSetFromFile(ResultSet):
                 a flag to determine whether morality metrics should be
                 calculated.
         """
+        self.interactions = interactions
+        if not interactions:
+            self.interactions = dict()
         self.players, self.interactions = self._read_csv(filename)
         self.nplayers = len(self.players)
-        self.nrepetitions = len(list(self.interactions.values())[0])
+        key = next(iter(self.interactions.keys()))
+        self.nrepetitions = len(list(self.interactions[key]))
 
         # Calculate all attributes:
         self.build_all(with_morality)
@@ -696,14 +702,17 @@ class ResultSetFromFile(ResultSet):
                 - Second element: interactions (a dictionary mapping player pair
                   indices to lists of histories)
         """
-        interactions = defaultdict(list)
+        interactions = self.interactions
         players_d = {}
         with open(filename, 'r') as f:
             for row in csv.reader(f):
                 index_pair = (int(row[0]), int(row[1]))
                 players = (row[2], row[3])
                 interaction = list(zip(row[4], row[5]))
-                interactions[index_pair].append(interaction)
+                try:
+                    interactions[index_pair].append(interaction)
+                except KeyError:
+                    interactions[index_pair] = [interaction]
                 # Build a dictionary mapping indices to players
                 # This is temporary to make sure the ordering of the players
                 # matches the indices
@@ -716,3 +725,62 @@ class ResultSetFromFile(ResultSet):
         for i in range(len(players_d)):
             players.append(players_d[i])
         return players, interactions
+
+
+class WrappedTemporaryShelve(object):
+    """Thin wrapper around a shelve of a temporary file."""
+
+    def __init__(self):
+        #http://stackoverflow.com/questions/5545473/temporary-shelves
+        f, shelve_filename = tempfile.mkstemp()
+        os.close(f)
+        self.shelve = shelve.open(shelve_filename + ".db", writeback=True)
+
+    def index_pair_to_key(self, index_pair):
+        key = ":".join(map(str, index_pair))
+        return key
+
+    def key_to_index_pair(self, key):
+        key = tuple(map(int, key.split(':')))
+        return key
+
+    def __getitem__(self, index_pair):
+        # Shelve keys have to be strings
+        key = self.index_pair_to_key(index_pair)
+        return self.shelve[key]
+
+    def __setitem__(self, index_pair, value):
+        # Shelve keys have to be strings
+        key = self.index_pair_to_key(index_pair)
+        self.shelve[key] = value
+
+    def keys(self):
+        for key in self.shelve.keys():
+            yield self.key_to_index_pair(key)
+
+    def items(self):
+        for key in self.shelve.keys():
+            key_ = self.key_to_index_pair(key)
+            yield (key_, self.shelve[key])
+
+    def __contains__(self, index_pair):
+        key = self.index_pair_to_key(index_pair)
+        return (key in self.shelve)
+
+
+class BigResultSetFromFile(ResultSetFromFile):
+    """A class to hold the results of a tournament. Reads in a CSV file produced
+    by the tournament class into a python shelve to conserve memory."""
+
+    def __init__(self, filename, with_morality=True):
+        """
+        Parameters
+        ----------
+            filename : string
+                name of a file of the correct file.
+            with_morality : bool
+                a flag to determine whether morality metrics should be
+                calculated.
+        """
+        interactions = WrappedTemporaryShelve()
+        ResultSetFromFile.__init__(self, filename, with_morality, interactions)
