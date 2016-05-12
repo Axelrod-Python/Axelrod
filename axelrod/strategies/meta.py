@@ -289,6 +289,14 @@ class MetaMixer(MetaPlayer):
     """
 
     name = "Meta Mixer"
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, team=None, distribution=None):
 

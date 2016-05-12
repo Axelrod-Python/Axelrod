@@ -1,5 +1,6 @@
 from axelrod import Actions, Player, init_args
 
+import copy
 
 class AntiCycler(Player):
     """
@@ -74,18 +75,27 @@ class Cycler(Player):
 
 
 class CyclerCCD(Cycler):
+    classifier = copy.copy(Cycler.classifier)
+    classifier['memory_depth'] = 2
+
     @init_args
     def __init__(self, cycle="CCD"):
         Cycler.__init__(self, cycle=cycle)
 
 
 class CyclerCCCD(Cycler):
+    classifier = copy.copy(Cycler.classifier)
+    classifier['memory_depth'] = 3
+
     @init_args
     def __init__(self, cycle="CCCD"):
         Cycler.__init__(self, cycle=cycle)
 
 
 class CyclerCCCCCD(Cycler):
+    classifier = copy.copy(Cycler.classifier)
+    classifier['memory_depth'] = 5
+
     @init_args
     def __init__(self, cycle="CCCCCD"):
         Cycler.__init__(self, cycle=cycle)

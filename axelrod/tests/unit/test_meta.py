@@ -3,7 +3,7 @@
 import random
 
 import axelrod
-import unittest
+import copy
 
 from .test_player import TestPlayer
 
@@ -26,7 +26,7 @@ class TestMetaPlayer(TestPlayer):
         'manipulates_state': False
     }
 
-    def classifier_test(self):
+    def classifier_test(self, expected_class_classifier=None):
         player = self.player()
         classifier = dict()
         for key in ['stochastic',
@@ -46,6 +46,12 @@ class TestMetaPlayer(TestPlayer):
                              classifier[key],
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
                              (key, player.classifier[key], classifier[key]))
+
+        # Test that player has same classifier as it's class unless otherwise
+        # specified
+        if expected_class_classifier is None:
+            expected_class_classifier = player.classifier
+        self.assertEqual(expected_class_classifier, self.player.classifier)
 
     def test_reset(self):
         p1 = self.player()
@@ -69,6 +75,10 @@ class TestMetaMajority(TestMetaPlayer):
         'inspects_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
 
@@ -95,6 +105,10 @@ class TestMetaMinority(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
 
     def test_team(self):
         team = [axelrod.Cooperator]
@@ -126,6 +140,10 @@ class TestMetaWinner(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
 
@@ -206,6 +224,10 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -222,6 +244,10 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -236,6 +262,11 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -252,6 +283,11 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
+
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -266,6 +302,11 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -282,6 +323,10 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -297,6 +342,9 @@ class TestMetaMixer(TestMetaPlayer):
         'inspects_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['makes_use_of'] = set()
 
     def test_strategy(self):
 

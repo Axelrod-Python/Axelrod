@@ -8,6 +8,8 @@ import random
 from .test_player import TestPlayer, TestHeadsUp
 from axelrod import random_choice, Actions
 
+import copy
+
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
@@ -24,6 +26,9 @@ class TestGambler(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = float('inf')
 
     def test_init(self):
         # Test empty table

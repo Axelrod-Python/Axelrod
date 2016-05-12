@@ -126,6 +126,15 @@ def factory_TestGoByRecentMajority(L, soft=True):
             name = "Hard Go By Majority: %i" % L
             player = getattr(axelrod, 'HardGoByMajority%i' % L)
 
+            expected_classifier = {
+                'stochastic': False,
+                'memory_depth': L,
+                'makes_use_of': set(),
+                'inspects_source': False,
+                'manipulates_source': False,
+                'manipulates_state': False
+            }
+
             def test_initial_strategy(self):
                 """Starts by defecting."""
                 self.first_play_test(D)

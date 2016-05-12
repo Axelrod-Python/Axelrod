@@ -4,6 +4,8 @@ import axelrod
 from .test_player import TestPlayer, TestHeadsUp
 from axelrod.strategies.lookerup import create_lookup_table_keys
 
+import copy
+
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
@@ -13,13 +15,16 @@ class TestLookerUp(TestPlayer):
     player = axelrod.LookerUp
 
     expected_classifier = {
-        'memory_depth': 1, # Default TFT table
+        'memory_depth': 1,  # Default TfT
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = float('inf')
 
     def test_init(self):
         # Test empty table
@@ -111,6 +116,7 @@ class TestLookerUp(TestPlayer):
         self.responses_test([D, D, D], [D, C, C], [D])
         self.responses_test([C, C, C], [D, D, C], [D])
         self.responses_test([C, C, D], [D, D, C], [D])
+
 
 
 class TestEvolvedLookerUp(TestPlayer):
