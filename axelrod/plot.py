@@ -1,4 +1,3 @@
-from numpy.linalg import LinAlgError
 from numpy import arange, median, nan_to_num
 from warnings import warn
 
@@ -26,23 +25,6 @@ class Plot(object):
     def __init__(self, result_set):
         self.result_set = result_set
         self.matplotlib_installed = matplotlib_installed
-
-    # Abstract Box and Violin plots
-
-    def _boxplot(self, data, names, title=None):
-        """For making boxplots."""
-        if not self.matplotlib_installed:
-            return None
-        nplayers = self.result_set.nplayers
-        width = max(nplayers / 3, 12)
-        height = width / 2
-        figure = plt.figure(figsize=(width, height))
-        plt.boxplot(data)
-        plt.xticks(self._boxplot_xticks_locations, names, rotation=90)
-        plt.tick_params(axis='both', which='both', labelsize=8)
-        if title:
-            plt.title(title)
-        return figure
 
     def _violinplot(self, data, names, title=None):
         """For making violinplots."""
@@ -83,14 +65,7 @@ class Plot(object):
         """For the specific mean score boxplot."""
         data = self._boxplot_dataset
         names = self._boxplot_xticks_labels
-        try:
-            figure = self._violinplot(data, names, title=title)
-        except LinAlgError:
-            # Matplotlib doesn't handle single point distributions well
-            # in violin plots. Should be fixed in next release:
-            # https://github.com/matplotlib/matplotlib/pull/4816
-            # Fall back to boxplot
-            figure = self._boxplot(data, names, title=title)
+        figure = self._violinplot(data, names, title=title)
         return figure
 
     @property
@@ -112,14 +87,7 @@ class Plot(object):
             return None
 
         data, names = self._winplot_dataset
-        try:
-            figure = self._violinplot(data, names, title)
-        except LinAlgError:
-            # Matplotlib doesn't handle single point distributions well
-            # in violin plots. Should be fixed in next release:
-            # https://github.com/matplotlib/matplotlib/pull/4816
-            # Fall back to boxplot
-            figure = self._boxplot(data, names, title)
+        figure = self._violinplot(data, names, title)
         # Expand ylim a bit
         maximum = max(max(w) for w in data)
         plt.ylim(-0.5, 0.5 + maximum)
@@ -165,14 +133,7 @@ class Plot(object):
         """For the specific match length boxplot."""
         data = self._lengthplot_dataset
         names = self._boxplot_xticks_labels
-        try:
-            figure = self._violinplot(data, names, title=title)
-        except LinAlgError:
-            # Matplotlib doesn't handle single point distributions well
-            # in violin plots. Should be fixed in next release:
-            # https://github.com/matplotlib/matplotlib/pull/4816
-            # Fall back to boxplot
-            figure = self._boxplot(data, names, title=title)
+        figure = self._violinplot(data, names, title=title)
         return figure
 
     # Payoff heatmaps
