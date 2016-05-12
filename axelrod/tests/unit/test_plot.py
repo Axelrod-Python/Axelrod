@@ -72,7 +72,7 @@ class TestPlot(unittest.TestCase):
                      axelrod.Defector()],
             turns=2,
             repetitions=2)
-        tournament.play(filename=tmp_file.name)
+        tournament.play(filename=tmp_file.name, progress_bar=False)
         tmp_file.close()
         rs = axelrod.ResultSetFromFile(tmp_file.name)
 
@@ -102,6 +102,14 @@ class TestPlot(unittest.TestCase):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
             self.assertIsInstance(plot.boxplot(), matplotlib.pyplot.Figure)
+        else:
+            self.skipTest('matplotlib not installed')
+
+    def test_boxplot_with_title(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.boxplot(title="title"),
+                                  matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 
@@ -158,6 +166,14 @@ class TestPlot(unittest.TestCase):
         else:
             self.skipTest('matplotlib not installed')
 
+    def test_payoff_with_title(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            self.assertIsInstance(plot.payoff(title="dummy title"),
+                                  matplotlib.pyplot.Figure)
+        else:
+            self.skipTest('matplotlib not installed')
+
     def test_ecosystem(self):
         if matplotlib_installed:
             eco = axelrod.Ecosystem(self.test_result_set)
@@ -165,6 +181,9 @@ class TestPlot(unittest.TestCase):
             plot = axelrod.Plot(self.test_result_set)
             self.assertIsInstance(
                 plot.stackplot(eco), matplotlib.pyplot.Figure)
+            self.assertIsInstance(
+                plot.stackplot(eco, title="dummy title"),
+                matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 
