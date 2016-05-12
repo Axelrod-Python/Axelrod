@@ -80,8 +80,9 @@ class TestAPavlov2011(TestPlayer):
 
         # Specific case for STFT when responding with TFT
         opponent = axelrod.Player()
-        opponent.history = [D] * 4
         player = axelrod.APavlov2006()
+        player.history = [D] * 8
+        opponent.history = [D] * 8
         player.opponent_class = "STFT"
         self.assertEqual(player.strategy(opponent), D)
         opponent.history.append(C)
