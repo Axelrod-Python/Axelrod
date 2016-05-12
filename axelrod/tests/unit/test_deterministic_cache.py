@@ -3,6 +3,9 @@ import os
 import sys
 from axelrod import DeterministicCache, TitForTat, Defector, Random
 
+import pickle
+import tempfile
+
 
 class TestDeterministicCache(unittest.TestCase):
 
@@ -39,6 +42,17 @@ class TestDeterministicCache(unittest.TestCase):
         cache[self.test_key] = self.test_value
         self.assertEqual(cache[self.test_key], self.test_value)
 
+    def test_setitem_invalid_key(self):
+        cache = DeterministicCache()
+        invalid_key = (1, 2, 3, 4)
+        with self.assertRaises(ValueError):
+            cache[invalid_key] = 3
+
+    def test_setitem_invalid_value(self):
+        cache = DeterministicCache()
+        with self.assertRaises(ValueError):
+            cache[self.test_key] = 5
+
     def test_set_immutable_cache(self):
         cache = DeterministicCache()
         cache.mutable = False
@@ -57,6 +71,7 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertFalse(cache._is_valid_key(('test', 'test', 'test')))
         self.assertFalse(cache._is_valid_key((TitForTat, 'test', 2)))
         self.assertFalse(cache._is_valid_key(('test', TitForTat, 2)))
+        self.assertFalse(cache._is_valid_key((TitForTat, TitForTat, TitForTat)))
         # Should return false if either player class is stochastic
         self.assertFalse(cache._is_valid_key((Random, TitForTat, 2)))
         self.assertFalse(cache._is_valid_key((TitForTat, Random, 2)))
@@ -79,3 +94,13 @@ class TestDeterministicCache(unittest.TestCase):
         cache = DeterministicCache()
         cache.load(self.test_load_file)
         self.assertEqual(cache[self.test_key], self.test_value)
+
+    def test_load_error_for_inccorect_format(self):
+        tmp_file = tempfile.NamedTemporaryFile()
+        with open(tmp_file.name, 'wb') as io:
+            pickle.dump(range(5), io)
+
+        with self.assertRaises(ValueError):
+            cache = DeterministicCache()
+            cache.load(tmp_file.name)
+
