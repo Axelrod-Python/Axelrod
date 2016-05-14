@@ -10,7 +10,7 @@ class SimpleFSM(object):
     def __init__(self, transitions, initial_state):
         """
         transitions is a list of the form
-        [(state, opponent action, next_state, next_action), ...]
+        [(state, last_opponent_action, next_state, next_action), ...]
 
         TitForTat would be represented with the following table:
         [(1, C, 1, C), (1, D, 1, D)]
@@ -23,6 +23,7 @@ class SimpleFSM(object):
             self.state_transitions[(state, opp_action)] = (next_state, next_action)
 
     def move(self, opponent_action):
+        """Computes the response move and changes state."""
         next_state, next_action = self.state_transitions[(self.state, opponent_action)]
         self.state = next_state
         return next_action
@@ -30,6 +31,17 @@ class SimpleFSM(object):
 
 class FSMPlayer(Player):
     """Abstract base class for finite state machine players."""
+
+    name = "FSM Player"
+
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self, transitions, initial_state, initial_action):
         Player.__init__(self)

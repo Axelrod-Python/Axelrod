@@ -201,13 +201,36 @@ class TestThumper(TestPlayer):
 
 
 class TestFortress3vsFortress3(TestHeadsUp):
-    """Test TFT vs WSLS"""
     def test_rounds(self):
         self.versus_test(axelrod.Fortress3(), axelrod.Fortress3(),
                          [D, D, C, C, C], [D, D, C, C, C])
 
-class TestFortress3vsFortress3(TestHeadsUp):
-    """Test TFT vs WSLS"""
+
+class TestFortress3vsTitForTat(TestHeadsUp):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress3(), axelrod.TitForTat(),
                          [D, D, D, C], [C, D, D, D])
+
+
+class TestFortress3vsCooperator(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.Fortress3(), axelrod.Cooperator(),
+                         [D, D, D, D, D, D], [C] * 6)
+
+
+class TestFortress4vsFortress4(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.Fortress4(), axelrod.Fortress4(),
+                         [D, D, D, C, C, C], [D, D, D, C, C, C])
+
+
+class TestFortress4vsTitForTat(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.Fortress4(), axelrod.TitForTat(),
+                         [D, D, D, D, C, D], [C, D, D, D, D, C])
+
+
+class TestFortress4vsCooperator(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.Fortress4(), axelrod.Cooperator(),
+                         [D, D, D, D, D, D], [C] * 6)
