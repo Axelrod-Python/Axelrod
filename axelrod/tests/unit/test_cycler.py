@@ -49,6 +49,9 @@ def test_cycler_factory(cycle):
 
     return TestCycler
 
+
+TestCyclerDC = test_cycler_factory("DC")
 TestCyclerCCD = test_cycler_factory("CCD")
+TestCyclerDDC = test_cycler_factory("DDC")
 TestCyclerCCCD = test_cycler_factory("CCCD")
 TestCyclerCCCCCD = test_cycler_factory("CCCCCD")

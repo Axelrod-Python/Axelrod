@@ -74,12 +74,30 @@ class Cycler(Player):
         return self.cycle[index]
 
 
+class CyclerDC(Cycler):
+    classifier = copy.copy(Cycler.classifier)
+    classifier['memory_depth'] = 1
+
+    @init_args
+    def __init__(self, cycle="DC"):
+        Cycler.__init__(self, cycle=cycle)
+
+
 class CyclerCCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
 
     @init_args
     def __init__(self, cycle="CCD"):
+        Cycler.__init__(self, cycle=cycle)
+
+
+class CyclerDDC(Cycler):
+    classifier = copy.copy(Cycler.classifier)
+    classifier['memory_depth'] = 2
+
+    @init_args
+    def __init__(self, cycle="DDC"):
         Cycler.__init__(self, cycle=cycle)
 
 
