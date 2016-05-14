@@ -11,7 +11,9 @@ from .axelrod_second import Champion, Eatherley, Tester
 from .backstabber import BackStabber, DoubleCrosser
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
-from .cycler import AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD
+from .cycler import (
+    AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD,
+    CyclerDC, CyclerDDC)
 from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .finite_state_machines import (
@@ -80,6 +82,8 @@ strategies = [
     CyclerCCCCCD,
     CyclerCCCD,
     CyclerCCD,
+    CyclerDC,
+    CyclerDDC,
     Darwin,
     Davis,
     Defector,
