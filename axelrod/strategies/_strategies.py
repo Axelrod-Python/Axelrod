@@ -14,6 +14,9 @@ from .cooperator import Cooperator, TrickyCooperator
 from .cycler import AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD
 from .darwin import Darwin
 from .defector import Defector, TrickyDefector
+from .finite_state_machines import (
+    Fortress3, Fortress4, Predator, Raider, Ripoff, SolutionB1, SolutionB5,
+    Thumper, FSMPlayer)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import Gambler, PSOGambler
