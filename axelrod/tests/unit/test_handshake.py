@@ -1,8 +1,8 @@
-"""Test for the alternator strategy."""
+"""Test for the Handshake strategy."""
 
 import axelrod
 
-from .test_player import TestHeadsUp, TestPlayer
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
