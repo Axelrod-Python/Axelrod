@@ -4,7 +4,8 @@ C, D = Actions.C, Actions.D
 
 
 class Adaptive(Player):
-    """A player starts by cooperating however will defect if at any point the opponent has defected."""
+    """Start with a specific sequence of C and D, then play the strategy that
+    has worked best, recalculated each turn."""
 
     name = 'Adaptive'
     classifier = {

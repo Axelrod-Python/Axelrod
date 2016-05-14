@@ -24,6 +24,7 @@ from .gobymajority import (GoByMajority,
     HardGoByMajority5)
 from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
 from .grumpy import Grumpy
+from .handshake import Handshake
 from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
     MathConstantHunter, RandomHunter, EventualCycleHunter)
@@ -101,6 +102,7 @@ strategies = [
     GoByMajority20,
     GoByMajority40,
     GoByMajority5,
+    Handshake,
     HardGoByMajority,
     HardGoByMajority10,
     HardGoByMajority20,
