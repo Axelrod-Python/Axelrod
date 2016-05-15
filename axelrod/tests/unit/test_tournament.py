@@ -79,7 +79,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
     def test_warning(self):
-        # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -93,8 +92,8 @@ class TestTournament(unittest.TestCase):
             self.assertEqual(len(w), 1)
 
         with warnings.catch_warnings(record=True) as w:
-            # Check that no warning is raised if no results set is built and no
-            # filename given
+            # Check that no warning is raised if no results set is built and a
+            # is filename given
             tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
             results = tournament.play(build_results=False,
                                       filename=tmp_file.name, progress_bar=False)
