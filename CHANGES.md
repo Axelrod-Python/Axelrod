@@ -1,3 +1,14 @@
+# v1.0.1, 2016-05-15
+
+Bug fix.
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.0.1...v1.0.1
+
+During the previous refactor of the Tournament, the ability to create noisy
+tournaments was lost. An integration test has been written to catch this in the
+future: https://github.com/Axelrod-Python/Axelrod/pull/596
+
 # v1.0.0, 2016-05-14
 
 Internal improvements, progress bar, minor interface change
