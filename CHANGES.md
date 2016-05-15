@@ -3,7 +3,7 @@
 Internal improvements, progress bar, minor interface change
 
 Here are all the commits for this PR:
-https://github.com/Axelrod-Python/Axelrod/compare/v0.0.31...master
+https://github.com/Axelrod-Python/Axelrod/compare/v0.0.31...v1.0.0
 
 This release is the first major release stating the stability and maturity of
 the library.
