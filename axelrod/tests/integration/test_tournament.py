@@ -1,6 +1,6 @@
 import unittest
 import axelrod
-import warnings
+import tempfile
 
 
 class TestTournament(unittest.TestCase):
@@ -32,10 +32,10 @@ class TestTournament(unittest.TestCase):
         tournament = axelrod.Tournament(name='test', players=strategies,
                                         game=self.game, turns=2,
                                         repetitions=2)
-        with warnings.catch_warnings(record=True) as w:
-            results = tournament.play(progress_bar=False, build_results=False)
-            self.assertEqual(len(w), 1)
-        self.assertIsNone(results)
+        tmp_file = tempfile.NamedTemporaryFile()
+        self.assertIsNone(tournament.play(progress_bar=False,
+                                          filename=tmp_file.name,
+                                          build_results=False))
 
     def test_serial_play(self):
         tournament = axelrod.Tournament(
