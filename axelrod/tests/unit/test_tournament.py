@@ -9,7 +9,7 @@ import unittest
 import warnings
 
 from hypothesis import given, example, settings
-from hypothesis.strategies import integers, lists, sampled_from, random_module, floats
+from hypothesis.strategies import integers
 from axelrod.tests.property import tournaments, prob_end_tournaments
 
 import axelrod
@@ -192,7 +192,7 @@ class TestTournament(unittest.TestCase):
     @given(tournament_and_seed=tournaments(min_size=2, max_size=5, min_turns=2,
                                            max_turns=50, min_repetitions=2,
                                            max_repetitions=4))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=50, timeout=30)
     @example(tournament_and_seed=(axelrod.Tournament(players=[s() for s in
         test_strategies], turns=test_turns, repetitions=test_repetitions),
         random.seed(0)))
@@ -523,7 +523,7 @@ class TestProbEndTournament(unittest.TestCase):
                                                     max_prob_end=.9,
                                                     min_repetitions=2,
                                                     max_repetitions=4))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=50, timeout=30)
     @example(tournament_and_seed=(
         axelrod.ProbEndTournament(players=[s() for s in test_strategies],
                                   prob_end=.2, repetitions=test_repetitions),
