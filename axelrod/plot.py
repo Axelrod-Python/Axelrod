@@ -198,7 +198,7 @@ class Plot(object):
 
     # Ecological Plot
 
-    def stackplot(self, eco, title=None):
+    def stackplot(self, eco, title=None, logscale=True):
 
         if not self.matplotlib_installed:
             return None
@@ -231,6 +231,7 @@ class Plot(object):
         ax.tick_params(direction='out')
         ax.set_yticklabels([])
 
-        ax.set_xscale('log')
+        if logscale:
+            ax.set_xscale('log')
 
         return figure

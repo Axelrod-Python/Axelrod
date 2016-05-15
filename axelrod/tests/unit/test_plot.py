@@ -184,6 +184,8 @@ class TestPlot(unittest.TestCase):
             self.assertIsInstance(
                 plot.stackplot(eco, title="dummy title"),
                 matplotlib.pyplot.Figure)
+            self.assertIsInstance(
+                plot.stackplot(eco, logscale=False), matplotlib.pyplot.Figure)
         else:
             self.skipTest('matplotlib not installed')
 
