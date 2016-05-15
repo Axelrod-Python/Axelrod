@@ -50,7 +50,7 @@ class DeterministicCache(UserDict):
         """Overrides the UserDict.__setitem__ method in order to validate
         the key/value and also to set the turns attribute"""
         if not self.mutable:
-            raise ValueError('Cannot update cache unles mutable is True.')
+            raise ValueError('Cannot update cache unless mutable is True.')
 
         if not self._is_valid_key(key):
             raise ValueError(

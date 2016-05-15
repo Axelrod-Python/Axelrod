@@ -111,3 +111,8 @@ class TestMoranProcess(unittest.TestCase):
         cache = axelrod.DeterministicCache()
         mp = MoranProcess((p1, p2), deterministic_cache=cache)
         self.assertEqual(cache, mp.deterministic_cache)
+
+    def test_iter(self):
+        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
+        mp = MoranProcess((p1, p2))
+        self.assertEqual(mp.__iter__(), mp)

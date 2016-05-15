@@ -52,15 +52,17 @@ class APavlov2006(Player):
             if len(self.history) % 6 in [0, 1]:
                 return C
             #TFT
-            return D if opponent.history[-1:] == [D] else C
+            if opponent.history[-1:] == [D]:
+                return D
         if self.opponent_class == "PavlovD":
             # Return D then C for the period
             if len(self.history) % 6 == 0:
                 return D
-            return C
         if self.opponent_class == "Cooperative":
             #TFT
-            return D if opponent.history[-1:] == [D] else C
+            if opponent.history[-1:] == [D]:
+                return D
+        return C
 
     def reset(self):
         Player.reset(self)

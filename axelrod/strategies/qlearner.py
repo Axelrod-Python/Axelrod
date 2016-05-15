@@ -37,7 +37,7 @@ class RiskyQLearner(Player):
         self.prev_action = random_choice()
         self.history = []
         self.score = 0
-        self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0])) })
+        self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0]))})
         self.Vs = OrderedDict({'': 0})
         self.prev_state = ''
 
@@ -53,10 +53,7 @@ class RiskyQLearner(Player):
             self.Qs[state] = OrderedDict(zip([C, D], [0, 0]))
             self.Vs[state] = 0
         self.perform_q_learning(self.prev_state, state, self.prev_action, reward)
-        if state not in self.Qs:
-            action = random_choice()
-        else:
-            action = self.select_action(state)
+        action = self.select_action(state)
         self.prev_state = state
         self.prev_action = action
         return action
@@ -73,7 +70,8 @@ class RiskyQLearner(Player):
 
     def find_state(self, opponent):
         """
-        Finds the my_state (the opponents last n moves +  its previous proportion of playing C) as a hashable state
+        Finds the my_state (the opponents last n moves +
+        its previous proportion of playing C) as a hashable state
         """
         prob = '{:.1f}'.format(opponent.cooperations)
         return ''.join(opponent.history[-self.memory_length:]) + prob
