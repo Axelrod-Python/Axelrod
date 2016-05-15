@@ -1,6 +1,6 @@
 import unittest
-import os
 import axelrod
+import warnings
 
 
 class TestTournament(unittest.TestCase):
@@ -32,7 +32,9 @@ class TestTournament(unittest.TestCase):
         tournament = axelrod.Tournament(name='test', players=strategies,
                                         game=self.game, turns=2,
                                         repetitions=2)
-        results = tournament.play(progress_bar=False, build_results=False)
+        with warnings.catch_warnings(record=True) as w:
+            results = tournament.play(progress_bar=False, build_results=False)
+            self.assertEqual(len(w), 1)
         self.assertIsNone(results)
 
     def test_serial_play(self):
