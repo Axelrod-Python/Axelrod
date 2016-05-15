@@ -23,6 +23,7 @@ class Adaptive(Player):
         self.reset()
 
     def score_last_round(self, opponent):
+        # Load the default game if not supplied by a tournament.
         try:
             game = self.match_attributes["game"]
         except AttributeError:

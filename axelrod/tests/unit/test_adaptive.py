@@ -24,6 +24,17 @@ class TestAdaptive(TestPlayer):
         # Test initial play sequence
         self.responses_test([], [], [C] * 6 + [D] * 5)
 
+    def test_scoring(self):
+        player = axelrod.Adaptive()
+        opponent = axelrod.Cooperator()
+        player.play(opponent)
+        player.play(opponent)
+        self.assertEqual(3, player.scores[C])
+        game = axelrod.Game(-3, 10, 10, 10)
+        player.set_match_attributes(game=game)
+        player.play(opponent)
+        self.assertEqual(0, player.scores[C])
+
 
 class TestAdaptivevsCooperator(TestHeadsUp):
     """Test TFT vs WSLS"""
