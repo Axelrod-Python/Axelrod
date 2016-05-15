@@ -126,7 +126,7 @@ class Tournament(object):
         progress_bar : bool
             Whether or not to update the tournament progress bar
         """
-        chunks = self.match_generator.build_match_chunks()
+        chunks = self.match_generator.build_match_chunks(noise=self.noise)
 
         for chunk in chunks:
             results = self._play_matches(chunk)
@@ -167,7 +167,7 @@ class Tournament(object):
         done_queue = Queue()
         workers = self._n_workers(processes=processes)
 
-        chunks = self.match_generator.build_match_chunks()
+        chunks = self.match_generator.build_match_chunks(noise=self.noise)
         for chunk in chunks:
             work_queue.put(chunk)
 

@@ -54,3 +54,20 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play(processes=2, progress_bar=False).scores
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
+
+
+class TestNoisyTournament(unittest.TestCase):
+    def test_noisy_tournament(self):
+        # Defector should win for low noise
+        players = [axelrod.Cooperator(), axelrod.Defector()]
+        tournament = axelrod.Tournament(players, turns=20, repetitions=10,
+                                        with_morality=False, noise=0.)
+        results = tournament.play()
+        self.assertEqual(results.ranked_names[0], "Defector")
+
+        # If the noise is large enough, cooperator should win
+        players = [axelrod.Cooperator(), axelrod.Defector()]
+        tournament = axelrod.Tournament(players, turns=20, repetitions=10,
+                                        with_morality=False, noise=0.75)
+        results = tournament.play()
+        self.assertEqual(results.ranked_names[0], "Cooperator")
