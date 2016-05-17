@@ -17,9 +17,10 @@ class Handshake(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    @init_args
+    def __init__(self, initial_plays=(C, D)):
         Player.__init__(self)
-        self.initial_plays = [C, D]
+        self.initial_plays = initial_plays
 
     def strategy(self, opponent):
         # Begin by playing the sequence C, D
@@ -27,7 +28,7 @@ class Handshake(Player):
         if index < len(self.initial_plays):
             return self.initial_plays[index]
         # If our opponent played [C, D] on the first two moves, cooperate
-        # forever. Otherwise defect.
-        if opponent.history[0:2] == self.initial_plays:
+        # forever. Otherwise defect forever.
+        if opponent.history[0: len(self.initial_plays)] == self.initial_plays:
             return C
         return D

@@ -24,7 +24,7 @@ class TestHandshake(TestPlayer):
         # Test initial play sequence
         self.responses_test([], [], [C, D])
 
-        self.responses_test([C, D], [C, D], [C])
-        self.responses_test([C, D], [C, C], [D])
-        self.responses_test([C, D], [D, C], [D])
-        self.responses_test([C, D], [D, D], [D])
+        self.responses_test([C, D], [C, D], [C] * 20)
+        self.responses_test([C, D], [C, C], [D] * 20)
+        self.responses_test([C, D], [D, C], [D] * 20)
+        self.responses_test([C, D], [D, D], [D] * 20)

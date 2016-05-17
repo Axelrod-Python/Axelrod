@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, Game
+from axelrod import Actions, Player, Game, init_args
 
 C, D = Actions.C, Actions.D
 
@@ -17,9 +17,12 @@ class Adaptive(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    @init_args
+    def __init__(self, initial_plays=None):
         Player.__init__(self)
-        self.initial_plays = [C] * 6 + [D] * 5
+        if not initial_plays:
+            initial_plays = [C] * 6 + [D] * 5
+        self.initial_plays = initial_plays
         self.reset()
 
     def score_last_round(self, opponent):
