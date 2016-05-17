@@ -38,7 +38,7 @@ class FSMPlayer(Player):
     name = "FSM Player"
 
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 1,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -75,7 +75,7 @@ class Fortress3(FSMPlayer):
 
     name = 'Fortress3'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -102,7 +102,7 @@ class Fortress4(FSMPlayer):
 
     name = 'Fortress4'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 4,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -129,7 +129,7 @@ class Predator(FSMPlayer):
 
     name = 'Predator'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 9,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -166,7 +166,7 @@ class Raider(FSMPlayer):
 
     name = 'Raider'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -193,7 +193,7 @@ class Ripoff(FSMPlayer):
 
     name = 'Ripoff'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -218,7 +218,7 @@ class SolutionB1(FSMPlayer):
 
     name = 'SolutionB1'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -243,7 +243,7 @@ class SolutionB5(FSMPlayer):
 
     name = 'SolutionB5'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 5,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -274,7 +274,7 @@ class Thumper(FSMPlayer):
 
     name = 'Thumper'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
