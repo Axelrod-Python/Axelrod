@@ -46,7 +46,13 @@ class FSMPlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, transitions, initial_state, initial_action):
+    @init_args
+    def __init__(self, transitions=None, initial_state=None, initial_action=None):
+        if not transitions:
+            # Tit For Tat
+            transitions = [(1, C, 1, C), (1, D, 1, D)]
+            initial_state = 1
+            initial_action = C
         Player.__init__(self)
         self.initial_action = initial_action
         self.fsm = SimpleFSM(transitions, initial_state)
@@ -77,6 +83,7 @@ class Fortress3(FSMPlayer):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
         transitions = ((1, D, 2, D),
                        (1, C, 1, D),
@@ -85,7 +92,7 @@ class Fortress3(FSMPlayer):
                        (3, C, 3, C),
                        (3, D, 1, D))
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=D)
+        FSMPlayer.__init__(self, transitions=transitions, initial_state=1, initial_action=D)
 
 
 class Fortress4(FSMPlayer):
@@ -103,7 +110,7 @@ class Fortress4(FSMPlayer):
         'manipulates_state': False
     }
 
-
+    @init_args
     def __init__(self):
         transitions = ((1, C, 1, D),
                        (1, D, 2, D),
@@ -130,7 +137,7 @@ class Predator(FSMPlayer):
         'manipulates_state': False
     }
 
-
+    @init_args
     def __init__(self):
         transitions = ((0, C, 0, D),
                        (0, D, 1, D),
@@ -167,6 +174,7 @@ class Raider(FSMPlayer):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
         transitions = ((0, C, 2, D),
                        (0, D, 2, D),
@@ -193,6 +201,7 @@ class Ripoff(FSMPlayer):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
         transitions = ((1, C, 2, C),
                        (1, D, 3, C),
@@ -217,6 +226,7 @@ class SolutionB1(FSMPlayer):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
         transitions = ((1, C, 2, D),
                        (1, D, 1, D),
@@ -241,6 +251,7 @@ class SolutionB5(FSMPlayer):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
         transitions = ((1, C, 2, C),
                        (1, D, 6, D),
@@ -271,6 +282,7 @@ class Thumper(FSMPlayer):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
         transitions = ((1, C, 1, C),
                        (1, D, 2, D),

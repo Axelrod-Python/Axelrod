@@ -14,7 +14,7 @@ class TestAdaptive(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'makes_use_of': set(),
+        'makes_use_of': set(["game"]),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

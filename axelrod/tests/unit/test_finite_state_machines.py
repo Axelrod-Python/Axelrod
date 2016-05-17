@@ -4,10 +4,33 @@ import unittest
 import axelrod
 from .test_player import TestHeadsUp, TestPlayer
 
+
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
-class TestFSMPlayer(unittest.TestCase):
+def check_state_transitions(state_transitions):
+    """Checks that the supplied transitions for a finite state machine are
+    well-formed."""
+    keys = state_transitions.keys()
+    values = state_transitions.values()
+    # Check that the set of source states equals the set of sink states
+    sources = [k[0] for k in keys]
+    sinks = [v[0] for v in values]
+    if not (set(sources) == set(sinks)):
+        return False
+    # Check that there are two outgoing edges for every source state
+    for state in sources:
+        for action in [C, D]:
+            if not ((state, action) in keys):
+                return False
+    # Check that every state is accessible
+    for state in sources:
+        if not (((state, C) in values) or ((state, D) in values)):
+            return False
+    return True
+
+
+class TestFSMPlayers(unittest.TestCase):
     """Test a few sample tables to make sure that the finite state machines are
     working as intended."""
 
@@ -55,8 +78,52 @@ class TestFSMPlayer(unittest.TestCase):
         self.assertEqual(opponent.history, [C, D] * 3)
         self.assertEqual(player.history, [C, C, D, D, C, C])
 
+    def test_malformed_tables(self):
+        # Test a malformed table
+        transitions = ((1, D, 2, D),
+                       (1, C, 1, D),
+                       (2, C, 1, D),
+                       (2, D, 3, C),
+                       (3, C, 3, C))
+        # There are three ways for the check to be False. Each of the following
+        # targets one case.
+        player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
+                                initial_action=C)
+        self.assertFalse(check_state_transitions(player.fsm.state_transitions))
 
-class TestFortress3(TestPlayer):
+        transitions = [(1, D, 2, D)]
+        player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
+                                initial_action=C)
+        self.assertFalse(check_state_transitions(player.fsm.state_transitions))
+
+        transitions = [(1, C, 1, C), (1, D, 1, D), (2, C, 1, D), (2, D, 1, C)]
+        player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
+                                initial_action=C)
+        self.assertFalse(check_state_transitions(player.fsm.state_transitions))
+
+
+class TestFSMPlayer(TestPlayer):
+
+    name = "FSM Player"
+    player = axelrod.FSMPlayer
+
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_transitions(self):
+        # Test that the finite state machine is well-formed
+        player = self.player()
+        fsm = player.fsm
+        self.assertTrue(check_state_transitions(fsm.state_transitions))
+
+
+class TestFortress3(TestFSMPlayer):
 
     name = "Fortress3"
     player = axelrod.Fortress3
@@ -74,7 +141,7 @@ class TestFortress3(TestPlayer):
         self.first_play_test(D)
 
 
-class TestFortress4(TestPlayer):
+class TestFortress4(TestFSMPlayer):
 
     name = "Fortress4"
     player = axelrod.Fortress4
@@ -92,7 +159,7 @@ class TestFortress4(TestPlayer):
         self.first_play_test(D)
 
 
-class TestPredator(TestPlayer):
+class TestPredator(TestFSMPlayer):
 
     name = "Predator"
     player = axelrod.Predator
@@ -110,7 +177,7 @@ class TestPredator(TestPlayer):
         self.first_play_test(C)
 
 
-class TestRaider(TestPlayer):
+class TestRaider(TestFSMPlayer):
 
     name = "Raider"
     player = axelrod.Raider
@@ -128,7 +195,7 @@ class TestRaider(TestPlayer):
         self.first_play_test(D)
 
 
-class TestRipoff(TestPlayer):
+class TestRipoff(TestFSMPlayer):
 
     name = "Ripoff"
     player = axelrod.Ripoff
@@ -146,7 +213,7 @@ class TestRipoff(TestPlayer):
         self.first_play_test(D)
 
 
-class TestSolutionB1(TestPlayer):
+class TestSolutionB1(TestFSMPlayer):
 
     name = "SolutionB1"
     player = axelrod.SolutionB1
@@ -164,7 +231,7 @@ class TestSolutionB1(TestPlayer):
         self.first_play_test(D)
 
 
-class TestSolutionB5(TestPlayer):
+class TestSolutionB5(TestFSMPlayer):
 
     name = "SolutionB5"
     player = axelrod.SolutionB5
@@ -182,7 +249,7 @@ class TestSolutionB5(TestPlayer):
         self.first_play_test(D)
 
 
-class TestThumper(TestPlayer):
+class TestThumper(TestFSMPlayer):
 
     name = "Thumper"
     player = axelrod.Thumper

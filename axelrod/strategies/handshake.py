@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, Game
+from axelrod import Actions, Player, Game, init_args
 
 C, D = Actions.C, Actions.D
 
@@ -18,8 +18,10 @@ class Handshake(Player):
     }
 
     @init_args
-    def __init__(self, initial_plays=(C, D)):
+    def __init__(self, initial_plays=None):
         Player.__init__(self)
+        if not initial_plays:
+            initial_plays = [C, D]
         self.initial_plays = initial_plays
 
     def strategy(self, opponent):

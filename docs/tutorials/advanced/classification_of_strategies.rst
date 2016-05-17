@@ -43,7 +43,7 @@ Here are how many of the strategies that make use of the particular game being
 played (whether or not it's the default Prisoner's dilemma)::
 
     >>> len([s() for s in axl.strategies if 'game' in s().classifier['makes_use_of']])
-    21
+    22
 
 Similarly, strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`
