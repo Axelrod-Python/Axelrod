@@ -28,3 +28,6 @@ class TestHandshake(TestPlayer):
         self.responses_test([C, D], [C, C], [D] * 20)
         self.responses_test([C, D], [D, C], [D] * 20)
         self.responses_test([C, D], [D, D], [D] * 20)
+
+        self.responses_test([C, D] * 2, [D, C] * 2, [D])
+        self.responses_test([C, D] * 2, [C, D] * 2, [C])
