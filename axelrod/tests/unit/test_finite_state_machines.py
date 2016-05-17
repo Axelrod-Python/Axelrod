@@ -23,10 +23,6 @@ def check_state_transitions(state_transitions):
         for action in [C, D]:
             if not ((state, action) in keys):
                 return False
-    # Check that every state is accessible
-    for state in sources:
-        if not (((state, C) in values) or ((state, D) in values)):
-            return False
     return True
 
 
@@ -85,18 +81,11 @@ class TestFSMPlayers(unittest.TestCase):
                        (2, C, 1, D),
                        (2, D, 3, C),
                        (3, C, 3, C))
-        # There are three ways for the check to be False. Each of the following
-        # targets one case.
         player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
                                 initial_action=C)
         self.assertFalse(check_state_transitions(player.fsm.state_transitions))
 
         transitions = [(1, D, 2, D)]
-        player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
-                                initial_action=C)
-        self.assertFalse(check_state_transitions(player.fsm.state_transitions))
-
-        transitions = [(1, C, 1, C), (1, D, 1, D), (2, C, 1, D), (2, D, 1, C)]
         player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
                                 initial_action=C)
         self.assertFalse(check_state_transitions(player.fsm.state_transitions))
