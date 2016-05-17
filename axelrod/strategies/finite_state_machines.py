@@ -5,7 +5,10 @@ C, D = Actions.C, Actions.D
 
 class SimpleFSM(object):
     """Simple implementation of a finite state machine that transitions
-    between states based on the last round of play."""
+    between states based on the last round of play.
+
+    https://en.wikipedia.org/wiki/Finite-state_machine
+    """
 
     def __init__(self, transitions, initial_state):
         """
