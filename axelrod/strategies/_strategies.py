@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from .alternator import Alternator
+from .adaptive import Adaptive
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -10,9 +11,14 @@ from .axelrod_second import Champion, Eatherley, Tester
 from .backstabber import BackStabber, DoubleCrosser
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
-from .cycler import AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD
+from .cycler import (
+    AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD,
+    CyclerDC, CyclerDDC)
 from .darwin import Darwin
 from .defector import Defector, TrickyDefector
+from .finite_state_machines import (
+    Fortress3, Fortress4, Predator, Raider, Ripoff, SolutionB1, SolutionB5,
+    Thumper, FSMPlayer)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import Gambler, PSOGambler
@@ -23,6 +29,7 @@ from .gobymajority import (GoByMajority,
     HardGoByMajority5)
 from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
 from .grumpy import Grumpy
+from .handshake import Handshake
 from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
     MathConstantHunter, RandomHunter, EventualCycleHunter)
@@ -52,6 +59,7 @@ from .titfortat import (
 # Note: Meta* strategies are handled in .__init__.py
 
 strategies = [
+    Adaptive,
     Aggravater,
     ALLCorALLD,
     Alternator,
@@ -74,6 +82,8 @@ strategies = [
     CyclerCCCCCD,
     CyclerCCCD,
     CyclerCCD,
+    CyclerDC,
+    CyclerDDC,
     Darwin,
     Davis,
     Defector,
@@ -89,6 +99,8 @@ strategies = [
     ForgetfulGrudger,
     Forgiver,
     ForgivingTitForTat,
+    Fortress3,
+    Fortress4,
     PSOGambler,
     GTFT,
     Geller,
@@ -99,6 +111,7 @@ strategies = [
     GoByMajority20,
     GoByMajority40,
     GoByMajority5,
+    Handshake,
     HardGoByMajority,
     HardGoByMajority10,
     HardGoByMajority20,
@@ -131,25 +144,31 @@ strategies = [
     OnceBitten,
     OppositeGrudger,
     Pi,
+    Predator,
     Prober,
     Prober2,
     Prober3,
     ProtectedMindReader,
     Punisher,
+    Raider,
     Random,
     RandomHunter,
     Retaliate,
     Retaliate2,
     Retaliate3,
+    Ripoff,
     RiskyQLearner,
     Shubik,
     SneakyTitForTat,
     SoftJoss,
+    SolutionB1,
+    SolutionB5,
     StochasticWSLS,
     SuspiciousTitForTat,
     Tester,
     ThueMorse,
     ThueMorseInverse,
+    Thumper,
     TitForTat,
     TitFor2Tats,
     TrickyCooperator,

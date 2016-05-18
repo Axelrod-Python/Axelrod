@@ -6,6 +6,9 @@ Strategies index
 Here are the docstrings of all the strategies in the library.
 
 
+.. automodule:: axelrod.strategies.adaptive
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.alternator
    :members:
    :undoc-members:
@@ -42,6 +45,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.defector
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.finite_state_machines
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.forgiver
    :members:
    :undoc-members:
@@ -58,6 +64,9 @@ Here are the docstrings of all the strategies in the library.
    :members:
    :undoc-members:
 .. automodule:: axelrod.strategies.grumpy
+   :members:
+   :undoc-members:
+.. automodule:: axelrod.strategies.handshake
    :members:
    :undoc-members:
 .. automodule:: axelrod.strategies.hunter
