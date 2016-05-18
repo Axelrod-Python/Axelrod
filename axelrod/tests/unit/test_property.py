@@ -98,7 +98,8 @@ class TestTournament(unittest.TestCase):
 
     @given(tournament_and_seed=tournaments(min_turns=2, max_turns=50, min_noise=0,
                                            max_noise=1, min_repetitions=2,
-                                           max_repetitions=50))
+                                           max_repetitions=50,
+                                           max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator(self, tournament_and_seed):
         tournament, seed = tournament_and_seed
@@ -112,7 +113,8 @@ class TestTournament(unittest.TestCase):
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
 
-    @given(tournament_and_seed=tournaments(strategies=axelrod.basic_strategies))
+    @given(tournament_and_seed=tournaments(strategies=axelrod.basic_strategies,
+                                           max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_given_strategies(self, tournament_and_seed):
         tournament, seed = tournament_and_seed
@@ -123,7 +125,8 @@ class TestTournament(unittest.TestCase):
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
 
-    @given(tournament_and_seed=tournaments(strategies=stochastic_strategies))
+    @given(tournament_and_seed=tournaments(strategies=stochastic_strategies,
+                                           max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_stochastic_strategies(self, tournament_and_seed):
         tournament, seed = tournament_and_seed
@@ -146,7 +149,8 @@ class TestProbEndTournament(unittest.TestCase):
                                                     max_prob_end=1,
                                                     min_noise=0, max_noise=1,
                                                     min_repetitions=2,
-                                                    max_repetitions=50))
+                                                    max_repetitions=50,
+                                                    max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator(self, tournament_and_seed):
         tournament, seed = tournament_and_seed
@@ -160,7 +164,8 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
 
-    @given(tournament_and_seed=prob_end_tournaments(strategies=axelrod.basic_strategies))
+    @given(tournament_and_seed=prob_end_tournaments(
+        strategies=axelrod.basic_strategies, max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_given_strategies(self, tournament_and_seed):
         tournament, seed = tournament_and_seed
@@ -171,7 +176,8 @@ class TestProbEndTournament(unittest.TestCase):
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
 
-    @given(tournament_and_seed=prob_end_tournaments(strategies=stochastic_strategies))
+    @given(tournament_and_seed=prob_end_tournaments(
+        strategies=stochastic_strategies, max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_stochastic_strategies(self, tournament_and_seed):
         tournament, seed = tournament_and_seed
