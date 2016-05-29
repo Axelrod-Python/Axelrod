@@ -86,7 +86,7 @@ class Tournament(object):
         """
         if progress_bar:
             self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
-                    desc="Playing matches", leave=False)
+                                          desc="Playing matches")
 
         self.setup_output_file(filename)
         if not build_results and not filename:
@@ -96,6 +96,9 @@ class Tournament(object):
             self._run_serial(progress_bar=progress_bar)
         else:
             self._run_parallel(processes=processes, progress_bar=progress_bar)
+
+        if progress_bar:
+            self.progress_bar.close()
 
         # Make sure that python has finished writing to disk
         self.outputfile.flush()
