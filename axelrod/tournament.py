@@ -85,7 +85,8 @@ class Tournament(object):
         axelrod.ResultSet
         """
         if progress_bar:
-            self.progress_bar = tqdm.tqdm(total=len(self.match_generator))
+            self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
+                                          desc="Playing matches")
 
         self.setup_output_file(filename)
         if not build_results and not filename:
@@ -96,13 +97,16 @@ class Tournament(object):
         else:
             self._run_parallel(processes=processes, progress_bar=progress_bar)
 
+        if progress_bar:
+            self.progress_bar.close()
+
         # Make sure that python has finished writing to disk
         self.outputfile.flush()
 
         if build_results:
-            return self._build_result_set()
+            return self._build_result_set(progress_bar=progress_bar)
 
-    def _build_result_set(self):
+    def _build_result_set(self, progress_bar=True):
         """
         Build the result set (used by the play method)
 
@@ -112,7 +116,7 @@ class Tournament(object):
         """
         result_set = ResultSetFromFile(
             filename=self.filename,
-            with_morality=self._with_morality)
+            progress_bar=progress_bar)
         self.outputfile.close()
         return result_set
 
