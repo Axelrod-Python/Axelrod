@@ -387,3 +387,9 @@ class TestResultSetFromFile(unittest.TestCase):
                                  (0, 2): [[('C', 'D'), ('C', 'D')]],
                                  (1, 1): [[('C', 'C'), ('C', 'C')]]}
         self.assertEqual(rs.interactions, expected_interactions)
+
+
+class TestDecorator(unittest.TestCase):
+    def test_update_pbar(self):
+        method = lambda x: None
+        self.assertEqual(axelrod.result_set.update_pbar(method)(1), None)
