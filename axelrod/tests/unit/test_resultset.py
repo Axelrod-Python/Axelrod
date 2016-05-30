@@ -390,6 +390,6 @@ class TestResultSetFromFile(unittest.TestCase):
 
 
 class TestDecorator(unittest.TestCase):
-    def test_update_pbar(self):
+    def test_update_progress_bar(self):
         method = lambda x: None
-        self.assertEqual(axelrod.result_set.update_pbar(method)(1), None)
+        self.assertEqual(axelrod.result_set.update_progress_bar(method)(1), None)

@@ -15,7 +15,7 @@ except ImportError:
     from io import StringIO
 
 
-def update_pbar(method):
+def update_progress_bar(method):
     """A decorator to update a progress bar if it exists"""
     def wrapper(*args):
         """Run the method and update the progress bar if it exists"""
@@ -104,7 +104,7 @@ class ResultSet(object):
         replist = list(range(self.nrepetitions))
         return [[[0 for j in plist] for i in plist] for r in replist]
 
-    @update_pbar
+    @update_progress_bar
     def build_match_lengths(self):
         """
         Returns:
@@ -136,7 +136,7 @@ class ResultSet(object):
 
         return match_lengths
 
-    @update_pbar
+    @update_progress_bar
     def build_scores(self):
         """
         Returns:
@@ -170,7 +170,7 @@ class ResultSet(object):
 
         return scores
 
-    @update_pbar
+    @update_progress_bar
     def build_ranked_names(self):
         """
         Returns:
@@ -181,7 +181,7 @@ class ResultSet(object):
 
         return [str(self.players[i]) for i in self.ranking]
 
-    @update_pbar
+    @update_progress_bar
     def build_wins(self):
         """
         Returns:
@@ -217,7 +217,7 @@ class ResultSet(object):
 
         return wins
 
-    @update_pbar
+    @update_progress_bar
     def build_normalised_scores(self):
         """
         Returns:
@@ -260,7 +260,7 @@ class ResultSet(object):
 
         return normalised_scores
 
-    @update_pbar
+    @update_progress_bar
     def build_ranking(self):
         """
         Returns:
@@ -276,7 +276,7 @@ class ResultSet(object):
         return sorted(range(self.nplayers),
                       key=lambda i: -nanmedian(self.normalised_scores[i]))
 
-    @update_pbar
+    @update_progress_bar
     def build_payoffs(self):
         """
         Returns:
@@ -317,7 +317,7 @@ class ResultSet(object):
 
         return payoffs
 
-    @update_pbar
+    @update_progress_bar
     def build_payoff_matrix(self):
         """
         Returns:
@@ -352,7 +352,7 @@ class ResultSet(object):
 
         return payoff_matrix
 
-    @update_pbar
+    @update_progress_bar
     def build_payoff_stddevs(self):
         """
         Returns:
@@ -389,7 +389,7 @@ class ResultSet(object):
 
         return payoff_stddevs
 
-    @update_pbar
+    @update_progress_bar
     def build_score_diffs(self):
         """
         Returns:
@@ -431,7 +431,7 @@ class ResultSet(object):
 
         return score_diffs
 
-    @update_pbar
+    @update_progress_bar
     def build_payoff_diffs_means(self):
         """
         Returns:
@@ -471,7 +471,7 @@ class ResultSet(object):
 
         return payoff_diffs_means
 
-    @update_pbar
+    @update_progress_bar
     def build_cooperation(self):
         """
         Returns:
@@ -509,7 +509,7 @@ class ResultSet(object):
 
         return cooperations
 
-    @update_pbar
+    @update_progress_bar
     def build_normalised_cooperation(self):
         """
         Returns:
@@ -553,7 +553,7 @@ class ResultSet(object):
 
         return normalised_cooperations
 
-    @update_pbar
+    @update_progress_bar
     def build_vengeful_cooperation(self):
         """
         Returns:
@@ -567,7 +567,7 @@ class ResultSet(object):
         return [[2 * (element - 0.5) for element in row]
                 for row in self.normalised_cooperation]
 
-    @update_pbar
+    @update_progress_bar
     def build_cooperating_rating(self):
         """
         Returns:
@@ -598,7 +598,7 @@ class ResultSet(object):
         return [sum(cs) / max(1, float(sum(ls))) for cs, ls
                 in zip(self.cooperation, lengths)]
 
-    @update_pbar
+    @update_progress_bar
     def build_good_partner_matrix(self):
         """
         Returns:
@@ -633,7 +633,7 @@ class ResultSet(object):
 
         return good_partner_matrix
 
-    @update_pbar
+    @update_progress_bar
     def build_good_partner_rating(self):
         """
         Returns:
@@ -655,7 +655,7 @@ class ResultSet(object):
 
         return good_partner_rating
 
-    @update_pbar
+    @update_progress_bar
     def build_eigenjesus_rating(self):
         """
         Returns:
@@ -669,7 +669,7 @@ class ResultSet(object):
 
         return eigenvector.tolist()
 
-    @update_pbar
+    @update_progress_bar
     def build_eigenmoses_rating(self):
         """
         Returns:
