@@ -22,7 +22,7 @@ To do this let us create a new class to generate matches::
     >>> class StochasticMatchups(axl.RoundRobinMatches):
     ...     """Inherit from the `axelrod.match_generator.RoundRobinMatches` class"""
     ...
-    ...     def build_match_chunks(self, noise=0):
+    ...     def build_match_chunks(self):
     ...         """
     ...         A generator that yields match parameters only with a given probability.
     ...
@@ -32,7 +32,7 @@ To do this let us create a new class to generate matches::
     ...         for player1_index in range(len(self.players)):
     ...             for player2_index in range(player1_index, len(self.players)):
     ...                 if random.random() < 0.5:  # This is the modification
-    ...                     match_params = self.build_single_match_params(noise)
+    ...                     match_params = self.build_single_match_params()
     ...                     index_pair = (player1_index, player2_index)
     ...                     yield (index_pair, match_params, self.repetitions)
 
@@ -75,12 +75,12 @@ builds matches that were either 200 turns or single 1 shot games::
     ...     """Inherit from the `axelrod.match_generator.RoundRobinMatches` class"""
     ...
     ...
-    ...     def build_single_match_params(self, noise=0):
+    ...     def build_single_match_params(self):
     ...         """Create a single set of match parameters"""
     ...         turns = 1
     ...         if random.random() < 0.5:
     ...             turns = 200
-    ...         return (turns, self.game, None, noise)
+    ...         return (turns, self.game, None, self.noise)
 
 We can take a look at the match lengths when using this generator::
 
