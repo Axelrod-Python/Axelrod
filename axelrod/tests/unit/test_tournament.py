@@ -11,6 +11,7 @@ import warnings
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers
 from axelrod.tests.property import tournaments, prob_end_tournaments
+from axelrod.strategy_transformers import FinalTransformer
 
 import axelrod
 
@@ -551,3 +552,17 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertEqual(results.players, [str(p) for p in tournament.players])
         for rep in results.interactions.values():
             self.assertEqual(len(rep), tournament.repetitions)
+
+    def test_players_do_not_know_match_length(self):
+        """Create two players who should cooperate on last to turns if they
+        know when those last two turns are.
+        """
+        p1 = FinalTransformer(['D', 'D'])(axelrod.Cooperator)()
+        p2 = FinalTransformer(['D', 'D'])(axelrod.Cooperator)()
+        players = [p1, p2]
+        tournament = axelrod.ProbEndTournament(players, prob_end=.1,
+                                               repetitions=1)
+        results = tournament.play()
+        # Check that both plays always cooperated
+        for rating in results.cooperating_rating:
+            self.assertEqual(rating, 1)
