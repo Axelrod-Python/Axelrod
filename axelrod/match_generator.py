@@ -2,8 +2,6 @@ from __future__ import division
 from math import ceil, log
 import random
 
-from .match import Match
-
 
 class MatchGenerator(object):
 

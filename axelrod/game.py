@@ -2,6 +2,7 @@ from axelrod import Actions
 
 C, D = Actions.C, Actions.D
 
+
 class Game(object):
     """A class to hold the game matrix and to score a game accordingly."""
 

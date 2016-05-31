@@ -12,7 +12,7 @@ import tqdm
 from .game import Game
 from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
-from .result_set import ResultSet, ResultSetFromFile
+from .result_set import ResultSetFromFile
 
 
 class Tournament(object):

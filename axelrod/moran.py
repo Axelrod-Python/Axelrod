@@ -6,7 +6,6 @@ import numpy as np
 
 from .deterministic_cache import DeterministicCache
 from .match import Match, is_stochastic
-from .player import Player
 from .random_ import randrange
 
 
@@ -30,11 +29,12 @@ def fitness_proportionate_selection(scores):
         if x >= r:
             return i
 
+
 class MoranProcess(object):
     def __init__(self, players, turns=100, noise=0, deterministic_cache=None):
         self.turns = turns
         self.noise = noise
-        self.initial_players = players # save initial population
+        self.initial_players = players  # save initial population
         self.players = []
         self.populations = []
         self.set_players()
@@ -70,7 +70,6 @@ class MoranProcess(object):
         - update the population
         """
         # Check the exit condition, that all players are of the same type.
-        population = self.populations[-1]
         classes = set(p.__class__ for p in self.players)
         if len(classes) == 1:
             self.winning_strategy_name = str(self.players[0])
@@ -94,8 +93,9 @@ class MoranProcess(object):
             for j in range(i + 1, N):
                 player1 = self.players[i]
                 player2 = self.players[j]
-                match = Match((player1, player2), turns=self.turns, noise=self.noise,
-                              deterministic_cache=self.deterministic_cache)
+                match = Match(
+                    (player1, player2), turns=self.turns, noise=self.noise,
+                    deterministic_cache=self.deterministic_cache)
                 match.play()
                 match_scores = np.sum(match.scores(), axis=0) / float(self.turns)
                 scores[i] += match_scores[0]
