@@ -21,7 +21,7 @@ class TestSampleTournaments(unittest.TestCase):
         # Play the tournament and build the actual outcome tuples.
         tournament = axelrod.Tournament(
             players=players, game=cls.game, turns=turns, repetitions=1)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         scores = [score[0] for score in results.scores]
         outcome = zip(names, scores)
 
