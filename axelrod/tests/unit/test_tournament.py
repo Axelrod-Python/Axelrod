@@ -9,7 +9,7 @@ import unittest
 import warnings
 
 from hypothesis import given, example, settings
-from hypothesis.strategies import integers, lists, sampled_from, random_module, floats
+from hypothesis.strategies import integers
 from axelrod.tests.property import tournaments, prob_end_tournaments
 
 import axelrod

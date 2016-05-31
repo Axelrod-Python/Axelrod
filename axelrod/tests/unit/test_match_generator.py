@@ -81,7 +81,9 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(len(match), test_turns)
 
         # Testing with noise
-        match_params = rr.build_single_match_params(noise=.5)
+        rr = axelrod.RoundRobinMatches(
+            self.players, test_turns, test_game, test_repetitions, noise=0.5)
+        match_params = rr.build_single_match_params()
         self.assertIsInstance(match_params, tuple)
         self.assertEqual(match_params[0], rr.turns)
         self.assertEqual(match_params[1], rr.game)
@@ -178,7 +180,9 @@ class TestProbEndRoundRobin(unittest.TestCase):
         self.assertGreater(len(match), 0)
 
         # Testing with noise
-        match_params = rr.build_single_match_params(noise=.5)
+        rr = axelrod.ProbEndRoundRobinMatches(
+            self.players, prob_end, test_game, test_repetitions, noise=0.5)
+        match_params = rr.build_single_match_params()
         self.assertIsInstance(match_params, tuple)
         self.assertLess(match_params[0], float('inf'))
         self.assertGreater(match_params[0], 0)

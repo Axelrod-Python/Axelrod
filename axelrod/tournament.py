@@ -50,8 +50,8 @@ class Tournament(object):
             self.game = game
         self.players = players
         self.repetitions = repetitions
-        self.match_generator = match_generator(players, turns, self.game,
-                                               self.repetitions)
+        self.match_generator = match_generator(
+            players, turns, self.game, self.repetitions, self.noise)
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
@@ -130,7 +130,7 @@ class Tournament(object):
         progress_bar : bool
             Whether or not to update the tournament progress bar
         """
-        chunks = self.match_generator.build_match_chunks(noise=self.noise)
+        chunks = self.match_generator.build_match_chunks()
 
         for chunk in chunks:
             results = self._play_matches(chunk)
@@ -171,7 +171,7 @@ class Tournament(object):
         done_queue = Queue()
         workers = self._n_workers(processes=processes)
 
-        chunks = self.match_generator.build_match_chunks(noise=self.noise)
+        chunks = self.match_generator.build_match_chunks()
         for chunk in chunks:
             work_queue.put(chunk)
 
