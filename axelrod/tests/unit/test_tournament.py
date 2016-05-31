@@ -554,7 +554,7 @@ class TestProbEndTournament(unittest.TestCase):
             self.assertEqual(len(rep), tournament.repetitions)
 
     def test_players_do_not_know_match_length(self):
-        """Create two players who should cooperate on last to turns if they
+        """Create two players who should cooperate on last two turns if they
         know when those last two turns are.
         """
         p1 = FinalTransformer(['D', 'D'])(axelrod.Cooperator)()
