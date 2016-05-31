@@ -32,6 +32,19 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
+    @given(turns=integers(min_value=1, max_value=200), game=games())
+    @example(turns=5, game=axelrod.DefaultGame)
+    def test_init(self, turns, game):
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+        match_attributes = {
+            'length': 500,
+            'game': game,
+            'noise': 0.5
+        }
+        match = axelrod.Match((p1, p2), turns, game=game, match_attributes=match_attributes)
+        self.assertEqual(match.players[0].match_attributes['length'], 500)
+        self.assertEqual(match.players[0].match_attributes['noise'], 0.5)
+
     @given(turns=integers(min_value=1, max_value=200))
     @example(turns=5)
     def test_len(self, turns):
