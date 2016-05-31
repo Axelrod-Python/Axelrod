@@ -1,6 +1,4 @@
 """Utilities used by various strategies"""
-import functools
-import collections
 import itertools
 
 from axelrod import update_history
@@ -28,7 +26,7 @@ def detect_cycle(history, min_size=1, offset=0):
     history_tail = history[-offset:]
     for i in range(min_size, len(history_tail) // 2):
         cycle = tuple(history_tail[:i])
-        for j,  elem in enumerate(history_tail):
+        for j, elem in enumerate(history_tail):
             if elem != cycle[j % len(cycle)]:
                 break
         if j == len(history_tail) - 1:

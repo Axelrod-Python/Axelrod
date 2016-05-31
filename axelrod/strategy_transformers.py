@@ -176,6 +176,7 @@ def forgiver_wrapper(player, opponent, action, p):
 ForgiverTransformer = StrategyTransformerFactory(
     forgiver_wrapper, name_prefix="Forgiving")
 
+
 def initial_sequence(player, opponent, action, initial_seq):
     """Play the moves in `seq` first (must be a list), ignoring the strategy's
     moves until the list is exhausted."""
@@ -220,8 +221,8 @@ def history_track_wrapper(player, opponent, action):
         player._recorded_history = [action]
     return action
 
-TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper,
-                                        name_prefix="HistoryTracking")()
+TrackHistoryTransformer = StrategyTransformerFactory(
+    history_track_wrapper, name_prefix="HistoryTracking")()
 
 
 def deadlock_break_wrapper(player, opponent, action):
@@ -238,6 +239,7 @@ def deadlock_break_wrapper(player, opponent, action):
 
 DeadlockBreakingTransformer = StrategyTransformerFactory(
     deadlock_break_wrapper, name_prefix="DeadlockBreaking")()
+
 
 def grudge_wrapper(player, opponent, action, grudges):
     """After `grudges` defections, defect forever."""

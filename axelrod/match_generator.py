@@ -2,12 +2,10 @@ from __future__ import division
 from math import ceil, log
 import random
 
-from .match import Match
-
 
 class MatchGenerator(object):
 
-    def __init__(self, players, turns, game, repetitions):
+    def __init__(self, players, turns, game, repetitions, noise=0):
         """
         A class to generate matches. This is used by the Tournament class which
         is in charge of playing the matches and collecting the results.
@@ -22,11 +20,14 @@ class MatchGenerator(object):
             The game object used to score the match
         repetitions : int
             The number of repetitions of a given match
+        noise : float, 0
+            The probability that a player's intended action should be flipped
         """
         self.players = players
         self.turns = turns
         self.game = game
         self.repetitions = repetitions
+        self.noise = noise
         self.opponents = players
 
     @property
@@ -52,15 +53,10 @@ class MatchGenerator(object):
 
 class RoundRobinMatches(MatchGenerator):
 
-    def build_match_chunks(self, noise=0):
+    def build_match_chunks(self):
         """
         A generator that returns player index pairs and match parameters for a
         round robin tournament.
-
-        parameters
-        ----------
-        noise : float, 0
-            The probability that a player's intended action should be flipped
 
         Yields
         -------
@@ -69,21 +65,16 @@ class RoundRobinMatches(MatchGenerator):
         """
         for player1_index in range(len(self.players)):
             for player2_index in range(player1_index, len(self.players)):
-                match_params = self.build_single_match_params(noise)
+                match_params = self.build_single_match_params()
                 index_pair = (player1_index, player2_index)
                 yield (index_pair, match_params, self.repetitions)
 
-    def build_single_match_params(self, noise=0):
+    def build_single_match_params(self):
         """
         Creates a single set of match parameters.
-
-        parameters
-        ----------
-        noise : float, 0
-            The probability that a player's intended action should be flipped
         """
         cache = None
-        return (self.turns, self.game, cache, noise)
+        return (self.turns, self.game, cache, self.noise)
 
     def __len__(self):
         """
@@ -103,7 +94,7 @@ class RoundRobinMatches(MatchGenerator):
 
 class ProbEndRoundRobinMatches(RoundRobinMatches):
 
-    def __init__(self, players, prob_end, game, repetitions):
+    def __init__(self, players, prob_end, game, repetitions, noise=0):
         """
         A class that generates matches for which the players do not
         know the length of the Match (to their knowledge it is infinite) but
@@ -117,23 +108,21 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             The probability that a turn of a Match is the last
         game : axelrod.Game
             The game object used to score the match
-        deterministic_cache : an instance of axelrod.DeterministicCache
-            A cache of resulting actions for deterministic matches
-        """
-        super(ProbEndRoundRobinMatches, self).__init__(
-            players, turns=float("inf"), game=game, repetitions=repetitions)
-        self.prob_end = prob_end
-
-    def build_single_match_params(self, noise=0):
-        """
-        Creates a single set of match parameters.
-
-        parameters
-        ----------
+        repetitions : int
+            The number of repetitions of a given match
         noise : float, 0
             The probability that a player's intended action should be flipped
         """
-        return (self.sample_length(self.prob_end), self.game, None, noise)
+        super(ProbEndRoundRobinMatches, self).__init__(
+            players, turns=float("inf"), game=game, repetitions=repetitions,
+            noise=noise)
+        self.prob_end = prob_end
+
+    def build_single_match_params(self):
+        """
+        Creates a single set of match parameters.
+        """
+        return (self.sample_length(self.prob_end), self.game, None, self.noise)
 
     def sample_length(self, prob_end):
         """

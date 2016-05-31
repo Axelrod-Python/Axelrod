@@ -91,7 +91,7 @@ class Match(object):
             not self.noise and
             self._cache.mutable and not (
                 any(p.classifier['stochastic'] for p in self.players)
-                )
+            )
         )
 
     def play(self):

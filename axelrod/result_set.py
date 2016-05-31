@@ -48,7 +48,8 @@ class ResultSet(object):
         self.players = players
         self.nplayers = len(players)
         self.interactions = interactions
-        self.nrepetitions = max([len(rep) for rep in list(interactions.values())])
+        self.nrepetitions = max(
+            [len(rep) for rep in list(interactions.values())])
 
         if progress_bar:
             self.progress_bar = tqdm.tqdm(total=19, desc="Analysing results")
@@ -57,7 +58,6 @@ class ResultSet(object):
 
         # Calculate all attributes:
         self.build_all()
-
 
     def build_all(self):
         """Build all the results. In a seperate method to make inheritance more
@@ -665,7 +665,7 @@ class ResultSet(object):
         http://www.scottaaronson.com/morality.pdf
         """
         eigenvector, eigenvalue = eigen.principal_eigenvector(
-                self.normalised_cooperation)
+            self.normalised_cooperation)
 
         return eigenvector.tolist()
 
@@ -679,7 +679,7 @@ class ResultSet(object):
         http://www.scottaaronson.com/morality.pdf
         """
         eigenvector, eigenvalue = eigen.principal_eigenvector(
-                self.vengeful_cooperation)
+            self.vengeful_cooperation)
 
         return eigenvector.tolist()
 
