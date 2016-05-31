@@ -34,7 +34,7 @@ class TestMatch(unittest.TestCase):
 
     @given(turns=integers(min_value=1, max_value=200), game=games())
     @example(turns=5, game=axelrod.DefaultGame)
-    def test_init(self, turns, game):
+    def test_non_default_attributes(self, turns, game):
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
         match_attributes = {
             'length': 500,
