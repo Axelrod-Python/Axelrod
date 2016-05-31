@@ -1,6 +1,7 @@
 import random
 from axelrod import Actions
 
+
 def random_choice(p=0.5):
     """
     Return 'C' with probability `p`, else return 'D'
@@ -12,6 +13,7 @@ def random_choice(p=0.5):
     if r < p:
         return Actions.C
     return Actions.D
+
 
 def randrange(a, b):
     """Python 2 / 3 compatible randrange. Returns a random integer uniformly

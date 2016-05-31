@@ -1,7 +1,4 @@
 import copy
-
-import axelrod
-
 from axelrod import Player, update_history, Actions
 
 C, D = Actions.C, Actions.D
