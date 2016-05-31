@@ -16,34 +16,50 @@ def is_stochastic(players, noise):
 class Match(object):
 
     def __init__(self, players, turns, game=None, deterministic_cache=None,
-                 noise=0):
+                 noise=0, match_attributes=None):
         """
         Parameters
         ----------
         players : tuple
             A pair of axelrod.Player objects
         turns : integer
-                The number of turns per match
+            The number of turns per match
         game : axelrod.Game
             The game object used to score the match
         deterministic_cache : dictionary
             A cache of resulting actions for deterministic matches
         noise : float
             The probability that a player's intended action should be flipped
+        match_attributes : dict
+            Mapping attribute names to values which should be passed to players.
+            The default is to use the correct values for turns, game and noise
+            but these can be overidden if desired.
         """
         self.result = []
         self.turns = turns
         self._cache_key = (players[0].__class__, players[1].__class__, turns)
+        self.noise = noise
+
         if game is None:
             self.game = Game()
         else:
             self.game = game
-        self.noise = noise
-        self.players = list(players)
+
         if deterministic_cache is None:
             self._cache = DeterministicCache()
         else:
             self._cache = deterministic_cache
+
+        if match_attributes is None:
+            self.match_attributes = {
+                'length': self.turns,
+                'game': self.game,
+                'noise': self.noise
+            }
+        else:
+            self.match_attributes = match_attributes
+
+        self.players = list(players)
 
     @property
     def players(self):
@@ -54,10 +70,7 @@ class Match(object):
         """Ensure that players are passed the match attributes"""
         newplayers = []
         for player in players:
-            player.set_match_attributes(
-                length=self.turns,
-                game=self.game,
-                noise=self.noise)
+            player.set_match_attributes(**self.match_attributes)
             newplayers.append(player)
         self._players = newplayers
 
