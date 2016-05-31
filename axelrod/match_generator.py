@@ -22,6 +22,8 @@ class MatchGenerator(object):
             The game object used to score the match
         repetitions : int
             The number of repetitions of a given match
+        noise : float, 0
+            The probability that a player's intended action should be flipped
         """
         self.players = players
         self.turns = turns
@@ -58,11 +60,6 @@ class RoundRobinMatches(MatchGenerator):
         A generator that returns player index pairs and match parameters for a
         round robin tournament.
 
-        parameters
-        ----------
-        noise : float, 0
-            The probability that a player's intended action should be flipped
-
         Yields
         -------
         tuples
@@ -77,11 +74,6 @@ class RoundRobinMatches(MatchGenerator):
     def build_single_match_params(self):
         """
         Creates a single set of match parameters.
-
-        parameters
-        ----------
-        noise : float, 0
-            The probability that a player's intended action should be flipped
         """
         cache = None
         return (self.turns, self.game, cache, self.noise)
@@ -118,21 +110,19 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             The probability that a turn of a Match is the last
         game : axelrod.Game
             The game object used to score the match
-        deterministic_cache : an instance of axelrod.DeterministicCache
-            A cache of resulting actions for deterministic matches
+        repetitions : int
+            The number of repetitions of a given match
+        noise : float, 0
+            The probability that a player's intended action should be flipped
         """
         super(ProbEndRoundRobinMatches, self).__init__(
-            players, turns=float("inf"), game=game, repetitions=repetitions, noise=noise)
+            players, turns=float("inf"), game=game, repetitions=repetitions,
+            noise=noise)
         self.prob_end = prob_end
 
     def build_single_match_params(self):
         """
         Creates a single set of match parameters.
-
-        parameters
-        ----------
-        noise : float, 0
-            The probability that a player's intended action should be flipped
         """
         return (self.sample_length(self.prob_end), self.game, None, self.noise)
 
