@@ -125,3 +125,40 @@ class TestAggravater(TestPlayer):
         """
         self.responses_test([C, D, D, D], [C, C, C, C], [C])
         self.responses_test([C, C, D, D, D], [C, D, C, C, C], [D])
+
+
+class TestSoftGrudger(TestPlayer):
+
+    name = "Soft Grudger"
+    player = axelrod.SoftGrudger
+    expected_classifier = {
+        'memory_depth': 6,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_initial_strategy(self):
+        """
+        Starts by cooperating
+        """
+        self.first_play_test(C)
+
+    def test_strategy(self):
+        """
+        If opponent defects at any point then the player will respond with D, D,
+        D, D, C, C
+        """
+        self.responses_test([C], [C], [C])
+        self.responses_test([C, C], [C, D], [D])
+        self.responses_test([C, C, D], [C, D, C], [D])
+        self.responses_test([C, C, D, D], [C, D, C, C], [D])
+        self.responses_test([C, C, D, D, D], [C, D, C, C, C], [D])
+        self.responses_test([C, C, D, D, D, D], [C, D, C, C, C, C], [C])
+        self.responses_test([C, C, D, D, D, D, C], [C, D, C, C, C, C, C], [C])
+        self.responses_test([C, C, D, D, D, D, C, C],
+                            [C, D, C, C, C, C, C, D], [D])
+        self.responses_test([C, C, D, D, D, D, C, C, D],
+                            [C, D, C, C, C, C, C, D, C], [D])

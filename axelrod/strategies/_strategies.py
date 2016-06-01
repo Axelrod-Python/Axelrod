@@ -27,7 +27,8 @@ from .gobymajority import (GoByMajority,
     GoByMajority5,
     HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
     HardGoByMajority5)
-from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
+from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
+    SoftGrudger)
 from .grumpy import Grumpy
 from .handshake import Handshake
 from .hunter import (
