@@ -1,3 +1,26 @@
+# v1.1.1, 2016-06-01
+
+Minor changes, bug fixes.
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.1.0...v1.1.1
+
+User facing:
+
+- The matches can tell the players different match attributes than the ones
+  actually being played (helpful for prob end tournaments where players cannot
+  know the length of the match for example):
+  https://github.com/Axelrod-Python/Axelrod/pull/609
+- A progress bar for the result set:
+  https://github.com/Axelrod-Python/Axelrod/pull/603
+
+Internal:
+
+- Reducing some test sizes: https://github.com/Axelrod-Python/Axelrod/pull/601
+- PEP8 improvements: https://github.com/Axelrod-Python/Axelrod/pull/607
+- Refactor of the match generator (noise is an attribute):
+  https://github.com/Axelrod-Python/Axelrod/pull/608
+
 # v1.1.0, 2016-05-18
 
 New strategies and minor changes to the test suite
