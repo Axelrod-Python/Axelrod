@@ -388,6 +388,15 @@ class TestResultSetFromFile(unittest.TestCase):
                                  (1, 1): [[('C', 'C'), ('C', 'C')]]}
         self.assertEqual(rs.interactions, expected_interactions)
 
+    def test_progres_bar(self):
+        rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True)
+        self.assertEqual(rs.read_progress_bar.total, 6)
+
+        # Test that can give length
+        rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True,
+                                       num_interactions=6)
+        self.assertEqual(rs.read_progress_bar.total, 6)
+
 
 class TestDecorator(unittest.TestCase):
     def test_update_progress_bar(self):

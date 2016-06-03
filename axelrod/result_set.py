@@ -771,8 +771,8 @@ class ResultSetFromFile(ResultSet):
             if not num_interactions:
                 # If number of interactions is not known:
                 num_interactions = sum(1 for line in open(filename))
-            progress_bar = tqdm.tqdm(total=num_interactions,
-                                     desc="Reading interactions")
+            self.read_progress_bar = tqdm.tqdm(total=num_interactions,
+                                               desc="Reading interactions")
 
         interactions = defaultdict(list)
         players_d = {}
@@ -789,10 +789,10 @@ class ResultSetFromFile(ResultSet):
                     if index not in players:
                         players_d[index] = player
                 if progress_bar:
-                    progress_bar.update()
+                    self.read_progress_bar.update()
 
         if progress_bar:
-            progress_bar.close()
+            self.read_progress_bar.close()
 
         # Create an ordered list of players
         players = []

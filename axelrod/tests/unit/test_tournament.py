@@ -119,6 +119,7 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
         self.assertEqual(len(results.interactions), 15)
+        self.assertEqual(tournament.num_interactions, 150)
 
     def test_no_progress_bar_play(self):
         """Test that progress bar is not created for progress_bar=False"""
@@ -228,6 +229,7 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
         results = tournament.play(processes=2, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(tournament.num_interactions, 75)
 
         # The following relates to #516
         players = [axelrod.Cooperator(), axelrod.Defector(),
