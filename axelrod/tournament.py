@@ -46,6 +46,7 @@ class Tournament(object):
         self.name = name
         self.turns = turns
         self.noise = noise
+        self.num_interactions = 0
         if game is not None:
             self.game = game
         self.players = players
@@ -67,7 +68,8 @@ class Tournament(object):
         # Save filename for loading ResultSet later
         self.filename = filename
 
-    def play(self, build_results=True, filename=None, processes=None, progress_bar=True):
+    def play(self, build_results=True, filename=None,
+             processes=None, progress_bar=True):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -116,7 +118,8 @@ class Tournament(object):
         """
         result_set = ResultSetFromFile(
             filename=self.filename,
-            progress_bar=progress_bar)
+            progress_bar=progress_bar,
+            num_interactions=self.num_interactions)
         self.outputfile.close()
         return result_set
 
@@ -153,6 +156,7 @@ class Tournament(object):
                 row.append(history1)
                 row.append(history2)
                 self.writer.writerow(row)
+                self.num_interactions += 1
 
     def _run_parallel(self, processes=2, progress_bar=False):
         """
@@ -286,6 +290,7 @@ class Tournament(object):
         match = Match(*params)
         for _ in range(repetitions):
             match.play()
+            self.num_interactions += 1
             interactions[index_pair].append(match.result)
         return interactions
 

@@ -707,7 +707,8 @@ class ResultSetFromFile(ResultSet):
     by the tournament class.
     """
 
-    def __init__(self, filename, progress_bar=True):
+    def __init__(self, filename, progress_bar=True,
+                 num_interactions=False):
         """
         Parameters
         ----------
@@ -715,8 +716,14 @@ class ResultSetFromFile(ResultSet):
                 name of a file of the correct file.
             progress_bar : bool
                 Whether or not to create a progress bar which will be updated
+            num_interactions : int
+                If the number of interactions is known this helps with
+                displaying the progress bar, if it is not known and progress_bar
+                is set to True then an initial count will take place
         """
-        self.players, self.interactions = self._read_csv(filename)
+        self.players, self.interactions = self._read_csv(filename,
+                                                         progress_bar,
+                                                         num_interactions)
         self.nplayers = len(self.players)
         self.nrepetitions = len(list(self.interactions.values())[0])
 
@@ -728,7 +735,8 @@ class ResultSetFromFile(ResultSet):
         # Calculate all attributes:
         self.build_all()
 
-    def _read_csv(self, filename):
+    def _read_csv(self, filename, progress_bar=False,
+                  num_interactions=False):
         """
         Reads from a csv file of the format:
 
@@ -744,6 +752,13 @@ class ResultSetFromFile(ResultSet):
         1, 2, Cooperator, Alternator, CCC, CDC
         1, 2, Cooperator, Alternator, CCC, CDC
 
+        Parameters
+        ----------
+            filename : string
+                name of a file of the correct file.
+            progress_bar : bool
+                Whether or not to create a progress bar which will be updated
+
         Returns
         -------
 
@@ -752,6 +767,13 @@ class ResultSetFromFile(ResultSet):
                 - Second element: interactions (a dictionary mapping player pair
                   indices to lists of histories)
         """
+        if progress_bar:
+            if not num_interactions:
+                # If number of interactions is not known:
+                num_interactions = sum(1 for line in open(filename))
+            progress_bar = tqdm.tqdm(total=num_interactions,
+                                     desc="Reading interactions")
+
         interactions = defaultdict(list)
         players_d = {}
         with open(filename, 'r') as f:
@@ -766,6 +788,11 @@ class ResultSetFromFile(ResultSet):
                 for index, player in zip(index_pair, players):
                     if index not in players:
                         players_d[index] = player
+                if progress_bar:
+                    progress_bar.update()
+
+        if progress_bar:
+            progress_bar.close()
 
         # Create an ordered list of players
         players = []
