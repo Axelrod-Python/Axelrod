@@ -1,6 +1,7 @@
 The MIT License (MIT)
 
-Copyright (c) 2015 Vincent Knight
+Copyright (c) 2015 The Axelrod-Python project team members listed at
+https://github.com/Axelrod-Python/Axelrod/graphs/contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
