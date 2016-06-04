@@ -736,7 +736,7 @@ class ResultSetFromFile(ResultSet):
         self.build_all()
 
     def _read_csv(self, filename, progress_bar=False,
-                  num_interactions=False):
+                  num_interactions=None):
         """
         Reads from a csv file of the format:
 

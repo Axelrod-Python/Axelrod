@@ -290,7 +290,6 @@ class Tournament(object):
         match = Match(*params)
         for _ in range(repetitions):
             match.play()
-            self.num_interactions += 1
             interactions[index_pair].append(match.result)
         return interactions
 
