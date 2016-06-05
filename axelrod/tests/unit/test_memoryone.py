@@ -36,6 +36,28 @@ class TestWinStayLoseShift(TestPlayer):
         self.markov_test([C, D, D, C])
 
 
+class TestWinShiftLoseStayTestPlayer(TestPlayer):
+
+    name = "Win-Shift Lose-Stay"
+    player = axelrod.WinShiftLoseStay
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """Starts by cooperating"""
+        self.first_play_test(D)
+
+    def test_effect_of_strategy(self):
+        """Check that switches if does not get best payoff."""
+        self.markov_test([D, C, C, D])
+
+
 class TestGTFT(TestPlayer):
 
     name = "GTFT: 0.33"
