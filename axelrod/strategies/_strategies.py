@@ -40,7 +40,7 @@ from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
     StochasticCooperator, StochasticWSLS, ZDExtort2, ZDExtort2v2, ZDExtort4,
-    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift)
+    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
@@ -178,12 +178,13 @@ strategies = [
     TrickyDefector,
     Tullock,
     TwoTitsForTat,
+    WinShiftLoseStay,
     WinStayLoseShift,
     ZDExtort2,
     ZDExtort2v2,
     ZDExtort4,
-    ZDGen2,
     ZDGTFT2,
+    ZDGen2,
     ZDSet2,
     e,
 ]
