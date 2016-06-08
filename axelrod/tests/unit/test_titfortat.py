@@ -292,16 +292,17 @@ class TestGradual(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        """Punishes defection with a growing number of defections"""
+        """Punishes defection with a growing number of defections and calms the opponent
+            with two Cooperations in a row"""
         self.responses_test([C], [C], [C])
         self.responses_test([C], [D], [D])
         self.responses_test([C, D], [D, C], [C])
-        self.responses_test([C, D, C], [D, C, D], [D])
-        self.responses_test([C, D, C, D], [D, C, D, C], [D])
-        self.responses_test([C, D, C, D, D], [D, C, D, C, C], [C])
-        self.responses_test([C, D, C, D, D, C], [D, C, D, C, C, D], [D])
+        self.responses_test([C, D, C], [D, C, D], [C])
+        self.responses_test([C, D, C, C], [D, C, D, C], [C])
+        self.responses_test([C, D, C, D, C], [D, C, D, C, C], [C])
+        self.responses_test([C, D, C, D, C, C], [D, C, D, C, C, D], [D])
         self.responses_test([C, D, C, D, D, C, D], [D, C, D, C, C, D, C], [D])
         self.responses_test([C, D, C, D, D, C, D, D],
-                            [D, C, D, C, C, D, C, C], [D])
-        self.responses_test([C, D, C, D, D, C, D, D, D],   
+                            [D, C, D, C, C, D, C, C], [C])
+        self.responses_test([C, D, C, D, D, C, D, D, C],
                             [D, C, D, C, C, D, C, C, C], [C])
