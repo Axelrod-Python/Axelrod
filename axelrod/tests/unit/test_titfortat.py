@@ -292,8 +292,8 @@ class TestGradual(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        """Punishes defection with a growing number of defections and calms the opponent
-            with two Cooperations in a row"""
+        """Punishes defection with a growing number of defections and calms
+        the opponent with two Cooperations in a row"""
         self.responses_test([C], [C], [C])
         self.responses_test([C], [D], [D])
         self.responses_test([C, D], [D, C], [C])

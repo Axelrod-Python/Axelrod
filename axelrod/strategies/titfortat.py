@@ -293,10 +293,13 @@ class Gradual(Player):
         'manipulates_state': False
     }
 
-    calming = False
-    punishing = False
-    punishment_count = 0
-    punishment_limit = 0
+    def __init__(self):
+
+        Player.__init__(self)
+        self.calming = False
+        self.punishing = False
+        self.punishment_count = 0
+        self.punishment_limit = 0
 
     def strategy(self, opponent):
 
@@ -314,7 +317,7 @@ class Gradual(Player):
                 self.punishment_count = 0
                 return C
 
-        if 'D' in opponent.history[-1:]:
+        if D in opponent.history[-1:]:
             self.punishing = True
             self.punishment_count += 1
             self.punishment_limit += 1
