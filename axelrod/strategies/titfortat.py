@@ -273,3 +273,59 @@ class OmegaTFT(Player):
         Player.reset(self)
         self.randomness_counter = 0
         self.deadlock_counter = 0
+
+
+class Gradual(Player):
+    """
+    A player that punishes defections with a growing number of defections
+    but after punishing enters a calming state and cooperates no matter what
+    the opponent does for two rounds.
+
+    http://perso.uclouvain.be/vincent.blondel/workshops/2003/beaufils.pdf """
+
+    name = "Gradual"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    calming = False
+    punishing = False
+    punishment_count = 0
+    punishment_limit = 0
+
+    def strategy(self, opponent):
+
+        if self.calming:
+            self.calming = False
+            return 'C'
+
+        if self.punishing:
+            if self.punishment_count < self.punishment_limit:
+                self.punishment_count += 1
+                return 'D'
+            else:
+                self.calming = True
+                self.punishing = False
+                self.punishment_count = 0
+                return "C"
+
+        if 'D' in opponent.history[-1:]:
+            self.punishing = True
+            self.punishment_count += 1
+            self.punishment_limit += 1
+            return 'D'
+
+
+        return "C"
+
+    def reset(self):
+        Player.reset(self)
+        self.calming = False
+        self.punishing = False
+        self.punishment_count = 0
+        self.punishment_limit = 0

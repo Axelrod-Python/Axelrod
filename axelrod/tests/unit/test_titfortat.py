@@ -272,3 +272,50 @@ class TestOmegaTFTvsAlternator(TestHeadsUp):
         self.versus_test(axelrod.OmegaTFT(), axelrod.Alternator(),
                          [C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D],
                          [C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D])
+
+
+class TestGradual(TestPlayer):
+
+    name = 'Gradual'
+    player = axelrod.Gradual
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+
+    def test_effect_of_strategy(self):
+        """Punishes defection with a growing number of defections and calms the opponent
+            with two Cooperations in a row"""
+        self.responses_test([C], [C], [C])
+        self.responses_test([C], [D], [D])
+        self.responses_test([C, D], [D, C], [C])
+        self.responses_test([C, D, C], [D, C, D], [C])
+        self.responses_test([C, D, C, C], [D, C, D, C], [C])
+        self.responses_test([C, D, C, D, C], [D, C, D, C, C], [C])
+        self.responses_test([C, D, C, D, C, C], [D, C, D, C, C, D], [D])
+        self.responses_test([C, D, C, D, D, C, D], [D, C, D, C, C, D, C], [D])
+        self.responses_test([C, D, C, D, D, C, D, D],
+                            [D, C, D, C, C, D, C, C], [C])
+        self.responses_test([C, D, C, D, D, C, D, D, C],
+                            [D, C, D, C, C, D, C, C, C], [C])
+
+    def test_reset_cleans_all(self):
+        p = axelrod.Gradual()
+        p.calming = True
+        p.punishing = True
+        p.punishment_count = 1
+        p.punishment_limit = 1
+        p.reset()
+
+        self.assertFalse(p.calming)
+        self.assertFalse(p.punishing)
+        self.assertEqual(p.punishment_count, 0)
+        self.assertEqual(p.punishment_limit, 0)
