@@ -306,3 +306,16 @@ class TestGradual(TestPlayer):
                             [D, C, D, C, C, D, C, C], [C])
         self.responses_test([C, D, C, D, D, C, D, D, C],
                             [D, C, D, C, C, D, C, C, C], [C])
+
+    def test_reset_cleans_all(self):
+        p = axelrod.Gradual()
+        p.calming = True
+        p.punishing = True
+        p.punishment_count = 1
+        p.punishment_limit = 1
+        p.reset()
+
+        self.assertFalse(p.calming)
+        self.assertFalse(p.punishing)
+        self.assertEqual(p.punishment_count, 0)
+        self.assertEqual(p.punishment_limit, 0)
