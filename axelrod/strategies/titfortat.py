@@ -302,26 +302,25 @@ class Gradual(Player):
 
         if self.calming:
             self.calming = False
-            return 'C'
+            return C
 
         if self.punishing:
             if self.punishment_count < self.punishment_limit:
                 self.punishment_count += 1
-                return 'D'
+                return D
             else:
                 self.calming = True
                 self.punishing = False
                 self.punishment_count = 0
-                return "C"
+                return C
 
         if 'D' in opponent.history[-1:]:
             self.punishing = True
             self.punishment_count += 1
             self.punishment_limit += 1
-            return 'D'
+            return D
 
-
-        return "C"
+        return C
 
     def reset(self):
         Player.reset(self)
