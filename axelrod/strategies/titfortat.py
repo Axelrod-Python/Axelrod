@@ -273,3 +273,20 @@ class OmegaTFT(Player):
         Player.reset(self)
         self.randomness_counter = 0
         self.deadlock_counter = 0
+
+class Gradual(Player):
+    """A player that punishes defection with a growing number of defections."""
+
+    name = "Gradual"
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory, memory-2
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @staticmethod
+    def strategy(opponent):
+        return D if D in opponent.history[-2:] else C
