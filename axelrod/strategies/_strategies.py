@@ -163,6 +163,7 @@ strategies = [
     RiskyQLearner,
     Shubik,
     SneakyTitForTat,
+    SoftGrudger,
     SoftJoss,
     SolutionB1,
     SolutionB5,
