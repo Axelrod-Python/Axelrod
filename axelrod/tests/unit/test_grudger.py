@@ -162,3 +162,11 @@ class TestSoftGrudger(TestPlayer):
                             [C, D, C, C, C, C, C, D], [D])
         self.responses_test([C, C, D, D, D, D, C, C, D],
                             [C, D, C, C, C, C, C, D, C], [D])
+
+    def test_reset(self):
+        p = axelrod.SoftGrudger()
+        p.grudged = True
+        p.grudge_memory = 5
+        p.reset()
+        self.assertFalse(p.grudged)
+        self.assertEqual(p.grudge_memory, 0)
