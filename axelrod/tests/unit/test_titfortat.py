@@ -339,3 +339,26 @@ class TestGradual(TestPlayer):
         self.assertFalse(p.punishing)
         self.assertEqual(p.punishment_count, 0)
         self.assertEqual(p.punishment_limit, 0)
+
+    def test_output_from_literature(self):
+        """
+        This strategy is not fully described in the literature, however the
+        following two results are reported in:
+
+        Bruno Beaufils, Jean-Paul Delahaye, Philippe Mathie
+        "Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner's
+        Dilemma" Proc. Artif. Life 1996
+
+        This test just ensures that the strategy is as was originally defined
+        """
+        player = axelrod.Gradual()
+
+        opp1 = axelrod.Defector()
+        match = axelrod.Match((player, opp1), 1000)
+        match.play()
+        self.assertEqual(match.final_score(), (915, 1340))
+
+        opp2 = axelrod.CyclerCCD()
+        match = axelrod.Match((player, opp2), 1000)
+        match.play()
+        self.assertEqual(match.final_score(), (3472, 767))
