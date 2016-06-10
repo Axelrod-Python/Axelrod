@@ -22,7 +22,7 @@ Each can be run individually::
 Furthermore the documentation is also doctested, to run those tests you can run
 the script::
 
-    $ sh doctest
+    $ python doctests.py
 
 Note that this project is being taken care off by `travis-ci
 <https://travis-ci.org/>`_, so all tests will be run automatically when opening
