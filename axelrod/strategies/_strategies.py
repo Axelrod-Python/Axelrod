@@ -27,7 +27,8 @@ from .gobymajority import (GoByMajority,
     GoByMajority5,
     HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
     HardGoByMajority5)
-from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
+from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
+    SoftGrudger)
 from .grumpy import Grumpy
 from .handshake import Handshake
 from .hunter import (
@@ -39,7 +40,7 @@ from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
     StochasticCooperator, StochasticWSLS, ZDExtort2, ZDExtort2v2, ZDExtort4,
-    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift)
+    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
@@ -162,6 +163,7 @@ strategies = [
     RiskyQLearner,
     Shubik,
     SneakyTitForTat,
+    SoftGrudger,
     SoftJoss,
     SolutionB1,
     SolutionB5,
@@ -177,12 +179,13 @@ strategies = [
     TrickyDefector,
     Tullock,
     TwoTitsForTat,
+    WinShiftLoseStay,
     WinStayLoseShift,
     ZDExtort2,
     ZDExtort2v2,
     ZDExtort4,
-    ZDGen2,
     ZDGTFT2,
+    ZDGen2,
     ZDSet2,
     e,
 ]

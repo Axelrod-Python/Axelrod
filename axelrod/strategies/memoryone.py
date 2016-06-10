@@ -88,6 +88,32 @@ class WinStayLoseShift(MemoryOnePlayer):
         self._initial = initial
 
 
+class WinShiftLoseStay(MemoryOnePlayer):
+    """Win-Shift Lose-Stay, also called Reverse Pavlov.
+
+    For reference see: "Engineering Design of Strategies for Winning
+    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
+    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
+    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
+    """
+
+    name = 'Win-Shift Lose-Stay'
+    classifier = {
+        'memory_depth': 1,  # Memory-one Four-Vector
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self, initial=D):
+        Player.__init__(self)
+        self.set_four_vector([0, 1, 1, 0])
+        self._initial = initial
+
+
 class GTFT(MemoryOnePlayer):
     """Generous Tit-For-Tat Strategy."""
 
