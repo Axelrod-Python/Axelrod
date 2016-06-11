@@ -1,14 +1,14 @@
 """Test for the Naive Prober strategy."""
 
 import axelrod
-from .test_player import TestPlayer
+from .test_player import TestPlayer, test_responses
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestNaiveProber(TestPlayer):
 
-    name = "RUA Naive Prober: 0.1"
+    name = "Naive Prober: 0.1"
     player = axelrod.NaiveProber
     expected_classifier = {
         'memory_depth': 1,
@@ -21,9 +21,20 @@ class TestNaiveProber(TestPlayer):
 
     def test_strategy(self):
         "Randomly defects and always retaliates like tit for tat."
-        self.first_play_test(C, random_seed=1)
-        self.first_play_test(D, random_seed=2)
-        # Random defection
-        self.responses_test([C] * 10, [C] * 10, [D], random_seed=3)
+        self.first_play_test(C)
         # Always retaliate a defection
         self.responses_test([C] * 2, [C, D], [D])
+
+    def test_random_defection(self):
+        # Random defection
+        player = self.player(0.4)
+        opponent = axelrod.Random()
+        test_responses(self, player, opponent, [C], [C], [D], random_seed=1)
+
+    def test_reduction_to_TFT(self):
+        player = self.player(0)
+        opponent = axelrod.Random()
+        test_responses(self, player, opponent, [C], [C], [C], random_seed=1)
+        test_responses(self, player, opponent, [C], [D], [D])
+        test_responses(self, player, opponent, [C, D], [D, C], [C])
+        test_responses(self, player, opponent, [C, D], [D, D], [D])
