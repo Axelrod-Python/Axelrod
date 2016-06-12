@@ -1012,11 +1012,11 @@ Here is how NaiveProber is implemented in the library::
 
     >>> import axelrod
     >>> p1 = axelrod.NaiveProber()  # Create a Prober3 player
-    >>> p2 = axelrod.Random()  # Create a player that always cooperates
+    >>> p2 = axelrod.Defector()  # Create a player that always defects
     >>> for round in range(5):
     ...     p1.play(p2)
 
     >>> p1.history
-    ['C', 'C', 'C', 'C', 'D']
+    ['C', 'D', 'D', 'D', 'D']
     >>> p2.history
-    ['C', 'C', 'C', 'C', 'D']
+    ['D', 'D', 'D', 'D', 'D']
