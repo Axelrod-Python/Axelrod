@@ -1,3 +1,23 @@
+# v1.2.0, 2016-06-13
+
+New strategies and some minor improvements
+
+- Naive Prober: https://github.com/Axelrod-Python/Axelrod/pull/629
+- Gradual: https://github.com/Axelrod-Python/Axelrod/pull/627
+- Soft grudger and reverse pavlov:
+  https://github.com/Axelrod-Python/Axelrod/pull/628
+
+Minor improvements include:
+
+- Progress bar for result set reading of data:
+  https://github.com/Axelrod-Python/Axelrod/pull/618
+- Prob end tournament players do not know match length (this was in essence a
+  bug): https://github.com/Axelrod-Python/Axelrod/pull/611
+- Doc fixes
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.1.1...v1.2.0
+
 # v1.1.1, 2016-06-01
 
 Minor changes, bug fixes.
