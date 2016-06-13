@@ -137,6 +137,7 @@ strategies = [
     LimitedRetaliate3,
     EvolvedLookerUp,
     MathConstantHunter,
+    NaiveProber,
     MindBender,
     MindController,
     MindReader,
