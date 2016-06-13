@@ -134,6 +134,11 @@ class HardProber(Player):
 class NaiveProber(Player):
     """
     Like tit-for-tat, but it occasionally defects with a small probability.
+
+    For reference see: "Engineering Design of Strategies for Winning
+    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
+    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
+    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
     """
 
     name = 'Naive Prober'
