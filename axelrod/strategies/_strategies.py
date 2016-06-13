@@ -44,8 +44,7 @@ from .memoryone import (
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
-from .prober import Prober, Prober2, Prober3, HardProber
-from .naiveprober import NaiveProber
+from .prober import Prober, Prober2, Prober3, HardProber, NaiveProber
 from .punisher import Punisher, InversePunisher
 from .qlearner import RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner
 from .rand import Random
