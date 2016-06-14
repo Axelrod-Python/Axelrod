@@ -7,8 +7,8 @@
 .. image:: https://travis-ci.org/Axelrod-Python/Axelrod.svg?branch=packaging
     :target: https://travis-ci.org/Axelrod-Python/Axelrod
 
-.. image:: https://zenodo.org/badge/19509/Axelrod-Python/Axelrod.svg
-    :target: https://zenodo.org/badge/latestdoi/19509/Axelrod-Python/Axelrod
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.55509.svg
+   :target: http://dx.doi.org/10.5281/zenodo.55509
 
 |Join the chat at https://gitter.im/Axelrod-Python/Axelrod|
 
