@@ -216,10 +216,14 @@ class TestRemorsefulProber(TestPlayer):
     def test_reduction_to_TFT(self):
         player = self.player(0)
         opponent = axelrod.Random()
-        test_responses(self, player, opponent, [C], [C], [C], random_seed=1)
-        test_responses(self, player, opponent, [C], [D], [D])
-        test_responses(self, player, opponent, [C, D], [D, C], [C])
-        test_responses(self, player, opponent, [C, D], [D, D], [D])
+        test_responses(self, player, opponent, [C], [C], [C], random_seed=1,
+                       attrs={'probing': False})
+        test_responses(self, player, opponent, [C], [D], [D],
+                       attrs={'probing': False})
+        test_responses(self, player, opponent, [C, D], [D, C], [C],
+                       attrs={'probing': False})
+        test_responses(self, player, opponent, [C, D], [D, D], [D],
+                       attrs={'probing': False})
 
     def test_reset_probing(self):
         player = self.player(0.4)
