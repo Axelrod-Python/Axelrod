@@ -195,7 +195,7 @@ class RemorsefulProber(NaiveProber):
     https://books.google.co.uk/books?id=ekonDAAAQBAJ&pg=PA273&lpg=PA273&dq=remorseful+prober&source=bl&ots=kAeYRYg7GB&sig=RD5-XtDAxzTF9rxRZEWyFjwuKhc&hl=en&sa=X&ved=0ahUKEwiFg--H_qvNAhWXF8AKHQVTAzcQ6AEIKDAC#v=onepage&q=remorseful%20prober&f=false
     """
 
-    name = 'Remorseful Prober'  # Needed if want to use with the decorator
+    name = 'Remorseful Prober'
     classifier = {
         'memory_depth': 2,  # It remembers if it's previous move was random
         'stochastic': True,
