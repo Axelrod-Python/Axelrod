@@ -197,21 +197,14 @@ class TestRemorsefulProber(TestPlayer):
         player = self.player(0.4)
         opponent = axelrod.Random()
 
-        random.seed(0)
-        player.history = [C]
-        opponent.history = [C]
-        self.assertEqual(player.strategy(opponent), D)  # Random defection
-        self.assertEqual(player.probing, True)
+        test_responses(self, player, opponent, [C], [C], [D], random_seed=0,
+                       attrs={'probing': True})
 
-        player.history = [C, D]
-        opponent.history = [C, D]
-        self.assertEqual(player.strategy(opponent), C)  # Remorse
-        self.assertEqual(player.probing, False)
+        test_responses(self, player, opponent, [C, D], [C, D], [C],
+                       attrs={'probing': False})
 
-        player.history = [C, D, C]
-        opponent.history = [C, D, D]
-        self.assertEqual(player.strategy(opponent), D)
-        self.assertEqual(player.probing, False)
+        test_responses(self, player, opponent, [C, D, C], [C, D, D], [D],
+                       attrs={'probing': False})
 
     def test_reduction_to_TFT(self):
         player = self.player(0)
