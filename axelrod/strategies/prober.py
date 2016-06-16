@@ -191,7 +191,7 @@ class RemorsefulProber(NaiveProber):
     and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
     IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
 
-    A fuller description is given in "The Selfish Gene"
+    A more complete description is given in "The Selfish Gene"
     (https://books.google.co.uk/books?id=ekonDAAAQBAJ):
 
     "Remorseful Prober remembers whether it has just spontaneously defected, and
