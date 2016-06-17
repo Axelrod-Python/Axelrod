@@ -1,5 +1,7 @@
 from axelrod import Actions, Player, init_args, random_choice
 
+import random
+
 C, D = Actions.C, Actions.D
 
 
@@ -143,7 +145,7 @@ class NaiveProber(Player):
 
     name = 'Naive Prober'
     classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -171,9 +173,65 @@ class NaiveProber(Player):
         # React to the opponent's last move
         if opponent.history[-1] == D:
             return D
-        # Otherwise cooperate, defect with a small probability
+        # Otherwise cooperate, defect with probability 1 - self.p
         choice = random_choice(1 - self.p)
         return choice
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
+
+
+class RemorsefulProber(NaiveProber):
+    """
+    Like Naive Prober, but it remembers if the opponent responds to a random
+    defection with a defection by being remorseful and cooperating.
+
+    For reference see: "Engineering Design of Strategies for Winning
+    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
+    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
+    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
+
+    A more complete description is given in "The Selfish Gene"
+    (https://books.google.co.uk/books?id=ekonDAAAQBAJ):
+
+    "Remorseful Prober remembers whether it has just spontaneously defected, and
+    whether the result was prompt retaliation. If so, it 'remorsefully' allows
+    its opponent 'one free hit' without retaliating."
+    """
+
+    name = 'Remorseful Prober'
+    classifier = {
+        'memory_depth': 2,  # It remembers if it's previous move was random
+        'stochastic': True,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self, p=0.1):
+        NaiveProber.__init__(self, p)
+        self.probing = False
+
+    def strategy(self, opponent):
+        # First move
+        if len(self.history) == 0:
+            return C
+        # React to the opponent's last move
+        if opponent.history[-1] == D:
+            if self.probing:
+                self.probing = False
+                return C
+            return D
+
+        # Otherwise cooperate with probability 1 - self.p
+        if random.random() < 1 - self.p:
+            self.probing = False
+            return C
+
+        self.probing = True
+        return D
+
+    def reset(self):
+        Player.reset(self)
+        self.probing = False
