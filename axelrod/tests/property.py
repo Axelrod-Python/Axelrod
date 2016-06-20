@@ -2,7 +2,8 @@
 A module for creating hypothesis based strategies for property based testing
 """
 import axelrod
-from hypothesis.strategies import composite, tuples, sampled_from, integers, floats, random_module, lists
+from hypothesis.strategies import (composite, sampled_from, integers,
+                                   floats, lists)
 
 
 @composite
@@ -45,15 +46,15 @@ def matches(draw, strategies=axelrod.strategies,
 
     Returns
     -------
-    tuple : a random match as well as a random seed
+    match : a random match
     """
-    seed = draw(random_module())
     strategies = draw(strategy_lists(min_size=2, max_size=2))
     players = [s() for s in strategies]
     turns = draw(integers(min_value=min_turns, max_value=max_turns))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
     match = axelrod.Match(players, turns=turns, noise=noise)
-    return match, seed
+    return match
+
 
 @composite
 def tournaments(draw, strategies=axelrod.strategies,
@@ -85,7 +86,6 @@ def tournaments(draw, strategies=axelrod.strategies,
     max_repetitions : integer
         The maximum number of repetitions
     """
-    seed = draw(random_module())
     strategies = draw(strategy_lists(strategies=strategies,
                                      min_size=min_size,
                                      max_size=max_size))
@@ -97,7 +97,7 @@ def tournaments(draw, strategies=axelrod.strategies,
 
     tournament = axelrod.Tournament(players, turns=turns,
                                     repetitions=repetitions, noise=noise)
-    return tournament, seed
+    return tournament
 
 
 @composite
@@ -130,7 +130,6 @@ def prob_end_tournaments(draw, strategies=axelrod.strategies,
     max_repetitions : integer
         The maximum number of repetitions
     """
-    seed = draw(random_module())
     strategies = draw(strategy_lists(strategies=strategies,
                                      min_size=min_size,
                                      max_size=max_size))
@@ -142,7 +141,7 @@ def prob_end_tournaments(draw, strategies=axelrod.strategies,
 
     tournament = axelrod.ProbEndTournament(players, prob_end=prob_end,
                                            repetitions=repetitions, noise=noise)
-    return tournament, seed
+    return tournament
 
 
 @composite

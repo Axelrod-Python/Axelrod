@@ -3,7 +3,6 @@
 import csv
 import logging
 from multiprocessing import Queue, cpu_count
-import random
 import tempfile
 import unittest
 import warnings
@@ -189,31 +188,30 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(progress_bar=True)
         self.assertIsInstance(results, axelrod.ResultSet)
 
-    @given(tournament_and_seed=tournaments(min_size=2, max_size=5, min_turns=2,
+    @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
                                            max_turns=50, min_repetitions=2,
                                            max_repetitions=4))
     @settings(max_examples=50, timeout=0)
-    @example(tournament_and_seed=(axelrod.Tournament(players=[s() for s in
-        test_strategies], turns=test_turns, repetitions=test_repetitions),
-        random.seed(0)))
+    @example(tournament=axelrod.Tournament(players=[s() for s in
+        test_strategies], turns=test_turns, repetitions=test_repetitions)
+        )
 
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
-    @example(tournament_and_seed=(
+    @example(tournament=
         axelrod.Tournament(players=[axelrod.BackStabber(),
                                     axelrod.MindReader()],
                            turns=2, repetitions=1),
-        random.seed(0)))
-    @example(tournament_and_seed=(
+        )
+    @example(tournament=
         axelrod.Tournament(players=[axelrod.BackStabber(),
                                     axelrod.ThueMorse()],
                            turns=2, repetitions=1),
-        random.seed(0)))
-    def test_property_serial_play(self, tournament_and_seed):
+        )
+    def test_property_serial_play(self, tournament):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
-        tournament, _ = tournament_and_seed  # Discarding the seed
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(tournament.players))
@@ -519,34 +517,31 @@ class TestProbEndTournament(unittest.TestCase):
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
-    @given(tournament_and_seed=prob_end_tournaments(min_size=2, max_size=5,
-                                                    min_prob_end=.1,
-                                                    max_prob_end=.9,
-                                                    min_repetitions=2,
-                                                    max_repetitions=4))
+    @given(tournament=prob_end_tournaments(min_size=2, max_size=5,
+                                           min_prob_end=.1,
+                                           max_prob_end=.9,
+                                           min_repetitions=2,
+                                           max_repetitions=4))
     @settings(max_examples=50, timeout=0)
-    @example(tournament_and_seed=(
+    @example(tournament=
         axelrod.ProbEndTournament(players=[s() for s in test_strategies],
-                                  prob_end=.2, repetitions=test_repetitions),
-        random.seed(0)))
+                                  prob_end=.2, repetitions=test_repetitions)
+        )
 
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
-    @example(tournament_and_seed=(
+    @example(tournament=
         axelrod.ProbEndTournament(players=[axelrod.BackStabber(),
                                            axelrod.MindReader()],
-                                  prob_end=.2, repetitions=1),
-        random.seed(0)))
-    @example(tournament_and_seed=(
+                                  prob_end=.2, repetitions=1))
+    @example(tournament=
         axelrod.ProbEndTournament(players=[axelrod.ThueMorse(),
                                            axelrod.MindReader()],
-                                  prob_end=.2, repetitions=1),
-        random.seed(0)))
-    def test_property_serial_play(self, tournament_and_seed):
+                                  prob_end=.2, repetitions=1))
+    def test_property_serial_play(self, tournament):
         """Test serial play using hypothesis"""
         # Test that we get an instance of ResultSet
-        tournament, _ = tournament_and_seed
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(tournament.players))
