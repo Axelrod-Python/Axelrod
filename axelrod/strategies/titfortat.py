@@ -365,7 +365,7 @@ class ContriteTitForTat(Player):
         if not opponent.history:
             return C
 
-        # If contrite and but managed to cooperate: apologise.
+        # If contrite but managed to cooperate: apologise.
         if self.contrite and self.history[-1] == C:
             self.contrite = False
             return C
