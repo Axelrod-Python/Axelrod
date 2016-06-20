@@ -54,6 +54,7 @@ class FSMPlayer(Player):
             initial_state = 1
             initial_action = C
         Player.__init__(self)
+        self.initial_state = initial_state
         self.initial_action = initial_action
         self.fsm = SimpleFSM(transitions, initial_state)
 
@@ -66,6 +67,10 @@ class FSMPlayer(Player):
             # for the strategy to function
             self.state = self.fsm.state
             return action
+
+    def reset(self):
+        Player.reset(self)
+        self.fsm.state = self.initial_state
 
 
 class Fortress3(FSMPlayer):
