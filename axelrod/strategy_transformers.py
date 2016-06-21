@@ -221,7 +221,8 @@ def history_track_wrapper(player, opponent, action):
         player._recorded_history = [action]
     return action
 
-TrackHistoryTransformer = StrategyTransformerFactory(history_track_wrapper)()
+TrackHistoryTransformer = StrategyTransformerFactory(
+    history_track_wrapper, name_prefix="HistoryTracking")()
 
 
 def deadlock_break_wrapper(player, opponent, action):
