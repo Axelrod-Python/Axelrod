@@ -5,7 +5,7 @@ from axelrod import Actions
 from axelrod.deterministic_cache import DeterministicCache
 
 from hypothesis import given, example
-from hypothesis.strategies import integers, floats, random_module, assume
+from hypothesis.strategies import integers, floats, assume
 
 from axelrod.tests.property import games
 
@@ -52,9 +52,8 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((p1, p2), turns)
         self.assertEqual(len(match), turns)
 
-    @given(p=floats(min_value=0, max_value=1),
-           rm=random_module())
-    def test_stochastic(self, p, rm):
+    @given(p=floats(min_value=0, max_value=1))
+    def test_stochastic(self, p):
 
         assume(0 < p < 1)
 
@@ -69,9 +68,8 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((p1, p2), 5)
         self.assertTrue(match._stochastic)
 
-    @given(p=floats(min_value=0, max_value=1),
-           rm=random_module())
-    def test_cache_update_required(self, p, rm):
+    @given(p=floats(min_value=0, max_value=1))
+    def test_cache_update_required(self, p):
 
         assume(0 < p < 1)
 
