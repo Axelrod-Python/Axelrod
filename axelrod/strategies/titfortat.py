@@ -1,4 +1,6 @@
 from axelrod import Actions, Player, init_args, flip_action
+from axelrod.strategy_transformers import (StrategyTransformerFactory,
+                                           history_track_wrapper)
 
 C, D = Actions.C, Actions.D
 
@@ -331,3 +333,56 @@ class Gradual(Player):
         self.punishing = False
         self.punishment_count = 0
         self.punishment_limit = 0
+
+
+Transformer = StrategyTransformerFactory(
+    history_track_wrapper, name_prefix=None)()
+
+
+@Transformer
+class ContriteTitForTat(Player):
+    """
+    A player that corresponds to Tit For Tat if there is no noise. In the case
+    of a noisy match: if the opponent defects as a result of a noisy defection
+    then ContriteTitForTat will become 'contrite' until it successfully
+    cooperates..
+
+    Reference: "How to Cope with Noise In the Iterated Prisoner's Dilemma" by
+    Wu and Axelrod. Published in Journal of Conflict Resolution, 39 (March
+    1995), pp. 183-189.
+
+    http://www-personal.umich.edu/~axe/research/How_to_Cope.pdf
+    """
+
+    name = "Contrite Tit For Tat"
+    classifier = {
+        'memory_depth': 3,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+    contrite = False
+
+    def strategy(self, opponent):
+
+        if not opponent.history:
+            return C
+
+        # If contrite but managed to cooperate: apologise.
+        if self.contrite and self.history[-1] == C:
+            self.contrite = False
+            return C
+
+        # Check if noise provoked opponent
+        if self._recorded_history[-1] != self.history[-1]:  # Check if noise
+            if self.history[-1] == D and opponent.history[-1] == C:
+                self.contrite = True
+
+        return opponent.history[-1]
+
+    def reset(self):
+        Player.reset(self)
+        self.contrite = False
+        self._recorded_history = []
