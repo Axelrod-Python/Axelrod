@@ -207,3 +207,32 @@ class TestProbEndRoundRobin(unittest.TestCase):
             self.players, prob_end, game=None, repetitions=repetitions)
         self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
         self.assertAlmostEqual(rr.estimated_size(), len(rr) * 1. / prob_end * repetitions)
+
+
+class TestSpatialMatches(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.players = [s() for s in test_strategies]
+
+    @given(repetitions=integers(min_value=1, max_value=test_repetitions),
+           turns=integers(min_value=1, max_value=test_turns))
+    @example(repetitions=test_repetitions, turns=test_turns)
+    def test_build_match_chunks(self, repetitions, turns):
+        edges = [(0, 1), (1, 2), (3, 4)]
+        sp = axelrod.SpatialMatches(
+            self.players, turns, test_game, repetitions, edges)
+        chunks = list(sp.build_match_chunks())
+        match_definitions = [tuple(list(index_pair) + [repetitions])
+                             for (index_pair, match_params, repetitions) in chunks]
+        expected_match_definitions = [(edge[0], edge[1], repetitions)
+                                      for edge in edges]
+
+        self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
+
+    def test_len(self):
+        edges = [(0, 1), (1, 2), (3, 4)]
+        sp = axelrod.SpatialMatches(
+            self.players, test_turns, test_game, test_repetitions, edges)
+        self.assertEqual(len(sp), len(list(sp.build_match_chunks())))
+        self.assertEqual(len(sp), len(edges))
