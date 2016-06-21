@@ -1,5 +1,6 @@
 from axelrod import Actions, Player, init_args, flip_action
-from axelrod.strategy_transformers import StrategyTransformerFactory, history_track_wrapper
+from axelrod.strategy_transformers import (StrategyTransformerFactory,
+                                           history_track_wrapper)
 
 C, D = Actions.C, Actions.D
 
