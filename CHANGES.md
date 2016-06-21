@@ -1,3 +1,17 @@
+# v1.3.0, 2016-06-21
+
+New strategy, a bug fix and more explicit copyright notice
+
+- Remorseful Prober: https://github.com/Axelrod-Python/Axelrod/pull/633
+
+Bug fix:
+
+- The finite state machines were not reseting state properly.
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.2.0...v1.3.0
+
 # v1.2.0, 2016-06-13
 
 New strategies and some minor improvements
