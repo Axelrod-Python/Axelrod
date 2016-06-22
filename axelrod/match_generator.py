@@ -167,3 +167,56 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         """Rough estimate of the number of matches that will be generated."""
         size = self.__len__() * (1. / self.prob_end) * self.repetitions
         return size
+
+class SpatialMatches(RoundRobinMatches):
+
+    def __init__(self, players, turns, game, repetitions, edges):
+        self.edges = edges
+        super(RoundRobinMatches, self).__init__(players, turns, game, repetitions)
+        """
+        A class that generates spatial structure matches. In spatial structure
+        matches the players do not play against every other player, instead they
+        only play their neighbors.
+
+        In literature the authors interpreted spatial tournaments topology
+        as a 2D square lattice. We want to create a class that will not take as
+        an argument only a 2D lattice but any given graph.
+
+        After considering various python packages for graphs, we ended up using
+        a simple dictionary that includes the edges.So the players - nodes will
+        only play players that are connected to with an edge.
+
+        We have chosen to implement spatial structure tournaments because
+        it has spon various tournaments after the work of Nowak and May 1992,
+        <http://www.nature.com/nature/journal/v359/n6398/abs/359826a0.html>
+        which proved that in PD cooperation behavior can merge for spatial
+        games.
+
+        Moreover, IPD tournaments with this topology have been conducted by
+        various researchers such as Lindgren and Nordahl in 1994
+        <http://www.sciencedirect.com/science/article/pii/0167278994902895>
+        and Brauchli, Killingback and Doebeli 1999.
+        <http://www.zoology.ubc.ca/~doebeli/reprints/Doe38.pdf>
+
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+        turns : integer
+            The number of turns per match
+        game : axelrod.Game
+            The game object used to score the match
+        repetitions : int
+            The number of repetitions of a given match
+        edges : dictionary
+            A dictionary containing the existing edges
+        """
+
+    def build_match_chunks(self):
+        for edge in self.edges:
+            match_params = self.build_single_match_params()
+            index_pair = edge
+            yield (index_pair, match_params, self.repetitions)
+
+    def __len__(self):
+        return len(self.edges)
