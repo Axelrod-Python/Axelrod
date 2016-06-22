@@ -1,3 +1,12 @@
+# v1.4.0, 2016-06-21
+
+New strategy.
+
+- contrite TitForTat: https://github.com/Axelrod-Python/Axelrod/pull/639
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.3.0...v1.4.0
+
 # v1.3.0, 2016-06-21
 
 New strategy, a bug fix and more explicit copyright notice
