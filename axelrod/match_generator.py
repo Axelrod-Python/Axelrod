@@ -171,6 +171,12 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
 class SpatialMatches(RoundRobinMatches):
 
     def __init__(self, players, turns, game, repetitions, edges):
+
+        player_indices = list(range(len(players)))
+        node_indices = sorted(set([node for edge in edges for node in edge]))
+        if player_indices != node_indices:
+            raise ValueError("The graph edges do not include all players.")
+
         self.edges = edges
         super(SpatialMatches, self).__init__(players, turns, game, repetitions)
         """
@@ -211,7 +217,6 @@ class SpatialMatches(RoundRobinMatches):
         edges : dictionary
             A dictionary containing the existing edges
         """
-
     def build_match_chunks(self):
         for edge in self.edges:
             match_params = self.build_single_match_params()
