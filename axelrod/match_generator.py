@@ -172,7 +172,7 @@ class SpatialMatches(RoundRobinMatches):
 
     def __init__(self, players, turns, game, repetitions, edges):
         self.edges = edges
-        super(RoundRobinMatches, self).__init__(players, turns, game, repetitions)
+        super(SpatialMatches, self).__init__(players, turns, game, repetitions)
         """
         A class that generates spatial structure matches. In spatial structure
         matches the players do not play against every other player, instead they
