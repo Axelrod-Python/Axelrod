@@ -31,6 +31,8 @@ test_turns = 100
 
 test_prob_end = .5
 
+test_edges = [(0, 1), (1, 2), (3, 4)]
+
 
 class TestTournament(unittest.TestCase):
 
@@ -548,3 +550,34 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertEqual(results.players, [str(p) for p in tournament.players])
         for rep in results.interactions.values():
             self.assertEqual(len(rep), tournament.repetitions)
+
+class TestSpatialTournament(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.game = axelrod.Game()
+        cls.players = [s() for s in test_strategies]
+        cls.test_name = 'test'
+        cls.test_repetitions = test_repetitions
+        cls.test_turns = test_turns
+        cls.test_edges = test_edges
+
+    def test_init(self):
+        tournament = axelrod.SpatialTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=self.test_turns,
+            edges=self.test_edges,
+            noise=0.2)
+        self.assertEqual(tournament.match_generator.edges, tournament.edges)
+        self.assertEqual(len(tournament.players), len(test_strategies))
+        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.turns, 100)
+        self.assertEqual(tournament.repetitions, 10)
+        self.assertEqual(tournament.name, 'test')
+        self.assertTrue(tournament._with_morality)
+        self.assertIsInstance(tournament._logger, logging.Logger)
+        self.assertEqual(tournament.noise, 0.2)
+        anonymous_tournament = axelrod.Tournament(players=self.players)
+        self.assertEqual(anonymous_tournament.name, 'axelrod')
