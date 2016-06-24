@@ -11,7 +11,7 @@ import tqdm
 
 from .game import Game
 from .match import Match
-from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
+from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches
 from .result_set import ResultSetFromFile
 
 
@@ -335,3 +335,43 @@ class ProbEndTournament(Tournament):
         self.prob_end = prob_end
         self.match_generator = ProbEndRoundRobinMatches(
             players, prob_end, self.game, repetitions)
+
+
+class SpatialTournament(Tournament):
+    """
+    A tournament in which the players are allocated in a graph as nodes
+    and they players only play the others that are connected to with an edge.
+    """
+    def __init__(self, players, edges, match_generator=SpatialMatches,
+                 name='axelrod', game=None, turns=200, repetitions=10,
+                 noise=0,
+                 with_morality=True):
+        """
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+        match_generator : class
+            A class that must be descended from axelrod.MatchGenerator
+        name : string
+            A name for the tournament
+        game : axelrod.Game
+            The game object used to score the tournament
+        edges : dictionary
+            A dictionary containing the existing edges
+        repetitions : integer
+            The number of times the round robin should be repeated
+        processes : integer
+            The number of processes to be used for parallel processing
+        noise : float
+            The probability that a player's intended action should be flipped
+        with_morality : boolean
+            Whether morality metrics should be calculated
+        """
+        super(SpatialTournament, self).__init__(
+            players, name=name, game=game, turns=turns,
+            repetitions=repetitions, noise=noise, with_morality=with_morality)
+
+        self.edges = edges
+        self.match_generator = SpatialMatches(
+            players, turns, self.game, repetitions, edges)
