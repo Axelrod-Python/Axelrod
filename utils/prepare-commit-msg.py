@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# This script is intended to be used a a git hook and will prepend the ticket
-# number to a commit message in the correct format for Github/Gitlab to parse.
+# This script is an optional git hook and will prepend the issue
+# number to a commit message in the correct format for Github to parse.
 #
-# To use, create a shortcut to this file in .git/hooks called
+# If you wish to use it, create a shortcut to this file in .git/hooks called
 # 'prepare-commit-msg' e.g. from top folder of your project:
 #     cd .git/hooks
 #     ln -s ./utils/prepare-commit-msg.py prepare-commit-msg
