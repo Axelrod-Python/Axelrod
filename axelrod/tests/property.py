@@ -145,6 +145,55 @@ def prob_end_tournaments(draw, strategies=axelrod.strategies,
 
 
 @composite
+def spatial_tournaments(draw, strategies=axelrod.strategies,
+                        min_size=2, max_size=10,
+                        min_turns=1, max_turns=200,
+                        min_noise=0, max_noise=1,
+                        min_repetitions=1, max_repetitions=20):
+    """
+    A hypothesis decorator to return a tournament and a random seed (to ensure
+    reproducibility for strategies that make use of the random module when
+    initiating).
+
+    Parameters
+    ----------
+    min_size : integer
+        The minimum number of strategies to include
+    max_size : integer
+        The maximum number of strategies to include
+    min_noise : float
+        The minimum noise value
+    min_noise : float
+        The maximum noise value
+    min_repetitions : integer
+        The minimum number of repetitions
+    max_repetitions : integer
+        The maximum number of repetitions
+    edges : list
+        The edges to include
+    """
+    strategies = draw(strategy_lists(strategies=strategies,
+                                     min_size=min_size,
+                                     max_size=max_size))
+    players = [s() for s in strategies]
+    turns = draw(integers(min_value=min_turns, max_value=max_turns))
+
+    edges= []
+    for i in range (0, len(players)-1):
+        temp=(i, i+1)
+        edges.append(temp)
+    print(players)
+    print(edges)
+
+    repetitions = draw(integers(min_value=min_repetitions,
+                                max_value=max_repetitions))
+    noise = draw(floats(min_value=min_noise, max_value=max_noise))
+
+    tournament = axelrod.SpatialTournament(players, edges=edges, turns=turns,
+                                           repetitions=repetitions, noise=noise)
+    return tournament
+
+@composite
 def games(draw, prisoners_dilemma=True, max_value=100):
     """
     A hypothesis decorator to return a random game.
