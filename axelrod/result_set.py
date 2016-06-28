@@ -683,25 +683,6 @@ class ResultSet(object):
 
         return eigenvector.tolist()
 
-    def csv(self):
-        """
-        Returns:
-        --------
-
-        The string of the total scores per player (columns) per repetition
-        (rows).
-        """
-        csv_string = StringIO()
-        header = ",".join(self.ranked_names) + "\n"
-        csv_string.write(header)
-        writer = csv.writer(csv_string, lineterminator="\n")
-        for irep in range(self.nrepetitions):
-            data = [self.normalised_scores[rank][irep]
-                    for rank in self.ranking]
-            writer.writerow(list(map(str, data)))
-        return csv_string.getvalue()
-
-
 class ResultSetFromFile(ResultSet):
     """A class to hold the results of a tournament. Reads in a CSV file produced
     by the tournament class.

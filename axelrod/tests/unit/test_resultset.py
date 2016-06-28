@@ -157,9 +157,6 @@ class TestResultSet(unittest.TestCase):
                 0.5057828909101213
             ]
 
-        cls.expected_csv = (
-            'Defector,Tit For Tat,Alternator\n2.6,1.7,1.5\n2.6,1.7,1.5\n2.6,1.7,1.5\n')
-
     def test_init(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -354,11 +351,6 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(len(rs.eigenmoses_rating), rs.nplayers)
         for j, rate in enumerate(rs.eigenmoses_rating):
             self.assertAlmostEqual(rate, self.expected_eigenmoses_rating[j])
-
-    def test_csv(self):
-        rs = axelrod.ResultSet(self.players, self.interactions,
-                               progress_bar=False)
-        self.assertEqual(rs.csv(), self.expected_csv)
 
 
 class TestResultSetFromFile(unittest.TestCase):
