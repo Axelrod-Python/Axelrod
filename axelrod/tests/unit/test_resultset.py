@@ -38,8 +38,6 @@ class TestResultSet(unittest.TestCase):
                                                1: cls.matches[(0, 1)] + cls.matches[(1, 2)],
                                                2: cls.matches[(1, 2)] + cls.matches[(0, 2)]}
 
-
-
         cls.expected_match_lengths =[
                [[0, 5, 5], [5, 0, 5], [5, 5, 0]]
                for _ in range(3)
@@ -143,8 +141,7 @@ class TestResultSet(unittest.TestCase):
                 1.0,
                 0
             ]
-
-
+            
         cls.expected_eigenjesus_rating = [
                 0.5547001962252291,
                 0.8320502943378436,
@@ -401,7 +398,6 @@ class TestResultSet_SpatialStructure(TestResultSet):
     """
     Specific test for some spatial tournament.
     """
-
     @classmethod
     def setUpClass(cls):
 
@@ -422,12 +418,9 @@ class TestResultSet_SpatialStructure(TestResultSet):
                 except KeyError:
                     cls.interactions[index_pair] = [match.result]
 
-
         cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)] + cls.matches[(0, 2)],
                                                1: cls.matches[(0, 1)] ,
                                                2: cls.matches[(0, 2)]}
-
-
 
         cls.expected_match_lengths =[
                [[0, 5, 5], [5, 0, 0], [5, 0, 0]]
@@ -507,9 +500,9 @@ class TestResultSet_SpatialStructure(TestResultSet):
             ]
 
         cls.expected_normalised_cooperation = [
-                [0, mean([3 / 5.0 for _ in range(3)]), mean([3 / 5.0 for _ in range(3)])],
-                [mean([3 / 5.0 for _ in range(3)]), 0, 0 ],
-                [0, 0, 0],
+            [0, mean([3 / 5.0 for _ in range(3)]), mean([3 / 5.0 for _ in range(3)])],
+            [mean([3 / 5.0 for _ in range(3)]), 0, 0 ],
+            [0, 0, 0],
             ]
 
         cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
@@ -530,7 +523,7 @@ class TestResultSet_SpatialStructure(TestResultSet):
         cls.expected_good_partner_rating = [
                 1.0,
                 1.0,
-                0
+                0.0
             ]
 
         cls.expected_eigenjesus_rating = [
@@ -548,10 +541,9 @@ class TestResultSet_SpatialStructure(TestResultSet):
         cls.expected_csv = (
             'Defector,Tit For Tat,Alternator\n3.4,2.6,1.5\n3.4,2.6,1.5\n3.4,2.6,1.5\n')
 
-
     def test_match_lengths(self):
         """
-        Overwriting match_lenghts because of edges
+        Overwriting match lengths because of edges
         """
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -569,7 +561,8 @@ class TestResultSet_SpatialStructure(TestResultSet):
 
                 for j, length in enumerate(opp):
                     edge = (i, j)
-                    if edge in self.edges or edge[::-1] in self.edges :  # Specific test for example match setup
+                    # Specific test for example match setup
+                    if edge in self.edges or edge[::-1] in self.edges :
                         self.assertEqual(length, self.turns)
                     else:
                         self.assertEqual(length, 0)
@@ -597,7 +590,6 @@ class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
                 except KeyError:
                     cls.interactions[index_pair] = [match.result]
 
-
         cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)] ,
                                                1: cls.matches[(0, 1)] ,
                                                2: cls.matches[(2, 3)],
@@ -609,10 +601,10 @@ class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
                 ]
 
         cls.expected_scores =[
-               [13, 13, 13],
-               [13, 13, 13],
-               [25, 25, 25],
-               [0, 0, 0]
+               [ 13.0 for _ in range(3)],
+               [ 13.0 for _ in range(3)],
+               [ 25.0 for _ in range(3)],
+               [ 0  for _ in range(3)]
                 ]
 
         cls.expected_wins =[
@@ -631,7 +623,8 @@ class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
 
         cls.expected_ranking = [2, 0, 1, 3]
 
-        cls.expected_ranked_names = ['Defector','Alternator','Tit For Tat','Cooperator']
+        cls.expected_ranked_names = ['Defector','Alternator',
+                                     'Tit For Tat','Cooperator']
 
         cls.expected_null_results_matrix = [
             [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
@@ -671,7 +664,6 @@ class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 5.0],
             [0.0, 0.0, -5.0, 0.0]
-
         ]
 
         # Recalculating to deal with numeric imprecision
@@ -709,8 +701,8 @@ class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
         cls.expected_cooperating_rating = [
                 18.0 / 30,
                 18.0 / 30,
-                0,
-                30 /30
+                0.0,
+                30 / 30
             ]
 
         cls.expected_good_partner_matrix = [
@@ -723,7 +715,7 @@ class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
         cls.expected_good_partner_rating = [
                 1.0,
                 1.0,
-                0,
+                0.0,
                 1.0
             ]
 
@@ -742,7 +734,8 @@ class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
             ]
 
         cls.expected_csv = (
-        'Defector,Alternator,Tit For Tat,Cooperator\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n')
+        "Defector,Alternator,Tit For Tat,Cooperator\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n")
+
 
 class TestResultSet_SpatialStructure_Three(TestResultSet_SpatialStructure):
 
@@ -758,7 +751,6 @@ class TestResultSet_SpatialStructure_Three(TestResultSet_SpatialStructure):
                                                 turns=cls.turns)
                         for _ in range(3)] for i in range(4)}
 
-
         cls.interactions = {}
         for index_pair, matches in cls.matches.items():
             for match in matches:
@@ -769,8 +761,8 @@ class TestResultSet_SpatialStructure_Three(TestResultSet_SpatialStructure):
                 except KeyError:
                     cls.interactions[index_pair] = [match.result]
 
-        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 0)] ,
-                                               1: cls.matches[(1, 1)] ,
+        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 0)],
+                                               1: cls.matches[(1, 1)],
                                                2: cls.matches[(2, 2)],
                                                3: cls.matches[(3, 3)]}
 
@@ -780,17 +772,11 @@ class TestResultSet_SpatialStructure_Three(TestResultSet_SpatialStructure):
                 ]
 
         cls.expected_scores =[
-               [0, 0, 0],
-               [0, 0, 0],
-               [0, 0, 0],
-               [0, 0, 0],
+            [0 for _ in range(3)] for _ in range(4)
                 ]
 
         cls.expected_wins =[
-               [0, 0, 0],
-               [0, 0, 0],
-               [0, 0, 0],
-               [0, 0, 0]
+            [0 for _ in range(3)] for _ in range(4)
                 ]
 
         cls.expected_normalised_scores =[
@@ -820,11 +806,7 @@ class TestResultSet_SpatialStructure_Three(TestResultSet_SpatialStructure):
         ]
 
         cls.expected_payoff_diffs_means = [
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0]
-
+            [0.0 for _ in range(4)] for _ in range(4)
         ]
 
         # Recalculating to deal with numeric imprecision
@@ -843,10 +825,7 @@ class TestResultSet_SpatialStructure_Three(TestResultSet_SpatialStructure):
         ]
 
         cls.expected_cooperation = [
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0]
+            [0.0 for _ in range(4)] for _ in range(4)
             ]
 
         cls.expected_normalised_cooperation = [
@@ -860,24 +839,15 @@ class TestResultSet_SpatialStructure_Three(TestResultSet_SpatialStructure):
                                    for row in cls.expected_normalised_cooperation]
 
         cls.expected_cooperating_rating = [
-                0,
-                0,
-                0,
-                0,
+                0.0 for _ in range(4)
             ]
 
         cls.expected_good_partner_matrix = [
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0]
+            [0.0 for _ in range(4)] for _ in range(4)
             ]
 
         cls.expected_good_partner_rating = [
-                0,
-                0,
-                0,
-                0
+                0.0 for _ in range(4)
             ]
 
         cls.expected_eigenjesus_rating = [
