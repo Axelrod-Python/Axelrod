@@ -5,10 +5,10 @@
 #
 # If you wish to use it, create a shortcut to this file in .git/hooks called
 # 'prepare-commit-msg' e.g. from top folder of your project:
-#     cd .git/hooks
-#     ln -s ./utils/prepare-commit-msg.py prepare-commit-msg
+#   ln -s ./utils/prepare-commit-msg.py .git/hooks/prepare-commit-msg
 #
-# TODO - the above doesn't work on Windows
+# or, for Windows users:
+#   mklink .git\hooks\prepare-commit-msg utils\prepare-commit-msg.py
 
 import sys
 import re
