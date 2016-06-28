@@ -9,6 +9,17 @@
 #
 # or, for Windows users:
 #   mklink .git\hooks\prepare-commit-msg .prepare-commit-msg.py
+#
+# If you use a graphical git client, you can configure it so that the issue
+# numbers become clickable in the log view. e.g. for Atlassian SourceTree:
+#   From the 'Repository Settings' menu, click the 'Advanced' tab
+#   In the 'Commit Text Replacements', click the 'Add' button
+#   Select 'Other' as the 'Replacement Type'
+#   Enter '#(\d{1,})' as the 'Regex Pattern'
+#   Enter '<a href="https://github.com/Axelrod-Python/Axelrod/issues/$1">#$1</a>' as the 'Replace With'
+#
+# Any issue numbers created by this hook (or entered manually in the correct)
+# format will now be clickable links in the log view.
 
 import sys
 import re
