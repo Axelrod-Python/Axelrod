@@ -182,8 +182,6 @@ def spatial_tournaments(draw, strategies=axelrod.strategies,
     for i in range (0, len(players)-1):
         temp=(i, i+1)
         edges.append(temp)
-    print(players)
-    print(edges)
 
     repetitions = draw(integers(min_value=min_repetitions,
                                 max_value=max_repetitions))
