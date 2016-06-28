@@ -164,7 +164,8 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.players, self.players)
         self.assertEqual(rs.nplayers, len(self.players))
         self.assertEqual(rs.interactions, self.interactions)
-        self.assertEqual(rs.nrepetitions, len(self.interactions))
+        for inter in self.interactions.values():
+            self.assertEqual(rs.nrepetitions, len(inter))
 
         # Test structure of matches
         # This is really a test of the test
