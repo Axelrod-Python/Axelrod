@@ -386,3 +386,34 @@ class ContriteTitForTat(Player):
         Player.reset(self)
         self.contrite = False
         self._recorded_history = []
+
+class SlowTitForTat(Player):
+    """
+    A player co-operates twice, then if the opponent makes the same move twice, 
+    the player mimics its move
+    """
+
+    name = 'Slow Tit For Tat'
+    classifier = {
+        'memory_depth': 2,  # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+
+        #Co-operate twice 
+        if self.history[-1] == C:
+            return C
+
+        #If opponent makes the same move twice, mimc
+        if opponent.history[-2] == opponent.history [-1]:
+            return opponent.history[-1]
+        
+        return C
+
+        
+
