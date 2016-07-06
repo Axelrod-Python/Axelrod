@@ -386,3 +386,31 @@ class ContriteTitForTat(Player):
         Player.reset(self)
         self.contrite = False
         self._recorded_history = []
+
+
+class SoftTitForTwoTats(Player):
+    """
+    A player co-operates except for when the opponent defects twice
+    """
+
+    name = 'Soft Tit For Two Tats'
+    classifier = {
+        'memory_depth': 2,  # Four-Vector = (1.,0.,1.,0.)
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        if len(self.history) == 0:
+            return C
+
+        if opponent.history[-2] == [D, D]:
+            return D
+        
+        return C
+
+        
+
