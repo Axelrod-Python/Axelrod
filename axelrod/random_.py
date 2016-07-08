@@ -1,4 +1,5 @@
 import random
+import numpy
 from axelrod import Actions
 
 
@@ -21,3 +22,9 @@ def randrange(a, b):
     c = b - a
     r = c * random.random()
     return a + int(r)
+
+
+def set_seed(seed):
+    """Sets a seed"""
+    random.seed(seed)
+    numpy.random.seed(seed)

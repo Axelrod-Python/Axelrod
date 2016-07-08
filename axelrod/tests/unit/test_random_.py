@@ -1,9 +1,10 @@
 """Test for the random strategy."""
 
+import numpy
 import random
 import unittest
 
-from axelrod import random_choice, Actions
+from axelrod import random_choice, set_seed, Actions
 
 C, D = Actions.C, Actions.D
 
@@ -16,3 +17,18 @@ class TestRandom_(unittest.TestCase):
         self.assertEqual(random_choice(), C)
         random.seed(2)
         self.assertEqual(random_choice(), D)
+
+    def test_set_seed(self):
+        """Test that numpy and stdlib random seed is set by set seed helper
+        function"""
+
+        numpy_random_numbers = []
+        stdlib_random_numbers = []
+        for _ in range(2):
+            set_seed(0)
+            numpy_random_numbers.append(numpy.random.random())
+            stdlib_random_numbers.append(random.random())
+
+        self.assertEqual(numpy_random_numbers[0], numpy_random_numbers[1])
+        self.assertEqual(stdlib_random_numbers[0], stdlib_random_numbers[1])
+
