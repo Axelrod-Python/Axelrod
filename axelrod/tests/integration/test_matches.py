@@ -2,9 +2,6 @@
 import unittest
 import axelrod
 
-import random
-import numpy
-
 from hypothesis import given
 from hypothesis.strategies import integers
 from axelrod.tests.property import strategy_lists
@@ -15,7 +12,8 @@ deterministic_strategies = [s for s in axelrod.ordinary_strategies
                             if not s().classifier['stochastic']]  # Well behaved strategies
 
 stochastic_strategies = [s for s in axelrod.ordinary_strategies
-                            if s().classifier['stochastic']]
+                         if s().classifier['stochastic']]
+
 
 class TestMatchOutcomes(unittest.TestCase):
 

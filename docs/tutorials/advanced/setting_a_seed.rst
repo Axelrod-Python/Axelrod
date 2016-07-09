@@ -1,7 +1,7 @@
 .. _setting_a_seed:
 
-Setting a seed
-==============
+Setting a random seed
+=====================
 
 The library has a variety of strategies whose behaviour is stochastic. To ensure
 reproducible results a random seed should be set. As both Numpy and the standard
