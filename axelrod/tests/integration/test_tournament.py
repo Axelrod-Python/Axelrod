@@ -82,7 +82,7 @@ class TestTournament(unittest.TestCase):
         """
         files = []
         for _ in range(2):
-            axelrod.set_seed(0)
+            axelrod.seed(0)
             stochastic_players = [s() for s in axelrod.ordinary_strategies
                                   if s().classifier['stochastic']]
             tournament = axelrod.Tournament(name='test',

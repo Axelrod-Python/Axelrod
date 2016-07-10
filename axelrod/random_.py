@@ -24,7 +24,7 @@ def randrange(a, b):
     return a + int(r)
 
 
-def set_seed(seed):
+def seed(seed):
     """Sets a seed"""
     random.seed(seed)
     numpy.random.seed(seed)

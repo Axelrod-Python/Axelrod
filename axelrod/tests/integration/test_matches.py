@@ -37,7 +37,7 @@ class TestMatchOutcomes(unittest.TestCase):
         same result"""
         results = []
         for _ in range(3):
-            axelrod.set_seed(seed)
+            axelrod.seed(seed)
             players = [s() for s in strategies]
             results.append(axelrod.Match(players, turns).play())
 
