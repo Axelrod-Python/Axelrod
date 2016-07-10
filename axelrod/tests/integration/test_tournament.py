@@ -1,6 +1,7 @@
 import unittest
 import axelrod
 import tempfile
+import filecmp
 
 from axelrod.strategy_transformers import FinalTransformer
 
@@ -59,6 +60,39 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play(processes=2, progress_bar=False).scores
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
+
+    def test_repeat_tournament_deterministic(self):
+        """A test to check that tournament gives same results."""
+        deterministic_players = [s() for s in axelrod.ordinary_strategies
+                                 if not s().classifier['stochastic']]
+        files = []
+        for _ in range(2):
+            tournament = axelrod.Tournament(name='test',
+                                            players=deterministic_players,
+                                            game=self.game, turns=2,
+                                            repetitions=2)
+            files.append(tempfile.NamedTemporaryFile())
+            tournament.play(progress_bar=False, filename=files[-1].name,
+                            build_results=False)
+        self.assertTrue(filecmp.cmp(files[0].name, files[1].name))
+
+    def test_repeat_tournament_stochastic(self):
+        """
+        A test to check that tournament gives same results when setting seed.
+        """
+        files = []
+        for _ in range(2):
+            axelrod.set_seed(0)
+            stochastic_players = [s() for s in axelrod.ordinary_strategies
+                                  if s().classifier['stochastic']]
+            tournament = axelrod.Tournament(name='test',
+                                            players=stochastic_players,
+                                            game=self.game, turns=2,
+                                            repetitions=2)
+            files.append(tempfile.NamedTemporaryFile())
+            tournament.play(progress_bar=False, filename=files[-1].name,
+                            build_results=False)
+        self.assertTrue(filecmp.cmp(files[0].name, files[1].name))
 
 
 class TestNoisyTournament(unittest.TestCase):
