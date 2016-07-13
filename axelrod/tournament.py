@@ -357,8 +357,8 @@ class SpatialTournament(Tournament):
             A name for the tournament
         game : axelrod.Game
             The game object used to score the tournament
-        edges : dictionary
-            A dictionary containing the existing edges
+        edges : list
+            A list of tuples containing the existing edges
         repetitions : integer
             The number of times the round robin should be repeated
         processes : integer

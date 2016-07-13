@@ -214,8 +214,8 @@ class SpatialMatches(RoundRobinMatches):
             The game object used to score the match
         repetitions : int
             The number of repetitions of a given match
-        edges : dictionary
-            A dictionary containing the existing edges
+        edges : list
+            A list of tuples containing the existing edges
         """
     def build_match_chunks(self):
         for edge in self.edges:
