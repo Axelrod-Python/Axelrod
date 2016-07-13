@@ -236,10 +236,3 @@ class TestSpatialMatches(unittest.TestCase):
             self.players, test_turns, test_game, test_repetitions, edges)
         self.assertEqual(len(sp), len(list(sp.build_match_chunks())))
         self.assertEqual(len(sp), len(edges))
-
-"""
-    def test_edges_that_do_not_include_all_players(self):
-        edges = [(0, 1)]
-        self.assertRaises(ValueError, axelrod.SpatialMatches,
-            self.players, test_turns, test_game, test_repetitions, edges)
-"""
