@@ -161,42 +161,6 @@ class TestProbEndTournament(unittest.TestCase):
         for p in tournament.players:
             self.assertIn(str(p), stochastic_player_names)
 
-class TestSpatialTournament(unittest.TestCase):
-
-    def test_call(self):
-        tournament = tournaments().example()
-        self.assertIsInstance(tournament, axelrod.Tournament)
-
-    @given(tournament=spatial_tournaments(min_turns=2, max_turns=50, min_noise=0,
-                                          max_noise=1, min_repetitions=2,
-                                          max_repetitions=50,
-                                          max_size=3))
-
-    @settings(max_examples=10, timeout=0)
-    def test_decorator(self, tournament):
-        self.assertIsInstance(tournament, axelrod.Tournament)
-        self.assertLessEqual(tournament.turns, 50)
-        self.assertGreaterEqual(tournament.turns, 2)
-        self.assertLessEqual(tournament.noise, 1)
-        self.assertGreaterEqual(tournament.noise, 0)
-        self.assertLessEqual(tournament.repetitions, 50)
-        self.assertGreaterEqual(tournament.repetitions, 2)
-
-    @given(tournament=spatial_tournaments(strategies=axelrod.basic_strategies))
-    @settings(max_examples=10, timeout=0)
-    def test_decorator_with_given_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.SpatialTournament)
-        basic_player_names = [str(s()) for s in axelrod.basic_strategies]
-        for p in tournament.players:
-            self.assertIn(str(p), basic_player_names)
-
-    @given(tournament=spatial_tournaments(strategies=stochastic_strategies))
-    @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.SpatialTournament)
-        stochastic_player_names = [str(s()) for s in stochastic_strategies]
-        for p in tournament.players:
-            self.assertIn(str(p), stochastic_player_names)
 
 class TestGame(unittest.TestCase):
 
