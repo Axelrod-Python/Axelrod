@@ -5,26 +5,27 @@ In a spatial topology tournament the connectivity between players is given by
 a graph where the nodes represent players, and  the  edges, connecting the nodes,
 refer to the connection between the corresponding players.
 
-The initial work was done by Nowak  and May in 1992s paper, "Evolutionary games
-and spatial chaos", introducing a spatial topology as a square lattice. (The
-paper can be found here : http://www.nature.com/nature/journal/v359/n6398/abs/359826a0.html).
+The initial work was done by Nowak  and May in a 1992 paper, "Evolutionary games
+and spatial chaos", introducing spatial topology as a square lattice. (The
+paper can be found here: http://www.nature.com/nature/journal/v359/n6398/abs/359826a0.html).
 
-Additionally, Szabó and Fáth 2007 in their paper consider a variate of graphs,
-such as lattices small world, scale-free graphs and evolving networks. (Their
-paper can be found here : https://arxiv.org/abs/cond-mat/0607344 ).
+Additionally, Szabó and Fáth in their 2007 paper consider a variety of graphs,
+such as lattices, small world, scale-free graphs and evolving networks. (Their
+paper can be found here: https://arxiv.org/abs/cond-mat/0607344).
 
-Eves so, here it is possible to create a tournament where the players are
-allocated to any given graph and the only interact with other player that they
+Even so, here it is possible to create a tournament where the players are
+allocated to any given graph and they only interact with players to which they
 have a connection - edge.
 
 Let's create a tournament where :code:`Cooperator` and :code:`Defector` do not
-play each other neither :code:`TitForTat` and :code:`Grudger` :
+play each other and neither do :code:`TitForTat` and :code:`Grudger` :
 
 .. image:: _static/spatial_tournaments/spatial.png
    :width: 80%
    :align: center
 
-Note that the edges have to be given as a list argument::
+Note that the edges have to be given as a list of tuples of player
+indices::
 
   >>> import axelrod as axl
   >>> players = [axl.Cooperator(), axl.Defector(),
@@ -61,7 +62,6 @@ and obtain the interactions::
     ...     player1 = spatial_tournament.players[index_pair[0]]
     ...     player2 = spatial_tournament.players[index_pair[1]]
     ...     print('%s vs %s: %s' % (player1, player2, interaction))
-
     Defector vs Tit For Tat: [[('D', 'C'), ('D', 'D')], [('D', 'C'), ('D', 'D')]]
     Cooperator vs Grudger: [[('C', 'C'), ('C', 'C')], [('C', 'C'), ('C', 'C')]]
     Defector vs Grudger: [[('D', 'C'), ('D', 'D')], [('D', 'C'), ('D', 'D')]]
