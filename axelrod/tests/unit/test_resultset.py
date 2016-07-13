@@ -141,7 +141,7 @@ class TestResultSet(unittest.TestCase):
                 1.0,
                 0
             ]
-            
+
         cls.expected_eigenjesus_rating = [
                 0.5547001962252291,
                 0.8320502943378436,
@@ -394,7 +394,7 @@ class TestDecorator(unittest.TestCase):
         self.assertEqual(axelrod.result_set.update_progress_bar(method)(1), None)
 
 
-class TestResultSet_SpatialStructure(TestResultSet):
+class TestResultSetSpatialStructure(TestResultSet):
     """
     Specific test for some spatial tournament.
     """
@@ -567,7 +567,7 @@ class TestResultSet_SpatialStructure(TestResultSet):
                     else:
                         self.assertEqual(length, 0)
 
-class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
+class TestResultSetSpatialStructureTwo(TestResultSet_SpatialStructure):
 
     @classmethod
     def setUpClass(cls):
@@ -737,7 +737,7 @@ class TestResultSet_SpatialStructure_Two(TestResultSet_SpatialStructure):
         "Defector,Alternator,Tit For Tat,Cooperator\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n")
 
 
-class TestResultSet_SpatialStructure_Three(TestResultSet_SpatialStructure):
+class TestResultSetSpatialStructureThree(TestResultSet_SpatialStructure):
 
     @classmethod
     def setUpClass(cls):

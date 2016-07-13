@@ -3,8 +3,7 @@ import unittest
 import axelrod
 from axelrod.tests.property import (strategy_lists,
                                     matches, tournaments,
-                                    prob_end_tournaments,
-                                    games)
+                                    prob_end_tournaments, games)
 
 from hypothesis import given, settings
 
