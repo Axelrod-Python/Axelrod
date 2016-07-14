@@ -543,7 +543,17 @@ class TestResultSetSpatialStructure(TestResultSet):
 
     def test_match_lengths(self):
         """
-        Overwriting match lengths because of edges
+        Overwriting match lengths test. This method, among other things, checks
+        that if two players interacted the length of that interaction equals the
+        number of turns.
+
+        Implementing this for the round robin tournament meant checking the
+        interactions between each strategy and the rest strategies of the
+        tournament.
+
+        In a spatial tournament we need to check that: The length of interaction
+        of players-nodes that are end vertices of an edge is equal to the
+        number of turns. Otherwise it is 0.
         """
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -566,6 +576,7 @@ class TestResultSetSpatialStructure(TestResultSet):
                         self.assertEqual(length, self.turns)
                     else:
                         self.assertEqual(length, 0)
+
 
 class TestResultSetSpatialStructureTwo(TestResultSet_SpatialStructure):
 
