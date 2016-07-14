@@ -578,7 +578,7 @@ class TestResultSetSpatialStructure(TestResultSet):
                         self.assertEqual(length, 0)
 
 
-class TestResultSetSpatialStructureTwo(TestResultSet_SpatialStructure):
+class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
 
     @classmethod
     def setUpClass(cls):
@@ -748,7 +748,7 @@ class TestResultSetSpatialStructureTwo(TestResultSet_SpatialStructure):
         "Defector,Alternator,Tit For Tat,Cooperator\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n")
 
 
-class TestResultSetSpatialStructureThree(TestResultSet_SpatialStructure):
+class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
     @classmethod
     def setUpClass(cls):
