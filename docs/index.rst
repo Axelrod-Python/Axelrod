@@ -56,6 +56,7 @@ Tutorials
 
    tutorials/index.rst
    reference/index.rst
+   community.rst
    citing_the_library.rst
 
 
