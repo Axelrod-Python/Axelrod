@@ -406,12 +406,14 @@ class SlowTitForTwoTats(Player):
 
     def strategy(self, opponent):
         
-        #Play [c, c]
+        #Start with two cooperations
         if len(self.history) < 2:
             return C
-        #Mimic if opponent plays same move twice
+        
+        #Mimic if opponent plays the same move twice
         if opponent.history[-2] == opponent.history[-1]:
             return opponent.history[-1]
+        
         #Otherwise cooperate
         return C
 
