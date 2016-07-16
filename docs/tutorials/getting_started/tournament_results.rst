@@ -28,7 +28,7 @@ This tutorial will show you how to access the various results of a tournament:
 - Eigenmoses rating: a morality metric from the literature.
 - Eigenjesus rating: a morality metric from the literature.
 
-As shown in :ref:`getting-started` let us create a tournament::
+As shown in :ref:`creating_tournaments` let us create a tournament::
 
     >>> import axelrod as axl
     >>> players = [axl.Cooperator(), axl.Defector(),
