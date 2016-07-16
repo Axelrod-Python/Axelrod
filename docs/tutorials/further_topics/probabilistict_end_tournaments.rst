@@ -12,7 +12,7 @@ probability::
 
 
 We can view the results in a similar way as for described in
-:ref:`payoff-matrix`::
+:ref:`tournament-results`::
 
     >>> results = tournament.play()
     >>> m = results.payoff_matrix
