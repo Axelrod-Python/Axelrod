@@ -432,8 +432,13 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(opponent.history, [C, D, D, D])
         self.assertFalse(ctft.contrite)
 
+             
     def test_reset_cleans_all(self):
         p = self.player()
         p.contrite = True
         p.reset()
         self.assertFalse(p.contrite)
+
+
+       
+  

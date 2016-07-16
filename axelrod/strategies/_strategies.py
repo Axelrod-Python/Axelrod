@@ -56,7 +56,7 @@ from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
-    OmegaTFT, Gradual, ContriteTitForTat, SoftTitForTwoTats)
+    OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats)
 
 
 # Note: Meta* strategies are handled in .__init__.py
@@ -166,7 +166,7 @@ strategies = [
     Ripoff,
     RiskyQLearner,
     Shubik,
-    SoftTitForTwoTats,
+    SlowTitForTwoTats,
     SneakyTitForTat,
     SoftGrudger,
     SoftJoss,

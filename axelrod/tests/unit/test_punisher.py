@@ -116,3 +116,4 @@ class TestInversePunisher(TestPlayer):
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)
+        
