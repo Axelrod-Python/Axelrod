@@ -1,5 +1,4 @@
 from numpy import arange, median, nan_to_num
-from warnings import warn
 
 matplotlib_installed = True
 try:
@@ -36,7 +35,7 @@ class Plot(object):
         figure = plt.figure(figsize=(width, height))
         spacing = 4
         positions = spacing * arange(1, nplayers + 1, 1)
-        plt.violinplot(data, positions=positions, widths=spacing/2,
+        plt.violinplot(data, positions=positions, widths=spacing / 2,
                        showmedians=True, showextrema=False)
         plt.xticks(positions, names, rotation=90)
         plt.xlim(0, spacing * (nplayers + 1))

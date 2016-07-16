@@ -1,9 +1,96 @@
+# v1.4.0, 2016-06-22
+
+New strategy.
+
+- contrite TitForTat: https://github.com/Axelrod-Python/Axelrod/pull/639
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.3.0...v1.4.0
+
+# v1.3.0, 2016-06-21
+
+New strategy, a bug fix and more explicit copyright notice
+
+- Remorseful Prober: https://github.com/Axelrod-Python/Axelrod/pull/633
+
+Bug fix:
+
+- The finite state machines were not reseting state properly.
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.2.0...v1.3.0
+
+# v1.2.0, 2016-06-13
+
+New strategies and some minor improvements
+
+- Naive Prober: https://github.com/Axelrod-Python/Axelrod/pull/629
+- Gradual: https://github.com/Axelrod-Python/Axelrod/pull/627
+- Soft grudger and reverse pavlov:
+  https://github.com/Axelrod-Python/Axelrod/pull/628
+
+Minor improvements include:
+
+- Progress bar for result set reading of data:
+  https://github.com/Axelrod-Python/Axelrod/pull/618
+- Prob end tournament players do not know match length (this was in essence a
+  bug): https://github.com/Axelrod-Python/Axelrod/pull/611
+- Doc fixes
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.1.1...v1.2.0
+
+# v1.1.1, 2016-06-01
+
+Minor changes, bug fixes.
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.1.0...v1.1.1
+
+User facing:
+
+- The matches can tell the players different match attributes than the ones
+  actually being played (helpful for prob end tournaments where players cannot
+  know the length of the match for example):
+  https://github.com/Axelrod-Python/Axelrod/pull/609
+- A progress bar for the result set:
+  https://github.com/Axelrod-Python/Axelrod/pull/603
+
+Internal:
+
+- Reducing some test sizes: https://github.com/Axelrod-Python/Axelrod/pull/601
+- PEP8 improvements: https://github.com/Axelrod-Python/Axelrod/pull/607
+- Refactor of the match generator (noise is an attribute):
+  https://github.com/Axelrod-Python/Axelrod/pull/608
+
+# v1.1.0, 2016-05-18
+
+New strategies and minor changes to the test suite
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.0.1...v1.1.0
+
+This introduces various new strategies to the library:
+
+- Adaptive
+- Handshake
+- CyclerDC and CyclerDDC (used in the literature)
+- 8 Finite State Machine strategies: Fortress3, Fortress4, Predator,
+  Raider, Ripoff, SolutionB1, SolutionB5, Thumper
+
+This version also includes a minor change to the test suite: shortening the size
+of the tournaments being run in the integration tests.
+
+Here is the PR that incorporated all of the above:
+https://github.com/Axelrod-Python/Axelrod/pull/591
+
 # v1.0.1, 2016-05-15
 
 Bug fix.
 
 Here are all the commits for this PR:
-https://github.com/Axelrod-Python/Axelrod/compare/v1.0.1...v1.0.1
+https://github.com/Axelrod-Python/Axelrod/compare/v1.0.0...v1.0.1
 
 During the previous refactor of the Tournament, the ability to create noisy
 tournaments was lost. An integration test has been written to catch this in the

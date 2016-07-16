@@ -5,7 +5,7 @@ from axelrod import Actions
 from axelrod.deterministic_cache import DeterministicCache
 
 from hypothesis import given, example
-from hypothesis.strategies import integers, floats, random_module, assume
+from hypothesis.strategies import integers, floats, assume
 
 from axelrod.tests.property import games
 
@@ -32,6 +32,19 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
+    @given(turns=integers(min_value=1, max_value=200), game=games())
+    @example(turns=5, game=axelrod.DefaultGame)
+    def test_non_default_attributes(self, turns, game):
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+        match_attributes = {
+            'length': 500,
+            'game': game,
+            'noise': 0.5
+        }
+        match = axelrod.Match((p1, p2), turns, game=game, match_attributes=match_attributes)
+        self.assertEqual(match.players[0].match_attributes['length'], 500)
+        self.assertEqual(match.players[0].match_attributes['noise'], 0.5)
+
     @given(turns=integers(min_value=1, max_value=200))
     @example(turns=5)
     def test_len(self, turns):
@@ -39,9 +52,8 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((p1, p2), turns)
         self.assertEqual(len(match), turns)
 
-    @given(p=floats(min_value=0, max_value=1),
-           rm=random_module())
-    def test_stochastic(self, p, rm):
+    @given(p=floats(min_value=0, max_value=1))
+    def test_stochastic(self, p):
 
         assume(0 < p < 1)
 
@@ -56,9 +68,8 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((p1, p2), 5)
         self.assertTrue(match._stochastic)
 
-    @given(p=floats(min_value=0, max_value=1),
-           rm=random_module())
-    def test_cache_update_required(self, p, rm):
+    @given(p=floats(min_value=0, max_value=1))
+    def test_cache_update_required(self, p):
 
         assume(0 < p < 1)
 

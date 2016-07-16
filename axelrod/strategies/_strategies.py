@@ -27,7 +27,8 @@ from .gobymajority import (GoByMajority,
     GoByMajority5,
     HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
     HardGoByMajority5)
-from .grudger import Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater
+from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
+    SoftGrudger)
 from .grumpy import Grumpy
 from .handshake import Handshake
 from .hunter import (
@@ -39,11 +40,12 @@ from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
     StochasticCooperator, StochasticWSLS, ZDExtort2, ZDExtort2v2, ZDExtort4,
-    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift)
+    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
-from .prober import Prober, Prober2, Prober3, HardProber
+from .prober import (Prober, Prober2, Prober3, HardProber,
+                     NaiveProber, RemorsefulProber)
 from .punisher import Punisher, InversePunisher
 from .qlearner import RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner
 from .rand import Random
@@ -54,7 +56,8 @@ from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
-    OmegaTFT)
+    OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats)
+
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -76,6 +79,7 @@ strategies = [
     Calculator,
     CautiousQLearner,
     Champion,
+    ContriteTitForTat,
     Cooperator,
     CooperatorHunter,
     CycleHunter,
@@ -118,6 +122,7 @@ strategies = [
     HardGoByMajority40,
     HardGoByMajority5,
     Golden,
+    Gradual,
     Grofman,
     Grudger,
     Grumpy,
@@ -133,6 +138,7 @@ strategies = [
     LimitedRetaliate3,
     EvolvedLookerUp,
     MathConstantHunter,
+    NaiveProber,
     MindBender,
     MindController,
     MindReader,
@@ -153,13 +159,16 @@ strategies = [
     Raider,
     Random,
     RandomHunter,
+    RemorsefulProber,
     Retaliate,
     Retaliate2,
     Retaliate3,
     Ripoff,
     RiskyQLearner,
     Shubik,
+    SlowTitForTwoTats,
     SneakyTitForTat,
+    SoftGrudger,
     SoftJoss,
     SolutionB1,
     SolutionB5,
@@ -175,12 +184,13 @@ strategies = [
     TrickyDefector,
     Tullock,
     TwoTitsForTat,
+    WinShiftLoseStay,
     WinStayLoseShift,
     ZDExtort2,
     ZDExtort2v2,
     ZDExtort4,
-    ZDGen2,
     ZDGTFT2,
+    ZDGen2,
     ZDSet2,
     e,
 ]

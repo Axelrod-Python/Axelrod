@@ -7,19 +7,16 @@ in the :code:`axelrod/strategies/_strategies.py` file.
 
 If you have added your strategy to a file that already existed (perhaps you
 added a new variant of :code:`titfortat` to the :code:`titfortat.py` file),
-add a line similar to::
+simply add your strategy to the list of strategies already imported from
+`<file_name>.py`::
 
-    from <file_name> import *
+    from <file_name> import <list-of-strategies>
 
-Where :code:`file_name.py` is the name of the file you created.  So for the
-:code:`TitForTat` strategy which is written in the :code:`titfortat.py` file we
-have::
+If you have added your strategy to a new file then simply add a line similar to
+above with your new strategy.
 
-    from titfortat import *
-
-Once you have done that (**and you need to do this even if you have added a
-strategy to an already existing file**), you need to add the class itself to
-the :code:`strategies` list.
+Once you have done that, you need to add the class itself to the
+:code:`strategies` list (in `axelrod/strategies/_strategies.py`).
 
 Finally, if you have created a new module (a new :code:`<strategy.py>` file)
 please add it to the `docs/references/all_strategies.rst` file so that it will

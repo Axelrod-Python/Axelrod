@@ -200,6 +200,10 @@ class TestRandomHunter(TestPlayer):
         history2 = [random.choice([C, D]) for i in range(100)]
         self.responses_test(history1, history2, D)
 
+        history1 = [D] * 100
+        history2 = [random.choice([C, D]) for i in range(100)]
+        self.responses_test(history1, history2, D)
+
     def test_reset(self):
         player = self.player()
         opponent = axelrod.Cooperator()

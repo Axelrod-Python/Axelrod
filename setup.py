@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='Axelrod',
-    version='1.0.1',
+    version='1.4.0',
     install_requires=requirements,
     author='Vince Knight, Owen Campbell, Karol Langner, Marc Harper',
     author_email=('axelrod-python@googlegroups.com'),

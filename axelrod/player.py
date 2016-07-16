@@ -1,5 +1,4 @@
 from functools import wraps
-import inspect
 import random
 import copy
 
@@ -23,14 +22,17 @@ def is_basic(s):
     manipulates_state = s.classifier['manipulates_state']
     return (not stochastic) and (not inspects_source) and (not manipulates_source) and (not manipulates_state) and (depth in (0, 1))
 
+
 def obey_axelrod(s):
     """
     A function to check if a strategy obeys Axelrod's original tournament rules.
     """
     classifier = s.classifier
-    return not (classifier['inspects_source'] or\
-           classifier['manipulates_source'] or\
-           classifier['manipulates_state'])
+    return not (
+        classifier['inspects_source'] or
+        classifier['manipulates_source'] or
+        classifier['manipulates_state'])
+
 
 def update_history(player, move):
     """Updates histories and cooperation / defections counts following play."""
@@ -41,6 +43,7 @@ def update_history(player, move):
         player.cooperations += 1
     elif move == D:
         player.defections += 1
+
 
 def init_args(func):
     """Decorator to simplify the handling of init_args. Use whenever overriding

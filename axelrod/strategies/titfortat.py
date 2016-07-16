@@ -1,4 +1,6 @@
 from axelrod import Actions, Player, init_args, flip_action
+from axelrod.strategy_transformers import (StrategyTransformerFactory,
+                                           history_track_wrapper)
 
 C, D = Actions.C, Actions.D
 
@@ -273,3 +275,144 @@ class OmegaTFT(Player):
         Player.reset(self)
         self.randomness_counter = 0
         self.deadlock_counter = 0
+
+
+class Gradual(Player):
+    """
+    A player that punishes defections with a growing number of defections
+    but after punishing enters a calming state and cooperates no matter what
+    the opponent does for two rounds.
+
+    http://perso.uclouvain.be/vincent.blondel/workshops/2003/beaufils.pdf """
+
+    name = "Gradual"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+
+        Player.__init__(self)
+        self.calming = False
+        self.punishing = False
+        self.punishment_count = 0
+        self.punishment_limit = 0
+
+    def strategy(self, opponent):
+
+        if self.calming:
+            self.calming = False
+            return C
+
+        if self.punishing:
+            if self.punishment_count < self.punishment_limit:
+                self.punishment_count += 1
+                return D
+            else:
+                self.calming = True
+                self.punishing = False
+                self.punishment_count = 0
+                return C
+
+        if D in opponent.history[-1:]:
+            self.punishing = True
+            self.punishment_count += 1
+            self.punishment_limit += 1
+            return D
+
+        return C
+
+    def reset(self):
+        Player.reset(self)
+        self.calming = False
+        self.punishing = False
+        self.punishment_count = 0
+        self.punishment_limit = 0
+
+
+Transformer = StrategyTransformerFactory(
+    history_track_wrapper, name_prefix=None)()
+
+
+@Transformer
+class ContriteTitForTat(Player):
+    """
+    A player that corresponds to Tit For Tat if there is no noise. In the case
+    of a noisy match: if the opponent defects as a result of a noisy defection
+    then ContriteTitForTat will become 'contrite' until it successfully
+    cooperates..
+
+    Reference: "How to Cope with Noise In the Iterated Prisoner's Dilemma" by
+    Wu and Axelrod. Published in Journal of Conflict Resolution, 39 (March
+    1995), pp. 183-189.
+
+    http://www-personal.umich.edu/~axe/research/How_to_Cope.pdf
+    """
+
+    name = "Contrite Tit For Tat"
+    classifier = {
+        'memory_depth': 3,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+    contrite = False
+
+    def strategy(self, opponent):
+
+        if not opponent.history:
+            return C
+
+        # If contrite but managed to cooperate: apologise.
+        if self.contrite and self.history[-1] == C:
+            self.contrite = False
+            return C
+
+        # Check if noise provoked opponent
+        if self._recorded_history[-1] != self.history[-1]:  # Check if noise
+            if self.history[-1] == D and opponent.history[-1] == C:
+                self.contrite = True
+
+        return opponent.history[-1]
+
+    def reset(self):
+        Player.reset(self)
+        self.contrite = False
+        self._recorded_history = []
+
+
+class SlowTitForTwoTats(Player):
+    """
+    A player plays C twice, then if the opponent plays the same move twice, 
+    plays that move 
+    """
+
+    name = 'Slow Tit For Two Tats'
+    classifier = {
+        'memory_depth': 2, 
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        #Play [c, c]
+        if len(self.history)<2:
+            return C
+        #Mimic if opponent plays same move twice
+        if opponent.history[-2] == opponent.history[-1]:
+            return opponent.history[-1]
+        #Otherwise cooperate
+        return C
+
+        
+

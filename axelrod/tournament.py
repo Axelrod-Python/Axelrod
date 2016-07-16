@@ -12,7 +12,7 @@ import tqdm
 from .game import Game
 from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches
-from .result_set import ResultSet, ResultSetFromFile
+from .result_set import ResultSetFromFile
 
 
 class Tournament(object):
@@ -46,12 +46,13 @@ class Tournament(object):
         self.name = name
         self.turns = turns
         self.noise = noise
+        self.num_interactions = 0
         if game is not None:
             self.game = game
         self.players = players
         self.repetitions = repetitions
-        self.match_generator = match_generator(players, turns, self.game,
-                                               self.repetitions)
+        self.match_generator = match_generator(
+            players, turns, self.game, self.repetitions, self.noise)
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
@@ -67,7 +68,8 @@ class Tournament(object):
         # Save filename for loading ResultSet later
         self.filename = filename
 
-    def play(self, build_results=True, filename=None, processes=None, progress_bar=True):
+    def play(self, build_results=True, filename=None,
+             processes=None, progress_bar=True):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -85,7 +87,8 @@ class Tournament(object):
         axelrod.ResultSet
         """
         if progress_bar:
-            self.progress_bar = tqdm.tqdm(total=len(self.match_generator))
+            self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
+                                          desc="Playing matches")
 
         self.setup_output_file(filename)
         if not build_results and not filename:
@@ -96,13 +99,16 @@ class Tournament(object):
         else:
             self._run_parallel(processes=processes, progress_bar=progress_bar)
 
+        if progress_bar:
+            self.progress_bar.close()
+
         # Make sure that python has finished writing to disk
         self.outputfile.flush()
 
         if build_results:
-            return self._build_result_set()
+            return self._build_result_set(progress_bar=progress_bar)
 
-    def _build_result_set(self):
+    def _build_result_set(self, progress_bar=True):
         """
         Build the result set (used by the play method)
 
@@ -112,7 +118,8 @@ class Tournament(object):
         """
         result_set = ResultSetFromFile(
             filename=self.filename,
-            with_morality=self._with_morality)
+            progress_bar=progress_bar,
+            num_interactions=self.num_interactions)
         self.outputfile.close()
         return result_set
 
@@ -126,7 +133,7 @@ class Tournament(object):
         progress_bar : bool
             Whether or not to update the tournament progress bar
         """
-        chunks = self.match_generator.build_match_chunks(noise=self.noise)
+        chunks = self.match_generator.build_match_chunks()
 
         for chunk in chunks:
             results = self._play_matches(chunk)
@@ -149,6 +156,7 @@ class Tournament(object):
                 row.append(history1)
                 row.append(history2)
                 self.writer.writerow(row)
+                self.num_interactions += 1
 
     def _run_parallel(self, processes=2, progress_bar=False):
         """
@@ -167,7 +175,7 @@ class Tournament(object):
         done_queue = Queue()
         workers = self._n_workers(processes=processes)
 
-        chunks = self.match_generator.build_match_chunks(noise=self.noise)
+        chunks = self.match_generator.build_match_chunks()
         for chunk in chunks:
             work_queue.put(chunk)
 

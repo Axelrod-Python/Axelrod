@@ -1000,3 +1000,23 @@ HardProber is implemented in the library::
     ['D', 'D', 'C', 'C', 'D']
     >>> p2.history
     ['C', 'C', 'C', 'C', 'C']
+
+NaiveProber
+^^^^^^^^^^^
+
+NAIVE_PROBER is a modification of Tit For Tat strategy which with a small
+probability randomly defects. Default value for a probability of defection is
+0.1.
+
+Here is how NaiveProber is implemented in the library::
+
+    >>> import axelrod
+    >>> p1 = axelrod.NaiveProber()  # Create a Prober3 player
+    >>> p2 = axelrod.Defector()  # Create a player that always defects
+    >>> for round in range(5):
+    ...     p1.play(p2)
+
+    >>> p1.history
+    ['C', 'D', 'D', 'D', 'D']
+    >>> p2.history
+    ['D', 'D', 'D', 'D', 'D']

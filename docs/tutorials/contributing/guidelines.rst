@@ -19,3 +19,6 @@ The project follows the following guidelines:
    maintainers to merge (and preferably not the submitted). Opening a PR for early
    feedback or to check test coverage is OK, just indicate that the PR is not ready
    to merge (and update when it is).
+
+By submitting a pull request, you are agreeing that your work may be distributed
+under the terms of the project's `licence <https://raw.githubusercontent.com/Axelrod-Python/Axelrod/master/LICENSE.txt>`_ and you will become one of the project's joint copyright holders.

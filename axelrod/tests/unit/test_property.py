@@ -6,7 +6,6 @@ from axelrod.tests.property import (strategy_lists,
                                     prob_end_tournaments, games)
 
 from hypothesis import given, settings
-from hypothesis.strategies import random_module
 
 stochastic_strategies = [s for s in axelrod.strategies if
                          s().classifier['stochastic']]
@@ -20,20 +19,18 @@ class TestStrategyList(unittest.TestCase):
         for p in strategies:
             self.assertIsInstance(p(), axelrod.Player)
 
-    @given(strategies=strategy_lists(min_size=1, max_size=50),
-           rm=random_module())
+    @given(strategies=strategy_lists(min_size=1, max_size=50))
     @settings(max_examples=10, timeout=0)
-    def test_decorator(self, strategies, rm):
+    def test_decorator(self, strategies):
         self.assertIsInstance(strategies, list)
         self.assertGreaterEqual(len(strategies), 1)
         self.assertLessEqual(len(strategies), 50)
         for strategy in strategies:
             self.assertIsInstance(strategy(), axelrod.Player)
 
-    @given(strategies=strategy_lists(strategies=axelrod.basic_strategies),
-           rm=random_module())
+    @given(strategies=strategy_lists(strategies=axelrod.basic_strategies))
     @settings(max_examples=10, timeout=0)
-    def test_decorator_with_given_strategies(self, strategies, rm):
+    def test_decorator_with_given_strategies(self, strategies):
         self.assertIsInstance(strategies, list)
         basic_player_names = [str(s()) for s in axelrod.basic_strategies]
         for strategy in strategies:
@@ -41,10 +38,9 @@ class TestStrategyList(unittest.TestCase):
             self.assertIsInstance(player, axelrod.Player)
             self.assertIn(str(player), basic_player_names)
 
-    @given(strategies=strategy_lists(strategies=stochastic_strategies),
-           rm=random_module())
+    @given(strategies=strategy_lists(strategies=stochastic_strategies))
     @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, strategies, rm):
+    def test_decorator_with_stochastic_strategies(self, strategies):
         self.assertIsInstance(strategies, list)
         stochastic_player_names = [str(s()) for s in stochastic_strategies]
         for strategy in strategies:
@@ -59,16 +55,13 @@ class TestMatch(unittest.TestCase):
     """
 
     def test_call(self):
-        match, seed = matches().example()
-        self.assertTrue(str(seed).startswith('random.seed'))
+        match = matches().example()
         self.assertIsInstance(match, axelrod.Match)
 
-    @given(match_and_seed=matches(min_turns=10, max_turns=50,
-                                  min_noise=0, max_noise=1))
+    @given(match=matches(min_turns=10, max_turns=50,
+                         min_noise=0, max_noise=1))
     @settings(max_examples=10, timeout=0)
-    def test_decorator(self, match_and_seed):
-        match, seed = match_and_seed
-        self.assertTrue(str(seed).startswith('random.seed'))
+    def test_decorator(self, match):
 
         self.assertIsInstance(match, axelrod.Match)
         self.assertGreaterEqual(len(match), 10)
@@ -76,12 +69,10 @@ class TestMatch(unittest.TestCase):
         self.assertGreaterEqual(match.noise, 0)
         self.assertLessEqual(match.noise, 1)
 
-    @given(match_and_seed=matches(min_turns=10, max_turns=50,
-                                  min_noise=0, max_noise=0))
+    @given(match=matches(min_turns=10, max_turns=50,
+                         min_noise=0, max_noise=0))
     @settings(max_examples=10, timeout=0)
-    def test_decorator_with_no_noise(self, match_and_seed):
-        match, seed = match_and_seed
-        self.assertTrue(str(seed).startswith('random.seed'))
+    def test_decorator_with_no_noise(self, match):
 
         self.assertIsInstance(match, axelrod.Match)
         self.assertGreaterEqual(len(match), 10)
@@ -92,18 +83,15 @@ class TestMatch(unittest.TestCase):
 class TestTournament(unittest.TestCase):
 
     def test_call(self):
-        tournament, seed = tournaments().example()
-        self.assertTrue(str(seed).startswith('random.seed'))
+        tournament = tournaments().example()
         self.assertIsInstance(tournament, axelrod.Tournament)
 
-    @given(tournament_and_seed=tournaments(min_turns=2, max_turns=50, min_noise=0,
-                                           max_noise=1, min_repetitions=2,
-                                           max_repetitions=50))
+    @given(tournament=tournaments(min_turns=2, max_turns=50, min_noise=0,
+                                  max_noise=1, min_repetitions=2,
+                                  max_repetitions=50,
+                                  max_size=3))
     @settings(max_examples=10, timeout=0)
-    def test_decorator(self, tournament_and_seed):
-        tournament, seed = tournament_and_seed
-        self.assertTrue(str(seed).startswith('random.seed'))
-
+    def test_decorator(self, tournament):
         self.assertIsInstance(tournament, axelrod.Tournament)
         self.assertLessEqual(tournament.turns, 50)
         self.assertGreaterEqual(tournament.turns, 2)
@@ -112,23 +100,19 @@ class TestTournament(unittest.TestCase):
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
 
-    @given(tournament_and_seed=tournaments(strategies=axelrod.basic_strategies))
+    @given(tournament=tournaments(strategies=axelrod.basic_strategies,
+                                  max_size=3))
     @settings(max_examples=10, timeout=0)
-    def test_decorator_with_given_strategies(self, tournament_and_seed):
-        tournament, seed = tournament_and_seed
-        self.assertTrue(str(seed).startswith('random.seed'))
-
+    def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axelrod.Tournament)
         basic_player_names = [str(s()) for s in axelrod.basic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
 
-    @given(tournament_and_seed=tournaments(strategies=stochastic_strategies))
+    @given(tournament=tournaments(strategies=stochastic_strategies,
+                                  max_size=3))
     @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, tournament_and_seed):
-        tournament, seed = tournament_and_seed
-        self.assertTrue(str(seed).startswith('random.seed'))
-
+    def test_decorator_with_stochastic_strategies(self, tournament):
         self.assertIsInstance(tournament, axelrod.Tournament)
         stochastic_player_names = [str(s()) for s in stochastic_strategies]
         for p in tournament.players:
@@ -138,20 +122,17 @@ class TestTournament(unittest.TestCase):
 class TestProbEndTournament(unittest.TestCase):
 
     def test_call(self):
-        tournament, seed = prob_end_tournaments().example()
-        self.assertTrue(str(seed).startswith('random.seed'))
+        tournament = tournaments().example()
         self.assertIsInstance(tournament, axelrod.Tournament)
 
-    @given(tournament_and_seed=prob_end_tournaments(min_prob_end=0,
-                                                    max_prob_end=1,
-                                                    min_noise=0, max_noise=1,
-                                                    min_repetitions=2,
-                                                    max_repetitions=50))
+    @given(tournament=prob_end_tournaments(min_prob_end=0,
+                                           max_prob_end=1,
+                                           min_noise=0, max_noise=1,
+                                           min_repetitions=2,
+                                           max_repetitions=50,
+                                           max_size=3))
     @settings(max_examples=10, timeout=0)
-    def test_decorator(self, tournament_and_seed):
-        tournament, seed = tournament_and_seed
-        self.assertTrue(str(seed).startswith('random.seed'))
-
+    def test_decorator(self, tournament):
         self.assertIsInstance(tournament, axelrod.ProbEndTournament)
         self.assertLessEqual(tournament.prob_end, 1)
         self.assertGreaterEqual(tournament.prob_end, 0)
@@ -160,23 +141,19 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertLessEqual(tournament.repetitions, 50)
         self.assertGreaterEqual(tournament.repetitions, 2)
 
-    @given(tournament_and_seed=prob_end_tournaments(strategies=axelrod.basic_strategies))
+    @given(tournament=prob_end_tournaments(strategies=axelrod.basic_strategies,
+                                           max_size=3))
     @settings(max_examples=10, timeout=0)
-    def test_decorator_with_given_strategies(self, tournament_and_seed):
-        tournament, seed = tournament_and_seed
-        self.assertTrue(str(seed).startswith('random.seed'))
-
+    def test_decorator_with_given_strategies(self, tournament):
         self.assertIsInstance(tournament, axelrod.ProbEndTournament)
         basic_player_names = [str(s()) for s in axelrod.basic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
 
-    @given(tournament_and_seed=prob_end_tournaments(strategies=stochastic_strategies))
+    @given(tournament=prob_end_tournaments(strategies=stochastic_strategies,
+                                           max_size=3))
     @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, tournament_and_seed):
-        tournament, seed = tournament_and_seed
-        self.assertTrue(str(seed).startswith('random.seed'))
-
+    def test_decorator_with_stochastic_strategies(self, tournament):
         self.assertIsInstance(tournament, axelrod.ProbEndTournament)
         stochastic_player_names = [str(s()) for s in stochastic_strategies]
         for p in tournament.players:

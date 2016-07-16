@@ -43,9 +43,10 @@ We can plot the results::
    :width: 50%
    :align: center
 
-We can also view the length of the matches player by each player (here plotted
-with a high number of repetitions we see that the expected length of Match is
-obtained :math:`\approx 4`)::
+We can also view the length of the matches played by each player. The plot shows
+that the length of each match (for each player) is not the same. The median
+length is 4 which is the expected value with the probability of a match ending
+being :code:`0.5`.
 
     >>> p = plot.lengthplot()
     >>> p.show()

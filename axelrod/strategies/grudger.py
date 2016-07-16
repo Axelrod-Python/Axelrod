@@ -106,3 +106,53 @@ class Aggravater(Player):
         elif opponent.defections:
             return D
         return C
+
+
+class SoftGrudger(Player):
+    """
+    A modification of the Grudger strategy. Instead of punishing by always
+    defecting: punishes by playing: D, D, D, D, C, C. (Will continue to
+    cooperate afterwards).
+
+    For reference see: "Engineering Design of Strategies for Winning
+    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
+    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
+    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
+    """
+
+    name = 'Soft Grudger'
+    classifier = {
+        'memory_depth': 6,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        """Initialised the player."""
+        super(SoftGrudger, self).__init__()
+        self.grudged = False
+        self.grudge_memory = 0
+
+    def strategy(self, opponent):
+        """Begins by playing C, then plays D, D, D, D, C, C against a defection
+        """
+        if self.grudged:
+            strategy = [D, D, D, C, C][self.grudge_memory]
+            self.grudge_memory += 1
+            if self.grudge_memory == 5:
+                self.grudge_memory = 0
+                self.grudged = False
+            return strategy
+        elif D in opponent.history[-1:]:
+            self.grudged = True
+            return D
+        return C
+
+    def reset(self):
+        """Resets scores and history."""
+        Player.reset(self)
+        self.grudged = False
+        self.grudge_memory = 0

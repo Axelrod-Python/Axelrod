@@ -2,7 +2,7 @@ from __future__ import division
 import unittest
 
 from hypothesis import given, example
-from hypothesis.strategies import floats, random_module, integers
+from hypothesis.strategies import floats, integers
 
 import axelrod
 
@@ -81,7 +81,9 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(len(match), test_turns)
 
         # Testing with noise
-        match_params = rr.build_single_match_params(noise=.5)
+        rr = axelrod.RoundRobinMatches(
+            self.players, test_turns, test_game, test_repetitions, noise=0.5)
+        match_params = rr.build_single_match_params()
         self.assertIsInstance(match_params, tuple)
         self.assertEqual(match_params[0], rr.turns)
         self.assertEqual(match_params[1], rr.game)
@@ -113,6 +115,7 @@ class TestRoundRobin(unittest.TestCase):
         self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
         self.assertEqual(rr.estimated_size(), len(rr) * turns * repetitions)
 
+
 class TestProbEndRoundRobin(unittest.TestCase):
 
     @classmethod
@@ -120,9 +123,9 @@ class TestProbEndRoundRobin(unittest.TestCase):
         cls.players = [s() for s in test_strategies]
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions),
-           prob_end=floats(min_value=0, max_value=1), rm=random_module())
-    @example(repetitions=test_repetitions, prob_end=.5, rm=random_module())
-    def test_build_match_chunks(self, repetitions, prob_end, rm):
+           prob_end=floats(min_value=0, max_value=1))
+    @example(repetitions=test_repetitions, prob_end=.5)
+    def test_build_match_chunks(self, repetitions, prob_end):
         rr = axelrod.ProbEndRoundRobinMatches(
             self.players, prob_end, test_game, repetitions)
         chunks = list(rr.build_match_chunks())
@@ -131,8 +134,8 @@ class TestProbEndRoundRobin(unittest.TestCase):
 
         self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
 
-    @given(prob_end=floats(min_value=0.1, max_value=0.5), rm=random_module())
-    def test_build_matches_different_length(self, prob_end, rm):
+    @given(prob_end=floats(min_value=0.1, max_value=0.5))
+    def test_build_matches_different_length(self, prob_end):
         """
         If prob end is not 0 or 1 then the matches should all have different
         length
@@ -146,8 +149,8 @@ class TestProbEndRoundRobin(unittest.TestCase):
         match_lengths = [match_params[0] for (index_pair, match_params, repetitions) in chunks]
         self.assertNotEqual(min(match_lengths), max(match_lengths))
 
-    @given(prob_end=floats(min_value=0, max_value=1), rm=random_module())
-    def test_sample_length(self, prob_end, rm):
+    @given(prob_end=floats(min_value=0, max_value=1))
+    def test_sample_length(self, prob_end):
         rr = axelrod.ProbEndRoundRobinMatches(
             self.players, prob_end, test_game, test_repetitions)
         self.assertGreaterEqual(rr.sample_length(prob_end), 1)
@@ -156,8 +159,8 @@ class TestProbEndRoundRobin(unittest.TestCase):
         except AssertionError:
             self.assertEqual(rr.sample_length(prob_end), float("inf"))
 
-    @given(prob_end=floats(min_value=.1, max_value=1), rm=random_module())
-    def test_build_single_match_params(self, prob_end, rm):
+    @given(prob_end=floats(min_value=.1, max_value=1))
+    def test_build_single_match_params(self, prob_end):
         rr = axelrod.ProbEndRoundRobinMatches(
             self.players, prob_end, test_game, test_repetitions)
         match_params = rr.build_single_match_params()
@@ -176,9 +179,12 @@ class TestProbEndRoundRobin(unittest.TestCase):
         self.assertIsInstance(match, axelrod.Match)
         self.assertLess(len(match), float('inf'))
         self.assertGreater(len(match), 0)
+        self.assertEqual(match.players[0].match_attributes['length'], float('inf'))
 
         # Testing with noise
-        match_params = rr.build_single_match_params(noise=.5)
+        rr = axelrod.ProbEndRoundRobinMatches(
+            self.players, prob_end, test_game, test_repetitions, noise=0.5)
+        match_params = rr.build_single_match_params()
         self.assertIsInstance(match_params, tuple)
         self.assertLess(match_params[0], float('inf'))
         self.assertGreater(match_params[0], 0)
@@ -194,11 +200,10 @@ class TestProbEndRoundRobin(unittest.TestCase):
         self.assertLess(len(match), float('inf'))
         self.assertGreater(len(match), 0)
 
-    @given(prob_end=floats(min_value=.1, max_value=1), rm=random_module())
-    def test_len(self, prob_end, rm):
-        turns = 5
+    @given(prob_end=floats(min_value=.1, max_value=1))
+    def test_len(self, prob_end):
         repetitions = 10
-        rr = axelrod.ProbEndRoundRobinMatches(self.players, prob_end, game=None,
-                                       repetitions=repetitions)
+        rr = axelrod.ProbEndRoundRobinMatches(
+            self.players, prob_end, game=None, repetitions=repetitions)
         self.assertEqual(len(rr), len(list(rr.build_match_chunks())))
         self.assertAlmostEqual(rr.estimated_size(), len(rr) * 1. / prob_end * repetitions)

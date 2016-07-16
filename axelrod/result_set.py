@@ -1,5 +1,6 @@
 from collections import defaultdict
 import csv
+import tqdm
 
 from numpy import mean, nanmedian, std
 
@@ -14,10 +15,25 @@ except ImportError:
     from io import StringIO
 
 
+def update_progress_bar(method):
+    """A decorator to update a progress bar if it exists"""
+    def wrapper(*args):
+        """Run the method and update the progress bar if it exists"""
+        output = method(*args)
+
+        try:
+            args[0].progress_bar.update(1)
+        except AttributeError:
+            pass
+
+        return output
+    return wrapper
+
+
 class ResultSet(object):
     """A class to hold the results of a tournament."""
 
-    def __init__(self, players, interactions, with_morality=True):
+    def __init__(self, players, interactions, progress_bar=True):
         """
         Parameters
         ----------
@@ -26,19 +42,24 @@ class ResultSet(object):
             interactions : list
                 a list of dictionaries mapping tuples of player indices to
                 interactions (1 for each repetition)
-            with_morality : bool
-                a flag to determine whether morality metrics should be
-                calculated.
+            progress_bar : bool
+                Whether or not to create a progress bar which will be updated
         """
         self.players = players
         self.nplayers = len(players)
         self.interactions = interactions
-        self.nrepetitions = max([len(rep) for rep in list(interactions.values())])
+        self.nrepetitions = max(
+            [len(rep) for rep in list(interactions.values())])
+
+        if progress_bar:
+            self.progress_bar = tqdm.tqdm(total=19, desc="Analysing results")
+        else:
+            self.progress_bar = False
 
         # Calculate all attributes:
-        self.build_all(with_morality)
+        self.build_all()
 
-    def build_all(self, with_morality):
+    def build_all(self):
         """Build all the results. In a seperate method to make inheritance more
         straightforward"""
         self.wins = self.build_wins()
@@ -54,15 +75,19 @@ class ResultSet(object):
         self.score_diffs = self.build_score_diffs()
         self.payoff_diffs_means = self.build_payoff_diffs_means()
 
-        if with_morality:
-            self.cooperation = self.build_cooperation()
-            self.normalised_cooperation = self.build_normalised_cooperation()
-            self.vengeful_cooperation = self.build_vengeful_cooperation()
-            self.cooperating_rating = self.build_cooperating_rating()
-            self.good_partner_matrix = self.build_good_partner_matrix()
-            self.good_partner_rating = self.build_good_partner_rating()
-            self.eigenmoses_rating = self.build_eigenmoses_rating()
-            self.eigenjesus_rating = self.build_eigenjesus_rating()
+        self.cooperation = self.build_cooperation()
+        self.normalised_cooperation = self.build_normalised_cooperation()
+        self.vengeful_cooperation = self.build_vengeful_cooperation()
+        self.cooperating_rating = self.build_cooperating_rating()
+        self.good_partner_matrix = self.build_good_partner_matrix()
+        self.good_partner_rating = self.build_good_partner_rating()
+        self.eigenmoses_rating = self.build_eigenmoses_rating()
+        self.eigenjesus_rating = self.build_eigenjesus_rating()
+
+        try:
+            self.progress_bar.close()
+        except AttributeError:
+            pass
 
     @property
     def _null_results_matrix(self):
@@ -79,6 +104,7 @@ class ResultSet(object):
         replist = list(range(self.nrepetitions))
         return [[[0 for j in plist] for i in plist] for r in replist]
 
+    @update_progress_bar
     def build_match_lengths(self):
         """
         Returns:
@@ -110,6 +136,7 @@ class ResultSet(object):
 
         return match_lengths
 
+    @update_progress_bar
     def build_scores(self):
         """
         Returns:
@@ -143,6 +170,7 @@ class ResultSet(object):
 
         return scores
 
+    @update_progress_bar
     def build_ranked_names(self):
         """
         Returns:
@@ -150,8 +178,10 @@ class ResultSet(object):
             Returns the ranked names. A list of names as calculated by
             self.ranking.
         """
+
         return [str(self.players[i]) for i in self.ranking]
 
+    @update_progress_bar
     def build_wins(self):
         """
         Returns:
@@ -187,6 +217,7 @@ class ResultSet(object):
 
         return wins
 
+    @update_progress_bar
     def build_normalised_scores(self):
         """
         Returns:
@@ -229,6 +260,7 @@ class ResultSet(object):
 
         return normalised_scores
 
+    @update_progress_bar
     def build_ranking(self):
         """
         Returns:
@@ -244,6 +276,7 @@ class ResultSet(object):
         return sorted(range(self.nplayers),
                       key=lambda i: -nanmedian(self.normalised_scores[i]))
 
+    @update_progress_bar
     def build_payoffs(self):
         """
         Returns:
@@ -281,8 +314,10 @@ class ResultSet(object):
                             utilities.append(iu.compute_final_score_per_turn(interaction)[1])
 
                     payoffs[player][opponent] = utilities
+
         return payoffs
 
+    @update_progress_bar
     def build_payoff_matrix(self):
         """
         Returns:
@@ -317,6 +352,7 @@ class ResultSet(object):
 
         return payoff_matrix
 
+    @update_progress_bar
     def build_payoff_stddevs(self):
         """
         Returns:
@@ -353,6 +389,7 @@ class ResultSet(object):
 
         return payoff_stddevs
 
+    @update_progress_bar
     def build_score_diffs(self):
         """
         Returns:
@@ -391,8 +428,10 @@ class ResultSet(object):
                         scores = iu.compute_final_score_per_turn(interaction)
                         diff = (scores[1] - scores[0])
                         score_diffs[player][opponent][repetition] = diff
+
         return score_diffs
 
+    @update_progress_bar
     def build_payoff_diffs_means(self):
         """
         Returns:
@@ -429,8 +468,10 @@ class ResultSet(object):
                     payoff_diffs_means[player][opponent] = mean(diffs)
                 else:
                     payoff_diffs_means[player][opponent] = 0
+
         return payoff_diffs_means
 
+    @update_progress_bar
     def build_cooperation(self):
         """
         Returns:
@@ -465,8 +506,10 @@ class ResultSet(object):
                                 coop_count += iu.compute_cooperations(interaction)[1]
 
                         cooperations[player][opponent] += coop_count
+
         return cooperations
 
+    @update_progress_bar
     def build_normalised_cooperation(self):
         """
         Returns:
@@ -507,8 +550,10 @@ class ResultSet(object):
 
                 # Mean over all reps:
                 normalised_cooperations[player][opponent] = mean(coop_counts)
+
         return normalised_cooperations
 
+    @update_progress_bar
     def build_vengeful_cooperation(self):
         """
         Returns:
@@ -522,6 +567,7 @@ class ResultSet(object):
         return [[2 * (element - 0.5) for element in row]
                 for row in self.normalised_cooperation]
 
+    @update_progress_bar
     def build_cooperating_rating(self):
         """
         Returns:
@@ -552,6 +598,7 @@ class ResultSet(object):
         return [sum(cs) / max(1, float(sum(ls))) for cs, ls
                 in zip(self.cooperation, lengths)]
 
+    @update_progress_bar
     def build_good_partner_matrix(self):
         """
         Returns:
@@ -586,6 +633,7 @@ class ResultSet(object):
 
         return good_partner_matrix
 
+    @update_progress_bar
     def build_good_partner_rating(self):
         """
         Returns:
@@ -607,6 +655,7 @@ class ResultSet(object):
 
         return good_partner_rating
 
+    @update_progress_bar
     def build_eigenjesus_rating(self):
         """
         Returns:
@@ -616,9 +665,11 @@ class ResultSet(object):
         http://www.scottaaronson.com/morality.pdf
         """
         eigenvector, eigenvalue = eigen.principal_eigenvector(
-                self.normalised_cooperation)
+            self.normalised_cooperation)
+
         return eigenvector.tolist()
 
+    @update_progress_bar
     def build_eigenmoses_rating(self):
         """
         Returns:
@@ -628,51 +679,45 @@ class ResultSet(object):
         http://www.scottaaronson.com/morality.pdf
         """
         eigenvector, eigenvalue = eigen.principal_eigenvector(
-                self.vengeful_cooperation)
+            self.vengeful_cooperation)
+
         return eigenvector.tolist()
-
-    def csv(self):
-        """
-        Returns:
-        --------
-
-        The string of the total scores per player (columns) per repetition
-        (rows).
-        """
-        csv_string = StringIO()
-        header = ",".join(self.ranked_names) + "\n"
-        csv_string.write(header)
-        writer = csv.writer(csv_string, lineterminator="\n")
-        for irep in range(self.nrepetitions):
-            data = [self.normalised_scores[rank][irep]
-                    for rank in self.ranking]
-            writer.writerow(list(map(str, data)))
-        return csv_string.getvalue()
-
 
 class ResultSetFromFile(ResultSet):
     """A class to hold the results of a tournament. Reads in a CSV file produced
     by the tournament class.
     """
 
-    def __init__(self, filename, with_morality=True):
+    def __init__(self, filename, progress_bar=True,
+                 num_interactions=False):
         """
         Parameters
         ----------
             filename : string
                 name of a file of the correct file.
-            with_morality : bool
-                a flag to determine whether morality metrics should be
-                calculated.
+            progress_bar : bool
+                Whether or not to create a progress bar which will be updated
+            num_interactions : int
+                If the number of interactions is known this helps with
+                displaying the progress bar, if it is not known and progress_bar
+                is set to True then an initial count will take place
         """
-        self.players, self.interactions = self._read_csv(filename)
+        self.players, self.interactions = self._read_csv(filename,
+                                                         progress_bar,
+                                                         num_interactions)
         self.nplayers = len(self.players)
         self.nrepetitions = len(list(self.interactions.values())[0])
 
-        # Calculate all attributes:
-        self.build_all(with_morality)
+        if progress_bar:
+            self.progress_bar = tqdm.tqdm(total=19, desc="Analysing results")
+        else:
+            self.progress_bar = False
 
-    def _read_csv(self, filename):
+        # Calculate all attributes:
+        self.build_all()
+
+    def _read_csv(self, filename, progress_bar=False,
+                  num_interactions=None):
         """
         Reads from a csv file of the format:
 
@@ -688,6 +733,13 @@ class ResultSetFromFile(ResultSet):
         1, 2, Cooperator, Alternator, CCC, CDC
         1, 2, Cooperator, Alternator, CCC, CDC
 
+        Parameters
+        ----------
+            filename : string
+                name of a file of the correct file.
+            progress_bar : bool
+                Whether or not to create a progress bar which will be updated
+
         Returns
         -------
 
@@ -696,6 +748,13 @@ class ResultSetFromFile(ResultSet):
                 - Second element: interactions (a dictionary mapping player pair
                   indices to lists of histories)
         """
+        if progress_bar:
+            if not num_interactions:
+                # If number of interactions is not known:
+                num_interactions = sum(1 for line in open(filename))
+            self.read_progress_bar = tqdm.tqdm(total=num_interactions,
+                                               desc="Reading interactions")
+
         interactions = defaultdict(list)
         players_d = {}
         with open(filename, 'r') as f:
@@ -710,6 +769,11 @@ class ResultSetFromFile(ResultSet):
                 for index, player in zip(index_pair, players):
                     if index not in players:
                         players_d[index] = player
+                if progress_bar:
+                    self.read_progress_bar.update()
+
+        if progress_bar:
+            self.read_progress_bar.close()
 
         # Create an ordered list of players
         players = []

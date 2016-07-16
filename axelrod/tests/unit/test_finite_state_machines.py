@@ -111,6 +111,12 @@ class TestFSMPlayer(TestPlayer):
         fsm = player.fsm
         self.assertTrue(check_state_transitions(fsm.state_transitions))
 
+    def test_reset_initial_state(self):
+        player = self.player()
+        player.fsm.state = -1
+        player.reset()
+        self.assertFalse(player.fsm.state == -1)
+
 
 class TestFortress3(TestFSMPlayer):
 
