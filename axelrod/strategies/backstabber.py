@@ -4,7 +4,7 @@ from axelrod.strategy_transformers import FinalTransformer
 C, D = Actions.C, Actions.D
 
 
-@FinalTransformer((D, D)) # End with two defections
+@FinalTransformer((D, D), name_prefix=None) # End with two defections
 class BackStabber(Player):
     """
     Forgives the first 3 defections but on the fourth
@@ -29,7 +29,7 @@ class BackStabber(Player):
             return D
         return C
 
-@FinalTransformer((D, D)) # End with two defections
+@FinalTransformer((D, D), name_prefix=None) # End with two defections
 class DoubleCrosser(Player):
     """
     Forgives the first 3 defections but on the fourth

@@ -12,7 +12,7 @@ C to D and D to C::
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import *
-    >>> FlippedCooperator = FlipTransformer(axelrod.Cooperator)
+    >>> FlippedCooperator = FlipTransformer()(axelrod.Cooperator)
     >>> player = FlippedCooperator()
     >>> opponent = axelrod.Cooperator()
     >>> player.strategy(opponent)
@@ -29,15 +29,17 @@ class and player::
     >>> FlippedCooperator.name
     'Flipped Cooperator'
 
-This behavor can be supressed by setting the :code:`name_prefix` argument::
+This behavior can be suppressed by setting the :code:`name_prefix` argument::
 
-    FlipTransformer = StrategyTransformerFactory(flip_wrapper, name_prefix="")()
+    >>> FlippedCooperator = FlipTransformer(name_prefix=None)(axelrod.Cooperator)
+    >>> player = FlippedCooperator()
+    >>> player.name
+    'Cooperator'
 
 Note carefully that the transformer returns a class, not an instance of a class.
 This means that you need to use the Transformed class as you would normally to
 create a new instance::
 
-    >>> import axelrod
     >>> from axelrod.strategy_transformers import NoisyTransformer
     >>> player = NoisyTransformer(0.5)(axelrod.Cooperator)()
 
@@ -52,7 +54,7 @@ The library includes the following transformers:
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import FlipTransformer
-    >>> FlippedCooperator = FlipTransformer(axelrod.Cooperator)
+    >>> FlippedCooperator = FlipTransformer()(axelrod.Cooperator)
     >>> player = FlippedCooperator()
 
 * :code:`NoisyTransformer(noise)`: Flips actions with probability :code:`noise`::
@@ -94,7 +96,7 @@ The library includes the following transformers:
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import RetaliateUntilApologyTransformer
-    >>> TFT = RetaliateUntilApologyTransformer(axelrod.Cooperator)
+    >>> TFT = RetaliateUntilApologyTransformer()(axelrod.Cooperator)
     >>> player = TFT()
 
 * :code:`ApologizingTransformer`: Apologizes after a round of :code:`(D, C)`::
@@ -116,7 +118,7 @@ The library includes the following transformers:
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import DeadlockBreakingTransformer
-    >>> DeadlockBreakingTFT = DeadlockBreakingTransformer(axelrod.TitForTat)
+    >>> DeadlockBreakingTFT = DeadlockBreakingTransformer()(axelrod.TitForTat)
     >>> player = DeadlockBreakingTFT()
 
 * :code:`GrudgeTransformer(N)`: Defections unconditionally after more than N defections::
@@ -130,7 +132,7 @@ The library includes the following transformers:
 
     >>> import axelrod
     >>> from axelrod.strategy_transformers import TrackHistoryTransformer
-    >>> player = TrackHistoryTransformer(axelrod.Random)()
+    >>> player = TrackHistoryTransformer()(axelrod.Random)()
 
 * :code:`MixedTransformer`: Randomly plays a mutation to another strategy (or
   set of strategies. Here is the syntax to do this with a set of strategies::
