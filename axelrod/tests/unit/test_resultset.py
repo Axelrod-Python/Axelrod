@@ -173,6 +173,12 @@ class TestResultSet(unittest.TestCase):
                 self.assertIsInstance(interaction, list)
                 self.assertEqual(len(interaction), self.turns)
 
+    def test_init_with_different_game(self):
+        game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False, game=game)
+        self.assertEqual(rs.game.RPST(), (-1, -1, -1, -1))
+
     def test_with_progress_bar(self):
         rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertTrue(rs.progress_bar)
@@ -216,6 +222,14 @@ class TestResultSet(unittest.TestCase):
         self.assertIsInstance(rs.scores, list)
         self.assertEqual(len(rs.scores), rs.nplayers)
         self.assertEqual(rs.scores, self.expected_scores)
+
+    def test_scores_with_different_game(self):
+        game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False, game=game)
+        for player in rs.scores:
+            for score in player:
+                self.assertFalse(score > 0)
 
     def test_ranking(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
@@ -377,6 +391,12 @@ class TestResultSetFromFile(unittest.TestCase):
                                  (0, 2): [[('C', 'D'), ('C', 'D')]],
                                  (1, 1): [[('C', 'C'), ('C', 'C')]]}
         self.assertEqual(rs.interactions, expected_interactions)
+
+    def test_init_with_different_game(self):
+        game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
+        rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False,
+                                       game=game)
+        self.assertEqual(rs.game.RPST(), (-1, -1, -1, -1))
 
     def test_progres_bar(self):
         rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True)

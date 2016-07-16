@@ -5,6 +5,7 @@ import tqdm
 from numpy import mean, nanmedian, std
 
 from . import eigen
+from .game import Game
 import axelrod.interaction_utils as iu
 
 try:
@@ -32,8 +33,9 @@ def update_progress_bar(method):
 
 class ResultSet(object):
     """A class to hold the results of a tournament."""
+    game = Game()
 
-    def __init__(self, players, interactions, progress_bar=True):
+    def __init__(self, players, interactions, progress_bar=True, game=None):
         """
         Parameters
         ----------
@@ -45,6 +47,8 @@ class ResultSet(object):
             progress_bar : bool
                 Whether or not to create a progress bar which will be updated
         """
+        if game is not None:
+            self.game = game
         self.players = players
         self.nplayers = len(players)
         self.interactions = interactions
@@ -162,7 +166,8 @@ class ResultSet(object):
         for index_pair, repetitions in self.interactions.items():
             if index_pair[0] != index_pair[1]:  # Ignoring self interactions
                 for repetition, interaction in enumerate(repetitions):
-                    final_scores = iu.compute_final_score(interaction)
+                    final_scores = iu.compute_final_score(interaction,
+                                                          self.game)
                     for player in range(2):
                         player_index = index_pair[player]
                         player_score = final_scores[player]
@@ -211,7 +216,8 @@ class ResultSet(object):
                     player_index = index_pair[player]
 
                     for rep, interaction in enumerate(repetitions):
-                        winner_index = iu.compute_winner_index(interaction)
+                        winner_index = iu.compute_winner_index(interaction,
+                                                               self.game)
                         if winner_index is not False and player == winner_index:
                             wins[player_index][rep] += 1
 
@@ -246,7 +252,9 @@ class ResultSet(object):
         for index_pair, repetitions in self.interactions.items():
             for repetition, interaction in enumerate(repetitions):
                 if index_pair[0] != index_pair[1]:  # Ignore self interactions
-                    scores_per_turn = iu.compute_final_score_per_turn(interaction)
+                    scores_per_turn = iu.compute_final_score_per_turn(
+                                                                interaction,
+                                                                self.game)
                     for player in range(2):
                         player_index = index_pair[player]
                         score_per_turn = scores_per_turn[player]
@@ -308,10 +316,14 @@ class ResultSet(object):
 
                     if (player, opponent) == index_pair:
                         for interaction in repetitions:
-                            utilities.append(iu.compute_final_score_per_turn(interaction)[0])
+                            utilities.append(iu.compute_final_score_per_turn(
+                                                                interaction,
+                                                                self.game)[0])
                     elif (opponent, player) == index_pair:
                         for interaction in repetitions:
-                            utilities.append(iu.compute_final_score_per_turn(interaction)[1])
+                            utilities.append(iu.compute_final_score_per_turn(
+                                                                interaction,
+                                                                self.game)[1])
 
                     payoffs[player][opponent] = utilities
 
@@ -419,13 +431,15 @@ class ResultSet(object):
             for opponent in plist:
                 if (player, opponent) in self.interactions:
                     for repetition, interaction in enumerate(self.interactions[(player, opponent)]):
-                        scores = iu.compute_final_score_per_turn(interaction)
+                        scores = iu.compute_final_score_per_turn(interaction,
+                                                                 self.game)
                         diff = (scores[0] - scores[1])
                         score_diffs[player][opponent][repetition] = diff
 
                 if (opponent, player) in self.interactions:
                     for repetition, interaction in enumerate(self.interactions[(opponent, player)]):
-                        scores = iu.compute_final_score_per_turn(interaction)
+                        scores = iu.compute_final_score_per_turn(interaction,
+                                                                 self.game)
                         diff = (scores[1] - scores[0])
                         score_diffs[player][opponent][repetition] = diff
 
@@ -458,11 +472,13 @@ class ResultSet(object):
                 for index_pair, repetitions in self.interactions.items():
                     if (player, opponent) == index_pair:
                         for interaction in repetitions:
-                            scores = iu.compute_final_score_per_turn(interaction)
+                            scores = iu.compute_final_score_per_turn(interaction,
+                                                                     self.game)
                             diffs.append(scores[0] - scores[1])
                     elif (opponent, player) == index_pair:
                         for interaction in repetitions:
-                            scores = iu.compute_final_score_per_turn(interaction)
+                            scores = iu.compute_final_score_per_turn(interaction,
+                                                                    self.game)
                             diffs.append(scores[1] - scores[0])
                 if diffs:
                     payoff_diffs_means[player][opponent] = mean(diffs)
@@ -687,9 +703,10 @@ class ResultSetFromFile(ResultSet):
     """A class to hold the results of a tournament. Reads in a CSV file produced
     by the tournament class.
     """
+    game = Game()
 
     def __init__(self, filename, progress_bar=True,
-                 num_interactions=False):
+                 num_interactions=False, game=None):
         """
         Parameters
         ----------
@@ -702,6 +719,8 @@ class ResultSetFromFile(ResultSet):
                 displaying the progress bar, if it is not known and progress_bar
                 is set to True then an initial count will take place
         """
+        if game is not None:
+            self.game = game
         self.players, self.interactions = self._read_csv(filename,
                                                          progress_bar,
                                                          num_interactions)
