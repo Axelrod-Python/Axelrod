@@ -53,8 +53,11 @@ Match lengths
 
 This gives the length of the matches played by each player::
 
-    >>> results.match_lengths
-    [[[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]], [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]], [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]]]
+    >>> import pprint  # Nicer formatting of output
+    >>> pprint.pprint(results.match_lengths)
+    [[[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]],
+     [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]],
+     [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]]]
 
 Every player plays 200 turns against every other player for every repetition of
 the tournament.
@@ -107,18 +110,38 @@ Payoffs
 This gives for each player, against each opponent every payoff received for
 each repetition::
 
-    >>> results.payoffs
-    [[[3.0, 3.0, 3.0, 3.0, 3.0, 3.0], [0.0, 0.0, 0.0], [3.0, 3.0, 3.0], [3.0, 3.0, 3.0]], [[5.0, 5.0, 5.0], [1.0, 1.0, 1.0, 1.0, 1.0, 1.0], [1.4, 1.4, 1.4], [1.4, 1.4, 1.4]], [[3.0, 3.0, 3.0], [0.9, 0.9, 0.9], [3.0, 3.0, 3.0, 3.0, 3.0, 3.0], [3.0, 3.0, 3.0]], [[3.0, 3.0, 3.0], [0.9, 0.9, 0.9], [3.0, 3.0, 3.0], [3.0, 3.0, 3.0, 3.0, 3.0, 3.0]]]
+    >>> pprint.pprint(results.payoffs)
+    [[[3.0, 3.0, 3.0, 3.0, 3.0, 3.0],
+      [0.0, 0.0, 0.0],
+      [3.0, 3.0, 3.0],
+      [3.0, 3.0, 3.0]],
+     [[5.0, 5.0, 5.0],
+      [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+      [1.4, 1.4, 1.4],
+      [1.4, 1.4, 1.4]],
+     [[3.0, 3.0, 3.0],
+      [0.9, 0.9, 0.9],
+      [3.0, 3.0, 3.0, 3.0, 3.0, 3.0],
+      [3.0, 3.0, 3.0]],
+     [[3.0, 3.0, 3.0],
+      [0.9, 0.9, 0.9],
+      [3.0, 3.0, 3.0],
+      [3.0, 3.0, 3.0, 3.0, 3.0, 3.0]]]
+
 
 Payoff matrix
 -------------
 
 This gives the mean payoff of each player against every opponent::
 
-    >>> results.payoff_matrix  # doctest: +SKIP
-    [[3.0, 0.0, 3.0, 3.0], [5.0, 1.0, 1.4, 1.4], [3.0, 0.9, 3.0, 3.0], [3.0, 0.9, 3.0, 3.0]]
+    >>> pprint.pprint(results.payoff_matrix)  # doctest: +SKIP
+    [[3.0, 0.0, 3.0, 3.0],
+     [5.0, 1.0, 1.4, 1.4],
+     [3.0, 0.9, 3.0, 3.0],
+     [3.0, 0.9, 3.0, 3.0]]
 
-We see that the :code:`Cooperator` gets a mean score of 3 against all players except the :code:`Defector`::
+We see that the :code:`Cooperator` gets a mean score of 3 against all players
+except the :code:`Defector`::
 
     >>> results.payoff_matrix[0]
     [3.0, 0.0, 3.0, 3.0]
@@ -129,8 +152,11 @@ Payoff standard deviation
 This gives the standard deviation of the payoff of each player against
 every opponent::
 
-    >>> results.payoff_stddevs  # doctest: +SKIP
-    [[0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 2.2, 2.2], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]]
+    >>> pprint.pprint(results.payoff_stddevs)  # doctest: +SKIP
+    [[0.0, 0.0, 0.0, 0.0],
+     [0.0, 0.0, 2.2, 2.2],
+     [0.0, 0.0, 0.0, 0.0],
+     [0.0, 0.0, 0.0, 0.0]]
 
 We see that there is no variation for the payoff for :code:`Cooperator`::
 
@@ -143,8 +169,11 @@ Score differences
 This gives the score difference for each player against each opponent for every
 repetition::
 
-    >>> results.score_diffs  # doctest: +SKIP
-    [[[0.0, 0.0, 0.0], [-5.0, -5.0, -5.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]], [[5.0, 5.0, 5.0], [0.0, 0.0, 0.0], [0.4999999999999999, 0.4999999999999999, 0.4999999999999999], [0.4999999999999999, 0.4999999999999999, 0.4999999999999999]], [[0.0, 0.0, 0.0], [-0.4999999999999999, -0.4999999999999999, -0.4999999999999999], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0], [-0.4999999999999999, -0.4999999999999999, -0.4999999999999999], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]]
+    >>> pprint.pprint(results.score_diffs)  # doctest: +SKIP
+    [[[0.0, 0.0, 0.0], [-5.0, -5.0, -5.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
+     [[5.0, 5.0, 5.0], [0.0, 0.0, 0.0], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]],
+     [[0.0, 0.0, 0.0], [-0.5, -0.5, -0.5], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
+     [[0.0, 0.0, 0.0], [-0.5, -0.5, -0.5], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]]
 
 We see that :code:`Cooperator` has no difference in score with all players
 except against the :code:`Defector`::
@@ -157,8 +186,11 @@ Payoff difference means
 
 This gives the mean payoff differences over each repetition::
 
-    >>> results.payoff_diffs_means  # doctest: +SKIP
-    [[0.0, -5.0, 0.0, 0.0], [5.0, 0.0, 0.49999999999999983, 0.49999999999999983], [0.0, -0.49999999999999983, 0.0, 0.0], [0.0, -0.49999999999999983, 0.0, 0.0]]
+    >>> pprint.pprint(results.payoff_diffs_means)  # doctest: +SKIP
+    [[0.0, -5.0, 0.0, 0.0],
+     [5.0, 0.0, 0.49999999999999983, 0.49999999999999983],
+     [0.0, -0.49999999999999983, 0.0, 0.0],
+     [0.0, -0.49999999999999983, 0.0, 0.0]]
 
 Here is the mean payoff difference for the :code:`Cooperator` strategy, shows
 that it has no difference with all players except against the
@@ -180,8 +212,11 @@ Normalised cooperation
 
 This gives the average rate of cooperation against each opponent::
 
-    >>> results.normalised_cooperation  # doctest: +SKIP
-    [[1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0], [1.0, 0.1, 1.0, 1.0], [1.0, 0.1, 1.0, 1.0]]
+    >>> pprint.pprint(results.normalised_cooperation)  # doctest: +SKIP
+    [[1.0, 1.0, 1.0, 1.0],
+     [0.0, 0.0, 0.0, 0.0],
+     [1.0, 0.1, 1.0, 1.0],
+     [1.0, 0.1, 1.0, 1.0]]
 
 We see that :code:`Cooperator` for all the rounds (as expected)::
 
@@ -203,15 +238,21 @@ Morality Metrics
 The following morality metrics are available, they are calculated as a function
 of the cooperation rating::
 
-    >>> results.vengeful_cooperation  # doctest: +SKIP
-    [[1.0, 1.0, 1.0, 1.0], [-1.0, -1.0, -1.0, -1.0], [1.0, -0.8, 1.0, 1.0], [1.0, -0.78 1.0, 1.0]]
-    >>> results.good_partner_matrix
+    >>> pprint.pprint(results.vengeful_cooperation)  # doctest: +SKIP
+    [[1.0, 1.0, 1.0, 1.0],
+     [-1.0, -1.0, -1.0, -1.0],
+     [1.0, -0.8, 1.0, 1.0],
+     [1.0, -0.78 1.0, 1.0]]
+    >>> pprint.pprint(results.good_partner_matrix)
     [[0, 3, 3, 3], [0, 0, 0, 0], [3, 3, 0, 3], [3, 3, 3, 0]]
-    >>> results.good_partner_rating
+    >>> pprint.pprint(results.good_partner_rating)
     [1.0, 0.0, 1.0, 1.0]
-    >>> results.eigenmoses_rating  # doctest: +SKIP
-    [0.37956816961269385, -0.37956816961269385, 0.5965970202882925, 0.5965970202882925]
-    >>> results.eigenjesus_rating  # doctest: +SKIP
+    >>> pprint.pprint(results.eigenmoses_rating)  # doctest: +SKIP
+    [0.37956816961269385,
+     -0.37956816961269385,
+     0.5965970202882925,
+     0.5965970202882925]
+    >>> pprint.pprint(results.eigenjesus_rating)  # doctest: +SKIP
     [0.5773502691896258, 0.0, 0.5773502691896258, 0.5773502691896258]
 
 For more information about these see :ref:`morality-metrics`.
