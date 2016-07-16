@@ -439,6 +439,28 @@ class TestContriteTitForTat(TestPlayer):
         p.reset()
         self.assertFalse(p.contrite)
 
+class TestSlowTitForTwoTats(TestPlayer):
+
+    name = "Slow Tit For Two Tats"
+    player = axelrod.SlowTitForTwoTats
+    expected_classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+
+    def test_effect_of_strategy(self):
+        """If opponent plays the same move twice, repeats last action of opponent history."""
+        self.responses_test([C]*2, [C, C], [C])
+        self.responses_test([C]*3, [C, D, C], [C])
+        self.responses_test([C]*3, [C, D, D], [D])
 
        
   

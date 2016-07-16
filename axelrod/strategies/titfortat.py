@@ -390,13 +390,13 @@ class ContriteTitForTat(Player):
 
 class SlowTitForTwoTats(Player):
     """
-    A player that plays [c,c], then if the opponent plays the same move twice, 
+    A player plays C twice, then if the opponent plays the same move twice, 
     plays that move 
     """
 
     name = 'Slow Tit For Two Tats'
     classifier = {
-        'memory_depth': 2,  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 2, 
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
