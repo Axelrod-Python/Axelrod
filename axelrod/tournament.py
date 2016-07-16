@@ -119,7 +119,8 @@ class Tournament(object):
         result_set = ResultSetFromFile(
             filename=self.filename,
             progress_bar=progress_bar,
-            num_interactions=self.num_interactions)
+            num_interactions=self.num_interactions,
+            game=self.game)
         self.outputfile.close()
         return result_set
 
