@@ -14,7 +14,7 @@ To access the detailed interaction results we create a tournament as usual
     >>> tournament = axl.Tournament(players, turns=3, repetitions=1)
     >>> results = tournament.play()
 
-The tournament object has an 'interactions' attribute which contains all the
+The result set object has an 'interactions' attribute which contains all the
 interactions between the players.
 (Actually, it's a list of lists: one list for each repetition which, in
 turn, has a list of Match objects). These can be used to view the history of the
