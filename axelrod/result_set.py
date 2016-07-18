@@ -704,7 +704,6 @@ class ResultSetFromFile(ResultSet):
     """A class to hold the results of a tournament. Reads in a CSV file produced
     by the tournament class.
     """
-    game = Game()
 
     def __init__(self, filename, progress_bar=True,
                  num_interactions=False, game=None):
@@ -720,7 +719,9 @@ class ResultSetFromFile(ResultSet):
                 displaying the progress bar, if it is not known and progress_bar
                 is set to True then an initial count will take place
         """
-        if game is not None:
+        if game is None:
+            self.game = Game()
+        else:
             self.game = game
         self.players, self.interactions = self._read_csv(filename,
                                                          progress_bar,
