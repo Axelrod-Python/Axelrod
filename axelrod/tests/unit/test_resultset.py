@@ -38,8 +38,6 @@ class TestResultSet(unittest.TestCase):
                                                1: cls.matches[(0, 1)] + cls.matches[(1, 2)],
                                                2: cls.matches[(1, 2)] + cls.matches[(0, 2)]}
 
-
-
         cls.expected_match_lengths =[
                [[0, 5, 5], [5, 0, 5], [5, 5, 0]]
                for _ in range(3)
@@ -144,7 +142,6 @@ class TestResultSet(unittest.TestCase):
                 0
             ]
 
-
         cls.expected_eigenjesus_rating = [
                 0.5547001962252291,
                 0.8320502943378436,
@@ -164,7 +161,8 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.players, self.players)
         self.assertEqual(rs.nplayers, len(self.players))
         self.assertEqual(rs.interactions, self.interactions)
-        self.assertEqual(rs.nrepetitions, len(self.interactions))
+        for inter in self.interactions.values():
+            self.assertEqual(rs.nrepetitions, len(inter))
 
         # Test structure of matches
         # This is really a test of the test
@@ -394,3 +392,499 @@ class TestDecorator(unittest.TestCase):
     def test_update_progress_bar(self):
         method = lambda x: None
         self.assertEqual(axelrod.result_set.update_progress_bar(method)(1), None)
+
+
+class TestResultSetSpatialStructure(TestResultSet):
+    """
+    Specific test for some spatial tournament.
+    """
+    @classmethod
+    def setUpClass(cls):
+
+        cls.players = (axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector())
+        cls.turns = 5
+        cls.edges = [(0, 1), (0, 2)]
+        cls.matches = { (0,1): [axelrod.Match((cls.players[0], cls.players[1]),
+                        turns=cls.turns) for _ in range(3)],
+                        (0,2): [axelrod.Match((cls.players[0], cls.players[2]),
+                        turns=cls.turns) for _ in range(3)]}
+
+        cls.interactions = {}
+        for index_pair, matches in cls.matches.items():
+            for match in matches:
+                match.play()
+                try:
+                    cls.interactions[index_pair].append(match.result)
+                except KeyError:
+                    cls.interactions[index_pair] = [match.result]
+
+        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)] + cls.matches[(0, 2)],
+                                               1: cls.matches[(0, 1)] ,
+                                               2: cls.matches[(0, 2)]}
+
+        cls.expected_match_lengths =[
+               [[0, 5, 5], [5, 0, 0], [5, 0, 0]]
+               for _ in range(3)
+                ]
+
+        cls.expected_scores =[
+               [15, 15, 15],
+               [13, 13, 13],
+               [17, 17, 17]
+                ]
+
+        cls.expected_wins =[
+               [0, 0, 0],
+               [0, 0, 0],
+               [1, 1, 1]
+                ]
+
+        cls.expected_normalised_scores =[
+               [3.0 / 2 for _ in range(3)],
+               [(13.0 / 5 )  for _ in range(3)],
+               [(17.0 / 5 )  for _ in range(3)],
+                ]
+
+        cls.expected_ranking = [2, 1, 0]
+
+        cls.expected_ranked_names = ['Defector', 'Tit For Tat', 'Alternator']
+
+        cls.expected_null_results_matrix = [
+            [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+            [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+            [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+        ]
+
+        cls.expected_payoffs = [
+            [[], [13/5.0 for _ in range(3)], [2/5.0 for _ in range(3)]],
+            [[13/5.0 for _ in range(3)], [], []],
+            [[17/5.0 for _ in range(3)], [], []]
+        ]
+
+        norm_scores = cls.expected_normalised_scores
+        cls.expected_score_diffs = [
+            [[0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [-3.0, -3.0, -3.0]],
+            [[0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0]],
+            [[3.0, 3.0, 3.0],
+             [0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0]],
+        ]
+
+        cls.expected_payoff_diffs_means = [
+            [0.0, 0.0, -3.0],
+            [0.0, 0.0, 0.0],
+            [3.0, 0.0, 0.0]
+        ]
+
+        # Recalculating to deal with numeric imprecision
+        cls.expected_payoff_matrix = [
+            [0, mean([13/5.0 for _ in range(3)]), mean([2/5.0 for _ in range(3)])],
+            [mean([13/5.0 for _ in range(3)]), 0, 0 ],
+            [mean([17/5.0 for _ in range(3)]), 0 , 0]
+        ]
+
+        cls.expected_payoff_stddevs = [
+            [0, std([13/5.0 for _ in range(3)]), std([2/5.0 for _ in range(3)])],
+            [std([13/5.0 for _ in range(3)]), 0, 0 ],
+            [std([17/5.0 for _ in range(3)]), 0, 0 ]
+        ]
+
+        cls.expected_cooperation = [
+                [0, 9, 9],
+                [9, 0, 0],
+                [0, 0, 0],
+            ]
+
+        cls.expected_normalised_cooperation = [
+            [0, mean([3 / 5.0 for _ in range(3)]), mean([3 / 5.0 for _ in range(3)])],
+            [mean([3 / 5.0 for _ in range(3)]), 0, 0 ],
+            [0, 0, 0],
+            ]
+
+        cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
+                                   for row in cls.expected_normalised_cooperation]
+
+        cls.expected_cooperating_rating = [
+                18.0 / 30,
+                9.0 / 15,
+                0
+            ]
+
+        cls.expected_good_partner_matrix = [
+                [0, 3, 3],
+                [3, 0, 0],
+                [0, 0, 0]
+            ]
+
+        cls.expected_good_partner_rating = [
+                1.0,
+                1.0,
+                0.0
+            ]
+
+        cls.expected_eigenjesus_rating = [
+                0.447213595499958,
+                0.894427190999916,
+                0.0
+            ]
+
+        cls.expected_eigenmoses_rating = [
+               -0.32929277996907086,
+                0.7683498199278325,
+                0.5488212999484519
+            ]
+
+        cls.expected_csv = (
+            'Defector,Tit For Tat,Alternator\n3.4,2.6,1.5\n3.4,2.6,1.5\n3.4,2.6,1.5\n')
+
+    def test_match_lengths(self):
+        """
+        Overwriting match lengths test. This method, among other things, checks
+        that if two players interacted the length of that interaction equals the
+        number of turns.
+
+        Implementing this for the round robin tournament meant checking the
+        interactions between each strategy and the rest strategies of the
+        tournament.
+
+        In a spatial tournament we need to check that: The length of interaction
+        of players-nodes that are end vertices of an edge is equal to the
+        number of turns. Otherwise it is 0.
+        """
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.match_lengths, list)
+        self.assertEqual(len(rs.match_lengths), rs.nrepetitions)
+        self.assertEqual(rs.match_lengths, self.expected_match_lengths)
+
+        for rep in rs.match_lengths:
+            self.assertIsInstance(rep, list)
+            self.assertEqual(len(rep), len(self.players))
+
+            for i, opp in enumerate(rep):
+                self.assertIsInstance(opp, list)
+                self.assertEqual(len(opp), len(self.players))
+
+                for j, length in enumerate(opp):
+                    edge = (i, j)
+                    # Specific test for example match setup
+                    if edge in self.edges or edge[::-1] in self.edges :
+                        self.assertEqual(length, self.turns)
+                    else:
+                        self.assertEqual(length, 0)
+
+
+class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
+
+    @classmethod
+    def setUpClass(cls):
+
+        cls.players = (axelrod.Alternator(), axelrod.TitForTat(),
+                       axelrod.Defector(), axelrod.Cooperator())
+        cls.turns = 5
+        cls.edges = [(0, 1), (2, 3)]
+        cls.matches = { (0,1): [axelrod.Match((cls.players[0], cls.players[1]),
+                        turns=cls.turns) for _ in range(3)],
+                        (2,3): [axelrod.Match((cls.players[2], cls.players[3]),
+                        turns=cls.turns) for _ in range(3)]}
+
+        cls.interactions = {}
+        for index_pair, matches in cls.matches.items():
+            for match in matches:
+                match.play()
+                try:
+                    cls.interactions[index_pair].append(match.result)
+                except KeyError:
+                    cls.interactions[index_pair] = [match.result]
+
+        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)] ,
+                                               1: cls.matches[(0, 1)] ,
+                                               2: cls.matches[(2, 3)],
+                                               3: cls.matches[(2, 3)]}
+
+        cls.expected_match_lengths =[
+               [[0, 5, 0, 0], [5, 0, 0, 0], [0, 0, 0, 5], [0, 0, 5, 0]]
+               for _ in range(3)
+                ]
+
+        cls.expected_scores =[
+               [ 13.0 for _ in range(3)],
+               [ 13.0 for _ in range(3)],
+               [ 25.0 for _ in range(3)],
+               [ 0  for _ in range(3)]
+                ]
+
+        cls.expected_wins =[
+               [0, 0, 0],
+               [0, 0, 0],
+               [1, 1, 1],
+               [0, 0, 0]
+                ]
+
+        cls.expected_normalised_scores =[
+               [(13.0 / 5 )  for _ in range(3)],
+               [(13.0 / 5 )  for _ in range(3)],
+               [(25.0 / 5 )  for _ in range(3)],
+               [0  for _ in range(3)]
+                ]
+
+        cls.expected_ranking = [2, 0, 1, 3]
+
+        cls.expected_ranked_names = ['Defector','Alternator',
+                                     'Tit For Tat','Cooperator']
+
+        cls.expected_null_results_matrix = [
+            [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+            [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+            [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+        ]
+
+        cls.expected_payoffs = [
+             [[], [13/5.0 for _ in range(3)], [], []],
+             [[13/5.0 for _ in range(3)], [], [], []],
+             [[], [], [], [25/5.0 for _ in range(3)]],
+             [[], [], [0 for _ in range(3)], []]
+        ]
+
+        norm_scores = cls.expected_normalised_scores
+        cls.expected_score_diffs = [
+            [[0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0]],
+            [[0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0]],
+            [[0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [5.0, 5.0, 5.0]],
+            [[0.0, 0.0, 0.0],
+             [0.0, 0.0, 0.0],
+             [-5.0, -5.0, -5.0],
+             [0.0, 0.0, 0.0]]
+        ]
+
+        cls.expected_payoff_diffs_means = [
+            [0.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 5.0],
+            [0.0, 0.0, -5.0, 0.0]
+        ]
+
+        # Recalculating to deal with numeric imprecision
+        cls.expected_payoff_matrix = [
+            [0, mean([13/5.0 for _ in range(3)]), 0, 0],
+            [mean([13/5.0 for _ in range(3)]), 0, 0, 0],
+            [0, 0, 0, mean([25/5.0 for _ in range(3)])],
+            [0, 0, 0, 0]
+        ]
+
+        cls.expected_payoff_stddevs = [
+            [0, std([13/5.0 for _ in range(3)]), 0, 0],
+            [std([13/5.0 for _ in range(3)]), 0, 0, 0],
+            [0, 0, 0, std([25/5.0 for _ in range(3)])],
+            [0, 0, 0, 0]
+        ]
+
+        cls.expected_cooperation = [
+                [0, 9, 0, 0],
+                [9, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 15, 0]
+            ]
+
+        cls.expected_normalised_cooperation = [
+                [0.0, mean([3 / 5.0 for _ in range(3)]), 0.0, 0.0],
+                [mean([3 / 5.0 for _ in range(3)]), 0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0, 0.0],
+                [0.0, 0.0, mean([5 / 5.0 for _ in range(3)]), 0.0]
+                ]
+
+        cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
+                                   for row in cls.expected_normalised_cooperation]
+
+        cls.expected_cooperating_rating = [
+                18.0 / 30,
+                18.0 / 30,
+                0.0,
+                30 / 30
+            ]
+
+        cls.expected_good_partner_matrix = [
+                [0, 3, 0, 0],
+                [3, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 3, 0]
+            ]
+
+        cls.expected_good_partner_rating = [
+                1.0,
+                1.0,
+                0.0,
+                1.0
+            ]
+
+        cls.expected_eigenjesus_rating = [
+                0.7071067811865476,
+                0.7071067811865476,
+                0.0,
+                0.0,
+            ]
+
+        cls.expected_eigenmoses_rating = [
+                0.48505781033492573,
+                0.48505781033492573,
+                0.7090603855860735,
+                0.1633132292825755
+            ]
+
+        cls.expected_csv = (
+        "Defector,Alternator,Tit For Tat,Cooperator\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n")
+
+
+class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
+
+    @classmethod
+    def setUpClass(cls):
+
+        cls.players = (axelrod.Alternator(), axelrod.TitForTat(),
+                       axelrod.Defector(), axelrod.Cooperator())
+        cls.turns = 5
+        cls.edges = [(0, 0), (1, 1), (2, 2), (3, 3)]
+        cls.matches = {(i, i): [axelrod.Match((cls.players[i],
+                                                cls.players[i].clone()),
+                                                turns=cls.turns)
+                        for _ in range(3)] for i in range(4)}
+
+        cls.interactions = {}
+        for index_pair, matches in cls.matches.items():
+            for match in matches:
+                match.play()
+
+                try:
+                    cls.interactions[index_pair].append(match.result)
+                except KeyError:
+                    cls.interactions[index_pair] = [match.result]
+
+        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 0)],
+                                               1: cls.matches[(1, 1)],
+                                               2: cls.matches[(2, 2)],
+                                               3: cls.matches[(3, 3)]}
+
+        cls.expected_match_lengths =[
+               [[5, 0, 0, 0], [0, 5, 0, 0], [0, 0, 5, 0], [0, 0, 0, 5]]
+               for _ in range(3)
+                ]
+
+        cls.expected_scores =[
+            [0 for _ in range(3)] for _ in range(4)
+                ]
+
+        cls.expected_wins =[
+            [0 for _ in range(3)] for _ in range(4)
+                ]
+
+        cls.expected_normalised_scores =[
+               ["nan" for _ in range(3)] for i in range(4)
+                ]
+
+        cls.expected_ranking = [0, 1, 2, 3]
+
+        cls.expected_ranked_names = ['Alternator','Tit For Tat','Defector','Cooperator']
+
+        cls.expected_null_results_matrix = [
+            [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+            [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+            [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+        ]
+
+        cls.expected_payoffs = [
+             [[11 /5.0 for _ in range(3)], [], [], []],
+             [[], [15 /5.0 for _ in range(3)], [], []],
+             [[], [], [5 /5.0 for _ in range(3)], []],
+             [[], [], [], [15 /5.0 for _ in range(3)]]
+        ]
+
+        norm_scores = cls.expected_normalised_scores
+        cls.expected_score_diffs = [
+            [[0.0 for _ in range(3)] for _ in range(4) ] for _ in range(4)
+        ]
+
+        cls.expected_payoff_diffs_means = [
+            [0.0 for _ in range(4)] for _ in range(4)
+        ]
+
+        # Recalculating to deal with numeric imprecision
+        cls.expected_payoff_matrix = [
+            [mean([11/5.0 for _ in range(3)]),0, 0, 0],
+            [0, mean([15/5.0 for _ in range(3)]), 0, 0],
+            [0, 0, mean([5/5.0 for _ in range(3)]), 0],
+            [0, 0, 0, mean([15/5.0 for _ in range(3)])]
+        ]
+
+        cls.expected_payoff_stddevs = [
+            [std([11/5.0 for _ in range(3)]),0, 0, 0],
+            [0, std([15/5.0 for _ in range(3)]), 0, 0],
+            [0, 0, std([5/5.0 for _ in range(3)]), 0],
+            [0, 0, 0, std([15/5.0 for _ in range(3)])]
+        ]
+
+        cls.expected_cooperation = [
+            [0.0 for _ in range(4)] for _ in range(4)
+            ]
+
+        cls.expected_normalised_cooperation = [
+                [mean([3 / 5.0 for _ in range(3)]), 0.0, 0.0, 0.0],
+                [0.0, mean([5 / 5.0 for _ in range(3)]), 0.0, 0.0],
+                [0.0, 0.0, 0.0, 0.0],
+                [0.0, 0.0, 0.0, mean([5 / 5.0 for _ in range(3)])]
+                ]
+
+        cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
+                                   for row in cls.expected_normalised_cooperation]
+
+        cls.expected_cooperating_rating = [
+                0.0 for _ in range(4)
+            ]
+
+        cls.expected_good_partner_matrix = [
+            [0.0 for _ in range(4)] for _ in range(4)
+            ]
+
+        cls.expected_good_partner_rating = [
+                0.0 for _ in range(4)
+            ]
+
+        cls.expected_eigenjesus_rating = [
+                0.0009235301367282831,
+                0.7071064796379986,
+                0.0,
+                0.7071064796379986,
+            ]
+
+        cls.expected_eigenmoses_rating = [
+                0.4765940316018446,
+                0.3985944056208427,
+                0.6746133178770147,
+                0.3985944056208427
+            ]
+
+        cls.expected_csv = (
+            'Alternator,Tit For Tat,Defector,Cooperator\nnan,nan,nan,nan\nnan,nan,nan,nan\nnan,nan,nan,nan\n')
+
+    def test_normalised_scores(self):
+        """
+        Need to test string representation because of nan
+        """
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.normalised_scores, list)
+        self.assertEqual(len(rs.normalised_scores), rs.nplayers)
+        self.assertEqual([[str(s) for s in player] for player in rs.normalised_scores]
+                         , self.expected_normalised_scores)

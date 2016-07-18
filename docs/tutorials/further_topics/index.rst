@@ -11,5 +11,6 @@ Contents:
 
    noisy_tournaments.rst
    probabilistict_end_tournaments.rst
+   spatial_tournaments.rst
    morality_metrics.rst
    ecological_variant.rst

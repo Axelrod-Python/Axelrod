@@ -309,7 +309,7 @@ class ResultSet(object):
                     if (player, opponent) == index_pair:
                         for interaction in repetitions:
                             utilities.append(iu.compute_final_score_per_turn(interaction)[0])
-                    if (opponent, player) == index_pair:
+                    elif (opponent, player) == index_pair:
                         for interaction in repetitions:
                             utilities.append(iu.compute_final_score_per_turn(interaction)[1])
 
@@ -460,7 +460,7 @@ class ResultSet(object):
                         for interaction in repetitions:
                             scores = iu.compute_final_score_per_turn(interaction)
                             diffs.append(scores[0] - scores[1])
-                    if (opponent, player) == index_pair:
+                    elif (opponent, player) == index_pair:
                         for interaction in repetitions:
                             scores = iu.compute_final_score_per_turn(interaction)
                             diffs.append(scores[1] - scores[0])
@@ -501,7 +501,7 @@ class ResultSet(object):
                         if (player, opponent) == index_pair:
                             for interaction in repetitions:
                                 coop_count += iu.compute_cooperations(interaction)[0]
-                        if (opponent, player) == index_pair:
+                        elif (opponent, player) == index_pair:
                             for interaction in repetitions:
                                 coop_count += iu.compute_cooperations(interaction)[1]
 
@@ -625,7 +625,7 @@ class ResultSet(object):
                                 if coops[0] >= coops[1]:
                                     good_partner_matrix[player][opponent] += 1
 
-                        if (opponent, player) == index_pair:
+                        elif (opponent, player) == index_pair:
                             for interaction in repetitions:
                                 coops = iu.compute_cooperations(interaction)
                                 if coops[0] <= coops[1]:

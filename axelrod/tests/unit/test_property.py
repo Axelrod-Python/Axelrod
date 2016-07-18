@@ -159,6 +159,7 @@ class TestProbEndTournament(unittest.TestCase):
         for p in tournament.players:
             self.assertIn(str(p), stochastic_player_names)
 
+
 class TestGame(unittest.TestCase):
 
     def test_call(self):

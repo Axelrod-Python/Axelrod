@@ -9,7 +9,9 @@ import warnings
 
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers
-from axelrod.tests.property import tournaments, prob_end_tournaments
+from axelrod.tests.property import (tournaments,
+                                    prob_end_tournaments,
+                                    strategy_lists)
 
 import axelrod
 
@@ -31,6 +33,10 @@ test_turns = 100
 
 test_prob_end = .5
 
+test_edges = [(0, 1), (1, 2), (3, 4)]
+
+deterministic_strategies = [s for s in axelrod.ordinary_strategies
+                            if not s().classifier['stochastic']] 
 
 class TestTournament(unittest.TestCase):
 
@@ -548,3 +554,71 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertEqual(results.players, [str(p) for p in tournament.players])
         for rep in results.interactions.values():
             self.assertEqual(len(rep), tournament.repetitions)
+
+class TestSpatialTournament(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.game = axelrod.Game()
+        cls.players = [s() for s in test_strategies]
+        cls.test_name = 'test'
+        cls.test_repetitions = test_repetitions
+        cls.test_turns = test_turns
+        cls.test_edges = test_edges
+
+    def test_init(self):
+        tournament = axelrod.SpatialTournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=self.test_turns,
+            edges=self.test_edges,
+            noise=0.2)
+        self.assertEqual(tournament.match_generator.edges, tournament.edges)
+        self.assertEqual(len(tournament.players), len(test_strategies))
+        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.turns, 100)
+        self.assertEqual(tournament.repetitions, 10)
+        self.assertEqual(tournament.name, 'test')
+        self.assertTrue(tournament._with_morality)
+        self.assertIsInstance(tournament._logger, logging.Logger)
+        self.assertEqual(tournament.noise, 0.2)
+        anonymous_tournament = axelrod.Tournament(players=self.players)
+        self.assertEqual(anonymous_tournament.name, 'axelrod')
+
+        @given(strategies=strategy_lists(strategies=deterministic_strategies,
+                                         min_size=2, max_size=2),
+               turns=integers(min_value=1, max_value=20))
+
+        def test_complete_tournament(self, strategies, turns):
+            """
+            A test to check that a spatial tournament on the complete multigraph
+            gives the same results as the round robin.
+            """
+
+            players = [s() for s in strategies]
+            # edges
+            edges=[]
+            for i in range(0, len(players)) :
+                for j in range(i, len(players)) :
+                    edges.append((i, j))
+            # create a round robin tournament
+            tournament = axelrod.Tournament(players, turns=turns)
+            results = tournament.play()
+            # create a complete spatial tournament
+            spatial_tournament = axelrod.SpatialTournament(players, turns=turns,
+                                                           edges=edges)
+            spatial_results =  spatial_tournament.play()
+            self.assertEqual(results.ranked_names, spatial_results.ranked_names)
+            self.assertEqual(results.nplayers, spatial_results.nplayers)
+            self.assertEqual(results.nrepetitions, spatial_results.nrepetitions)
+            self.assertEqual(results.payoff_diffs_means, spatial_results.payoff_diffs_means)
+            self.assertEqual(results.payoff_matrix, spatial_results.payoff_matrix)
+            self.assertEqual(results.payoff_stddevs, spatial_results.payoff_stddevs)
+            self.assertEqual(results.payoffs, spatial_results.payoffs)
+            self.assertEqual(results.cooperating_rating, spatial_results.cooperating_rating)
+            self.assertEqual(results.cooperation, spatial_results.cooperation)
+            self.assertEqual(results.normalised_cooperation, spatial_results.normalised_cooperation)
+            self.assertEqual(results.normalised_scores, spatial_results.normalised_scores)
+            self.assertEqual(results.good_partner_matrix, spatial_results.good_partner_matrix)
+            self.assertEqual(results.good_partner_rating, spatial_results.good_partner_rating)
