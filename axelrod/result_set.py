@@ -33,7 +33,6 @@ def update_progress_bar(method):
 
 class ResultSet(object):
     """A class to hold the results of a tournament."""
-    game = Game()
 
     def __init__(self, players, interactions, progress_bar=True, game=None):
         """
@@ -47,7 +46,9 @@ class ResultSet(object):
             progress_bar : bool
                 Whether or not to create a progress bar which will be updated
         """
-        if game is not None:
+        if game is None:
+            self.game = Game()
+        else:
             self.game = game
         self.players = players
         self.nplayers = len(players)
