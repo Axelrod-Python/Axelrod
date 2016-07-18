@@ -12,13 +12,13 @@ set. To do this we can use the `seed` function::
     >>> players = (axl.Random(), axl.MetaMixer())  # Two stochastic strategies
     >>> axl.seed(0)
     >>> axl.Match(players, turns=3).play()
-    [('D', 'C'), ('D', 'D'), ('C', 'D')]
+    [('D', 'C'), ('D', 'D'), ('C', 'C')]
 
 We obtain the same results is it is played with the same seed::
 
     >>> axl.seed(0)
     >>> axl.Match(players, turns=3).play()
-    [('D', 'C'), ('D', 'D'), ('C', 'D')]
+    [('D', 'C'), ('D', 'D'), ('C', 'C')]
 
 Note that this is equivalent to::
 
@@ -28,8 +28,8 @@ Note that this is equivalent to::
     >>> random.seed(0)
     >>> numpy.random.seed(0)
     >>> axl.Match(players, turns=3).play()
-    [('D', 'C'), ('D', 'D'), ('C', 'D')]
+    [('D', 'C'), ('D', 'D'), ('C', 'C')]
     >>> numpy.random.seed(0)
     >>> random.seed(0)
     >>> axl.Match(players, turns=3).play()
-    [('D', 'C'), ('D', 'D'), ('C', 'D')]
+    [('D', 'C'), ('D', 'D'), ('C', 'C')]
