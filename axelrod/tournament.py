@@ -16,7 +16,6 @@ from .result_set import ResultSetFromFile
 
 
 class Tournament(object):
-    game = Game()
 
     def __init__(self, players, match_generator=RoundRobinMatches,
                  name='axelrod', game=None, turns=200, repetitions=10,
@@ -43,12 +42,14 @@ class Tournament(object):
         with_morality : boolean
             Whether morality metrics should be calculated
         """
+        if game is None:
+            self.game = Game()
+        else:
+            self.game = game
         self.name = name
         self.turns = turns
         self.noise = noise
         self.num_interactions = 0
-        if game is not None:
-            self.game = game
         self.players = players
         self.repetitions = repetitions
         self.match_generator = match_generator(
@@ -119,7 +120,8 @@ class Tournament(object):
         result_set = ResultSetFromFile(
             filename=self.filename,
             progress_bar=progress_bar,
-            num_interactions=self.num_interactions)
+            num_interactions=self.num_interactions,
+            game=self.game)
         self.outputfile.close()
         return result_set
 

@@ -126,6 +126,18 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(results.interactions), 15)
         self.assertEqual(tournament.num_interactions, 75)
 
+    def test_serial_play_with_different_game(self):
+        # Test that a non default game is passed to the result set
+        game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=game,
+            turns=1,
+            repetitions=1)
+        results = tournament.play(progress_bar=False)
+        self.assertEqual(results.game.RPST(), (-1, -1, -1, -1))
+
     def test_no_progress_bar_play(self):
         """Test that progress bar is not created for progress_bar=False"""
         tournament = axelrod.Tournament(
