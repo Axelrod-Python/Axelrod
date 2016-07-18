@@ -8,7 +8,7 @@ from .lookerup import LookerUp, create_lookup_table_keys
 C, D = Actions.C, Actions.D
 
 
-@FinalTransformer((D, D)) # End with two defections if tournament length is known
+@FinalTransformer((D, D), name_prefix=None)  # End with two defections if tournament length is known
 class Gambler(LookerUp):
     """
     A LookerUp class player which will select randomly an action in some cases.

@@ -1,6 +1,5 @@
-from axelrod import Actions, Player, init_args, flip_action
-from axelrod.strategy_transformers import (StrategyTransformerFactory,
-                                           history_track_wrapper)
+from axelrod import Actions, Player, init_args
+from axelrod.strategy_transformers import TrackHistoryTransformer
 
 C, D = Actions.C, Actions.D
 
@@ -335,11 +334,7 @@ class Gradual(Player):
         self.punishment_limit = 0
 
 
-Transformer = StrategyTransformerFactory(
-    history_track_wrapper, name_prefix=None)()
-
-
-@Transformer
+@TrackHistoryTransformer(name_prefix=None)
 class ContriteTitForTat(Player):
     """
     A player that corresponds to Tit For Tat if there is no noise. In the case

@@ -21,12 +21,12 @@ class TestTransformers(unittest.TestCase):
         # choices (like use of super) do not cause issues
         for s in axelrod.ordinary_strategies:
             opponent = axelrod.Cooperator()
-            player = IdentityTransformer(s)()
+            player = IdentityTransformer()(s)()
             player.play(opponent)
 
     def test_naming(self):
         """Tests that the player and class names are properly modified."""
-        cls = FlipTransformer(axelrod.Cooperator)
+        cls = FlipTransformer()(axelrod.Cooperator)
         p1 = cls()
         self.assertEqual(cls.__name__, "FlippedCooperator")
         self.assertEqual(p1.name, "Flipped Cooperator")
@@ -45,7 +45,7 @@ class TestTransformers(unittest.TestCase):
         """Tests that Player.clone preserves the application of transformations.
         """
         p1 = axelrod.Cooperator()
-        p2 = FlipTransformer(axelrod.Cooperator)() # Defector
+        p2 = FlipTransformer()(axelrod.Cooperator)() # Defector
         p3 = p2.clone()
         self.assertEqual(simulate_play(p1, p3), (C, D))
         self.assertEqual(simulate_play(p1, p3), (C, D))
@@ -63,7 +63,7 @@ class TestTransformers(unittest.TestCase):
     def test_flip_transformer(self):
         """Tests that FlipTransformer(Cooperator) == Defector."""
         p1 = axelrod.Cooperator()
-        p2 = FlipTransformer(axelrod.Cooperator)() # Defector
+        p2 = FlipTransformer()(axelrod.Cooperator)() # Defector
         self.assertEqual(simulate_play(p1, p2), (C, D))
         self.assertEqual(simulate_play(p1, p2), (C, D))
         self.assertEqual(simulate_play(p1, p2), (C, D))
@@ -122,7 +122,7 @@ class TestTransformers(unittest.TestCase):
     def test_history_track(self):
         """Tests the history tracking transformer."""
         p1 = axelrod.Cooperator()
-        p2 = TrackHistoryTransformer(axelrod.Random)()
+        p2 = TrackHistoryTransformer()(axelrod.Random)()
         for _ in range(6):
             p1.play(p2)
         self.assertEqual(p2.history, p2._recorded_history)
@@ -181,7 +181,7 @@ class TestTransformers(unittest.TestCase):
 
     def test_retaliation_until_apology(self):
         """Tests the RetaliateUntilApologyTransformer."""
-        TFT = RetaliateUntilApologyTransformer(axelrod.Cooperator)
+        TFT = RetaliateUntilApologyTransformer()(axelrod.Cooperator)
         p1 = TFT()
         p2 = axelrod.Cooperator()
         p1.play(p2)
@@ -276,7 +276,7 @@ class TestTransformers(unittest.TestCase):
         # Now let's use the transformer to break the deadlock to achieve
         # Mutual cooperation
         p1 = axelrod.TitForTat()
-        p2 = DeadlockBreakingTransformer(InitialTransformer([D])(axelrod.TitForTat))()
+        p2 = DeadlockBreakingTransformer()(InitialTransformer([D])(axelrod.TitForTat))()
         for _ in range(4):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, C])
@@ -301,9 +301,9 @@ class TestTransformers(unittest.TestCase):
     def test_nilpotency(self):
         """Show that some of the transformers are (sometimes) nilpotent, i.e.
         that transfomer(transformer(PlayerClass)) == PlayerClass"""
-        for transformer in [IdentityTransformer,
-                            FlipTransformer,
-                            TrackHistoryTransformer]:
+        for transformer in [IdentityTransformer(),
+                            FlipTransformer(),
+                            TrackHistoryTransformer()]:
             for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
                 for third_player in [axelrod.Cooperator(), axelrod.Defector()]:
                     player = PlayerClass()
@@ -320,13 +320,13 @@ class TestTransformers(unittest.TestCase):
         transfomer(transformer(PlayerClass)) == transformer(PlayerClass).
         That means that the transformer is a projection on the set of
         strategies."""
-        for transformer in [IdentityTransformer, GrudgeTransformer(1),
+        for transformer in [IdentityTransformer(), GrudgeTransformer(1),
                             FinalTransformer([C]), FinalTransformer([D]),
                             InitialTransformer([C]), InitialTransformer([D]),
-                            DeadlockBreakingTransformer,
+                            DeadlockBreakingTransformer(),
                             RetaliationTransformer(1),
-                            RetaliateUntilApologyTransformer,
-                            TrackHistoryTransformer,
+                            RetaliateUntilApologyTransformer(),
+                            TrackHistoryTransformer(),
                             ApologyTransformer([D], [C])]:
             for PlayerClass in [axelrod.Cooperator, axelrod.Defector]:
                 for third_player in [axelrod.Cooperator(), axelrod.Defector()]:
@@ -345,24 +345,18 @@ class TestTransformers(unittest.TestCase):
         the implementation matters, not just the outcomes."""
         # Difference between Alternator and CyclerCD
         p1 = axelrod.Cycler(cycle="CD")
-        p2 = FlipTransformer(axelrod.Cycler)(cycle="CD")
+        p2 = FlipTransformer()(axelrod.Cycler)(cycle="CD")
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, D, C])
         self.assertEqual(p2.history, [D, C, D, C, D])
 
         p1 = axelrod.Alternator()
-        p2 = FlipTransformer(axelrod.Alternator)()
+        p2 = FlipTransformer()(axelrod.Alternator)()
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, D, C])
         self.assertEqual(p2.history, [D, D, D, D, D])
-
-    def test_namespace(self):
-        test_object = TestClass()
-        self.assertEqual(
-            test_object.__class__,
-            axelrod.tests.unit.test_strategy_transformers.TestClass)
 
 
 # Test that RUA(Cooperator) is the same as TitForTat
@@ -372,7 +366,7 @@ class TestTransformers(unittest.TestCase):
 # this alters Cooperator's class variable, and causes its test to fail
 # So for now this is commented out.
 
-TFT = RetaliateUntilApologyTransformer(axelrod.Cooperator)
+TFT = RetaliateUntilApologyTransformer()(axelrod.Cooperator)
 
 class TestRUAisTFT(TestTitForTat):
     # This runs the 7 TFT tests when unittest is invoked
@@ -388,7 +382,7 @@ class TestRUAisTFT(TestTitForTat):
     }
 
 # Test that FlipTransformer(Defector) == Cooperator
-Cooperator2 = FlipTransformer(axelrod.Defector)
+Cooperator2 = FlipTransformer()(axelrod.Defector)
 
 class TestFlipDefector(TestCooperator):
     # This runs the 7 TFT tests when unittest is invoked

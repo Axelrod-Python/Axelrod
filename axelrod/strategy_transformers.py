@@ -71,6 +71,11 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
 
             args = self.args
             kwargs = self.kwargs
+            try:
+            #if "name_prefix" in kwargs remove as only want dec arguments
+                del kwargs["name_prefix"]
+            except KeyError:
+                pass
 
             # Define the new strategy method, wrapping the existing method
             # with `strategy_wrapper`
@@ -144,7 +149,7 @@ def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)
     # This example just passes through the proposed_action
     return proposed_action
 
-IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)()
+IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)
 
 
 def flip_wrapper(player, opponent, action):
@@ -152,7 +157,7 @@ def flip_wrapper(player, opponent, action):
     return flip_action(action)
 
 FlipTransformer = StrategyTransformerFactory(
-    flip_wrapper, name_prefix="Flipped")()
+    flip_wrapper, name_prefix="Flipped")
 
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
@@ -186,7 +191,8 @@ def initial_sequence(player, opponent, action, initial_seq):
         return initial_seq[index]
     return action
 
-InitialTransformer = StrategyTransformerFactory(initial_sequence)
+InitialTransformer = StrategyTransformerFactory(initial_sequence,
+                                                name_prefix="Initial")
 
 
 def final_sequence(player, opponent, action, seq):
@@ -210,7 +216,8 @@ def final_sequence(player, opponent, action, seq):
         return seq[-index]
     return action
 
-FinalTransformer = StrategyTransformerFactory(final_sequence)
+FinalTransformer = StrategyTransformerFactory(final_sequence,
+                                              name_prefix="Final")
 
 
 def history_track_wrapper(player, opponent, action):
@@ -222,7 +229,7 @@ def history_track_wrapper(player, opponent, action):
     return action
 
 TrackHistoryTransformer = StrategyTransformerFactory(
-    history_track_wrapper, name_prefix="HistoryTracking")()
+    history_track_wrapper, name_prefix="HistoryTracking")
 
 
 def deadlock_break_wrapper(player, opponent, action):
@@ -238,7 +245,7 @@ def deadlock_break_wrapper(player, opponent, action):
     return action
 
 DeadlockBreakingTransformer = StrategyTransformerFactory(
-    deadlock_break_wrapper, name_prefix="DeadlockBreaking")()
+    deadlock_break_wrapper, name_prefix="DeadlockBreaking")
 
 
 def grudge_wrapper(player, opponent, action, grudges):
@@ -345,4 +352,4 @@ class RetaliationUntilApologyWrapper(object):
         return action
 
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
-    RetaliationUntilApologyWrapper(), name_prefix="RUA")()
+    RetaliationUntilApologyWrapper(), name_prefix="RUA")
