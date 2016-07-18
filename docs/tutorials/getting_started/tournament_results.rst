@@ -6,7 +6,7 @@ Accessing tournament results
 This tutorial will show you how to access the various results of a tournament:
 
 - Wins: the number of matches won by each player
-- Match lengths: the number of turns of each match player by each player
+- Match lengths: the number of turns of each match played by each player
   (relevant for tournaments like probabilistic ending tournaments).
 - Scores: the total scores of each player.
 - Normalised scores: the scores normalised by matches played and turns.
@@ -211,21 +211,14 @@ We see that :code:`Cooperator` for all the rounds (as expected)::
     >>> results.normalised_cooperation[0]
     [1.0, 1.0, 1.0, 1.0]
 
-
-Cooperation rating
-------------------
-
-This gives the cooperation rating of each player::
-
-    >>> results.cooperating_rating
-    [1.0, 0.0, 0.7, 0.7]
-
 Morality Metrics
 ----------------
 
 The following morality metrics are available, they are calculated as a function
 of the cooperation rating::
 
+    >>> results.cooperating_rating
+    [1.0, 0.0, 0.7, 0.7]
     >>> pprint.pprint(results.vengeful_cooperation)  # doctest: +SKIP
     [[1.0, 1.0, 1.0, 1.0],
      [-1.0, -1.0, -1.0, -1.0],

@@ -11,7 +11,7 @@ probability::
     >>> tournament = axl.ProbEndTournament(players, prob_end=0.5)
 
 
-We can view the results in a similar way as for described in
+We can view the results in a similar way as described in
 :ref:`tournament-results`::
 
     >>> results = tournament.play()
