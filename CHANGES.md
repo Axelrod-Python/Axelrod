@@ -1,3 +1,34 @@
+# v1.5.0, 2016-06-22
+
+New tournament type, new strategy, seeding, dev tools, docs + minor/bug fixes
+
+User facing:
+
+- Spatial tournaments: https://github.com/Axelrod-Python/Axelrod/pull/654
+- New strategy, slow tit for tat:
+  https://github.com/Axelrod-Python/Axelrod/pull/659
+- Seed the library: https://github.com/Axelrod-Python/Axelrod/pull/653
+- More uniform strategy transformer behaviour:
+  https://github.com/Axelrod-Python/Axelrod/pull/657
+- Results can be calculated with non default game:
+  https://github.com/Axelrod-Python/Axelrod/pull/656
+
+Documentation:
+
+- A community page: https://github.com/Axelrod-Python/Axelrod/pull/656
+- An overall results page that replaces the payoff matrix page:
+  https://github.com/Axelrod-Python/Axelrod/pull/660
+
+Development:
+
+- A git hook script for commit messages:
+  https://github.com/Axelrod-Python/Axelrod/pull/648
+- Caching of hypothesis database on travis:
+  https://github.com/Axelrod-Python/Axelrod/pull/658
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.4.0...v1.5.0
+
 # v1.4.0, 2016-06-22
 
 New strategy.
