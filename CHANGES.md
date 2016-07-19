@@ -1,4 +1,4 @@
-# v1.5.0, 2016-06-22
+# v1.5.0, 2016-07-19
 
 New tournament type, new strategy, seeding, dev tools, docs + minor/bug fixes
 
