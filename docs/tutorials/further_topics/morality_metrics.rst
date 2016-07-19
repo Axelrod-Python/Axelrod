@@ -1,3 +1,5 @@
+.. _morality-metrics:
+
 Morality Metrics
 ================
 

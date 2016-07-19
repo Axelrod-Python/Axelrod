@@ -590,7 +590,7 @@ class ResultSet(object):
         Returns:
         --------
 
-            The list of cooperation counts
+            The list of cooperation ratings
             List of the form:
 
             [ML1, ML2, ML3..., MLn]
