@@ -30,7 +30,7 @@ class TestTournament(unittest.TestCase):
 
     def test_full_tournament(self):
         """A test to check that tournament runs with all non cheating strategies."""
-        strategies = [strategy() for strategy in axelrod.ordinary_strategies]
+        strategies = [strategy() for strategy in axelrod.strategies]
         tournament = axelrod.Tournament(name='test', players=strategies,
                                         game=self.game, turns=2,
                                         repetitions=2)
@@ -63,7 +63,7 @@ class TestTournament(unittest.TestCase):
 
     def test_repeat_tournament_deterministic(self):
         """A test to check that tournament gives same results."""
-        deterministic_players = [s() for s in axelrod.ordinary_strategies
+        deterministic_players = [s() for s in axelrod.strategies
                                  if not s().classifier['stochastic']]
         files = []
         for _ in range(2):
@@ -83,7 +83,7 @@ class TestTournament(unittest.TestCase):
         files = []
         for _ in range(2):
             axelrod.seed(0)
-            stochastic_players = [s() for s in axelrod.ordinary_strategies
+            stochastic_players = [s() for s in axelrod.strategies
                                   if s().classifier['stochastic']]
             tournament = axelrod.Tournament(name='test',
                                             players=stochastic_players,

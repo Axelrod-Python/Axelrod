@@ -1,11 +1,11 @@
 from axelrod import Actions, Player, obey_axelrod
-from ._strategies import strategies
+from ._strategies import all_strategies
 from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter, EventualCycleHunter
 from .cooperator import Cooperator
 from numpy.random import choice
 
 # Needs to be computed manually to prevent circular dependency
-ordinary_strategies = [s for s in strategies if obey_axelrod(s)]
+ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
 C, D = Actions.C, Actions.D
 
 class MetaPlayer(Player):

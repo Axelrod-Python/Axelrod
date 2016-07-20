@@ -61,7 +61,7 @@ from .titfortat import (
 
 # Note: Meta* strategies are handled in .__init__.py
 
-strategies = [
+all_strategies = [
     Adaptive,
     Aggravater,
     ALLCorALLD,

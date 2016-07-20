@@ -383,7 +383,7 @@ class TestContriteTitForTat(TestPlayer):
         'manipulates_state': False
     }
 
-    deterministic_strategies = [s for s in axelrod.ordinary_strategies
+    deterministic_strategies = [s for s in axelrod.strategies
                                 if not s().classifier['stochastic']]
 
     @given(strategies=strategy_lists(strategies=deterministic_strategies,
@@ -432,7 +432,7 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(opponent.history, [C, D, D, D])
         self.assertFalse(ctft.contrite)
 
-             
+
     def test_reset_cleans_all(self):
         p = self.player()
         p.contrite = True
@@ -462,5 +462,5 @@ class TestSlowTitForTwoTats(TestPlayer):
         self.responses_test([C]*3, [C, D, C], [C])
         self.responses_test([C]*3, [C, D, D], [D])
 
-       
-  
+
+

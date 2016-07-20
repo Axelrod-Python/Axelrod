@@ -12,15 +12,18 @@ from .meta import (
     MetaMixer
     )
 
-strategies.extend((MetaHunter, MetaMajority, MetaMinority, MetaWinner,
+recursive_strategies = [MetaHunter, MetaMajority, MetaMinority, MetaWinner,
                    MetaMajorityMemoryOne, MetaWinnerMemoryOne,
                    MetaMajorityFiniteMemory, MetaWinnerFiniteMemory,
-                   MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMixer))
+                   MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMixer]
+all_strategies.extend(recursive_strategies)
 
 # Distinguished strategy collections in addition to
-# `strategies` from _strategies.py
+# `all_strategies` from _strategies.py
 
 demo_strategies = [Cooperator, Defector, TitForTat, Grudger, Random]
-basic_strategies = [s for s in strategies if is_basic(s())]
-ordinary_strategies = [s for s in strategies if obey_axelrod(s())]
-cheating_strategies = [s for s in strategies if not obey_axelrod(s())]
+basic_strategies = [s for s in all_strategies if is_basic(s())]
+strategies = [s for s in all_strategies if obey_axelrod(s())]
+cheating_strategies = [s for s in all_strategies if not obey_axelrod(s())]
+
+ordinary_strategies = strategies  # This is a legacy and will be removed

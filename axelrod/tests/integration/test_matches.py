@@ -8,10 +8,10 @@ from axelrod.tests.property import strategy_lists
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
-deterministic_strategies = [s for s in axelrod.ordinary_strategies
+deterministic_strategies = [s for s in axelrod.strategies
                             if not s().classifier['stochastic']]  # Well behaved strategies
 
-stochastic_strategies = [s for s in axelrod.ordinary_strategies
+stochastic_strategies = [s for s in axelrod.strategies
                          if s().classifier['stochastic']]
 
 

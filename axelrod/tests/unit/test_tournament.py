@@ -35,8 +35,8 @@ test_prob_end = .5
 
 test_edges = [(0, 1), (1, 2), (3, 4)]
 
-deterministic_strategies = [s for s in axelrod.ordinary_strategies
-                            if not s().classifier['stochastic']] 
+deterministic_strategies = [s for s in axelrod.strategies
+                            if not s().classifier['stochastic']]
 
 class TestTournament(unittest.TestCase):
 
