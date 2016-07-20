@@ -8,6 +8,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   strategies.rst
    classification_of_strategies.rst
    strategy_transformers.rst
    making_tournaments.rst
