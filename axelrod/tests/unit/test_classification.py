@@ -133,7 +133,7 @@ class TestStrategies(unittest.TestCase):
         for strategy_list in ["all_strategies",
                               "demo_strategies",
                               "basic_strategies",
-                              "recursive_strategies",
+                              "long_run_time_strategies",
                               "strategies",
                               "ordinary_strategies",
                               "cheating_strategies"]:
@@ -143,7 +143,7 @@ class TestStrategies(unittest.TestCase):
         for strategy_list in [axelrod.all_strategies,
                               axelrod.demo_strategies,
                               axelrod.basic_strategies,
-                              axelrod.recursive_strategies,
+                              axelrod.long_run_time_strategies,
                               axelrod.strategies,
                               axelrod.ordinary_strategies,
                               axelrod.cheating_strategies]:
@@ -153,7 +153,7 @@ class TestStrategies(unittest.TestCase):
         all_strategies_set = set(axelrod.all_strategies)
         for strategy_list in [axelrod.demo_strategies,
                               axelrod.basic_strategies,
-                              axelrod.recursive_strategies,
+                              axelrod.long_run_time_strategies,
                               axelrod.strategies,
                               axelrod.ordinary_strategies,
                               axelrod.cheating_strategies]:
@@ -162,7 +162,7 @@ class TestStrategies(unittest.TestCase):
         strategies_set = set(axelrod.strategies)
         for strategy_list in [axelrod.demo_strategies,
                               axelrod.basic_strategies,
-                              axelrod.recursive_strategies]:
+                              axelrod.long_run_time_strategies]:
             self.assertTrue(set(strategy_list).issubset(strategies_set))
 
     def test_meta_inclusion(self):

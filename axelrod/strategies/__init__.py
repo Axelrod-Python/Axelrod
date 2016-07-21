@@ -12,11 +12,11 @@ from .meta import (
     MetaMixer
     )
 
-recursive_strategies = [MetaHunter, MetaMajority, MetaMinority, MetaWinner,
+long_run_time_strategies = [MetaHunter, MetaMajority, MetaMinority, MetaWinner,
                    MetaMajorityMemoryOne, MetaWinnerMemoryOne,
                    MetaMajorityFiniteMemory, MetaWinnerFiniteMemory,
                    MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMixer]
-all_strategies.extend(recursive_strategies)
+all_strategies.extend(long_run_time_strategies)
 
 # Distinguished strategy collections in addition to
 # `all_strategies` from _strategies.py
