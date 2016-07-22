@@ -1,4 +1,5 @@
 from numpy import arange, median, nan_to_num
+import warnings
 
 matplotlib_installed = True
 try:
@@ -8,7 +9,9 @@ try:
     from mpl_toolkits.axes_grid1 import make_axes_locatable
 except ImportError:
     matplotlib_installed = False
-
+except RuntimeError:
+    matplotlib_installed = False
+    warnings.warn('matplotlib does work with virtual environments on MacOS.')
 
 def default_cmap():
     """Sets a default matplotlib colormap based on the version."""
