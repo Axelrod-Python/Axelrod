@@ -12,10 +12,13 @@ from .meta import (
     MetaMixer
     )
 
-long_run_time_strategies = [MetaHunter, MetaMajority, MetaMinority, MetaWinner,
+all_strategies.append(MetaHunter)
+
+long_run_time_strategies = [MetaMajority, MetaMinority, MetaWinner,
                    MetaMajorityMemoryOne, MetaWinnerMemoryOne,
                    MetaMajorityFiniteMemory, MetaWinnerFiniteMemory,
                    MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMixer]
+
 all_strategies.extend(long_run_time_strategies)
 
 # Distinguished strategy collections in addition to

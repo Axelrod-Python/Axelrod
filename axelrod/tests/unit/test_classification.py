@@ -165,8 +165,25 @@ class TestStrategies(unittest.TestCase):
                               axelrod.long_run_time_strategies]:
             self.assertTrue(set(strategy_list).issubset(strategies_set))
 
+    def test_long_run_strategies(self):
+        long_run_time_strategies = [axelrod.MetaMajority,
+                                    axelrod.MetaMinority,
+                                    axelrod.MetaWinner,
+                                    axelrod.MetaMajorityMemoryOne,
+                                    axelrod.MetaWinnerMemoryOne,
+                                    axelrod.MetaMajorityFiniteMemory,
+                                    axelrod.MetaWinnerFiniteMemory,
+                                    axelrod.MetaMajorityLongMemory,
+                                    axelrod.MetaWinnerLongMemory,
+                                    axelrod.MetaMixer]
+        self.assertTrue(long_run_time_strategies,
+                        axelrod.long_run_time_strategies)
+
     def test_meta_inclusion(self):
         self.assertTrue(axelrod.MetaMajority in axelrod.strategies)
+
+        self.assertTrue(axelrod.MetaHunter in axelrod.strategies)
+        self.assertFalse(axelrod.MetaHunter in axelrod.long_run_time_strategies)
 
     def test_demo_strategies(self):
         demo_strategies = [axelrod.Cooperator,
