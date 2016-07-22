@@ -372,6 +372,7 @@ class TestResultSet(unittest.TestCase):
         results = tournament.play()
         self.assertEqual(results.payoff_diffs_means[-1][-1], 1.0)
 
+
 class TestResultSetFromFile(unittest.TestCase):
     tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
     tournament = axelrod.Tournament(
