@@ -1,4 +1,5 @@
 from numpy import arange, median, nan_to_num
+import warnings
 
 matplotlib_installed = True
 try:
@@ -8,6 +9,12 @@ try:
     from mpl_toolkits.axes_grid1 import make_axes_locatable
 except ImportError:
     matplotlib_installed = False
+except RuntimeError:
+    matplotlib_installed = False
+    warnings.warn(
+        'Matplotlib failed to import and so no plots will be produced. This ' +
+        'could be caused by using a virtual environment on OSX. See ' +
+        'http://matplotlib.org/faq/virtualenv_faq.html for details.')
 
 
 def default_cmap():
