@@ -14,7 +14,7 @@ class TestClassification(unittest.TestCase):
                       'manipulates_source',
                       'manipulates_state']
 
-        for s in axelrod.strategies:
+        for s in axelrod.all_strategies:
             s = s()
             self.assertTrue(None not in [s.classifier[key] for key in known_keys])
 
@@ -130,23 +130,60 @@ class TestClassification(unittest.TestCase):
 class TestStrategies(unittest.TestCase):
 
     def test_strategy_list(self):
-        for strategy_list in ["strategies",
+        for strategy_list in ["all_strategies",
                               "demo_strategies",
                               "basic_strategies",
+                              "long_run_time_strategies",
+                              "strategies",
                               "ordinary_strategies",
                               "cheating_strategies"]:
             self.assertTrue(hasattr(axelrod, strategy_list))
 
     def test_lists_not_empty(self):
-        for strategy_list in [axelrod.strategies,
+        for strategy_list in [axelrod.all_strategies,
                               axelrod.demo_strategies,
                               axelrod.basic_strategies,
+                              axelrod.long_run_time_strategies,
+                              axelrod.strategies,
                               axelrod.ordinary_strategies,
                               axelrod.cheating_strategies]:
             self.assertTrue(len(strategy_list) > 0)
 
+    def test_inclusion_of_strategy_lists(self):
+        all_strategies_set = set(axelrod.all_strategies)
+        for strategy_list in [axelrod.demo_strategies,
+                              axelrod.basic_strategies,
+                              axelrod.long_run_time_strategies,
+                              axelrod.strategies,
+                              axelrod.ordinary_strategies,
+                              axelrod.cheating_strategies]:
+            self.assertTrue(set(strategy_list).issubset(all_strategies_set))
+
+        strategies_set = set(axelrod.strategies)
+        for strategy_list in [axelrod.demo_strategies,
+                              axelrod.basic_strategies,
+                              axelrod.long_run_time_strategies]:
+            self.assertTrue(set(strategy_list).issubset(strategies_set))
+
+    def test_long_run_strategies(self):
+        long_run_time_strategies = [axelrod.MetaMajority,
+                                    axelrod.MetaMinority,
+                                    axelrod.MetaWinner,
+                                    axelrod.MetaMajorityMemoryOne,
+                                    axelrod.MetaWinnerMemoryOne,
+                                    axelrod.MetaMajorityFiniteMemory,
+                                    axelrod.MetaWinnerFiniteMemory,
+                                    axelrod.MetaMajorityLongMemory,
+                                    axelrod.MetaWinnerLongMemory,
+                                    axelrod.MetaMixer]
+        self.assertTrue(long_run_time_strategies,
+                        axelrod.long_run_time_strategies)
+
     def test_meta_inclusion(self):
         self.assertTrue(axelrod.MetaMajority in axelrod.strategies)
+
+        self.assertTrue(axelrod.MetaHunter in axelrod.strategies)
+        self.assertFalse(axelrod.MetaHunter in axelrod.long_run_time_strategies)
 
     def test_demo_strategies(self):
         demo_strategies = [axelrod.Cooperator,

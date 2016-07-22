@@ -19,7 +19,7 @@ class TestTransformers(unittest.TestCase):
     def test_all_strategies(self):
         # Attempt to transform each strategy to ensure that implementation
         # choices (like use of super) do not cause issues
-        for s in axelrod.ordinary_strategies:
+        for s in axelrod.strategies:
             opponent = axelrod.Cooperator()
             player = IdentityTransformer()(s)()
             player.play(opponent)
