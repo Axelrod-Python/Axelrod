@@ -11,7 +11,11 @@ except ImportError:
     matplotlib_installed = False
 except RuntimeError:
     matplotlib_installed = False
-    warnings.warn('matplotlib does work with virtual environments on MacOS.')
+    warnings.warn(
+        'Matplotlib failed to import and so no plots will be produced. This ' +
+        'could be caused by using a virtual environment on OSX. See ' +
+        'http://matplotlib.org/faq/virtualenv_faq.html for details.')
+
 
 def default_cmap():
     """Sets a default matplotlib colormap based on the version."""
