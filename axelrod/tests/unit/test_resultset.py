@@ -372,6 +372,16 @@ class TestResultSet(unittest.TestCase):
         results = tournament.play()
         self.assertEqual(results.payoff_diffs_means[-1][-1], 1.0)
 
+    def test_equality(self):
+        rs_sets = [axelrod.ResultSet(self.players, self.interactions,
+                                     progress_bar=False) for _ in range(2)]
+        self.assertEqual(rs_sets[0], rs_sets[1])
+
+        players = [s() for s in axelrod.demo_strategies]
+        tournament = axelrod.Tournament(players, repetitions=2, turns=5)
+        results = tournament.play()
+        self.assertNotEqual(results, rs_sets[0])
+
 
 class TestResultSetFromFile(unittest.TestCase):
     tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
@@ -916,3 +926,7 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
         self.assertEqual(len(rs.normalised_scores), rs.nplayers)
         self.assertEqual([[str(s) for s in player] for player in rs.normalised_scores]
                          , self.expected_normalised_scores)
+
+    def test_equality(self):
+        """Overwriting for this particular case"""
+        pass

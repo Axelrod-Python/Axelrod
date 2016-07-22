@@ -680,6 +680,30 @@ class ResultSet(object):
 
         return eigenvector.tolist()
 
+    def __eq__(self, other):
+        return all([self.wins == other.wins,
+                    self.match_lengths == other.match_lengths,
+                    self.scores == other.scores,
+                    self.normalised_scores == other.normalised_scores,
+                    self.ranking == other.ranking,
+                    self.ranked_names == other.ranked_names,
+                    self.payoffs == other.payoffs,
+                    self.payoff_matrix == other.payoff_matrix,
+                    self.payoff_stddevs == other.payoff_stddevs,
+                    self.score_diffs == other.score_diffs,
+                    self.payoff_diffs_means == other.payoff_diffs_means,
+                    self.cooperation == other.cooperation,
+                    self.normalised_cooperation == other.normalised_cooperation,
+                    self.vengeful_cooperation == other.vengeful_cooperation,
+                    self.cooperating_rating == other.cooperating_rating,
+                    self.good_partner_matrix == other.good_partner_matrix,
+                    self.good_partner_rating == other.good_partner_rating,
+                    self.eigenmoses_rating == other.eigenmoses_rating,
+                    self.eigenjesus_rating == other.eigenjesus_rating])
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 class ResultSetFromFile(ResultSet):
     """A class to hold the results of a tournament. Reads in a CSV file produced
     by the tournament class.
