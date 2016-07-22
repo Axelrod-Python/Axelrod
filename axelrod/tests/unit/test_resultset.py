@@ -364,6 +364,13 @@ class TestResultSet(unittest.TestCase):
         for j, rate in enumerate(rs.eigenmoses_rating):
             self.assertAlmostEqual(rate, self.expected_eigenmoses_rating[j])
 
+    def test_self_interaction_for_random_strategies(self):
+        # Based on https://github.com/Axelrod-Python/Axelrod/issues/670
+        axelrod.seed(0)
+        players = [s() for s in axelrod.demo_strategies]
+        tournament = axelrod.Tournament(players, repetitions=2, turns=5)
+        results = tournament.play()
+        self.assertEqual(results.payoff_diffs_means[-1][-1], 1.0)
 
 class TestResultSetFromFile(unittest.TestCase):
     tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
