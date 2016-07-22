@@ -805,3 +805,219 @@ class ResultSetFromFile(ResultSet):
         for i in range(len(players_d)):
             players.append(players_d[i])
         return players, interactions
+
+
+class BigResultSet(ResultSet):
+    """
+    Proof of concept for a result set that loops over the data file twice.
+    """
+
+    def __init__(self, filename, progress_bar=True,
+                 num_interactions=False, game=None):
+        if game is None:
+            self.game = Game()
+        else:
+            self.game = game
+
+        self.filename = filename
+        self.players, self.nrepetitions = self._read_players_and_repetition_numbers()
+        self.nplayers = len(self.players)
+
+        self._build_score_related_metrices()
+
+    def _read_players_and_repetition_numbers(self):
+        """Read the players and the repetitions numbers"""
+
+
+        self.players_d = {}
+        self.repetitions_d = {}
+        with open(self.filename, 'r') as f: # This is the only pass through of the data in this method.
+            for row in csv.reader(f):
+                index_pair = (int(row[0]), int(row[1]))
+                players = (row[2], row[3])
+                self._update_repetitions(index_pair)
+                self._update_players(index_pair, players)
+
+        nrepetitions = self._build_nrepetitions()
+        players = self._build_players()
+
+        return players, nrepetitions
+
+    def _update_players(self, index_pair, players):
+        for index, player in zip(index_pair, players):
+            if index not in self.players_d:
+                self.players_d[index] = player
+
+    def _update_repetitions(self, index_pair):
+        try:
+            self.repetitions_d[index_pair] += 1
+        except KeyError:
+            self.repetitions_d[index_pair] = 1
+
+    def _build_nrepetitions(self):
+        nrepetitions = max(self.repetitions_d.values())
+        del self.repetitions_d  # Manual garbage collection
+        return nrepetitions
+
+    def _build_players(self):
+        players = []
+        for i in range(len(self.players_d)):
+            players.append(self.players_d[i])
+
+        del self.players_d  # Manual garbage collection
+        return players
+
+    def read_match_chunks(self):
+        """A generator to return a given repetitions of matches
+
+        !!! Will only work if data is in correct format !!!
+        (Match repetitions are together)
+        """
+        with open(self.filename, 'r') as f:
+            csv_reader = csv.reader(f)
+            repetitions = []
+            count = 0
+            for row in csv_reader:
+                repetitions.append(row)
+                count += 1
+                if count == self.nrepetitions:
+                    yield repetitions
+                    repetitions = []
+                    count = 0
+
+    def _build_score_related_metrices(self):
+        match_chunks = self.read_match_chunks()
+
+        plist = range(self.nplayers)
+        replist = range(self.nrepetitions)
+        self.match_lengths = [[[0 for opponent in plist] for player in plist]
+                              for _ in range(self.nrepetitions)]
+        self.wins = [[0 for _ in replist] for player in plist]
+        self.scores = [[0 for _ in replist] for player in plist]
+        self.normalised_scores = [[[] for _ in replist] for player in plist]
+        self.payoffs = [[[] for opponent in plist] for player in plist]
+        self.score_diffs = [[[0] * self.nrepetitions for opponent in plist] for player in plist]
+        self.cooperation = [[0 for opponent in plist] for player in plist]
+        self.normalised_cooperation = [[[] for opponent in plist] for player in plist]
+        self.good_partner_matrix = [[0 for opponent in plist] for player in plist]
+
+        total_interactions = [0 for player in plist]
+        self.good_partner_rating = [0 for player in plist]
+
+
+        for match in match_chunks:  # This is the only pass through of the data in this method.
+
+            for repetition, record in enumerate(match):
+                index_pair = (int(record[0]), int(record[1]))
+                players = (record[2], record[3])
+                interaction = list(zip(record[4], record[5]))
+
+                # Build `.match_lengths` 1/2
+                self.match_lengths[repetition][index_pair[0]][index_pair[1]] = len(interaction)
+
+
+
+                # Build `.payoffs`
+                scores_per_turn = iu.compute_final_score_per_turn(interaction, game=self.game)
+                self.payoffs[index_pair[0]][index_pair[1]].append(scores_per_turn[0])
+                if index_pair[0] != index_pair[1]:
+                    self.payoffs[index_pair[1]][index_pair[0]].append(scores_per_turn[1])
+
+
+                # Build `.score_diffs`
+                self.score_diffs[index_pair[0]][index_pair[1]][repetition] = scores_per_turn[0] - scores_per_turn[1]
+                self.score_diffs[index_pair[1]][index_pair[0]][repetition] = scores_per_turn[1] - scores_per_turn[0]
+
+                # Build `.normalised_cooperation` 1/2
+                normalised_cooperation = iu.compute_normalised_cooperation(interaction)
+                self.normalised_cooperation[index_pair[0]][index_pair[1]].append(normalised_cooperation[0])
+                self.normalised_cooperation[index_pair[1]][index_pair[0]].append(normalised_cooperation[1])
+
+                if index_pair[0] != index_pair[1]:  # Anything that ignores self interactions
+
+                    # Build `.match_lengths` 2/2
+                    self.match_lengths[repetition][index_pair[1]][index_pair[0]] = len(interaction)
+
+                    # Keep track of total interactions (used for good_partner_rating)
+                    for index in index_pair:
+                        total_interactions[index] += 1
+
+                    # Build `.wins`
+                    match_winner_index = iu.compute_winner_index(interaction, game=self.game)
+                    if match_winner_index is not False:
+                        winner_index = index_pair[match_winner_index]
+                        self.wins[winner_index][repetition] += 1
+
+                    # Build `.scores`
+                    final_scores = iu.compute_final_score(interaction, game=self.game)
+                    for player in range(2):
+                        player_index = index_pair[player]
+                        player_score = final_scores[player]
+                        self.scores[player_index][repetition] += player_score
+
+                    # Build `.normalised_scores` 1/2
+                    for player in range(2):
+                        player_index = index_pair[player]
+                        player_score_per_turn = scores_per_turn[player]
+                        self.normalised_scores[player_index][repetition].append(player_score_per_turn)
+
+                    # Build `.cooperation`
+                    cooperations = iu.compute_cooperations(interaction)
+                    self.cooperation[index_pair[0]][index_pair[1]] += cooperations[0]
+                    self.cooperation[index_pair[1]][index_pair[0]] += cooperations[1]
+
+                    # Build `.good_partner_matrix`
+                    if cooperations[0] >= cooperations[1]:
+                        self.good_partner_matrix[index_pair[0]][index_pair[1]] += 1
+                    if cooperations[1] >= cooperations[0]:
+                        self.good_partner_matrix[index_pair[1]][index_pair[0]] += 1
+
+
+        # Certain small post analysis:
+
+        # Build `.normalised_scores` 2/2
+        for i, rep in enumerate(self.normalised_scores):
+            for j, player_scores in enumerate(rep):
+                if player_scores != []:
+                    self.normalised_scores[i][j] = mean(player_scores)
+                else:
+                    self.normalised_scores[i][j] = 0
+
+        # Build `.normalised_cooperation` 2/2
+        for i, rep in enumerate(self.normalised_cooperation):
+            for j, cooperation in enumerate(rep):
+                if cooperation != []:
+                    self.normalised_cooperation[i][j] = mean(cooperation)
+                else:
+                    self.normalised_cooperation[i][j] = 0
+
+        # Build `.ranking`
+        self.ranking = self.build_ranking()
+
+        # Build `.ranked_names`
+        self.ranked_names = self.build_ranked_names()
+
+        # Build `.payoff_matrix`
+        self.payoff_matrix = self.build_payoff_matrix()
+
+        # Build `.payoff_stddevs`
+        self.payoff_stddevs = self.build_payoff_stddevs()
+
+        # Build `.payoff_diff_means`
+        self.payoff_diffs_means = self.build_payoff_diffs_means()
+
+        # Build `.vengeful_cooperation`
+        self.vengeful_cooperation = self.build_vengeful_cooperation()
+
+        # Build `.cooperating_rating`
+        self.cooperating_rating = self.build_cooperating_rating()
+
+        # Build `.good_partner_rating`
+        self.good_partner_rating = [sum(self.good_partner_matrix[player]) / max(1, float(total_interactions[player]))
+                                    for player in plist]
+
+        # Build `.eigenjesus_rating`
+        self.eigenjesus_rating = self.build_eigenjesus_rating()
+
+        # Build `.eigenmoses_rating`
+        self.eigenmoses_rating = self.build_eigenmoses_rating()
