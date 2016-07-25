@@ -464,28 +464,8 @@ class ResultSet(object):
             Where pij is the mean difference of the
             scores per turn between player i and j in repetition m.
         """
-        plist = list(range(self.nplayers))
-        payoff_diffs_means = [[0 for opponent in plist] for player in plist]
-
-        for player in plist:
-            for opponent in plist:
-                diffs = []
-                for index_pair, repetitions in self.interactions.items():
-                    if (player, opponent) == index_pair:
-                        for interaction in repetitions:
-                            scores = iu.compute_final_score_per_turn(interaction,
-                                                                     self.game)
-                            diffs.append(scores[0] - scores[1])
-                    elif (opponent, player) == index_pair:
-                        for interaction in repetitions:
-                            scores = iu.compute_final_score_per_turn(interaction,
-                                                                    self.game)
-                            diffs.append(scores[1] - scores[0])
-                if diffs:
-                    payoff_diffs_means[player][opponent] = mean(diffs)
-                else:
-                    payoff_diffs_means[player][opponent] = 0
-
+        payoff_diffs_means = [[mean(diff) for diff in player]
+                              for player in self.score_diffs]
         return payoff_diffs_means
 
     @update_progress_bar
