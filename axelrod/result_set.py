@@ -823,7 +823,8 @@ class BigResultSet(ResultSet):
         self.players, self.nrepetitions = self._read_players_and_repetition_numbers()
         self.nplayers = len(self.players)
 
-        self._build_score_related_metrices()
+        self._build_empty_metrics()
+        self._build_score_related_metrics()
 
     def _read_players_and_repetition_numbers(self):
         """Read the players and the repetitions numbers"""
@@ -885,9 +886,11 @@ class BigResultSet(ResultSet):
                     repetitions = []
                     count = 0
 
-    def _build_score_related_metrices(self):
-        match_chunks = self.read_match_chunks()
-
+    def _build_empty_metrics(self):
+        """
+        Creates the various empty metrics ready to be updated as the data is
+        read.
+        """
         plist = range(self.nplayers)
         replist = range(self.nrepetitions)
         self.match_lengths = [[[0 for opponent in plist] for player in plist]
@@ -896,14 +899,20 @@ class BigResultSet(ResultSet):
         self.scores = [[0 for _ in replist] for player in plist]
         self.normalised_scores = [[[] for _ in replist] for player in plist]
         self.payoffs = [[[] for opponent in plist] for player in plist]
-        self.score_diffs = [[[0] * self.nrepetitions for opponent in plist] for player in plist]
+        self.score_diffs = [[[0] * self.nrepetitions for opponent in plist]
+                            for player in plist]
         self.cooperation = [[0 for opponent in plist] for player in plist]
-        self.normalised_cooperation = [[[] for opponent in plist] for player in plist]
-        self.good_partner_matrix = [[0 for opponent in plist] for player in plist]
+        self.normalised_cooperation = [[[] for opponent in plist]
+                                       for player in plist]
+        self.good_partner_matrix = [[0 for opponent in plist]
+                                    for player in plist]
 
-        total_interactions = [0 for player in plist]
+        self.total_interactions = [0 for player in plist]
         self.good_partner_rating = [0 for player in plist]
 
+
+    def _build_score_related_metrics(self):
+        match_chunks = self.read_match_chunks()
 
         for match in match_chunks:  # This is the only pass through of the data in this method.
 
@@ -940,7 +949,7 @@ class BigResultSet(ResultSet):
 
                     # Keep track of total interactions (used for good_partner_rating)
                     for index in index_pair:
-                        total_interactions[index] += 1
+                        self.total_interactions[index] += 1
 
                     # Build `.wins`
                     match_winner_index = iu.compute_winner_index(interaction, game=self.game)
@@ -1013,8 +1022,9 @@ class BigResultSet(ResultSet):
         self.cooperating_rating = self.build_cooperating_rating()
 
         # Build `.good_partner_rating`
-        self.good_partner_rating = [sum(self.good_partner_matrix[player]) / max(1, float(total_interactions[player]))
-                                    for player in plist]
+        self.good_partner_rating = [sum(self.good_partner_matrix[player]) /
+                max(1, float(self.total_interactions[player]))
+                                    for player in range(self.nplayers)]
 
         # Build `.eigenjesus_rating`
         self.eigenjesus_rating = self.build_eigenjesus_rating()
