@@ -517,7 +517,7 @@ class TestBigResultSet(unittest.TestCase):
         rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
         brs._build_empty_metrics()
         self.assertNotEqual(brs, rs)
-        brs._build_score_related_metrics()
+        brs._build_score_related_metrics(progress_bar=False)
         self.assertEqual(brs, rs)
 
     def test_buid_empty_metrics(self):
@@ -571,7 +571,7 @@ class TestBigResultSet(unittest.TestCase):
     def test_same_results_with_prob_end(self, tournament):
         tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         rs = tournament.play(filename=tmp_file.name, progress_bar=False)
-        brs = axelrod.BigResultSet(tmp_file.name)
+        brs = axelrod.BigResultSet(tmp_file.name, progress_bar=False)
 
         # Not testing full equality because of floating point errors.
         self.assertEqual(rs.ranked_names, brs.ranked_names)

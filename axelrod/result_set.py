@@ -704,6 +704,7 @@ class ResultSet(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
+
 class ResultSetFromFile(ResultSet):
     """A class to hold the results of a tournament. Reads in a CSV file produced
     by the tournament class.
@@ -820,15 +821,25 @@ class BigResultSet(ResultSet):
             self.game = game
 
         self.filename = filename
-        self.players, self.nrepetitions = self._read_players_and_repetition_numbers()
+        self.num_interactions = num_interactions
+
+        self.players, self.nrepetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
         self.nplayers = len(self.players)
 
         self._build_empty_metrics()
-        self._build_score_related_metrics()
+        self._build_score_related_metrics(progress_bar=progress_bar)
 
-    def _read_players_and_repetition_numbers(self):
+    def create_progress_bar(self, desc=None):
+        if not self.num_interactions:
+            self.num_interactions = sum(1 for line in open(self.filename))
+        return tqdm.tqdm(total=self.num_interactions, desc=desc)
+
+    def _read_players_and_repetition_numbers(self, progress_bar=False):
         """Read the players and the repetitions numbers"""
 
+
+        if progress_bar:
+            progress_bar = self.create_progress_bar(desc="Counting")
 
         self.players_d = {}
         self.repetitions_d = {}
@@ -838,6 +849,11 @@ class BigResultSet(ResultSet):
                 players = (row[2], row[3])
                 self._update_repetitions(index_pair)
                 self._update_players(index_pair, players)
+                if progress_bar:
+                    progress_bar.update()
+
+        if progress_bar:
+            progress_bar.close()
 
         nrepetitions = self._build_nrepetitions()
         players = self._build_players()
@@ -868,12 +884,16 @@ class BigResultSet(ResultSet):
         del self.players_d  # Manual garbage collection
         return players
 
-    def read_match_chunks(self):
+    def read_match_chunks(self, progress_bar=False):
         """A generator to return a given repetitions of matches
 
         !!! Will only work if data is in correct format !!!
         (Match repetitions are together)
         """
+
+        if progress_bar:
+            progress_bar = self.create_progress_bar(desc="Analysing")
+
         with open(self.filename, 'r') as f:
             csv_reader = csv.reader(f)
             repetitions = []
@@ -881,10 +901,15 @@ class BigResultSet(ResultSet):
             for row in csv_reader:
                 repetitions.append(row)
                 count += 1
+                if progress_bar:
+                    progress_bar.update()
                 if count == self.nrepetitions:
                     yield repetitions
                     repetitions = []
                     count = 0
+
+        if progress_bar:
+            progress_bar.close()
 
     def _build_empty_metrics(self):
         """
@@ -924,14 +949,14 @@ class BigResultSet(ResultSet):
         self.score_diffs[p2][p1][repetition] = -diff
 
     def _update_normalised_cooperation(self, p1, p2, interaction):
-        normalised_cooperation = iu.compute_normalised_cooperation(interaction)
+        normalised_cooperations = iu.compute_normalised_cooperation(interaction)
 
-        # Build `.normalised_cooperation` 1/2
-        self.normalised_cooperation[p1][p2].append(normalised_cooperation[0])
-        self.normalised_cooperation[p2][p1].append(normalised_cooperation[1])
+        self.normalised_cooperation[p1][p2].append(normalised_cooperations[0])
+        self.normalised_cooperation[p2][p1].append(normalised_cooperations[1])
 
     def _update_wins(self, repetition, p1, p2, interaction):
-        match_winner_index = iu.compute_winner_index(interaction, game=self.game)
+        match_winner_index = iu.compute_winner_index(interaction,
+                                                     game=self.game)
         index_pair = [p1, p2]
         if match_winner_index is not False:
             winner_index = index_pair[match_winner_index]
@@ -965,6 +990,10 @@ class BigResultSet(ResultSet):
                     self.normalised_scores[i][j] = mean(player_scores)
                 else:
                     self.normalised_scores[i][j] = 0
+            try:
+                self.progress_bar.update()
+            except AttributeError:
+                pass
 
     def _summarise_normalised_cooperation(self):
         for i, rep in enumerate(self.normalised_cooperation):
@@ -973,14 +1002,19 @@ class BigResultSet(ResultSet):
                     self.normalised_cooperation[i][j] = mean(cooperation)
                 else:
                     self.normalised_cooperation[i][j] = 0
+            try:
+                self.progress_bar.update()
+            except AttributeError:
+                pass
 
+    @update_progress_bar
     def build_good_partner_rating(self):
         return [sum(self.good_partner_matrix[player]) /
                 max(1, float(self.total_interactions[player]))
                 for player in range(self.nplayers)]
 
-    def _build_score_related_metrics(self):
-        match_chunks = self.read_match_chunks()
+    def _build_score_related_metrics(self, progress_bar=False):
+        match_chunks = self.read_match_chunks(progress_bar)
 
         for match in match_chunks:
             p1, p2 = int(match[0][0]), int(match[0][1])
@@ -1010,6 +1044,9 @@ class BigResultSet(ResultSet):
                     self._update_cooperation(p1, p2, cooperations)
                     self._update_good_partner_matrix(p1, p2, cooperations)
 
+        if progress_bar:
+            self.progress_bar = tqdm.tqdm(total=10 + 2 * self.nplayers,
+                                          desc="Finishing", leave=True)
         self._summarise_normalised_scores()
         self._summarise_normalised_cooperation()
 
@@ -1023,3 +1060,6 @@ class BigResultSet(ResultSet):
         self.good_partner_rating = self.build_good_partner_rating()
         self.eigenjesus_rating = self.build_eigenjesus_rating()
         self.eigenmoses_rating = self.build_eigenmoses_rating()
+
+        if progress_bar:
+            self.progress_bar.close()
