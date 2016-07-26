@@ -948,6 +948,31 @@ class BigResultSet(ResultSet):
             score_per_turn = scores_per_turn[index]
             self.normalised_scores[player][repetition].append(score_per_turn)
 
+    def _update_cooperation(self, p1, p2, cooperations):
+        self.cooperation[p1][p2] += cooperations[0]
+        self.cooperation[p2][p1] += cooperations[1]
+
+    def _update_good_partner_matrix(self, p1, p2, cooperations):
+        if cooperations[0] >= cooperations[1]:
+            self.good_partner_matrix[p1][p2] += 1
+        if cooperations[1] >= cooperations[0]:
+            self.good_partner_matrix[p2][p1] += 1
+
+    def _summarise_normalised_scores(self):
+        for i, rep in enumerate(self.normalised_scores):
+            for j, player_scores in enumerate(rep):
+                if player_scores != []:
+                    self.normalised_scores[i][j] = mean(player_scores)
+                else:
+                    self.normalised_scores[i][j] = 0
+
+    def _summarise_normalised_cooperation(self):
+        for i, rep in enumerate(self.normalised_cooperation):
+            for j, cooperation in enumerate(rep):
+                if cooperation != []:
+                    self.normalised_cooperation[i][j] = mean(cooperation)
+                else:
+                    self.normalised_cooperation[i][j] = 0
 
     def build_good_partner_rating(self):
         return [sum(self.good_partner_matrix[player]) /
@@ -957,20 +982,20 @@ class BigResultSet(ResultSet):
     def _build_score_related_metrics(self):
         match_chunks = self.read_match_chunks()
 
-        for match in match_chunks:  # This is the only pass through of the data in this method.
+        for match in match_chunks:
+            p1, p2 = int(match[0][0]), int(match[0][1])
 
             for repetition, record in enumerate(match):
-                index_pair = (int(record[0]), int(record[1]))
-                p1, p2 = index_pair[0], index_pair[1]
                 interaction = list(zip(record[4], record[5]))
+
                 scores_per_turn = iu.compute_final_score_per_turn(interaction,
                                                                  game=self.game)
+                cooperations = iu.compute_cooperations(interaction)
 
                 self._update_match_lengths(repetition, p1, p2, interaction)
                 self._update_payoffs(p1, p2, scores_per_turn)
                 self._update_score_diffs(repetition, p1, p2, scores_per_turn)
                 self._update_normalised_cooperation(p1, p2, interaction)
-
 
                 if p1 != p2:  # Anything that ignores self interactions
 
@@ -982,36 +1007,11 @@ class BigResultSet(ResultSet):
                     self._update_scores(repetition, p1, p2, interaction)
                     self._update_normalised_scores(repetition, p1, p2,
                                                    scores_per_turn)
+                    self._update_cooperation(p1, p2, cooperations)
+                    self._update_good_partner_matrix(p1, p2, cooperations)
 
-                    # Build `.cooperation`
-                    cooperations = iu.compute_cooperations(interaction)
-                    self.cooperation[index_pair[0]][index_pair[1]] += cooperations[0]
-                    self.cooperation[index_pair[1]][index_pair[0]] += cooperations[1]
-
-                    # Build `.good_partner_matrix`
-                    if cooperations[0] >= cooperations[1]:
-                        self.good_partner_matrix[index_pair[0]][index_pair[1]] += 1
-                    if cooperations[1] >= cooperations[0]:
-                        self.good_partner_matrix[index_pair[1]][index_pair[0]] += 1
-
-
-        # Certain small post analysis:
-
-        # Build `.normalised_scores` 2/2
-        for i, rep in enumerate(self.normalised_scores):
-            for j, player_scores in enumerate(rep):
-                if player_scores != []:
-                    self.normalised_scores[i][j] = mean(player_scores)
-                else:
-                    self.normalised_scores[i][j] = 0
-
-        # Build `.normalised_cooperation` 2/2
-        for i, rep in enumerate(self.normalised_cooperation):
-            for j, cooperation in enumerate(rep):
-                if cooperation != []:
-                    self.normalised_cooperation[i][j] = mean(cooperation)
-                else:
-                    self.normalised_cooperation[i][j] = 0
+        self._summarise_normalised_scores()
+        self._summarise_normalised_cooperation()
 
         self.ranking = self.build_ranking()
         self.ranked_names = self.build_ranked_names()
