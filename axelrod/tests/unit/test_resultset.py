@@ -5,8 +5,9 @@ from numpy import mean, std
 
 import tempfile
 
-from hypothesis import given
-from hypothesis.strategies import floats, integers
+from hypothesis import given, settings
+from axelrod.tests.property import prob_end_tournaments
+
 
 class TestResultSet(unittest.TestCase):
 
@@ -562,6 +563,21 @@ class TestBigResultSet(unittest.TestCase):
                          expected_normalised_cooperation)
         self.assertEqual(brs.good_partner_matrix, expected_good_partner_matrix)
         self.assertEqual(brs.good_partner_rating, expected_good_partner_rating)
+
+    @given(tournament=prob_end_tournaments(max_size=5,
+                                           min_prob_end=.7,
+                                           max_repetitions=3))
+    @settings(max_examples=50, timeout=0)
+    def test_same_results_with_prob_end(self, tournament):
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        rs = tournament.play(filename=tmp_file.name, progress_bar=False)
+        brs = axelrod.BigResultSet(tmp_file.name)
+
+        # Not testing full equality because of floating point errors.
+        self.assertEqual(rs.ranked_names, brs.ranked_names)
+        self.assertEqual(rs.scores, brs.scores)
+        self.assertEqual(rs.match_lengths, brs.match_lengths)
+        self.assertEqual(rs.cooperation, brs.cooperation)
 
 
 class TestDecorator(unittest.TestCase):

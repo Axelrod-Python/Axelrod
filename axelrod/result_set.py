@@ -918,7 +918,6 @@ class BigResultSet(ResultSet):
 
             for repetition, record in enumerate(match):
                 index_pair = (int(record[0]), int(record[1]))
-                players = (record[2], record[3])
                 interaction = list(zip(record[4], record[5]))
 
                 # Build `.match_lengths` 1/2
