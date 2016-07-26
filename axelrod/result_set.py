@@ -910,6 +910,49 @@ class BigResultSet(ResultSet):
         self.total_interactions = [0 for player in plist]
         self.good_partner_rating = [0 for player in plist]
 
+    def _update_match_lengths(self, repetition, p1, p2, interaction):
+        self.match_lengths[repetition][p1][p2] = len(interaction)
+
+    def _update_payoffs(self, p1, p2, scores_per_turn):
+        self.payoffs[p1][p2].append(scores_per_turn[0])
+        if p1 != p2:
+            self.payoffs[p2][p1].append(scores_per_turn[1])
+
+    def _update_score_diffs(self, repetition, p1, p2, scores_per_turn):
+        diff = scores_per_turn[0] - scores_per_turn[1]
+        self.score_diffs[p1][p2][repetition] = diff
+        self.score_diffs[p2][p1][repetition] = -diff
+
+    def _update_normalised_cooperation(self, p1, p2, interaction):
+        normalised_cooperation = iu.compute_normalised_cooperation(interaction)
+
+        # Build `.normalised_cooperation` 1/2
+        self.normalised_cooperation[p1][p2].append(normalised_cooperation[0])
+        self.normalised_cooperation[p2][p1].append(normalised_cooperation[1])
+
+    def _update_wins(self, repetition, p1, p2, interaction):
+        match_winner_index = iu.compute_winner_index(interaction, game=self.game)
+        index_pair = [p1, p2]
+        if match_winner_index is not False:
+            winner_index = index_pair[match_winner_index]
+            self.wins[winner_index][repetition] += 1
+
+    def _update_scores(self, repetition, p1, p2, interaction):
+        final_scores = iu.compute_final_score(interaction, game=self.game)
+        for index, player in enumerate([p1, p2]):
+            player_score = final_scores[index]
+            self.scores[player][repetition] += player_score
+
+    def _update_normalised_scores(self, repetition, p1, p2, scores_per_turn):
+        for index, player in enumerate([p1, p2]):
+            score_per_turn = scores_per_turn[index]
+            self.normalised_scores[player][repetition].append(score_per_turn)
+
+
+    def build_good_partner_rating(self):
+        return [sum(self.good_partner_matrix[player]) /
+                max(1, float(self.total_interactions[player]))
+                for player in range(self.nplayers)]
 
     def _build_score_related_metrics(self):
         match_chunks = self.read_match_chunks()
@@ -918,56 +961,27 @@ class BigResultSet(ResultSet):
 
             for repetition, record in enumerate(match):
                 index_pair = (int(record[0]), int(record[1]))
+                p1, p2 = index_pair[0], index_pair[1]
                 interaction = list(zip(record[4], record[5]))
+                scores_per_turn = iu.compute_final_score_per_turn(interaction,
+                                                                 game=self.game)
 
-                # Build `.match_lengths` 1/2
-                self.match_lengths[repetition][index_pair[0]][index_pair[1]] = len(interaction)
-
-
-
-                # Build `.payoffs`
-                scores_per_turn = iu.compute_final_score_per_turn(interaction, game=self.game)
-                self.payoffs[index_pair[0]][index_pair[1]].append(scores_per_turn[0])
-                if index_pair[0] != index_pair[1]:
-                    self.payoffs[index_pair[1]][index_pair[0]].append(scores_per_turn[1])
+                self._update_match_lengths(repetition, p1, p2, interaction)
+                self._update_payoffs(p1, p2, scores_per_turn)
+                self._update_score_diffs(repetition, p1, p2, scores_per_turn)
+                self._update_normalised_cooperation(p1, p2, interaction)
 
 
-                # Build `.score_diffs`
-                self.score_diffs[index_pair[0]][index_pair[1]][repetition] = scores_per_turn[0] - scores_per_turn[1]
-                self.score_diffs[index_pair[1]][index_pair[0]][repetition] = scores_per_turn[1] - scores_per_turn[0]
+                if p1 != p2:  # Anything that ignores self interactions
 
-                # Build `.normalised_cooperation` 1/2
-                normalised_cooperation = iu.compute_normalised_cooperation(interaction)
-                self.normalised_cooperation[index_pair[0]][index_pair[1]].append(normalised_cooperation[0])
-                self.normalised_cooperation[index_pair[1]][index_pair[0]].append(normalised_cooperation[1])
+                    for player in [p1, p2]:
+                        self.total_interactions[player] += 1
 
-                if index_pair[0] != index_pair[1]:  # Anything that ignores self interactions
-
-                    # Build `.match_lengths` 2/2
-                    self.match_lengths[repetition][index_pair[1]][index_pair[0]] = len(interaction)
-
-                    # Keep track of total interactions (used for good_partner_rating)
-                    for index in index_pair:
-                        self.total_interactions[index] += 1
-
-                    # Build `.wins`
-                    match_winner_index = iu.compute_winner_index(interaction, game=self.game)
-                    if match_winner_index is not False:
-                        winner_index = index_pair[match_winner_index]
-                        self.wins[winner_index][repetition] += 1
-
-                    # Build `.scores`
-                    final_scores = iu.compute_final_score(interaction, game=self.game)
-                    for player in range(2):
-                        player_index = index_pair[player]
-                        player_score = final_scores[player]
-                        self.scores[player_index][repetition] += player_score
-
-                    # Build `.normalised_scores` 1/2
-                    for player in range(2):
-                        player_index = index_pair[player]
-                        player_score_per_turn = scores_per_turn[player]
-                        self.normalised_scores[player_index][repetition].append(player_score_per_turn)
+                    self._update_match_lengths(repetition, p2, p1, interaction)
+                    self._update_wins(repetition, p1, p2, interaction)
+                    self._update_scores(repetition, p1, p2, interaction)
+                    self._update_normalised_scores(repetition, p1, p2,
+                                                   scores_per_turn)
 
                     # Build `.cooperation`
                     cooperations = iu.compute_cooperations(interaction)
@@ -999,34 +1013,13 @@ class BigResultSet(ResultSet):
                 else:
                     self.normalised_cooperation[i][j] = 0
 
-        # Build `.ranking`
         self.ranking = self.build_ranking()
-
-        # Build `.ranked_names`
         self.ranked_names = self.build_ranked_names()
-
-        # Build `.payoff_matrix`
         self.payoff_matrix = self.build_payoff_matrix()
-
-        # Build `.payoff_stddevs`
         self.payoff_stddevs = self.build_payoff_stddevs()
-
-        # Build `.payoff_diff_means`
         self.payoff_diffs_means = self.build_payoff_diffs_means()
-
-        # Build `.vengeful_cooperation`
         self.vengeful_cooperation = self.build_vengeful_cooperation()
-
-        # Build `.cooperating_rating`
         self.cooperating_rating = self.build_cooperating_rating()
-
-        # Build `.good_partner_rating`
-        self.good_partner_rating = [sum(self.good_partner_matrix[player]) /
-                max(1, float(self.total_interactions[player]))
-                                    for player in range(self.nplayers)]
-
-        # Build `.eigenjesus_rating`
+        self.good_partner_rating = self.build_good_partner_rating()
         self.eigenjesus_rating = self.build_eigenjesus_rating()
-
-        # Build `.eigenmoses_rating`
         self.eigenmoses_rating = self.build_eigenmoses_rating()
