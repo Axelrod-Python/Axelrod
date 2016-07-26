@@ -5,16 +5,17 @@ This tutorial will show you briefly how to access the detailed interaction
 results corresponding to the tournament.
 
 To access the detailed interaction results we create a tournament as usual
-(see :ref:`creating_tournaments`)::
+(see :ref:`creating_tournaments`) but indicate that we want to keep track of the
+interactions::
 
     >>> import axelrod as axl
     >>> players = [
     ...     axl.Cooperator(), axl.Defector(),
     ...     axl.TitForTat(), axl.Grudger()]
     >>> tournament = axl.Tournament(players, turns=3, repetitions=1)
-    >>> results = tournament.play()
+    >>> results = tournament.play(interactions=True)
 
-The result set object has an 'interactions' attribute which contains all the
+The result set object now has an 'interactions' attribute which contains all the
 interactions between the players.
 (Actually, it's a list of lists: one list for each repetition which, in
 turn, has a list of Match objects). These can be used to view the history of the

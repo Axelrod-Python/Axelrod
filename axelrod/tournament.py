@@ -12,7 +12,7 @@ import tqdm
 from .game import Game
 from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches
-from .result_set import ResultSetFromFile
+from .result_set import ResultSetFromFile, BigResultSet
 
 
 class Tournament(object):
@@ -70,7 +70,7 @@ class Tournament(object):
         self.filename = filename
 
     def play(self, build_results=True, filename=None,
-             processes=None, progress_bar=True):
+             processes=None, progress_bar=True, interactions=False):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -82,6 +82,9 @@ class Tournament(object):
             name of output file
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
+        interactions : bool
+            Whether or not to output a results set that has the full interaction
+            history
 
         Returns
         -------
@@ -107,9 +110,10 @@ class Tournament(object):
         self.outputfile.flush()
 
         if build_results:
-            return self._build_result_set(progress_bar=progress_bar)
+            return self._build_result_set(progress_bar=progress_bar,
+                                          interactions=interactions)
 
-    def _build_result_set(self, progress_bar=True):
+    def _build_result_set(self, progress_bar=True, interactions=False):
         """
         Build the result set (used by the play method)
 
@@ -117,11 +121,19 @@ class Tournament(object):
         -------
         axelrod.ResultSet
         """
-        result_set = ResultSetFromFile(
-            filename=self.filename,
-            progress_bar=progress_bar,
-            num_interactions=self.num_interactions,
-            game=self.game)
+        kwargs = {"filename": self.filename,
+                  "progress_bar": progress_bar,
+                  "num_interactions": self.num_interactions,
+                  "game":self.game}
+
+        if interactions:
+            ResultSet = ResultSetFromFile
+        else:
+            ResultSet = BigResultSet
+            kwargs["nrepetitions"] = self.repetitions
+            kwargs["players"] = [str(p) for p in self.players]
+
+        result_set = ResultSet(**kwargs)
         self.outputfile.close()
         return result_set
 
