@@ -814,7 +814,8 @@ class BigResultSet(ResultSet):
     """
 
     def __init__(self, filename, progress_bar=True,
-                 num_interactions=False, game=None):
+                 num_interactions=False, players=False, nrepetitions=False,
+                 game=None):
         if game is None:
             self.game = Game()
         else:
@@ -823,7 +824,10 @@ class BigResultSet(ResultSet):
         self.filename = filename
         self.num_interactions = num_interactions
 
-        self.players, self.nrepetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
+        if not players and not nrepetitions:
+            self.players, self.nrepetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
+        else:
+            self.players, self.nrepetitions = players, nrepetitions
         self.nplayers = len(self.players)
 
         self._build_empty_metrics()
@@ -836,7 +840,6 @@ class BigResultSet(ResultSet):
 
     def _read_players_and_repetition_numbers(self, progress_bar=False):
         """Read the players and the repetitions numbers"""
-
 
         if progress_bar:
             progress_bar = self.create_progress_bar(desc="Counting")
@@ -1046,7 +1049,7 @@ class BigResultSet(ResultSet):
 
         if progress_bar:
             self.progress_bar = tqdm.tqdm(total=10 + 2 * self.nplayers,
-                                          desc="Finishing", leave=True)
+                                          desc="Finishing")
         self._summarise_normalised_scores()
         self._summarise_normalised_cooperation()
 
