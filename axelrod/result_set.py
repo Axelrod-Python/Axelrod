@@ -707,12 +707,36 @@ class ResultSet(object):
 
 class ResultSetFromFile(ResultSet):
     """
-    Proof of concept for a result set that loops over the data file twice.
+    Read the result set directly from file.
     """
 
     def __init__(self, filename, progress_bar=True,
                  num_interactions=False, players=False, nrepetitions=False,
                  game=None, keep_interactions=False):
+        """
+        Parameters
+        ----------
+            filename : string
+                the file from which to read the interactions
+            progress_bar : bool
+                Whether or not to create a progress bar which will be updated
+            num_interactions : int
+                The number of interactions in the file. Used for the progress
+                bar. If not known but progress_bar is true, will be efficiently
+                read from file.
+            players : list
+                A list of the names of players. If not known will be efficiently
+                read from file.
+            nrepetitions : int
+                The number of repetitions of each match. If not know will be
+                efficiently read from file.
+            game : axelrod.Game
+                The particular game that should be used to calculate the scores.
+            keep_interactions : bool
+                Whether or not to load the interactions in to memory. WARNING:
+                for large tournaments this drastically increases the memory
+                required.
+        """
         if game is None:
             self.game = Game()
         else:
@@ -732,19 +756,34 @@ class ResultSetFromFile(ResultSet):
                                           keep_interactions=keep_interactions)
 
     def create_progress_bar(self, desc=None):
+        """
+        Create a progress bar for a read through of the data file.
+
+        Parameters
+        ----------
+            desc : string
+                A description.
+        """
         if not self.num_interactions:
             self.num_interactions = sum(1 for line in open(self.filename))
         return tqdm.tqdm(total=self.num_interactions, desc=desc)
 
     def _read_players_and_repetition_numbers(self, progress_bar=False):
-        """Read the players and the repetitions numbers"""
+        """
+        Read the players and the repetitions numbers
+
+        Parameters
+        ----------
+            progress_bar : bool
+                Whether or not to display a progress bar
+        """
 
         if progress_bar:
             progress_bar = self.create_progress_bar(desc="Counting")
 
         self.players_d = {}
         self.repetitions_d = {}
-        with open(self.filename, 'r') as f: # This is the only pass through of the data in this method.
+        with open(self.filename, 'r') as f:
             for row in csv.reader(f):
                 index_pair = (int(row[0]), int(row[1]))
                 players = (row[2], row[3])
@@ -762,22 +801,61 @@ class ResultSetFromFile(ResultSet):
         return players, nrepetitions
 
     def _update_players(self, index_pair, players):
+        """
+        During a read of the data, update the internal players dictionary
+
+        Parameters
+        ----------
+
+            index_pair : tuple
+                A tuple of player indices
+            players : tuple
+                A tuple of player names
+        """
         for index, player in zip(index_pair, players):
             if index not in self.players_d:
                 self.players_d[index] = player
 
     def _update_repetitions(self, index_pair):
+        """
+        During a read of the data, update the internal repetitions dictionary
+
+        Parameters
+        ----------
+
+            index_pair : tuple
+                A tuple of player indices
+        """
         try:
             self.repetitions_d[index_pair] += 1
         except KeyError:
             self.repetitions_d[index_pair] = 1
 
     def _build_nrepetitions(self):
+        """
+        Count the number of repetitions
+
+        Returns
+        -------
+
+            nrepetitions : int
+                The number of repetitions
+        """
         nrepetitions = max(self.repetitions_d.values())
+
         del self.repetitions_d  # Manual garbage collection
         return nrepetitions
 
     def _build_players(self):
+        """
+        List the players
+
+        Returns
+        -------
+
+            players : list
+                An ordered list of players
+        """
         players = []
         for i in range(len(self.players_d)):
             players.append(self.players_d[i])
@@ -786,7 +864,22 @@ class ResultSetFromFile(ResultSet):
         return players
 
     def read_match_chunks(self, progress_bar=False):
-        """A generator to return a given repetitions of matches"""
+        """
+        A generator to return a given repetitions of matches
+
+        Parameters
+        ----------
+
+            progress_bar : bool
+                whether or not to display a progress bar
+
+        Yields
+        ------
+            repetitions : list
+                A list of lists include index pairs, player pairs and
+                repetitions. All repetitions for a given pair are yielded
+                together.
+        """
 
         if progress_bar:
             progress_bar = self.create_progress_bar(desc="Analysing")
@@ -812,6 +905,12 @@ class ResultSetFromFile(ResultSet):
         """
         Creates the various empty metrics ready to be updated as the data is
         read.
+
+        Parameters
+        ----------
+
+            keep_interactions : bool
+                Whether or not to load the interactions in to memory
         """
         plist = range(self.nplayers)
         replist = range(self.nrepetitions)
@@ -915,6 +1014,16 @@ class ResultSetFromFile(ResultSet):
 
     def _build_score_related_metrics(self, progress_bar=False,
                                      keep_interactions=False):
+        """
+        Read the data and carry out all relevant calculations.
+
+        Parameters
+        ----------
+            progress_bar : bool
+                Whether or not to display a progress bar
+            keep_interactions : bool
+                Whether or not to lad the interactions in to memory
+        """
         match_chunks = self.read_match_chunks(progress_bar)
 
         for match in match_chunks:
