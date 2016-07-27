@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import unittest
+import tempfile
+import axelrod
 import axelrod.interaction_utils as iu
+
 from axelrod import Actions
 
 C, D = Actions.C, Actions.D
@@ -46,6 +49,23 @@ class TestMatch(unittest.TestCase):
     def test_compute_sparklines(self):
         for inter, spark in zip(self.interactions, self.sparklines):
             self.assertEqual(spark, iu.compute_sparklines(inter))
+
+    def test_read_interactions_from_file(self):
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        players = [axelrod.Cooperator(),
+                   axelrod.Defector()]
+        tournament = axelrod.Tournament(players=players, turns=2, repetitions=3)
+        tournament.play(filename=tmp_file.name)
+        tmp_file.close()
+        expected_interactions = {(0, 0): [[('C', 'C'), ('C', 'C')] for _ in
+                                          range(3)],
+                                 (0, 1): [[('C', 'D'), ('C', 'D')] for _ in
+                                          range(3)],
+                                 (1, 1): [[('D', 'D'), ('D', 'D')] for _ in
+                                          range(3)]}
+        interactions = iu.read_interactions_from_file(tmp_file.name,
+                                                      progress_bar=False)
+        self.assertEqual(expected_interactions, interactions)
 
     def test_string_to_interactions(self):
         string = 'CDCDDD'
