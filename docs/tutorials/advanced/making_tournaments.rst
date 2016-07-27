@@ -41,7 +41,7 @@ Using this class we can create a tournament with little effort::
     >>> players = [axl.Cooperator(), axl.Defector(), axl.TitForTat(),
     ...            axl.Grudger(), axl.Alternator()]
     >>> tournament = axl.Tournament(players, match_generator=StochasticMatchups, turns=2, repetitions=2)
-    >>> results = tournament.play(interactions=True)
+    >>> results = tournament.play(keep_interactions=True)
 
 We can then look at the interactions (results may differ based on random seed)
 for the first repetition::
@@ -88,6 +88,6 @@ We can take a look at the match lengths when using this generator::
     ...            axl.Grudger(), axl.Alternator()]
     >>> tournament = axl.Tournament(players, match_generator=OneShotOrRepetitionMatchups,
     ...                             turns=float("inf"), repetitions=1)
-    >>> results = tournament.play(interactions=True)
+    >>> results = tournament.play(keep_interactions=True)
     >>> sorted(list(set([len(matches[0]) for matches in results.interactions.values()])))
     [1, 200]

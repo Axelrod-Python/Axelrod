@@ -35,7 +35,7 @@ indices::
 To create a spatial tournament you call the :code:`SpatialTournamnent` class::
 
     >>> spatial_tournament = axl.SpatialTournament(players, edges=edges)
-    >>> results = spatial_tournament.play()
+    >>> results = spatial_tournament.play(keep_interactions=True)
 
 We can plot the results::
 
@@ -57,7 +57,7 @@ Let's run small tournament of 2 :code:`turns` and 5 :code:`repetitions`
 and obtain the interactions::
 
     >>> spatial_tournament = axl.SpatialTournament(players ,turns=2, repetitions=2, edges=edges)
-    >>> results = spatial_tournament.play(interactions=True)
+    >>> results = spatial_tournament.play(keep_interactions=True)
     >>> for index_pair, interaction in results.interactions.items():
     ...     player1 = spatial_tournament.players[index_pair[0]]
     ...     player2 = spatial_tournament.players[index_pair[1]]

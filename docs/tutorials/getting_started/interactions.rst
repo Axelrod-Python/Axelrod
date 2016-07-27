@@ -13,13 +13,12 @@ interactions::
     ...     axl.Cooperator(), axl.Defector(),
     ...     axl.TitForTat(), axl.Grudger()]
     >>> tournament = axl.Tournament(players, turns=3, repetitions=1)
-    >>> results = tournament.play(interactions=True)
+    >>> results = tournament.play(keep_interactions=True)
 
-The result set object now has an 'interactions' attribute which contains all the
-interactions between the players.
-(Actually, it's a list of lists: one list for each repetition which, in
-turn, has a list of Match objects). These can be used to view the history of the
-interactions::
+If the play method is called with `keep_interactions=True`, the result set
+object will have an 'interactions' attribute which contains all the interactions
+between the players. These can be used to
+view the history of the interactions::
 
     >>> for index_pair, interaction in results.interactions.items():
     ...     player1 = tournament.players[index_pair[0]]
@@ -36,9 +35,9 @@ interactions::
     Cooperator vs Tit For Tat: [('C', 'C'), ('C', 'C'), ('C', 'C')]
     Defector vs Defector: [('D', 'D'), ('D', 'D'), ('D', 'D')]
 
-We can use these interactions to reconstruct :code:`axelrod.Match` objects which have
-a variety of available methods for analysis (more information can be found in
-:ref:`creating_matches`)::
+We can use these interactions to reconstruct :code:`axelrod.Match` objects which
+have a variety of available methods for analysis (more information can be found
+in :ref:`creating_matches`)::
 
     >>> matches = []
     >>> for index_pair, interaction in results.interactions.items():

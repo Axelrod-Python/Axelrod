@@ -889,11 +889,7 @@ class BigResultSet(ResultSet):
         return players
 
     def read_match_chunks(self, progress_bar=False):
-        """A generator to return a given repetitions of matches
-
-        !!! Will only work if data is in correct format !!!
-        (Match repetitions are together)
-        """
+        """A generator to return a given repetitions of matches"""
 
         if progress_bar:
             progress_bar = self.create_progress_bar(desc="Analysing")
