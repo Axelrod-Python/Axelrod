@@ -12,7 +12,7 @@ import tqdm
 from .game import Game
 from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches
-from .result_set import BigResultSet
+from .result_set import ResultSetFromFile
 
 
 class Tournament(object):
@@ -120,13 +120,13 @@ class Tournament(object):
         -------
         axelrod.BigResultSet
         """
-        result_set = BigResultSet(filename=self.filename,
-                                  progress_bar=progress_bar,
-                                  num_interactions=self.num_interactions,
-                                  nrepetitions=self.repetitions,
-                                  players=[str(p) for p in self.players],
-                                  keep_interactions=keep_interactions,
-                                  game=self.game)
+        result_set = ResultSetFromFile(filename=self.filename,
+                                       progress_bar=progress_bar,
+                                       num_interactions=self.num_interactions,
+                                       nrepetitions=self.repetitions,
+                                       players=[str(p) for p in self.players],
+                                       keep_interactions=keep_interactions,
+                                       game=self.game)
         self.outputfile.close()
         return result_set
 

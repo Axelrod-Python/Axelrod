@@ -13,5 +13,5 @@ from .strategies import *
 from .deterministic_cache import DeterministicCache
 from .match_generator import *
 from .tournament import Tournament, ProbEndTournament, SpatialTournament
-from .result_set import ResultSet, ResultSetFromFile, BigResultSet
+from .result_set import ResultSet, ResultSetFromFile
 from .ecosystem import Ecosystem
