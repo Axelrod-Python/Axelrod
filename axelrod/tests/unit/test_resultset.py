@@ -5,6 +5,7 @@ import axelrod.interaction_utils as iu
 from numpy import mean, std
 
 import tempfile
+import os
 
 from hypothesis import given, settings
 from axelrod.tests.property import tournaments, prob_end_tournaments
@@ -398,9 +399,8 @@ class TestResultSetFromFile(unittest.TestCase):
 
     def test_init(self):
         brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
-        players = ['Cooperator', 'Tit For Tat', 'Defector']
-        self.assertEqual(brs.players, players)
-        self.assertEqual(brs.nplayers, len(players))
+        self.assertEqual(brs.players, [str(p) for p in self.players])
+        self.assertEqual(brs.nplayers, len(self.players))
         self.assertEqual(brs.nrepetitions, 3)
 
     def test_init_with_different_game(self):
@@ -408,6 +408,30 @@ class TestResultSetFromFile(unittest.TestCase):
         brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False,
                                    game=game)
         self.assertEqual(brs.game.RPST(), (-1, -1, -1, -1))
+
+    def test_init_with_progress_bar(self):
+        """Just able to test that no error occurs"""
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True)
+        self.assertEqual(brs.nplayers, len(self.players))
+        self.assertEqual(brs.nrepetitions, 3)
+        self.assertEqual(brs.num_interactions, 18)
+
+    def test_init_with_num_interactions(self):
+        """Just able to test that no error occurs"""
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True,
+                                        num_interactions=18)
+        self.assertEqual(brs.nplayers, len(self.players))
+        self.assertEqual(brs.nrepetitions, 3)
+        self.assertEqual(brs.num_interactions, 18)
+
+    def test_init_with_players_nrepetitions(self):
+        """Just able to test that no error occurs"""
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True,
+                                        num_interactions=18, nrepetitions=3,
+                                        players=[str(p) for p in self.players])
+        self.assertEqual(brs.nplayers, len(self.players))
+        self.assertEqual(brs.nrepetitions, 3)
+        self.assertEqual(brs.num_interactions, 18)
 
     def test_equality(self):
         """A test that checks overall equality by comparing to the base result
