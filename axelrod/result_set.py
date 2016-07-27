@@ -765,7 +765,8 @@ class ResultSetFromFile(ResultSet):
                 A description.
         """
         if not self.num_interactions:
-            self.num_interactions = sum(1 for line in open(self.filename))
+            with open(self.filename) as f:
+                self.num_interactions = sum(1 for line in f)
         return tqdm.tqdm(total=self.num_interactions, desc=desc)
 
     def _read_players_and_repetition_numbers(self, progress_bar=False):

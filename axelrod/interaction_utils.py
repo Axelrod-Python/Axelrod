@@ -112,7 +112,8 @@ def read_interactions_from_file(filename, progress_bar=True,
     """
     if progress_bar:
         if not num_interactions:
-            num_interactions = sum(1 for line in open(filename))
+            with open(filename) as f:
+                num_interactions = sum(1 for line in f)
         progress_bar = tqdm.tqdm(total=num_interactions, desc="Loading")
 
     pairs_to_interactions = {}
