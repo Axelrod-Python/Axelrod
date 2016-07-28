@@ -916,7 +916,7 @@ class ResultSetFromFile(ResultSet):
         plist = range(self.nplayers)
         replist = range(self.nrepetitions)
         self.match_lengths = [[[0 for opponent in plist] for player in plist]
-                              for _ in range(self.nrepetitions)]
+                              for _ in replist]
         self.wins = [[0 for _ in replist] for player in plist]
         self.scores = [[0 for _ in replist] for player in plist]
         self.normalised_scores = [[[] for _ in replist] for player in plist]
