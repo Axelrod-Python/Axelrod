@@ -707,7 +707,8 @@ class ResultSet(object):
 
 class ResultSetFromFile(ResultSet):
     """
-    Read the result set directly from file.
+    A class to hold the results of a tournament. Reads in a CSV file produced
+    by the tournament class.
     """
 
     def __init__(self, filename, progress_bar=True,

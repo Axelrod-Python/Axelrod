@@ -87,7 +87,7 @@ class Tournament(object):
 
         Returns
         -------
-        axelrod.ResultSet
+        axelrod.ResultSetFromFile
         """
         if progress_bar:
             self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
