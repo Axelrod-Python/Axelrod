@@ -1,7 +1,6 @@
 from collections import defaultdict
 import csv
 import tqdm
-import gc
 
 from numpy import mean, nanmedian, std
 
@@ -900,7 +899,6 @@ class ResultSetFromFile(ResultSet):
                     yield repetitions
                     repetitions = []
                     count = 0
-                    gc.collect()
 
         if progress_bar:
             progress_bar.close()
