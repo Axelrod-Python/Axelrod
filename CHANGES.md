@@ -1,3 +1,20 @@
+# v1.6.0, 2016-07-31
+
+Renaming of strategies, big performance improvement for result analysis and bug
+fixes
+
+- axelrod.strategies is a list of well behaved (non cheating strategies):
+  https://github.com/Axelrod-Python/Axelrod/pull/665
+- The results set now has much lower memory footprint and is much faster:
+  https://github.com/Axelrod-Python/Axelrod/pull/672
+- Correct calculation for mean score diffs:
+  https://github.com/Axelrod-Python/Axelrod/pull/671
+- Error catching for bug with OSX, virtual envs and matplotlib:
+  https://github.com/Axelrod-Python/Axelrod/pull/669
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.5.0...v1.6.0
+
 # v1.5.0, 2016-07-19
 
 New tournament type, new strategy, seeding, dev tools, docs + minor/bug fixes
