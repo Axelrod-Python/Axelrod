@@ -8,9 +8,12 @@ form:
 This is used by both the Match class and the ResultSet class which analyse
 interactions.
 """
+import csv
+
 from .game import Game
 from axelrod import Actions
 
+import tqdm
 
 C, D = Actions.C, Actions.D
 
@@ -99,6 +102,37 @@ def compute_sparklines(interactions, c_symbol=u'█', d_symbol=u' '):
         sparkline(histories[0], c_symbol, d_symbol) +
         u'\n' +
         sparkline(histories[1], c_symbol, d_symbol))
+
+
+def read_interactions_from_file(filename, progress_bar=True,
+                                num_interactions=False):
+    """
+    Reads a file and returns a dictionary mapping tuples of player pairs to
+    lists of interactions
+    """
+    if progress_bar:
+        if not num_interactions:
+            with open(filename) as f:
+                num_interactions = sum(1 for line in f)
+        progress_bar = tqdm.tqdm(total=num_interactions, desc="Loading")
+
+    pairs_to_interactions = {}
+    with open(filename, 'r') as f:
+        for row in csv.reader(f):
+            index_pair = (int(row[0]), int(row[1]))
+            interaction = list(zip(row[4], row[5]))
+
+            try:
+                pairs_to_interactions[index_pair].append(interaction)
+            except KeyError:
+                pairs_to_interactions[index_pair] = [interaction]
+
+            if progress_bar:
+                progress_bar.update()
+
+    if progress_bar:
+        progress_bar.close()
+    return pairs_to_interactions
 
 
 def string_to_interactions(string):

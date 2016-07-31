@@ -123,7 +123,6 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
-        self.assertEqual(len(results.interactions), 15)
         self.assertEqual(tournament.num_interactions, 75)
 
     def test_serial_play_with_different_game(self):
@@ -564,8 +563,7 @@ class TestProbEndTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.nplayers, len(tournament.players))
         self.assertEqual(results.players, [str(p) for p in tournament.players])
-        for rep in results.interactions.values():
-            self.assertEqual(len(rep), tournament.repetitions)
+
 
 class TestSpatialTournament(unittest.TestCase):
 

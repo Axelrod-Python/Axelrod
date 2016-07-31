@@ -70,7 +70,7 @@ class Tournament(object):
         self.filename = filename
 
     def play(self, build_results=True, filename=None,
-             processes=None, progress_bar=True):
+             processes=None, progress_bar=True, keep_interactions=False):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -82,10 +82,12 @@ class Tournament(object):
             name of output file
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
+        interactions : bool
+            Whether or not to load the interactions in to memory
 
         Returns
         -------
-        axelrod.ResultSet
+        axelrod.ResultSetFromFile
         """
         if progress_bar:
             self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
@@ -107,21 +109,24 @@ class Tournament(object):
         self.outputfile.flush()
 
         if build_results:
-            return self._build_result_set(progress_bar=progress_bar)
+            return self._build_result_set(progress_bar=progress_bar,
+                                          keep_interactions=keep_interactions)
 
-    def _build_result_set(self, progress_bar=True):
+    def _build_result_set(self, progress_bar=True, keep_interactions=False):
         """
         Build the result set (used by the play method)
 
         Returns
         -------
-        axelrod.ResultSet
+        axelrod.BigResultSet
         """
-        result_set = ResultSetFromFile(
-            filename=self.filename,
-            progress_bar=progress_bar,
-            num_interactions=self.num_interactions,
-            game=self.game)
+        result_set = ResultSetFromFile(filename=self.filename,
+                                       progress_bar=progress_bar,
+                                       num_interactions=self.num_interactions,
+                                       nrepetitions=self.repetitions,
+                                       players=[str(p) for p in self.players],
+                                       keep_interactions=keep_interactions,
+                                       game=self.game)
         self.outputfile.close()
         return result_set
 

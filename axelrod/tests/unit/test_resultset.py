@@ -1,12 +1,15 @@
 import unittest
 import axelrod
+import axelrod.interaction_utils as iu
 
 from numpy import mean, std
 
 import tempfile
+import os
 
-from hypothesis import given
-from hypothesis.strategies import floats, integers
+from hypothesis import given, settings
+from axelrod.tests.property import tournaments, prob_end_tournaments
+
 
 class TestResultSet(unittest.TestCase):
 
@@ -372,48 +375,222 @@ class TestResultSet(unittest.TestCase):
         results = tournament.play()
         self.assertEqual(results.payoff_diffs_means[-1][-1], 1.0)
 
+    def test_equality(self):
+        rs_sets = [axelrod.ResultSet(self.players, self.interactions,
+                                     progress_bar=False) for _ in range(2)]
+        self.assertEqual(rs_sets[0], rs_sets[1])
+
+        players = [s() for s in axelrod.demo_strategies]
+        tournament = axelrod.Tournament(players, repetitions=2, turns=5)
+        results = tournament.play()
+        self.assertNotEqual(results, rs_sets[0])
+
 
 class TestResultSetFromFile(unittest.TestCase):
     tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-    tournament = axelrod.Tournament(
-        players=[axelrod.Cooperator(),
-                 axelrod.TitForTat(),
-                 axelrod.Defector()],
-        turns=2,
-        repetitions=1)
+    players = [axelrod.Cooperator(),
+               axelrod.TitForTat(),
+               axelrod.Defector()]
+    tournament = axelrod.Tournament(players=players, turns=2, repetitions=3)
     tournament.play(filename=tmp_file.name)
     tmp_file.close()
 
+    interactions = iu.read_interactions_from_file(tmp_file.name)
 
     def test_init(self):
-        rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
-        players = ['Cooperator', 'Tit For Tat', 'Defector']
-        self.assertEqual(rs.players, players)
-        self.assertEqual(rs.nplayers, len(players))
-        self.assertEqual(rs.nrepetitions, 1)
-
-        expected_interactions = {(0, 1): [[('C', 'C'), ('C', 'C')]],
-                                 (1, 2): [[('C', 'D'), ('D', 'D')]],
-                                 (0, 0): [[('C', 'C'), ('C', 'C')]],
-                                 (2, 2): [[('D', 'D'), ('D', 'D')]],
-                                 (0, 2): [[('C', 'D'), ('C', 'D')]],
-                                 (1, 1): [[('C', 'C'), ('C', 'C')]]}
-        self.assertEqual(rs.interactions, expected_interactions)
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        self.assertEqual(brs.players, [str(p) for p in self.players])
+        self.assertEqual(brs.nplayers, len(self.players))
+        self.assertEqual(brs.nrepetitions, 3)
 
     def test_init_with_different_game(self):
         game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
-        rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False,
-                                       game=game)
-        self.assertEqual(rs.game.RPST(), (-1, -1, -1, -1))
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False,
+                                   game=game)
+        self.assertEqual(brs.game.RPST(), (-1, -1, -1, -1))
 
-    def test_progres_bar(self):
-        rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True)
-        self.assertEqual(rs.read_progress_bar.total, 6)
+    def test_init_with_progress_bar(self):
+        """Just able to test that no error occurs"""
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True)
+        self.assertEqual(brs.nplayers, len(self.players))
+        self.assertEqual(brs.nrepetitions, 3)
+        self.assertEqual(brs.num_interactions, 18)
 
-        # Test that can give length
-        rs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True,
-                                       num_interactions=6)
-        self.assertEqual(rs.read_progress_bar.total, 6)
+    def test_init_with_num_interactions(self):
+        """Just able to test that no error occurs"""
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True,
+                                        num_interactions=18)
+        self.assertEqual(brs.nplayers, len(self.players))
+        self.assertEqual(brs.nrepetitions, 3)
+        self.assertEqual(brs.num_interactions, 18)
+
+    def test_init_with_players_nrepetitions(self):
+        """Just able to test that no error occurs"""
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True,
+                                        num_interactions=18, nrepetitions=3,
+                                        players=[str(p) for p in self.players])
+        self.assertEqual(brs.nplayers, len(self.players))
+        self.assertEqual(brs.nrepetitions, 3)
+        self.assertEqual(brs.num_interactions, 18)
+
+    def test_equality(self):
+        """A test that checks overall equality by comparing to the base result
+        set class"""
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        rs = axelrod.ResultSet(self.players, self.interactions, progress_bar=False)
+        self.assertEqual(rs, brs)
+
+    def test_interactions_equality(self):
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False,
+                                   keep_interactions=True)
+        rs = axelrod.ResultSet(self.players, self.interactions, progress_bar=False)
+        self.assertEqual(rs.interactions, brs.interactions)
+
+    @given(tournament=tournaments(max_size=5,
+                                  max_turns=5,
+                                  max_repetitions=3))
+    @settings(max_examples=50, timeout=0)
+    def test_equality_with_round_robin(self, tournament):
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        tournament.play(filename=tmp_file.name, progress_bar=False,
+                        build_results=False)
+        brs = axelrod.ResultSetFromFile(tmp_file.name, progress_bar=False)
+        interactions = iu.read_interactions_from_file(tmp_file.name)
+        rs = axelrod.ResultSet(tournament.players, interactions,
+                               progress_bar=False)
+
+        # Not testing full equality because of floating point errors.
+        self.assertEqual(rs.ranked_names, brs.ranked_names)
+        self.assertEqual(rs.scores, brs.scores)
+        self.assertEqual(rs.match_lengths, brs.match_lengths)
+        self.assertEqual(rs.cooperation, brs.cooperation)
+
+    @given(tournament=prob_end_tournaments(max_size=5,
+                                           min_prob_end=.7,
+                                           max_repetitions=3))
+    @settings(max_examples=50, timeout=0)
+    def test_equality_with_prob_end(self, tournament):
+        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        tournament.play(filename=tmp_file.name, progress_bar=False,
+                        build_results=False)
+        brs = axelrod.ResultSetFromFile(tmp_file.name, progress_bar=False)
+        interactions = iu.read_interactions_from_file(tmp_file.name)
+        rs = axelrod.ResultSet(tournament.players, interactions,
+                               progress_bar=False)
+
+        # Not testing full equality because of floating point errors.
+        self.assertEqual(rs.ranked_names, brs.ranked_names)
+        self.assertEqual(rs.scores, brs.scores)
+        self.assertEqual(rs.match_lengths, brs.match_lengths)
+        self.assertEqual(rs.cooperation, brs.cooperation)
+
+    def test_read_players_and_repetitions(self):
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        players, nrepetitions = brs._read_players_and_repetition_numbers()
+        expected_players = ['Cooperator', 'Tit For Tat', 'Defector']
+        self.assertEqual(brs.players, expected_players)
+        self.assertEqual(nrepetitions, 3)
+
+    def test_update_repetitions(self):
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs.repetitions_d = {}
+        brs._update_repetitions((0, 0))
+        self.assertEqual(brs.repetitions_d, {(0, 0): 1})
+        brs._update_repetitions((0, 0))
+        self.assertEqual(brs.repetitions_d, {(0, 0): 2})
+        brs._update_repetitions((0, 1))
+        self.assertEqual(brs.repetitions_d, {(0, 0): 2, (0, 1): 1})
+
+    def test_build_repetitions(self):
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs.repetitions_d = {}
+        brs._update_repetitions((0, 0))
+        brs._update_repetitions((0, 0))
+        nrepetitions = brs._build_nrepetitions()
+        self.assertEqual(nrepetitions, 2)
+        self.assertFalse(hasattr(brs, 'repetitions_d'))
+
+    def test_update_players(self):
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs.players_d = {}
+        brs._update_players((0, 0), ('Cooperator', 'Cooperator'))
+        self.assertEqual(brs.players_d, {0: 'Cooperator'})
+        brs._update_players((0, 0), ('Cooperator', 'Cooperator'))
+        self.assertEqual(brs.players_d, {0: 'Cooperator'})
+        brs._update_players((0, 1), ('Cooperator', 'Defector'))
+        self.assertEqual(brs.players_d, {0: 'Cooperator', 1: 'Defector'})
+
+    def test_build_players(self):
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs.players_d = {}
+        brs._update_players((0, 0), ('Cooperator', 'Cooperator'))
+        brs._update_players((0, 1), ('Cooperator', 'Defector'))
+        players = brs._build_players()
+        self.assertEqual(players, ['Cooperator', 'Defector'])
+        self.assertFalse(hasattr(brs, 'players_d'))
+
+    def test_build_read_match_chunks(self):
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        matches = brs.read_match_chunks()
+        chunk = next(matches)
+        self.assertEqual(chunk[0], ['0'] * 2 + ['Cooperator'] * 2 + ['CC'] * 2)
+        self.assertEqual(chunk[1], ['0'] * 2 + ['Cooperator'] * 2 + ['CC'] * 2)
+        self.assertEqual(chunk[2], ['0'] * 2 + ['Cooperator'] * 2 + ['CC'] * 2)
+        self.assertEqual(len(list(matches)), 5)
+
+    def test_build_all(self):
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+
+        brs._build_empty_metrics()
+        self.assertNotEqual(brs, rs)
+        brs._build_score_related_metrics(progress_bar=False)
+        self.assertEqual(brs, rs)
+
+    def test_buid_empty_metrics(self):
+        plist = range(3)
+        nrepetitions = 3
+        replist = range(nrepetitions)
+        expected_match_lengths = [[[0 for opponent in plist] for player in plist]
+                                  for _ in replist]
+        expected_wins = [[0 for _ in replist] for player in plist]
+        expected_scores = [[0 for _ in replist] for player in plist]
+        expected_normalised_scores = [[[] for _ in replist] for player in plist]
+        expected_payoffs = [[[] for opponent in plist] for player in plist]
+        expected_score_diffs = [[[0] * nrepetitions for opponent in plist]
+                                for player in plist]
+        expected_cooperation = [[0 for opponent in plist] for player in plist]
+        expected_normalised_cooperation = [[[] for opponent in plist]
+                                       for player in plist]
+        expected_good_partner_matrix = [[0 for opponent in plist]
+                                        for player in plist]
+
+        expected_good_partner_rating = [0 for player in plist]
+        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs.match_lengths = []
+        brs.wins = []
+        brs.scores = []
+        brs.normalised_scores = []
+        brs.payoffs = []
+        brs.score_diffs = []
+        brs.cooperation = []
+        brs.normalised_cooperation = []
+        brs.good_partner_matrix = []
+        brs.total_interactions = []
+        brs.good_partner_rating = []
+        brs._build_empty_metrics()
+        self.assertEqual(brs.match_lengths, expected_match_lengths)
+        self.assertEqual(brs.wins, expected_wins)
+        self.assertEqual(brs.scores, expected_scores)
+        self.assertEqual(brs.normalised_scores, expected_normalised_scores)
+        self.assertEqual(brs.payoffs, expected_payoffs)
+        self.assertEqual(brs.score_diffs, expected_score_diffs)
+        self.assertEqual(brs.cooperation, expected_cooperation)
+        self.assertEqual(brs.normalised_cooperation,
+                         expected_normalised_cooperation)
+        self.assertEqual(brs.good_partner_matrix, expected_good_partner_matrix)
+        self.assertEqual(brs.good_partner_rating, expected_good_partner_rating)
 
 
 class TestDecorator(unittest.TestCase):
@@ -916,3 +1093,7 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
         self.assertEqual(len(rs.normalised_scores), rs.nplayers)
         self.assertEqual([[str(s) for s in player] for player in rs.normalised_scores]
                          , self.expected_normalised_scores)
+
+    def test_equality(self):
+        """Overwriting for this particular case"""
+        pass
