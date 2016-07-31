@@ -168,6 +168,7 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         size = self.__len__() * (1. / self.prob_end) * self.repetitions
         return size
 
+
 class SpatialMatches(RoundRobinMatches):
     """
     A class that generates spatially-structured matches.
@@ -207,3 +208,42 @@ class SpatialMatches(RoundRobinMatches):
 
     def __len__(self):
         return len(self.edges)
+
+
+class ProbEndSpatialMatches(SpatialMatches, ProbEndRoundRobinMatches):
+    """
+    A class that generates spatially-structured prob ending matches.
+    In these matches, players interact only with their neighbors rather than the
+    entire population. This reduces to a well-mixed population when the spatial
+    graph is a complete graph.
+
+    Parameters
+    ----------
+    players : list
+        A list of axelrod.Player objects
+    prob_end : float
+        The probability that a turn of a Match is the last
+    game : axelrod.Game
+        The game object used to score the match
+    repetitions : int
+        The number of repetitions of a given match
+    edges : list
+        A list of tuples containing the existing edges
+    """
+
+    def __init__(self, players, prob_end, game, repetitions, edges):
+
+        player_indices = list(range(len(players)))
+        node_indices = sorted(set([node for edge in edges for node in edge]))
+        if player_indices != node_indices:
+            raise ValueError("The graph edges do not include all players.")
+
+        self.edges = edges
+        ProbEndRoundRobinMatches.__init__(self, players, prob_end,
+                                          game, repetitions, edges)
+
+    def build_single_match_params(self):
+        """
+        Creates a single set of match parameters.
+        """
+        return ProbEndRoundRobinMatches.build_single_match_params(self)
