@@ -303,10 +303,9 @@ class Tournament(object):
 
 class ProbEndTournament(Tournament):
     """
-    A tournament in which the player don't know the length of a given match
-    (currently implemented by setting this to be infinite). The length of a
-    match is equivalent to randomly sampling after each round whether or not to
-    continue.
+    A tournament in which the player don't know the length of a given match. The
+    length of a match is equivalent to randomly sampling after each round
+    whether or not to continue.
     """
 
     def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
@@ -388,6 +387,7 @@ class ProbEndSpatialTournament(ProbEndTournament):
     """
     A tournament in which the players are allocated in a graph as nodes
     and they players only play the others that are connected to with an edge.
+    Players do not know the length of a given match (it is randomly sampled).
     """
     def __init__(self, players, edges, match_generator=SpatialMatches,
                  name='axelrod', game=None, prob_end=.5, repetitions=10,
