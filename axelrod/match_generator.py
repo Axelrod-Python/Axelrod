@@ -231,7 +231,7 @@ class ProbEndSpatialMatches(SpatialMatches, ProbEndRoundRobinMatches):
         A list of tuples containing the existing edges
     """
 
-    def __init__(self, players, prob_end, game, repetitions, edges):
+    def __init__(self, players, prob_end, game, repetitions, noise, edges):
 
         player_indices = list(range(len(players)))
         node_indices = sorted(set([node for edge in edges for node in edge]))
@@ -240,7 +240,7 @@ class ProbEndSpatialMatches(SpatialMatches, ProbEndRoundRobinMatches):
 
         self.edges = edges
         ProbEndRoundRobinMatches.__init__(self, players, prob_end,
-                                          game, repetitions, edges)
+                                          game, repetitions, noise)
 
     def build_single_match_params(self):
         """
