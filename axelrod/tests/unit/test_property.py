@@ -4,6 +4,7 @@ import axelrod
 from axelrod.tests.property import (strategy_lists,
                                     matches, tournaments,
                                     prob_end_tournaments, spatial_tournaments,
+                                    prob_end_spatial_tournaments,
                                     games)
 
 from hypothesis import given, settings
@@ -197,6 +198,47 @@ class TestSpatialTournament(unittest.TestCase):
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_stochastic_strategies(self, tournament):
         self.assertIsInstance(tournament, axelrod.SpatialTournament)
+        stochastic_player_names = [str(s()) for s in stochastic_strategies]
+        for p in tournament.players:
+            self.assertIn(str(p), stochastic_player_names)
+
+
+class TestProbEndSpatialTournament(unittest.TestCase):
+
+    def test_call(self):
+        tournament = prob_end_spatial_tournaments().example()
+        self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)
+
+    @given(tournament=prob_end_spatial_tournaments(min_prob_end=0,
+                                                   max_prob_end=1,
+                                                   min_noise=0, max_noise=1,
+                                                   min_repetitions=2,
+                                                   max_repetitions=50,
+                                                   max_size=3))
+    @settings(max_examples=10, timeout=0)
+    def test_decorator(self, tournament):
+        self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)
+        self.assertLessEqual(tournament.prob_end, 1)
+        self.assertGreaterEqual(tournament.prob_end, 0)
+        self.assertLessEqual(tournament.noise, 1)
+        self.assertGreaterEqual(tournament.noise, 0)
+        self.assertLessEqual(tournament.repetitions, 50)
+        self.assertGreaterEqual(tournament.repetitions, 2)
+
+    @given(tournament=prob_end_spatial_tournaments(strategies=axelrod.basic_strategies,
+                                          max_size=3))
+    @settings(max_examples=10, timeout=0)
+    def test_decorator_with_given_strategies(self, tournament):
+        self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)
+        basic_player_names = [str(s()) for s in axelrod.basic_strategies]
+        for p in tournament.players:
+            self.assertIn(str(p), basic_player_names)
+
+    @given(tournament=prob_end_spatial_tournaments(strategies=stochastic_strategies,
+                                          max_size=3))
+    @settings(max_examples=10, timeout=0)
+    def test_decorator_with_stochastic_strategies(self, tournament):
+        self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)
         stochastic_player_names = [str(s()) for s in stochastic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), stochastic_player_names)

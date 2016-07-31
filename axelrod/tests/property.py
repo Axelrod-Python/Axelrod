@@ -200,6 +200,65 @@ def spatial_tournaments(draw, strategies=axelrod.strategies,
 
 
 @composite
+def prob_end_spatial_tournaments(draw, strategies=axelrod.strategies,
+                                min_size=1, max_size=10,
+                                min_prob_end=0, max_prob_end=1,
+                                min_noise=0, max_noise=1,
+                                min_repetitions=1, max_repetitions=20):
+    """
+    A hypothesis decorator to return a probabilistic ending spatial tournament.
+
+    Parameters
+    ----------
+    min_size : integer
+        The minimum number of strategies to include
+    max_size : integer
+        The maximum number of strategies to include
+    min_prob_end : float
+        The minimum probability of a match ending
+    max_prob_end : float
+        The maximum probability of a match ending
+    min_noise : float
+        The minimum noise value
+    min_noise : float
+        The maximum noise value
+    min_repetitions : integer
+        The minimum number of repetitions
+    max_repetitions : integer
+        The maximum number of repetitions
+    """
+    strategies = draw(strategy_lists(strategies=strategies,
+                                     min_size=min_size,
+                                     max_size=max_size))
+    players = [s() for s in strategies]
+    player_indices = list(range(len(players)))
+
+    all_potential_edges = list(itertools.combinations(player_indices, 2))
+    all_potential_edges.extend([(i, i) for i in player_indices])  # Loops
+    edges = draw(lists(sampled_from(all_potential_edges), unique=True,
+                       average_size=2 * len(players)))
+
+    # Ensure all players/nodes are connected:
+    node_indices = sorted(set([node for edge in edges for node in edge]))
+    missing_nodes = [index
+                     for index in player_indices if index not in node_indices]
+    for index in missing_nodes:
+        opponent = draw(sampled_from(player_indices))
+        edges.append((index, opponent))
+
+    prob_end = draw(floats(min_value=min_prob_end, max_value=max_prob_end))
+    repetitions = draw(integers(min_value=min_repetitions,
+                                max_value=max_repetitions))
+    noise = draw(floats(min_value=min_noise, max_value=max_noise))
+
+    tournament = axelrod.ProbEndSpatialTournament(players, prob_end=prob_end,
+                                                  repetitions=repetitions,
+                                                  noise=noise,
+                                                  edges=edges)
+    return tournament
+
+
+@composite
 def games(draw, prisoners_dilemma=True, max_value=100):
     """
     A hypothesis decorator to return a random game.
