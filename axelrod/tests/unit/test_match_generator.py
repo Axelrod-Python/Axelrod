@@ -44,7 +44,7 @@ class TestTournamentType(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             len(tt)
 
-    def _params(self):
+    def test_build__params(self):
         tt = axelrod.MatchGenerator(
             self.players, test_turns, test_game, test_repetitions)
         with self.assertRaises(NotImplementedError):
