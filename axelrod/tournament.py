@@ -381,4 +381,4 @@ class SpatialTournament(Tournament):
 
         self.edges = edges
         self.match_generator = SpatialMatches(
-            players, turns, self.game, repetitions, edges)
+            players, turns, self.game, repetitions, self.noise, edges)

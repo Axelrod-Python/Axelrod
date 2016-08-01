@@ -220,11 +220,13 @@ class TestSpatialMatches(unittest.TestCase):
     @example(repetitions=test_repetitions, turns=test_turns)
     def test_build_match_chunks(self, repetitions, turns):
         edges = [(0, 1), (1, 2), (3, 4)]
+        noise = 0
         sp = axelrod.SpatialMatches(
-            self.players, turns, test_game, repetitions, edges)
+            self.players, turns, test_game, repetitions, noise, edges)
         chunks = list(sp.build_match_chunks())
         match_definitions = [tuple(list(index_pair) + [repetitions])
-                             for (index_pair, match_params, repetitions) in chunks]
+                             for (index_pair, match_params, repetitions, noise)
+                                                                      in chunks]
         expected_match_definitions = [(edge[0], edge[1], repetitions)
                                       for edge in edges]
 
@@ -232,7 +234,20 @@ class TestSpatialMatches(unittest.TestCase):
 
     def test_len(self):
         edges = [(0, 1), (1, 2), (3, 4)]
+        noise = 0
         sp = axelrod.SpatialMatches(
-            self.players, test_turns, test_game, test_repetitions, edges)
+            self.players, test_turns, test_game, test_repetitions, noise, edges)
         self.assertEqual(len(sp), len(list(sp.build_match_chunks())))
         self.assertEqual(len(sp), len(edges))
+
+    @given(noise=floats(min_value=0, max_value=1))
+    def test_noise(self, noise):
+        edges = [(0, 1), (1, 2), (3, 4)]
+        sp = axelrod.SpatialMatches(
+            self.players, test_turns, test_game, test_repetitions, noise, edges)
+        self.assertEqual(sp.noise, noise)
+        chunks = sp.build_match_chunks()
+        noise_values = [match_params[3]
+                        for (index_pair, match_params, turns, repetitions) in chunks]
+        for value in noise_values:
+            self.assertEqual(noise, value)
