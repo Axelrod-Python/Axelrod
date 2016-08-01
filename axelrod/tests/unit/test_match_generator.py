@@ -225,7 +225,8 @@ class TestSpatialMatches(unittest.TestCase):
             self.players, turns, test_game, repetitions, noise, edges)
         chunks = list(sp.build_match_chunks())
         match_definitions = [tuple(list(index_pair) + [repetitions])
-                             for (index_pair, match_params, repetitions) in chunks]
+                             for (index_pair, match_params, repetitions, noise)
+                                                                      in chunks]
         expected_match_definitions = [(edge[0], edge[1], repetitions)
                                       for edge in edges]
 
