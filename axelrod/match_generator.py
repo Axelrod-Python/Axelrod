@@ -192,8 +192,13 @@ class SpatialMatches(RoundRobinMatches):
 
     def __init__(self, players, turns, game, repetitions, edges):
 
-        player_indices = list(range(len(players)))
-        node_indices = sorted(set([node for edge in edges for node in edge]))
+        # Check if all players are connected.
+        player_indices = set(range(len(players)))
+        node_indices = set()
+        for edge in edges:
+            for node in edge:
+                node_indices.add(node)
+
         if player_indices != node_indices:
             raise ValueError("The graph edges do not include all players.")
 
@@ -233,8 +238,13 @@ class ProbEndSpatialMatches(SpatialMatches, ProbEndRoundRobinMatches):
 
     def __init__(self, players, prob_end, game, repetitions, noise, edges):
 
-        player_indices = list(range(len(players)))
-        node_indices = sorted(set([node for edge in edges for node in edge]))
+        # Check if all players are connected.
+        player_indices = set(range(len(players)))
+        node_indices = set()
+        for edge in edges:
+            for node in edge:
+                node_indices.add(node)
+
         if player_indices != node_indices:
             raise ValueError("The graph edges do not include all players.")
 

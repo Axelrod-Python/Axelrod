@@ -1,7 +1,9 @@
 """
 A module for creating hypothesis based strategies for property based testing
 """
-import axelrod
+from axelrod import (strategies, Match, Game,
+                     Tournament, ProbEndTournament,
+                     SpatialTournament, ProbEndSpatialTournament)
 from hypothesis.strategies import (composite, sampled_from, integers,
                                    floats, lists)
 
@@ -9,8 +11,8 @@ import itertools
 
 
 @composite
-def strategy_lists(draw, strategies=axelrod.strategies, min_size=1,
-                   max_size=len(axelrod.strategies)):
+def strategy_lists(draw, strategies=strategies, min_size=1,
+                   max_size=len(strategies)):
     """
     A hypothesis decorator to return a list of strategies
 
@@ -25,8 +27,9 @@ def strategy_lists(draw, strategies=axelrod.strategies, min_size=1,
                             max_size=max_size))
     return strategies
 
+
 @composite
-def matches(draw, strategies=axelrod.strategies,
+def matches(draw, strategies=strategies,
             min_turns=1, max_turns=200,
             min_noise=0, max_noise=1):
     """
@@ -53,12 +56,12 @@ def matches(draw, strategies=axelrod.strategies,
     players = [s() for s in strategies]
     turns = draw(integers(min_value=min_turns, max_value=max_turns))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
-    match = axelrod.Match(players, turns=turns, noise=noise)
+    match = Match(players, turns=turns, noise=noise)
     return match
 
 
 @composite
-def tournaments(draw, strategies=axelrod.strategies,
+def tournaments(draw, strategies=strategies,
                 min_size=1, max_size=10,
                 min_turns=1, max_turns=200,
                 min_noise=0, max_noise=1,
@@ -94,17 +97,17 @@ def tournaments(draw, strategies=axelrod.strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = axelrod.Tournament(players, turns=turns,
-                                    repetitions=repetitions, noise=noise)
+    tournament = Tournament(players, turns=turns, repetitions=repetitions,
+                            noise=noise)
     return tournament
 
 
 @composite
-def prob_end_tournaments(draw, strategies=axelrod.strategies,
-                        min_size=1, max_size=10,
-                        min_prob_end=0, max_prob_end=1,
-                        min_noise=0, max_noise=1,
-                        min_repetitions=1, max_repetitions=20):
+def prob_end_tournaments(draw, strategies=strategies,
+                         min_size=1, max_size=10,
+                         min_prob_end=0, max_prob_end=1,
+                         min_noise=0, max_noise=1,
+                         min_repetitions=1, max_repetitions=20):
     """
     A hypothesis decorator to return a tournament,
 
@@ -136,13 +139,13 @@ def prob_end_tournaments(draw, strategies=axelrod.strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = axelrod.ProbEndTournament(players, prob_end=prob_end,
-                                           repetitions=repetitions, noise=noise)
+    tournament = ProbEndTournament(players, prob_end=prob_end,
+                                   repetitions=repetitions, noise=noise)
     return tournament
 
 
 @composite
-def spatial_tournaments(draw, strategies=axelrod.strategies,
+def spatial_tournaments(draw, strategies=strategies,
                         min_size=1, max_size=10,
                         min_turns=1, max_turns=200,
                         min_noise=0, max_noise=1,
@@ -162,7 +165,7 @@ def spatial_tournaments(draw, strategies=axelrod.strategies,
         The maximum number of turns
     min_noise : float
         The minimum noise value
-    min_noise : float
+    max_noise : float
         The maximum noise value
     min_repetitions : integer
         The minimum number of repetitions
@@ -193,14 +196,14 @@ def spatial_tournaments(draw, strategies=axelrod.strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = axelrod.SpatialTournament(players, turns=turns,
-                                           repetitions=repetitions, noise=noise,
-                                           edges=edges)
+    tournament = SpatialTournament(players, turns=turns,
+                                   repetitions=repetitions, noise=noise,
+                                   edges=edges)
     return tournament
 
 
 @composite
-def prob_end_spatial_tournaments(draw, strategies=axelrod.strategies,
+def prob_end_spatial_tournaments(draw, strategies=strategies,
                                 min_size=1, max_size=10,
                                 min_prob_end=0, max_prob_end=1,
                                 min_noise=0, max_noise=1,
@@ -220,7 +223,7 @@ def prob_end_spatial_tournaments(draw, strategies=axelrod.strategies,
         The maximum probability of a match ending
     min_noise : float
         The minimum noise value
-    min_noise : float
+    max_noise : float
         The maximum noise value
     min_repetitions : integer
         The minimum number of repetitions
@@ -251,10 +254,9 @@ def prob_end_spatial_tournaments(draw, strategies=axelrod.strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = axelrod.ProbEndSpatialTournament(players, prob_end=prob_end,
-                                                  repetitions=repetitions,
-                                                  noise=noise,
-                                                  edges=edges)
+    tournament = ProbEndSpatialTournament(players, prob_end=prob_end,
+                                          repetitions=repetitions,
+                                          noise=noise, edges=edges)
     return tournament
 
 
@@ -292,5 +294,5 @@ def games(draw, prisoners_dilemma=True, max_value=100):
         r = draw(integers(max_value=max_value))
         p = draw(integers(max_value=max_value))
 
-    game = axelrod.Game(r=r, s=s, t=t, p=p)
+    game = Game(r=r, s=s, t=t, p=p)
     return game
