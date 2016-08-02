@@ -702,6 +702,10 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
                                           max_turns=1),
            seed=integers(min_value=0, max_value=4294967295))
     def test_one_turn_tournament(self, tournament, seed):
+        """
+        Tests that gives same result as the corresponding spatial round robin
+        spatial tournament
+        """
         prob_end_tour = axelrod.ProbEndSpatialTournament(tournament.players,
                                          prob_end=1,
                                          edges=tournament.edges,
