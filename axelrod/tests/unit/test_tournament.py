@@ -663,6 +663,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.noise, 0.2)
+        self.assertEqual(tournament.match_generator.noise, 0.2)
         self.assertEqual(tournament.prob_end, self.test_prob_end)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')

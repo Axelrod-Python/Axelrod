@@ -245,21 +245,29 @@ class TestProbEndSpatialMatches(unittest.TestCase):
         cls.players = [s() for s in test_strategies]
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions),
-           prob_end=floats(min_value=.2, max_value=.7))
-    @example(repetitions=test_repetitions, prob_end=.5)
-    def test_build_match_chunks(self, repetitions, prob_end):
+           prob_end=floats(min_value=.2, max_value=.7),
+           noise=floats(min_value=0, max_value=1))
+    @example(repetitions=test_repetitions, prob_end=.5, noise=0)
+    def test_build_match_chunks(self, repetitions, prob_end, noise):
         edges = [(0, 1), (1, 2), (3, 4)]
-        noise = 0
         pesp = axelrod.ProbEndSpatialMatches(
             self.players, prob_end, test_game, repetitions, noise, edges)
         chunks = list(pesp.build_match_chunks())
-        match_definitions = [tuple(list(index_pair) + [repetitions])
-                             for (index_pair, match_params, repetitions) in chunks]
-        expected_match_definitions = [(edge[0], edge[1], repetitions)
-                                      for edge in edges]
 
-        self.assertEqual(sorted(match_definitions),
-                         sorted(expected_match_definitions))
+        match_definitions = set()
+
+        cache = None
+        attributes = {'game': test_game, 'length': float('inf'), 'noise': noise}
+        expected_params_without_turns = (test_game, cache, noise, attributes)
+
+        for index_pair, match_params, repetitions in chunks:
+            match_definitions.add(tuple(list(index_pair) + [repetitions]))
+            self.assertEqual(match_params[1:], expected_params_without_turns)
+
+        expected_match_definitions = set((edge[0], edge[1], repetitions)
+                                         for edge in edges)
+
+        self.assertEqual(match_definitions, expected_match_definitions)
 
     def test_len(self):
         edges = [(0, 1), (1, 2), (3, 4)]
@@ -297,8 +305,7 @@ class TestProbEndSpatialMatches(unittest.TestCase):
         chunks = pesp.build_match_chunks()
         match_lengths = [match_params[0]
                          for (index_pair, match_params, repetitions) in chunks]
-        self.assertNotEqual(min(match_lengths), max(match_lengths),
-                msg=str(match_lengths))
+        self.assertNotEqual(min(match_lengths), max(match_lengths))
 
     @given(noise=floats(min_value=0, max_value=1),
            prob_end=floats(min_value=0, max_value=1))
