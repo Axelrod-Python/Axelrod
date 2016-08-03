@@ -216,12 +216,13 @@ class SpatialMatches(RoundRobinMatches):
         A list of tuples containing the existing edges
     """
 
-    def __init__(self, players, turns, game, repetitions, edges):
+    def __init__(self, players, turns, game, repetitions, edges, noise=0):
 
         if not graph_is_connected(edges, players):
             raise ValueError("The graph edges do not include all players.")
         self.edges = edges
-        super(SpatialMatches, self).__init__(players, turns, game, repetitions)
+        super(SpatialMatches, self).__init__(players, turns, game, repetitions,
+                                             noise)
 
     def build_match_chunks(self):
         for edge in self.edges:
