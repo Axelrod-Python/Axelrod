@@ -11,7 +11,7 @@ import tqdm
 
 from .game import Game
 from .match import Match
-from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches
+from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches
 from .result_set import ResultSetFromFile
 
 
@@ -303,10 +303,9 @@ class Tournament(object):
 
 class ProbEndTournament(Tournament):
     """
-    A tournament in which the player don't know the length of a given match
-    (currently implemented by setting this to be infinite). The length of a
-    match is equivalent to randomly sampling after each round whether or not to
-    continue.
+    A tournament in which the player don't know the length of a given match. The
+    length of a match is equivalent to randomly sampling after each round
+    whether or not to continue.
     """
 
     def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
@@ -382,3 +381,46 @@ class SpatialTournament(Tournament):
         self.edges = edges
         self.match_generator = SpatialMatches(
             players, turns, self.game, repetitions, edges)
+
+
+class ProbEndSpatialTournament(ProbEndTournament):
+    """
+    A tournament in which the players are allocated in a graph as nodes
+    and they players only play the others that are connected to with an edge.
+    Players do not know the length of a given match (it is randomly sampled).
+    """
+    def __init__(self, players, edges, match_generator=SpatialMatches,
+                 name='axelrod', game=None, prob_end=.5, repetitions=10,
+                 noise=0,
+                 with_morality=True):
+        """
+        Parameters
+        ----------
+        players : list
+            A list of axelrod.Player objects
+        match_generator : class
+            A class that must be descended from axelrod.MatchGenerator
+        name : string
+            A name for the tournament
+        game : axelrod.Game
+            The game object used to score the tournament
+        prob_end : a float
+            The probability of a given match ending
+        edges : list
+            A list of tuples containing the existing edges
+        repetitions : integer
+            The number of times the round robin should be repeated
+        processes : integer
+            The number of processes to be used for parallel processing
+        noise : float
+            The probability that a player's intended action should be flipped
+        with_morality : boolean
+            Whether morality metrics should be calculated
+        """
+        super(ProbEndSpatialTournament, self).__init__(
+            players, name=name, game=game, prob_end=prob_end,
+            repetitions=repetitions, noise=noise, with_morality=with_morality)
+
+        self.edges = edges
+        self.match_generator = ProbEndSpatialMatches(
+            players, prob_end, self.game, repetitions, noise, edges)

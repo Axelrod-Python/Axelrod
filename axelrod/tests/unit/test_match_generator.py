@@ -5,6 +5,7 @@ from hypothesis import given, example
 from hypothesis.strategies import floats, integers
 
 import axelrod
+from axelrod.match_generator import graph_is_connected
 
 
 test_strategies = [
@@ -236,3 +237,106 @@ class TestSpatialMatches(unittest.TestCase):
             self.players, test_turns, test_game, test_repetitions, edges)
         self.assertEqual(len(sp), len(list(sp.build_match_chunks())))
         self.assertEqual(len(sp), len(edges))
+
+
+class TestProbEndSpatialMatches(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.players = [s() for s in test_strategies]
+
+    @given(repetitions=integers(min_value=1, max_value=test_repetitions),
+           prob_end=floats(min_value=.2, max_value=.7),
+           noise=floats(min_value=0, max_value=1))
+    @example(repetitions=test_repetitions, prob_end=.5, noise=0)
+    def test_build_match_chunks(self, repetitions, prob_end, noise):
+        edges = [(0, 1), (1, 2), (3, 4)]
+        pesp = axelrod.ProbEndSpatialMatches(
+            self.players, prob_end, test_game, repetitions, noise, edges)
+        chunks = list(pesp.build_match_chunks())
+
+        match_definitions = set()
+
+        cache = None
+        attributes = {'game': test_game, 'length': float('inf'), 'noise': noise}
+        expected_params_without_turns = (test_game, cache, noise, attributes)
+
+        for index_pair, match_params, repetitions in chunks:
+            match_definitions.add(tuple(list(index_pair) + [repetitions]))
+            self.assertEqual(match_params[1:], expected_params_without_turns)
+
+        expected_match_definitions = set((edge[0], edge[1], repetitions)
+                                         for edge in edges)
+
+        self.assertEqual(match_definitions, expected_match_definitions)
+
+    def test_raise_error_if_not_connected(self):
+        edges = [(0, 0), (0, 1), (1, 1)]
+        players = ["Cooperator", "Defector", "Alternator"]
+        noise = 0
+        self.assertRaises(ValueError, axelrod.ProbEndSpatialMatches,
+                          players, test_turns, test_game, test_repetitions,
+                          noise, edges)
+
+    def test_len(self):
+        edges = [(0, 1), (1, 2), (3, 4)]
+        noise = 0
+        pesp = axelrod.ProbEndSpatialMatches(
+            self.players, test_turns, test_game, test_repetitions, noise, edges)
+        self.assertEqual(len(pesp), len(list(pesp.build_match_chunks())))
+        self.assertEqual(len(pesp), len(edges))
+
+    @given(prob_end=floats(min_value=0, max_value=1))
+    def test_sample_length(self, prob_end):
+        edges = [(0, 1), (1, 2), (3, 4)]
+        noise = 0
+        pesp = axelrod.ProbEndSpatialMatches(
+            self.players, prob_end, test_game, test_repetitions, noise, edges)
+        self.assertGreaterEqual(pesp.sample_length(prob_end), 1)
+        try:
+            self.assertIsInstance(pesp.sample_length(prob_end), int)
+        except AssertionError:
+            self.assertEqual(pesp.sample_length(prob_end), float("inf"))
+
+    @given(prob_end=floats(min_value=0.005, max_value=0.01))
+    def test_build_matches_different_length(self, prob_end):
+        """
+        If prob end is not 0 or 1 then the matches should all have different
+        length
+
+        Theoretically, this test could fail as it's probabilistically possible
+        to sample all games with same length.
+        """
+        edges = [(0, 1), (1, 2), (3, 4)]
+        noise = 0
+        pesp = axelrod.ProbEndSpatialMatches(
+            self.players, prob_end, test_game, test_repetitions, noise, edges)
+        chunks = pesp.build_match_chunks()
+        match_lengths = [match_params[0]
+                         for (index_pair, match_params, repetitions) in chunks]
+        self.assertNotEqual(min(match_lengths), max(match_lengths))
+
+    @given(noise=floats(min_value=0, max_value=1),
+           prob_end=floats(min_value=0, max_value=1))
+    def test_noise(self, noise, prob_end):
+        edges = [(0, 1), (1, 2), (3, 4)]
+        pesp = axelrod.ProbEndSpatialMatches(
+            self.players, prob_end, test_game, test_repetitions, noise, edges)
+        self.assertEqual(pesp.noise, noise)
+        chunks = pesp.build_match_chunks()
+        noise_values = [match_params[3]
+                        for (index_pair, match_params, repetitions) in chunks]
+        for value in noise_values:
+            self.assertEqual(noise, value)
+
+
+class TestUtilityFunctions(unittest.TestCase):
+    def test_connected_graph(self):
+        edges = [(0, 0), (0, 1), (1, 1)]
+        players = ["Cooperator", "Defector"]
+        self.assertTrue(graph_is_connected(edges, players))
+
+    def test_unconnected_graph(self):
+        edges = [(0, 0), (0, 1), (1, 1)]
+        players = ["Cooperator", "Defector", "Alternator"]
+        self.assertFalse(graph_is_connected(edges, players))
