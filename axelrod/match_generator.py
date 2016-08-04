@@ -169,18 +169,20 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         return size
 
 
-def test_graph_is_connected(edges, players):
+def graph_is_connected(edges, players):
     """
     Test if a set of edges defines a complete graph on a set of players.
 
-    This is used by the spatial tournaments and will raise a ValueError if the
-    graph would have some players not playing anyone.
+    This is used by the spatial tournaments.
 
     Parameters:
     -----------
+    edges : a list of 2 tuples
+    players : a list of player names
 
-        edges : a list of 2 tuples
-        players : a list of player names
+    Returns:
+    --------
+    boolean : True if the graph is connected
     """
     # Check if all players are connected.
     player_indices = set(range(len(players)))
@@ -189,8 +191,7 @@ def test_graph_is_connected(edges, players):
         for node in edge:
             node_indices.add(node)
 
-    if player_indices != node_indices:
-        raise ValueError("The graph edges do not include all players.")
+    return player_indices == node_indices
 
 
 
@@ -217,7 +218,8 @@ class SpatialMatches(RoundRobinMatches):
 
     def __init__(self, players, turns, game, repetitions, edges):
 
-        test_graph_is_connected(edges, players)
+        if not graph_is_connected(edges, players):
+            raise ValueError("The graph edges do not include all players.")
         self.edges = edges
         super(SpatialMatches, self).__init__(players, turns, game, repetitions)
 
@@ -254,7 +256,8 @@ class ProbEndSpatialMatches(SpatialMatches, ProbEndRoundRobinMatches):
 
     def __init__(self, players, prob_end, game, repetitions, noise, edges):
 
-        test_graph_is_connected(edges, players)
+        if not graph_is_connected(edges, players):
+            raise ValueError("The graph edges do not include all players.")
         self.edges = edges
         ProbEndRoundRobinMatches.__init__(self, players, prob_end,
                                           game, repetitions, noise)

@@ -5,7 +5,7 @@ from hypothesis import given, example
 from hypothesis.strategies import floats, integers
 
 import axelrod
-from axelrod.match_generator import test_graph_is_connected
+from axelrod.match_generator import graph_is_connected
 
 
 test_strategies = [
@@ -270,6 +270,14 @@ class TestProbEndSpatialMatches(unittest.TestCase):
 
         self.assertEqual(match_definitions, expected_match_definitions)
 
+    def test_raise_error_if_not_connected(self):
+        edges = [(0, 0), (0, 1), (1, 1)]
+        players = ["Cooperator", "Defector", "Alternator"]
+        noise = 0
+        self.assertRaises(ValueError, axelrod.ProbEndSpatialMatches,
+                          players, test_turns, test_game, test_repetitions,
+                          noise, edges)
+
     def test_len(self):
         edges = [(0, 1), (1, 2), (3, 4)]
         noise = 0
@@ -326,9 +334,9 @@ class TestUtilityFunctions(unittest.TestCase):
     def test_connected_graph(self):
         edges = [(0, 0), (0, 1), (1, 1)]
         players = ["Cooperator", "Defector"]
-        self.assertEqual(test_graph_is_connected(edges, players), None)
+        self.assertTrue(graph_is_connected(edges, players))
 
     def test_unconnected_graph(self):
         edges = [(0, 0), (0, 1), (1, 1)]
         players = ["Cooperator", "Defector", "Alternator"]
-        self.assertRaises(ValueError, test_graph_is_connected, edges, players)
+        self.assertFalse(graph_is_connected(edges, players))
