@@ -123,7 +123,7 @@ def prob_end_tournaments(draw, strategies=strategies,
         The maximum probability of a match ending
     min_noise : float
         The minimum noise value
-    min_noise : float
+    max_noise : float
         The maximum noise value
     min_repetitions : integer
         The minimum number of repetitions
