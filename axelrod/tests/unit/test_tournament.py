@@ -708,8 +708,11 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
     @given(strategies=strategy_lists(strategies=deterministic_strategies,
                                      min_size=2, max_size=2),
            prob_end=floats(min_value=.1, max_value=.9),
+           reps=integers(min_value=1, max_value=3),
            seed=integers(min_value=0, max_value=4294967295))
-    def test_complete_tournament(self, strategies, prob_end, seed):
+    @settings(max_examples=50, timeout=0)
+    def test_complete_tournament(self, strategies, prob_end,
+                                 seed, reps):
         """
         A test to check that a spatial tournament on the complete graph
         gives the same results as the round robin.
@@ -720,12 +723,14 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
                  for j in range(i, len(players))]
         # create a prob end round robin tournament
         axelrod.seed(seed)
-        tournament = axelrod.ProbEndTournament(players, prob_end=prob_end)
+        tournament = axelrod.ProbEndTournament(players, prob_end=prob_end,
+                                               repetitions=reps)
         results = tournament.play(progress_bar=False)
         # create a complete spatial tournament
         axelrod.seed(seed)
         spatial_tournament = axelrod.ProbEndSpatialTournament(players,
                                                               prob_end=prob_end,
+                                                              repetitions=reps,
                                                               edges=edges)
         spatial_results = spatial_tournament.play(progress_bar=False)
         self.assertEqual(results.match_lengths, spatial_results.match_lengths)
@@ -737,8 +742,10 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
 
 
     @given(tournament=spatial_tournaments(strategies=axelrod.basic_strategies,
-                                          max_turns=1),
+                                          max_turns=1, max_noise=0,
+                                          max_repetitions=3),
            seed=integers(min_value=0, max_value=4294967295))
+    @settings(max_examples=50, timeout=0)
     def test_one_turn_tournament(self, tournament, seed):
         """
         Tests that gives same result as the corresponding spatial round robin
