@@ -5,6 +5,7 @@ from hypothesis import given, example
 from hypothesis.strategies import floats, integers
 
 import axelrod
+from axelrod.match_generator import test_graph_is_connected
 
 
 test_strategies = [
@@ -319,3 +320,15 @@ class TestProbEndSpatialMatches(unittest.TestCase):
                         for (index_pair, match_params, repetitions) in chunks]
         for value in noise_values:
             self.assertEqual(noise, value)
+
+
+class TestUtilityFunctions(unittest.TestCase):
+    def test_connected_graph(self):
+        edges = [(0, 0), (0, 1), (1, 1)]
+        players = ["Cooperator", "Defector"]
+        self.assertEqual(test_graph_is_connected(edges, players), None)
+
+    def test_unconnected_graph(self):
+        edges = [(0, 0), (0, 1), (1, 1)]
+        players = ["Cooperator", "Defector", "Alternator"]
+        self.assertRaises(ValueError, test_graph_is_connected, edges, players)

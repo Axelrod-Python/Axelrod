@@ -169,6 +169,31 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         return size
 
 
+def test_graph_is_connected(edges, players):
+    """
+    Test if a set of edges defines a complete graph on a set of players.
+
+    This is used by the spatial tournaments and will raise a ValueError if the
+    graph would have some players not playing anyone.
+
+    Parameters:
+    -----------
+
+        edges : a list of 2 tuples
+        players : a list of player names
+    """
+    # Check if all players are connected.
+    player_indices = set(range(len(players)))
+    node_indices = set()
+    for edge in edges:
+        for node in edge:
+            node_indices.add(node)
+
+    if player_indices != node_indices:
+        raise ValueError("The graph edges do not include all players.")
+
+
+
 class SpatialMatches(RoundRobinMatches):
     """
     A class that generates spatially-structured matches.
@@ -192,16 +217,7 @@ class SpatialMatches(RoundRobinMatches):
 
     def __init__(self, players, turns, game, repetitions, edges):
 
-        # Check if all players are connected.
-        player_indices = set(range(len(players)))
-        node_indices = set()
-        for edge in edges:
-            for node in edge:
-                node_indices.add(node)
-
-        if player_indices != node_indices:
-            raise ValueError("The graph edges do not include all players.")
-
+        test_graph_is_connected(edges, players)
         self.edges = edges
         super(SpatialMatches, self).__init__(players, turns, game, repetitions)
 
@@ -238,16 +254,7 @@ class ProbEndSpatialMatches(SpatialMatches, ProbEndRoundRobinMatches):
 
     def __init__(self, players, prob_end, game, repetitions, noise, edges):
 
-        # Check if all players are connected.
-        player_indices = set(range(len(players)))
-        node_indices = set()
-        for edge in edges:
-            for node in edge:
-                node_indices.add(node)
-
-        if player_indices != node_indices:
-            raise ValueError("The graph edges do not include all players.")
-
+        test_graph_is_connected(edges, players)
         self.edges = edges
         ProbEndRoundRobinMatches.__init__(self, players, prob_end,
                                           game, repetitions, noise)
