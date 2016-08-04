@@ -594,45 +594,82 @@ class TestSpatialTournament(unittest.TestCase):
         self.assertTrue(tournament._with_morality)
         self.assertIsInstance(tournament._logger, logging.Logger)
         self.assertEqual(tournament.noise, 0.2)
+        self.assertEqual(tournament.match_generator.noise, 0.2)
         anonymous_tournament = axelrod.Tournament(players=self.players)
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
-        @given(strategies=strategy_lists(strategies=deterministic_strategies,
-                                         min_size=2, max_size=2),
-               turns=integers(min_value=1, max_value=20))
+    @given(strategies=strategy_lists(strategies=deterministic_strategies,
+                                     min_size=2, max_size=2),
+           turns=integers(min_value=1, max_value=20),
+           repetitions=integers(min_value=1, max_value=5),
+           noise=floats(min_value=0, max_value=1),
+           seed=integers(min_value=0, max_value=4294967295))
+    @settings(max_examples=50, timeout=0)
+    def test_complete_tournament(self, strategies, turns, repetitions,
+                                 noise, seed):
+        """
+        A test to check that a spatial tournament on the complete multigraph
+        gives the same results as the round robin.
+        """
 
-        def test_complete_tournament(self, strategies, turns):
-            """
-            A test to check that a spatial tournament on the complete multigraph
-            gives the same results as the round robin.
-            """
+        players = [s() for s in strategies]
+        # edges
+        edges = []
+        for i in range(0, len(players)):
+            for j in range(i, len(players)):
+                edges.append((i, j))
 
-            players = [s() for s in strategies]
-            # edges
-            edges=[]
-            for i in range(0, len(players)) :
-                for j in range(i, len(players)) :
-                    edges.append((i, j))
-            # create a round robin tournament
-            tournament = axelrod.Tournament(players, turns=turns)
-            results = tournament.play()
-            # create a complete spatial tournament
-            spatial_tournament = axelrod.SpatialTournament(players, turns=turns,
-                                                           edges=edges)
-            spatial_results =  spatial_tournament.play()
-            self.assertEqual(results.ranked_names, spatial_results.ranked_names)
-            self.assertEqual(results.nplayers, spatial_results.nplayers)
-            self.assertEqual(results.nrepetitions, spatial_results.nrepetitions)
-            self.assertEqual(results.payoff_diffs_means, spatial_results.payoff_diffs_means)
-            self.assertEqual(results.payoff_matrix, spatial_results.payoff_matrix)
-            self.assertEqual(results.payoff_stddevs, spatial_results.payoff_stddevs)
-            self.assertEqual(results.payoffs, spatial_results.payoffs)
-            self.assertEqual(results.cooperating_rating, spatial_results.cooperating_rating)
-            self.assertEqual(results.cooperation, spatial_results.cooperation)
-            self.assertEqual(results.normalised_cooperation, spatial_results.normalised_cooperation)
-            self.assertEqual(results.normalised_scores, spatial_results.normalised_scores)
-            self.assertEqual(results.good_partner_matrix, spatial_results.good_partner_matrix)
-            self.assertEqual(results.good_partner_rating, spatial_results.good_partner_rating)
+        # create a round robin tournament
+        tournament = axelrod.Tournament(players, repetitions=repetitions,
+                                        turns=turns, noise=noise)
+        # create a complete spatial tournament
+        spatial_tournament = axelrod.SpatialTournament(players,
+                                                       repetitions=repetitions,
+                                                       turns=turns,
+                                                       noise=noise,
+                                                       edges=edges)
+
+        axelrod.seed(seed)
+        results = tournament.play(progress_bar=False)
+        axelrod.seed(seed)
+        spatial_results = spatial_tournament.play(progress_bar=False)
+
+        self.assertEqual(results.ranked_names, spatial_results.ranked_names)
+        self.assertEqual(results.nplayers, spatial_results.nplayers)
+        self.assertEqual(results.nrepetitions, spatial_results.nrepetitions)
+        self.assertEqual(results.payoff_diffs_means,
+                         spatial_results.payoff_diffs_means)
+        self.assertEqual(results.payoff_matrix, spatial_results.payoff_matrix)
+        self.assertEqual(results.payoff_stddevs, spatial_results.payoff_stddevs)
+        self.assertEqual(results.payoffs, spatial_results.payoffs)
+        self.assertEqual(results.cooperating_rating,
+                         spatial_results.cooperating_rating)
+        self.assertEqual(results.cooperation, spatial_results.cooperation)
+        self.assertEqual(results.normalised_cooperation,
+                         spatial_results.normalised_cooperation)
+        self.assertEqual(results.normalised_scores,
+                         spatial_results.normalised_scores)
+        self.assertEqual(results.good_partner_matrix,
+                         spatial_results.good_partner_matrix)
+        self.assertEqual(results.good_partner_rating,
+                         spatial_results.good_partner_rating)
+
+    def test_particular_tournament(self):
+        """A test for a tournament that has caused failures during some bug
+        fixing"""
+        players = [axelrod.Cooperator(), axelrod.Defector(),
+                   axelrod.TitForTat(), axelrod.Grudger()]
+        edges = [(0, 2), (0, 3), (1, 2), (1, 3)]
+        tournament = axelrod.SpatialTournament(players, edges=edges)
+        results = tournament.play(progress_bar=False)
+        expected_ranked_names = ['Cooperator', 'Tit For Tat',
+                                 'Grudger', 'Defector']
+        self.assertEqual(results.ranked_names, expected_ranked_names)
+
+        # Check that this tournament runs with noise
+        tournament = axelrod.SpatialTournament(players, edges=edges, noise=.5)
+        results = tournament.play(progress_bar=False)
+        self.assertIsInstance(results, axelrod.ResultSetFromFile)
 
 
 class TestProbEndingSpatialTournament(unittest.TestCase):
@@ -671,8 +708,11 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
     @given(strategies=strategy_lists(strategies=deterministic_strategies,
                                      min_size=2, max_size=2),
            prob_end=floats(min_value=.1, max_value=.9),
+           reps=integers(min_value=1, max_value=3),
            seed=integers(min_value=0, max_value=4294967295))
-    def test_complete_tournament(self, strategies, prob_end, seed):
+    @settings(max_examples=50, timeout=0)
+    def test_complete_tournament(self, strategies, prob_end,
+                                 seed, reps):
         """
         A test to check that a spatial tournament on the complete graph
         gives the same results as the round robin.
@@ -683,12 +723,14 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
                  for j in range(i, len(players))]
         # create a prob end round robin tournament
         axelrod.seed(seed)
-        tournament = axelrod.ProbEndTournament(players, prob_end=prob_end)
+        tournament = axelrod.ProbEndTournament(players, prob_end=prob_end,
+                                               repetitions=reps)
         results = tournament.play(progress_bar=False)
         # create a complete spatial tournament
         axelrod.seed(seed)
         spatial_tournament = axelrod.ProbEndSpatialTournament(players,
                                                               prob_end=prob_end,
+                                                              repetitions=reps,
                                                               edges=edges)
         spatial_results = spatial_tournament.play(progress_bar=False)
         self.assertEqual(results.match_lengths, spatial_results.match_lengths)
@@ -700,8 +742,10 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
 
 
     @given(tournament=spatial_tournaments(strategies=axelrod.basic_strategies,
-                                          max_turns=1),
+                                          max_turns=1, max_noise=0,
+                                          max_repetitions=3),
            seed=integers(min_value=0, max_value=4294967295))
+    @settings(max_examples=50, timeout=0)
     def test_one_turn_tournament(self, tournament, seed):
         """
         Tests that gives same result as the corresponding spatial round robin

@@ -217,19 +217,27 @@ class TestSpatialMatches(unittest.TestCase):
         cls.players = [s() for s in test_strategies]
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions),
-           turns=integers(min_value=1, max_value=test_turns))
-    @example(repetitions=test_repetitions, turns=test_turns)
-    def test_build_match_chunks(self, repetitions, turns):
+           turns=integers(min_value=1, max_value=test_turns),
+           noise=floats(min_value=0, max_value=1))
+    @example(repetitions=test_repetitions, turns=test_turns, noise=0)
+    def test_build_match_chunks(self, repetitions, turns, noise):
         edges = [(0, 1), (1, 2), (3, 4)]
         sp = axelrod.SpatialMatches(
-            self.players, turns, test_game, repetitions, edges)
+            self.players, turns, test_game, repetitions, edges, noise)
         chunks = list(sp.build_match_chunks())
-        match_definitions = [tuple(list(index_pair) + [repetitions])
-                             for (index_pair, match_params, repetitions) in chunks]
-        expected_match_definitions = [(edge[0], edge[1], repetitions)
-                                      for edge in edges]
 
-        self.assertEqual(sorted(match_definitions), sorted(expected_match_definitions))
+        match_definitions = set()
+
+        cache = None
+        expected_params = (turns, test_game, cache, noise)
+        for index_pair, match_params, repetitions in chunks:
+            match_definitions.add(tuple(list(index_pair) + [repetitions]))
+            self.assertEqual(match_params, expected_params)
+
+        expected_match_definitions = set((edge[0], edge[1], repetitions)
+                                         for edge in edges)
+
+        self.assertEqual(match_definitions, expected_match_definitions)
 
     def test_len(self):
         edges = [(0, 1), (1, 2), (3, 4)]
