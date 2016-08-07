@@ -111,6 +111,8 @@ class Tournament(object):
         if build_results:
             return self._build_result_set(progress_bar=progress_bar,
                                           keep_interactions=keep_interactions)
+        else:
+            self.outputfile.close()
 
     def _build_result_set(self, progress_bar=True, keep_interactions=False):
         """
