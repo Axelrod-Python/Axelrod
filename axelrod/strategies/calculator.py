@@ -1,5 +1,3 @@
-import itertools
-
 from axelrod import Actions, Player
 from .axelrod_first import Joss
 from axelrod._strategy_utils import detect_cycle

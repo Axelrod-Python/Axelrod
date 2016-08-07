@@ -4,9 +4,7 @@ Most tests come form the LookerUp test suite
 """
 
 import axelrod
-import random
 from .test_player import TestPlayer, TestHeadsUp
-from axelrod import random_choice, Actions
 
 import copy
 

@@ -5,7 +5,6 @@ import axelrod.interaction_utils as iu
 from numpy import mean, std
 
 import tempfile
-import os
 
 from hypothesis import given, settings
 from axelrod.tests.property import tournaments, prob_end_tournaments

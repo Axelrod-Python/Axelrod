@@ -1,5 +1,4 @@
 from axelrod import Actions, Player, init_args, random_choice
-import copy
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 

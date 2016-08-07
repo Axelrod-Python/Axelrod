@@ -1,7 +1,5 @@
 """Test for the punisher strategy."""
 
-import random
-
 import axelrod
 from .test_player import TestPlayer
 
@@ -116,4 +114,3 @@ class TestInversePunisher(TestPlayer):
         self.assertEqual(P1.history, [])
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)
-        
