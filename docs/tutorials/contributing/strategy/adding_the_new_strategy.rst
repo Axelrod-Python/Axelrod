@@ -8,7 +8,7 @@ in the :code:`axelrod/strategies/_strategies.py` file.
 If you have added your strategy to a file that already existed (perhaps you
 added a new variant of :code:`titfortat` to the :code:`titfortat.py` file),
 simply add your strategy to the list of strategies already imported from
-`<file_name>.py`::
+:code:`<file_name>.py`::
 
     from <file_name> import <list-of-strategies>
 

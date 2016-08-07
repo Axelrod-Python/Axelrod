@@ -12,4 +12,5 @@ Contents:
    play_contexts.rst
    overview_of_strategies.rst
    all_strategies.rst
+   bibliography.rst
    glossary.rst

@@ -4,9 +4,10 @@ Morality Metrics
 ================
 
 Tyler Singer-Clark's June 2014 paper, "Morality Metrics On Iterated Prisoner’s
-Dilemma Players," describes several interesting metrics which may be used to
-analyse IPD tournaments all of which are available within the ResultSet class.
-(Tyler's paper is available here: http://www.scottaaronson.com/morality.pdf).
+Dilemma Players" [Tyler-Clark2014]), describes several interesting metrics which
+may be used to analyse IPD tournaments all of which are available within the
+ResultSet class. (Tyler's paper is available here:
+http://www.scottaaronson.com/morality.pdf).
 
 Each metric depends upon the cooperation rate of the players, defined by Tyler
 Singer-Clark as:

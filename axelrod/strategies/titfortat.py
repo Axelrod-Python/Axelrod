@@ -12,6 +12,11 @@ class TitForTat(Player):
     Note that the code for this strategy is written in a fairly verbose
     way. This is done so that it can serve as an example strategy for
     those who might be new to Python.
+
+    Names
+
+    - Rapoport's strategy: [Axelrod1980]_
+    - TitForTat: [Axelrod1980]_
     """
 
     # These are various properties for the strategy

@@ -18,7 +18,7 @@ To do this let us create a new class to generate matches::
 
     >>> import axelrod as axl
     >>> import random
-    >>> random.seed(0)  # Setting a seed
+    >>> axl.seed(0)  # Setting a seed.
     >>> class StochasticMatchups(axl.RoundRobinMatches):
     ...     """Inherit from the `axelrod.match_generator.RoundRobinMatches` class"""
     ...

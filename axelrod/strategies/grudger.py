@@ -3,7 +3,17 @@ from axelrod import Actions, Player
 C, D = Actions.C, Actions.D
 
 class Grudger(Player):
-    """A player starts by cooperating however will defect if at any point the opponent has defected."""
+    """
+    A player starts by cooperating however will defect if at any point the
+    opponent has defected.
+
+    Names:
+
+    - Friedman's strategy: [Axelrod1980]_
+    - Grudger: [Li2011]_
+    - Grim: [Berg2015]_
+    - Grim Trigger: [Banks1980]_
+    """
 
     name = 'Grudger'
     classifier = {

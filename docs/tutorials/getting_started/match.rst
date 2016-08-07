@@ -18,27 +18,20 @@ For example, to create a 5 turn match between :code:`Cooperator` and
 
 By default, a match will not be noisy, but you can introduce noise if you wish::
 
-    >>> import axelrod as axl
-    >>> players = (axl.Cooperator(), axl.Alternator())
     >>> match = axl.Match(players=players, turns=5, noise=0.2)
-    >>> match.play() # doctest: +SKIP
-    [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
+    >>> match.play()  # doctest: +SKIP
+    [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('D', 'D')]
 
 The result of the match is held as an attribute within the :code:`Match` class.
 Each time :code:`play()` is called, it will overwrite the content of that
 attribute::
 
-    >>> import axelrod as axl
-    >>> players = (axl.Cooperator(), axl.Alternator())
-    >>> match = axl.Match(players=players, turns=5, noise=0.2)
+    >>> match.result  # doctest: +SKIP
+    [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('D', 'D')]
     >>> match.play()  # doctest: +SKIP
-    [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
-    >>> match.result # doctest: +SKIP
-    [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
-    >>> match.play() # doctest: +SKIP
-    [('D', 'C'), ('D', 'C'), ('C', 'D'), ('C', 'D'), ('C', 'C')]
-    >>> match.result # doctest: +SKIP
-    [('D', 'C'), ('D', 'C'), ('C', 'D'), ('C', 'D'), ('C', 'C')]
+    [('C', 'C'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'C')]
+    >>> match.result  # doctest: +SKIP
+    [('C', 'C'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'C')]
 
 
 The result of the match can also be viewed as sparklines where cooperation is
@@ -51,7 +44,7 @@ way to view the result and can be useful for spotting patterns::
     >>> match = axl.Match(players, 25)
     >>> match.play()
     [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
-    >>> print(match.sparklines()) # doctest: +SKIP
+    >>> print(match.sparklines())  # doctest: +SKIP
     █████████████████████████
     █ █ █ █ █ █ █ █ █ █ █ █ █
 

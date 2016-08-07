@@ -106,17 +106,18 @@ All three of these functions can take an optional keyword argument
    expected responses are D, C, C, C. Note that the histories will elongate as
    the responses accumulated.
 
-    The function :code:`responses_test` also accepts a dictionary parameter of
-    attributes to check at the end of the checks. For example this test checks
-    if the player's internal variable :code:`opponent_class` is set to
-    :code:`"Cooperative"`::
+   The function :code:`responses_test` also accepts a dictionary parameter of
+   attributes to check at the end of the checks. For example this test checks
+   if the player's internal variable :code:`opponent_class` is set to
+   :code:`"Cooperative"`::
 
-        self.responses_test([C] * 6, [C] * 6, [C],
-                        attrs={"opponent_class": "Cooperative"})
+       self.responses_test([C] * 6, [C] * 6, [C],
+                       attrs={"opponent_class": "Cooperative"})
 
 Finally, there is a :code:`TestHeadsUp` class that streamlines the testing of
 two strategies playing each other using a test function :code:`versus_test`. For
-example, to test several rounds of play of Tit-For-Two-Tats versus Bully::
+example, to test several rounds of play of :code:`TitForTwoTats` versus
+:code:`Bully`::
 
     class TestTF2TvsBully(TestHeadsUp):
         """Test Tit for Two Tats vs Bully"""
