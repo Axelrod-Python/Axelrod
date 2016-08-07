@@ -31,10 +31,10 @@ class Gambler(LookerUp):
         """
         if not lookup_table:
             lookup_table = {
-            ('', 'C', 'D') : 0,
-            ('', 'D', 'D') : 0,
-            ('', 'C', 'C') : 1,
-            ('', 'D', 'C') : 1,
+            ('', 'C', 'D'): 0,
+            ('', 'D', 'D'): 0,
+            ('', 'C', 'C'): 1,
+            ('', 'D', 'C'): 1,
             }
         LookerUp.__init__(self, lookup_table=lookup_table, value_length=None)
 

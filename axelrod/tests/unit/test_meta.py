@@ -146,8 +146,7 @@ class TestMetaWinner(TestMetaPlayer):
     expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
-
-        P1 = axelrod.MetaWinner(team = [axelrod.Cooperator, axelrod.Defector])
+        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         P2 = axelrod.Player()
 
         # This meta player will simply choose the strategy with the highest current score.
@@ -164,19 +163,19 @@ class TestMetaWinner(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
         opponent = axelrod.Cooperator()
-        player = axelrod.MetaWinner(team = [axelrod.Cooperator, axelrod.Defector])
+        player = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         for _ in range(5):
             player.play(opponent)
         self.assertEqual(player.history[-1], C)
 
         opponent = axelrod.Defector()
-        player = axelrod.MetaWinner(team = [axelrod.Defector])
+        player = axelrod.MetaWinner(team=[axelrod.Defector])
         for _ in range(20):
             player.play(opponent)
         self.assertEqual(player.history[-1], D)
 
         opponent = axelrod.Defector()
-        player = axelrod.MetaWinner(team = [axelrod.Cooperator, axelrod.Defector])
+        player = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         for _ in range(20):
             player.play(opponent)
         self.assertEqual(player.history[-1], D)
@@ -188,7 +187,7 @@ class TestMetaHunter(TestMetaPlayer):
     player = axelrod.MetaHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -207,7 +206,8 @@ class TestMetaHunter(TestMetaPlayer):
         self.responses_test([C] * 4, [D] * 4, [D])
         self.responses_test([C] * 6, [C, D] * 3, [D])
         self.responses_test([C] * 8, [C, C, C, D, C, C, C, D], [D])
-        self.responses_test([C] * 100, [random.choice([C, D]) for i in range(100)],[D])
+        self.responses_test([C] * 100,
+                            [random.choice([C, D]) for i in range(100)], [D])
         # Test post 100 rounds responses
         self.responses_test([C] * 101, [C] * 101, [C])
         self.responses_test([C] * 101, [C] * 100 + [D], [D])
@@ -218,7 +218,7 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
     player = axelrod.MetaMajorityMemoryOne
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : True,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -257,7 +257,7 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     player = axelrod.MetaMajorityFiniteMemory
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : True,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -266,7 +266,6 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     expected_class_classifier = copy.copy(expected_classifier)
     expected_class_classifier['stochastic'] = False
     expected_class_classifier['makes_use_of'] = set([])
-
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -277,7 +276,7 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
     player = axelrod.MetaWinnerFiniteMemory
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : True,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -286,7 +285,6 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
     expected_class_classifier = copy.copy(expected_classifier)
     expected_class_classifier['stochastic'] = False
     expected_class_classifier['makes_use_of'] = set([])
-
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -297,7 +295,7 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
     player = axelrod.MetaMajorityLongMemory
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : True,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -306,7 +304,6 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
     expected_class_classifier = copy.copy(expected_classifier)
     expected_class_classifier['stochastic'] = False
     expected_class_classifier['makes_use_of'] = set([])
-
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -317,7 +314,7 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
     player = axelrod.MetaWinnerLongMemory
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : True,
+        'stochastic': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

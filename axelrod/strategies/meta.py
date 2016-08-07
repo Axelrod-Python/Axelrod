@@ -1,6 +1,8 @@
 from axelrod import Actions, Player, obey_axelrod
 from ._strategies import all_strategies
-from .hunter import DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter, EventualCycleHunter
+from .hunter import (
+    DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter,
+    CycleHunter, EventualCycleHunter)
 from .cooperator import Cooperator
 from numpy.random import choice
 
@@ -8,11 +10,11 @@ from numpy.random import choice
 ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
 C, D = Actions.C, Actions.D
 
+
 class MetaPlayer(Player):
     """A generic player that has its own team of players."""
 
     name = "Meta Player"
-
     team = [Cooperator]
     classifier = {
         'memory_depth': float('inf'),  # Long memory
@@ -24,7 +26,6 @@ class MetaPlayer(Player):
     }
 
     def __init__(self):
-
         super(MetaPlayer, self).__init__()
 
         # Make sure we don't use any meta players to avoid infinite recursion.
@@ -45,7 +46,6 @@ class MetaPlayer(Player):
             self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
 
     def strategy(self, opponent):
-
         # Make sure the history of all hunters is current.
         for ih in range(len(self.team)):
             self.team[ih].history = self.history
@@ -117,9 +117,9 @@ class MetaWinner(MetaPlayer):
     name = "Meta Winner"
 
     def __init__(self, team=None):
-
-        # The default is to use all strategies available, but we need to import the list
-        # at runtime, since _strategies import also _this_ module before defining the list.
+        # The default is to use all strategies available, but we need to import
+        # the list at runtime, since _strategies import also _this_ module
+        # before defining the list.
         if team:
             self.team = team
         else:
@@ -136,7 +136,6 @@ class MetaWinner(MetaPlayer):
             t.score = 0
 
     def strategy(self, opponent):
-
         # Update the running score for each player, before determining the next move.
         if len(self.history):
             for player in self.team:
@@ -147,15 +146,15 @@ class MetaWinner(MetaPlayer):
         return super(MetaWinner, self).strategy(opponent)
 
     def meta_strategy(self, results, opponent):
-
         scores = [pl.score for pl in self.team]
         bestscore = max(scores)
         beststrategies = [i for i, pl in enumerate(self.team) if pl.score == bestscore]
         bestproposals = [results[i] for i in beststrategies]
         bestresult = C if C in bestproposals else D
 
-        # Update each player's proposed history with his proposed result, but always after
-        # the new result has been settled based on scores accumulated until now.
+        # Update each player's proposed history with his proposed result, but
+        # always after the new result has been settled based on scores
+        # accumulated until now.
         for r, t in zip(results, self.team):
             t.proposed_history.append(r)
 
@@ -180,25 +179,27 @@ class MetaHunter(MetaPlayer):
     }
 
     def __init__(self):
-        # Notice that we don't include the cooperator hunter, because it leads to excessive
-        # defection and therefore bad performance against unforgiving strategies. We will stick
-        # to hunters that use defections as cues. However, a really tangible benefit comes from
-        # combining Random Hunter and Math Constant Hunter, since together they catch strategies
-        # that are lightly randomized but still quite constant (the tricky/suspecious ones).
+        # Notice that we don't include the cooperator hunter, because it leads
+        # to excessive defection and therefore bad performance against
+        # unforgiving strategies. We will stick to hunters that use defections
+        # as cues. However, a really tangible benefit comes from combining
+        # Random Hunter and Math Constant Hunter, since together they catch
+        # strategies that are lightly randomized but still quite constant
+        # (the tricky/suspicious ones).
         self.team = [DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter, CycleHunter, EventualCycleHunter]
 
         super(MetaHunter, self).__init__()
 
     @staticmethod
     def meta_strategy(results, opponent):
-
         # If any of the hunters smells prey, then defect!
         if D in results:
             return D
 
-        # Tit-for-tat might seem like a better default choice, but in many cases it complicates
-        # the heuristics of hunting and creates fale-positives. So go ahead and use it, but only
-        # for longer histories.
+        # Tit-for-tat might seem like a better default choice, but in many
+        # cases it complicates the heuristics of hunting and creates
+        # false-positives. So go ahead and use it, but only for longer
+        # histories.
         if len(opponent.history) > 100:
             return D if opponent.history[-1:] == [D] else C
         else:
@@ -231,6 +232,7 @@ class MetaMajorityFiniteMemory(MetaMajority):
     """MetaMajority with the team of Finite Memory Players"""
 
     name = "Meta Majority Finite Memory"
+
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
@@ -242,6 +244,7 @@ class MetaWinnerFiniteMemory(MetaWinner):
     """MetaWinner with the team of Finite Memory Players"""
 
     name = "Meta Winner Finite Memory"
+
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
@@ -253,6 +256,7 @@ class MetaMajorityLongMemory(MetaMajority):
     """MetaMajority with the team of Long (infinite) Memory Players"""
 
     name = "Meta Majority Long Memory"
+
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
@@ -264,6 +268,7 @@ class MetaWinnerLongMemory(MetaWinner):
     """MetaWinner with the team of Long (infinite) Memory Players"""
 
     name = "Meta Winner Long Memory"
+
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
@@ -299,9 +304,9 @@ class MetaMixer(MetaPlayer):
     }
 
     def __init__(self, team=None, distribution=None):
-
-        # The default is to use all strategies available, but we need to import the list
-        # at runtime, since _strategies import also _this_ module before defining the list.
+        # The default is to use all strategies available, but we need to import
+        # the list at runtime, since _strategies import also _this_ module
+        # before defining the list.
         if team:
             self.team = team
         else:

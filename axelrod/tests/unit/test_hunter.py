@@ -37,7 +37,7 @@ class TestDefectorHunter(TestPlayer):
     player = axelrod.DefectorHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -57,7 +57,7 @@ class TestCooperatorHunter(TestPlayer):
     player = axelrod.CooperatorHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -77,7 +77,7 @@ class TestAlternatorHunter(TestPlayer):
     player = axelrod.AlternatorHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'inspects_source': False,
         'makes_use_of': set(),
         'manipulates_source': False,
@@ -100,7 +100,7 @@ class TestCycleHunter(TestPlayer):
     player = axelrod.CycleHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -132,7 +132,7 @@ class TestEventualCycleHunter(TestPlayer):
     player = axelrod.CycleHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -150,7 +150,8 @@ class TestEventualCycleHunter(TestPlayer):
                 player.play(opponent)
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers and cooperators
-        for opponent in [axelrod.Random(), axelrod.AntiCycler(), axelrod.DoubleCrosser(), axelrod.Cooperator()]:
+        for opponent in [axelrod.Random(), axelrod.AntiCycler(),
+                         axelrod.DoubleCrosser(), axelrod.Cooperator()]:
             player.reset()
             for i in range(50):
                 player.play(opponent)
@@ -163,7 +164,7 @@ class TestMathConstantHunter(TestPlayer):
     player = axelrod.MathConstantHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -180,7 +181,7 @@ class TestRandomHunter(TestPlayer):
     player = axelrod.RandomHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -189,10 +190,7 @@ class TestRandomHunter(TestPlayer):
 
     def test_strategy(self):
 
-        P1 = axelrod.RandomHunter()
-        P2 = axelrod.Player()
-
-        # We should also catch the alternator here.
+        # We should catch the alternator here.
         self.responses_test([C] * 12, [C, D] * 6, [D])
 
         # It is still possible for this test to fail, but very unlikely.

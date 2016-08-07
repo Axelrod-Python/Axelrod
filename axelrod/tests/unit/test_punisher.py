@@ -12,7 +12,7 @@ class TestPunisher(TestPlayer):
     player = axelrod.Punisher
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -103,9 +103,6 @@ class TestInversePunisher(TestPlayer):
                                         "mem_length": 16})
 
     def test_reset_method(self):
-        """
-        tests the reset method
-        """
         P1 = axelrod.InversePunisher()
         P1.history = [C, D, D, D]
         P1.grudged = True

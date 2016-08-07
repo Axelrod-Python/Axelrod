@@ -75,7 +75,6 @@ class TestGTFT(TestPlayer):
         self.first_play_test(C)
 
     def test_four_vector(self):
-        player = self.player()
         (R, P, S, T) = Game().RPST()
         p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
         expected_dictionary = {(C, C): 1., (C, D): p, (D, C): 1., (D, D): p}

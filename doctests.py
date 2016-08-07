@@ -7,8 +7,9 @@ def load_tests(loader, tests, ignore):
     for root, dirs, files in os.walk("./docs"):
         for f in files:
             if f.endswith(".rst"):
-                 tests.addTests(doctest.DocFileSuite(os.path.join(root, f),
-                                                  optionflags=doctest.ELLIPSIS))
+                 tests.addTests(
+                     doctest.DocFileSuite(os.path.join(root, f),
+                                          optionflags=doctest.ELLIPSIS))
 
     return tests
 

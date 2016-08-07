@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class MindController(Player):
     """A player that changes the opponents strategy to cooperate."""
 

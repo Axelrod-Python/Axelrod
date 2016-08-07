@@ -17,7 +17,7 @@ class TestGambler(TestPlayer):
     player = axelrod.Gambler
 
     expected_classifier = {
-        'memory_depth': 1, # Default TFT table
+        'memory_depth': 1,  # Default TFT table
         'stochastic': True,
         'makes_use_of': set(['length']),
         'inspects_source': False,
@@ -36,10 +36,10 @@ class TestGambler(TestPlayer):
         # Test default table
         player = self.player()
         expected_lookup_table = {
-            ('', 'C', 'D') : 0,
-            ('', 'D', 'D') : 0,
-            ('', 'C', 'C') : 1,
-            ('', 'D', 'C') : 1,
+            ('', 'C', 'D'): 0,
+            ('', 'D', 'D'): 0,
+            ('', 'C', 'C'): 1,
+            ('', 'D', 'C'): 1,
         }
         self.assertEqual(player.lookup_table, expected_lookup_table)
         # Test malformed tables
@@ -88,7 +88,7 @@ class TestPSOGambler(TestPlayer):
 
     def test_init(self):
         # Check for a few known keys
-        known_pairs = { ('CD', 'DD', 'DD'): 0.48, ('CD', 'CC', 'DD'): 0.67}
+        known_pairs = {('CD', 'DD', 'DD'): 0.48, ('CD', 'CC', 'DD'): 0.67}
         player = self.player()
         for k, v in known_pairs.items():
             self.assertEqual(player.lookup_table[k], v)
@@ -97,7 +97,7 @@ class TestPSOGambler(TestPlayer):
         """Starts by cooperating."""
         self.first_play_test(C)
         # Defects on the last two rounds
-        self.responses_test([C] * 197 , [C] * 197, [C, D, D],
+        self.responses_test([C] * 197, [C] * 197, [C, D, D],
                             tournament_length=200)
 
 
@@ -116,7 +116,6 @@ class PSOGamblervsCooperator(TestHeadsUp):
 
 class PSOGamblervsTFT(TestHeadsUp):
     def test_vs(self):
-        outcomes = zip()
         self.versus_test(axelrod.PSOGambler(), axelrod.TitForTat(),
                          [C, C, C, C], [C, C, C, C])
 

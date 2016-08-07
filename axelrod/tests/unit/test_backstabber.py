@@ -33,13 +33,13 @@ class TestBackStabber(TestPlayer):
                             tournament_length=200)
 
         # Defects on rounds 199, and 200 no matter what
-        self.responses_test([C] * 197 , [C] * 197, [C, D, D],
+        self.responses_test([C] * 197, [C] * 197, [C, D, D],
                             tournament_length=200)
         # Test that exceeds tournament length
-        self.responses_test([C] * 198 , [C] * 198, [D, D, C],
+        self.responses_test([C] * 198, [C] * 198, [D, D, C],
                             tournament_length=200)
         # But only if the tournament is known
-        self.responses_test([C] * 198 , [C] * 198, [C, C, C],
+        self.responses_test([C] * 198, [C] * 198, [C, C, C],
                             tournament_length=-1)
 
 
@@ -80,5 +80,5 @@ class TestDoubleCrosser(TestPlayer):
                             tournament_length=200)
 
         # Defects on rounds 199, and 200 no matter what
-        self.responses_test([C] * 197 , [C] * 197, [C, D, D],
+        self.responses_test([C] * 197, [C] * 197, [C, D, D],
                             tournament_length=200)

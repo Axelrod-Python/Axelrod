@@ -103,4 +103,3 @@ class TestDeterministicCache(unittest.TestCase):
         with self.assertRaises(ValueError):
             cache = DeterministicCache()
             cache.load(tmp_file.name)
-

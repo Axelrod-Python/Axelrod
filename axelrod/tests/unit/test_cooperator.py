@@ -51,5 +51,5 @@ class TestTrickyCooperator(TestPlayer):
         self.responses_test([C, C, C], [C, C, C], [D])
         self.responses_test([C, C, C, D, D], [C, C, C, C, D], [C])
         history = [C, C, C, D, D] + [C] * 11
-        opponent_histroy = [C, C, C, C, D] + [D] + [C] * 10
-        self.responses_test(history, opponent_histroy,[D])
+        opponent_history = [C, C, C, C, D] + [D] + [C] * 10
+        self.responses_test(history, opponent_history, [D])

@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 from .axelrod_first import Joss
 from axelrod._strategy_utils import detect_cycle
 
+
 class Calculator(Player):
     """
     Plays like (Hard) Joss for the first 20 rounds. If periodic behavior is

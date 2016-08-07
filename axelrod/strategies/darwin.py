@@ -3,6 +3,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class Darwin(Player):
     """ A strategy which accumulates a record (the 'genome') of what the most
         favourable response in the previous round should have been, and naively

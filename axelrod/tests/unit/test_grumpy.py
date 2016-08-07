@@ -38,20 +38,20 @@ class TestGrumpy(TestPlayer):
         Tests that grumpy will play c until threshold is ht at which point it will become grumpy.
         Player will then not become nice until lower nice threshold is hit.
         """
-        P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
+        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
         P2 = TestOpponent()
         test_responses(self, P1, P2, [C, D, D, D], [C, C, C, C], [C])
 
-        P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
+        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
         P2 = TestOpponent()
         test_responses(self, P1, P2, [C, C, D, D, D], [D, D, D, D, D], [D])
 
-        P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
+        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
         P2 = TestOpponent()
         test_responses(self, P1, P2, [C, C, D, D, D, D, D, D],
                        [D, D, D, D, D, C, C, C], [D])
 
-        P1 = axelrod.Grumpy(grumpy_threshold = 3, nice_threshold=0)
+        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
         P2 = TestOpponent()
         test_responses(self, P1, P2, [C, C, D, D, D, D, D, D, D, D, D],
                        [D, D, D, D, D, C, C, C, C, C, C], [C])

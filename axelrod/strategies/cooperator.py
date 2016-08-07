@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class Cooperator(Player):
     """A player who only ever cooperates."""
 

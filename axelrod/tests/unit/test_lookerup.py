@@ -34,10 +34,10 @@ class TestLookerUp(TestPlayer):
         # Test default table
         player = self.player()
         expected_lookup_table = {
-            ('', 'C', 'D') : D,
-            ('', 'D', 'D') : D,
-            ('', 'C', 'C') : C,
-            ('', 'D', 'C') : C,
+            ('', 'C', 'D'): D,
+            ('', 'D', 'D'): D,
+            ('', 'C', 'C'): C,
+            ('', 'D', 'C'): C,
         }
         self.assertEqual(player.lookup_table, expected_lookup_table)
         # Test malformed tables
@@ -62,10 +62,10 @@ class TestLookerUp(TestPlayer):
         constructor with the lookup table we want.
         """
         defector_table = {
-            ('', C, D) : D,
-            ('', D, D) : D,
-            ('', C, C) : D,
-            ('', D, C) : D,
+            ('', C, D): D,
+            ('', D, D): D,
+            ('', C, C): D,
+            ('', D, C): D,
         }
         self.player = lambda : axelrod.LookerUp(defector_table)
         self.responses_test([C, C], [C, C], [D])
@@ -91,19 +91,19 @@ class TestLookerUp(TestPlayer):
         """A lookup table that always repeats the opponent's first move."""
 
         first_move_table = {
-            # If oppponent starts by cooperating:
-            (C, C, D) : C,
-            (C, D, D) : C,
-            (C, C, C) : C,
-            (C, D, C) : C,
+            # If opponent starts by cooperating:
+            (C, C, D): C,
+            (C, D, D): C,
+            (C, C, C): C,
+            (C, D, C): C,
             # If opponent starts by defecting:
-            (D, C, D) : D,
-            (D, D, D) : D,
-            (D, C, C) : D,
-            (D, D, C) : D,
+            (D, C, D): D,
+            (D, D, D): D,
+            (D, C, C): D,
+            (D, D, C): D,
         }
 
-        self.player = lambda : axelrod.LookerUp(first_move_table)
+        self.player = lambda: axelrod.LookerUp(first_move_table)
 
         # if the opponent started by cooperating, we should always cooperate
         self.responses_test([C, C, C], [C, C, C], [C])
@@ -116,7 +116,6 @@ class TestLookerUp(TestPlayer):
         self.responses_test([D, D, D], [D, C, C], [D])
         self.responses_test([C, C, C], [D, D, C], [D])
         self.responses_test([C, C, D], [D, D, C], [D])
-
 
 
 class TestEvolvedLookerUp(TestPlayer):
@@ -136,8 +135,8 @@ class TestEvolvedLookerUp(TestPlayer):
     def test_init(self):
         # Check for a few known keys
         known_pairs = {('DD', 'CC', 'CD'): 'D', ('DC', 'CD', 'CD'): 'C',
-                        ('DD', 'CD', 'CD'): 'D', ('DC', 'DC', 'DC'): 'C',
-                        ('DD', 'DD', 'CC'): 'D', ('CD', 'CC', 'DC'): 'C'}
+                       ('DD', 'CD', 'CD'): 'D', ('DC', 'DC', 'DC'): 'C',
+                       ('DD', 'DD', 'CC'): 'D', ('CD', 'CC', 'DC'): 'C'}
         player = self.player()
         for k, v in known_pairs.items():
             self.assertEqual(player.lookup_table[k], v)

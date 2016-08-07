@@ -51,7 +51,7 @@ class APavlov2006(Player):
         if self.opponent_class == "STFT":
             if len(self.history) % 6 in [0, 1]:
                 return C
-            #TFT
+            # TFT
             if opponent.history[-1:] == [D]:
                 return D
         if self.opponent_class == "PavlovD":
@@ -59,7 +59,7 @@ class APavlov2006(Player):
             if len(self.history) % 6 == 0:
                 return D
         if self.opponent_class == "Cooperative":
-            #TFT
+            # TFT
             if opponent.history[-1:] == [D]:
                 return D
         return C
@@ -112,10 +112,10 @@ class APavlov2011(Player):
         if self.opponent_class in ["Random", "ALLD"]:
             return D
         if self.opponent_class == "STFT":
-            #TFTT
+            # TFTT
             return D if opponent.history[-2:] == [D, D] else C
         if self.opponent_class == "Cooperative":
-            #TFT
+            # TFT
             return D if opponent.history[-1:] == [D] else C
 
     def reset(self):

@@ -5,6 +5,7 @@ from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
 
+
 class RiskyQLearner(Player):
     """A player who learns the best strategies through the q-learning algorithm.
 

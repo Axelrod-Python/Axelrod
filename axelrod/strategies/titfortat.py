@@ -385,13 +385,13 @@ class ContriteTitForTat(Player):
 
 class SlowTitForTwoTats(Player):
     """
-    A player plays C twice, then if the opponent plays the same move twice, 
-    plays that move 
+    A player plays C twice, then if the opponent plays the same move twice,
+    plays that move
     """
 
     name = 'Slow Tit For Two Tats'
     classifier = {
-        'memory_depth': 2, 
+        'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -400,17 +400,14 @@ class SlowTitForTwoTats(Player):
     }
 
     def strategy(self, opponent):
-        
-        #Start with two cooperations
+
+        # Start with two cooperations
         if len(self.history) < 2:
             return C
-        
-        #Mimic if opponent plays the same move twice
+
+        # Mimic if opponent plays the same move twice
         if opponent.history[-2] == opponent.history[-1]:
             return opponent.history[-1]
-        
-        #Otherwise cooperate
+
+        # Otherwise cooperate
         return C
-
-        
-

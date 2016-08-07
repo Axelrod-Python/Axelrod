@@ -21,7 +21,6 @@ class TestChampion(TestPlayer):
         'manipulates_state': False
     }
 
-
     def test_strategy(self):
         # Initially cooperates
         self.first_play_test(C)
@@ -38,7 +37,7 @@ class TestChampion(TestPlayer):
             self.responses_test(my_responses, random_sample,
                                 [random_sample[-1]])
             my_responses.append(random_sample[-1])
-            random_sample.append(random.choice([C,D]))
+            random_sample.append(random.choice([C, D]))
 
         # Cooperate unless the opponent defected, has defected at least 40% of
         # the time, and with a random choice
