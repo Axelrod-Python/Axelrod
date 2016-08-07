@@ -15,9 +15,11 @@ class LookerUp(Player):
     opponents first n actions, self's last m actions, and opponents last m
     actions, all as strings. The values are the actions to play on this round.
     For example, in the case of m=n=1, if
-    - the opponent started by playing C
-    - my last action was a C the opponents
-    - last action was a D
+
+    * the opponent started by playing C
+    * my last action was a C the opponents
+    * last action was a D
+
     then the corresponding key would be
 
         ('C', 'C', 'D')
