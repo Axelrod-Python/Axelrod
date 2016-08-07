@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from axelrod import Actions, Game
 from .deterministic_cache import DeterministicCache
 
