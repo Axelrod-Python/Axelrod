@@ -11,14 +11,13 @@ set. To do this we can use the `seed` function::
     >>> import axelrod as axl
     >>> players = (axl.Random(), axl.MetaMixer())  # Two stochastic strategies
     >>> axl.seed(0)
-    >>> axl.Match(players, turns=3).play()
-    [('D', 'C'), ('D', 'D'), ('C', 'C')]
+    >>> results = axl.Match(players, turns=3).play()
 
 We obtain the same results is it is played with the same seed::
 
     >>> axl.seed(0)
-    >>> axl.Match(players, turns=3).play()
-    [('D', 'C'), ('D', 'D'), ('C', 'C')]
+    >>> results == axl.Match(players, turns=3).play()
+    True
 
 Note that this is equivalent to::
 
@@ -27,9 +26,8 @@ Note that this is equivalent to::
     >>> players = (axl.Random(), axl.MetaMixer())
     >>> random.seed(0)
     >>> numpy.random.seed(0)
-    >>> axl.Match(players, turns=3).play()
-    [('D', 'C'), ('D', 'D'), ('C', 'C')]
+    >>> results = axl.Match(players, turns=3).play()
     >>> numpy.random.seed(0)
     >>> random.seed(0)
-    >>> axl.Match(players, turns=3).play()
-    [('D', 'C'), ('D', 'D'), ('C', 'C')]
+    >>> results == axl.Match(players, turns=3).play()
+    True
