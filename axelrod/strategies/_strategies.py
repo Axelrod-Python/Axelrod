@@ -125,11 +125,7 @@ strategies = [
     HardGoByMajority20,
     HardGoByMajority40,
     HardGoByMajority5,
-<<<<<<< HEAD
     Hopeless, 
-=======
-    Hopeless,
->>>>>>> e4e4fd4b1c41db1ad9cd3ca50c2396ee94e88e50
     Golden,
     Gradual,
     Grim, 

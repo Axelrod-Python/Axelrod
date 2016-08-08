@@ -28,10 +28,7 @@ class TestDesperate(TestPlayer):
 
         self.responses_test([C]* 4, [D] * 4, [D])
         self.responses_test([D, D, C], [C, C, D], [D])
-<<<<<<< HEAD
         self.responses_test([D, D, D], [C, C, D], [C])
-=======
->>>>>>> e4e4fd4b1c41db1ad9cd3ca50c2396ee94e88e50
 
 class TestHopeless(TestPlayer):
 
@@ -88,7 +85,7 @@ class TestGrim(TestPlayer):
     name = "Grim"
     player = axelrod.Grim
     expected_classifier = {
-        'memory_depth': 1,  # Long memory
+        'memory_depth': 1, 
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,

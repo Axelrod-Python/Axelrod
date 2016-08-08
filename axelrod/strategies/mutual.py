@@ -22,11 +22,8 @@ class Desperate(Player):
         return D
 
 class Hopeless(Player): 
-<<<<<<< HEAD
     """A player that only defects after mutual cooperation"""
-=======
-    """A player that only cooperates after mutual defection"""
->>>>>>> e4e4fd4b1c41db1ad9cd3ca50c2396ee94e88e50
+
     name = "Hopeless"
     classifier = {
         'memory_depth': 1,  
