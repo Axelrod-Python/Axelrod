@@ -3,8 +3,9 @@ from axelrod import Actions, Player, init_args
 C, D = Actions.C, Actions.D
 
 class Desperate(Player):
-    """A player that only cooperates after mutual defection"""
-    name = "Desperate"
+	"""A player only cooperates after mutual defection"""
+
+    name = 'Desperate'
     classifier = {
         'memory_depth': 1,  
         'stochastic': False,
@@ -22,12 +23,9 @@ class Desperate(Player):
         return D
 
 class Hopeless(Player): 
-<<<<<<< HEAD
-    """A player that only defects after mutual cooperation"""
-=======
-    """A player that only cooperates after mutual defection"""
->>>>>>> e4e4fd4b1c41db1ad9cd3ca50c2396ee94e88e50
-    name = "Hopeless"
+	"""A player only defects after mutual cooperation"""
+
+    name = 'Hopeless'
     classifier = {
         'memory_depth': 1,  
         'stochastic': False,
@@ -38,15 +36,16 @@ class Hopeless(Player):
     }
 
     def strategy(self, opponent):
-        if not opponent.history:
+		if not opponent.history:
             return C
         if self.history[-1] == C and opponent.history[-1] == C:
             return D
         return C
 
 class Willing(Player):
-    """A player that only defects after mutual defection"""
-    name = "Willing"
+	"""A player only defects after mutual defection"""
+
+	name = 'Willing'
     classifier = {
         'memory_depth': 1,  
         'stochastic': False,
@@ -56,16 +55,17 @@ class Willing(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
-        if not opponent.history:
+	def strategy(self, opponent):
+		if not opponent.history:
             return C
         if self.history[-1] == D and opponent.history[-1] == D:
             return D
         return C
 
 class Grim(Player):
-    """A player that only cooperates after mutual cooperation"""
-    name = "Grim"
+	"""A player only cooperates after mutual cooperation"""
+
+	name = 'Grim'
     classifier = {
         'memory_depth': 1,  
         'stochastic': False,
@@ -76,7 +76,7 @@ class Grim(Player):
     }
 
     def strategy(self, opponent):
-        if not opponent.history:
+		if not opponent.history:
             return D
         if self.history[-1] == C and opponent.history[-1] == C:
             return C

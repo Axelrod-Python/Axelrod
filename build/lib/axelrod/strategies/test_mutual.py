@@ -25,13 +25,12 @@ class TestDesperate(TestPlayer):
         self.first_play_test(D)
 
     def test_responses(self):
-
-        self.responses_test([C]* 4, [D] * 4, [D])
-        self.responses_test([D, D, C], [C, C, D], [D])
-<<<<<<< HEAD
+ 		"""
+ 		Test that a player only cooperates after mutual defection
+ 		"""
+        self.responses_test([C] * 4, [D] * 4, [D])
+        self.responses_test([D] * 5, [C] * 5, [C])
         self.responses_test([D, D, D], [C, C, D], [C])
-=======
->>>>>>> e4e4fd4b1c41db1ad9cd3ca50c2396ee94e88e50
 
 class TestHopeless(TestPlayer):
 
@@ -53,7 +52,9 @@ class TestHopeless(TestPlayer):
         self.first_play_test(C)
 
     def test_responses(self):
-
+ 		"""
+ 		Test that a player only defects after mutual cooperation
+ 		"""
         self.responses_test([C] * 4, [D] * 4, [C])
         self.responses_test([D] * 5, [C] * 5, [C])
         self.responses_test([C, D, C], [C, C, C], [D])
@@ -78,7 +79,10 @@ class TestWilling(TestPlayer):
         self.first_play_test(C)
 
     def test_responses(self):
-
+ 		
+ 		"""
+ 		Test that a player only defects after mutual defection
+ 		"""
         self.responses_test([C] * 4, [D] * 4, [C])
         self.responses_test([D] * 5, [C] * 5, [C])
         self.responses_test([C, C, D], [C, C, D], [D])
@@ -86,7 +90,7 @@ class TestWilling(TestPlayer):
 class TestGrim(TestPlayer):
 
     name = "Grim"
-    player = axelrod.Grim
+    player = axelrod.rim
     expected_classifier = {
         'memory_depth': 1,  # Long memory
         'stochastic': False,
@@ -103,7 +107,9 @@ class TestGrim(TestPlayer):
         self.first_play_test(D)
 
     def test_responses(self):
-
+ 		"""
+ 		Test that a  player only cooperates after mutual cooperation
+ 		"""
         self.responses_test([D] * 4, [D] * 4, [D])
         self.responses_test([D] * 5, [C] * 5, [D])
         self.responses_test([D, D, C], [C, D, C], [C])
