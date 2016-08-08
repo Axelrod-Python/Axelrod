@@ -123,7 +123,7 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         Creates a single set of match parameters.
         """
         return (
-            self.sample_length(self.prob_end), self.game, None, self.noise,
+            self.sample_length(), self.game, None, self.noise,
             {'length': float('inf'), 'game': self.game, 'noise': self.noise})
 
     def sample_length(self):
