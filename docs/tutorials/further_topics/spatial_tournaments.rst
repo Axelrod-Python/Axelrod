@@ -76,16 +76,11 @@ It is also possible to create a probabilistic ending spatial tournament with the
     >>> prob_end_spatial_tournament = axl.ProbEndSpatialTournament(players, edges=edges, prob_end=.1, repetitions=1)
     >>> prob_end_results = prob_end_spatial_tournament.play(keep_interactions=True)
 
-We see that the match lengths are no longer all equal (we are here printing the
-length of the interactions)::
+We see that the match lengths are no longer all equal::
 
     >>> axl.seed(0)
-    >>> for index_pair, interaction in prob_end_results.interactions.items():
-    ...     player1 = spatial_tournament.players[index_pair[0]]
-    ...     player2 = spatial_tournament.players[index_pair[1]]
-    ...     rep_length = [len(rep) for rep in interaction]
-    ...     print('%s vs %s: %s' % (player1, player2, rep_length))
-    Defector vs Tit For Tat: [43]
-    Cooperator vs Grudger: [7]
-    Defector vs Grudger: [5]
-    Cooperator vs Tit For Tat: [1]
+    >>> lengths = []
+    >>> for interaction in prob_end_results.interactions.values():
+    ...     lengths.append(len(interaction[0]))
+    >>> min(lengths) != max(lengths)
+    True
