@@ -103,14 +103,6 @@ class Plot(object):
     def _sd_ordering(self):
         return self.result_set.ranking
 
-        # Sort by median then max
-        # from operator import itemgetter
-        # diffs = self.result_set.score_diffs
-        # to_sort = [(median(d), max(d), i) for (i, d) in enumerate(diffs)]
-        # to_sort.sort(reverse=True, key=itemgetter(0, 1))
-        # ordering = [x[-1] for x in to_sort]
-        # return ordering
-
     @property
     def _sdv_plot_dataset(self):
         ordering = self._sd_ordering
@@ -231,7 +223,8 @@ class Plot(object):
         for i, n in enumerate(self.result_set.ranked_names):
             x = -0.01
             y = (i + 0.5) * 1.0 / self.result_set.nplayers
-            ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False, va='center', ha='right', fontsize=5)
+            ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False,
+                        va='center', ha='right', fontsize=5)
             ticks.append(y)
         ax.set_yticks(ticks)
         ax.tick_params(direction='out')

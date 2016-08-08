@@ -149,10 +149,9 @@ class Player(object):
 
     def reset(self):
         """Resets history.
-
-        When creating strategies that create new attributes then this method should be
-        re-written (in the inherited class) and should not only reset history but also
-        rest all other attributes.
+        When creating strategies that create new attributes then this method
+        should be re-written (in the inherited class) and should not only reset
+        history but also rest all other attributes.
         """
         self.history = []
         self.cooperations = 0

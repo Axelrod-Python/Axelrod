@@ -126,7 +126,7 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
             self.sample_length(self.prob_end), self.game, None, self.noise,
             {'length': float('inf'), 'game': self.game, 'noise': self.noise})
 
-    def sample_length(self, prob_end):
+    def sample_length(self):
         """
         Sample length of a game.
 
