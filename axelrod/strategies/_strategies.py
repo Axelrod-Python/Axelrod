@@ -43,7 +43,7 @@ from .memoryone import (
     ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
-from .mutual import Desperate, Hopeless, Willing, Grim
+from .mutual import Desperate, Hopeless, Willing
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
 from .prober import (Prober, Prober2, Prober3, HardProber,
                      NaiveProber, RemorsefulProber)
@@ -118,7 +118,6 @@ strategies = [
     GoByMajority20,
     GoByMajority40,
     GoByMajority5,
-    Grim, 
     Handshake,
     HardGoByMajority,
     HardGoByMajority10,
@@ -128,7 +127,6 @@ strategies = [
     Hopeless, 
     Golden,
     Gradual,
-    Grim, 
     Grofman,
     Grudger,
     Grumpy,
@@ -137,7 +135,8 @@ strategies = [
     HardTitForTat,
     HesitantQLearner,
     Inverse,
-    InversePunisher,
+    Inverse,
+    Punisher,
     Joss,
     LimitedRetaliate,
     LimitedRetaliate2,

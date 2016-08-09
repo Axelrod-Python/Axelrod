@@ -80,28 +80,3 @@ class TestWilling(TestPlayer):
         self.responses_test([D] * 5, [C] * 5, [C])
         self.responses_test([C, C, D], [C, C, D], [D])
 
-class TestGrim(TestPlayer):
-
-    name = "Grim"
-    player = axelrod.Grim
-    expected_classifier = {
-        'memory_depth': 1, 
-        'stochastic': False,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def test_strategy(self):
-        """
-        Test that initial strategy defects.
-        """
-        self.first_play_test(D)
-
-    def test_responses(self):
-
-        self.responses_test([D] * 4, [D] * 4, [D])
-        self.responses_test([D] * 5, [C] * 5, [D])
-        self.responses_test([D, D, C], [C, D, C], [C])
-

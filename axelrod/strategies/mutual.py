@@ -60,22 +60,5 @@ class Willing(Player):
             return D
         return C
 
-class Grim(Player):
-    """A player that only cooperates after mutual cooperation"""
-    name = "Grim"
-    classifier = {
-        'memory_depth': 1,  
-        'stochastic': False,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
 
-    def strategy(self, opponent):
-        if not opponent.history:
-            return D
-        if self.history[-1] == C and opponent.history[-1] == C:
-            return C
-        return D
 
