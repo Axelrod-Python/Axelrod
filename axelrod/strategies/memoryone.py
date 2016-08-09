@@ -1,5 +1,4 @@
 from axelrod import Actions, Player, init_args, random_choice
-import copy
 
 """IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
@@ -64,7 +63,7 @@ class MemoryOnePlayer(Player):
             return self._initial
         # Determine which probability to use
         p = self._four_vector[(self.history[-1], opponent.history[-1])]
-        # Draw a random number in [0,1] to decide
+        # Draw a random number in [0, 1] to decide
         return random_choice(p)
 
 
@@ -84,7 +83,7 @@ class WinStayLoseShift(MemoryOnePlayer):
     @init_args
     def __init__(self, initial=C):
         Player.__init__(self)
-        self.set_four_vector([1,0,0,1])
+        self.set_four_vector([1, 0, 0, 1])
         self._initial = initial
 
 

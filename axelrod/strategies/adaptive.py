@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, Game, init_args
+from axelrod import Actions, Player, init_args
 
 C, D = Actions.C, Actions.D
 

@@ -153,12 +153,13 @@ class TestProbEndRoundRobin(unittest.TestCase):
     @given(prob_end=floats(min_value=0, max_value=1))
     def test_sample_length(self, prob_end):
         rr = axelrod.ProbEndRoundRobinMatches(
-            self.players, prob_end, test_game, test_repetitions)
-        self.assertGreaterEqual(rr.sample_length(prob_end), 1)
+            self.players, prob_end, test_game, test_repetitions,
+        )
+        self.assertGreaterEqual(rr.sample_length(), 1)
         try:
-            self.assertIsInstance(rr.sample_length(prob_end), int)
+            self.assertIsInstance(rr.sample_length(), int)
         except AssertionError:
-            self.assertEqual(rr.sample_length(prob_end), float("inf"))
+            self.assertEqual(rr.sample_length(), float("inf"))
 
     @given(prob_end=floats(min_value=.1, max_value=1))
     def test_build_single_match_params(self, prob_end):
@@ -300,11 +301,11 @@ class TestProbEndSpatialMatches(unittest.TestCase):
         noise = 0
         pesp = axelrod.ProbEndSpatialMatches(
             self.players, prob_end, test_game, test_repetitions, noise, edges)
-        self.assertGreaterEqual(pesp.sample_length(prob_end), 1)
+        self.assertGreaterEqual(pesp.sample_length(), 1)
         try:
-            self.assertIsInstance(pesp.sample_length(prob_end), int)
+            self.assertIsInstance(pesp.sample_length(), int)
         except AssertionError:
-            self.assertEqual(pesp.sample_length(prob_end), float("inf"))
+            self.assertEqual(pesp.sample_length(), float("inf"))
 
     @given(prob_end=floats(min_value=0.005, max_value=0.01))
     def test_build_matches_different_length(self, prob_end):

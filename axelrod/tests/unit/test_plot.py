@@ -18,14 +18,14 @@ class TestPlot(unittest.TestCase):
         cls.players = (axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector())
         cls.turns = 5
         cls.matches = {
-                        (0,1): [axelrod.Match((cls.players[0], cls.players[1]),
+                        (0, 1): [axelrod.Match((cls.players[0], cls.players[1]),
                         turns=cls.turns) for _ in range(3)],
-                        (0,2): [axelrod.Match((cls.players[0], cls.players[2]),
+                        (0, 2): [axelrod.Match((cls.players[0], cls.players[2]),
                         turns=cls.turns) for _ in range(3)],
-                        (1,2): [axelrod.Match((cls.players[1], cls.players[2]),
+                        (1, 2): [axelrod.Match((cls.players[1], cls.players[2]),
                         turns=cls.turns) for _ in range(3)]}
-                          # This would not actually be a round robin tournament
-                           # (no cloned matches)
+                        # This would not actually be a round robin tournament
+                        # (no cloned matches)
 
         cls.interactions = {}
         for index_pair, matches in cls.matches.items():

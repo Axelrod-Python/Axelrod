@@ -1,4 +1,3 @@
-from collections import defaultdict
 import csv
 import tqdm
 
@@ -7,13 +6,6 @@ from numpy import mean, nanmedian, std
 from . import eigen
 from .game import Game
 import axelrod.interaction_utils as iu
-
-try:
-    # Python 2
-    from StringIO import StringIO
-except ImportError:
-    # Python 3
-    from io import StringIO
 
 
 def update_progress_bar(method):

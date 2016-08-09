@@ -35,8 +35,6 @@ class Tournament(object):
             The number of turns per match
         repetitions : integer
             The number of times the round robin should be repeated
-        processes : integer
-            The number of processes to be used for parallel processing
         noise : float
             The probability that a player's intended action should be flipped
         with_morality : boolean
@@ -80,9 +78,11 @@ class Tournament(object):
             whether or not to build a results st
         filename : string
             name of output file
+        processes : integer
+            The number of processes to be used for parallel processing
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
-        interactions : bool
+        keep_interactions : bool
             Whether or not to load the interactions in to memory
 
         Returns
@@ -111,6 +111,8 @@ class Tournament(object):
         if build_results:
             return self._build_result_set(progress_bar=progress_bar,
                                           keep_interactions=keep_interactions)
+        else:
+            self.outputfile.close()
 
     def _build_result_set(self, progress_bar=True, keep_interactions=False):
         """
@@ -235,8 +237,6 @@ class Tournament(object):
             The number of sub-processes in existence
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
-        interactions : list
-            The list of interactions per repetition to update with results
         progress_bar : bool
             Whether or not to update the tournament progress bar
         """
@@ -310,8 +310,7 @@ class ProbEndTournament(Tournament):
 
     def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
                  name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 noise=0,
-                 with_morality=True):
+                 noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -327,8 +326,6 @@ class ProbEndTournament(Tournament):
             The probability of a given match ending
         repetitions : integer
             The number of times the round robin should be repeated
-        processes : integer
-            The number of processes to be used for parallel processing
         noise : float
             The probability that a player's intended action should be flipped
         with_morality : boolean
@@ -348,17 +345,13 @@ class SpatialTournament(Tournament):
     A tournament in which the players are allocated in a graph as nodes
     and they players only play the others that are connected to with an edge.
     """
-    def __init__(self, players, edges, match_generator=SpatialMatches,
-                 name='axelrod', game=None, turns=200, repetitions=10,
-                 noise=0,
-                 with_morality=True):
+    def __init__(self, players, edges, name='axelrod', game=None, turns=200,
+                 repetitions=10, noise=0, with_morality=True):
         """
         Parameters
         ----------
         players : list
             A list of axelrod.Player objects
-        match_generator : class
-            A class that must be descended from axelrod.MatchGenerator
         name : string
             A name for the tournament
         game : axelrod.Game
@@ -367,8 +360,6 @@ class SpatialTournament(Tournament):
             A list of tuples containing the existing edges
         repetitions : integer
             The number of times the round robin should be repeated
-        processes : integer
-            The number of processes to be used for parallel processing
         noise : float
             The probability that a player's intended action should be flipped
         with_morality : boolean
@@ -389,17 +380,13 @@ class ProbEndSpatialTournament(ProbEndTournament):
     and they players only play the others that are connected to with an edge.
     Players do not know the length of a given match (it is randomly sampled).
     """
-    def __init__(self, players, edges, match_generator=SpatialMatches,
-                 name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 noise=0,
-                 with_morality=True):
+    def __init__(self, players, edges, name='axelrod', game=None, prob_end=.5,
+                 repetitions=10, noise=0, with_morality=True):
         """
         Parameters
         ----------
         players : list
             A list of axelrod.Player objects
-        match_generator : class
-            A class that must be descended from axelrod.MatchGenerator
         name : string
             A name for the tournament
         game : axelrod.Game
@@ -410,8 +397,6 @@ class ProbEndSpatialTournament(ProbEndTournament):
             A list of tuples containing the existing edges
         repetitions : integer
             The number of times the round robin should be repeated
-        processes : integer
-            The number of processes to be used for parallel processing
         noise : float
             The probability that a player's intended action should be flipped
         with_morality : boolean

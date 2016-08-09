@@ -14,7 +14,7 @@ class TestProber(TestPlayer):
     player = axelrod.Prober
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -43,7 +43,7 @@ class TestProber2(TestPlayer):
     player = axelrod.Prober2
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -72,7 +72,7 @@ class TestProber3(TestPlayer):
     player = axelrod.Prober3
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -102,7 +102,7 @@ class TestHardProber(TestPlayer):
     player = axelrod.HardProber
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,

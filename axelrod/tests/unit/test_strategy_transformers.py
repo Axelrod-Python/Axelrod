@@ -237,7 +237,6 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [D, D, D, D, D])
 
         # Decorating with list and distribution
-
         # Decorate a cooperator putting all weight on other strategies that are
         # 'nice'
         probability = [.3, .2, 0]

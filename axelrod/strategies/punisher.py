@@ -13,7 +13,7 @@ class Punisher(Player):
     name = 'Punisher'
     classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic' : False,
+        'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,

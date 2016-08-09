@@ -1,5 +1,3 @@
-import random
-
 from axelrod import Actions, Player, random_choice
 
 

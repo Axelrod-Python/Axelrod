@@ -93,7 +93,7 @@ class ForgetfulFoolMeOnce(Player):
     }
 
     @init_args
-    def __init__(self, forget_probability = 0.05):
+    def __init__(self, forget_probability=0.05):
         """
         Parameters
         ----------

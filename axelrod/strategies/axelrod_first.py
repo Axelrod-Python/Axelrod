@@ -2,10 +2,9 @@
 Additional strategies from Axelrod's first tournament.
 """
 
-from math import sqrt
 import random
 
-from axelrod import Actions, Game, Player, init_args, flip_action, random_choice
+from axelrod import Actions, Player, init_args, flip_action, random_choice
 
 from.memoryone import MemoryOnePlayer
 

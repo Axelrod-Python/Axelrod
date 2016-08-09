@@ -1,7 +1,5 @@
 """Tests for grudger strategies."""
 
-import random
-
 import axelrod
 
 from .test_player import TestPlayer

@@ -1,5 +1,3 @@
-from itertools import product
-
 from axelrod import Actions, Player, init_args, random_choice
 from axelrod.strategy_transformers import FinalTransformer
 from .lookerup import LookerUp, create_lookup_table_keys
@@ -8,7 +6,8 @@ from .lookerup import LookerUp, create_lookup_table_keys
 C, D = Actions.C, Actions.D
 
 
-@FinalTransformer((D, D), name_prefix=None)  # End with two defections if tournament length is known
+# End with two defections if tournament length is known
+@FinalTransformer((D, D), name_prefix=None)
 class Gambler(LookerUp):
     """
     A LookerUp class player which will select randomly an action in some cases.
@@ -32,10 +31,10 @@ class Gambler(LookerUp):
         """
         if not lookup_table:
             lookup_table = {
-            ('', 'C', 'D') : 0,
-            ('', 'D', 'D') : 0,
-            ('', 'C', 'C') : 1,
-            ('', 'D', 'C') : 1,
+            ('', 'C', 'D'): 0,
+            ('', 'D', 'D'): 0,
+            ('', 'C', 'C'): 1,
+            ('', 'D', 'C'): 1,
             }
         LookerUp.__init__(self, lookup_table=lookup_table, value_length=None)
 

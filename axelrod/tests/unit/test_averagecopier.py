@@ -1,7 +1,5 @@
 """Test for the average_copier strategy."""
 
-import random
-
 import axelrod
 
 from .test_player import TestPlayer

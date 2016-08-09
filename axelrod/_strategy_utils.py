@@ -112,8 +112,7 @@ class Memoized(object):
 @Memoized
 def recursive_thue_morse(n):
     """The recursive definition of the Thue-Morse sequence. The first few terms
-    of the Thue-Morse sequence are:
-    0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . ."""
+    of the Thue-Morse sequence are: 0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . ."""
 
     if n == 0:
         return 0

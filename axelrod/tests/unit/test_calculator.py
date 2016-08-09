@@ -1,7 +1,5 @@
 """Tests for calculator strategies."""
 
-import random
-
 import axelrod
 
 from .test_player import TestPlayer

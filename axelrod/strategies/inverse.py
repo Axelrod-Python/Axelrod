@@ -2,6 +2,7 @@ from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
 
+
 class Inverse(Player):
     """A player who defects with a probability that diminishes relative to how
     long ago the opponent defected."""
