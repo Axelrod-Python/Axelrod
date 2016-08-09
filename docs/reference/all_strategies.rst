@@ -93,6 +93,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.mindreader
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.mutual
+   :members: 
+   :undoc-members:
 .. automodule:: axelrod.strategies.oncebitten
    :members:
    :undoc-members:
