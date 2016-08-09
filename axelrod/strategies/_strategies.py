@@ -43,6 +43,7 @@ from .memoryone import (
     ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay)
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
+from .mutual import Desperate, Hopeless, Willing
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
 from .prober import (Prober, Prober2, Prober3, HardProber,
                      NaiveProber, RemorsefulProber)
@@ -87,11 +88,12 @@ all_strategies = [
     CyclerCCCD,
     CyclerCCD,
     CyclerDC,
-    CyclerDDC,
+    CyclerDDC, 
     Darwin,
     Davis,
     Defector,
     DefectorHunter,
+    Desperate,
     DoubleCrosser,
     Eatherley,
     EventualCycleHunter,
@@ -121,6 +123,7 @@ all_strategies = [
     HardGoByMajority20,
     HardGoByMajority40,
     HardGoByMajority5,
+    Hopeless, 
     Golden,
     Gradual,
     Grofman,
@@ -184,6 +187,7 @@ all_strategies = [
     TrickyDefector,
     Tullock,
     TwoTitsForTat,
+    Willing, 
     WinShiftLoseStay,
     WinStayLoseShift,
     ZDExtort2,
