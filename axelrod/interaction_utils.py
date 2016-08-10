@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Functions to calculate results from interactions. Interactions are lists of the
 form:
