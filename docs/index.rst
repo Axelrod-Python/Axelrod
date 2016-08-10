@@ -17,14 +17,14 @@ Here is quick overview of the current capabilities of the library:
       strategies, including finite state machines, strategies that hunt for
       patterns in other strategies, and strategies that combine the effects of
       many others
-    * Strategy transformers that augment that abilities of any strategy
+    * Strategy transformers that augment the abilities of any strategy
 
 * Head-to-Head matches
 
 * Round Robin tournaments with a variety of options, including:
 
     * noisy environments
-    * spatial games
+    * spatial tournaments
     * probabilistically chosen match lengths
 
 * Population dynamics
@@ -39,7 +39,7 @@ Every strategy is categorized on a number of dimensions, including:
 
     * Deterministic or Stochastic
     * How many rounds of history used
-    * Whether the strategy has access to the game matrix, the length of the
+    * Whether the strategy makes used of the game matrix, the length of the
       match, etc.
 
 Furthermore the library is extensively tested with 99%+ coverage, ensuring
