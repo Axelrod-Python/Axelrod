@@ -39,7 +39,7 @@ Every strategy is categorized on a number of dimensions, including:
 
     * Deterministic or Stochastic
     * How many rounds of history used
-    * Whether the strategy makes used of the game matrix, the length of the
+    * Whether the strategy makes use of the game matrix, the length of the
       match, etc.
 
 Furthermore the library is extensively tested with 99%+ coverage, ensuring
