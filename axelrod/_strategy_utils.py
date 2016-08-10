@@ -15,7 +15,7 @@ def detect_cycle(history, min_size=1, offset=0):
     Mainly used by hunter strategies.
 
     Parameters
-
+    ----------
     history: sequence of C and D
         The sequence to look for cycles within
     min_size: int, 1
@@ -83,7 +83,7 @@ def look_ahead(player_1, player_2, game, rounds=10):
 
 
 class Memoized(object):
-    """Decorator. Caches a function's return value each time it is called.
+    """Decorator that caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned
     (not reevaluated). From:
     https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
