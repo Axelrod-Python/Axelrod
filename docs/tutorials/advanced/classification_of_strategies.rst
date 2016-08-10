@@ -30,7 +30,7 @@ Or indeed find out how many strategy only use 1 turn worth of memory to
 make a decision::
 
     >>> len([s for s in axl.strategies if s().classifier['memory_depth']==1])
-    21
+    24
 
 We can also identify strategies that make use of particular properties of the
 tournament. For example, here is the number of strategies that  make use of the
