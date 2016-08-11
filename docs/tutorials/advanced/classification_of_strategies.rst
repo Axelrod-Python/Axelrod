@@ -10,7 +10,7 @@ various dimensions.
 Here is the :code:`classifier` for the :code:`Cooperator` strategy::
 
     >>> import axelrod as axl
-    >>> expected_dictionary = {'manipulates_state': False, 'makes_use_of': set([]), 'stochastic': False, 'manipulates_source': False, 'inspects_source': False, 'memory_depth': 0}  # Order of this dictionary might be different on your machine
+    >>> expected_dictionary = {'manipulates_state': False, 'makes_use_of': set([]), 'long_run_time': False, 'stochastic': False, 'manipulates_source': False, 'inspects_source': False, 'memory_depth': 0}  # Order of this dictionary might be different on your machine
     >>> axl.Cooperator.classifier == expected_dictionary
     True
 
@@ -44,6 +44,11 @@ played (whether or not it's the default Prisoner's dilemma)::
 
     >>> len([s() for s in axl.strategies if 'game' in s().classifier['makes_use_of']])
     22
+
+Some strategies have been classified as having a particularly long run time::
+
+    >>> len([s() for s in axl.strategies if s().classifier['long_run_time']])
+    10
 
 Similarly, strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`

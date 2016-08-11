@@ -15,6 +15,7 @@ class TestMindController(TestPlayer):
         'memory_depth': -10,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': True,  # Finds out what opponent will do
         'manipulates_state': False
@@ -67,6 +68,7 @@ class TestMindWarper(TestMindController):
         'memory_depth': -10,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': True,  # Finds out what opponent will do
         'manipulates_state': False
@@ -93,6 +95,7 @@ class TestMindBender(TestMindController):
         'memory_depth': -10,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': True,  # Finds out what opponent will do
         'manipulates_state': False

@@ -17,6 +17,7 @@ class TestDavis(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -53,6 +54,7 @@ class TestRevisedDowning(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -91,6 +93,7 @@ class TestFeld(TestPlayer):
         'memory_depth': 200,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -133,6 +136,7 @@ class TestGrofman(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -157,6 +161,7 @@ class TestJoss(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -179,6 +184,7 @@ class TestNydegger(TestPlayer):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -230,6 +236,7 @@ class TestShubik(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -269,6 +276,7 @@ class TestTullock(TestPlayer):
         'memory_depth': 11,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -305,6 +313,7 @@ class TestUnnamedStrategy(TestPlayer):
         'memory_depth': 0,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -20,6 +20,7 @@ class Davis(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -58,6 +59,7 @@ class RevisedDowning(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -134,6 +136,7 @@ class Feld(Player):
         'memory_depth': 200, # Varies actually, eventually becomes depth 1
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -189,6 +192,7 @@ class Grofman(Player):
         'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -255,6 +259,7 @@ class Nydegger(Player):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -309,6 +314,7 @@ class Shubik(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -368,6 +374,7 @@ class Tullock(Player):
         'memory_depth': 11, # long memory, modified by init
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -422,6 +429,7 @@ class UnnamedStrategy(Player):
         'memory_depth': 0,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

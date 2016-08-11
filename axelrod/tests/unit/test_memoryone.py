@@ -18,6 +18,7 @@ class TestWinStayLoseShift(TestPlayer):
         'memory_depth': 1,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -44,6 +45,7 @@ class TestWinShiftLoseStayTestPlayer(TestPlayer):
         'memory_depth': 1,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -94,6 +96,7 @@ class TestFirmButFair(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -119,6 +122,7 @@ class TestStochasticCooperator(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -150,6 +154,7 @@ class TestStochasticWSLS(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -206,6 +211,7 @@ class TestZDExtort2(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(["game"]),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -234,6 +240,7 @@ class TestZDExtort2v2(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(["game"]),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -256,6 +263,7 @@ class TestZDExtort4(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(["game"]),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -278,6 +286,7 @@ class TestZDGen2(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(["game"]),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -328,6 +337,7 @@ class TestZDSet2(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(["game"]),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -350,6 +360,7 @@ class TestSoftJoss(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -372,6 +383,7 @@ class TestALLCorALLD(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -73,6 +73,7 @@ class Player(object):
         'stochastic': False,
         'memory_depth': float('inf'),
         'makes_use_of': None,
+        'long_run_time': False,
         'inspects_source': None,
         'manipulates_source': None,
         'manipulates_state': None

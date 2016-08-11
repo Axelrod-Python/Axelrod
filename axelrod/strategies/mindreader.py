@@ -14,6 +14,7 @@ class MindReader(Player):
         'memory_depth': -10,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': False,
         'manipulates_state': False
@@ -52,6 +53,7 @@ class ProtectedMindReader(MindReader):
         'memory_depth': -10,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': True,  # Finds out what opponent will do
         'manipulates_source': True,  # Stops opponent's strategy
         'manipulates_state': False
@@ -75,6 +77,7 @@ class MirrorMindReader(ProtectedMindReader):
         'memory_depth': -10,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': True, # reading and copying the source of the component
         'manipulates_source': True, # changing own source dynamically
         'manipulates_state': False

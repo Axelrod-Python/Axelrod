@@ -34,6 +34,7 @@ class TestThueMorse(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -60,6 +61,7 @@ class TestThueMorseInverse(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
