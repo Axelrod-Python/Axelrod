@@ -18,11 +18,6 @@ class TestDesperate(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
-        """
-        Test that initial strategy defects.
-        """
-        self.first_play_test(D)
 
     def test_responses(self):
 
@@ -44,11 +39,6 @@ class TestHopeless(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
-        """
-        Test that initial strategy cooperates.
-        """
-        self.first_play_test(C)
 
     def test_responses(self):
 
@@ -69,11 +59,6 @@ class TestWilling(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
-        """
-        Test that initial strategy cooperates.
-        """
-        self.first_play_test(C)
 
     def test_responses(self):
 
