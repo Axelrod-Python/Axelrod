@@ -68,7 +68,15 @@ class MemoryOnePlayer(Player):
 
 
 class WinStayLoseShift(MemoryOnePlayer):
-    """Win-Stay Lose-Shift, also called Pavlov."""
+    """
+    Win-Stay Lose-Shift, also called Pavlov.
+
+    Names:
+
+    - WSLS: [Stewart2012]_
+    - Win Stay Lose Shift: [Nowak1993]_
+    - Pavlov: [Kraines1989]_
+    """
 
     name = 'Win-Stay Lose-Shift'
     classifier = {

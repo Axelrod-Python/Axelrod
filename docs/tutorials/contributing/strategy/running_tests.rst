@@ -24,7 +24,7 @@ the script::
 
     $ python doctests.py
 
-Note that this project is being taken care off by `travis-ci
+Note that this project is being taken care of by `travis-ci
 <https://travis-ci.org/>`_, so all tests will be run automatically when opening
 a pull request.  You can see the latest build status `here
 <https://travis-ci.org/Axelrod-Python/Axelrod>`_.

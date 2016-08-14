@@ -15,9 +15,9 @@ interactions::
     >>> tournament = axl.Tournament(players, turns=3, repetitions=1)
     >>> results = tournament.play(keep_interactions=True)
 
-If the play method is called with `keep_interactions=True`, the result set
-object will have an 'interactions' attribute which contains all the interactions
-between the players. These can be used to
+If the play method is called with :code:`keep_interactions=True`, the result set
+object will have an :code:`interactions` attribute which contains all the
+interactions between the players. These can be used to
 view the history of the interactions::
 
     >>> for index_pair, interaction in results.interactions.items():
@@ -50,11 +50,11 @@ in :ref:`creating_matches`)::
     10
 
 As an example let us view all winners of each match (:code:`False` indicates a
-tie):
+tie)::
 
     >>> for match in matches:
     ...     print("{} v {}, winner: {}".format(match.players[0], match.players[1], match.winner()))  #doctest: +SKIP
-	Cooperator v Defector, winner: Defector
+    Cooperator v Defector, winner: Defector
     Defector v Tit For Tat, winner: Defector
     Cooperator v Cooperator, winner: False
     Tit For Tat v Grudger, winner: False
@@ -64,4 +64,3 @@ tie):
     Cooperator v Grudger, winner: False
     Cooperator v Tit For Tat, winner: False
     Defector v Defector, winner: False
-

@@ -7,9 +7,9 @@ introduced by flipping plays between ‘C’ and ‘D’ with some probability t
 applied to all plays after they are delivered by the player.
 
 The presence of this persistent background noise causes some strategies to
-behave substantially differently. For example, TitForTat can fall into
-defection loops with itself when there is noise. While TitForTat would usually
-cooperate well with itself::
+behave substantially differently. For example, :code:`TitForTat` can fall into
+defection loops with itself when there is noise. While :code:`TitForTat` would
+usually cooperate well with itself::
 
     C C C C C ...
     C C C C C ...

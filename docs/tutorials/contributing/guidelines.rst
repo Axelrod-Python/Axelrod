@@ -16,7 +16,7 @@ The project follows the following guidelines:
    testing suite that makes some things very easy to write tests for. Please try
    to increase the test coverage on pull requests.
 4. Merging pull-requests: We require two of the (currently four) core-team
-   maintainers to merge (and preferably not the submitted). Opening a PR for early
+   maintainers to merge. Opening a PR for early
    feedback or to check test coverage is OK, just indicate that the PR is not ready
    to merge (and update when it is).
 

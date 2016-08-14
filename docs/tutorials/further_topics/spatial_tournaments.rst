@@ -1,21 +1,15 @@
 Spatial tournaments
 ===================
 
-In a spatial topology tournament the connectivity between players is given by
-a graph where the nodes represent players, and  the  edges, connecting the nodes,
-refer to the connection between the corresponding players.
+A spatial tournament is defined on a graph where the nodes correspond to players
+and edges define whether or not a given player pair will have a match.
 
-The initial work was done by Nowak  and May in a 1992 paper, "Evolutionary games
-and spatial chaos", introducing spatial topology as a square lattice. (The
-paper can be found here: http://www.nature.com/nature/journal/v359/n6398/abs/359826a0.html).
+The initial work on spatial tournaments was done by Nowak and May in a 1992
+paper: [Nowak1992]_.
 
-Additionally, Szabó and Fáth in their 2007 paper consider a variety of graphs,
-such as lattices, small world, scale-free graphs and evolving networks. (Their
-paper can be found here: https://arxiv.org/abs/cond-mat/0607344).
-
-Even so, here it is possible to create a tournament where the players are
-allocated to any given graph and they only interact with players to which they
-have a connection - edge.
+Additionally, Szabó and Fáth in their 2007 paper [Szabó1992]_ consider a variety
+of graphs, such as lattices, small world, scale-free graphs and evolving
+networks.
 
 Let's create a tournament where :code:`Cooperator` and :code:`Defector` do not
 play each other and neither do :code:`TitForTat` and :code:`Grudger` :
@@ -43,7 +37,6 @@ We can plot the results::
     >>> p = plot.boxplot()
     >>> p.show()
 
-
 .. image:: _static/spatial_tournaments/spatial_results.png
      :width: 50%
      :align: center
@@ -53,7 +46,7 @@ We can, like any other tournament, obtain the ranks for our players::
    >>> results.ranked_names
    ['Cooperator', 'Tit For Tat', 'Grudger', 'Defector']
 
-Let's run small tournament of 2 :code:`turns` and 5 :code:`repetitions`
+Let's run a small tournament of 2 :code:`turns` and 5 :code:`repetitions`
 and obtain the interactions::
 
     >>> spatial_tournament = axl.SpatialTournament(players ,turns=2, repetitions=2, edges=edges)

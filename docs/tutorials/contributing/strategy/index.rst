@@ -1,8 +1,8 @@
 Contributing a strategy
 =======================
 
-This section contains a variety of tutorials that should help you contribute to
-the library.
+This section contains a variety of tutorials that should help you contribute a
+new strategy to the library.
 
 Contents:
 

@@ -7,7 +7,7 @@ This tutorial will show you how to access the various results of a tournament:
 
 - Wins: the number of matches won by each player
 - Match lengths: the number of turns of each match played by each player
-  (relevant for tournaments like probabilistic ending tournaments).
+  (relevant for tournaments with probabilistic ending).
 - Scores: the total scores of each player.
 - Normalised scores: the scores normalised by matches played and turns.
 - Ranking: ranking of players based on median score.
@@ -23,10 +23,10 @@ This tutorial will show you how to access the various results of a tournament:
 - Cooperation rating: cooperation rating of each player
 - Vengeful cooperation: a morality metric from the literature (see
   :ref:`morality-metrics`).
-- Good partner matrix: a morality metric from the literature.
-- Good partner rating: a morality metric from the literature.
-- Eigenmoses rating: a morality metric from the literature.
-- Eigenjesus rating: a morality metric from the literature.
+- Good partner matrix: a morality metric from [Singer-Clark2014]_.
+- Good partner rating: a morality metric from [Singer-Clark2014]_.
+- Eigenmoses rating: a morality metric from [Singer-Clark2014]_.
+- Eigenjesus rating: a morality metric from [Singer-Clark2014]_.
 
 As shown in :ref:`creating_tournaments` let us create a tournament::
 
@@ -78,8 +78,7 @@ This gives the scores, averaged per opponent and turns::
     >>> results.normalised_scores  # doctest: +SKIP
     [[2.0, 2.0, 2.0], [2.6, 2.6, 2.6], [2.3, 2.3, 2.3], [2.3, 2.3, 2.3]]
 
-We see that Cooperator got on average a score of 2 per turn per opponent.
-Note: Here using string representation to deal with floating point numbers::
+We see that Cooperator got on average a score of 2 per turn per opponent::
 
     >>> results.normalised_scores[0]
     [2.0, 2.0, 2.0]
@@ -228,12 +227,9 @@ of the cooperation rating::
     [[0, 3, 3, 3], [0, 0, 0, 0], [3, 3, 0, 3], [3, 3, 3, 0]]
     >>> pprint.pprint(results.good_partner_rating)
     [1.0, 0.0, 1.0, 1.0]
-    >>> pprint.pprint(results.eigenmoses_rating)  # doctest: +SKIP
-    [0.37956816961269385,
-     -0.37956816961269385,
-     0.5965970202882925,
-     0.5965970202882925]
-    >>> pprint.pprint(results.eigenjesus_rating)  # doctest: +SKIP
-    [0.5773502691896258, 0.0, 0.5773502691896258, 0.5773502691896258]
+    >>> results.eigenmoses_rating
+    [0.37..., -0.37..., 0.59..., 0.59...]
+    >>> results.eigenjesus_rating
+    [0.57..., 0.0, 0.57..., 0.57...]
 
 For more information about these see :ref:`morality-metrics`.

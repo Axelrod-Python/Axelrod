@@ -210,6 +210,11 @@ class Joss(MemoryOnePlayer):
     """
     Cooperates with probability 0.9 when the opponent cooperates, otherwise
     emulates Tit-For-Tat.
+
+    Names:
+
+    - Joss [Axelrod1980]_
+    - Hard Joss [Stewart2012]_
     """
 
     name = "Joss"

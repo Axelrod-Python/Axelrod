@@ -83,10 +83,12 @@ Study the evolutionary process using a Moran process::
 As well as this, the library has a growing collection of strategies. The
 :ref:`strategies-index` gives a description of them.
 
-For further details there is a library of tutorials available:
+For further details there is a library of :ref:`tutorials` available and a
+:ref:`community` page with information about how to get support and/or make
+contributions.
 
-Tutorials
----------
+Table of Contents
+-----------------
 
 .. toctree::
    :maxdepth: 3

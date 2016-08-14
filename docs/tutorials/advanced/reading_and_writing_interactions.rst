@@ -1,5 +1,5 @@
-Reading and writing interactions to file
-========================================
+Reading and writing interactions from/to file
+=============================================
 
 When dealing with large tournaments it might be desirable to separate the
 analysis from the actual running of the tournaments. This can be done by passing
@@ -98,7 +98,8 @@ The columns of this file are of the form:
 Note that depending on the order in which the matches have been played, the rows
 could also be in a different order.
 
-Alternator versus TitForTat has the following interactions: :code:`CCDC, CDCD`:
+:code:`Alternator` versus :code:`TitForTat` has the following interactions:
+:code:`CCDC, CDCD`:
 
 - First turn: :code:`C` versus :code:`C` (the first two letters)
 - Second turn: :code:`D` versus :code:`C` (the second pair of letters)

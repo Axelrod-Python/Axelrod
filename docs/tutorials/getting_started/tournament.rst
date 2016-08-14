@@ -8,7 +8,7 @@ strategies::
 
     >>> import axelrod as axl
     >>> players = [axl.Cooperator(), axl.Defector(),
-    ...               axl.TitForTat(), axl.Grudger()]
+    ...            axl.TitForTat(), axl.Grudger()]
     >>> players
     [Cooperator, Defector, Tit For Tat, Grudger]
 
