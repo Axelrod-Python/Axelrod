@@ -1,3 +1,23 @@
+# v1.7.0, 2016-08-14
+
+Probabilistic ending spatial tournaments, classifier for long run time, style
+improvements, documentation improvements (including a bibliography) and bug fix.
+
+- Probabilistic ending spatial tournaments:
+  https://github.com/Axelrod-Python/Axelrod/pull/674
+- Classifier for strategies that have a long run time:
+  https://github.com/Axelrod-Python/Axelrod/issues/690
+- Documentation and style
+  cleanup:https://github.com/Axelrod-Python/Axelrod/issues/675,
+  https://github.com/Axelrod-Python/Axelrod/pull/687,
+  https://github.com/Axelrod-Python/Axelrod/pull/685,
+  https://github.com/Axelrod-Python/Axelrod/pull/682
+- Fix the noise in spatial tournaments:
+  https://github.com/Axelrod-Python/Axelrod/pull/679
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.6.0...v1.7.0
+
 # v1.6.0, 2016-07-31
 
 Renaming of strategies, big performance improvement for result analysis and bug
