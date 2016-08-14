@@ -296,8 +296,8 @@ class ResultSet(object):
 
             [uij1, uij2, ..., uijk]
 
-            Where k is the number of repetitions and uijk is the list of utilities
-            obtained by player i against player j in each repetition.
+            Where k is the number of repetitions and uijk is the list of
+            utilities obtained by player i against player j in each repetition.
         """
         plist = list(range(self.nplayers))
         payoffs = [[[] for opponent in plist] for player in plist]

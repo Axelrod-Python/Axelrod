@@ -12,7 +12,7 @@ initial population of players, the population is iterated in rounds consisting
 of:
 
 - matches played between each pair of players, with the cumulative total
-  scores recored
+  scores recorded
 - a player is chosen to reproduce proportional to the player's score in the
   round
 - a player is chosen at random to be replaced

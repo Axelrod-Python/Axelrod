@@ -10,4 +10,4 @@ def flip_action(action):
     elif action == Actions.D:
         return Actions.C
     else:
-        raise ValueError("Encountered a invalid action")
+        raise ValueError("Encountered a invalid action.")

@@ -15,15 +15,24 @@
 Axelrod
 =======
 
-A repository with the following goals:
+A library with the following principles and goals:
 
-1. To enable the reproduction of previous Iterated Prisoner's Dilemma research as easily as possible.
-2. To produce the de-facto tool for any future Iterated Prisoner's Dilemma research.
-3. To provide as simple a means as possible for anyone to define and contribute
+1. Enabling the reproduction of previous Iterated Prisoner's Dilemma research
+as easily as possible.
+2. Creating the de-facto tool for future Iterated Prisoner's Dilemma
+research.
+3. Providing as simple a means as possible for anyone to define and contribute
    new and original Iterated Prisoner's Dilemma strategies.
+4. Emphasizing readability along with an open and welcoming community that
+is accommodating for developers and researchers of a variety of skill levels
 
-**Please contribute strategies via pull request (or just get in touch
-with us).**
+Currently the library contains well over 100 strategies and can perform a
+variety of tournament types (RoundRobin, Noisy, Spatially-distributed, and
+probabilistically ending) and population dynamics while taking advantage
+of multi-core processors.
+
+
+**Please contribute via pull request (or just get in touch with us).**
 
 For an overview of how to use and contribute to this repository, see the
 documentation: http://axelrod.readthedocs.org/
@@ -91,8 +100,7 @@ at http://axelrod-tournament.readthedocs.org.
 Contributing
 ============
 
-All contributions are welcome, with a particular emphasis on
-contributing further strategies.
+All contributions are welcome!
 
 You can find helpful instructions about contributing in the
 documentation:

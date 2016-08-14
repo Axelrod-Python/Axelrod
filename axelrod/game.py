@@ -15,7 +15,8 @@ class Game(object):
         }
 
     def RPST(self):
-        """Return the values in the game matrix in the Press and Dyson notation."""
+        """Return the values in the game matrix in the Press and Dyson
+        notation."""
         R = self.scores[(C, C)][0]
         P = self.scores[(D, D)][0]
         S = self.scores[(C, D)][0]

@@ -66,13 +66,14 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             Returns
             -------
             new_class, class object
-                A class object that can create instances of the modified PlayerClass
+                A class object that can create instances of the modified
+                PlayerClass
             """
 
             args = self.args
             kwargs = self.kwargs
             try:
-            #if "name_prefix" in kwargs remove as only want dec arguments
+                # if "name_prefix" in kwargs remove as only want dec arguments
                 del kwargs["name_prefix"]
             except KeyError:
                 pass

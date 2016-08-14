@@ -26,14 +26,14 @@ class Match(object):
             The number of turns per match
         game : axelrod.Game
             The game object used to score the match
-        deterministic_cache : dictionary
+        deterministic_cache : axelrod.DeterministicCache
             A cache of resulting actions for deterministic matches
         noise : float
             The probability that a player's intended action should be flipped
         match_attributes : dict
             Mapping attribute names to values which should be passed to players.
             The default is to use the correct values for turns, game and noise
-            but these can be overidden if desired.
+            but these can be overridden if desired.
         """
         self.result = []
         self.turns = turns
@@ -78,7 +78,7 @@ class Match(object):
     def _stochastic(self):
         """
         A boolean to show whether a match between two players would be
-        stochastic
+        stochastic.
         """
         return is_stochastic(self.players, self.noise)
 

@@ -144,5 +144,4 @@ class DeterministicCache(UserDict):
         else:
             raise ValueError(
                 'Cache file exists but is not the correct format. Try deleting and re-building the cache file.')
-
         return True
