@@ -11,6 +11,7 @@ Let us take a look at the dimensions available by looking at :code:`TitForTat`::
     >>> for key in sorted(classifier.keys()):
     ...    print(key)
     inspects_source
+    long_run_time
     makes_use_of
     manipulates_source
     manipulates_state

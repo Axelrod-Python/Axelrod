@@ -17,6 +17,7 @@ class TestGoByMajority(TestPlayer):
         'stochastic': False,
         'memory_depth': float('inf'),
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -99,6 +100,7 @@ def factory_TestGoByRecentMajority(L, soft=True):
             'stochastic': False,
             'memory_depth': L,
             'makes_use_of': set(),
+            'long_run_time': False,
             'inspects_source': False,
             'manipulates_source': False,
             'manipulates_state': False
@@ -130,6 +132,7 @@ def factory_TestGoByRecentMajority(L, soft=True):
                 'stochastic': False,
                 'memory_depth': L,
                 'makes_use_of': set(),
+                'long_run_time': False,
                 'inspects_source': False,
                 'manipulates_source': False,
                 'manipulates_state': False

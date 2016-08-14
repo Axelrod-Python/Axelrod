@@ -30,4 +30,3 @@ class TestRandom_(unittest.TestCase):
 
         self.assertEqual(numpy_random_numbers[0], numpy_random_numbers[1])
         self.assertEqual(stdlib_random_numbers[0], stdlib_random_numbers[1])
-

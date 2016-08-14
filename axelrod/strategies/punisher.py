@@ -15,6 +15,7 @@ class Punisher(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -72,6 +73,7 @@ class InversePunisher(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

@@ -25,6 +25,7 @@ class TitForTat(Player):
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -49,6 +50,7 @@ class TitFor2Tats(Player):
         'memory_depth': 2,  # Long memory, memory-2
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -67,6 +69,7 @@ class TwoTitsForTat(Player):
         'memory_depth': 2,  # Long memory, memory-2
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -89,6 +92,7 @@ class Bully(Player):
         'memory_depth': 1,   # Four-Vector = (0, 1, 0, 1)
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -107,6 +111,7 @@ class SneakyTitForTat(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -130,6 +135,7 @@ class SuspiciousTitForTat(Player):
         'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -149,6 +155,7 @@ class AntiTitForTat(Player):
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -167,6 +174,7 @@ class HardTitForTat(Player):
         'memory_depth': 3,  # memory-three
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -193,6 +201,7 @@ class HardTitFor2Tats(Player):
         'memory_depth': 3,  # memory-three
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -223,6 +232,7 @@ class OmegaTFT(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -294,6 +304,7 @@ class Gradual(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -359,6 +370,7 @@ class ContriteTitForTat(Player):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -399,6 +411,7 @@ class SlowTitForTwoTats(Player):
         'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

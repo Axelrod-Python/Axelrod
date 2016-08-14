@@ -26,6 +26,7 @@ class Darwin(Player):
         'memory_depth': float('inf'),
         'stochastic': False,
         'inspects_source': False,
+        'long_run_time': False,
         'makes_use_of': set(),
         'manipulates_source': False,
         'manipulates_state': True  # Does not reset properly.

@@ -16,6 +16,7 @@ class TestProber(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -45,6 +46,7 @@ class TestProber2(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -74,6 +76,7 @@ class TestProber3(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -104,6 +107,7 @@ class TestHardProber(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -137,6 +141,7 @@ class TestNaiveProber(TestPlayer):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -171,6 +176,7 @@ class TestRemorsefulProber(TestPlayer):
         'memory_depth': 2,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

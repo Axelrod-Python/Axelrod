@@ -20,6 +20,7 @@ class Grudger(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -42,6 +43,7 @@ class ForgetfulGrudger(Player):
         'memory_depth': 10,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -83,6 +85,7 @@ class OppositeGrudger(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -104,6 +107,7 @@ class Aggravater(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -135,6 +139,7 @@ class SoftGrudger(Player):
         'memory_depth': 6,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

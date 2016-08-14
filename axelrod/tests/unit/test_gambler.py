@@ -20,6 +20,7 @@ class TestGambler(TestPlayer):
         'memory_depth': 1,  # Default TFT table
         'stochastic': True,
         'makes_use_of': set(['length']),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -81,6 +82,7 @@ class TestPSOGambler(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(['length']),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

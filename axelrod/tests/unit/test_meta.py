@@ -21,6 +21,7 @@ class TestMetaPlayer(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': True,
         'manipulates_source': False,
         'inspects_source': False,
         'manipulates_state': False
@@ -71,6 +72,7 @@ class TestMetaMajority(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'long_run_time': True,
         'manipulates_source': False,
         'inspects_source': False,
         'manipulates_state': False
@@ -101,6 +103,7 @@ class TestMetaMinority(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -136,6 +139,7 @@ class TestMetaWinner(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -188,6 +192,7 @@ class TestMetaHunter(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -220,6 +225,7 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'inspects_source': False,
+        'long_run_time': True,
         'manipulates_source': False,
         'manipulates_state': False
     }
@@ -239,6 +245,7 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'makes_use_of': set(['game']),
+        'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -258,6 +265,7 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -277,6 +285,7 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -296,6 +305,7 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -315,6 +325,7 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
+        'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -336,6 +347,7 @@ class TestMetaMixer(TestMetaPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'manipulates_source': False,
+        'long_run_time': True,
         'inspects_source': False,
         'manipulates_state': False
     }

@@ -41,6 +41,7 @@ class FSMPlayer(Player):
         'memory_depth': 1,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -83,6 +84,7 @@ class Fortress3(FSMPlayer):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -110,6 +112,7 @@ class Fortress4(FSMPlayer):
         'memory_depth': 4,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -137,6 +140,7 @@ class Predator(FSMPlayer):
         'memory_depth': 9,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -174,6 +178,7 @@ class Raider(FSMPlayer):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -201,6 +206,7 @@ class Ripoff(FSMPlayer):
         'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -226,6 +232,7 @@ class SolutionB1(FSMPlayer):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -251,6 +258,7 @@ class SolutionB5(FSMPlayer):
         'memory_depth': 5,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -282,6 +290,7 @@ class Thumper(FSMPlayer):
         'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

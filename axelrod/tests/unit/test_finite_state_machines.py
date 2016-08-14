@@ -100,6 +100,7 @@ class TestFSMPlayer(TestPlayer):
         'memory_depth': 1,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -126,6 +127,7 @@ class TestFortress3(TestFSMPlayer):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -144,6 +146,7 @@ class TestFortress4(TestFSMPlayer):
         'memory_depth': 4,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -162,6 +165,7 @@ class TestPredator(TestFSMPlayer):
         'memory_depth': 9,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -180,6 +184,7 @@ class TestRaider(TestFSMPlayer):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -198,6 +203,7 @@ class TestRipoff(TestFSMPlayer):
         'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -216,6 +222,7 @@ class TestSolutionB1(TestFSMPlayer):
         'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -234,6 +241,7 @@ class TestSolutionB5(TestFSMPlayer):
         'memory_depth': 5,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -252,6 +260,7 @@ class TestThumper(TestFSMPlayer):
         'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

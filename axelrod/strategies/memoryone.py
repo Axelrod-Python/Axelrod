@@ -15,6 +15,7 @@ class MemoryOnePlayer(Player):
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -83,6 +84,7 @@ class WinStayLoseShift(MemoryOnePlayer):
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -109,6 +111,7 @@ class WinShiftLoseStay(MemoryOnePlayer):
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -129,6 +132,7 @@ class GTFT(MemoryOnePlayer):
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': True,
         'makes_use_of': set(["game"]),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -227,6 +231,7 @@ class LRPlayer(MemoryOnePlayer):
         'memory_depth': 1,  # Memory-one Four-Vector
         'stochastic': True,
         'makes_use_of': set(["game"]),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -455,6 +460,7 @@ class ALLCorALLD(Player):
         'memory_depth': 1,  # Memory-one Four-Vector (1, 1, 0, 0)
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

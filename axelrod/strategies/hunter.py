@@ -12,6 +12,7 @@ class DefectorHunter(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -31,6 +32,7 @@ class CooperatorHunter(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -50,6 +52,7 @@ class AlternatorHunter(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -71,6 +74,7 @@ class CycleHunter(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -93,6 +97,7 @@ class EventualCycleHunter(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -118,6 +123,7 @@ class MathConstantHunter(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -155,6 +161,7 @@ class RandomHunter(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

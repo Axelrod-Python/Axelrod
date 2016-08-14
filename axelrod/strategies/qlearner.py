@@ -17,6 +17,7 @@ class RiskyQLearner(Player):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'makes_use_of': set(["game"]),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

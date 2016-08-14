@@ -10,6 +10,7 @@ class TestClassification(unittest.TestCase):
         # A set of dimensions that are known to have been fully applied
         known_keys = ['stochastic',
                       'memory_depth',
+                      'long_run_time',
                       'inspects_source',
                       'manipulates_source',
                       'manipulates_state']

@@ -16,6 +16,7 @@ class Prober(Player):
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -48,6 +49,7 @@ class Prober2(Player):
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -80,6 +82,7 @@ class Prober3(Player):
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -110,6 +113,7 @@ class HardProber(Player):
         'stochastic': False,
         'memory_depth': float('inf'),  # Long memory
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -148,6 +152,7 @@ class NaiveProber(Player):
         'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -204,6 +209,7 @@ class RemorsefulProber(NaiveProber):
         'memory_depth': 2,  # It remembers if it's previous move was random
         'stochastic': True,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

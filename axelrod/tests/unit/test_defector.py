@@ -15,6 +15,7 @@ class TestDefector(TestPlayer):
         'memory_depth': 0,
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_state': False,
         'manipulates_source': False
@@ -37,6 +38,7 @@ class TestTrickyDefector(TestPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False

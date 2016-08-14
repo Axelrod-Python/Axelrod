@@ -375,6 +375,7 @@ class TestRUAisTFT(TestTitForTat):
         'memory_depth': 0, # really 1
         'stochastic': False,
         'makes_use_of': set(),
+        'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
