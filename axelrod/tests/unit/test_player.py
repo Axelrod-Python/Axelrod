@@ -3,7 +3,7 @@ import random
 import unittest
 
 import axelrod
-from axelrod import Player, simulate_play, init_args
+from axelrod import DefaultGame, Player, simulate_play, init_args
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -157,7 +157,7 @@ class TestPlayer(unittest.TestCase):
             player = self.player()
             self.assertEqual(player.history, [])
             self.assertEqual(player.match_attributes,
-                    {'length': -1, 'game': DefaultGame, 'noise': 0})
+                {'length': -1, 'game': DefaultGame, 'noise': 0})
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
             self.classifier_test(self.expected_class_classifier)

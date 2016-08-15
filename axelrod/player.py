@@ -102,6 +102,7 @@ class Player(object):
         self.defections = 0
         self.init_args = ()
         self.set_match_attributes()
+        self.id = self._unique_id()
 
     def _unique_id(self):
         id = [self.name.replace(' ', '_').lower()]
