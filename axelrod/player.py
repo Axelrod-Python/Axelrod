@@ -105,12 +105,20 @@ class Player(object):
         self.id = self._unique_id()
 
     def _unique_id(self):
+        """
+        Returns a unique id based on the player name and any initialisation
+        arguments.
+        """
         id = [self.name.replace(' ', '_').lower()]
         if self.init_args:
             id.extend(['_', self._hashed_arguments()])
         return ''.join(id)
 
     def _hashed_arguments(self):
+        """
+        Returns a url safe, md5 hash of the player's initialisation arguments
+        serialised as a json string.
+        """
         serialised_args = json.dumps(self.init_args).encode('utf-8')
         md5_args = hashlib.md5(serialised_args).digest()
         base64_args = base64.urlsafe_b64encode(md5_args).decode('utf-8')
