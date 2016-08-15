@@ -13,6 +13,7 @@ class TestDesperate(TestPlayer):
     player = axelrod.Desperate
     expected_classifier = {
         'memory_depth': 1,
+        'long_run_time': False,
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -36,6 +37,7 @@ class TestHopeless(TestPlayer):
     player = axelrod.Hopeless
     expected_classifier = {
         'memory_depth': 1,
+        'long_run_time': False,
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -58,6 +60,7 @@ class TestWilling(TestPlayer):
     player = axelrod.Willing
     expected_classifier = {
         'memory_depth': 1,
+        'long_run_time': False,
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,

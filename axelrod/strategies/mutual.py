@@ -9,6 +9,7 @@ class Desperate(Player):
     name = "Desperate"
     classifier = {
         'memory_depth': 1,
+        'long_run_time': False,
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -29,6 +30,7 @@ class Hopeless(Player):
     name = "Hopeless"
     classifier = {
         'memory_depth': 1,
+        'long_run_time': False,
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -49,6 +51,7 @@ class Willing(Player):
     name = "Willing"
     classifier = {
         'memory_depth': 1,
+        'long_run_time': False,
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
