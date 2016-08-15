@@ -24,11 +24,11 @@ def is_basic(s):
     manipulates_source = s.classifier['manipulates_source']
     manipulates_state = s.classifier['manipulates_state']
     return (
-        not stochastic
-        and not inspects_source
-        and not manipulates_source
-        and not manipulates_state
-        and depth in (0, 1)
+        not stochastic and
+        not inspects_source and
+        not manipulates_source and
+        not manipulates_state and
+        depth in (0, 1)
     )
 
 
