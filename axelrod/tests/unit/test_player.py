@@ -156,7 +156,8 @@ class TestPlayer(unittest.TestCase):
         if self.__class__ != TestPlayer:
             player = self.player()
             self.assertEqual(player.history, [])
-            self.assertEqual(player.match_attributes,
+            self.assertEqual(
+                player.match_attributes,
                 {'length': -1, 'game': DefaultGame, 'noise': 0})
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
