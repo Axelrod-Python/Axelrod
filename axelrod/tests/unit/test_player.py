@@ -1,10 +1,9 @@
-import copy
 import inspect
 import random
 import unittest
 
 import axelrod
-from axelrod import DefaultGame, Game, Player, simulate_play, init_args
+from axelrod import Player, simulate_play, init_args
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -12,6 +11,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 def cooperate(self):
     return C
+
 
 def defect(self):
     return D
@@ -97,7 +97,9 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p2.history[0], D)
 
     def test_strategy(self):
-        self.assertRaises(NotImplementedError, self.player().strategy, self.player())
+        self.assertRaises(
+            NotImplementedError, self.player().strategy, self.player())
+
 
 def test_responses(test_class, P1, P2, history_1, history_2, responses,
                    random_seed=None, attrs=None):
@@ -287,10 +289,11 @@ class TestPlayer(unittest.TestCase):
         self.assertTrue('stochastic' in player.classifier,
                         msg="stochastic not in classifier")
         for key in TestOpponent.classifier:
-            self.assertEqual(player.classifier[key],
-                             self.expected_classifier[key],
-                             msg="%s - Behaviour: %s != Expected Behaviour: %s" %
-                             (key, player.classifier[key], self.expected_classifier[key]))
+            self.assertEqual(
+                player.classifier[key],
+                self.expected_classifier[key],
+                msg="%s - Behaviour: %s != Expected Behaviour: %s" %
+                (key, player.classifier[key], self.expected_classifier[key]))
 
 
 class TestHeadsUp(unittest.TestCase):
