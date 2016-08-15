@@ -4,7 +4,7 @@ import random
 import unittest
 
 import axelrod
-from axelrod import DefaultGame, Game, Player, simulate_play
+from axelrod import DefaultGame, Game, Player, simulate_play, init_args
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -17,6 +17,17 @@ def defect(self):
     return D
 
 
+class TestParameterisedPlayer(Player):
+    """A player who exists to test the _unique_id method"""
+
+    name = 'Test Parameterised Player'
+
+    @init_args
+    def __init__(self, *args):
+        Player.__init__(self)
+        self.reset()
+
+
 class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
@@ -24,6 +35,16 @@ class TestPlayerClass(unittest.TestCase):
     classifier = {
         'stochastic': False
     }
+
+    def test_unique_id(self):
+        p = self.player()
+        self.assertEqual(p._unique_id(), 'player')
+        p.name = 'Test Player'
+        self.assertEqual(p._unique_id(), 'test_player')
+        p = TestParameterisedPlayer(1, 'two')
+        self.assertEqual(
+            p._unique_id(),
+            'test_parameterised_player_OgvZ44dE0V_ncMnnliU8Rw==')
 
     def test_add_noise(self):
         random.seed(1)

@@ -1,6 +1,9 @@
 from functools import wraps
 import random
 import copy
+import json
+import hashlib
+import base64
 
 from axelrod import Actions, flip_action
 from .game import DefaultGame
@@ -92,6 +95,18 @@ class Player(object):
         self.defections = 0
         self.init_args = ()
         self.set_match_attributes()
+
+    def _unique_id(self):
+        id = [self.name.replace(' ', '_').lower()]
+        if self.init_args:
+            id.extend(['_', self._hashed_arguments()])
+        return ''.join(id)
+
+    def _hashed_arguments(self):
+        serialised_args = json.dumps(self.init_args).encode('utf-8')
+        md5_args = hashlib.md5(serialised_args).digest()
+        base64_args = base64.urlsafe_b64encode(md5_args).decode('utf-8')
+        return base64_args
 
     def receive_match_attributes(self):
         # Overwrite this function if your strategy needs
