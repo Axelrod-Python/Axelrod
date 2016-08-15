@@ -37,10 +37,15 @@ class TestPlayerClass(unittest.TestCase):
     }
 
     def test_unique_id(self):
+        # Test id for single word name
         p = self.player()
         self.assertEqual(p._unique_id(), 'player')
+
+        # Test id for name with spaces
         p.name = 'Test Player'
         self.assertEqual(p._unique_id(), 'test_player')
+
+        # Test id for player with init arguments
         p = TestParameterisedPlayer(1, 'two')
         self.assertEqual(
             p._unique_id(),
