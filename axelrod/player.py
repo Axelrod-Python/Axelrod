@@ -23,12 +23,19 @@ def is_basic(s):
     inspects_source = s.classifier['inspects_source']
     manipulates_source = s.classifier['manipulates_source']
     manipulates_state = s.classifier['manipulates_state']
-    return (not stochastic) and (not inspects_source) and (not manipulates_source) and (not manipulates_state) and (depth in (0, 1))
+    return (
+        not stochastic
+        and not inspects_source
+        and not manipulates_source
+        and not manipulates_state
+        and depth in (0, 1)
+    )
 
 
 def obey_axelrod(s):
     """
-    A function to check if a strategy obeys Axelrod's original tournament rules.
+    A function to check if a strategy obeys Axelrod's original tournament
+    rules.
     """
     classifier = s.classifier
     return not (
