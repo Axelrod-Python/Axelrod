@@ -3,12 +3,13 @@ from axelrod.random_ import random_choice
 
 C, D = Actions.C, Actions.D
 
+
 class Desperate(Player):
     """A player that only cooperates after mutual defection"""
     name = "Desperate"
     classifier = {
         'memory_depth': 1,
-        'stochastic': False,
+        'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -22,12 +23,13 @@ class Desperate(Player):
             return C
         return D
 
+
 class Hopeless(Player):
     """A player that only defects after mutual cooperation"""
     name = "Hopeless"
     classifier = {
         'memory_depth': 1,
-        'stochastic': False,
+        'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -41,12 +43,13 @@ class Hopeless(Player):
             return D
         return C
 
+
 class Willing(Player):
     """A player that only defects after mutual defection"""
     name = "Willing"
     classifier = {
         'memory_depth': 1,
-        'stochastic': False,
+        'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
