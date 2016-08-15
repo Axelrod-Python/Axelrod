@@ -10,13 +10,18 @@ from .meta import (
     MetaMajorityMemoryOne, MetaWinnerMemoryOne, MetaMajorityFiniteMemory,
     MetaWinnerFiniteMemory, MetaMajorityLongMemory, MetaWinnerLongMemory,
     MetaMixer
-    )
+)
 
-all_strategies.extend([MetaHunter, MetaMajority, MetaMinority, MetaWinner,
-                       MetaMajorityMemoryOne, MetaWinnerMemoryOne,
-                       MetaMajorityFiniteMemory, MetaWinnerFiniteMemory,
-                       MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMixer])
+all_strategies.extend([
+    MetaHunter, MetaMajority, MetaMinority, MetaWinner, MetaMajorityMemoryOne,
+    MetaWinnerMemoryOne, MetaMajorityFiniteMemory, MetaWinnerFiniteMemory,
+    MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMixer])
 
+
+def strategy_id(strategy):
+    return strategy.name.lower().replace(' ', '_')
+
+strategy_index = {strategy_id(s): s for s in all_strategies}
 
 # Distinguished strategy collections in addition to
 # `all_strategies` from _strategies.py

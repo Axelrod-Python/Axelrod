@@ -3,8 +3,7 @@ import random
 import unittest
 
 import axelrod
-from axelrod import DefaultGame, Player, simulate_play, init_args
-
+from axelrod import DefaultGame, Player, simulate_play
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -17,17 +16,6 @@ def defect(self):
     return D
 
 
-class TestParameterisedPlayer(Player):
-    """A player who exists to test the _unique_id method"""
-
-    name = 'Test Parameterised Player'
-
-    @init_args
-    def __init__(self, *args):
-        Player.__init__(self)
-        self.reset()
-
-
 class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
@@ -35,21 +23,6 @@ class TestPlayerClass(unittest.TestCase):
     classifier = {
         'stochastic': False
     }
-
-    def test_unique_id(self):
-        # Test id for single word name
-        p = self.player()
-        self.assertEqual(p._unique_id(), 'player')
-
-        # Test id for name with spaces
-        p.name = 'Test Player'
-        self.assertEqual(p._unique_id(), 'test_player')
-
-        # Test id for player with init arguments
-        p = TestParameterisedPlayer(1, 'two')
-        self.assertEqual(
-            p._unique_id(),
-            'test_parameterised_player_OgvZ44dE0V_ncMnnliU8Rw==')
 
     def test_add_noise(self):
         random.seed(1)
@@ -162,7 +135,6 @@ class TestPlayer(unittest.TestCase):
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
             self.classifier_test(self.expected_class_classifier)
-            self.assertIsNotNone(player.id)
 
     def test_repr(self):
         """Test that the representation is correct."""
