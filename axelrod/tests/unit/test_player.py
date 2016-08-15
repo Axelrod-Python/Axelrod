@@ -242,7 +242,6 @@ class TestPlayer(unittest.TestCase):
             self, P1, P2, history_1, history_2, responses,
             random_seed=random_seed, attrs=attrs)
 
-
     def classifier_test(self, expected_class_classifier=None):
         """Test that the keys in the expected_classifier dictionary give the
         expected values in the player classifier dictionary. Also checks that
@@ -259,7 +258,7 @@ class TestPlayer(unittest.TestCase):
         self.assertTrue('memory_depth' in player.classifier,
                         msg="memory_depth not in classifier")
         self.assertTrue('stochastic' in player.classifier,
-                        msg="stochastic not in classifier")
+                        msg="stochastic n§ot in classifier")
         for key in TestOpponent.classifier:
             self.assertEqual(player.classifier[key],
                              self.expected_classifier[key],
