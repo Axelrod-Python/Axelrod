@@ -162,6 +162,7 @@ class TestPlayer(unittest.TestCase):
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
             self.classifier_test(self.expected_class_classifier)
+            self.assertIsNotNone(player.id)
 
     def test_repr(self):
         """Test that the representation is correct."""
