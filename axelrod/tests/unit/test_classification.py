@@ -134,6 +134,15 @@ class TestStrategies(unittest.TestCase):
         for strategy in axelrod.all_strategies:
             self.assertIsNotNone(axelrod.strategy_id(strategy))
 
+        self.assertEqual(
+            axelrod.strategy_id(axelrod.TitForTat),
+            'tit_for_tat')
+
+        self.assertEqual(
+            axelrod.strategy_id(axelrod.Defector),
+            'defector')
+
+
     def test_strategy_list(self):
         for strategy_list in ["all_strategies",
                               "demo_strategies",
