@@ -24,6 +24,8 @@ class TestDesperate(TestPlayer):
     def test_strategy(self):
         seed(1)
         self.first_play_test(C)
+        seed(2)
+        self.first_play_test(D)
 
     def test_responses(self):
         self.responses_test([C] * 4, [D] * 4, [D])
@@ -48,6 +50,8 @@ class TestHopeless(TestPlayer):
     def test_strategy(self):
         seed(1)
         self.first_play_test(C)
+        seed(2)
+        self.first_play_test(D)
 
     def test_responses(self):
         self.responses_test([C] * 4, [D] * 4, [C])
@@ -71,6 +75,8 @@ class TestWilling(TestPlayer):
     def test_strategy(self):
         seed(1)
         self.first_play_test(C)
+        seed(2)
+        self.first_play_test(D)
 
     def test_responses(self):
         self.responses_test([C] * 4, [D] * 4, [C])

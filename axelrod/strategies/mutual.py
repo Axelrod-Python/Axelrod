@@ -5,7 +5,12 @@ C, D = Actions.C, Actions.D
 
 
 class Desperate(Player):
-    """A player that only cooperates after mutual defection"""
+    """A player that only cooperates after mutual defection.
+
+    Names:
+
+    - Desperate: [Berg2015]_"""
+
     name = "Desperate"
     classifier = {
         'memory_depth': 1,
@@ -26,7 +31,12 @@ class Desperate(Player):
 
 
 class Hopeless(Player):
-    """A player that only defects after mutual cooperation"""
+    """A player that only defects after mutual cooperation.
+
+    Names:
+
+    - Hopeless: [Berg2015]_"""
+
     name = "Hopeless"
     classifier = {
         'memory_depth': 1,
@@ -47,7 +57,12 @@ class Hopeless(Player):
 
 
 class Willing(Player):
-    """A player that only defects after mutual defection"""
+    """A player that only defects after mutual defection.
+
+    Names:
+
+    - Willing: [Berg2015]_"""
+
     name = "Willing"
     classifier = {
         'memory_depth': 1,
