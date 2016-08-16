@@ -10,6 +10,8 @@ class Retaliate(Player):
     A player starts by cooperating but will retaliate once the opponent
     has won more than 10 percent times the number of defections the player has.
     """
+
+    name = 'Retaliate'
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
@@ -52,10 +54,13 @@ class Retaliate(Player):
         Player.reset(self)
         self.play_counts = defaultdict(int)
 
+
 class Retaliate2(Retaliate):
     """
     Retaliate player with a threshold of 8 percent.
     """
+
+    name = 'Retaliate 2'
 
     def __init__(self, retaliation_threshold=0.08):
         super(Retaliate2, self).__init__(
@@ -66,6 +71,8 @@ class Retaliate3(Retaliate):
     """
     Retaliate player with a threshold of 5 percent.
     """
+
+    name = 'Retaliate 3'
 
     def __init__(self, retaliation_threshold=0.05):
         super(Retaliate3, self).__init__(
@@ -80,6 +87,7 @@ class LimitedRetaliate(Player):
     retaliation limit (20 defections).
     """
 
+    name = 'Limited Retaliate'
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
@@ -156,6 +164,8 @@ class LimitedRetaliate2(LimitedRetaliate):
     retaliation limit of 15.
     """
 
+    name = 'Limited Retaliate 2'
+
     def __init__(self, retaliation_threshold=0.08, retaliation_limit=15):
         super(LimitedRetaliate2, self).__init__(
             retaliation_threshold=retaliation_threshold,
@@ -167,6 +177,8 @@ class LimitedRetaliate3(LimitedRetaliate):
     LimitedRetaliate player with a threshold of 5 percent and a
     retaliation limit of 20.
     """
+
+    name = 'Limited Retaliate 3'
 
     def __init__(self, retaliation_threshold=0.05, retaliation_limit=20):
         super(LimitedRetaliate3, self).__init__(
