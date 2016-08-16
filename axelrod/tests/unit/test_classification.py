@@ -130,6 +130,10 @@ class TestClassification(unittest.TestCase):
 
 class TestStrategies(unittest.TestCase):
 
+    def test_strategy_id(self):
+        for strategy in axelrod.all_strategies:
+            self.assertIsNotNone(axelrod.strategy_id(strategy))
+
     def test_strategy_list(self):
         for strategy_list in ["all_strategies",
                               "demo_strategies",
