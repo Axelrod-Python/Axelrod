@@ -148,6 +148,9 @@ class TestStrategies(unittest.TestCase):
             unique_id = strategy.name.lower().replace(' ', '_')
             self.assertIn(unique_id, axelrod.strategy_index)
 
+        self.assertEqual(
+            len(axelrod.all_strategies), len(axelrod.strategy_index))
+
         self.assertIn('tit_for_tat', axelrod.strategy_index)
         self.assertIn('defector', axelrod.strategy_index)
 
