@@ -142,6 +142,13 @@ class TestStrategies(unittest.TestCase):
             axelrod.strategy_id(axelrod.Defector),
             'defector')
 
+    def test_strategy_index(self):
+        for strategy in axelrod.all_strategies:
+            unique_id = strategy.name.lower().replace(' ', '_')
+            self.assertIn(unique_id, axelrod.strategy_index)
+
+        self.assertIn('tit_for_tat', axelrod.strategy_index)
+        self.assertIn('defector', axelrod.strategy_index)
 
     def test_strategy_list(self):
         for strategy_list in ["all_strategies",
