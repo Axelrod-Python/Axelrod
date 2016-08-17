@@ -17,7 +17,8 @@ class TestClassification(unittest.TestCase):
 
         for s in axelrod.all_strategies:
             s = s()
-            self.assertTrue(None not in [s.classifier[key] for key in known_keys])
+            self.assertTrue(
+                None not in [s.classifier[key] for key in known_keys])
 
     def test_multiple_instances(self):
         """Certain instances of classes of strategies will have different
@@ -130,6 +131,29 @@ class TestClassification(unittest.TestCase):
 
 class TestStrategies(unittest.TestCase):
 
+    def test_strategy_id(self):
+        for strategy in axelrod.all_strategies:
+            self.assertIsNotNone(axelrod.strategy_id(strategy))
+
+        self.assertEqual(
+            axelrod.strategy_id(axelrod.TitForTat),
+            'tit_for_tat')
+
+        self.assertEqual(
+            axelrod.strategy_id(axelrod.Defector),
+            'defector')
+
+    def test_strategy_index(self):
+        for strategy in axelrod.all_strategies:
+            unique_id = strategy.name.lower().replace(' ', '_')
+            self.assertIn(unique_id, axelrod.strategy_index)
+
+        self.assertEqual(
+            len(axelrod.all_strategies), len(axelrod.strategy_index))
+
+        self.assertIn('tit_for_tat', axelrod.strategy_index)
+        self.assertIn('defector', axelrod.strategy_index)
+
     def test_strategy_list(self):
         for strategy_list in ["all_strategies",
                               "demo_strategies",
@@ -184,7 +208,8 @@ class TestStrategies(unittest.TestCase):
         self.assertTrue(axelrod.MetaMajority in axelrod.strategies)
 
         self.assertTrue(axelrod.MetaHunter in axelrod.strategies)
-        self.assertFalse(axelrod.MetaHunter in axelrod.long_run_time_strategies)
+        self.assertFalse(
+            axelrod.MetaHunter in axelrod.long_run_time_strategies)
 
     def test_demo_strategies(self):
         demo_strategies = [axelrod.Cooperator,
