@@ -443,29 +443,27 @@ class AdaptiveTitForTat(Player):
     
     Attributes
     ----------
-    world : float [0.0, 1.0], default=0.5
+    world : float [0.0, 1.0], set to 0.5
         continuous variable representing the world's image
         1.0 - total cooperation
-        0.0 - total defections
+        0.0 - total defection
         other values - something in between of the above
         updated every round, starting value shouldn't matter as long as
         it's >= 0.5
         
     Parameters
     ----------
-    rate : float [0.0, 1.0]
+    rate : float [0.0, 1.0], default=0.5
         adaptation rate - r in Algorithm above
+        smaller value means more gradual and robust
+        to perturbations behaviour
         
     References
     ----------
-    Basic Model: 
-        http://www.prisoners-dilemma.com/strategies.html
-    Extension for spatial games:
-        http://users.softlab.ntua.gr/~brensham/Publications/PPSN2000.pdf
-        
+        http://users.softlab.ntua.gr/~brensham/Publications/SAB2000.pdf
     """
     
-    name = 'Adaptive Tit for Tat'
+    name = 'Adaptive Tit For Tat'
     classifier = {
         'memory_depth': 1,
         'stochastic': False,
@@ -484,8 +482,8 @@ class AdaptiveTitForTat(Player):
         self.rate, self.starting_rate = rate, rate
         
     def strategy(self, opponent):
-    
-        if len(self.history) == 0:
+
+        if len(opponent.history) == 0:
             return C
         
         if opponent.history[-1] == C:
