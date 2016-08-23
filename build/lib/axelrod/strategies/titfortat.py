@@ -431,38 +431,21 @@ class SlowTitForTwoTats(Player):
         return C
         
 class AdaptiveTitForTat(Player):
-    """ATFT - Adaptive Tit for Tat (Basic Model)
-    
-    Algorithm
-    ----------
-    if (opponent played C in the last cycle) then
-    world = world + r*(1-world)
+    """Adaptive tit-for-tat model
+    If (opponent played C in the last cycle) then
+    world = world + rc*(1-world), rc is the adaptation rate for cooperation
     else
-    world = world + r*(0-world)
+    world = world + rd*(0-world), rd is the adaptation rate for defection
     If (world >= 0.5) play C, else play D
-    
-    Attributes
-    ----------
-    world : float [0.0, 1.0], default=0.5
-        continuous variable representing the world's image
-        1.0 - total cooperation
-        0.0 - total defections
-        other values - something in between of the above
-        updated every round, starting value shouldn't matter as long as
-        it's >= 0.5
-        
-    Parameters
-    ----------
-    rate : float [0.0, 1.0]
-        adaptation rate - r in Algorithm above
-        
-    References
-    ----------
-    Basic Model: 
-        http://www.prisoners-dilemma.com/strategies.html
-    Extension for spatial games:
-        http://users.softlab.ntua.gr/~brensham/Publications/PPSN2000.pdf
-        
+    Throughout  an  observation  window,  record  how  many  times  (n)  the  agent’s
+    move  has  coincided  with  the  opponent’s  move.  At  regular  intervals  (every
+    “window” steps) adapt the rates as follows :
+    If (n>threshold) then
+    rc = rmin, rd = rmax
+    else
+    rc = rmax, rd = rmin
+
+    http://users.softlab.ntua.gr/~brensham/Publications/PPSN2000.pdf
     """
     
     name = 'Adaptive Tit for Tat'
@@ -475,23 +458,29 @@ class AdaptiveTitForTat(Player):
         'manipulates_source': False,
         'manipulates_state': False
     }
-    world = 0.5
 
     @init_args
-    def __init__(self, rate=0.5):
+    def __init__(self, world=0.5, rate_min=0.1, rate_max=0.8):
     
         super().__init__()
-        self.rate, self.starting_rate = rate, rate
+        self.world, self.starting_world = world, world
+        self.rate_min, self.starting_rate_min = rate_min, rate_min
+        self.rate_max, self.starting_rate_max = rate_max, rate_max
         
     def strategy(self, opponent):
-    
-        if len(self.history) == 0:
+        
+        if not self.history:
             return C
         
-        if opponent.history[-1] == C:
-            self.world += self.rate * (1. - self.world)
+        if opponent.history[-1] == self.history[-1]:
+            rate_c, rate_d = self.rate_min, self.rate_max
         else:
-            self.world -= self.rate * self.world
+            rate_c, rate_d = self.rate_max, self.rate_min
+        
+        if opponent.history[-1] == C:
+            self.world += rate_c * (1. - self.world)
+        else:
+            self.world -= rate_d * self.world
         
         if self.world >= 0.5:
             return C
@@ -501,9 +490,14 @@ class AdaptiveTitForTat(Player):
     def reset(self):
         
         super().reset()
-        self.world = 0.5
-        self.rate = self.starting_rate
+        self.world = self.starting_world
+        self.rate_min = self.starting_rate_min
+        self.rate_max = self.starting_rate_max
+        self.n = 0
         
     def __repr__(self):
          
-        return "%s: %s" % (self.name, round(self.rate, 2))
+        return "%s: world=%s, rate_min=%s, rate_max=%s" % (self.name, 
+                                           round(self.world, 2), 
+                                           round(self.rate_min, 2),
+                                           round(self.rate_max, 2))
