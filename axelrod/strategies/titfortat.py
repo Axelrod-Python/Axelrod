@@ -465,7 +465,7 @@ class AdaptiveTitForTat(Player):
     
     name = 'Adaptive Tit For Tat'
     classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

@@ -467,7 +467,7 @@ class TestAdaptiveTitForTat(TestPlayer):
     name = "Adaptive Tit For Tat: 0.5"
     player = axelrod.AdaptiveTitForTat
     expected_classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
