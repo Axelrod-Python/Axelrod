@@ -478,7 +478,7 @@ class AdaptiveTitForTat(Player):
     @init_args
     def __init__(self, rate=0.5):
     
-        super().__init__()
+        Player.__init__(self)
         self.rate, self.starting_rate = rate, rate
         
     def strategy(self, opponent):
@@ -498,7 +498,7 @@ class AdaptiveTitForTat(Player):
         
     def reset(self):
         
-        super().reset()
+        Player.reset(self)
         self.world = 0.5
         self.rate = self.starting_rate
         
