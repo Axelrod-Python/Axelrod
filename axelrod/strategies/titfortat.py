@@ -434,7 +434,7 @@ class AdaptiveTitForTat(Player):
     """ATFT - Adaptive Tit for Tat (Basic Model)
     
     Algorithm
-    ----------
+    
     if (opponent played C in the last cycle) then
     world = world + r*(1-world)
     else
@@ -442,7 +442,7 @@ class AdaptiveTitForTat(Player):
     If (world >= 0.5) play C, else play D
     
     Attributes
-    ----------
+    
     world : float [0.0, 1.0], set to 0.5
         continuous variable representing the world's image
         1.0 - total cooperation
@@ -452,15 +452,15 @@ class AdaptiveTitForTat(Player):
         it's >= 0.5
         
     Parameters
-    ----------
+    
     rate : float [0.0, 1.0], default=0.5
         adaptation rate - r in Algorithm above
         smaller value means more gradual and robust
         to perturbations behaviour
         
-    References
-    ----------
-        http://users.softlab.ntua.gr/~brensham/Publications/SAB2000.pdf
+    Names
+    
+    - Adaptive Tit For Tat: [Tzafestas2000]_
     """
     
     name = 'Adaptive Tit For Tat'
