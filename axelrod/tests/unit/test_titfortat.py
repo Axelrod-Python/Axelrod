@@ -483,5 +483,10 @@ class TestAdaptiveTitForTat(TestPlayer):
         
         self.markov_test(['C', 'D', 'C', 'D'])
         
+        p1, p2 = self.player(), self.player()
+        p1.play(p2)
+        p1.play(p2)
+        self.assertEqual(p2.world, 0.75)
+        
         
 
