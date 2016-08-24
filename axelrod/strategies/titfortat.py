@@ -429,3 +429,79 @@ class SlowTitForTwoTats(Player):
 
         # Otherwise cooperate
         return C
+        
+class AdaptiveTitForTat(Player):
+    """ATFT - Adaptive Tit for Tat (Basic Model)
+    
+    Algorithm
+    
+    if (opponent played C in the last cycle) then
+    world = world + r*(1-world)
+    else
+    world = world + r*(0-world)
+    If (world >= 0.5) play C, else play D
+    
+    Attributes
+    
+    world : float [0.0, 1.0], set to 0.5
+        continuous variable representing the world's image
+        1.0 - total cooperation
+        0.0 - total defection
+        other values - something in between of the above
+        updated every round, starting value shouldn't matter as long as
+        it's >= 0.5
+        
+    Parameters
+    
+    rate : float [0.0, 1.0], default=0.5
+        adaptation rate - r in Algorithm above
+        smaller value means more gradual and robust
+        to perturbations behaviour
+        
+    Names
+    
+    - Adaptive Tit For Tat: [Tzafestas2000]_
+    """
+    
+    name = 'Adaptive Tit For Tat'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+    world = 0.5
+
+    @init_args
+    def __init__(self, rate=0.5):
+    
+        Player.__init__(self)
+        self.rate, self.starting_rate = rate, rate
+        
+    def strategy(self, opponent):
+
+        if len(opponent.history) == 0:
+            return C
+        
+        if opponent.history[-1] == C:
+            self.world += self.rate * (1. - self.world)
+        else:
+            self.world -= self.rate * self.world
+        
+        if self.world >= 0.5:
+            return C
+        
+        return D
+        
+    def reset(self):
+        
+        Player.reset(self)
+        self.world = 0.5
+        self.rate = self.starting_rate
+        
+    def __repr__(self):
+         
+        return "%s: %s" % (self.name, round(self.rate, 2))

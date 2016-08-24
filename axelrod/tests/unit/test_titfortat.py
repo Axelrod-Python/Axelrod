@@ -462,5 +462,39 @@ class TestSlowTitForTwoTats(TestPlayer):
         self.responses_test([C]*3, [C, D, C], [C])
         self.responses_test([C]*3, [C, D, D], [D])
 
+class TestAdaptiveTitForTat(TestPlayer):
 
+    name = "Adaptive Tit For Tat: 0.5"
+    player = axelrod.AdaptiveTitForTat
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+    
+    def test_strategy(self):
+        """Start by cooperating."""
+        self.first_play_test(C)
+        
+    def test_effect_of_strategy(self):
+        
+        self.markov_test(['C', 'D', 'C', 'D'])
+        
+        p1, p2 = self.player(), self.player()
+        p1.play(p2)
+        p1.play(p2)
+        self.assertEqual(p2.world, 0.75)
+        
+    def test_world_rate_reset(self):
+        p1, p2 = self.player(), self.player()
+        p1.play(p2)
+        p1.play(p2)
+        p2.reset()
+        self.assertEqual(p2.world, 0.5)
+        self.assertEqual(p2.rate, 0.5)
+        
+        
 
