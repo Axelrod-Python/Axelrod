@@ -64,6 +64,7 @@ from .titfortat import (
 
 all_strategies = [
     Adaptive,
+    AdaptiveTitForTat,
     Aggravater,
     ALLCorALLD,
     Alternator,
