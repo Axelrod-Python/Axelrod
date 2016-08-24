@@ -1,6 +1,7 @@
 *pyc
 *.DS_Store
 site/
+build/
 _build/
 *.log
 dist/
