@@ -33,6 +33,30 @@ ordinary_strategies = strategies  # This is a legacy and will be removed
 
 
 def filtered_strategies(filterset, strategies=all_strategies):
+    """
+    Applies the filters defined in the given filterset dict and returns those
+    strategy classes which pass all of those filters from the given list of
+    strategies.
+
+    Parameters
+    ----------
+        filterset : dict
+            mapping filter name to criterion.
+            e.g.
+                {
+                    'stochastic': True,
+                    'min_memory_depth': 2
+                }
+        strategies: list
+            of subclasses of axelrod.Player
+
+    Returns
+    -------
+        list
+
+        of subclasses of axelrod.Player
+
+    """
     return [
         s for s in strategies
         if passes_filterset(s, filterset)]
