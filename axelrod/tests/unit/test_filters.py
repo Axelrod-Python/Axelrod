@@ -2,7 +2,7 @@ import unittest
 from axelrod.strategies._filters import *
 from axelrod import filtered_strategies
 from hypothesis import given, example
-from hypothesis.strategies import sampled_from, integers
+from hypothesis.strategies import integers
 import operator
 
 
@@ -16,27 +16,21 @@ class TestFilters(unittest.TestCase):
             'makes_use_of': ['game', 'length']
         }
 
-    @given(
-        truthy=sampled_from([True, 'True', 'true', '1', 'Yes', 'yes']),
-        falsy=sampled_from([False, 'False', 'false', '0', 'No', 'no'])
-    )
-    @example(truthy=True, falsy=False)
-    def test_boolean_filter(self, truthy, falsy):
+    def test_boolean_filter(self):
         self.assertTrue(
-            passes_boolean_filter(self.TestStrategy, 'stochastic', truthy))
+            passes_boolean_filter(self.TestStrategy, 'stochastic', True))
         self.assertFalse(
-            passes_boolean_filter(self.TestStrategy, 'stochastic', falsy))
+            passes_boolean_filter(self.TestStrategy, 'stochastic', False))
         self.assertTrue(
-            passes_boolean_filter(self.TestStrategy, 'inspects_source', falsy))
+            passes_boolean_filter(self.TestStrategy, 'inspects_source', False))
         self.assertFalse(
-            passes_boolean_filter(self.TestStrategy, 'inspects_source', truthy))
-
+            passes_boolean_filter(self.TestStrategy, 'inspects_source', True))
 
     @given(
         smaller=integers(min_value=0, max_value=9),
         larger=integers(min_value=11, max_value=100),
     )
-    @example(smaller='0', larger=float('inf'))
+    @example(smaller=0, larger=float('inf'))
     def test_operator_filter(self, smaller, larger):
         self.assertTrue(passes_operator_filter(
             self.TestStrategy, 'memory_depth', smaller, operator.ge))
@@ -47,7 +41,6 @@ class TestFilters(unittest.TestCase):
         self.assertFalse(passes_operator_filter(
             self.TestStrategy, 'memory_depth', larger, operator.ge))
 
-
     def test_list_filter(self):
         self.assertTrue(passes_in_list_filter(
             self.TestStrategy, 'makes_use_of', 'game'))
@@ -57,39 +50,37 @@ class TestFilters(unittest.TestCase):
             self.TestStrategy, 'makes_use_of', 'test'))
 
     @given(
-        truthy=sampled_from([True, 'True', 'true', '1', 'Yes', 'yes']),
-        falsy=sampled_from([False, 'False', 'false', '0', 'No', 'no']),
         smaller=integers(min_value=0, max_value=9),
         larger=integers(min_value=11, max_value=100),
     )
-    @example(truthy=True, falsy=False, smaller='2', larger=float('inf'))
-    def test_passes_filterset(self, truthy, falsy, smaller, larger):
+    @example(smaller=0, larger=float('inf'))
+    def test_passes_filterset(self, smaller, larger):
 
         full_passing_filterset = {
-            'stochastic': truthy,
-            'inspects_source': falsy,
+            'stochastic': True,
+            'inspects_source': False,
             'min_memory_depth': smaller,
             'max_memory_depth': larger,
             'makes_use_of': 'length'
         }
 
         sparse_passing_filterset = {
-            'stochastic': truthy,
-            'inspects_source': falsy,
+            'stochastic': True,
+            'inspects_source': False,
             'makes_use_of': 'length'
         }
 
         full_failing_filterset = {
-            'stochastic': falsy,
-            'inspects_source': falsy,
+            'stochastic': False,
+            'inspects_source': False,
             'min_memory_depth': smaller,
             'max_memory_depth': larger,
             'makes_use_of': 'length'
         }
 
         sparse_failing_filterset = {
-            'stochastic': falsy,
-            'inspects_source': falsy,
+            'stochastic': False,
+            'inspects_source': False,
             'min_memory_depth': smaller,
         }
 
