@@ -21,7 +21,6 @@ class TestFilters(unittest.TestCase):
     )
     @example(truthy=True, falsy=False)
     def test_boolean_filter(self, truthy, falsy):
-
         self.assertTrue(
             passes_boolean_filter(self.TestStrategy, 'stochastic', truthy))
         self.assertFalse(
@@ -38,7 +37,6 @@ class TestFilters(unittest.TestCase):
     )
     @example(smaller='0', larger=float('inf'))
     def test_operator_filter(self, smaller, larger):
-
         self.assertTrue(passes_operator_filter(
             self.TestStrategy, 'memory_depth', smaller, operator.ge))
         self.assertTrue(passes_operator_filter(
@@ -50,7 +48,6 @@ class TestFilters(unittest.TestCase):
 
 
     def test_list_filter(self):
-
         self.assertTrue(passes_in_list_filter(
             self.TestStrategy, 'makes_use_of', 'game'))
         self.assertTrue(passes_in_list_filter(
@@ -94,7 +91,6 @@ class TestFilters(unittest.TestCase):
             'inspects_source': falsy,
             'min_memory_depth': smaller,
         }
-
 
         self.assertTrue(passes_filterset(
             self.TestStrategy, full_passing_filterset))
