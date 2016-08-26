@@ -32,15 +32,31 @@ def passes_in_list_filter(strategy, value, classifier):
 
 def passes_filterset(strategy, filterset):
     """
+    Determines whether a given strategy meets the criteria defined in a
+    dictionary of filters.
+
     Parameters
     ----------
         strategy : a descendant class of axelrod.Player
-        filterset : dictionary
+        filterset : dict
+            mapping filter name to criterion.
+            e.g.
+                {
+                    'stochastic': True,
+                    'min_memory_depth': 2
+                }
 
     Returns
     -------
         boolean
+
+        True if the given strategy meets all the supplied criteria in the
+        filterset, otherwise false.
+
     """
+
+    # A dictionary mapping filter name (from the supplied filterset) to
+    # the relevant function and arguments for that filter.
     FilterFunction = namedtuple('FilterFunction', 'function kwargs')
     filter_functions = {
         'stochastic': FilterFunction(
@@ -68,6 +84,9 @@ def passes_filterset(strategy, filterset):
             function=passes_in_list_filter,
             kwargs={'classifier': 'makes_use_of'})
     }
+
+    # A list of boolean values to record whether the strategy passed or failed
+    # each of the filters in the supplied filterset.
     passes_filters = []
 
     for filter, filter_function in filter_functions.items():
@@ -78,4 +97,5 @@ def passes_filterset(strategy, filterset):
             kwargs['value'] = filterset[filter]
             passes_filters.append(filter_function.function(**kwargs))
 
+    # Only return True if the strategy passes all the supplied filters
     return all(passes_filters)
