@@ -14,12 +14,9 @@ def passes_boolean_filter(strategy, classifier_key, value):
         classifier_key: string
             Defining which entry from the strategy's classifier dict is to be
             tested (e.g. 'stochastic' or 'inspects_source').
-        value: string or boolean
+        value: boolean
             The value against which the strategy's classifier dict entry is to
             be tested.
-
-            If a string is used as the value, it must be capable of being
-            converted to a boolean (e.g. 'true', 'True', '1', 'false').
 
     Returns
     -------
@@ -28,12 +25,7 @@ def passes_boolean_filter(strategy, classifier_key, value):
         True if the value from the strategy's classifier dictionary matches
         the value passed to the function.
     """
-    if isinstance(value, str):
-        filter_value = strtobool(value)
-    else:
-        filter_value = value
-
-    return strategy.classifier[classifier_key] == filter_value
+    return strategy.classifier[classifier_key] == value
 
 
 def passes_operator_filter(strategy, classifier_key, value, operator):
@@ -47,12 +39,9 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
         classifier_key: string
             Defining which entry from the strategy's classifier dict is to be
             tested (e.g. 'memory_depth').
-        value: string or int
+        value: int
             The value against which the strategy's classifier dict entry is to
             be tested.
-
-            If a string is used as the value, it must be capable of being
-            converted to an integer.
         operator: operator.le or operator.ge
             Indicating whether a 'less than or equal to' or 'greater than or
             equal to' test should be applied.
@@ -64,17 +53,12 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
         True if the value from the strategy's classifier dictionary matches
         the value and operator passed to the function.
     """
-    if isinstance(value, str):
-        filter_value = int(value)
-    else:
-        filter_value = value
-
     classifier_value = strategy.classifier[classifier_key]
     if (isinstance(classifier_value, str) and
             classifier_value.lower() == 'infinity'):
         classifier_value = float('inf')
 
-    return operator(classifier_value, filter_value)
+    return operator(classifier_value, value)
 
 
 def passes_in_list_filter(strategy, classifier_key, value):
