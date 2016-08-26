@@ -18,13 +18,14 @@ class TestFilters(unittest.TestCase):
 
     def test_boolean_filter(self):
         self.assertTrue(
-            passes_boolean_filter(self.TestStrategy, 'stochastic', True))
+            passes_equality_filter(self.TestStrategy, 'stochastic', True))
         self.assertFalse(
-            passes_boolean_filter(self.TestStrategy, 'stochastic', False))
+            passes_equality_filter(self.TestStrategy, 'stochastic', False))
         self.assertTrue(
-            passes_boolean_filter(self.TestStrategy, 'inspects_source', False))
+            passes_equality_filter(
+                self.TestStrategy, 'inspects_source', False))
         self.assertFalse(
-            passes_boolean_filter(self.TestStrategy, 'inspects_source', True))
+            passes_equality_filter(self.TestStrategy, 'inspects_source', True))
 
     @given(
         smaller=integers(min_value=0, max_value=9),

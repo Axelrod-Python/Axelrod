@@ -1,11 +1,10 @@
-from distutils.util import strtobool
 from collections import namedtuple
 import operator
 
 
-def passes_boolean_filter(strategy, classifier_key, value):
+def passes_equality_filter(strategy, classifier_key, value):
     """
-    Tests whether a given strategy passes a boolean equality filter for a
+    Tests whether a given strategy passes an equality filter for a
     given key in its classifier dict.
 
     Parameters
@@ -14,7 +13,7 @@ def passes_boolean_filter(strategy, classifier_key, value):
         classifier_key: string
             Defining which entry from the strategy's classifier dict is to be
             tested (e.g. 'stochastic' or 'inspects_source').
-        value: boolean
+        value: any type
             The value against which the strategy's classifier dict entry is to
             be tested.
 
@@ -113,19 +112,19 @@ def passes_filterset(strategy, filterset):
     # the relevant function and arguments for that filter.
     filter_functions = {
         'stochastic': FilterFunction(
-            function=passes_boolean_filter,
+            function=passes_equality_filter,
             kwargs={'classifier_key': 'stochastic'}),
         'long_run_time': FilterFunction(
-            function=passes_boolean_filter,
+            function=passes_equality_filter,
             kwargs={'classifier_key': 'long_run_time'}),
         'manipulates_state': FilterFunction(
-            function=passes_boolean_filter,
+            function=passes_equality_filter,
             kwargs={'classifier_key': 'manipulates_state'}),
         'manipulates_source': FilterFunction(
-            function=passes_boolean_filter,
+            function=passes_equality_filter,
             kwargs={'classifier_key': 'manipulates_source'}),
         'inspects_source': FilterFunction(
-            function=passes_boolean_filter,
+            function=passes_equality_filter,
             kwargs={'classifier_key': 'inspects_source'}),
         'min_memory_depth': FilterFunction(
             function=passes_operator_filter,
