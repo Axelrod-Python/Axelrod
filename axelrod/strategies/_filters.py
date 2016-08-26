@@ -3,7 +3,7 @@ from collections import namedtuple
 import operator
 
 
-def passes_boolean_filter(strategy, value, classifier_key):
+def passes_boolean_filter(strategy, classifier_key, value):
     """
     Tests whether a given strategy passes a boolean equality filter for a
     given key in its classifier dict.
@@ -36,7 +36,7 @@ def passes_boolean_filter(strategy, value, classifier_key):
     return strategy.classifier[classifier_key] == filter_value
 
 
-def passes_operator_filter(strategy, value, classifier_key, operator):
+def passes_operator_filter(strategy, classifier_key, value, operator):
     """
     Tests whether a given strategy passes a filter for a
     given key in its classifier dict using a given inequality operator.
@@ -77,7 +77,7 @@ def passes_operator_filter(strategy, value, classifier_key, operator):
     return operator(classifier_value, filter_value)
 
 
-def passes_in_list_filter(strategy, value, classifier_key):
+def passes_in_list_filter(strategy, classifier_key, value):
     """
     Tests whether a given value exists in the list returned from the given
     strategy's classifier dict for the given classifier_key.
