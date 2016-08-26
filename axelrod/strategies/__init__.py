@@ -1,5 +1,6 @@
 from ..player import is_basic, obey_axelrod
 from ._strategies import *
+from ._filters import passes_filterset
 
 # `from ._strategies import *` import the collection `strategies`
 # Now import the Meta strategies. This cannot be done in _strategies
@@ -29,3 +30,9 @@ long_run_time_strategies = [s for s in all_strategies if
 cheating_strategies = [s for s in all_strategies if not obey_axelrod(s())]
 
 ordinary_strategies = strategies  # This is a legacy and will be removed
+
+
+def filtered_strategies(filterset, strategies=all_strategies):
+    return [
+        s for s in strategies
+        if passes_filterset(s, filterset)]

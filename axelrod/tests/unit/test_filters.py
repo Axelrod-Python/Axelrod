@@ -1,5 +1,6 @@
 import unittest
 from axelrod.strategies._filters import *
+from axelrod import filtered_strategies
 from hypothesis import given, example
 from hypothesis.strategies import sampled_from, integers
 import operator
@@ -100,3 +101,55 @@ class TestFilters(unittest.TestCase):
             self.TestStrategy, full_failing_filterset))
         self.assertFalse(passes_filterset(
             self.TestStrategy, sparse_failing_filterset))
+
+    def test_filtered_strategies(self):
+
+        class StochasticTestStrategy(object):
+            classifier = {
+                'stochastic': True,
+                'memory_depth': float('inf'),
+                'makes_use_of': []
+            }
+
+        class MemoryDepth2TestStrategy(object):
+            classifier = {
+                'stochastic': False,
+                'memory_depth': 2,
+                'makes_use_of': []
+            }
+
+        class UsesLengthTestStrategy(object):
+            classifier = {
+                'stochastic': True,
+                'memory_depth': float('inf'),
+                'makes_use_of': ['length']
+            }
+
+        strategies = [
+            StochasticTestStrategy,
+            MemoryDepth2TestStrategy,
+            UsesLengthTestStrategy
+        ]
+
+        stochastic_filterset = {
+            'stochastic': True
+        }
+
+        deterministic_filterset = {
+            'stochastic': False
+        }
+
+        uses_length_filterset = {
+            'stochastic': True,
+            'makes_use_of': 'length'
+        }
+
+        self.assertEqual(
+            filtered_strategies(stochastic_filterset, strategies),
+            [StochasticTestStrategy, UsesLengthTestStrategy])
+        self.assertEqual(
+            filtered_strategies(deterministic_filterset, strategies),
+            [MemoryDepth2TestStrategy])
+        self.assertEqual(
+            filtered_strategies(uses_length_filterset, strategies),
+            [UsesLengthTestStrategy])
