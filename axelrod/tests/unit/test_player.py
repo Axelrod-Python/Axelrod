@@ -1,4 +1,4 @@
-import copy
+# -*- coding: utf-8 -*-import copy
 import inspect
 import random
 import unittest
