@@ -36,7 +36,7 @@ class TestFilters(unittest.TestCase):
         smaller=integers(min_value=0, max_value=9),
         larger=integers(min_value=11, max_value=100),
     )
-    @example(smaller='2', larger='20')
+    @example(smaller='0', larger=float('inf'))
     def test_operator_filter(self, smaller, larger):
 
         self.assertTrue(passes_operator_filter(
@@ -64,7 +64,7 @@ class TestFilters(unittest.TestCase):
         smaller=integers(min_value=0, max_value=9),
         larger=integers(min_value=11, max_value=100),
     )
-    @example(truthy=True, falsy=False, smaller='2', larger='20')
+    @example(truthy=True, falsy=False, smaller='2', larger=float('inf'))
     def test_passes_filterset(self, truthy, falsy, smaller, larger):
 
         full_passing_filterset = {
