@@ -145,10 +145,16 @@ def passes_filterset(strategy, filterset):
             kwargs={'classifier_key': 'inspects_source'}),
         'min_memory_depth': FilterFunction(
             function=passes_operator_filter,
-            kwargs={'classifier_key': 'memory_depth', 'operator': operator.ge}),
+            kwargs={
+                'classifier_key': 'memory_depth',
+                'operator': operator.ge
+            }),
         'max_memory_depth': FilterFunction(
             function=passes_operator_filter,
-            kwargs={'classifier_key': 'memory_depth', 'operator': operator.le}),
+            kwargs={
+                'classifier_key': 'memory_depth',
+                'operator': operator.le
+            }),
         'makes_use_of': FilterFunction(
             function=passes_in_list_filter,
             kwargs={'classifier_key': 'makes_use_of'})
