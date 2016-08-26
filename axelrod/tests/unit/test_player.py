@@ -4,7 +4,7 @@ import random
 import unittest
 
 import axelrod
-from axelrod import DefaultGame, Game, Player, simulate_play
+from axelrod import DefaultGame, Player, simulate_play
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -12,6 +12,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 def cooperate(self):
     return C
+
 
 def defect(self):
     return D
