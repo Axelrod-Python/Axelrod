@@ -5,13 +5,15 @@ import operator
 
 def passes_boolean_filter(strategy, value, classifier_key):
     """
+    Tests whether a given strategy passes a boolean equality filter for a
+    given key in its classifier dict.
 
     Parameters
     ----------
         strategy : a descendant class of axelrod.Player
         classifier_key: string
             Defining which entry from the strategy's classifier dict is to be
-            tested (e.g. 'stochastic' or 'makes_use_of').
+            tested (e.g. 'stochastic' or 'inspects_source').
         value: string or boolean
             The value against which the strategy's classifier dict entry is to
             be tested.
@@ -35,6 +37,33 @@ def passes_boolean_filter(strategy, value, classifier_key):
 
 
 def passes_operator_filter(strategy, value, classifier_key, operator):
+    """
+    Tests whether a given strategy passes a filter for a
+    given key in its classifier dict using a given inequality operator.
+
+    Parameters
+    ----------
+        strategy : a descendant class of axelrod.Player
+        classifier_key: string
+            Defining which entry from the strategy's classifier dict is to be
+            tested (e.g. 'memory_depth').
+        value: string or int
+            The value against which the strategy's classifier dict entry is to
+            be tested.
+
+            If a string is used as the value, it must be capable of being
+            converted to an integer.
+        operator: operator.le or operator.ge
+            Indicating whether a 'less than or equal to' or 'greater than or
+            equal to' test should be applied.
+
+    Returns
+    -------
+        boolean
+
+        True if the value from the strategy's classifier dictionary matches
+        the value and operator passed to the function.
+    """
     if isinstance(value, str):
         filter_value = int(value)
     else:
@@ -49,6 +78,24 @@ def passes_operator_filter(strategy, value, classifier_key, operator):
 
 
 def passes_in_list_filter(strategy, value, classifier_key):
+    """
+    Tests whether a given value exists in the list returned from the given
+    strategy's classifier dict for the given classifier_key.
+
+    Parameters
+    ----------
+        strategy : a descendant class of axelrod.Player
+        classifier_key: string
+            Defining which entry from the strategy's classifier dict is to be
+            tested (e.g. 'makes_use_of').
+        value: string
+            The value against which the strategy's classifier dict entry is to
+            be tested.
+
+    Returns
+    -------
+        boolean
+    """
     return value in strategy.classifier[classifier_key]
 
 
