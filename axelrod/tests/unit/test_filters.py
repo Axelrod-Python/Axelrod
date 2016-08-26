@@ -66,5 +66,41 @@ class TestFilters(unittest.TestCase):
     )
     @example(truthy=True, falsy=False, smaller='2', larger='20')
     def test_passes_filterset(self, truthy, falsy, smaller, larger):
-        pass
 
+        full_passing_filterset = {
+            'stochastic': truthy,
+            'inspects_source': falsy,
+            'min_memory_depth': smaller,
+            'max_memory_depth': larger,
+            'makes_use_of': 'length'
+        }
+
+        sparse_passing_filterset = {
+            'stochastic': truthy,
+            'inspects_source': falsy,
+            'makes_use_of': 'length'
+        }
+
+        full_failing_filterset = {
+            'stochastic': falsy,
+            'inspects_source': falsy,
+            'min_memory_depth': smaller,
+            'max_memory_depth': larger,
+            'makes_use_of': 'length'
+        }
+
+        sparse_failing_filterset = {
+            'stochastic': falsy,
+            'inspects_source': falsy,
+            'min_memory_depth': smaller,
+        }
+
+
+        self.assertTrue(passes_filterset(
+            self.TestStrategy, full_passing_filterset))
+        self.assertTrue(passes_filterset(
+            self.TestStrategy, sparse_passing_filterset))
+        self.assertFalse(passes_filterset(
+            self.TestStrategy, full_failing_filterset))
+        self.assertFalse(passes_filterset(
+            self.TestStrategy, sparse_failing_filterset))
