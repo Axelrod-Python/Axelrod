@@ -2,31 +2,6 @@ from collections import namedtuple
 import operator
 
 
-def passes_equality_filter(strategy, classifier_key, value):
-    """
-    Tests whether a given strategy passes an equality filter for a
-    given key in its classifier dict.
-
-    Parameters
-    ----------
-        strategy : a descendant class of axelrod.Player
-        classifier_key: string
-            Defining which entry from the strategy's classifier dict is to be
-            tested (e.g. 'stochastic' or 'inspects_source').
-        value: any type
-            The value against which the strategy's classifier dict entry is to
-            be tested.
-
-    Returns
-    -------
-        boolean
-
-        True if the value from the strategy's classifier dictionary matches
-        the value passed to the function.
-    """
-    return strategy.classifier[classifier_key] == value
-
-
 def passes_operator_filter(strategy, classifier_key, value, operator):
     """
     Tests whether a given strategy passes a filter for a
@@ -112,20 +87,35 @@ def passes_filterset(strategy, filterset):
     # the relevant function and arguments for that filter.
     filter_functions = {
         'stochastic': FilterFunction(
-            function=passes_equality_filter,
-            kwargs={'classifier_key': 'stochastic'}),
+            function=passes_operator_filter,
+            kwargs={
+                'classifier_key': 'stochastic',
+                'operator': operator.eq
+            }),
         'long_run_time': FilterFunction(
-            function=passes_equality_filter,
-            kwargs={'classifier_key': 'long_run_time'}),
+            function=passes_operator_filter,
+            kwargs={
+                'classifier_key': 'long_run_time',
+                'operator': operator.eq
+            }),
         'manipulates_state': FilterFunction(
-            function=passes_equality_filter,
-            kwargs={'classifier_key': 'manipulates_state'}),
+            function=passes_operator_filter,
+            kwargs={
+                'classifier_key': 'manipulates_state',
+                'operator': operator.eq
+            }),
         'manipulates_source': FilterFunction(
-            function=passes_equality_filter,
-            kwargs={'classifier_key': 'manipulates_source'}),
+            function=passes_operator_filter,
+            kwargs={
+                'classifier_key': 'manipulates_source',
+                'operator': operator.eq
+            }),
         'inspects_source': FilterFunction(
-            function=passes_equality_filter,
-            kwargs={'classifier_key': 'inspects_source'}),
+            function=passes_operator_filter,
+            kwargs={
+                'classifier_key': 'inspects_source',
+                'operator': operator.eq
+            }),
         'min_memory_depth': FilterFunction(
             function=passes_operator_filter,
             kwargs={

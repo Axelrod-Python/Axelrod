@@ -16,23 +16,26 @@ class TestFilters(unittest.TestCase):
             'makes_use_of': ['game', 'length']
         }
 
-    def test_boolean_filter(self):
+    def test_equality_filter(self):
         self.assertTrue(
-            passes_equality_filter(self.TestStrategy, 'stochastic', True))
+            passes_operator_filter(
+                self.TestStrategy, 'stochastic', True, operator.eq))
         self.assertFalse(
-            passes_equality_filter(self.TestStrategy, 'stochastic', False))
+            passes_operator_filter(
+                self.TestStrategy, 'stochastic', False, operator.eq))
         self.assertTrue(
-            passes_equality_filter(
-                self.TestStrategy, 'inspects_source', False))
+            passes_operator_filter(
+                self.TestStrategy, 'inspects_source', False, operator.eq))
         self.assertFalse(
-            passes_equality_filter(self.TestStrategy, 'inspects_source', True))
+            passes_operator_filter(
+                self.TestStrategy, 'inspects_source', True, operator.eq))
 
     @given(
         smaller=integers(min_value=0, max_value=9),
         larger=integers(min_value=11, max_value=100),
     )
     @example(smaller=0, larger=float('inf'))
-    def test_operator_filter(self, smaller, larger):
+    def test_inequality_filter(self, smaller, larger):
         self.assertTrue(passes_operator_filter(
             self.TestStrategy, 'memory_depth', smaller, operator.ge))
         self.assertTrue(passes_operator_filter(
