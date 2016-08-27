@@ -5,7 +5,7 @@ import operator
 def passes_operator_filter(strategy, classifier_key, value, operator):
     """
     Tests whether a given strategy passes a filter for a
-    given key in its classifier dict using a given inequality operator.
+    given key in its classifier dict using a given (in)equality operator.
 
     Parameters
     ----------
@@ -16,7 +16,7 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
         value: int
             The value against which the strategy's classifier dict entry is to
             be tested.
-        operator: operator.le or operator.ge
+        operator: operator.le, operator.ge or operator.eq
             Indicating whether a 'less than or equal to' or 'greater than or
             equal to' test should be applied.
 
