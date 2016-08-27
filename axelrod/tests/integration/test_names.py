@@ -9,5 +9,5 @@ class TestNames(unittest.TestCase):
         self.assertEqual(len(names), len(all_strategies))
 
     def test_all_names_are_unique(self):
-        names = set(s.name for s in all_strategies if s.name)
+        names = set(s.name for s in all_strategies)
         self.assertEqual(len(names), len(all_strategies))
