@@ -62,11 +62,18 @@ class TestFilters(unittest.TestCase):
     @example(smaller=0, larger=float('inf'))
     def test_passes_filterset(self, smaller, larger):
 
-        full_passing_filterset = {
+        full_passing_filterset_1 = {
             'stochastic': True,
             'inspects_source': False,
             'min_memory_depth': smaller,
             'max_memory_depth': larger,
+            'makes_use_of': ['game', 'length']
+        }
+
+        full_passing_filterset_2 = {
+            'stochastic': True,
+            'inspects_source': False,
+            'memory_depth': 10,
             'makes_use_of': ['game', 'length']
         }
 
@@ -91,7 +98,9 @@ class TestFilters(unittest.TestCase):
         }
 
         self.assertTrue(passes_filterset(
-            self.TestStrategy, full_passing_filterset))
+            self.TestStrategy, full_passing_filterset_1))
+        self.assertTrue(passes_filterset(
+            self.TestStrategy, full_passing_filterset_2))
         self.assertTrue(passes_filterset(
             self.TestStrategy, sparse_passing_filterset))
         self.assertFalse(passes_filterset(

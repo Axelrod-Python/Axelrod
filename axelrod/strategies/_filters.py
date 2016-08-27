@@ -120,6 +120,12 @@ def passes_filterset(strategy, filterset):
                 'classifier_key': 'inspects_source',
                 'operator': operator.eq
             }),
+        'memory_depth': FilterFunction(
+            function=passes_operator_filter,
+            kwargs={
+                'classifier_key': 'memory_depth',
+                'operator': operator.eq
+            }),
         'min_memory_depth': FilterFunction(
             function=passes_operator_filter,
             kwargs={
