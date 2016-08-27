@@ -259,12 +259,13 @@ class TestPlayer(unittest.TestCase):
         self.assertTrue('memory_depth' in player.classifier,
                         msg="memory_depth not in classifier")
         self.assertTrue('stochastic' in player.classifier,
-                        msg="stochastic n§ot in classifier")
+                        msg="stochastic not in classifier")
         for key in TestOpponent.classifier:
-            self.assertEqual(player.classifier[key],
-                             self.expected_classifier[key],
-                             msg="%s - Behaviour: %s != Expected Behaviour: %s" %
-                             (key, player.classifier[key], self.expected_classifier[key]))
+            self.assertEqual(
+                player.classifier[key],
+                self.expected_classifier[key],
+                msg="%s - Behaviour: %s != Expected Behaviour: %s" %
+                (key, player.classifier[key], self.expected_classifier[key]))
 
 
 class TestHeadsUp(unittest.TestCase):
