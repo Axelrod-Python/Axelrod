@@ -7,6 +7,22 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
     Tests whether a given strategy passes a filter for a
     given key in its classifier dict using a given (in)equality operator.
 
+    e.g.
+
+    For the following strategy:
+
+    class ExampleStrategy(Player):
+        classifier = {
+            'stochastic': True,
+            'inspects_source': False,
+            'memory_depth': 10,
+            'makes_use_of': ['game', 'length']
+        }
+
+    passes_operator_filter(ExampleStrategy, 'memory_depth', 10, operator.eq)
+
+    would test whether the 'memory_depth' entry equals 10 and return True
+
     Parameters
     ----------
         strategy : a descendant class of axelrod.Player
@@ -40,6 +56,23 @@ def passes_in_list_filter(strategy, classifier_key, value):
     Tests whether a given list of values exist in the list returned from the
     given strategy's classifier dict for the given classifier_key.
 
+    e.g.
+
+    For the following strategy:
+
+    class ExampleStrategy(Player):
+        classifier = {
+            'stochastic': True,
+            'inspects_source': False,
+            'memory_depth': 10,
+            'makes_use_of': ['game', 'length']
+        }
+
+    passes_in_list_filter(ExampleStrategy, 'makes_use_of', 'game', operator.eq)
+
+    would test whether 'game' exists in the strategy's' 'makes_use_of' entry
+    and return True.
+
     Parameters
     ----------
         strategy : a descendant class of axelrod.Player
@@ -65,6 +98,30 @@ def passes_filterset(strategy, filterset):
     """
     Determines whether a given strategy meets the criteria defined in a
     dictionary of filters.
+
+    e.g.
+
+    For the following strategy:
+
+    class ExampleStrategy(Player):
+        classifier = {
+            'stochastic': True,
+            'inspects_source': False,
+            'memory_depth': 10,
+            'makes_use_of': ['game', 'length']
+        }
+
+    and this filterset dict:
+
+    example_filterset = {
+        'stochastic': True,
+        'memory_depth': 10
+    }
+
+    passes_filterset(ExampleStrategy, example_filterset)
+
+    would test whether both the strategy's 'stochastic' entry is True AND
+    that its 'memory_depth' equals 10 and return True.
 
     Parameters
     ----------
