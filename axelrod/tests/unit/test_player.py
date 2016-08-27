@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-import copy
+# -*- coding: utf-8 -*-
+import copy
 import inspect
 import random
 import unittest
@@ -72,7 +73,9 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p2.history[0], D)
 
     def test_strategy(self):
-        self.assertRaises(NotImplementedError, self.player().strategy, self.player())
+        self.assertRaises(
+            NotImplementedError, self.player().strategy, self.player())
+
 
 def test_responses(test_class, P1, P2, history_1, history_2, responses,
                    random_seed=None, attrs=None):
@@ -129,8 +132,9 @@ class TestPlayer(unittest.TestCase):
         if self.__class__ != TestPlayer:
             player = self.player()
             self.assertEqual(player.history, [])
-            self.assertEqual(player.match_attributes,
-                    {'length': -1, 'game': DefaultGame, 'noise': 0})
+            self.assertEqual(
+                player.match_attributes,
+                {'length': -1, 'game': DefaultGame, 'noise': 0})
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
             self.classifier_test(self.expected_class_classifier)
