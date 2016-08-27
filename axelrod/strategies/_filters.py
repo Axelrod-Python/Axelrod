@@ -37,8 +37,8 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
 
 def passes_in_list_filter(strategy, classifier_key, value):
     """
-    Tests whether a given value exists in the list returned from the given
-    strategy's classifier dict for the given classifier_key.
+    Tests whether a given list of values exist in the list returned from the
+    given strategy's classifier dict for the given classifier_key.
 
     Parameters
     ----------
@@ -46,15 +46,19 @@ def passes_in_list_filter(strategy, classifier_key, value):
         classifier_key: string
             Defining which entry from the strategy's classifier dict is to be
             tested (e.g. 'makes_use_of').
-        value: string
-            The value against which the strategy's classifier dict entry is to
+        value: list
+            The values against which the strategy's classifier dict entry is to
             be tested.
 
     Returns
     -------
         boolean
     """
-    return value in strategy.classifier[classifier_key]
+    result = True
+    for entry in value:
+        if entry not in strategy.classifier[classifier_key]:
+            result = False
+    return result
 
 
 def passes_filterset(strategy, filterset):

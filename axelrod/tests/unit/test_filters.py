@@ -47,9 +47,11 @@ class TestFilters(unittest.TestCase):
 
     def test_list_filter(self):
         self.assertTrue(passes_in_list_filter(
-            self.TestStrategy, 'makes_use_of', 'game'))
+            self.TestStrategy, 'makes_use_of', ['game']))
         self.assertTrue(passes_in_list_filter(
-            self.TestStrategy, 'makes_use_of', 'length'))
+            self.TestStrategy, 'makes_use_of', ['length']))
+        self.assertTrue(passes_in_list_filter(
+            self.TestStrategy, 'makes_use_of', ['game', 'length']))
         self.assertFalse(passes_in_list_filter(
             self.TestStrategy, 'makes_use_of', 'test'))
 
@@ -65,13 +67,13 @@ class TestFilters(unittest.TestCase):
             'inspects_source': False,
             'min_memory_depth': smaller,
             'max_memory_depth': larger,
-            'makes_use_of': 'length'
+            'makes_use_of': ['game', 'length']
         }
 
         sparse_passing_filterset = {
             'stochastic': True,
             'inspects_source': False,
-            'makes_use_of': 'length'
+            'makes_use_of': ['length']
         }
 
         full_failing_filterset = {
@@ -79,7 +81,7 @@ class TestFilters(unittest.TestCase):
             'inspects_source': False,
             'min_memory_depth': smaller,
             'max_memory_depth': larger,
-            'makes_use_of': 'length'
+            'makes_use_of': ['length']
         }
 
         sparse_failing_filterset = {
@@ -136,7 +138,7 @@ class TestFilters(unittest.TestCase):
 
         uses_length_filterset = {
             'stochastic': True,
-            'makes_use_of': 'length'
+            'makes_use_of': ['length']
         }
 
         self.assertEqual(
