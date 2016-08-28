@@ -1,3 +1,15 @@
+# v1.8.0, 2016-08-28
+
+New strategies:
+
+- Adaptive TitForTat:
+  https://github.com/Axelrod-Python/Axelrod/pull/697
+- Desperate, Hopeless, Willing:
+  https://github.com/Axelrod-Python/Axelrod/pull/686
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.7.0...v1.8.0
+
 # v1.7.0, 2016-08-14
 
 Probabilistic ending spatial tournaments, classifier for long run time, style
