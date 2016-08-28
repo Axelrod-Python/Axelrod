@@ -18,19 +18,18 @@ Axelrod
 A library with the following principles and goals:
 
 1. Enabling the reproduction of previous Iterated Prisoner's Dilemma research
-as easily as possible.
+   as easily as possible.
 2. Creating the de-facto tool for future Iterated Prisoner's Dilemma
-research.
+   research.
 3. Providing as simple a means as possible for anyone to define and contribute
    new and original Iterated Prisoner's Dilemma strategies.
 4. Emphasizing readability along with an open and welcoming community that
-is accommodating for developers and researchers of a variety of skill levels
+   is accommodating for developers and researchers of a variety of skill levels.
 
 Currently the library contains well over 100 strategies and can perform a
 variety of tournament types (RoundRobin, Noisy, Spatially-distributed, and
 probabilistically ending) and population dynamics while taking advantage
 of multi-core processors.
-
 
 **Please contribute via pull request (or just get in touch with us).**
 
@@ -69,21 +68,17 @@ Usage
 The full documentation can be found here:
 `axelrod.readthedocs.org/ <http://axelrod.readthedocs.org/>`__.
 
-The documentation includes details of how to setup a tournament but here is an
-example showing how to create a tournament with all stochastic strategies::
+The documentation includes details of how to setup a tournament but here is a
+brief example showing how to get a simple tournament::
 
-    import axelrod
-    strategies = [s() for s in axelrod.ordinary_strategies if s().classifier['stochastic']]
-    tournament = axelrod.Tournament(strategies)
-    results = tournament.play()
+    >>> import axelrod as axl
+    >>> axl.seed(0)  # Set a seed
+    >>> players = [s() for s in axl.demo_strategies]  # Create players
+    >>> tournament = axl.Tournament(players)  # Create a tournament
+    >>> results = tournament.play()  # Play the tournament
+    >>> results.ranked_names
+    ['Defector', 'Grudger', 'Tit For Tat', 'Cooperator', 'Random: 0.5']
 
-The :code:`results` object now contains all the results we could need::
-
-    print(results.ranked_names)
-
-gives::
-
-    ['Meta Hunter', 'Inverse', 'Forgetful Fool Me Once', 'GTFT: 0.33', 'Champion', 'ZD-GTFT-2', 'Eatherley', 'Math Constant Hunter', 'Random Hunter', 'Soft Joss: 0.9', 'Meta Majority', 'Nice Average Copier', 'Feld', 'Meta Minority', 'Grofman', 'Stochastic WSLS', 'ZD-Extort-2', 'Tullock', 'Joss: 0.9', 'Arrogant QLearner', 'Average Copier', 'Cautious QLearner', 'Hesitant QLearner', 'Risky QLearner', 'Random: 0.5', 'Meta Winner']
 
 There is also a `notebooks repository
 <https://github.com/Axelrod-Python/Axelrod-notebooks>`_ which shows further
@@ -105,10 +100,6 @@ All contributions are welcome!
 You can find helpful instructions about contributing in the
 documentation:
 http://axelrod.readthedocs.org/en/latest/tutorials/contributing/index.html
-
-.. image:: https://graphs.waffle.io/Axelrod-Python/Axelrod/throughput.svg
- :target: https://waffle.io/Axelrod-Python/Axelrod/metrics
-  :alt: 'Throughput Graph'
 
 Example notebooks
 =================
