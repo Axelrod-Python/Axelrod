@@ -4,7 +4,7 @@ import unittest
 
 
 def load_tests(loader, tests, ignore):
-    for root, dirs, files in os.walk("./docs"):
+    for root, dirs, files in os.walk("."):
         for f in files:
             if f.endswith(".rst"):
                  tests.addTests(
