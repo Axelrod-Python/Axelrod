@@ -18,6 +18,7 @@ class GoByMajority(Player):
     default this is 0)
     """
 
+    name = 'Go By Marjority'
     classifier = {
         'stochastic': False,
         'inspects_source': False,
@@ -49,7 +50,8 @@ class GoByMajority(Player):
         else:
             self.memory = 0
 
-        self.name = 'Go By Majority' + (self.memory > 0) * (": %i" % self.memory)
+        self.name = (
+            'Go By Majority' + (self.memory > 0) * (": %i" % self.memory))
         if self.soft:
             self.name = "Soft " + self.name
         else:
@@ -80,6 +82,7 @@ class GoByMajority40(GoByMajority):
     """
     GoByMajority player with a memory of 40.
     """
+    name = 'Go By Majority 40'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 40
 
@@ -93,6 +96,7 @@ class GoByMajority20(GoByMajority):
     """
     GoByMajority player with a memory of 20.
     """
+    name = 'Go By Majority 20'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 20
 
@@ -106,6 +110,7 @@ class GoByMajority10(GoByMajority):
     """
     GoByMajority player with a memory of 10.
     """
+    name = 'Go By Majority 10'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 10
 
@@ -119,6 +124,7 @@ class GoByMajority5(GoByMajority):
     """
     GoByMajority player with a memory of 5.
     """
+    name = 'Go By Majority 5'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 5
 
@@ -136,6 +142,7 @@ class HardGoByMajority(GoByMajority):
     An optional memory attribute will limit the number of turns remembered (by
     default this is 0)
     """
+    name = 'Hard Go By Majority'
 
     @init_args
     def __init__(self, memory_depth=float('inf'), soft=False):
@@ -147,6 +154,7 @@ class HardGoByMajority40(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 40.
     """
+    name = 'Hard Go By Majority 40'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 40
 
@@ -160,6 +168,7 @@ class HardGoByMajority20(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 20.
     """
+    name = 'Hard Go By Majority 20'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 20
 
@@ -173,6 +182,7 @@ class HardGoByMajority10(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 10.
     """
+    name = 'Hard Go By Majority 10'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 10
 
@@ -186,6 +196,7 @@ class HardGoByMajority5(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 5.
     """
+    name = 'Hard Go By Majority 5'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 5
 

@@ -2,6 +2,7 @@ from axelrod import Actions, Player, init_args
 
 import copy
 
+
 class AntiCycler(Player):
     """
     A player that follows a sequence of plays that contains no cycles:
@@ -67,7 +68,7 @@ class Cycler(Player):
         """
         Player.__init__(self)
         self.cycle = cycle
-        self.name += " " + cycle
+        self.name = "Cycler {}".format(cycle)
         self.classifier['memory_depth'] = len(cycle) - 1
 
     def strategy(self, opponent):
@@ -77,6 +78,8 @@ class Cycler(Player):
 
 
 class CyclerDC(Cycler):
+
+    name = 'Cycler DC'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 1
 
@@ -86,6 +89,8 @@ class CyclerDC(Cycler):
 
 
 class CyclerCCD(Cycler):
+
+    name = 'Cycler CCD'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
 
@@ -95,6 +100,8 @@ class CyclerCCD(Cycler):
 
 
 class CyclerDDC(Cycler):
+
+    name = 'Cycler DDC'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
 
@@ -104,6 +111,8 @@ class CyclerDDC(Cycler):
 
 
 class CyclerCCCD(Cycler):
+
+    name = 'Cycler CCCD'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 3
 
@@ -113,6 +122,8 @@ class CyclerCCCD(Cycler):
 
 
 class CyclerCCCCCD(Cycler):
+
+    name = 'Cycler CCCCCD'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 5
 
