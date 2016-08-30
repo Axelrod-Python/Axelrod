@@ -38,6 +38,17 @@ def filtered_strategies(filterset, strategies=all_strategies):
     strategy classes which pass all of those filters from the given list of
     strategies.
 
+    e.g.
+
+    For the filterset dict:
+        {
+            'stochastic': True,
+            'min_memory_depth': 2
+        }
+
+    the function will return a list of all deterministic strategies with a
+    memory_depth of 2 or more.
+
     Parameters
     ----------
         filterset : dict
