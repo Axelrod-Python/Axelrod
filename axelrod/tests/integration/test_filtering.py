@@ -37,8 +37,8 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         min_memory_depth=float('inf'),
         max_memory_depth=float('inf'),
         memory_depth=float('inf'))
-    def test_memory_depth_filtering(
-        self, min_memory_depth, max_memory_depth, memory_depth):
+    def test_memory_depth_filtering(self, min_memory_depth, max_memory_depth,
+                                    memory_depth):
 
         min_comprehension = set([
             s for s in all_strategies if
