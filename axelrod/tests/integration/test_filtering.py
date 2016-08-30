@@ -66,3 +66,21 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         }
         filtered = set(filtered_strategies(filterset))
         self.assertEqual(comprehension, filtered)
+
+    def test_makes_use_of_filtering(self):
+        classifiers = [
+            ['game'],
+            ['length'],
+            ['game', 'length']
+        ]
+
+        for classifier in classifiers:
+            comprehension = set([
+                s for s in all_strategies if
+                set(classifier).issubset(set(s.classifier['makes_use_of']))
+            ])
+            filterset = {
+                'makes_use_of': classifier
+            }
+            filtered = set(filtered_strategies(filterset))
+            self.assertEqual(comprehension, filtered)
