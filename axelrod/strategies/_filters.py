@@ -207,12 +207,12 @@ def passes_filterset(strategy, filterset):
     # Loop through each of the entries in the filter_functions dict and, if
     # that filter is defined in the supplied filterset, call the relevant
     # function and record its result in the passes_filters list.
-    for filter, filter_function in filter_functions.items():
+    for _filter, filter_function in filter_functions.items():
 
-        if filterset.get(filter, None) is not None:
+        if filterset.get(_filter, None) is not None:
             kwargs = filter_function.kwargs
             kwargs['strategy'] = strategy
-            kwargs['value'] = filterset[filter]
+            kwargs['value'] = filterset[_filter]
             passes_filters.append(filter_function.function(**kwargs))
 
     # Return True if the strategy passed all the supplied filters
