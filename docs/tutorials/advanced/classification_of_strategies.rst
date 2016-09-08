@@ -10,7 +10,15 @@ various dimensions.
 Here is the :code:`classifier` for the :code:`Cooperator` strategy::
 
     >>> import axelrod as axl
-    >>> expected_dictionary = {'manipulates_state': False, 'makes_use_of': set([]), 'long_run_time': False, 'stochastic': False, 'manipulates_source': False, 'inspects_source': False, 'memory_depth': 0}  # Order of this dictionary might be different on your machine
+    >>> expected_dictionary = {
+    >>>    'manipulates_state': False,
+    >>>    'makes_use_of': set([]),
+    >>>    'long_run_time': False,
+    >>>    'stochastic': False,
+    >>>    'manipulates_source': False,
+    >>>    'inspects_source': False,
+    >>>    'memory_depth': 0
+    >>> }  # Order of this dictionary might be different on your machine
     >>> axl.Cooperator.classifier == expected_dictionary
     True
 
@@ -20,37 +28,73 @@ Note that instances of the class also have this classifier::
     >>> s.classifier == expected_dictionary
     True
 
-This allows us to, for example, quickly identify all the stochastic
+We can use this classification to generate sets of strategies according to
+filters which we define in a 'filterset' dictionary and then pass to the
+'filtered_strategies' function. For example, to identify all the stochastic
 strategies::
 
-    >>> len([s for s in axl.strategies if s().classifier['stochastic']])
+    >>> filterset = {
+    >>>     'stochastic': True
+    >>> }
+    >>> strategies = filtered_strategies(filterset)
+    >>> len(strategies)
     43
 
-Or indeed find out how many strategy only use 1 turn worth of memory to
+
+Or, to find out how many strategy only use 1 turn worth of memory to
 make a decision::
 
-    >>> len([s for s in axl.strategies if s().classifier['memory_depth']==1])
+    >>> filterset = {
+    >>>     'memory_depth': 1
+    >>> }
+    >>> strategies = filtered_strategies(filterset)
+    >>> len(strategies)
+    24
+
+Mutliple filter can be specified within the filterset dictionary. To specify a
+range of memory_depth values, we can use the 'min_memory_depth' and
+'max_memory_depth' filters::
+
+    >>> filterset = {
+    >>>     'min_memory_depth': 1,
+    >>>     'max_memory_depth': 4
+    >>> }
+    >>> strategies = filtered_strategies(filterset)
+    >>> len(strategies)
     24
 
 We can also identify strategies that make use of particular properties of the
 tournament. For example, here is the number of strategies that  make use of the
 length of each match of the tournament::
 
-    >>> len([s() for s in axl.strategies if 'length' in s().classifier['makes_use_of']])
+    >>> filterset = {
+    >>>     'makes_use_of': ['length']
+    >>> }
+    >>> strategies = filtered_strategies(filterset)
+    >>> len(strategies)
     10
 
-Here are how many of the strategies that make use of the particular game being
-played (whether or not it's the default Prisoner's dilemma)::
+Note that in the filterset dictionary, the value for the 'makes_use_of' key
+must be a list. Here is how we might identify the number of strategies that use
+both the length of the tournament and the game being played::
 
-    >>> len([s() for s in axl.strategies if 'game' in s().classifier['makes_use_of']])
-    22
+    >>> filterset = {
+    >>>     'makes_use_of': ['length', 'game']
+    >>> }
+    >>> strategies = filtered_strategies(filterset)
+    >>> len(strategies)
+    10
 
 Some strategies have been classified as having a particularly long run time::
 
-    >>> len([s() for s in axl.strategies if s().classifier['long_run_time']])
+    >>> filterset = {
+    >>>     'long_run_time': True
+    >>> }
+    >>> strategies = filtered_strategies(filterset)
+    >>> len(strategies)
     10
 
-Similarly, strategies that :code:`manipulate_source`, :code:`manipulate_state`
+Strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`
 function::
 
