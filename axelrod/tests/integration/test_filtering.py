@@ -1,4 +1,4 @@
-2import unittest
+import unittest
 from hypothesis import given, example
 from hypothesis.strategies import integers
 from axelrod import all_strategies, filtered_strategies
