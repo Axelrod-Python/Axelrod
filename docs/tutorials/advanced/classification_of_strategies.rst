@@ -38,7 +38,7 @@ strategies::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    43
+    35
 
 
 Or, to find out how many strategy only use 1 turn worth of memory to
@@ -49,7 +49,7 @@ make a decision::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    24
+    41
 
 Mutliple filter can be specified within the filterset dictionary. To specify a
 range of memory_depth values, we can use the 'min_memory_depth' and
@@ -72,7 +72,7 @@ length of each match of the tournament::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    10
+    4
 
 Note that in the filterset dictionary, the value for the 'makes_use_of' key
 must be a list. Here is how we might identify the number of strategies that use
@@ -83,7 +83,7 @@ both the length of the tournament and the game being played::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    10
+    0
 
 Some strategies have been classified as having a particularly long run time::
 
