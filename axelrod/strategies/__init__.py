@@ -1,5 +1,6 @@
 from ..player import is_basic, obey_axelrod
 from ._strategies import *
+from ._filters import passes_filterset
 
 # `from ._strategies import *` import the collection `strategies`
 # Now import the Meta strategies. This cannot be done in _strategies
@@ -29,3 +30,44 @@ long_run_time_strategies = [s for s in all_strategies if
 cheating_strategies = [s for s in all_strategies if not obey_axelrod(s())]
 
 ordinary_strategies = strategies  # This is a legacy and will be removed
+
+
+def filtered_strategies(filterset, strategies=all_strategies):
+    """
+    Applies the filters defined in the given filterset dict and returns those
+    strategy classes which pass all of those filters from the given list of
+    strategies.
+
+    e.g.
+
+    For the filterset dict:
+        {
+            'stochastic': True,
+            'min_memory_depth': 2
+        }
+
+    the function will return a list of all deterministic strategies with a
+    memory_depth of 2 or more.
+
+    Parameters
+    ----------
+        filterset : dict
+            mapping filter name to criterion.
+            e.g.
+                {
+                    'stochastic': True,
+                    'min_memory_depth': 2
+                }
+        strategies: list
+            of subclasses of axelrod.Player
+
+    Returns
+    -------
+        list
+
+        of subclasses of axelrod.Player
+
+    """
+    return [
+        s for s in strategies
+        if passes_filterset(s, filterset)]
