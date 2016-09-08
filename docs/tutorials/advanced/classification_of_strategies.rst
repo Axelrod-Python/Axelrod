@@ -89,6 +89,7 @@ Some strategies have been classified as having a particularly long run time::
 
     >>> filterset = {
     ...     'long_run_time': True
+    ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
     10
