@@ -28,6 +28,15 @@ Note that instances of the class also have this classifier::
     >>> s.classifier == expected_dictionary
     True
 
+and that we can retrieve individual entries from that :code:`classifier` dictionary::
+
+    >>> s = axl.TitForTat
+    >>> s.classifier['memory_depth']
+    1
+    >>> s = axl.Random
+    >>> s.classifier['stochastic']
+    True
+
 We can use this classification to generate sets of strategies according to
 filters which we define in a 'filterset' dictionary and then pass to the
 'filtered_strategies' function. For example, to identify all the stochastic
