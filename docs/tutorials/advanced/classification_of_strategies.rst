@@ -11,14 +11,14 @@ Here is the :code:`classifier` for the :code:`Cooperator` strategy::
 
     >>> import axelrod as axl
     >>> expected_dictionary = {
-    >>>    'manipulates_state': False,
-    >>>    'makes_use_of': set([]),
-    >>>    'long_run_time': False,
-    >>>    'stochastic': False,
-    >>>    'manipulates_source': False,
-    >>>    'inspects_source': False,
-    >>>    'memory_depth': 0
-    >>> }  # Order of this dictionary might be different on your machine
+    ...    'manipulates_state': False,
+    ...    'makes_use_of': set([]),
+    ...    'long_run_time': False,
+    ...    'stochastic': False,
+    ...    'manipulates_source': False,
+    ...    'inspects_source': False,
+    ...    'memory_depth': 0
+    ... }  # Order of this dictionary might be different on your machine
     >>> axl.Cooperator.classifier == expected_dictionary
     True
 
@@ -34,9 +34,9 @@ filters which we define in a 'filterset' dictionary and then pass to the
 strategies::
 
     >>> filterset = {
-    >>>     'stochastic': True
-    >>> }
-    >>> strategies = filtered_strategies(filterset)
+    ...     'stochastic': True
+    ... }
+    >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
     43
 
@@ -45,9 +45,9 @@ Or, to find out how many strategy only use 1 turn worth of memory to
 make a decision::
 
     >>> filterset = {
-    >>>     'memory_depth': 1
-    >>> }
-    >>> strategies = filtered_strategies(filterset)
+    ...     'memory_depth': 1
+    ... }
+    >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
     24
 
@@ -56,10 +56,10 @@ range of memory_depth values, we can use the 'min_memory_depth' and
 'max_memory_depth' filters::
 
     >>> filterset = {
-    >>>     'min_memory_depth': 1,
-    >>>     'max_memory_depth': 4
-    >>> }
-    >>> strategies = filtered_strategies(filterset)
+    ...     'min_memory_depth': 1,
+    ...     'max_memory_depth': 4
+    ... }
+    >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
     24
 
@@ -68,9 +68,9 @@ tournament. For example, here is the number of strategies that  make use of the
 length of each match of the tournament::
 
     >>> filterset = {
-    >>>     'makes_use_of': ['length']
-    >>> }
-    >>> strategies = filtered_strategies(filterset)
+    ...     'makes_use_of': ['length']
+    ... }
+    >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
     10
 
@@ -79,18 +79,17 @@ must be a list. Here is how we might identify the number of strategies that use
 both the length of the tournament and the game being played::
 
     >>> filterset = {
-    >>>     'makes_use_of': ['length', 'game']
-    >>> }
-    >>> strategies = filtered_strategies(filterset)
+    ...     'makes_use_of': ['length', 'game']
+    ... }
+    >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
     10
 
 Some strategies have been classified as having a particularly long run time::
 
     >>> filterset = {
-    >>>     'long_run_time': True
-    >>> }
-    >>> strategies = filtered_strategies(filterset)
+    ...     'long_run_time': True
+    >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
     10
 
