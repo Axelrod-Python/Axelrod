@@ -50,7 +50,7 @@ strategies::
     35
 
 
-Or, to find out how many strategy only use 1 turn worth of memory to
+Or, to find out how many strategies only use 1 turn worth of memory to
 make a decision::
 
     >>> filterset = {
