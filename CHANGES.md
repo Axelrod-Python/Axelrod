@@ -3,7 +3,7 @@
 Filtering of strategy classes with a filterset dictionary.
 
 Here are all the commits for this PR:
-https://github.com/Axelrod-Python/Axelrod/compare/v1.9.0...v1.9.0
+https://github.com/Axelrod-Python/Axelrod/compare/v1.8.0...v1.9.0
 
 # v1.8.0, 2016-08-28
 
