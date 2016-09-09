@@ -60,7 +60,7 @@ make a decision::
     >>> len(strategies)
     24
 
-Multiple filter can be specified within the filterset dictionary. To specify a
+Multiple filters can be specified within the filterset dictionary. To specify a
 range of memory_depth values, we can use the 'min_memory_depth' and
 'max_memory_depth' filters::
 
