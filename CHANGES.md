@@ -1,3 +1,7 @@
+# v1.9.0, 2016-09-09
+
+Filtering of strategy classes with a filterset dictionary.
+
 # v1.8.0, 2016-08-28
 
 New strategies:
