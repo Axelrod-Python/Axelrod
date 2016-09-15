@@ -233,3 +233,29 @@ of the cooperation rating::
     [0.57..., 0.0, 0.57..., 0.57...]
 
 For more information about these see :ref:`morality-metrics`.
+
+Summarising a tournament
+------------------------
+
+The results set can also return a list of named tuples, ordered by strategy rank
+that summarises the results of the tournament::
+
+    >>> summary = results.summarise()
+    >>> pprint.pprint(summary)
+    [Player(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0),
+     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0),
+     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0),
+     Player(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0)]
+
+It is also possible to write this data directly to a csv file using the
+`write_summary` method::
+
+    >>> results.write_summary('summary.csv')
+    >>> with open('summary.csv', 'r') as outfile:
+    ...     out = outfile.read()
+    >>> pprint.pprint(out)
+    ('Rank,Name,Median_score,Cooperation_rating,Wins\n'
+     '0,Defector,2.6,0.0,3.0\n'
+     '1,Tit For Tat,2.3,0.7,0.0\n'
+     '2,Grudger,2.3,0.7,0.0\n'
+     '3,Cooperator,2.0,1.0,0.0\n')

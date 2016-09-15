@@ -1,6 +1,7 @@
 import csv
 import tqdm
 
+from collections import namedtuple
 from numpy import mean, nanmedian, std
 
 from . import eigen
@@ -695,6 +696,53 @@ class ResultSet(object):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def summarise(self):
+        """
+        Obtain summary of performance of each strategy:
+        ordered by rank, including median normalised score and cooperation
+        rating.
+
+        Output
+        ------
+
+            A list of the form:
+
+            [[player name, median score, cooperation_rating],...]
+
+        """
+
+        median_scores = map(nanmedian, self.normalised_scores)
+        median_wins = map(nanmedian, self.wins)
+
+        self.player = namedtuple("Player", ["Rank", "Name", "Median_score",
+                                            "Cooperation_rating", "Wins"])
+
+        summary_data = [perf for perf in zip(self.players,
+                                             median_scores,
+                                             self.cooperating_rating,
+                                             median_wins)]
+        summary_data = [self.player(rank, *summary_data[i]) for
+                        rank, i in enumerate(self.ranking)]
+
+        return summary_data
+
+    def write_summary(self, filename):
+        """
+        Write a csv file containing summary data of the results of the form:
+
+            "Rank", "Name", "Median-score-per-turn", "Cooperation-rating"
+
+        Parameters
+        ----------
+            filename : a filepath to which to write the data
+        """
+        summary_data = self.summarise()
+        with open(filename, 'w') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(self.player._fields)
+            for player in summary_data:
+                writer.writerow(player)
 
 
 class ResultSetFromFile(ResultSet):
