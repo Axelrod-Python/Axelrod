@@ -251,11 +251,13 @@ It is also possible to write this data directly to a csv file using the
 `write_summary` method::
 
     >>> results.write_summary('summary.csv')
+    >>> import csv
     >>> with open('summary.csv', 'r') as outfile:
-    ...     out = outfile.read()
-    >>> pprint.pprint(out)
-    ('Rank,Name,Median_score,Cooperation_rating,Wins\n'
-     '0,Defector,2.6,0.0,3.0\n'
-     '1,Tit For Tat,2.3,0.7,0.0\n'
-     '2,Grudger,2.3,0.7,0.0\n'
-     '3,Cooperator,2.0,1.0,0.0\n')
+    ...     csvreader = csv.reader(outfile)
+    ...     for row in csvreader:
+    ...         print(row)
+    ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins']
+    ['0', 'Defector', '2.6...', '0.0', '3.0']
+    ['1', 'Tit For Tat', '2.3...', '0.7', '0.0']
+    ['2', 'Grudger', '2.3...', '0.7', '0.0']
+    ['3', 'Cooperator', '2.0...', '1.0', '0.0']
