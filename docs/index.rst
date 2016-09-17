@@ -95,7 +95,7 @@ Table of Contents
 
    tutorials/index.rst
    reference/index.rst
-   community.rst
+   community/index.rst
    citing_the_library.rst
 
 
