@@ -2,9 +2,10 @@ import unittest
 import axelrod
 import axelrod.interaction_utils as iu
 
-from numpy import mean, std
+from numpy import mean, std, nanmedian
 
 import tempfile
+import csv
 
 from hypothesis import given, settings
 from axelrod.tests.property import tournaments, prob_end_tournaments
@@ -383,6 +384,46 @@ class TestResultSet(unittest.TestCase):
         tournament = axelrod.Tournament(players, repetitions=2, turns=5)
         results = tournament.play()
         self.assertNotEqual(results, rs_sets[0])
+
+    def test_summarise(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        sd = rs.summarise()
+
+        self.assertEqual(len(sd), len(rs.players))
+        self.assertEqual([str(player.Name) for player in sd], rs.ranked_names)
+        self.assertEqual([int(player.Rank) for player in sd],
+                         list(range(len(self.players))))
+
+        ranked_median_scores = [list(map(nanmedian, rs.normalised_scores))[i]
+                                for i in rs.ranking]
+        self.assertEqual([float(player.Median_score) for player in sd],
+                         ranked_median_scores)
+
+        ranked_cooperation_rating = [rs.cooperating_rating[i]
+                                     for i in rs.ranking]
+        self.assertEqual([float(player.Cooperation_rating) for player in sd],
+                         ranked_cooperation_rating)
+
+        ranked_median_wins = [nanmedian(rs.wins[i]) for i in rs.ranking]
+        self.assertEqual([float(player.Wins) for player in sd],
+                         ranked_median_wins)
+
+    def test_write_summary(self):
+        tmp_file = tempfile.NamedTemporaryFile()
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        rs.write_summary(filename=tmp_file.name)
+        with open(tmp_file.name, "r") as csvfile:
+            ranked_names = []
+            csvreader = csv.reader(csvfile)
+            for row in csvreader:
+                ranked_names.append(row[1])
+                self.assertEqual(len(row), 5)
+        self.assertEqual(ranked_names[0], "Name")
+        self.assertEqual(ranked_names[1:], rs.ranked_names)
+
+
 
 
 class TestResultSetFromFile(unittest.TestCase):
