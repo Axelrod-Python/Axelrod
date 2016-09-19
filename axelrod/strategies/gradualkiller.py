@@ -40,7 +40,7 @@ class GradualKiller(Player):
         #     return D
         # return C
 
-        if len(self.history) >= 7:
-            if opponent.history[5:7] == [D, D]:
-                return D
+        # if len(self.history) >= 7:
+        if opponent.history[5:7] == [D, D]:
+            return D
         return C
