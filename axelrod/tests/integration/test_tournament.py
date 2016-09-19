@@ -79,10 +79,10 @@ class TestTournament(unittest.TestCase):
             handle, filename = tempfile.mkstemp(prefix='axelrod_')
             handles.append(handle)
             files.append(filename)
-            tournament.play(progress_bar=False, filename=files[-1].name,
+            tournament.play(progress_bar=False, filename=files[-1],
                             build_results=False)
         try:
-            self.assertTrue(filecmp.cmp(files[0].name, files[1].name))
+            self.assertTrue(filecmp.cmp(files[0], files[1]))
         finally:
             for handle, filename in zip(handles, files):
                 os.close(handle)
@@ -105,10 +105,10 @@ class TestTournament(unittest.TestCase):
             handle, filename = tempfile.mkstemp(prefix='axelrod_')
             handles.append(handle)
             files.append(filename)
-            tournament.play(progress_bar=False, filename=files[-1].name,
+            tournament.play(progress_bar=False, filename=files[-1],
                             build_results=False)
         try:
-            self.assertTrue(filecmp.cmp(files[0].name, files[1].name))
+            self.assertTrue(filecmp.cmp(files[0], files[1]))
         finally:
             for handle, filename in zip(handles, files):
                 os.close(handle)
