@@ -4,7 +4,8 @@ from axelrod._strategy_utils import thue_morse_generator
 
 class SequencePlayer(Player):
     """Abstract base class for players that use a generated sequence to
-    determine their plays."""
+    determine their plays.
+    """
 
     @init_args
     def __init__(self, generator_function, generator_args=()):
@@ -37,9 +38,14 @@ class SequencePlayer(Player):
 class ThueMorse(SequencePlayer):
     """
     A player who cooperates or defects according to the Thue-Morse sequence.
-
     The first few terms of the Thue-Morse sequence are:
     0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . .
+
+    Thue-Morse sequence: http://mathworld.wolfram.com/Thue-MorseSequence.html
+
+    Names
+
+    -ThueMorse: Original by Geraint Palmer
     """
 
     name = 'ThueMorse'
@@ -59,8 +65,12 @@ class ThueMorse(SequencePlayer):
 
 
 class ThueMorseInverse(ThueMorse):
-    """A player who defects or cooperates according to the Thue-Morse sequence
-    (Inverse of ThueMorse)."""
+    """ A player who plays the inverse of the Thue-Morse sequence.
+
+    Names
+
+    -ThueMorse: Original by Geraint Palmer
+    """
 
     name = 'ThueMorseInverse'
     classifier = {
@@ -83,4 +93,3 @@ class ThueMorseInverse(ThueMorse):
             return Actions.C
         else:
             return Actions.D
-
