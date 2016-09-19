@@ -206,7 +206,7 @@ class RemorsefulProber(NaiveProber):
 
     name = 'Remorseful Prober'
     classifier = {
-        'memory_depth': 2,  # It remembers if it's previous move was random
+        'memory_depth': 2,  # It remembers if its previous move was random
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
