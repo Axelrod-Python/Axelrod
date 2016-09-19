@@ -201,3 +201,32 @@ class GrudgerAlternator(Player):
             if self.history[-1] == Actions.C:
                 return Actions.D
         return Actions.C
+
+
+
+class EasyGo(Player):
+    """
+    A player starts by defecting however will cooperate if at any point the opponent has defected.
+
+    Names:
+
+    - Easy Go [PRISON1998]_
+    """
+
+    name = 'EasyGo'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @staticmethod
+    def strategy(opponent):
+        """Begins by playing D, then plays C for the remaining rounds if the opponent ever plays D."""
+        if opponent.defections:
+            return C
+        return D

@@ -227,3 +227,33 @@ class TestGrudgerAlternator(TestPlayer):
             my_hist = [C] * (i + 1)
             expected_response = [D if r % 2 == 0 else C for r in range(j)]
             self.responses_test(my_hist, opp_hist, expected_response)
+
+
+
+
+class TestEasyGo(TestPlayer):
+
+    name = "EasyGo"
+    player = axelrod.EasyGo
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_initial_strategy(self):
+        """
+        Starts by cooperating
+        """
+        self.first_play_test(D)
+
+    def test_strategy(self):
+        """
+        If opponent defects at any point then the player will cooperate forever
+        """
+        self.responses_test([C, D, D, D], [C, C, C, C], [D])
+        self.responses_test([C, C, D, D, D], [C, D, C, C, C], [C])
