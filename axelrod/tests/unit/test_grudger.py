@@ -229,8 +229,6 @@ class TestGrudgerAlternator(TestPlayer):
             self.responses_test(my_hist, opp_hist, expected_response)
 
 
-
-
 class TestEasyGo(TestPlayer):
 
     name = "EasyGo"

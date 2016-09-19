@@ -176,12 +176,13 @@ class SoftGrudger(Player):
 
 class GrudgerAlternator(Player):
     """
-    A player starts by cooperating until the first opponents defenction,
+    A player starts by cooperating until the first opponents defection,
     then alternates D-C.
 
     Names:
 
     - c_then_per_dc: [PRISON1998]_
+    - GrudgerAlternator
     """
 
     name = 'GrudgerAlternator'
