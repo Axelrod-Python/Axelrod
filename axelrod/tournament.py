@@ -63,7 +63,7 @@ class Tournament(object):
             # Setup a temporary file
             self.outputfile = NamedTemporaryFile(mode='w')
             filename = self.outputfile.name
-        self.writer = csv.writer(self.outputfile)
+        self.writer = csv.writer(self.outputfile, lineterminator='\n')
         # Save filename for loading ResultSet later
         self.filename = filename
 
