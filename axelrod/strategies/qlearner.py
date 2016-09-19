@@ -7,9 +7,17 @@ C, D = Actions.C, Actions.D
 
 
 class RiskyQLearner(Player):
-    """A player who learns the best strategies through the q-learning algorithm.
+    """A player who learns the best strategies through the q-learning
+    algorithm.
 
-    This qlearner is quick to come to conclusions and doesn't care about the future.
+    Q-learning algorithm: http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html
+
+    This qlearner is quick to come to conclusions and doesn't care about the
+    future.
+
+    Names
+
+    -RiskyQLearner: Original strategy by Geraint Palmer
     """
 
     name = 'Risky QLearner'
@@ -109,9 +117,14 @@ class RiskyQLearner(Player):
 
 
 class ArrogantQLearner(RiskyQLearner):
-    """A player who learns the best strategies through the q-learning algorithm.
+    """A player who learns the best strategies through the q-learning
+    algorithm.
 
     This Q learner jumps to quick conclusions and care about the future.
+
+    Names
+
+    -ArrogantQLearner: Original strategy by Geraint Palmer
     """
 
     name = 'Arrogant QLearner'
@@ -123,6 +136,10 @@ class HesitantQLearner(RiskyQLearner):
     """A player who learns the best strategies through the q-learning algorithm.
 
     This Q learner is slower to come to conclusions and does not look ahead much.
+
+    Names
+
+    -HesitantQLearner: Original strategy by Geraint Palmer
     """
 
     name = 'Hesitant QLearner'
@@ -133,7 +150,12 @@ class HesitantQLearner(RiskyQLearner):
 class CautiousQLearner(RiskyQLearner):
     """A player who learns the best strategies through the q-learning algorithm.
 
-    This Q learner is slower to come to conclusions and wants to look ahead more.
+    This Q learner is slower to come to conclusions and wants to look ahead
+    more.
+
+    Names
+
+    -CautiousQLearner: Original strategy by Geraint Palmer
     """
 
     name = 'Cautious QLearner'
