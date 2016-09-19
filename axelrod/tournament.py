@@ -62,8 +62,8 @@ class Tournament(object):
             self.outputfile = open(filename, 'a')
         else:
             # Setup a temporary file (in a temporary folder)
-            handle, filename = mkstemp(prefix='axelrod_')
-            self.outputfile = open(handle, 'w')
+            self.filehandle, filename = mkstemp(prefix='axelrod_')
+            self.outputfile = open(filename, 'w')
 
         self.writer = csv.writer(self.outputfile, lineterminator='\n')
         # Save filename for loading ResultSet later
@@ -118,10 +118,10 @@ class Tournament(object):
 
         self.outputfile.close()
         if filename is None:
+            os.close(self.filehandle)
             os.remove(self.filename)
 
         return results
-
 
     def _build_result_set(self, progress_bar=True, keep_interactions=False):
         """
