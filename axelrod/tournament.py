@@ -1,10 +1,11 @@
 from __future__ import absolute_import
 
+import os
 import csv
 from collections import defaultdict
 import logging
 from multiprocessing import Process, Queue, cpu_count
-from tempfile import NamedTemporaryFile
+from tempfile import mkstemp
 import warnings
 
 import tqdm
@@ -60,9 +61,10 @@ class Tournament(object):
         if filename:
             self.outputfile = open(filename, 'a')
         else:
-            # Setup a temporary file
-            self.outputfile = NamedTemporaryFile(mode='w')
-            filename = self.outputfile.name
+            # Setup a temporary file (in a temporary folder)
+            handle, filename = mkstemp(prefix='axelrod_')
+            self.outputfile = open(handle, 'w')
+
         self.writer = csv.writer(self.outputfile, lineterminator='\n')
         # Save filename for loading ResultSet later
         self.filename = filename
@@ -109,10 +111,17 @@ class Tournament(object):
         self.outputfile.flush()
 
         if build_results:
-            return self._build_result_set(progress_bar=progress_bar,
-                                          keep_interactions=keep_interactions)
+            results = self._build_result_set(progress_bar=progress_bar,
+                                             keep_interactions=keep_interactions)
         else:
-            self.outputfile.close()
+            results = None
+
+        self.outputfile.close()
+        if filename is None:
+            os.remove(self.filename)
+
+        return results
+
 
     def _build_result_set(self, progress_bar=True, keep_interactions=False):
         """
@@ -129,7 +138,6 @@ class Tournament(object):
                                        players=[str(p) for p in self.players],
                                        keep_interactions=keep_interactions,
                                        game=self.game)
-        self.outputfile.close()
         return result_set
 
     def _run_serial(self, progress_bar=False):
