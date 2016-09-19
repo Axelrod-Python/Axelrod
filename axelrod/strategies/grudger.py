@@ -171,3 +171,33 @@ class SoftGrudger(Player):
         Player.reset(self)
         self.grudged = False
         self.grudge_memory = 0
+
+
+
+class GrudgerAlternator(Player):
+    """
+    A player starts by cooperating until the first opponents defenction,
+    then alternates D-C.
+
+    Names:
+
+    - c_then_per_dc: [PRISON1998]_
+    """
+
+    name = 'GrudgerAlternator'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        """Begins by playing C, then plays Alternator for the remaining rounds if the opponent ever plays D."""
+        if opponent.defections:
+            if self.history[-1] == Actions.C:
+                return Actions.D
+        return Actions.C

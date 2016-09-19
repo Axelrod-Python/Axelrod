@@ -29,7 +29,7 @@ from .gobymajority import (GoByMajority,
     HardGoByMajority5)
 from .gradualkiller import GradualKiller
 from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
-    SoftGrudger)
+    SoftGrudger, GrudgerAlternator)
 from .grumpy import Grumpy
 from .handshake import Handshake
 from .hunter import (
@@ -124,6 +124,7 @@ all_strategies = [
     GradualKiller,
     Grofman,
     Grudger,
+    GrudgerAlternator,
     Grumpy,
     Handshake,
     HardGoByMajority,
