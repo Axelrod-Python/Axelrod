@@ -183,7 +183,7 @@ class TestRemorsefulProber(TestPlayer):
     }
 
     def test_strategy(self):
-        "Randomly defects (probes) and always retaliates like tit for tat."
+        """Randomly defects (probes) and always retaliates like tit for tat."""
         self.first_play_test(C)
 
         player = self.player(0.4)
@@ -192,32 +192,22 @@ class TestRemorsefulProber(TestPlayer):
         opponent.history = [C, D]
         self.assertEqual(player.strategy(opponent), D)
 
-    def test_random_defection(self):
-        # Random defection
-        player = self.player(0.4)
-        opponent = axelrod.Random()
-        test_responses(self, player, opponent, [C], [C], [D], random_seed=1)
-
     def test_remorse(self):
-        """After probing, if opponent retaliates, will offer a C"""
+        """After probing, if opponent retaliates, will offer a C."""
         player = self.player(0.4)
-        opponent = axelrod.Random()
+        opponent = axelrod.Cooperator()
 
-        random.seed(0)
-        player.history = [C]
-        opponent.history = [C]
-        self.assertEqual(player.strategy(opponent), D)  # Random defection
-        self.assertEqual(player.probing, True)
+        test_responses(self, player, opponent, [C], [C], [C],
+                       random_seed=0, attrs={'probing': False})
 
-        player.history = [C, D]
-        opponent.history = [C, D]
-        self.assertEqual(player.strategy(opponent), C)  # Remorse
-        self.assertEqual(player.probing, False)
+        test_responses(self, player, opponent, [C], [C], [D],
+                       random_seed=1, attrs={'probing': True})
 
-        player.history = [C, D, C]
-        opponent.history = [C, D, D]
-        self.assertEqual(player.strategy(opponent), D)
-        self.assertEqual(player.probing, False)
+        test_responses(self, player, opponent, [C, D], [C, D], [D],
+                       attrs={'probing': False})
+
+        test_responses(self, player, opponent, [C, D, C], [C, D, D], [D],
+                       attrs={'probing': False})
 
     def test_reduction_to_TFT(self):
         player = self.player(0)
@@ -236,3 +226,9 @@ class TestRemorsefulProber(TestPlayer):
         player.probing = True
         player.reset()
         self.assertFalse(player.probing)
+
+    def test_random_defection(self):
+        # Random defection
+        player = self.player(0.4)
+        opponent = axelrod.Random()
+        test_responses(self, player, opponent, [C], [C], [D], random_seed=1)
