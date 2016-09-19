@@ -101,6 +101,9 @@ def compute_normalised_state_distribution(interactions):
     """
     Returns the normalized count of each state for a set of interactions.
     """
+    if len(interactions) == 0:
+        return None
+
     normalized_count = Counter(interactions)
     total = sum(normalized_count.values(), 0.0)
     # By starting the sum with 0.0 we make sure total is a floating point value,
