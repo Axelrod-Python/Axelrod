@@ -90,7 +90,6 @@ class TestAPavlov2011(TestPlayer):
         opponent.history.append(C)
         self.assertEqual(player.strategy(opponent), C)
 
-
         self.responses_test([C, C, C, C, C, D], [C, C, C, C, D, D], [D],
                             attrs={"opponent_class": "Random"})
         self.responses_test([C, D, D, C, C, C], [D, D, C, C, C, C], [D],
