@@ -96,10 +96,14 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertEqual(cache[self.test_key], self.test_value)
 
     def test_load_error_for_inccorect_format(self):
-        tmp_file = tempfile.NamedTemporaryFile()
-        with open(tmp_file.name, 'wb') as io:
-            pickle.dump(range(5), io)
+        tmp_handle, tmp_file = tempfile.mkstemp(prefix='axelrod_')
+        try:
+            with open(tmp_file, 'wb') as io:
+              pickle.dump(range(5), io)
 
-        with self.assertRaises(ValueError):
-            cache = DeterministicCache()
-            cache.load(tmp_file.name)
+            with self.assertRaises(ValueError):
+                cache = DeterministicCache()
+                cache.load(tmp_file)
+        finally:
+            os.close(tmp_handle)
+            os.remove(tmp_file)

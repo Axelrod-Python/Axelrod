@@ -240,6 +240,8 @@ class Tournament(object):
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
+
+        # Fix for Windows - instance methods removed and replaced with partial
         work_queue = Queue()
         done_queue = Queue()
         workers = self._n_workers(processes=processes)
@@ -253,7 +255,8 @@ class Tournament(object):
 
         return True
 
-    def _n_workers(self, processes=2):
+    @staticmethod
+    def _n_workers(processes=2):
         """
         Determines the number of parallel processes to use.
 

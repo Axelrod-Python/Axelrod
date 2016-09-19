@@ -1,3 +1,4 @@
+import os
 import unittest
 import axelrod
 import axelrod.interaction_utils as iu
@@ -410,18 +411,22 @@ class TestResultSet(unittest.TestCase):
                          ranked_median_wins)
 
     def test_write_summary(self):
-        tmp_file = tempfile.NamedTemporaryFile()
+        tmp_handle, tmp_file = tempfile.mkstemp(prefix='axelrod_')
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
-        rs.write_summary(filename=tmp_file.name)
-        with open(tmp_file.name, "r") as csvfile:
-            ranked_names = []
-            csvreader = csv.reader(csvfile)
-            for row in csvreader:
-                ranked_names.append(row[1])
-                self.assertEqual(len(row), 5)
-        self.assertEqual(ranked_names[0], "Name")
-        self.assertEqual(ranked_names[1:], rs.ranked_names)
+        rs.write_summary(filename=tmp_file)
+        try:
+            with open(tmp_file, "r") as csvfile:
+                ranked_names = []
+                csvreader = csv.reader(csvfile)
+                for row in csvreader:
+                    ranked_names.append(row[1])
+                    self.assertEqual(len(row), 5)
+            self.assertEqual(ranked_names[0], "Name")
+            self.assertEqual(ranked_names[1:], rs.ranked_names)
+        finally:
+            os.close(tmp_handle)
+            os.remove(tmp_file)
 
 
 

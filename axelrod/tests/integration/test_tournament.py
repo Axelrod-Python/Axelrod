@@ -86,8 +86,7 @@ class TestTournament(unittest.TestCase):
         finally:
             for handle, filename in zip(handles, files):
                 os.close(handle)
-                os.remove(handle)
-
+                os.remove(filename)
 
     def test_repeat_tournament_stochastic(self):
         """
