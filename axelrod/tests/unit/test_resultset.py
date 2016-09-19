@@ -488,12 +488,14 @@ class TestResultSetFromFile(unittest.TestCase):
 
     @given(tournament=tournaments(max_size=5,
                                   max_turns=5,
+                                  max_noise=0,
                                   max_repetitions=3))
     @settings(max_examples=50, timeout=0)
     def test_equality_with_round_robin(self, tournament):
         tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         tournament.play(filename=tmp_file.name, progress_bar=False,
                         build_results=False)
+
         brs = axelrod.ResultSetFromFile(tmp_file.name, progress_bar=False)
         interactions = iu.read_interactions_from_file(tmp_file.name)
         rs = axelrod.ResultSet(tournament.players, interactions,
