@@ -9,6 +9,7 @@ This is used by both the Match class and the ResultSet class which analyse
 interactions.
 """
 import csv
+from collections import Counter
 
 from .game import Game
 from axelrod import Actions
@@ -85,6 +86,29 @@ def compute_normalised_cooperation(interactions):
     normalised_cooperation = tuple([c / float(num_turns) for c in cooperation])
 
     return normalised_cooperation
+
+
+def compute_state_distribution(interactions):
+    """
+    Returns the count of each state for a set of interactions.
+    """
+    if len(interactions) == 0:
+        return None
+    return Counter(interactions)
+
+
+def compute_normalised_state_distribution(interactions):
+    """
+    Returns the normalized count of each state for a set of interactions.
+    """
+    normalized_count = Counter(interactions)
+    total = sum(normalized_count.values(), 0.0)
+    # By starting the sum with 0.0 we make sure total is a floating point value,
+    # avoiding the Python 2 floor division behaviour of / with integer operands (Stack Overflow)
+
+    for key in normalized_count:
+        normalized_count[key] /= total
+    return normalized_count
 
 
 def sparkline(actions, c_symbol=u'█', d_symbol=u' '):
