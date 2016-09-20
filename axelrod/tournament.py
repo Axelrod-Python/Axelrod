@@ -4,7 +4,6 @@ import csv
 from collections import defaultdict
 import logging
 from multiprocessing import Process, Queue, cpu_count
-from tempfile import NamedTemporaryFile
 import warnings
 
 import tqdm
@@ -61,18 +60,6 @@ class Tournament(object):
         self.writer = None
         self.filename = None
 
-    def setup_output_file(self, filename=None):
-        """Open a CSV writer for tournament output."""
-        if filename:
-            self.outputfile = open(filename, 'a')
-        else:
-            # Setup a temporary file
-            self.outputfile = NamedTemporaryFile(mode='w')
-            filename = self.outputfile.name
-        self.writer = csv.writer(self.outputfile, lineterminator='\n')
-        # Save filename for loading ResultSet later
-        self.filename = filename
-
     def play(self, build_results=True, filename=None,
              processes=None, progress_bar=True):
         """
@@ -104,7 +91,7 @@ class Tournament(object):
         else:
             self.interactions_dict = {}
 
-        if not build_results and not filename:
+        if (not build_results) and (filename is not None):
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
 
         if processes is None:
