@@ -3,7 +3,6 @@
 import csv
 import logging
 from multiprocessing import Queue, cpu_count
-import tempfile
 import unittest
 import warnings
 
@@ -63,6 +62,8 @@ class TestTournament(unittest.TestCase):
             [200, 200, 1, 200, 200],
             [200, 200, 1, 200, 200]]
 
+        cls.filename = "test_results.csv"
+
     def test_init(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -100,9 +101,9 @@ class TestTournament(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             # Check that no warning is raised if no results set is built and a
             # is filename given
-            tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-            results = tournament.play(build_results=False,
-                                      filename=tmp_file.name, progress_bar=False)
+
+            tournament.play(build_results=False,
+                            filename=self.filename, progress_bar=False)
             self.assertEqual(len(w), 0)
 
     def test_serial_play(self):
@@ -156,11 +157,10 @@ class TestTournament(unittest.TestCase):
         self.assertRaises(AttributeError, call_progress_bar)
 
         # Test without build results
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         results = tournament.play(progress_bar=False, build_results=False,
-                                  filename=tmp_file.name)
+                                  filename=self.filename)
         self.assertIsNone(results)
-        results = axelrod.ResultSetFromFile(tmp_file.name)
+        results = axelrod.ResultSetFromFile(self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertRaises(AttributeError, call_progress_bar)
 
@@ -182,11 +182,10 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament.progress_bar.total, 15)
 
         # Test without build results
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         results = tournament.play(progress_bar=True, build_results=False,
-                                  filename=tmp_file.name)
+                                  filename=self.filename)
         self.assertIsNone(results)
-        results = axelrod.ResultSetFromFile(tmp_file.name)
+        results = axelrod.ResultSetFromFile(self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.progress_bar.total, 15)
 
@@ -391,13 +390,12 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions)
 
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        results = tournament.play(build_results=False, filename=tmp_file.name,
+        results = tournament.play(build_results=False, filename=self.filename,
                                   progress_bar=False)
         self.assertIsNone(results)
 
         # Checking that results were written properly
-        results = axelrod.ResultSetFromFile(tmp_file.name)
+        results = axelrod.ResultSetFromFile(self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(turns=integers(min_value=1, max_value=200))
@@ -442,7 +440,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual((len(list(chunk_generator))), 0)
 
     def test_write_interactions(self):
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -453,7 +450,7 @@ class TestTournament(unittest.TestCase):
                     name='_write_interactions')
         tournament._build_result_set = MagicMock(
                     name='_build_result_set')  # Mocking this as it is called by play
-        self.assertTrue(tournament.play(filename=tmp_file.name,
+        self.assertTrue(tournament.play(filename=self.filename,
                                         progress_bar=False))
         tournament.outputfile.close()  # This is normally closed by `build_result_set`
 
@@ -462,16 +459,14 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(calls), 15)
 
     def test_write_to_csv(self):
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=2,
             repetitions=2)
-        tournament.play(filename=tmp_file.name, progress_bar=False)
-        tmp_file.close()
-        with open(tmp_file.name, 'r') as f:
+        tournament.play(filename=self.filename, progress_bar=False)
+        with open(self.filename, 'r') as f:
             written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
             expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
                              [0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
@@ -669,7 +664,7 @@ class TestSpatialTournament(unittest.TestCase):
         # Check that this tournament runs with noise
         tournament = axelrod.SpatialTournament(players, edges=edges, noise=.5)
         results = tournament.play(progress_bar=False)
-        self.assertIsInstance(results, axelrod.ResultSetFromFile)
+        self.assertIsInstance(results, axelrod.ResultSet)
 
 
 class TestProbEndingSpatialTournament(unittest.TestCase):

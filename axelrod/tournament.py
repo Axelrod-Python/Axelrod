@@ -55,11 +55,6 @@ class Tournament(object):
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
-        self.interactions_dict = None
-        self.outputfile = None
-        self.writer = None
-        self.filename = None
-
     def play(self, build_results=True, filename=None,
              processes=None, progress_bar=True):
         """
@@ -88,10 +83,14 @@ class Tournament(object):
             self.outputfile = open(filename, 'w')
             self.writer = csv.writer(self.outputfile, lineterminator='\n')
             self.filename = filename
+            self.interactions_dict = None
         else:
+            self.outputfile = None
+            self.writer = None
+            self.filename = None
             self.interactions_dict = {}
 
-        if (not build_results) and (filename is not None):
+        if (not build_results) and (filename is None):
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
 
         if processes is None:
@@ -104,11 +103,10 @@ class Tournament(object):
 
         if filename:
             self.outputfile.flush()
+            self.outputfile.close()
 
         if build_results:
             return self._build_result_set(progress_bar=progress_bar)
-        else:
-            self.outputfile.close()
 
     def _build_result_set(self, progress_bar=True):
         """
