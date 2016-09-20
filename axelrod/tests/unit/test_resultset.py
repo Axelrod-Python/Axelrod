@@ -488,6 +488,7 @@ class TestResultSetFromFile(unittest.TestCase):
 
     @given(tournament=tournaments(max_size=5,
                                   max_turns=5,
+                                  max_noise=0,
                                   max_repetitions=3))
     @settings(max_examples=50, timeout=0)
     def test_equality_with_round_robin(self, tournament):
