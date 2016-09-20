@@ -13,7 +13,7 @@ interactions::
     ...     axl.Cooperator(), axl.Defector(),
     ...     axl.TitForTat(), axl.Grudger()]
     >>> tournament = axl.Tournament(players, turns=3, repetitions=1)
-    >>> results = tournament.play()
+    >>> results = tournament.play(keep_interactions=True)
 
 If the play method is called with :code:`keep_interactions=True`, the result set
 object will have an :code:`interactions` attribute which contains all the
@@ -23,17 +23,17 @@ view the history of the interactions::
     >>> for index_pair, interaction in results.interactions.items():
     ...     player1 = tournament.players[index_pair[0]]
     ...     player2 = tournament.players[index_pair[1]]
-    ...     print('%s vs %s: %s' % (player1, player2, interaction))
-    Cooperator vs Defector: [[('C', 'D'), ('C', 'D'), ('C', 'D')]]
-    Defector vs Tit For Tat: [[('D', 'C'), ('D', 'D'), ('D', 'D')]]
-    Cooperator vs Cooperator: [[('C', 'C'), ('C', 'C'), ('C', 'C')]]
-    Tit For Tat vs Grudger: [[('C', 'C'), ('C', 'C'), ('C', 'C')]]
-    Grudger vs Grudger: [[('C', 'C'), ('C', 'C'), ('C', 'C')]]
-    Tit For Tat vs Tit For Tat: [[('C', 'C'), ('C', 'C'), ('C', 'C')]]
-    Defector vs Grudger: [[('D', 'C'), ('D', 'D'), ('D', 'D')]]
-    Cooperator vs Grudger: [[('C', 'C'), ('C', 'C'), ('C', 'C')]]
-    Cooperator vs Tit For Tat: [[('C', 'C'), ('C', 'C'), ('C', 'C')]]
-    Defector vs Defector: [[('D', 'D'), ('D', 'D'), ('D', 'D')]]
+    ...     print('%s vs %s: %s' % (player1, player2, interaction)) # doctest: +SKIP
+    Cooperator vs Defector: [('C', 'D'), ('C', 'D'), ('C', 'D')]
+    Defector vs Tit For Tat: [('D', 'C'), ('D', 'D'), ('D', 'D')]
+    Cooperator vs Cooperator: [('C', 'C'), ('C', 'C'), ('C', 'C')]
+    Tit For Tat vs Grudger: [('C', 'C'), ('C', 'C'), ('C', 'C')]
+    Grudger vs Grudger: [('C', 'C'), ('C', 'C'), ('C', 'C')]
+    Tit For Tat vs Tit For Tat: [('C', 'C'), ('C', 'C'), ('C', 'C')]
+    Defector vs Grudger: [('D', 'C'), ('D', 'D'), ('D', 'D')]
+    Cooperator vs Grudger: [('C', 'C'), ('C', 'C'), ('C', 'C')]
+    Cooperator vs Tit For Tat: [('C', 'C'), ('C', 'C'), ('C', 'C')]
+    Defector vs Defector: [('D', 'D'), ('D', 'D'), ('D', 'D')]
 
 We can use these interactions to reconstruct :code:`axelrod.Match` objects which
 have a variety of available methods for analysis (more information can be found

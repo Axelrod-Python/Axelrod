@@ -753,7 +753,7 @@ class ResultSetFromFile(ResultSet):
 
     def __init__(self, filename, progress_bar=True,
                  num_interactions=False, players=False, nrepetitions=False,
-                 game=None):
+                 game=None, keep_interactions=False):
         """
         Parameters
         ----------
@@ -773,6 +773,10 @@ class ResultSetFromFile(ResultSet):
                 efficiently read from file.
             game : axelrod.Game
                 The particular game that should be used to calculate the scores.
+            keep_interactions : bool
+                Whether or not to load the interactions in to memory. WARNING:
+                for large tournaments this drastically increases the memory
+                required.
         """
         if game is None:
             self.game = Game()
@@ -788,8 +792,9 @@ class ResultSetFromFile(ResultSet):
             self.players, self.nrepetitions = players, nrepetitions
         self.nplayers = len(self.players)
 
-        self._build_empty_metrics()
-        self._build_score_related_metrics(progress_bar=progress_bar)
+        self._build_empty_metrics(keep_interactions=keep_interactions)
+        self._build_score_related_metrics(progress_bar=progress_bar,
+                                          keep_interactions=keep_interactions)
 
     def create_progress_bar(self, desc=None):
         """
@@ -938,10 +943,16 @@ class ResultSetFromFile(ResultSet):
         if progress_bar:
             progress_bar.close()
 
-    def _build_empty_metrics(self):
+    def _build_empty_metrics(self, keep_interactions=False):
         """
         Creates the various empty metrics ready to be updated as the data is
         read.
+
+        Parameters
+        ----------
+
+            keep_interactions : bool
+                Whether or not to load the interactions in to memory
         """
         plist = range(self.nplayers)
         replist = range(self.nrepetitions)
@@ -962,6 +973,8 @@ class ResultSetFromFile(ResultSet):
         self.total_interactions = [0 for player in plist]
         self.good_partner_rating = [0 for player in plist]
 
+        if keep_interactions:
+            self.interactions = {}
 
     def _update_match_lengths(self, repetition, p1, p2, interaction):
         self.match_lengths[repetition][p1][p2] = len(interaction)
@@ -1041,7 +1054,8 @@ class ResultSetFromFile(ResultSet):
                 max(1, float(self.total_interactions[player]))
                 for player in range(self.nplayers)]
 
-    def _build_score_related_metrics(self, progress_bar=False):
+    def _build_score_related_metrics(self, progress_bar=False,
+                                     keep_interactions=False):
         """
         Read the data and carry out all relevant calculations.
 
@@ -1049,6 +1063,8 @@ class ResultSetFromFile(ResultSet):
         ----------
             progress_bar : bool
                 Whether or not to display a progress bar
+            keep_interactions : bool
+                Whether or not to lad the interactions in to memory
         """
         match_chunks = self.read_match_chunks(progress_bar)
 
@@ -1057,6 +1073,12 @@ class ResultSetFromFile(ResultSet):
 
             for repetition, record in enumerate(match):
                 interaction = list(zip(record[4], record[5]))
+
+                if keep_interactions:
+                    try:
+                        self.interactions[(p1, p2)].append(interaction)
+                    except KeyError:
+                        self.interactions[(p1, p2)] = [interaction]
 
                 scores_per_turn = iu.compute_final_score_per_turn(interaction,
                                                                  game=self.game)
