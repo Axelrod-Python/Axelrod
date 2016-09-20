@@ -4,7 +4,6 @@ import sys
 from axelrod import DeterministicCache, TitForTat, Defector, Random
 
 import pickle
-import tempfile
 
 
 class TestDeterministicCache(unittest.TestCase):
@@ -96,10 +95,10 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertEqual(cache[self.test_key], self.test_value)
 
     def test_load_error_for_inccorect_format(self):
-        tmp_file = tempfile.NamedTemporaryFile()
-        with open(tmp_file.name, 'wb') as io:
+        filename = "test_outputs/test.cache"
+        with open(filename, 'wb') as io:
             pickle.dump(range(5), io)
 
         with self.assertRaises(ValueError):
             cache = DeterministicCache()
-            cache.load(tmp_file.name)
+            cache.load(filename)
