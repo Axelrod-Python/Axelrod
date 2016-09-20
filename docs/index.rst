@@ -32,8 +32,8 @@ Here is quick overview of the current capabilities of the library:
     * The Moran process
     * An ecological model
 
-* Multi-processor support, caching for deterministic interactions, automatically
-  generate figures and statistics
+* Multi-processor support (not currently supported on Windows), caching for
+  deterministic interactions, automatically generate figures and statistics
 
 Every strategy is categorized on a number of dimensions, including:
 

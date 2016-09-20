@@ -1,7 +1,7 @@
 import unittest
 import axelrod
-import tempfile
 import filecmp
+import sys
 
 from axelrod.strategy_transformers import FinalTransformer
 
@@ -34,9 +34,9 @@ class TestTournament(unittest.TestCase):
         tournament = axelrod.Tournament(name='test', players=strategies,
                                         game=self.game, turns=2,
                                         repetitions=2)
-        tmp_file = tempfile.NamedTemporaryFile()
+        filename = "test_outputs/test_tournament.csv"
         self.assertIsNone(tournament.play(progress_bar=False,
-                                          filename=tmp_file.name,
+                                          filename=filename,
                                           build_results=False))
 
     def test_serial_play(self):
@@ -50,6 +50,8 @@ class TestTournament(unittest.TestCase):
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
 
+    @unittest.skipIf(sys.platform.startswith("win"),
+                     "Parallel processing not supported on Windows")
     def test_parallel_play(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -71,10 +73,10 @@ class TestTournament(unittest.TestCase):
                                             players=deterministic_players,
                                             game=self.game, turns=2,
                                             repetitions=2)
-            files.append(tempfile.NamedTemporaryFile())
-            tournament.play(progress_bar=False, filename=files[-1].name,
+            files.append("test_outputs/stochastic_tournament_{}.csv".format(_))
+            tournament.play(progress_bar=False, filename=files[-1],
                             build_results=False)
-        self.assertTrue(filecmp.cmp(files[0].name, files[1].name))
+        self.assertTrue(filecmp.cmp(files[0], files[1]))
 
     def test_repeat_tournament_stochastic(self):
         """
@@ -89,10 +91,10 @@ class TestTournament(unittest.TestCase):
                                             players=stochastic_players,
                                             game=self.game, turns=2,
                                             repetitions=2)
-            files.append(tempfile.NamedTemporaryFile())
-            tournament.play(progress_bar=False, filename=files[-1].name,
+            files.append("test_outputs/stochastic_tournament_{}.csv".format(_))
+            tournament.play(progress_bar=False, filename=files[-1],
                             build_results=False)
-        self.assertTrue(filecmp.cmp(files[0].name, files[1].name))
+        self.assertTrue(filecmp.cmp(files[0], files[1]))
 
 
 class TestNoisyTournament(unittest.TestCase):
