@@ -154,7 +154,14 @@ class Tournament(object):
         return True
 
     def _write_interactions(self, results):
-        """Write the interactions to csv."""
+        """Write the interactions to file or to a dictionary"""
+        if self.interactions_dict is not None:
+            self._write_to_dict(results)
+        elif self.writer is not None:
+            self._write_to_file(results)
+
+    def _write_to_file(self, results):
+        """Write the interactions to csv file"""
         for index_pair, interactions in results.items():
             for interaction in interactions:
                 row = list(index_pair)
@@ -165,6 +172,16 @@ class Tournament(object):
                 row.append(history1)
                 row.append(history2)
                 self.writer.writerow(row)
+                self.num_interactions += 1
+
+    def _write_to_dict(self, results):
+        """Write the interactions to memory"""
+        for index_pair, interactions in results.items():
+            for interaction in interactions:
+                try:
+                    self.interactions_dict[index_pair].append(interaction)
+                except KeyError:
+                    self.interactions_dict[index_pair] = [interaction]
                 self.num_interactions += 1
 
     def _run_parallel(self, processes=2, progress_bar=False):
