@@ -74,7 +74,7 @@ class Tournament(object):
         self.filename = filename
 
     def play(self, build_results=True, filename=None,
-             processes=None, progress_bar=True, keep_interactions=False):
+             processes=None, progress_bar=True):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -88,8 +88,6 @@ class Tournament(object):
             The number of processes to be used for parallel processing
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
-        keep_interactions : bool
-            Whether or not to load the interactions in to memory
 
         Returns
         -------
@@ -121,12 +119,11 @@ class Tournament(object):
             self.outputfile.flush()
 
         if build_results:
-            return self._build_result_set(progress_bar=progress_bar,
-                                          keep_interactions=keep_interactions)
+            return self._build_result_set(progress_bar=progress_bar)
         else:
             self.outputfile.close()
 
-    def _build_result_set(self, progress_bar=True, keep_interactions=False):
+    def _build_result_set(self, progress_bar=True):
         """
         Build the result set (used by the play method)
 
@@ -143,7 +140,6 @@ class Tournament(object):
                                            num_interactions=self.num_interactions,
                                            nrepetitions=self.repetitions,
                                            players=[str(p) for p in self.players],
-                                           keep_interactions=keep_interactions,
                                            game=self.game)
             self.outputfile.close()
         else:
