@@ -481,7 +481,7 @@ class TestResultSetFromFile(unittest.TestCase):
 
     def test_interactions_equality(self):
         brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
-                                   keep_interactions=True)
+                                        keep_interactions=True)
         rs = axelrod.ResultSet(self.players, self.interactions, progress_bar=False)
         self.assertEqual(rs.interactions, brs.interactions)
 

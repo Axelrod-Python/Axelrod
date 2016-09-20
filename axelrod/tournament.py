@@ -56,7 +56,7 @@ class Tournament(object):
         self._logger = logging.getLogger(__name__)
 
     def play(self, build_results=True, filename=None,
-             processes=None, progress_bar=True):
+             processes=None, progress_bar=True, keep_interactions=False):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -70,6 +70,9 @@ class Tournament(object):
             The number of processes to be used for parallel processing
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
+        keep_interactions : bool
+            Whether or not to save the interactions to memory. Only relevant
+            when writing to file.
 
         Returns
         -------
@@ -106,9 +109,10 @@ class Tournament(object):
             self.outputfile.close()
 
         if build_results:
-            return self._build_result_set(progress_bar=progress_bar)
+            return self._build_result_set(progress_bar=progress_bar,
+                                          keep_interactions=keep_interactions)
 
-    def _build_result_set(self, progress_bar=True):
+    def _build_result_set(self, progress_bar=True, keep_interactions=False):
         """
         Build the result set (used by the play method)
 
@@ -116,14 +120,12 @@ class Tournament(object):
         -------
         axelrod.BigResultSet
         """
-        # TODO Change ResultSet -> ResultSetFromDict and then have ResultSet
-        # which recognises the inputs (if a filename is provided is brings in
-        # ResultSetFromFile, if not it brings in ResultSetFromDict).
         if self.filename is not None:
             result_set = ResultSetFromFile(filename=self.filename,
                                            progress_bar=progress_bar,
                                            num_interactions=self.num_interactions,
                                            nrepetitions=self.repetitions,
+                                           keep_interactions=keep_interactions,
                                            players=[str(p) for p in self.players],
                                            game=self.game)
             self.outputfile.close()
