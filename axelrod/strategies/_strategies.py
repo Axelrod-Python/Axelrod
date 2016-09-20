@@ -27,8 +27,9 @@ from .gobymajority import (GoByMajority,
     GoByMajority5,
     HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
     HardGoByMajority5)
+from .gradualkiller import GradualKiller
 from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
-    SoftGrudger)
+    SoftGrudger, GrudgerAlternator, EasyGo)
 from .grumpy import Grumpy
 from .handshake import Handshake
 from .hunter import (
@@ -97,6 +98,7 @@ all_strategies = [
     DefectorHunter,
     Desperate,
     DoubleCrosser,
+    EasyGo,
     Eatherley,
     EventualCycleHunter,
     Feld,
@@ -121,8 +123,10 @@ all_strategies = [
     GoByMajority5,
     Golden,
     Gradual,
+    GradualKiller,
     Grofman,
     Grudger,
+    GrudgerAlternator,
     Grumpy,
     Handshake,
     HardGoByMajority,

@@ -99,7 +99,6 @@ class TestFeld(TestPlayer):
         'manipulates_state': False
     }
 
-
     def test_strategy(self):
         self.first_play_test(C)
         # Test retaliate

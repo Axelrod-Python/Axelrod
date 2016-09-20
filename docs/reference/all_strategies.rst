@@ -120,6 +120,12 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.titfortat
    :members:
    :undoc-members:
+<<<<<<< HEAD
 .. automodule:: axelrod.strategies.worseandworse
   :members:
   :undoc-members:
+=======
+.. automodule:: axelrod.strategies.gradualkiller
+   :members:
+   :undoc-members:
+>>>>>>> 419ca25750831c421e4cf1feabd4281f32954038
