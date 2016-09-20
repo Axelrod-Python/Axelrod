@@ -29,7 +29,7 @@ indices::
 To create a spatial tournament you call the :code:`SpatialTournamnent` class::
 
     >>> spatial_tournament = axl.SpatialTournament(players, edges=edges)
-    >>> results = spatial_tournament.play(keep_interactions=True)
+    >>> results = spatial_tournament.play()
 
 We can plot the results::
 
@@ -50,7 +50,7 @@ Let's run a small tournament of 2 :code:`turns` and 5 :code:`repetitions`
 and obtain the interactions::
 
     >>> spatial_tournament = axl.SpatialTournament(players ,turns=2, repetitions=2, edges=edges)
-    >>> results = spatial_tournament.play(keep_interactions=True)
+    >>> results = spatial_tournament.play()
     >>> for index_pair, interaction in results.interactions.items():
     ...     player1 = spatial_tournament.players[index_pair[0]]
     ...     player2 = spatial_tournament.players[index_pair[1]]
@@ -67,11 +67,10 @@ It is also possible to create a probabilistic ending spatial tournament with the
 :code:`ProbEndSpatialTournament` class::
 
     >>> prob_end_spatial_tournament = axl.ProbEndSpatialTournament(players, edges=edges, prob_end=.1, repetitions=1)
-    >>> prob_end_results = prob_end_spatial_tournament.play(keep_interactions=True)
+    >>> prob_end_results = prob_end_spatial_tournament.play()
 
 We see that the match lengths are no longer all equal::
 
-    >>> axl.seed(0)
     >>> lengths = []
     >>> for interaction in prob_end_results.interactions.values():
     ...     lengths.append(len(interaction[0]))
