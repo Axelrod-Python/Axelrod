@@ -15,7 +15,7 @@ class TestResultSet(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 
-        cls.filename = "test_results.csv"
+        cls.filename = "test_outputs/test_results.csv"
 
         cls.players = (axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector())
         cls.turns = 5
@@ -427,7 +427,7 @@ class TestResultSet(unittest.TestCase):
 
 
 class TestResultSetFromFile(unittest.TestCase):
-    filename = "test_results_from_file.csv"
+    filename = "test_outputs/test_results_from_file.csv"
     players = [axelrod.Cooperator(),
                axelrod.TitForTat(),
                axelrod.Defector()]
@@ -490,7 +490,7 @@ class TestResultSetFromFile(unittest.TestCase):
                                   max_repetitions=3))
     @settings(max_examples=50, timeout=0)
     def test_equality_with_round_robin(self, tournament):
-        filename = "test_results.csv"
+        filename = "test_outputs/test_results.csv"
         tournament.play(filename=filename, progress_bar=False,
                         build_results=False)
         brs = axelrod.ResultSetFromFile(filename, progress_bar=False)
@@ -509,7 +509,7 @@ class TestResultSetFromFile(unittest.TestCase):
                                            max_repetitions=3))
     @settings(max_examples=50, timeout=0)
     def test_equality_with_prob_end(self, tournament):
-        filename = "test_results.csv"
+        filename = "test_outputs/test_results.csv"
         tournament.play(filename=filename, progress_bar=False,
                         build_results=False)
         brs = axelrod.ResultSetFromFile(filename, progress_bar=False)

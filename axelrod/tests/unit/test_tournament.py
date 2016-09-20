@@ -62,7 +62,7 @@ class TestTournament(unittest.TestCase):
             [200, 200, 1, 200, 200],
             [200, 200, 1, 200, 200]]
 
-        cls.filename = "test_results.csv"
+        cls.filename = "test_outputs/test_tournament.csv"
 
     def test_init(self):
         tournament = axelrod.Tournament(

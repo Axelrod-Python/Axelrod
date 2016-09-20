@@ -13,3 +13,4 @@ cache.txt
 test.csv
 summary.csv
 basic_tournament.csv
+test_outputs/*csv
