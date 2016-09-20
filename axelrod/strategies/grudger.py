@@ -182,7 +182,7 @@ class GrudgerAlternator(Player):
     Names:
 
     - c_then_per_dc: [PRISON1998]_
-    - GrudgerAlternator
+    - Grudger Alternator: Original name by Geraint Palmer
     """
 
     name = 'GrudgerAlternator'
