@@ -11,8 +11,9 @@ import tqdm
 
 from .game import Game
 from .match import Match
-from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches
-from .result_set import ResultSetFromFile
+from .match_generator import (RoundRobinMatches, ProbEndRoundRobinMatches,
+                              SpatialMatches, ProbEndSpatialMatches)
+from .result_set import ResultSetFromFile, ResultSet
 
 
 class Tournament(object):
@@ -55,6 +56,11 @@ class Tournament(object):
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
+        self.interactions_dict = None
+        self.outputfile = None
+        self.writer = None
+        self.filename = None
+
     def setup_output_file(self, filename=None):
         """Open a CSV writer for tournament output."""
         if filename:
@@ -93,7 +99,13 @@ class Tournament(object):
             self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
                                           desc="Playing matches")
 
-        self.setup_output_file(filename)
+        if filename is not None:
+            self.outputfile = open(filename, 'w')
+            self.writer = csv.writer(self.outputfile, lineterminator='\n')
+            self.filename = filename
+        else:
+            self.interactions_dict = {}
+
         if not build_results and not filename:
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
 
@@ -105,8 +117,8 @@ class Tournament(object):
         if progress_bar:
             self.progress_bar.close()
 
-        # Make sure that python has finished writing to disk
-        self.outputfile.flush()
+        if filename:
+            self.outputfile.flush()
 
         if build_results:
             return self._build_result_set(progress_bar=progress_bar,
@@ -122,14 +134,23 @@ class Tournament(object):
         -------
         axelrod.BigResultSet
         """
-        result_set = ResultSetFromFile(filename=self.filename,
-                                       progress_bar=progress_bar,
-                                       num_interactions=self.num_interactions,
-                                       nrepetitions=self.repetitions,
-                                       players=[str(p) for p in self.players],
-                                       keep_interactions=keep_interactions,
-                                       game=self.game)
-        self.outputfile.close()
+        # TODO Change ResultSet -> ResultSetFromDict and then have ResultSet
+        # which recognises the inputs (if a filename is provided is brings in
+        # ResultSetFromFile, if not it brings in ResultSetFromDict).
+        if self.filename is not None:
+            result_set = ResultSetFromFile(filename=self.filename,
+                                           progress_bar=progress_bar,
+                                           num_interactions=self.num_interactions,
+                                           nrepetitions=self.repetitions,
+                                           players=[str(p) for p in self.players],
+                                           keep_interactions=keep_interactions,
+                                           game=self.game)
+            self.outputfile.close()
+        else:
+            result_set = ResultSet(players=[str(p) for p in self.players],
+                                   interactions=self.interactions_dict,
+                                   progress_bar=progress_bar,
+                                   game=self.game)
         return result_set
 
     def _run_serial(self, progress_bar=False):
