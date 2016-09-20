@@ -31,16 +31,6 @@ class GradualKiller(Player):
 
     def strategy(self, opponent):
         """This is the actual strategy"""
-        # # First seven moves
-        # firstseven = [D, D, D, D, D, C, C]
-        # if len(self.history) < 7:
-        #     return firstseven[len(self.history)]
-        # # React to the opponent's 6th and 7th moves
-        # elif opponent.history[5:7] == [D, D]:
-        #     return D
-        # return C
-
-        # if len(self.history) >= 7:
         if opponent.history[5:7] == [D, D]:
             return D
         return C
