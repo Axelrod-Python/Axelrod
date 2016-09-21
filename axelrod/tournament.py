@@ -126,7 +126,7 @@ class Tournament(object):
             return self._build_result_set(progress_bar=progress_bar,
                                           keep_interactions=keep_interactions,
                                           in_memory=in_memory)
-        else:
+        elif not in_memory:
             self.outputfile.close()
 
     def _build_result_set(self, progress_bar=True, keep_interactions=False,
