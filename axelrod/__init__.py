@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 import sys
 
+on_windows = sys.platform.startswith("win")
+
 # The order of imports matters!
 from .actions import Actions, flip_action
 from .random_ import random_choice, seed
@@ -16,5 +18,3 @@ from .match_generator import *
 from .tournament import Tournament, ProbEndTournament, SpatialTournament, ProbEndSpatialTournament
 from .result_set import ResultSet, ResultSetFromFile
 from .ecosystem import Ecosystem
-
-on_windows = sys.platform.startswith("win")
