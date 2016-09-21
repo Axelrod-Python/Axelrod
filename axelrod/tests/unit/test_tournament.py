@@ -396,6 +396,10 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
+        # Test in memory
+        results = tournament.play(progress_bar=False, in_memory=True)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
     def test_no_build_result_set(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -468,6 +472,16 @@ class TestTournament(unittest.TestCase):
                                         progress_bar=False))
         tournament.outputfile.close()  # This is normally closed by `build_result_set`
 
+        # Get the calls made to write_interactions
+        calls = tournament._write_interactions.call_args_list
+        self.assertEqual(len(calls), 15)
+
+        # Test when runnning in memory
+        tournament._write_interactions = MagicMock(
+                    name='_write_interactions')
+        self.assertTrue(tournament.play(filename=self.filename,
+                                        progress_bar=False,
+                                        in_memory=True))
         # Get the calls made to write_interactions
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
