@@ -8,7 +8,7 @@ class WorseAndWorse (Player):
 
     Names
 
-    - worse_and_worse: [Prison]
+    - worse_and_worse: [PRISON1998]
 
     """
 
