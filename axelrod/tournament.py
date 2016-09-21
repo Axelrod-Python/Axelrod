@@ -1,11 +1,13 @@
 from __future__ import absolute_import
 
+import os
 import csv
 from collections import defaultdict
 import logging
 from multiprocessing import Process, Queue, cpu_count
-from tempfile import NamedTemporaryFile
+from tempfile import mkstemp
 import warnings
+from functools import partial
 
 import tqdm
 
@@ -13,6 +15,56 @@ from .game import Game
 from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches
 from .result_set import ResultSetFromFile
+
+
+# Non-Class methods for Windows issues
+def _worker(play_matches, work_queue, done_queue):
+    """
+            The work for each parallel sub-process to execute.
+
+            Parameters
+            ----------
+            work_queue : multiprocessing.Queue
+                A queue containing an entry for each round robin to be processed
+            done_queue : multiprocessing.Queue
+                A queue containing the output dictionaries from each round robin
+            """
+    for chunk in iter(work_queue.get, 'STOP'):
+        interactions = play_matches(chunk)
+        done_queue.put(interactions)
+    done_queue.put('STOP')
+    return True
+
+
+def _play_matches(obj_players, chunk):
+    """
+    Play matches in a given chunk.
+
+    Parameters
+    ----------
+    chunk : tuple (index pair, match_parameters, repetitions)
+        match_parameters are also a tuple: (turns, game, noise)
+
+    Returns
+    -------
+    interactions : dictionary
+        Mapping player index pairs to results of matches:
+
+            (0, 1) -> [('C', 'D'), ('D', 'C'),...]
+    """
+    interactions = defaultdict(list)
+    index_pair, match_params, repetitions = chunk
+    p1_index, p2_index = index_pair
+    player1 = obj_players[p1_index].clone()
+    player2 = obj_players[p2_index].clone()
+    players = (player1, player2)
+    params = [players]
+    params.extend(match_params)
+    match = Match(*params)
+    for _ in range(repetitions):
+        match.play()
+        interactions[index_pair].append(match.result)
+    return interactions
 
 
 class Tournament(object):
@@ -60,10 +112,11 @@ class Tournament(object):
         if filename:
             self.outputfile = open(filename, 'a')
         else:
-            # Setup a temporary file
-            self.outputfile = NamedTemporaryFile(mode='w')
-            filename = self.outputfile.name
-        self.writer = csv.writer(self.outputfile, lineterminator='\n')
+            # Setup a temporary file (in a temporary folder)
+            self.filehandle, filename = mkstemp(prefix='axelrod_')
+            self.outputfile = open(filename, 'w')
+
+        # self.writer = csv.writer(self.outputfile, lineterminator='\n')
         # Save filename for loading ResultSet later
         self.filename = filename
 
@@ -109,10 +162,17 @@ class Tournament(object):
         self.outputfile.flush()
 
         if build_results:
-            return self._build_result_set(progress_bar=progress_bar,
-                                          keep_interactions=keep_interactions)
+            results = self._build_result_set(progress_bar=progress_bar,
+                                             keep_interactions=keep_interactions)
         else:
-            self.outputfile.close()
+            results = None
+
+        self.outputfile.close()
+        if filename is None:
+            os.close(self.filehandle)
+            os.remove(self.filename)
+
+        return results
 
     def _build_result_set(self, progress_bar=True, keep_interactions=False):
         """
@@ -129,7 +189,6 @@ class Tournament(object):
                                        players=[str(p) for p in self.players],
                                        keep_interactions=keep_interactions,
                                        game=self.game)
-        self.outputfile.close()
         return result_set
 
     def _run_serial(self, progress_bar=False):
@@ -155,6 +214,7 @@ class Tournament(object):
 
     def _write_interactions(self, results):
         """Write the interactions to csv."""
+        writer = csv.writer(self.outputfile, lineterminator='\n')
         for index_pair, interactions in results.items():
             for interaction in interactions:
                 row = list(index_pair)
@@ -164,7 +224,7 @@ class Tournament(object):
                 history2 = "".join([i[1] for i in interaction])
                 row.append(history1)
                 row.append(history2)
-                self.writer.writerow(row)
+                writer.writerow(row)
                 self.num_interactions += 1
 
     def _run_parallel(self, processes=2, progress_bar=False):
@@ -180,6 +240,8 @@ class Tournament(object):
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, Pool can only accept
         # target functions which can be pickled and instance methods cannot.
+
+        # Fix for Windows - instance methods removed and replaced with partial
         work_queue = Queue()
         done_queue = Queue()
         workers = self._n_workers(processes=processes)
@@ -193,7 +255,8 @@ class Tournament(object):
 
         return True
 
-    def _n_workers(self, processes=2):
+    @staticmethod
+    def _n_workers(processes=2):
         """
         Determines the number of parallel processes to use.
 
@@ -221,8 +284,12 @@ class Tournament(object):
             A queue containing the output dictionaries from each round robin
         """
         for worker in range(workers):
+            # Works but ugly
+            chunker = partial(_play_matches, self.players)
+            partialworker = partial(_worker, chunker)
+
             process = Process(
-                target=self._worker, args=(work_queue, done_queue))
+                target=partialworker, args=(work_queue, done_queue))
             work_queue.put('STOP')
             process.start()
         return True

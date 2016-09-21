@@ -1,3 +1,4 @@
+import os
 import unittest
 import axelrod
 import tempfile
@@ -34,10 +35,14 @@ class TestTournament(unittest.TestCase):
         tournament = axelrod.Tournament(name='test', players=strategies,
                                         game=self.game, turns=2,
                                         repetitions=2)
-        tmp_file = tempfile.NamedTemporaryFile()
-        self.assertIsNone(tournament.play(progress_bar=False,
-                                          filename=tmp_file.name,
-                                          build_results=False))
+        tmp_handle, tmp_file = tempfile.mkstemp(prefix='axelrod_')
+        try:
+            self.assertIsNone(tournament.play(progress_bar=False,
+                                              filename=tmp_file,
+                                              build_results=False))
+        finally:
+            os.close(tmp_handle)
+            os.remove(tmp_file)
 
     def test_serial_play(self):
         tournament = axelrod.Tournament(
@@ -65,22 +70,29 @@ class TestTournament(unittest.TestCase):
         """A test to check that tournament gives same results."""
         deterministic_players = [s() for s in axelrod.strategies
                                  if not s().classifier['stochastic']]
-        files = []
+        handles, files = [], []
         for _ in range(2):
             tournament = axelrod.Tournament(name='test',
                                             players=deterministic_players,
                                             game=self.game, turns=2,
                                             repetitions=2)
-            files.append(tempfile.NamedTemporaryFile())
-            tournament.play(progress_bar=False, filename=files[-1].name,
+            handle, filename = tempfile.mkstemp(prefix='axelrod_')
+            handles.append(handle)
+            files.append(filename)
+            tournament.play(progress_bar=False, filename=files[-1],
                             build_results=False)
-        self.assertTrue(filecmp.cmp(files[0].name, files[1].name))
+        try:
+            self.assertTrue(filecmp.cmp(files[0], files[1]))
+        finally:
+            for handle, filename in zip(handles, files):
+                os.close(handle)
+                os.remove(filename)
 
     def test_repeat_tournament_stochastic(self):
         """
         A test to check that tournament gives same results when setting seed.
         """
-        files = []
+        handles, files = [], []
         for _ in range(2):
             axelrod.seed(0)
             stochastic_players = [s() for s in axelrod.strategies
@@ -89,10 +101,17 @@ class TestTournament(unittest.TestCase):
                                             players=stochastic_players,
                                             game=self.game, turns=2,
                                             repetitions=2)
-            files.append(tempfile.NamedTemporaryFile())
-            tournament.play(progress_bar=False, filename=files[-1].name,
+            handle, filename = tempfile.mkstemp(prefix='axelrod_')
+            handles.append(handle)
+            files.append(filename)
+            tournament.play(progress_bar=False, filename=files[-1],
                             build_results=False)
-        self.assertTrue(filecmp.cmp(files[0].name, files[1].name))
+        try:
+            self.assertTrue(filecmp.cmp(files[0], files[1]))
+        finally:
+            for handle, filename in zip(handles, files):
+                os.close(handle)
+                os.remove(filename)
 
 
 class TestNoisyTournament(unittest.TestCase):
