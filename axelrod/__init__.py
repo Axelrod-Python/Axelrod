@@ -1,7 +1,7 @@
 from __future__ import absolute_import
-import sys
+import os
 
-on_windows = sys.platform.startswith("win")
+on_windows = os.name == 'nt'
 
 # The order of imports matters!
 from .actions import Actions, flip_action
