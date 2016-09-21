@@ -55,7 +55,7 @@ class Tournament(object):
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
-    def setup_output_file(self, filename=None, in_memory=False):
+    def setup_output(self, filename=None, in_memory=False):
         """Open a CSV writer for tournament output."""
         if in_memory:
             self.interactions_dict = {}
@@ -105,7 +105,7 @@ class Tournament(object):
         if on_windows and (filename is None):
             in_memory = True
 
-        self.setup_output_file(filename, in_memory)
+        self.setup_output(filename, in_memory)
 
         if not build_results and not filename:
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
