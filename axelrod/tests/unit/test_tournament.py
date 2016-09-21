@@ -5,7 +5,6 @@ import logging
 from multiprocessing import Queue, cpu_count
 import unittest
 import warnings
-import sys
 
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers, floats
@@ -190,7 +189,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.progress_bar.total, 15)
 
-    @unittest.skipIf(sys.platform.startswith("win"),
+    @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
     def test_progress_bar_play_parallel(self):
         """Test that tournament plays when asking for progress bar for parallel
@@ -237,7 +236,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(results.nplayers, len(tournament.players))
         self.assertEqual(results.players, [str(p) for p in tournament.players])
 
-    @unittest.skipIf(sys.platform.startswith("win"),
+    @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
     def test_parallel_play(self):
         # Test that we get an instance of ResultSet
@@ -279,7 +278,7 @@ class TestTournament(unittest.TestCase):
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
 
-    @unittest.skipIf(sys.platform.startswith("win"),
+    @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
     def test_run_parallel(self):
         tournament = axelrod.Tournament(
@@ -296,7 +295,7 @@ class TestTournament(unittest.TestCase):
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
 
-    @unittest.skipIf(sys.platform.startswith("win"),
+    @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
     def test_n_workers(self):
         max_processes = cpu_count()
@@ -318,7 +317,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament._n_workers(processes=max_processes+2),
                                                max_processes)
 
-    @unittest.skipIf(sys.platform.startswith("win"),
+    @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
     @unittest.skipIf(
         cpu_count() < 2,
@@ -335,7 +334,7 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions,)
         self.assertEqual(tournament._n_workers(processes=2), 2)
 
-    @unittest.skipIf(sys.platform.startswith("win"),
+    @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
     def test_start_workers(self):
         workers = 2
@@ -359,7 +358,7 @@ class TestTournament(unittest.TestCase):
                 stops += 1
         self.assertEqual(stops, workers)
 
-    @unittest.skipIf(sys.platform.startswith("win"),
+    @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
     def test_worker(self):
         tournament = axelrod.Tournament(

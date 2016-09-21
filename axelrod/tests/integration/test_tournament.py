@@ -1,7 +1,6 @@
 import unittest
 import axelrod
 import filecmp
-import sys
 
 from axelrod.strategy_transformers import FinalTransformer
 
@@ -50,7 +49,7 @@ class TestTournament(unittest.TestCase):
         actual_outcome = sorted(zip(self.player_names, scores))
         self.assertEqual(actual_outcome, self.expected_outcome)
 
-    @unittest.skipIf(sys.platform.startswith("win"),
+    @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
     def test_parallel_play(self):
         tournament = axelrod.Tournament(
