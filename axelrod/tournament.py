@@ -1,18 +1,18 @@
 from __future__ import absolute_import
 
-import csv
 from collections import defaultdict
-import logging
 from multiprocessing import Process, Queue, cpu_count
 from tempfile import NamedTemporaryFile
+import csv
+import logging
+import tqdm
 import warnings
 
-import tqdm
-
+from axelrod import on_windows
 from .game import Game
 from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches
-from .result_set import ResultSetFromFile
+from .result_set import ResultSetFromFile, ResultSet
 
 
 class Tournament(object):
@@ -55,20 +55,25 @@ class Tournament(object):
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
-    def setup_output_file(self, filename=None):
+    def setup_output(self, filename=None, in_memory=False):
         """Open a CSV writer for tournament output."""
-        if filename:
-            self.outputfile = open(filename, 'a')
+        if in_memory:
+            self.interactions_dict = {}
+            self.writer = None
         else:
-            # Setup a temporary file
-            self.outputfile = NamedTemporaryFile(mode='w')
-            filename = self.outputfile.name
-        self.writer = csv.writer(self.outputfile, lineterminator='\n')
-        # Save filename for loading ResultSet later
-        self.filename = filename
+            if filename:
+                self.outputfile = open(filename, 'w')
+            else:
+                # Setup a temporary file
+                self.outputfile = NamedTemporaryFile(mode='w')
+                filename = self.outputfile.name
+            self.writer = csv.writer(self.outputfile, lineterminator='\n')
+            # Save filename for loading ResultSet later
+            self.filename = filename
 
     def play(self, build_results=True, filename=None,
-             processes=None, progress_bar=True, keep_interactions=False):
+             processes=None, progress_bar=True,
+             keep_interactions=False, in_memory=False):
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -84,6 +89,10 @@ class Tournament(object):
             Whether or not to create a progress bar which will be updated
         keep_interactions : bool
             Whether or not to load the interactions in to memory
+        in_memory : bool
+            By default interactions are written to a file.
+            If this is True they will be kept in memory.
+            This is not advised for large tournaments.
 
         Returns
         -------
@@ -93,11 +102,15 @@ class Tournament(object):
             self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
                                           desc="Playing matches")
 
-        self.setup_output_file(filename)
+        if on_windows and (filename is None):
+            in_memory = True
+
+        self.setup_output(filename, in_memory)
+
         if not build_results and not filename:
             warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
 
-        if processes is None:
+        if (processes is None) or (on_windows):
             self._run_serial(progress_bar=progress_bar)
         else:
             self._run_parallel(processes=processes, progress_bar=progress_bar)
@@ -106,15 +119,18 @@ class Tournament(object):
             self.progress_bar.close()
 
         # Make sure that python has finished writing to disk
-        self.outputfile.flush()
+        if not in_memory:
+            self.outputfile.flush()
 
         if build_results:
             return self._build_result_set(progress_bar=progress_bar,
-                                          keep_interactions=keep_interactions)
-        else:
+                                          keep_interactions=keep_interactions,
+                                          in_memory=in_memory)
+        elif not in_memory:
             self.outputfile.close()
 
-    def _build_result_set(self, progress_bar=True, keep_interactions=False):
+    def _build_result_set(self, progress_bar=True, keep_interactions=False,
+                          in_memory=False):
         """
         Build the result set (used by the play method)
 
@@ -122,14 +138,20 @@ class Tournament(object):
         -------
         axelrod.BigResultSet
         """
-        result_set = ResultSetFromFile(filename=self.filename,
-                                       progress_bar=progress_bar,
-                                       num_interactions=self.num_interactions,
-                                       nrepetitions=self.repetitions,
-                                       players=[str(p) for p in self.players],
-                                       keep_interactions=keep_interactions,
-                                       game=self.game)
-        self.outputfile.close()
+        if not in_memory:
+            result_set = ResultSetFromFile(filename=self.filename,
+                                           progress_bar=progress_bar,
+                                           num_interactions=self.num_interactions,
+                                           nrepetitions=self.repetitions,
+                                           players=[str(p) for p in self.players],
+                                           keep_interactions=keep_interactions,
+                                           game=self.game)
+            self.outputfile.close()
+        else:
+            result_set = ResultSet(players=[str(p) for p in self.players],
+                                     interactions=self.interactions_dict,
+                                     progress_bar=progress_bar,
+                                     game=self.game)
         return result_set
 
     def _run_serial(self, progress_bar=False):
@@ -154,6 +176,13 @@ class Tournament(object):
         return True
 
     def _write_interactions(self, results):
+        """Write the interactions to file or to a dictionary"""
+        if self.writer is not None:
+          self._write_interactions_to_file(results)
+        elif self.interactions_dict is not None:
+          self._write_interactions_to_dict(results)
+
+    def _write_interactions_to_file(self, results):
         """Write the interactions to csv."""
         for index_pair, interactions in results.items():
             for interaction in interactions:
@@ -165,6 +194,16 @@ class Tournament(object):
                 row.append(history1)
                 row.append(history2)
                 self.writer.writerow(row)
+                self.num_interactions += 1
+
+    def _write_interactions_to_dict(self, results):
+        """Write the interactions to memory"""
+        for index_pair, interactions in results.items():
+            for interaction in interactions:
+                try:
+                    self.interactions_dict[index_pair].append(interaction)
+                except KeyError:
+                    self.interactions_dict[index_pair] = [interaction]
                 self.num_interactions += 1
 
     def _run_parallel(self, processes=2, progress_bar=False):

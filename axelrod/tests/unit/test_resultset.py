@@ -4,7 +4,6 @@ import axelrod.interaction_utils as iu
 
 from numpy import mean, std, nanmedian
 
-import tempfile
 import csv
 
 from hypothesis import given, settings
@@ -15,6 +14,8 @@ class TestResultSet(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+
+        cls.filename = "test_outputs/test_results.csv"
 
         cls.players = (axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector())
         cls.turns = 5
@@ -410,11 +411,10 @@ class TestResultSet(unittest.TestCase):
                          ranked_median_wins)
 
     def test_write_summary(self):
-        tmp_file = tempfile.NamedTemporaryFile()
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
-        rs.write_summary(filename=tmp_file.name)
-        with open(tmp_file.name, "r") as csvfile:
+        rs.write_summary(filename=self.filename)
+        with open(self.filename, "r") as csvfile:
             ranked_names = []
             csvreader = csv.reader(csvfile)
             for row in csvreader:
@@ -427,38 +427,37 @@ class TestResultSet(unittest.TestCase):
 
 
 class TestResultSetFromFile(unittest.TestCase):
-    tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+    filename = "test_outputs/test_results_from_file.csv"
     players = [axelrod.Cooperator(),
                axelrod.TitForTat(),
                axelrod.Defector()]
     tournament = axelrod.Tournament(players=players, turns=2, repetitions=3)
-    tournament.play(filename=tmp_file.name)
-    tmp_file.close()
+    tournament.play(filename=filename)
 
-    interactions = iu.read_interactions_from_file(tmp_file.name)
+    interactions = iu.read_interactions_from_file(filename)
 
     def test_init(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertEqual(brs.players, [str(p) for p in self.players])
         self.assertEqual(brs.nplayers, len(self.players))
         self.assertEqual(brs.nrepetitions, 3)
 
     def test_init_with_different_game(self):
         game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False,
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
                                    game=game)
         self.assertEqual(brs.game.RPST(), (-1, -1, -1, -1))
 
     def test_init_with_progress_bar(self):
         """Just able to test that no error occurs"""
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=True)
         self.assertEqual(brs.nplayers, len(self.players))
         self.assertEqual(brs.nrepetitions, 3)
         self.assertEqual(brs.num_interactions, 18)
 
     def test_init_with_num_interactions(self):
         """Just able to test that no error occurs"""
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True,
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=True,
                                         num_interactions=18)
         self.assertEqual(brs.nplayers, len(self.players))
         self.assertEqual(brs.nrepetitions, 3)
@@ -466,7 +465,7 @@ class TestResultSetFromFile(unittest.TestCase):
 
     def test_init_with_players_nrepetitions(self):
         """Just able to test that no error occurs"""
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=True,
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=True,
                                         num_interactions=18, nrepetitions=3,
                                         players=[str(p) for p in self.players])
         self.assertEqual(brs.nplayers, len(self.players))
@@ -476,13 +475,13 @@ class TestResultSetFromFile(unittest.TestCase):
     def test_equality(self):
         """A test that checks overall equality by comparing to the base result
         set class"""
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         rs = axelrod.ResultSet(self.players, self.interactions, progress_bar=False)
         self.assertEqual(rs, brs)
 
     def test_interactions_equality(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False,
-                                   keep_interactions=True)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
+                                        keep_interactions=True)
         rs = axelrod.ResultSet(self.players, self.interactions, progress_bar=False)
         self.assertEqual(rs.interactions, brs.interactions)
 
@@ -492,11 +491,11 @@ class TestResultSetFromFile(unittest.TestCase):
                                   max_repetitions=3))
     @settings(max_examples=50, timeout=0)
     def test_equality_with_round_robin(self, tournament):
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        tournament.play(filename=tmp_file.name, progress_bar=False,
+        filename = "test_outputs/test_results.csv"
+        tournament.play(filename=filename, progress_bar=False,
                         build_results=False)
-        brs = axelrod.ResultSetFromFile(tmp_file.name, progress_bar=False)
-        interactions = iu.read_interactions_from_file(tmp_file.name)
+        brs = axelrod.ResultSetFromFile(filename, progress_bar=False)
+        interactions = iu.read_interactions_from_file(filename)
         rs = axelrod.ResultSet(tournament.players, interactions,
                                progress_bar=False)
 
@@ -511,11 +510,11 @@ class TestResultSetFromFile(unittest.TestCase):
                                            max_repetitions=3))
     @settings(max_examples=50, timeout=0)
     def test_equality_with_prob_end(self, tournament):
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        tournament.play(filename=tmp_file.name, progress_bar=False,
+        filename = "test_outputs/test_results.csv"
+        tournament.play(filename=filename, progress_bar=False,
                         build_results=False)
-        brs = axelrod.ResultSetFromFile(tmp_file.name, progress_bar=False)
-        interactions = iu.read_interactions_from_file(tmp_file.name)
+        brs = axelrod.ResultSetFromFile(filename, progress_bar=False)
+        interactions = iu.read_interactions_from_file(filename)
         rs = axelrod.ResultSet(tournament.players, interactions,
                                progress_bar=False)
 
@@ -526,14 +525,14 @@ class TestResultSetFromFile(unittest.TestCase):
         self.assertEqual(rs.cooperation, brs.cooperation)
 
     def test_read_players_and_repetitions(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         players, nrepetitions = brs._read_players_and_repetition_numbers()
         expected_players = ['Cooperator', 'Tit For Tat', 'Defector']
         self.assertEqual(brs.players, expected_players)
         self.assertEqual(nrepetitions, 3)
 
     def test_update_repetitions(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(filename=self.filename, progress_bar=False)
         brs.repetitions_d = {}
         brs._update_repetitions((0, 0))
         self.assertEqual(brs.repetitions_d, {(0, 0): 1})
@@ -543,7 +542,7 @@ class TestResultSetFromFile(unittest.TestCase):
         self.assertEqual(brs.repetitions_d, {(0, 0): 2, (0, 1): 1})
 
     def test_build_repetitions(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         brs.repetitions_d = {}
         brs._update_repetitions((0, 0))
         brs._update_repetitions((0, 0))
@@ -552,7 +551,7 @@ class TestResultSetFromFile(unittest.TestCase):
         self.assertFalse(hasattr(brs, 'repetitions_d'))
 
     def test_update_players(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         brs.players_d = {}
         brs._update_players((0, 0), ('Cooperator', 'Cooperator'))
         self.assertEqual(brs.players_d, {0: 'Cooperator'})
@@ -562,7 +561,7 @@ class TestResultSetFromFile(unittest.TestCase):
         self.assertEqual(brs.players_d, {0: 'Cooperator', 1: 'Defector'})
 
     def test_build_players(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         brs.players_d = {}
         brs._update_players((0, 0), ('Cooperator', 'Cooperator'))
         brs._update_players((0, 1), ('Cooperator', 'Defector'))
@@ -571,7 +570,7 @@ class TestResultSetFromFile(unittest.TestCase):
         self.assertFalse(hasattr(brs, 'players_d'))
 
     def test_build_read_match_chunks(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         matches = brs.read_match_chunks()
         chunk = next(matches)
         self.assertEqual(chunk[0], ['0'] * 2 + ['Cooperator'] * 2 + ['CC'] * 2)
@@ -580,7 +579,7 @@ class TestResultSetFromFile(unittest.TestCase):
         self.assertEqual(len(list(matches)), 5)
 
     def test_build_all(self):
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
 
@@ -608,7 +607,7 @@ class TestResultSetFromFile(unittest.TestCase):
                                         for player in plist]
 
         expected_good_partner_rating = [0 for player in plist]
-        brs = axelrod.ResultSetFromFile(self.tmp_file.name, progress_bar=False)
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         brs.match_lengths = []
         brs.wins = []
         brs.scores = []

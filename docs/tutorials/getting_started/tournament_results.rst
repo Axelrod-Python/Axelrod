@@ -165,8 +165,8 @@ repetition::
 We see that :code:`Cooperator` has no difference in score with all players
 except against the :code:`Defector`::
 
-    >>> results.score_diffs[0]
-    [[-0.0, -0.0, -0.0], [-5.0, -5.0, -5.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
+    >>> results.score_diffs[0][1]
+    [-5.0, -5.0, -5.0]
 
 Payoff difference means
 -----------------------

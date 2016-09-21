@@ -1,4 +1,7 @@
 from __future__ import absolute_import
+import os
+
+on_windows = os.name == 'nt'
 
 # The order of imports matters!
 from .actions import Actions, flip_action
