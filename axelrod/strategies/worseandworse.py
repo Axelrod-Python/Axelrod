@@ -3,12 +3,11 @@ from random import randint
 
 class WorseAndWorse (Player):
     """
-    Defects with probability of 'current turn / total no. of turns'. Therefore it
-    is more and more likely to defect as the round goes on.
+    Defects with probability of 'current turn / total no. of turns'. Therefore
+    it is more and more likely to defect as the round goes on.
 
-    Names
-
-    - worse_and_worse: [PRISON1998]
+    Names:
+        - worse_and_worse: [PRISON1998]
 
     """
 
@@ -24,7 +23,13 @@ class WorseAndWorse (Player):
     }
 
     def strategy(self, opponent):
+        current_round = len(self.history) + 1
         expected_length = self.match_attributes['length']
-        if randint(0, expected_length) < (len(self.history) + 1):
-            return Actions.D
-        return Actions.C
+        try:
+            if randint(0, expected_length) < (current_round):
+                return Actions.D
+            return Actions.C
+        except:
+            if randint(0, 200) < (current_round):
+                return Actions.D
+            return Actions.C
