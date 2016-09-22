@@ -739,7 +739,7 @@ class ResultSet(object):
         """
         summary_data = self.summarise()
         with open(filename, 'w') as csvfile:
-            writer = csv.writer(csvfile)
+            writer = csv.writer(csvfile, lineterminator='\n')
             writer.writerow(self.player._fields)
             for player in summary_data:
                 writer.writerow(player)

@@ -1,3 +1,27 @@
+# v1.10.0, 2016-09-22
+
+Windows support! Summarise method for results, new strategies, and code of
+conduct as well as minor fixes.
+
+- Various fixes to windows bugs (thanks to the PyConUK sprint!):
+  https://github.com/Axelrod-Python/Axelrod/pull/711
+  https://github.com/Axelrod-Python/Axelrod/pull/714
+  https://github.com/Axelrod-Python/Axelrod/pull/721
+- The result set has a summary:
+  https://github.com/Axelrod-Python/Axelrod/pull/707
+- Three new strategies (Gradual killer, easy go, Grudger alternator):
+  https://github.com/Axelrod-Python/Axelrod/pull/715
+- Code of conduct:
+  https://github.com/Axelrod-Python/Axelrod/pull/705
+- Fix of some tests:
+  https://github.com/Axelrod-Python/Axelrod/pull/716
+- Fix of link in docs:
+  https://github.com/Axelrod-Python/Axelrod/pull/722
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.9.0...v1.10.0
+
 # v1.9.0, 2016-09-09
 
 Filtering of strategy classes with a filterset dictionary.
