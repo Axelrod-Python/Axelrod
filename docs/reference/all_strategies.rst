@@ -124,5 +124,5 @@ Here are the docstrings of all the strategies in the library.
    :members:
    :undoc-members:
 .. automodule:: axelrod.strategies.worseandworse
-  :members:
-  :undoc-members:
+   :members:
+   :undoc-members:
