@@ -1,5 +1,7 @@
 from axelrod import Actions, Player
-from random import randint
+from random import randint, choice
+
+C, D = Actions.C, Actions.D
 
 class WorseAndWorse (Player):
     """
@@ -27,9 +29,7 @@ class WorseAndWorse (Player):
         expected_length = self.match_attributes['length']
         try:
             if randint(0, expected_length) < (current_round):
-                return Actions.D
-            return Actions.C
-        except:
-            if randint(0, 200) < (current_round):
-                return Actions.D
-            return Actions.C
+                return D
+            return C
+        except ValueError:
+            choice([C, D])
