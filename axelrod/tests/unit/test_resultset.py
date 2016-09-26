@@ -500,10 +500,14 @@ class TestResultSetFromFile(unittest.TestCase):
                                progress_bar=False)
 
         # Not testing full equality because of floating point errors.
-        self.assertEqual(rs.ranked_names, brs.ranked_names)
         self.assertEqual(rs.scores, brs.scores)
+        self.assertEqual(rs.wins, brs.wins)
         self.assertEqual(rs.match_lengths, brs.match_lengths)
         self.assertEqual(rs.cooperation, brs.cooperation)
+
+        # Test that players are in the results (due to floating point errors
+        # the order might not be the same)
+        self.assertEqual(set(rs.ranked_names), set(brs.ranked_names))
 
     @given(tournament=prob_end_tournaments(max_size=5,
                                            min_prob_end=.7,
