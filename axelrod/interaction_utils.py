@@ -91,8 +91,20 @@ def compute_normalised_cooperation(interactions):
 def compute_state_distribution(interactions):
     """
     Returns the count of each state for a set of interactions.
+
+    Parameters
+    ----------
+    interactions : list of tuples
+        A list containing the interactions of the match as shown at the top of
+        this file.
+
+    Returns
+    ----------
+    Counter(interactions) : Counter Object
+        Dictionary where the keys are the states and the values are the number
+        of times that state occurs.
     """
-    if len(interactions) == 0:
+    if not interactions:
         return None
     return Counter(interactions)
 
@@ -100,17 +112,30 @@ def compute_state_distribution(interactions):
 def compute_normalised_state_distribution(interactions):
     """
     Returns the normalized count of each state for a set of interactions.
+
+    Parameters
+    ----------
+    interactions : list of tuples
+        A list containing the interactions of the match as shown at the top of
+        this file.
+
+    Returns
+    ----------
+    normalized_count : Counter Object
+        Dictionary where the keys are the states and the values are a normalized
+        count of the number of times that state occurs.
     """
-    if len(interactions) == 0:
+    if not interactions:
         return None
 
-    normalized_count = Counter(interactions)
-    total = sum(normalized_count.values(), 0.0)
+    interactions_count = Counter(interactions)
+    total = sum(interactions_count.values(), 0.0)
     # By starting the sum with 0.0 we make sure total is a floating point value,
-    # avoiding the Python 2 floor division behaviour of / with integer operands (Stack Overflow)
+    # avoiding the Python 2 floor division behaviour of / with integer operands
+    # (Stack Overflow)
 
-    for key in normalized_count:
-        normalized_count[key] /= total
+    normalized_count = Counter({key: value / total for key, value in
+                                interactions_count.items()})
     return normalized_count
 
 
