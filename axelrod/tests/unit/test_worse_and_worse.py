@@ -24,23 +24,35 @@ class TestWorseAndWorse(TestPlayer):
 
     def test_strategy(self):
         """
-        Test that the stratergy chooses to defect according to the correct
-        probability.
+        Test that the strategy gives expected behaviour
         """
-        if sys.version_info[0] == 2:
-            # Python 2.x
+        axelrod.seed(1)
+        opponent = axelrod.Cooperator()
+        player = axelrod.WorseAndWorse()
+        match = axelrod.Match((opponent, player), turns=5)
+        self.assertEqual(match.play(), [('C', 'C'),
+                                        ('C', 'D'),
+                                        ('C', 'D'),
+                                        ('C', 'D'),
+                                        ('C', 'D')])
 
-            self.responses_test([], [], [D, C, C, D, D], random_seed=1,
-            tournament_length=5)
+        # Test that behaviour does not depend on opponent
+        opponent = axelrod.Defector()
+        player = axelrod.WorseAndWorse()
+        axelrod.seed(1)
+        match = axelrod.Match((opponent, player), turns=5)
+        self.assertEqual(match.play(), [('D', 'C'),
+                                        ('D', 'D'),
+                                        ('D', 'D'),
+                                        ('D', 'D'),
+                                        ('D', 'D')])
 
-            self.responses_test([], [], [C, C, D, D, C], random_seed=2,
-            tournament_length=5)
-
-        elif sys.version_info[0] == 3:
-            # Python 3.x
-
-            self.responses_test([], [], [C, C, D, D, D], random_seed=1,
-            tournament_length=5)
-
-            self.responses_test([], [], [D, D, D, D, D], random_seed=2,
-            tournament_length=5)
+        # Test that behaviour changes when does not know length.
+        axelrod.seed(1)
+        match = axelrod.Match((opponent, player), turns=5,
+                              match_attributes={'length': float('inf')})
+        self.assertEqual(match.play(), [('D', 'C'),
+                                        ('D', 'C'),
+                                        ('D', 'C'),
+                                        ('D', 'C'),
+                                        ('D', 'C')])
