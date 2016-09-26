@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 import tempfile
+from collections import Counter
 import axelrod
 import axelrod.interaction_utils as iu
 
@@ -17,6 +18,14 @@ class TestMatch(unittest.TestCase):
     winners = [False, 0, 1, None]
     cooperations = [(1, 1), (0, 2), (2, 1), None]
     normalised_cooperations = [(.5, .5), (0, 1), (1, .5), None]
+    state_distribution = [Counter({('C', 'D'): 1, ('D', 'C'): 1}),
+                          Counter({('D', 'C'): 2}),
+                          Counter({('C', 'C'): 1, ('C', 'D'): 1}),
+                          None]
+    normalised_state_distribution = [Counter({('C', 'D'): 0.5, ('D', 'C'): 0.5}),
+                                     Counter({('D', 'C'): 1.0}),
+                                     Counter({('C', 'C'): 0.5, ('C', 'D'): 0.5}),
+                                     None]
     sparklines = [ u'█ \n █', u'  \n██', u'██\n█ ', None ]
 
 
@@ -45,6 +54,14 @@ class TestMatch(unittest.TestCase):
     def test_compute_normalised_cooperations(self):
         for inter, coop in zip(self.interactions, self.normalised_cooperations):
             self.assertEqual(coop, iu.compute_normalised_cooperation(inter))
+
+    def test_compute_state_distribution(self):
+        for inter, dist in zip(self.interactions, self.state_distribution):
+            self.assertEqual(dist, iu.compute_state_distribution(inter))
+
+    def test_compute_normalised_state_distribution(self):
+        for inter, dist in zip(self.interactions, self.normalised_state_distribution):
+            self.assertEqual(dist, iu.compute_normalised_state_distribution(inter))
 
     def test_compute_sparklines(self):
         for inter, spark in zip(self.interactions, self.sparklines):

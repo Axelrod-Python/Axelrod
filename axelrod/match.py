@@ -159,6 +159,18 @@ class Match(object):
         """Returns the count of cooperations by each player per turn"""
         return iu.compute_normalised_cooperation(self.result)
 
+    def state_distribution(self):
+        """
+        Returns the count of each state for a set of interactions.
+        """
+        return iu.compute_state_distribution(self.result)
+
+    def normalised_state_distribution(self):
+        """
+        Returns the normalized count of each state for a set of interactions.
+        """
+        return iu.compute_normalised_state_distribution(self.result)
+
     def sparklines(self, c_symbol=u'█', d_symbol=u' '):
         return iu.compute_sparklines(self.result, c_symbol, d_symbol)
 
