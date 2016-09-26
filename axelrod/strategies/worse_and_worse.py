@@ -1,5 +1,4 @@
-from axelrod import Actions, Player
-from random import randint, choice
+from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
 
@@ -27,9 +26,5 @@ class WorseAndWorse (Player):
     def strategy(self, opponent):
         current_round = len(self.history) + 1
         expected_length = self.match_attributes['length']
-        try:
-            if randint(0, expected_length) < (current_round):
-                return D
-            return C
-        except ValueError:
-            choice([C, D])
+        probability = 1 - float(current_round) / expected_length
+        return random_choice(probability)
