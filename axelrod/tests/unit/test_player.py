@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import copy
 import inspect
 import random
 import unittest
@@ -89,7 +88,7 @@ def test_responses(test_class, P1, P2, history_1, history_2, responses,
     """
 
     if random_seed:
-        random.seed(random_seed)
+        axelrod.seed(random_seed)
     # Force the histories, In case either history is impossible or if some
     # internal state needs to be set, actually submit to moves to the strategy
     # method. Still need to append history manually.
