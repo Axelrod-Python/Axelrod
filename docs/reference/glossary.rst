@@ -91,3 +91,9 @@ A tournament
 ------------
 
 A **tournament** is a repetition of round robins so as to smooth out stochastic effects.
+
+Noise
+-----
+
+A match or tournament can be played with **noise**: this is the probability that
+indicates the chance of an action dictated by a strategy being swapped.

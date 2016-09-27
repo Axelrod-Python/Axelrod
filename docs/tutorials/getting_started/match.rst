@@ -16,7 +16,9 @@ For example, to create a 5 turn match between :code:`Cooperator` and
     >>> match.play()
     [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
 
-By default, a match will not be noisy, but you can introduce noise if you wish::
+By default, a match will not be noisy, but you can introduce noise if you wish.
+Noise is the probability with which any action dictated by a strategy will be
+swapped::
 
     >>> match = axl.Match(players=players, turns=5, noise=0.2)
     >>> match.play()  # doctest: +SKIP
