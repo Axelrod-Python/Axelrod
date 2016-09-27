@@ -1,5 +1,3 @@
-import random
-
 from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
@@ -10,11 +8,12 @@ class WorseAndWorse (Player):
     it is more and more likely to defect as the round goes on.
 
     Names:
-        - worse_and_worse: [PRISON1998]
+        - worse_and_worse: Source code available at the download tab of
+                            [PRISON1998].
 
     """
 
-    name = 'Worse and worse'
+    name = 'Worse and Worse'
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
@@ -27,19 +26,20 @@ class WorseAndWorse (Player):
 
     def strategy(self, opponent):
         current_round = len(self.history) + 1
-        if random.randint(0, 1000) < current_round:
-            return D
-        return C
+        probability = 1 - float(current_round) / 1000
+        return random_choice(probability)
 
 
-class WorseAndWorseRandom (Player):
+class KnowledgeableWorseAndWorse (Player):
     """
     This strategy is based of 'Worse And Worse' but will defect with probability
     of 'current turn / total no. of turns'.
 
+    Names:
+        - Knowledgeable Worse and Worse: Original name by Adam Pohl
     """
 
-    name = 'Worse and worse random'
+    name = 'Knowledgeable Worse and Worse'
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,

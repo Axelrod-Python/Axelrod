@@ -8,7 +8,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestWorseAndWorse(TestPlayer):
 
-    name = "Worse and worse"
+    name = "Worse and Worse"
     player = axelrod.WorseAndWorse
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -25,12 +25,17 @@ class TestWorseAndWorse(TestPlayer):
         Test that the strategy gives expected behaviour
         """
 
-        axelrod.seed(1)
+        axelrod.seed(8)
         opponent = axelrod.Cooperator()
         player = axelrod.WorseAndWorse()
-        match = axelrod.Match((opponent, player), turns=5)
+        match = axelrod.Match((opponent, player), turns=10)
         self.assertEqual(match.play(), [('C', 'C'),
                                         ('C', 'C'),
+                                        ('C', 'C'),
+                                        ('C', 'C'),
+                                        ('C', 'C'),
+                                        ('C', 'C'),
+                                        ('C', 'D'),
                                         ('C', 'C'),
                                         ('C', 'C'),
                                         ('C', 'C')])
@@ -38,10 +43,15 @@ class TestWorseAndWorse(TestPlayer):
         # Test that behaviour does not depend on opponent
         opponent = axelrod.Defector()
         player = axelrod.WorseAndWorse()
-        axelrod.seed(1)
-        match = axelrod.Match((opponent, player), turns=5)
+        axelrod.seed(8)
+        match = axelrod.Match((opponent, player), turns=10)
         self.assertEqual(match.play(), [('D', 'C'),
                                         ('D', 'C'),
+                                        ('D', 'C'),
+                                        ('D', 'C'),
+                                        ('D', 'C'),
+                                        ('D', 'C'),
+                                        ('D', 'D'),
                                         ('D', 'C'),
                                         ('D', 'C'),
                                         ('D', 'C')])
@@ -49,8 +59,8 @@ class TestWorseAndWorse(TestPlayer):
 
 class TestWorseAndWorseRandom(TestPlayer):
 
-    name = "Worse and worse random"
-    player = axelrod.WorseAndWorseRandom
+    name = "Knowledgeable Worse and Worse"
+    player = axelrod.KnowledgeableWorseAndWorse
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
@@ -67,7 +77,7 @@ class TestWorseAndWorseRandom(TestPlayer):
         """
         axelrod.seed(1)
         opponent = axelrod.Cooperator()
-        player = axelrod.WorseAndWorseRandom()
+        player = axelrod.KnowledgeableWorseAndWorse()
         match = axelrod.Match((opponent, player), turns=5)
         self.assertEqual(match.play(), [('C', 'C'),
                                         ('C', 'D'),
@@ -77,7 +87,7 @@ class TestWorseAndWorseRandom(TestPlayer):
 
         # Test that behaviour does not depend on opponent
         opponent = axelrod.Defector()
-        player = axelrod.WorseAndWorseRandom()
+        player = axelrod.KnowledgeableWorseAndWorse()
         axelrod.seed(1)
         match = axelrod.Match((opponent, player), turns=5)
         self.assertEqual(match.play(), [('D', 'C'),
