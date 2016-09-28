@@ -1,3 +1,4 @@
+from __future__ import print_function
 from axelrod import Actions, Player, init_args
 from builtins import input
 
@@ -39,6 +40,10 @@ class Human(Player):
         Player.__init__(self)
         self.name = name
 
-    @staticmethod
-    def strategy(opponent):
+    def strategy(self, opponent):
+        if not opponent.history:
+            print('Starting new match')
+        else:
+            print('Them: ', opponent.history)
+            print('You:  ', self.history)
         return human_input()
