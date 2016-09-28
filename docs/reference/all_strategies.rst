@@ -60,6 +60,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.gobymajority
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.gradualkiller
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.grudger
    :members:
    :undoc-members:
@@ -120,6 +123,6 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.titfortat
    :members:
    :undoc-members:
-.. automodule:: axelrod.strategies.gradualkiller
+.. automodule:: axelrod.strategies.worse_and_worse
    :members:
    :undoc-members:
