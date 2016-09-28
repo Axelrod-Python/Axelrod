@@ -71,7 +71,7 @@ class Human(Player):
             toolbar = None
 
         action = prompt(
-            'Turn {} action [C or D]: '.format(len(self.history) + 1),
+            'Turn {} action [C or D] for {}: '.format(len(self.history) + 1, self.name),
             validator=ActionValidator(),
             get_bottom_toolbar_tokens=toolbar,
             style=toolbar_style)
