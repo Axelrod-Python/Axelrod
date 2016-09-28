@@ -1,8 +1,19 @@
-from __future__ import print_function
 from axelrod import Actions, Player, init_args
-import sys
+from prompt_toolkit import prompt
+from prompt_toolkit.validation import Validator, ValidationError
 
 C, D = Actions.C, Actions.D
+
+
+class ActionValidator(Validator):
+
+    def validate(self, document):
+        text = document.text
+
+        if text and text not in ['C', 'D']:
+            raise ValidationError(
+                message='Action must be C or D',
+                cursor_position=0)
 
 
 def human_input():
@@ -16,19 +27,7 @@ def human_input():
         Either 'C' or 'D'
     """
 
-    # Input functions changed between python 2 and python 3. This condition
-    # checks the python version being used and sets the correct function
-    # accordingly.
-    if sys.version_info[0] >= 3:
-        get_input = input
-    else:
-        get_input = raw_input
-
-    prompt = 'Action [C or D]: '
-
-    action = get_input(prompt)
-    while action.upper() not in ['C', 'D']:
-        action = input(prompt)
+    action = prompt('Action [C or D]: ', validator=ActionValidator())
 
     return action.upper()
 
