@@ -1,6 +1,14 @@
 from axelrod import Actions, Player, init_args
+from builtins import input
 
 C, D = Actions.C, Actions.D
+
+
+def human_input():
+    action = input('Action [C or D]: ')
+    while action not in ['C', 'D']:
+        action = input('Action: ')
+    return action
 
 
 class Human(Player):
@@ -33,7 +41,4 @@ class Human(Player):
 
     @staticmethod
     def strategy(opponent):
-        action = raw_input('action: ')
-        while action not in Actions:
-            action = raw_input('action: ')
-        return action
+        return human_input()
