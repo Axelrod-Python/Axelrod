@@ -64,14 +64,20 @@ class Human(Player):
 
         self.opponent_history = opponent.history
 
+        current_turn = len(self.history) + 1
         if self.history:
             toolbar = self.history_toolbar
+            print('{}Turn {}: {} played {}, opponent played {}'.format(
+                linesep, current_turn - 1, self.name, self.history[-1],
+                opponent.history[-1]))
         else:
             print('{}Starting new match'.format(linesep))
             toolbar = None
 
+
         action = prompt(
-            'Turn {} action [C or D] for {}: '.format(len(self.history) + 1, self.name),
+            'Turn {} action [C or D] for {}: '.format(
+                current_turn, self.name),
             validator=ActionValidator(),
             get_bottom_toolbar_tokens=toolbar,
             style=toolbar_style)
