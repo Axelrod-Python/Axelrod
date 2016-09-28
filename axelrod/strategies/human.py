@@ -6,6 +6,19 @@ C, D = Actions.C, Actions.D
 
 
 def human_input():
+    """
+    A function to fetch keyboard input from a user, validate that is either
+    'C' or 'D' and return the resulting action.
+
+    Returns
+    -------
+    string
+        Either 'C' or 'D'
+    """
+
+    # Input functions changed between python 2 and python 3. This condition
+    # checks the python version being used and sets the correct function
+    # accordingly.
     if sys.version_info[0] >= 3:
         get_input = input
     else:
@@ -14,10 +27,10 @@ def human_input():
     prompt = 'Action [C or D]: '
 
     action = get_input(prompt)
-    while action not in ['C', 'D']:
+    while action.upper() not in ['C', 'D']:
         action = input(prompt)
 
-    return action
+    return action.upper()
 
 
 class Human(Player):
