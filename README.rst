@@ -42,6 +42,9 @@ or again, just let us know) :) If there is something that is missing in this
 library and that you would like implemented so as to be able to carry out a
 project please open an issue and let us know!
 
+**Note: this library will be dropping support for python 2 on the 1st of
+December 2017.**
+
 Installation
 ============
 
