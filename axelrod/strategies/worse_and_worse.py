@@ -7,9 +7,11 @@ class WorseAndWorse (Player):
     Defects with probability of 'current turn / 1000'. Therefore
     it is more and more likely to defect as the round goes on.
 
+    Source code available at the download tab of [PRISON1998]
+
+
     Names:
-        - worse_and_worse: Source code available at the download tab of
-                            [PRISON1998].
+        - worse_and_worse: [PRISON1998].
 
     """
 
