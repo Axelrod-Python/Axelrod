@@ -1,3 +1,18 @@
+# v1.11.0, 2016-09-28
+
+State distribution functions, new strategies and minor test fix.
+
+- Matches have a method to give state distribution:
+  https://github.com/Axelrod-Python/Axelrod/pull/717
+- Two new strategies: Worse and Worse and Knowledgeable Worse and Worse.
+  https://github.com/Axelrod-Python/Axelrod/pull/724
+- Minor fix of a test that would sometimes fail due to floating point error.
+  https://github.com/Axelrod-Python/Axelrod/pull/725
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.10.0...v1.11.0
+
 # v1.10.0, 2016-09-22
 
 Windows support! Summarise method for results, new strategies, and code of
