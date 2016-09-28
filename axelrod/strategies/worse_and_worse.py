@@ -7,11 +7,11 @@ class WorseAndWorse (Player):
     Defects with probability of 'current turn / 1000'. Therefore
     it is more and more likely to defect as the round goes on.
 
-    Source code available at the download tab of [PRISON1998]
+    Source code available at the download tab of [PRISON1998]_
 
 
     Names:
-        - worse_and_worse: [PRISON1998].
+        - Worse and Worse: [PRISON1998]_
 
     """
 
@@ -34,7 +34,7 @@ class WorseAndWorse (Player):
 
 class KnowledgeableWorseAndWorse (Player):
     """
-    This strategy is based of 'Worse And Worse' but will defect with probability
+    This strategy is based on 'Worse And Worse' but will defect with probability
     of 'current turn / total no. of turns'.
 
     Names:
