@@ -57,7 +57,8 @@ class Human(Player):
 
     def history_toolbar(self, cli):
         my_history = [self.symbols[action] for action in self.history]
-        opponent_history = [self.symbols[action] for action in self.opponent_history]
+        opponent_history = [
+            self.symbols[action] for action in self.opponent_history]
         history = list(zip(my_history, opponent_history))
         if self.history:
             content = 'History ({}, opponent): {}'.format(self.name, history)
