@@ -11,9 +11,11 @@ def human_input():
     else:
         get_input = raw_input
 
-    action = get_input('Action [C or D]: ')
+    prompt = 'Action [C or D]: '
+
+    action = get_input(prompt)
     while action not in ['C', 'D']:
-        action = input('Action: ')
+        action = input(prompt)
 
     return action
 
