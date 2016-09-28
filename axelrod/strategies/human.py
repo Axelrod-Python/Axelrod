@@ -74,7 +74,6 @@ class Human(Player):
             print('{}Starting new match'.format(linesep))
             toolbar = None
 
-
         action = prompt(
             'Turn {} action [C or D] for {}: '.format(
                 current_turn, self.name),
