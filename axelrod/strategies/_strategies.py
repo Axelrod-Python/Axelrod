@@ -32,6 +32,7 @@ from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
     SoftGrudger, GrudgerAlternator, EasyGo)
 from .grumpy import Grumpy
 from .handshake import Handshake
+from .human import Human
 from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
     MathConstantHunter, RandomHunter, EventualCycleHunter)
@@ -202,5 +203,4 @@ all_strategies = [
     ZDGen2,
     ZDSet2,
     e,
-    
 ]
