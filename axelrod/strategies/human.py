@@ -1,35 +1,26 @@
+from __future__ import unicode_literals
+from os import linesep
 from axelrod import Actions, Player, init_args
 from prompt_toolkit import prompt
+from prompt_toolkit.token import Token
+from prompt_toolkit.styles import style_from_dict
 from prompt_toolkit.validation import Validator, ValidationError
 
 C, D = Actions.C, Actions.D
 
 
 class ActionValidator(Validator):
+    """
+    A class to validate input from prompt_toolkit.prompt
+    """
 
     def validate(self, document):
         text = document.text
 
-        if text and text not in ['C', 'D']:
+        if text and text.upper() not in ['C', 'D']:
             raise ValidationError(
                 message='Action must be C or D',
                 cursor_position=0)
-
-
-def human_input():
-    """
-    A function to fetch keyboard input from a user, validate that is either
-    'C' or 'D' and return the resulting action.
-
-    Returns
-    -------
-    string
-        Either 'C' or 'D'
-    """
-
-    action = prompt('Action [C or D]: ', validator=ActionValidator())
-
-    return action.upper()
 
 
 class Human(Player):
@@ -60,10 +51,29 @@ class Human(Player):
         Player.__init__(self)
         self.name = name
 
+    def history_toolbar(self, cli):
+        history = list(zip(self.history, self.opponent_history))
+        if self.history:
+            content = 'History (You, Them): {}'.format(history)
+        return [(Token.Toolbar, content)]
+
     def strategy(self, opponent):
-        if not opponent.history:
-            print('Starting new match')
+        toolbar_style = style_from_dict({
+            Token.Toolbar: '#ffffff bg:#333333',
+        })
+
+        self.opponent_history = opponent.history
+
+        if self.history:
+            toolbar = self.history_toolbar
         else:
-            print('Them: ', opponent.history)
-            print('You:  ', self.history)
-        return human_input()
+            print('{}Starting new match'.format(linesep))
+            toolbar = None
+
+        action = prompt(
+            'Turn {} action [C or D]: '.format(len(self.history) + 1),
+            validator=ActionValidator(),
+            get_bottom_toolbar_tokens=toolbar,
+            style=toolbar_style)
+
+        return action.upper()
