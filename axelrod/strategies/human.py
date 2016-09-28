@@ -41,7 +41,7 @@ class Human(Player):
     }
 
     @init_args
-    def __init__(self, name='Human'):
+    def __init__(self, name='Human', c_symbol='C', d_symbol='D'):
         """
         Parameters
         ----------
@@ -50,9 +50,15 @@ class Human(Player):
         """
         Player.__init__(self)
         self.name = name
+        self.symbols = {
+            C: c_symbol,
+            D: d_symbol
+        }
 
     def history_toolbar(self, cli):
-        history = list(zip(self.history, self.opponent_history))
+        my_history = [self.symbols[action] for action in self.history]
+        opponent_history = [self.symbols[action] for action in self.opponent_history]
+        history = list(zip(my_history, opponent_history))
         if self.history:
             content = 'History ({}, opponent): {}'.format(self.name, history)
         return [(Token.Toolbar, content)]
@@ -68,8 +74,9 @@ class Human(Player):
         if self.history:
             toolbar = self.history_toolbar
             print('{}Turn {}: {} played {}, opponent played {}'.format(
-                linesep, current_turn - 1, self.name, self.history[-1],
-                opponent.history[-1]))
+                linesep, current_turn - 1, self.name,
+                self.symbols[self.history[-1]],
+                self.symbols[opponent.history[-1]]))
         else:
             print('{}Starting new match'.format(linesep))
             toolbar = None
