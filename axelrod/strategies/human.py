@@ -33,4 +33,7 @@ class Human(Player):
 
     @staticmethod
     def strategy(opponent):
-        return C
+        action = raw_input('action: ')
+        while action not in Actions:
+            action = raw_input('action: ')
+        return action
