@@ -1,14 +1,20 @@
 from __future__ import print_function
 from axelrod import Actions, Player, init_args
-from builtins import input
+import sys
 
 C, D = Actions.C, Actions.D
 
 
 def human_input():
-    action = input('Action [C or D]: ')
+    if sys.version_info[0] >= 3:
+        get_input = input
+    else:
+        get_input = raw_input
+
+    action = get_input('Action [C or D]: ')
     while action not in ['C', 'D']:
         action = input('Action: ')
+
     return action
 
 
