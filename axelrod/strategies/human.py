@@ -54,7 +54,7 @@ class Human(Player):
     def history_toolbar(self, cli):
         history = list(zip(self.history, self.opponent_history))
         if self.history:
-            content = 'History (You, Them): {}'.format(history)
+            content = 'History ({}, opponent): {}'.format(self.name, history)
         return [(Token.Toolbar, content)]
 
     def strategy(self, opponent):
