@@ -3,12 +3,15 @@ from axelrod import Actions
 from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
 from prompt_toolkit.validation import ValidationError
+from prompt_toolkit.token import Token
 
 C, D = Actions.C, Actions.D
 
 
 class TestDocument(object):
-
+    """
+    A class to mimic a prompt-toolkit document having just the text attribute.
+    """
     def __init__(self, text):
         self.text = text
 
@@ -43,3 +46,13 @@ class TestHumanClass(TestPlayer):
         human = Human(name='test human', c_symbol='X', d_symbol='Y')
         self.assertEqual(human.name, 'test human')
         self.assertEqual(human.symbols, {C: 'X', D: 'Y'})
+
+    def test_history_toolbar(self):
+        human = Human()
+        expected_content = ''
+        self.assertEqual(human._history_toolbar(None)[0][1], expected_content)
+
+        human.history = ['C']
+        human.opponent_history = ['C']
+        expected_content = "History (Human, opponent): [('C', 'C')]"
+        self.assertEqual(human._history_toolbar(None)[0][1], expected_content)
