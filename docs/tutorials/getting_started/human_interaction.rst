@@ -11,5 +11,19 @@ It is possible to play interactively using the Human strategy::
     >>> match = axl.Match(players, turns=3)
     >>> match.play() #doctest: +SKIP
 
-You will be prompted for the action to play at each turn and will be able to
-access the results of the match as described in :ref:`creating_matches`
+You will be prompted for the action to play at each turn:
+
+.. code-block:: bash
+
+    Starting new match
+    Turn 1 action [C or D] for me: C
+
+    Turn 1: me played C, opponent played C
+    Turn 2 action [C or D] for me: D
+
+    Turn 2: me played D, opponent played C
+    Turn 3 action [C or D] for me: C
+    [('C', 'C'), ('C', 'D'), ('D', 'C')]
+
+after this, the :code:`match` object can be manipulated as described in
+:ref:`creating_matches`
