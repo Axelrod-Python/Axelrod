@@ -16,3 +16,4 @@ Contents:
    interactions.rst
    visualising_results.rst
    moran.rst
+   human_interaction.rst
