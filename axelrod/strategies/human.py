@@ -12,6 +12,7 @@ C, D = Actions.C, Actions.D
 class ActionValidator(Validator):
     """
     A class to validate input from prompt_toolkit.prompt
+    Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#input-validation
     """
 
     def validate(self, document):
@@ -47,6 +48,10 @@ class Human(Player):
         ----------
         name: string
             The name of the human player
+        c_symbol: string
+            The symbol to denote cooperation
+        d_symbol: string
+            The symbol to denote defection
         """
         Player.__init__(self)
         self.name = name
@@ -54,8 +59,13 @@ class Human(Player):
             C: c_symbol,
             D: d_symbol
         }
+        self.opponent_history = []
 
     def history_toolbar(self, cli):
+        """
+        A prompt-toolkit function to define the bottom toolbar.
+        Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#adding-a-bottom-toolbar
+        """
         my_history = [self.symbols[action] for action in self.history]
         opponent_history = [
             self.symbols[action] for action in self.opponent_history]
