@@ -32,6 +32,11 @@ class Human(Player):
     """
     A strategy that prompts for keyboard input rather than deriving its own
     action.
+
+    This strategy is intended to be used interactively by a user playing
+    against other strategies from within the rest of the library. Unlike
+    other strategies, it is designed to be a teaching aid rather than a
+    research tool.
     """
 
     name = 'Human'
