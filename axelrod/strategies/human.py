@@ -76,6 +76,8 @@ class Human(Player):
         history = list(zip(my_history, opponent_history))
         if self.history:
             content = 'History ({}, opponent): {}'.format(self.name, history)
+        else:
+            content = ''
         return [(Token.Toolbar, content)]
 
     def _status_messages(self):
@@ -131,13 +133,12 @@ class Human(Player):
 
     def strategy(self, opponent, input_function=None):
         """
-        Parameters
-        ----------
-        opponent: axelrod.Player
-        input_function: function
-            Which returns a valid Action.
-            This is mainly used for testing in order to by-pass the need
-            for human keyboard input.
+        Ordinarily, the strategy prompts for keyboard input rather than
+        deriving its own action.
+
+        However, it is also possible to pass a function which returns a valid
+        action. This is mainly used for testing purposes in order to by-pass
+        the need for human interaction.
         """
 
         self.opponent_history = opponent.history
