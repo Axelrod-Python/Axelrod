@@ -8,6 +8,10 @@ from prompt_toolkit.validation import Validator, ValidationError
 
 C, D = Actions.C, Actions.D
 
+toolbar_style = style_from_dict({
+    Token.Toolbar: '#ffffff bg:#333333',
+})
+
 
 class ActionValidator(Validator):
     """
@@ -75,10 +79,6 @@ class Human(Player):
         return [(Token.Toolbar, content)]
 
     def strategy(self, opponent):
-        toolbar_style = style_from_dict({
-            Token.Toolbar: '#ffffff bg:#333333',
-        })
-
         # Use an attribute so that the opponent's history is
         # available to the history_toolbar function.
         self.opponent_history = opponent.history
