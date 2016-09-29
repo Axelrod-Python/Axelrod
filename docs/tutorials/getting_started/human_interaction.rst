@@ -5,7 +5,7 @@ Human Interaction
 
 It is possible to play interactively using the Human strategy::
 
-    >>> import axelrod as axelrod
+    >>> import axelrod as axl
     >>> me = axl.Human(name='me')
     >>> players = [axl.TitForTat(), me]
     >>> match = axl.Match(players, turns=3)
