@@ -1,7 +1,10 @@
 from unittest import TestCase
+from axelrod import Actions
 from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
 from prompt_toolkit.validation import ValidationError
+
+C, D = Actions.C, Actions.D
 
 
 class TestDocument(object):
@@ -35,3 +38,8 @@ class TestHumanClass(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    def test_init(self):
+        human = Human(name='test human', c_symbol='X', d_symbol='Y')
+        self.assertEqual(human.name, 'test human')
+        self.assertEqual(human.symbols, {C: 'X', D: 'Y'})
