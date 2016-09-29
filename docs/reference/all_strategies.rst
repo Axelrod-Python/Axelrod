@@ -72,9 +72,6 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.handshake
    :members:
    :undoc-members:
-.. automodule:: axelrod.strategies.human
-   :members:
-   :undoc-members:
 .. automodule:: axelrod.strategies.hunter
    :members:
    :undoc-members:
