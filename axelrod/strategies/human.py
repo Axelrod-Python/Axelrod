@@ -97,9 +97,9 @@ class Human(Player):
             toolbar = self.history_toolbar
             print_statement = (
                 '{}Turn {}: {} played {}, opponent played {}'.format(
-                linesep, len(self.history), self.name,
-                self.symbols[self.history[-1]],
-                self.symbols[self.opponent_history[-1]])
+                    linesep, len(self.history), self.name,
+                    self.symbols[self.history[-1]],
+                    self.symbols[self.opponent_history[-1]])
             )
         else:
             toolbar = None
@@ -110,19 +110,43 @@ class Human(Player):
             'print': print_statement
         }
 
-    def strategy(self, opponent):
-        # Use an attribute so that the opponent's history is
-        # available to the history_toolbar function which has a signature
-        # defined by the prompt-toolkit package.
-        self.opponent_history = opponent.history
+    def _get_human_input(self):
+        """
+        A method to prompt the user for input, validate it and display
+        the bottom toolbar.
 
-        status_messages = self._status_messages()
-        print(status_messages['print'])
+        Returns
+        -------
+        string
+            Uppercase C or D indicating the action to play
+        """
         action = prompt(
             'Turn {} action [C or D] for {}: '.format(
                 len(self.history) + 1, self.name),
             validator=ActionValidator(),
-            get_bottom_toolbar_tokens=status_messages['toolbar'],
+            get_bottom_toolbar_tokens=self.status_messages['toolbar'],
             style=toolbar_style)
 
         return action.upper()
+
+    def strategy(self, opponent, input_function=None):
+        """
+        Parameters
+        ----------
+        opponent: axelrod.Player
+        input_function: function
+            Which returns a valid Action.
+            This is mainly used for testing in order to by-pass the need
+            for human keyboard input.
+        """
+
+        self.opponent_history = opponent.history
+        self.status_messages = self._status_messages()
+        print(self.status_messages['print'])
+
+        if not input_function:
+            action = self._get_human_input()
+        else:
+            action = input_function()
+
+        return action
