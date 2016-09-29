@@ -58,9 +58,11 @@ class Human(Player):
         name: string
             The name of the human player
         c_symbol: string
-            The symbol to denote cooperation
+            A symbol to denote cooperation within the history toolbar
+            and prompt
         d_symbol: string
-            The symbol to denote defection
+            A symbol to denote defection within the history toolbar
+            and prompt
         """
         Player.__init__(self)
         self.name = name
