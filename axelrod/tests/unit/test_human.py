@@ -73,7 +73,8 @@ class TestHumanClass(TestPlayer):
         human.history = ['C']
         human.opponent_history = ['C']
         expected_print_message = (
-            '{}Turn 1: Human played C, opponent played C'.format(linesep)
+            '{}Turn 1: Human played {}, opponent played {}'.format(
+                linesep, human.history[0], human.opponent_history[0])
         )
         actual_messages = human._status_messages()
         self.assertEqual(actual_messages['print'], expected_print_message)
