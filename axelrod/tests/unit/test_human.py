@@ -4,6 +4,7 @@ from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
 from prompt_toolkit.validation import ValidationError
 from prompt_toolkit.token import Token
+from os import linesep
 
 C, D = Actions.C, Actions.D
 
@@ -58,3 +59,19 @@ class TestHumanClass(TestPlayer):
         expected_content = "History (Human, opponent): [('C', 'C')]"
         actual_content = human._history_toolbar(None)[0][1]
         self.assertEqual(actual_content, expected_content)
+
+    def test_status_messages(self):
+        human = Human()
+        expected_messages = {
+            'toolbar': None,
+            'print': '{}Starting new match'.format(linesep)
+        }
+        actual_messages = human._status_messages()
+        self.assertEqual(actual_messages, expected_messages)
+
+        human.history = ['C']
+        human.opponent_history = ['C']
+        expected_print_message = '{}Turn 1: Human played C, opponent played C'.format(linesep)
+        actual_messages = human._status_messages()
+        self.assertEqual(actual_messages['print'], expected_print_message)
+        self.assertIsNotNone(actual_messages['toolbar'])
