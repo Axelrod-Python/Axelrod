@@ -3,7 +3,6 @@ from axelrod import Actions, Player
 from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
 from prompt_toolkit.validation import ValidationError
-from prompt_toolkit.token import Token
 from os import linesep
 
 C, D = Actions.C, Actions.D
@@ -13,6 +12,7 @@ class TestDocument(object):
     """
     A class to mimic a prompt-toolkit document having just the text attribute.
     """
+
     def __init__(self, text):
         self.text = text
 
