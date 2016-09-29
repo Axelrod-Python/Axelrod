@@ -1,5 +1,5 @@
 from unittest import TestCase
-from axelrod import Actions
+from axelrod import Actions, Player
 from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
 from prompt_toolkit.validation import ValidationError
@@ -77,3 +77,16 @@ class TestHumanClass(TestPlayer):
         actual_messages = human._status_messages()
         self.assertEqual(actual_messages['print'], expected_print_message)
         self.assertIsNotNone(actual_messages['toolbar'])
+
+    def test_get_human_input(self):
+        # There are no tests for this method.
+        # The method purely calls prompt_toolkit.prompt which is difficult to
+        # test and we therefore rely upon the test suite of the prompt_toolkit
+        # library itself.
+        pass
+
+    def test_strategy(self):
+        human = Human()
+        expected_action = 'C'
+        actual_action = human.strategy(Player(), lambda: 'C')
+        self.assertEqual(actual_action, expected_action)
