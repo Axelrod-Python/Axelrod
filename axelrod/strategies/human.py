@@ -79,8 +79,12 @@ class Human(Player):
             Token.Toolbar: '#ffffff bg:#333333',
         })
 
+        # Use an attribute so that the opponent's history is
+        # available to the history_toolbar function.
         self.opponent_history = opponent.history
 
+        # Define the history toolbar only if a match is in progress.
+        # Otherwise, print a 'Starting new match' line.
         current_turn = len(self.history) + 1
         if self.history:
             toolbar = self.history_toolbar
