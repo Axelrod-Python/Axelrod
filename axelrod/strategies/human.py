@@ -78,29 +78,51 @@ class Human(Player):
             content = 'History ({}, opponent): {}'.format(self.name, history)
         return [(Token.Toolbar, content)]
 
-    def strategy(self, opponent):
-        # Use an attribute so that the opponent's history is
-        # available to the history_toolbar function.
-        self.opponent_history = opponent.history
+    def _status_messages(self):
+        """
+        A method to define the messages printed to the console and
+        displayed in the prompt-toolkit bottom toolbar.
 
-        # Define the history toolbar only if a match is in progress.
-        # Otherwise, print a 'Starting new match' line.
-        current_turn = len(self.history) + 1
+        The bottom toolbar is defined only if a match is in progress.
+
+        The console print statement is either the result of the previous
+        turn or a message indicating that new match is starting.
+
+        Returns
+        -------
+        dict
+            mapping print or toolbar to the relevant string
+        """
         if self.history:
             toolbar = self.history_toolbar
-            print('{}Turn {}: {} played {}, opponent played {}'.format(
-                linesep, current_turn - 1, self.name,
+            print_statement = (
+                '{}Turn {}: {} played {}, opponent played {}'.format(
+                linesep, len(self.history), self.name,
                 self.symbols[self.history[-1]],
-                self.symbols[opponent.history[-1]]))
+                self.symbols[self.opponent_history[-1]])
+            )
         else:
-            print('{}Starting new match'.format(linesep))
             toolbar = None
+            print_statement = '{}Starting new match'.format(linesep)
 
+        return {
+            'toolbar': toolbar,
+            'print': print_statement
+        }
+
+    def strategy(self, opponent):
+        # Use an attribute so that the opponent's history is
+        # available to the history_toolbar function which has a signature
+        # defined by the prompt-toolkit package.
+        self.opponent_history = opponent.history
+
+        status_messages = self._status_messages()
+        print(status_messages['print'])
         action = prompt(
             'Turn {} action [C or D] for {}: '.format(
-                current_turn, self.name),
+                len(self.history) + 1, self.name),
             validator=ActionValidator(),
-            get_bottom_toolbar_tokens=toolbar,
+            get_bottom_toolbar_tokens=status_messages['toolbar'],
             style=toolbar_style)
 
         return action.upper()
