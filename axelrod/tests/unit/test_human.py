@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from unittest import TestCase
 from axelrod import Actions, Player
 from axelrod.strategies.human import Human, ActionValidator
