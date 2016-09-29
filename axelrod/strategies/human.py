@@ -65,7 +65,7 @@ class Human(Player):
         }
         self.opponent_history = []
 
-    def history_toolbar(self, cli):
+    def _history_toolbar(self, cli):
         """
         A prompt-toolkit function to define the bottom toolbar.
         Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#adding-a-bottom-toolbar
@@ -94,7 +94,7 @@ class Human(Player):
             mapping print or toolbar to the relevant string
         """
         if self.history:
-            toolbar = self.history_toolbar
+            toolbar = self._history_toolbar
             print_statement = (
                 '{}Turn {}: {} played {}, opponent played {}'.format(
                     linesep, len(self.history), self.name,
