@@ -50,9 +50,11 @@ class TestHumanClass(TestPlayer):
     def test_history_toolbar(self):
         human = Human()
         expected_content = ''
-        self.assertEqual(human._history_toolbar(None)[0][1], expected_content)
+        actual_content = human._history_toolbar(None)[0][1]
+        self.assertEqual(actual_content, expected_content)
 
         human.history = ['C']
         human.opponent_history = ['C']
         expected_content = "History (Human, opponent): [('C', 'C')]"
-        self.assertEqual(human._history_toolbar(None)[0][1], expected_content)
+        actual_content = human._history_toolbar(None)[0][1]
+        self.assertEqual(actual_content, expected_content)
