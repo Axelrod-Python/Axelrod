@@ -149,9 +149,11 @@ class Tournament(object):
             self.outputfile.close()
         else:
             result_set = ResultSet(players=[str(p) for p in self.players],
-                                     interactions=self.interactions_dict,
-                                     progress_bar=progress_bar,
-                                     game=self.game)
+                                   interactions=self.interactions_dict,
+                                   num_interactions=self.num_interactions,
+                                   nrepetitions=self.repetitions,
+                                   progress_bar=progress_bar,
+                                   game=self.game)
         return result_set
 
     def _run_serial(self, progress_bar=False):
