@@ -13,7 +13,7 @@ set. To do this we can use the `seed` function::
     >>> axl.seed(0)
     >>> results = axl.Match(players, turns=3).play()
 
-We obtain the same results is it is played with the same seed::
+We obtain the same results if it is played with the same seed::
 
     >>> axl.seed(0)
     >>> results == axl.Match(players, turns=3).play()
