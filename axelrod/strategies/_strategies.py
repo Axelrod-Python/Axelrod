@@ -13,7 +13,7 @@ from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
 from .cycler import (
     AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD,
-    CyclerDC, CyclerDDC)
+    CyclerDC, CyclerDDC, CyclerCCCDCD)
 from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .finite_state_machines import (
@@ -91,6 +91,7 @@ all_strategies = [
     CyclerCCD,
     CyclerDC,
     CyclerDDC,
+    CyclerCCCDCD,
     Darwin,
     Davis,
     Defector,
