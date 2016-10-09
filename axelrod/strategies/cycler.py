@@ -130,3 +130,14 @@ class CyclerCCCCCD(Cycler):
     @init_args
     def __init__(self, cycle="CCCCCD"):
         Cycler.__init__(self, cycle=cycle)
+
+
+class CyclerCCCDCD(Cycler):
+
+    name = 'Cycler CCCDCD'
+    classifier = copy.copy(Cycler.classifier)
+    classifier['memory_depth'] = 5
+
+    @init_args
+    def __init__(self, cycle="CCCDCD"):
+        Cycler.__init__(self, cycle=cycle)
