@@ -3,9 +3,9 @@
 Ecological Variant
 ==================
 
-In Axelrod's original work an ecological approach based on the mayoff matrix of
+In Axelrod's original work an ecological approach based on the payoff matrix of
 the tournament was used to study the evolutionary stability of each strategy.
-Whilst this bares some comparison to the :ref:`moran-process`, the later is
+Whilst this bears some comparison to the :ref:`moran-process`, the latter is
 much more widely used in the literature.
 
 To study the evolutionary stability of each strategy it is possible to create an
