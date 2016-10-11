@@ -99,6 +99,29 @@ class TestProber3(TestPlayer):
         self.responses_test([D, C, C, D, C], [C, D, C, C], [C])
 
 
+class TestProber4(TestPlayer):
+
+    name = "Prober 4"
+    player = axelrod.Prober4
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_initial_strategy(self):
+        """Starts by playing CCDCDDDCCDCDCCDCDDCD."""
+        self.responses_test([], [], [C, C, D, C, D, D, D, C, C, D,
+                                     C, D, C, C, D, C, D, D, C, D])
+#     def test_strategy(self):
+#         pass
+#
+
+
 class TestHardProber(TestPlayer):
 
     name = "Hard Prober"
