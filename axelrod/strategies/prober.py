@@ -111,6 +111,15 @@ class Prober4(Player):
     """
 
     name = 'Prober 4'
+    classifier = {
+        'stochastic': False,
+        'memory_depth': 20,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def __init__(self):
         self.probe_sequence = [C, C, D, C, D, D, D, C, C, D,
