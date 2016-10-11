@@ -104,9 +104,10 @@ class Prober3(Player):
 
 class Prober4(Player):
     """
-    Plays fixed sequence of 20 moves initially.
-    If the opponent played D for D at least 3 times more than D for C,
-    defects forever.
+    Plays initial sequence of 20 fixed moves.
+    Counts just (retaliated) and unjust defections of the opponent.
+    If the absolute difference between just and unjust defections
+    is greater than 2, defects forever.
     Otherwise cooperates for the next 5 moves, and plays TFT afterwards.
     """
 
@@ -129,7 +130,7 @@ class Prober4(Player):
         self.just_Ds = 0
         self.unjust_Ds = 0
         self.politeness_pool = [C, C, C, C, C]
-        self.is_angry = False
+        self.is_naughty = False
 
     def strategy(self, opponent):
         if len(opponent.history) == 0:
@@ -146,10 +147,11 @@ class Prober4(Player):
                         self.unjust_Ds += 1
                 return self.init_sequence[turn]
             if turn == len(self.init_sequence):
-                self.is_angry = (self.just_Ds - self.unjust_Ds >= 3)
-            if self.is_angry:
+                diff_in_Ds = abs(self.just_Ds - self.unjust_Ds)
+                self.is_naughty = (diff_in_Ds > 2)
+            if self.is_naughty:
                 return D
-            if not self.is_angry:
+            if not self.is_naughty:
                 if self.politeness_pool:
                     return self.politeness_pool.pop()
                 else:

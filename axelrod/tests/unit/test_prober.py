@@ -112,14 +112,26 @@ class TestProber4(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+    initial_sequence = [C, C, D, C, D, D, D, C, C, D,
+                        C, D, C, C, D, C, D, D, C, D]
 
     def test_initial_strategy(self):
         """Starts by playing CCDCDDDCCDCDCCDCDDCD."""
-        self.responses_test([], [], [C, C, D, C, D, D, D, C, C, D,
-                                     C, D, C, C, D, C, D, D, C, D])
-#     def test_strategy(self):
-#         pass
-#
+        self.responses_test([], [], self.initial_sequence)
+
+    def test_strategy(self):
+        # Defects forever if opponent played D for C
+        # at least 3 more times than D for D
+        self.responses_test(self.initial_sequence,
+                            self.initial_sequence, [D] * 10)
+
+        # Defects forever if opponent played D for D
+        # at least 3 more times than C for D
+        opponents_history = list(map(lambda x: D if x is C else C,
+                                     self.initial_sequence))
+
+        self.responses_test(self.initial_sequence,
+                            opponents_history, [D] * 10)
 
 
 class TestHardProber(TestPlayer):
