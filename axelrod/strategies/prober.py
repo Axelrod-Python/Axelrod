@@ -102,6 +102,57 @@ class Prober3(Player):
                 return D if opponent.history[-1:] == [D] else C
 
 
+class Prober4(Player):
+    """
+    Plays fixed sequence of 20 moves initially.
+    If the opponent played D for D at least 3 times more than D for C,
+    defects forever.
+    Otherwise cooperates for the next 5 moves, and plays TFT afterwards.
+    """
+
+    name = 'Prober 4'
+
+    def __init__(self):
+        self.probe_sequence = [C, C, D, C, D, D, D, C, C, D,
+                               C, D, C, C, D, C, D, D, C, D]
+        self.probe_lenght = len(self.probe_sequence)
+        self.politness_pool = [C, C, C, C, C]
+        self.is_angry = False
+
+    def strategy(self, opponent):
+        turn = len(self.history)
+        if turn <= self.probe_length:
+            return self.probe_sequence[turn - 1]
+        if turn == self.probe_length + 1:
+            self.judge(opponent)
+        if self.angry:
+            return D
+        else:
+            # Cooperate for the next 5 turns
+            if self.politness_pool:
+                return self.politness_pool.pop()
+            else:
+                # TFT
+                return D if opponent.history[-1:] == [D] else C
+
+    def judge(self, opponent):
+        just_defect = 0
+        unjust_defect = 0
+        for turn in range(self.probe_lenght):
+            if opponent.history[turn + 1] == D:
+                if self.history[turn] == C:
+                    unjust_defect += 1
+                if self.history[turn] == D:
+                    just_defect += 1
+        if just_defect - unjust_defect >= 3:
+            self.is_angry = True
+
+    def reset(self):
+        Player.reset(self)
+        self.politeness_pool = [C, C, C, C, C]
+        self.is_angry = False
+
+
 class HardProber(Player):
     """
     Plays D, D, C, C initially. Defects forever if opponent cooperated in moves
