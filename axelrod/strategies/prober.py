@@ -121,10 +121,12 @@ class Prober4(Player):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
+        Player.__init__(self)
         self.probe_sequence = [C, C, D, C, D, D, D, C, C, D,
                                C, D, C, C, D, C, D, D, C, D]
-        self.probe_lenght = len(self.probe_sequence)
+        self.probe_length = len(self.probe_sequence)
         self.politness_pool = [C, C, C, C, C]
         self.is_angry = False
 
@@ -134,7 +136,7 @@ class Prober4(Player):
             return self.probe_sequence[turn - 1]
         if turn == self.probe_length + 1:
             self.judge(opponent)
-        if self.angry:
+        if self.is_angry:
             return D
         else:
             # Cooperate for the next 5 turns
@@ -147,7 +149,7 @@ class Prober4(Player):
     def judge(self, opponent):
         just_defect = 0
         unjust_defect = 0
-        for turn in range(self.probe_lenght):
+        for turn in range(self.probe_length):
             if opponent.history[turn + 1] == D:
                 if self.history[turn] == C:
                     unjust_defect += 1
