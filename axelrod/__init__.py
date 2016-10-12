@@ -4,6 +4,7 @@ import os
 on_windows = os.name == 'nt'
 
 # The order of imports matters!
+from .version import __version__
 from .actions import Actions, flip_action
 from .random_ import random_choice, seed
 from .plot import Plot

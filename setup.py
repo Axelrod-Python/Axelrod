@@ -4,9 +4,12 @@ from setuptools import setup
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
+# Read in the version number
+exec(open('axelrod/version.py', 'r').read())
+
 setup(
     name='Axelrod',
-    version='1.11.0',
+    version=__version__,
     install_requires=requirements,
     author='Vince Knight, Owen Campbell, Karol Langner, Marc Harper',
     author_email=('axelrod-python@googlegroups.com'),

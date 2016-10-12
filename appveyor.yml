@@ -7,3 +7,4 @@ build: off
 test_script:
   - "%PYTHON%\\python.exe -m unittest discover"
   - "%PYTHON%\\python.exe doctests.py"
+  - "%PYTHON%\\python.exe setup.py install"
