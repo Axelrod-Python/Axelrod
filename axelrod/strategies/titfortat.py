@@ -126,7 +126,7 @@ class SneakyTitForTat(Player):
 
     Names:
 
-    - Sneaky Tit For Tat:
+    - Sneaky Tit For Tat: Reference Required
     """
 
     name = "Sneaky Tit For Tat"
@@ -204,7 +204,7 @@ class HardTitForTat(Player):
 
     Names:
 
-    - Hard Tit For Tat:
+    - Hard Tit For Tat: Reference Required
     """
 
     name = 'Hard Tit For Tat'
@@ -236,7 +236,7 @@ class HardTitFor2Tats(Player):
 
     Names:
 
-    - Hard Tit For Two Tats:
+    - Hard Tit For Two Tats: Reference Required
     """
 
     name = "Hard Tit For 2 Tats"
@@ -346,7 +346,7 @@ class Gradual(Player):
 
     Names:
 
-    - Gradual: http://perso.uclouvain.be/vincent.blondel/workshops/2003/beaufils.pdf
+    - Gradual: [Beaufils1997]_
      """
 
     name = "Gradual"
