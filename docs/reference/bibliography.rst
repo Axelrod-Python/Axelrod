@@ -10,6 +10,7 @@ documentation.
 .. [Axelrod1984]  The Evolution of Cooperation. Basic Books. ISBN 0-465-02121-2.
 .. [Axelrod1995] Wu, J. and Axelrod, R. (1995) ‘How to cope with noise in the Iterated prisoner’s dilemma’, Journal of Conflict Resolution, 39(1), pp. 183–189. doi: 10.1177/0022002795039001008.
 .. [Banks1980] Banks, J. S., & Sundaram, R. K. (1990). Repeated games, finite automata, and complexity. Games and Economic Behavior, 2(2), 97–117.  http://doi.org/10.1016/0899-8256(90)90024-O
+.. [Beaufils1997] Beaufils, B. and Delahaye, J. (1997) ‘Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma’. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
 .. [Berg2015] Berg, P. Van Den, & Weissing, F. J. (2015). The importance of mechanisms for the evolution of cooperation. Proceedings of the Royal Society B-Biological Sciences, 282.
 .. [Hilde2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013) ‘Adaptive dynamics of extortion and compliance’, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
 .. [Kraines1989] Kraines, D. & Kraines, V. Theor Decis (1989) 26: 47.  doi:10.1007/BF00134056
