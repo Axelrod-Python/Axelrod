@@ -69,7 +69,7 @@ class ThueMorseInverse(ThueMorse):
 
     Names:
 
-    - Thue Morse: Original by Geraint Palmer
+    - Thue Morse Inverse: Original by Geraint Palmer
     """
 
     name = 'ThueMorseInverse'
