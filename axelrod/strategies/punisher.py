@@ -9,9 +9,9 @@ class Punisher(Player):
     1<=mem_length<=20 proportional to the amount of time the opponent has
     played D, punishing that player for playing D too often.
 
-    Names
+    Names:
 
-    -Punisher: Original by Geraint Palmer
+    - Punisher: Original by Geraint Palmer
     """
 
     name = 'Punisher'
@@ -68,9 +68,9 @@ class InversePunisher(Player):
     """
     An inverse player of Punisher.
 
-    Names
+    Names:
 
-    -Inverse Punisher: Original by Geraint Palmer
+    - Inverse Punisher: Original by Geraint Palmer
     """
 
     name = 'Inverse Punisher'

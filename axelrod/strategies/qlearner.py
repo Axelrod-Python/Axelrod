@@ -15,7 +15,7 @@ class RiskyQLearner(Player):
     This qlearner is quick to come to conclusions and doesn't care about the
     future.
 
-    Names
+    Names:
 
     - RiskyQLearner: Original strategy by Geraint Palmer
     """
@@ -122,7 +122,7 @@ class ArrogantQLearner(RiskyQLearner):
 
     This Q learner jumps to quick conclusions and care about the future.
 
-    Names
+    Names:
 
     - ArrogantQLearner: Original strategy by Geraint Palmer
     """
@@ -137,7 +137,7 @@ class HesitantQLearner(RiskyQLearner):
 
     This Q learner is slower to come to conclusions and does not look ahead much.
 
-    Names
+    Names:
 
     - HesitantQLearner: Original strategy by Geraint Palmer
     """
@@ -153,7 +153,7 @@ class CautiousQLearner(RiskyQLearner):
     This Q learner is slower to come to conclusions and wants to look ahead
     more.
 
-    Names
+    Names:
 
     - CautiousQLearner: Original strategy by Geraint Palmer
     """

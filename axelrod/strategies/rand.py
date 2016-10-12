@@ -4,7 +4,7 @@ from axelrod import Player, init_args, random_choice
 class Random(Player):
     """A player who randomly chooses between cooperating and defecting.
 
-    Names
+    Names:
 
     - Random: [Axelrod1980]_
     """

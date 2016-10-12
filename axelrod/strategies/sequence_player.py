@@ -43,7 +43,7 @@ class ThueMorse(SequencePlayer):
 
     Thue-Morse sequence: http://mathworld.wolfram.com/Thue-MorseSequence.html
 
-    Names
+    Names:
 
     - ThueMorse: Original by Geraint Palmer
     """
@@ -67,7 +67,7 @@ class ThueMorse(SequencePlayer):
 class ThueMorseInverse(ThueMorse):
     """ A player who plays the inverse of the Thue-Morse sequence.
 
-    Names
+    Names:
 
     - ThueMorse: Original by Geraint Palmer
     """

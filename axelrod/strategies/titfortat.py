@@ -13,7 +13,7 @@ class TitForTat(Player):
     way. This is done so that it can serve as an example strategy for
     those who might be new to Python.
 
-    Names
+    Names:
 
     - Rapoport's strategy: [Axelrod1980]_
     - TitForTat: [Axelrod1980]_
@@ -46,7 +46,7 @@ class TitFor2Tats(Player):
     """A player starts by cooperating and then defects only after two defects by
     opponent.
 
-    Names
+    Names:
 
     - Tit for two Tats: [Axelrod1984]_
     """
@@ -71,9 +71,9 @@ class TwoTitsForTat(Player):
     """A player starts by cooperating and replies to each defect by two
     defections.
 
-    Names
+    Names:
 
-    -Tit for two Tats: [Axelrod1984]_
+    - Tit for two Tats: [Axelrod1984]_
     """
 
     name = "Two Tits For Tat"
@@ -99,9 +99,9 @@ class Bully(Player):
     This is the complete opposite of Tit For Tat, also called BULLY in
     literature.
 
-    Names
+    Names:
 
-    -Reverse Tit For Tat: [Nachbar1992]_
+    - Reverse Tit For Tat: [Nachbar1992]_
 
     """
 
@@ -124,9 +124,9 @@ class Bully(Player):
 class SneakyTitForTat(Player):
     """Tries defecting once and repents if punished.
 
-    Names
+    Names:
 
-    -Sneaky Tit For Tat:
+    - Sneaky Tit For Tat:
     """
 
     name = "Sneaky Tit For Tat"
@@ -153,9 +153,9 @@ class SneakyTitForTat(Player):
 class SuspiciousTitForTat(Player):
     """A variant of Tit For Tats that starts off with a defection.
 
-    Names
+    Names:
 
-    -Suspicious Tit For Tat: [Hilde2013]_
+    - Suspicious Tit For Tat: [Hilde2013]_
     """
 
     name = "Suspicious Tit For Tat"
@@ -178,9 +178,9 @@ class AntiTitForTat(Player):
     """A strategy that plays the opposite of the opponents previous move.
     This is similar to BULLY above, except that the first move is cooperation.
 
-    Names
+    Names:
 
-    -Anti Tit For Tat: [Hilde2013]_
+    - Anti Tit For Tat: [Hilde2013]_
     """
 
     name = 'Anti Tit For Tat'
@@ -202,9 +202,9 @@ class AntiTitForTat(Player):
 class HardTitForTat(Player):
     """A variant of Tit For Tat that uses a longer history for retaliation.
 
-    Names
+    Names:
 
-    -Hard Tit For Tat:
+    - Hard Tit For Tat:
     """
 
     name = 'Hard Tit For Tat'
@@ -234,9 +234,9 @@ class HardTitFor2Tats(Player):
     """A variant of Tit For Two Tats that uses a longer history for
     retaliation.
 
-    Names
+    Names:
 
-    -Hard Tit For Two Tats:
+    - Hard Tit For Two Tats:
     """
 
     name = "Hard Tit For 2 Tats"
@@ -269,7 +269,7 @@ class OmegaTFT(Player):
        and attempting to break them
        - uses a more sophisticated retaliation mechanism that is noise tolerant.
 
-       Names
+       Names:
 
        - OmegaTFT: [Slany2007]_
     """
@@ -344,9 +344,9 @@ class Gradual(Player):
     but after punishing enters a calming state and cooperates no matter what
     the opponent does for two rounds.
 
-    Names
+    Names:
 
-    -Gradual: http://perso.uclouvain.be/vincent.blondel/workshops/2003/beaufils.pdf
+    - Gradual: http://perso.uclouvain.be/vincent.blondel/workshops/2003/beaufils.pdf
      """
 
     name = "Gradual"
@@ -408,9 +408,9 @@ class ContriteTitForTat(Player):
     then ContriteTitForTat will become 'contrite' until it successfully
     cooperates.
 
-    Names
+    Names:
 
-    -Contrite Tit For Tat: [Axelrod1995]_
+    - Contrite Tit For Tat: [Axelrod1995]_
     """
 
     name = "Contrite Tit For Tat"
@@ -507,7 +507,7 @@ class AdaptiveTitForTat(Player):
         smaller value means more gradual and robust
         to perturbations behaviour
 
-    Names
+    Names:
 
     - Adaptive Tit For Tat: [Tzafestas2000]_
     """
