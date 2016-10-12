@@ -6,7 +6,7 @@ class Random(Player):
 
     Names
 
-    -Random: [Axelrod1980]_
+    - Random: [Axelrod1980]_
     """
 
     name = 'Random'
