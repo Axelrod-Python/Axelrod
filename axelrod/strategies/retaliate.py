@@ -12,7 +12,7 @@ class Retaliate(Player):
 
     Names
 
-    -Retaliate: Original strategy by Owen Campbell
+    - Retaliate: Original strategy by Owen Campbell
     """
 
     name = 'Retaliate'
@@ -65,7 +65,7 @@ class Retaliate2(Retaliate):
 
     Names
 
-    -Retaliate2: Original strategy by Owen Campbell
+    - Retaliate2: Original strategy by Owen Campbell
     """
 
     name = 'Retaliate 2'
@@ -81,7 +81,7 @@ class Retaliate3(Retaliate):
 
     Names
 
-    -Retaliate3: Original strategy by Owen Campbell
+    - Retaliate3: Original strategy by Owen Campbell
     """
 
     name = 'Retaliate 3'
@@ -100,7 +100,7 @@ class LimitedRetaliate(Player):
 
     Names
 
-    -LimitedRetaliate: Original strategy by Owen Campbell
+    - LimitedRetaliate: Original strategy by Owen Campbell
     """
 
     name = 'Limited Retaliate'
@@ -181,7 +181,7 @@ class LimitedRetaliate2(LimitedRetaliate):
 
     Names
 
-    -LimitedRetaliate2: Original strategy by Owen Campbell
+    - LimitedRetaliate2: Original strategy by Owen Campbell
     """
 
     name = 'Limited Retaliate 2'
@@ -199,7 +199,7 @@ class LimitedRetaliate3(LimitedRetaliate):
 
     Names
 
-    -LimitedRetaliate3: Original strategy by Owen Campbell
+    - LimitedRetaliate3: Original strategy by Owen Campbell
     """
 
     name = 'Limited Retaliate 3'

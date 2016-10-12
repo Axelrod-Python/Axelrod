@@ -8,6 +8,10 @@ class Punisher(Player):
     opponent has defected, but forgets after meme_length matches, with
     1<=mem_length<=20 proportional to the amount of time the opponent has
     played D, punishing that player for playing D too often.
+
+    Names
+
+    -Punisher: Original by Geraint Palmer
     """
 
     name = 'Punisher'
@@ -62,10 +66,11 @@ class Punisher(Player):
 
 class InversePunisher(Player):
     """
-    A player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after mem_length matches, with
-    1 <= mem_length <= 20 proportional to the amount of time the opponent
-    has played C. The inverse of Punisher.
+    An inverse player of Punisher.
+
+    Names
+
+    -Inverse Punisher: Original by Geraint Palmer
     """
 
     name = 'Inverse Punisher'

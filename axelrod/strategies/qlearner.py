@@ -17,7 +17,7 @@ class RiskyQLearner(Player):
 
     Names
 
-    -RiskyQLearner: Original strategy by Geraint Palmer
+    - RiskyQLearner: Original strategy by Geraint Palmer
     """
 
     name = 'Risky QLearner'
@@ -124,7 +124,7 @@ class ArrogantQLearner(RiskyQLearner):
 
     Names
 
-    -ArrogantQLearner: Original strategy by Geraint Palmer
+    - ArrogantQLearner: Original strategy by Geraint Palmer
     """
 
     name = 'Arrogant QLearner'
@@ -139,7 +139,7 @@ class HesitantQLearner(RiskyQLearner):
 
     Names
 
-    -HesitantQLearner: Original strategy by Geraint Palmer
+    - HesitantQLearner: Original strategy by Geraint Palmer
     """
 
     name = 'Hesitant QLearner'
@@ -155,7 +155,7 @@ class CautiousQLearner(RiskyQLearner):
 
     Names
 
-    -CautiousQLearner: Original strategy by Geraint Palmer
+    - CautiousQLearner: Original strategy by Geraint Palmer
     """
 
     name = 'Cautious QLearner'
