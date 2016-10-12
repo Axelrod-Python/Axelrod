@@ -10,9 +10,7 @@ class RiskyQLearner(Player):
     """A player who learns the best strategies through the q-learning
     algorithm.
 
-    Q-learning algorithm: http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html
-
-    This qlearner is quick to come to conclusions and doesn't care about the
+    This Q learner is quick to come to conclusions and doesn't care about the
     future.
 
     Names:
