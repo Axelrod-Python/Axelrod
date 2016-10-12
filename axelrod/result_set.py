@@ -27,7 +27,7 @@ def update_progress_bar(method):
 class ResultSet(object):
     """A class to hold the results of a tournament."""
 
-    def __init__(self, players, interactions, nrepetitions=False,
+    def __init__(self, players, interactions, repetitions=False,
                  progress_bar=True, game=None, num_interactions=False):
         """
         Parameters
@@ -37,6 +37,12 @@ class ResultSet(object):
             interactions : list
                 a list of dictionaries mapping tuples of player indices to
                 interactions (1 for each repetition)
+            repetitions : int
+                The number of repetitions
+            num_interactions : int
+                The number of interactions
+            game : axlerod.game
+                The particular game used.
             progress_bar : bool
                 Whether or not to create a progress bar which will be updated
         """
@@ -49,10 +55,10 @@ class ResultSet(object):
         self.players = players
         self.num_matches = len(interactions)
 
-        if not players or not nrepetitions:
-            self.players, self.nrepetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
+        if not players or not repetitions:
+            self.players, self.repetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
         else:
-            self.players, self.nrepetitions = players, nrepetitions
+            self.players, self.repetitions = players, repetitions
 
         self.nplayers = len(self.players)
 
@@ -103,20 +109,20 @@ class ResultSet(object):
         except KeyError:
             self.repetitions_d[index_pair] = nbr
 
-    def _build_nrepetitions(self):
+    def _build_repetitions(self):
         """
         Count the number of repetitions
 
         Returns
         -------
 
-            nrepetitions : int
+            repetitions : int
                 The number of repetitions
         """
-        nrepetitions = max(self.repetitions_d.values())
+        repetitions = max(self.repetitions_d.values())
 
         del self.repetitions_d  # Manual garbage collection
-        return nrepetitions
+        return repetitions
 
     def _build_players(self):
         """
@@ -332,14 +338,14 @@ class ResultSet(object):
                 Whether or not to load the interactions in to memory
         """
         plist = range(self.nplayers)
-        replist = range(self.nrepetitions)
+        replist = range(self.repetitions)
         self.match_lengths = [[[0 for opponent in plist] for player in plist]
                               for _ in replist]
         self.wins = [[0 for _ in replist] for player in plist]
         self.scores = [[0 for _ in replist] for player in plist]
         self.normalised_scores = [[[] for _ in replist] for player in plist]
         self.payoffs = [[[] for opponent in plist] for player in plist]
-        self.score_diffs = [[[0] * self.nrepetitions for opponent in plist]
+        self.score_diffs = [[[0] * self.repetitions for opponent in plist]
                             for player in plist]
         self.cooperation = [[0 for opponent in plist] for player in plist]
         self.normalised_cooperation = [[[] for opponent in plist]
@@ -625,10 +631,10 @@ class ResultSet(object):
         if progress_bar:
             progress_bar.close()
 
-        nrepetitions = self._build_nrepetitions()
+        repetitions = self._build_repetitions()
         players = self._build_players()
 
-        return players, nrepetitions
+        return players, repetitions
 
 
 class ResultSetFromFile(ResultSet):
@@ -638,7 +644,7 @@ class ResultSetFromFile(ResultSet):
     """
 
     def __init__(self, filename, progress_bar=True,
-                 num_interactions=False, players=False, nrepetitions=False,
+                 num_interactions=False, players=False, repetitions=False,
                  game=None, keep_interactions=False):
         """
         Parameters
@@ -654,7 +660,7 @@ class ResultSetFromFile(ResultSet):
             players : list
                 A list of the names of players. If not known will be efficiently
                 read from file.
-            nrepetitions : int
+            repetitions : int
                 The number of repetitions of each match. If not know will be
                 efficiently read from file.
             game : axelrod.Game
@@ -672,10 +678,10 @@ class ResultSetFromFile(ResultSet):
         self.filename = filename
         self.num_interactions = num_interactions
 
-        if not players and not nrepetitions:
-            self.players, self.nrepetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
+        if not players and not repetitions:
+            self.players, self.repetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
         else:
-            self.players, self.nrepetitions = players, nrepetitions
+            self.players, self.repetitions = players, repetitions
         self.nplayers = len(self.players)
 
         self._build_empty_metrics(keep_interactions=keep_interactions)
@@ -723,10 +729,10 @@ class ResultSetFromFile(ResultSet):
         if progress_bar:
             progress_bar.close()
 
-        nrepetitions = self._build_nrepetitions()
+        repetitions = self._build_repetitions()
         players = self._build_players()
 
-        return players, nrepetitions
+        return players, repetitions
 
     def read_match_chunks(self, progress_bar=False):
         """
@@ -760,7 +766,7 @@ class ResultSetFromFile(ResultSet):
                 count += 1
                 if progress_bar:
                     progress_bar.update()
-                if count == self.nrepetitions:
+                if count == self.repetitions:
                     yield repetitions
                     repetitions = []
                     count = 0

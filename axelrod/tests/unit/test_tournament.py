@@ -659,7 +659,7 @@ class TestSpatialTournament(unittest.TestCase):
 
         self.assertEqual(results.ranked_names, spatial_results.ranked_names)
         self.assertEqual(results.nplayers, spatial_results.nplayers)
-        self.assertEqual(results.nrepetitions, spatial_results.nrepetitions)
+        self.assertEqual(results.repetitions, spatial_results.repetitions)
         self.assertEqual(results.payoff_diffs_means,
                          spatial_results.payoff_diffs_means)
         self.assertEqual(results.payoff_matrix, spatial_results.payoff_matrix)
