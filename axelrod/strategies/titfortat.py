@@ -73,7 +73,7 @@ class TwoTitsForTat(Player):
 
     Names:
 
-    - Tit for two Tats: [Axelrod1984]_
+    - Two Tits for Tats: [Axelrod1984]_
     """
 
     name = "Two Tits For Tat"
@@ -176,7 +176,7 @@ class SuspiciousTitForTat(Player):
 
 class AntiTitForTat(Player):
     """A strategy that plays the opposite of the opponents previous move.
-    This is similar to BULLY above, except that the first move is cooperation.
+    This is similar to Bully, except that the first move is cooperation.
 
     Names:
 
