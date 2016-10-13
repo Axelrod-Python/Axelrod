@@ -1,3 +1,23 @@
+# v1.12.0, 2016-10-13
+
+Human interactive player, new strategy, under the hood improvements and
+documentation.
+
+- You can play against an instance of `axelrod.Human`
+  https://github.com/Axelrod-Python/Axelrod/pull/732
+- Improved efficiency of result set from memory
+  https://github.com/Axelrod-Python/Axelrod/pull/737
+- Documentation improvements
+  https://github.com/Axelrod-Python/Axelrod/pull/741
+  https://github.com/Axelrod-Python/Axelrod/pull/736
+  https://github.com/Axelrod-Python/Axelrod/pull/735
+  https://github.com/Axelrod-Python/Axelrod/pull/727
+- New strategy CyclerCCCDCD:
+  https://github.com/Axelrod-Python/Axelrod/pull/379
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.11.0...v1.12.0
+
 # v1.11.0, 2016-09-28
 
 State distribution functions, new strategies and minor test fix.
