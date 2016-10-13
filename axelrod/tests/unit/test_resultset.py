@@ -2,9 +2,10 @@ import unittest
 import axelrod
 import axelrod.interaction_utils as iu
 
-from numpy import mean, std, nanmedian
+from numpy import mean, std, nanmedian, nanmean
 
 import csv
+from collections import Counter
 
 from hypothesis import given, settings
 from axelrod.tests.property import tournaments, prob_end_tournaments
@@ -120,10 +121,38 @@ class TestResultSet(unittest.TestCase):
                 [0, 0, 0],
             ]
 
+        cls.expected_state_distribution = [
+                [], [], []
+            ]
+
         cls.expected_normalised_cooperation = [
                 [0, mean([3 / 5.0 for _ in range(3)]), mean([3 / 5.0 for _ in range(3)])],
                 [mean([3 / 5.0 for _ in range(3)]), 0, mean([1 / 5.0 for _ in range(3)])],
                 [0, 0, 0],
+            ]
+
+        cls.expected_state_distribution = [
+                [Counter(),
+                 Counter({('D', 'C'): 6, ('C', 'D'): 6, ('C', 'C'): 3}),
+                 Counter({('C', 'D'): 9, ('D', 'D'): 6})],
+                [Counter({('D', 'C'): 6, ('C', 'D'): 6, ('C', 'C'): 3}),
+                 Counter(),
+                 Counter({('D', 'D'): 12, ('C', 'D'): 3})],
+                [Counter({('D', 'C'): 9, ('D', 'D'): 6}),
+                 Counter({('D', 'D'): 12, ('D', 'C'): 3}),
+                 Counter()]
+            ]
+
+        cls.expected_normalised_state_distribution = [
+                [Counter(),
+                 Counter({('D', 'C'): 0.4, ('C', 'D'): 0.4, ('C', 'C'): 0.2}),
+                 Counter({('C', 'D'): 0.6, ('D', 'D'): 0.4})],
+                [Counter({('D', 'C'): 0.4, ('C', 'D'): 0.4, ('C', 'C'): 0.2}),
+                 Counter(),
+                 Counter({('D', 'D'): 0.8, ('C', 'D'): 0.2})],
+                [Counter({('D', 'C'): 0.6, ('D', 'D'): 0.4}),
+                 Counter({('D', 'D'): 0.8, ('D', 'C'): 0.2}),
+                 Counter()]
             ]
 
         cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
@@ -323,6 +352,22 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.normalised_cooperation,
                          self.expected_normalised_cooperation)
 
+    def test_state_distribution(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.state_distribution, list)
+        self.assertEqual(len(rs.state_distribution), rs.nplayers)
+        self.assertEqual(rs.state_distribution,
+                         self.expected_state_distribution)
+
+    def test_state_normalised_distribution(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.normalised_state_distribution, list)
+        self.assertEqual(len(rs.normalised_state_distribution), rs.nplayers)
+        self.assertEqual(rs.normalised_state_distribution,
+                         self.expected_normalised_state_distribution)
+
     def test_vengeful_cooperation(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -413,6 +458,9 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual([float(player.Wins) for player in sd],
                          ranked_median_wins)
 
+        for player in sd:
+            self.assertEqual(player.CC_rate + player.CD_rate + player.DC_rate + player.DD_rate, 1)
+
     def test_write_summary(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -422,11 +470,9 @@ class TestResultSet(unittest.TestCase):
             csvreader = csv.reader(csvfile)
             for row in csvreader:
                 ranked_names.append(row[1])
-                self.assertEqual(len(row), 5)
+                self.assertEqual(len(row), 9)
         self.assertEqual(ranked_names[0], "Name")
         self.assertEqual(ranked_names[1:], rs.ranked_names)
-
-
 
 
 class TestResultSetFromFile(unittest.TestCase):
@@ -794,6 +840,26 @@ class TestResultSetSpatialStructure(TestResultSet):
                 0.5488212999484519
             ]
 
+        cls.expected_state_distribution = [
+              [Counter(),
+               Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+               Counter({('C', 'D'): 9, ('D', 'D'): 6})],
+              [Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+               Counter(),
+               Counter()],
+              [Counter({('D', 'C'): 9, ('D', 'D'): 6}), Counter(), Counter()]
+            ]
+
+        cls.expected_normalised_state_distribution = [
+              [Counter(),
+               Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+               Counter({('C', 'D'): 0.6, ('D', 'D'): 0.4})],
+              [Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+               Counter(),
+               Counter()],
+              [Counter({('D', 'C'): 0.6, ('D', 'D'): 0.4}), Counter(), Counter()]
+            ]
+
         cls.expected_csv = (
             'Defector,Tit For Tat,Alternator\n3.4,2.6,1.5\n3.4,2.6,1.5\n3.4,2.6,1.5\n')
 
@@ -1000,6 +1066,32 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                 0.1633132292825755
             ]
 
+        cls.expected_state_distribution = [
+               [Counter(),
+                Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+                Counter(),
+                Counter()],
+               [Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+                Counter(),
+                Counter(),
+                Counter()],
+               [Counter(), Counter(), Counter(), Counter({('D', 'C'): 15})],
+               [Counter(), Counter(), Counter({('C', 'D'): 15}), Counter()]
+            ]
+
+        cls.expected_normalised_state_distribution = [
+               [Counter(),
+                Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+                Counter(),
+                Counter()],
+               [Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+                Counter(),
+                Counter(),
+                Counter()],
+               [Counter(), Counter(), Counter(), Counter({('D', 'C'): 1.0})],
+               [Counter(), Counter(), Counter({('C', 'D'): 1.0}), Counter()]
+            ]
+
         cls.expected_csv = (
         "Defector,Alternator,Tit For Tat,Cooperator\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n")
 
@@ -1131,9 +1223,36 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
                 0.3985944056208427
             ]
 
+        cls.expected_state_distribution = [
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()]
+            ]
+
+        cls.expected_normalised_state_distribution = [
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()]
+            ]
+
+
         cls.expected_csv = (
             'Alternator,Tit For Tat,Defector,Cooperator\nnan,nan,nan,nan\nnan,nan,nan,nan\nnan,nan,nan,nan\n')
 
     def test_equality(self):
         """Overwriting for this particular case"""
         pass
+
+    def test_summarise(self):
+        """Overwriting for this particular case"""
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        sd = rs.summarise()
+
+        for player in sd:
+            self.assertEqual(player.CC_rate, 0)
+            self.assertEqual(player.CD_rate, 0)
+            self.assertEqual(player.DC_rate, 0)
+            self.assertEqual(player.DD_rate, 0)

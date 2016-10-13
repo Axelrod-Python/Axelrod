@@ -1,7 +1,7 @@
 import csv
 import tqdm
 
-from collections import namedtuple
+from collections import namedtuple, Counter
 from numpy import mean, nanmedian, std
 
 from . import eigen
@@ -326,6 +326,26 @@ class ResultSet(object):
         return sorted(range(self.nplayers),
                       key=lambda i: -nanmedian(self.normalised_scores[i]))
 
+    def build_normalised_state_distribution(self):
+        """
+        Returns
+        ----------
+
+            Normalised state distribution. A list of lists of counter objects:
+
+            Dictionary where the keys are the states and the values are a
+            normalized counts of the number of times that state occurs.
+        """
+        norm = []
+        for player in self.state_distribution:
+            counters = []
+            for counter in player:
+                total = sum(counter.values(), 0.0)
+                counters.append(Counter({key: value / total for key, value in
+                                         counter.items()}))
+            norm.append(counters)
+        return norm
+
     def _build_empty_metrics(self, keep_interactions=False):
         """
         Creates the various empty metrics ready to be updated as the data is
@@ -350,6 +370,8 @@ class ResultSet(object):
         self.cooperation = [[0 for opponent in plist] for player in plist]
         self.normalised_cooperation = [[[] for opponent in plist]
                                        for player in plist]
+        self.state_distribution = [[Counter() for opponent in plist]
+                                   for player in plist]
         self.good_partner_matrix = [[0 for opponent in plist]
                                     for player in plist]
 
@@ -400,6 +422,13 @@ class ResultSet(object):
     def _update_cooperation(self, p1, p2, cooperations):
         self.cooperation[p1][p2] += cooperations[0]
         self.cooperation[p2][p1] += cooperations[1]
+
+    def _update_state_distribution(self, p1, p2, counter):
+        self.state_distribution[p1][p2] += counter
+
+        counter[('C', 'D')], counter[('D', 'C')] = (counter[('D', 'C')],
+                                                    counter[('C', 'D')])
+        self.state_distribution[p2][p1] += counter
 
     def _update_good_partner_matrix(self, p1, p2, cooperations):
         if cooperations[0] >= cooperations[1]:
@@ -466,6 +495,7 @@ class ResultSet(object):
                 scores_per_turn = iu.compute_final_score_per_turn(interaction,
                                                                  game=self.game)
                 cooperations = iu.compute_cooperations(interaction)
+                state_counter = iu.compute_state_distribution(interaction)
 
                 self._update_match_lengths(repetition, p1, p2, interaction)
                 self._update_payoffs(p1, p2, scores_per_turn)
@@ -483,6 +513,7 @@ class ResultSet(object):
                     self._update_normalised_scores(repetition, p1, p2,
                                                    scores_per_turn)
                     self._update_cooperation(p1, p2, cooperations)
+                    self._update_state_distribution(p1, p2, state_counter)
                     self._update_good_partner_matrix(p1, p2, cooperations)
 
         if progress_bar:
@@ -492,6 +523,7 @@ class ResultSet(object):
         self._summarise_normalised_cooperation()
 
         self.ranking = self.build_ranking()
+        self.normalised_state_distribution = self.build_normalised_state_distribution()
         self.ranked_names = self.build_ranked_names()
         self.payoff_matrix = self.build_payoff_matrix()
         self.payoff_stddevs = self.build_payoff_stddevs()
@@ -548,13 +580,27 @@ class ResultSet(object):
         median_wins = map(nanmedian, self.wins)
 
         self.player = namedtuple("Player", ["Rank", "Name", "Median_score",
-                                            "Cooperation_rating", "Wins"])
+                                            "Cooperation_rating", "Wins",
+                                            "CC_rate", "CD_rate", "DC_rate",
+                                            "DD_rate"])
 
-        summary_data = [perf for perf in zip(self.players,
-                                             median_scores,
-                                             self.cooperating_rating,
-                                             median_wins)]
-        summary_data = [self.player(rank, *summary_data[i]) for
+        states = [('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')]
+        state_prob = []
+        for i, player in enumerate(self.normalised_state_distribution):
+            counts = []
+            for state in states:
+                counts.append(sum([opp[state] for j, opp in enumerate(player)
+                                   if i != j]))
+            try:
+                counts = [c / sum(counts) for c in counts]
+            except ZeroDivisionError:
+                counts = [0 for c in counts]
+            state_prob.append(counts)
+
+        summary_data = list(zip(self.players, median_scores,
+                                self.cooperating_rating, median_wins))
+
+        summary_data = [self.player(rank, *summary_data[i], *state_prob[i]) for
                         rank, i in enumerate(self.ranking)]
 
         return summary_data
@@ -563,7 +609,7 @@ class ResultSet(object):
         """
         Write a csv file containing summary data of the results of the form:
 
-            "Rank", "Name", "Median-score-per-turn", "Cooperation-rating"
+            "Rank", "Name", "Median-score-per-turn", "Cooperation-rating", "Wins", "CC-Rate", "CD-Rate", "DC-Rate", "DD-rate"
 
         Parameters
         ----------

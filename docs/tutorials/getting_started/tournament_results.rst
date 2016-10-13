@@ -20,6 +20,10 @@ This tutorial will show you how to access the various results of a tournament:
 - Payoff difference means: the mean score differences.
 - Cooperation counts: the number of times each player cooperated.
 - Normalised cooperation: cooperation count per turn.
+- Normalised cooperation: cooperation count per turn.
+- State distribution: the count of each type of state of a match
+- Normalised state distribution: the normalised count of each type of state of a
+  match
 - Cooperation rating: cooperation rating of each player
 - Vengeful cooperation: a morality metric from the literature (see
   :ref:`morality-metrics`).
@@ -210,6 +214,52 @@ We see that :code:`Cooperator` for all the rounds (as expected)::
     >>> results.normalised_cooperation[0]
     [1.0, 1.0, 1.0, 1.0]
 
+State distribution counts
+-------------------------
+
+This gives a total state count against each opponent::
+
+    >>> pprint.pprint(results.state_distribution)
+    [[Counter(),
+      Counter({('C', 'D'): 30}),
+      Counter({('C', 'C'): 30}),
+      Counter({('C', 'C'): 30})],
+     [Counter({('D', 'C'): 30}),
+      Counter(),
+      Counter({('D', 'D'): 27, ('D', 'C'): 3}),
+      Counter({('D', 'D'): 27, ('D', 'C'): 3})],
+     [Counter({('C', 'C'): 30}),
+      Counter({('D', 'D'): 27, ('C', 'D'): 3}),
+      Counter(),
+      Counter({('C', 'C'): 30})],
+     [Counter({('C', 'C'): 30}),
+      Counter({('D', 'D'): 27, ('C', 'D'): 3}),
+      Counter({('C', 'C'): 30}),
+      Counter()]]
+
+Normalised state distribution
+-----------------------------
+
+This gives the average rate state distribution against each opponent::
+
+    >>> pprint.pprint(results.normalised_state_distribution)
+    [[Counter(),
+      Counter({('C', 'D'): 1.0}),
+      Counter({('C', 'C'): 1.0}),
+      Counter({('C', 'C'): 1.0})],
+     [Counter({('D', 'C'): 1.0}),
+      Counter(),
+      Counter({('D', 'D'): 0.9, ('D', 'C'): 0.1}),
+      Counter({('D', 'D'): 0.9, ('D', 'C'): 0.1})],
+     [Counter({('C', 'C'): 1.0}),
+      Counter({('D', 'D'): 0.9, ('C', 'D'): 0.1}),
+      Counter(),
+      Counter({('C', 'C'): 1.0})],
+     [Counter({('C', 'C'): 1.0}),
+      Counter({('D', 'D'): 0.9, ('C', 'D'): 0.1}),
+      Counter({('C', 'C'): 1.0}),
+      Counter()]]
+
 Morality Metrics
 ----------------
 
@@ -242,10 +292,10 @@ that summarises the results of the tournament::
 
     >>> summary = results.summarise()
     >>> pprint.pprint(summary)
-    [Player(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0),
-     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0),
-     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0),
-     Player(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0)]
+    [Player(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0, CC_rate=...),
+     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0, CC_rate=...),
+     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0, CC_rate=...),
+     Player(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0, CC_rate=...)]
 
 It is also possible to write this data directly to a csv file using the
 `write_summary` method::
@@ -256,8 +306,8 @@ It is also possible to write this data directly to a csv file using the
     ...     csvreader = csv.reader(outfile)
     ...     for row in csvreader:
     ...         print(row)
-    ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins']
-    ['0', 'Defector', '2.6...', '0.0', '3.0']
-    ['1', 'Tit For Tat', '2.3...', '0.7', '0.0']
-    ['2', 'Grudger', '2.3...', '0.7', '0.0']
-    ['3', 'Cooperator', '2.0...', '1.0', '0.0']
+    ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins', 'CC_rate', 'CD_rate', 'DC_rate', 'DD_rate']
+    ['0', 'Defector', '2.6...', '0.0', '3.0', ...]
+    ['1', 'Tit For Tat', '2.3...', '0.7', '0.0', ...]
+    ['2', 'Grudger', '2.3...', '0.7', '0.0', ...]
+    ['3', 'Cooperator', '2.0...', '1.0', '0.0', ...]
