@@ -118,7 +118,7 @@ class ArrogantQLearner(RiskyQLearner):
     """A player who learns the best strategies through the q-learning
     algorithm.
 
-    This Q learner jumps to quick conclusions and care about the future.
+    This Q learner jumps to quick conclusions and cares about the future.
 
     Names:
 

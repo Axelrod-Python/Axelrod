@@ -67,7 +67,7 @@ class Punisher(Player):
 class InversePunisher(Player):
     """
     An inverted version of Punisher. Similarly the player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after mem_length matches, with 1 <= mem_length <= 20. This time mem_lenght is
+    opponent has defected, but forgets after mem_length matches, with 1 <= mem_length <= 20. This time mem_length is
     proportional to the amount of time the opponent has played C.
 
     Names:

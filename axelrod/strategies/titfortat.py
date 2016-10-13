@@ -96,7 +96,7 @@ class Bully(Player):
     """A player that behaves opposite to Tit For Tat, including first move.
 
     Starts by defecting and then does the opposite of opponent's previous move.
-    This is the complete opposite of Tit For Tat, also called BULLY in
+    This is the complete opposite of Tit For Tat, also called Bully in the
     literature.
 
     Names:
@@ -151,7 +151,7 @@ class SneakyTitForTat(Player):
 
 
 class SuspiciousTitForTat(Player):
-    """A variant of Tit For Tats that starts off with a defection.
+    """A variant of Tit For Tat that starts off with a defection.
 
     Names:
 
