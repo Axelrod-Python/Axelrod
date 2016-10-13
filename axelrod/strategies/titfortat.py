@@ -13,7 +13,7 @@ class TitForTat(Player):
     way. This is done so that it can serve as an example strategy for
     those who might be new to Python.
 
-    Names
+    Names:
 
     - Rapoport's strategy: [Axelrod1980]_
     - TitForTat: [Axelrod1980]_
@@ -43,7 +43,13 @@ class TitForTat(Player):
 
 
 class TitFor2Tats(Player):
-    """A player starts by cooperating and then defects only after two defects by opponent."""
+    """A player starts by cooperating and then defects only after two defects by
+    opponent.
+
+    Names:
+
+    - Tit for two Tats: [Axelrod1984]_
+    """
 
     name = "Tit For 2 Tats"
     classifier = {
@@ -62,7 +68,13 @@ class TitFor2Tats(Player):
 
 
 class TwoTitsForTat(Player):
-    """A player starts by cooperating and replies to each defect by two defections."""
+    """A player starts by cooperating and replies to each defect by two
+    defections.
+
+    Names:
+
+    - Two Tits for Tats: [Axelrod1984]_
+    """
 
     name = "Two Tits For Tat"
     classifier = {
@@ -84,7 +96,13 @@ class Bully(Player):
     """A player that behaves opposite to Tit For Tat, including first move.
 
     Starts by defecting and then does the opposite of opponent's previous move.
-    This is the complete opposite of TIT FOR TAT, also called BULLY in literature.
+    This is the complete opposite of Tit For Tat, also called Bully in the
+    literature.
+
+    Names:
+
+    - Reverse Tit For Tat: [Nachbar1992]_
+
     """
 
     name = "Bully"
@@ -104,7 +122,12 @@ class Bully(Player):
 
 
 class SneakyTitForTat(Player):
-    """Tries defecting once and repents if punished."""
+    """Tries defecting once and repents if punished.
+
+    Names:
+
+    - Sneaky Tit For Tat: Reference Required
+    """
 
     name = "Sneaky Tit For Tat"
     classifier = {
@@ -128,7 +151,12 @@ class SneakyTitForTat(Player):
 
 
 class SuspiciousTitForTat(Player):
-    """A TFT that initially defects."""
+    """A variant of Tit For Tat that starts off with a defection.
+
+    Names:
+
+    - Suspicious Tit For Tat: [Hilde2013]_
+    """
 
     name = "Suspicious Tit For Tat"
     classifier = {
@@ -148,7 +176,12 @@ class SuspiciousTitForTat(Player):
 
 class AntiTitForTat(Player):
     """A strategy that plays the opposite of the opponents previous move.
-    This is similar to BULLY above, except that the first move is cooperation."""
+    This is similar to Bully, except that the first move is cooperation.
+
+    Names:
+
+    - Anti Tit For Tat: [Hilde2013]_
+    """
 
     name = 'Anti Tit For Tat'
     classifier = {
@@ -167,7 +200,12 @@ class AntiTitForTat(Player):
 
 
 class HardTitForTat(Player):
-    """A variant of Tit For Tat that uses a longer history for retaliation."""
+    """A variant of Tit For Tat that uses a longer history for retaliation.
+
+    Names:
+
+    - Hard Tit For Tat: Reference Required
+    """
 
     name = 'Hard Tit For Tat'
     classifier = {
@@ -194,7 +232,12 @@ class HardTitForTat(Player):
 
 class HardTitFor2Tats(Player):
     """A variant of Tit For Two Tats that uses a longer history for
-    retaliation."""
+    retaliation.
+
+    Names:
+
+    - Hard Tit For Two Tats: Reference Required
+    """
 
     name = "Hard Tit For 2 Tats"
     classifier = {
@@ -221,10 +264,14 @@ class HardTitFor2Tats(Player):
 
 
 class OmegaTFT(Player):
-    """OmegaTFT modifies TFT in two ways:
-       -- checks for deadlock loops of alternating rounds of (C, D) and (D, C),
+    """OmegaTFT modifies Tit For Tat in two ways:
+       - checks for deadlock loops of alternating rounds of (C, D) and (D, C),
        and attempting to break them
-       -- uses a more sophisticated retaliation mechanism that is noise tolerant.
+       - uses a more sophisticated retaliation mechanism that is noise tolerant.
+
+       Names:
+
+       - OmegaTFT: [Slany2007]_
     """
 
     name = "Omega TFT"
@@ -297,7 +344,10 @@ class Gradual(Player):
     but after punishing enters a calming state and cooperates no matter what
     the opponent does for two rounds.
 
-    http://perso.uclouvain.be/vincent.blondel/workshops/2003/beaufils.pdf """
+    Names:
+
+    - Gradual: [Beaufils1997]_
+     """
 
     name = "Gradual"
     classifier = {
@@ -356,13 +406,11 @@ class ContriteTitForTat(Player):
     A player that corresponds to Tit For Tat if there is no noise. In the case
     of a noisy match: if the opponent defects as a result of a noisy defection
     then ContriteTitForTat will become 'contrite' until it successfully
-    cooperates..
+    cooperates.
 
-    Reference: "How to Cope with Noise In the Iterated Prisoner's Dilemma" by
-    Wu and Axelrod. Published in Journal of Conflict Resolution, 39 (March
-    1995), pp. 183-189.
+    Names:
 
-    http://www-personal.umich.edu/~axe/research/How_to_Cope.pdf
+    - Contrite Tit For Tat: [Axelrod1995]_
     """
 
     name = "Contrite Tit For Tat"
@@ -403,7 +451,8 @@ class ContriteTitForTat(Player):
 class SlowTitForTwoTats(Player):
     """
     A player plays C twice, then if the opponent plays the same move twice,
-    plays that move
+    plays that move.
+
     """
 
     name = 'Slow Tit For Two Tats'
@@ -429,20 +478,20 @@ class SlowTitForTwoTats(Player):
 
         # Otherwise cooperate
         return C
-        
+
 class AdaptiveTitForTat(Player):
-    """ATFT - Adaptive Tit for Tat (Basic Model)
-    
+    """ATFT - Adaptive Tit For Tat (Basic Model)
+
     Algorithm
-    
+
     if (opponent played C in the last cycle) then
     world = world + r*(1-world)
     else
     world = world + r*(0-world)
     If (world >= 0.5) play C, else play D
-    
+
     Attributes
-    
+
     world : float [0.0, 1.0], set to 0.5
         continuous variable representing the world's image
         1.0 - total cooperation
@@ -450,19 +499,19 @@ class AdaptiveTitForTat(Player):
         other values - something in between of the above
         updated every round, starting value shouldn't matter as long as
         it's >= 0.5
-        
+
     Parameters
-    
+
     rate : float [0.0, 1.0], default=0.5
         adaptation rate - r in Algorithm above
         smaller value means more gradual and robust
         to perturbations behaviour
-        
-    Names
-    
+
+    Names:
+
     - Adaptive Tit For Tat: [Tzafestas2000]_
     """
-    
+
     name = 'Adaptive Tit For Tat'
     classifier = {
         'memory_depth': float('inf'),
@@ -477,31 +526,31 @@ class AdaptiveTitForTat(Player):
 
     @init_args
     def __init__(self, rate=0.5):
-    
+
         Player.__init__(self)
         self.rate, self.starting_rate = rate, rate
-        
+
     def strategy(self, opponent):
 
         if len(opponent.history) == 0:
             return C
-        
+
         if opponent.history[-1] == C:
             self.world += self.rate * (1. - self.world)
         else:
             self.world -= self.rate * self.world
-        
+
         if self.world >= 0.5:
             return C
-        
+
         return D
-        
+
     def reset(self):
-        
+
         Player.reset(self)
         self.world = 0.5
         self.rate = self.starting_rate
-        
+
     def __repr__(self):
-         
+
         return "%s: %s" % (self.name, round(self.rate, 2))

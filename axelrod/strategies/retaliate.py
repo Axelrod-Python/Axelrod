@@ -9,6 +9,10 @@ class Retaliate(Player):
     """
     A player starts by cooperating but will retaliate once the opponent
     has won more than 10 percent times the number of defections the player has.
+
+    Names:
+
+    - Retaliate: Original strategy by Owen Campbell
     """
 
     name = 'Retaliate'
@@ -58,6 +62,10 @@ class Retaliate(Player):
 class Retaliate2(Retaliate):
     """
     Retaliate player with a threshold of 8 percent.
+
+    Names:
+
+    - Retaliate2: Original strategy by Owen Campbell
     """
 
     name = 'Retaliate 2'
@@ -70,6 +78,10 @@ class Retaliate2(Retaliate):
 class Retaliate3(Retaliate):
     """
     Retaliate player with a threshold of 5 percent.
+
+    Names:
+
+    - Retaliate3: Original strategy by Owen Campbell
     """
 
     name = 'Retaliate 3'
@@ -85,6 +97,10 @@ class LimitedRetaliate(Player):
     It will then retaliate by defecting. It stops when either, it has beaten
     the opponent 10 times more often that it has lost or it reaches the
     retaliation limit (20 defections).
+
+    Names:
+
+    - LimitedRetaliate: Original strategy by Owen Campbell
     """
 
     name = 'Limited Retaliate'
@@ -162,6 +178,10 @@ class LimitedRetaliate2(LimitedRetaliate):
     """
     LimitedRetaliate player with a threshold of 8 percent and a
     retaliation limit of 15.
+
+    Names:
+
+    - LimitedRetaliate2: Original strategy by Owen Campbell
     """
 
     name = 'Limited Retaliate 2'
@@ -176,6 +196,10 @@ class LimitedRetaliate3(LimitedRetaliate):
     """
     LimitedRetaliate player with a threshold of 5 percent and a
     retaliation limit of 20.
+
+    Names:
+
+    - LimitedRetaliate3: Original strategy by Owen Campbell
     """
 
     name = 'Limited Retaliate 3'
