@@ -83,7 +83,6 @@ class TestResultSet(unittest.TestCase):
             [[17/5.0 for _ in range(3)], [9/5.0 for _ in range(3)], []]
         ]
 
-        norm_scores = cls.expected_normalised_scores
         cls.expected_score_diffs = [
             [[0.0, 0.0, 0.0],
              [0.0, 0.0, 0.0],
@@ -763,7 +762,6 @@ class TestResultSetSpatialStructure(TestResultSet):
             [[17/5.0 for _ in range(3)], [], []]
         ]
 
-        norm_scores = cls.expected_normalised_scores
         cls.expected_score_diffs = [
             [[0.0, 0.0, 0.0],
              [0.0, 0.0, 0.0],
@@ -859,9 +857,6 @@ class TestResultSetSpatialStructure(TestResultSet):
                Counter()],
               [Counter({('D', 'C'): 0.6, ('D', 'D'): 0.4}), Counter(), Counter()]
             ]
-
-        cls.expected_csv = (
-            'Defector,Tit For Tat,Alternator\n3.4,2.6,1.5\n3.4,2.6,1.5\n3.4,2.6,1.5\n')
 
     def test_match_lengths(self):
         """
@@ -972,7 +967,6 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
              [[], [], [0 for _ in range(3)], []]
         ]
 
-        norm_scores = cls.expected_normalised_scores
         cls.expected_score_diffs = [
             [[0.0, 0.0, 0.0],
              [0.0, 0.0, 0.0],
@@ -1092,9 +1086,6 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                [Counter(), Counter(), Counter({('C', 'D'): 1.0}), Counter()]
             ]
 
-        cls.expected_csv = (
-        "Defector,Alternator,Tit For Tat,Cooperator\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n")
-
 
 class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
@@ -1159,7 +1150,6 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
              [[], [], [], [15 /5.0 for _ in range(3)]]
         ]
 
-        norm_scores = cls.expected_normalised_scores
         cls.expected_score_diffs = [
             [[0.0 for _ in range(3)] for _ in range(4) ] for _ in range(4)
         ]
@@ -1237,9 +1227,6 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
                 [Counter(), Counter(), Counter(), Counter()]
             ]
 
-
-        cls.expected_csv = (
-            'Alternator,Tit For Tat,Defector,Cooperator\nnan,nan,nan,nan\nnan,nan,nan,nan\nnan,nan,nan,nan\n')
 
     def test_equality(self):
         """Overwriting for this particular case"""
