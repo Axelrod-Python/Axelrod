@@ -2,7 +2,7 @@ import unittest
 import axelrod
 import axelrod.interaction_utils as iu
 
-from numpy import mean, std, nanmedian, nanmean
+from numpy import mean, std, nanmedian
 
 import csv
 from collections import Counter
