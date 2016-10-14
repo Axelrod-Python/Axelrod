@@ -600,7 +600,8 @@ class ResultSet(object):
         summary_data = list(zip(self.players, median_scores,
                                 self.cooperating_rating, median_wins))
 
-        summary_data = [self.player(rank, *summary_data[i], *state_prob[i]) for
+        summary_data = [self.player(rank, *(list(summary_data[i])
+                                            + state_prob[i])) for
                         rank, i in enumerate(self.ranking)]
 
         return summary_data
