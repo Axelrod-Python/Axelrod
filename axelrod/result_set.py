@@ -7,6 +7,9 @@ from numpy import mean, nanmedian, std
 from . import eigen
 from .game import Game
 import axelrod.interaction_utils as iu
+from axelrod import Actions
+
+C, D = Actions.C, Actions.D
 
 
 def update_progress_bar(method):
@@ -142,7 +145,7 @@ class ResultSet(object):
         return players
 
     @update_progress_bar
-    def build_eigenmoses_rating(self):
+    def _build_eigenmoses_rating(self):
         """
         Returns:
         --------
@@ -156,7 +159,7 @@ class ResultSet(object):
         return eigenvector.tolist()
 
     @update_progress_bar
-    def build_eigenjesus_rating(self):
+    def _build_eigenjesus_rating(self):
         """
         Returns:
         --------
@@ -170,7 +173,7 @@ class ResultSet(object):
         return eigenvector.tolist()
 
     @update_progress_bar
-    def build_cooperating_rating(self):
+    def _build_cooperating_rating(self):
         """
         Returns:
         --------
@@ -201,7 +204,7 @@ class ResultSet(object):
                 in zip(self.cooperation, lengths)]
 
     @update_progress_bar
-    def build_vengeful_cooperation(self):
+    def _build_vengeful_cooperation(self):
         """
         Returns:
         --------
@@ -215,7 +218,7 @@ class ResultSet(object):
                 for row in self.normalised_cooperation]
 
     @update_progress_bar
-    def build_payoff_diffs_means(self):
+    def _build_payoff_diffs_means(self):
         """
         Returns:
         --------
@@ -237,7 +240,7 @@ class ResultSet(object):
         return payoff_diffs_means
 
     @update_progress_bar
-    def build_payoff_stddevs(self):
+    def _build_payoff_stddevs(self):
         """
         Returns:
         --------
@@ -274,7 +277,7 @@ class ResultSet(object):
         return payoff_stddevs
 
     @update_progress_bar
-    def build_payoff_matrix(self):
+    def _build_payoff_matrix(self):
         """
         Returns:
         --------
@@ -309,7 +312,7 @@ class ResultSet(object):
         return payoff_matrix
 
     @update_progress_bar
-    def build_ranked_names(self):
+    def _build_ranked_names(self):
         """
         Returns:
         --------
@@ -320,7 +323,7 @@ class ResultSet(object):
         return [str(self.players[i]) for i in self.ranking]
 
     @update_progress_bar
-    def build_ranking(self):
+    def _build_ranking(self):
         """
         Returns:
         --------
@@ -336,7 +339,7 @@ class ResultSet(object):
                       key=lambda i: -nanmedian(self.normalised_scores[i]))
 
     @update_progress_bar
-    def build_normalised_state_distribution(self):
+    def _build_normalised_state_distribution(self):
         """
         Returns
         ----------
@@ -350,7 +353,7 @@ class ResultSet(object):
         for player in self.state_distribution:
             counters = []
             for counter in player:
-                total = sum(counter.values(), 0.0)
+                total = sum(counter.values())
                 counters.append(Counter({key: value / total for key, value in
                                          counter.items()}))
             norm.append(counters)
@@ -436,8 +439,7 @@ class ResultSet(object):
     def _update_state_distribution(self, p1, p2, counter):
         self.state_distribution[p1][p2] += counter
 
-        counter[('C', 'D')], counter[('D', 'C')] = (counter[('D', 'C')],
-                                                    counter[('C', 'D')])
+        counter[(C, D)], counter[(D, C)] = counter[(D, C)], counter[(C, D)]
         self.state_distribution[p2][p1] += counter
 
     def _update_good_partner_matrix(self, p1, p2, cooperations):
@@ -471,7 +473,7 @@ class ResultSet(object):
                 pass
 
     @update_progress_bar
-    def build_good_partner_rating(self):
+    def _build_good_partner_rating(self):
         return [sum(self.good_partner_matrix[player]) /
                 max(1, float(self.total_interactions[player]))
                 for player in range(self.nplayers)]
@@ -532,17 +534,17 @@ class ResultSet(object):
         self._summarise_normalised_scores()
         self._summarise_normalised_cooperation()
 
-        self.ranking = self.build_ranking()
-        self.normalised_state_distribution = self.build_normalised_state_distribution()
-        self.ranked_names = self.build_ranked_names()
-        self.payoff_matrix = self.build_payoff_matrix()
-        self.payoff_stddevs = self.build_payoff_stddevs()
-        self.payoff_diffs_means = self.build_payoff_diffs_means()
-        self.vengeful_cooperation = self.build_vengeful_cooperation()
-        self.cooperating_rating = self.build_cooperating_rating()
-        self.good_partner_rating = self.build_good_partner_rating()
-        self.eigenjesus_rating = self.build_eigenjesus_rating()
-        self.eigenmoses_rating = self.build_eigenmoses_rating()
+        self.ranking = self._build_ranking()
+        self.normalised_state_distribution = self._build_normalised_state_distribution()
+        self.ranked_names = self._build_ranked_names()
+        self.payoff_matrix = self._build_payoff_matrix()
+        self.payoff_stddevs = self._build_payoff_stddevs()
+        self.payoff_diffs_means = self._build_payoff_diffs_means()
+        self.vengeful_cooperation = self._build_vengeful_cooperation()
+        self.cooperating_rating = self._build_cooperating_rating()
+        self.good_partner_rating = self._build_good_partner_rating()
+        self.eigenjesus_rating = self._build_eigenjesus_rating()
+        self.eigenmoses_rating = self._build_eigenmoses_rating()
 
         if progress_bar:
             self.progress_bar.close()
@@ -594,25 +596,26 @@ class ResultSet(object):
                                             "CC_rate", "CD_rate", "DC_rate",
                                             "DD_rate"])
 
-        states = [('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')]
+        states = [(C, C), (C, D), (D, C), (D, D)]
         state_prob = []
         for i, player in enumerate(self.normalised_state_distribution):
             counts = []
             for state in states:
-                counts.append(sum([opp[state] for j, opp in enumerate(player)
-                                   if i != j]))
+                p = sum([opp[state] for j, opp in enumerate(player) if i != j])
+                counts.append(p)
             try:
                 counts = [c / sum(counts) for c in counts]
             except ZeroDivisionError:
                 counts = [0 for c in counts]
             state_prob.append(counts)
 
-        summary_data = list(zip(self.players, median_scores,
-                                self.cooperating_rating, median_wins))
+        summary_measures = list(zip(self.players, median_scores,
+                                    self.cooperating_rating, median_wins))
 
-        summary_data = [self.player(rank, *(list(summary_data[i])
-                                            + state_prob[i])) for
-                        rank, i in enumerate(self.ranking)]
+        summary_data = []
+        for rank, i in enumerate(self.ranking):
+            data = list(summary_measures[i]) + state_prob[i]
+            summary_data.append(self.player(rank, *data))
 
         return summary_data
 
