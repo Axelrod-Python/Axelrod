@@ -217,7 +217,10 @@ We see that :code:`Cooperator` for all the rounds (as expected)::
 State distribution counts
 -------------------------
 
-This gives a total state count against each opponent::
+This gives a total state count against each opponent. A state corresponds to 1
+turn of a match and can be one of :code:`('C', 'C'), ('C', 'D'), ('D', 'C'),
+('D', 'D')` where the first element is the action of the player in question and
+the second the action of the opponent::
 
     >>> pprint.pprint(results.state_distribution)
     [[Counter(),
@@ -240,7 +243,11 @@ This gives a total state count against each opponent::
 Normalised state distribution
 -----------------------------
 
-This gives the average rate state distribution against each opponent::
+This gives the average rate state distribution against each opponent.
+A state corresponds to 1
+turn of a match and can be one of :code:`('C', 'C'), ('C', 'D'), ('D', 'C'),
+('D', 'D')` where the first element is the action of the player in question and
+the second the action of the opponent::
 
     >>> pprint.pprint(results.normalised_state_distribution)
     [[Counter(),
