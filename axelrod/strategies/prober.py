@@ -104,7 +104,7 @@ class Prober3(Player):
 
 class Prober4(Player):
     """
-    Plays initial sequence of 20 fixed moves.
+    Plays fixed initial sequence of 20 moves.
     Counts just (retaliated) and unjust defections of the opponent.
     If the absolute difference between just and unjust defections
     is greater than 2, defects forever.
@@ -129,8 +129,8 @@ class Prober4(Player):
                               C, D, C, C, D, C, D, D, C, D]
         self.just_Ds = 0
         self.unjust_Ds = 0
-        self.politeness_pool = [C, C, C, C, C]
-        self.is_naughty = False
+        self.cooperation_pool = 5 * [C]
+        self.turned_defector = False
 
     def strategy(self, opponent):
         if len(opponent.history) == 0:
@@ -148,21 +148,21 @@ class Prober4(Player):
                 return self.init_sequence[turn]
             if turn == len(self.init_sequence):
                 diff_in_Ds = abs(self.just_Ds - self.unjust_Ds)
-                self.is_naughty = (diff_in_Ds > 2)
-            if self.is_naughty:
+                self.turned_defector = (diff_in_Ds > 2)
+            if self.turned_defector:
                 return D
-            if not self.is_naughty:
-                if self.politeness_pool:
-                    return self.politeness_pool.pop()
+            if not self.turned_defector:
+                if self.cooperation_pool:
+                    return self.cooperation_pool.pop()
                 else:
-                    return D if opponent.history[-1:] == [D] else C
+                    return D if opponent.history[-1] == D else C
 
     def reset(self):
         Player.reset(self)
         self.just_Ds = 0
         self.unjust_Ds = 0
-        self.politeness_pool = [C, C, C, C, C]
-        self.is_angry = False
+        self.cooperation_pool = [C, C, C, C, C]
+        self.became_defector = False
 
 
 class HardProber(Player):

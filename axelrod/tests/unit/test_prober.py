@@ -104,8 +104,8 @@ class TestProber4(TestPlayer):
     name = "Prober 4"
     player = axelrod.Prober4
     expected_classifier = {
-        'memory_depth': 1,
         'stochastic': False,
+        'memory_depth': 1,
         'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
@@ -114,24 +114,54 @@ class TestProber4(TestPlayer):
     }
     initial_sequence = [C, C, D, C, D, D, D, C, C, D,
                         C, D, C, C, D, C, D, D, C, D]
+    cooperation_pool = [C] * 5
 
     def test_initial_strategy(self):
         """Starts by playing CCDCDDDCCDCDCCDCDDCD."""
         self.responses_test([], [], self.initial_sequence)
 
     def test_strategy(self):
-        # Defects forever if opponent played D for C
-        # at least 3 more times than D for D
-        self.responses_test(self.initial_sequence,
-                            self.initial_sequence, [D] * 10)
+        # Defects forever if the opponent played D for C
+        # at least 3 times more than D for D
+        history1 = self.initial_sequence
+        history2 = self.initial_sequence
+        responses = [D] * 10
+        self.responses_test(history1, history2, responses)
 
-        # Defects forever if opponent played D for D
-        # at least 3 more times than C for D
-        opponents_history = list(map(lambda x: D if x is C else C,
-                                     self.initial_sequence))
+        # or if the opponent played D for D
+        # at least 3 times more than D for C
+        history1 = self.initial_sequence
+        history2 = list(map(lambda x: D if x is C else C,
+                            self.initial_sequence))
+        responses = [D] * 10
+        self.responses_test(history1, history2, responses)
 
-        self.responses_test(self.initial_sequence,
-                            opponents_history, [D] * 10)
+        # Otherwise cooperates for 5 rounds
+        history1 = self.initial_sequence
+        history2 = [C] * len(history1)
+        responses = self.cooperation_pool
+        self.responses_test(history1, history2, responses)
+
+        # and plays like TFT afterwards
+        history1 = self.initial_sequence + self.cooperation_pool
+        history2 = [C] * (len(history1) - 1) + [D]
+        self.responses_test(history1, history2, [D])
+
+        history1 = self.initial_sequence + self.cooperation_pool + [D]
+        history2 = [C] * len(history1)
+        self.responses_test(history1, history2, [C])
+
+        history1 = self.initial_sequence + self.cooperation_pool
+        history2 = [C] * len(history1)
+        self.responses_test(history1, history2, [C])
+
+        history1 = self.initial_sequence + self.cooperation_pool + [C]
+        history2 = [C] * (len(history1) - 1) + [D]
+        self.responses_test(history1, history2, [D])
+
+        history1 = self.initial_sequence + self.cooperation_pool + [C]
+        history2 = [C] * (len(history1) - 1) + [D]
+        self.responses_test(history1, history2, [D])
 
 
 class TestHardProber(TestPlayer):
