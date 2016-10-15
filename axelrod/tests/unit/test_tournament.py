@@ -160,7 +160,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(progress_bar=False, build_results=False,
                                   filename=self.filename)
         self.assertIsNone(results)
-        results = axelrod.ResultSetFromFile(self.filename)
+        results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertRaises(AttributeError, call_progress_bar)
 
@@ -419,7 +419,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsNone(results)
 
         # Checking that results were written properly
-        results = axelrod.ResultSetFromFile(self.filename)
+        results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(turns=integers(min_value=1, max_value=200))

@@ -422,7 +422,7 @@ class TestResultSet(unittest.TestCase):
         axelrod.seed(0)
         players = [s() for s in axelrod.demo_strategies]
         tournament = axelrod.Tournament(players, repetitions=2, turns=5)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertEqual(results.payoff_diffs_means[-1][-1], 1.0)
 
     def test_equality(self):
@@ -432,7 +432,7 @@ class TestResultSet(unittest.TestCase):
 
         players = [s() for s in axelrod.demo_strategies]
         tournament = axelrod.Tournament(players, repetitions=2, turns=5)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertNotEqual(results, rs_sets[0])
 
     def test_summarise(self):
@@ -482,9 +482,9 @@ class TestResultSetFromFile(unittest.TestCase):
                axelrod.TitForTat(),
                axelrod.Defector()]
     tournament = axelrod.Tournament(players=players, turns=2, repetitions=3)
-    tournament.play(filename=filename)
+    tournament.play(filename=filename, progress_bar=False)
 
-    interactions = iu.read_interactions_from_file(filename)
+    interactions = iu.read_interactions_from_file(filename, progress_bar=False)
 
     def test_init(self):
         brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
@@ -495,7 +495,7 @@ class TestResultSetFromFile(unittest.TestCase):
     def test_init_with_different_game(self):
         game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
         brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
-                                   game=game)
+                                        game=game)
         self.assertEqual(brs.game.RPST(), (-1, -1, -1, -1))
 
     def test_init_with_progress_bar(self):
@@ -507,7 +507,7 @@ class TestResultSetFromFile(unittest.TestCase):
 
     def test_init_with_num_interactions(self):
         """Just able to test that no error occurs"""
-        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=True,
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
                                         num_interactions=18)
         self.assertEqual(brs.nplayers, len(self.players))
         self.assertEqual(brs.repetitions, 3)
@@ -515,7 +515,7 @@ class TestResultSetFromFile(unittest.TestCase):
 
     def test_init_with_players_repetitions(self):
         """Just able to test that no error occurs"""
-        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=True,
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
                                         num_interactions=18, repetitions=3,
                                         players=[str(p) for p in self.players])
         self.assertEqual(brs.nplayers, len(self.players))
@@ -545,7 +545,8 @@ class TestResultSetFromFile(unittest.TestCase):
         tournament.play(filename=filename, progress_bar=False,
                         build_results=False)
         brs = axelrod.ResultSetFromFile(filename, progress_bar=False)
-        interactions = iu.read_interactions_from_file(filename)
+        interactions = iu.read_interactions_from_file(filename,
+                                                      progress_bar=False)
         rs = axelrod.ResultSet(tournament.players, interactions,
                                progress_bar=False)
 
@@ -568,7 +569,8 @@ class TestResultSetFromFile(unittest.TestCase):
         tournament.play(filename=filename, progress_bar=False,
                         build_results=False)
         brs = axelrod.ResultSetFromFile(filename, progress_bar=False)
-        interactions = iu.read_interactions_from_file(filename)
+        interactions = iu.read_interactions_from_file(filename,
+                                                      progress_bar=False)
         rs = axelrod.ResultSet(tournament.players, interactions,
                                progress_bar=False)
 
