@@ -1247,3 +1247,15 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
             self.assertEqual(player.CD_rate, 0)
             self.assertEqual(player.DC_rate, 0)
             self.assertEqual(player.DD_rate, 0)
+
+
+class TestSummary(unittest.TestCase):
+    """Separate test to check that summary always builds without failures"""
+    @given(tournament=tournaments(max_size=5,
+                                  max_turns=5,
+                                  max_repetitions=3))
+    @settings(max_examples=50, timeout=0)
+    def test_summarise_without_failure(self, tournament):
+        results = tournament.play(progress_bar=False)
+        sd = results.summarise()
+        self.assertIsInstance(sd, list)
