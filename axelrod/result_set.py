@@ -354,8 +354,8 @@ class ResultSet(object):
             counters = []
             for counter in player:
                 total = sum(counter.values())
-                counters.append(Counter({key: value / total for key, value in
-                                         counter.items()}))
+                counters.append(Counter({key: float(value) / total for
+                                         key, value in counter.items()}))
             norm.append(counters)
         return norm
 
@@ -750,7 +750,7 @@ class ResultSet(object):
                 p = sum([opp[state] for j, opp in enumerate(player) if i != j])
                 counts.append(p)
             try:
-                counts = [c / sum(counts) for c in counts]
+                counts = [float(c) / sum(counts) for c in counts]
             except ZeroDivisionError:
                 counts = [0 for c in counts]
             state_prob.append(counts)

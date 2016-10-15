@@ -1259,3 +1259,9 @@ class TestSummary(unittest.TestCase):
         results = tournament.play(progress_bar=False)
         sd = results.summarise()
         self.assertIsInstance(sd, list)
+
+        for player in sd:
+            # round for numerical error
+            total_rate = round(player.CC_rate + player.CD_rate +
+                               player.DC_rate + player.DD_rate, 3)
+            self.assertTrue(total_rate in [0, 1])
