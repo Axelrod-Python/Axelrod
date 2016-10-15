@@ -104,11 +104,15 @@ class Prober3(Player):
 
 class Prober4(Player):
     """
-    Plays fixed initial sequence of 20 moves.
-    Counts just (retaliated) and unjust defections of the opponent.
-    If the absolute difference between just and unjust defections
-    is greater than 2, defects forever.
-    Otherwise cooperates for the next 5 moves, and plays TFT afterwards.
+    Plays C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D initially.
+    Counts retaliating and provocative defections of the opponent.
+    If the absolute difference between the counts is smaller or equal to 2,
+    defects forever.
+    Otherwise plays C for the next 5 turns and TFT for the rest of the game.
+
+    Names:
+
+    - prober4: [PRISON1998]_
     """
 
     name = 'Prober 4'
@@ -125,18 +129,19 @@ class Prober4(Player):
     @init_args
     def __init__(self):
         Player.__init__(self)
-        self.init_sequence = [C, C, D, C, D, D, D, C, C, D,
-                              C, D, C, C, D, C, D, D, C, D]
+        self.init_sequence = [
+            C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
+        ]
         self.just_Ds = 0
         self.unjust_Ds = 0
-        self.cooperation_pool = 5 * [C]
+        self.cooperation_pool = [C] * 5
         self.turned_defector = False
 
     def strategy(self, opponent):
         if len(opponent.history) == 0:
-            return C
+            return self.init_sequence[0]
         if len(self.history) == 0:
-            return C
+            return self.init_sequence[0]
         else:
             turn = len(self.history)
             if turn < len(self.init_sequence):
@@ -148,7 +153,7 @@ class Prober4(Player):
                 return self.init_sequence[turn]
             if turn == len(self.init_sequence):
                 diff_in_Ds = abs(self.just_Ds - self.unjust_Ds)
-                self.turned_defector = (diff_in_Ds > 2)
+                self.turned_defector = (diff_in_Ds <= 2)
             if self.turned_defector:
                 return D
             if not self.turned_defector:
@@ -161,8 +166,8 @@ class Prober4(Player):
         Player.reset(self)
         self.just_Ds = 0
         self.unjust_Ds = 0
-        self.cooperation_pool = [C, C, C, C, C]
-        self.became_defector = False
+        self.cooperation_pool = [C] * 5
+        self.turned_defector = False
 
 
 class HardProber(Player):

@@ -112,8 +112,9 @@ class TestProber4(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-    initial_sequence = [C, C, D, C, D, D, D, C, C, D,
-                        C, D, C, C, D, C, D, D, C, D]
+    initial_sequence = [
+        C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
+    ]
     cooperation_pool = [C] * 5
 
     def test_initial_strategy(self):
@@ -121,47 +122,54 @@ class TestProber4(TestPlayer):
         self.responses_test([], [], self.initial_sequence)
 
     def test_strategy(self):
-        # Defects forever if the opponent played D for C
-        # at least 3 times more than D for D
-        history1 = self.initial_sequence
-        history2 = self.initial_sequence
-        responses = [D] * 10
-        self.responses_test(history1, history2, responses)
+        # After playing the initial sequence defects forever
+        # if the absolute difference in the number of retaliating
+        # and provocative defections of the opponent is smaller or equal to 2
 
-        # or if the opponent played D for D
-        # at least 3 times more than D for C
+        provocative_histories = [
+            [C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, D, C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, C, D, C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D],
+        ]
+
         history1 = self.initial_sequence
-        history2 = list(map(lambda x: D if x is C else C,
-                            self.initial_sequence))
         responses = [D] * 10
-        self.responses_test(history1, history2, responses)
+        for history2 in provocative_histories:
+            self.responses_test(history1, history2, responses)
 
         # Otherwise cooperates for 5 rounds
+        unprovocative_histories = [
+            [C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D],
+            [D, D, C, D, C, C, C, D, D, C, D, C, D, D, C, D, C, C, D, C],
+            [C, C, D, C, D, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, C, D, C, D, D, C, C, D, C, C, C, C, C, C, D, D, D, C, C],
+            [C, C, C, C, D, D, C, C, D, C, C, D, D, C, D, C, D, C, C, C],
+        ]
+
         history1 = self.initial_sequence
-        history2 = [C] * len(history1)
         responses = self.cooperation_pool
-        self.responses_test(history1, history2, responses)
+        for history2 in unprovocative_histories:
+            self.responses_test(history1, history2, responses)
 
         # and plays like TFT afterwards
-        history1 = self.initial_sequence + self.cooperation_pool
-        history2 = [C] * (len(history1) - 1) + [D]
-        self.responses_test(history1, history2, [D])
+            history1 += self.cooperation_pool
+            history2 += self.cooperation_pool
+            self.responses_test(history1, history2, [C])
 
-        history1 = self.initial_sequence + self.cooperation_pool + [D]
-        history2 = [C] * len(history1)
-        self.responses_test(history1, history2, [C])
+            history1 += [C]
+            history2 += [D]
+            self.responses_test(history1, history2, [D])
 
-        history1 = self.initial_sequence + self.cooperation_pool
-        history2 = [C] * len(history1)
-        self.responses_test(history1, history2, [C])
+            history1 += [D]
+            history2 += [C]
+            self.responses_test(history1, history2, [C])
 
-        history1 = self.initial_sequence + self.cooperation_pool + [C]
-        history2 = [C] * (len(history1) - 1) + [D]
-        self.responses_test(history1, history2, [D])
-
-        history1 = self.initial_sequence + self.cooperation_pool + [C]
-        history2 = [C] * (len(history1) - 1) + [D]
-        self.responses_test(history1, history2, [D])
+            history1 += [C]
+            history2 += [D]
+            self.responses_test(history1, history2, [D])
 
 
 class TestHardProber(TestPlayer):
