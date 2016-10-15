@@ -141,6 +141,7 @@ class ResultSet(object):
         del self.players_d  # Manual garbage collection
         return players
 
+    @update_progress_bar
     def build_eigenmoses_rating(self):
         """
         Returns:
@@ -154,6 +155,7 @@ class ResultSet(object):
 
         return eigenvector.tolist()
 
+    @update_progress_bar
     def build_eigenjesus_rating(self):
         """
         Returns:
@@ -167,6 +169,7 @@ class ResultSet(object):
 
         return eigenvector.tolist()
 
+    @update_progress_bar
     def build_cooperating_rating(self):
         """
         Returns:
@@ -197,6 +200,7 @@ class ResultSet(object):
         return [sum(cs) / max(1, float(sum(ls))) for cs, ls
                 in zip(self.cooperation, lengths)]
 
+    @update_progress_bar
     def build_vengeful_cooperation(self):
         """
         Returns:
@@ -210,6 +214,7 @@ class ResultSet(object):
         return [[2 * (element - 0.5) for element in row]
                 for row in self.normalised_cooperation]
 
+    @update_progress_bar
     def build_payoff_diffs_means(self):
         """
         Returns:
@@ -231,6 +236,7 @@ class ResultSet(object):
                               for player in self.score_diffs]
         return payoff_diffs_means
 
+    @update_progress_bar
     def build_payoff_stddevs(self):
         """
         Returns:
@@ -267,6 +273,7 @@ class ResultSet(object):
 
         return payoff_stddevs
 
+    @update_progress_bar
     def build_payoff_matrix(self):
         """
         Returns:
@@ -301,6 +308,7 @@ class ResultSet(object):
 
         return payoff_matrix
 
+    @update_progress_bar
     def build_ranked_names(self):
         """
         Returns:
@@ -311,6 +319,7 @@ class ResultSet(object):
 
         return [str(self.players[i]) for i in self.ranking]
 
+    @update_progress_bar
     def build_ranking(self):
         """
         Returns:
@@ -326,6 +335,7 @@ class ResultSet(object):
         return sorted(range(self.nplayers),
                       key=lambda i: -nanmedian(self.normalised_scores[i]))
 
+    @update_progress_bar
     def build_normalised_state_distribution(self):
         """
         Returns
@@ -517,7 +527,7 @@ class ResultSet(object):
                     self._update_good_partner_matrix(p1, p2, cooperations)
 
         if progress_bar:
-            self.progress_bar = tqdm.tqdm(total=10 + 2 * self.nplayers,
+            self.progress_bar = tqdm.tqdm(total=11 + 2 * self.nplayers,
                                           desc="Finishing")
         self._summarise_normalised_scores()
         self._summarise_normalised_cooperation()
@@ -648,6 +658,8 @@ class ResultSet(object):
             players_pair = [self.players[i] for i in match_pair]
             repetitions = [list(match_pair) + players_pair + rep for rep in
                            interactions]
+            if progress_bar:
+                progress_bar.update()
             yield repetitions
 
         if progress_bar:

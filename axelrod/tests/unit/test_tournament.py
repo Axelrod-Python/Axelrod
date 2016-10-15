@@ -176,10 +176,14 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.progress_bar.total, 15)
+        self.assertEqual(tournament.progress_bar.total,
+                         tournament.progress_bar.n)
 
         results = tournament.play(progress_bar=True)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.progress_bar.total, 15)
+        self.assertEqual(tournament.progress_bar.total,
+                         tournament.progress_bar.n)
 
         # Test without build results
         results = tournament.play(progress_bar=True, build_results=False,
@@ -188,6 +192,8 @@ class TestTournament(unittest.TestCase):
         results = axelrod.ResultSetFromFile(self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.progress_bar.total, 15)
+        self.assertEqual(tournament.progress_bar.total,
+                         tournament.progress_bar.n)
 
     @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")

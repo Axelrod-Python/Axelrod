@@ -223,12 +223,14 @@ class TestResultSet(unittest.TestCase):
     def test_with_progress_bar(self):
         rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertTrue(rs.progress_bar)
-        self.assertEqual(rs.progress_bar.total, 10 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.total, 11 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=True)
         self.assertTrue(rs.progress_bar)
-        self.assertEqual(rs.progress_bar.total, 10 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.total, 11 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
     def test_match_lengths(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
