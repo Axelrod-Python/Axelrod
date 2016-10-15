@@ -395,25 +395,84 @@ class ResultSet(object):
             self.interactions = {}
 
     def _update_match_lengths(self, repetition, p1, p2, interaction):
+        """
+        During a read of the data, update the match lengths attribute
+
+        Parameters
+        ----------
+
+            repetition : int
+                The index of the repetition
+            p1, p2 : int
+                The indices of the first and second player
+            interaction : list
+                A list of tuples of interactions
+        """
         self.match_lengths[repetition][p1][p2] = len(interaction)
 
     def _update_payoffs(self, p1, p2, scores_per_turn):
+        """
+        During a read of the data, update the payoffs attribute
+
+        Parameters
+        ----------
+
+            p1, p2 : int
+                The indices of the first and second player
+            scores_per_turn : tuples
+                A 2-tuple of the scores per turn for a given match
+        """
         self.payoffs[p1][p2].append(scores_per_turn[0])
         if p1 != p2:
             self.payoffs[p2][p1].append(scores_per_turn[1])
 
     def _update_score_diffs(self, repetition, p1, p2, scores_per_turn):
+        """
+        During a read of the data, update the score diffs attribute
+
+        Parameters
+        ----------
+
+            p1, p2 : int
+                The indices of the first and second player
+            scores_per_turn : tuples
+                A 2-tuple of the scores per turn for a given match
+        """
         diff = scores_per_turn[0] - scores_per_turn[1]
         self.score_diffs[p1][p2][repetition] = diff
         self.score_diffs[p2][p1][repetition] = -diff
 
     def _update_normalised_cooperation(self, p1, p2, interaction):
+        """
+        During a read of the data, update the normalised cooperation attribute
+
+        Parameters
+        ----------
+
+            p1, p2 : int
+                The indices of the first and second player
+            interaction : list of tuples
+                A list of interactions
+        """
         normalised_cooperations = iu.compute_normalised_cooperation(interaction)
 
         self.normalised_cooperation[p1][p2].append(normalised_cooperations[0])
         self.normalised_cooperation[p2][p1].append(normalised_cooperations[1])
 
     def _update_wins(self, repetition, p1, p2, interaction):
+        """
+        During a read of the data, update the wins attribute
+
+        Parameters
+        ----------
+
+            repetition : int
+                The index of a repetition
+            p1, p2 : int
+                The indices of the first and second player
+            interaction : list of tuples
+                A list of interactions
+        """
         match_winner_index = iu.compute_winner_index(interaction,
                                                      game=self.game)
         index_pair = [p1, p2]
@@ -422,33 +481,95 @@ class ResultSet(object):
             self.wins[winner_index][repetition] += 1
 
     def _update_scores(self, repetition, p1, p2, interaction):
+        """
+        During a read of the data, update the scores attribute
+
+        Parameters
+        ----------
+
+            repetition : int
+                The index of a repetition
+            p1, p2 : int
+                The indices of the first and second player
+            interaction : list of tuples
+                A list of interactions
+        """
         final_scores = iu.compute_final_score(interaction, game=self.game)
         for index, player in enumerate([p1, p2]):
             player_score = final_scores[index]
             self.scores[player][repetition] += player_score
 
     def _update_normalised_scores(self, repetition, p1, p2, scores_per_turn):
+        """
+        During a read of the data, update the normalised scores attribute
+
+        Parameters
+        ----------
+
+            repetition : int
+                The index of a repetition
+            p1, p2 : int
+                The indices of the first and second player
+            scores_per_turn : tuple
+                A 2 tuple with the scores per turn of each player
+        """
         for index, player in enumerate([p1, p2]):
             score_per_turn = scores_per_turn[index]
             self.normalised_scores[player][repetition].append(score_per_turn)
 
     def _update_cooperation(self, p1, p2, cooperations):
+        """
+        During a read of the data, update the cooperation attribute
+
+        Parameters
+        ----------
+
+            p1, p2 : int
+                The indices of the first and second player
+            cooperations : tuple
+                A 2 tuple with the count of cooperation each player
+        """
         self.cooperation[p1][p2] += cooperations[0]
         self.cooperation[p2][p1] += cooperations[1]
 
     def _update_state_distribution(self, p1, p2, counter):
+        """
+        During a read of the data, update the state_distribution attribute
+
+        Parameters
+        ----------
+
+            p1, p2 : int
+                The indices of the first and second player
+            counter : collections.Counter
+                A counter object for the states of a match
+        """
         self.state_distribution[p1][p2] += counter
 
         counter[(C, D)], counter[(D, C)] = counter[(D, C)], counter[(C, D)]
         self.state_distribution[p2][p1] += counter
 
     def _update_good_partner_matrix(self, p1, p2, cooperations):
+        """
+        During a read of the data, update the good partner matrix attribute
+
+        Parameters
+        ----------
+
+            p1, p2 : int
+                The indices of the first and second player
+            cooperations : tuple
+                A 2 tuple with the count of cooperation each player
+        """
         if cooperations[0] >= cooperations[1]:
             self.good_partner_matrix[p1][p2] += 1
         if cooperations[1] >= cooperations[0]:
             self.good_partner_matrix[p2][p1] += 1
 
     def _summarise_normalised_scores(self):
+        """
+        At the end of a read of the data, finalise the normalised scores
+        """
         for i, rep in enumerate(self.normalised_scores):
             for j, player_scores in enumerate(rep):
                 if player_scores != []:
@@ -461,6 +582,9 @@ class ResultSet(object):
                 pass
 
     def _summarise_normalised_cooperation(self):
+        """
+        At the end of a read of the data, finalise the normalised cooperation
+        """
         for i, rep in enumerate(self.normalised_cooperation):
             for j, cooperation in enumerate(rep):
                 if cooperation != []:
@@ -474,6 +598,10 @@ class ResultSet(object):
 
     @update_progress_bar
     def _build_good_partner_rating(self):
+        """
+        At the end of a read of the data, build the good partner rating
+        attribute
+        """
         return [sum(self.good_partner_matrix[player]) /
                 max(1, float(self.total_interactions[player]))
                 for player in range(self.nplayers)]
@@ -550,6 +678,15 @@ class ResultSet(object):
             self.progress_bar.close()
 
     def __eq__(self, other):
+        """
+        Check equality of results set
+
+        Parameters
+        ----------
+
+            other : axelrod.ResultSet
+                Another results set against which to check equality
+        """
         return all([self.wins == other.wins,
                     self.match_lengths == other.match_lengths,
                     self.scores == other.scores,
@@ -571,6 +708,15 @@ class ResultSet(object):
                     self.eigenjesus_rating == other.eigenjesus_rating])
 
     def __ne__(self, other):
+        """
+        Check inequality of results set
+
+        Parameters
+        ----------
+
+            other : axelrod.ResultSet
+                Another results set against which to check inequality
+        """
         return not self.__eq__(other)
 
     def summarise(self):
