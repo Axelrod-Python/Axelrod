@@ -399,7 +399,7 @@ class Shubik(Player):
 
 class Tullock(Player):
     """
-    Submitted to Axelrod's first tournament by Gordon Tulloc.
+    Submitted to Axelrod's first tournament by Gordon Tullock.
 
     Cooperates for the first 11 rounds then randomly cooperates 10% less often
     than the opponent has in previous rounds.
