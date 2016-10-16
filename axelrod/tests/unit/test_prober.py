@@ -99,6 +99,79 @@ class TestProber3(TestPlayer):
         self.responses_test([D, C, C, D, C], [C, D, C, C], [C])
 
 
+class TestProber4(TestPlayer):
+
+    name = "Prober 4"
+    player = axelrod.Prober4
+    expected_classifier = {
+        'stochastic': False,
+        'memory_depth': float('inf'),
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+    initial_sequence = [
+        C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
+    ]
+
+    def test_initial_strategy(self):
+        """Starts by playing CCDCDDDCCDCDCCDCDDCD."""
+        self.responses_test([], [], self.initial_sequence)
+
+    def test_strategy(self):
+        # After playing the initial sequence defects forever
+        # if the absolute difference in the number of retaliating
+        # and provocative defections of the opponent is smaller or equal to 2
+
+        provocative_histories = [
+            [C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, D, C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, C, D, C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D],
+        ]
+
+        history1 = self.initial_sequence
+        responses = [D] * 10
+        attrs = {'turned_defector': True}
+        for history2 in provocative_histories:
+            self.responses_test(history1, history2, responses, attrs=attrs)
+
+        # Otherwise cooperates for 5 rounds
+        unprovocative_histories = [
+            [C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D],
+            [D, D, C, D, C, C, C, D, D, C, D, C, D, D, C, D, C, C, D, C],
+            [C, C, D, C, D, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
+            [C, C, D, C, D, D, C, C, D, C, C, C, C, C, C, D, D, D, C, C],
+            [C, C, C, C, D, D, C, C, D, C, C, D, D, C, D, C, D, C, C, C],
+        ]
+
+        responses = [C] * 5
+        attrs = {'turned_defector': False}
+        for history2 in unprovocative_histories:
+            self.responses_test(history1, history2, responses, attrs=attrs)
+
+        # and plays like TFT afterwards
+            history1 += responses
+            history2 += responses
+            self.responses_test(history1, history2, [C], attrs=attrs)
+
+            history1 += [C]
+            history2 += [D]
+            self.responses_test(history1, history2, [D], attrs=attrs)
+
+            history1 += [D]
+            history2 += [C]
+            self.responses_test(history1, history2, [C], attrs=attrs)
+
+            history1 += [C]
+            history2 += [D]
+            self.responses_test(history1, history2, [D], attrs=attrs)
+
+
 class TestHardProber(TestPlayer):
 
     name = "Hard Prober"

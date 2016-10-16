@@ -47,7 +47,7 @@ from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .mutual import Desperate, Hopeless, Willing
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
-from .prober import (Prober, Prober2, Prober3, HardProber,
+from .prober import (Prober, Prober2, Prober3, Prober4, HardProber,
                      NaiveProber, RemorsefulProber)
 from .punisher import Punisher, InversePunisher
 from .qlearner import RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner
@@ -165,6 +165,7 @@ all_strategies = [
     Prober,
     Prober2,
     Prober3,
+    Prober4,
     ProtectedMindReader,
     Punisher,
     Raider,

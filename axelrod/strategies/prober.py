@@ -102,6 +102,68 @@ class Prober3(Player):
                 return D if opponent.history[-1:] == [D] else C
 
 
+class Prober4(Player):
+    """
+    Plays C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D initially.
+    Counts retaliating and provocative defections of the opponent.
+    If the absolute difference between the counts is smaller or equal to 2,
+    defects forever.
+    Otherwise plays C for the next 5 turns and TFT for the rest of the game.
+
+    Names:
+
+    - prober4: [PRISON1998]_
+    """
+
+    name = 'Prober 4'
+    classifier = {
+        'stochastic': False,
+        'memory_depth': float('inf'),
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self):
+        Player.__init__(self)
+        self.init_sequence = [
+            C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
+        ]
+        self.just_Ds = 0
+        self.unjust_Ds = 0
+        self.turned_defector = False
+
+    def strategy(self, opponent):
+        if not self.history:
+            return self.init_sequence[0]
+        turn = len(self.history)
+        if turn < len(self.init_sequence):
+            if opponent.history[-1] == D:
+                if self.history[-1] == D:
+                    self.just_Ds += 1
+                if self.history[-1] == C:
+                    self.unjust_Ds += 1
+            return self.init_sequence[turn]
+        if turn == len(self.init_sequence):
+            diff_in_Ds = abs(self.just_Ds - self.unjust_Ds)
+            self.turned_defector = (diff_in_Ds <= 2)
+        if self.turned_defector:
+            return D
+        if not self.turned_defector:
+            if turn < len(self.init_sequence) + 5:
+                return C
+            return D if opponent.history[-1] == D else C
+
+    def reset(self):
+        Player.reset(self)
+        self.just_Ds = 0
+        self.unjust_Ds = 0
+        self.turned_defector = False
+
+
 class HardProber(Player):
     """
     Plays D, D, C, C initially. Defects forever if opponent cooperated in moves
