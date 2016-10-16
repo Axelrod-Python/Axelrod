@@ -1,3 +1,37 @@
+# v1.13.0, 2016-10-16
+
+New strategy, state distribution and documentation
+
+- Adding Prober4 strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/743
+- Adding state distribution to results set
+  https://github.com/Axelrod-Python/Axelrod/pull/742
+- More references for strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/745
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.12.0...v1.13.0
+
+# v1.12.0, 2016-10-13
+
+Human interactive player, new strategy, under the hood improvements and
+documentation.
+
+- You can play against an instance of `axelrod.Human`
+  https://github.com/Axelrod-Python/Axelrod/pull/732
+- Improved efficiency of result set from memory
+  https://github.com/Axelrod-Python/Axelrod/pull/737
+- Documentation improvements
+  https://github.com/Axelrod-Python/Axelrod/pull/741
+  https://github.com/Axelrod-Python/Axelrod/pull/736
+  https://github.com/Axelrod-Python/Axelrod/pull/735
+  https://github.com/Axelrod-Python/Axelrod/pull/727
+- New strategy CyclerCCCDCD:
+  https://github.com/Axelrod-Python/Axelrod/pull/379
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.11.0...v1.12.0
+
 # v1.12.0, 2016-10-13
 
 Human interactive player, new strategy, under the hood improvements and
