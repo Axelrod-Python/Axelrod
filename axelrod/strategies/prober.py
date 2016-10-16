@@ -137,7 +137,7 @@ class Prober4(Player):
         self.turned_defector = False
 
     def strategy(self, opponent):
-        if len(self.history) == 0:
+        if not self.history:
             return self.init_sequence[0]
         turn = len(self.history)
         if turn < len(self.init_sequence):
