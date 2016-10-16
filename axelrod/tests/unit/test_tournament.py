@@ -160,7 +160,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(progress_bar=False, build_results=False,
                                   filename=self.filename)
         self.assertIsNone(results)
-        results = axelrod.ResultSetFromFile(self.filename)
+        results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertRaises(AttributeError, call_progress_bar)
 
@@ -176,10 +176,14 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.progress_bar.total, 15)
+        self.assertEqual(tournament.progress_bar.total,
+                         tournament.progress_bar.n)
 
         results = tournament.play(progress_bar=True)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.progress_bar.total, 15)
+        self.assertEqual(tournament.progress_bar.total,
+                         tournament.progress_bar.n)
 
         # Test without build results
         results = tournament.play(progress_bar=True, build_results=False,
@@ -188,6 +192,8 @@ class TestTournament(unittest.TestCase):
         results = axelrod.ResultSetFromFile(self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.progress_bar.total, 15)
+        self.assertEqual(tournament.progress_bar.total,
+                         tournament.progress_bar.n)
 
     @unittest.skipIf(axelrod.on_windows,
                      "Parallel processing not supported on Windows")
@@ -413,7 +419,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsNone(results)
 
         # Checking that results were written properly
-        results = axelrod.ResultSetFromFile(self.filename)
+        results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(turns=integers(min_value=1, max_value=200))

@@ -5,6 +5,7 @@ import axelrod.interaction_utils as iu
 from numpy import mean, std, nanmedian
 
 import csv
+from collections import Counter
 
 from hypothesis import given, settings
 from axelrod.tests.property import tournaments, prob_end_tournaments
@@ -82,7 +83,6 @@ class TestResultSet(unittest.TestCase):
             [[17/5.0 for _ in range(3)], [9/5.0 for _ in range(3)], []]
         ]
 
-        norm_scores = cls.expected_normalised_scores
         cls.expected_score_diffs = [
             [[0.0, 0.0, 0.0],
              [0.0, 0.0, 0.0],
@@ -120,10 +120,38 @@ class TestResultSet(unittest.TestCase):
                 [0, 0, 0],
             ]
 
+        cls.expected_state_distribution = [
+                [], [], []
+            ]
+
         cls.expected_normalised_cooperation = [
                 [0, mean([3 / 5.0 for _ in range(3)]), mean([3 / 5.0 for _ in range(3)])],
                 [mean([3 / 5.0 for _ in range(3)]), 0, mean([1 / 5.0 for _ in range(3)])],
                 [0, 0, 0],
+            ]
+
+        cls.expected_state_distribution = [
+                [Counter(),
+                 Counter({('D', 'C'): 6, ('C', 'D'): 6, ('C', 'C'): 3}),
+                 Counter({('C', 'D'): 9, ('D', 'D'): 6})],
+                [Counter({('D', 'C'): 6, ('C', 'D'): 6, ('C', 'C'): 3}),
+                 Counter(),
+                 Counter({('D', 'D'): 12, ('C', 'D'): 3})],
+                [Counter({('D', 'C'): 9, ('D', 'D'): 6}),
+                 Counter({('D', 'D'): 12, ('D', 'C'): 3}),
+                 Counter()]
+            ]
+
+        cls.expected_normalised_state_distribution = [
+                [Counter(),
+                 Counter({('D', 'C'): 0.4, ('C', 'D'): 0.4, ('C', 'C'): 0.2}),
+                 Counter({('C', 'D'): 0.6, ('D', 'D'): 0.4})],
+                [Counter({('D', 'C'): 0.4, ('C', 'D'): 0.4, ('C', 'C'): 0.2}),
+                 Counter(),
+                 Counter({('D', 'D'): 0.8, ('C', 'D'): 0.2})],
+                [Counter({('D', 'C'): 0.6, ('D', 'D'): 0.4}),
+                 Counter({('D', 'D'): 0.8, ('D', 'C'): 0.2}),
+                 Counter()]
             ]
 
         cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
@@ -195,12 +223,14 @@ class TestResultSet(unittest.TestCase):
     def test_with_progress_bar(self):
         rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertTrue(rs.progress_bar)
-        self.assertEqual(rs.progress_bar.total, 10 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.total, 11 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=True)
         self.assertTrue(rs.progress_bar)
-        self.assertEqual(rs.progress_bar.total, 10 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.total, 11 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
     def test_match_lengths(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
@@ -323,6 +353,22 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.normalised_cooperation,
                          self.expected_normalised_cooperation)
 
+    def test_state_distribution(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.state_distribution, list)
+        self.assertEqual(len(rs.state_distribution), rs.nplayers)
+        self.assertEqual(rs.state_distribution,
+                         self.expected_state_distribution)
+
+    def test_state_normalised_distribution(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.normalised_state_distribution, list)
+        self.assertEqual(len(rs.normalised_state_distribution), rs.nplayers)
+        self.assertEqual(rs.normalised_state_distribution,
+                         self.expected_normalised_state_distribution)
+
     def test_vengeful_cooperation(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -376,7 +422,7 @@ class TestResultSet(unittest.TestCase):
         axelrod.seed(0)
         players = [s() for s in axelrod.demo_strategies]
         tournament = axelrod.Tournament(players, repetitions=2, turns=5)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertEqual(results.payoff_diffs_means[-1][-1], 1.0)
 
     def test_equality(self):
@@ -386,7 +432,7 @@ class TestResultSet(unittest.TestCase):
 
         players = [s() for s in axelrod.demo_strategies]
         tournament = axelrod.Tournament(players, repetitions=2, turns=5)
-        results = tournament.play()
+        results = tournament.play(progress_bar=False)
         self.assertNotEqual(results, rs_sets[0])
 
     def test_summarise(self):
@@ -413,6 +459,9 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual([float(player.Wins) for player in sd],
                          ranked_median_wins)
 
+        for player in sd:
+            self.assertEqual(player.CC_rate + player.CD_rate + player.DC_rate + player.DD_rate, 1)
+
     def test_write_summary(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -422,11 +471,9 @@ class TestResultSet(unittest.TestCase):
             csvreader = csv.reader(csvfile)
             for row in csvreader:
                 ranked_names.append(row[1])
-                self.assertEqual(len(row), 5)
+                self.assertEqual(len(row), 9)
         self.assertEqual(ranked_names[0], "Name")
         self.assertEqual(ranked_names[1:], rs.ranked_names)
-
-
 
 
 class TestResultSetFromFile(unittest.TestCase):
@@ -435,9 +482,9 @@ class TestResultSetFromFile(unittest.TestCase):
                axelrod.TitForTat(),
                axelrod.Defector()]
     tournament = axelrod.Tournament(players=players, turns=2, repetitions=3)
-    tournament.play(filename=filename)
+    tournament.play(filename=filename, progress_bar=False)
 
-    interactions = iu.read_interactions_from_file(filename)
+    interactions = iu.read_interactions_from_file(filename, progress_bar=False)
 
     def test_init(self):
         brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
@@ -448,7 +495,7 @@ class TestResultSetFromFile(unittest.TestCase):
     def test_init_with_different_game(self):
         game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
         brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
-                                   game=game)
+                                        game=game)
         self.assertEqual(brs.game.RPST(), (-1, -1, -1, -1))
 
     def test_init_with_progress_bar(self):
@@ -460,7 +507,7 @@ class TestResultSetFromFile(unittest.TestCase):
 
     def test_init_with_num_interactions(self):
         """Just able to test that no error occurs"""
-        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=True,
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
                                         num_interactions=18)
         self.assertEqual(brs.nplayers, len(self.players))
         self.assertEqual(brs.repetitions, 3)
@@ -468,7 +515,7 @@ class TestResultSetFromFile(unittest.TestCase):
 
     def test_init_with_players_repetitions(self):
         """Just able to test that no error occurs"""
-        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=True,
+        brs = axelrod.ResultSetFromFile(self.filename, progress_bar=False,
                                         num_interactions=18, repetitions=3,
                                         players=[str(p) for p in self.players])
         self.assertEqual(brs.nplayers, len(self.players))
@@ -498,7 +545,8 @@ class TestResultSetFromFile(unittest.TestCase):
         tournament.play(filename=filename, progress_bar=False,
                         build_results=False)
         brs = axelrod.ResultSetFromFile(filename, progress_bar=False)
-        interactions = iu.read_interactions_from_file(filename)
+        interactions = iu.read_interactions_from_file(filename,
+                                                      progress_bar=False)
         rs = axelrod.ResultSet(tournament.players, interactions,
                                progress_bar=False)
 
@@ -521,7 +569,8 @@ class TestResultSetFromFile(unittest.TestCase):
         tournament.play(filename=filename, progress_bar=False,
                         build_results=False)
         brs = axelrod.ResultSetFromFile(filename, progress_bar=False)
-        interactions = iu.read_interactions_from_file(filename)
+        interactions = iu.read_interactions_from_file(filename,
+                                                      progress_bar=False)
         rs = axelrod.ResultSet(tournament.players, interactions,
                                progress_bar=False)
 
@@ -717,7 +766,6 @@ class TestResultSetSpatialStructure(TestResultSet):
             [[17/5.0 for _ in range(3)], [], []]
         ]
 
-        norm_scores = cls.expected_normalised_scores
         cls.expected_score_diffs = [
             [[0.0, 0.0, 0.0],
              [0.0, 0.0, 0.0],
@@ -794,8 +842,25 @@ class TestResultSetSpatialStructure(TestResultSet):
                 0.5488212999484519
             ]
 
-        cls.expected_csv = (
-            'Defector,Tit For Tat,Alternator\n3.4,2.6,1.5\n3.4,2.6,1.5\n3.4,2.6,1.5\n')
+        cls.expected_state_distribution = [
+              [Counter(),
+               Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+               Counter({('C', 'D'): 9, ('D', 'D'): 6})],
+              [Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+               Counter(),
+               Counter()],
+              [Counter({('D', 'C'): 9, ('D', 'D'): 6}), Counter(), Counter()]
+            ]
+
+        cls.expected_normalised_state_distribution = [
+              [Counter(),
+               Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+               Counter({('C', 'D'): 0.6, ('D', 'D'): 0.4})],
+              [Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+               Counter(),
+               Counter()],
+              [Counter({('D', 'C'): 0.6, ('D', 'D'): 0.4}), Counter(), Counter()]
+            ]
 
     def test_match_lengths(self):
         """
@@ -906,7 +971,6 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
              [[], [], [0 for _ in range(3)], []]
         ]
 
-        norm_scores = cls.expected_normalised_scores
         cls.expected_score_diffs = [
             [[0.0, 0.0, 0.0],
              [0.0, 0.0, 0.0],
@@ -1000,8 +1064,31 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                 0.1633132292825755
             ]
 
-        cls.expected_csv = (
-        "Defector,Alternator,Tit For Tat,Cooperator\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n5.0,2.6,2.6,0.0\n")
+        cls.expected_state_distribution = [
+               [Counter(),
+                Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+                Counter(),
+                Counter()],
+               [Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+                Counter(),
+                Counter(),
+                Counter()],
+               [Counter(), Counter(), Counter(), Counter({('D', 'C'): 15})],
+               [Counter(), Counter(), Counter({('C', 'D'): 15}), Counter()]
+            ]
+
+        cls.expected_normalised_state_distribution = [
+               [Counter(),
+                Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+                Counter(),
+                Counter()],
+               [Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+                Counter(),
+                Counter(),
+                Counter()],
+               [Counter(), Counter(), Counter(), Counter({('D', 'C'): 1.0})],
+               [Counter(), Counter(), Counter({('C', 'D'): 1.0}), Counter()]
+            ]
 
 
 class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
@@ -1067,7 +1154,6 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
              [[], [], [], [15 /5.0 for _ in range(3)]]
         ]
 
-        norm_scores = cls.expected_normalised_scores
         cls.expected_score_diffs = [
             [[0.0 for _ in range(3)] for _ in range(4) ] for _ in range(4)
         ]
@@ -1131,9 +1217,51 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
                 0.3985944056208427
             ]
 
-        cls.expected_csv = (
-            'Alternator,Tit For Tat,Defector,Cooperator\nnan,nan,nan,nan\nnan,nan,nan,nan\nnan,nan,nan,nan\n')
+        cls.expected_state_distribution = [
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()]
+            ]
+
+        cls.expected_normalised_state_distribution = [
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()],
+                [Counter(), Counter(), Counter(), Counter()]
+            ]
+
 
     def test_equality(self):
         """Overwriting for this particular case"""
         pass
+
+    def test_summarise(self):
+        """Overwriting for this particular case"""
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        sd = rs.summarise()
+
+        for player in sd:
+            self.assertEqual(player.CC_rate, 0)
+            self.assertEqual(player.CD_rate, 0)
+            self.assertEqual(player.DC_rate, 0)
+            self.assertEqual(player.DD_rate, 0)
+
+
+class TestSummary(unittest.TestCase):
+    """Separate test to check that summary always builds without failures"""
+    @given(tournament=tournaments(max_size=5,
+                                  max_turns=5,
+                                  max_repetitions=3))
+    @settings(max_examples=50, timeout=0)
+    def test_summarise_without_failure(self, tournament):
+        results = tournament.play(progress_bar=False)
+        sd = results.summarise()
+        self.assertIsInstance(sd, list)
+
+        for player in sd:
+            # round for numerical error
+            total_rate = round(player.CC_rate + player.CD_rate +
+                               player.DC_rate + player.DD_rate, 3)
+            self.assertTrue(total_rate in [0, 1])
