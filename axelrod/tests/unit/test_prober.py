@@ -105,7 +105,7 @@ class TestProber4(TestPlayer):
     player = axelrod.Prober4
     expected_classifier = {
         'stochastic': False,
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
@@ -115,7 +115,6 @@ class TestProber4(TestPlayer):
     initial_sequence = [
         C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
     ]
-    cooperation_pool = [C] * 5
 
     def test_initial_strategy(self):
         """Starts by playing CCDCDDDCCDCDCCDCDDCD."""
@@ -137,8 +136,9 @@ class TestProber4(TestPlayer):
 
         history1 = self.initial_sequence
         responses = [D] * 10
+        attrs = {'turned_defector': True}
         for history2 in provocative_histories:
-            self.responses_test(history1, history2, responses)
+            self.responses_test(history1, history2, responses, attrs=attrs)
 
         # Otherwise cooperates for 5 rounds
         unprovocative_histories = [
@@ -149,27 +149,27 @@ class TestProber4(TestPlayer):
             [C, C, C, C, D, D, C, C, D, C, C, D, D, C, D, C, D, C, C, C],
         ]
 
-        history1 = self.initial_sequence
-        responses = self.cooperation_pool
+        responses = [C] * 5
+        attrs = {'turned_defector': False}
         for history2 in unprovocative_histories:
-            self.responses_test(history1, history2, responses)
+            self.responses_test(history1, history2, responses, attrs=attrs)
 
         # and plays like TFT afterwards
-            history1 += self.cooperation_pool
-            history2 += self.cooperation_pool
-            self.responses_test(history1, history2, [C])
+            history1 += responses
+            history2 += responses
+            self.responses_test(history1, history2, [C], attrs=attrs)
 
             history1 += [C]
             history2 += [D]
-            self.responses_test(history1, history2, [D])
+            self.responses_test(history1, history2, [D], attrs=attrs)
 
             history1 += [D]
             history2 += [C]
-            self.responses_test(history1, history2, [C])
+            self.responses_test(history1, history2, [C], attrs=attrs)
 
             history1 += [C]
             history2 += [D]
-            self.responses_test(history1, history2, [D])
+            self.responses_test(history1, history2, [D], attrs=attrs)
 
 
 class TestHardProber(TestPlayer):

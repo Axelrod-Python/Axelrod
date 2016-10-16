@@ -118,7 +118,7 @@ class Prober4(Player):
     name = 'Prober 4'
     classifier = {
         'stochastic': False,
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
@@ -134,39 +134,33 @@ class Prober4(Player):
         ]
         self.just_Ds = 0
         self.unjust_Ds = 0
-        self.cooperation_pool = [C] * 5
         self.turned_defector = False
 
     def strategy(self, opponent):
-        if len(opponent.history) == 0:
-            return self.init_sequence[0]
         if len(self.history) == 0:
             return self.init_sequence[0]
-        else:
-            turn = len(self.history)
-            if turn < len(self.init_sequence):
-                if opponent.history[-1] == D:
-                    if self.history[-1] == D:
-                        self.just_Ds += 1
-                    if self.history[-1] == C:
-                        self.unjust_Ds += 1
-                return self.init_sequence[turn]
-            if turn == len(self.init_sequence):
-                diff_in_Ds = abs(self.just_Ds - self.unjust_Ds)
-                self.turned_defector = (diff_in_Ds <= 2)
-            if self.turned_defector:
-                return D
-            if not self.turned_defector:
-                if self.cooperation_pool:
-                    return self.cooperation_pool.pop()
-                else:
-                    return D if opponent.history[-1] == D else C
+        turn = len(self.history)
+        if turn < len(self.init_sequence):
+            if opponent.history[-1] == D:
+                if self.history[-1] == D:
+                    self.just_Ds += 1
+                if self.history[-1] == C:
+                    self.unjust_Ds += 1
+            return self.init_sequence[turn]
+        if turn == len(self.init_sequence):
+            diff_in_Ds = abs(self.just_Ds - self.unjust_Ds)
+            self.turned_defector = (diff_in_Ds <= 2)
+        if self.turned_defector:
+            return D
+        if not self.turned_defector:
+            if turn < len(self.init_sequence) + 5:
+                return C
+            return D if opponent.history[-1] == D else C
 
     def reset(self):
         Player.reset(self)
         self.just_Ds = 0
         self.unjust_Ds = 0
-        self.cooperation_pool = [C] * 5
         self.turned_defector = False
 
 
