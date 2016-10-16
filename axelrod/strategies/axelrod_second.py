@@ -12,6 +12,12 @@ C, D = Actions.C, Actions.D
 class Champion(Player):
     """
     Strategy submitted to Axelrod's second tournament by Danny Champion.
+
+    This player cooperates on the first 10 moves and plays Tit for Tat for the next 15 more moves. After 25 moves, the program cooperates unless all the following are true: the other player defected on the previous move, the other player cooperated less than 60% and the random number between 0 and 1 is greater that the other player's cooperation rate.
+    
+    Names:
+
+    - Champion: [Axelrod1980b]_
     """
 
     name = "Champion"
@@ -48,6 +54,12 @@ class Champion(Player):
 class Eatherley(Player):
     """
     Strategy submitted to Axelrod's second tournament by Graham Eatherley.
+
+    A player that keeps track of how many times in the game the other player defected. After the other player defects, it defects with a probability equal to the ratio of the other's total defections to the total moves to that point.
+
+    Names:
+
+    - Eatherley: [Axelrod1980b]_
     """
 
     name = "Eatherley"
@@ -79,8 +91,11 @@ class Tester(Player):
     """
     Submitted to Axelrod's second tournament by David Gladstein.
 
-    Defects on the first move and plays TFT if the opponent ever defects (after
-    one apology cooperation round). Otherwise alternate cooperation and defection.
+    Defects on the first move and plays Tit For Tat if the opponent ever defects (after one apology cooperation round). Otherwise alternate cooperation and defection.
+
+    Names:
+
+    - Tester: [Axelrod1980b]_
     """
 
     name = "Tester"

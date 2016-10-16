@@ -12,8 +12,16 @@ C, D = Actions.C, Actions.D
 
 
 class Davis(Player):
-    """A player starts by cooperating for 10 rounds then plays Grudger,
-    defecting if at any point the opponent has defected."""
+    """
+    Submitted to Axelrod's first tournament by Morton Davis.
+
+    A player starts by cooperating for 10 rounds then plays Grudger,
+    defecting if at any point the opponent has defected.
+
+    Names:
+
+    - Davis: [Axelrod1980]_
+    """
 
     name = 'Davis'
     classifier = {
@@ -49,8 +57,11 @@ class Davis(Player):
 
 class RevisedDowning(Player):
     """Revised Downing attempts to determine if players are cooperative or not.
-    If so, it cooperates with them. This strategy would have won Axelrod's first
-    tournament.
+    If so, it cooperates with them. This strategy would have won Axelrod's first tournament.
+
+    Names:
+
+    - Revised Downing: [Axelrod1980]_
     """
 
     name = "Revised Downing"
@@ -127,8 +138,14 @@ class RevisedDowning(Player):
 
 class Feld(Player):
     """
+    Submitted to Axelrod's first tournament by Scott Feld.
+
     Defects when opponent defects. Cooperates with a probability that decreases
     to 0.5 at round 200.
+
+    Names:
+
+    - Feld: [Axelrod1980]_
     """
 
     name = "Feld"
@@ -182,9 +199,15 @@ class Feld(Player):
 
 class Grofman(Player):
     """
+    Submitted to Axelrod's first tournament by Bernard Grofman.
+
     Cooperate on the first 2 moves. Return opponent's move for the next 5.
     Then cooperate if the last round's moves were the same, otherwise cooperate
     with probability 2/7.
+
+    Names:
+
+    - Grofman: [Axelrod1980]_
     """
 
     name = "Grofman"
@@ -212,6 +235,8 @@ class Grofman(Player):
 
 class Joss(MemoryOnePlayer):
     """
+    Submitted to Axelrod's first tournament by Johann Joss.
+
     Cooperates with probability 0.9 when the opponent cooperates, otherwise
     emulates Tit-For-Tat.
 
@@ -242,21 +267,18 @@ class Joss(MemoryOnePlayer):
 
 class Nydegger(Player):
     """
-    The program begins with tit for tat for the first three moves, except that
-    if it was the only one to cooperate on the first move and the only one to
-    defect on the second move, it defects on the third move. After the third move,
-    its choice is determined from the 3 preceding outcomes in the following manner.
-    Let A be the sum formed by counting the other's defection as 2 points and one's
-    own as 1 point, and giving weights of 16, 4, and 1 to the preceding three
-    moves in chronological order. The choice can be described as defecting only
-    when A equals 1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54,
-    55, 58, or 61. Thus if all three preceding moves are mutual defection,
-    A = 63 and the rule cooperates. This rule was designed for use in laboratory
-    experiments as a stooge which had a memory and appeared to be trustworthy,
-    potentially cooperative, but not gullible.
+    Submitted to Axelrod's first tournament by Rudy Nydegger.
 
-    -- Axelrod, "Effective Choice in the Prisoner's Dilemma"
+    The program begins with tit for tat for the first three moves, except 
+    that if it was the only one to cooperate on the first move and the only one to defect on the second move, it defects on the third move. After the third move, its choice is determined from the 3 preceding outcomes in the following manner.
 
+    Let A be the sum formed by counting the other's defection as 2 points and one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding three moves in chronological order. The choice can be described as defecting only when A equals 1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
+
+    Thus if all three preceding moves are mutual defection, A = 63 and the rule cooperates. This rule was designed for use in laboratory experiments as a stooge which had a memory and appeared to be trustworthy, potentially cooperative, but not gullible.
+
+    Names:
+
+    - Nydegger: [Axelrod1980]_
     """
 
     name = "Nydegger"
@@ -309,9 +331,15 @@ class Nydegger(Player):
 
 class Shubik(Player):
     """
+    Submitted to Axelrod's first tournament by Martin Shubik.
+
     Plays like Tit-For-Tat with the following modification. After
     each retaliation, the number of rounds that Shubik retaliates
     increases by 1.
+
+    Names:
+
+    - Shubik: [Axelrod1980]_
     """
 
     name = 'Shubik'
@@ -371,8 +399,15 @@ class Shubik(Player):
 
 class Tullock(Player):
     """
+    Submitted to Axelrod's first tournament by Gordon Tullock.
+
     Cooperates for the first 11 rounds then randomly cooperates 10% less often
-    than the opponent has in previous rounds."""
+    than the opponent has in previous rounds.
+
+    Names:
+
+    - Tullock: [Axelrod1980]_
+    """
 
     name = "Tullock"
     classifier = {
@@ -423,7 +458,10 @@ class UnnamedStrategy(Player):
     score than the other player. Unfortunately, the complex process of adjustment
     frequently left the probability of cooperation in the 30% to 70% range, and
     therefore the rule appeared random to many other players.
-    -- Axelrod, "Effective Choice in the Prisoner's Dilemma"
+    
+    Names:
+
+    - Unnamed Strategy: [Axelrod1980]_
 
     Warning: This strategy is not identical to the original strategy (source
     unavailable) and was written based on published descriptions.
