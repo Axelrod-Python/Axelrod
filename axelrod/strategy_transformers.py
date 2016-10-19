@@ -13,6 +13,7 @@ from numpy.random import choice
 
 from .actions import Actions, flip_action
 from .random_ import random_choice
+from mock_player import simulate_play
 
 C, D = Actions.C, Actions.D
 
@@ -159,6 +160,20 @@ def flip_wrapper(player, opponent, action):
 
 FlipTransformer = StrategyTransformerFactory(
     flip_wrapper, name_prefix="Flipped")
+
+
+def dual_wrapper(player, opponent, action):
+    """Applies flip_action at the class level."""
+    original_history = [flip_action(a) for a in player.history]
+    opponent_history = opponent.history
+    simulate_play(player, opponent, h1=original_history, h2=opponent_history)
+    player.play(opponent)
+    action = player.history[-1][0]
+    return flip_action(action)
+
+
+DualTransformer = StrategyTransformerFactory(
+    dual_wrapper, name_prefix="Dual")
 
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
