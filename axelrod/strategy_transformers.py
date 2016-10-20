@@ -13,7 +13,7 @@ from numpy.random import choice
 
 from .actions import Actions, flip_action
 from .random_ import random_choice
-from mock_player import simulate_play
+from axelrod import simulate_play
 
 C, D = Actions.C, Actions.D
 
@@ -162,14 +162,20 @@ FlipTransformer = StrategyTransformerFactory(
     flip_wrapper, name_prefix="Flipped")
 
 
-def dual_wrapper(player, opponent, action):
+def dual_wrapper(player, opp, proposed_action, strategyclass, opponentclass):
     """Applies flip_action at the class level."""
-    original_history = [flip_action(a) for a in player.history]
-    opponent_history = opponent.history
-    simulate_play(player, opponent, h1=original_history, h2=opponent_history)
-    player.play(opponent)
-    action = player.history[-1][0]
-    return flip_action(action)
+    if len(player.history) == 0:
+        return flip_action(proposed_action)
+
+    orig_hist = [flip_action(a) for a in player.history]
+    oppo_hist = opp.history
+    P1 = strategyclass.clone()
+    P2 = opponentclass.clone()
+    new_orig_hist, new_oppo_hist = simulate_play(P1, P2, h1=orig_hist, h2=oppo_hist)
+    P1.history = new_orig_hist
+    P2.history = new_oppo_hist
+    P1.play(P2)
+    return flip_action(P1.history[-1])
 
 
 DualTransformer = StrategyTransformerFactory(
