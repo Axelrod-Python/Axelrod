@@ -168,13 +168,22 @@ def dual_wrapper(player, opp, proposed_action, strategyclass, opponentclass):
         return flip_action(proposed_action)
 
     orig_hist = [flip_action(a) for a in player.history]
-    oppo_hist = opp.history
+    oppo_hist = opp.history[:] # prevents weird copy issues
+    print(orig_hist)
+    print(oppo_hist)
     P1 = strategyclass.clone()
     P2 = opponentclass.clone()
     new_orig_hist, new_oppo_hist = simulate_play(P1, P2, h1=orig_hist, h2=oppo_hist)
+    print(new_orig_hist)
+    print(new_oppo_hist)
     P1.history = new_orig_hist
     P2.history = new_oppo_hist
+    print(P1.history[-1], P2.history[-1])
     P1.play(P2)
+    print(P1.history)
+    print(P2.history)
+    print(opp.history)
+    print("------")
     return flip_action(P1.history[-1])
 
 
