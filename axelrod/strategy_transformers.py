@@ -13,7 +13,8 @@ from numpy.random import choice
 
 from .actions import Actions, flip_action
 from .random_ import random_choice
-from axelrod import simulate_play
+from axelrod import simulate_play, strategies
+
 
 C, D = Actions.C, Actions.D
 
@@ -151,6 +152,7 @@ def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)
     # This example just passes through the proposed_action
     return proposed_action
 
+
 IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)
 
 
@@ -158,32 +160,25 @@ def flip_wrapper(player, opponent, action):
     """Applies flip_action at the class level."""
     return flip_action(action)
 
+
 FlipTransformer = StrategyTransformerFactory(
     flip_wrapper, name_prefix="Flipped")
 
 
-def dual_wrapper(player, opp, proposed_action, strategyclass, opponentclass):
+def dual_wrapper(player, opp, proposed_action, strategyclass):
     """Applies flip_action at the class level."""
     if len(player.history) == 0:
         return flip_action(proposed_action)
 
     orig_hist = [flip_action(a) for a in player.history]
-    oppo_hist = opp.history[:] # prevents weird copy issues
-    print(orig_hist)
-    print(oppo_hist)
+    oppo_hist = opp.history[:]  # prevents weird copy issues
+    # P1 = getattr(axelrod, player.name[5:]).clone()
     P1 = strategyclass.clone()
-    P2 = opponentclass.clone()
+    P2 = opp.clone()
     new_orig_hist, new_oppo_hist = simulate_play(P1, P2, h1=orig_hist, h2=oppo_hist)
-    print(new_orig_hist)
-    print(new_oppo_hist)
     P1.history = new_orig_hist
     P2.history = new_oppo_hist
-    print(P1.history[-1], P2.history[-1])
     P1.play(P2)
-    print(P1.history)
-    print(P2.history)
-    print(opp.history)
-    print("------")
     return flip_action(P1.history[-1])
 
 
