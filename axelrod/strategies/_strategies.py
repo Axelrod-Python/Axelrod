@@ -101,11 +101,7 @@ all_strategies = [
     DefectorHunter,
     Desperate,
     DoubleCrosser,
-<<<<<<< HEAD
 	Doubler,
-=======
-    Doubler,
->>>>>>> refs/remotes/Axelrod-Python/master
     EasyGo,
     Eatherley,
     EventualCycleHunter,
