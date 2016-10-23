@@ -5,9 +5,8 @@ C, D = Actions.C, Actions.D
 
 class Doubler(Player):
     """
-    Cooperates except when the opponent defected and
-    opponent's cooperations are less than twice as often
-    as opponent's defections.
+    Cooperates except when the opponent has defected and
+    the opponent's cooperation count is less than twice their defection count.
 
     Names:
 

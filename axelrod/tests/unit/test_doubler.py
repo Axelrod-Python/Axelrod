@@ -25,9 +25,9 @@ class TestDoubler(TestPlayer):
         # Starts by cooperating
         self.first_play_test(C)
 
-        # Defects if the opponent defected and
-        # opponent's cooperations are less than twice as often
-        # as opponent's defections
+        # Defects when the opponent has defected and
+        # the opponent's cooperation count
+        # is less than twice their defection count
         self.responses_test([C], [D], [D])
         self.responses_test([D, D], [D, D], [D])
         self.responses_test([C, D], [C, D], [D])
