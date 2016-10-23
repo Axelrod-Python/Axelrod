@@ -16,7 +16,7 @@ class Negation(Player):
 
     name = "Negation"
     classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
