@@ -5,13 +5,13 @@ from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
-class TestNeg(TestPlayer):
+class TestNegation(TestPlayer):
 
-    name = "Neg"
-    player = axelrod.Neg
+    name = "Negation"
+    player = axelrod.Negation
     expected_classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
-        'stochastic': False,
+        'memory_depth': 1,
+        'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,

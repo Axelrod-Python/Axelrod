@@ -4,20 +4,20 @@ from axelrod.strategy_transformers import TrackHistoryTransformer
 
 C, D = Actions.C, Actions.D
 
-class Neg(Player):
+class Negation(Player):
     """
     A player starts by cooperating or defecting randomly if it's their first move,
      then simply doing the opposite of the opponents last move thereafter.
 
     Names:
 
-    Neg - [No official reference found in docs, only found in 'Desired New Strategies' list: https://github.com/Axelrod-Python/Axelrod/issues/379]
+    Negation - [http://www.prisoners-dilemma.com/competition.html]
     """
 
-    name = "Neg"
+    name = "Negation"
     classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
-        'stochastic': False,
+        'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
@@ -27,7 +27,7 @@ class Neg(Player):
 
     def strategy(self, opponent):
         # Random first move
-        if(len(self.history) == 0):
+        if not self.history:
             return random_choice();
         
         # Act opposite of opponent otherwise
