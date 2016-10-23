@@ -16,6 +16,7 @@ from .cycler import (
     CyclerDC, CyclerDDC, CyclerCCCDCD)
 from .darwin import Darwin
 from .defector import Defector, TrickyDefector
+from .doubler import Doubler
 from .finite_state_machines import (
     Fortress3, Fortress4, Predator, Raider, Ripoff, SolutionB1, SolutionB5,
     Thumper, FSMPlayer)
@@ -100,6 +101,7 @@ all_strategies = [
     DefectorHunter,
     Desperate,
     DoubleCrosser,
+	Doubler,
     EasyGo,
     Eatherley,
     EventualCycleHunter,
