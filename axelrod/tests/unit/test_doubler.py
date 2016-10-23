@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 @@ -0,0 +1,38 @@
+=======
+>>>>>>> refs/remotes/Axelrod-Python/master
 """Test for the doubler strategy."""
 
 import axelrod
@@ -36,4 +39,8 @@ class TestDoubler(TestPlayer):
 
         # Cooperates otherwise
         self.responses_test([C], [C], [C])
+<<<<<<< HEAD
         self.responses_test([C, C, C, C], [C, C, C, D], [C])
+=======
+        self.responses_test([C, C, C, C], [C, C, C, D], [C])
+>>>>>>> refs/remotes/Axelrod-Python/master
