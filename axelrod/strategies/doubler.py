@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-@@ -0,0 +1,33 @@
-=======
->>>>>>> refs/remotes/Axelrod-Python/master
 from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
@@ -34,8 +30,4 @@ class Doubler(Player):
         if (opponent.history[-1] == D and
                 opponent.cooperations <= opponent.defections * 2):
             return D
-<<<<<<< HEAD
         return C
-=======
-        return C
->>>>>>> refs/remotes/Axelrod-Python/master

@@ -47,11 +47,7 @@ Here are the docstrings of all the strategies in the library.
    :undoc-members:
 .. automodule:: axelrod.strategies.doubler
    :members:
-<<<<<<< HEAD
-   :undoc-members:   
-=======
    :undoc-members:
->>>>>>> refs/remotes/Axelrod-Python/master
 .. automodule:: axelrod.strategies.finite_state_machines
    :members:
    :undoc-members:
