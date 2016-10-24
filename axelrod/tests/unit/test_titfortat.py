@@ -106,7 +106,7 @@ class TestBully(TestPlayer):
         """Starts by defecting"""
         self.first_play_test(D)
 
-    def test_affect_of_strategy(self):
+    def test_effect_of_strategy(self):
         """Will do opposite of what opponent does."""
         self.markov_test([D, C, D, C])
 
@@ -151,7 +151,7 @@ class TestSuspiciousTitForTat(TestPlayer):
         """Starts by Defecting"""
         self.first_play_test(D)
 
-    def test_affect_of_strategy(self):
+    def test_effect_of_strategy(self):
         """Plays like TFT after the first move, repeating the opponents last move."""
         self.markov_test([C, D, C, D])
 
@@ -173,7 +173,7 @@ class TestAntiTitForTat(TestPlayer):
         """Starts by Cooperating"""
         self.first_play_test(C)
 
-    def test_affect_of_strategy(self):
+    def test_effect_of_strategy(self):
         """Will do opposite of what opponent does."""
         self.markov_test([D, C, D, C])
 

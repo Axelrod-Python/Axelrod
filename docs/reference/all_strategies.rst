@@ -102,6 +102,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.mutual
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.negation
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.oncebitten
    :members:
    :undoc-members:

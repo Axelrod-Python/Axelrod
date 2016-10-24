@@ -47,6 +47,7 @@ from .memoryone import (
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .mutual import Desperate, Hopeless, Willing
+from .negation import Negation
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
 from .prober import (Prober, Prober2, Prober3, Prober4, HardProber,
                      NaiveProber, RemorsefulProber)
@@ -157,6 +158,7 @@ all_strategies = [
     MindReader,
     MindWarper,
     MirrorMindReader,
+	Negation,
     NiceAverageCopier,
     Nydegger,
     OmegaTFT,
