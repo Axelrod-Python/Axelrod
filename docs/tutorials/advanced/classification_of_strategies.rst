@@ -70,7 +70,7 @@ range of memory_depth values, we can use the 'min_memory_depth' and
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    42
+    43
 
 We can also identify strategies that make use of particular properties of the
 tournament. For example, here is the number of strategies that  make use of the
