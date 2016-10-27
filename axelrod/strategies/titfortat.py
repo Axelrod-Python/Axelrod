@@ -554,3 +554,47 @@ class AdaptiveTitForTat(Player):
     def __repr__(self):
 
         return "%s: %s" % (self.name, round(self.rate, 2))
+
+class SpitefulTitForTat(Player):
+    """
+    A player starts by cooperating and then mimics the previous action of the
+    opponent until opponent defects twice in a row, at which point player always defects
+
+    Names:
+
+    - Spiteful Tit For Tat
+    """
+
+    name = 'Spiteful Tit For Tat'
+    classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        self.retaliating=False
+
+    def strategy(self, opponent):
+        # First move
+        if len(self.history) == 0:
+            return C
+
+        if opponent.history[-2:]==[D,D]:
+            retaliating=True
+
+        if retaliating:
+            return D
+        else:
+            # React to the opponent's last move
+            if opponent.history[-1] == D:
+                return D
+            return C
+
+    def reset(self):
+        Player.reset(self)
+        self.retaliating=False
