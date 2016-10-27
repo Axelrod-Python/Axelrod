@@ -577,6 +577,7 @@ class SpitefulTitForTat(Player):
     }
 
     def __init__(self):
+        Player.__init__(self)
         self.retaliating=False
 
     def strategy(self, opponent):
@@ -585,9 +586,9 @@ class SpitefulTitForTat(Player):
             return C
 
         if opponent.history[-2:]==[D,D]:
-            retaliating=True
+            self.retaliating=True
 
-        if retaliating:
+        if self.retaliating:
             return D
         else:
             # React to the opponent's last move
