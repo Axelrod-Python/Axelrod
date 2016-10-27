@@ -497,4 +497,25 @@ class TestAdaptiveTitForTat(TestPlayer):
         self.assertEqual(p2.rate, 0.5)
         
         
+class TestSpitefulTitForTat(TestPlayer):
+    name = "Spiteful Tit For Tat"
+    player = axelrod.SpitefulTitForTat
+    expected_classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+
+    def test_effect_of_strategy(self):
+        """Repeats last action of opponent history until 2 consecutive defections, then always defects"""
+        self.markov_test([C, D, C, D])
+        self.responses_test([C] * 4, [C, C, C, C], [C])
+        self.responses_test([C] * 5, [C, C, C, C, D], [D])
+        self.responses_test([C] * 5, [C, C, D, D, C], [D])
