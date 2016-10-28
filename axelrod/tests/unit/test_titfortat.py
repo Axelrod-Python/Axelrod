@@ -501,7 +501,7 @@ class TestSpitefulTitForTat(TestPlayer):
     name = "Spiteful Tit For Tat"
     player = axelrod.SpitefulTitForTat
     expected_classifier = {
-        'memory_depth': 2,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -516,6 +516,13 @@ class TestSpitefulTitForTat(TestPlayer):
     def test_effect_of_strategy(self):
         """Repeats last action of opponent history until 2 consecutive defections, then always defects"""
         self.markov_test([C, D, C, D])
-        self.responses_test([C] * 4, [C, C, C, C], [C])
-        self.responses_test([C] * 5, [C, C, C, C, D], [D])
-        self.responses_test([C] * 5, [C, C, D, D, C], [D])
+        self.responses_test([C] * 4, [C, C, C, C], [C], attrs = {"retaliating": False})
+        self.responses_test([C] * 5, [C, C, C, C, D], [D], attrs = {"retaliating": False})
+        self.responses_test([C] * 5, [C, C, D, D, C], [D], attrs = {"retaliating": True})
+
+    def test_reset_retaliating(self):
+        player = self.player()
+        player.retaliating = True
+        player.reset()
+        assertFalse(player.retaliating)
+

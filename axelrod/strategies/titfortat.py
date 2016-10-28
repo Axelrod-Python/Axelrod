@@ -562,12 +562,12 @@ class SpitefulTitForTat(Player):
 
     Names:
 
-    - Spiteful Tit For Tat
+    - Spiteful Tit For Tat [PRISON1998]_
     """
 
     name = 'Spiteful Tit For Tat'
     classifier = {
-        'memory_depth': 2,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -578,14 +578,14 @@ class SpitefulTitForTat(Player):
 
     def __init__(self):
         Player.__init__(self)
-        self.retaliating=False
+        self.retaliating = False
 
     def strategy(self, opponent):
         # First move
-        if len(self.history) == 0:
+        if not self.history:
             return C
 
-        if opponent.history[-2:]==[D,D]:
+        if opponent.history[-2:] == [D,D]:
             self.retaliating=True
 
         if self.retaliating:
@@ -598,4 +598,6 @@ class SpitefulTitForTat(Player):
 
     def reset(self):
         Player.reset(self)
-        self.retaliating=False
+        self.retaliating = False
+
+
