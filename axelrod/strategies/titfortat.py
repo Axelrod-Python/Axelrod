@@ -555,6 +555,7 @@ class AdaptiveTitForTat(Player):
 
         return "%s: %s" % (self.name, round(self.rate, 2))
 
+
 class SpitefulTitForTat(Player):
     """
     A player starts by cooperating and then mimics the previous action of the
@@ -585,8 +586,8 @@ class SpitefulTitForTat(Player):
         if not self.history:
             return C
 
-        if opponent.history[-2:] == [D,D]:
-            self.retaliating=True
+        if opponent.history[-2:] == [D, D]:
+            self.retaliating = True
 
         if self.retaliating:
             return D
@@ -599,5 +600,3 @@ class SpitefulTitForTat(Player):
     def reset(self):
         Player.reset(self)
         self.retaliating = False
-
-

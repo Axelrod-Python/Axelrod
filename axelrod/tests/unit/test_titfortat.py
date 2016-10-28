@@ -495,7 +495,7 @@ class TestAdaptiveTitForTat(TestPlayer):
         p2.reset()
         self.assertEqual(p2.world, 0.5)
         self.assertEqual(p2.rate, 0.5)
-        
+
         
 class TestSpitefulTitForTat(TestPlayer):
     name = "Spiteful Tit For Tat"
@@ -516,13 +516,12 @@ class TestSpitefulTitForTat(TestPlayer):
     def test_effect_of_strategy(self):
         """Repeats last action of opponent history until 2 consecutive defections, then always defects"""
         self.markov_test([C, D, C, D])
-        self.responses_test([C] * 4, [C, C, C, C], [C], attrs = {"retaliating": False})
-        self.responses_test([C] * 5, [C, C, C, C, D], [D], attrs = {"retaliating": False})
-        self.responses_test([C] * 5, [C, C, D, D, C], [D], attrs = {"retaliating": True})
+        self.responses_test([C] * 4, [C, C, C, C], [C], attrs={"retaliating": False})
+        self.responses_test([C] * 5, [C, C, C, C, D], [D], attrs={"retaliating": False})
+        self.responses_test([C] * 5, [C, C, D, D, C], [D], attrs={"retaliating": True})
 
     def test_reset_retaliating(self):
         player = self.player()
         player.retaliating = True
         player.reset()
         self.assertFalse(player.retaliating)
-
