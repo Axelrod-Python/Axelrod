@@ -34,7 +34,7 @@ class TitForTat(Player):
     def strategy(self, opponent):
         """This is the actual strategy"""
         # First move
-        if len(self.history) == 0:
+        if not self.history:
             return C
         # React to the opponent's last move
         if opponent.history[-1] == D:
@@ -295,7 +295,7 @@ class OmegaTFT(Player):
 
     def strategy(self, opponent):
         # Cooperate on the first move
-        if len(self.history) == 0:
+        if not self.history:
             return C
         # TFT on round 2
         if len(self.history) == 1:
