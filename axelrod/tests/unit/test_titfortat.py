@@ -524,5 +524,5 @@ class TestSpitefulTitForTat(TestPlayer):
         player = self.player()
         player.retaliating = True
         player.reset()
-        assertFalse(player.retaliating)
+        self.assertFalse(player.retaliating)
 
