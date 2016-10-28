@@ -270,10 +270,11 @@ class OmegaTFT(TestPlayer):
 
 class TestOmegaTFTvsSTFT(TestHeadsUp):
     def test_rounds(self):
-        outcomes = zip()
-        self.versus_test(axelrod.OmegaTFT(), axelrod.SuspiciousTitForTat(),
-                         [C, D, C, D, C, C, C, C, C],
-                         [D, C, D, C, D, C, C, C, C])
+        self.versus_test(
+            axelrod.OmegaTFT(), axelrod.SuspiciousTitForTat(),
+            [C, D, C, D, C, C, C, C, C],
+            [D, C, D, C, D, C, C, C, C]
+        )
 
 
 class TestOmegaTFTvsAlternator(TestHeadsUp):
