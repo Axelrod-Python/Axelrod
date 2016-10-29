@@ -129,7 +129,8 @@ class TestSneakyTitForTat(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        """Will try defecting after two turns of cooperation, but will stop if punished."""
+        """Will try defecting after two turns of cooperation, but will stop
+        if punished."""
         self.responses_test([C, C], [C, C], [D])
         self.responses_test([C, C, D, D], [C, C, C, D], [C])
 
@@ -139,7 +140,7 @@ class TestSuspiciousTitForTat(TestPlayer):
     name = 'Suspicious Tit For Tat'
     player = axelrod.SuspiciousTitForTat
     expected_classifier = {
-        'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -152,7 +153,8 @@ class TestSuspiciousTitForTat(TestPlayer):
         self.first_play_test(D)
 
     def test_effect_of_strategy(self):
-        """Plays like TFT after the first move, repeating the opponents last move."""
+        """Plays like TFT after the first move, repeating the opponents last
+        move."""
         self.markov_test([C, D, C, D])
 
 
@@ -161,7 +163,7 @@ class TestAntiTitForTat(TestPlayer):
     name = 'Anti Tit For Tat'
     player = axelrod.AntiTitForTat
     expected_classifier = {
-        'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -183,7 +185,7 @@ class TestHardTitForTat(TestPlayer):
     name = "Hard Tit For Tat"
     player = axelrod.HardTitForTat
     expected_classifier = {
-        'memory_depth': 3, # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 3,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -268,16 +270,20 @@ class OmegaTFT(TestPlayer):
 
 class TestOmegaTFTvsSTFT(TestHeadsUp):
     def test_rounds(self):
-        outcomes = zip()
-        self.versus_test(axelrod.OmegaTFT(), axelrod.SuspiciousTitForTat(),
-                         [C, D, C, D, C, C, C, C, C],
-                         [D, C, D, C, D, C, C, C, C])
+        self.versus_test(
+            axelrod.OmegaTFT(), axelrod.SuspiciousTitForTat(),
+            [C, D, C, D, C, C, C, C, C],
+            [D, C, D, C, D, C, C, C, C]
+        )
+
 
 class TestOmegaTFTvsAlternator(TestHeadsUp):
     def test_rounds(self):
-        self.versus_test(axelrod.OmegaTFT(), axelrod.Alternator(),
-                         [C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D],
-                         [C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D])
+        self.versus_test(
+            axelrod.OmegaTFT(), axelrod.Alternator(),
+            [C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D],
+            [C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D]
+        )
 
 
 class TestGradual(TestPlayer):
@@ -300,38 +306,96 @@ class TestGradual(TestPlayer):
     def test_effect_of_strategy(self):
         """Punishes defection with a growing number of defections and calms
         the opponent with two Cooperations in a row"""
-        self.responses_test([C], [C], [C], attrs={"calming": False,
-                            "punishing": False, "punishment_count": 0,
-                            "punishment_limit": 0})
-        self.responses_test([C], [D], [D], attrs={"calming": False,
-                            "punishing": True, "punishment_count": 1,
-                            "punishment_limit": 1})
-        self.responses_test([C, D], [D, C], [C], attrs={"calming": True,
-                            "punishing": False, "punishment_count": 0,
-                            "punishment_limit": 1})
-        self.responses_test([C, D, C], [D, C, D], [C], attrs={"calming": False,
-                            "punishing": False, "punishment_count": 0,
-                            "punishment_limit": 1})
-        self.responses_test([C, D, C, C], [D, C, D, C], [C],
-                            attrs={"calming": False, "punishing": False,
-                            "punishment_count": 0, "punishment_limit": 1})
-        self.responses_test([C, D, C, D, C], [D, C, D, C, C], [C],
-                            attrs={"calming": False, "punishing": False,
-                            "punishment_count": 0, "punishment_limit": 1})
-        self.responses_test([C, D, C, D, C, C], [D, C, D, C, C, D], [D],
-                            attrs={"calming": False, "punishing": True,
-                            "punishment_count": 1, "punishment_limit": 2})
-        self.responses_test([C, D, C, D, D, C, D], [D, C, D, C, C, D, C], [D],
-                            attrs={"calming": False, "punishing": True,
-                            "punishment_count": 2, "punishment_limit": 2})
-        self.responses_test([C, D, C, D, D, C, D, D],
-                            [D, C, D, C, C, D, C, C], [C],
-                            attrs={"calming": True, "punishing": False,
-                            "punishment_count": 0, "punishment_limit": 2})
-        self.responses_test([C, D, C, D, D, C, D, D, C],
-                            [D, C, D, C, C, D, C, C, C], [C],
-                            attrs={"calming": False, "punishing": False,
-                            "punishment_count": 0, "punishment_limit": 2})
+        self.responses_test(
+            [C], [C], [C],
+            attrs={
+                "calming": False,
+                "punishing": False,
+                "punishment_count": 0,
+                "punishment_limit": 0
+            }
+        )
+        self.responses_test(
+            [C], [D], [D],
+            attrs={
+                "calming": False,
+                "punishing": True,
+                "punishment_count": 1,
+                "punishment_limit": 1
+            }
+        )
+        self.responses_test(
+            [C, D], [D, C], [C],
+            attrs={
+                "calming": True,
+                "punishing": False,
+                "punishment_count": 0,
+                "punishment_limit": 1
+            }
+        )
+        self.responses_test(
+            [C, D, C], [D, C, D], [C],
+            attrs={
+                "calming": False,
+                "punishing": False,
+                "punishment_count": 0,
+                "punishment_limit": 1
+            }
+        )
+        self.responses_test(
+            [C, D, C, C], [D, C, D, C], [C],
+            attrs={
+                "calming": False,
+                "punishing": False,
+                "punishment_count": 0,
+                "punishment_limit": 1
+            }
+        )
+        self.responses_test(
+            [C, D, C, D, C], [D, C, D, C, C], [C],
+            attrs={
+                "calming": False,
+                "punishing": False,
+                "punishment_count": 0,
+                "punishment_limit": 1
+            }
+        )
+        self.responses_test(
+            [C, D, C, D, C, C], [D, C, D, C, C, D], [D],
+            attrs={
+                "calming": False,
+                "punishing": True,
+                "punishment_count": 1,
+                "punishment_limit": 2
+            }
+        )
+        self.responses_test(
+            [C, D, C, D, D, C, D], [D, C, D, C, C, D, C], [D],
+            attrs={
+                "calming": False,
+                "punishing": True,
+                "punishment_count": 2,
+                "punishment_limit": 2
+            }
+        )
+        self.responses_test(
+            [C, D, C, D, D, C, D, D], [D, C, D, C, C, D, C, C], [C],
+            attrs={
+                "calming": True,
+                "punishing": False,
+                "punishment_count": 0,
+                "punishment_limit": 2
+            }
+        )
+        self.responses_test(
+            [C, D, C, D, D, C, D, D, C], [D, C, D, C, C, D, C, C, C], [C],
+            attrs={
+                "calming": False,
+                "punishing": False,
+                "punishment_count": 0,
+                "punishment_limit": 2
+            }
+        )
 
     def test_reset_cleans_all(self):
         p = axelrod.Gradual()
@@ -432,12 +496,12 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(opponent.history, [C, D, D, D])
         self.assertFalse(ctft.contrite)
 
-
     def test_reset_cleans_all(self):
         p = self.player()
         p.contrite = True
         p.reset()
         self.assertFalse(p.contrite)
+
 
 class TestSlowTitForTwoTats(TestPlayer):
 
@@ -457,10 +521,12 @@ class TestSlowTitForTwoTats(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        """If opponent plays the same move twice, repeats last action of opponent history."""
-        self.responses_test([C]*2, [C, C], [C])
-        self.responses_test([C]*3, [C, D, C], [C])
-        self.responses_test([C]*3, [C, D, D], [D])
+        """If opponent plays the same move twice, repeats last action of
+        opponent history."""
+        self.responses_test([C] * 2, [C, C], [C])
+        self.responses_test([C] * 3, [C, D, C], [C])
+        self.responses_test([C] * 3, [C, D, D], [D])
+
 
 class TestAdaptiveTitForTat(TestPlayer):
 
@@ -474,20 +540,20 @@ class TestAdaptiveTitForTat(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-    
+
     def test_strategy(self):
         """Start by cooperating."""
         self.first_play_test(C)
-        
+
     def test_effect_of_strategy(self):
-        
+
         self.markov_test(['C', 'D', 'C', 'D'])
-        
+
         p1, p2 = self.player(), self.player()
         p1.play(p2)
         p1.play(p2)
         self.assertEqual(p2.world, 0.75)
-        
+
     def test_world_rate_reset(self):
         p1, p2 = self.player(), self.player()
         p1.play(p2)
@@ -496,7 +562,7 @@ class TestAdaptiveTitForTat(TestPlayer):
         self.assertEqual(p2.world, 0.5)
         self.assertEqual(p2.rate, 0.5)
 
-        
+
 class TestSpitefulTitForTat(TestPlayer):
     name = "Spiteful Tit For Tat"
     player = axelrod.SpitefulTitForTat
@@ -514,11 +580,18 @@ class TestSpitefulTitForTat(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        """Repeats last action of opponent history until 2 consecutive defections, then always defects"""
+        """Repeats last action of opponent history until 2 consecutive
+        defections, then always defects"""
         self.markov_test([C, D, C, D])
-        self.responses_test([C] * 4, [C, C, C, C], [C], attrs={"retaliating": False})
-        self.responses_test([C] * 5, [C, C, C, C, D], [D], attrs={"retaliating": False})
-        self.responses_test([C] * 5, [C, C, D, D, C], [D], attrs={"retaliating": True})
+        self.responses_test(
+            [C] * 4, [C, C, C, C], [C], attrs={"retaliating": False}
+        )
+        self.responses_test(
+            [C] * 5, [C, C, C, C, D], [D], attrs={"retaliating": False}
+        )
+        self.responses_test(
+            [C] * 5, [C, C, D, D, C], [D], attrs={"retaliating": True}
+        )
 
     def test_reset_retaliating(self):
         player = self.player()

@@ -160,7 +160,7 @@ class SuspiciousTitForTat(Player):
 
     name = "Suspicious Tit For Tat"
     classifier = {
-        'memory_depth': 1, # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -267,7 +267,7 @@ class OmegaTFT(Player):
     """OmegaTFT modifies Tit For Tat in two ways:
        - checks for deadlock loops of alternating rounds of (C, D) and (D, C),
        and attempting to break them
-       - uses a more sophisticated retaliation mechanism that is noise tolerant.
+       - uses a more sophisticated retaliation mechanism that is noise tolerant
 
        Names:
 
@@ -315,9 +315,10 @@ class OmegaTFT(Player):
             # If the opponent's move changed, increase the counter
             if opponent.history[-2] != opponent.history[-1]:
                 self.randomness_counter += 1
-            # If the opponent's last move differed from mine, increase the counter
+            # If the opponent's last move differed from mine,
+            # increase the counter
             if self.history[-1] == opponent.history[-1]:
-                self.randomness_counter+= 1
+                self.randomness_counter += 1
             # Compare counts to thresholds
             # If randomness_counter exceeds Y, Defect for the remainder
             if self.randomness_counter >= 8:
@@ -479,6 +480,7 @@ class SlowTitForTwoTats(Player):
         # Otherwise cooperate
         return C
 
+
 class AdaptiveTitForTat(Player):
     """ATFT - Adaptive Tit For Tat (Basic Model)
 
@@ -559,7 +561,8 @@ class AdaptiveTitForTat(Player):
 class SpitefulTitForTat(Player):
     """
     A player starts by cooperating and then mimics the previous action of the
-    opponent until opponent defects twice in a row, at which point player always defects
+    opponent until opponent defects twice in a row, at which point player
+    always defects
 
     Names:
 
