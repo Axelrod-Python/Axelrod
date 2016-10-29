@@ -13,7 +13,7 @@ from numpy.random import choice
 
 from .actions import Actions, flip_action
 from .random_ import random_choice
-from axelrod import simulate_play, strategies
+from axelrod import simulate_play, strategies, Player
 
 
 C, D = Actions.C, Actions.D
@@ -110,7 +110,8 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 {
                     "name": name,
                     "strategy": strategy,
-                    "__module__": PlayerClass.__module__
+                    "__module__": PlayerClass.__module__,
+                    "original_class": PlayerClass
                 })
             return new_class
     return Decorator
@@ -165,25 +166,7 @@ FlipTransformer = StrategyTransformerFactory(
     flip_wrapper, name_prefix="Flipped")
 
 
-def dual_wrapper(player, opp, proposed_action, strategyclass):
-    """Applies flip_action at the class level."""
-    if len(player.history) == 0:
-        return flip_action(proposed_action)
 
-    orig_hist = [flip_action(a) for a in player.history]
-    oppo_hist = opp.history[:]  # prevents weird copy issues
-    # P1 = getattr(axelrod, player.name[5:]).clone()
-    P1 = strategyclass.clone()
-    P2 = opp.clone()
-    new_orig_hist, new_oppo_hist = simulate_play(P1, P2, h1=orig_hist, h2=oppo_hist)
-    P1.history = new_orig_hist
-    P2.history = new_oppo_hist
-    P1.play(P2)
-    return flip_action(P1.history[-1])
-
-
-DualTransformer = StrategyTransformerFactory(
-    dual_wrapper, name_prefix="Dual")
 
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
@@ -379,3 +362,27 @@ class RetaliationUntilApologyWrapper(object):
 
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
     RetaliationUntilApologyWrapper(), name_prefix="RUA")
+
+
+def dual_strategy(dual_player, opponent):
+    from copy import deepcopy
+    fresh_opponent = deepcopy(opponent)
+    dual_player.original.play(fresh_opponent)
+    return flip_action(dual_player.original.history[-1])
+
+
+def dual(player):
+    """Magic"""
+    from types import MethodType
+    class Dual(Player):
+        __name__ = "Dual " + player.__class__.__name__
+        name = "Dual " + player.name
+        classifier = player.__class__.classifier
+
+    dual_player = player.clone()
+    dual_player.original = player.clone()
+    dual_player.__class__ = Dual
+
+    dual_player.strategy = MethodType(dual_strategy, dual_player)
+    return dual_player
+
