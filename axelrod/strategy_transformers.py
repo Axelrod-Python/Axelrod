@@ -374,14 +374,11 @@ def dual_strategy(dual_player, opponent):
 def dual(player):
     """Magic"""
     from types import MethodType
-    class Dual(Player):
-        __name__ = "Dual " + player.__class__.__name__
-        name = "Dual " + player.name
-        classifier = player.__class__.classifier
+    player.__class__.__name__ = "Dual " + player.__class__.__name__
+    player.name = "Dual " + player.name
 
     dual_player = player.clone()
     dual_player.original = player.clone()
-    dual_player.__class__ = Dual
 
     dual_player.strategy = MethodType(dual_strategy, dual_player)
     return dual_player
