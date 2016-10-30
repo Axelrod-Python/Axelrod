@@ -364,22 +364,13 @@ RetaliateUntilApologyTransformer = StrategyTransformerFactory(
     RetaliationUntilApologyWrapper(), name_prefix="RUA")
 
 
-def dual_strategy(dual_player, opponent):
-    from copy import deepcopy
-    fresh_opponent = deepcopy(opponent)
-    dual_player.original.play(fresh_opponent)
-    return flip_action(dual_player.original.history[-1])
-
-
 def dual(player):
     """Magic"""
-    from types import MethodType
     player.__class__.__name__ = "Dual " + player.__class__.__name__
     player.name = "Dual " + player.name
 
     dual_player = player.clone()
     dual_player.original = player.clone()
 
-    dual_player.strategy = MethodType(dual_strategy, dual_player)
+    dual_player.strategy = dual_player.dual_strategy
     return dual_player
-
