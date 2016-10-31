@@ -18,6 +18,10 @@ def defect(self):
     return D
 
 
+def randomize(self):
+    return random.choice([C, D])
+
+
 class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
@@ -52,7 +56,7 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p1.defections, 0)
         self.assertEqual(p2.cooperations, 0)
         self.assertEqual(p2.defections, 1)
-        # Test play counts
+        # Test state distribution
         self.assertEqual(p1.state_distribution, {(C, D): 1})
         self.assertEqual(p2.state_distribution, {(D, C): 1})
 
@@ -64,9 +68,21 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p1.defections, 0)
         self.assertEqual(p2.cooperations, 0)
         self.assertEqual(p2.defections, 2)
-        # Test play counts
+        # Test state distribution
         self.assertEqual(p1.state_distribution, {(C, D): 2})
         self.assertEqual(p2.state_distribution, {(D, C): 2})
+
+    def test_state_distribution(self):
+        p1, p2 = self.player(), self.player()
+        history_1 = [C, C, D, D, C, D]
+        history_2 = [C, D, C, D, D, C]
+        p1.strategy = randomize
+        p2.strategy = randomize
+        simulate_play(p1, p2, history_1, history_2)
+        self.assertEqual(p1.state_distribution,
+                         {(C, C): 1, (C, D): 2, (D, C): 2, (D, D): 1})
+        self.assertEqual(p2.state_distribution,
+                         {(C, C): 1, (C, D): 2, (D, C): 2, (D, D): 1})
 
     def test_noisy_play(self):
         random.seed(1)
