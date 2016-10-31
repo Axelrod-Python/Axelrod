@@ -53,8 +53,8 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p2.cooperations, 0)
         self.assertEqual(p2.defections, 1)
         # Test play counts
-        self.assertEqual(p1.play_counts, {(C, D): 1})
-        self.assertEqual(p2.play_counts, {(D, C): 1})
+        self.assertEqual(p1.state_distribution, {(C, D): 1})
+        self.assertEqual(p2.state_distribution, {(D, C): 1})
 
         p1.play(p2)
         self.assertEqual(p1.history[-1], C)
@@ -65,8 +65,8 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p2.cooperations, 0)
         self.assertEqual(p2.defections, 2)
         # Test play counts
-        self.assertEqual(p1.play_counts, {(C, D): 2})
-        self.assertEqual(p2.play_counts, {(D, C): 2})
+        self.assertEqual(p1.state_distribution, {(C, D): 2})
+        self.assertEqual(p2.state_distribution, {(D, C): 2})
 
     def test_noisy_play(self):
         random.seed(1)
@@ -179,7 +179,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(p.history, [])
         self.assertEqual(self.player().cooperations, 0)
         self.assertEqual(self.player().defections, 0)
-        self.assertEqual(self.player().play_counts, {})
+        self.assertEqual(self.player().state_distribution, {})
 
     def test_clone(self):
         # Make sure that self.init_args has the right number of arguments
@@ -198,7 +198,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(len(p2.history), 0)
         self.assertEqual(p2.cooperations, 0)
         self.assertEqual(p2.defections, 0)
-        self.assertEqual(p2.play_counts, {})
+        self.assertEqual(p2.state_distribution, {})
         self.assertEqual(p2.classifier, p1.classifier)
         self.assertEqual(p2.match_attributes, p1.match_attributes)
 
