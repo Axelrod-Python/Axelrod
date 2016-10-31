@@ -9,6 +9,7 @@ See the various Meta strategies for another type of transformation.
 import inspect
 import random
 import collections
+import copy
 from numpy.random import choice
 
 from .actions import Actions, flip_action
@@ -107,6 +108,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 new_class_name, (PlayerClass,),
                 {
                     "name": name,
+                    "original_class": PlayerClass,
                     "strategy": strategy,
                     "__module__": PlayerClass.__module__
                 })
@@ -354,3 +356,19 @@ class RetaliationUntilApologyWrapper(object):
 
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
     RetaliationUntilApologyWrapper(), name_prefix="RUA")
+
+
+def dual_wrapper(player, opponent, proposed_action):
+    """
+    Dual
+    """
+    if len(player.history) == 0:
+        player.original_player = player.original_class(*player.init_args)
+
+    action = player.original_player.strategy(opponent)
+    player.original_player.history.append(action)
+
+    return flip_action(action)
+
+DualTransformer = StrategyTransformerFactory(
+    dual_wrapper, name_prefix="Dual")
