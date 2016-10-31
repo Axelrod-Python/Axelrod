@@ -53,9 +53,9 @@ def update_history(player, move):
         player.defections += 1
 
 
-def get_state_distribution_from_history(player, history1, history2):
-    """Gets state_distribution from player's and opponent's histories"""
-    for action, reply in zip(history1, history2):
+def get_state_distribution_from_history(player, history_1, history_2):
+    """Gets state_distribution from player's and opponent's histories."""
+    for action, reply in zip(history_1, history_2):
         update_state_distribution(player, action, reply)
 
 
