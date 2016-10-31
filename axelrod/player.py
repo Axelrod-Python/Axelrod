@@ -53,6 +53,12 @@ def update_history(player, move):
         player.defections += 1
 
 
+def get_state_distribution_from_history(player, history1, history2):
+    """Gets state_distribution from player's and opponent's histories"""
+    for action, reply in zip(history1, history2):
+        update_state_distribution(player, action, reply)
+
+
 def update_state_distribution(player, action, reply):
     """Updates state_distribution following play. """
     last_turn = (action, reply)
