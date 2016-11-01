@@ -247,7 +247,7 @@ class TestShubik(TestPlayer):
         # Looks like Tit-For-Tat at first
         self.markov_test([C, D, C, D])
 
-    def test_affect_of_strategy(self):
+    def test_effect_of_strategy(self):
         """Plays a modified TFT."""
         self.responses_test([C, C, C], [C, C, C], [C, C, C])
         # Make sure that the retaliations are increasing

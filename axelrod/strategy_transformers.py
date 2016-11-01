@@ -13,7 +13,7 @@ from numpy.random import choice
 
 from .actions import Actions, flip_action
 from .random_ import random_choice
-from axelrod import simulate_play, strategies, Player
+from axelrod import simulate_play, strategies,
 
 
 C, D = Actions.C, Actions.D
@@ -109,6 +109,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 new_class_name, (PlayerClass,),
                 {
                     "name": name,
+                    "original_class": PlayerClass,
                     "strategy": strategy,
                     "__module__": PlayerClass.__module__,
                     "original_class": PlayerClass
@@ -166,7 +167,19 @@ FlipTransformer = StrategyTransformerFactory(
     flip_wrapper, name_prefix="Flipped")
 
 
+def dual_wrapper(player, opponent, proposed_action):
+    """
+    Dual
+    """
+    if not player.history:
+        player.original_player = player.original_class(*player.init_args)
 
+    action = player.original_player.strategy(opponent)
+    player.original_player.history.append(action)
+    return flip_action(action)
+
+
+DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
 
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
@@ -175,6 +188,7 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
     if r < noise:
         return flip_action(action)
     return action
+
 
 NoisyTransformer = StrategyTransformerFactory(
     noisy_wrapper, name_prefix="Noisy")
@@ -186,6 +200,7 @@ def forgiver_wrapper(player, opponent, action, p):
     if action == D:
         return random_choice(p)
     return C
+
 
 ForgiverTransformer = StrategyTransformerFactory(
     forgiver_wrapper, name_prefix="Forgiving")
@@ -199,6 +214,7 @@ def initial_sequence(player, opponent, action, initial_seq):
     if index < len(initial_seq):
         return initial_seq[index]
     return action
+
 
 InitialTransformer = StrategyTransformerFactory(initial_sequence,
                                                 name_prefix="Initial")
@@ -225,6 +241,7 @@ def final_sequence(player, opponent, action, seq):
         return seq[-index]
     return action
 
+
 FinalTransformer = StrategyTransformerFactory(final_sequence,
                                               name_prefix="Final")
 
@@ -236,6 +253,7 @@ def history_track_wrapper(player, opponent, action):
     except AttributeError:
         player._recorded_history = [action]
     return action
+
 
 TrackHistoryTransformer = StrategyTransformerFactory(
     history_track_wrapper, name_prefix="HistoryTracking")
@@ -253,6 +271,7 @@ def deadlock_break_wrapper(player, opponent, action):
         return C
     return action
 
+
 DeadlockBreakingTransformer = StrategyTransformerFactory(
     deadlock_break_wrapper, name_prefix="DeadlockBreaking")
 
@@ -262,6 +281,7 @@ def grudge_wrapper(player, opponent, action, grudges):
     if opponent.defections > grudges:
         return D
     return action
+
 
 GrudgeTransformer = StrategyTransformerFactory(
     grudge_wrapper, name_prefix="Grudging")
@@ -275,6 +295,7 @@ def apology_wrapper(player, opponent, action, myseq, opseq):
        (opseq == opponent.history[-length:]):
         return C
     return action
+
 
 ApologyTransformer = StrategyTransformerFactory(
     apology_wrapper, name_prefix="Apologizing")
@@ -317,6 +338,7 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
 
     return action
 
+
 MixedTransformer = StrategyTransformerFactory(
     mixed_wrapper, name_prefix="Mutated")
 
@@ -339,6 +361,7 @@ class RetaliationWrapper(object):
             self.retaliation_count -= 1
             return D
 
+
 RetaliationTransformer = StrategyTransformerFactory(
     RetaliationWrapper(), name_prefix="Retaliating")
 
@@ -360,17 +383,6 @@ class RetaliationUntilApologyWrapper(object):
             return D
         return action
 
+
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
     RetaliationUntilApologyWrapper(), name_prefix="RUA")
-
-
-def dual(player):
-    """Magic"""
-    player.__class__.__name__ = "Dual " + player.__class__.__name__
-    player.name = "Dual " + player.name
-
-    dual_player = player.clone()
-    dual_player.original = player.clone()
-
-    dual_player.strategy = dual_player.dual_strategy
-    return dual_player

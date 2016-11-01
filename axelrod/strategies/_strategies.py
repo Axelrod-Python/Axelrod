@@ -16,6 +16,7 @@ from .cycler import (
     CyclerDC, CyclerDDC, CyclerCCCDCD)
 from .darwin import Darwin
 from .defector import Defector, TrickyDefector
+from .doubler import Doubler
 from .finite_state_machines import (
     Fortress3, Fortress4, Predator, Raider, Ripoff, SolutionB1, SolutionB5,
     Thumper, FSMPlayer)
@@ -46,6 +47,7 @@ from .memoryone import (
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .mutual import Desperate, Hopeless, Willing
+from .negation import Negation
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
 from .prober import (Prober, Prober2, Prober3, Prober4, HardProber,
                      NaiveProber, RemorsefulProber)
@@ -59,7 +61,7 @@ from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
-    OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat)
+    OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,SpitefulTitForTat)
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse)
 
 # Note: Meta* strategies are handled in .__init__.py
@@ -99,6 +101,7 @@ all_strategies = [
     DefectorHunter,
     Desperate,
     DoubleCrosser,
+    Doubler,
     EasyGo,
     Eatherley,
     EventualCycleHunter,
@@ -155,6 +158,7 @@ all_strategies = [
     MindReader,
     MindWarper,
     MirrorMindReader,
+	Negation,
     NiceAverageCopier,
     Nydegger,
     OmegaTFT,
@@ -184,6 +188,7 @@ all_strategies = [
     SoftJoss,
     SolutionB1,
     SolutionB5,
+    SpitefulTitForTat,
     StochasticWSLS,
     SuspiciousTitForTat,
     Tester,

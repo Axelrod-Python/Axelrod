@@ -1,3 +1,15 @@
+# v1.14.0, 2016-10-24
+
+Two new strategies.
+
+- Adding Negative strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/748
+- Adding Doubler strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/747
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.13.0...v1.14.0
+
 # v1.13.0, 2016-10-16
 
 New strategy, state distribution and documentation

@@ -45,6 +45,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.defector
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.doubler
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.finite_state_machines
    :members:
    :undoc-members:
@@ -97,6 +100,9 @@ Here are the docstrings of all the strategies in the library.
    :members:
    :undoc-members:
 .. automodule:: axelrod.strategies.mutual
+   :members:
+   :undoc-members:
+.. automodule:: axelrod.strategies.negation
    :members:
    :undoc-members:
 .. automodule:: axelrod.strategies.oncebitten
