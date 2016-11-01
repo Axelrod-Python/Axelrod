@@ -185,6 +185,27 @@ class TestMetaWinner(TestMetaPlayer):
         self.assertEqual(player.history[-1], D)
 
 
+class TestMetaWinnerEnsemble(TestMetaPlayer):
+    name = "Meta Winner Ensemble"
+    player = axelrod.MetaWinnerEnsemble
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'makes_use_of': set(['game']),
+        'long_run_time': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
 class TestMetaHunter(TestMetaPlayer):
 
     name = "Meta Hunter"
