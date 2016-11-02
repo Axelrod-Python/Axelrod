@@ -31,7 +31,29 @@ def fitness_proportionate_selection(scores):
 
 
 class MoranProcess(object):
-    def __init__(self, players, turns=100, noise=0, deterministic_cache=None):
+    def __init__(self, players, turns=100, noise=0, deterministic_cache=None, mutation_rate=0.):
+        """
+        An agent based Moran process class. In each round, each player plays a Match with each other
+        player. Players are assigned a fitness score by their total score from all matches in the round.
+        A player is chosen to reproduce proportionally to fitness, possibly mutated, and is cloned. The
+        clone replaces a randomly chosen player.
+
+        If the mutation_rate is 0, the population will eventually fixate on exactly one player type. In this
+        case a StopIteration exception is raised and the play stops. If mutation_rate is not zero, then
+        the process will iterate indefinitely.
+
+        Parameters
+        ----------
+        players, iterable of axelrod.Player subclasses
+        turns: int, 100
+            The number of turns in each pairwise interaction
+        noise: float, 0
+            The background noise, if any. Randomly flips plays with probability `noise`.
+        deterministic_cache: axelrod.DeterministicCache, None
+            A optional prebuilt deterministic cache
+        mutation_rate: float, 0
+            The rate of mutation. Replicating players are mutated with probability `mutation_rate`
+        """
         self.turns = turns
         self.noise = noise
         self.initial_players = players  # save initial population
@@ -40,6 +62,10 @@ class MoranProcess(object):
         self.set_players()
         self.score_history = []
         self.winning_strategy_name = None
+        self.mutation_rate = mutation_rate
+        assert (mutation_rate >= 0) and (mutation_rate <= 1)
+        assert (noise >= 0) and (noise <= 1)
+
         if deterministic_cache is not None:
             self.deterministic_cache = deterministic_cache
         else:
@@ -60,7 +86,7 @@ class MoranProcess(object):
         A boolean to show whether a match between two players would be
         stochastic
         """
-        return is_stochastic(self.players, self.noise)
+        return is_stochastic(self.players, self.noise) or (self.mutation_rate > 0)
 
     def __next__(self):
         """Iterate the population:
@@ -70,14 +96,21 @@ class MoranProcess(object):
         - update the population
         """
         # Check the exit condition, that all players are of the same type.
-        classes = set(p.__class__ for p in self.players)
-        if len(classes) == 1:
+#        classes = set(p.__class__ for p in self.players)
+        classes = set(str(p) for p in self.players)
+        if (self.mutation_rate == 0) and (len(classes) == 1):
             self.winning_strategy_name = str(self.players[0])
             raise StopIteration
         scores = self._play_next_round()
         # Update the population
         # Fitness proportionate selection
         j = fitness_proportionate_selection(scores)
+        # Mutate?
+        if self.mutation_rate:
+            r = random.random()
+            # If mutate, choose another strategy at random
+            if r < self.mutation_rate:
+                j = randrange(0, len(self.players))
         # Randomly remove a strategy
         i = randrange(0, len(self.players))
         # Replace player i with clone of player j
