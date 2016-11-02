@@ -80,10 +80,10 @@ class MoranProcess(object):
         d = dict()
         for p in players:
             d[str(p)] = p
-        mt = dict()
+        mutation_targets = dict()
         for key in sorted(keys):
-            mt[key] = [v for (k, v) in sorted(d.items()) if k != key]
-        self.mutation_targets = mt
+            mutation_targets[key] = [v for (k, v) in sorted(d.items()) if k != key]
+        self.mutation_targets = mutation_targets
 
     def set_players(self):
         """Copy the initial players into the first population."""
@@ -182,6 +182,8 @@ class MoranProcess(object):
 
     def play(self):
         """Play the process out to completion."""
+        if self.mutation_rate != 0:
+            raise ValueError("MoranProcess.play() will never exit if mutation_rate is nonzero")
         while True:
             try:
                 self.__next__()

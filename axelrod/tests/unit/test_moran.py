@@ -76,6 +76,12 @@ class TestMoranProcess(unittest.TestCase):
                 pass
             self.assertEqual(mp.population_distribution(), counter)
 
+    def test_play_exception(self):
+        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
+        mp = MoranProcess((p1, p2), mutation_rate=0.2)
+        with self.assertRaises(ValueError):
+            mp.play()
+
     def test_three_players(self):
         players = [axelrod.Cooperator(), axelrod.Cooperator(),
                    axelrod.Defector()]
