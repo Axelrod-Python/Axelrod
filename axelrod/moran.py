@@ -81,7 +81,7 @@ class MoranProcess(object):
         for p in players:
             d[str(p)] = p
         mt = dict()
-        for key in keys:
+        for key in sorted(keys):
             mt[key] = [v for (k, v) in d.items() if k != key]
         self.mutation_targets = mt
 
