@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from collections import Counter
+import itertools
 import random
 import unittest
 
@@ -46,6 +48,40 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(populations, mp.populations)
         self.assertEqual(mp.winning_strategy_name, str(p2))
 
+    def test_two_random_players(self):
+        p1, p2 = axelrod.Random(0.5), axelrod.Random(0.25)
+        random.seed(5)
+        mp = MoranProcess((p1, p2))
+        populations = mp.play()
+        self.assertEqual(len(mp), 2)
+        self.assertEqual(len(populations), 2)
+        self.assertEqual(populations, mp.populations)
+        self.assertEqual(mp.winning_strategy_name, str(p1))
+
+    def test_two_players_with_mutation(self):
+        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
+        random.seed(5)
+        mp = MoranProcess((p1, p2), mutation_rate=0.2)
+        self.assertEqual(mp._stochastic, True)
+        self.assertDictEqual(mp.mutation_targets, {str(p1): [p2], str(p2): [p1]})
+        # Test that mutation causes the population to alternate between fixations
+        counters = [
+            Counter({'Cooperator': 2}),
+            Counter({'Defector': 2}),
+            Counter({'Cooperator': 2}),
+            Counter({'Defector': 2})
+        ]
+        for counter in counters:
+            for _ in itertools.takewhile(lambda x: x.population_distribution() != counter, mp):
+                pass
+            self.assertEqual(mp.population_distribution(), counter)
+
+    def test_play_exception(self):
+        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
+        mp = MoranProcess((p1, p2), mutation_rate=0.2)
+        with self.assertRaises(ValueError):
+            mp.play()
+
     def test_three_players(self):
         players = [axelrod.Cooperator(), axelrod.Cooperator(),
                    axelrod.Defector()]
@@ -56,6 +92,24 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(len(populations), 7)
         self.assertEqual(populations, mp.populations)
         self.assertEqual(mp.winning_strategy_name, str(axelrod.Defector()))
+
+    def test_three_players_with_mutation(self):
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Random()
+        p3 = axelrod.Defector()
+        players = [p1, p2, p3]
+        mp = MoranProcess(players, mutation_rate=0.2)
+        self.assertEqual(mp._stochastic, True)
+        self.assertDictEqual(mp.mutation_targets, {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]})
+        # Test that mutation causes the population to alternate between fixations
+        counters = [
+            Counter({'Cooperator': 3}),
+            Counter({'Defector': 3}),
+        ]
+        for counter in counters:
+            for _ in itertools.takewhile(lambda x: x.population_distribution() != counter, mp):
+                pass
+            self.assertEqual(mp.population_distribution(), counter)
 
     def test_four_players(self):
         players = [axelrod.Cooperator() for _ in range(3)]

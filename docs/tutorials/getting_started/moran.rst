@@ -54,3 +54,21 @@ The scores in each round::
     [3.0, 7.04, 7.04, 4.98],
     [3.04, 3.04, 3.04, 2.97],
     [3.04, 3.04, 3.04, 2.97]]
+
+
+The `MoranProcess` class also accepts an argument for a mutation rate. Nonzero mutation changes the Markov process so
+that it no longer has absorbing states, and will iterate forever. To prevent this, iterate with a loop (or function
+like `takewhile` from `itertools`):
+
+    >>> import axelrod as axl
+    >>> axl.seed(4) # for reproducible example
+    >>> players = [axl.Cooperator(), axl.Defector(),
+    ...               axl.TitForTat(), axl.Grudger()]
+    >>> mp = axl.MoranProcess(players, mutation_rate=0.1)
+    >>> for _ in mp:
+    ...     if len(mp.population_distribution()) == 1:
+    ...         break
+    >>> mp.population_distribution()
+    Counter({'Tit For Tat': 4})
+
+
