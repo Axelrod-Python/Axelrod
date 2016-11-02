@@ -1,3 +1,4 @@
+from collections import defaultdict
 from functools import wraps
 import random
 import copy
@@ -52,6 +53,18 @@ def update_history(player, move):
         player.defections += 1
 
 
+def get_state_distribution_from_history(player, history_1, history_2):
+    """Gets state_distribution from player's and opponent's histories."""
+    for action, reply in zip(history_1, history_2):
+        update_state_distribution(player, action, reply)
+
+
+def update_state_distribution(player, action, reply):
+    """Updates state_distribution following play. """
+    last_turn = (action, reply)
+    player.state_distribution[last_turn] += 1
+
+
 def init_args(func):
     """Decorator to simplify the handling of init_args. Use whenever overriding
     Player.__init__ in subclasses of Player that require arguments as follows:
@@ -97,6 +110,7 @@ class Player(object):
                 self.classifier[dimension] = self.default_classifier[dimension]
         self.cooperations = 0
         self.defections = 0
+        self.state_distribution = defaultdict(int)
         self.init_args = ()
         self.set_match_attributes()
 
@@ -141,6 +155,8 @@ class Player(object):
             s1, s2 = self._add_noise(noise, s1, s2)
         update_history(self, s1)
         update_history(opponent, s2)
+        update_state_distribution(self, s1, s2)
+        update_state_distribution(opponent, s2, s1)
 
     def clone(self):
         """Clones the player without history, reapplying configuration
@@ -164,3 +180,4 @@ class Player(object):
         self.history = []
         self.cooperations = 0
         self.defections = 0
+        self.state_distribution = defaultdict(int)

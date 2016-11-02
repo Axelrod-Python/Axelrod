@@ -1,5 +1,6 @@
 import copy
-from axelrod import Player, update_history, Actions
+from axelrod import get_state_distribution_from_history, Player, \
+    update_history, update_state_distribution,  Actions
 
 C, D = Actions.C, Actions.D
 
@@ -37,6 +38,9 @@ def simulate_play(P1, P2, h1=None, h2=None):
         # Update Cooperation / Defection counts
         update_history(P1, h1)
         update_history(P2, h2)
+        get_state_distribution_from_history(P1, h1, h2)
+        get_state_distribution_from_history(P2, h2, h1)
+
         return (h1, h2)
     else:
         s1 = P1.strategy(P2)
@@ -44,4 +48,6 @@ def simulate_play(P1, P2, h1=None, h2=None):
         # Record history
         update_history(P1, s1)
         update_history(P2, s2)
+        update_state_distribution(P1, s1, s2)
+        update_state_distribution(P2, s2, s1)
         return (s1, s2)
