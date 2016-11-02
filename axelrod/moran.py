@@ -107,7 +107,8 @@ class MoranProcess(object):
         r = random.random()
         if r < self.mutation_rate:
             s = str(self.players[index])
-            p = random.choice(self.mutation_targets[s])
+            j = randrange(0, len(self.mutation_targets[s]))
+            p = self.mutation_targets[s][j]
             new_player = p.clone()
         else:
             # Just clone the player

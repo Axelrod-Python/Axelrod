@@ -69,6 +69,6 @@ like `takewhile` from `itertools`):
     ...     if len(mp.population_distribution()) == 1:
     ...         break
     >>> mp.population_distribution()
-    Counter({'Grudger': 4})
+    Counter({'Tit For Tat': 4})
 
 
