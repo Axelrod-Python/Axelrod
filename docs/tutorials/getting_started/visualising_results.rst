@@ -53,3 +53,9 @@ outputs of tournaments with a large number of strategies::
 .. image:: _static/visualising_results/demo_strategies_payoff.svg
    :width: 50%
    :align: center
+
+Saving all plots
+----------------
+
+The `axelrod.Plot` class has a method: `save_all_plots` that will save all the
+above plots to file.

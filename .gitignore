@@ -5,6 +5,7 @@ test.csv
 summary.csv
 basic_tournament.csv
 test_outputs/*csv
+test_outputs/*svg
 test_outputs/*cache
 
 # Mac Specific

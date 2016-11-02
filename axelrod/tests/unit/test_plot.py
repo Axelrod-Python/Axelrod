@@ -189,6 +189,20 @@ class TestPlot(unittest.TestCase):
         else:
             self.skipTest('matplotlib not installed')
 
+    def test_all_plots(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            # Test that this method does not crash.
+            self.assertIsNone(
+                plot.save_all_plots(prefix="test_outputs/",
+                                    progress_bar=False))
+            self.assertIsNone(
+                plot.save_all_plots(prefix="test_outputs/",
+                                    title_prefix="A prefix",
+                                    progress_bar=False))
+        else:
+            self.skipTest('matplotlib not installed')
+
 
 if __name__ == '__main__':
     unittest.main()

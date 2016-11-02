@@ -1,4 +1,5 @@
 from numpy import arange, median, nan_to_num
+import tqdm
 import warnings
 
 matplotlib_installed = True
@@ -234,3 +235,40 @@ class Plot(object):
             ax.set_xscale('log')
 
         return figure
+
+    def save_all_plots(self, prefix="axelrod", title_prefix="axelrod",
+                       filetype="svg", progress_bar=True):
+        """
+        A method to save all plots to file.
+
+        Parameters
+        ----------
+
+            prefix : str
+                A prefix for the file name. This can include the directory.
+                Default: axelrod.
+            title_prefix : str
+                A prefix for the title of the plots (appears on the graphic).
+                Default: axelrod.
+            filetype : str
+                A string for the filetype to save files to: pdf, png, svg,
+                etc...
+            progress_bar : bool
+                Whether or not to create a progress bar which will be updated
+        """
+        plots = [("boxplot", "Payoff"), ("payoff", "Payoff"),
+                 ("winplot", "Wins"), ("sdvplot", "Payoff differences"),
+                 ("pdplot", "Payoff differences"),
+                 ("lengthplot", "Length of Matches")]
+
+        if progress_bar:
+            total = len(plots)  # Total number of plots
+            pbar = tqdm.tqdm(total=total, desc="Obtaining plots")
+
+        for method, name in plots:
+            f = getattr(self, method)(title="{} - {}".format(title_prefix,
+                                                             name))
+            f.savefig("{}_{}.{}".format(prefix, method, filetype))
+
+            if progress_bar:
+                pbar.update()
