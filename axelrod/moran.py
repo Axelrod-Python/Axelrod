@@ -43,7 +43,7 @@ class MoranProcess(object):
         the process will iterate indefinitely, so mp.play() will never exit, and you should use the class as an
         iterator instead.
 
-        When a player mutates, it chooses a random player type from the initial population. This is not the only
+        When a player mutates it chooses a random player type from the initial population. This is not the only
         method yet emulates the common method in the literature.
 
         Parameters
@@ -123,7 +123,6 @@ class MoranProcess(object):
         - update the population
         """
         # Check the exit condition, that all players are of the same type.
-#        classes = set(p.__class__ for p in self.players)
         classes = set(str(p) for p in self.players)
         if (self.mutation_rate == 0) and (len(classes) == 1):
             self.winning_strategy_name = str(self.players[0])
