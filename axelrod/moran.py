@@ -40,7 +40,11 @@ class MoranProcess(object):
 
         If the mutation_rate is 0, the population will eventually fixate on exactly one player type. In this
         case a StopIteration exception is raised and the play stops. If mutation_rate is not zero, then
-        the process will iterate indefinitely.
+        the process will iterate indefinitely, so mp.play() will never exit, and you should use the class as an
+        iterator instead.
+
+        When a player mutates, it chooses a random player type from the initial population. This is not the only
+        method yet emulates the common method in the literature.
 
         Parameters
         ----------
@@ -65,11 +69,21 @@ class MoranProcess(object):
         self.mutation_rate = mutation_rate
         assert (mutation_rate >= 0) and (mutation_rate <= 1)
         assert (noise >= 0) and (noise <= 1)
-
         if deterministic_cache is not None:
             self.deterministic_cache = deterministic_cache
         else:
             self.deterministic_cache = DeterministicCache()
+        # Build the set of mutation targets
+        # Determine the number of unique types (players)
+        keys = set([str(p) for p in players])
+        # Create a dictionary mapping each type to a set of representatives of the other types
+        d = dict()
+        for p in players:
+            d[str(p)] = p
+        mt = dict()
+        for key in keys:
+            mt[key] = [v for (k, v) in d.items() if k != key]
+        self.mutation_targets = mt
 
     def set_players(self):
         """Copy the initial players into the first population."""
@@ -88,10 +102,23 @@ class MoranProcess(object):
         """
         return is_stochastic(self.players, self.noise) or (self.mutation_rate > 0)
 
+    def mutate(self, index):
+        # If mutate, choose another strategy at random from the initial population
+        r = random.random()
+        if r < self.mutation_rate:
+            s = str(self.players[index])
+            p = random.choice(self.mutation_targets[s])
+            new_player = p.clone()
+        else:
+            # Just clone the player
+            new_player = self.players[index].clone()
+        return new_player
+
     def __next__(self):
         """Iterate the population:
         - play the round's matches
         - chooses a player proportionally to fitness (total score) to reproduce
+        - mutate, if appropriate
         - choose a player at random to be replaced
         - update the population
         """
@@ -107,15 +134,15 @@ class MoranProcess(object):
         j = fitness_proportionate_selection(scores)
         # Mutate?
         if self.mutation_rate:
-            r = random.random()
-            # If mutate, choose another strategy at random
-            if r < self.mutation_rate:
-                j = randrange(0, len(self.players))
+            new_player = self.mutate(j)
+        else:
+            new_player = self.players[j].clone()
         # Randomly remove a strategy
         i = randrange(0, len(self.players))
         # Replace player i with clone of player j
-        self.players[i] = self.players[j].clone()
+        self.players[i] = new_player
         self.populations.append(self.population_distribution())
+        return self
 
     def _play_next_round(self):
         """Plays the next round of the process. Every player is paired up
