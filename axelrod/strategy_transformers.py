@@ -13,7 +13,6 @@ from numpy.random import choice
 
 from .actions import Actions, flip_action
 from .random_ import random_choice
-from axelrod import simulate_play, strategies,
 
 
 C, D = Actions.C, Actions.D
@@ -341,6 +340,33 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
 
 MixedTransformer = StrategyTransformerFactory(
     mixed_wrapper, name_prefix="Mutated")
+
+
+def joss_ann_wrapper(player, opponent, proposed_action, probability):
+    """
+    The Joss-Ann of a strategy is a new strategy which has a probability of
+    choosing the move C, a probability of choosing the move D, and otherwise
+    uses the response appropriate to the original strategy.
+
+    Parameters
+    ----------
+
+    probability: a tuple or list representing a probability distribution of
+                playing move C or D (doesn't have to be complete) ie. (0, 1) or
+                (0.2, 0.3)
+    """
+    if sum(probability) > 1:
+        probability[:] = [i / sum(probability) for i in probability]
+
+    remaining_probability = max(0, 1 - probability[0] - probability[1])
+    probability += (remaining_probability,)
+    options = [C, D, proposed_action]
+    action = choice(options, p=probability)
+    return action
+
+
+JossAnnTransformer = StrategyTransformerFactory(joss_ann_wrapper,
+                                                name_prefix="Joss-Ann")
 
 # Strategy wrappers as classes
 
