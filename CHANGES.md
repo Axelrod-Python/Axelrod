@@ -1,3 +1,25 @@
+# v1.15.0, 2016-11-03
+
+Mutation in Moran process, players track state pairs, save all plots method,
+new strategies and PEP8.
+
+- Mutation in Moran processes:
+  https://github.com/Axelrod-Python/Axelrod/pull/754
+- Save all plots to file method:
+  https://github.com/Axelrod-Python/Axelrod/pull/753
+- Players track state pairs:
+  https://github.com/Axelrod-Python/Axelrod/pull/752
+- New strategies:
+      - StochasticCooperator (re introduced):
+        https://github.com/Axelrod-Python/Axelrod/pull/755
+      - SpitefulTitForTat
+        https://github.com/Axelrod-Python/Axelrod/pull/749
+- PEP8:
+  https://github.com/Axelrod-Python/Axelrod/pull/750
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.14.0...v1.15.0
+
 # v1.14.0, 2016-10-24
 
 Two new strategies.
