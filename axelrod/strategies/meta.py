@@ -54,7 +54,8 @@ class MetaPlayer(Player):
         # Get the results of all our players.
         results = [player.strategy(opponent) for player in self.team]
 
-        # A subclass should just define a way to choose the result based on team results.
+        # A subclass should just define a way to choose the result based on
+        # team results.
         return self.meta_strategy(results, opponent)
 
     def meta_strategy(self, results, opponent):
@@ -137,7 +138,8 @@ class MetaWinner(MetaPlayer):
             t.score = 0
 
     def strategy(self, opponent):
-        # Update the running score for each player, before determining the next move.
+        # Update the running score for each player, before determining the
+        # next move.
         if len(self.history):
             for player in self.team:
                 game = self.match_attributes["game"]
@@ -149,7 +151,8 @@ class MetaWinner(MetaPlayer):
     def meta_strategy(self, results, opponent):
         scores = [pl.score for pl in self.team]
         bestscore = max(scores)
-        beststrategies = [i for i, pl in enumerate(self.team) if pl.score == bestscore]
+        beststrategies = [i for (i, pl) in enumerate(self.team)
+                          if pl.score == bestscore]
         bestproposals = [results[i] for i in beststrategies]
         bestresult = C if C in bestproposals else D
 
@@ -166,7 +169,13 @@ class MetaWinner(MetaPlayer):
         return bestresult
 
 class MetaWinnerEnsemble(MetaWinner):
-    """A variant of MetaWinner that chooses one of the top scoring strategies at random against each opponent."""
+    """A variant of MetaWinner that chooses one of the top scoring strategies
+    at random against each opponent.
+
+    Names:
+
+    Meta Winner Ensemble: Original name by Marc Harper
+    """
 
     name = "Meta Winner Ensemble"
 

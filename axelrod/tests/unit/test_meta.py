@@ -5,7 +5,7 @@ import random
 import axelrod
 import copy
 
-from .test_player import TestPlayer
+from .test_player import TestPlayer, test_responses
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -153,7 +153,8 @@ class TestMetaWinner(TestMetaPlayer):
         P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         P2 = axelrod.Player()
 
-        # This meta player will simply choose the strategy with the highest current score.
+        # This meta player will simply choose the strategy with the highest
+        # current score.
         P1.team[0].score = 0
         P1.team[1].score = 1
         self.assertEqual(P1.strategy(P2), C)
@@ -205,6 +206,14 @@ class TestMetaWinnerEnsemble(TestMetaPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
+        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        P2 = axelrod.Cooperator()
+        test_responses(self, P1, P2, [C] * 4, [C] * 4, [C] * 4)
+
+        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        P2 = axelrod.Defector()
+        test_responses(self, P1, P2, [C] * 4, [D] * 4, [D] * 4)
+
 
 class TestMetaHunter(TestMetaPlayer):
 
@@ -222,7 +231,8 @@ class TestMetaHunter(TestMetaPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
-        # We are not using the Cooperator Hunter here, so this should lead to cooperation.
+        # We are not using the Cooperator Hunter here, so this should lead to
+        #  cooperation.
         self.responses_test([C, C, C, C], [C, C, C, C], [C])
 
         # After long histories tit-for-tat should come into play.
