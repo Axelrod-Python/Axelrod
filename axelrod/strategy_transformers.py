@@ -167,8 +167,21 @@ FlipTransformer = StrategyTransformerFactory(
 
 
 def dual_wrapper(player, opponent, proposed_action):
-    """
-    Dual
+    """Wraps the players strategy function to produce the Dual.
+
+    The Dual of a strategy will return the exact opposite set of moves to the
+    original strategy when both are faced with the same history.
+
+    Parameters
+    ----------
+    player: Player object or subclass (self)
+    opponent: Player object or subclass
+    proposed_action: axelrod.Action, C or D
+        The proposed action by the wrapped strategy
+
+    Returns
+    -------
+    action: an axelrod.Action, C or D
     """
     if not player.history:
         player.original_player = player.original_class(*player.init_args)
@@ -343,7 +356,8 @@ MixedTransformer = StrategyTransformerFactory(
 
 
 def joss_ann_wrapper(player, opponent, proposed_action, probability):
-    """
+    """Wraps the players strategy function to produce the Joss-Ann.
+
     The Joss-Ann of a strategy is a new strategy which has a probability of
     choosing the move C, a probability of choosing the move D, and otherwise
     uses the response appropriate to the original strategy.
@@ -351,9 +365,17 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     Parameters
     ----------
 
-    probability: a tuple or list representing a probability distribution of
-                playing move C or D (doesn't have to be complete) ie. (0, 1) or
-                (0.2, 0.3)
+    player: Player object or subclass (self)
+    opponent: Player object or subclass
+    proposed_action: axelrod.Action, C or D
+        The proposed action by the wrapped strategy
+    probability: tuple
+        a tuple or list representing a probability distribution of playing move
+        C or D (doesn't have to be complete) ie. (0, 1) or (0.2, 0.3)
+
+    Returns
+    -------
+    action: an axelrod.Action, C or D
     """
     if sum(probability) > 1:
         probability[:] = [i / sum(probability) for i in probability]
