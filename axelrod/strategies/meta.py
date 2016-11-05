@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, obey_axelrod
+from axelrod import Actions, Player, obey_axelrod, random_choice
 from ._strategies import all_strategies
 from .hunter import (
     DefectorHunter, AlternatorHunter, RandomHunter, MathConstantHunter,
@@ -54,7 +54,8 @@ class MetaPlayer(Player):
         # Get the results of all our players.
         results = [player.strategy(opponent) for player in self.team]
 
-        # A subclass should just define a way to choose the result based on team results.
+        # A subclass should just define a way to choose the result based on
+        # team results.
         return self.meta_strategy(results, opponent)
 
     def meta_strategy(self, results, opponent):
@@ -137,7 +138,8 @@ class MetaWinner(MetaPlayer):
             t.score = 0
 
     def strategy(self, opponent):
-        # Update the running score for each player, before determining the next move.
+        # Update the running score for each player, before determining the
+        # next move.
         if len(self.history):
             for player in self.team:
                 game = self.match_attributes["game"]
@@ -149,7 +151,8 @@ class MetaWinner(MetaPlayer):
     def meta_strategy(self, results, opponent):
         scores = [pl.score for pl in self.team]
         bestscore = max(scores)
-        beststrategies = [i for i, pl in enumerate(self.team) if pl.score == bestscore]
+        beststrategies = [i for (i, pl) in enumerate(self.team)
+                          if pl.score == bestscore]
         bestproposals = [results[i] for i in beststrategies]
         bestresult = C if C in bestproposals else D
 
@@ -164,6 +167,38 @@ class MetaWinner(MetaPlayer):
             return C
 
         return bestresult
+
+class MetaWinnerEnsemble(MetaWinner):
+    """A variant of MetaWinner that chooses one of the top scoring strategies
+    at random against each opponent.
+
+    Names:
+
+    Meta Winner Ensemble: Original name by Marc Harper
+    """
+
+    name = "Meta Winner Ensemble"
+
+    def meta_strategy(self, results, opponent):
+        # Sort by score
+        scores = [(pl.score, i) for (i, pl) in enumerate(self.team)]
+        # Choose one of the best scorers at random
+        scores.sort(reverse=True)
+        prop = max(1, int(len(scores) * 0.08))
+        index = choice([i for (s, i) in scores[:prop]])
+
+        # Update each player's proposed history with his proposed result, but
+        # always after the new result has been settled based on scores
+        # accumulated until now.
+        for r, t in zip(results, self.team):
+            t.proposed_history.append(r)
+
+        if opponent.defections == 0:
+            # Don't poke the bear
+            return C
+
+        # return result
+        return results[index]
 
 
 class MetaHunter(MetaPlayer):
