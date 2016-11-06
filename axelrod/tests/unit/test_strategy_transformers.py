@@ -4,10 +4,12 @@ import unittest
 import axelrod
 from axelrod import simulate_play
 from axelrod.strategy_transformers import *
+from axelrod.actions import flip_action
 from .test_titfortat import TestTitForTat
 from .test_cooperator import TestCooperator
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
 
 @IdentityTransformer
 class TestClass(object):
@@ -45,7 +47,7 @@ class TestTransformers(unittest.TestCase):
         """Tests that Player.clone preserves the application of transformations.
         """
         p1 = axelrod.Cooperator()
-        p2 = FlipTransformer()(axelrod.Cooperator)() # Defector
+        p2 = FlipTransformer()(axelrod.Cooperator)()  # Defector
         p3 = p2.clone()
         self.assertEqual(simulate_play(p1, p3), (C, D))
         self.assertEqual(simulate_play(p1, p3), (C, D))
@@ -63,10 +65,64 @@ class TestTransformers(unittest.TestCase):
     def test_flip_transformer(self):
         """Tests that FlipTransformer(Cooperator) == Defector."""
         p1 = axelrod.Cooperator()
-        p2 = FlipTransformer()(axelrod.Cooperator)() # Defector
+        p2 = FlipTransformer()(axelrod.Cooperator)()  # Defector
         self.assertEqual(simulate_play(p1, p2), (C, D))
         self.assertEqual(simulate_play(p1, p2), (C, D))
         self.assertEqual(simulate_play(p1, p2), (C, D))
+
+    def test_dual_wsls_transformer(self):
+        """Tests that DualTransformer produces the opposite results when faced
+        with the same opponent history.
+        """
+        p1 = axelrod.WinStayLoseShift()
+        p2 = DualTransformer()(axelrod.WinStayLoseShift)()
+        p3 = axelrod.CyclerCCD()  # Cycles 'CCD'
+
+        for _ in range(10):
+            p1.play(p3)
+
+        p3.reset()
+        for _ in range(10):
+            p2.play(p3)
+
+        self.assertEqual(p1.history, [flip_action(x) for x in p2.history])
+
+    def test_dual_tft_transformer(self):
+        """Tests that DualTransformer produces the opposite results when faced
+        with the same opponent history.
+        """
+        p1 = axelrod.TitForTat()
+        p2 = DualTransformer()(axelrod.TitForTat)()
+        p3 = axelrod.CyclerCCD()  # Cycles 'CCD'
+
+        for _ in range(10):
+            p1.play(p3)
+
+        p3.reset()
+        for _ in range(10):
+            p2.play(p3)
+
+        self.assertEqual(p1.history, [flip_action(x) for x in p2.history])
+
+    def test_dual_majority_transformer(self):
+        """Tests that DualTransformer produces the opposite results when faced
+        with the same opponent history.
+        """
+        p1 = axelrod.GoByMajority()
+        p2 = DualTransformer()(axelrod.GoByMajority)()
+        p3 = axelrod.Cycler('CDD')  # Cycles 'CDD'
+
+        for _ in range(10):
+            p1.play(p3)
+
+        p3.reset()
+        for _ in range(10):
+            p2.play(p3)
+
+        self.assertEqual(p1.history, [flip_action(x) for x in p2.history])
+
+    def test_jossann_transformer(self):
+        pass
 
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""

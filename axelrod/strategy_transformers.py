@@ -11,6 +11,7 @@ import random
 import collections
 from numpy.random import choice
 
+
 from .actions import Actions, flip_action
 from .random_ import random_choice
 
@@ -111,7 +112,6 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                     "original_class": PlayerClass,
                     "strategy": strategy,
                     "__module__": PlayerClass.__module__,
-                    "original_class": PlayerClass
                 })
             return new_class
     return Decorator
@@ -387,8 +387,9 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     return action
 
 
-JossAnnTransformer = StrategyTransformerFactory(joss_ann_wrapper,
-                                                name_prefix="Joss-Ann")
+JossAnnTransformer = StrategyTransformerFactory(
+    joss_ann_wrapper, name_prefix="Joss-Ann")
+
 
 # Strategy wrappers as classes
 
