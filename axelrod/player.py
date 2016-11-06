@@ -134,12 +134,6 @@ class Player(object):
         """This is a placeholder strategy."""
         raise NotImplementedError()
 
-    def dual_strategy(self, opponent):
-        from copy import deepcopy
-        fresh_opponent = deepcopy(opponent)
-        self.original.play(fresh_opponent)
-        return flip_action(self.original.history[-1])
-
     def play(self, opponent, noise=0):
         """This pits two players against each other."""
         s1, s2 = self.strategy(opponent), opponent.strategy(self)

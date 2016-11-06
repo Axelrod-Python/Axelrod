@@ -10,8 +10,6 @@ import inspect
 import random
 import collections
 from numpy.random import choice
-
-
 from .actions import Actions, flip_action
 from .random_ import random_choice
 
