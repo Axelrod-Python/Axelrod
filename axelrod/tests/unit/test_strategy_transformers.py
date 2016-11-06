@@ -122,6 +122,8 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [flip_action(x) for x in p2.history])
 
     def test_jossann_transformer(self):
+        """Tests the JossAnn transformer.
+        """
         probability = (1, 0)
         p1 = JossAnnTransformer(probability)(axelrod.Defector)()
         p2 = axelrod.Cooperator()
@@ -135,6 +137,14 @@ class TestTransformers(unittest.TestCase):
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p1.history, [D, D, D, D, D])
+
+        probability = (0.3, 0.3)
+        p1 = JossAnnTransformer(probability)(axelrod.TitForTat)()
+        p2 = axelrod.Cycler()
+        axelrod.seed(0)
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, C, C, D, D])
 
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""
