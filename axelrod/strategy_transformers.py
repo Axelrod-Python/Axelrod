@@ -170,6 +170,8 @@ def dual_wrapper(player, opponent, proposed_action):
     The Dual of a strategy will return the exact opposite set of moves to the
     original strategy when both are faced with the same history.
 
+    A formal definition can be found in [Ashlock2010]_.
+
     Parameters
     ----------
     player: Player object or subclass (self)
@@ -359,6 +361,8 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     The Joss-Ann of a strategy is a new strategy which has a probability of
     choosing the move C, a probability of choosing the move D, and otherwise
     uses the response appropriate to the original strategy.
+
+    A formal definition can be found in [Ashlock2010]_.
 
     Parameters
     ----------
