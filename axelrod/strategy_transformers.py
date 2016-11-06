@@ -171,6 +171,7 @@ def dual_wrapper(player, opponent, proposed_action):
     original strategy when both are faced with the same history.
 
     A formal definition can be found in [Ashlock2010]_.
+    http://doi.org/10.1109/ITW.2010.5593352
 
     Parameters
     ----------
@@ -363,6 +364,7 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     uses the response appropriate to the original strategy.
 
     A formal definition can be found in [Ashlock2010]_.
+    http://doi.org/10.1109/ITW.2010.5593352
 
     Parameters
     ----------
