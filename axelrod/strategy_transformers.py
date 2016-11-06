@@ -10,9 +10,9 @@ import inspect
 import random
 import collections
 from numpy.random import choice
-
 from .actions import Actions, flip_action
 from .random_ import random_choice
+
 
 C, D = Actions.C, Actions.D
 
@@ -107,8 +107,9 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 new_class_name, (PlayerClass,),
                 {
                     "name": name,
+                    "original_class": PlayerClass,
                     "strategy": strategy,
-                    "__module__": PlayerClass.__module__
+                    "__module__": PlayerClass.__module__,
                 })
             return new_class
     return Decorator
@@ -150,6 +151,7 @@ def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs)
     # This example just passes through the proposed_action
     return proposed_action
 
+
 IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)
 
 
@@ -157,8 +159,40 @@ def flip_wrapper(player, opponent, action):
     """Applies flip_action at the class level."""
     return flip_action(action)
 
+
 FlipTransformer = StrategyTransformerFactory(
     flip_wrapper, name_prefix="Flipped")
+
+
+def dual_wrapper(player, opponent, proposed_action):
+    """Wraps the players strategy function to produce the Dual.
+
+    The Dual of a strategy will return the exact opposite set of moves to the
+    original strategy when both are faced with the same history.
+
+    A formal definition can be found in [Ashlock2010]_.
+    http://doi.org/10.1109/ITW.2010.5593352
+
+    Parameters
+    ----------
+    player: Player object or subclass (self)
+    opponent: Player object or subclass
+    proposed_action: axelrod.Action, C or D
+        The proposed action by the wrapped strategy
+
+    Returns
+    -------
+    action: an axelrod.Action, C or D
+    """
+    if not player.history:
+        player.original_player = player.original_class(*player.init_args)
+
+    action = player.original_player.strategy(opponent)
+    player.original_player.history.append(action)
+    return flip_action(action)
+
+
+DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
 
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
@@ -167,6 +201,7 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
     if r < noise:
         return flip_action(action)
     return action
+
 
 NoisyTransformer = StrategyTransformerFactory(
     noisy_wrapper, name_prefix="Noisy")
@@ -178,6 +213,7 @@ def forgiver_wrapper(player, opponent, action, p):
     if action == D:
         return random_choice(p)
     return C
+
 
 ForgiverTransformer = StrategyTransformerFactory(
     forgiver_wrapper, name_prefix="Forgiving")
@@ -191,6 +227,7 @@ def initial_sequence(player, opponent, action, initial_seq):
     if index < len(initial_seq):
         return initial_seq[index]
     return action
+
 
 InitialTransformer = StrategyTransformerFactory(initial_sequence,
                                                 name_prefix="Initial")
@@ -217,6 +254,7 @@ def final_sequence(player, opponent, action, seq):
         return seq[-index]
     return action
 
+
 FinalTransformer = StrategyTransformerFactory(final_sequence,
                                               name_prefix="Final")
 
@@ -228,6 +266,7 @@ def history_track_wrapper(player, opponent, action):
     except AttributeError:
         player._recorded_history = [action]
     return action
+
 
 TrackHistoryTransformer = StrategyTransformerFactory(
     history_track_wrapper, name_prefix="HistoryTracking")
@@ -245,6 +284,7 @@ def deadlock_break_wrapper(player, opponent, action):
         return C
     return action
 
+
 DeadlockBreakingTransformer = StrategyTransformerFactory(
     deadlock_break_wrapper, name_prefix="DeadlockBreaking")
 
@@ -254,6 +294,7 @@ def grudge_wrapper(player, opponent, action, grudges):
     if opponent.defections > grudges:
         return D
     return action
+
 
 GrudgeTransformer = StrategyTransformerFactory(
     grudge_wrapper, name_prefix="Grudging")
@@ -267,6 +308,7 @@ def apology_wrapper(player, opponent, action, myseq, opseq):
        (opseq == opponent.history[-length:]):
         return C
     return action
+
 
 ApologyTransformer = StrategyTransformerFactory(
     apology_wrapper, name_prefix="Apologizing")
@@ -309,8 +351,49 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
 
     return action
 
+
 MixedTransformer = StrategyTransformerFactory(
     mixed_wrapper, name_prefix="Mutated")
+
+
+def joss_ann_wrapper(player, opponent, proposed_action, probability):
+    """Wraps the players strategy function to produce the Joss-Ann.
+
+    The Joss-Ann of a strategy is a new strategy which has a probability of
+    choosing the move C, a probability of choosing the move D, and otherwise
+    uses the response appropriate to the original strategy.
+
+    A formal definition can be found in [Ashlock2010]_.
+    http://doi.org/10.1109/ITW.2010.5593352
+
+    Parameters
+    ----------
+
+    player: Player object or subclass (self)
+    opponent: Player object or subclass
+    proposed_action: axelrod.Action, C or D
+        The proposed action by the wrapped strategy
+    probability: tuple
+        a tuple or list representing a probability distribution of playing move
+        C or D (doesn't have to be complete) ie. (0, 1) or (0.2, 0.3)
+
+    Returns
+    -------
+    action: an axelrod.Action, C or D
+    """
+    if sum(probability) > 1:
+        probability[:] = [i / sum(probability) for i in probability]
+
+    remaining_probability = max(0, 1 - probability[0] - probability[1])
+    probability += (remaining_probability,)
+    options = [C, D, proposed_action]
+    action = choice(options, p=probability)
+    return action
+
+
+JossAnnTransformer = StrategyTransformerFactory(
+    joss_ann_wrapper, name_prefix="Joss-Ann")
+
 
 # Strategy wrappers as classes
 
@@ -330,6 +413,7 @@ class RetaliationWrapper(object):
         if self.retaliation_count > 0:
             self.retaliation_count -= 1
             return D
+
 
 RetaliationTransformer = StrategyTransformerFactory(
     RetaliationWrapper(), name_prefix="Retaliating")
@@ -351,6 +435,7 @@ class RetaliationUntilApologyWrapper(object):
                 return C
             return D
         return action
+
 
 RetaliateUntilApologyTransformer = StrategyTransformerFactory(
     RetaliationUntilApologyWrapper(), name_prefix="RUA")

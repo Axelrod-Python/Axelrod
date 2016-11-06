@@ -60,6 +60,16 @@ The library includes the following transformers:
     >>> NoisyCooperator = NoisyTransformer(0.5)(axl.Cooperator)
     >>> player = NoisyCooperator()
 
+* :code:`DualTransformer`: The Dual of a strategy will return the exact opposite set of moves to the original strategy when both are faced with the same history. [Ashlock2010]_::
+
+    >>> DualWSLS = DualTransformer()(axl.WinStayLoseShift)
+    >>> player = DualWSLS()
+
+* :code:`JossAnnTransformer(probability)`: Where :code:`probability = (x, y)`, the Joss-Ann of a strategy is a new strategy which has a probability :code:`x` of choosing the move C, a probability :code:`y` of choosing the move D, and otherwise uses the response appropriate to the original strategy. [Ashlock2010]_::
+
+    >>> JossAnnTFT = JossAnnTransformer((0.2, 0.3))(axl.TitForTat)
+    >>> player = JossAnnTFT()
+
 * :code:`ForgiverTransformer(p)`: Flips defections with probability :code:`p`::
 
     >>> ForgivinDefector = ForgiverTransformer(0.1)(axl.Defector)
