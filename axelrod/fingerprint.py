@@ -9,6 +9,33 @@ from axelrod.interaction_utils import compute_final_score_per_turn as cfspt
 from collections import OrderedDict
 
 
+def create_jossann(coordinate, probe):
+    """Creates a JossAnn probe player that matches the coordinate.
+
+    If the coordinate sums to more than 1 the parameters are flipped and
+    subtracted from 1 to give meaningful probabilities. This is outlined further
+    in [Ashlock2010]_.
+
+    Parameters
+    ----------
+    coordinate : tuple of length 2
+        coordinate of the form (x, y)
+    probe : class
+        A class that must be descended from axelrod.strategies
+
+    Returns
+    ----------
+    joss_ann: Joss-AnnTitForTat object
+        `JossAnnTransformer` with parameters that correspond to (x, y).
+    """
+    x, y = coordinate
+    if x + y > 1:
+        joss_ann = JossAnnTransformer((1 - y, 1 - x))(probe)()
+    else:
+        joss_ann = JossAnnTransformer((x, y))(probe)()
+    return joss_ann
+
+
 class Fingerprint():
     def __init__(self):
         pass
@@ -78,12 +105,8 @@ class AshlockFingerprint(Fingerprint):
             parameters that correspond to (x, y).
         """
         probe_dict = self.create_probe_coords(step)
-        for coord in probe_dict.keys():
-            x, y = coord
-            if x + y > 1:
-                probe_dict[coord] = JossAnnTransformer((1 - y, 1 - x))(probe)()
-            else:
-                probe_dict[coord] = JossAnnTransformer((x, y))(probe)()
+        for coordinate in probe_dict.keys():
+            probe_dict[coordinate] = create_jossann(coordinate, probe)
         return probe_dict
 
     def create_edges(self, probe_dict):
