@@ -23,24 +23,24 @@ class AshlockFingerprint(Fingerprint):
         Parameters
         ----------
         strategy : class
-            A class that must be descended from axelrod.strategies.
+            A class that must be descended from axelrod.Player
         probe : class
-            A class that must be descended from axelrod.strategies
+            A class that must be descended from axelrod.Player
         """
         self.strategy = strategy
         self.probe = probe
 
-    def create_probe_coords(self, granularity):
+    def create_probe_coords(self, step):
         """Creates a set of coordinates over the unit square.
 
-        Construncts (x, y) coordinates that are separated by a step equal to
-        `granularity`. The coordinates are over the unit squeare which implies
-        that the number of points created will be 1/`granularity`^2.
+        Constructs (x, y) coordinates that are separated by a step equal to
+        `step`. The coordinates are over the unit squeare which implies
+        that the number of points created will be 1/`step`^2.
 
         Parameters
         ----------
-        granularity : float
-            The seperation between each coordinate. Smaller granularity will
+        step : float
+            The separation between each coordinate. Smaller steps will
             produce more coordinates that will be closer together.
 
         Returns
@@ -49,23 +49,23 @@ class AshlockFingerprint(Fingerprint):
             An Ordered Dictionary where the keys are tuples representing each
             coordinate, eg. (x, y). The value is automatically set to `None`.
         """
-        coordinates = list(product(np.arange(0, 1, granularity),
-                                   np.arange(0, 1, granularity)))
+        coordinates = list(product(np.arange(0, 1, step),
+                                   np.arange(0, 1, step)))
 
         probe_coords = OrderedDict.fromkeys(coordinates)
         return probe_coords
 
-    def create_probes(self, probe, granularity):
+    def create_probes(self, probe, step):
         """Creates a set of probe strategies over the unit square.
 
-        Construncts probe strategies that correspond to (x, y) coordinates. The
-        precision of the coordinates is determined by `granularity`. The probes
+        Constructs probe strategies that correspond to (x, y) coordinates. The
+        precision of the coordinates is determined by `step`. The probes
         are created using the `JossAnnTransformer`.
 
         Parameters
         ----------
-        granularity : float
-            The seperation between each coordinate. Smaller granularity will
+        step : float
+            The separation between each coordinate. Smaller steps will
             produce more coordinates that will be closer together.
         probe : class
             A class that must be descended from axelrod.strategies.
@@ -77,7 +77,7 @@ class AshlockFingerprint(Fingerprint):
             coordinate, eg. (x, y). The value is a `JossAnnTransformer` with
             parameters that correspond to (x, y).
         """
-        probe_dict = self.create_probe_coords(granularity)
+        probe_dict = self.create_probe_coords(step)
         for coord in probe_dict.keys():
             x, y = coord
             if x + y > 1:
@@ -89,7 +89,7 @@ class AshlockFingerprint(Fingerprint):
     def create_edges(self, probe_dict):
         """Creates a set of edges for a spatial tournament.
 
-        Construncts edges that correspond to the probes in `probe_dict`. Probes
+        Constructs edges that correspond to the probes in `probe_dict`. Probes
         whose coordinates sum to less/more than 1 will have edges that link them
         to 0/1 correspondingly.
 
@@ -119,7 +119,7 @@ class AshlockFingerprint(Fingerprint):
             edges.append(edge)
         return edges
 
-    def fingerprint(self, turns=50, repetitions=10, granularity=0.01, cores=None):
+    def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None):
         """Build and play a spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament
@@ -133,13 +133,13 @@ class AshlockFingerprint(Fingerprint):
             The number of turns per match
         repetitions : integer, optional
             The number of times the round robin should be repeated
-        granularity : float, optional
-            The seperation between each coordinate. Smaller granularity will
+        step : float, optional
+            The separation between each coordinate. Smaller steps will
             produce more coordinates that will be closer together.
-        cores : integer, optional
+        processes : integer, optional
             The number of processes to be used for parallel processing
         """
-        self.probe_players = self.create_probes(self.probe, granularity)
+        self.probe_players = self.create_probes(self.probe, step)
         self.edges = self.create_edges(self.probe_players)
         original = self.strategy()
         dual = DualTransformer()(self.strategy)()
@@ -149,7 +149,7 @@ class AshlockFingerprint(Fingerprint):
                                               repetitions=repetitions,
                                               edges=self.edges)
         print("Begin Spatial Tournament")
-        self.results = spatial_tourn.play(processes=cores,
+        self.results = spatial_tourn.play(processes=processes,
                                           keep_interactions=True)
         print("Spatial Tournament Finished")
 
