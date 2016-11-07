@@ -172,7 +172,7 @@ class AshlockFingerprint(Fingerprint):
                                               repetitions=repetitions,
                                               edges=self.edges)
         print("Begin Spatial Tournament")
-        self.results = spatial_tourn.play(processes=processes,
+        self.results = spatial_tourn.play(processes=processes, build_results=False, in_memory=True,
                                           keep_interactions=True)
         print("Spatial Tournament Finished")
 
