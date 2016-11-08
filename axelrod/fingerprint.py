@@ -135,8 +135,40 @@ class AshlockFingerprint(Fingerprint):
             edges.append(edge)
         return edges
 
+    def construct_tournament_elements(self, step):
+        """Build the elements required for a spatial tournament
+
+        Parameters
+        ----------
+        step : float
+            The separation between each coordinate. Smaller steps will
+            produce more coordinates that will be closer together.
+
+        Returns
+        ----------
+        edges : list of tuples
+            A list containing tuples of length 2. All tuples will have either 0
+            or 1 as the first element. The second element is the index of the
+            corresponding probe (+2 to allow for including the Strategy and it's
+            Dual).
+
+        tournament_players : list
+            A list containing instances of axelrod.Player. The first item is the
+            original player, the second is the dual, the rest are the probes.
+
+        """
+        probe_coords = self.create_probe_coords(step)
+        edges = self.create_edges(probe_coords)
+
+        dual = DualTransformer()(self.strategy)()
+        probe_players = self.create_probes(self.probe, probe_coords)
+        probes = probe_players.values()
+        tournament_players = [self.strategy(), dual] + list(probes)
+
+        return edges, tournament_players
+
     def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None):
-        """Build and play a spatial tournament.
+        """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament
         where the original strategy only plays probes whose coordinates sum to
@@ -155,19 +187,15 @@ class AshlockFingerprint(Fingerprint):
         processes : integer, optional
             The number of processes to be used for parallel processing
         """
-        probe_coords = self.create_probe_coords(step)
-        self.probe_players = self.create_probes(self.probe, probe_coords)
-        self.edges = self.create_edges(probe_coords)
-        original = self.strategy()
-        dual = DualTransformer()(self.strategy)()
-        probes = self.probe_players.values()
-        tourn_players = [original, dual] + list(probes)
-        spatial_tourn = axl.SpatialTournament(tourn_players, turns=turns,
-                                              repetitions=repetitions,
-                                              edges=self.edges)
+        edges, tourn_players = self.construct_tournament_elements(step)
+        self.spatial_tourn = axl.SpatialTournament(tourn_players, turns=turns,
+                                                   repetitions=repetitions,
+                                                   edges=edges)
         print("Begin Spatial Tournament")
-        self.results = spatial_tourn.play(processes=processes, build_results=False, in_memory=True,
-                                          keep_interactions=True)
+        self.results = self.spatial_tourn.play(processes=processes,
+                                               build_results=True,
+                                               in_memory=True,
+                                               keep_interactions=True)
         print("Spatial Tournament Finished")
 
     def _generate_data(self, results, probe_coords):
