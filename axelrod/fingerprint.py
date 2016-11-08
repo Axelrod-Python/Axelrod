@@ -90,9 +90,8 @@ class AshlockFingerprint(Fingerprint):
         ----------
         probe : class
             A class that must be descended from axelrod.strategies.
-        probe_coords : ordered dictionary
-            An Ordered Dictionary where the keys are tuples representing each
-            coordinate, eg. (x, y). The value is automatically set to `None`.
+        probe_coords : list of tuples
+            Tuples of length 2 representing each coordinate, eg. (x, y)
 
         Returns
         ----------
@@ -105,7 +104,7 @@ class AshlockFingerprint(Fingerprint):
                                  for coord in probe_coords)
         return probe_dict
 
-    def create_edges(self, probe_dict):
+    def create_edges(self, coordinates):
         """Creates a set of edges for a spatial tournament.
 
         Constructs edges that correspond to the probes in `probe_dict`. Probes
@@ -114,10 +113,8 @@ class AshlockFingerprint(Fingerprint):
 
         Parameters
         ----------
-        probe_dict : ordered dictionary
-            An Ordered Dictionary where the keys are tuples representing each
-            coordinate, eg. (x, y). The value is a `JossAnnTransformer` with
-            parameters that correspond to (x, y).
+        coordinates : list of tuples
+            Tuples of length 2 representing each coordinate, eg. (x, y)
 
         Returns
         ----------
@@ -128,7 +125,7 @@ class AshlockFingerprint(Fingerprint):
             Dual).
         """
         edges = []
-        for index, coord in enumerate(probe_dict.keys()):
+        for index, coord in enumerate(coordinates):
             #  Add 2 to the index because we will have to allow for the Strategy
             #  and it's Dual
             if sum(coord) > 1:
@@ -160,7 +157,7 @@ class AshlockFingerprint(Fingerprint):
         """
         probe_coords = self.create_probe_coords(step)
         self.probe_players = self.create_probes(self.probe, probe_coords)
-        self.edges = self.create_edges(self.probe_players)
+        self.edges = self.create_edges(probe_coords)
         original = self.strategy()
         dual = DualTransformer()(self.strategy)()
         probes = self.probe_players.values()

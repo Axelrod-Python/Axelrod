@@ -8,6 +8,7 @@ strategy = axl.WinStayLoseShift
 probe = axl.TitForTat
 coordinates = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
 probes = [JossAnnTransformer(c)(probe)() for c in coordinates]
+edges = [(0, 2), (0, 3), (0, 4), (0, 5)]
 
 
 class TestFingerprint(unittest.TestCase):
@@ -19,6 +20,7 @@ class TestFingerprint(unittest.TestCase):
         cls.probe = probe
         cls.expected_probes = probes
         cls.expected_coordinates = coordinates
+        cls.expected_edges = edges
 
     def test_init(self):
         strategy = axl.Cooperator()
@@ -40,6 +42,10 @@ class TestFingerprint(unittest.TestCase):
         # self.assertEqual(list(probe_dict.values()), self.expected_probes)
 
     def test_create_edges(self):
+        AF = AshlockFingerprint(self.strategy, self.probe)
+        coords = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
+        edges = AF.create_edges(coords)
+        self.assertEqual(edges, self.expected_edges)
         pass
 
     def test_fingerprint(self):
