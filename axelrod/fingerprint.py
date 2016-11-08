@@ -72,17 +72,14 @@ class AshlockFingerprint(Fingerprint):
 
         Returns
         ----------
-        probe_coords : ordered dictionary
-            An Ordered Dictionary where the keys are tuples representing each
-            coordinate, eg. (x, y). The value is automatically set to `None`.
+        coordinates : list of tuples
+            Tuples of length 2 representing each coordinate, eg. (x, y)
         """
         coordinates = list(product(np.arange(0, 1, step),
                                    np.arange(0, 1, step)))
+        return coordinates
 
-        probe_coords = OrderedDict.fromkeys(coordinates)
-        return probe_coords
-
-    def create_probes(self, probe, step):
+    def create_probes(self, probe, probe_coords):
         """Creates a set of probe strategies over the unit square.
 
         Constructs probe strategies that correspond to (x, y) coordinates. The
@@ -91,11 +88,11 @@ class AshlockFingerprint(Fingerprint):
 
         Parameters
         ----------
-        step : float
-            The separation between each coordinate. Smaller steps will
-            produce more coordinates that will be closer together.
         probe : class
             A class that must be descended from axelrod.strategies.
+        probe_coords : ordered dictionary
+            An Ordered Dictionary where the keys are tuples representing each
+            coordinate, eg. (x, y). The value is automatically set to `None`.
 
         Returns
         ----------
@@ -104,9 +101,8 @@ class AshlockFingerprint(Fingerprint):
             coordinate, eg. (x, y). The value is a `JossAnnTransformer` with
             parameters that correspond to (x, y).
         """
-        probe_dict = self.create_probe_coords(step)
-        for coordinate in probe_dict.keys():
-            probe_dict[coordinate] = create_jossann(coordinate, probe)
+        probe_dict = OrderedDict((coord, create_jossann(coord, probe))
+                                 for coord in probe_coords)
         return probe_dict
 
     def create_edges(self, probe_dict):
@@ -162,7 +158,8 @@ class AshlockFingerprint(Fingerprint):
         processes : integer, optional
             The number of processes to be used for parallel processing
         """
-        self.probe_players = self.create_probes(self.probe, step)
+        probe_coords = self.create_probe_coords(step)
+        self.probe_players = self.create_probes(self.probe, probe_coords)
         self.edges = self.create_edges(self.probe_players)
         original = self.strategy()
         dual = DualTransformer()(self.strategy)()

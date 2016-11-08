@@ -31,7 +31,6 @@ class TestFingerprint(unittest.TestCase):
         AF = AshlockFingerprint(self.strategy, self.probe)
         probe_coords = AF.create_probe_coords(0.5)
         self.assertEqual(probe_coords, self.expected_coordinates)
-        # self.assertEqual(list(probe_coords.values()), [None, None, None, None])
 
     def test_create_probes(self):
         AF = AshlockFingerprint(self.strategy, self.probe)
