@@ -12,3 +12,21 @@ class TestFingerprint(unittest.TestCase):
         fingerprint = AshlockFingerprint(strategy, probe)
         self.assertEqual(fingerprint.strategy, strategy)
         self.assertEqual(fingerprint.probe, probe)
+
+    def test_create_probe_coords(test):
+        pass
+
+    def test_create_probes(self):
+        pass
+
+    def test_create_edges(self):
+        pass
+
+    def test_fingerprint(self):
+        pass
+
+    def test__generate_data(self):
+        pass
+
+    def test_plot(self):
+        pass
