@@ -69,9 +69,9 @@ class TestFingerprint(unittest.TestCase):
 
     def test_create_probes(self):
         coords = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
-        probe_dict = create_probes(probe, coords)
-        self.assertEqual(list(probe_dict.keys()), coords)
-        # self.assertEqual(list(probe_dict.values()), self.expected_probes)
+        probes = create_probes(probe, coords)
+        self.assertEqual(len(probes), 6)
+        self.assertEqual(probes, self.expected_probes)
 
     def test_create_edges(self):
         coords = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]

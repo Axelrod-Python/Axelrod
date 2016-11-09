@@ -1,11 +1,9 @@
 import axelrod as axl
 import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import compute_final_score_per_turn as cfspt
-from collections import OrderedDict, namedtuple
+from collections import namedtuple
 
 
 def create_jossann(coordinate, probe):
@@ -80,9 +78,8 @@ def create_probes(probe, coordinates):
         coordinate, eg. (x, y). The value is a `JossAnnTransformer` with
         parameters that correspond to (x, y).
     """
-    probe_dict = OrderedDict((coordinate, create_jossann(coordinate, probe))
-                             for coordinate in coordinates)
-    return probe_dict
+    probes = [create_jossann(coordinate, probe) for coordinate in coordinates]
+    return probes
 
 
 def create_edges(coordinates):
@@ -158,8 +155,8 @@ class AshlockFingerprint():
 
         dual = DualTransformer()(self.strategy)()
         probe_players = create_probes(self.probe, probe_coordinates)
-        probes = probe_players.values()
-        tournament_players = [self.strategy(), dual] + list(probes)
+        # probes = probe_players.values()
+        tournament_players = [self.strategy(), dual] + probe_players
 
         return edges, tournament_players
 
@@ -236,5 +233,7 @@ class AshlockFingerprint():
             http://matplotlib.org/examples/color/colormaps_reference.html
         """
 
-        sns.heatmap(self.data, cmap=col_map)
-        plt.show()
+        # sns.heatmap(self.data, cmap=col_map)
+        # plt.show()
+
+        pass
