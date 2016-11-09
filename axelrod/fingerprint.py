@@ -36,6 +36,86 @@ def create_jossann(coordinate, probe):
     return joss_ann
 
 
+def create_coordinates(step):
+    """Creates a set of coordinates over the unit square.
+
+    Constructs (x, y) coordinates that are separated by a step equal to
+    `step`. The coordinates are over the unit squeare which implies
+    that the number of points created will be 1/`step`^2.
+
+    Parameters
+    ----------
+    step : float
+        The separation between each coordinate. Smaller steps will
+        produce more coordinates that will be closer together.
+
+    Returns
+    ----------
+    coordinates : list of tuples
+        Tuples of length 2 representing each coordinate, eg. (x, y)
+    """
+    coordinates = list(product(np.arange(0, 1, step),
+                               np.arange(0, 1, step)))
+    return coordinates
+
+
+def create_probes(probe, probe_coords):
+    """Creates a set of probe strategies over the unit square.
+
+    Constructs probe strategies that correspond to (x, y) coordinates. The
+    probes are created using the `JossAnnTransformer`.
+
+    Parameters
+    ----------
+    probe : class
+        A class that must be descended from axelrod.strategies.
+    probe_coords : list of tuples
+        Tuples of length 2 representing each coordinate, eg. (x, y)
+
+    Returns
+    ----------
+    probe_dict : ordered dictionary
+        An Ordered Dictionary where the keys are tuples representing each
+        coordinate, eg. (x, y). The value is a `JossAnnTransformer` with
+        parameters that correspond to (x, y).
+    """
+    probe_dict = OrderedDict((coord, create_jossann(coord, probe))
+                             for coord in probe_coords)
+    return probe_dict
+
+
+def create_edges(coordinates):
+    """Creates a set of edges for a spatial tournament.
+
+    Constructs edges that correspond to `coordinates`. Coordinates that sum to
+    1 or less will have edges that start at 0, those who sum to more than will
+    have an edge that starts at 1.
+
+    Parameters
+    ----------
+    coordinates : list of tuples
+        Tuples of length 2 representing each coordinate, eg. (x, y)
+
+    Returns
+    ----------
+    edges : list of tuples
+        A list containing tuples of length 2. All tuples will have either 0
+        or 1 as the first element. The second element is the index of the
+        corresponding probe (+2 to allow for including the Strategy and it's
+        Dual).
+    """
+    edges = []
+    for index, coord in enumerate(coordinates):
+        #  Add 2 to the index because we will have to allow for the Strategy
+        #  and it's Dual
+        if sum(coord) > 1:
+            edge = (1, index + 2)
+        else:
+            edge = (0, index + 2)
+        edges.append(edge)
+    return edges
+
+
 class Fingerprint():
     def __init__(self):
         pass
@@ -56,84 +136,6 @@ class AshlockFingerprint(Fingerprint):
         """
         self.strategy = strategy
         self.probe = probe
-
-    def create_probe_coords(self, step):
-        """Creates a set of coordinates over the unit square.
-
-        Constructs (x, y) coordinates that are separated by a step equal to
-        `step`. The coordinates are over the unit squeare which implies
-        that the number of points created will be 1/`step`^2.
-
-        Parameters
-        ----------
-        step : float
-            The separation between each coordinate. Smaller steps will
-            produce more coordinates that will be closer together.
-
-        Returns
-        ----------
-        coordinates : list of tuples
-            Tuples of length 2 representing each coordinate, eg. (x, y)
-        """
-        coordinates = list(product(np.arange(0, 1, step),
-                                   np.arange(0, 1, step)))
-        return coordinates
-
-    def create_probes(self, probe, probe_coords):
-        """Creates a set of probe strategies over the unit square.
-
-        Constructs probe strategies that correspond to (x, y) coordinates. The
-        precision of the coordinates is determined by `step`. The probes
-        are created using the `JossAnnTransformer`.
-
-        Parameters
-        ----------
-        probe : class
-            A class that must be descended from axelrod.strategies.
-        probe_coords : list of tuples
-            Tuples of length 2 representing each coordinate, eg. (x, y)
-
-        Returns
-        ----------
-        probe_dict : ordered dictionary
-            An Ordered Dictionary where the keys are tuples representing each
-            coordinate, eg. (x, y). The value is a `JossAnnTransformer` with
-            parameters that correspond to (x, y).
-        """
-        probe_dict = OrderedDict((coord, create_jossann(coord, probe))
-                                 for coord in probe_coords)
-        return probe_dict
-
-    def create_edges(self, coordinates):
-        """Creates a set of edges for a spatial tournament.
-
-        Constructs edges that correspond to the probes in `probe_dict`. Probes
-        whose coordinates sum to less/more than 1 will have edges that link them
-        to 0/1 correspondingly.
-
-        Parameters
-        ----------
-        coordinates : list of tuples
-            Tuples of length 2 representing each coordinate, eg. (x, y)
-
-        Returns
-        ----------
-        edges : list of tuples
-            A list containing tuples of length 2. All tuples will have either 0
-            or 1 as the first element. The second element is the index of the
-            corresponding probe (+2 to allow for including the Strategy and it's
-            Dual).
-        """
-        edges = []
-        for index, coord in enumerate(coordinates):
-            #  Add 2 to the index because we will have to allow for the Strategy
-            #  and it's Dual
-            if sum(coord) > 1:
-                edge = (1, index + 2)
-            else:
-                edge = (0, index + 2)
-            edges.append(edge)
-        return edges
 
     def construct_tournament_elements(self, step):
         """Build the elements required for a spatial tournament
@@ -157,11 +159,11 @@ class AshlockFingerprint(Fingerprint):
             original player, the second is the dual, the rest are the probes.
 
         """
-        probe_coords = self.create_probe_coords(step)
-        edges = self.create_edges(probe_coords)
+        probe_coords = create_coordinates(step)
+        edges = create_edges(probe_coords)
 
         dual = DualTransformer()(self.strategy)()
-        probe_players = self.create_probes(self.probe, probe_coords)
+        probe_players = create_probes(self.probe, probe_coords)
         probes = probe_players.values()
         tournament_players = [self.strategy(), dual] + list(probes)
 

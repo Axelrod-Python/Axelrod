@@ -29,24 +29,22 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(fingerprint.strategy, strategy)
         self.assertEqual(fingerprint.probe, probe)
 
-    def test_create_probe_coords(self):
-        AF = AshlockFingerprint(self.strategy, self.probe)
-        probe_coords = AF.create_probe_coords(0.5)
-        self.assertEqual(probe_coords, self.expected_coordinates)
+    def test_create_coordinates(self):
+        test_coordinates = create_coordinates(0.5)
+        coordinates = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
+        self.assertEqual(test_coordinates, coordinates)
 
     def test_create_probes(self):
-        AF = AshlockFingerprint(self.strategy, self.probe)
         coords = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
-        probe_dict = AF.create_probes(self.probe, coords)
-        self.assertEqual(list(probe_dict.keys()), self.expected_coordinates)
+        probe_dict = create_probes(probe, coords)
+        self.assertEqual(list(probe_dict.keys()), coords)
         # self.assertEqual(list(probe_dict.values()), self.expected_probes)
 
     def test_create_edges(self):
-        AF = AshlockFingerprint(self.strategy, self.probe)
         coords = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
-        edges = AF.create_edges(coords)
-        self.assertEqual(edges, self.expected_edges)
-        pass
+        expected_edges = [(0, 2), (0, 3), (0, 4), (0, 5)]
+        edges = create_edges(coords)
+        self.assertEqual(edges, expected_edges)
 
     def test_fingerprint(self):
         pass
