@@ -160,6 +160,7 @@ class AshlockFingerprint(Fingerprint):
 
         """
         probe_coords = create_coordinates(step)
+        self.coordinates = probe_coords
         edges = create_edges(probe_coords)
 
         dual = DualTransformer()(self.strategy)()
@@ -193,14 +194,13 @@ class AshlockFingerprint(Fingerprint):
         self.spatial_tourn = axl.SpatialTournament(tourn_players, turns=turns,
                                                    repetitions=repetitions,
                                                    edges=edges)
-        print("Begin Spatial Tournament")
         self.results = self.spatial_tourn.play(processes=processes,
                                                build_results=True,
                                                in_memory=True,
                                                keep_interactions=True)
-        print("Spatial Tournament Finished")
+        self.data = self.generate_data(self.results, self.coordinates)
 
-    def _generate_data(self, results, probe_coords):
+    def generate_data(self, interactions, coordinates):
         """Generates useful data from a spatial tournament.
 
         Matches interactions from `results` to their corresponding coordinate in
@@ -208,36 +208,30 @@ class AshlockFingerprint(Fingerprint):
 
         Parameters
         ----------
-        results : axelrod.result_set.ResultSetFromFile
-            A results set for a spatial tournament.
+        interactions : dictionary
+            A dictionary of the interactions of a tournament
         probe_coords : list of tuples
             A list of tuples of length 2, where each tuple represents a
             coordinate, eg. (x, y).
 
         Returns
         ----------
-        data_frame : pandas.core.frame.DataFrame
-            A pandas DataFrame object where the row and column headers
-            correspond to coordinates. The cell values are the score of the
-            original/dual strategy playing the probe with parameters that match
-            the coordinate.
+        coord_scores : dictionary
+            A dictionary where the keys are coordinates of the form (x, y) and
+            the values are the mean score for the corresponding interactions.
         """
-        edge_scores = {key: cfspt(value[0])[0] for key, value in
-                       results.interactions.items()}
+        edge_scores = {key: np.mean([cfspt(i) for i in value]) for key, value in
+                       interactions.items()}
 
-        coord_scores = OrderedDict.fromkeys(probe_coords)
-        for index, coord in enumerate(coord_scores.keys()):
+        coord_scores = {coord: None for coord in coordinates}
+        for index, coord in enumerate(coordinates):
             if sum(coord) > 1:
                 edge = (1, index + 2)
             else:
                 edge = (0, index + 2)
             coord_scores[coord] = edge_scores[edge]
 
-        ser = pd.Series(list(coord_scores.values()),
-                        index=pd.MultiIndex.from_tuples(coord_scores.keys()))
-        data_frame = ser.unstack().fillna(0)
-        data_frame.shape
-        return data_frame
+        return coord_scores
 
     def plot(self, col_map=None):
         """Plot the results of the spatial tournament.
@@ -248,6 +242,6 @@ class AshlockFingerprint(Fingerprint):
             A matplotlib colour map, full list can be found at
             http://matplotlib.org/examples/color/colormaps_reference.html
         """
-        self.data = self._generate_data(self.results, self.probe_players.keys())
+
         sns.heatmap(self.data, cmap=col_map)
         plt.show()
