@@ -198,7 +198,7 @@ class AshlockFingerprint(Fingerprint):
                                                build_results=True,
                                                in_memory=True,
                                                keep_interactions=True)
-        self.data = self.generate_data(self.results, self.coordinates)
+        self.data = self.generate_data(self.results.interactions, self.coordinates)
 
     def generate_data(self, interactions, coordinates):
         """Generates useful data from a spatial tournament.
