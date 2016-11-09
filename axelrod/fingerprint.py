@@ -114,6 +114,37 @@ def create_edges(coordinates):
     return edges
 
 
+def generate_data(interactions, coordinates, edges):
+    """Generates useful data from a spatial tournament.
+
+    Matches interactions from `results` to their corresponding coordinate in
+    `probe_coords`.
+
+    Parameters
+    ----------
+    interactions : dictionary
+        A dictionary of the interactions of a tournament
+    coordinates : list of tuples
+        A list of tuples of length 2, where each tuple represents a
+        coordinate, eg. (x, y).
+    edges : list of tuples
+        A list containing tuples of length 2. All tuples will have either 0
+        or 1 as the first element. The second element is the index of the
+        corresponding probe (+2 to allow for including the Strategy and it's
+        Dual).
+
+    Returns
+    ----------
+    coordinate_scores : dictionary
+        A dictionary where the keys are coordinates of the form (x, y) and
+        the values are the mean score for the corresponding interactions.
+    """
+    edge_scores = [np.mean([cfspt(scores) for scores in interactions[edge]])
+                   for edge in edges]
+    coordinate_scores = dict(zip(coordinates, edge_scores))
+    return coordinate_scores
+
+
 class AshlockFingerprint():
     def __init__(self, strategy, probe):
         """
@@ -188,40 +219,7 @@ class AshlockFingerprint():
                                                build_results=True,
                                                in_memory=True,
                                                keep_interactions=True)
-        self.data = self.generate_data(self.results.interactions, self.coordinates)
-
-    def generate_data(self, interactions, coordinates):
-        """Generates useful data from a spatial tournament.
-
-        Matches interactions from `results` to their corresponding coordinate in
-        `probe_coords`.
-
-        Parameters
-        ----------
-        interactions : dictionary
-            A dictionary of the interactions of a tournament
-        coordinates : list of tuples
-            A list of tuples of length 2, where each tuple represents a
-            coordinate, eg. (x, y).
-
-        Returns
-        ----------
-        coordinate_scores : dictionary
-            A dictionary where the keys are coordinates of the form (x, y) and
-            the values are the mean score for the corresponding interactions.
-        """
-        edge_scores = {key: np.mean([cfspt(i) for i in value]) for key, value in
-                       interactions.items()}
-
-        coordinate_scores = {coord: None for coord in coordinates}
-        for index, coordinate in enumerate(coordinates):
-            if sum(coordinate) > 1:
-                edge = (1, index + 2)
-            else:
-                edge = (0, index + 2)
-            coordinate_scores[coordinate] = edge_scores[edge]
-
-        return coordinate_scores
+        self.data = generate_data(self.results.interactions, self.coordinates)
 
     def plot(self, col_map=None):
         """Plot the results of the spatial tournament.
