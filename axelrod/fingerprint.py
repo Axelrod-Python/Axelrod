@@ -60,7 +60,7 @@ def create_coordinates(step):
     return coordinates
 
 
-def create_probes(probe, probe_coords):
+def create_probes(probe, coordinates):
     """Creates a set of probe strategies over the unit square.
 
     Constructs probe strategies that correspond to (x, y) coordinates. The
@@ -70,7 +70,7 @@ def create_probes(probe, probe_coords):
     ----------
     probe : class
         A class that must be descended from axelrod.strategies.
-    probe_coords : list of tuples
+    coordinates : list of tuples
         Tuples of length 2 representing each coordinate, eg. (x, y)
 
     Returns
@@ -80,8 +80,8 @@ def create_probes(probe, probe_coords):
         coordinate, eg. (x, y). The value is a `JossAnnTransformer` with
         parameters that correspond to (x, y).
     """
-    probe_dict = OrderedDict((coord, create_jossann(coord, probe))
-                             for coord in probe_coords)
+    probe_dict = OrderedDict((coordinate, create_jossann(coordinate, probe))
+                             for coordinate in coordinates)
     return probe_dict
 
 
@@ -106,10 +106,10 @@ def create_edges(coordinates):
         Dual).
     """
     edges = []
-    for index, coord in enumerate(coordinates):
+    for index, coordinate in enumerate(coordinates):
         #  Add 2 to the index because we will have to allow for the Strategy
         #  and it's Dual
-        if sum(coord) > 1:
+        if sum(coordinate) > 1:
             edge = (1, index + 2)
         else:
             edge = (0, index + 2)
@@ -160,12 +160,12 @@ class AshlockFingerprint(Fingerprint):
             original player, the second is the dual, the rest are the probes.
 
         """
-        probe_coords = create_coordinates(step)
-        self.coordinates = probe_coords
-        edges = create_edges(probe_coords)
+        probe_coordinates = create_coordinates(step)
+        self.coordinates = probe_coordinates
+        edges = create_edges(probe_coordinates)
 
         dual = DualTransformer()(self.strategy)()
-        probe_players = create_probes(self.probe, probe_coords)
+        probe_players = create_probes(self.probe, probe_coordinates)
         probes = probe_players.values()
         tournament_players = [self.strategy(), dual] + list(probes)
 
@@ -211,28 +211,28 @@ class AshlockFingerprint(Fingerprint):
         ----------
         interactions : dictionary
             A dictionary of the interactions of a tournament
-        probe_coords : list of tuples
+        coordinates : list of tuples
             A list of tuples of length 2, where each tuple represents a
             coordinate, eg. (x, y).
 
         Returns
         ----------
-        coord_scores : dictionary
+        coordinate_scores : dictionary
             A dictionary where the keys are coordinates of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
         edge_scores = {key: np.mean([cfspt(i) for i in value]) for key, value in
                        interactions.items()}
 
-        coord_scores = {coord: None for coord in coordinates}
-        for index, coord in enumerate(coordinates):
-            if sum(coord) > 1:
+        coordinate_scores = {coord: None for coord in coordinates}
+        for index, coordinate in enumerate(coordinates):
+            if sum(coordinate) > 1:
                 edge = (1, index + 2)
             else:
                 edge = (0, index + 2)
-            coord_scores[coord] = edge_scores[edge]
+            coordinate_scores[coordinate] = edge_scores[edge]
 
-        return coord_scores
+        return coordinate_scores
 
     def plot(self, col_map=None):
         """Plot the results of the spatial tournament.
