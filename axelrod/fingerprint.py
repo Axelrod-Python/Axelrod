@@ -3,10 +3,9 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from itertools import product
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import compute_final_score_per_turn as cfspt
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 
 
 def create_jossann(coordinate, probe):
@@ -54,8 +53,10 @@ def create_coordinates(step):
     coordinates : list of tuples
         Tuples of length 2 representing each coordinate, eg. (x, y)
     """
-    coordinates = list(product(np.arange(0, 1, step),
-                               np.arange(0, 1, step)))
+    Point = namedtuple('Point', 'x y')
+    coordinates = list(Point(j, k) for j in np.arange(0, 1, step)
+                       for k in np.arange(0, 1, step))
+
     return coordinates
 
 
