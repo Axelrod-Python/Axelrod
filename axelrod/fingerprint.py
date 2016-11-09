@@ -117,15 +117,7 @@ def create_edges(coordinates):
     return edges
 
 
-class Fingerprint():
-    def __init__(self):
-        pass
-
-    def plot(self):
-        pass
-
-
-class AshlockFingerprint(Fingerprint):
+class AshlockFingerprint():
     def __init__(self, strategy, probe):
         """
         Parameters
