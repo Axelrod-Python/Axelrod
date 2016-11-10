@@ -145,6 +145,23 @@ def generate_data(interactions, coordinates, edges):
     return coordinate_scores
 
 
+def read_interactions(filename):
+    with open(filename, 'r') as textfile:
+        string = textfile.read()
+        data = string.split('\n')
+        data.pop()
+        new_data = [k.split(',') for k in data]
+        dictionary = {}
+        for i in new_data:
+            edge = (int(i[0]), int(i[1]))
+            interactions = list(zip(i[4], i[5]))
+            if edge not in dictionary:
+                dictionary[edge] = []
+            dictionary[edge].append(interactions)
+        print(dictionary.keys())
+    return dictionary
+
+
 class AshlockFingerprint():
     def __init__(self, strategy, probe):
         """
@@ -211,15 +228,17 @@ class AshlockFingerprint():
         processes : integer, optional
             The number of processes to be used for parallel processing
         """
+        filename = "vk.txt"
         edges, tourn_players = self.construct_tournament_elements(step)
-        self.spatial_tourn = axl.SpatialTournament(tourn_players, turns=turns,
+        self.spatial_tourn = axl.SpatialTournament(tourn_players,
+                                                   turns=turns,
                                                    repetitions=repetitions,
                                                    edges=edges)
-        self.results = self.spatial_tourn.play(processes=processes,
-                                               build_results=True,
-                                               in_memory=True,
-                                               keep_interactions=True)
-        self.data = generate_data(self.results.interactions, self.coordinates)
+        self.spatial_tourn.play(processes=processes,
+                                build_results=False,
+                                filename=filename)
+        self.interactions = read_interactions(filename)
+        self.data = generate_data(self.interactions, self.coordinates, edges)
 
     def plot(self, col_map=None):
         """Plot the results of the spatial tournament.
