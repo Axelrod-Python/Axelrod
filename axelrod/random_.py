@@ -8,7 +8,23 @@ def random_choice(p=0.5):
     Return 'C' with probability `p`, else return 'D'
 
     Emulates Python's random.choice(['C', 'D']) since it is not consistent
-    across Python 2.7 to Python 3.4"""
+    across Python 2.7 to Python 3.4
+
+    Parameters
+    ----------
+
+    p : float
+        The probability of picking 'C'
+
+    Returns
+    -------
+    axelrod.Actions.C or axelrod.Actions.D
+    """
+    if p == 0:
+        return Actions.D
+
+    if p == 1:
+        return Actions.C
 
     r = random.random()
     if r < p:

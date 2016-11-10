@@ -80,7 +80,7 @@ class TestEatherley(TestPlayer):
         # Test defection after opponent defection
         self.responses_test([D], [D], [D])
         self.responses_test([D, D], [D, D], [D])
-        self.responses_test([D, C, C, D], [D, C, C, D], [D, C], random_seed=8)
+        self.responses_test([D, C, C, D], [D, C, C, D], [C, C], random_seed=8)
 
 
 class TestTester(TestPlayer):

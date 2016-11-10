@@ -229,7 +229,7 @@ class TestZDExtort2(TestPlayer):
         self.responses_test([C], [C], [D, D, C, C], random_seed=2)
         self.responses_test([C], [D], [D, D, C, C], random_seed=2)
         self.responses_test([D], [C], [D, D, C, C], random_seed=2)
-        self.responses_test([D], [D], [D, D, C, C], random_seed=2)
+        self.responses_test([C], [D], [D, D, C, C], random_seed=2)
 
 
 class TestZDExtort2v2(TestPlayer):
