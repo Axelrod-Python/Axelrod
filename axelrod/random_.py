@@ -2,6 +2,9 @@ import random
 import numpy
 from axelrod import Actions
 
+# A dictionary mapping 0 or 1 probability of cooperating to an action.
+choices = {0: Actions.D, 1: Actions.C}
+
 
 def random_choice(p=0.5):
     """
@@ -20,16 +23,11 @@ def random_choice(p=0.5):
     -------
     axelrod.Actions.C or axelrod.Actions.D
     """
-    if p == 0:
-        return Actions.D
-
-    if p == 1:
-        return Actions.C
-
-    r = random.random()
-    if r < p:
-        return Actions.C
-    return Actions.D
+    try:
+        return choices[p]
+    except KeyError:
+        r = random.random()
+        return choices[r < p]
 
 
 def randrange(a, b):
