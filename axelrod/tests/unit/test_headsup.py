@@ -38,7 +38,7 @@ class TestTF2TvsBully(TestHeadsUp):
 class TestZDGTFT2vsBully(TestHeadsUp):
     """Test ZDGTFT2 vs Bully"""
     def test_rounds(self):
-        self.versus_test(axelrod.ZDGTFT2(), axelrod.Bully(), [C, D, D, C, C, D],
+        self.versus_test(axelrod.ZDGTFT2(), axelrod.Bully(), [C, D, D, C, C, C],
             [D, D, C, C, D, D], random_seed=2)
 
 
