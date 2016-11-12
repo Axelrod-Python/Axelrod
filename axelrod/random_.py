@@ -2,11 +2,8 @@ import random
 import numpy
 from axelrod import Actions
 
-
-choices = {
-    0: Actions.D,
-    1: Actions.C
-}
+# A dictionary mapping 0 or 1 probability of cooperating to an action.
+choices = {0: Actions.D, 1: Actions.C}
 
 
 def random_choice(p=0.5):
