@@ -3,6 +3,12 @@ import numpy
 from axelrod import Actions
 
 
+choices = {
+    0: Actions.D,
+    1: Actions.C
+}
+
+
 def random_choice(p=0.5):
     """
     Return 'C' with probability `p`, else return 'D'
@@ -20,16 +26,14 @@ def random_choice(p=0.5):
     -------
     axelrod.Actions.C or axelrod.Actions.D
     """
-    if p == 0:
-        return Actions.D
 
-    if p == 1:
-        return Actions.C
+    if p in [0, 1]:
+        choice = choices[p]
+    else:
+        r = random.random()
+        choice = choices[r < p]
 
-    r = random.random()
-    if r < p:
-        return Actions.C
-    return Actions.D
+    return choice
 
 
 def randrange(a, b):
