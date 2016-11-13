@@ -1,3 +1,17 @@
+# v1.16.0, 2016-11-13
+
+Minor internal change, new strategy and new strategy transformers
+
+- Random_choice method does not sample if not necessary
+  https://github.com/Axelrod-Python/Axelrod/pull/761
+- New strategy: Meta Winner Ensemble
+  https://github.com/Axelrod-Python/Axelrod/pull/757
+- New strategy transformers: Dual transformer and Joss-Ann transformer
+  https://github.com/Axelrod-Python/Axelrod/pull/758
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.15.0...v1.16.0
+
 # v1.15.0, 2016-11-03
 
 Mutation in Moran process, players track state pairs, save all plots method,
