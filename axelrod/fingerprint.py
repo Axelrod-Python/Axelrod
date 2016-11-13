@@ -4,6 +4,9 @@ import numpy as np
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import compute_final_score_per_turn as cfspt
 from collections import namedtuple
+from tempfile import NamedTemporaryFile
+
+Point = namedtuple('Point', 'x y')
 
 
 def create_jossann(coordinate, probe):
@@ -51,7 +54,6 @@ def create_coordinates(step):
     coordinates : list of tuples
         Tuples of length 2 representing each coordinate, eg. (x, y)
     """
-    Point = namedtuple('Point', 'x y')
     coordinates = list(Point(j, k) for j in np.arange(0, 1, step)
                        for k in np.arange(0, 1, step))
 
@@ -151,15 +153,14 @@ def read_interactions(filename):
         data = string.split('\n')
         data.pop()
         new_data = [k.split(',') for k in data]
-        dictionary = {}
+        results = {}
         for i in new_data:
             edge = (int(i[0]), int(i[1]))
             interactions = list(zip(i[4], i[5]))
-            if edge not in dictionary:
-                dictionary[edge] = []
-            dictionary[edge].append(interactions)
-        print(dictionary.keys())
-    return dictionary
+            if edge not in results:
+                results[edge] = []
+            results[edge].append(interactions)
+    return results
 
 
 class AshlockFingerprint():
@@ -228,7 +229,8 @@ class AshlockFingerprint():
         processes : integer, optional
             The number of processes to be used for parallel processing
         """
-        filename = "vk.txt"
+        outputfile = NamedTemporaryFile(mode='w')
+        filename = outputfile.name
         edges, tourn_players = self.construct_tournament_elements(step)
         self.spatial_tourn = axl.SpatialTournament(tourn_players,
                                                    turns=turns,
