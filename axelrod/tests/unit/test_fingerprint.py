@@ -3,6 +3,12 @@ import axelrod as axl
 from axelrod.fingerprint import *
 from axelrod.strategy_transformers import JossAnnTransformer
 
+matplotlib_installed = True
+try:
+    import matplotlib.pyplot
+except ImportError:
+    matplotlib_installed = False
+
 
 strategy = axl.WinStayLoseShift
 probe = axl.TitForTat
@@ -120,4 +126,8 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(all(values), True)
 
     def test_plot(self):
-        pass
+        af = AshlockFingerprint(self.strategy, self.probe)
+        af.fingerprint(turns=10, repetitions=2, step=0.25, processes=1)
+        p = af.plot()
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+
