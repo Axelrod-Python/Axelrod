@@ -148,6 +148,21 @@ def generate_data(interactions, coordinates, edges):
 
 
 def read_interactions(filename):
+    """Produces the interactions from a file created by a  spatial tournament.
+
+    Parameters
+    ----------
+    filename : str
+        The filename or location of the file that contains all the data from the
+        spatial tournament.
+
+    Returns
+    ----------
+    results : dictionary
+        A dictionary where the keys are tuples representing edges, and the
+        values are the corresponding interactions of the players on that edge.
+
+    """
     with open(filename, 'r') as textfile:
         string = textfile.read()
         data = string.split('\n')
@@ -242,11 +257,15 @@ class AshlockFingerprint():
         self.interactions = read_interactions(filename)
         self.data = generate_data(self.interactions, self.coordinates, edges)
 
-    def plot(self, col_map='seismic', filename=None):
+    def plot(self, filename=None, col_map='seismic'):
         """Plot the results of the spatial tournament.
 
         Parameters
         ----------
+        filename : str, optional
+            The location and name that the resulting plot should be saved to.
+            Defaults to the current directory with the name
+            `Strategy and Probe.pdf`
         col_map : str, optional
             A matplotlib colour map, full list can be found at
             http://matplotlib.org/examples/color/colormaps_reference.html
