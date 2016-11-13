@@ -2,7 +2,7 @@ import axelrod as axl
 import numpy as np
 import matplotlib.pyplot as plt
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
-from axelrod.interaction_utils import compute_final_score_per_turn as cfspt
+from axelrod.interaction_utils import compute_final_score_per_turn, read_interactions_from_file
 from axelrod import on_windows
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
@@ -143,41 +143,10 @@ def generate_data(interactions, coordinates, edges):
         A dictionary where the keys are coordinates of the form (x, y) and
         the values are the mean score for the corresponding interactions.
     """
-    edge_scores = [np.mean([cfspt(scores) for scores in interactions[edge]])
-                   for edge in edges]
+    edge_scores = [np.mean([compute_final_score_per_turn(scores)
+                            for scores in interactions[edge]]) for edge in edges]
     coordinate_scores = dict(zip(coordinates, edge_scores))
     return coordinate_scores
-
-
-def read_interactions(filename):
-    """Produces the interactions from a file created by a  spatial tournament.
-
-    Parameters
-    ----------
-    filename : str
-        The filename or location of the file that contains all the data from the
-        spatial tournament.
-
-    Returns
-    ----------
-    results : dictionary
-        A dictionary where the keys are tuples representing edges, and the
-        values are the corresponding interactions of the players on that edge.
-
-    """
-    with open(filename, 'r') as textfile:
-        string = textfile.read()
-        data = string.split('\n')
-        data.pop()
-        new_data = [k.split(',') for k in data]
-        results = {}
-        for i in new_data:
-            edge = (int(i[0]), int(i[1]))
-            interactions = list(zip(i[4], i[5]))
-            if edge not in results:
-                results[edge] = []
-            results[edge].append(interactions)
-    return results
 
 
 class AshlockFingerprint():
@@ -265,8 +234,9 @@ class AshlockFingerprint():
                                 filename=filename,
                                 processes=processes,
                                 in_memory=in_memory)
-        self.interactions = read_interactions(filename)
+        self.interactions = read_interactions_from_file(filename)
         self.data = generate_data(self.interactions, self.coordinates, edges)
+        return self.data
 
     def plot(self, col_map='seismic'):
         """Plot the results of the spatial tournament.
