@@ -220,9 +220,10 @@ class AshlockFingerprint():
             in_memory = True
         elif filename:
             outputfile = open(filename, 'w')
+            filename = outputfile.name
         else:
             outputfile = NamedTemporaryFile(mode='w')
-        filename = outputfile.name
+            filename = outputfile.name
 
         edges, tourn_players = self.construct_tournament_elements(step)
         self.step = step
@@ -230,11 +231,18 @@ class AshlockFingerprint():
                                                    turns=turns,
                                                    repetitions=repetitions,
                                                    edges=edges)
-        self.spatial_tourn.play(build_results=False,
-                                filename=filename,
-                                processes=processes,
-                                in_memory=in_memory)
-        self.interactions = read_interactions_from_file(filename)
+        if in_memory:
+            results = self.spatial_tourn.play(build_results=True,
+                                              processes=processes,
+                                              in_memory=in_memory)
+            self.interactions = results.interactions
+        else:
+            self.spatial_tourn.play(build_results=False,
+                                    filename=filename,
+                                    processes=processes,
+                                    in_memory=in_memory)
+            self.interactions = read_interactions_from_file(filename)
+
         self.data = generate_data(self.interactions, self.coordinates, edges)
         return self.data
 
