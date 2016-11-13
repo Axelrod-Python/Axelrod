@@ -6,6 +6,7 @@ from axelrod.interaction_utils import compute_final_score_per_turn as cfspt
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
 
+
 Point = namedtuple('Point', 'x y')
 
 
@@ -219,7 +220,6 @@ class AshlockFingerprint():
 
         dual = DualTransformer()(self.strategy)()
         probe_players = create_probes(self.probe, probe_coordinates)
-        # probes = probe_players.values()
         tournament_players = [self.strategy(), dual] + probe_players
 
         return edges, tournament_players
@@ -257,7 +257,7 @@ class AshlockFingerprint():
         self.interactions = read_interactions(filename)
         self.data = generate_data(self.interactions, self.coordinates, edges)
 
-    def plot(self, filename=None, col_map='seismic'):
+    def plot(self, col_map='seismic'):
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -269,17 +269,15 @@ class AshlockFingerprint():
         col_map : str, optional
             A matplotlib colour map, full list can be found at
             http://matplotlib.org/examples/color/colormaps_reference.html
+
+        Returns
+        ----------
+        figure : matplotlib figure
+            A heat plot of the results of the spatial tournament
         """
-
-        # sns.heatmap(self.data, cmap=col_map)
-        # plt.show()
-        from math import sqrt
-        granularity = int(sqrt(len(self.coordinates)))
-        if filename is None:
-            filename = self.strategy.name + ' and ' + self.probe.name + ".pdf"
-
+        size = (1 / self.step) // 1
         ordered_data = [self.data[coord] for coord in self.coordinates]
-        plotting_data = np.reshape(ordered_data, (granularity, granularity))
-
+        plotting_data = np.reshape(ordered_data, (size, size))
+        figure = plt.figure()
         plt.imshow(plotting_data, cmap=col_map, )
-        plt.savefig(filename)
+        return figure

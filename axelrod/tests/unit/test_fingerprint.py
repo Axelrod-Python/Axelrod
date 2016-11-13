@@ -45,7 +45,6 @@ long_edges = [(0, 2),
 
 
 class TestFingerprint(unittest.TestCase):
-    """Some stuff"""
 
     @classmethod
     def setUpClass(cls):
