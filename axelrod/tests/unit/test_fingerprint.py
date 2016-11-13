@@ -94,6 +94,17 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(edge_keys, sorted(long_edges))
         self.assertEqual(coord_keys, long_coordinates)
 
+    def test_read_interactions(self):
+        filename = "test_outputs/test_results.csv"
+        af = AshlockFingerprint(self.strategy, self.probe)
+        edges, players = af.construct_tournament_elements(0.25)
+        spatial_tournament = axl.SpatialTournament(players, turns=10,
+                                                   repetitions=2,
+                                                   edges=edges)
+        spatial_tournament.play(build_results=False, filename=filename)
+        interactions = read_interactions(filename)
+        self.assertEqual(sorted(list(interactions.keys())), sorted(long_edges))
+
     def test_generate_data(self):
         af = AshlockFingerprint(self.strategy, self.probe)
         edges, players = af.construct_tournament_elements(0.25)
