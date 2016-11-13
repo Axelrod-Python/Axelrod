@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import compute_final_score_per_turn as cfspt
+from axelrod import on_windows
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
 
@@ -224,7 +225,8 @@ class AshlockFingerprint():
 
         return edges, tournament_players
 
-    def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None):
+    def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None,
+                    filename=None):
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament
@@ -244,16 +246,25 @@ class AshlockFingerprint():
         processes : integer, optional
             The number of processes to be used for parallel processing
         """
-        outputfile = NamedTemporaryFile(mode='w')
+        in_memory = False
+        if on_windows and (filename is None):
+            in_memory = True
+        elif filename:
+            outputfile = open(filename, 'w')
+        else:
+            outputfile = NamedTemporaryFile(mode='w')
         filename = outputfile.name
+
         edges, tourn_players = self.construct_tournament_elements(step)
+        self.step = step
         self.spatial_tourn = axl.SpatialTournament(tourn_players,
                                                    turns=turns,
                                                    repetitions=repetitions,
                                                    edges=edges)
-        self.spatial_tourn.play(processes=processes,
-                                build_results=False,
-                                filename=filename)
+        self.spatial_tourn.play(build_results=False,
+                                filename=filename,
+                                processes=processes,
+                                in_memory=in_memory)
         self.interactions = read_interactions(filename)
         self.data = generate_data(self.interactions, self.coordinates, edges)
 
