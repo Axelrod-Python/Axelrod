@@ -86,7 +86,13 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(tournament_players[0].__class__, af.strategy)
 
     def test_fingerprint(self):
-        pass
+        af = AshlockFingerprint(self.strategy, self.probe)
+        af.fingerprint(turns=10, repetitions=2, step=0.25, processes=1)
+        edge_keys = sorted(list(af.interactions.keys()))
+        coord_keys = sorted(list(af.data.keys()))
+        self.assertEqual(af.step, 0.25)
+        self.assertEqual(edge_keys, sorted(long_edges))
+        self.assertEqual(coord_keys, long_coordinates)
 
     def test_generate_data(self):
         af = AshlockFingerprint(self.strategy, self.probe)
