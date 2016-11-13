@@ -1,6 +1,6 @@
 import axelrod as axl
 import numpy as np
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import compute_final_score_per_turn as cfspt
 from collections import namedtuple
@@ -242,7 +242,7 @@ class AshlockFingerprint():
         self.interactions = read_interactions(filename)
         self.data = generate_data(self.interactions, self.coordinates, edges)
 
-    def plot(self, col_map=None):
+    def plot(self, col_map='seismic', filename=None):
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -254,5 +254,13 @@ class AshlockFingerprint():
 
         # sns.heatmap(self.data, cmap=col_map)
         # plt.show()
+        from math import sqrt
+        granularity = int(sqrt(len(self.coordinates)))
+        if filename is None:
+            filename = self.strategy.name + ' and ' + self.probe.name + ".pdf"
 
-        pass
+        ordered_data = [self.data[coord] for coord in self.coordinates]
+        plotting_data = np.reshape(ordered_data, (granularity, granularity))
+
+        plt.imshow(plotting_data, cmap=col_map, )
+        plt.savefig(filename)
