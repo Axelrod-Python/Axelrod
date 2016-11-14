@@ -3,6 +3,11 @@ import axelrod as axl
 from axelrod.fingerprint import *
 from axelrod.strategy_transformers import JossAnnTransformer
 
+from hypothesis import given, settings
+from axelrod.tests.property import strategy_lists
+
+
+
 matplotlib_installed = True
 try:
     import matplotlib.pyplot
@@ -115,3 +120,15 @@ class TestFingerprint(unittest.TestCase):
         af.fingerprint(turns=10, repetitions=2, step=0.25, progress_bar=False)
         p = af.plot()
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
+
+    @given(strategy_pair=strategy_lists(min_size=2, max_size=2))
+    def test_pair_fingerprints(self, strategy_pair):
+        """
+        A test to check that we can fingerprint
+        with any two given strategies
+        """
+        strategy, probe = strategy_pair
+        af = AshlockFingerprint(strategy, probe)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
+                              progress_bar=False)
+        self.assertIsInstance(data, dict)
