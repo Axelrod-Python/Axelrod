@@ -31,7 +31,7 @@ def create_jossann(coordinate, probe):
         `JossAnnTransformer` with parameters that correspond to (x, y).
     """
     x, y = coordinate
-    if x + y > 1:
+    if x + y >= 1:
         joss_ann = JossAnnTransformer((1 - y, 1 - x))(probe)()
     else:
         joss_ann = JossAnnTransformer((x, y))(probe)()
@@ -110,7 +110,7 @@ def create_edges(coordinates):
     for index, coordinate in enumerate(coordinates):
         #  Add 2 to the index because we will have to allow for the Strategy
         #  and it's Dual
-        if sum(coordinate) > 1:
+        if sum(coordinate) >= 1:
             edge = (1, index + 2)
         else:
             edge = (0, index + 2)
