@@ -91,9 +91,20 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(len(tournament_players), 6)
         self.assertEqual(tournament_players[0].__class__, af.strategy)
 
-    def test_fingerprint(self):
+    def test_serial_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.25, processes=1)
+        af.fingerprint(turns=10, repetitions=2, step=0.25)
+        edge_keys = sorted(list(af.interactions.keys()))
+        coord_keys = sorted(list(af.data.keys()))
+        self.assertEqual(af.step, 0.25)
+        self.assertEqual(edge_keys, sorted(long_edges))
+        self.assertEqual(coord_keys, long_coordinates)
+
+    @unittest.skipIf(axl.on_windows,
+                     "Parallel processing not supported on Windows")
+    def test_parallel_fingerprint(self):
+        af = AshlockFingerprint(self.strategy, self.probe)
+        af.fingerprint(turns=10, repetitions=2, step=0.25, processes=2)
         edge_keys = sorted(list(af.interactions.keys()))
         coord_keys = sorted(list(af.data.keys()))
         self.assertEqual(af.step, 0.25)
@@ -116,7 +127,6 @@ class TestFingerprint(unittest.TestCase):
 
     def test_plot(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.25, processes=1)
+        af.fingerprint(turns=10, repetitions=2, step=0.25)
         p = af.plot()
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
-
