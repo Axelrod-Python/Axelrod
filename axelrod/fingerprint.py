@@ -31,7 +31,7 @@ def create_jossann(coordinate, probe):
         `JossAnnTransformer` with parameters that correspond to (x, y).
     """
     x, y = coordinate
-    if x + y > 1:
+    if x + y >= 1:
         joss_ann = JossAnnTransformer((1 - y, 1 - x))(probe)()
     else:
         joss_ann = JossAnnTransformer((x, y))(probe)()
@@ -110,7 +110,7 @@ def create_edges(coordinates):
     for index, coordinate in enumerate(coordinates):
         #  Add 2 to the index because we will have to allow for the Strategy
         #  and it's Dual
-        if sum(coordinate) > 1:
+        if sum(coordinate) >= 1:
             edge = (1, index + 2)
         else:
             edge = (0, index + 2)
@@ -195,7 +195,7 @@ class AshlockFingerprint():
         return edges, tournament_players
 
     def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None,
-                    filename=None):
+                    filename=None, in_memory=False, progress_bar=True):
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament
@@ -214,11 +214,19 @@ class AshlockFingerprint():
             produce more coordinates that will be closer together.
         processes : integer, optional
             The number of processes to be used for parallel processing
+        progress_bar : bool
+            Whether or not to create a progress bar which will be updated
+
+        Returns
+        ----------
+        self.data : dictionary
+            A dictionary where the keys are coordinates of the form (x, y) and
+            the values are the mean score for the corresponding interactions.
         """
-        in_memory = False
+
         if on_windows and (filename is None):
             in_memory = True
-        elif filename:
+        elif filename is not None:
             outputfile = open(filename, 'w')
             filename = outputfile.name
         else:
@@ -227,20 +235,18 @@ class AshlockFingerprint():
 
         edges, tourn_players = self.construct_tournament_elements(step)
         self.step = step
-        self.spatial_tourn = axl.SpatialTournament(tourn_players,
-                                                   turns=turns,
-                                                   repetitions=repetitions,
-                                                   edges=edges)
+        self.spatial_tournament = axl.SpatialTournament(tourn_players,
+                                                        turns=turns,
+                                                        repetitions=repetitions,
+                                                        edges=edges)
+        self.spatial_tournament.play(build_results=False,
+                                     filename=filename,
+                                     processes=processes,
+                                     in_memory=in_memory,
+                                     progress_bar=progress_bar)
         if in_memory:
-            results = self.spatial_tourn.play(build_results=True,
-                                              processes=processes,
-                                              in_memory=in_memory)
-            self.interactions = results.interactions
+            self.interactions = self.spatial_tournament.interactions_dict
         else:
-            self.spatial_tourn.play(build_results=False,
-                                    filename=filename,
-                                    processes=processes,
-                                    in_memory=in_memory)
             self.interactions = read_interactions_from_file(filename)
 
         self.data = generate_data(self.interactions, self.coordinates, edges)
