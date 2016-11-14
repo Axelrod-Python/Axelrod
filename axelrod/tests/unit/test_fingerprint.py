@@ -57,14 +57,27 @@ class TestFingerprint(unittest.TestCase):
 
     def test_progress_bar_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=True)
+        data = af.fingerprint(turns=10, repetitions=2, step=0.5,
+                              progress_bar=True)
         self.assertEqual(sorted(data.keys()), self.expected_coordinates)
+
+    def test_in_memory_fingerprint(self):
+        af = AshlockFingerprint(self.strategy, self.probe)
+        af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False,
+                       in_memory=True)
+        edge_keys = sorted(list(af.interactions.keys()))
+        coord_keys = sorted(list(af.data.keys()))
+        self.assertEqual(af.step, 0.5)
+        self.assertEqual(af.spatial_tournament.interactions_dict,
+                         af.interactions)
+        self.assertEqual(edge_keys, self.expected_edges)
+        self.assertEqual(coord_keys, self.expected_coordinates)
 
     def test_serial_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False)
+        data = af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False)
         edge_keys = sorted(list(af.interactions.keys()))
-        coord_keys = sorted(list(af.data.keys()))
+        coord_keys = sorted(list(data.keys()))
         self.assertEqual(af.step, 0.5)
         self.assertEqual(edge_keys, self.expected_edges)
         self.assertEqual(coord_keys, self.expected_coordinates)
@@ -73,7 +86,8 @@ class TestFingerprint(unittest.TestCase):
                      "Parallel processing not supported on Windows")
     def test_parallel_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.5, processes=2, progress_bar=False)
+        af.fingerprint(turns=10, repetitions=2, step=0.5, processes=2,
+                       progress_bar=False)
         edge_keys = sorted(list(af.interactions.keys()))
         coord_keys = sorted(list(af.data.keys()))
         self.assertEqual(af.step, 0.5)
@@ -89,7 +103,8 @@ class TestFingerprint(unittest.TestCase):
                                                    edges=edges)
         results = spatial_tournament.play(progress_bar=False,
                                           keep_interactions=True)
-        data = generate_data(results.interactions, self.expected_coordinates, self.expected_edges)
+        data = generate_data(results.interactions, self.expected_coordinates,
+                             self.expected_edges)
         keys = sorted(list(data.keys()))
         values = [0 < score < 5 for score in data.values()]
         self.assertEqual(sorted(keys), self.expected_coordinates)

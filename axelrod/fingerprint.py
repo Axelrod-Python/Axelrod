@@ -195,7 +195,7 @@ class AshlockFingerprint():
         return edges, tournament_players
 
     def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None,
-                    filename=None, progress_bar=True):
+                    filename=None, in_memory=False, progress_bar=True):
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament
@@ -223,10 +223,10 @@ class AshlockFingerprint():
             A dictionary where the keys are coordinates of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
-        in_memory = False
+
         if on_windows and (filename is None):
             in_memory = True
-        elif filename:
+        elif filename is not None:
             outputfile = open(filename, 'w')
             filename = outputfile.name
         else:
@@ -235,21 +235,18 @@ class AshlockFingerprint():
 
         edges, tourn_players = self.construct_tournament_elements(step)
         self.step = step
-        self.spatial_tourn = axl.SpatialTournament(tourn_players,
-                                                   turns=turns,
-                                                   repetitions=repetitions,
-                                                   edges=edges)
+        self.spatial_tournament = axl.SpatialTournament(tourn_players,
+                                                        turns=turns,
+                                                        repetitions=repetitions,
+                                                        edges=edges)
+        self.spatial_tournament.play(build_results=False,
+                                     filename=filename,
+                                     processes=processes,
+                                     in_memory=in_memory,
+                                     progress_bar=progress_bar)
         if in_memory:
-            results = self.spatial_tourn.play(build_results=True,
-                                              processes=processes,
-                                              in_memory=in_memory)
-            self.interactions = results.interactions
+            self.interactions = self.spatial_tournament.interactions_dict
         else:
-            self.spatial_tourn.play(build_results=False,
-                                    filename=filename,
-                                    processes=processes,
-                                    in_memory=in_memory,
-                                    progress_bar=progress_bar)
             self.interactions = read_interactions_from_file(filename)
 
         self.data = generate_data(self.interactions, self.coordinates, edges)
