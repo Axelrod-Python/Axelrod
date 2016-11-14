@@ -55,6 +55,11 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(len(tournament_players), 6)
         self.assertEqual(tournament_players[0].__class__, af.strategy)
 
+    def test_progress_bar_fingerprint(self):
+        af = AshlockFingerprint(self.strategy, self.probe)
+        data = af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=True)
+        self.assertEqual(sorted(data.keys()), self.expected_coordinates)
+
     def test_serial_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
         af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False)
@@ -92,6 +97,6 @@ class TestFingerprint(unittest.TestCase):
 
     def test_plot(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.25)
+        af.fingerprint(turns=10, repetitions=2, step=0.25, progress_bar=False)
         p = af.plot()
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
