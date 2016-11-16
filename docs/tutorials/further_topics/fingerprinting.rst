@@ -7,9 +7,9 @@ In [Ashlock2010] a methodology for obtaining visual representation of a
 strategy's behaviour is given.
 The basic method is to play the strategy against a probe strategy with varying
 noise parameters.
-These noise parameters are implemented through the `JossAnnTransformer`.
+These noise parameters are implemented through the :code:`JossAnnTransformer`.
 The Joss-Ann of a strategy is a new strategy which has a probability :code:`x` of
-choosing the move C, a probability :code:`y` of choosing the move D, and otherwise
+cooperating, a probability :code:`y` of defecting, and otherwise
 uses the response appropriate to the original strategy.
 We can then plot the expected score of the strategy against :code:`x` and :code:`y` and
 obtain a heat plot over the unit square.

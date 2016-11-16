@@ -8,15 +8,15 @@ from collections import namedtuple
 from tempfile import NamedTemporaryFile
 
 
-Point = namedtuple('Point', 'x y')
+Coordinate = namedtuple('Coordinate', 'x y')
 
 
-def create_points(step):
+def create_coordinates(step):
     """Creates a set of coordinates over the unit square.
 
     Constructs (x, y) coordinates that are separated by a step equal to
     `step`. The coordinates are over the unit squeare which implies
-    that the number of points created will be 1/`step`^2.
+    that the number of coordinates created will be 1/`step`^2.
 
     Parameters
     ----------
@@ -26,10 +26,10 @@ def create_points(step):
 
     Returns
     ----------
-    coordinates : list of Points
+    coordinates : list of Coordinates
         Named Tuples of length 2 representing each coordinate, eg. (x, y)
     """
-    coordinates = list(Point(j, k) for j in np.arange(0, 1, step)
+    coordinates = list(Coordinate(j, k) for j in np.arange(0, 1, step)
                        for k in np.arange(0, 1, step))
 
     return coordinates
@@ -49,7 +49,7 @@ class AshlockFingerprint():
         self.probe = probe
 
     @staticmethod
-    def create_jossann(point, probe):
+    def create_jossann(coordinate, probe):
         """Creates a JossAnn probe player that matches the coordinate.
 
         If the coordinate sums to more than 1 the parameters are flipped and
@@ -58,7 +58,7 @@ class AshlockFingerprint():
 
         Parameters
         ----------
-        coordinate : Point
+        coordinate : Coordinate
             coordinate of the form (x, y)
         probe : class
             A class that must be descended from axelrod.strategies
@@ -68,7 +68,7 @@ class AshlockFingerprint():
         joss_ann: Joss-AnnTitForTat object
             `JossAnnTransformer` with parameters that correspond to (x, y).
         """
-        x, y = point
+        x, y = coordinate
         if x + y >= 1:
             joss_ann = JossAnnTransformer((1 - y, 1 - x))(probe)()
         else:
@@ -85,7 +85,7 @@ class AshlockFingerprint():
 
         Parameters
         ----------
-        coordinates : list of Points
+        coordinates : list of Coordinates
             Tuples of length 2 representing each coordinate, eg. (x, y)
 
         Returns
@@ -117,7 +117,7 @@ class AshlockFingerprint():
         ----------
         probe : class
             A class that must be descended from axelrod.strategies.
-        coordinates : list of Points
+        coordinates : list of Coordinates
             Tuples of length 2 representing each coordinate, eg. (x, y)
 
         Returns
@@ -151,7 +151,7 @@ class AshlockFingerprint():
             original player, the second is the dual, the rest are the probes.
 
         """
-        probe_coordinates = create_points(step)
+        probe_coordinates = create_coordinates(step)
         self.coordinates = probe_coordinates
         edges = self.create_edges(probe_coordinates)
 
@@ -172,7 +172,7 @@ class AshlockFingerprint():
         ----------
         interactions : dictionary
             A dictionary of the interactions of a tournament
-        coordinates : list of Point
+        coordinates : list of Coordinate
             A list of tuples of length 2, where each tuple represents a
             coordinate, eg. (x, y).
         edges : list of tuples
@@ -184,7 +184,7 @@ class AshlockFingerprint():
         Returns
         ----------
         coordinate_scores : dictionary
-            A dictionary where the keys are Points of the form (x, y) and
+            A dictionary where the keys are Coordinates of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
         edge_scores = [np.mean([compute_final_score_per_turn(scores) for scores

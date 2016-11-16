@@ -40,8 +40,8 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(fingerprint.strategy, strategy)
         self.assertEqual(fingerprint.probe, probe)
 
-    def test_create_points(self):
-        test_coordinates = create_points(0.5)
+    def test_create_coordinates(self):
+        test_coordinates = create_coordinates(0.5)
         self.assertEqual(test_coordinates, self.expected_coordinates)
 
     def test_create_probes(self):
