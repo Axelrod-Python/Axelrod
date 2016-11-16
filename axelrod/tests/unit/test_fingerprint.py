@@ -5,6 +5,7 @@ from axelrod.strategy_transformers import JossAnnTransformer
 
 from hypothesis import given, settings
 from axelrod.tests.property import strategy_lists
+from collections import OrderedDict
 
 
 
@@ -20,7 +21,22 @@ probe = axl.TitForTat
 points = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
 probes = [JossAnnTransformer(c)(probe)() for c in points]
 edges = [(0, 2), (0, 3), (0, 4), (1, 5)]
-
+test_data = OrderedDict([(Point(x=0.5, y=0.75), '2.200'),
+                         (Point(x=0.25, y=0.5), '2.250'),
+                         (Point(x=0.0, y=0.0), '3.000'),
+                         (Point(x=0.0, y=0.25), '1.960'),
+                         (Point(x=0.25, y=0.0), '3.000'),
+                         (Point(x=0.5, y=0.5), '2.180'),
+                         (Point(x=0.0, y=0.75), '1.870'),
+                         (Point(x=0.5, y=0.0), '3.000'),
+                         (Point(x=0.5, y=0.25), '2.490'),
+                         (Point(x=0.25, y=0.75), '1.940'),
+                         (Point(x=0.75, y=0.25), '2.550'),
+                         (Point(x=0.75, y=0.75), '2.230'),
+                         (Point(x=0.75, y=0.5), '2.420'),
+                         (Point(x=0.25, y=0.25), '2.340'),
+                         (Point(x=0.75, y=0.0), '3.000'),
+                         (Point(x=0.0, y=0.5), '1.940')])
 
 
 class TestFingerprint(unittest.TestCase):
@@ -123,6 +139,14 @@ class TestFingerprint(unittest.TestCase):
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
         q = af.plot(col_map='jet')
         self.assertIsInstance(q, matplotlib.pyplot.Figure)
+
+    def test_actual_data_fingerprint(self):
+        axl.seed(0)  # Fingerprinting is a random process
+        af = axl.AshlockFingerprint(self.strategy, self.probe)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.25)
+        format_data = OrderedDict((key, "{0:.3f}".format(value))
+                                   for key, value in data.items())
+        self.assertEqual(format_data, test_data)
 
     @given(strategy_pair=strategy_lists(min_size=2, max_size=2))
     def test_pair_fingerprints(self, strategy_pair):
