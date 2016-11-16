@@ -273,4 +273,5 @@ class AshlockFingerprint():
         plotting_data = np.reshape(ordered_data, (size, size))
         figure = plt.figure()
         plt.imshow(plotting_data, cmap=col_map, )
+        plt.axis('off')
         return figure
