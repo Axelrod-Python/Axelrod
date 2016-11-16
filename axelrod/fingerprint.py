@@ -8,15 +8,15 @@ from collections import namedtuple
 from tempfile import NamedTemporaryFile
 
 
-Coordinate = namedtuple('Coordinate', 'x y')
+Point = namedtuple('Point', 'x y')
 
 
-def create_coordinates(step):
-    """Creates a set of coordinates over the unit square.
+def create_points(step):
+    """Creates a set of Points over the unit square.
 
-    Constructs (x, y) coordinates that are separated by a step equal to
-    `step`. The coordinates are over the unit squeare which implies
-    that the number of coordinates created will be 1/`step`^2.
+    A Point has coordinates (x, y). This function constructs points that are
+    separated by a step equal to `step`. The points are over the unit
+    square which implies that the number created will be 1/`step`^2.
 
     Parameters
     ----------
@@ -26,13 +26,13 @@ def create_coordinates(step):
 
     Returns
     ----------
-    coordinates : list of Coordinates
-        Named Tuples of length 2 representing each coordinate, eg. (x, y)
+    points : list of Point
+        Named Tuples of length 2 representing each coordinate (x, y)
     """
-    coordinates = list(Coordinate(j, k) for j in np.arange(0, 1, step)
+    points = list(Point(j, k) for j in np.arange(0, 1, step)
                        for k in np.arange(0, 1, step))
 
-    return coordinates
+    return points
 
 
 class AshlockFingerprint():
@@ -49,17 +49,17 @@ class AshlockFingerprint():
         self.probe = probe
 
     @staticmethod
-    def create_jossann(coordinate, probe):
-        """Creates a JossAnn probe player that matches the coordinate.
+    def create_jossann(point, probe):
+        """Creates a JossAnn probe player that matches the Point.
 
-        If the coordinate sums to more than 1 the parameters are flipped and
-        subtracted from 1 to give meaningful probabilities. This is outlined further
-        in [Ashlock2010]_.
+        If the coordinates of point sums to more than 1 the parameters are
+        flipped and subtracted from 1 to give meaningful probabilities. This is
+        outlined further in [Ashlock2010]_.
 
         Parameters
         ----------
-        coordinate : Coordinate
-            coordinate of the form (x, y)
+        point : Point
+            has coordinates (x, y)
         probe : class
             A class that must be descended from axelrod.strategies
 
@@ -68,7 +68,7 @@ class AshlockFingerprint():
         joss_ann: Joss-AnnTitForTat object
             `JossAnnTransformer` with parameters that correspond to (x, y).
         """
-        x, y = coordinate
+        x, y = point
         if x + y >= 1:
             joss_ann = JossAnnTransformer((1 - y, 1 - x))(probe)()
         else:
@@ -76,17 +76,17 @@ class AshlockFingerprint():
         return joss_ann
 
     @staticmethod
-    def create_edges(coordinates):
+    def create_edges(points):
         """Creates a set of edges for a spatial tournament.
 
-        Constructs edges that correspond to `coordinates`. Coordinates that sum to
-        1 or less will have edges that start at 0, those who sum to more than will
-        have an edge that starts at 1.
+        Constructs edges that correspond to `points`. Points whose coordinates
+        sum to 1 or less will have edges that start at 0, those who sum to more
+        than will have an edge that starts at 1.
 
         Parameters
         ----------
-        coordinates : list of Coordinates
-            Tuples of length 2 representing each coordinate, eg. (x, y)
+        points : list of Points
+            Tuples of length 2 representing each coordinate (x, y)
 
         Returns
         ----------
@@ -97,17 +97,17 @@ class AshlockFingerprint():
             Dual).
         """
         edges = []
-        for index, coordinate in enumerate(coordinates):
+        for index, point in enumerate(points):
             #  Add 2 to the index because we will have to allow for the Strategy
             #  and it's Dual
-            if sum(coordinate) >= 1:
+            if sum(point) >= 1:
                 edge = (1, index + 2)
             else:
                 edge = (0, index + 2)
             edges.append(edge)
         return edges
 
-    def create_probes(self, probe, coordinates):
+    def create_probes(self, probe, points):
         """Creates a set of probe strategies over the unit square.
 
         Constructs probe strategies that correspond to (x, y) coordinates. The
@@ -117,8 +117,8 @@ class AshlockFingerprint():
         ----------
         probe : class
             A class that must be descended from axelrod.strategies.
-        coordinates : list of Coordinates
-            Tuples of length 2 representing each coordinate, eg. (x, y)
+        points : list of Points
+            Tuples of length 2 representing each coordinate (x, y)
 
         Returns
         ----------
@@ -126,7 +126,7 @@ class AshlockFingerprint():
             A list of `JossAnnTransformer` players with
             parameters that correspond to (x, y).
         """
-        probes = [self.create_jossann(coordinate, probe) for coordinate in coordinates]
+        probes = [self.create_jossann(point, probe) for point in points]
         return probes
 
     def construct_tournament_elements(self, step):
@@ -151,30 +151,30 @@ class AshlockFingerprint():
             original player, the second is the dual, the rest are the probes.
 
         """
-        probe_coordinates = create_coordinates(step)
-        self.coordinates = probe_coordinates
-        edges = self.create_edges(probe_coordinates)
+        probe_points = create_points(step)
+        self.points = probe_points
+        edges = self.create_edges(probe_points)
 
         dual = DualTransformer()(self.strategy)()
-        probe_players = self.create_probes(self.probe, probe_coordinates)
+        probe_players = self.create_probes(self.probe, probe_points)
         tournament_players = [self.strategy(), dual] + probe_players
 
         return edges, tournament_players
 
     @staticmethod
-    def generate_data(interactions, coordinates, edges):
+    def generate_data(interactions, points, edges):
         """Generates useful data from a spatial tournament.
 
-        Matches interactions from `results` to their corresponding coordinate in
-        `probe_coords`.
+        Matches interactions from `results` to their corresponding Point in
+        `probe_points`.
 
         Parameters
         ----------
         interactions : dictionary
             A dictionary of the interactions of a tournament
-        coordinates : list of Coordinate
+        points : list of Points
             A list of tuples of length 2, where each tuple represents a
-            coordinate, eg. (x, y).
+            coordinate (x, y).
         edges : list of tuples
             A list containing tuples of length 2. All tuples will have either 0
             or 1 as the first element. The second element is the index of the
@@ -183,14 +183,14 @@ class AshlockFingerprint():
 
         Returns
         ----------
-        coordinate_scores : dictionary
-            A dictionary where the keys are Coordinates of the form (x, y) and
+        point_scores : dictionary
+            A dictionary where the keys are Points of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
         edge_scores = [np.mean([compute_final_score_per_turn(scores) for scores
                                 in interactions[edge]]) for edge in edges]
-        coordinate_scores = dict(zip(coordinates, edge_scores))
-        return coordinate_scores
+        point_scores = dict(zip(points, edge_scores))
+        return point_scores
 
     def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None,
                     filename=None, in_memory=False, progress_bar=True):
@@ -247,7 +247,7 @@ class AshlockFingerprint():
         else:
             self.interactions = read_interactions_from_file(filename)
 
-        self.data = self.generate_data(self.interactions, self.coordinates, edges)
+        self.data = self.generate_data(self.interactions, self.points, edges)
         return self.data
 
     def plot(self, col_map='seismic'):
@@ -269,7 +269,7 @@ class AshlockFingerprint():
             A heat plot of the results of the spatial tournament
         """
         size = int((1 / self.step) // 1)
-        ordered_data = [self.data[coord] for coord in self.coordinates]
+        ordered_data = [self.data[point] for point in self.points]
         plotting_data = np.reshape(ordered_data, (size, size))
         figure = plt.figure()
         plt.imshow(plotting_data, cmap=col_map, )

@@ -17,8 +17,8 @@ except ImportError:
 
 strategy = axl.WinStayLoseShift
 probe = axl.TitForTat
-coordinates = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
-probes = [JossAnnTransformer(c)(probe)() for c in coordinates]
+points = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
+probes = [JossAnnTransformer(c)(probe)() for c in points]
 edges = [(0, 2), (0, 3), (0, 4), (1, 5)]
 
 
@@ -30,7 +30,7 @@ class TestFingerprint(unittest.TestCase):
         cls.strategy = strategy
         cls.probe = probe
         cls.expected_probes = probes
-        cls.expected_coordinates = coordinates
+        cls.expected_points = points
         cls.expected_edges = edges
 
     def test_init(self):
@@ -40,19 +40,18 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(fingerprint.strategy, strategy)
         self.assertEqual(fingerprint.probe, probe)
 
-    def test_create_coordinates(self):
-        test_coordinates = create_coordinates(0.5)
-        self.assertEqual(test_coordinates, self.expected_coordinates)
+    def test_create_points(self):
+        test_points = create_points(0.5)
+        self.assertEqual(test_points, self.expected_points)
 
     def test_create_probes(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        probes = af.create_probes(probe, self.expected_coordinates)
+        probes = af.create_probes(probe, self.expected_points)
         self.assertEqual(len(probes), 4)
-        # self.assertEqual(probes, self.expected_probes)
 
     def test_create_edges(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        edges = af.create_edges(self.expected_coordinates)
+        edges = af.create_edges(self.expected_points)
         self.assertEqual(edges, self.expected_edges)
 
     def test_construct_tournament_elemets(self):
@@ -66,7 +65,7 @@ class TestFingerprint(unittest.TestCase):
         af = AshlockFingerprint(self.strategy, self.probe)
         data = af.fingerprint(turns=10, repetitions=2, step=0.5,
                               progress_bar=True)
-        self.assertEqual(sorted(data.keys()), self.expected_coordinates)
+        self.assertEqual(sorted(data.keys()), self.expected_points)
 
     def test_in_memory_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
@@ -78,7 +77,7 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(af.spatial_tournament.interactions_dict,
                          af.interactions)
         self.assertEqual(edge_keys, self.expected_edges)
-        self.assertEqual(coord_keys, self.expected_coordinates)
+        self.assertEqual(coord_keys, self.expected_points)
 
     def test_serial_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
@@ -87,7 +86,7 @@ class TestFingerprint(unittest.TestCase):
         coord_keys = sorted(list(data.keys()))
         self.assertEqual(af.step, 0.5)
         self.assertEqual(edge_keys, self.expected_edges)
-        self.assertEqual(coord_keys, self.expected_coordinates)
+        self.assertEqual(coord_keys, self.expected_points)
 
     @unittest.skipIf(axl.on_windows,
                      "Parallel processing not supported on Windows")
@@ -99,7 +98,7 @@ class TestFingerprint(unittest.TestCase):
         coord_keys = sorted(list(af.data.keys()))
         self.assertEqual(af.step, 0.5)
         self.assertEqual(edge_keys, self.expected_edges)
-        self.assertEqual(coord_keys, self.expected_coordinates)
+        self.assertEqual(coord_keys, self.expected_points)
 
     def test_generate_data(self):
         af = AshlockFingerprint(self.strategy, self.probe)
@@ -110,11 +109,11 @@ class TestFingerprint(unittest.TestCase):
                                                    edges=edges)
         results = spatial_tournament.play(progress_bar=False,
                                           keep_interactions=True)
-        data = af.generate_data(results.interactions, self.expected_coordinates,
+        data = af.generate_data(results.interactions, self.expected_points,
                              self.expected_edges)
         keys = sorted(list(data.keys()))
         values = [0 < score < 5 for score in data.values()]
-        self.assertEqual(sorted(keys), self.expected_coordinates)
+        self.assertEqual(sorted(keys), self.expected_points)
         self.assertEqual(all(values), True)
 
     def test_plot(self):
