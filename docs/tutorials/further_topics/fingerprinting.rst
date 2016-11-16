@@ -3,7 +3,7 @@
 Fingerprinting
 ==============
 
-In [Ashlock2010] a methodology for obtaining visual representation of a
+In [Ashlock2010]_ a methodology for obtaining visual representation of a
 strategy's behaviour is given.
 The basic method is to play the strategy against a probe strategy with varying
 noise parameters.
@@ -13,6 +13,8 @@ cooperating, a probability :code:`y` of defecting, and otherwise
 uses the response appropriate to the original strategy.
 We can then plot the expected score of the strategy against :code:`x` and :code:`y` and
 obtain a heat plot over the unit square.
+When :code:`x + y >= 1` the :code:`JossAnn` is created with parameters :code:`(1-y, 1-x)` and plays against the Dual of the strategy instead.
+A full definition and explanation is given in [Ashlock2010]_.
 
 Here is how to create a fingerprint of :code:`WinStayLoseShift` using
 :code:`TitForTat` as a probe::
@@ -22,8 +24,11 @@ Here is how to create a fingerprint of :code:`WinStayLoseShift` using
     >>> strategy = axl.WinStayLoseShift
     >>> probe = axl.TitForTat
     >>> af = axl.AshlockFingerprint(strategy, probe)
-    >>> af.fingerprint(turns=10, repetitions=2, step=0.2)
-    {Point(x=0.8..., y=0.2...): 2.75, ...
+    >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2)
+    >>> data
+    {...
+    >>> data[(0, 0)]
+    3.0
 
 The :code:`fingerprint` method returns a dictionary mapping coordinates of the
 form :code:`(x, y)` to the mean score for the corresponding interactions.
