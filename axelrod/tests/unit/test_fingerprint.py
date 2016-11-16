@@ -45,12 +45,14 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(test_coordinates, self.expected_coordinates)
 
     def test_create_probes(self):
-        probes = create_probes(probe, self.expected_coordinates)
+        af = AshlockFingerprint(self.strategy, self.probe)
+        probes = af.create_probes(probe, self.expected_coordinates)
         self.assertEqual(len(probes), 4)
         # self.assertEqual(probes, self.expected_probes)
 
     def test_create_edges(self):
-        edges = create_edges(self.expected_coordinates)
+        af = AshlockFingerprint(self.strategy, self.probe)
+        edges = af.create_edges(self.expected_coordinates)
         self.assertEqual(edges, self.expected_edges)
 
     def test_construct_tournament_elemets(self):
@@ -108,7 +110,7 @@ class TestFingerprint(unittest.TestCase):
                                                    edges=edges)
         results = spatial_tournament.play(progress_bar=False,
                                           keep_interactions=True)
-        data = generate_data(results.interactions, self.expected_coordinates,
+        data = af.generate_data(results.interactions, self.expected_coordinates,
                              self.expected_edges)
         keys = sorted(list(data.keys()))
         values = [0 < score < 5 for score in data.values()]
