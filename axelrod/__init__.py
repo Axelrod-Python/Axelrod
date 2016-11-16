@@ -20,3 +20,4 @@ from .match_generator import *
 from .tournament import Tournament, ProbEndTournament, SpatialTournament, ProbEndSpatialTournament
 from .result_set import ResultSet, ResultSetFromFile
 from .ecosystem import Ecosystem
+from .fingerprint import AshlockFingerprint, create_coordinates
