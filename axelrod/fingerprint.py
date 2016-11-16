@@ -11,7 +11,7 @@ from tempfile import NamedTemporaryFile
 Point = namedtuple('Point', 'x y')
 
 
-def create_coordinates(step):
+def create_points(step):
     """Creates a set of coordinates over the unit square.
 
     Constructs (x, y) coordinates that are separated by a step equal to
@@ -26,8 +26,8 @@ def create_coordinates(step):
 
     Returns
     ----------
-    coordinates : list of tuples
-        Tuples of length 2 representing each coordinate, eg. (x, y)
+    coordinates : list of Points
+        Named Tuples of length 2 representing each coordinate, eg. (x, y)
     """
     coordinates = list(Point(j, k) for j in np.arange(0, 1, step)
                        for k in np.arange(0, 1, step))
@@ -49,7 +49,7 @@ class AshlockFingerprint():
         self.probe = probe
 
     @staticmethod
-    def create_jossann(coordinate, probe):
+    def create_jossann(point, probe):
         """Creates a JossAnn probe player that matches the coordinate.
 
         If the coordinate sums to more than 1 the parameters are flipped and
@@ -58,7 +58,7 @@ class AshlockFingerprint():
 
         Parameters
         ----------
-        coordinate : tuple of length 2
+        coordinate : Point
             coordinate of the form (x, y)
         probe : class
             A class that must be descended from axelrod.strategies
@@ -68,7 +68,7 @@ class AshlockFingerprint():
         joss_ann: Joss-AnnTitForTat object
             `JossAnnTransformer` with parameters that correspond to (x, y).
         """
-        x, y = coordinate
+        x, y = point
         if x + y >= 1:
             joss_ann = JossAnnTransformer((1 - y, 1 - x))(probe)()
         else:
@@ -85,7 +85,7 @@ class AshlockFingerprint():
 
         Parameters
         ----------
-        coordinates : list of tuples
+        coordinates : list of Points
             Tuples of length 2 representing each coordinate, eg. (x, y)
 
         Returns
@@ -117,14 +117,13 @@ class AshlockFingerprint():
         ----------
         probe : class
             A class that must be descended from axelrod.strategies.
-        coordinates : list of tuples
+        coordinates : list of Points
             Tuples of length 2 representing each coordinate, eg. (x, y)
 
         Returns
         ----------
-        probe_dict : ordered dictionary
-            An Ordered Dictionary where the keys are tuples representing each
-            coordinate, eg. (x, y). The value is a `JossAnnTransformer` with
+        probes : list
+            A list of `JossAnnTransformer` players with
             parameters that correspond to (x, y).
         """
         probes = [self.create_jossann(coordinate, probe) for coordinate in coordinates]
@@ -152,7 +151,7 @@ class AshlockFingerprint():
             original player, the second is the dual, the rest are the probes.
 
         """
-        probe_coordinates = create_coordinates(step)
+        probe_coordinates = create_points(step)
         self.coordinates = probe_coordinates
         edges = self.create_edges(probe_coordinates)
 
@@ -173,7 +172,7 @@ class AshlockFingerprint():
         ----------
         interactions : dictionary
             A dictionary of the interactions of a tournament
-        coordinates : list of tuples
+        coordinates : list of Point
             A list of tuples of length 2, where each tuple represents a
             coordinate, eg. (x, y).
         edges : list of tuples
@@ -185,7 +184,7 @@ class AshlockFingerprint():
         Returns
         ----------
         coordinate_scores : dictionary
-            A dictionary where the keys are coordinates of the form (x, y) and
+            A dictionary where the keys are Points of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
         edge_scores = [np.mean([compute_final_score_per_turn(scores) for scores
@@ -269,7 +268,7 @@ class AshlockFingerprint():
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
-        size = (1 / self.step) // 1
+        size = int((1 / self.step) // 1)
         ordered_data = [self.data[coord] for coord in self.coordinates]
         plotting_data = np.reshape(ordered_data, (size, size))
         figure = plt.figure()
