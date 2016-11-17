@@ -70,7 +70,8 @@ class AshlockFingerprint():
         """
         x, y = point
         if x + y >= 1:
-            joss_ann = JossAnnTransformer((1 - y, 1 - x))(probe)()
+            dual = DualTransformer()(probe)
+            joss_ann = JossAnnTransformer((1 - y, 1 - x))(dual)()
         else:
             joss_ann = JossAnnTransformer((x, y))(probe)()
         return joss_ann
@@ -96,15 +97,7 @@ class AshlockFingerprint():
             corresponding probe (+2 to allow for including the Strategy and it's
             Dual).
         """
-        edges = []
-        for index, point in enumerate(points):
-            #  Add 2 to the index because we will have to allow for the Strategy
-            #  and its Dual
-            if sum(point) >= 1:
-                edge = (1, index + 2)
-            else:
-                edge = (0, index + 2)
-            edges.append(edge)
+        edges = [(0, index + 1) for index, point in enumerate(points)]
         return edges
 
     def create_probes(self, probe, points):
@@ -155,9 +148,8 @@ class AshlockFingerprint():
         self.points = probe_points
         edges = self.create_edges(probe_points)
 
-        dual = DualTransformer()(self.strategy)()
         probe_players = self.create_probes(self.probe, probe_points)
-        tournament_players = [self.strategy(), dual] + probe_players
+        tournament_players = [self.strategy()] + probe_players
 
         return edges, tournament_players
 
