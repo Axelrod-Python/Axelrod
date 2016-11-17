@@ -187,7 +187,7 @@ class AshlockFingerprint():
             A dictionary where the keys are Points of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
-        edge_scores = [np.mean([compute_final_score_per_turn(scores) for scores
+        edge_scores = [np.mean([compute_final_score_per_turn(scores)[0] for scores
                                 in interactions[edge]]) for edge in edges]
         point_scores = dict(zip(points, edge_scores))
         return point_scores
