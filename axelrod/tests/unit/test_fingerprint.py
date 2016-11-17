@@ -126,7 +126,7 @@ class TestFingerprint(unittest.TestCase):
         results = spatial_tournament.play(progress_bar=False,
                                           keep_interactions=True)
         data = af.generate_data(results.interactions, self.expected_points,
-                             self.expected_edges)
+                                self.expected_edges)
         keys = sorted(list(data.keys()))
         values = [0 < score < 5 for score in data.values()]
         self.assertEqual(sorted(keys), self.expected_points)

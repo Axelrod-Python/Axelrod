@@ -30,7 +30,7 @@ def create_points(step):
         Named Tuples of length 2 representing each coordinate (x, y)
     """
     points = list(Point(j, k) for j in np.arange(0, 1, step)
-                       for k in np.arange(0, 1, step))
+                  for k in np.arange(0, 1, step))
 
     return points
 
@@ -99,7 +99,7 @@ class AshlockFingerprint():
         edges = []
         for index, point in enumerate(points):
             #  Add 2 to the index because we will have to allow for the Strategy
-            #  and it's Dual
+            #  and its Dual
             if sum(point) >= 1:
                 edge = (1, index + 2)
             else:
@@ -135,15 +135,15 @@ class AshlockFingerprint():
         Parameters
         ----------
         step : float
-            The separation between each coordinate. Smaller steps will
-            produce more coordinates that will be closer together.
+            The separation between each Point. Smaller steps will
+            produce more Points that will be closer together.
 
         Returns
         ----------
         edges : list of tuples
             A list containing tuples of length 2. All tuples will have either 0
             or 1 as the first element. The second element is the index of the
-            corresponding probe (+2 to allow for including the Strategy and it's
+            corresponding probe (+2 to allow for including the Strategy and its
             Dual).
 
         tournament_players : list
@@ -173,12 +173,12 @@ class AshlockFingerprint():
         interactions : dictionary
             A dictionary of the interactions of a tournament
         points : list of Points
-            A list of tuples of length 2, where each tuple represents a
-            coordinate (x, y).
+            A list of tuples of length 2, where each tuple represents a Point
+            with coordinates (x, y).
         edges : list of tuples
             A list containing tuples of length 2. All tuples will have either 0
             or 1 as the first element. The second element is the index of the
-            corresponding probe (+2 to allow for including the Strategy and it's
+            corresponding probe (+2 to allow for including the Strategy and its
             Dual).
 
         Returns
@@ -208,8 +208,8 @@ class AshlockFingerprint():
         repetitions : integer, optional
             The number of times the round robin should be repeated
         step : float, optional
-            The separation between each coordinate. Smaller steps will
-            produce more coordinates that will be closer together.
+            The separation between each Point. Smaller steps will
+            produce more Points that will be closer together.
         processes : integer, optional
             The number of processes to be used for parallel processing
         progress_bar : bool
@@ -250,7 +250,7 @@ class AshlockFingerprint():
         self.data = self.generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, col_map='seismic'):
+    def plot(self, col_map='seismic', interp_method='none'):
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -272,6 +272,6 @@ class AshlockFingerprint():
         ordered_data = [self.data[point] for point in self.points]
         plotting_data = np.reshape(ordered_data, (size, size))
         figure = plt.figure()
-        plt.imshow(plotting_data, cmap=col_map, )
+        plt.imshow(plotting_data, cmap=col_map, interpolation=interp_method)
         plt.axis('off')
         return figure
