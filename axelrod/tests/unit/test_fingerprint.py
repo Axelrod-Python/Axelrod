@@ -2,11 +2,8 @@ import unittest
 import axelrod as axl
 from axelrod.fingerprint import *
 from axelrod.strategy_transformers import JossAnnTransformer
-
-from hypothesis import given, settings
+from hypothesis import given
 from axelrod.tests.property import strategy_lists
-from collections import OrderedDict
-
 
 
 matplotlib_installed = True
@@ -22,7 +19,7 @@ class TestFingerprint(unittest.TestCase):
     def setUpClass(cls):
         cls.strategy = axl.WinStayLoseShift
         cls.probe = axl.TitForTat
-        cls.expected_points =  [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
+        cls.expected_points = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
         cls.expected_probes = [JossAnnTransformer(c)(cls.probe)() for c in
                                cls.expected_points]
         cls.expected_edges = [(0, 2), (0, 3), (0, 4), (1, 5)]
@@ -120,22 +117,22 @@ class TestFingerprint(unittest.TestCase):
 
     def test_actual_data_fingerprint(self):
         axl.seed(0)  # Fingerprinting is a random process
-        test_data = OrderedDict([(Point(x=0.5, y=0.75), 2.200),
-                                 (Point(x=0.25, y=0.5), 2.250),
-                                 (Point(x=0.0, y=0.0), 3.000),
-                                 (Point(x=0.0, y=0.25), 1.960),
-                                 (Point(x=0.25, y=0.0), 3.000),
-                                 (Point(x=0.5, y=0.5), 2.180),
-                                 (Point(x=0.0, y=0.75), 1.870),
-                                 (Point(x=0.5, y=0.0), 3.000),
-                                 (Point(x=0.5, y=0.25), 2.490),
-                                 (Point(x=0.25, y=0.75), 1.940),
-                                 (Point(x=0.75, y=0.25), 2.550),
-                                 (Point(x=0.75, y=0.75), 2.230),
-                                 (Point(x=0.75, y=0.5), 2.420),
-                                 (Point(x=0.25, y=0.25), 2.340),
-                                 (Point(x=0.75, y=0.0), 3.000),
-                                 (Point(x=0.0, y=0.5), 1.940)])
+        test_data = {Point(x=0.5, y=0.75): 2.200,
+                     Point(x=0.25, y=0.5): 2.250,
+                     Point(x=0.0, y=0.0): 3.000,
+                     Point(x=0.0, y=0.25): 1.960,
+                     Point(x=0.25, y=0.0): 3.000,
+                     Point(x=0.5, y=0.5): 2.180,
+                     Point(x=0.0, y=0.75): 1.870,
+                     Point(x=0.5, y=0.0): 3.000,
+                     Point(x=0.5, y=0.25): 2.490,
+                     Point(x=0.25, y=0.75): 1.940,
+                     Point(x=0.75, y=0.25): 2.550,
+                     Point(x=0.75, y=0.75): 2.230,
+                     Point(x=0.75, y=0.5): 2.420,
+                     Point(x=0.25, y=0.25): 2.340,
+                     Point(x=0.75, y=0.0): 3.000,
+                     Point(x=0.0, y=0.5): 1.940}
         af = axl.AshlockFingerprint(self.strategy, self.probe)
         data = af.fingerprint(turns=50, repetitions=2, step=0.25)
 
