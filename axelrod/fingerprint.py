@@ -53,8 +53,8 @@ class AshlockFingerprint():
         """Creates a JossAnn probe player that matches the Point.
 
         If the coordinates of point sums to more than 1 the parameters are
-        flipped and subtracted from 1 to give meaningful probabilities. This is
-        outlined further in [Ashlock2010]_.
+        flipped and subtracted from 1 to give meaningful probabilities. We also
+        use the Dual of the probe. This is outlined further in [Ashlock2010]_.
 
         Parameters
         ----------
@@ -80,9 +80,8 @@ class AshlockFingerprint():
     def create_edges(points):
         """Creates a set of edges for a spatial tournament.
 
-        Constructs edges that correspond to `points`. Points whose coordinates
-        sum to 1 or less will have edges that start at 0, those who sum to more
-        than will have an edge that starts at 1.
+        Constructs edges that correspond to `points`. All edges begin at 0, and
+        connect to the index +1 of the probe.
 
         Parameters
         ----------
@@ -92,9 +91,9 @@ class AshlockFingerprint():
         Returns
         ----------
         edges : list of tuples
-            A list containing tuples of length 2. All tuples will have either 0
-            or 1 as the first element. The second element is the index of the
-            corresponding probe (+2 to allow for including the Strategy and it's
+            A list containing tuples of length 2. All tuples will have 0 as the
+            first element. The second element is the index of the
+            corresponding probe (+1 to allow for including the Strategy and it's
             Dual).
         """
         edges = [(0, index + 1) for index, point in enumerate(points)]
