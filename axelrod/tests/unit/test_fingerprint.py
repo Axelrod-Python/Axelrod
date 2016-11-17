@@ -20,9 +20,7 @@ class TestFingerprint(unittest.TestCase):
         cls.strategy = axl.WinStayLoseShift
         cls.probe = axl.TitForTat
         cls.expected_points = [(0.0, 0.0), (0.0, 0.5), (0.5, 0.0), (0.5, 0.5)]
-        cls.expected_probes = [JossAnnTransformer(c)(cls.probe)() for c in
-                               cls.expected_points]
-        cls.expected_edges = [(0, 2), (0, 3), (0, 4), (1, 5)]
+        cls.expected_edges = [(0, 1), (0, 2), (0, 3), (0, 4)]
 
     def test_init(self):
         strategy = axl.Cooperator()
@@ -49,7 +47,7 @@ class TestFingerprint(unittest.TestCase):
         af = AshlockFingerprint(self.strategy, self.probe)
         edges, tournament_players = af.construct_tournament_elements(0.5)
         self.assertEqual(edges, self.expected_edges)
-        self.assertEqual(len(tournament_players), 6)
+        self.assertEqual(len(tournament_players), 5)
         self.assertEqual(tournament_players[0].__class__, af.strategy)
 
     def test_progress_bar_fingerprint(self):
