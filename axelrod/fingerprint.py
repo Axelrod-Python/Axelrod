@@ -70,8 +70,7 @@ class AshlockFingerprint():
         """
         x, y = point
         if x + y >= 1:
-            dual = DualTransformer()(probe)
-            joss_ann = JossAnnTransformer((1 - y, 1 - x))(dual)()
+            joss_ann = DualTransformer()(JossAnnTransformer((1 - x, 1 - y))(probe))()
         else:
             joss_ann = JossAnnTransformer((x, y))(probe)()
         return joss_ann
