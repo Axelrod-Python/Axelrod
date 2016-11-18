@@ -111,6 +111,8 @@ class TestFingerprint(unittest.TestCase):
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
         q = af.plot(col_map='jet')
         self.assertIsInstance(q, matplotlib.pyplot.Figure)
+        r = af.plot(interpolation='bicubic')
+        self.assertIsInstance(r, matplotlib.pyplot.Figure)
 
     def test_wsls_fingerprint(self):
         axl.seed(0)  # Fingerprinting is a random process

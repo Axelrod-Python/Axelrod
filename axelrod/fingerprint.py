@@ -251,6 +251,9 @@ class AshlockFingerprint():
         col_map : str, optional
             A matplotlib colour map, full list can be found at
             http://matplotlib.org/examples/color/colormaps_reference.html
+        interpolation : str, optional
+            A matplotlib interpolation, full list can be found at
+            http://matplotlib.org/examples/images_contours_and_fields/interpolation_methods.html
 
         Returns
         ----------

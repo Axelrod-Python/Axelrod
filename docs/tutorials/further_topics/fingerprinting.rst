@@ -49,7 +49,7 @@ Using pararemeters :code:`turns=50, repetitions=2, step=0.01` we get the plot:
      :align: center
 
 We are also able to specify a matplotlib colour map and interpolation. Passing
-parameters :code:`col_map='PuOr', interp_method='bicubic'` to the :code:`plot()`
+parameters :code:`col_map='PuOr', interpolation='bicubic'` to the :code:`plot()`
 function gives us this plot instead:
 
 .. image:: _static/fingerprinting/WSLS_large_alt.png
