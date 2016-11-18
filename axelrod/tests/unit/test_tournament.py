@@ -38,6 +38,7 @@ test_edges = [(0, 1), (1, 2), (3, 4)]
 deterministic_strategies = [s for s in axelrod.strategies
                             if not s().classifier['stochastic']]
 
+
 class TestTournament(unittest.TestCase):
 
     @classmethod

@@ -6,6 +6,7 @@ Bibliography
 This is a collection of various bibliographic items referenced in the
 documentation.
 
+.. [Ashlock2010] Ashlock, D., Kim, E. Y., & Ashlock, W. (2010). A fingerprint comparison of different Prisoner’s Dilemma payoff matrices. Proceedings of the 2010 IEEE Conference on Computational Intelligence and Games, CIG2010, (2009), 219–226. http://doi.org/10.1109/ITW.2010.5593352
 .. [Axelrod1980] Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(1), 3–25.
 .. [Axelrod1980b] Axelrod, R. (1980). More Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(3), 379-403.
 .. [Axelrod1984]  The Evolution of Cooperation. Basic Books. ISBN 0-465-02121-2.
@@ -26,4 +27,3 @@ documentation.
 .. [Stewart2012] Stewart, a. J., & Plotkin, J. B. (2012). Extortion and cooperation in the Prisoner’s Dilemma. Proceedings of the National Academy of Sciences, 109(26), 10134–10135. http://doi.org/10.1073/pnas.1208087109
 .. [Szabó1992] Szabó, G., & Fáth, G. (2007). Evolutionary games on graphs. Physics Reports, 446(4-6), 97–216. http://doi.org/10.1016/j.physrep.2007.04.004
 .. [Tzafestas2000] Tzafestas, E. (2000). Toward adaptive cooperative behavior. From Animals to Animals: Proceedings of the 6th International Conference on the Simulation of Adaptive Behavior {(SAB-2000)}, 2, 334–340.
-.. [Ashlock2010] Ashlock, D., Kim, E. Y., & Ashlock, W. (2010). A fingerprint comparison of different Prisoner’s Dilemma payoff matrices. Proceedings of the 2010 IEEE Conference on Computational Intelligence and Games, CIG2010, (2009), 219–226. http://doi.org/10.1109/ITW.2010.5593352

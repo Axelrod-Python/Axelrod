@@ -14,3 +14,4 @@ Contents:
    spatial_tournaments.rst
    morality_metrics.rst
    ecological_variant.rst
+   fingerprinting.rst
