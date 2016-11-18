@@ -13,7 +13,7 @@ cooperating, a probability :code:`y` of defecting, and otherwise
 uses the response appropriate to the original strategy.
 We can then plot the expected score of the strategy against :code:`x` and :code:`y` and
 obtain a heat plot over the unit square.
-When :code:`x + y >= 1` the :code:`JossAnn` is created with parameters :code:`(1-y, 1-x)` and plays against the Dual of the strategy instead.
+When :code:`x + y >= 1` the :code:`JossAnn` is created with parameters :code:`(1-y, 1-x)` and plays against the Dual of the probe instead.
 A full definition and explanation is given in [Ashlock2010]_.
 
 Here is how to create a fingerprint of :code:`WinStayLoseShift` using
@@ -42,9 +42,17 @@ We can then plot the above to get::
      :align: center
 
 In reality we would need much more detail to make this plot useful.
-Using pararemeters :code:`turns=50, repetitions=2, step=0.005` we get the plot:
+Using pararemeters :code:`turns=50, repetitions=2, step=0.01` we get the plot:
 
 .. image:: _static/fingerprinting/WSLS_large.png
+     :width: 100%
+     :align: center
+
+We are also able to specify a matplotlib colour map and interpolation. Passing
+parameters :code:`col_map='PuOr', interp_method='bicubic'` to the :code:`plot()`
+function gives us this plot instead:
+
+.. image:: _static/fingerprinting/WSLS_large_alt.png
      :width: 100%
      :align: center
 
