@@ -21,13 +21,13 @@ def create_points(step):
     Parameters
     ----------
     step : float
-        The separation between each coordinate. Smaller steps will
-        produce more coordinates that will be closer together.
+        The separation between each Point. Smaller steps will produce more
+        Points with coordinates that will be closer together.
 
     Returns
     ----------
-    points : list of Point
-        Named Tuples of length 2 representing each coordinate (x, y)
+    points : list
+        of Point objects with coordinates (x, y)
     """
     points = list(Point(j, k) for j in np.arange(0, 1, step)
                   for k in np.arange(0, 1, step))
@@ -59,14 +59,13 @@ class AshlockFingerprint():
         Parameters
         ----------
         point : Point
-            has coordinates (x, y)
         probe : class
             A class that must be descended from axelrod.strategies
 
         Returns
         ----------
         joss_ann: Joss-AnnTitForTat object
-            `JossAnnTransformer` with parameters that correspond to (x, y).
+            `JossAnnTransformer` with parameters that correspond to `point`.
         """
         x, y = point
         if x + y >= 1:
@@ -84,15 +83,15 @@ class AshlockFingerprint():
 
         Parameters
         ----------
-        points : list of Points
-            Tuples of length 2 representing each coordinate (x, y)
+        points : list
+            of Point objects with coordinates (x, y)
 
         Returns
         ----------
         edges : list of tuples
             A list containing tuples of length 2. All tuples will have 0 as the
             first element. The second element is the index of the
-            corresponding probe (+1 to allow for including the Strategy and it's
+            corresponding probe (+1 to allow for including the Strategy and its
             Dual).
         """
         edges = [(0, index + 1) for index, point in enumerate(points)]
@@ -101,21 +100,21 @@ class AshlockFingerprint():
     def create_probes(self, probe, points):
         """Creates a set of probe strategies over the unit square.
 
-        Constructs probe strategies that correspond to (x, y) coordinates. The
-        probes are created using the `JossAnnTransformer`.
+        Constructs probe strategies that correspond to points with coordinates
+        (x, y). The probes are created using the `JossAnnTransformer`.
 
         Parameters
         ----------
         probe : class
             A class that must be descended from axelrod.strategies.
-        points : list of Points
-            Tuples of length 2 representing each coordinate (x, y)
+        points : list
+            of Point objects with coordinates (x, y)
 
         Returns
         ----------
         probes : list
-            A list of `JossAnnTransformer` players with
-            parameters that correspond to (x, y).
+            A list of `JossAnnTransformer` players with parameters that
+            correspond to point.
         """
         probes = [self.create_jossann(point, probe) for point in points]
         return probes
@@ -161,10 +160,10 @@ class AshlockFingerprint():
         Parameters
         ----------
         interactions : dictionary
-            A dictionary of the interactions of a tournament
-        points : list of Points
-            A list of tuples of length 2, where each tuple represents a Point
-            with coordinates (x, y).
+            A dictionary mapping edges to the corresponding interactions of
+            those players.
+        points : list
+            of Point objects with coordinates (x, y).
         edges : list of tuples
             A list containing tuples of length 2. All tuples will have either 0
             or 1 as the first element. The second element is the index of the
@@ -240,7 +239,7 @@ class AshlockFingerprint():
         self.data = self.generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, col_map='seismic', interp_method='none'):
+    def plot(self, col_map='seismic', interpolation='none'):
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -262,6 +261,6 @@ class AshlockFingerprint():
         ordered_data = [self.data[point] for point in self.points]
         plotting_data = np.reshape(ordered_data, (size, size))
         figure = plt.figure()
-        plt.imshow(plotting_data, cmap=col_map, interpolation=interp_method)
+        plt.imshow(plotting_data, cmap=col_map, interpolation=interpolation)
         plt.axis('off')
         return figure
