@@ -148,7 +148,7 @@ The library has had many awesome contributions from many `great
 contributors <https://github.com/Axelrod-Python/Axelrod/graphs/contributors>`_.
 The Core developers of the project are:
 
-- `drvinceknight` <https://github.com/drvinceknight>`_
+- `drvinceknight <https://github.com/drvinceknight>`_
 - `marcharper <https://github.com/marcharper>`_
 - `meatballs <https://github.com/meatballs>`_
 
