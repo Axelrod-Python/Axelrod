@@ -1,3 +1,14 @@
+# v1.17.0, 2016-11-19
+
+Ahslock fingerprinting.
+
+- Add a class for fingerprinting of strategies according to a paper by Ashlock
+  et al.
+  https://github.com/Axelrod-Python/Axelrod/pull/759
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.16.0...v1.17.0
+
 # v1.16.0, 2016-11-13
 
 Minor internal change, new strategy and new strategy transformers
