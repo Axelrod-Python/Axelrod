@@ -16,7 +16,7 @@ def create_points(step):
 
     A Point has coordinates (x, y). This function constructs points that are
     separated by a step equal to `step`. The points are over the unit
-    square which implies that the number created will be 1/`step`^2.
+    square which implies that the number created will be (1/`step` + 1)^2.
 
     Parameters
     ----------
@@ -29,8 +29,9 @@ def create_points(step):
     points : list
         of Point objects with coordinates (x, y)
     """
-    points = list(Point(j, k) for j in np.arange(0, 1, step)
-                  for k in np.arange(0, 1, step))
+    num = int((1 / step) // 1) + 1
+    points = [Point(j, k) for j in np.linspace(0, 1, num)
+              for k in np.linspace(0, 1, num)]
 
     return points
 
@@ -260,7 +261,7 @@ class AshlockFingerprint():
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
-        size = int((1 / self.step) // 1)
+        size = int((1 / self.step) // 1) + 1
         ordered_data = [self.data[point] for point in self.points]
         plotting_data = np.reshape(ordered_data, (size, size))
         figure = plt.figure()
