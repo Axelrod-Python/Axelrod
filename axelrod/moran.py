@@ -157,7 +157,7 @@ class MoranProcess(object):
                     (player1, player2), turns=self.turns, noise=self.noise,
                     deterministic_cache=self.deterministic_cache)
                 match.play()
-                match_scores = np.sum(match.scores(), axis=0) / float(self.turns)
+                match_scores = match.final_score_per_turn()
                 scores[i] += match_scores[0]
                 scores[j] += match_scores[1]
         self.score_history.append(scores)
