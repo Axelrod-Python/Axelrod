@@ -240,7 +240,7 @@ class AshlockFingerprint():
         self.data = self.generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, col_map='seismic', interpolation='none'):
+    def plot(self, col_map='seismic', interpolation='none', title=None):
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -255,6 +255,8 @@ class AshlockFingerprint():
         interpolation : str, optional
             A matplotlib interpolation, full list can be found at
             http://matplotlib.org/examples/images_contours_and_fields/interpolation_methods.html
+        title : str, optional
+            A title for the plot
 
         Returns
         ----------
@@ -267,4 +269,6 @@ class AshlockFingerprint():
         figure = plt.figure()
         plt.imshow(plotting_data, cmap=col_map, interpolation=interpolation)
         plt.axis('off')
+        if title is not None:
+            plt.title(title)
         return figure
