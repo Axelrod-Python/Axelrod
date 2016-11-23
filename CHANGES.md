@@ -1,3 +1,18 @@
+# v1.17.1, 2016-11-23
+
+Minor bug fix and a title option for fingerprints and a small internal
+improvement.
+
+- Correct the range for the fingerprint
+  https://github.com/Axelrod-Python/Axelrod/pull/766
+- Include ability to have a title for fingerprint plot
+  https://github.com/Axelrod-Python/Axelrod/pull/769
+- Calculate score per turn for Moran process using internal method.
+  https://github.com/Axelrod-Python/Axelrod/pull/764
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.17.0...v1.17.1
+
 # v1.17.0, 2016-11-19
 
 Ahslock fingerprinting.
