@@ -1,4 +1,4 @@
-# v1.18.0, 2016-11-24
+# v1.18.1, 2016-11-24
 
 There are no changes between 1.18.1 and 1.18.0. This release is due to an error
 during the uploading to pypi.
