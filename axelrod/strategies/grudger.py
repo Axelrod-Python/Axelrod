@@ -13,6 +13,7 @@ class Grudger(Player):
     - Grudger: [Li2011]_
     - Grim: [Berg2015]_
     - Grim Trigger: [Banks1980]_
+    - Spite: [Beaufils1997]_
     """
 
     name = 'Grudger'

@@ -100,10 +100,9 @@ class WinStayLoseShift(MemoryOnePlayer):
 class WinShiftLoseStay(MemoryOnePlayer):
     """Win-Shift Lose-Stay, also called Reverse Pavlov.
 
-    For reference see: "Engineering Design of Strategies for Winning
-    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
-    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
-    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
+    Names:
+
+    - WSLS: [Li2011]_
     """
 
     name = 'Win-Shift Lose-Stay'
@@ -125,7 +124,12 @@ class WinShiftLoseStay(MemoryOnePlayer):
 
 
 class GTFT(MemoryOnePlayer):
-    """Generous Tit-For-Tat Strategy."""
+    """Generous Tit For Tat Strategy.
+
+    Names:
+
+    - Generous Tit For Tat: [Nowak1993]_
+    """
 
     name = 'GTFT'
     classifier = {
@@ -165,8 +169,12 @@ class GTFT(MemoryOnePlayer):
 
 
 class FirmButFair(MemoryOnePlayer):
-    """A Classical Strategy described in this paper (and earlier):
-    http://www.math.ubc.ca/~hauert/publications/reprints/hauert_jtb02b.pdf"""
+    """A strategy that cooperates on the first move, and cooperates except after receiving a
+    sucker payoff.
+
+    Names:
+
+    - Firm But Fair: [Frean1994]_"""
 
     name = 'Firm But Fair'
 

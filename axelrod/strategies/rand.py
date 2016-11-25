@@ -7,6 +7,7 @@ class Random(Player):
     Names:
 
     - Random: [Axelrod1980]_
+    - Lunatic: [Tzafestas2000]_
     """
 
     name = 'Random'

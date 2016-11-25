@@ -5,7 +5,12 @@ C, D = Actions.C, Actions.D
 
 class Handshake(Player):
     """Starts with C, D. If the opponent plays the same way, cooperate forever,
-    else defect forever."""
+    else defect forever.
+
+    Names:
+
+    - Handshake: [Robson1989]_
+    """
 
     name = 'Handshake'
     classifier = {

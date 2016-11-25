@@ -156,6 +156,7 @@ class SuspiciousTitForTat(Player):
     Names:
 
     - Suspicious Tit For Tat: [Hilde2013]_
+    - Mistrust: [Beaufils1997]_
     """
 
     name = "Suspicious Tit For Tat"
