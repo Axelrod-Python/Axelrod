@@ -100,10 +100,9 @@ class WinStayLoseShift(MemoryOnePlayer):
 class WinShiftLoseStay(MemoryOnePlayer):
     """Win-Shift Lose-Stay, also called Reverse Pavlov.
 
-    For reference see: "Engineering Design of Strategies for Winning
-    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
-    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
-    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
+    Names:
+
+    - WSLS: [Li2011]_
     """
 
     name = 'Win-Shift Lose-Stay'
