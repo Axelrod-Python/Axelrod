@@ -5,7 +5,13 @@ C, D = Actions.C, Actions.D
 
 class Adaptive(Player):
     """Start with a specific sequence of C and D, then play the strategy that
-    has worked best, recalculated each turn."""
+    has worked best, recalculated each turn.
+
+    Names:
+
+    - Adaptive: [Li2011]_
+
+    """
 
     name = 'Adaptive'
     classifier = {
