@@ -2,6 +2,8 @@ from axelrod import Actions, Player, init_args
 
 C, D = Actions.C, Actions.D
 
+# Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
+# Original Author: Martin Jones, @mojones
 
 class ANN(Player):
     name = 'ANN'
