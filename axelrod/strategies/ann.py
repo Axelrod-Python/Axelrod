@@ -8,8 +8,8 @@ C, D = Actions.C, Actions.D
 class ANN(Player):
     name = 'ANN'
     classifier = {
-        'memory_depth': 1,  # actually variable
-        'stochastic': True,
+        'memory_depth': float('inf'),
+        'stochastic': False,
         'inspects_source': False,
         'makes_use_of': set(),
         'manipulates_source': False,
@@ -17,6 +17,7 @@ class ANN(Player):
     }
 
     def activate(self, inputs):
+        """Compute the output of the neural network."""
         # calculate values of hidden nodes
         hidden_values = []
         for i in range(self.hidden_layer_size):
@@ -56,13 +57,8 @@ class ANN(Player):
         self.input_values = len(input_to_hidden_layer_weights[0])
         self.hidden_layer_size = len(hidden_to_output_layer_weights)
 
-        # self.init_args = (input_to_hidden_layer_weights,
-        #                   hidden_to_output_layer_weights,
-        #                   bias_weights)
-
     def strategy(self, opponent):
-        # action2input = {'C': 1, 'D': -1}
-
+        # Compute features for Neural Network
         if len(opponent.history) == 0:
             opponent_first_c = 0
             opponent_first_d = 0
@@ -156,14 +152,15 @@ class ANN(Player):
             turns_remaining
 
         ])
-        # if output > random.uniform(-1, 1):
         if output > 0:
-            return 'C'
+            return C
         else:
-            return 'D'
+            return D
 
 
 def split_weights(weights, input_values, hidden_layer_size):
+    """Splits the input vector into the the NN bias weights and layer
+    parameters."""
     number_of_input_to_hidden_weights = input_values * hidden_layer_size
     # number_of_hidden_bias_weights = hidden_layer_size
     number_of_hidden_to_output_weights = hidden_layer_size
@@ -178,7 +175,6 @@ def split_weights(weights, input_values, hidden_layer_size):
            number_of_input_to_hidden_weights + number_of_hidden_to_output_weights:]
 
     return (input2hidden, hidden2output, bias)
-
 
 class EvolvedANN(ANN):
     name = "EvolvedANN"
