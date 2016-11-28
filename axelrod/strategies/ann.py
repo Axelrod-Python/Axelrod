@@ -155,10 +155,11 @@ def split_weights(weights, input_values, hidden_layer_size):
 class EvolvedANN(ANN):
     name = "EvolvedANN"
 
-    self.classifier['makes_use_of'] = set(['length'])
+
 
     @init_args
     def __init__(self):
+        self.classifier['makes_use_of'] = set(['length'])
         input_values = 17
         hidden_layer_size = 10
 
