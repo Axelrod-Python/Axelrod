@@ -13,7 +13,8 @@ class ANN(Player):
         'inspects_source': False,
         'makes_use_of': set(),
         'manipulates_source': False,
-        'manipulates_state': False
+        'manipulates_state': False,
+        'long_run_time': False
     }
 
     def activate(self, inputs):
