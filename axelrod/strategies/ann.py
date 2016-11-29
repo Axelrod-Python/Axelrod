@@ -157,6 +157,14 @@ class ANN(Player):
 
 
 class EvolvedANN(ANN):
+    """
+    A strategy based on a pre-trained neural network.
+
+    Names:
+
+     - EvolvedANN: : Original name by Martin Jones.
+    """
+
     name = "EvolvedANN"
 
     @init_args
@@ -165,7 +173,7 @@ class EvolvedANN(ANN):
         input_values = 17
         hidden_layer_size = 10
 
-        test_weights = [0.19789658035994948, -5575.476236516673, 0.1028948855131803, 0.7421752484224489,
+        weights = [0.19789658035994948, -5575.476236516673, 0.1028948855131803, 0.7421752484224489,
                        -16.286246197005298, 11708.007255945553, 0.01400184611448853, -33.39126355009626,
                        -12.755203414662356, -32.92388754142929, 197.3517717772447, 108262.87038790248,
                        -0.1084768512582505, 85.20738888799768, 723.9537664890132, -2.59453614458083,
@@ -215,7 +223,7 @@ class EvolvedANN(ANN):
                        0.020513128847167047, -0.9179124323385958]
 
         (i2h, h2o, bias) = split_weights(
-            test_weights,
+            weights,
             input_values,
             hidden_layer_size
         )

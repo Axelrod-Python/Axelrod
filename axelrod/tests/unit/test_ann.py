@@ -30,3 +30,14 @@ class TestEvolvedANNvsCooperator(TestHeadsUp):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN(), axelrod.Cooperator(),
                          [C, D, D, C, D], [C] * 5)
+
+
+class TestEvolvedANNvsDefector(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.EvolvedANN(), axelrod.Defector(),
+                         [C, D, D, D, D], [D] * 5)
+
+class TestEvolvedANNvsTFT(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.EvolvedANN(), axelrod.TitForTat(),
+                         [C, D, D, C, C], [C, C, D, D, C] * 5)
