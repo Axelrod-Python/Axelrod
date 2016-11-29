@@ -1,11 +1,32 @@
+# Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
+# Original Author: Martin Jones, @mojones
+
 from axelrod import Actions, Player, init_args
 
 C, D = Actions.C, Actions.D
 
-# Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
-# Original Author: Martin Jones, @mojones
+
+def split_weights(weights, input_values, hidden_layer_size):
+    """Splits the input vector into the the NN bias weights and layer
+    parameters."""
+    number_of_input_to_hidden_weights = input_values * hidden_layer_size
+    number_of_hidden_to_output_weights = hidden_layer_size
+
+    input2hidden = []
+    for i in range(0, number_of_input_to_hidden_weights, input_values):
+        input2hidden.append(weights[i:i + input_values])
+
+    start = number_of_input_to_hidden_weights
+    end = number_of_input_to_hidden_weights + number_of_hidden_to_output_weights
+
+    hidden2output = weights[start: end]
+    bias = weights[end:]
+
+    return (input2hidden, hidden2output, bias)
+
 
 class ANN(Player):
+    """A single layer neural network based strategy."""
     name = 'ANN'
     classifier = {
         'memory_depth': float('inf'),
@@ -135,27 +156,8 @@ class ANN(Player):
             return D
 
 
-def split_weights(weights, input_values, hidden_layer_size):
-    """Splits the input vector into the the NN bias weights and layer
-    parameters."""
-    number_of_input_to_hidden_weights = input_values * hidden_layer_size
-    number_of_hidden_to_output_weights = hidden_layer_size
-
-    input2hidden = []
-    for i in range(0, number_of_input_to_hidden_weights, input_values):
-        input2hidden.append(weights[i:i + input_values])
-
-    hidden2output = weights[
-                    number_of_input_to_hidden_weights:number_of_input_to_hidden_weights + number_of_hidden_to_output_weights]
-    bias = weights[number_of_input_to_hidden_weights + number_of_hidden_to_output_weights:]
-
-    return (input2hidden, hidden2output, bias)
-
-
 class EvolvedANN(ANN):
     name = "EvolvedANN"
-
-
 
     @init_args
     def __init__(self):
@@ -182,8 +184,8 @@ class EvolvedANN(ANN):
                        -8426184.81603275, -82.36805426730088, 1144.1032034358543, 15635.402592538396,
                        3095.643889329041, 2332.107673930774, -0.5601648316602144, 101.98300711150003,
                        -7387.135294747112, -4241.004613717573, 3.06175607282536e-05, -35122.894421260884,
-                        -38591.45572476855, -0.16081285130591272, -29608.73087879185, 122.47563639056185,
-                        6.381946054740736, -0.8978628581801188, 17658.47647781355, -0.011719257684286711,
+                       -38591.45572476855, -0.16081285130591272, -29608.73087879185, 122.47563639056185,
+                       6.381946054740736, -0.8978628581801188, 17658.47647781355, -0.011719257684286711,
                        0.10734295104044986, -378.35448968529494, 225.06912279045062, -351.12326495980847,
                        -1.927322672845826, 0.0014584395475859544, -8.629826916169318, 22.43281153854352,
                        87.10895591188721, -0.22253937914423294, -233.06796470563208, -620.4917481128365,
