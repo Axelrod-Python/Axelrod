@@ -1,3 +1,13 @@
+# v1.19.0, 2016-11-30
+
+New strategy using a trained neural network.
+
+- Implement the EvolvedANN
+  https://github.com/Axelrod-Python/Axelrod/pull/773
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.18.1...v1.19.0
+
 # v1.18.1, 2016-11-24
 
 There are no changes between 1.18.1 and 1.18.0. This release is due to an error
