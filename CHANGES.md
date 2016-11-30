@@ -1,9 +1,11 @@
 # v1.19.0, 2016-11-30
 
-New strategy using a trained neural network.
+New strategy using a trained neural network and documentation.
 
 - Implement the EvolvedANN
   https://github.com/Axelrod-Python/Axelrod/pull/773
+- More strategy documentation
+  https://github.com/Axelrod-Python/Axelrod/pull/772
 
 Here are all the commits for this PR:
 https://github.com/Axelrod-Python/Axelrod/compare/v1.18.1...v1.19.0
