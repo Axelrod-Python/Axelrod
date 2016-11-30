@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from .alternator import Alternator
 from .adaptive import Adaptive
+from .ann import EvolvedANN
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -105,6 +106,8 @@ all_strategies = [
     EasyGo,
     Eatherley,
     EventualCycleHunter,
+    EvolvedANN,
+    EvolvedLookerUp,
     Feld,
     FirmButFair,
     FoolMeForever,
@@ -150,7 +153,6 @@ all_strategies = [
     LimitedRetaliate,
     LimitedRetaliate2,
     LimitedRetaliate3,
-    EvolvedLookerUp,
     MathConstantHunter,
     NaiveProber,
     MindBender,
