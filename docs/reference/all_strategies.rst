@@ -12,6 +12,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.alternator
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.ann
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.apavlov
    :members:
    :undoc-members:
