@@ -42,9 +42,6 @@ or again, just let us know) :) If there is something that is missing in this
 library and that you would like implemented so as to be able to carry out a
 project please open an issue and let us know!
 
-**Note: this library will be dropping support for python 2 on the 1st of
-December 2016.**
-
 Installation
 ============
 
@@ -138,7 +135,7 @@ paper please list it here:
   <http://vknight.org/unpeudemath/gametheory/2015/11/28/Experimenting-with-a-high-performing-evolved-strategy-in-other-environments.html>`_
   by `drvinceknight <https://twitter.com/drvinceknight>`_
 - `An open reproducible framework for the study of the iterated prisoner's
-  dilemma <https://arxiv.org/abs/1604.00896>_`: a pre print of a paper describing this
+  dilemma <https://arxiv.org/abs/1604.00896>`_: a pre print of a paper describing this
   library (20 authors).
 
 Contributors
