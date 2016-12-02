@@ -1,5 +1,6 @@
 """Utilities used by various strategies"""
 import itertools
+from functools import lru_cache
 
 from axelrod import update_history
 from axelrod import Actions
@@ -82,34 +83,7 @@ def look_ahead(player_1, player_2, game, rounds=10):
     return strategies[results.index(max(results))]
 
 
-class Memoized(object):
-    """Decorator that caches a function's return value each time it is called.
-    If called later with the same arguments, the cached value is returned
-    (not reevaluated). From:
-    https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
-    """
-
-    def __init__(self, func):
-        self.func = func
-        self.cache = {}
-
-    def __call__(self, *args):
-        try:
-            try:
-                return self.cache[args]
-            except KeyError:
-                value = self.func(*args)
-                self.cache[args] = value
-                return value
-        except TypeError:
-            return self.func(*args)
-
-    def __repr__(self):
-        """Return the function's docstring."""
-        return self.func.__doc__
-
-
-@Memoized
+@lru_cache()
 def recursive_thue_morse(n):
     """The recursive definition of the Thue-Morse sequence. The first few terms
     of the Thue-Morse sequence are: 0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . ."""
