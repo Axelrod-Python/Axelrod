@@ -33,22 +33,24 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(fingerprint.probe, probe)
 
     def test_create_points(self):
-        test_points = create_points(0.5)
+        test_points = create_points(0.5, progress_bar=False)
         self.assertEqual(test_points, self.expected_points)
 
     def test_create_probes(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        probes = af.create_probes(self.probe, self.expected_points)
+        probes = af.create_probes(self.probe, self.expected_points,
+                                  progress_bar=False)
         self.assertEqual(len(probes), 9)
 
     def test_create_edges(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        edges = af.create_edges(self.expected_points)
+        edges = af.create_edges(self.expected_points, progress_bar=False)
         self.assertEqual(edges, self.expected_edges)
 
     def test_construct_tournament_elemets(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        edges, tournament_players = af.construct_tournament_elements(0.5)
+        edges, tournament_players = af.construct_tournament_elements(0.5,
+                                                            progress_bar=False)
         self.assertEqual(edges, self.expected_edges)
         self.assertEqual(len(tournament_players), 10)
         self.assertEqual(tournament_players[0].__class__, af.strategy)
