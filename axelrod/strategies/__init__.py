@@ -9,10 +9,10 @@ from ._filters import passes_filterset
 from .meta import (
     MetaHunter, MetaHunterAggressive, MetaPlayer, MetaMajority,
     MetaMajorityMemoryOne, MetaMajorityFiniteMemory, MetaMajorityLongMemory,
-    MetaMinority, MetaMixer, MetaWinner,
-    MetaWinnerMemoryOne, MetaWinnerFiniteMemory, MetaWinnerLongMemory,
-    MetaWinnerEnsemble, MWEDeterministic, MWEFast, MWEFiniteMemory,
-    MWELongMemory, MWEMemoryOne, MWERandom, MWEStochastic
+    MetaMinority, MetaMixer, MetaWinner, MetaWinnerDeterministic,
+    MetaWinnerEnsemble, MetaWinnerMemoryOne, MetaWinnerFiniteMemory,
+    MetaWinnerLongMemory, MetaWinnerStochastic, MWEDeterministic, MWEFast,
+    MWEFiniteMemory, MWELongMemory, MWEMemoryOne, MWERandom, MWEStochastic
     )
 
 all_strategies += [MetaHunter,
@@ -24,10 +24,12 @@ all_strategies += [MetaHunter,
                    MetaMinority,
                    MetaMixer,
                    MetaWinner,
+                   MetaWinnerDeterministic,
                    MetaWinnerEnsemble,
                    MetaWinnerMemoryOne,
                    MetaWinnerFiniteMemory,
                    MetaWinnerLongMemory,
+                   MetaWinnerStochastic,
                    MWEDeterministic,
                    MWEFast,
                    MWEFiniteMemory,

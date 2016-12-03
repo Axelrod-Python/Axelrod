@@ -47,7 +47,7 @@ strategies::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    56
+    57
 
 
 Or, to find out how many strategies only use 1 turn worth of memory to
@@ -81,7 +81,7 @@ length of each match of the tournament::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    17
+    19
 
 Note that in the filterset dictionary, the value for the 'makes_use_of' key
 must be a list. Here is how we might identify the number of strategies that use
@@ -92,7 +92,7 @@ both the length of the tournament and the game being played::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    11
+    13
 
 Some strategies have been classified as having a particularly long run time::
 
@@ -101,7 +101,7 @@ Some strategies have been classified as having a particularly long run time::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    18
+    20
 
 Strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`

@@ -283,17 +283,6 @@ class MetaMajorityMemoryOne(MetaMajority):
         super(MetaMajorityMemoryOne, self).__init__(team=team)
 
 
-class MetaWinnerMemoryOne(MetaWinner):
-    """MetaWinner with the team of Memory One players"""
-
-    name = "Meta Winner Memory One"
-
-    @init_args
-    def __init__(self):
-        team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
-        super(MetaWinnerMemoryOne, self).__init__(team=team)
-
-
 class MetaMajorityFiniteMemory(MetaMajority):
     """MetaMajority with the team of Finite Memory Players"""
 
@@ -304,18 +293,6 @@ class MetaMajorityFiniteMemory(MetaMajority):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
         super(MetaMajorityFiniteMemory, self).__init__(team=team)
-
-
-class MetaWinnerFiniteMemory(MetaWinner):
-    """MetaWinner with the team of Finite Memory Players"""
-
-    name = "Meta Winner Finite Memory"
-
-    @init_args
-    def __init__(self):
-        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
-                < float('inf')]
-        super(MetaWinnerFiniteMemory, self).__init__(team=team)
 
 
 class MetaMajorityLongMemory(MetaMajority):
@@ -330,6 +307,29 @@ class MetaMajorityLongMemory(MetaMajority):
         super(MetaMajorityLongMemory, self).__init__(team=team)
 
 
+class MetaWinnerMemoryOne(MetaWinner):
+    """MetaWinner with the team of Memory One players"""
+
+    name = "Meta Winner Memory One"
+
+    @init_args
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
+        super(MetaWinnerMemoryOne, self).__init__(team=team)
+
+
+class MetaWinnerFiniteMemory(MetaWinner):
+    """MetaWinner with the team of Finite Memory Players"""
+
+    name = "Meta Winner Finite Memory"
+
+    @init_args
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
+                < float('inf')]
+        super(MetaWinnerFiniteMemory, self).__init__(team=team)
+
+
 class MetaWinnerLongMemory(MetaWinner):
     """MetaWinner with the team of Long (infinite) Memory Players"""
 
@@ -340,6 +340,30 @@ class MetaWinnerLongMemory(MetaWinner):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
         super(MetaWinnerLongMemory, self).__init__(team=team)
+
+
+class MetaWinnerDeterministic(MetaWinner):
+    """Meta Winner Ensemble with the team of Deterministic Players."""
+
+    name = "Meta Winner Deterministic"
+
+    @init_args
+    def __init__(self):
+        team = [s for s in ordinary_strategies if
+                not s().classifier['stochastic']]
+        super(MetaWinnerDeterministic, self).__init__(team=team)
+
+
+class MetaWinnerStochastic(MetaWinner):
+    """Meta Winner Ensemble with the team of Stochastic Players."""
+
+    name = "Meta Winner Stochastic"
+
+    @init_args
+    def __init__(self):
+        team = [s for s in ordinary_strategies if
+                s().classifier['stochastic']]
+        super(MetaWinnerStochastic, self).__init__(team=team)
 
 
 class MetaMixer(MetaPlayer):
