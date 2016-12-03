@@ -87,7 +87,6 @@ class MetaMajority(MetaPlayer):
     @init_args
     def __init__(self, team=None):
         super(MetaMajority, self).__init__(team=team)
-        self.classifier['memory_depth'] = float('inf')
 
     @staticmethod
     def meta_strategy(results, opponent):
@@ -104,7 +103,6 @@ class MetaMinority(MetaPlayer):
     @init_args
     def __init__(self, team=None):
         super(MetaMinority, self).__init__(team=team)
-        self.classifier['memory_depth'] = float('inf')
 
     @staticmethod
     def meta_strategy(results, opponent):

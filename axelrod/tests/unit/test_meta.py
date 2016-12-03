@@ -1,10 +1,8 @@
-"""Tests for the hunter strategy."""
+"""Tests for the various Meta strategies."""
 
 import random
 
 import axelrod
-import copy
-
 from .test_player import TestPlayer, test_responses
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -21,7 +19,6 @@ class TestMetaPlayer(TestPlayer):
         'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': {'game', 'length'},
-        # 'makes_use_of': {},
         'long_run_time': True,
         'manipulates_source': False,
         'inspects_source': False,
@@ -30,30 +27,13 @@ class TestMetaPlayer(TestPlayer):
 
     def classifier_test(self, expected_class_classifier=None):
         player = self.player()
-        classifier = dict()
-        for key in ['stochastic',
-                    'inspects_source', 'manipulates_source',
-                    'manipulates_state']:
-            classifier[key] = (any(t.classifier[key] for t in player.team))
-        classifier['memory_depth'] = float('inf')
 
-        for t in player.team:
-            try:
-                classifier['makes_use_of'].update(t.classifier['makes_use_of'])
-            except KeyError:
-                pass
-
-        for key in classifier:
+        for key in self.expected_classifier:
             self.assertEqual(player.classifier[key],
-                             classifier[key],
+                             self.expected_classifier[key],
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
-                             (key, player.classifier[key], classifier[key]))
-
-        # Test that player has same classifier as its class unless otherwise
-        # specified
-        if expected_class_classifier is None:
-            expected_class_classifier = player.classifier
-        self.assertEqual(expected_class_classifier, self.player.classifier)
+                             (key, player.classifier[key],
+                              self.expected_classifier[key]))
 
     def test_reset(self):
         p1 = self.player()
@@ -75,12 +55,10 @@ class TestMetaMajority(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'manipulates_source': False,
+        'makes_use_of': {'game', 'length'},
         'inspects_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
 
@@ -104,13 +82,11 @@ class TestMetaMinority(TestMetaPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'long_run_time': True,
+        'makes_use_of': {'game', 'length'},
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_team(self):
         team = [axelrod.Cooperator]
@@ -139,13 +115,11 @@ class TestMetaWinner(TestMetaPlayer):
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
         'long_run_time': True,
+        'makes_use_of': {'game', 'length'},
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
@@ -190,15 +164,12 @@ class TestMetaWinnerEnsemble(TestMetaPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'makes_use_of': set(['game']),
+        'makes_use_of': {'game', 'length'},
         'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -221,6 +192,7 @@ class TestMetaHunter(TestMetaPlayer):
         'stochastic': False,
         'long_run_time': False,
         'inspects_source': False,
+        'makes_use_of': set(),
         'manipulates_source': False,
         'manipulates_state': False
     }
@@ -255,6 +227,7 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         'stochastic': False,
         'long_run_time': False,
         'inspects_source': False,
+        'makes_use_of': set(),
         'manipulates_source': False,
         'manipulates_state': False
     }
@@ -288,12 +261,10 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
         'stochastic': True,
         'inspects_source': False,
         'long_run_time': True,
+        'makes_use_of': set(['game']),
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -312,9 +283,6 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
         'manipulates_state': False
     }
 
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
-
     def test_strategy(self):
         self.first_play_test(C)
 
@@ -327,12 +295,10 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -346,12 +312,10 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -365,12 +329,10 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game', 'length'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -384,12 +346,10 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game', 'length'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -400,16 +360,14 @@ class TestMetaMixer(TestMetaPlayer):
     name = "Meta Mixer"
     player = axelrod.MetaMixer
     expected_classifier = {
+        'inspects_source': False,
+        'long_run_time': True,
+        'makes_use_of': {'game', 'length'},
+        'manipulates_source': False,
+        'manipulates_state': False,
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'manipulates_source': False,
-        'long_run_time': True,
-        'inspects_source': False,
-        'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set()
 
     def test_strategy(self):
 
@@ -455,13 +413,10 @@ class TestMWEDeterministic(TestMetaPlayer):
         'stochastic': False,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game', 'length'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    # expected_class_classifier['stochastic'] = False
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -475,12 +430,10 @@ class TestMWEStochastic(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game', 'length'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -494,12 +447,10 @@ class TestMWEFast(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game', 'length'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -513,15 +464,14 @@ class TestMWEFiniteMemory(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game'},
         'manipulates_source': False,
         'manipulates_state': False
     }
 
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
-
     def test_strategy(self):
         self.first_play_test(C)
+
 
 class TestMWELongMemory(TestMetaPlayer):
     name = "MWE Long Memory"
@@ -531,12 +481,10 @@ class TestMWELongMemory(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game', 'length'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -550,12 +498,10 @@ class TestMWEMemoryOne(TestMetaPlayer):
         'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
+        'makes_use_of': {'game'},
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -566,17 +512,10 @@ class TestMWERandom(TestMetaPlayer):
     player = axelrod.MWERandom
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic': True,
-        'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['makes_use_of'] = set([])
-
     def test_strategy(self):
         self.first_play_test(C)
-
-
