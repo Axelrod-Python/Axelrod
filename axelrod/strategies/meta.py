@@ -359,3 +359,87 @@ class MetaMixer(MetaPlayer):
     def meta_strategy(self, results, opponent):
         """Using the numpy.random choice function to sample with weights"""
         return choice(results, p=self.distribution)
+
+
+class MWEDeterministic(MetaWinnerEnsemble):
+    """Meta Winner Ensemble with the team of Deterministic Players."""
+
+    name = "MWE Deterministic"
+
+    def __init__(self):
+        team = [s for s in ordinary_strategies if
+                not s().classifier['stochastic']]
+        super(MWEDeterministic, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MWEStochastic(MetaWinnerEnsemble):
+    """Meta Winner Ensemble with the team of Stochastic Players."""
+
+    name = "MWE Stochastic"
+
+    def __init__(self):
+        team = [s for s in ordinary_strategies if
+                s().classifier['stochastic']]
+        super(MWEStochastic, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MWEFast(MetaWinnerEnsemble):
+    """Meta Winner Ensemble with the team of Fast Run Time Players."""
+
+    name = "MWE Fast"
+
+    def __init__(self):
+        team = [s for s in ordinary_strategies if
+                not s().classifier['long_run_time']]
+        super(MWEFast, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MWEFiniteMemory(MetaWinnerEnsemble):
+    """Meta Winner Ensemble with the team of Finite Memory Players."""
+
+    name = "MWE Finite Memory"
+
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
+                < float('inf')]
+        super(MWEFiniteMemory, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MWELongMemory(MetaWinnerEnsemble):
+    """Meta Winner Ensemble with the team of Long Memory Players."""
+
+    name = "MWE Long Memory"
+
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
+                == float('inf')]
+        super(MWELongMemory, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MWEMemoryOne(MetaWinnerEnsemble):
+    """Meta Winner Ensemble with the team of Memory One Players."""
+
+    name = "MWE Memory One"
+
+    def __init__(self):
+        team = [s for s in ordinary_strategies if s().classifier['memory_depth']
+                <= 1]
+        super(MWEMemoryOne, self).__init__(team=team)
+        self.init_args = ()
+
+
+class MWERandom(MetaWinnerEnsemble):
+    """MetaWinner with a random team of players."""
+
+    name = "MWE Random"
+
+    def __init__(self):
+        l = len(ordinary_strategies)
+        team = list(choice([s for s in ordinary_strategies], int(l / 4)))
+        super(MWERandom, self).__init__(team=team)
+        self.init_args = ()

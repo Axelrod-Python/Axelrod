@@ -420,3 +420,143 @@ class TestMetaMixer(TestMetaPlayer):
         P2 = axelrod.Cooperator()
 
         self.assertRaises(ValueError, P1.strategy, P2)
+
+
+class TestMWEDeterministic(TestMetaPlayer):
+    name = "MWE Deterministic"
+    player = axelrod.MWEDeterministic
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'long_run_time': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMWEStochastic(TestMetaPlayer):
+    name = "MWE Stochastic"
+    player = axelrod.MWEStochastic
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'long_run_time': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMWEFast(TestMetaPlayer):
+    name = "MWE Fast"
+    player = axelrod.MWEFast
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'long_run_time': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMWEFiniteMemory(TestMetaPlayer):
+    name = "MWE Finite Memory"
+    player = axelrod.MWEFiniteMemory
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'long_run_time': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['stochastic'] = False
+    expected_class_classifier['makes_use_of'] = set([])
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+class TestMWELongMemory(TestMetaPlayer):
+    name = "MWE Long Memory"
+    player = axelrod.MWELongMemory
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'long_run_time': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['makes_use_of'] = set([])
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMWEMemoryOne(TestMetaPlayer):
+    name = "MWE Memory One"
+    player = axelrod.MWEMemoryOne
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'long_run_time': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = 1
+    expected_class_classifier['makes_use_of'] = set([])
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
+class TestMWERandom(TestMetaPlayer):
+    name = "MWE Random"
+    player = axelrod.MWERandom
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': True,
+        'long_run_time': True,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = 1
+    expected_class_classifier['makes_use_of'] = set([])
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
