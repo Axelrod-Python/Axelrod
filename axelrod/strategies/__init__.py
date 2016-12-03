@@ -7,7 +7,7 @@ from ._filters import passes_filterset
 # because it creates circular dependencies
 
 from .meta import (
-    MetaHunter, MetaPlayer, MetaMajority,
+    MetaHunter, MetaHunterAggressive, MetaPlayer, MetaMajority,
     MetaMajorityMemoryOne, MetaMajorityFiniteMemory, MetaMajorityLongMemory,
     MetaMinority, MetaMixer, MetaWinner,
     MetaWinnerMemoryOne, MetaWinnerFiniteMemory, MetaWinnerLongMemory,
@@ -16,6 +16,7 @@ from .meta import (
     )
 
 all_strategies += [MetaHunter,
+                   MetaHunterAggressive,
                    MetaMajority,
                    MetaMajorityMemoryOne,
                    MetaMajorityFiniteMemory,
