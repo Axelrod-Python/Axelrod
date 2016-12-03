@@ -99,7 +99,7 @@ class DeterministicCache(UserDict):
         if len(key) != 3:
             return False
 
-        # The triplet should be a pair of axelrod.Player sublclasses and an
+        # The triplet should be a pair of axelrod.Player subclasses and an
         # integer
         try:
             if not (
@@ -111,7 +111,7 @@ class DeterministicCache(UserDict):
         except TypeError:
             return False
 
-        # Each Player class should be deterministic
+        # Each Player should be deterministic
         if key[0].classifier['stochastic'] or key[1].classifier['stochastic']:
             return False
 

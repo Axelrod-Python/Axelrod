@@ -43,7 +43,7 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
         True if the value from the strategy's classifier dictionary matches
         the value and operator passed to the function.
     """
-    classifier_value = strategy.classifier[classifier_key]
+    classifier_value = strategy().classifier[classifier_key]
     if (isinstance(classifier_value, str) and
             classifier_value.lower() == 'infinity'):
         classifier_value = float('inf')
@@ -89,7 +89,7 @@ def passes_in_list_filter(strategy, classifier_key, value):
     """
     result = True
     for entry in value:
-        if entry not in strategy.classifier[classifier_key]:
+        if entry not in strategy().classifier[classifier_key]:
             result = False
     return result
 

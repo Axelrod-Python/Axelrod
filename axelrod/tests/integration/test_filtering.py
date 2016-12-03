@@ -77,7 +77,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         for classifier in classifiers:
             comprehension = set([
                 s for s in all_strategies if
-                set(classifier).issubset(set(s.classifier['makes_use_of']))
+                set(classifier).issubset(set(s().classifier['makes_use_of']))
             ])
             filterset = {
                 'makes_use_of': classifier

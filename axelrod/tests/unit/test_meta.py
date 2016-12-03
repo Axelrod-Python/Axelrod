@@ -365,7 +365,7 @@ class TestMetaMixer(TestMetaPlayer):
         'makes_use_of': {'game', 'length'},
         'manipulates_source': False,
         'manipulates_state': False,
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': float('inf'),
         'stochastic': True,
     }
 
@@ -410,7 +410,7 @@ class TestMWEDeterministic(TestMetaPlayer):
     player = axelrod.MWEDeterministic
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
+        'stochastic': True,
         'long_run_time': True,
         'inspects_source': False,
         'makes_use_of': {'game', 'length'},

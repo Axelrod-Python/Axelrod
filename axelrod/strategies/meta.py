@@ -14,7 +14,6 @@ class MetaPlayer(Player):
     """A generic player that has its own team of players."""
 
     name = "Meta Player"
-    # team = [Cooperator]
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -391,6 +390,7 @@ class MWEDeterministic(MetaWinnerEnsemble):
         team = [s for s in ordinary_strategies if
                 not s().classifier['stochastic']]
         super(MWEDeterministic, self).__init__(team=team)
+        self.classifier["stochastic"] = True
 
 
 class MWEStochastic(MetaWinnerEnsemble):
