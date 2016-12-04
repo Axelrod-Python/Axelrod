@@ -167,7 +167,8 @@ class MetaWinner(MetaPlayer):
 
 class MetaWinnerEnsemble(MetaWinner):
     """A variant of MetaWinner that chooses one of the top scoring strategies
-    at random against each opponent.
+    at random against each opponent. Note this strategy is always stochastic
+    regardless of the team.
 
     Names:
 
@@ -357,6 +358,7 @@ class MetaWinnerDeterministic(MetaWinner):
     name = "Meta Winner Deterministic"
 
     # Manually setting classifier until #779 is resolved
+    # This strategy is always stochastic.
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,

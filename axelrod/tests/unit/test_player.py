@@ -188,7 +188,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(t_attrs['noise'], .5)
 
     def test_reset(self):
-        """Make sure reseting works correctly."""
+        """Make sure resetting works correctly."""
         p = self.player()
         p_clone = p.clone()
         p2 = axelrod.Random()
