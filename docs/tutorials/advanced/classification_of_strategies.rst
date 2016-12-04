@@ -47,7 +47,7 @@ strategies::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    57
+    56
 
 
 Or, to find out how many strategies only use 1 turn worth of memory to
@@ -92,7 +92,7 @@ both the length of the tournament and the game being played::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    13
+    12
 
 Some strategies have been classified as having a particularly long run time::
 
@@ -101,7 +101,7 @@ Some strategies have been classified as having a particularly long run time::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    20
+    19
 
 Strategies that :code:`manipulate_source`, :code:`manipulate_state`
 and/or :code:`inspect_source` return :code:`False` for the :code:`obey_axelrod`

@@ -473,23 +473,6 @@ class TestMWEStochastic(TestMetaPlayer):
         self.first_play_test(C)
 
 
-class TestMWEFast(TestMetaPlayer):
-    name = "MWE Fast"
-    player = axelrod.MWEFast
-    expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': True,
-        'long_run_time': True,
-        'inspects_source': False,
-        'makes_use_of': {'game', 'length'},
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def test_strategy(self):
-        self.first_play_test(C)
-
-
 class TestMWEFiniteMemory(TestMetaPlayer):
     name = "MWE Finite Memory"
     player = axelrod.MWEFiniteMemory

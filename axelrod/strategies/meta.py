@@ -440,18 +440,6 @@ class MWEStochastic(MetaWinnerEnsemble):
         super(MWEStochastic, self).__init__(team=team)
 
 
-class MWEFast(MetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Fast Run Time Players."""
-
-    name = "MWE Fast"
-
-    @init_args
-    def __init__(self):
-        team = [s for s in ordinary_strategies if
-                not s().classifier['long_run_time']]
-        super(MWEFast, self).__init__(team=team)
-
-
 class MWEFiniteMemory(MetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Finite Memory Players."""
 
@@ -498,4 +486,3 @@ class MWERandom(MetaWinnerEnsemble):
         l = len(ordinary_strategies)
         team = list(choice([s for s in ordinary_strategies], int(l / 4)))
         super(MWERandom, self).__init__(team=team)
-
