@@ -36,6 +36,8 @@ class Random(Player):
         """
         Player.__init__(self)
         self.p = p
+        if p in [0, 1]:
+            self.classifier['stochastic'] = False
 
     def strategy(self, opponent):
         return random_choice(self.p)
