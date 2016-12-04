@@ -43,3 +43,20 @@ class TestMatchOutcomes(unittest.TestCase):
 
         self.assertEqual(results[0], results[1])
         self.assertEqual(results[1], results[2])
+
+    def test_matches_with_det_player_for_stochastic_classes(self):
+        """A test based on a bug found in the cache.
+
+        See: https://github.com/Axelrod-Python/Axelrod/issues/779"""
+        p1 = axelrod.MemoryOnePlayer((0, 0, 0, 0))
+        p2 = axelrod.MemoryOnePlayer((1, 0, 1, 0))
+        p3 = axelrod.MemoryOnePlayer((1, 1, 1, 0))
+
+        m = axelrod.Match((p1, p2), turns=3)
+        self.assertEqual(m.play(), [('C', 'C'), ('D', 'C'), ('D', 'D')])
+
+        m = axelrod.Match((p2, p3), turns=3)
+        self.assertEqual(m.play(), [('C', 'C'), ('C', 'C'), ('C', 'C')])
+
+        m = axelrod.Match((p1, p3), turns=3)
+        self.assertEqual(m.play(), [('C', 'C'), ('D', 'C'), ('D', 'C')])

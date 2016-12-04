@@ -37,7 +37,7 @@ class Match(object):
         """
         self.result = []
         self.turns = turns
-        self._cache_key = (players[0].__class__, players[1].__class__, turns)
+        self._cache_key = (players[0], players[1], turns)
         self.noise = noise
 
         if game is None:

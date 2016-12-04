@@ -47,8 +47,10 @@ class MemoryOnePlayer(Player):
         """
         Player.__init__(self)
         self._initial = initial
-        if four_vector:
+        if four_vector is not None:
             self.set_four_vector(four_vector)
+            if self.name == 'Generic Memory One Player':
+                self.name = "%s: %s" % (self.name, four_vector)
 
     def set_four_vector(self, four_vector):
         if not all(0 <= p <= 1 for p in four_vector):
