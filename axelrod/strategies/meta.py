@@ -158,6 +158,13 @@ class MetaWinner(MetaPlayer):
 
         return bestresult
 
+    def reset(self):
+        MetaPlayer.reset(self)
+        for t in self.team:
+            t.proposed_history = []
+            t.score = 0
+
+
 class MetaWinnerEnsemble(MetaWinner):
     """A variant of MetaWinner that chooses one of the top scoring strategies
     at random against each opponent.
@@ -365,6 +372,7 @@ class MetaWinnerDeterministic(MetaWinner):
         team = [s for s in ordinary_strategies if
                 not s().classifier['stochastic']]
         super(MetaWinnerDeterministic, self).__init__(team=team)
+        self.classifier['stochastic'] = False
 
 
 class MetaWinnerStochastic(MetaWinner):

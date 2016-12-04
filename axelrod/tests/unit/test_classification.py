@@ -179,8 +179,6 @@ class TestStrategies(unittest.TestCase):
                                     axelrod.MetaMinority,
                                     axelrod.MetaWinner,
                                     axelrod.MetaWinnerEnsemble,
-                                    # axelrod.MetaMajorityMemoryOne,
-                                    # axelrod.MetaWinnerMemoryOne,
                                     axelrod.MetaMajorityFiniteMemory,
                                     axelrod.MetaWinnerFiniteMemory,
                                     axelrod.MetaMajorityLongMemory,
@@ -192,7 +190,6 @@ class TestStrategies(unittest.TestCase):
                                     axelrod.MWELongMemory,
                                     axelrod.MWEStochastic,
                                     axelrod.MWEDeterministic,
-                                    # axelrod.MWEMemoryOne,
                                     axelrod.MetaWinnerStochastic
                                     ]
 
