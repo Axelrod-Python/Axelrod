@@ -26,7 +26,7 @@ class TestMatch(unittest.TestCase):
             turns
         )
         self.assertEqual(
-            match._cache_key, (axelrod.Cooperator, axelrod.Cooperator, turns))
+            match._cache_key, (p1, p2, turns))
         self.assertEqual(match.turns, turns)
         self.assertEqual(match._cache, {})
         self.assertEqual(match.noise, 0)
@@ -96,11 +96,11 @@ class TestMatch(unittest.TestCase):
         expected_result = [(C, D), (C, D), (C, D)]
         self.assertEqual(match.play(), expected_result)
         self.assertEqual(
-            cache[(axelrod.Cooperator, axelrod.Defector, 3)], expected_result)
+            cache[(axelrod.Cooperator(), axelrod.Defector(), 3)], expected_result)
 
         # a deliberately incorrect result so we can tell it came from the cache
         expected_result = [(C, C), (D, D), (D, C)]
-        cache[(axelrod.Cooperator, axelrod.Defector, 3)] = expected_result
+        cache[(axelrod.Cooperator(), axelrod.Defector(), 3)] = expected_result
         match = axelrod.Match(players, 3, deterministic_cache=cache)
         self.assertEqual(match.play(), expected_result)
 

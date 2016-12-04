@@ -46,6 +46,24 @@ class DeterministicCache(UserDict):
         if file_name is not None:
             self.load(file_name)
 
+    def _key_transform(self, key):
+        """
+        Parameters
+        ----------
+        key: tuple
+            A 3-tuple: (player instance, player instance, match length)
+        """
+        return key[0].name, key[1].name, key[2]
+
+    def __delitem__(self, key):
+        return UserDict.__delitem__(self, self._key_transform(key))
+
+    def __getitem__(self, key):
+        return UserDict.__getitem__(self, self._key_transform(key))
+
+    def __contains__(self, key):
+        return UserDict.__contains__(self, self._key_transform(key))
+
     def __setitem__(self, key, value):
         """Overrides the UserDict.__setitem__ method in order to validate
         the key/value and also to set the turns attribute"""
@@ -60,7 +78,7 @@ class DeterministicCache(UserDict):
             raise ValueError(
                 'Value must be a list with length equal to turns attribute')
 
-        UserDict.__setitem__(self, key, value)
+        UserDict.__setitem__(self, self._key_transform(key), value)
 
     def _is_valid_key(self, key):
         """Validate a proposed dictionary key
@@ -85,8 +103,8 @@ class DeterministicCache(UserDict):
         # integer
         try:
             if not (
-                issubclass(key[0], Player) and
-                issubclass(key[1], Player) and
+                isinstance(key[0], Player) and
+                isinstance(key[1], Player) and
                 isinstance(key[2], int)
             ):
                 return False
