@@ -4,6 +4,7 @@ from .hunter import (
     AlternatorHunter, CooperatorHunter, CycleHunter, DefectorHunter,
     EventualCycleHunter, MathConstantHunter, RandomHunter,)
 from numpy.random import choice
+from random import sample
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
@@ -497,5 +498,5 @@ class MWERandom(MetaWinnerEnsemble):
     @init_args
     def __init__(self):
         l = len(ordinary_strategies)
-        team = list(choice([s for s in ordinary_strategies], int(l / 4)))
+        team = sample([s for s in ordinary_strategies], int(l / 4))
         super(MWERandom, self).__init__(team=team)
