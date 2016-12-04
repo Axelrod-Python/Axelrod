@@ -92,8 +92,7 @@ class AshlockFingerprint():
         edges : list of tuples
             A list containing tuples of length 2. All tuples will have 0 as the
             first element. The second element is the index of the
-            corresponding probe (+1 to allow for including the Strategy and its
-            Dual).
+            corresponding probe (+1 to allow for including the Strategy).
         """
         edges = [(0, index + 1) for index, point in enumerate(points)]
         return edges
@@ -134,12 +133,11 @@ class AshlockFingerprint():
         edges : list of tuples
             A list containing tuples of length 2. All tuples will have either 0
             or 1 as the first element. The second element is the index of the
-            corresponding probe (+2 to allow for including the Strategy and its
-            Dual).
+            corresponding probe (+1 to allow for including the Strategy).
 
         tournament_players : list
             A list containing instances of axelrod.Player. The first item is the
-            original player, the second is the dual, the rest are the probes.
+            original player, the rest are the probes.
 
         """
         probe_points = create_points(step)
@@ -168,8 +166,7 @@ class AshlockFingerprint():
         edges : list of tuples
             A list containing tuples of length 2. All tuples will have either 0
             or 1 as the first element. The second element is the index of the
-            corresponding probe (+2 to allow for including the Strategy and its
-            Dual).
+            corresponding probe (+1 to allow for including the Strategy).
 
         Returns
         ----------
@@ -186,10 +183,11 @@ class AshlockFingerprint():
                     filename=None, in_memory=False, progress_bar=True):
         """Build and play the spatial tournament.
 
-        Creates the probes and their edges then builds a spatial tournament
-        where the original strategy only plays probes whose coordinates sum to
-        less than 1 (or equal). Probes whose coordinates sum to more than 1 play
-        the Dual Strategy.
+        Creates the probes and their edges then builds a spatial tournament.
+        When the coordinates of the probe sum to more than 1, the dual of the
+        probe is taken instead and then the Joss-Ann Transformer is applied. If
+        the coordinates sum to less than 1 (or equal), then only the Joss-Ann is
+        applied, a dual is not required.
 
         Parameters
         ----------
