@@ -2,9 +2,9 @@ from collections import namedtuple
 import operator
 
 
-def passes_operator_filter(strategy, classifier_key, value, operator):
+def passes_operator_filter(player, classifier_key, value, operator):
     """
-    Tests whether a given strategy passes a filter for a
+    Tests whether a given player passes a filter for a
     given key in its classifier dict using a given (in)equality operator.
 
     e.g.
@@ -19,13 +19,13 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
             'makes_use_of': ['game', 'length']
         }
 
-    passes_operator_filter(ExampleStrategy, 'memory_depth', 10, operator.eq)
+    passes_operator_filter(ExampleStrategy(), 'memory_depth', 10, operator.eq)
 
     would test whether the 'memory_depth' entry equals 10 and return True
 
     Parameters
     ----------
-        strategy : a descendant class of axelrod.Player
+        player : an instance of axelrod.Player
         classifier_key: string
             Defining which entry from the strategy's classifier dict is to be
             tested (e.g. 'memory_depth').
@@ -43,7 +43,7 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
         True if the value from the strategy's classifier dictionary matches
         the value and operator passed to the function.
     """
-    classifier_value = strategy().classifier[classifier_key]
+    classifier_value = player.classifier[classifier_key]
     if (isinstance(classifier_value, str) and
             classifier_value.lower() == 'infinity'):
         classifier_value = float('inf')
@@ -51,10 +51,10 @@ def passes_operator_filter(strategy, classifier_key, value, operator):
     return operator(classifier_value, value)
 
 
-def passes_in_list_filter(strategy, classifier_key, value):
+def passes_in_list_filter(player, classifier_key, value):
     """
     Tests whether a given list of values exist in the list returned from the
-    given strategy's classifier dict for the given classifier_key.
+    given players's classifier dict for the given classifier_key.
 
     e.g.
 
@@ -68,7 +68,7 @@ def passes_in_list_filter(strategy, classifier_key, value):
             'makes_use_of': ['game', 'length']
         }
 
-    passes_in_list_filter(ExampleStrategy, 'makes_use_of', 'game', operator.eq)
+    passes_in_list_filter(ExampleStrategy(), 'makes_use_of', 'game', operator.eq)
 
     would test whether 'game' exists in the strategy's' 'makes_use_of' entry
     and return True.
@@ -89,7 +89,7 @@ def passes_in_list_filter(strategy, classifier_key, value):
     """
     result = True
     for entry in value:
-        if entry not in strategy().classifier[classifier_key]:
+        if entry not in player.classifier[classifier_key]:
             result = False
     return result
 
@@ -211,7 +211,7 @@ def passes_filterset(strategy, filterset):
 
         if filterset.get(_filter, None) is not None:
             kwargs = filter_function.kwargs
-            kwargs['strategy'] = strategy
+            kwargs['player'] = strategy()
             kwargs['value'] = filterset[_filter]
             passes_filters.append(filter_function.function(**kwargs))
 
