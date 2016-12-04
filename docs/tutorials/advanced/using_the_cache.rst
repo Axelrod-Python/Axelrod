@@ -40,11 +40,11 @@ Let us rerun the above match but using the cache::
 We can take a look at the cache::
 
     >>> cache  # doctest: +ELLIPSIS
-    {(<class 'axelrod.strategies.gobymajority.GoByMajority'>, <class 'axelrod.strategies.alternator.Alternator'>, 200): [('C', 'C'), ..., ('C', 'D')]}
+    {('Soft Go By Majority', 'Alternator', 200): [('C', 'C'), ..., ('C', 'D')]}
     >>> len(cache)
     1
 
-This maps a triplet of 2 player classes and the match length to the resulting
+This maps a triplet of 2 player names and the match length to the resulting
 interactions.  We can rerun the code and compare the timing::
 
     >>> def run_match_with_cache():
