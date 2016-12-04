@@ -1,7 +1,7 @@
 import unittest
-from hypothesis import given, example
+from hypothesis import given, example, settings
 from hypothesis.strategies import integers
-from axelrod import all_strategies, filtered_strategies
+from axelrod import all_strategies, filtered_strategies, MWERandom, seed
 
 
 class TestFiltersAgainstComprehensions(unittest.TestCase):
@@ -67,7 +67,14 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         filtered = set(filtered_strategies(filterset))
         self.assertEqual(comprehension, filtered)
 
-    def test_makes_use_of_filtering(self):
+    @given(seed_=integers(min_value=0, max_value=4294967295))
+    @settings(max_examples=10)
+    def test_makes_use_of_filtering(self, seed_):
+        """
+        Test equivalent filtering using two approaches.
+
+        This needs to be seeded as some players classification is random.
+        """
         classifiers = [
             ['game'],
             ['length'],
@@ -75,13 +82,17 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
         ]
 
         for classifier in classifiers:
+            seed(seed_)
             comprehension = set([
                 s for s in all_strategies if
                 set(classifier).issubset(set(s().classifier['makes_use_of']))
             ])
+
+            seed(seed_)
             filterset = {
                 'makes_use_of': classifier
             }
             filtered = set(filtered_strategies(filterset))
+
             self.assertEqual(comprehension, filtered,
                              msg="classifier: {}".format(classifier))
