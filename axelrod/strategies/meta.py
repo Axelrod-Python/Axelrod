@@ -358,18 +358,6 @@ class MetaWinnerDeterministic(MetaWinner):
 
     name = "Meta Winner Deterministic"
 
-    # Manually setting classifier until #779 is resolved
-    # This strategy is always stochastic.
-    classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': True,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
