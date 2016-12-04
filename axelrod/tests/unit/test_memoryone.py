@@ -9,6 +9,27 @@ from .test_player import TestPlayer, test_four_vector
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
+class TestGenericPlayerOne(unittest.TestCase):
+    """
+    A class to test the naming and classification of generic memory one players
+    """
+    p1 = axelrod.MemoryOnePlayer((0, 0, 0, 0))
+    p2 = axelrod.MemoryOnePlayer((1, 0, 1, 0))
+    p3 = axelrod.MemoryOnePlayer((1, 0.5, 1, 0.5))
+
+    def test_name(self):
+        self.assertEqual(self.p1.name,
+                         "Generic Memory One Player: (0, 0, 0, 0)")
+        self.assertEqual(self.p2.name,
+                         "Generic Memory One Player: (1, 0, 1, 0)")
+        self.assertEqual(self.p3.name,
+                         "Generic Memory One Player: (1, 0.5, 1, 0.5)")
+
+    def test_stochastic_classification(self):
+        self.assertFalse(self.p1.classifier['stochastic'])
+        self.assertFalse(self.p2.classifier['stochastic'])
+        self.assertTrue(self.p3.classifier['stochastic'])
+
 
 class TestWinStayLoseShift(TestPlayer):
 
