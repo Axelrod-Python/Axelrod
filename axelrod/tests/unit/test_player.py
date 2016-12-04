@@ -190,12 +190,19 @@ class TestPlayer(unittest.TestCase):
     def test_reset(self):
         """Make sure reseting works correctly."""
         p = self.player()
-        p.history = [C, C]
+        p_clone = p.clone()
+        p2 = axelrod.Random()
+        for _ in range(10):
+            p.play(p2)
         p.reset()
         self.assertEqual(p.history, [])
         self.assertEqual(self.player().cooperations, 0)
         self.assertEqual(self.player().defections, 0)
         self.assertEqual(self.player().state_distribution, {})
+
+        for k, v in p_clone.__dict__.items():
+            self.assertEqual(v, getattr(p_clone, k))
+
 
     def test_clone(self):
         # Make sure that self.init_args has the right number of arguments
