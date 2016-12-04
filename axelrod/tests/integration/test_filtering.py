@@ -83,4 +83,5 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
                 'makes_use_of': classifier
             }
             filtered = set(filtered_strategies(filterset))
-            self.assertEqual(comprehension, filtered)
+            self.assertEqual(comprehension, filtered,
+                             msg="classifier: {}".format(classifier))
