@@ -281,6 +281,7 @@ class MetaMajorityMemoryOne(MetaMajority):
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
         super(MetaMajorityMemoryOne, self).__init__(team=team)
+        self.classifier["long_run_time"] = False
 
 
 class MetaMajorityFiniteMemory(MetaMajority):
@@ -316,6 +317,7 @@ class MetaWinnerMemoryOne(MetaWinner):
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
         super(MetaWinnerMemoryOne, self).__init__(team=team)
+        self.classifier["long_run_time"] = False
 
 
 class MetaWinnerFiniteMemory(MetaWinner):
@@ -474,6 +476,7 @@ class MWEMemoryOne(MetaWinnerEnsemble):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 <= 1]
         super(MWEMemoryOne, self).__init__(team=team)
+        self.classifier["long_run_time"] = False
 
 
 class MWERandom(MetaWinnerEnsemble):
