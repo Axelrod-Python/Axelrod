@@ -3,7 +3,7 @@
 Fingerprinting
 ==============
 
-In [Ashlock2009]_, [Ashlock2010]_ a methodology for obtaining visual
+In [Ashlock2008]_, [Ashlock2009]_ a methodology for obtaining visual
 representation of a strategy's behaviour is described.  The basic method is to
 play the strategy against a probe strategy with varying noise parameters.
 These noise parameters are implemented through the :code:`JossAnnTransformer`.
@@ -14,7 +14,7 @@ score of the strategy against :code:`x` and :code:`y` and obtain a heat plot
 over the unit square.  When :code:`x + y >= 1` the :code:`JossAnn` is created
 with parameters :code:`(1-y, 1-x)` and plays against the Dual of the probe
 instead. A full definition and explanation is given in
-[Ashlock2009]_, [Ashlock2010]_.
+[Ashlock2008]_, [Ashlock2009]_.
 
 Here is how to create a fingerprint of :code:`WinStayLoseShift` using
 :code:`TitForTat` as a probe::

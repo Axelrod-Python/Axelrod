@@ -6,8 +6,8 @@ Bibliography
 This is a collection of various bibliographic items referenced in the
 documentation.
 
+.. [Ashlock2008] Ashlock, D., & Kim, E. Y. (2008). Fingerprinting: Visualization and automatic analysis of prisoner’s dilemma strategies. IEEE Transactions on Evolutionary Computation, 12(5), 647–659. http://doi.org/10.1109/TEVC.2008.920675
 .. [Ashlock2009] Ashlock, D., Kim, E. Y., & Ashlock, W. (2009) Fingerprint analysis of the noisy prisoner’s dilemma using a finite-state representation. IEEE Transactions on Computational Intelligence and AI in Games. 1(2), 154-167  http://doi.org/10.1109/TCIAIG.2009.2018704
-.. [Ashlock2010] Ashlock, D., Kim, E. Y., & Ashlock, W. (2010). A fingerprint comparison of different Prisoner’s Dilemma payoff matrices. Proceedings of the 2010 IEEE Conference on Computational Intelligence and Games, CIG2010, (2009), 219–226. http://doi.org/10.1109/ITW.2010.5593352
 .. [Axelrod1980] Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(1), 3–25.
 .. [Axelrod1980b] Axelrod, R. (1980). More Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(3), 379-403.
 .. [Axelrod1984]  The Evolution of Cooperation. Basic Books. ISBN 0-465-02121-2.
