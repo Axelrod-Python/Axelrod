@@ -52,7 +52,7 @@ def create_points(step, progress_bar=True):
 
 
 class AshlockFingerprint():
-    def __init__(self, strategy, probe):
+    def __init__(self, strategy, probe=axl.TitForTat):
         """
         Parameters
         ----------
@@ -60,6 +60,7 @@ class AshlockFingerprint():
             A class that must be descended from axelrod.Player
         probe : class
             A class that must be descended from axelrod.Player
+            Default: Tit For Tat
         """
         self.strategy = strategy
         self.probe = probe
@@ -172,7 +173,10 @@ class AshlockFingerprint():
         probe_players = self.create_probes(self.probe, self.points,
                                            progress_bar=progress_bar)
 
-        tournament_players = [self.strategy()] + probe_players
+        try:
+            tournament_players = [self.strategy()] + probe_players
+        except TypeError:  # If strategy is an instance
+            tournament_players = [self.strategy] + probe_players
 
         return edges, tournament_players
 

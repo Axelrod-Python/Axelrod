@@ -25,12 +25,21 @@ class TestFingerprint(unittest.TestCase):
                               (0, 4), (0, 5), (0, 6),
                               (0, 7), (0, 8), (0, 9)]
 
+    def test_default_init(self):
+        fingerprint = AshlockFingerprint(self.strategy)
+        self.assertEqual(fingerprint.strategy, self.strategy)
+        self.assertEqual(fingerprint.probe, self.probe)
+
     def test_init(self):
-        strategy = axl.Cooperator()
-        probe = axl.TitForTat()
-        fingerprint = AshlockFingerprint(strategy, probe)
-        self.assertEqual(fingerprint.strategy, strategy)
-        self.assertEqual(fingerprint.probe, probe)
+        fingerprint = AshlockFingerprint(self.strategy, self.probe)
+        self.assertEqual(fingerprint.strategy, self.strategy)
+        self.assertEqual(fingerprint.probe, self.probe)
+
+    def test_init_with_instance(self):
+        player = self.strategy()
+        fingerprint = AshlockFingerprint(player)
+        self.assertEqual(fingerprint.strategy, player)
+        self.assertEqual(fingerprint.probe, self.probe)
 
     def test_create_points(self):
         test_points = create_points(0.5, progress_bar=False)
@@ -226,10 +235,15 @@ class TestFingerprint(unittest.TestCase):
     def test_pair_fingerprints(self, strategy_pair):
         """
         A test to check that we can fingerprint
-        with any two given strategies
+        with any two given strategies or instances
         """
         strategy, probe = strategy_pair
         af = AshlockFingerprint(strategy, probe)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
+                              progress_bar=False)
+        self.assertIsInstance(data, dict)
+
+        af = AshlockFingerprint(strategy(), probe)
         data = af.fingerprint(turns=2, repetitions=2, step=0.5,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
