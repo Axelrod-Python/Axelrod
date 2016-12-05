@@ -99,7 +99,7 @@ class DeterministicCache(UserDict):
         if len(key) != 3:
             return False
 
-        # The triplet should be a pair of axelrod.Player subclasses and an
+        # The triplet should be a pair of axelrod.Player instances and an
         # integer
         try:
             if not (
