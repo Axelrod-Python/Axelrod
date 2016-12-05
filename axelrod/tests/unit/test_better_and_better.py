@@ -25,5 +25,4 @@ class TestBetterAndBetter(TestPlayer):
         Test that the strategy gives expected behaviour
         """
 
-        axelrod.seed(6)
         self.responses_test([], [], [D, D, D, D, C, D, D, D, D, D], random_seed=6)
