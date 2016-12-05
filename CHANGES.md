@@ -1,3 +1,22 @@
+# v1.20.0, 2016-12-05
+
+Dropping support for python 2, bug fixes and minor tidy of code (thanks to
+dropping python 2 support!).
+
+- Dropping support for python 2
+  https://github.com/Axelrod-Python/Axelrod/pull/774
+- Fix bug in cache
+  https://github.com/Axelrod-Python/Axelrod/pull/782
+- Fix bug in stochastic classification of Random player
+  https://github.com/Axelrod-Python/Axelrod/pull/783
+- Fix docstrings in fingerprint
+  https://github.com/Axelrod-Python/Axelrod/pull/784
+- Use python 3 function caching
+  https://github.com/Axelrod-Python/Axelrod/pull/775
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v1.19.0...v1.20.0
+
 # v1.19.0, 2016-11-30
 
 New strategy using a trained neural network and documentation.
