@@ -184,7 +184,6 @@ class TestStrategies(unittest.TestCase):
                                     axelrod.MetaMajorityLongMemory,
                                     axelrod.MetaWinnerLongMemory,
                                     axelrod.MetaMixer,
-                                    axelrod.MWERandom,
                                     axelrod.MWEFiniteMemory,
                                     axelrod.MetaWinnerDeterministic,
                                     axelrod.MWELongMemory,

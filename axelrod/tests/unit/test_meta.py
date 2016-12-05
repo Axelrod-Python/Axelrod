@@ -522,17 +522,3 @@ class TestMWEMemoryOne(TestMetaPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-
-
-class TestMWERandom(TestMetaPlayer):
-    name = "MWE Random"
-    player = axelrod.MWERandom
-    expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def test_strategy(self):
-        self.first_play_test(C)

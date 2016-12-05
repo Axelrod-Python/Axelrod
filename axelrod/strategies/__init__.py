@@ -12,7 +12,7 @@ from .meta import (
     MetaMinority, MetaMixer, MetaWinner, MetaWinnerDeterministic,
     MetaWinnerEnsemble, MetaWinnerMemoryOne, MetaWinnerFiniteMemory,
     MetaWinnerLongMemory, MetaWinnerStochastic, MWEDeterministic,
-    MWEFiniteMemory, MWELongMemory, MWEMemoryOne, MWERandom, MWEStochastic
+    MWEFiniteMemory, MWELongMemory, MWEMemoryOne, MWEStochastic
     )
 
 all_strategies += [MetaHunter,
@@ -34,7 +34,6 @@ all_strategies += [MetaHunter,
                    MWEFiniteMemory,
                    MWELongMemory,
                    MWEMemoryOne,
-                   MWERandom,
                    MWEStochastic
                    ]
 

@@ -476,15 +476,3 @@ class MWEMemoryOne(MetaWinnerEnsemble):
                 <= 1]
         super(MWEMemoryOne, self).__init__(team=team)
         self.classifier["long_run_time"] = False
-
-
-class MWERandom(MetaWinnerEnsemble):
-    """MetaWinner with a random team of players."""
-
-    name = "MWE Random"
-
-    @init_args
-    def __init__(self):
-        l = len(ordinary_strategies)
-        team = sample([s for s in ordinary_strategies], int(l / 4))
-        super(MWERandom, self).__init__(team=team)
