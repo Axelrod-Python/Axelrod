@@ -105,3 +105,37 @@ class TestWorseAndWorseRandom(TestPlayer):
                                         ('D', 'C'),
                                         ('D', 'C'),
                                         ('D', 'C')])
+
+
+class TestWorseAndWorse2(TestPlayer):
+
+    name = "Worse and Worse 2"
+    player = axelrod.WorseAndWorse2
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """
+        Test that the strategy gives expected behaviour
+        """
+
+        # Test that first move is C
+        self.responses_test([], [], [C])
+
+        # Test that given a history, next move matches opponent (round <= 20)
+        self.responses_test([C], [C], [C])
+        self.responses_test([C, C], [C, D], [D])
+        self.responses_test([C] * 19, [C] * 19, [C])
+        self.responses_test([C] * 19, [C] * 18 + [D], [D])
+
+        # Test that after round 20, strategy follows stochastic behaviour given
+        # a seed
+        self.responses_test([C] * 20, [C] * 20, [C, D, C, C, C, C, D, C, C, C], random_seed=8)
+        self.responses_test([C] * 20, [C] * 20, [D, D, C, C, D, C, C, C, C, C], random_seed=2)

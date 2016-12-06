@@ -26,3 +26,4 @@ class TestBetterAndBetter(TestPlayer):
         """
 
         self.responses_test([], [], [D, D, D, D, C, D, D, D, D, D], random_seed=6)
+        self.responses_test([], [], [D, D, D, D, D, D, D, D, D, D], random_seed=8)
