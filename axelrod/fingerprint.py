@@ -280,7 +280,7 @@ class AshlockFingerprint():
         self.data = self.generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, col_map='seismic', interpolation='none', title=None):
+    def plot(self, col_map='seismic', interpolation='none', title=None, colorbar=True):
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -297,6 +297,8 @@ class AshlockFingerprint():
             http://matplotlib.org/examples/images_contours_and_fields/interpolation_methods.html
         title : str, optional
             A title for the plot
+        colorbar : bool, optional
+            Choose whether the colorbar should be included or not
 
         Returns
         ----------
@@ -306,9 +308,16 @@ class AshlockFingerprint():
         size = int((1 / self.step) // 1) + 1
         ordered_data = [self.data[point] for point in self.points]
         plotting_data = np.reshape(ordered_data, (size, size))
-        figure = plt.figure()
-        plt.imshow(plotting_data, cmap=col_map, interpolation=interpolation)
+        fig, ax = plt.subplots()
+        cax = ax.imshow(plotting_data, cmap=col_map, interpolation=interpolation)
+
+        if colorbar:
+            max_score = max(ordered_data)
+            min_score = min(ordered_data)
+            ticks = [min_score, (max_score + min_score) / 2, max_score]
+            fig.colorbar(cax, ticks=ticks)
+
         plt.axis('off')
         if title is not None:
             plt.title(title)
-        return figure
+        return fig
