@@ -64,7 +64,7 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,SpitefulTitForTat)
-from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse, WorseAndWorse2)
+from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse, WorseAndWorse2, WorseAndWorse3)
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -211,6 +211,7 @@ all_strategies = [
     WinStayLoseShift,
     WorseAndWorse,
     WorseAndWorse2,
+    WorseAndWorse3,
     ZDExtort2,
     ZDExtort2v2,
     ZDExtort4,
