@@ -61,18 +61,19 @@ We are also able to specify a matplotlib colour map and interpolation::
      :width: 100%
      :align: center
 
-Note that it is also possible to pass a player instance to be fingerprinted.
+Note that it is also possible to pass a player instance to be fingerprinted
+and/or as a probe.
 This allows for the fingerprinting of parametrized strategies::
 
     >>> axl.seed(0)
     >>> player = axl.Random(.1)
-    >>> probe = axl.TitForTat
+    >>> probe = axl.GTFT(.9)
     >>> af = axl.AshlockFingerprint(player, probe)
     >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2)
     >>> data
     {...
     >>> data[(0, 0)]
-    1.39...
+    4.4...
 
 Ashlock's fingerprint is currently the only fingerprint implemented in the
 library.

@@ -41,6 +41,47 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(fingerprint.strategy, player)
         self.assertEqual(fingerprint.probe, self.probe)
 
+        probe_player = self.probe()
+        fingerprint = AshlockFingerprint(self.strategy, probe_player)
+        self.assertEqual(fingerprint.strategy, self.strategy)
+        self.assertEqual(fingerprint.probe, probe_player)
+
+        fingerprint = AshlockFingerprint(player, probe_player)
+        self.assertEqual(fingerprint.strategy, player)
+        self.assertEqual(fingerprint.probe, probe_player)
+
+    def test_create_jossann(self):
+        fingerprint = AshlockFingerprint(self.strategy)
+
+        # x + y < 1
+        ja = fingerprint.create_jossann((.5, .4), self.probe)
+        self.assertEqual(str(ja), "Joss-Ann Tit For Tat")
+
+        # x + y = 1
+        ja = fingerprint.create_jossann((.4, .6), self.probe)
+        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat")
+
+        # x + y > 1
+        ja = fingerprint.create_jossann((.5, .6), self.probe)
+        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat")
+
+    def test_create_jossann_parametrised_player(self):
+        fingerprint = AshlockFingerprint(self.strategy)
+
+        probe = axl.Random(0.1)
+
+        # x + y < 1
+        ja = fingerprint.create_jossann((.5, .4), probe)
+        self.assertEqual(str(ja), "Joss-Ann Random: 0.1")
+
+        # x + y = 1
+        ja = fingerprint.create_jossann((.4, .6), probe)
+        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1")
+
+        # x + y > 1
+        ja = fingerprint.create_jossann((.5, .6), probe)
+        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1")
+
     def test_create_points(self):
         test_points = create_points(0.5, progress_bar=False)
         self.assertEqual(test_points, self.expected_points)
@@ -244,6 +285,16 @@ class TestFingerprint(unittest.TestCase):
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy(), probe)
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
+                              progress_bar=False)
+        self.assertIsInstance(data, dict)
+
+        af = AshlockFingerprint(strategy, probe())
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
+                              progress_bar=False)
+        self.assertIsInstance(data, dict)
+
+        af = AshlockFingerprint(strategy(), probe())
         data = af.fingerprint(turns=2, repetitions=2, step=0.5,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
