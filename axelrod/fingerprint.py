@@ -299,6 +299,8 @@ class AshlockFingerprint():
             A title for the plot
         colorbar : bool, optional
             Choose whether the colorbar should be included or not
+        labels : bool, optional
+            Choose whether the axis labels and ticks should be included
 
         Returns
         ----------
