@@ -1,7 +1,7 @@
-# v1.20.0, 2016-12-05
+# v2.0.0, 2016-12-05
 
-Dropping support for python 2, bug fixes and minor tidy of code (thanks to
-dropping python 2 support!).
+Dropping support for python 2, bug fixes, minor tidy of code (thanks to
+dropping python 2 support!) and progress bars for fingerprinting.
 
 - Dropping support for python 2
   https://github.com/Axelrod-Python/Axelrod/pull/774
@@ -13,9 +13,11 @@ dropping python 2 support!).
   https://github.com/Axelrod-Python/Axelrod/pull/784
 - Use python 3 function caching
   https://github.com/Axelrod-Python/Axelrod/pull/775
+- More progress bars for fingerprinting
+  https://github.com/Axelrod-Python/Axelrod/pull/778
 
 Here are all the commits for this PR:
-https://github.com/Axelrod-Python/Axelrod/compare/v1.19.0...v1.20.0
+https://github.com/Axelrod-Python/Axelrod/compare/v1.19.0...v2.0.0
 
 # v1.19.0, 2016-11-30
 

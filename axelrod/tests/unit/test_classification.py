@@ -179,13 +179,18 @@ class TestStrategies(unittest.TestCase):
                                     axelrod.MetaMinority,
                                     axelrod.MetaWinner,
                                     axelrod.MetaWinnerEnsemble,
-                                    axelrod.MetaMajorityMemoryOne,
-                                    axelrod.MetaWinnerMemoryOne,
                                     axelrod.MetaMajorityFiniteMemory,
                                     axelrod.MetaWinnerFiniteMemory,
                                     axelrod.MetaMajorityLongMemory,
                                     axelrod.MetaWinnerLongMemory,
-                                    axelrod.MetaMixer]
+                                    axelrod.MetaMixer,
+                                    axelrod.MWEFiniteMemory,
+                                    axelrod.MetaWinnerDeterministic,
+                                    axelrod.MWELongMemory,
+                                    axelrod.MWEStochastic,
+                                    axelrod.MWEDeterministic,
+                                    axelrod.MetaWinnerStochastic
+                                    ]
 
         self.assertEqual(str_reps(long_run_time_strategies),
                          str_reps(axelrod.long_run_time_strategies))

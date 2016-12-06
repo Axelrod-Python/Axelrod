@@ -7,17 +7,35 @@ from ._filters import passes_filterset
 # because it creates circular dependencies
 
 from .meta import (
-    MetaPlayer, MetaMajority, MetaMinority, MetaWinner, MetaHunter,
-    MetaMajorityMemoryOne, MetaWinnerMemoryOne, MetaMajorityFiniteMemory,
-    MetaWinnerFiniteMemory, MetaMajorityLongMemory, MetaWinnerLongMemory,
-    MetaMixer, MetaWinnerEnsemble
+    MetaHunter, MetaHunterAggressive, MetaPlayer, MetaMajority,
+    MetaMajorityMemoryOne, MetaMajorityFiniteMemory, MetaMajorityLongMemory,
+    MetaMinority, MetaMixer, MetaWinner, MetaWinnerDeterministic,
+    MetaWinnerEnsemble, MetaWinnerMemoryOne, MetaWinnerFiniteMemory,
+    MetaWinnerLongMemory, MetaWinnerStochastic, MWEDeterministic,
+    MWEFiniteMemory, MWELongMemory, MWEMemoryOne, MWEStochastic
     )
 
-all_strategies.extend([MetaHunter, MetaMajority, MetaMinority, MetaWinner,
-                       MetaMajorityMemoryOne, MetaWinnerMemoryOne,
-                       MetaMajorityFiniteMemory, MetaWinnerFiniteMemory,
-                       MetaMajorityLongMemory, MetaWinnerLongMemory, MetaMixer,
-                       MetaWinnerEnsemble])
+all_strategies += [MetaHunter,
+                   MetaHunterAggressive,
+                   MetaMajority,
+                   MetaMajorityMemoryOne,
+                   MetaMajorityFiniteMemory,
+                   MetaMajorityLongMemory,
+                   MetaMinority,
+                   MetaMixer,
+                   MetaWinner,
+                   MetaWinnerDeterministic,
+                   MetaWinnerEnsemble,
+                   MetaWinnerMemoryOne,
+                   MetaWinnerFiniteMemory,
+                   MetaWinnerLongMemory,
+                   MetaWinnerStochastic,
+                   MWEDeterministic,
+                   MWEFiniteMemory,
+                   MWELongMemory,
+                   MWEMemoryOne,
+                   MWEStochastic
+                   ]
 
 
 # Distinguished strategy collections in addition to
