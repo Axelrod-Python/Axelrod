@@ -280,7 +280,7 @@ class AshlockFingerprint():
         self.data = self.generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, col_map='seismic', interpolation='none', title=None, colorbar=True):
+    def plot(self, col_map='seismic', interpolation='none', title=None, colorbar=True, labels=True):
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -317,7 +317,17 @@ class AshlockFingerprint():
             ticks = [min_score, (max_score + min_score) / 2, max_score]
             fig.colorbar(cax, ticks=ticks)
 
-        plt.axis('off')
+        plt.xlabel('y')
+        plt.ylabel('x', rotation=0)
+        ax.xaxis.tick_top()
+        ax.xaxis.set_label_position('top')
+        ax.tick_params(axis=u'both', which=u'both', length=0)
+        plt.xticks([0, len(plotting_data) - 1], ['0', '1'])
+        plt.yticks([0, len(plotting_data) - 1], ['0', '1'])
+
+        if not labels:
+            plt.axis('off')
+
         if title is not None:
             plt.title(title)
         return fig
