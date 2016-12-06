@@ -28,7 +28,7 @@ class WorseAndWorse(Player):
 
     def strategy(self, opponent):
         current_round = len(self.history) + 1
-        probability = 1 - float(current_round) / 1000
+        probability = 1 - current_round / 1000
         return random_choice(probability)
 
 
@@ -55,7 +55,7 @@ class KnowledgeableWorseAndWorse(Player):
     def strategy(self, opponent):
         current_round = len(self.history) + 1
         expected_length = self.match_attributes['length']
-        probability = 1 - float(current_round) / expected_length
+        probability = 1 - current_round / expected_length
         return random_choice(probability)
 
 
@@ -90,7 +90,7 @@ class WorseAndWorse2(Player):
         elif current_round <= 20:
             return opponent.history[-1]
         else:
-            probability = 20 / float(current_round)
+            probability = 20 / current_round
             return random_choice(probability)
 
 
@@ -124,5 +124,5 @@ class WorseAndWorse3(Player):
         if current_round == 1:
             return C
         else:
-            probability = 1 - opponent.defections / float(current_round - 1)
+            probability = 1 - opponent.defections / (current_round - 1)
             return random_choice(probability)

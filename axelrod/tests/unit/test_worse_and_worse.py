@@ -155,22 +155,6 @@ class TestWorseAndWorse3(TestPlayer):
         'manipulates_state': False
     }
 
-    class TestWAW3vsCooperator(TestHeadsUp):
-        """Test Worse and Worse 3 vs Cooperator"""
-        def test_rounds(self):
-            waw3_outcomes = [C] * 10
-            coop_outcomes = [C] * 10
-            self.versus_test(axelrod.WorseAndWorse3(), axelrod.Cooperator(),
-                             waw3_outcomes, coop_outcomes)
-
-    class TestWAW3vsDefector(TestHeadsUp):
-        """Test Worse and Worse 3 vs Defector"""
-        def test_rounds(self):
-            waw3_outcomes = [C] + [D] * 9
-            def_outcomes = [D] * 10
-            self.versus_test(axelrod.WorseAndWorse3(), axelrod.Defector(),
-                             waw3_outcomes, def_outcomes)
-
     def test_strategy(self):
         """
         Test that the strategy gives expected behaviour
@@ -179,11 +163,11 @@ class TestWorseAndWorse3(TestPlayer):
         # Test that first move is C
         self.first_play_test('C')
 
-        # Test that against a Cooperator, always cooperates
-        self.TestWAW3vsCooperator().test_rounds()
+        # Test that if opponent only defects, strategy also defects
+        self.responses_test([D] * 5, [D] * 5, [D])
 
-        # Test that against a Defector, always defects, except for the first turn
-        self.TestWAW3vsDefector().test_rounds()
+        # Test that if opponent only cooperates, strategy also cooperates
+        self.responses_test([C] * 5, [C] * 5, [C])
 
         # Test that given a non 0/1 probability of defecting, strategy follows
         # stochastic behaviour, given a seed

@@ -25,5 +25,5 @@ class BetterAndBetter(Player):
 
     def strategy(self, opponent):
         current_round = len(self.history) + 1
-        probability = float(current_round) / 1000
+        probability = current_round / 1000
         return random_choice(probability)
