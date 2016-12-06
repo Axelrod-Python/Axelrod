@@ -58,7 +58,8 @@ class ForgetfulGrudger(Player):
         self.grudge_memory = 0
 
     def strategy(self, opponent):
-        """Begins by playing C, then plays D for mem_length rounds if the opponent ever plays D."""
+        """Begins by playing C, then plays D for mem_length rounds if the
+        opponent ever plays D."""
         if self.grudge_memory >= self.mem_length:
             self.grudge_memory = 0
             self.grudged = False
@@ -79,7 +80,8 @@ class ForgetfulGrudger(Player):
 
 
 class OppositeGrudger(Player):
-    """A player starts by defecting however will cooperate if at any point the opponent has cooperated."""
+    """A player starts by defecting however will cooperate if at any point the
+    opponent has cooperated."""
 
     name = 'Opposite Grudger'
     classifier = {
@@ -94,7 +96,8 @@ class OppositeGrudger(Player):
 
     @staticmethod
     def strategy(opponent):
-        """Begins by playing D, then plays C for the remaining rounds if the opponent ever plays C."""
+        """Begins by playing D, then plays C for the remaining rounds if the
+        opponent ever plays C."""
         if opponent.cooperations:
             return C
         return D
@@ -174,7 +177,6 @@ class SoftGrudger(Player):
         self.grudge_memory = 0
 
 
-
 class GrudgerAlternator(Player):
     """
     A player starts by cooperating until the first opponents defection,
@@ -198,17 +200,18 @@ class GrudgerAlternator(Player):
     }
 
     def strategy(self, opponent):
-        """Begins by playing C, then plays Alternator for the remaining rounds if the opponent ever plays D."""
+        """Begins by playing C, then plays Alternator for the remaining rounds
+        if the opponent ever plays D."""
         if opponent.defections:
             if self.history[-1] == Actions.C:
                 return Actions.D
         return Actions.C
 
 
-
 class EasyGo(Player):
     """
-    A player starts by defecting however will cooperate if at any point the opponent has defected.
+    A player starts by defecting however will cooperate if at any point the
+    opponent has defected.
 
     Names:
 
@@ -228,7 +231,8 @@ class EasyGo(Player):
 
     @staticmethod
     def strategy(opponent):
-        """Begins by playing D, then plays C for the remaining rounds if the opponent ever plays D."""
+        """Begins by playing D, then plays C for the remaining rounds if the
+        opponent ever plays D."""
         if opponent.defections:
             return C
         return D

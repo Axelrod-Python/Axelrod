@@ -748,20 +748,23 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         gives the same results as the round robin.
         """
         players = [s() for s in strategies]
+
+        # create a prob end round robin tournament
+        tournament = axelrod.ProbEndTournament(players, prob_end=prob_end,
+                                               repetitions=reps)
+        axelrod.seed(seed)
+        results = tournament.play(progress_bar=False)
+
+        # create a complete spatial tournament
         # edges
         edges = [(i, j) for i in range(len(players))
                  for j in range(i, len(players))]
-        # create a prob end round robin tournament
-        axelrod.seed(seed)
-        tournament = axelrod.ProbEndTournament(players, prob_end=prob_end,
-                                               repetitions=reps)
-        results = tournament.play(progress_bar=False)
-        # create a complete spatial tournament
-        axelrod.seed(seed)
+
         spatial_tournament = axelrod.ProbEndSpatialTournament(players,
                                                               prob_end=prob_end,
                                                               repetitions=reps,
                                                               edges=edges)
+        axelrod.seed(seed)
         spatial_results = spatial_tournament.play(progress_bar=False)
         self.assertEqual(results.match_lengths, spatial_results.match_lengths)
         self.assertEqual(results.ranked_names, spatial_results.ranked_names)

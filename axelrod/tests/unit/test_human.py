@@ -93,3 +93,12 @@ class TestHumanClass(TestPlayer):
         expected_action = 'C'
         actual_action = human.strategy(Player(), lambda: 'C')
         self.assertEqual(actual_action, expected_action)
+
+    def test_reset(self):
+        # Overwrite standard test to prevent input blocking
+        p = self.player()
+        p.reset()
+        self.assertEqual(p.history, [])
+        self.assertEqual(self.player().cooperations, 0)
+        self.assertEqual(self.player().defections, 0)
+        self.assertEqual(self.player().state_distribution, {})
