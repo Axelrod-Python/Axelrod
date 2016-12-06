@@ -52,14 +52,17 @@ def create_points(step, progress_bar=True):
 
 
 class AshlockFingerprint():
-    def __init__(self, strategy, probe):
+    def __init__(self, strategy, probe=axl.TitForTat):
         """
         Parameters
         ----------
-        strategy : class
-            A class that must be descended from axelrod.Player
-        probe : class
-            A class that must be descended from axelrod.Player
+        strategy : class or instance
+            A class that must be descended from axelrod.Player or an instance of
+            axelrod.Player.
+        probe : class or instance
+            A class that must be descended from axelrod.Player or an instance of
+            axelrod.Player.
+            Default: Tit For Tat
         """
         self.strategy = strategy
         self.probe = probe
@@ -84,10 +87,17 @@ class AshlockFingerprint():
             `JossAnnTransformer` with parameters that correspond to `point`.
         """
         x, y = point
-        if x + y >= 1:
-            joss_ann = DualTransformer()(JossAnnTransformer((1 - x, 1 - y))(probe))()
+
+        if isinstance(probe, axl.Player):
+            init_args = probe.init_args
+            probe = probe.__class__
         else:
-            joss_ann = JossAnnTransformer((x, y))(probe)()
+            init_args = ()
+
+        if x + y >= 1:
+            joss_ann = DualTransformer()(JossAnnTransformer((1 - x, 1 - y))(probe))(*init_args)
+        else:
+            joss_ann = JossAnnTransformer((x, y))(probe)(*init_args)
         return joss_ann
 
     @staticmethod
@@ -172,7 +182,10 @@ class AshlockFingerprint():
         probe_players = self.create_probes(self.probe, self.points,
                                            progress_bar=progress_bar)
 
-        tournament_players = [self.strategy()] + probe_players
+        if isinstance(self.strategy, axl.Player):
+            tournament_players = [self.strategy] + probe_players
+        else:
+            tournament_players = [self.strategy()] + probe_players
 
         return edges, tournament_players
 
