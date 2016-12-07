@@ -348,9 +348,7 @@ class AshlockFingerprint():
 
         plt.xlabel('$x$')
         plt.ylabel('$y$', rotation=0)
-        # ax.xaxis.tick_top()
-        # ax.xaxis.set_label_position('top')
-        ax.tick_params(axis=u'both', which=u'both', length=0)
+        ax.tick_params(axis='both', which='both', length=0)
         plt.xticks([0, len(plotting_data) - 1], ['0', '1'])
         plt.yticks([0, len(plotting_data) - 1], ['1', '0'])
 
