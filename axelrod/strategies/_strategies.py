@@ -10,6 +10,7 @@ from .axelrod_first import (Davis, RevisedDowning, Feld, Grofman, Nydegger,
                             Joss, Shubik, Tullock, UnnamedStrategy)
 from .axelrod_second import Champion, Eatherley, Tester
 from .backstabber import BackStabber, DoubleCrosser
+from .better_and_better import BetterAndBetter
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
 from .cycler import (
@@ -63,7 +64,7 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,SpitefulTitForTat)
-from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse)
+from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse, WorseAndWorse2, WorseAndWorse3)
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -81,6 +82,7 @@ all_strategies = [
     Appeaser,
     ArrogantQLearner,
     AverageCopier,
+    BetterAndBetter,
     BackStabber,
     Bully,
     Calculator,
@@ -208,6 +210,8 @@ all_strategies = [
     WinShiftLoseStay,
     WinStayLoseShift,
     WorseAndWorse,
+    WorseAndWorse2,
+    WorseAndWorse3,
     ZDExtort2,
     ZDExtort2v2,
     ZDExtort4,

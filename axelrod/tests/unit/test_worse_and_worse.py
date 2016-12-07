@@ -2,7 +2,7 @@
 
 import axelrod
 
-from .test_player import TestPlayer
+from .test_player import TestPlayer, TestHeadsUp
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -105,3 +105,71 @@ class TestWorseAndWorseRandom(TestPlayer):
                                         ('D', 'C'),
                                         ('D', 'C'),
                                         ('D', 'C')])
+
+
+class TestWorseAndWorse2(TestPlayer):
+
+    name = "Worse and Worse 2"
+    player = axelrod.WorseAndWorse2
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """
+        Test that the strategy gives expected behaviour
+        """
+
+        # Test that first move is C
+        self.first_play_test('C')
+
+        # Test that given a history, next move matches opponent (round <= 20)
+        self.responses_test([C], [C], [C])
+        self.responses_test([C, C], [C, D], [D])
+        self.responses_test([C] * 19, [C] * 19, [C])
+        self.responses_test([C] * 19, [C] * 18 + [D], [D])
+
+        # Test that after round 20, strategy follows stochastic behaviour given
+        # a seed
+        self.responses_test([C] * 20, [C] * 20, [C, D, C, C, C, C, D, C, C, C], random_seed=8)
+        self.responses_test([C] * 20, [C] * 20, [D, D, C, C, D, C, C, C, C, C], random_seed=2)
+
+
+class TestWorseAndWorse3(TestPlayer):
+
+    name = "Worse and Worse 3"
+    player = axelrod.WorseAndWorse3
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """
+        Test that the strategy gives expected behaviour
+        """
+
+        # Test that first move is C
+        self.first_play_test('C')
+
+        # Test that if opponent only defects, strategy also defects
+        self.responses_test([D] * 5, [D] * 5, [D])
+
+        # Test that if opponent only cooperates, strategy also cooperates
+        self.responses_test([C] * 5, [C] * 5, [C])
+
+        # Test that given a non 0/1 probability of defecting, strategy follows
+        # stochastic behaviour, given a seed
+        self.responses_test([C] * 5, [C, D, C, D, C], [D, C, C, D, C, C, C, C, C, C], random_seed=8)
+        self.responses_test([C] * 5, [D] * 5, [D, D, D, C, C, D, D, D, C, C], random_seed=2)
