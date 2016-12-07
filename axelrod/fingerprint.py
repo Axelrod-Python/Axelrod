@@ -309,7 +309,8 @@ class AshlockFingerprint():
         """
         size = int((1 / self.step) // 1) + 1
         ordered_data = [self.data[point] for point in self.points]
-        plotting_data = np.reshape(ordered_data, (size, size))
+        shaped_data = np.reshape(ordered_data, (size, size), order='F')
+        plotting_data = np.flipud(shaped_data)
         fig, ax = plt.subplots()
         cax = ax.imshow(plotting_data, cmap=col_map, interpolation=interpolation)
 
@@ -319,13 +320,13 @@ class AshlockFingerprint():
             ticks = [min_score, (max_score + min_score) / 2, max_score]
             fig.colorbar(cax, ticks=ticks)
 
-        plt.xlabel('y')
-        plt.ylabel('x', rotation=0)
-        ax.xaxis.tick_top()
-        ax.xaxis.set_label_position('top')
+        plt.xlabel('$x$')
+        plt.ylabel('$y$', rotation=0)
+        # ax.xaxis.tick_top()
+        # ax.xaxis.set_label_position('top')
         ax.tick_params(axis=u'both', which=u'both', length=0)
         plt.xticks([0, len(plotting_data) - 1], ['0', '1'])
-        plt.yticks([0, len(plotting_data) - 1], ['0', '1'])
+        plt.yticks([0, len(plotting_data) - 1], ['1', '0'])
 
         if not labels:
             plt.axis('off')
