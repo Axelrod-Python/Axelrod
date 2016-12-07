@@ -313,10 +313,6 @@ class AshlockFingerprint():
 
         Parameters
         ----------
-        filename : str, optional
-            The location and name that the resulting plot should be saved to.
-            Defaults to the current directory with the name
-            `Strategy and Probe.pdf`
         col_map : str, optional
             A matplotlib colour map, full list can be found at
             http://matplotlib.org/examples/color/colormaps_reference.html
