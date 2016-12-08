@@ -280,15 +280,39 @@ class AshlockFingerprint():
         self.data = self.generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, col_map='seismic', interpolation='none', title=None):
+    @staticmethod
+    def reshape_data(data, points, size):
+        """Shape the data so that it can be plotted easily.
+
+        Parameters
+        ----------
+        data : dictionary
+            A dictionary where the keys are Points of the form (x, y) and
+            the values are the mean score for the corresponding interactions.
+
+        points : list
+            of Point objects with coordinates (x, y).
+
+        size : int
+            The number of Points in every row/column.
+
+        Returns
+        ----------
+        plotting_data : list
+            2-D numpy array of the scores, correctly shaped to ensure that the
+            score corresponding to Point (0, 0) is in the left hand corner ie.
+            the standard origin.
+        """
+        ordered_data = [data[point] for point in points]
+        shaped_data = np.reshape(ordered_data, (size, size), order='F')
+        plotting_data = np.flipud(shaped_data)
+        return plotting_data
+
+    def plot(self, col_map='seismic', interpolation='none', title=None, colorbar=True, labels=True):
         """Plot the results of the spatial tournament.
 
         Parameters
         ----------
-        filename : str, optional
-            The location and name that the resulting plot should be saved to.
-            Defaults to the current directory with the name
-            `Strategy and Probe.pdf`
         col_map : str, optional
             A matplotlib colour map, full list can be found at
             http://matplotlib.org/examples/color/colormaps_reference.html
@@ -297,6 +321,10 @@ class AshlockFingerprint():
             http://matplotlib.org/examples/images_contours_and_fields/interpolation_methods.html
         title : str, optional
             A title for the plot
+        colorbar : bool, optional
+            Choose whether the colorbar should be included or not
+        labels : bool, optional
+            Choose whether the axis labels and ticks should be included
 
         Returns
         ----------
@@ -304,11 +332,25 @@ class AshlockFingerprint():
             A heat plot of the results of the spatial tournament
         """
         size = int((1 / self.step) // 1) + 1
-        ordered_data = [self.data[point] for point in self.points]
-        plotting_data = np.reshape(ordered_data, (size, size))
-        figure = plt.figure()
-        plt.imshow(plotting_data, cmap=col_map, interpolation=interpolation)
-        plt.axis('off')
+        plotting_data = self.reshape_data(self.data, self.points, size)
+        fig, ax = plt.subplots()
+        cax = ax.imshow(plotting_data, cmap=col_map, interpolation=interpolation)
+
+        if colorbar:
+            max_score = max(self.data.values())
+            min_score = min(self.data.values())
+            ticks = [min_score, (max_score + min_score) / 2, max_score]
+            fig.colorbar(cax, ticks=ticks)
+
+        plt.xlabel('$x$')
+        plt.ylabel('$y$', rotation=0)
+        ax.tick_params(axis='both', which='both', length=0)
+        plt.xticks([0, len(plotting_data) - 1], ['0', '1'])
+        plt.yticks([0, len(plotting_data) - 1], ['1', '0'])
+
+        if not labels:
+            plt.axis('off')
+
         if title is not None:
             plt.title(title)
-        return figure
+        return fig

@@ -160,6 +160,33 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(sorted(keys), self.expected_points)
         self.assertEqual(all(values), True)
 
+    def test_reshape_data(self):
+        test_points = [Point(x=0.0, y=0.0),
+                       Point(x=0.0, y=0.5),
+                       Point(x=0.0, y=1.0),
+                       Point(x=0.5, y=0.0),
+                       Point(x=0.5, y=0.5),
+                       Point(x=0.5, y=1.0),
+                       Point(x=1.0, y=0.0),
+                       Point(x=1.0, y=0.5),
+                       Point(x=1.0, y=1.0)]
+        test_data = {Point(x=0.0, y=0.0): 5,
+                     Point(x=0.0, y=0.5): 9,
+                     Point(x=0.0, y=1.0): 3,
+                     Point(x=0.5, y=0.0): 8,
+                     Point(x=0.5, y=0.5): 2,
+                     Point(x=0.5, y=1.0): 4,
+                     Point(x=1.0, y=0.0): 2,
+                     Point(x=1.0, y=0.5): 1,
+                     Point(x=1.0, y=1.0): 9}
+        test_shaped_data = [[3, 4, 9],
+                            [9, 2, 1],
+                            [5, 8, 2]]
+        af = AshlockFingerprint(self.strategy, self.probe)
+        plotting_data = af.reshape_data(test_data, test_points, 3)
+        for i in range(len(plotting_data)):
+            self.assertEqual(list(plotting_data[i]), test_shaped_data[i])
+
     def test_plot(self):
         af = AshlockFingerprint(self.strategy, self.probe)
         af.fingerprint(turns=10, repetitions=2, step=0.25, progress_bar=False)
@@ -170,7 +197,11 @@ class TestFingerprint(unittest.TestCase):
         r = af.plot(interpolation='bicubic')
         self.assertIsInstance(r, matplotlib.pyplot.Figure)
         t = af.plot(title='Title')
-        self.assertIsInstance(r, matplotlib.pyplot.Figure)
+        self.assertIsInstance(t, matplotlib.pyplot.Figure)
+        u = af.plot(colorbar=False)
+        self.assertIsInstance(u, matplotlib.pyplot.Figure)
+        v = af.plot(labels=False)
+        self.assertIsInstance(v, matplotlib.pyplot.Figure)
 
     def test_wsls_fingerprint(self):
         axl.seed(0)  # Fingerprinting is a random process

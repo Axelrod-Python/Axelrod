@@ -53,9 +53,11 @@ We get the plot:
      :width: 100%
      :align: center
 
-We are also able to specify a matplotlib colour map and interpolation::
+We are also able to specify a matplotlib colour map, interpolation and can
+remove the colorbar and axis labels::
 
-    >>> af.plot(col_map='PuOr', interpolation='bicubic')  # doctest: +SKIP
+    >>> p = af.plot(col_map='PuOr', interpolation='bicubic', colorbar=False, labels=False)  # doctest: +SKIP
+    >>> p.show()
 
 .. image:: _static/fingerprinting/WSLS_large_alt.png
      :width: 100%
