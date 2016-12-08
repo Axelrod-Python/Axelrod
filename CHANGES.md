@@ -1,3 +1,20 @@
+# v2.1.0, 2016-12-8
+
+New strategies, ability to fingerprint instances and appearance improvements to
+fingerprint plots.
+
+- New Meta strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/777
+- Better and better, Worse and Worse 2, Worse and Worse 3
+  https://github.com/Axelrod-Python/Axelrod/pull/786
+- Add ability to Fingerprint instances
+  https://github.com/Axelrod-Python/Axelrod/pull/785
+- Add plotting options to fingerprint
+  https://github.com/Axelrod-Python/Axelrod/pull/787
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.0.0...v2.1.0
+
 # v2.0.0, 2016-12-05
 
 Dropping support for python 2, bug fixes, minor tidy of code (thanks to
