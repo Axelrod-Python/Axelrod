@@ -28,25 +28,32 @@ def default_cmap():
 
 
 class Plot(object):
-
     def __init__(self, result_set):
         self.result_set = result_set
         self.matplotlib_installed = matplotlib_installed
+        self.nplayers = self.result_set.nplayers
+        self.players = self.result_set.players
 
-    def _violinplot(self, data, names, title=None):
+    def _violinplot(self, data, names, title=None, ax=None):
         """For making violinplots."""
         if not self.matplotlib_installed:
             return None
-        nplayers = self.result_set.nplayers
-        width = max(nplayers / 3, 12)
+
+        if ax is None:
+            _, ax = plt.subplots()
+        else:
+            ax = ax
+
+        figure = ax.get_figure()
+        width = max(self.nplayers / 3, 12)
         height = width / 2
-        figure = plt.figure(figsize=(width, height))
         spacing = 4
-        positions = spacing * arange(1, nplayers + 1, 1)
+        positions = spacing * arange(1, self.nplayers + 1, 1)
+        figure.set_size_inches(width, height)
         plt.violinplot(data, positions=positions, widths=spacing / 2,
                        showmedians=True, showextrema=False)
         plt.xticks(positions, names, rotation=90)
-        plt.xlim(0, spacing * (nplayers + 1))
+        plt.xlim(0, spacing * (self.nplayers + 1))
         plt.tick_params(axis='both', which='both', labelsize=8)
         if title:
             plt.title(title)
@@ -68,33 +75,32 @@ class Plot(object):
     def _boxplot_xticks_labels(self):
         return [str(n) for n in self.result_set.ranked_names]
 
-    def boxplot(self, title=None):
+    def boxplot(self, title=None, ax=None):
         """For the specific mean score boxplot."""
         data = self._boxplot_dataset
         names = self._boxplot_xticks_labels
-        figure = self._violinplot(data, names, title=title)
+        figure = self._violinplot(data, names, title=title,  ax=ax)
         return figure
 
     @property
     def _winplot_dataset(self):
         # Sort wins by median
         wins = self.result_set.wins
-        players = self.result_set.players
         medians = map(median, wins)
         medians = sorted(
             [(m, i) for (i, m) in enumerate(medians)], reverse=True)
         # Reorder and grab names
         wins = [wins[x[-1]] for x in medians]
-        ranked_names = [str(players[x[-1]]) for x in medians]
+        ranked_names = [str(self.players[x[-1]]) for x in medians]
         return wins, ranked_names
 
-    def winplot(self, title=None):
+    def winplot(self, title=None, ax=None):
         """Plots the distributions for the number of wins for each strategy."""
         if not self.matplotlib_installed:
             return None
 
         data, names = self._winplot_dataset
-        figure = self._violinplot(data, names, title)
+        figure = self._violinplot(data, names, title=title, ax=ax)
         # Expand ylim a bit
         maximum = max(max(w) for w in data)
         plt.ylim(-0.5, 0.5 + maximum)
@@ -108,17 +114,16 @@ class Plot(object):
     def _sdv_plot_dataset(self):
         ordering = self._sd_ordering
         diffs = self.result_set.score_diffs
-        players = self.result_set.players
         # Reorder and grab names
         diffs = [diffs[i] for i in ordering]
-        ranked_names = [str(players[i]) for i in ordering]
+        ranked_names = [str(self.players[i]) for i in ordering]
         return diffs, ranked_names
 
-    def sdvplot(self, title=None):
+    def sdvplot(self, title=None, ax=None):
         """Score difference violinplots to visualize the distributions of how
         players attain their payoffs."""
         diffs, ranked_names = self._sdv_plot_dataset
-        figure = self._violinplot(diffs, ranked_names, title)
+        figure = self._violinplot(diffs, ranked_names, title=title, ax=ax)
         return figure
 
     @property
@@ -128,14 +133,12 @@ class Plot(object):
                  for length in rep[playeri]] for playeri in
                 self.result_set.ranking]
 
-    def lengthplot(self, title=None):
+    def lengthplot(self, title=None, ax=None):
         """For the specific match length boxplot."""
         data = self._lengthplot_dataset
         names = self._boxplot_xticks_labels
-        figure = self._violinplot(data, names, title=title)
+        figure = self._violinplot(data, names, title=title, ax=ax)
         return figure
-
-    # Payoff heatmaps
 
     @property
     def _payoff_dataset(self):
@@ -156,17 +159,20 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return matrix, ranked_names
 
-    def _payoff_heatmap(self, data, names, title=None):
+    def _payoff_heatmap(self, data, names, title=None, ax=None):
         """Generic heatmap plot"""
         if not self.matplotlib_installed:
             return None
 
-        nplayers = self.result_set.nplayers
-        width = max(nplayers / 4, 12)
+        if ax is None:
+            _, ax = plt.subplots()
+        else:
+            ax = ax
+
+        figure = ax.get_figure()
+        width = max(self.nplayers / 4, 12)
         height = width
-        figure, ax = plt.subplots()
-        figure.set_figwidth(width)
-        figure.set_figheight(height)
+        figure.set_size_inches(width, height)
         cmap = default_cmap()
         mat = ax.matshow(data, cmap=cmap)
         plt.xticks(range(self.result_set.nplayers))
@@ -182,29 +188,33 @@ class Plot(object):
         plt.colorbar(mat, cax=cax)
         return figure
 
-    def pdplot(self, title=None):
+    def pdplot(self, title=None, ax=None):
         """Payoff difference heatmap to visualize the distributions of how
         players attain their payoffs."""
         matrix, names = self._pdplot_dataset
-        return self._payoff_heatmap(matrix, names, title)
+        return self._payoff_heatmap(matrix, names, title=title, ax=ax)
 
-    def payoff(self, title=None):
+    def payoff(self, title=None, ax=None):
         """Payoff heatmap to visualize the distributions of how
         players attain their payoffs."""
         data = self._payoff_dataset
         names = self.result_set.ranked_names
-        return self._payoff_heatmap(data, names, title)
+        return self._payoff_heatmap(data, names, title=title, ax=ax)
 
     # Ecological Plot
 
-    def stackplot(self, eco, title=None, logscale=True):
-
+    def stackplot(self, eco, title=None, logscale=True, ax=None):
         if not self.matplotlib_installed:
             return None
 
         populations = eco.population_sizes
 
-        figure, ax = plt.subplots()
+        if ax is None:
+            _, ax = plt.subplots()
+        else:
+            ax = ax
+
+        figure = ax.get_figure()
         turns = range(len(populations))
         pops = [[populations[iturn][ir] for iturn in turns] for ir in self.result_set.ranking]
         ax.stackplot(turns, *pops)
@@ -225,7 +235,7 @@ class Plot(object):
             x = -0.01
             y = (i + 0.5) * 1.0 / self.result_set.nplayers
             ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False,
-                        va='center', ha='right', fontsize=5)
+                             va='center', ha='right', fontsize=5)
             ticks.append(y)
         ax.set_yticks(ticks)
         ax.tick_params(direction='out')

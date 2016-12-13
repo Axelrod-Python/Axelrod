@@ -59,3 +59,20 @@ Saving all plots
 
 The `axelrod.Plot` class has a method: `save_all_plots` that will save all the
 above plots to file.
+
+Passing various objects to plot
+-------------------------------
+
+The library give access to underlying matplotlib axes objects of each plot, thus
+the user can easily modify various aspects of a plot::
+
+    >>> import matplotlib.pyplot as plt
+    >>> _, ax = plt.subplots()
+    >>> title = ax.set_title('Payoff')
+    >>> xlabel = ax.set_xlabel('Strategies')
+    >>> p = plot.boxplot(ax=ax)
+    >>> p.show()
+
+.. image:: _static/visualising_results/title_labels_payoff.png
+   :width: 50%
+   :align: center
