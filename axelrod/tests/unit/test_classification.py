@@ -189,8 +189,10 @@ class TestStrategies(unittest.TestCase):
                                     axl.MWELongMemory,
                                     axl.MWEStochastic,
                                     axl.MWEDeterministic,
-                                    axl.MetaWinnerStochastic
-                                    ]
+                                    axl.MetaWinnerStochastic,
+                                    axl.NiceMetaWinner,
+                                    axl.NiceMetaWinnerEnsemble
+        ]
 
         self.assertEqual(str_reps(long_run_time_strategies),
                          str_reps(axl.long_run_time_strategies))

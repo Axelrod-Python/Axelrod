@@ -107,10 +107,10 @@ class TestMetaMinority(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
 
-class TestMetaWinner(TestMetaPlayer):
+class TestNiceMetaWinner(TestMetaPlayer):
 
-    name = "Meta Winner"
-    player = axelrod.MetaWinner
+    name = "Nice Meta Winner"
+    player = axelrod.NiceMetaWinner
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -122,7 +122,7 @@ class TestMetaWinner(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         P2 = axelrod.Player()
 
         # This meta player will simply choose the strategy with the highest
@@ -140,13 +140,13 @@ class TestMetaWinner(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
         opponent = axelrod.Cooperator()
-        player = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        player = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         for _ in range(5):
             player.play(opponent)
         self.assertEqual(player.history[-1], C)
 
         opponent = axelrod.Defector()
-        player = axelrod.MetaWinner(team=[axelrod.Defector])
+        player = axelrod.NiceMetaWinner(team=[axelrod.Defector])
         for _ in range(20):
             player.play(opponent)
         self.assertEqual(player.history[-1], D)
@@ -158,9 +158,9 @@ class TestMetaWinner(TestMetaPlayer):
         self.assertEqual(player.history[-1], D)
 
 
-class TestMetaWinnerEnsemble(TestMetaPlayer):
-    name = "Meta Winner Ensemble"
-    player = axelrod.MetaWinnerEnsemble
+class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
+    name = "Nice Meta Winner Ensemble"
+    player = axelrod.NiceMetaWinnerEnsemble
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -174,11 +174,11 @@ class TestMetaWinnerEnsemble(TestMetaPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
-        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         P2 = axelrod.Cooperator()
         test_responses(self, P1, P2, [C] * 4, [C] * 4, [C] * 4)
 
-        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         P2 = axelrod.Defector()
         test_responses(self, P1, P2, [C] * 4, [D] * 4, [D] * 4)
 

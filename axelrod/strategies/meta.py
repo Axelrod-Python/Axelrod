@@ -1,10 +1,11 @@
 from axelrod import Actions, Player, init_args, obey_axelrod
+from axelrod.strategy_transformers import NiceTransformer
 from ._strategies import all_strategies
 from .hunter import (
     AlternatorHunter, CooperatorHunter, CycleHunter, DefectorHunter,
     EventualCycleHunter, MathConstantHunter, RandomHunter,)
 from numpy.random import choice
-from random import sample
+
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
@@ -153,10 +154,6 @@ class MetaWinner(MetaPlayer):
         for r, t in zip(results, self.team):
             t.proposed_history.append(r)
 
-        if opponent.defections == 0:
-            # Don't poke the bear
-            return C
-
         return bestresult
 
     def reset(self):
@@ -164,6 +161,10 @@ class MetaWinner(MetaPlayer):
         for t in self.team:
             t.proposed_history = []
             t.score = 0
+
+
+NiceMetaWinner = NiceTransformer()(MetaWinner)
+NiceMetaWinner.name = "Nice Meta Winner"
 
 
 class MetaWinnerEnsemble(MetaWinner):
@@ -192,13 +193,12 @@ class MetaWinnerEnsemble(MetaWinner):
         for r, t in zip(results, self.team):
             t.proposed_history.append(r)
 
-        if opponent.defections == 0:
-            # Don't poke the bear
-            return C
-
         # return result
         return results[index]
 
+
+NiceMetaWinnerEnsemble = NiceTransformer()(MetaWinnerEnsemble)
+NiceMetaWinnerEnsemble.name = "Nice Meta Winner Ensemble"
 
 class MetaHunter(MetaPlayer):
     """A player who uses a selection of hunters."""
@@ -354,7 +354,7 @@ class MetaWinnerLongMemory(MetaWinner):
 
 
 class MetaWinnerDeterministic(MetaWinner):
-    """Meta Winner Ensemble with the team of Deterministic Players."""
+    """Meta Winner with the team of Deterministic Players."""
 
     name = "Meta Winner Deterministic"
 
@@ -367,7 +367,7 @@ class MetaWinnerDeterministic(MetaWinner):
 
 
 class MetaWinnerStochastic(MetaWinner):
-    """Meta Winner Ensemble with the team of Stochastic Players."""
+    """Meta Winner with the team of Stochastic Players."""
 
     name = "Meta Winner Stochastic"
 
@@ -416,7 +416,7 @@ class MetaMixer(MetaPlayer):
         return choice(results, p=self.distribution)
 
 
-class MWEDeterministic(MetaWinnerEnsemble):
+class MWEDeterministic(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Deterministic Players."""
 
     name = "MWE Deterministic"
@@ -429,7 +429,7 @@ class MWEDeterministic(MetaWinnerEnsemble):
         self.classifier["stochastic"] = True
 
 
-class MWEStochastic(MetaWinnerEnsemble):
+class MWEStochastic(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Stochastic Players."""
 
     name = "MWE Stochastic"
@@ -441,7 +441,7 @@ class MWEStochastic(MetaWinnerEnsemble):
         super(MWEStochastic, self).__init__(team=team)
 
 
-class MWEFiniteMemory(MetaWinnerEnsemble):
+class MWEFiniteMemory(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Finite Memory Players."""
 
     name = "MWE Finite Memory"
@@ -453,7 +453,7 @@ class MWEFiniteMemory(MetaWinnerEnsemble):
         super(MWEFiniteMemory, self).__init__(team=team)
 
 
-class MWELongMemory(MetaWinnerEnsemble):
+class MWELongMemory(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Long Memory Players."""
 
     name = "MWE Long Memory"
@@ -465,7 +465,7 @@ class MWELongMemory(MetaWinnerEnsemble):
         super(MWELongMemory, self).__init__(team=team)
 
 
-class MWEMemoryOne(MetaWinnerEnsemble):
+class MWEMemoryOne(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Memory One Players."""
 
     name = "MWE Memory One"

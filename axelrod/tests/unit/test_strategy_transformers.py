@@ -1,4 +1,3 @@
-import random
 import unittest
 
 import axelrod
@@ -375,6 +374,29 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [C, D, D, D, D, D, D, D])
         self.assertEqual(p2.history, [C, C, C, C, D, D, D, D])
 
+    def test_nice(self):
+        """Tests the NiceTransformer."""
+        p1 = NiceTransformer()(axelrod.Defector)()
+        p2 = axelrod.Defector()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, D, D, D, D])
+        self.assertEqual(p2.history, [D, D, D, D, D])
+
+        p1 = NiceTransformer()(axelrod.Defector)()
+        p2 = axelrod.Alternator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, C, D, D, D])
+        self.assertEqual(p2.history, [C, D, C, D, C])
+
+        p1 = NiceTransformer()(axelrod.Defector)()
+        p2 = axelrod.Cooperator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [C, C, C, C, C])
+        self.assertEqual(p2.history, [C, C, C, C, C])
+
     def test_nilpotency(self):
         """Show that some of the transformers are (sometimes) nilpotent, i.e.
         that transfomer(transformer(PlayerClass)) == PlayerClass"""
@@ -435,13 +457,6 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.history, [C, D, C, D, C])
         self.assertEqual(p2.history, [D, D, D, D, D])
 
-
-# Test that RUA(Cooperator) is the same as TitForTat
-# reusing the TFT tests. Since TFT is completely specified by its tests,
-# this is actually a proof that they are equal!
-# However because classifier is a class variable until after instantiation
-# this alters Cooperator's class variable, and causes its test to fail
-# So for now this is commented out.
 
 TFT = RetaliateUntilApologyTransformer()(axelrod.Cooperator)
 
