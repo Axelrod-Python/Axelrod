@@ -1,19 +1,15 @@
-# v2.1.0, 2016-12-8
+# v2.2.0, 2016-12-20
 
-New strategies, ability to fingerprint instances and appearance improvements to
-fingerprint plots.
+Minor update: ability to pass axes object to plots and internal documentation
+build fix.
 
-- New Meta strategies
-  https://github.com/Axelrod-Python/Axelrod/pull/777
-- Better and better, Worse and Worse 2, Worse and Worse 3
-  https://github.com/Axelrod-Python/Axelrod/pull/786
-- Add ability to Fingerprint instances
-  https://github.com/Axelrod-Python/Axelrod/pull/785
-- Add plotting options to fingerprint
-  https://github.com/Axelrod-Python/Axelrod/pull/787
+- Pass axis object to plots
+  https://github.com/Axelrod-Python/Axelrod/pull/791
+- Build docs with py3
+  https://github.com/Axelrod-Python/Axelrod/pull/788
 
 Here are all the commits for this PR:
-https://github.com/Axelrod-Python/Axelrod/compare/v2.0.0...v2.1.0
+https://github.com/Axelrod-Python/Axelrod/compare/v2.1.0...v2.2.0
 
 # v2.0.0, 2016-12-05
 
