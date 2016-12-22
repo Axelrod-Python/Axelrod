@@ -46,6 +46,8 @@ strategies = [s for s in all_strategies if obey_axelrod(s())]
 
 long_run_time_strategies = [s for s in all_strategies if
                             s().classifier['long_run_time']]
+short_run_time_strategies = [s for s in strategies if not
+                             s().classifier['long_run_time']]
 cheating_strategies = [s for s in all_strategies if not obey_axelrod(s())]
 
 ordinary_strategies = strategies  # This is a legacy and will be removed

@@ -1,7 +1,7 @@
 """Tests for the classification"""
 
 import unittest
-import axelrod
+import axelrod as axl
 
 
 class TestClassification(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestClassification(unittest.TestCase):
                       'manipulates_source',
                       'manipulates_state']
 
-        for s in axelrod.all_strategies:
+        for s in axl.all_strategies:
             s = s()
             self.assertTrue(
                 None not in [s.classifier[key] for key in known_keys])
@@ -23,110 +23,110 @@ class TestClassification(unittest.TestCase):
     def test_multiple_instances(self):
         """Certain instances of classes of strategies will have different
         classifiers based on the initialisation variables"""
-        P1 = axelrod.MemoryOnePlayer((.5, .5, .5, .5))
-        P2 = axelrod.MemoryOnePlayer((1, 0, 0, 1))
+        P1 = axl.MemoryOnePlayer((.5, .5, .5, .5))
+        P2 = axl.MemoryOnePlayer((1, 0, 0, 1))
         self.assertNotEqual(P1.classifier, P2.classifier)
 
-        P1 = axelrod.Joss()
-        P2 = axelrod.Joss(0)
+        P1 = axl.Joss()
+        P2 = axl.Joss(0)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
-        P1 = axelrod.GTFT(1)
-        P2 = axelrod.GTFT(.5)
+        P1 = axl.GTFT(1)
+        P2 = axl.GTFT(.5)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
-        P1 = axelrod.StochasticWSLS()
-        P2 = axelrod.StochasticWSLS(0)
+        P1 = axl.StochasticWSLS()
+        P2 = axl.StochasticWSLS(0)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
-        P1 = axelrod.GoByMajority(5)
-        P2 = axelrod.StochasticWSLS(.1)
+        P1 = axl.GoByMajority(5)
+        P2 = axl.StochasticWSLS(.1)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
     def test_manipulation_of_classifier(self):
         """Test that can change the classifier of an instance without changing
         the classifier of the class"""
-        player = axelrod.Cooperator()
+        player = axl.Cooperator()
         player.classifier['memory_depth'] += 1
-        self.assertNotEqual(player.classifier, axelrod.Cooperator.classifier)
-        player = axelrod.Defector()
+        self.assertNotEqual(player.classifier, axl.Cooperator.classifier)
+        player = axl.Defector()
         player.classifier['memory_depth'] += 1
-        self.assertNotEqual(player.classifier, axelrod.Defector.classifier)
+        self.assertNotEqual(player.classifier, axl.Defector.classifier)
 
     def test_obey_axelrod(self):
-        """A test that verifies if the obey_axelrod function works correctly"""
-        known_cheaters = [axelrod.Darwin,
-                          axelrod.Geller,
-                          axelrod.GellerCooperator,
-                          axelrod.GellerDefector,
-                          axelrod.MindBender,
-                          axelrod.MindController,
-                          axelrod.MindWarper,
-                          axelrod.MindReader]
+        """A test that verifies if the obey_axl function works correctly"""
+        known_cheaters = [axl.Darwin,
+                          axl.Geller,
+                          axl.GellerCooperator,
+                          axl.GellerDefector,
+                          axl.MindBender,
+                          axl.MindController,
+                          axl.MindWarper,
+                          axl.MindReader]
 
-        known_basic = [axelrod.Alternator,
-                       axelrod.AntiTitForTat,
-                       axelrod.Bully,
-                       axelrod.Cooperator,
-                       axelrod.Defector,
-                       axelrod.GoByMajority,
-                       axelrod.SuspiciousTitForTat,
-                       axelrod.TitForTat,
-                       axelrod.WinStayLoseShift]
+        known_basic = [axl.Alternator,
+                       axl.AntiTitForTat,
+                       axl.Bully,
+                       axl.Cooperator,
+                       axl.Defector,
+                       axl.GoByMajority,
+                       axl.SuspiciousTitForTat,
+                       axl.TitForTat,
+                       axl.WinStayLoseShift]
 
-        known_ordinary = [axelrod.AverageCopier,
-                          axelrod.ForgivingTitForTat,
-                          axelrod.GoByMajority20,
-                          axelrod.GTFT,
-                          axelrod.Grudger,
-                          axelrod.Inverse,
-                          axelrod.Random]
+        known_ordinary = [axl.AverageCopier,
+                          axl.ForgivingTitForTat,
+                          axl.GoByMajority20,
+                          axl.GTFT,
+                          axl.Grudger,
+                          axl.Inverse,
+                          axl.Random]
 
         for strategy in known_cheaters:
-            self.assertFalse(axelrod.obey_axelrod(strategy()), msg=strategy)
+            self.assertFalse(axl.obey_axelrod(strategy()), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axelrod.obey_axelrod(strategy()), msg=strategy)
+            self.assertTrue(axl.obey_axelrod(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertTrue(axelrod.obey_axelrod(strategy()), msg=strategy)
+            self.assertTrue(axl.obey_axelrod(strategy()), msg=strategy)
 
     def test_is_basic(self):
         """A test that verifies if the is_basic function works correctly"""
-        known_cheaters = [axelrod.Darwin,
-                          axelrod.Geller,
-                          axelrod.GellerCooperator,
-                          axelrod.GellerDefector,
-                          axelrod.MindBender,
-                          axelrod.MindController,
-                          axelrod.MindWarper,
-                          axelrod.MindReader]
+        known_cheaters = [axl.Darwin,
+                          axl.Geller,
+                          axl.GellerCooperator,
+                          axl.GellerDefector,
+                          axl.MindBender,
+                          axl.MindController,
+                          axl.MindWarper,
+                          axl.MindReader]
 
-        known_basic = [axelrod.Alternator,
-                       axelrod.AntiTitForTat,
-                       axelrod.Bully,
-                       axelrod.Cooperator,
-                       axelrod.Defector,
-                       axelrod.SuspiciousTitForTat,
-                       axelrod.TitForTat,
-                       axelrod.WinStayLoseShift]
+        known_basic = [axl.Alternator,
+                       axl.AntiTitForTat,
+                       axl.Bully,
+                       axl.Cooperator,
+                       axl.Defector,
+                       axl.SuspiciousTitForTat,
+                       axl.TitForTat,
+                       axl.WinStayLoseShift]
 
-        known_ordinary = [axelrod.AverageCopier,
-                          axelrod.ForgivingTitForTat,
-                          axelrod.GoByMajority20,
-                          axelrod.GTFT,
-                          axelrod.Grudger,
-                          axelrod.Inverse,
-                          axelrod.Random]
+        known_ordinary = [axl.AverageCopier,
+                          axl.ForgivingTitForTat,
+                          axl.GoByMajority20,
+                          axl.GTFT,
+                          axl.Grudger,
+                          axl.Inverse,
+                          axl.Random]
 
         for strategy in known_cheaters:
-            self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axl.is_basic(strategy()), msg=strategy)
 
         for strategy in known_basic:
-            self.assertTrue(axelrod.is_basic(strategy()), msg=strategy)
+            self.assertTrue(axl.is_basic(strategy()), msg=strategy)
 
         for strategy in known_ordinary:
-            self.assertFalse(axelrod.is_basic(strategy()), msg=strategy)
+            self.assertFalse(axl.is_basic(strategy()), msg=strategy)
 
 
 def str_reps(xs):
@@ -144,71 +144,80 @@ class TestStrategies(unittest.TestCase):
                               "strategies",
                               "ordinary_strategies",
                               "cheating_strategies"]:
-            self.assertTrue(hasattr(axelrod, strategy_list))
+            self.assertTrue(hasattr(axl, strategy_list))
 
     def test_lists_not_empty(self):
-        for strategy_list in [axelrod.all_strategies,
-                              axelrod.demo_strategies,
-                              axelrod.basic_strategies,
-                              axelrod.long_run_time_strategies,
-                              axelrod.strategies,
-                              axelrod.ordinary_strategies,
-                              axelrod.cheating_strategies]:
+        for strategy_list in [axl.all_strategies,
+                              axl.demo_strategies,
+                              axl.basic_strategies,
+                              axl.long_run_time_strategies,
+                              axl.strategies,
+                              axl.ordinary_strategies,
+                              axl.cheating_strategies]:
             self.assertTrue(len(strategy_list) > 0)
 
     def test_inclusion_of_strategy_lists(self):
-        all_strategies_set = set(axelrod.all_strategies)
-        for strategy_list in [axelrod.demo_strategies,
-                              axelrod.basic_strategies,
-                              axelrod.long_run_time_strategies,
-                              axelrod.strategies,
-                              axelrod.ordinary_strategies,
-                              axelrod.cheating_strategies]:
+        all_strategies_set = set(axl.all_strategies)
+        for strategy_list in [axl.demo_strategies,
+                              axl.basic_strategies,
+                              axl.long_run_time_strategies,
+                              axl.strategies,
+                              axl.ordinary_strategies,
+                              axl.cheating_strategies]:
             self.assertTrue(str_reps(strategy_list).issubset(
                 str_reps(all_strategies_set)))
 
-        strategies_set = set(axelrod.strategies)
-        for strategy_list in [axelrod.demo_strategies,
-                              axelrod.basic_strategies,
-                              axelrod.long_run_time_strategies]:
+        strategies_set = set(axl.strategies)
+        for strategy_list in [axl.demo_strategies,
+                              axl.basic_strategies,
+                              axl.long_run_time_strategies]:
             self.assertTrue(str_reps(strategy_list).issubset(
                 str_reps(strategies_set)))
 
     def test_long_run_strategies(self):
-        long_run_time_strategies = [axelrod.MetaMajority,
-                                    axelrod.MetaMinority,
-                                    axelrod.MetaWinner,
-                                    axelrod.MetaWinnerEnsemble,
-                                    axelrod.MetaMajorityFiniteMemory,
-                                    axelrod.MetaWinnerFiniteMemory,
-                                    axelrod.MetaMajorityLongMemory,
-                                    axelrod.MetaWinnerLongMemory,
-                                    axelrod.MetaMixer,
-                                    axelrod.MWEFiniteMemory,
-                                    axelrod.MetaWinnerDeterministic,
-                                    axelrod.MWELongMemory,
-                                    axelrod.MWEStochastic,
-                                    axelrod.MWEDeterministic,
-                                    axelrod.MetaWinnerStochastic
+        long_run_time_strategies = [axl.MetaMajority,
+                                    axl.MetaMinority,
+                                    axl.MetaWinner,
+                                    axl.MetaWinnerEnsemble,
+                                    axl.MetaMajorityFiniteMemory,
+                                    axl.MetaWinnerFiniteMemory,
+                                    axl.MetaMajorityLongMemory,
+                                    axl.MetaWinnerLongMemory,
+                                    axl.MetaMixer,
+                                    axl.MWEFiniteMemory,
+                                    axl.MetaWinnerDeterministic,
+                                    axl.MWELongMemory,
+                                    axl.MWEStochastic,
+                                    axl.MWEDeterministic,
+                                    axl.MetaWinnerStochastic
                                     ]
 
         self.assertEqual(str_reps(long_run_time_strategies),
-                         str_reps(axelrod.long_run_time_strategies))
+                         str_reps(axl.long_run_time_strategies))
+        self.assertTrue(all(s().classifier['long_run_time']
+                             for s in axl.long_run_time_strategies))
+
+    def test_short_run_strategies(self):
+        short_run_time_strategies = [s for s in axl.strategies
+                                     if s not in axl.long_run_time_strategies]
+
+        self.assertEqual(str_reps(short_run_time_strategies),
+                         str_reps(axl.short_run_time_strategies))
+        self.assertFalse(any(s().classifier['long_run_time']
+                             for s in axl.short_run_time_strategies))
 
     def test_meta_inclusion(self):
-        self.assertTrue(str(axelrod.MetaMajority()) in
-                        str_reps(axelrod.strategies))
+        self.assertTrue(str(axl.MetaMajority()) in str_reps(axl.strategies))
 
-        self.assertTrue(str(axelrod.MetaHunter()) in
-                        str_reps(axelrod.strategies))
-        self.assertFalse(str(axelrod.MetaHunter()) in
-            str_reps(axelrod.long_run_time_strategies))
+        self.assertTrue(str(axl.MetaHunter()) in str_reps(axl.strategies))
+        self.assertFalse(str(axl.MetaHunter()) in
+                         str_reps(axl.long_run_time_strategies))
 
     def test_demo_strategies(self):
-        demo_strategies = [axelrod.Cooperator,
-                           axelrod.Defector,
-                           axelrod.TitForTat,
-                           axelrod.Grudger,
-                           axelrod.Random]
+        demo_strategies = [axl.Cooperator,
+                           axl.Defector,
+                           axl.TitForTat,
+                           axl.Grudger,
+                           axl.Random]
         self.assertTrue(str_reps(demo_strategies),
-                        str_reps(axelrod.demo_strategies))
+                        str_reps(axl.demo_strategies))
