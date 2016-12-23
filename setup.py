@@ -13,8 +13,12 @@ setup(
     install_requires=requirements,
     author='Vince Knight, Owen Campbell, Karol Langner, Marc Harper',
     author_email=('axelrod-python@googlegroups.com'),
-    packages=['axelrod', 'axelrod.strategies', 'axelrod.tests'],
+    packages=['axelrod', 'axelrod.strategies', 'axelrod.tests', 'axelrod.data'],
     url='http://axelrod.readthedocs.org/',
     license='The MIT License (MIT)',
     description='Reproduce the Axelrod iterated prisoners dilemma tournament',
+    include_package_data=True,
+    package_data={
+        '': ['axelrod/data/*.csv'],
+    },
 )
