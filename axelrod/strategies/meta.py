@@ -416,63 +416,63 @@ class MetaMixer(MetaPlayer):
         return choice(results, p=self.distribution)
 
 
-class MWEDeterministic(NiceMetaWinnerEnsemble):
+class NMWEDeterministic(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Deterministic Players."""
 
-    name = "MWE Deterministic"
+    name = "NMWE Deterministic"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 not s().classifier['stochastic']]
-        super(MWEDeterministic, self).__init__(team=team)
+        super(NMWEDeterministic, self).__init__(team=team)
         self.classifier["stochastic"] = True
 
 
-class MWEStochastic(NiceMetaWinnerEnsemble):
+class NMWEStochastic(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Stochastic Players."""
 
-    name = "MWE Stochastic"
+    name = "NMWE Stochastic"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 s().classifier['stochastic']]
-        super(MWEStochastic, self).__init__(team=team)
+        super(NMWEStochastic, self).__init__(team=team)
 
 
-class MWEFiniteMemory(NiceMetaWinnerEnsemble):
+class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Finite Memory Players."""
 
-    name = "MWE Finite Memory"
+    name = "NMWE Finite Memory"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
-        super(MWEFiniteMemory, self).__init__(team=team)
+        super(NMWEFiniteMemory, self).__init__(team=team)
 
 
-class MWELongMemory(NiceMetaWinnerEnsemble):
+class NMWELongMemory(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Long Memory Players."""
 
-    name = "MWE Long Memory"
+    name = "NMWE Long Memory"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
-        super(MWELongMemory, self).__init__(team=team)
+        super(NMWELongMemory, self).__init__(team=team)
 
 
-class MWEMemoryOne(NiceMetaWinnerEnsemble):
+class NMWEMemoryOne(NiceMetaWinnerEnsemble):
     """Meta Winner Ensemble with the team of Memory One Players."""
 
-    name = "MWE Memory One"
+    name = "NMWE Memory One"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 <= 1]
-        super(MWEMemoryOne, self).__init__(team=team)
+        super(NMWEMemoryOne, self).__init__(team=team)
         self.classifier["long_run_time"] = False
