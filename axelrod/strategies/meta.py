@@ -200,6 +200,7 @@ class MetaWinnerEnsemble(MetaWinner):
 NiceMetaWinnerEnsemble = NiceTransformer()(MetaWinnerEnsemble)
 NiceMetaWinnerEnsemble.name = "Nice Meta Winner Ensemble"
 
+
 class MetaHunter(MetaPlayer):
     """A player who uses a selection of hunters."""
 
@@ -417,7 +418,7 @@ class MetaMixer(MetaPlayer):
 
 
 class NMWEDeterministic(NiceMetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Deterministic Players."""
+    """Nice Meta Winner Ensemble with the team of Deterministic Players."""
 
     name = "NMWE Deterministic"
 
@@ -430,7 +431,7 @@ class NMWEDeterministic(NiceMetaWinnerEnsemble):
 
 
 class NMWEStochastic(NiceMetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Stochastic Players."""
+    """Nice Meta Winner Ensemble with the team of Stochastic Players."""
 
     name = "NMWE Stochastic"
 
@@ -442,7 +443,7 @@ class NMWEStochastic(NiceMetaWinnerEnsemble):
 
 
 class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Finite Memory Players."""
+    """Nice Meta Winner Ensemble with the team of Finite Memory Players."""
 
     name = "NMWE Finite Memory"
 
@@ -454,7 +455,7 @@ class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
 
 
 class NMWELongMemory(NiceMetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Long Memory Players."""
+    """Nice Meta Winner Ensemble with the team of Long Memory Players."""
 
     name = "NMWE Long Memory"
 
@@ -466,7 +467,7 @@ class NMWELongMemory(NiceMetaWinnerEnsemble):
 
 
 class NMWEMemoryOne(NiceMetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Memory One Players."""
+    """Nice Meta Winner Ensemble with the team of Memory One Players."""
 
     name = "NMWE Memory One"
 
