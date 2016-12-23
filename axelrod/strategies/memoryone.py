@@ -380,6 +380,7 @@ class ZDGTFT2(LRPlayer):
 
     name = 'ZD-GTFT-2'
 
+    @init_args
     def __init__(self, phi=0.25, s=0.5):
         """
         Parameters
@@ -391,7 +392,6 @@ class ZDGTFT2(LRPlayer):
         self.phi = phi
         self.s = s
         super(ZDGTFT2, self).__init__()
-        self.init_args = (phi, s)
 
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()

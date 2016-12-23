@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-import inspect
 import random
 import unittest
 
@@ -20,6 +18,7 @@ def defect(self):
 
 def randomize(self):
     return random.choice([C, D])
+
 
 
 class TestPlayerClass(unittest.TestCase):
@@ -97,6 +96,23 @@ class TestPlayerClass(unittest.TestCase):
     def test_strategy(self):
         self.assertRaises(
             NotImplementedError, self.player().strategy, self.player())
+
+    def test_clone(self):
+        """Tests player cloning."""
+        p1 = axelrod.Random(0.75)  # 0.5 is the default
+        p2 = p1.clone()
+        turns = 50
+        for op in [axelrod.Cooperator(), axelrod.Defector(),
+                   axelrod.TitForTat()]:
+            p1.reset()
+            p2.reset()
+            seed = random.randint(0, 10 ** 6)
+            for p in [p1, p2]:
+                axelrod.seed(seed)
+                m = axelrod.Match((p, op), turns=turns)
+                m.play()
+            self.assertEqual(len(p1.history), turns)
+            self.assertEqual(p1.history, p2.history)
 
 
 def test_responses(test_class, P1, P2, history_1, history_2, responses,
@@ -203,20 +219,12 @@ class TestPlayer(unittest.TestCase):
         for k, v in p_clone.__dict__.items():
             self.assertEqual(v, getattr(p_clone, k))
 
-
     def test_clone(self):
-        # Make sure that self.init_args has the right number of arguments
-        PlayerClass = self.player
-        argspec = inspect.getargspec(PlayerClass.__init__)
-        # Does the class use the init_args decorator?
-        if argspec.varargs == "args":
-            self.assertEqual(len(argspec.args), 1)
-        else:
-            player = PlayerClass()
-            self.assertEqual(len(argspec.args) - 1, len(player.init_args))
-
-        # Test that the player is cloned correctly
+        # Test that the cloned player produces identical play
         p1 = self.player()
+        if str(p1) in ["Darwin", "Human"]:
+            # Known exceptions
+            return
         p2 = p1.clone()
         self.assertEqual(len(p2.history), 0)
         self.assertEqual(p2.cooperations, 0)
@@ -224,6 +232,20 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(p2.state_distribution, {})
         self.assertEqual(p2.classifier, p1.classifier)
         self.assertEqual(p2.match_attributes, p1.match_attributes)
+
+        turns = 50
+        r = random.random()
+        for op in [axelrod.Cooperator(), axelrod.Defector(),
+                   axelrod.TitForTat(), axelrod.Random(r)]:
+            p1.reset()
+            p2.reset()
+            seed = random.randint(0, 10 ** 6)
+            for p in [p1, p2]:
+                axelrod.seed(seed)
+                m = axelrod.Match((p, op), turns=turns)
+                m.play()
+            self.assertEqual(len(p1.history), turns)
+            self.assertEqual(p1.history, p2.history)
 
     def first_play_test(self, play, random_seed=None):
         """Tests first move of a strategy."""

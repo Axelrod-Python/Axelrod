@@ -529,7 +529,6 @@ class AdaptiveTitForTat(Player):
 
     @init_args
     def __init__(self, rate=0.5):
-
         Player.__init__(self)
         self.rate, self.starting_rate = rate, rate
 
