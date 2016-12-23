@@ -98,9 +98,7 @@ class TestPSOGambler(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        # Defects on the last two rounds
-        self.responses_test([C] * 197, [C] * 197, [C, D, D],
-                            tournament_length=200)
+        self.responses_test([C] * 197, [C] * 197, [C])
 
 
 # Some heads up tests for PSOGambler

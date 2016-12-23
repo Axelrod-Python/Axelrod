@@ -1,13 +1,10 @@
-from axelrod import Actions, Player, init_args, random_choice
-from axelrod.strategy_transformers import FinalTransformer
+from axelrod import Actions, init_args, random_choice, load_data
 from .lookerup import LookerUp, create_lookup_table_keys
 
 
 C, D = Actions.C, Actions.D
 
 
-# End with two defections if tournament length is known
-@FinalTransformer((D, D), name_prefix=None)
 class Gambler(LookerUp):
     """
     A LookerUp class player which will select randomly an action in some cases.
@@ -47,6 +44,10 @@ class Gambler(LookerUp):
         return random_choice(action)
 
 
+data = load_data("pso_gambler.csv", directory="data")
+table = list(map(float, str(data).strip().split(', ')))
+
+
 class PSOGambler(Gambler):
     """
     A LookerUp strategy that uses a lookup table with probability numbers
@@ -63,12 +64,7 @@ class PSOGambler(Gambler):
                                                      opponent_start_plays=2)
 
         # GK: Pattern of values determined previously with a pso algorithm.
-        pattern_pso = [1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0,
-                       0.0, 0.0, 0.0, 0.0, 1.0, 0.93, 0.0, 1.0, 0.67, 0.42, 0.0,
-                       0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.48, 0.0,
-                       0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.19, 1.0, 1.0, 0.0,
-                       0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
-                       0.0, 1.0, 0.36, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        pattern_pso = table
 
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern_pso))

@@ -155,7 +155,7 @@ class EvolvedLookerUp(LookerUp):
         lookup_table_keys = create_lookup_table_keys(plays=2,
                                                      opponent_start_plays=2)
 
-        # Pattern of values determed previously with an evolutionary algorithm.
+        # Pattern of values determined previously with an evolutionary algorithm.
         pattern='CDCCDCCCDCDDDDDCCDCCDDDDDCDCDDDCDDDDCCCDDCCDDDDDCDCDDDCDCDDDDDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
