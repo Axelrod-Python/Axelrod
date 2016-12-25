@@ -38,7 +38,7 @@ class Gambler(LookerUp):
             ('', 'C', 'C'): 1,
             ('', 'D', 'C'): 1,
             }
-        LookerUp.__init__(self, lookup_table=lookup_table, value_length=None)
+        LookerUp.__init__(self, lookup_table=lookup_table)
 
     def strategy(self, opponent):
         action = LookerUp.strategy(self, opponent)

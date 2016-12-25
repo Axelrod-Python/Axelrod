@@ -58,7 +58,7 @@ make a decision::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    26
+    28
 
 Multiple filters can be specified within the filterset dictionary. To specify a
 range of memory_depth values, we can use the 'min_memory_depth' and
@@ -70,7 +70,7 @@ range of memory_depth values, we can use the 'min_memory_depth' and
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    44
+    47
 
 We can also identify strategies that make use of particular properties of the
 tournament. For example, here is the number of strategies that  make use of the
@@ -81,7 +81,8 @@ length of each match of the tournament::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    20
+
+    25
 
 Note that in the filterset dictionary, the value for the 'makes_use_of' key
 must be a list. Here is how we might identify the number of strategies that use

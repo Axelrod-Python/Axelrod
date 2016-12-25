@@ -7,14 +7,14 @@ from .test_player import TestHeadsUp, TestPlayer
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
-class TestEvolvedANN(TestPlayer):
+class TestEvolvedANN2(TestPlayer):
 
-    name = "EvolvedANN"
-    player = axelrod.EvolvedANN
+    name = "EvolvedANN2"
+    player = axelrod.EvolvedANN2
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'makes_use_of': set(["length"]),
+        'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -28,16 +28,16 @@ class TestEvolvedANN(TestPlayer):
 
 class TestEvolvedANNvsCooperator(TestHeadsUp):
     def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN(), axelrod.Cooperator(),
-                         [C, D, D, C, D], [C] * 5)
+        self.versus_test(axelrod.EvolvedANN2(), axelrod.Cooperator(),
+                         [C, C, C, C, C], [C] * 5)
 
 
 class TestEvolvedANNvsDefector(TestHeadsUp):
     def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN(), axelrod.Defector(),
-                         [C, D, D, D, D], [D] * 5)
+        self.versus_test(axelrod.EvolvedANN2(), axelrod.Defector(),
+                         [C, C, D, D, D], [D] * 5)
 
 class TestEvolvedANNvsTFT(TestHeadsUp):
     def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN(), axelrod.TitForTat(),
-                         [C, D, D, C, C], [C, C, D, D, C] * 5)
+        self.versus_test(axelrod.EvolvedANN2(), axelrod.TitForTat(),
+                         [C] * 5, [C] * 5)
