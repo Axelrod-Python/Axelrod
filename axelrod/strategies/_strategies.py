@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from .alternator import Alternator
 from .adaptive import Adaptive
-from .ann import EvolvedANN
+from .ann import EvolvedANN, EvolvedANN2, EvolvedANN05
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -25,11 +25,12 @@ from .finite_state_machines import (
     SolutionB5, Thumper, FSMPlayer)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
-from .gambler import Gambler, PSOGambler
-from .gobymajority import (
-    GoByMajority, GoByMajority10, GoByMajority20, GoByMajority40,
-    GoByMajority5, HardGoByMajority, HardGoByMajority10, HardGoByMajority20,
-    HardGoByMajority40, HardGoByMajority5)
+from .gambler import Gambler, PSOGambler, PSOGambler2, PSOGambler05
+from .gobymajority import (GoByMajority,
+    GoByMajority10, GoByMajority20, GoByMajority40,
+    GoByMajority5,
+    HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
+    HardGoByMajority5)
 from .gradualkiller import GradualKiller
 from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
     SoftGrudger, GrudgerAlternator, EasyGo)
@@ -114,6 +115,8 @@ all_strategies = [
     Eatherley,
     EventualCycleHunter,
     EvolvedANN,
+    EvolvedANN2,
+    EvolvedANN05,
     EvolvedLookerUp,
     Feld,
     FirmButFair,
@@ -125,7 +128,6 @@ all_strategies = [
     ForgivingTitForTat,
     Fortress3,
     Fortress4,
-    PSOGambler,
     GTFT,
     Geller,
     GellerCooperator,
@@ -182,6 +184,9 @@ all_strategies = [
     Prober4,
     ProtectedMindReader,
     Pun1,
+    PSOGambler,
+    PSOGambler2,
+    PSOGambler05,
     Punisher,
     Raider,
     Random,

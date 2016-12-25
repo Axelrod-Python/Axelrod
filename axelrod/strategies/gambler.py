@@ -69,3 +69,57 @@ class PSOGambler(Gambler):
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern_pso))
         Gambler.__init__(self, lookup_table=lookup_table)
+
+
+data = load_data("pso_gambler2.csv", directory="data")
+table2 = list(map(float, str(data).strip().split(', ')))
+
+
+class PSOGambler2(Gambler):
+    """
+    A LookerUp strategy that uses a lookup table with probability numbers
+    generated using a Particle Swarm Optimisation (PSO) algorithm.
+
+    A description of how this strategy was trained is given here:
+    https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
+    """
+
+    name = "PSO Gambler 2"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=2,
+                                                     opponent_start_plays=2)
+
+        # GK: Pattern of values determined previously with a pso algorithm.
+        pattern_pso = table2
+
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern_pso))
+        Gambler.__init__(self, lookup_table=lookup_table)
+
+
+data = load_data("pso_gambler05.csv", directory="data")
+table05 = list(map(float, str(data).strip().split(', ')))
+
+
+class PSOGambler05(Gambler):
+    """
+    A LookerUp strategy that uses a lookup table with probability numbers
+    generated using a Particle Swarm Optimisation (PSO) algorithm.
+
+    A description of how this strategy was trained is given here:
+    https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
+    """
+
+    name = "PSO Gambler 05"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=2,
+                                                     opponent_start_plays=2)
+
+        # GK: Pattern of values determined previously with a pso algorithm.
+        pattern_pso = table05
+
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern_pso))
+        Gambler.__init__(self, lookup_table=lookup_table)

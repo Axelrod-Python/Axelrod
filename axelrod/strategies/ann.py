@@ -173,7 +173,6 @@ class EvolvedANN(ANN):
 
     @init_args
     def __init__(self):
-        self.classifier['makes_use_of'] = set(['length'])
         input_values = 17
         hidden_layer_size = 10
 
@@ -187,32 +186,61 @@ class EvolvedANN(ANN):
         ANN.__init__(self, i2h, h2o, bias)
 
 
-# data = load_data("ann_weights.csv", directory="data")
-# w1 = list(map(float, str(data).strip().split(', ')))
+data = load_data("ann_weights_2.csv", directory="data")
+w2= list(map(float, str(data).strip().split(', ')))
 
 
-# class MarcANN1(ANN):
-#     """
-#     A strategy based on a pre-trained neural network.
-#
-#     Names:
-#
-#      - EvolvedANN: : Original name by Martin Jones.
-#     """
-#
-#     name = "MarcANN1"
-#
-#     @init_args
-#     def __init__(self):
-#         self.classifier['makes_use_of'] = set(['length'])
-#         input_values = 17
-#         hidden_layer_size = 10
-#
-#         weights = w1
-#
-#         (i2h, h2o, bias) = split_weights(
-#             weights,
-#             input_values,
-#             hidden_layer_size
-#         )
-#         ANN.__init__(self, i2h, h2o, bias)
+class EvolvedANN2(ANN):
+    """
+    A strategy based on a pre-trained neural network.
+
+    Names:
+
+     - EvolvedANN2: : Original name by Marc Harper.
+    """
+
+    name = "EvolvedANN2"
+
+    @init_args
+    def __init__(self):
+        input_values = 17
+        hidden_layer_size = 10
+
+        weights = w2
+
+        (i2h, h2o, bias) = split_weights(
+            weights,
+            input_values,
+            hidden_layer_size
+        )
+        ANN.__init__(self, i2h, h2o, bias)
+
+
+data = load_data("ann_weights_05.csv", directory="data")
+w05 = list(map(float, str(data).strip().split(', ')))
+
+
+class EvolvedANN05(ANN):
+    """
+    A strategy based on a pre-trained neural network.
+
+    Names:
+
+     - EvolvedANN05: Original name by Marc Harper.
+    """
+
+    name = "EvolvedANN05"
+
+    @init_args
+    def __init__(self):
+        input_values = 17
+        hidden_layer_size = 10
+
+        weights = w05
+
+        (i2h, h2o, bias) = split_weights(
+            weights,
+            input_values,
+            hidden_layer_size
+        )
+        ANN.__init__(self, i2h, h2o, bias)
