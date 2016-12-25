@@ -44,7 +44,7 @@ class TestGambler(TestPlayer):
         }
         self.assertEqual(player.lookup_table, expected_lookup_table)
         # Test malformed tables
-        table = {(C, C): 1, ('DD', 'DD'): 1}
+        table = {(C, C, C): 1, ('DD', 'DD', 'C'): 1}
         with self.assertRaises(ValueError):
             player = self.player(table)
 

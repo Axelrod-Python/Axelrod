@@ -19,7 +19,7 @@ class MetaPlayer(Player):
     classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
-        'makes_use_of': set(),
+        'makes_use_of': {'game', 'length'},
         'long_run_time': True,
         'inspects_source': False,
         'manipulates_source': False,

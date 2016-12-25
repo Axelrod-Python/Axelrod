@@ -15,7 +15,7 @@ class TestLookerUp(TestPlayer):
     player = axelrod.LookerUp
 
     expected_classifier = {
-        'memory_depth': 1,  # Default TfT
+        'memory_depth': 1,  # Default TFT
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -42,15 +42,12 @@ class TestLookerUp(TestPlayer):
         }
         self.assertEqual(player.lookup_table, expected_lookup_table)
         # Test malformed tables
-        table = {(C, C): C, ('DD', 'DD'): C}
-        with self.assertRaises(ValueError):
-            player = self.player(table)
-        table = {(C, C): C, (C, D): 'CD'}
+        table = {('', C, C): C, ('', 'DD', 'DD'): C}
         with self.assertRaises(ValueError):
             player = self.player(table)
 
     def test_strategy(self):
-        self.markov_test([C, D, C, D]) # TFT
+        self.markov_test([C, D, C, D])  # TFT
         self.responses_test([C] * 4, [C, C, C, C], [C])
         self.responses_test([C] * 5, [C, C, C, C, D], [D])
 
@@ -121,8 +118,8 @@ class TestLookerUp(TestPlayer):
 
 class TestEvolvedLookerUp(TestPlayer):
 
-    name = "EvolvedLookerUp"
-    player = axelrod.EvolvedLookerUp
+    name = "EvolvedLookerUp2_2"
+    player = axelrod.EvolvedLookerUp2_2
 
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -172,3 +169,48 @@ class EvolvedLookerUpvsAlternator(TestHeadsUp):
     def test_vs(self):
         self.versus_test(axelrod.EvolvedLookerUp(), axelrod.Alternator(),
                          [C, C, D, D, D, D], [C, D, C, D, C, D])
+
+
+class TestWinner12(TestPlayer):
+    name = "Winner12"
+    player = axelrod.Winner12
+
+    expected_classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = float('inf')
+
+    def test_strategy(self):
+        """Starts by cooperating twice."""
+        self.responses_test([], [], [C, C])
+
+
+class TestWinner21(TestPlayer):
+    name = "Winner21"
+    player = axelrod.Winner21
+
+    expected_classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = float('inf')
+
+
+    def test_strategy(self):
+        """Starts by cooperating twice."""
+        self.responses_test([], [], [D, C])

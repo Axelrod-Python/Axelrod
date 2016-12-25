@@ -1,5 +1,6 @@
 """Tests for the various Meta strategies."""
 
+import copy
 import random
 
 import axelrod
@@ -18,7 +19,7 @@ class TestMetaPlayer(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
-        'makes_use_of': {'game', 'length'},
+        'makes_use_of': {'game'},
         'long_run_time': True,
         'manipulates_source': False,
         'inspects_source': False,
@@ -27,13 +28,24 @@ class TestMetaPlayer(TestPlayer):
 
     def classifier_test(self, expected_class_classifier=None):
         player = self.player()
+        classifier = dict()
+        for key in ['stochastic',
+                    'inspects_source', 'manipulates_source',
+                    'manipulates_state']:
+            classifier[key] = (any(t.classifier[key] for t in player.team))
+        classifier['memory_depth'] = float('inf')
 
-        for key in self.expected_classifier:
+        for t in player.team:
+            try:
+                classifier['makes_use_of'].update(t.classifier['makes_use_of'])
+            except KeyError:
+                pass
+
+        for key in classifier:
             self.assertEqual(player.classifier[key],
-                             self.expected_classifier[key],
+                             classifier[key],
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
-                             (key, player.classifier[key],
-                              self.expected_classifier[key]))
+                                 (key, player.classifier[key], classifier[key]))
 
     def test_reset(self):
         p1 = self.player()
@@ -454,6 +466,10 @@ class TestNMWEDeterministic(TestMetaPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    # Skip this test
+    def classifier_test(self, expected_class_classifier=None):
+        pass
 
     def test_strategy(self):
         self.first_play_test(C)

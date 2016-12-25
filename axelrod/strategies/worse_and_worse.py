@@ -71,7 +71,7 @@ class WorseAndWorse2(Player):
 
     name = 'Worse and Worse 2'
     classifier = {
-        'memory_depth': 1),
+        'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,

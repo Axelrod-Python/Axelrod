@@ -1,7 +1,21 @@
 from axelrod import Actions, Player, init_args
+from axelrod.strategy_transformers import InitialTransformer
 from itertools import product
 
 C, D = Actions.C, Actions.D
+
+
+def create_lookup_table_keys(plays=2, opp_plays=None, opponent_start_plays=2):
+    """Creates the keys for a lookup table."""
+    if opp_plays is None:
+        opp_plays = plays
+    self_histories = [''.join(x) for x in product('CD', repeat=plays)]
+    other_histories = [''.join(x) for x in product('CD', repeat=opp_plays)]
+    opponent_starts = [''.join(x) for x in
+                       product('CD', repeat=opponent_start_plays)]
+    lookup_table_keys = list(product(opponent_starts, self_histories,
+                                         other_histories))
+    return lookup_table_keys
 
 
 class LookerUp(Player):
@@ -57,7 +71,6 @@ class LookerUp(Player):
 
        {('CC', 'CDD', 'CCC'): C,
         ('CD', 'CCD', 'CCC'): D}
-
     """
 
     name = 'LookerUp'
@@ -98,17 +111,17 @@ class LookerUp(Player):
         # If the table dictates to ignore the opening actions of the opponent
         # then the memory classification is adjusted
         if self.opponent_start_plays == 0:
-            self.classifier['memory_depth'] = self.plays
+            self.classifier['memory_depth'] = max(self.plays, self.opp_plays)
+        else:
+            self.classifier['memory_depth'] = float('inf')
 
         # Ensure that table is well-formed
         for k, v in lookup_table.items():
-            if (len(k[1]) != self.plays) or (len(k[0]) != self.opponent_start_plays) or (len(k[2]) != self.opp_plays):
+            if (len(k[1]) != self.plays) or \
+               (len(k[0]) != self.opponent_start_plays) or \
+               (len(k[2]) != self.opp_plays):
                 raise ValueError("All table elements must have the same size")
-            if value_length is not None:
-                if len(v) > value_length:
-                    raise ValueError("Table values should be of length one, C or D")
-        if self.opponent_start_plays == 0:
-            self.classifier["memory_depth"] = max(self.plays, self.opp_plays)
+
 
     def strategy(self, opponent):
         # If there isn't enough history to lookup an action, cooperate.
@@ -131,19 +144,6 @@ class LookerUp(Player):
         # Look up the action associated with that tuple in the lookup table.
         action = self.lookup_table[key]
         return action
-
-
-def create_lookup_table_keys(plays=2, opp_plays=None, opponent_start_plays=2):
-    """Creates the keys for a lookup table."""
-    if not opp_plays:
-        opp_plays = plays
-    self_histories = [''.join(x) for x in product('CD', repeat=plays)]
-    other_histories = [''.join(x) for x in product('CD', repeat=opp_plays)]
-    opponent_starts = [''.join(x) for x in
-                       product('CD', repeat=opponent_start_plays)]
-    lookup_table_keys = list(product(opponent_starts, self_histories,
-                                         other_histories))
-    return lookup_table_keys
 
 
 class EvolvedLookerUp0_1(LookerUp):
@@ -501,7 +501,7 @@ class EvolvedLookerUp4_2(LookerUp):
         LookerUp.__init__(self, lookup_table=lookup_table)
 
 
-@InitialTransformer((C, C))
+@InitialTransformer((C, C), name_prefix=None)
 class Winner12(LookerUp):
     """
     Names:
@@ -514,14 +514,14 @@ class Winner12(LookerUp):
                                                      opp_plays=2,
                                                      opponent_start_plays=0)
 
-        # Pattern of values determined previously with an evolutionary algorithm.
         pattern = 'CDCDDCDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
+        # self.classifier["memory_depth"] = 2
 
 
-@InitialTransformer((D, C))
+@InitialTransformer((D, C), name_prefix=None)
 class Winner21(LookerUp):
     """
     Names:
@@ -534,8 +534,8 @@ class Winner21(LookerUp):
                                                      opp_plays=1,
                                                      opponent_start_plays=0)
 
-        # Pattern of values determined previously with an evolutionary algorithm.
         pattern = 'CDCDCDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
+        # self.classifier["memory_depth"] = 2

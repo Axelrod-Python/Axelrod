@@ -42,7 +42,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
 
         min_comprehension = set([
             s for s in all_strategies if
-            s.classifier['memory_depth'] >= min_memory_depth])
+            s().classifier['memory_depth'] >= min_memory_depth])
         min_filterset = {
             'min_memory_depth': min_memory_depth
         }
@@ -51,7 +51,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
 
         max_comprehension = set([
             s for s in all_strategies if
-            s.classifier['memory_depth'] <= max_memory_depth])
+            s().classifier['memory_depth'] <= max_memory_depth])
         max_filterset = {
             'max_memory_depth': max_memory_depth
         }
@@ -60,7 +60,7 @@ class TestFiltersAgainstComprehensions(unittest.TestCase):
 
         comprehension = set([
             s for s in all_strategies if
-            s.classifier['memory_depth'] == memory_depth])
+            s().classifier['memory_depth'] == memory_depth])
         filterset = {
             'memory_depth': memory_depth
         }
