@@ -244,3 +244,33 @@ class EvolvedANN05(ANN):
             hidden_layer_size
         )
         ANN.__init__(self, i2h, h2o, bias)
+
+
+data = load_data("ann_weights_moran.csv", directory="data")
+w_moran = list(map(float, str(data).strip().split(', ')))
+
+
+class EvolvedANNMoran(ANN):
+    """
+    A strategy based on a pre-trained neural network.
+
+    Names:
+
+     - EvolvedANNMoran: Original name by Marc Harper.
+    """
+
+    name = "EvolvedANNMoran"
+
+    @init_args
+    def __init__(self):
+        input_values = 17
+        hidden_layer_size = 10
+
+        weights = w_moran
+
+        (i2h, h2o, bias) = split_weights(
+            weights,
+            input_values,
+            hidden_layer_size
+        )
+        ANN.__init__(self, i2h, h2o, bias)

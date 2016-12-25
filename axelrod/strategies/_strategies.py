@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from .alternator import Alternator
 from .adaptive import Adaptive
-from .ann import EvolvedANN, EvolvedANN2, EvolvedANN05
+from .ann import EvolvedANN, EvolvedANN2, EvolvedANN05, EvolvedANNMoran
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -117,6 +117,7 @@ all_strategies = [
     EvolvedANN,
     EvolvedANN2,
     EvolvedANN05,
+    EvolvedANNMoran,
     EvolvedLookerUp,
     Feld,
     FirmButFair,
