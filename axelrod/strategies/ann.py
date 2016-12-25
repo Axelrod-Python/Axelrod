@@ -5,6 +5,11 @@ from axelrod import Actions, Player, init_args, load_data
 
 C, D = Actions.C, Actions.D
 
+w1 = load_data("ann_weights.csv", directory="data")
+w2 = load_data("ann_weights_2.csv", directory="data")
+w05 = load_data("ann_weights_05.csv", directory="data")
+w_moran = load_data("ann_weights_moran.csv", directory="data")
+
 
 def split_weights(weights, input_values, hidden_layer_size):
     """Splits the input vector into the the NN bias weights and layer
@@ -156,10 +161,6 @@ class ANN(Player):
             return D
 
 
-data = load_data("ann_weights.csv", directory="data")
-w1 = list(map(float, str(data).strip().split(', ')))
-
-
 class EvolvedANN(ANN):
     """
     A strategy based on a pre-trained neural network.
@@ -184,10 +185,6 @@ class EvolvedANN(ANN):
             hidden_layer_size
         )
         ANN.__init__(self, i2h, h2o, bias)
-
-
-data = load_data("ann_weights_2.csv", directory="data")
-w2= list(map(float, str(data).strip().split(', ')))
 
 
 class EvolvedANN2(ANN):
@@ -216,10 +213,6 @@ class EvolvedANN2(ANN):
         ANN.__init__(self, i2h, h2o, bias)
 
 
-data = load_data("ann_weights_05.csv", directory="data")
-w05 = list(map(float, str(data).strip().split(', ')))
-
-
 class EvolvedANN05(ANN):
     """
     A strategy based on a pre-trained neural network.
@@ -244,10 +237,6 @@ class EvolvedANN05(ANN):
             hidden_layer_size
         )
         ANN.__init__(self, i2h, h2o, bias)
-
-
-data = load_data("ann_weights_moran.csv", directory="data")
-w_moran = list(map(float, str(data).strip().split(', ')))
 
 
 class EvolvedANNMoran(ANN):

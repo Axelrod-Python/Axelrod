@@ -1,8 +1,13 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player, init_args, load_lookerup_tables
 from axelrod.strategy_transformers import InitialTransformer
 from itertools import product
 
 C, D = Actions.C, Actions.D
+
+
+# Dictionary of table patterns
+# Keys are (plays, opp_plays, opponent_start_plays)
+patterns = load_lookerup_tables()
 
 
 def create_lookup_table_keys(plays=2, opp_plays=None, opponent_start_plays=2):
@@ -159,7 +164,7 @@ class EvolvedLookerUp0_1(LookerUp):
                                                      opponent_start_plays=1)
 
         # Pattern of values determined previously with an evolutionary algorithm.
-        pattern = 'CD'
+        pattern = patterns[(0, 0, 1)]
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)

@@ -4,6 +4,10 @@ from .lookerup import LookerUp, create_lookup_table_keys
 
 C, D = Actions.C, Actions.D
 
+table = load_data("pso_gambler.csv", directory="data")
+table2 = load_data("pso_gambler2.csv", directory="data")
+table05 = load_data("pso_gambler05.csv", directory="data")
+
 
 class Gambler(LookerUp):
     """
@@ -44,10 +48,6 @@ class Gambler(LookerUp):
         return random_choice(action)
 
 
-data = load_data("pso_gambler.csv", directory="data")
-table = list(map(float, str(data).strip().split(', ')))
-
-
 class PSOGambler(Gambler):
     """
     A LookerUp strategy that uses a lookup table with probability numbers
@@ -71,10 +71,6 @@ class PSOGambler(Gambler):
         Gambler.__init__(self, lookup_table=lookup_table)
 
 
-data = load_data("pso_gambler2.csv", directory="data")
-table2 = list(map(float, str(data).strip().split(', ')))
-
-
 class PSOGambler2(Gambler):
     """
     A LookerUp strategy that uses a lookup table with probability numbers
@@ -96,10 +92,6 @@ class PSOGambler2(Gambler):
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern_pso))
         Gambler.__init__(self, lookup_table=lookup_table)
-
-
-data = load_data("pso_gambler05.csv", directory="data")
-table05 = list(map(float, str(data).strip().split(', ')))
 
 
 class PSOGambler05(Gambler):
