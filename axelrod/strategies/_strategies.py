@@ -47,7 +47,8 @@ from .lookerup import (LookerUp,
     EvolvedLookerUp1_3, EvolvedLookerUp1_4, EvolvedLookerUp2_0,
     EvolvedLookerUp2_1, EvolvedLookerUp2_2, EvolvedLookerUp2_3,
     EvolvedLookerUp2_4, EvolvedLookerUp3_1, EvolvedLookerUp3_3,
-    EvolvedLookerUp4_1, EvolvedLookerUp4_2)
+    EvolvedLookerUp4_1, EvolvedLookerUp4_2,
+    Winner12, Winner21)
 EvolvedLookerUp = EvolvedLookerUp2_2
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
@@ -121,6 +122,7 @@ all_strategies = [
     EasyGo,
     Eatherley,
     EventualCycleHunter,
+    EvolvedANN,
     EvolvedLookerUp0_1,
     EvolvedLookerUp0_2,
     EvolvedLookerUp0_3,
@@ -240,6 +242,8 @@ all_strategies = [
     Tullock,
     TwoTitsForTat,
     Willing,
+    Winner12,
+    Winner21,
     WinShiftLoseStay,
     WinStayLoseShift,
     WorseAndWorse,

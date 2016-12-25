@@ -107,6 +107,8 @@ class LookerUp(Player):
             if value_length is not None:
                 if len(v) > value_length:
                     raise ValueError("Table values should be of length one, C or D")
+        if self.opponent_start_plays == 0:
+            self.classifier["memory_depth"] = max(self.plays, self.opp_plays)
 
     def strategy(self, opponent):
         # If there isn't enough history to lookup an action, cooperate.
@@ -438,6 +440,7 @@ class EvolvedLookerUp3_2(LookerUp):
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
 
+
 class EvolvedLookerUp3_3(LookerUp):
     """
     A LookerUp strategy that uses a lookup table generated using an evolutionary
@@ -493,6 +496,46 @@ class EvolvedLookerUp4_2(LookerUp):
         # Pattern of values determined previously with an evolutionary algorithm.
         pattern="CDDDCCCCCDCCCCCCDDDCDCCDCDCCCCDCDDCDCDDCDCCCDDDCDDCCDCDCDDCCDDDCDDCCCDCCCCDDCCCCDDCCCDDCCDCCDDDDCDCCDCDCCDCCDDCDDDDDDCDDDDDCCDCCCCDCCCDCCDCDCCCCCDDCCDDDCCDCCCDDCDCDDCDCDCDDCDDCCCCDCCDDDDDCCDCDDDDCDCDCDDDDDCCCDCDDCDCDDCCDDCCDDCCDCDDCDDDCDCCCDDDCDDDDDDDDDDDCCCDDDDCDCCDDDDDCCDCDCCDCCDDDCCCDDDCDDCDDCCCDCCDCDCDDCDDDCDDDDDDCDDDCDDCCCDDDCCCCDDCDCDCDCCDDCCCDDCDCCDCCDCDCDDCCCDDCDDCCCCDCDDDCCDDDCCDDDCDDCDDDCDDDDDDCCCCCCDCDCCDDCCDDDDCDCCDCCCDCDCCDDCCDCDDDDCDDCCCCCCDDDDCCCCDCCDCCCDCDCCCCDDDCCCCCDDCDDCCCDDDDDDDDDDDDDDDDCCDDDDCDDCCDDDDDCDDDDCDDDCDCDDDDDCCCCCDCDDCDCCCDCCDDDCDDDCDCDDCDDDCDCDDDCCDDDCCDCCCCCCDCCDCDCCDCCDCDCCCDDCDCCCDDCCCCDDDDCCDCDCCDCCCDCCDCCDCCDDCCCDCCDDDDCDDCCCDDCCDDCCDCDDCCCDCDDDDCDCDCDDCDCDDDCCDDCDCCCDCDCCDDDCDCDCDCCDCDDCCCCDCDCCDDDCDCDDDDDDDDDDDDDDDDDDDDCDDDCDCDCCCDCDCDCDCCDDDDDCDDCCCDDDDCDDDDDDDCDDDCCCDCCCCDCCDDDDDDDDDCDDDCDDDDCDCDCCCDDDDCCCDCDCCCDCCCDCDDDCCDDDCDDDDCCCCDCCDCDDDDCCCCDDCDDCDDDCDCDDCDDCDCCDCCDCCDCDCDCCDCCDCCDCCCDDDDDCCDDDDDDCDCCCCCDDCDCCDCDDDDDCDDDDDDCDDDDDDDCDCDDDDDCCDDCCCCDDDDDDDDDDDDDDDD"
 
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
+
+
+@InitialTransformer((C, C))
+class Winner12(LookerUp):
+    """
+    Names:
+        - Winner12 [Mathieu2015]
+    """
+    name = "Winner12"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=1,
+                                                     opp_plays=2,
+                                                     opponent_start_plays=0)
+
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern = 'CDCDDCDD'
+        # Zip together the keys and the action pattern to get the lookup table.
+        lookup_table = dict(zip(lookup_table_keys, pattern))
+        LookerUp.__init__(self, lookup_table=lookup_table)
+
+
+@InitialTransformer((D, C))
+class Winner21(LookerUp):
+    """
+    Names:
+        - Winner21 [Mathieu2015]
+    """
+    name = "Winner21"
+
+    def __init__(self):
+        lookup_table_keys = create_lookup_table_keys(plays=2,
+                                                     opp_plays=1,
+                                                     opponent_start_plays=0)
+
+        # Pattern of values determined previously with an evolutionary algorithm.
+        pattern = 'CDCDCDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
