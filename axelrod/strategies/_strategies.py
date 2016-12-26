@@ -25,7 +25,7 @@ from .finite_state_machines import (
     SolutionB5, Thumper, FSMPlayer)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
-from .gambler import Gambler, PSOGambler, PSOGambler2, PSOGambler05
+from .gambler import Gambler, PSOGambler, PSOGambler2, PSOGambler05, PSOGambler3_3
 from .gobymajority import (GoByMajority,
     GoByMajority10, GoByMajority20, GoByMajority40,
     GoByMajority5,
@@ -211,6 +211,7 @@ all_strategies = [
     Pun1,
     PSOGambler,
     PSOGambler2,
+    PSOGambler3_3,
     PSOGambler05,
     Punisher,
     Raider,

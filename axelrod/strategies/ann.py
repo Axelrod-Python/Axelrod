@@ -215,7 +215,7 @@ class EvolvedANN2(ANN):
 
 class EvolvedANN05(ANN):
     """
-    A strategy based on a pre-trained neural network.
+    A strategy based on a pre-trained neural network, trained with noise=0.05.
 
     Names:
 
@@ -241,7 +241,8 @@ class EvolvedANN05(ANN):
 
 class EvolvedANNMoran(ANN):
     """
-    A strategy based on a pre-trained neural network.
+    A strategy based on a pre-trained neural network, optimized for the Moran
+    process.
 
     Names:
 

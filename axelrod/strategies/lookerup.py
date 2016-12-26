@@ -8,7 +8,6 @@ from axelrod.strategy_transformers import InitialTransformer
 module = sys.modules[__name__]
 C, D = Actions.C, Actions.D
 
-
 # Dictionary of table patterns
 # Keys are (plays, opp_plays, opponent_start_plays)
 patterns = load_lookerup_tables()
@@ -26,9 +25,8 @@ def create_lookup_table_keys(plays=2, opp_plays=None, opponent_start_plays=2):
                                          other_histories))
     return lookup_table_keys
 
-
-def create_lookup_table_from_pattern(plays, opp_plays, opponent_start_plays,
-                                     pattern):
+def create_lookup_table_from_pattern(
+    plays=2, opp_plays=None, opponent_start_plays=2, pattern=None):
     lookup_table_keys = create_lookup_table_keys(
         plays=plays, opp_plays=opp_plays,
         opponent_start_plays=opponent_start_plays)
@@ -111,10 +109,10 @@ class LookerUp(Player):
 
         if not lookup_table:
             lookup_table = {
-            ('', 'C', 'D'): D,
-            ('', 'D', 'D'): D,
-            ('', 'C', 'C'): C,
-            ('', 'D', 'C'): C,
+                ('', 'C', 'D'): D,
+                ('', 'D', 'D'): D,
+                ('', 'C', 'C'): C,
+                ('', 'D', 'C'): C,
             }
 
         self.lookup_table = lookup_table
@@ -193,15 +191,13 @@ class Winner12(LookerUp):
     name = "Winner12"
 
     def __init__(self):
-        lookup_table_keys = create_lookup_table_keys(plays=1,
-                                                     opp_plays=2,
-                                                     opponent_start_plays=0)
+        lookup_table_keys = create_lookup_table_keys(
+            plays=1, opp_plays=2, opponent_start_plays=0)
 
         pattern = 'CDCDDCDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
-        # self.classifier["memory_depth"] = 2
 
 
 @InitialTransformer((D, C), name_prefix=None)
@@ -213,12 +209,10 @@ class Winner21(LookerUp):
     name = "Winner21"
 
     def __init__(self):
-        lookup_table_keys = create_lookup_table_keys(plays=2,
-                                                     opp_plays=1,
-                                                     opponent_start_plays=0)
+        lookup_table_keys = create_lookup_table_keys(
+            plays=2, opp_plays=1, opponent_start_plays=0)
 
         pattern = 'CDCDCDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
         LookerUp.__init__(self, lookup_table=lookup_table)
-        # self.classifier["memory_depth"] = 2
