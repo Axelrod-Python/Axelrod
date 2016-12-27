@@ -11,10 +11,8 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 def cooperate(self):
     return C
 
-
 def defect(self):
     return D
-
 
 def randomize(self):
     return random.choice([C, D])
@@ -73,14 +71,13 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_state_distribution(self):
         p1, p2 = self.player(), self.player()
-        history_1 = [C, C, D, D, C]
-        history_2 = [C, D, C, D, D]
         p1.strategy = randomize
         p2.strategy = randomize
-        simulate_play(p1, p2, history_1, history_2)
-        self.assertEqual(p1.state_distribution,
+        for h1, h2 in zip([C, C, D, D, C], [C, D, C, D, D]):
+            simulate_play(p1, p2, h1, h2)
+        self.assertEqual(dict(p1.state_distribution),
                          {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1})
-        self.assertEqual(p2.state_distribution,
+        self.assertEqual(dict(p2.state_distribution),
                          {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1})
 
     def test_noisy_play(self):

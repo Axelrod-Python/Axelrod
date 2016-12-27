@@ -1,3 +1,5 @@
+from collections import Counter, defaultdict
+
 
 def copy_history(history):
     """Copies a history object efficiently."""
@@ -9,13 +11,18 @@ def copy_history(history):
 class History(object):
     def __init__(self, history=None):
         self._history = []
-        self._counter = collections.Counter()
+        self._counter = Counter()
         if history:
             self.extend(history)
 
+    def copy(self):
+        new_history = History()
+        new_history.extend(self._history)
+        return new_history
+
     def reset(self):
         self._history = []
-        self._counter = collections.Counter()
+        self._counter = Counter()
 
     def append(self, play):
         self._history.append(play)
@@ -53,4 +60,4 @@ class History(object):
         return (self._history == other_history)
 
     def __repr__(self):
-        return "History: " + self._history.__repr__()
+        return "History: " + ''.join(self._history)

@@ -44,13 +44,7 @@ def obey_axelrod(s):
 
 def update_history(player, move):
     """Updates histories and cooperation / defections counts following play."""
-    # Update histories
     player.history.append(move)
-    # # Update player counts of cooperation and defection
-    # if move == C:
-    #     player.cooperations += 1
-    # elif move == D:
-    #     player.defections += 1
 
 
 def get_state_distribution_from_history(player, history_1, history_2):
@@ -101,15 +95,13 @@ class Player(object):
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
-        self.history = History()
+        self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
         if self.name == "Player":
             self.classifier['stochastic'] = False
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
-        # self.cooperations = 0
-        # self.defections = 0
         self.state_distribution = defaultdict(int)
         self.init_args = ()
         self.set_match_attributes()
@@ -162,7 +154,7 @@ class Player(object):
         """Clones the player without history, reapplying configuration
         parameters as necessary."""
 
-        # You may be tempted to reimplement using the `copy` module
+        # You may be tempted to re-implement using the `copy` module
         # Note that this would require a deepcopy in some cases and there may
         # be significant changes required throughout the library.
         # Consider overriding in special cases only if necessary
@@ -178,8 +170,6 @@ class Player(object):
         history but also rest all other attributes.
         """
         self._history.reset()
-        self.cooperations = 0
-        self.defections = 0
         self.state_distribution = defaultdict(int)
 
     @property
@@ -191,7 +181,7 @@ class Player(object):
         if isinstance(obj, list):
             self._history = History(history=obj)
         elif isinstance(obj, History):
-            self._history = copy_history(obj)
+            self._history = obj.copy()
 
     @property
     def cooperations(self):
