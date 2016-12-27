@@ -126,11 +126,10 @@ class ANN(Player):
             opponent_previous2_d = 1 if opponent.history[-2] == D else 0
 
         # Remaining Features
-        # turns_remaining = self.match_attributes['length'] - len(self.history)
-        total_opponent_c = opponent.history.count(C)
-        total_opponent_d = opponent.history.count(D)
-        total_self_c = self.history.count(C)
-        total_self_d = self.history.count(D)
+        total_opponent_c = opponent.cooperations
+        total_opponent_d = opponent.defections
+        total_self_c = self.cooperations
+        total_self_d = self.defections
 
         output = self.activate([
             opponent_first_c,
