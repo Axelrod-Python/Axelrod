@@ -412,7 +412,8 @@ class TestMetaMixer(TestMetaPlayer):
         P2 = axelrod.Cooperator()
 
         for k in range(100):
-            self.assertEqual(P1.strategy(P2), C)
+            P1.play(P2)
+            self.assertEqual(P1.history[-1], C)
 
         team.append(axelrod.Defector)
         distribution = [.2, .5, .3, 0]  # If add a defector but does not occur
@@ -420,14 +421,16 @@ class TestMetaMixer(TestMetaPlayer):
         P1 = axelrod.MetaMixer(team, distribution)
 
         for k in range(100):
-            self.assertEqual(P1.strategy(P2), C)
+            P1.play(P2)
+            self.assertEqual(P1.history[-1], C)
 
         distribution = [0, 0, 0, 1]  # If defector is only one that is played
 
         P1 = axelrod.MetaMixer(team, distribution)
 
         for k in range(100):
-            self.assertEqual(P1.strategy(P2), D)
+            P1.play(P2)
+            self.assertEqual(P1.history[-1], D)
 
     def test_raise_error_in_distribution(self):
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]

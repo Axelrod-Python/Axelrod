@@ -57,12 +57,12 @@ class MetaPlayer(Player):
             self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
 
     def strategy(self, opponent):
-        # Make sure the history of all hunters is current.
-        for ih in range(len(self.team)):
-            self.team[ih].history = self.history
-
         # Get the results of all our players.
-        results = [player.strategy(opponent) for player in self.team]
+        results = []
+        for player in self.team:
+            play = player.strategy(opponent)
+            player.history.append(play)
+            results.append(play)
 
         # A subclass should just define a way to choose the result based on
         # team results.
