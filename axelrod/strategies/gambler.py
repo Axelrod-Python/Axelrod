@@ -1,13 +1,9 @@
-from axelrod import Actions, random_choice, load_data
+from axelrod import Actions, random_choice, load_pso_tables
 from .lookerup import LookerUp, create_lookup_table_from_pattern
 
 
 C, D = Actions.C, Actions.D
-
-table = load_data("pso_gambler.csv", directory="data")
-table2 = load_data("pso_gambler2.csv", directory="data")
-table3_3 = load_data("pso_gambler3_3.csv", directory="data")
-table05 = load_data("pso_gambler05.csv", directory="data")
+tables = load_pso_tables("pso_gambler.csv", directory="data")
 
 
 class Gambler(LookerUp):
@@ -44,7 +40,7 @@ class PSOGambler(Gambler):
     name = "PSO Gambler"
 
     def __init__(self):
-        pattern = table
+        pattern = tables[('', 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
             plays=2, opp_plays=2, opponent_start_plays=2,
             pattern=pattern)
@@ -60,7 +56,7 @@ class PSOGambler2(Gambler):
     name = "PSO Gambler 2"
 
     def __init__(self):
-        pattern = table2
+        pattern = tables[('2', 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
             plays=2, opp_plays=2, opponent_start_plays=2,
             pattern=pattern)
@@ -76,7 +72,7 @@ class PSOGambler3_3(Gambler):
     name = "PSO Gambler 3_3"
 
     def __init__(self):
-        pattern = table3_3
+        pattern = tables[('', 3, 3, 3)]
         lookup_table = create_lookup_table_from_pattern(
             plays=3, opp_plays=3, opponent_start_plays=3,
             pattern=pattern)
@@ -88,10 +84,25 @@ class PSOGambler05(Gambler):
     A 2x2 PSO Gambler trained with noise=0.05.
     """
 
-    name = "PSO Gambler 05"
+    name = "PSO Gambler 05_noise"
 
     def __init__(self):
-        pattern = table05
+        pattern = tables[('05_noise', 2, 2, 2)]
+        lookup_table = create_lookup_table_from_pattern(
+            plays=2, opp_plays=2, opponent_start_plays=2,
+            pattern=pattern)
+        Gambler.__init__(self, lookup_table=lookup_table)
+
+
+class PSOGamblerMoran(Gambler):
+    """
+    A 2x2 PSO Gambler trained to win the Moran process.
+    """
+
+    name = "PSO Gambler Moran"
+
+    def __init__(self):
+        pattern = tables[("moran", 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
             plays=2, opp_plays=2, opponent_start_plays=2,
             pattern=pattern)

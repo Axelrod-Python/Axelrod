@@ -25,7 +25,9 @@ from .finite_state_machines import (
     SolutionB5, Thumper, FSMPlayer)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
-from .gambler import Gambler, PSOGambler, PSOGambler2, PSOGambler05, PSOGambler3_3
+from .gambler import (
+    Gambler, PSOGambler, PSOGambler2, PSOGambler05, PSOGambler3_3,
+    PSOGamblerMoran)
 from .gobymajority import (GoByMajority,
     GoByMajority10, GoByMajority20, GoByMajority40,
     GoByMajority5,
@@ -48,7 +50,7 @@ from .lookerup import (LookerUp,
     EvolvedLookerUp2_2_1, EvolvedLookerUp2_2_2, EvolvedLookerUp2_2_3,
     EvolvedLookerUp2_2_4, EvolvedLookerUp3_3_1, EvolvedLookerUp3_3_2,
     EvolvedLookerUp3_3_3, EvolvedLookerUp4_4_1, EvolvedLookerUp4_4_2,
-    Winner12, Winner21)
+    EvolvedLookerUpMoran2_2_2, Winner12, Winner21)
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
@@ -143,6 +145,7 @@ all_strategies = [
     EvolvedLookerUp3_3_3,
     # EvolvedLookerUp4_4_1,
     # EvolvedLookerUp4_4_2,
+    EvolvedLookerUpMoran2_2_2,
     Feld,
     FirmButFair,
     FoolMeForever,
@@ -213,6 +216,7 @@ all_strategies = [
     PSOGambler2,
     PSOGambler3_3,
     PSOGambler05,
+    PSOGamblerMoran,
     Punisher,
     Raider,
     Random,

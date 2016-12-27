@@ -167,11 +167,11 @@ class LookerUp(Player):
 # loaded above, one for each key.
 
 for k, pattern in patterns.items():
-    plays, opp_plays, opp_start_plays = k
+    name, plays, opp_plays, opp_start_plays = k
     table = create_lookup_table_from_pattern(
         plays, opp_plays, opp_start_plays, pattern)
-    class_name = "EvolvedLookerUp{}_{}_{}".format(
-        plays, opp_plays, opp_start_plays)
+    class_name = "EvolvedLookerUp{}{}_{}_{}".format(
+        name, plays, opp_plays, opp_start_plays)
     # Dynamically create the class
     new_class = type(class_name, (LookerUp,), {})
     new_class.__init__ = init_args(partial(

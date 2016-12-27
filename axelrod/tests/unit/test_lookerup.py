@@ -151,9 +151,9 @@ class TestGeneratedPlayers(unittest.TestCase):
         issue then AttributeError will be raised."""
         patterns = axelrod.load_lookerup_tables()
         for k, v in patterns.items():
-            plays, opp_plays, opp_start_plays = k
-            class_name = "EvolvedLookerUp{}_{}_{}".format(
-                plays, opp_plays, opp_start_plays)
+            name, plays, opp_plays, opp_start_plays = k
+            class_name = "EvolvedLookerUp{}{}_{}_{}".format(
+                name, plays, opp_plays, opp_start_plays)
             getattr(axelrod, class_name)
 
 

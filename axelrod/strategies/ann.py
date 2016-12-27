@@ -1,14 +1,10 @@
 # Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
 # Original Author: Martin Jones, @mojones
 
-from axelrod import Actions, Player, init_args, load_data
+from axelrod import Actions, Player, init_args, load_weights
 
 C, D = Actions.C, Actions.D
-
-w1 = load_data("ann_weights.csv", directory="data")
-w2 = load_data("ann_weights_2.csv", directory="data")
-w05 = load_data("ann_weights_05.csv", directory="data")
-w_moran = load_data("ann_weights_moran.csv", directory="data")
+nn_weights = load_weights()
 
 
 def split_weights(weights, input_values, hidden_layer_size):
@@ -177,7 +173,7 @@ class EvolvedANN(ANN):
         input_values = 17
         hidden_layer_size = 10
 
-        weights = w1
+        weights = nn_weights['']
 
         (i2h, h2o, bias) = split_weights(
             weights,
@@ -203,7 +199,7 @@ class EvolvedANN2(ANN):
         input_values = 17
         hidden_layer_size = 10
 
-        weights = w2
+        weights = nn_weights['2']
 
         (i2h, h2o, bias) = split_weights(
             weights,
@@ -229,7 +225,7 @@ class EvolvedANN05(ANN):
         input_values = 17
         hidden_layer_size = 10
 
-        weights = w05
+        weights = nn_weights['05']
 
         (i2h, h2o, bias) = split_weights(
             weights,
@@ -256,7 +252,7 @@ class EvolvedANNMoran(ANN):
         input_values = 17
         hidden_layer_size = 10
 
-        weights = w_moran
+        weights = nn_weights['moran']
 
         (i2h, h2o, bias) = split_weights(
             weights,

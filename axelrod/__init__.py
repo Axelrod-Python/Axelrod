@@ -5,7 +5,7 @@ on_windows = os.name == 'nt'
 
 # The order of imports matters!
 from .version import __version__
-from .load_data_ import load_data, load_lookerup_tables
+from .load_data_ import load_lookerup_tables, load_pso_tables, load_weights
 from .actions import Actions, flip_action
 from .random_ import random_choice, seed
 from .plot import Plot
