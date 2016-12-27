@@ -120,47 +120,34 @@ class MetaWinner(MetaPlayer):
     @init_args
     def __init__(self, team=None):
         super(MetaWinner, self).__init__(team=team)
-
         # For each player, we will keep the history of proposed moves and
         # a running score since the beginning of the game.
-        for t in self.team:
-            t.proposed_history = []
-            t.score = 0
-
+        self.scores = [0] * len(self.team)
         self.classifier['long_run_time'] = True
 
-    def strategy(self, opponent):
+    def _update_scores(self, opponent):
         # Update the running score for each player, before determining the
         # next move.
+        game = self.match_attributes["game"]
         if len(self.history):
-            for player in self.team:
-                game = self.match_attributes["game"]
-                last_round = (player.proposed_history[-1], opponent.history[-1])
+            for i, player in enumerate(self.team):
+                last_round = (player.history[-1], opponent.history[-1])
                 s = game.scores[last_round][0]
-                player.score += s
-        return super(MetaWinner, self).strategy(opponent)
+                self.scores[i] += s
 
     def meta_strategy(self, results, opponent):
-        scores = [pl.score for pl in self.team]
-        bestscore = max(scores)
-        beststrategies = [i for (i, pl) in enumerate(self.team)
-                          if pl.score == bestscore]
+        self._update_scores(opponent)
+        # Choice an action based on the collection of scores
+        bestscore = max(self.scores)
+        beststrategies = [i for (i, score) in enumerate(self.scores)
+                          if score == bestscore]
         bestproposals = [results[i] for i in beststrategies]
         bestresult = C if C in bestproposals else D
-
-        # Update each player's proposed history with his proposed result, but
-        # always after the new result has been settled based on scores
-        # accumulated until now.
-        for r, t in zip(results, self.team):
-            t.proposed_history.append(r)
-
         return bestresult
 
     def reset(self):
         MetaPlayer.reset(self)
-        for t in self.team:
-            t.proposed_history = []
-            t.score = 0
+        self.scores = [0] * len(self.team)
 
 
 NiceMetaWinner = NiceTransformer()(MetaWinner)
@@ -180,20 +167,13 @@ class MetaWinnerEnsemble(MetaWinner):
     name = "Meta Winner Ensemble"
 
     def meta_strategy(self, results, opponent):
+        self._update_scores(opponent)
         # Sort by score
-        scores = [(pl.score, i) for (i, pl) in enumerate(self.team)]
+        scores = [(score, i) for (i, score) in enumerate(self.scores)]
         # Choose one of the best scorers at random
         scores.sort(reverse=True)
         prop = max(1, int(len(scores) * 0.08))
         index = choice([i for (s, i) in scores[:prop]])
-
-        # Update each player's proposed history with his proposed result, but
-        # always after the new result has been settled based on scores
-        # accumulated until now.
-        for r, t in zip(results, self.team):
-            t.proposed_history.append(r)
-
-        # return result
         return results[index]
 
 
