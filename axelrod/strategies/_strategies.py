@@ -46,6 +46,7 @@ from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
     StochasticCooperator, StochasticWSLS, ZDExtort2, ZDExtort2v2, ZDExtort4,
     ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay)
+from .memorytwo import MEM2
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .mutual import Desperate, Hopeless, Willing
@@ -157,6 +158,7 @@ all_strategies = [
     LimitedRetaliate3,
     MathConstantHunter,
     NaiveProber,
+    MEM2,
     MindBender,
     MindController,
     MindReader,

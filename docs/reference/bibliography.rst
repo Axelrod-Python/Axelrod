@@ -19,6 +19,7 @@ documentation.
 .. [Hilde2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013). Adaptive dynamics of extortion and compliance, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
 .. [Kraines1989] Kraines, D. & Kraines, V. Theor Decis (1989) 26: 47.  doi:10.1007/BF00134056
 .. [Li2011] Li, J., Hingston, P., Member, S., & Kendall, G. (2011). Engineering Design of Strategies for Winning Iterated Prisoner ’ s Dilemma Competitions, 3(4), 348–360.
+.. [Li2014] Li, J. and Kendall, G. (2016). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826
 .. [Nachbar1992] Nachbar J., Evolution in the finitely repeated prisoner’s dilemma, Journal of Economic Behavior & Organization, 19(3): 307-326, 1992.
 .. [Nowak1992] Nowak, M. a., & May, R. M. (1992). Evolutionary games and spatial chaos. Nature. http://doi.org/10.1038/359826a0
 .. [Nowak1993] Nowak, M., & Sigmund, K. (1993). A strategy of win-stay, lose-shift that outperforms tit-for-tat in the Prisoner’s Dilemma game. Nature, 364(6432), 56–58. http://doi.org/10.1038/364056a0
