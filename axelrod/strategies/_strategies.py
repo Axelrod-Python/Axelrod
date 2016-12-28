@@ -6,8 +6,9 @@ from .ann import EvolvedANN
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
-from .axelrod_first import (Davis, RevisedDowning, Feld, Grofman, Nydegger,
-                            Joss, Shubik, Tullock, UnnamedStrategy)
+from .axelrod_first import (
+    Davis, RevisedDowning, Feld, Grofman, Nydegger, Joss, Shubik, Tullock,
+    UnnamedStrategy)
 from .axelrod_second import Champion, Eatherley, Tester
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
@@ -20,15 +21,15 @@ from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
 from .finite_state_machines import (
-    Fortress3, Fortress4, Predator, Pun1, Raider, Ripoff, SolutionB1, SolutionB5, Thumper, FSMPlayer)
+    Fortress3, Fortress4, Predator, Pun1, Raider, Ripoff, SolutionB1,
+    SolutionB5, Thumper, FSMPlayer)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import Gambler, PSOGambler
-from .gobymajority import (GoByMajority,
-    GoByMajority10, GoByMajority20, GoByMajority40,
-    GoByMajority5,
-    HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
-    HardGoByMajority5)
+from .gobymajority import (
+    GoByMajority, GoByMajority10, GoByMajority20, GoByMajority40,
+    GoByMajority5, HardGoByMajority, HardGoByMajority10, HardGoByMajority20,
+    HardGoByMajority40, HardGoByMajority5)
 from .gradualkiller import GradualKiller
 from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
     SoftGrudger, GrudgerAlternator, EasyGo)
@@ -54,7 +55,8 @@ from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForev
 from .prober import (Prober, Prober2, Prober3, Prober4, HardProber,
                      NaiveProber, RemorsefulProber)
 from .punisher import Punisher, InversePunisher
-from .qlearner import RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner
+from .qlearner import (
+    RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner)
 from .rand import Random
 from .retaliate import (
     Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
@@ -63,8 +65,10 @@ from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
-    OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,SpitefulTitForTat)
-from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse, WorseAndWorse2, WorseAndWorse3)
+    OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
+    SpitefulTitForTat)
+from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
+                              WorseAndWorse2, WorseAndWorse3)
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -185,6 +189,7 @@ all_strategies = [
     Retaliate,
     Retaliate2,
     Retaliate3,
+    RevisedDowning,
     Ripoff,
     RiskyQLearner,
     Shubik,
