@@ -351,3 +351,69 @@ class Thumper(FSMPlayer):
         )
 
         FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=C)
+
+
+class EvolvedFSM4(FSMPlayer):
+
+    name = "Evolved FSM 4"
+    classifier = {
+        'memory_depth': 4,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self):
+        transitions = (
+            (0, C, 0, C),
+            (0, D, 2, D),
+            (1, C, 3, D),
+            (1, D, 0, C),
+            (2, C, 2, D),
+            (2, D, 1, C),
+            (3, C, 3, D),
+            (3, D, 1, D)
+        )
+
+        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
+
+
+class EvolvedFSM8(FSMPlayer):
+
+    name = "Evolved FSM 8"
+    classifier = {
+        'memory_depth': 8,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self):
+        transitions = (
+            (0, C, 0, C),
+            (0, D, 3, D),
+            (1, C, 5, C),
+            (1, D, 0, C),
+            (2, C, 3, D),
+            (2, D, 1, D),
+            (3, C, 5, C),
+            (3, D, 2, D),
+            (4, C, 3, C),
+            (4, D, 0, D),
+            (5, C, 7, D),
+            (5, D, 3, D),
+            (6, C, 6, C),
+            (6, D, 3, C),
+            (7, C, 7, D),
+            (7, D, 5, D)
+        )
+
+        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
