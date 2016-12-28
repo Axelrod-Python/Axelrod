@@ -25,35 +25,19 @@ class Gambler(LookerUp):
 
     def strategy(self, opponent):
         action = LookerUp.strategy(self, opponent)
-        # action could be 'C' or a float
+        # action could be 'C', 'D', or a float
         if action in [C, D]:
             return action
         return random_choice(action)
 
 
-class PSOGambler(Gambler):
+class PSOGambler1_1_1(Gambler):
     """
-    A 2x2 PSOGambler trained with pyswarm.
+    A 1x1x1 PSOGambler trained with pyswarm.
     See: https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
     """
 
-    name = "PSO Gambler"
-
-    def __init__(self):
-        pattern = tables[('', 2, 2, 2)]
-        lookup_table = create_lookup_table_from_pattern(
-            plays=2, opp_plays=2, opponent_start_plays=2,
-            pattern=pattern)
-        Gambler.__init__(self, lookup_table=lookup_table)
-
-
-class PSOGambler2(Gambler):
-    """
-    A 2x2 PSOGambler trained with pyswarm.
-    See: https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
-    """
-
-    name = "PSO Gambler 2"
+    name = "PSO Gambler 1_1_1"
 
     def __init__(self):
         pattern = tables[('2', 2, 2, 2)]
@@ -64,12 +48,28 @@ class PSOGambler2(Gambler):
 
 
 
-class PSOGambler3_3(Gambler):
+class PSOGambler2_2_2(Gambler):
     """
-    A 3x3 PSOGambler trained with pyswarm.
+    A 2x2x2 PSOGambler trained with pyswarm.
+    See: https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
     """
 
-    name = "PSO Gambler 3_3"
+    name = "PSO Gambler 2_2_2"
+
+    def __init__(self):
+        pattern = tables[('2', 2, 2, 2)]
+        lookup_table = create_lookup_table_from_pattern(
+            plays=2, opp_plays=2, opponent_start_plays=2,
+            pattern=pattern)
+        Gambler.__init__(self, lookup_table=lookup_table)
+
+
+class PSOGambler3_3_3(Gambler):
+    """
+    A 3x3x3 PSOGambler trained with pyswarm.
+    """
+
+    name = "PSO Gambler 3_3_3"
 
     def __init__(self):
         pattern = tables[('', 3, 3, 3)]
@@ -79,12 +79,12 @@ class PSOGambler3_3(Gambler):
         Gambler.__init__(self, lookup_table=lookup_table)
 
 
-class PSOGambler05(Gambler):
+class PSOGambler2_2_2_Noise05(Gambler):
     """
-    A 2x2 PSO Gambler trained with noise=0.05.
+    A 2x2x2 PSO Gambler trained with noise=0.05.
     """
 
-    name = "PSO Gambler 05_noise"
+    name = "PSO Gambler Noise 05"
 
     def __init__(self):
         pattern = tables[('05_noise', 2, 2, 2)]
@@ -94,12 +94,12 @@ class PSOGambler05(Gambler):
         Gambler.__init__(self, lookup_table=lookup_table)
 
 
-class PSOGamblerMoran(Gambler):
+class PSOGambler2_2_2_Moran(Gambler):
     """
-    A 2x2 PSO Gambler trained to win the Moran process.
+    A 2x2x2 PSO Gambler trained to win the Moran process.
     """
 
-    name = "PSO Gambler Moran"
+    name = "PSO Gambler 2_2_2 Moran"
 
     def __init__(self):
         pattern = tables[("moran", 2, 2, 2)]

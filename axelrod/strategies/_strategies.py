@@ -26,8 +26,8 @@ from .finite_state_machines import (
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import (
-    Gambler, PSOGambler, PSOGambler2, PSOGambler05, PSOGambler3_3,
-    PSOGamblerMoran)
+    Gambler, PSOGambler1_1_1, PSOGambler2_2_2, PSOGambler3_3_3,
+    PSOGambler2_2_2_Noise05, PSOGambler2_2_2_Moran)
 from .gobymajority import (GoByMajority,
     GoByMajority10, GoByMajority20, GoByMajority40,
     GoByMajority5,
@@ -131,7 +131,7 @@ all_strategies = [
     # EvolvedLookerUp0_0_2,
     # EvolvedLookerUp0_0_3,
     EvolvedLookerUp1_1_0,
-    # EvolvedLookerUp1_1_1,
+    EvolvedLookerUp1_1_1,
     # EvolvedLookerUp1_1_2,
     # EvolvedLookerUp1_1_3,
     # EvolvedLookerUp1_1_4,
@@ -142,7 +142,7 @@ all_strategies = [
     # EvolvedLookerUp2_2_4,
     # EvolvedLookerUp3_3_1,
     # EvolvedLookerUp3_3_2,
-    EvolvedLookerUp3_3_3,
+    # EvolvedLookerUp3_3_3,
     # EvolvedLookerUp4_4_1,
     # EvolvedLookerUp4_4_2,
     EvolvedLookerUpMoran2_2_2,
@@ -212,11 +212,10 @@ all_strategies = [
     Prober4,
     ProtectedMindReader,
     Pun1,
-    PSOGambler,
-    PSOGambler2,
-    PSOGambler3_3,
-    PSOGambler05,
-    PSOGamblerMoran,
+    PSOGambler1_1_1,
+    PSOGambler2_2_2,
+    PSOGambler2_2_2_Noise05,
+    PSOGambler2_2_2_Moran,
     Punisher,
     Raider,
     Random,

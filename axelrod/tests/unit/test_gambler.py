@@ -77,10 +77,10 @@ class TestGambler(TestPlayer):
         self.responses_test([D, D], [D, D], [D])
 
 
-class TestPSOGambler(TestPlayer):
+class TestPSOGambler2_2_2(TestPlayer):
 
-    name = "PSO Gambler"
-    player = axelrod.PSOGambler
+    name = "PSO Gambler 2_2_2"
+    player = axelrod.PSOGambler2_2_2
 
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -94,7 +94,7 @@ class TestPSOGambler(TestPlayer):
 
     def test_init(self):
         # Check for a few known keys
-        known_pairs = {('CD', 'DD', 'DD'): 0.48, ('CD', 'CC', 'DD'): 0.67}
+        known_pairs = {('CD', 'DD', 'DD'): 0.24523149, ('CD', 'CC', 'DD'): 0.}
         player = self.player()
         for k, v in known_pairs.items():
             self.assertEqual(player.lookup_table[k], v)
@@ -106,25 +106,26 @@ class TestPSOGambler(TestPlayer):
 
 
 # Some heads up tests for PSOGambler
-class PSOGamblervsDefector(TestHeadsUp):
+class PSOGambler2_2_2vsDefector(TestHeadsUp):
     def test_vs(self):
-        self.versus_test(axelrod.PSOGambler(), axelrod.Defector(),
+        self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Defector(),
                          [C, C, D, D], [D, D, D, D])
 
 
-class PSOGamblervsCooperator(TestHeadsUp):
+class PSOGambler2_2_2vsCooperator(TestHeadsUp):
     def test_vs(self):
-        self.versus_test(axelrod.PSOGambler(), axelrod.Cooperator(),
+        self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Cooperator(),
                          [C, C, C, C], [C, C, C, C])
 
 
-class PSOGamblervsTFT(TestHeadsUp):
+class PSOGambler2_2_2vsTFT(TestHeadsUp):
     def test_vs(self):
-        self.versus_test(axelrod.PSOGambler(), axelrod.TitForTat(),
+        self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.TitForTat(),
                          [C, C, C, C], [C, C, C, C])
 
 
-class PSOGamblervsAlternator(TestHeadsUp):
+class PSOGambler2_2_2vsAlternator(TestHeadsUp):
     def test_vs(self):
-        self.versus_test(axelrod.PSOGambler(), axelrod.Alternator(),
-                         [C, C, D, D, D, D], [C, D, C, D, C, D])
+        axelrod.seed(10)
+        self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Alternator(),
+                         [C, C, C, C, C, C, C], [C, D, C, D, C, D, C])

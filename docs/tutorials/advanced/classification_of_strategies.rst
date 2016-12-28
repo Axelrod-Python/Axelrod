@@ -47,8 +47,7 @@ strategies::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    60
-
+    61
 
 Or, to find out how many strategies only use 1 turn worth of memory to
 make a decision::

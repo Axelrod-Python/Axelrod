@@ -259,7 +259,7 @@ class TestTournament(unittest.TestCase):
 
         # The following relates to #516
         players = [axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.BackStabber(), axelrod.PSOGambler(),
+                   axelrod.BackStabber(), axelrod.PSOGambler2_2_2(),
                    axelrod.ThueMorse(), axelrod.DoubleCrosser()]
         tournament = axelrod.Tournament(
             name=self.test_name,
