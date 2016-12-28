@@ -176,6 +176,29 @@ class TestPredator(TestFSMPlayer):
         self.first_play_test(C)
 
 
+class TestPun1(TestFSMPlayer):
+
+    name = "Pun1"
+    player = axelrod.Pun1
+    expected_classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Test initial play sequence
+        self.first_play_test(D)
+        self.responses_test([D, C], [C, C], [C])
+        self.responses_test([D, C], [D, C], [C])
+        self.responses_test([D, C, C], [C, C, C], [C])
+        self.responses_test([D, C, C, C], [C, C, C, D], [D])
+
+
 class TestRaider(TestFSMPlayer):
 
     name = "Raider"

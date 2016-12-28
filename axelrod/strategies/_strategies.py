@@ -20,8 +20,7 @@ from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
 from .finite_state_machines import (
-    Fortress3, Fortress4, Predator, Raider, Ripoff, SolutionB1, SolutionB5,
-    Thumper, FSMPlayer)
+    Fortress3, Fortress4, Predator, Pun1, Raider, Ripoff, SolutionB1, SolutionB5, Thumper, FSMPlayer)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import Gambler, PSOGambler
@@ -177,6 +176,7 @@ all_strategies = [
     Prober3,
     Prober4,
     ProtectedMindReader,
+    Pun1,
     Punisher,
     Raider,
     Random,

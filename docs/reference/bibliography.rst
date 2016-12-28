@@ -6,6 +6,7 @@ Bibliography
 This is a collection of various bibliographic items referenced in the
 documentation.
 
+.. [Ashlock2006] Ashlock, D., & Kim E. Y, & Leahy, N. (2006). Understanding Representational Sensitivity in the Iterated Prisoner’s Dilemma with Fingerprints. IEEE Transactions On Systems, Man, And Cybernetics, Part C: Applications And Reviews, 36 (4)
 .. [Ashlock2008] Ashlock, D., & Kim, E. Y. (2008). Fingerprinting: Visualization and automatic analysis of prisoner’s dilemma strategies. IEEE Transactions on Evolutionary Computation, 12(5), 647–659. http://doi.org/10.1109/TEVC.2008.920675
 .. [Ashlock2009] Ashlock, D., Kim, E. Y., & Ashlock, W. (2009) Fingerprint analysis of the noisy prisoner’s dilemma using a finite-state representation. IEEE Transactions on Computational Intelligence and AI in Games. 1(2), 154-167  http://doi.org/10.1109/TCIAIG.2009.2018704
 .. [Axelrod1980] Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(1), 3–25.

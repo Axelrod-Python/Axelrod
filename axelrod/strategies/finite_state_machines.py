@@ -170,6 +170,31 @@ class Predator(FSMPlayer):
         FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=C)
 
 
+class Pun1(FSMPlayer):
+    """FSM player described in [Ashlock2006]."""
+
+    name = 'Pun1'
+    classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self):
+        transitions = ((1, C, 2, C),
+                       (1, D, 2, C),
+                       (2, C, 1, C),
+                       (2, D, 1, D)
+                       )
+
+        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=D)
+
+
 class Raider(FSMPlayer):
     """FSM player described in DOI:10.1109/FOCI.2014.7007818"""
 
