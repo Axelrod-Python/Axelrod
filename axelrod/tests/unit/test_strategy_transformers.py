@@ -341,7 +341,7 @@ class TestTransformers(unittest.TestCase):
 
     def test_deadlock(self):
         """Test the DeadlockBreakingTransformer."""
-        # We can induce a deadlock by alterting TFT to defect first
+        # We can induce a deadlock by altering TFT to defect first
         p1 = axelrod.TitForTat()
         p2 = InitialTransformer([D])(axelrod.TitForTat)()
         for _ in range(4):
@@ -399,7 +399,7 @@ class TestTransformers(unittest.TestCase):
 
     def test_nilpotency(self):
         """Show that some of the transformers are (sometimes) nilpotent, i.e.
-        that transfomer(transformer(PlayerClass)) == PlayerClass"""
+        that transformer(transformer(PlayerClass)) == PlayerClass"""
         for transformer in [IdentityTransformer(),
                             FlipTransformer(),
                             TrackHistoryTransformer()]:
@@ -409,7 +409,7 @@ class TestTransformers(unittest.TestCase):
                     transformed = transformer(transformer(PlayerClass))()
                     for _ in range(5):
                         self.assertEqual(player.strategy(third_player),
-                                        transformed.strategy(third_player))
+                                         transformed.strategy(third_player))
                         player.play(third_player)
                         third_player.history.pop(-1)
                         transformed.play(third_player)
@@ -433,7 +433,7 @@ class TestTransformers(unittest.TestCase):
                     transformed = transformer(transformer(PlayerClass))()
                     for i in range(5):
                         self.assertEqual(player.strategy(third_player),
-                                        transformed.strategy(third_player))
+                                         transformed.strategy(third_player))
                         player.play(third_player)
                         third_player.history.pop(-1)
                         transformed.play(third_player)

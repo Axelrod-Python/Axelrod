@@ -1,11 +1,4 @@
-from collections import Counter, defaultdict
-
-
-def copy_history(history):
-    """Copies a history object efficiently."""
-    new_history = History()
-    new_history.extend(history)
-    return new_history
+from collections import Counter
 
 
 class History(object):
@@ -16,8 +9,7 @@ class History(object):
             self.extend(history)
 
     def copy(self):
-        new_history = History()
-        new_history.extend(self._history)
+        new_history = History(self._history)
         return new_history
 
     def reset(self):
@@ -51,7 +43,9 @@ class History(object):
         return self._history[key]
 
     def __eq__(self, other):
-        # Allow comparison to lists
+        # Allow comparison to lists and strings
+        if isinstance(other, str):
+            other = list(str)
         if isinstance(other, list):
             other_history = other
         else:
