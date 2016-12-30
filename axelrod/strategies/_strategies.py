@@ -22,7 +22,7 @@ from .defector import Defector, TrickyDefector
 from .doubler import Doubler
 from .finite_state_machines import (
     Fortress3, Fortress4, Predator, Raider, Ripoff, SolutionB1, SolutionB5,
-    Thumper, FSMPlayer, EvolvedFSM4, EvolvedFSM8)
+    Thumper, FSMPlayer, EvolvedFSM4, EvolvedFSM8, EvolvedFSM16)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import (
@@ -124,29 +124,14 @@ all_strategies = [
     Eatherley,
     EventualCycleHunter,
     EvolvedANN,
-    # EvolvedANN2,
+    EvolvedANN2,
     EvolvedANN05,
     EvolvedANNMoran,
     EvolvedFSM4,
     EvolvedFSM8,
-    # EvolvedLookerUp0_0_1,
-    # EvolvedLookerUp0_0_2,
-    # EvolvedLookerUp0_0_3,
-    # EvolvedLookerUp1_1_0,
+    EvolvedFSM16,
     EvolvedLookerUp1_1_1,
-    # EvolvedLookerUp1_1_2,
-    # EvolvedLookerUp1_1_3,
-    # EvolvedLookerUp1_1_4,
-    # EvolvedLookerUp2_2_0,
-    # EvolvedLookerUp2_2_1,
     EvolvedLookerUp2_2_2,
-    # EvolvedLookerUp2_2_3,
-    # EvolvedLookerUp2_2_4,
-    # EvolvedLookerUp3_3_1,
-    # EvolvedLookerUp3_3_2,
-    # EvolvedLookerUp3_3_3,
-    # EvolvedLookerUp4_4_1,
-    # EvolvedLookerUp4_4_2,
     EvolvedLookerUpMoran2_2_2,
     Feld,
     FirmButFair,

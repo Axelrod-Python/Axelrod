@@ -73,8 +73,8 @@ class TestLookerUp(TestPlayer):
     def test_zero_tables(self):
         """Test the corner case where n=0."""
         pattern = "CD"
-        lookup_table_keys = create_lookup_table_keys(plays=0,
-                                                     opponent_start_plays=1)
+        lookup_table_keys = create_lookup_table_keys(
+            plays=0, op_plays=2, op_start_plays=0)
 
         lookup_table = dict(zip(lookup_table_keys, pattern))
         player = axelrod.LookerUp(lookup_table)
@@ -151,9 +151,9 @@ class TestGeneratedPlayers(unittest.TestCase):
         issue then AttributeError will be raised."""
         patterns = axelrod.load_lookerup_tables()
         for k, v in patterns.items():
-            name, plays, opp_plays, opp_start_plays = k
+            name, plays, op_plays, op_start_plays = k
             class_name = "EvolvedLookerUp{}{}_{}_{}".format(
-                name, plays, opp_plays, opp_start_plays)
+                name, plays, op_plays, op_start_plays)
             getattr(axelrod, class_name)
 
 

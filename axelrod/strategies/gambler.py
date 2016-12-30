@@ -42,10 +42,9 @@ class PSOGambler1_1_1(Gambler):
     def __init__(self):
         pattern = tables[('2', 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
-            plays=2, opp_plays=2, opponent_start_plays=2,
+            plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)
-
 
 
 class PSOGambler2_2_2(Gambler):
@@ -59,7 +58,7 @@ class PSOGambler2_2_2(Gambler):
     def __init__(self):
         pattern = tables[('2', 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
-            plays=2, opp_plays=2, opponent_start_plays=2,
+            plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)
 
@@ -74,7 +73,7 @@ class PSOGambler3_3_3(Gambler):
     def __init__(self):
         pattern = tables[('', 3, 3, 3)]
         lookup_table = create_lookup_table_from_pattern(
-            plays=3, opp_plays=3, opponent_start_plays=3,
+            plays=3, op_plays=3, op_start_plays=3,
             pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)
 
@@ -89,7 +88,7 @@ class PSOGambler2_2_2_Noise05(Gambler):
     def __init__(self):
         pattern = tables[('05_noise', 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
-            plays=2, opp_plays=2, opponent_start_plays=2,
+            plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)
 
@@ -104,6 +103,6 @@ class PSOGambler2_2_2_Moran(Gambler):
     def __init__(self):
         pattern = tables[("moran", 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
-            plays=2, opp_plays=2, opponent_start_plays=2,
+            plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)

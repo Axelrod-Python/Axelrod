@@ -9,27 +9,24 @@ module = sys.modules[__name__]
 C, D = Actions.C, Actions.D
 
 # Dictionary of table patterns
-# Keys are (plays, opp_plays, opponent_start_plays)
+# Keys are (name, plays, op_plays, op_start_plays)
 patterns = load_lookerup_tables()
 
 
-def create_lookup_table_keys(plays=2, opp_plays=None, opponent_start_plays=2):
+def create_lookup_table_keys(plays, op_plays, op_start_plays):
     """Creates the keys for a lookup table."""
-    if opp_plays is None:
-        opp_plays = plays
     self_histories = [''.join(x) for x in product('CD', repeat=plays)]
-    other_histories = [''.join(x) for x in product('CD', repeat=opp_plays)]
+    other_histories = [''.join(x) for x in product('CD', repeat=op_plays)]
     opponent_starts = [''.join(x) for x in
-                       product('CD', repeat=opponent_start_plays)]
+                       product('CD', repeat=op_start_plays)]
     lookup_table_keys = list(product(opponent_starts, self_histories,
-                                         other_histories))
+                                     other_histories))
     return lookup_table_keys
 
-def create_lookup_table_from_pattern(
-    plays=2, opp_plays=None, opponent_start_plays=2, pattern=None):
+def create_lookup_table_from_pattern(plays, op_plays, op_start_plays, pattern):
     lookup_table_keys = create_lookup_table_keys(
-        plays=plays, opp_plays=opp_plays,
-        opponent_start_plays=opponent_start_plays)
+        plays=plays, op_plays=op_plays,
+        op_start_plays=op_start_plays)
     table = dict(zip(lookup_table_keys, pattern))
     return table
 
@@ -120,28 +117,28 @@ class LookerUp(Player):
         # separate variable, figure it out. The number of turns is the length
         # of the second element of any given key in the dict.
         self.plays = len(list(self.lookup_table.keys())[0][1])
-        self.opp_plays = len(list(self.lookup_table.keys())[0][2])
+        self.op_plays = len(list(self.lookup_table.keys())[0][2])
         # The number of opponent starting actions is the length of the first
         # element of any given key in the dict.
-        self.opponent_start_plays = len(list(self.lookup_table.keys())[0][0])
+        self.op_start_plays = len(list(self.lookup_table.keys())[0][0])
         # If the table dictates to ignore the opening actions of the opponent
         # then the memory classification is adjusted
-        if self.opponent_start_plays == 0:
-            self.classifier['memory_depth'] = max(self.plays, self.opp_plays)
+        if self.op_start_plays == 0:
+            self.classifier['memory_depth'] = max(self.plays, self.op_plays)
         else:
             self.classifier['memory_depth'] = float('inf')
 
         # Ensure that table is well-formed
         for k, v in lookup_table.items():
             if (len(k[1]) != self.plays) or \
-               (len(k[0]) != self.opponent_start_plays) or \
-               (len(k[2]) != self.opp_plays):
+               (len(k[0]) != self.op_start_plays) or \
+               (len(k[2]) != self.op_plays):
                 raise ValueError("All table elements must have the same size")
 
 
     def strategy(self, opponent):
         # If there isn't enough history to lookup an action, cooperate.
-        table_depth = max(self.opp_plays, self.plays, self.opponent_start_plays)
+        table_depth = max(self.plays, self.op_plays, self.op_start_plays)
         if len(self.history) < table_depth:
             return C
         # Count backward m turns to get my own recent history.
@@ -150,12 +147,12 @@ class LookerUp(Player):
         else:
             history_start = -1 * self.plays
             my_history = ''.join(self.history[history_start:])
-        if self.opp_plays == 0:
+        if self.op_plays == 0:
             opponent_history = ''
         else:
-            history_start = -1 * self.opp_plays
+            history_start = -1 * self.op_plays
             opponent_history = ''.join(opponent.history[history_start:])
-        opponent_start = ''.join(opponent.history[:self.opponent_start_plays])
+        opponent_start = ''.join(opponent.history[:self.op_start_plays])
         # Put these three strings together in a tuple.
         key = (opponent_start, my_history, opponent_history)
         # Look up the action associated with that tuple in the lookup table.
@@ -167,11 +164,11 @@ class LookerUp(Player):
 # loaded above, one for each key.
 
 for k, pattern in patterns.items():
-    name, plays, opp_plays, opp_start_plays = k
+    name, plays, op_plays, op_start_plays = k
     table = create_lookup_table_from_pattern(
-        plays, opp_plays, opp_start_plays, pattern)
+        plays, op_plays, op_start_plays, pattern)
     class_name = "EvolvedLookerUp{}{}_{}_{}".format(
-        name, plays, opp_plays, opp_start_plays)
+        name, plays, op_plays, op_start_plays)
     # Dynamically create the class
     new_class = type(class_name, (LookerUp,), {})
     new_class.__init__ = init_args(partial(
@@ -192,7 +189,7 @@ class Winner12(LookerUp):
 
     def __init__(self):
         lookup_table_keys = create_lookup_table_keys(
-            plays=1, opp_plays=2, opponent_start_plays=0)
+            plays=1, op_plays=2, op_start_plays=0)
 
         pattern = 'CDCDDCDD'
         # Zip together the keys and the action pattern to get the lookup table.
@@ -210,7 +207,7 @@ class Winner21(LookerUp):
 
     def __init__(self):
         lookup_table_keys = create_lookup_table_keys(
-            plays=2, opp_plays=1, opponent_start_plays=0)
+            plays=2, op_plays=1, op_start_plays=0)
 
         pattern = 'CDCDCDDD'
         # Zip together the keys and the action pattern to get the lookup table.

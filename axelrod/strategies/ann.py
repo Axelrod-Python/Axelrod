@@ -1,4 +1,4 @@
-# Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
+# Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
 # Original Author: Martin Jones, @mojones
 
 from axelrod import Actions, Player, init_args, load_weights
@@ -22,7 +22,6 @@ def split_weights(weights, input_values, hidden_layer_size):
 
     hidden2output = weights[start: end]
     bias = weights[end:]
-
     return (input2hidden, hidden2output, bias)
 
 
@@ -38,6 +37,16 @@ class ANN(Player):
         'manipulates_state': False,
         'long_run_time': False
     }
+
+    @init_args
+    def __init__(self, weights, num_features, num_hidden):
+        Player.__init__(self)
+        (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
+        self.input_to_hidden_layer_weights = i2h
+        self.hidden_to_output_layer_weights = h2o
+        self.bias_weights = bias
+        self.input_values = num_features
+        self.hidden_layer_size = num_hidden
 
     def activate(self, inputs):
         """Compute the output of the neural network."""
@@ -64,23 +73,7 @@ class ANN(Player):
 
         return output_value
 
-    @init_args
-    def __init__(
-        self,
-        input_to_hidden_layer_weights=[],
-        hidden_to_output_layer_weights=[],
-        bias_weights=[]
-    ):
-
-        Player.__init__(self)
-        self.input_to_hidden_layer_weights = input_to_hidden_layer_weights
-        self.hidden_to_output_layer_weights = hidden_to_output_layer_weights
-        self.bias_weights = bias_weights
-
-        self.input_values = len(input_to_hidden_layer_weights[0])
-        self.hidden_layer_size = len(hidden_to_output_layer_weights)
-
-    def strategy(self, opponent):
+    def compute_features(self, opponent):
         # Compute features for Neural Network
         # These are True/False 0/1
         if len(opponent.history) == 0:
@@ -131,7 +124,7 @@ class ANN(Player):
         total_self_c = self.cooperations
         total_self_d = self.defections
 
-        output = self.activate([
+        return [
             opponent_first_c,
             opponent_first_d,
             opponent_second_c,
@@ -149,7 +142,11 @@ class ANN(Player):
             total_self_c,
             total_self_d,
             len(self.history)
-        ])
+        ]
+
+    def strategy(self, opponent):
+        features = self.compute_features(opponent)
+        output = self.activate(features)
         if output > 0:
             return C
         else:
@@ -169,17 +166,10 @@ class EvolvedANN(ANN):
 
     @init_args
     def __init__(self):
-        input_values = 17
-        hidden_layer_size = 10
-
-        weights = nn_weights['']
-
-        (i2h, h2o, bias) = split_weights(
-            weights,
-            input_values,
-            hidden_layer_size
-        )
-        ANN.__init__(self, i2h, h2o, bias)
+        weights = nn_weights['1']
+        num_features = 17
+        num_hidden = 10
+        ANN.__init__(self, weights, num_features, num_hidden)
 
 
 class EvolvedANN2(ANN):
@@ -195,17 +185,10 @@ class EvolvedANN2(ANN):
 
     @init_args
     def __init__(self):
-        input_values = 17
-        hidden_layer_size = 10
-
         weights = nn_weights['2']
-
-        (i2h, h2o, bias) = split_weights(
-            weights,
-            input_values,
-            hidden_layer_size
-        )
-        ANN.__init__(self, i2h, h2o, bias)
+        num_features = 17
+        num_hidden = 10
+        ANN.__init__(self, weights, num_features, num_hidden)
 
 
 class EvolvedANN05(ANN):
@@ -221,17 +204,10 @@ class EvolvedANN05(ANN):
 
     @init_args
     def __init__(self):
-        input_values = 17
-        hidden_layer_size = 10
-
         weights = nn_weights['05']
-
-        (i2h, h2o, bias) = split_weights(
-            weights,
-            input_values,
-            hidden_layer_size
-        )
-        ANN.__init__(self, i2h, h2o, bias)
+        num_features = 17
+        num_hidden = 10
+        ANN.__init__(self, weights, num_features, num_hidden)
 
 
 class EvolvedANNMoran(ANN):
@@ -248,14 +224,7 @@ class EvolvedANNMoran(ANN):
 
     @init_args
     def __init__(self):
-        input_values = 17
-        hidden_layer_size = 10
-
         weights = nn_weights['moran']
-
-        (i2h, h2o, bias) = split_weights(
-            weights,
-            input_values,
-            hidden_layer_size
-        )
-        ANN.__init__(self, i2h, h2o, bias)
+        num_features = 17
+        num_hidden = 10
+        ANN.__init__(self, weights, num_features, num_hidden)
