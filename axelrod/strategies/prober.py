@@ -5,6 +5,42 @@ import random
 C, D = Actions.C, Actions.D
 
 
+class CollectiveStrategy(Player):
+    """Defined in [Li2009]. 'It always cooperates in the first move and defects
+    in the second move. If the opponent also cooperates in the first move and
+    defects in the second move, CS will cooperate until the opponent defects.
+    Otherwise, CS will always defect.'
+
+    Names:
+        Collective Strategy [Li2009]
+
+    """
+
+    name = "CollectiveStrategy"
+
+    classifier = {
+        'stochastic': False,
+        'memory_depth': float('inf'),  # Long memory
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        turn = len(self.history)
+        if turn == 0:
+            return C
+        if turn == 1:
+            return D
+        if opponent.defections > 1:
+            return D
+        if opponent.history[0:2] == [C, D]:
+            return C
+        return D
+
+
 class Prober(Player):
     """
     Plays D, C, C initially. Defects forever if opponent cooperated in moves 2

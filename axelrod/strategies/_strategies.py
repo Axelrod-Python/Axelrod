@@ -52,8 +52,8 @@ from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .mutual import Desperate, Hopeless, Willing
 from .negation import Negation
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
-from .prober import (Prober, Prober2, Prober3, Prober4, HardProber,
-                     NaiveProber, RemorsefulProber)
+from .prober import (CollectiveStrategy, Prober, Prober2, Prober3, Prober4,
+                     HardProber, NaiveProber, RemorsefulProber)
 from .punisher import Punisher, InversePunisher
 from .qlearner import (
     RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner)
@@ -92,6 +92,7 @@ all_strategies = [
     Calculator,
     CautiousQLearner,
     Champion,
+    CollectiveStrategy,
     ContriteTitForTat,
     Cooperator,
     CooperatorHunter,
