@@ -98,7 +98,7 @@ class LookerUp(Player):
     }
 
     @init_args
-    def __init__(self, lookup_table=None):
+    def __init__(self, lookup_table=None, initial_actions=None):
         """
         If no lookup table is provided to the constructor, then use the TFT one.
         """
@@ -128,6 +128,11 @@ class LookerUp(Player):
         else:
             self.classifier['memory_depth'] = float('inf')
 
+        if not initial_actions:
+            table_depth = max(self.plays, self.op_plays, self.op_start_plays)
+            initial_actions = [C] * table_depth
+        self.initial_actions = initial_actions
+
         # Ensure that table is well-formed
         for k, v in lookup_table.items():
             if (len(k[1]) != self.plays) or \
@@ -140,7 +145,7 @@ class LookerUp(Player):
         # If there isn't enough history to lookup an action, cooperate.
         table_depth = max(self.plays, self.op_plays, self.op_start_plays)
         if len(self.history) < table_depth:
-            return C
+            return self.initial_actions[len(self.history)]
         # Count backward m turns to get my own recent history.
         if self.plays == 0:
             my_history = ''
