@@ -28,8 +28,8 @@ def load_lookerup_tables(filename="lookup_tables.csv", directory="data"):
     rows = load_file(filename, directory)
     d = dict()
     for row in rows:
-        name, a, b, c, pattern = row
-        d[(name, int(a), int(b), int(c))] = pattern
+        name, a, b, c, initial, pattern = row
+        d[(name, int(a), int(b), int(c))] = (initial, pattern)
     return d
 
 def load_pso_tables(filename="pso_gambler.csv", directory="data"):

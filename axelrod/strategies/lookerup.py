@@ -168,7 +168,7 @@ class LookerUp(Player):
 # Create several classes at runtime based on the data in the look up tables
 # loaded above, one for each key.
 
-for k, pattern in patterns.items():
+for k, (initial, pattern) in patterns.items():
     name, plays, op_plays, op_start_plays = k
     table = create_lookup_table_from_pattern(
         plays, op_plays, op_start_plays, pattern)
@@ -177,14 +177,13 @@ for k, pattern in patterns.items():
     # Dynamically create the class
     new_class = type(class_name, (LookerUp,), {})
     new_class.__init__ = init_args(partial(
-        new_class.__init__, lookup_table=table))
+        new_class.__init__, lookup_table=table, initial_actions=initial))
     new_class.name = class_name
     # Add the generated class to the module dictionary so it can be
     # imported into other modules
     setattr(module, class_name, new_class)
 
 
-@InitialTransformer((C, C), name_prefix=None)
 class Winner12(LookerUp):
     """
     Names:
@@ -199,10 +198,10 @@ class Winner12(LookerUp):
         pattern = 'CDCDDCDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
-        LookerUp.__init__(self, lookup_table=lookup_table)
+        LookerUp.__init__(self, lookup_table=lookup_table,
+                          initial_actions=(C, C))
 
 
-@InitialTransformer((D, C), name_prefix=None)
 class Winner21(LookerUp):
     """
     Names:
@@ -217,4 +216,5 @@ class Winner21(LookerUp):
         pattern = 'CDCDCDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
-        LookerUp.__init__(self, lookup_table=lookup_table)
+        LookerUp.__init__(self, lookup_table=lookup_table,
+                          initial_actions=(D, C))
