@@ -1,7 +1,7 @@
 from collections import defaultdict
 
-from axelrod import get_state_distribution_from_history, Player, \
-    update_history, update_state_distribution,  Actions
+from axelrod import Actions, Player, update_history, update_state_distribution
+from .history import History
 
 C, D = Actions.C, Actions.D
 
@@ -13,7 +13,7 @@ class MockPlayer(Player):
     def __init__(self, player, move):
         # Need to retain history for opponents that examine opponents history
         Player.__init__(self)
-        self.history = player.history.copy()
+        self.history = History(player.history)
         self.move = move
 
     def strategy(self, opponent):
