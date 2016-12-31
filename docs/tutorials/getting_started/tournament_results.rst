@@ -24,6 +24,8 @@ This tutorial will show you how to access the various results of a tournament:
 - State distribution: the count of each type of state of a match
 - Normalised state distribution: the normalised count of each type of state of a
   match
+- Initial cooperation count: the count of initial cooperation by each player.
+- Initial cooperation rate: the rate of initial cooperation by each player.
 - Cooperation rating: cooperation rating of each player
 - Vengeful cooperation: a morality metric from the literature (see
   :ref:`morality-metrics`).
@@ -63,8 +65,8 @@ This gives the length of the matches played by each player::
      [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]],
      [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]]]
 
-Every player plays 200 turns against every other player for every repetition of
-the tournament.
+Every player plays 10 turns against every other player (including themselves)
+for every repetition of the tournament.
 
 Scores
 ------
@@ -267,6 +269,28 @@ the second the action of the opponent::
       Counter({('C', 'C'): 1.0}),
       Counter()]]
 
+
+Initial cooperation counts
+--------------------------
+
+This gives the count of cooperations made by each player during the first turn
+of every match::
+
+    >>> results.initial_cooperation_count
+    [9, 0, 9, 9]
+
+Each player plays an opponent a total of 9 times (3 opponents and 3
+repetitions). Apart from the :code:`Defector`, they all cooperate on the first
+turn.
+
+Initial cooperation rates
+-------------------------
+
+This gives the rate of which a strategy cooperates during the first turn::
+
+    >>> results.initial_cooperation_rate
+    [1.0, 0.0, 1.0, 1.0]
+
 Morality Metrics
 ----------------
 
@@ -299,10 +323,10 @@ that summarises the results of the tournament::
 
     >>> summary = results.summarise()
     >>> pprint.pprint(summary)
-    [Player(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0, CC_rate=...),
-     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0, CC_rate=...),
-     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0, CC_rate=...),
-     Player(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0, CC_rate=...)]
+    [Player(Rank=0, Name='Defector', Median_score=2.6..., Cooperation_rating=0.0, Wins=3.0, Initial_C_rate=0.0, CC_rate=...),
+     Player(Rank=1, Name='Tit For Tat', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0, Initial_C_rate=1.0, CC_rate=...),
+     Player(Rank=2, Name='Grudger', Median_score=2.3..., Cooperation_rating=0.7, Wins=0.0, Initial_C_rate=1.0, CC_rate=...),
+     Player(Rank=3, Name='Cooperator', Median_score=2.0..., Cooperation_rating=1.0, Wins=0.0, Initial_C_rate=1.0, CC_rate=...)]
 
 It is also possible to write this data directly to a csv file using the
 `write_summary` method::
@@ -313,8 +337,8 @@ It is also possible to write this data directly to a csv file using the
     ...     csvreader = csv.reader(outfile)
     ...     for row in csvreader:
     ...         print(row)
-    ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins', 'CC_rate', 'CD_rate', 'DC_rate', 'DD_rate']
-    ['0', 'Defector', '2.6...', '0.0', '3.0', '0.0', '0.0', '0.4...', '0.6...']
-    ['1', 'Tit For Tat', '2.3...', '0.7', '0.0', '0.66...', '0.03...', '0.0', '0.3...']
-    ['2', 'Grudger', '2.3...', '0.7', '0.0', '0.66...', '0.03...', '0.0', '0.3...']
-    ['3', 'Cooperator', '2.0...', '1.0', '0.0', '0.66...', '0.33...', '0.0', '0.0']
+    ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins', 'Initial_C_rate', 'CC_rate', 'CD_rate', 'DC_rate', 'DD_rate']
+    ['0', 'Defector', '2.6...', '0.0', '3.0', '0.0', '0.0', '0.0', '0.4...', '0.6...']
+    ['1', 'Tit For Tat', '2.3...', '0.7', '0.0', '1.0', '0.66...', '0.03...', '0.0', '0.3...']
+    ['2', 'Grudger', '2.3...', '0.7', '0.0', '1.0', '0.66...', '0.03...', '0.0', '0.3...']
+    ['3', 'Cooperator', '2.0...', '1.0', '0.0', '1.0', '0.66...', '0.33...', '0.0', '0.0']
