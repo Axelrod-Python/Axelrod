@@ -217,8 +217,8 @@ ForgiverTransformer = StrategyTransformerFactory(
 
 
 def nice_wrapper(player, opponent, action):
-    """If a strategy wants to defect, flip to cooperate with the given
-    probability."""
+    """Makes sure that the player doesn't defect unless the opponent has already
+    defected."""
     if action == D:
         if opponent.defections == 0:
             return C
