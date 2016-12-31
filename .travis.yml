@@ -1,8 +1,8 @@
 
 language: python
 python:
-  - 3.4
   - 3.5
+  - 3.6
 
 cache:
   directories:
@@ -15,7 +15,7 @@ install:
   - pip install -r requirements.txt
   - pip install sphinx
   - pip install sphinx_rtd_theme
-  - pip install docutils==0.12 
+  - pip install docutils==0.12
   - pip install coverage
   - pip install coveralls
 script:
