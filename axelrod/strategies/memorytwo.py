@@ -13,9 +13,9 @@ class MEM2(Player):
     ALLD has ever been selected twice, which can only be known if the entire
     history of play is accessible.
 
-    Names
-    -----
-        MEM2 [Li2014]
+    Names:
+
+        - MEM2 [Li2014]_
     """
 
     name = 'MEM2'

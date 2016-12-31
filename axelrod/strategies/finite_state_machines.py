@@ -178,7 +178,11 @@ class Predator(FSMPlayer):
 
 
 class Pun1(FSMPlayer):
-    """FSM player described in [Ashlock2006]."""
+    """FSM player described in [Ashlock2006].
+
+    Names:
+        - Pun1 [Ashlock2006]_
+    """
 
     name = 'Pun1'
     classifier = {

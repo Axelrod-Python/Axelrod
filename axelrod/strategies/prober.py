@@ -12,7 +12,8 @@ class CollectiveStrategy(Player):
     Otherwise, CS will always defect.'
 
     Names:
-        Collective Strategy [Li2009]
+
+        - Collective Strategy [Li2009]_
 
     """
 
