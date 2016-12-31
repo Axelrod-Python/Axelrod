@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 from collections import Counter
 import random
 
 import numpy as np
 
 from .deterministic_cache import DeterministicCache
-from .match import Match, is_stochastic
+from .match import Match
 from .random_ import randrange
 
 
@@ -93,14 +92,6 @@ class MoranProcess(object):
             self.players.append(player)
         self.populations = [self.population_distribution()]
         self.num_players = len(self.players)
-
-    @property
-    def _stochastic(self):
-        """
-        A boolean to show whether a match between two players would be
-        stochastic
-        """
-        return is_stochastic(self.players, self.noise) or (self.mutation_rate > 0)
 
     def mutate(self, index):
         # If mutate, choose another strategy at random from the initial population

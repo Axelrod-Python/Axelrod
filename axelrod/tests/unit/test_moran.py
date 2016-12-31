@@ -1,15 +1,13 @@
-# -*- coding: utf-8 -*-
 from collections import Counter
 import itertools
 import random
 import unittest
 
+from hypothesis import given, example, settings
+
 import axelrod
 from axelrod import MoranProcess
 from axelrod.moran import fitness_proportionate_selection
-
-from hypothesis import given, example, settings
-
 from axelrod.tests.property import strategy_lists
 
 
@@ -20,17 +18,6 @@ class TestMoranProcess(unittest.TestCase):
         random.seed(1)
         self.assertEqual(fitness_proportionate_selection([1, 1, 1]), 0)
         self.assertEqual(fitness_proportionate_selection([1, 1, 1]), 2)
-
-    def test_stochastic(self):
-        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
-        mp = MoranProcess((p1, p2))
-        self.assertFalse(mp._stochastic)
-        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
-        mp = MoranProcess((p1, p2), noise=0.05)
-        self.assertTrue(mp._stochastic)
-        p1, p2 = axelrod.Cooperator(), axelrod.Random()
-        mp = MoranProcess((p1, p2))
-        self.assertTrue(mp._stochastic)
 
     def test_exit_condition(self):
         p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
@@ -62,7 +49,6 @@ class TestMoranProcess(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         random.seed(5)
         mp = MoranProcess((p1, p2), mutation_rate=0.2)
-        self.assertEqual(mp._stochastic, True)
         self.assertDictEqual(mp.mutation_targets, {str(p1): [p2], str(p2): [p1]})
         # Test that mutation causes the population to alternate between fixations
         counters = [
@@ -99,7 +85,6 @@ class TestMoranProcess(unittest.TestCase):
         p3 = axelrod.Defector()
         players = [p1, p2, p3]
         mp = MoranProcess(players, mutation_rate=0.2)
-        self.assertEqual(mp._stochastic, True)
         self.assertDictEqual(mp.mutation_targets, {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]})
         # Test that mutation causes the population to alternate between fixations
         counters = [
