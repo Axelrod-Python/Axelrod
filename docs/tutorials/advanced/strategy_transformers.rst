@@ -3,8 +3,8 @@
 Strategy Transformers
 =====================
 
-What is a Strategy Transfomer?
-------------------------------
+What is a Strategy Transformer?
+-------------------------------
 
 A strategy transformer is a function that modifies an existing strategy. For
 example, :code:`FlipTransformer` takes a strategy and flips the actions from
@@ -50,51 +50,6 @@ Included Transformers
 
 The library includes the following transformers:
 
-* :code:`FlipTransformer`: Flips all actions::
-
-    >>> FlippedCooperator = FlipTransformer()(axl.Cooperator)
-    >>> player = FlippedCooperator()
-
-* :code:`NoisyTransformer(noise)`: Flips actions with probability :code:`noise`::
-
-    >>> NoisyCooperator = NoisyTransformer(0.5)(axl.Cooperator)
-    >>> player = NoisyCooperator()
-
-* :code:`DualTransformer`: The Dual of a strategy will return the exact opposite set of moves to the original strategy when both are faced with the same history. [Ashlock2008]_::
-
-    >>> DualWSLS = DualTransformer()(axl.WinStayLoseShift)
-    >>> player = DualWSLS()
-
-* :code:`JossAnnTransformer(probability)`: Where :code:`probability = (x, y)`, the Joss-Ann of a strategy is a new strategy which has a probability :code:`x` of choosing the move C, a probability :code:`y` of choosing the move D, and otherwise uses the response appropriate to the original strategy. [Ashlock2008]_::
-
-    >>> JossAnnTFT = JossAnnTransformer((0.2, 0.3))(axl.TitForTat)
-    >>> player = JossAnnTFT()
-
-* :code:`ForgiverTransformer(p)`: Flips defections with probability :code:`p`::
-
-    >>> ForgivinDefector = ForgiverTransformer(0.1)(axl.Defector)
-    >>> player = ForgivinDefector()
-
-* :code:`InitialTransformer(seq=None)`: First plays the moves in the sequence :code:`seq`, then plays as usual. For example, to obtain a defector that cooperates on the first two rounds::
-
-    >>> InitiallyCooperatingDefector = InitialTransformer([C, C])(axl.Defector)
-    >>> player = InitiallyCooperatingDefector()
-
-* :code:`FinalTransformer(seq=None)`: Ends the tournament with the moves in the sequence :code:`seq`, if the tournament_length is known. For example, to obtain a cooperator that defects on the last two rounds::
-
-    >>> FinallyDefectingCooperator = FinalTransformer([D, D])(axl.Cooperator)
-    >>> player = FinallyDefectingCooperator()
-
-* :code:`RetaliateTransformer(N)`: Retaliation N times after a defection::
-
-    >>> TwoTitsForTat = RetaliationTransformer(2)(axl.Cooperator)
-    >>> player = TwoTitsForTat()
-
-* :code:`RetaliateUntilApologyTransformer()`: adds TitForTat-style retaliation::
-
-    >>> TFT = RetaliateUntilApologyTransformer()(axl.Cooperator)
-    >>> player = TFT()
-
 * :code:`ApologizingTransformer`: Apologizes after a round of :code:`(D, C)`::
 
     >>> ApologizingDefector = ApologyTransformer([D], [C])(axl.Defector)
@@ -111,16 +66,40 @@ The library includes the following transformers:
     >>> DeadlockBreakingTFT = DeadlockBreakingTransformer()(axl.TitForTat)
     >>> player = DeadlockBreakingTFT()
 
+* :code:`DualTransformer`: The Dual of a strategy will return the exact opposite set of moves to the original strategy when both are faced with the same history. [Ashlock2008]_::
+
+    >>> DualWSLS = DualTransformer()(axl.WinStayLoseShift)
+    >>> player = DualWSLS()
+
+* :code:`FlipTransformer`: Flips all actions::
+
+    >>> FlippedCooperator = FlipTransformer()(axl.Cooperator)
+    >>> player = FlippedCooperator()
+
+* :code:`FinalTransformer(seq=None)`: Ends the tournament with the moves in the sequence :code:`seq`, if the tournament_length is known. For example, to obtain a cooperator that defects on the last two rounds::
+
+    >>> FinallyDefectingCooperator = FinalTransformer([D, D])(axl.Cooperator)
+    >>> player = FinallyDefectingCooperator()
+
+* :code:`ForgiverTransformer(p)`: Flips defections with probability :code:`p`::
+
+    >>> ForgivinDefector = ForgiverTransformer(0.1)(axl.Defector)
+    >>> player = ForgivinDefector()
+
 * :code:`GrudgeTransformer(N)`: Defections unconditionally after more than N defections::
 
     >>> GrudgingCooperator = GrudgeTransformer(2)(axl.Cooperator)
     >>> player = GrudgingCooperator()
 
-* :code:`TrackHistoryTransformer`: Tracks History internally in the
-  :code:`Player` instance in a variable :code:`_recorded_history`. This allows a
-  player to e.g. detect noise.::
+* :code:`InitialTransformer(seq=None)`: First plays the moves in the sequence :code:`seq`, then plays as usual. For example, to obtain a defector that cooperates on the first two rounds::
 
-    >>> player = TrackHistoryTransformer()(axl.Random)()
+    >>> InitiallyCooperatingDefector = InitialTransformer([C, C])(axl.Defector)
+    >>> player = InitiallyCooperatingDefector()
+
+* :code:`JossAnnTransformer(probability)`: Where :code:`probability = (x, y)`, the Joss-Ann of a strategy is a new strategy which has a probability :code:`x` of choosing the move C, a probability :code:`y` of choosing the move D, and otherwise uses the response appropriate to the original strategy. [Ashlock2008]_::
+
+    >>> JossAnnTFT = JossAnnTransformer((0.2, 0.3))(axl.TitForTat)
+    >>> player = JossAnnTFT()
 
 * :code:`MixedTransformer`: Randomly plays a mutation to another strategy (or
   set of strategies. Here is the syntax to do this with a set of strategies::
@@ -134,6 +113,34 @@ The library includes the following transformers:
     >>> strategy = axl.Grudger
     >>> probability = .2
     >>> player =  MixedTransformer(probability, strategy)(axl.Cooperator)
+
+* :code:`NiceTransformer()`: Prevents a strategy from defecting if the opponent
+  has not yet defected::
+
+    >>> NiceDefector = NiceTransformer()(axl.Defector)
+    >>> player = NiceDefector()
+
+
+* :code:`NoisyTransformer(noise)`: Flips actions with probability :code:`noise`::
+
+    >>> NoisyCooperator = NoisyTransformer(0.5)(axl.Cooperator)
+    >>> player = NoisyCooperator()
+
+* :code:`RetaliateTransformer(N)`: Retaliation N times after a defection::
+
+    >>> TwoTitsForTat = RetaliationTransformer(2)(axl.Cooperator)
+    >>> player = TwoTitsForTat()
+
+* :code:`RetaliateUntilApologyTransformer()`: adds TitForTat-style retaliation::
+
+    >>> TFT = RetaliateUntilApologyTransformer()(axl.Cooperator)
+    >>> player = TFT()
+
+* :code:`TrackHistoryTransformer`: Tracks History internally in the
+  :code:`Player` instance in a variable :code:`_recorded_history`. This allows a
+  player to e.g. detect noise.::
+
+    >>> player = TrackHistoryTransformer()(axl.Random)()
 
 
 Composing Transformers
