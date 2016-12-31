@@ -38,6 +38,7 @@ from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
     SoftGrudger, GrudgerAlternator, EasyGo)
 from .grumpy import Grumpy
 from .handshake import Handshake
+from .hmm import HMMPlayer
 from .human import Human
 from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
