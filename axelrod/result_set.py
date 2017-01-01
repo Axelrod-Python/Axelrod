@@ -545,7 +545,8 @@ class ResultSet(object):
                 The indices of the first and second player
             initial_cooperations : tuple
                 A 2 tuple with a 0 or 1 indicating if the initial move of each
-                player was cooperation (0).
+                player was Cooperation (0) or Defection (1), e.g. (0, 1) for a
+                round (C, D)
         """
         self.initial_cooperation_count[p1] += initial_cooperations[0]
         self.initial_cooperation_count[p2] += initial_cooperations[1]
