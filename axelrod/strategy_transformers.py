@@ -17,11 +17,8 @@ from .random_ import random_choice
 
 C, D = Actions.C, Actions.D
 
-# Note: After a transformation is applied,
-# the player's history is overwritten with the modified history
-# just like in the noisy tournament case
-# This can lead to unexpected behavior, such as when
-# FlipTransform is applied to Alternator
+# Note: After a transformation is applied, the player's history is overwritten with the modified history just like in
+# the noisy tournament case. This can lead to unexpected behavior, such as when FlipTransform is applied to Alternator.
 
 
 def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
@@ -74,7 +71,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             args = self.args
             kwargs = self.kwargs
             try:
-                # if "name_prefix" in kwargs remove as only want dec arguments
+                # If "name_prefix" in kwargs remove as only want decorator arguments
                 del kwargs["name_prefix"]
             except KeyError:
                 pass
@@ -226,6 +223,19 @@ def forgiver_wrapper(player, opponent, action, p):
 
 ForgiverTransformer = StrategyTransformerFactory(
     forgiver_wrapper, name_prefix="Forgiving")
+
+
+def nice_wrapper(player, opponent, action):
+    """Makes sure that the player doesn't defect unless the opponent has already
+    defected."""
+    if action == D:
+        if opponent.defections == 0:
+            return C
+    return action
+
+
+NiceTransformer = StrategyTransformerFactory(
+    nice_wrapper, name_prefix="Nice")
 
 
 def initial_sequence(player, opponent, action, initial_seq):

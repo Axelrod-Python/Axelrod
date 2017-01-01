@@ -1,10 +1,11 @@
 from axelrod import Actions, Player, init_args, obey_axelrod
+from axelrod.strategy_transformers import NiceTransformer
 from ._strategies import all_strategies
 from .hunter import (
     AlternatorHunter, CooperatorHunter, CycleHunter, DefectorHunter,
     EventualCycleHunter, MathConstantHunter, RandomHunter,)
 from numpy.random import choice
-from random import sample
+
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
@@ -56,12 +57,12 @@ class MetaPlayer(Player):
             self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
 
     def strategy(self, opponent):
-        # Make sure the history of all hunters is current.
-        for ih in range(len(self.team)):
-            self.team[ih].history = self.history
-
         # Get the results of all our players.
-        results = [player.strategy(opponent) for player in self.team]
+        results = []
+        for player in self.team:
+            play = player.strategy(opponent)
+            player.history.append(play)
+            results.append(play)
 
         # A subclass should just define a way to choose the result based on
         # team results.
@@ -119,51 +120,38 @@ class MetaWinner(MetaPlayer):
     @init_args
     def __init__(self, team=None):
         super(MetaWinner, self).__init__(team=team)
-
         # For each player, we will keep the history of proposed moves and
         # a running score since the beginning of the game.
-        for t in self.team:
-            t.proposed_history = []
-            t.score = 0
-
+        self.scores = [0] * len(self.team)
         self.classifier['long_run_time'] = True
 
-    def strategy(self, opponent):
+    def _update_scores(self, opponent):
         # Update the running score for each player, before determining the
         # next move.
+        game = self.match_attributes["game"]
         if len(self.history):
-            for player in self.team:
-                game = self.match_attributes["game"]
-                last_round = (player.proposed_history[-1], opponent.history[-1])
+            for i, player in enumerate(self.team):
+                last_round = (player.history[-1], opponent.history[-1])
                 s = game.scores[last_round][0]
-                player.score += s
-        return super(MetaWinner, self).strategy(opponent)
+                self.scores[i] += s
 
     def meta_strategy(self, results, opponent):
-        scores = [pl.score for pl in self.team]
-        bestscore = max(scores)
-        beststrategies = [i for (i, pl) in enumerate(self.team)
-                          if pl.score == bestscore]
+        self._update_scores(opponent)
+        # Choice an action based on the collection of scores
+        bestscore = max(self.scores)
+        beststrategies = [i for (i, score) in enumerate(self.scores)
+                          if score == bestscore]
         bestproposals = [results[i] for i in beststrategies]
         bestresult = C if C in bestproposals else D
-
-        # Update each player's proposed history with his proposed result, but
-        # always after the new result has been settled based on scores
-        # accumulated until now.
-        for r, t in zip(results, self.team):
-            t.proposed_history.append(r)
-
-        if opponent.defections == 0:
-            # Don't poke the bear
-            return C
-
         return bestresult
 
     def reset(self):
         MetaPlayer.reset(self)
-        for t in self.team:
-            t.proposed_history = []
-            t.score = 0
+        self.scores = [0] * len(self.team)
+
+
+NiceMetaWinner = NiceTransformer()(MetaWinner)
+NiceMetaWinner.name = "Nice Meta Winner"
 
 
 class MetaWinnerEnsemble(MetaWinner):
@@ -179,25 +167,18 @@ class MetaWinnerEnsemble(MetaWinner):
     name = "Meta Winner Ensemble"
 
     def meta_strategy(self, results, opponent):
+        self._update_scores(opponent)
         # Sort by score
-        scores = [(pl.score, i) for (i, pl) in enumerate(self.team)]
+        scores = [(score, i) for (i, score) in enumerate(self.scores)]
         # Choose one of the best scorers at random
         scores.sort(reverse=True)
         prop = max(1, int(len(scores) * 0.08))
         index = choice([i for (s, i) in scores[:prop]])
-
-        # Update each player's proposed history with his proposed result, but
-        # always after the new result has been settled based on scores
-        # accumulated until now.
-        for r, t in zip(results, self.team):
-            t.proposed_history.append(r)
-
-        if opponent.defections == 0:
-            # Don't poke the bear
-            return C
-
-        # return result
         return results[index]
+
+
+NiceMetaWinnerEnsemble = NiceTransformer()(MetaWinnerEnsemble)
+NiceMetaWinnerEnsemble.name = "Nice Meta Winner Ensemble"
 
 
 class MetaHunter(MetaPlayer):
@@ -354,7 +335,7 @@ class MetaWinnerLongMemory(MetaWinner):
 
 
 class MetaWinnerDeterministic(MetaWinner):
-    """Meta Winner Ensemble with the team of Deterministic Players."""
+    """Meta Winner with the team of Deterministic Players."""
 
     name = "Meta Winner Deterministic"
 
@@ -367,7 +348,7 @@ class MetaWinnerDeterministic(MetaWinner):
 
 
 class MetaWinnerStochastic(MetaWinner):
-    """Meta Winner Ensemble with the team of Stochastic Players."""
+    """Meta Winner with the team of Stochastic Players."""
 
     name = "Meta Winner Stochastic"
 
@@ -416,63 +397,63 @@ class MetaMixer(MetaPlayer):
         return choice(results, p=self.distribution)
 
 
-class MWEDeterministic(MetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Deterministic Players."""
+class NMWEDeterministic(NiceMetaWinnerEnsemble):
+    """Nice Meta Winner Ensemble with the team of Deterministic Players."""
 
-    name = "MWE Deterministic"
+    name = "NMWE Deterministic"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 not s().classifier['stochastic']]
-        super(MWEDeterministic, self).__init__(team=team)
+        super(NMWEDeterministic, self).__init__(team=team)
         self.classifier["stochastic"] = True
 
 
-class MWEStochastic(MetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Stochastic Players."""
+class NMWEStochastic(NiceMetaWinnerEnsemble):
+    """Nice Meta Winner Ensemble with the team of Stochastic Players."""
 
-    name = "MWE Stochastic"
+    name = "NMWE Stochastic"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 s().classifier['stochastic']]
-        super(MWEStochastic, self).__init__(team=team)
+        super(NMWEStochastic, self).__init__(team=team)
 
 
-class MWEFiniteMemory(MetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Finite Memory Players."""
+class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
+    """Nice Meta Winner Ensemble with the team of Finite Memory Players."""
 
-    name = "MWE Finite Memory"
+    name = "NMWE Finite Memory"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
-        super(MWEFiniteMemory, self).__init__(team=team)
+        super(NMWEFiniteMemory, self).__init__(team=team)
 
 
-class MWELongMemory(MetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Long Memory Players."""
+class NMWELongMemory(NiceMetaWinnerEnsemble):
+    """Nice Meta Winner Ensemble with the team of Long Memory Players."""
 
-    name = "MWE Long Memory"
+    name = "NMWE Long Memory"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
-        super(MWELongMemory, self).__init__(team=team)
+        super(NMWELongMemory, self).__init__(team=team)
 
 
-class MWEMemoryOne(MetaWinnerEnsemble):
-    """Meta Winner Ensemble with the team of Memory One Players."""
+class NMWEMemoryOne(NiceMetaWinnerEnsemble):
+    """Nice Meta Winner Ensemble with the team of Memory One Players."""
 
-    name = "MWE Memory One"
+    name = "NMWE Memory One"
 
     @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 <= 1]
-        super(MWEMemoryOne, self).__init__(team=team)
+        super(NMWEMemoryOne, self).__init__(team=team)
         self.classifier["long_run_time"] = False

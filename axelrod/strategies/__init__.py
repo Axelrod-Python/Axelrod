@@ -11,31 +11,35 @@ from .meta import (
     MetaMajorityMemoryOne, MetaMajorityFiniteMemory, MetaMajorityLongMemory,
     MetaMinority, MetaMixer, MetaWinner, MetaWinnerDeterministic,
     MetaWinnerEnsemble, MetaWinnerMemoryOne, MetaWinnerFiniteMemory,
-    MetaWinnerLongMemory, MetaWinnerStochastic, MWEDeterministic,
-    MWEFiniteMemory, MWELongMemory, MWEMemoryOne, MWEStochastic
+    MetaWinnerLongMemory, MetaWinnerStochastic, NMWEDeterministic,
+    NMWEFiniteMemory, NMWELongMemory, NMWEMemoryOne, NMWEStochastic,
+    NiceMetaWinner, NiceMetaWinnerEnsemble,
     )
 
-all_strategies += [MetaHunter,
-                   MetaHunterAggressive,
-                   MetaMajority,
-                   MetaMajorityMemoryOne,
-                   MetaMajorityFiniteMemory,
-                   MetaMajorityLongMemory,
-                   MetaMinority,
-                   MetaMixer,
-                   MetaWinner,
-                   MetaWinnerDeterministic,
-                   MetaWinnerEnsemble,
-                   MetaWinnerMemoryOne,
-                   MetaWinnerFiniteMemory,
-                   MetaWinnerLongMemory,
-                   MetaWinnerStochastic,
-                   MWEDeterministic,
-                   MWEFiniteMemory,
-                   MWELongMemory,
-                   MWEMemoryOne,
-                   MWEStochastic
-                   ]
+all_strategies += [
+    MetaHunter,
+    MetaHunterAggressive,
+    MetaMajority,
+    MetaMajorityMemoryOne,
+    MetaMajorityFiniteMemory,
+    MetaMajorityLongMemory,
+    MetaMinority,
+    MetaMixer,
+    MetaWinner,
+    MetaWinnerDeterministic,
+    MetaWinnerEnsemble,
+    MetaWinnerMemoryOne,
+    MetaWinnerFiniteMemory,
+    MetaWinnerLongMemory,
+    MetaWinnerStochastic,
+    NMWEDeterministic,
+    NMWEFiniteMemory,
+    NMWELongMemory,
+    NMWEMemoryOne,
+    NMWEStochastic,
+    NiceMetaWinner,
+    NiceMetaWinnerEnsemble
+]
 
 
 # Distinguished strategy collections in addition to

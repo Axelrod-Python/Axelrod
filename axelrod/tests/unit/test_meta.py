@@ -107,10 +107,10 @@ class TestMetaMinority(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
 
-class TestMetaWinner(TestMetaPlayer):
+class TestNiceMetaWinner(TestMetaPlayer):
 
-    name = "Meta Winner"
-    player = axelrod.MetaWinner
+    name = "Nice Meta Winner"
+    player = axelrod.NiceMetaWinner
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -122,7 +122,7 @@ class TestMetaWinner(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         P2 = axelrod.Player()
 
         # This meta player will simply choose the strategy with the highest
@@ -140,13 +140,13 @@ class TestMetaWinner(TestMetaPlayer):
         self.assertEqual(P1.strategy(P2), C)
 
         opponent = axelrod.Cooperator()
-        player = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        player = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         for _ in range(5):
             player.play(opponent)
         self.assertEqual(player.history[-1], C)
 
         opponent = axelrod.Defector()
-        player = axelrod.MetaWinner(team=[axelrod.Defector])
+        player = axelrod.NiceMetaWinner(team=[axelrod.Defector])
         for _ in range(20):
             player.play(opponent)
         self.assertEqual(player.history[-1], D)
@@ -158,9 +158,9 @@ class TestMetaWinner(TestMetaPlayer):
         self.assertEqual(player.history[-1], D)
 
 
-class TestMetaWinnerEnsemble(TestMetaPlayer):
-    name = "Meta Winner Ensemble"
-    player = axelrod.MetaWinnerEnsemble
+class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
+    name = "Nice Meta Winner Ensemble"
+    player = axelrod.NiceMetaWinnerEnsemble
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -174,11 +174,11 @@ class TestMetaWinnerEnsemble(TestMetaPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
-        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         P2 = axelrod.Cooperator()
         test_responses(self, P1, P2, [C] * 4, [C] * 4, [C] * 4)
 
-        P1 = axelrod.MetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
+        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
         P2 = axelrod.Defector()
         test_responses(self, P1, P2, [C] * 4, [D] * 4, [D] * 4)
 
@@ -412,7 +412,8 @@ class TestMetaMixer(TestMetaPlayer):
         P2 = axelrod.Cooperator()
 
         for k in range(100):
-            self.assertEqual(P1.strategy(P2), C)
+            P1.play(P2)
+            self.assertEqual(P1.history[-1], C)
 
         team.append(axelrod.Defector)
         distribution = [.2, .5, .3, 0]  # If add a defector but does not occur
@@ -420,14 +421,16 @@ class TestMetaMixer(TestMetaPlayer):
         P1 = axelrod.MetaMixer(team, distribution)
 
         for k in range(100):
-            self.assertEqual(P1.strategy(P2), C)
+            P1.play(P2)
+            self.assertEqual(P1.history[-1], C)
 
         distribution = [0, 0, 0, 1]  # If defector is only one that is played
 
         P1 = axelrod.MetaMixer(team, distribution)
 
         for k in range(100):
-            self.assertEqual(P1.strategy(P2), D)
+            P1.play(P2)
+            self.assertEqual(P1.history[-1], D)
 
     def test_raise_error_in_distribution(self):
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
@@ -439,9 +442,9 @@ class TestMetaMixer(TestMetaPlayer):
         self.assertRaises(ValueError, P1.strategy, P2)
 
 
-class TestMWEDeterministic(TestMetaPlayer):
-    name = "MWE Deterministic"
-    player = axelrod.MWEDeterministic
+class TestNMWEDeterministic(TestMetaPlayer):
+    name = "NMWE Deterministic"
+    player = axelrod.NMWEDeterministic
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -456,9 +459,9 @@ class TestMWEDeterministic(TestMetaPlayer):
         self.first_play_test(C)
 
 
-class TestMWEStochastic(TestMetaPlayer):
-    name = "MWE Stochastic"
-    player = axelrod.MWEStochastic
+class TestNMWEStochastic(TestMetaPlayer):
+    name = "NMWE Stochastic"
+    player = axelrod.NMWEStochastic
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -473,9 +476,9 @@ class TestMWEStochastic(TestMetaPlayer):
         self.first_play_test(C)
 
 
-class TestMWEFiniteMemory(TestMetaPlayer):
-    name = "MWE Finite Memory"
-    player = axelrod.MWEFiniteMemory
+class TestNMWEFiniteMemory(TestMetaPlayer):
+    name = "NMWE Finite Memory"
+    player = axelrod.NMWEFiniteMemory
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -490,9 +493,9 @@ class TestMWEFiniteMemory(TestMetaPlayer):
         self.first_play_test(C)
 
 
-class TestMWELongMemory(TestMetaPlayer):
-    name = "MWE Long Memory"
-    player = axelrod.MWELongMemory
+class TestNMWELongMemory(TestMetaPlayer):
+    name = "NMWE Long Memory"
+    player = axelrod.NMWELongMemory
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
@@ -507,9 +510,9 @@ class TestMWELongMemory(TestMetaPlayer):
         self.first_play_test(C)
 
 
-class TestMWEMemoryOne(TestMetaPlayer):
-    name = "MWE Memory One"
-    player = axelrod.MWEMemoryOne
+class TestNMWEMemoryOne(TestMetaPlayer):
+    name = "NMWE Memory One"
+    player = axelrod.NMWEMemoryOne
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': True,
