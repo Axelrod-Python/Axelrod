@@ -1,11 +1,8 @@
 """
-Labeled and weighted graph class for Markov simulations. Not a full-featured
-class, rather an appropriate organizational data structure for handling various
-Markov process calculations, which are typically sparse.
+Weighted undirected sparse graphs.
 
 Original source:
 https://github.com/marcharper/stationary/blob/master/stationary/utils/graph.py
-
 """
 
 from collections import defaultdict
@@ -18,13 +15,10 @@ class Graph(object):
 
     Vertices can be any hashable / immutable python object. Initialize with a
     list of edges:
-        [[node1, node2, transition_probability],
-         [...]
-         ...
-        ]
+        [[node1, node2, weights], ...]
+    Weights can be omitted for an undirected graph.
 
     For efficiency, neighbors are cached in dictionaries.
-
     """
 
     def __init__(self, edges=None, directed=False):
@@ -130,4 +124,3 @@ def complete_graph(length, directed=False):
             edges.append((i, j))
     graph.add_edges(edges)
     return graph
-
