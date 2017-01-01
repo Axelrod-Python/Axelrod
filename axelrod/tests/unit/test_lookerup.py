@@ -134,8 +134,8 @@ class TestEvolvedLookerUp2_2_2(TestPlayer):
     def test_init(self):
         # Check for a few known keys
         known_pairs = {('DD', 'CC', 'CD'): 'D', ('DC', 'CD', 'CD'): 'C',
-                       ('DD', 'CD', 'CD'): 'D', ('DC', 'DC', 'DC'): 'C',
-                       ('DD', 'DD', 'CC'): 'D', ('CD', 'CC', 'DC'): 'C'}
+                       ('DD', 'CD', 'CD'): 'C', ('DC', 'DC', 'DC'): 'C',
+                       ('DD', 'DD', 'CC'): 'D', ('CD', 'CC', 'DC'): 'D'}
         player = self.player()
         for k, v in known_pairs.items():
             self.assertEqual(player.lookup_table[k], v)
@@ -180,7 +180,7 @@ class EvolvedLookerUpvsTFT(TestHeadsUp):
 class EvolvedLookerUpvsAlternator(TestHeadsUp):
     def test_vs(self):
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.Alternator(),
-                         [C, C, D, D, D, D], [C, D, C, D, C, D])
+                         [C, C, C, D, D, D], [C, D, C, D, C, D])
 
 
 class TestWinner12(TestPlayer):

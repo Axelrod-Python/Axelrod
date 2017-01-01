@@ -21,8 +21,8 @@ from .darwin import Darwin
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
 from .finite_state_machines import (
-    Fortress3, Fortress4, Predator, Raider, Ripoff, SolutionB1, SolutionB5,
-    Thumper, FSMPlayer, EvolvedFSM4, EvolvedFSM16,
+    Fortress3, Fortress4, Predator, Pun1, Raider, Ripoff, SolutionB1,
+    SolutionB5, Thumper, FSMPlayer, EvolvedFSM4, EvolvedFSM16,
     EvolvedFSM16Noise05)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector

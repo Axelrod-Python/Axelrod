@@ -7,10 +7,10 @@ from .test_player import TestHeadsUp, TestPlayer
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
-class TestEvolvedANN2(TestPlayer):
+class TestEvolvedANN(TestPlayer):
 
-    name = "EvolvedANN2"
-    player = axelrod.EvolvedANN2
+    name = "EvolvedANN"
+    player = axelrod.EvolvedANN
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -28,16 +28,16 @@ class TestEvolvedANN2(TestPlayer):
 
 class TestEvolvedANNvsCooperator(TestHeadsUp):
     def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN2(), axelrod.Cooperator(),
+        self.versus_test(axelrod.EvolvedANN(), axelrod.Cooperator(),
                          [C, C, C, C, C], [C] * 5)
 
 
 class TestEvolvedANNvsDefector(TestHeadsUp):
     def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN2(), axelrod.Defector(),
+        self.versus_test(axelrod.EvolvedANN(), axelrod.Defector(),
                          [C, C, D, D, D], [D] * 5)
 
 class TestEvolvedANNvsTFT(TestHeadsUp):
     def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN2(), axelrod.TitForTat(),
+        self.versus_test(axelrod.EvolvedANN(), axelrod.TitForTat(),
                          [C] * 5, [C] * 5)
