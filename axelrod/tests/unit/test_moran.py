@@ -6,9 +6,26 @@ import unittest
 from hypothesis import given, example, settings
 
 import axelrod
-from axelrod import MoranProcess, MoranProcessGraph
+from axelrod import Match, MoranProcess, MoranProcessGraph
 from axelrod.moran import fitness_proportionate_selection
 from axelrod.tests.property import strategy_lists
+
+
+class MockMatch(object):
+    """Mock Match class to always return the same score for testing purposes."""
+
+    def __init__(self, players, *args, **kwargs):
+        self.players = players
+        score_dict = {"Cooperator": 2, "Defector": 1}
+        self.score_dict = score_dict
+
+    def play(self):
+        pass
+
+    def final_score_per_turn(self):
+        s = (self.score_dict[str(self.players[0])],
+             self.score_dict[str(self.players[1])])
+        return s
 
 
 class TestMoranProcess(unittest.TestCase):
@@ -135,6 +152,21 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(len(populations), 9)
         self.assertEqual(populations, mp.populations)
         self.assertEqual(mp.winning_strategy_name, str(axelrod.Defector()))
+
+    def test_standard_fixation(self):
+        """Test a traditional Moran process with a MockMatch."""
+        axelrod.seed(0)
+        players = (axelrod.Cooperator(), axelrod.Cooperator(),
+                   axelrod.Defector(), axelrod.Defector())
+        mp = MoranProcess(players, match_class=MockMatch)
+        winners = []
+        for i in range(100):
+            mp.play()
+            winner = mp.winning_strategy_name
+            winners.append(winner)
+            mp.reset()
+        winners = Counter(winners)
+        self.assertEqual(winners["Cooperator"], 82)
 
     @given(strategies=strategy_lists(min_size=2, max_size=5))
     @settings(max_examples=5, timeout=0)  # Very low number of examples

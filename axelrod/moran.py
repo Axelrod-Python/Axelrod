@@ -31,7 +31,7 @@ def fitness_proportionate_selection(scores):
 
 class MoranProcess(object):
     def __init__(self, players, turns=100, noise=0, deterministic_cache=None,
-                 mutation_rate=0., mode='bd'):
+                 mutation_rate=0., mode='bd', match_class=Match):
         """
         An agent based Moran process class. In each round, each player plays a
         Match with each other player. Players are assigned a fitness score by
@@ -64,7 +64,10 @@ class MoranProcess(object):
             probability `mutation_rate`
         mode: string, bd
             Birth-Death (bd) or Death-Birth (db)
+        match_class: subclass of Match
+            The match type to use for scoring
         """
+        self.match_class = match_class
         self.turns = turns
         self.noise = noise
         self.initial_players = players  # save initial population
@@ -208,7 +211,7 @@ class MoranProcess(object):
         for i, j in self._matchup_indices():
             player1 = self.players[i]
             player2 = self.players[j]
-            match = Match(
+            match = self.match_class(
                 (player1, player2), turns=self.turns, noise=self.noise,
                 deterministic_cache=self.deterministic_cache)
             match.play()
@@ -252,7 +255,7 @@ class MoranProcess(object):
 class MoranProcessGraph(MoranProcess):
     def __init__(self, players, interaction_graph, reproduction_graph=None,
                  turns=100, noise=0, deterministic_cache=None,
-                 mutation_rate=0., mode='bd'):
+                 mutation_rate=0., mode='bd', match_class=Match):
         """
         An agent based Moran process class. In each round, each player plays a
         Match with each neighboring player according to the interaction graph.
@@ -270,6 +273,13 @@ class MoranProcessGraph(MoranProcess):
         When a player mutates it chooses a random player type from the initial
         population. This is not the only method yet emulates the common method
         in the literature.
+
+        Note: the weighted graph case is not yet implemented, nor is birth-bias,
+        death-bias, or Link Dynamics updating; however the most common use cases
+        are implemented.
+
+        See [Shakarian2013]_ for more detail on the process and different
+        updating modes.
 
         Parameters
         ----------
@@ -291,6 +301,8 @@ class MoranProcessGraph(MoranProcess):
             probability `mutation_rate`
         mode: string, bd
             Birth-Death (bd) or Death-Birth (db)
+        match_class: subclass of Match
+            The match type to use for scoring
         """
         MoranProcess.__init__(self, players, turns=turns, noise=noise,
                               deterministic_cache=deterministic_cache,
