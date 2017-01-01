@@ -166,13 +166,11 @@ class EvolvedANN(ANN):
 
     @init_args
     def __init__(self):
-        weights = nn_weights['1']
-        num_features = 17
-        num_hidden = 10
+        num_features, num_hidden, weights = nn_weights['1']
         ANN.__init__(self, weights, num_features, num_hidden)
 
 
-class EvolvedANN2(ANN):
+class EvolvedANN5(ANN):
     """
     A strategy based on a pre-trained neural network.
 
@@ -181,32 +179,28 @@ class EvolvedANN2(ANN):
      - EvolvedANN2: : Original name by Marc Harper.
     """
 
-    name = "EvolvedANN2"
+    name = "EvolvedANN5"
 
     @init_args
     def __init__(self):
-        weights = nn_weights['2']
-        num_features = 17
-        num_hidden = 10
+        num_features, num_hidden, weights = nn_weights['5']
         ANN.__init__(self, weights, num_features, num_hidden)
 
 
-class EvolvedANN05(ANN):
+class EvolvedANNNoise05(ANN):
     """
     A strategy based on a pre-trained neural network, trained with noise=0.05.
 
     Names:
 
-     - EvolvedANN05: Original name by Marc Harper.
+     - EvolvedANNNoise05: Original name by Marc Harper.
     """
 
-    name = "EvolvedANN05"
+    name = "EvolvedANNNoise05"
 
     @init_args
     def __init__(self):
-        weights = nn_weights['05']
-        num_features = 17
-        num_hidden = 10
+        num_features, num_hidden, weights = nn_weights['05']
         ANN.__init__(self, weights, num_features, num_hidden)
 
 
@@ -224,7 +218,5 @@ class EvolvedANNMoran(ANN):
 
     @init_args
     def __init__(self):
-        weights = nn_weights['moran']
-        num_features = 17
-        num_hidden = 10
+        num_features, num_hidden, weights = nn_weights['moran']
         ANN.__init__(self, weights, num_features, num_hidden)

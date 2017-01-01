@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from .alternator import Alternator
 from .adaptive import Adaptive
-from .ann import EvolvedANN, EvolvedANN2, EvolvedANN05, EvolvedANNMoran
+from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05, EvolvedANNMoran
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -22,12 +22,13 @@ from .defector import Defector, TrickyDefector
 from .doubler import Doubler
 from .finite_state_machines import (
     Fortress3, Fortress4, Predator, Raider, Ripoff, SolutionB1, SolutionB5,
-    Thumper, FSMPlayer, EvolvedFSM4, EvolvedFSM8, EvolvedFSM16)
+    Thumper, FSMPlayer, EvolvedFSM4, EvolvedFSM16,
+    EvolvedFSM16Noise05)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import (
-    Gambler, PSOGambler1_1_1, PSOGambler2_2_2, PSOGambler3_3_3,
-    PSOGambler2_2_2_Noise05, PSOGambler2_2_2_Moran)
+    Gambler, PSOGambler1_1_1, PSOGambler2_2_2, PSOGambler2_2_2_Noise05,
+    PSOGambler2_2_2_Moran, PSOGamblerMem1)
 from .gobymajority import (GoByMajority,
     GoByMajority10, GoByMajority20, GoByMajority40,
     GoByMajority5,
@@ -38,7 +39,7 @@ from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
     SoftGrudger, GrudgerAlternator, EasyGo)
 from .grumpy import Grumpy
 from .handshake import Handshake
-from .hmm import HMMPlayer
+from .hmm import HMMPlayer, EvolvedHMM5
 from .human import Human
 from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
@@ -125,15 +126,14 @@ all_strategies = [
     Eatherley,
     EventualCycleHunter,
     EvolvedANN,
-    EvolvedANN2,
-    EvolvedANN05,
-    EvolvedANNMoran,
+    EvolvedANN5,
+    EvolvedANNNoise05,
     EvolvedFSM4,
-    EvolvedFSM8,
     EvolvedFSM16,
+    EvolvedFSM16Noise05,
     EvolvedLookerUp1_1_1,
     EvolvedLookerUp2_2_2,
-    EvolvedLookerUpMoran2_2_2,
+    EvolvedHMM5,
     Feld,
     FirmButFair,
     FoolMeForever,
@@ -203,7 +203,7 @@ all_strategies = [
     PSOGambler1_1_1,
     PSOGambler2_2_2,
     PSOGambler2_2_2_Noise05,
-    PSOGambler2_2_2_Moran,
+    PSOGamblerMem1,
     Punisher,
     Raider,
     Random,

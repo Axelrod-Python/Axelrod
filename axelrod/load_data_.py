@@ -19,8 +19,10 @@ def load_weights(filename="ann_weights.csv", directory="data"):
     d = dict()
     for row in rows:
         name = str(row[0])
-        values = list(map(float, row[1:]))
-        d[name] = values
+        num_features = int(row[1])
+        num_hidden = int(row[2])
+        weights = list(map(float, row[3:]))
+        d[name] = (num_features, num_hidden, weights)
     return d
 
 def load_lookerup_tables(filename="lookup_tables.csv", directory="data"):

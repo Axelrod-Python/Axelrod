@@ -382,43 +382,6 @@ class EvolvedFSM4(FSMPlayer):
         FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
 
 
-class EvolvedFSM8(FSMPlayer):
-
-    name = "Evolved FSM 8"
-    classifier = {
-        'memory_depth': 8,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    @init_args
-    def __init__(self):
-        transitions = (
-            (0, C, 0, C),
-            (0, D, 7, D),
-            (1, C, 5, C),
-            (1, D, 6, C),
-            (2, C, 2, D),
-            (2, D, 5, C),
-            (3, C, 3, D),
-            (3, D, 3, D),
-            (4, C, 6, D),
-            (4, D, 7, C),
-            (5, C, 5, C),
-            (5, D, 3, D),
-            (6, C, 5, D),
-            (6, D, 6, C),
-            (7, C, 2, C),
-            (7, D, 7, D)
-        )
-
-        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
-
-
 class EvolvedFSM16(FSMPlayer):
 
     name = "Evolved FSM 16"
@@ -467,6 +430,59 @@ class EvolvedFSM16(FSMPlayer):
             (14, D, 13, D),
             (15, C, 15, D),
             (15, D, 2, C)
+        )
+
+        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
+
+
+class EvolvedFSM16Noise05(FSMPlayer):
+
+    name = "Evolved FSM 16 Noise 05"
+    classifier = {
+        'memory_depth': 16,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self):
+        transitions = (
+            (0, C, 8, C),
+            (0, D, 3, D),
+            (1, C, 13, C),
+            (1, D, 15, D),
+            (2, C, 12, C),
+            (2, D, 3, D),
+            (3, C, 10, C),
+            (3, D, 3, D),
+            (4, C, 5, D),
+            (4, D, 4, D),
+            (5, C, 4, D),
+            (5, D, 10, D),
+            (6, C, 8, C),
+            (6, D, 6, D),
+            (7, C, 5, D),
+            (7, D, 15, C),
+            (8, C, 2, C),
+            (8, D, 4, D),
+            (9, C, 15, D),
+            (9, D, 6, D),
+            (10, C, 4, D),
+            (10, D, 1, D),
+            (11, C, 14, D),
+            (11, D, 13, C),
+            (12, C, 13, C),
+            (12, D, 2, C),
+            (13, C, 13, C),
+            (13, D, 6, C),
+            (14, C, 3, D),
+            (14, D, 13, D),
+            (15, C, 5, D),
+            (15, D, 11, C)
         )
 
         FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)

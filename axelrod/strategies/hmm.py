@@ -83,7 +83,8 @@ class HMMPlayer(Player):
 
     @init_args
     def __init__(self, transitions_C=None, transitions_D=None,
-                 emission_probabilities=None, initial_state=0, initial_action=C):
+                 emission_probabilities=None, initial_state=0,
+                 initial_action=C):
         Player.__init__(self)
         if not transitions_C:
             transitions_C = [[1]]
@@ -104,7 +105,7 @@ class HMMPlayer(Player):
         for m in [self.hmm.transitions_C, self.hmm.transitions_D]:
             for row in m:
                 values.update(row)
-        if not values.issubset(set([0, 1])):
+        if not values.issubset({0, 1}):
             return True
         return False
 
@@ -122,4 +123,27 @@ class HMMPlayer(Player):
         Player.reset(self)
         self.hmm.state = self.initial_state
 
+
+class EvolvedHMM5(HMMPlayer):
+    name = "EvolvedHMM5"
+
+    @init_args
+    def __init__(self):
+        initial_state = 3
+        initial_action = C
+        t_C = [[1, 0, 0, 0, 0],
+               [0, 1, 0, 0, 0],
+               [0, 1, 0, 0, 0],
+               [0.631, 0, 0, 0.369, 0],
+               [0.143, 0.018, 0.118, 0, 0.721]]
+
+        t_D = [[0, 1, 0, 0, 0],
+               [0, 0.487, 0.513, 0, 0],
+               [0, 0, 0, 0.590, 0.410],
+               [1, 0, 0, 0, 0],
+               [0, 0.287, 0.456, 0.146, 0.111]]
+
+        emissions = [1, 0, 0, 1, 0.111]
+        HMMPlayer.__init__(self, t_C, t_D, emissions, initial_state,
+                           initial_action)
 

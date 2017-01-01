@@ -140,7 +140,6 @@ class LookerUp(Player):
                (len(k[2]) != self.op_plays):
                 raise ValueError("All table elements must have the same size")
 
-
     def strategy(self, opponent):
         # If there isn't enough history to lookup an action, cooperate.
         table_depth = max(self.plays, self.op_plays, self.op_start_plays)

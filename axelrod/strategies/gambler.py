@@ -31,6 +31,23 @@ class Gambler(LookerUp):
         return random_choice(action)
 
 
+class PSOGamblerMem1(Gambler):
+    """
+    A 1x1x0 PSOGambler trained with pyswarm.
+    See: https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
+    """
+
+    name = "PSO Gambler Mem1"
+
+    def __init__(self):
+        pattern = tables[('Mem1', 1, 1, 0)]
+        lookup_table = create_lookup_table_from_pattern(
+            plays=1, op_plays=1, op_start_plays=0,
+            pattern=pattern)
+        Gambler.__init__(self, lookup_table=lookup_table)
+        self.classifier['memory_depth'] = 1
+
+
 class PSOGambler1_1_1(Gambler):
     """
     A 1x1x1 PSOGambler trained with pyswarm.
@@ -59,21 +76,6 @@ class PSOGambler2_2_2(Gambler):
         pattern = tables[('2', 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
             plays=2, op_plays=2, op_start_plays=2,
-            pattern=pattern)
-        Gambler.__init__(self, lookup_table=lookup_table)
-
-
-class PSOGambler3_3_3(Gambler):
-    """
-    A 3x3x3 PSOGambler trained with pyswarm.
-    """
-
-    name = "PSO Gambler 3_3_3"
-
-    def __init__(self):
-        pattern = tables[('', 3, 3, 3)]
-        lookup_table = create_lookup_table_from_pattern(
-            plays=3, op_plays=3, op_start_plays=3,
             pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)
 
