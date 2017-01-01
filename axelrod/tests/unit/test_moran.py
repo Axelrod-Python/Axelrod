@@ -35,6 +35,35 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(populations, mp.populations)
         self.assertEqual(mp.winning_strategy_name, str(p2))
 
+    def test_death_birth(self):
+        """Two player death-birth should fixate after one round."""
+        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
+        seeds = range(0, 20)
+        for seed in seeds:
+            random.seed(seed)
+            mp = MoranProcess((p1, p2), mode='db')
+            next(mp)
+            self.assertIsNotNone(mp.winning_strategy_name)
+
+    def test_death_birth_outcomes(self):
+        """Show that birth-death and death-birth can produce different outcomes."""
+        seeds = [(1, True), (23, False)]
+        players = []
+        N = 6
+        for _ in range(N // 2):
+            players.append(axelrod.Cooperator())
+            players.append(axelrod.Defector())
+        for seed, outcome in seeds:
+            axelrod.seed(seed)
+            mp = MoranProcess(players, mode='bd')
+            mp.play()
+            winner = mp.winning_strategy_name
+            axelrod.seed(seed)
+            mp = MoranProcess(players, mode='db')
+            mp.play()
+            winner2 = mp.winning_strategy_name
+            self.assertEqual((winner == winner2), outcome)
+
     def test_two_random_players(self):
         p1, p2 = axelrod.Random(0.5), axelrod.Random(0.25)
         random.seed(5)
@@ -179,7 +208,7 @@ class GraphMoranProcess(unittest.TestCase):
     def test_cycle(self):
         """A cycle should sometimes produce different results vs. the default
         case."""
-        seeds = [(1, True), (2, True), (3, False), (13, False)]
+        seeds = [(1, True), (13, False)]
         players = []
         N = 6
         graph = axelrod.graph.cycle(N)
@@ -201,7 +230,7 @@ class GraphMoranProcess(unittest.TestCase):
     def test_asymmetry(self):
         """Asymmetry in interaction and reproduction should sometimes
         produce different results."""
-        seeds = [(1, True), (2, True), (8, False), (12, False)]
+        seeds = [(1, True), (21, False)]
         players = []
         N = 6
         graph1 = axelrod.graph.cycle(N)
@@ -220,3 +249,26 @@ class GraphMoranProcess(unittest.TestCase):
             mp.play()
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)
+
+    def test_cycle_death_birth(self):
+        """Test that death-birth can have different outcomes in the graph
+        case."""
+        seeds = [(1, True), (3, False)]
+        players = []
+        N = 6
+        graph = axelrod.graph.cycle(N)
+        for _ in range(N // 2):
+            players.append(axelrod.Cooperator())
+        for _ in range(N // 2):
+            players.append(axelrod.Defector())
+        for seed, outcome in seeds:
+            axelrod.seed(seed)
+            mp = MoranProcessGraph(players, graph, mode='bd')
+            mp.play()
+            winner = mp.winning_strategy_name
+            axelrod.seed(seed)
+            mp = MoranProcessGraph(players, graph, mode='db')
+            mp.play()
+            winner2 = mp.winning_strategy_name
+            self.assertEqual((winner == winner2), outcome)
+
