@@ -93,18 +93,3 @@ class PSOGambler2_2_2_Noise05(Gambler):
             plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)
-
-
-class PSOGambler2_2_2_Moran(Gambler):
-    """
-    A 2x2x2 PSO Gambler trained to win the Moran process.
-    """
-
-    name = "PSO Gambler 2_2_2 Moran"
-
-    def __init__(self):
-        pattern = tables[("moran", 2, 2, 2)]
-        lookup_table = create_lookup_table_from_pattern(
-            plays=2, op_plays=2, op_start_plays=2,
-            pattern=pattern)
-        Gambler.__init__(self, lookup_table=lookup_table)

@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from .alternator import Alternator
 from .adaptive import Adaptive
-from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05, EvolvedANNMoran
+from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -28,7 +28,7 @@ from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import (
     Gambler, PSOGambler1_1_1, PSOGambler2_2_2, PSOGambler2_2_2_Noise05,
-    PSOGambler2_2_2_Moran, PSOGamblerMem1)
+    PSOGamblerMem1)
 from .gobymajority import (GoByMajority,
     GoByMajority10, GoByMajority20, GoByMajority40,
     GoByMajority5,
@@ -52,7 +52,7 @@ from .lookerup import (LookerUp,
     EvolvedLookerUp2_2_1, EvolvedLookerUp2_2_2, EvolvedLookerUp2_2_3,
     EvolvedLookerUp2_2_4, EvolvedLookerUp3_3_1, EvolvedLookerUp3_3_2,
     EvolvedLookerUp3_3_3, EvolvedLookerUp4_4_1, EvolvedLookerUp4_4_2,
-    EvolvedLookerUpMoran2_2_2, Winner12, Winner21)
+    Winner12, Winner21)
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,

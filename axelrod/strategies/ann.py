@@ -202,21 +202,3 @@ class EvolvedANNNoise05(ANN):
     def __init__(self):
         num_features, num_hidden, weights = nn_weights['05']
         ANN.__init__(self, weights, num_features, num_hidden)
-
-
-class EvolvedANNMoran(ANN):
-    """
-    A strategy based on a pre-trained neural network, optimized for the Moran
-    process.
-
-    Names:
-
-     - EvolvedANNMoran: Original name by Marc Harper.
-    """
-
-    name = "EvolvedANNMoran"
-
-    @init_args
-    def __init__(self):
-        num_features, num_hidden, weights = nn_weights['moran']
-        ANN.__init__(self, weights, num_features, num_hidden)
