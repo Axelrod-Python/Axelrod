@@ -30,20 +30,24 @@ def fitness_proportionate_selection(scores):
 
 
 class MoranProcess(object):
-    def __init__(self, players, turns=100, noise=0, deterministic_cache=None, mutation_rate=0.):
+    def __init__(self, players, turns=100, noise=0, deterministic_cache=None,
+                 mutation_rate=0.):
         """
-        An agent based Moran process class. In each round, each player plays a Match with each other
-        player. Players are assigned a fitness score by their total score from all matches in the round.
-        A player is chosen to reproduce proportionally to fitness, possibly mutated, and is cloned. The
-        clone replaces a randomly chosen player.
+        An agent based Moran process class. In each round, each player plays a
+        Match with each other player. Players are assigned a fitness score by
+        their total score from all matches in the round. A player is chosen to
+        reproduce proportionally to fitness, possibly mutated, and is cloned.
+        The clone replaces a randomly chosen player.
 
-        If the mutation_rate is 0, the population will eventually fixate on exactly one player type. In this
-        case a StopIteration exception is raised and the play stops. If mutation_rate is not zero, then
-        the process will iterate indefinitely, so mp.play() will never exit, and you should use the class as an
-        iterator instead.
+        If the mutation_rate is 0, the population will eventually fixate on
+        exactly one player type. In this case a StopIteration exception is
+        raised and the play stops. If mutation_rate is not zero, then the
+        process will iterate indefinitely, so mp.play() will never exit, and
+        you should use the class as an iterator instead.
 
-        When a player mutates it chooses a random player type from the initial population. This is not the only
-        method yet emulates the common method in the literature.
+        When a player mutates it chooses a random player type from the initial
+        population. This is not the only method yet emulates the common method
+        in the literature.
 
         Parameters
         ----------
@@ -51,11 +55,13 @@ class MoranProcess(object):
         turns: int, 100
             The number of turns in each pairwise interaction
         noise: float, 0
-            The background noise, if any. Randomly flips plays with probability `noise`.
+            The background noise, if any. Randomly flips plays with probability
+            `noise`.
         deterministic_cache: axelrod.DeterministicCache, None
             A optional prebuilt deterministic cache
         mutation_rate: float, 0
-            The rate of mutation. Replicating players are mutated with probability `mutation_rate`
+            The rate of mutation. Replicating players are mutated with
+            probability `mutation_rate`
         """
         self.turns = turns
         self.noise = noise
@@ -75,7 +81,8 @@ class MoranProcess(object):
         # Build the set of mutation targets
         # Determine the number of unique types (players)
         keys = set([str(p) for p in players])
-        # Create a dictionary mapping each type to a set of representatives of the other types
+        # Create a dictionary mapping each type to a set of representatives of
+        # the other types
         d = dict()
         for p in players:
             d[str(p)] = p
@@ -106,6 +113,11 @@ class MoranProcess(object):
             new_player = self.players[index].clone()
         return new_player
 
+    def select_remove(self, index=None):
+        """Selects the player to be removed."""
+        i = randrange(0, len(self.players))
+        return i
+
     def __next__(self):
         """Iterate the population:
         - play the round's matches
@@ -129,28 +141,36 @@ class MoranProcess(object):
         else:
             new_player = self.players[j].clone()
         # Randomly remove a strategy
-        i = randrange(0, len(self.players))
+        i = self.select_remove(j)
         # Replace player i with clone of player j
         self.players[i] = new_player
         self.populations.append(self.population_distribution())
         return self
+
+    def _matchup_indices(self):
+        """Generate the matchup pairs"""
+        indices = []
+        N = len(self.players)
+        for i in range(N):
+            for j in range(i + 1, N):
+                indices.append((i, j))
+        return indices
 
     def _play_next_round(self):
         """Plays the next round of the process. Every player is paired up
         against every other player and the total scores are recorded."""
         N = self.num_players
         scores = [0] * N
-        for i in range(N):
-            for j in range(i + 1, N):
-                player1 = self.players[i]
-                player2 = self.players[j]
-                match = Match(
-                    (player1, player2), turns=self.turns, noise=self.noise,
-                    deterministic_cache=self.deterministic_cache)
-                match.play()
-                match_scores = match.final_score_per_turn()
-                scores[i] += match_scores[0]
-                scores[j] += match_scores[1]
+        for i, j in self._matchup_indices():
+            player1 = self.players[i]
+            player2 = self.players[j]
+            match = Match(
+                (player1, player2), turns=self.turns, noise=self.noise,
+                deterministic_cache=self.deterministic_cache)
+            match.play()
+            match_scores = match.final_score_per_turn()
+            scores[i] += match_scores[0]
+            scores[j] += match_scores[1]
         self.score_history.append(scores)
         return scores
 
@@ -159,8 +179,6 @@ class MoranProcess(object):
         player_names = [str(player) for player in self.players]
         counter = Counter(player_names)
         return counter
-
-    next = __next__  # Python 2
 
     def __iter__(self):
         return self
@@ -185,3 +203,88 @@ class MoranProcess(object):
 
     def __len__(self):
         return len(self.populations)
+
+
+class MoranProcessGraph(MoranProcess):
+    def __init__(self, players, interaction_graph, reproduction_graph=None,
+                 turns=100, noise=0, deterministic_cache=None,
+                 mutation_rate=0.):
+        """
+        An agent based Moran process class. In each round, each player plays a
+        Match with each neighboring player according to the interaction graph.
+        Players are assigned a fitness score by their total score from all
+        matches in the round. A player is chosen to reproduce proportionally to
+        fitness, possibly mutated, and is cloned. The clone replaces a randomly
+        chosen neighboring player according to the reproduction graph.
+
+        If the mutation_rate is 0, the population will eventually fixate on
+        exactly one player type. In this case a StopIteration exception is
+        raised and the play stops. If mutation_rate is not zero, then the
+        process will iterate indefinitely, so mp.play() will never exit, and
+        you should use the class as an iterator instead.
+
+        When a player mutates it chooses a random player type from the initial
+        population. This is not the only method yet emulates the common method
+        in the literature.
+
+        This is a birth-death implementation.
+
+        Parameters
+        ----------
+        players, iterable of axelrod.Player subclasses
+        interaction_graph: Axelrod.graph.Graph
+            The graph in which the replicators are arranged
+        reproduction_graph: Axelrod.graph.Graph
+            The reproduction graph, set equal to the interaction graph if not
+            given
+        turns: int, 100
+            The number of turns in each pairwise interaction
+        noise: float, 0
+            The background noise, if any. Randomly flips plays with probability
+            `noise`.
+        deterministic_cache: axelrod.DeterministicCache, None
+            A optional prebuilt deterministic cache
+        mutation_rate: float, 0
+            The rate of mutation. Replicating players are mutated with
+            probability `mutation_rate`
+        """
+        MoranProcess.__init__(self, players, turns=turns, noise=noise,
+                              deterministic_cache=deterministic_cache,
+                              mutation_rate=mutation_rate)
+        if not reproduction_graph:
+            reproduction_graph = interaction_graph
+        # Check equal vertices
+        v1 = interaction_graph.vertices()
+        v2 = reproduction_graph.vertices()
+        assert list(v1) == list(v2)
+        self.interaction_graph = interaction_graph
+        self.reproduction_graph = reproduction_graph
+        # Map players to graph vertices
+        self.locations = list(interaction_graph.vertices())
+        self.index = dict(zip(interaction_graph.vertices(),
+                              range(len(players))))
+
+    def select_remove(self, index):
+        """Selects the player to be removed."""
+        vertex = random.choice(
+            self.reproduction_graph.out_vertices(self.index[index]))
+        i = self.index[vertex]
+        return i
+
+    def _matchup_indices(self):
+        """Generate the matchup pairs"""
+        indices = set()
+        for i, source in enumerate(self.locations):
+            for target in self.interaction_graph.out_vertices(source):
+                j = self.index[target]
+                # Don't duplicate matches
+                if ((i, j) in indices) or (j, i) in indices:
+                    continue
+                indices.add((i, j))
+        return indices
+
+    def population_distribution(self):
+        """Returns the population distribution of the last iteration."""
+        player_names = [str(player) for player in self.players]
+        counter = Counter(player_names)
+        return (counter, player_names)
