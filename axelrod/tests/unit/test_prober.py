@@ -8,6 +8,34 @@ from .test_player import TestPlayer, test_responses
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
+class TestCollectiveStrategy(TestPlayer):
+
+    name = "CollectiveStrategy"
+    player = axelrod.CollectiveStrategy
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_initial_strategy(self):
+        """Starts by playing CD."""
+        self.responses_test([], [], [C, D])
+
+    def test_strategy(self):
+        # Defects forever unless opponent matched first two moves
+        self.responses_test([C, D], [C, C], [D] * 10)
+        self.responses_test([C, D], [D, C], [D] * 10)
+        self.responses_test([C, D], [D, D], [D] * 10)
+
+        self.responses_test([C, D], [C, D], [C] * 10)
+        self.responses_test([C, D, D], [C, D, D], [D] * 10)
+
+
 class TestProber(TestPlayer):
 
     name = "Prober"

@@ -1,6 +1,5 @@
 from axelrod import Actions, Player, init_args, random_choice
 
-"""IPD Strategies: http://www.prisoners-dilemma.com/strategies.html"""
 
 C, D = Actions.C, Actions.D
 
