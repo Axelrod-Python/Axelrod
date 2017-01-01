@@ -364,5 +364,4 @@ class MoranProcessGraph(MoranProcess):
         """Returns the population distribution of the last iteration."""
         player_names = [str(player) for player in self.players]
         counter = Counter(player_names)
-        # The configuration is also useful in this case.
-        return (counter, player_names)
+        return counter

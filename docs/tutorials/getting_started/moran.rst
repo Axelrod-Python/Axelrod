@@ -70,7 +70,8 @@ function like :code:`takewhile` from :code:`itertools`):
     ...     if len(mp.population_distribution()) == 1:
     ...         break
     >>> mp.population_distribution()
-    Counter({'Tit For Tat': 4})
+    Counter({'Cooperator': 4})
+
 
 Moran Process on Graphs
 -----------------------
@@ -99,12 +100,18 @@ one graph is supplied to the process, the two graphs are assumed to be the same.
 
 To create a graph-based Moran process, use a graph as follows::
 
+    >>> import axelrod
     >>> from axelrod import Cooperator, Defector, MoranProcessGraph
     >>> from axelrod.graph import Graph
+    >>> axelrod.seed(40)
     >>> edges = [(0, 1), (1, 2), (2, 3), (3, 1)]
     >>> graph = Graph(edges)
-    >>> population = [Cooperator(), Cooperator(), Cooperator(), Defector()]
+    >>> players = [Cooperator(), Cooperator(), Cooperator(), Defector()]
     >>> mp = MoranProcessGraph(players, interaction_graph=graph)
+    >>> results = mp.play()
+    >>> mp.population_distribution()
+    Counter({'Cooperator': 4})
+
 
 You can supply the `reproduction_graph` as a keyword argument. The standard Moran
 process is equivalent to using a complete graph for both graphs.
