@@ -126,7 +126,6 @@ class Prober4(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self):
         Player.__init__(self)
         self.init_sequence = [
@@ -277,6 +276,7 @@ class RemorsefulProber(NaiveProber):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self, p=0.1):
         NaiveProber.__init__(self, p)
         self.probing = False

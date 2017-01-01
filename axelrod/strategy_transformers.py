@@ -6,9 +6,10 @@ strategy.
 See the various Meta strategies for another type of transformation.
 """
 
+import collections
 import inspect
 import random
-import collections
+
 from numpy.random import choice
 from .actions import Actions, flip_action
 from .random_ import random_choice
@@ -78,16 +79,24 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             except KeyError:
                 pass
 
+            # Is the original strategy method a static method?
+            signature = inspect.signature(PlayerClass.strategy)
+            strategy_args = [p.name for p in signature.parameters.values()
+                    if p.kind == inspect.Parameter.POSITIONAL_OR_KEYWORD]
+            is_static = True
+            if len(strategy_args) > 1:
+                is_static = False
+
             # Define the new strategy method, wrapping the existing method
             # with `strategy_wrapper`
             def strategy(self, opponent):
-                # Is the original strategy method a static method?
-                argspec = inspect.getargspec(getattr(PlayerClass, "strategy"))
-                if 'self' in argspec.args:
-                    # it's not a static method
-                    proposed_action = PlayerClass.strategy(self, opponent)
-                else:
+
+                if is_static:
+                    # static method
                     proposed_action = PlayerClass.strategy(opponent)
+                else:
+                    proposed_action = PlayerClass.strategy(self, opponent)
+
                 # Apply the wrapper
                 return strategy_wrapper(self, opponent, proposed_action,
                                         *args, **kwargs)
