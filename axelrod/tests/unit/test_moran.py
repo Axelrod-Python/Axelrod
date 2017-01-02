@@ -285,7 +285,7 @@ class GraphMoranProcess(unittest.TestCase):
     def test_cycle_death_birth(self):
         """Test that death-birth can have different outcomes in the graph
         case."""
-        seeds = [(1, True), (3, False)]
+        seeds = [(1, True), (5, False)]
         players = []
         N = 6
         graph = axelrod.graph.cycle(N)
