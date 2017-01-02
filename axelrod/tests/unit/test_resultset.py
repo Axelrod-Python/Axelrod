@@ -120,6 +120,9 @@ class TestResultSet(unittest.TestCase):
                 [0, 0, 0],
             ]
 
+        cls.expected_initial_cooperation_count = [6, 6, 0]
+        cls.expected_initial_cooperation_rate = [1, 1, 0]
+
         cls.expected_state_distribution = [
                 [], [], []
             ]
@@ -223,13 +226,13 @@ class TestResultSet(unittest.TestCase):
     def test_with_progress_bar(self):
         rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertTrue(rs.progress_bar)
-        self.assertEqual(rs.progress_bar.total, 11 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.total, 12 + 2 * rs.nplayers)
         self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=True)
         self.assertTrue(rs.progress_bar)
-        self.assertEqual(rs.progress_bar.total, 11 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.total, 12 + 2 * rs.nplayers)
         self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
     def test_match_lengths(self):
@@ -345,6 +348,14 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(len(rs.cooperation), rs.nplayers)
         self.assertEqual(rs.cooperation, self.expected_cooperation)
 
+    def test_initial_cooperation_count(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.initial_cooperation_count, list)
+        self.assertEqual(len(rs.initial_cooperation_count), rs.nplayers)
+        self.assertEqual(rs.initial_cooperation_count,
+                         self.expected_initial_cooperation_count)
+
     def test_normalised_cooperation(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -352,6 +363,14 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(len(rs.normalised_cooperation), rs.nplayers)
         self.assertEqual(rs.normalised_cooperation,
                          self.expected_normalised_cooperation)
+
+    def test_initial_cooperation_rate(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.initial_cooperation_rate, list)
+        self.assertEqual(len(rs.initial_cooperation_rate), rs.nplayers)
+        self.assertEqual(rs.initial_cooperation_rate,
+                         self.expected_initial_cooperation_rate)
 
     def test_state_distribution(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
@@ -459,6 +478,12 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual([float(player.Wins) for player in sd],
                          ranked_median_wins)
 
+        ranked_initial_coop_rates = [self.expected_initial_cooperation_rate[i]
+                                     for i in rs.ranking]
+        self.assertEqual([float(player.Initial_C_rate)
+                          for player in sd],
+                         ranked_initial_coop_rates)
+
         for player in sd:
             self.assertEqual(player.CC_rate + player.CD_rate + player.DC_rate + player.DD_rate, 1)
 
@@ -471,7 +496,7 @@ class TestResultSet(unittest.TestCase):
             csvreader = csv.reader(csvfile)
             for row in csvreader:
                 ranked_names.append(row[1])
-                self.assertEqual(len(row), 9)
+                self.assertEqual(len(row), 10)
         self.assertEqual(ranked_names[0], "Name")
         self.assertEqual(ranked_names[1:], rs.ranked_names)
 
@@ -809,6 +834,9 @@ class TestResultSetSpatialStructure(TestResultSet):
             [0, 0, 0],
             ]
 
+        cls.expected_initial_cooperation_count = [6, 3, 0]
+        cls.expected_initial_cooperation_rate = [1, 1, 0]
+
         cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
                                    for row in cls.expected_normalised_cooperation]
 
@@ -1026,6 +1054,9 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                 [0.0, 0.0, mean([5 / 5.0 for _ in range(3)]), 0.0]
                 ]
 
+        cls.expected_initial_cooperation_count = [3.0, 3.0, 0, 3.0]
+        cls.expected_initial_cooperation_rate = [1.0, 1.0, 0, 1.0]
+
         cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
                                    for row in cls.expected_normalised_cooperation]
 
@@ -1188,6 +1219,9 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
                 [0.0, 0.0, 0.0, mean([5 / 5.0 for _ in range(3)])]
                 ]
 
+        cls.expected_initial_cooperation_count = [0, 0, 0, 0]
+        cls.expected_initial_cooperation_rate = [0, 0, 0, 0]
+
         cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
                                    for row in cls.expected_normalised_cooperation]
 
@@ -1265,3 +1299,4 @@ class TestSummary(unittest.TestCase):
             total_rate = round(player.CC_rate + player.CD_rate +
                                player.DC_rate + player.DD_rate, 3)
             self.assertTrue(total_rate in [0, 1])
+            self.assertTrue(0 <= player.Initial_C_rate <= 1)

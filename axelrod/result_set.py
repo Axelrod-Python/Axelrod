@@ -383,6 +383,7 @@ class ResultSet(object):
         self.cooperation = [[0 for opponent in plist] for player in plist]
         self.normalised_cooperation = [[[] for opponent in plist]
                                        for player in plist]
+        self.initial_cooperation_count = [0 for player in plist]
         self.state_distribution = [[Counter() for opponent in plist]
                                    for player in plist]
         self.good_partner_matrix = [[0 for opponent in plist]
@@ -532,6 +533,24 @@ class ResultSet(object):
         self.cooperation[p1][p2] += cooperations[0]
         self.cooperation[p2][p1] += cooperations[1]
 
+    def _update_initial_cooperation_count(self, p1, p2, initial_cooperations):
+        """
+        During a read of the data, update the initial cooperation count
+        attribute
+
+        Parameters
+        ----------
+
+            p1, p2 : int
+                The indices of the first and second player
+            initial_cooperations : tuple
+                A 2 tuple with a 0 or 1 indicating if the initial move of each
+                player was Cooperation (0) or Defection (1), e.g. (0, 1) for a
+                round (C, D)
+        """
+        self.initial_cooperation_count[p1] += initial_cooperations[0]
+        self.initial_cooperation_count[p2] += initial_cooperations[1]
+
     def _update_state_distribution(self, p1, p2, counter):
         """
         During a read of the data, update the state_distribution attribute
@@ -606,6 +625,16 @@ class ResultSet(object):
                 max(1, float(self.total_interactions[player]))
                 for player in range(self.nplayers)]
 
+    @update_progress_bar
+    def _build_initial_cooperation_rate(self):
+        """
+        At the end of a read of the data, build the normalised initial
+        cooperation rate attribute
+        """
+        return [self.initial_cooperation_count[player] /
+                max(1, float(self.total_interactions[player]))
+                for player in range(self.nplayers)]
+
     def _build_score_related_metrics(self, progress_bar=False,
                                      keep_interactions=False):
         """
@@ -653,11 +682,14 @@ class ResultSet(object):
                     self._update_normalised_scores(repetition, p1, p2,
                                                    scores_per_turn)
                     self._update_cooperation(p1, p2, cooperations)
+                    initial_coops = iu.compute_cooperations(interaction[:1])
+                    self._update_initial_cooperation_count(p1, p2,
+                                                           initial_coops)
                     self._update_state_distribution(p1, p2, state_counter)
                     self._update_good_partner_matrix(p1, p2, cooperations)
 
         if progress_bar:
-            self.progress_bar = tqdm.tqdm(total=11 + 2 * self.nplayers,
+            self.progress_bar = tqdm.tqdm(total=12 + 2 * self.nplayers,
                                           desc="Finishing")
         self._summarise_normalised_scores()
         self._summarise_normalised_cooperation()
@@ -670,6 +702,7 @@ class ResultSet(object):
         self.payoff_diffs_means = self._build_payoff_diffs_means()
         self.vengeful_cooperation = self._build_vengeful_cooperation()
         self.cooperating_rating = self._build_cooperating_rating()
+        self.initial_cooperation_rate = self._build_initial_cooperation_rate()
         self.good_partner_rating = self._build_good_partner_rating()
         self.eigenjesus_rating = self._build_eigenjesus_rating()
         self.eigenmoses_rating = self._build_eigenmoses_rating()
@@ -739,8 +772,8 @@ class ResultSet(object):
 
         self.player = namedtuple("Player", ["Rank", "Name", "Median_score",
                                             "Cooperation_rating", "Wins",
-                                            "CC_rate", "CD_rate", "DC_rate",
-                                            "DD_rate"])
+                                            "Initial_C_rate", "CC_rate",
+                                            "CD_rate", "DC_rate", "DD_rate"])
 
         states = [(C, C), (C, D), (D, C), (D, D)]
         state_prob = []
@@ -756,7 +789,8 @@ class ResultSet(object):
             state_prob.append(counts)
 
         summary_measures = list(zip(self.players, median_scores,
-                                    self.cooperating_rating, median_wins))
+                                    self.cooperating_rating, median_wins,
+                                    self.initial_cooperation_rate))
 
         summary_data = []
         for rank, i in enumerate(self.ranking):
@@ -769,7 +803,7 @@ class ResultSet(object):
         """
         Write a csv file containing summary data of the results of the form:
 
-            "Rank", "Name", "Median-score-per-turn", "Cooperation-rating", "Wins", "CC-Rate", "CD-Rate", "DC-Rate", "DD-rate"
+            "Rank", "Name", "Median-score-per-turn", "Cooperation-rating", "Initial_C_Rate", "Wins", "CC-Rate", "CD-Rate", "DC-Rate", "DD-rate"
 
         Parameters
         ----------
