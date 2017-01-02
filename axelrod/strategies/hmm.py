@@ -67,7 +67,12 @@ class SimpleHMM(object):
 
 
 class HMMPlayer(Player):
-    """Abstract base class for Hidden Markov Model players."""
+    """Abstract base class for Hidden Markov Model players.
+
+    Names
+
+        - HMMPlayer
+    """
 
     name = "HMM Player"
 
@@ -125,6 +130,14 @@ class HMMPlayer(Player):
 
 
 class EvolvedHMM5(HMMPlayer):
+    """
+    An HMM-based player with five hidden states trained with an evolutionary
+    algorithm.
+
+    Names
+
+        - EvolvedHMM5
+    """
     name = "EvolvedHMM5"
 
     @init_args

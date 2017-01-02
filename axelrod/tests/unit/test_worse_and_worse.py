@@ -11,7 +11,7 @@ class TestWorseAndWorse(TestPlayer):
     name = "Worse and Worse"
     player = axelrod.WorseAndWorse
     expected_classifier = {
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -62,7 +62,7 @@ class TestWorseAndWorseRandom(TestPlayer):
     name = "Knowledgeable Worse and Worse"
     player = axelrod.KnowledgeableWorseAndWorse
     expected_classifier = {
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(['length']),
         'long_run_time': False,
@@ -112,7 +112,7 @@ class TestWorseAndWorse2(TestPlayer):
     name = "Worse and Worse 2"
     player = axelrod.WorseAndWorse2
     expected_classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -148,7 +148,7 @@ class TestWorseAndWorse3(TestPlayer):
     name = "Worse and Worse 3"
     player = axelrod.WorseAndWorse3
     expected_classifier = {
-        'memory_depth': 0,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,

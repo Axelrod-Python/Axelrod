@@ -354,6 +354,7 @@ class Thumper(FSMPlayer):
 
 
 class EvolvedFSM4(FSMPlayer):
+    """A 4 state FSM player trained with an evolutionary algorithm."""
 
     name = "Evolved FSM 4"
     classifier = {
@@ -383,6 +384,7 @@ class EvolvedFSM4(FSMPlayer):
 
 
 class EvolvedFSM16(FSMPlayer):
+    """A 16 state FSM player trained with an evolutionary algorithm."""
 
     name = "Evolved FSM 16"
     classifier = {
@@ -436,6 +438,8 @@ class EvolvedFSM16(FSMPlayer):
 
 
 class EvolvedFSM16Noise05(FSMPlayer):
+    """A 16 state FSM player trained with an evolutionary algorithm with
+    noisy matches (noise=0.05)."""
 
     name = "Evolved FSM 16 Noise 05"
     classifier = {

@@ -1,3 +1,10 @@
+"""Stochastic variants of Lookup table based-strategies, trained with particle
+swarm algorithms.
+
+For the original see:
+ https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
+"""
+
 from axelrod import Actions, random_choice, load_pso_tables
 from .lookerup import LookerUp, create_lookup_table_from_pattern
 
@@ -33,8 +40,9 @@ class Gambler(LookerUp):
 
 class PSOGamblerMem1(Gambler):
     """
-    A 1x1x0 PSOGambler trained with pyswarm.
-    See: https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
+    A 1x1x0 PSOGambler trained with pyswarm. This is the 'optimal' memory one
+    strategy trained against the set of short run time strategies in the
+    Axelrod library.
     """
 
     name = "PSO Gambler Mem1"
@@ -51,7 +59,6 @@ class PSOGamblerMem1(Gambler):
 class PSOGambler1_1_1(Gambler):
     """
     A 1x1x1 PSOGambler trained with pyswarm.
-    See: https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
     """
 
     name = "PSO Gambler 1_1_1"
@@ -67,7 +74,6 @@ class PSOGambler1_1_1(Gambler):
 class PSOGambler2_2_2(Gambler):
     """
     A 2x2x2 PSOGambler trained with pyswarm.
-    See: https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
     """
 
     name = "PSO Gambler 2_2_2"
@@ -82,7 +88,6 @@ class PSOGambler2_2_2(Gambler):
 
 class PSOGambler2_2_2_Noise05(Gambler):
     """
-    A 2x2x2 PSO Gambler trained with noise=0.05.
     """
 
     name = "PSO Gambler Noise 05"

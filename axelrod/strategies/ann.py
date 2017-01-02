@@ -7,15 +7,20 @@ C, D = Actions.C, Actions.D
 nn_weights = load_weights()
 
 
-def split_weights(weights, input_values, hidden_layer_size):
+def split_weights(weights, num_features, num_hidden):
     """Splits the input vector into the the NN bias weights and layer
     parameters."""
-    number_of_input_to_hidden_weights = input_values * hidden_layer_size
-    number_of_hidden_to_output_weights = hidden_layer_size
+    # Check weights is the right length
+    expected_length = num_hidden * 2 + num_features * num_hidden
+    if expected_length != len(weights):
+        raise ValueError("NN weights array has an incorrect size.")
+
+    number_of_input_to_hidden_weights = num_features * num_hidden
+    number_of_hidden_to_output_weights = num_hidden
 
     input2hidden = []
-    for i in range(0, number_of_input_to_hidden_weights, input_values):
-        input2hidden.append(weights[i:i + input_values])
+    for i in range(0, number_of_input_to_hidden_weights, num_features):
+        input2hidden.append(weights[i:i + num_features])
 
     start = number_of_input_to_hidden_weights
     end = number_of_input_to_hidden_weights + number_of_hidden_to_output_weights
@@ -155,7 +160,8 @@ class ANN(Player):
 
 class EvolvedANN(ANN):
     """
-    A strategy based on a pre-trained neural network.
+    A strategy based on a pre-trained neural network with 17 features and a
+    hidden layer of size 10.
 
     Names:
 
@@ -172,11 +178,12 @@ class EvolvedANN(ANN):
 
 class EvolvedANN5(ANN):
     """
-    A strategy based on a pre-trained neural network.
+    A strategy based on a pre-trained neural network with 17 features and a
+    hidden layer of size 5.
 
     Names:
 
-     - EvolvedANN2: : Original name by Marc Harper.
+     - EvolvedANN5: : Original name by Marc Harper.
     """
 
     name = "EvolvedANN5"

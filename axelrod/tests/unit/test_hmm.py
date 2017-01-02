@@ -1,4 +1,4 @@
-"""Tests for Finite State Machine Strategies."""
+"""Tests for Hidden Markov Model Strategies."""
 import unittest
 
 import axelrod
@@ -11,6 +11,18 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 class TestHMMPlayers(unittest.TestCase):
     """Test a few sample tables to make sure that the finite state machines are
     working as intended."""
+
+    def test_is_stochastic_matrix(self):
+        m = [[1, 0], [0, 1]]
+        self.assertTrue(is_stochastic_matrix(m))
+        m = [[1, 1e-20], [0, 1]]
+        self.assertTrue(is_stochastic_matrix(m))
+        m = [[0.6, 0.4], [0.8, 0.2]]
+        self.assertTrue(is_stochastic_matrix(m))
+        m = [[0.6, 0.6], [0.8, 0.2]]
+        self.assertFalse(is_stochastic_matrix(m))
+        m = [[0.6, 0.4], [0.8, 1.2]]
+        self.assertFalse(is_stochastic_matrix(m))
 
     def test_cooperator(self):
         """Tests that the player defined by the table for Cooperator is in fact

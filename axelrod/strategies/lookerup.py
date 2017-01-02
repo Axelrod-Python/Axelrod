@@ -27,6 +27,8 @@ def create_lookup_table_from_pattern(plays, op_plays, op_start_plays, pattern):
     lookup_table_keys = create_lookup_table_keys(
         plays=plays, op_plays=op_plays,
         op_start_plays=op_start_plays)
+    if len(lookup_table_keys) != len(pattern):
+        raise ValueError("Table keys and pattern are not of the same size.")
     table = dict(zip(lookup_table_keys, pattern))
     return table
 
@@ -185,8 +187,10 @@ for k, (initial, pattern) in patterns.items():
 
 class Winner12(LookerUp):
     """
+    A lookup table based strategy.
+
     Names:
-        - Winner12 [Mathieu2015]
+        - Winner12 [Mathieu2015]_
     """
     name = "Winner12"
 
@@ -203,8 +207,10 @@ class Winner12(LookerUp):
 
 class Winner21(LookerUp):
     """
+    A lookup table based strategy.
+
     Names:
-        - Winner21 [Mathieu2015]
+        - Winner21 [Mathieu2015]_
     """
     name = "Winner21"
 

@@ -1,10 +1,20 @@
 """Test for the Adaptive strategy."""
+import unittest
 
 import axelrod
-
 from .test_player import TestHeadsUp, TestPlayer
+from axelrod.strategies.ann import split_weights
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
+
+class TestSplitWeights(unittest.TestCase):
+    def test_split_weights(self):
+        with self.assertRaises(ValueError):
+            split_weights([0] * 20, 12, 10)
+    # Doesn't Raise
+    split_weights([0] * 70, 5, 10)
+    split_weights([0] * 12, 10, 1)
 
 
 class TestEvolvedANN(TestPlayer):

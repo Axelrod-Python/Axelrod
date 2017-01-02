@@ -3,10 +3,33 @@ import copy
 import unittest
 
 import axelrod
-from axelrod.strategies.lookerup import create_lookup_table_keys
+from axelrod.strategies.lookerup import (
+    create_lookup_table_keys, create_lookup_table_from_pattern)
 from .test_player import TestPlayer, TestHeadsUp
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
+
+class TestCreateTables(unittest.TestCase):
+    def test_create_lookup_table_keys(self):
+        table = create_lookup_table_keys(1, 1, 1)
+        self.assertEqual(8, len(table))
+        table = create_lookup_table_keys(0, 1, 1)
+        self.assertEqual(4, len(table))
+        table = create_lookup_table_keys(1, 0, 1)
+        self.assertEqual(4, len(table))
+        table = create_lookup_table_keys(1, 1, 0)
+        self.assertEqual(4, len(table))
+        table = create_lookup_table_keys(2, 2, 2)
+        self.assertEqual(2**2 * 2**2 * 2**2, len(table))
+
+    def test_create_table_from_pattern(self):
+        with self.assertRaises(ValueError):
+            pattern = ''.join([C] * 8)
+            create_lookup_table_from_pattern(2, 2, 2, pattern)
+    # Doesn't Raise
+    pattern = ''.join([C] * 8)
+    create_lookup_table_from_pattern(1, 1, 1, pattern)
 
 
 class TestLookerUp(TestPlayer):
