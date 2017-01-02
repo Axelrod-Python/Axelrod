@@ -76,9 +76,10 @@ function like :code:`takewhile` from :code:`itertools`):
 Moran Process on Graphs
 -----------------------
 
-The library also provides a graph-based Moran process with `MoranProcessGraph`.
-To use this class you must supply at least one `Axelrod.graph.Graph` object,
-which can be initialized with just a list of edges::
+The library also provides a graph-based Moran process [Shakarian2013]_ with
+`MoranProcessGraph`.  To use this class you must supply at least one
+`Axelrod.graph.Graph` object, which can be initialized with just a list of
+edges::
 
     edges = [(source_1, target1), (source2, target2), ...]
 
