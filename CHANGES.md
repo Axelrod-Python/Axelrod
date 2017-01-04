@@ -1,3 +1,28 @@
+# v2.3.0, 2017-01-04
+
+Support for py3.6, new strategies, more tournament result information,  and
+internal improvements.
+
+- Helpful list of short run time strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/792
+- Nice Meta strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/794
+- New strategies: Mem2, Pun1, Collective Strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/795
+- New strategies: Mem2, Pun1, Collective Strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/795
+- Python 3.6 supported
+  https://github.com/Axelrod-Python/Axelrod/pull/800
+- Keep track of initial play rate in results
+  https://github.com/Axelrod-Python/Axelrod/pull/797
+- Fix depreciation warning
+  https://github.com/Axelrod-Python/Axelrod/pull/793
+- Moran processes are always stochastic
+  https://github.com/Axelrod-Python/Axelrod/pull/796
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.2.0...v2.3.0
+
 # v2.2.0, 2016-12-20
 
 Minor update: ability to pass axes object to plots and internal documentation
