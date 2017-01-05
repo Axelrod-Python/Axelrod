@@ -1,3 +1,15 @@
+# v2.4.0, 2017-01-05
+
+New machine learning strategies and moran processes on graphs.
+
+- Moran processes on graphs
+  https://github.com/Axelrod-Python/Axelrod/pull/799
+- Machine learning strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/803
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.3.0...v2.4.0
+
 # v2.3.0, 2017-01-04
 
 Support for py3.6, new strategies, more tournament result information,  and
