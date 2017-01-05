@@ -351,3 +351,161 @@ class Thumper(FSMPlayer):
         )
 
         FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=C)
+
+
+class EvolvedFSM4(FSMPlayer):
+    """
+    A 4 state FSM player trained with an evolutionary algorithm.
+
+    Names:
+
+        - Evolved FSM 4: Original name by Marc Harper
+    """
+
+    name = "Evolved FSM 4"
+    classifier = {
+        'memory_depth': 4,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self):
+        transitions = (
+            (0, C, 0, C),
+            (0, D, 2, D),
+            (1, C, 3, D),
+            (1, D, 0, C),
+            (2, C, 2, D),
+            (2, D, 1, C),
+            (3, C, 3, D),
+            (3, D, 1, D)
+        )
+
+        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
+
+
+class EvolvedFSM16(FSMPlayer):
+    """
+    A 16 state FSM player trained with an evolutionary algorithm.
+
+    Names:
+
+        - Evolved FSM 16: Original name by Marc Harper
+
+    """
+
+    name = "Evolved FSM 16"
+    classifier = {
+        'memory_depth': 16,  # At most
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self):
+        transitions = (
+            (0, C, 0, C),
+            (0, D, 12, D),
+            (1, C, 3, D),
+            (1, D, 6, C),
+            (2, C, 2, D),
+            (2, D, 14, D),
+            (3, C, 3, D),
+            (3, D, 3, D),
+            (4, C, 11, D),
+            (4, D, 7, D),
+            (5, C, 12, D),
+            (5, D, 10, D),
+            (6, C, 5, C),
+            (6, D, 12, D),
+            (7, C, 3, D),
+            (7, D, 1, C),
+            (8, C, 5, C),
+            (8, D, 5, C),
+            (9, C, 10, D),
+            (9, D, 13, D),
+            (10, C, 11, D),
+            (10, D, 8, C),
+            (11, C, 15, D),
+            (11, D, 5, D),
+            (12, C, 8, C),
+            (12, D, 11, D),
+            (13, C, 13, D),
+            (13, D, 7, D),
+            (14, C, 13, D),
+            (14, D, 13, D),
+            (15, C, 15, D),
+            (15, D, 2, C)
+        )
+
+        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
+
+
+class EvolvedFSM16Noise05(FSMPlayer):
+    """
+    A 16 state FSM player trained with an evolutionary algorithm with
+    noisy matches (noise=0.05).
+
+    Names:
+
+        - Evolved FSM 16 Noise 05: Original name by Marc Harper
+    """
+
+    name = "Evolved FSM 16 Noise 05"
+    classifier = {
+        'memory_depth': 16,  # At most
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    @init_args
+    def __init__(self):
+        transitions = (
+            (0, C, 8, C),
+            (0, D, 3, D),
+            (1, C, 13, C),
+            (1, D, 15, D),
+            (2, C, 12, C),
+            (2, D, 3, D),
+            (3, C, 10, C),
+            (3, D, 3, D),
+            (4, C, 5, D),
+            (4, D, 4, D),
+            (5, C, 4, D),
+            (5, D, 10, D),
+            (6, C, 8, C),
+            (6, D, 6, D),
+            (7, C, 5, D),
+            (7, D, 15, C),
+            (8, C, 2, C),
+            (8, D, 4, D),
+            (9, C, 15, D),
+            (9, D, 6, D),
+            (10, C, 4, D),
+            (10, D, 1, D),
+            (11, C, 14, D),
+            (11, D, 13, C),
+            (12, C, 13, C),
+            (12, D, 2, C),
+            (13, C, 13, C),
+            (13, D, 6, C),
+            (14, C, 3, D),
+            (14, D, 13, D),
+            (15, C, 5, D),
+            (15, D, 11, C)
+        )
+
+        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)

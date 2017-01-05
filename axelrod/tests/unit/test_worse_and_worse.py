@@ -137,8 +137,10 @@ class TestWorseAndWorse2(TestPlayer):
 
         # Test that after round 20, strategy follows stochastic behaviour given
         # a seed
-        self.responses_test([C] * 20, [C] * 20, [C, D, C, C, C, C, D, C, C, C], random_seed=8)
-        self.responses_test([C] * 20, [C] * 20, [D, D, C, C, D, C, C, C, C, C], random_seed=2)
+        self.responses_test([C] * 20, [C] * 20, [C, D, C, C, C, C, D, C, C, C],
+                            random_seed=8)
+        self.responses_test([C] * 20, [C] * 20, [D, D, C, C, D, C, C, C, C, C],
+                            random_seed=2)
 
 
 class TestWorseAndWorse3(TestPlayer):
@@ -171,5 +173,7 @@ class TestWorseAndWorse3(TestPlayer):
 
         # Test that given a non 0/1 probability of defecting, strategy follows
         # stochastic behaviour, given a seed
-        self.responses_test([C] * 5, [C, D, C, D, C], [D, C, C, D, C, C, C, C, C, C], random_seed=8)
-        self.responses_test([C] * 5, [D] * 5, [D, D, D, C, C, D, D, D, C, C], random_seed=2)
+        self.responses_test([C] * 5, [C, D, C, D, C],
+                            [D, C, C, D, C, C, C, C, C, C], random_seed=8)
+        self.responses_test([C] * 5, [D] * 5, [D, D, D, C, C, D, D, D, C, C],
+                            random_seed=2)

@@ -279,6 +279,7 @@ class Plot(object):
             f = getattr(self, method)(title="{} - {}".format(title_prefix,
                                                              name))
             f.savefig("{}_{}.{}".format(prefix, method, filetype))
+            plt.close(f)
 
             if progress_bar:
                 pbar.update()

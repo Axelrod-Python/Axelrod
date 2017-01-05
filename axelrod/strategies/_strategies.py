@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from .alternator import Alternator
 from .adaptive import Adaptive
-from .ann import EvolvedANN
+from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05
 from .apavlov import APavlov2006, APavlov2011
 from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
@@ -22,25 +22,37 @@ from .defector import Defector, TrickyDefector
 from .doubler import Doubler
 from .finite_state_machines import (
     Fortress3, Fortress4, Predator, Pun1, Raider, Ripoff, SolutionB1,
-    SolutionB5, Thumper, FSMPlayer)
+    SolutionB5, Thumper, FSMPlayer, EvolvedFSM4, EvolvedFSM16,
+    EvolvedFSM16Noise05)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
-from .gambler import Gambler, PSOGambler
-from .gobymajority import (
-    GoByMajority, GoByMajority10, GoByMajority20, GoByMajority40,
-    GoByMajority5, HardGoByMajority, HardGoByMajority10, HardGoByMajority20,
-    HardGoByMajority40, HardGoByMajority5)
+from .gambler import (
+    Gambler, PSOGambler1_1_1, PSOGambler2_2_2, PSOGambler2_2_2_Noise05,
+    PSOGamblerMem1)
+from .gobymajority import (GoByMajority,
+    GoByMajority10, GoByMajority20, GoByMajority40,
+    GoByMajority5,
+    HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
+    HardGoByMajority5)
 from .gradualkiller import GradualKiller
 from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
     SoftGrudger, GrudgerAlternator, EasyGo)
 from .grumpy import Grumpy
 from .handshake import Handshake
+from .hmm import HMMPlayer, EvolvedHMM5
 from .human import Human
 from .hunter import (
     DefectorHunter, CooperatorHunter, CycleHunter, AlternatorHunter,
     MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
-from .lookerup import LookerUp, EvolvedLookerUp
+from .lookerup import (LookerUp,
+    EvolvedLookerUp0_0_1, EvolvedLookerUp0_0_2, EvolvedLookerUp0_0_3,
+    EvolvedLookerUp1_1_0, EvolvedLookerUp1_1_1, EvolvedLookerUp1_1_2,
+    EvolvedLookerUp1_1_3, EvolvedLookerUp1_1_4, EvolvedLookerUp2_2_0,
+    EvolvedLookerUp2_2_1, EvolvedLookerUp2_2_2, EvolvedLookerUp2_2_3,
+    EvolvedLookerUp2_2_4, EvolvedLookerUp3_3_1, EvolvedLookerUp3_3_2,
+    EvolvedLookerUp3_3_3, EvolvedLookerUp4_4_1, EvolvedLookerUp4_4_2,
+    Winner12, Winner21)
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
@@ -114,7 +126,14 @@ all_strategies = [
     Eatherley,
     EventualCycleHunter,
     EvolvedANN,
-    EvolvedLookerUp,
+    EvolvedANN5,
+    EvolvedANNNoise05,
+    EvolvedFSM4,
+    EvolvedFSM16,
+    EvolvedFSM16Noise05,
+    EvolvedLookerUp1_1_1,
+    EvolvedLookerUp2_2_2,
+    EvolvedHMM5,
     Feld,
     FirmButFair,
     FoolMeForever,
@@ -125,7 +144,6 @@ all_strategies = [
     ForgivingTitForTat,
     Fortress3,
     Fortress4,
-    PSOGambler,
     GTFT,
     Geller,
     GellerCooperator,
@@ -182,6 +200,10 @@ all_strategies = [
     Prober4,
     ProtectedMindReader,
     Pun1,
+    PSOGambler1_1_1,
+    PSOGambler2_2_2,
+    PSOGambler2_2_2_Noise05,
+    PSOGamblerMem1,
     Punisher,
     Raider,
     Random,
@@ -215,6 +237,8 @@ all_strategies = [
     Tullock,
     TwoTitsForTat,
     Willing,
+    Winner12,
+    Winner21,
     WinShiftLoseStay,
     WinStayLoseShift,
     WorseAndWorse,

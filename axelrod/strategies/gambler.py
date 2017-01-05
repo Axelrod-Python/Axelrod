@@ -1,75 +1,114 @@
-from axelrod import Actions, Player, init_args, random_choice
-from axelrod.strategy_transformers import FinalTransformer
-from .lookerup import LookerUp, create_lookup_table_keys
+"""Stochastic variants of Lookup table based-strategies, trained with particle
+swarm algorithms.
+
+For the original see:
+ https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
+"""
+
+from axelrod import Actions, random_choice, load_pso_tables
+from .lookerup import LookerUp, create_lookup_table_from_pattern
 
 
 C, D = Actions.C, Actions.D
+tables = load_pso_tables("pso_gambler.csv", directory="data")
 
 
-# End with two defections if tournament length is known
-@FinalTransformer((D, D), name_prefix=None)
 class Gambler(LookerUp):
     """
-    A LookerUp class player which will select randomly an action in some cases.
-    It will always defect the last 2 turns.
+    A stochastic version of LookerUp which will select randomly an action in
+    some cases.
     """
 
     name = 'Gambler'
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
-        'makes_use_of': set(['length']),
+        'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
-    @init_args
-    def __init__(self, lookup_table=None):
-        """
-        If no lookup table is provided to the constructor, then use the TFT one.
-        """
-        if not lookup_table:
-            lookup_table = {
-            ('', 'C', 'D'): 0,
-            ('', 'D', 'D'): 0,
-            ('', 'C', 'C'): 1,
-            ('', 'D', 'C'): 1,
-            }
-        LookerUp.__init__(self, lookup_table=lookup_table, value_length=None)
-
     def strategy(self, opponent):
         action = LookerUp.strategy(self, opponent)
-        # action could be 'C' or a float
+        # action could be 'C', 'D', or a float
         if action in [C, D]:
             return action
         return random_choice(action)
 
 
-class PSOGambler(Gambler):
+class PSOGamblerMem1(Gambler):
     """
-    A LookerUp strategy that uses a lookup table with probability numbers
-    generated using a Particle Swarm Optimisation (PSO) algorithm.
+    A 1x1x0 PSOGambler trained with pyswarm. This is the 'optimal' memory one
+    strategy trained against the set of short run time strategies in the
+    Axelrod library.
 
-    A description of how this strategy was trained is given here:
-    https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
+    Names:
+        - PSO Gambler Mem1: Original name by Marc Harper
     """
 
-    name = "PSO Gambler"
+    name = "PSO Gambler Mem1"
 
     def __init__(self):
-        lookup_table_keys = create_lookup_table_keys(plays=2,
-                                                     opponent_start_plays=2)
+        pattern = tables[("PSO Gambler Mem1", 1, 1, 0)]
+        lookup_table = create_lookup_table_from_pattern(
+            plays=1, op_plays=1, op_start_plays=0,
+            pattern=pattern)
+        Gambler.__init__(self, lookup_table=lookup_table)
+        self.classifier['memory_depth'] = 1
 
-        # GK: Pattern of values determined previously with a pso algorithm.
-        pattern_pso = [1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0,
-                       0.0, 0.0, 0.0, 0.0, 1.0, 0.93, 0.0, 1.0, 0.67, 0.42, 0.0,
-                       0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.48, 0.0,
-                       0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.19, 1.0, 1.0, 0.0,
-                       0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
-                       0.0, 1.0, 0.36, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-        # Zip together the keys and the action pattern to get the lookup table.
-        lookup_table = dict(zip(lookup_table_keys, pattern_pso))
+class PSOGambler1_1_1(Gambler):
+    """
+    A 1x1x1 PSOGambler trained with pyswarm.
+
+    Names:
+        - PSO Gambler 1_1_1: Original name by Marc Harper
+    """
+
+    name = "PSO Gambler 1_1_1"
+
+    def __init__(self):
+        pattern = tables[("PSO Gambler 1_1_1", 1, 1, 1)]
+        lookup_table = create_lookup_table_from_pattern(
+            plays=1, op_plays=1, op_start_plays=1,
+            pattern=pattern)
+        Gambler.__init__(self, lookup_table=lookup_table)
+
+
+class PSOGambler2_2_2(Gambler):
+    """
+    A 2x2x2 PSOGambler trained with pyswarm. Original version by @GDKO.
+
+    Names:
+        - PSO Gambler 2_2_2: Original name by Marc Harper
+    """
+
+    name = "PSO Gambler 2_2_2"
+
+    def __init__(self):
+        pattern = tables[("PSO Gambler 2_2_2", 2, 2, 2)]
+        lookup_table = create_lookup_table_from_pattern(
+            plays=2, op_plays=2, op_start_plays=2,
+            pattern=pattern)
+        Gambler.__init__(self, lookup_table=lookup_table)
+
+
+class PSOGambler2_2_2_Noise05(Gambler):
+    """
+    A 2x2x2 PSOGambler trained with pyswarm with noise=0.05.
+
+    Names:
+        - PSO Gambler 2_2_2 Noise 05: Original name by Marc Harper
+
+    """
+
+    name = "PSO Gambler 2_2_2 Noise 05"
+
+    def __init__(self):
+        pattern = tables[("PSO Gambler 2_2_2 Noise 05", 2, 2, 2)]
+        lookup_table = create_lookup_table_from_pattern(
+            plays=2, op_plays=2, op_start_plays=2,
+            pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)

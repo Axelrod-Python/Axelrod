@@ -7,6 +7,7 @@ import tempfile
 matplotlib_installed = True
 try:
     import matplotlib.pyplot
+    plt = matplotlib.pyplot
 except ImportError:
     matplotlib_installed = False
 
@@ -101,15 +102,19 @@ class TestPlot(unittest.TestCase):
     def test_boxplot(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.boxplot(), matplotlib.pyplot.Figure)
+            fig = plot.boxplot()
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 
     def test_boxplot_with_title(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.boxplot(title="title"),
+            fig = plot.boxplot(title="title")
+            self.assertIsInstance(fig,
                                   matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 
@@ -122,14 +127,18 @@ class TestPlot(unittest.TestCase):
     def test_winplot(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.winplot(), matplotlib.pyplot.Figure)
+            fig = plot.winplot()
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 
     def test_sdvplot(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.sdvplot(), matplotlib.pyplot.Figure)
+            fig = plot.sdvplot()
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 
@@ -142,14 +151,18 @@ class TestPlot(unittest.TestCase):
     def test_lengthplot(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.lengthplot(), matplotlib.pyplot.Figure)
+            fig = plot.lengthplot()
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 
     def test_pdplot(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.pdplot(), matplotlib.pyplot.Figure)
+            fig = plot.pdplot()
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 
@@ -162,15 +175,18 @@ class TestPlot(unittest.TestCase):
     def test_payoff(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.payoff(), matplotlib.pyplot.Figure)
+            fig = plot.payoff()
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 
     def test_payoff_with_title(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(plot.payoff(title="dummy title"),
-                                  matplotlib.pyplot.Figure)
+            fig = plot.payoff(title="dummy title")
+            self.assertIsInstance(fig,matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 
@@ -179,13 +195,15 @@ class TestPlot(unittest.TestCase):
             eco = axelrod.Ecosystem(self.test_result_set)
             eco.reproduce(100)
             plot = axelrod.Plot(self.test_result_set)
-            self.assertIsInstance(
-                plot.stackplot(eco), matplotlib.pyplot.Figure)
-            self.assertIsInstance(
-                plot.stackplot(eco, title="dummy title"),
-                matplotlib.pyplot.Figure)
-            self.assertIsInstance(
-                plot.stackplot(eco, logscale=False), matplotlib.pyplot.Figure)
+            fig = plot.stackplot(eco)
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
+            fig = plot.stackplot(eco, title="dummy title")
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
+            fig = plot.stackplot(eco, logscale=False)
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+            plt.close(fig)
         else:
             self.skipTest('matplotlib not installed')
 

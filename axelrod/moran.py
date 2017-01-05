@@ -41,7 +41,7 @@ class MoranProcess(object):
 
         If the mutation_rate is 0, the population will eventually fixate on
         exactly one player type. In this case a StopIteration exception is
-        raised and the play stops. If mutation_rate is not zero, then the
+        raised and the play stops. If the mutation_rate is not zero, then the
         process will iterate indefinitely, so mp.play() will never exit, and
         you should use the class as an iterator instead.
 
@@ -89,8 +89,8 @@ class MoranProcess(object):
         # Build the set of mutation targets
         # Determine the number of unique types (players)
         keys = set([str(p) for p in players])
-        # Create a dictionary mapping each type to a set of representatives of
-        # the other types
+        # Create a dictionary mapping each type to a set of representatives
+        # of the other types
         d = dict()
         for p in players:
             d[str(p)] = p
