@@ -13,10 +13,10 @@ def check_state_transitions(state_transitions):
     well-formed."""
     keys = state_transitions.keys()
     values = state_transitions.values()
-    # Check that the set of source states equals the set of sink states
+    # Check that the set of source states contains the set of sink states
     sources = [k[0] for k in keys]
     sinks = [v[0] for v in values]
-    if not (set(sources) == set(sinks)):
+    if not set(sinks).issubset(set(sources)):
         return False
     # Check that there are two outgoing edges for every source state
     for state in sources:
@@ -281,6 +281,63 @@ class TestThumper(TestFSMPlayer):
     player = axelrod.Thumper
     expected_classifier = {
         'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Test initial play sequence
+        self.first_play_test(C)
+
+
+class TestEvolvedFSM4(TestFSMPlayer):
+
+    name = "Evolved FSM 4"
+    player = axelrod.EvolvedFSM4
+    expected_classifier = {
+        'memory_depth': 4,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Test initial play sequence
+        self.first_play_test(C)
+
+
+class TestEvolvedFSM16(TestFSMPlayer):
+
+    name = "Evolved FSM 16"
+    player = axelrod.EvolvedFSM16
+    expected_classifier = {
+        'memory_depth': 16,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Test initial play sequence
+        self.first_play_test(C)
+
+
+class TestEvolvedFSM16Noise05(TestFSMPlayer):
+
+    name = "Evolved FSM 16 Noise 05"
+    player = axelrod.EvolvedFSM16Noise05
+    expected_classifier = {
+        'memory_depth': 16,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

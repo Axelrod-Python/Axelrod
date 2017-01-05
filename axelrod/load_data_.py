@@ -2,6 +2,8 @@ import pkg_resources
 
 
 def load_file(filename, directory):
+    """Loads a data file stored in the Axelrod library's data subdirectory,
+    likely for parameters for a strategy."""
     path = '/'.join((directory, filename))
     data = pkg_resources.resource_string(__name__, path)
     data = data.decode('UTF-8', 'replace')

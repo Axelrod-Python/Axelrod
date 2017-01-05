@@ -3,6 +3,8 @@ Test for the Gambler strategy.
 Most tests come form the LookerUp test suite
 """
 
+import copy
+
 import axelrod
 from .test_player import TestPlayer, TestHeadsUp
 
@@ -77,6 +79,31 @@ class TestGambler(TestPlayer):
         self.responses_test([D, D], [D, D], [D])
 
 
+class TestPSOGamblerMem1(TestPlayer):
+
+    name = "PSO Gambler Mem1"
+    player = axelrod.PSOGamblerMem1
+
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = float('inf')
+
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+        self.responses_test([C] * 197, [C] * 197, [C])
+
+
 class TestPSOGambler2_2_2(TestPlayer):
 
     name = "PSO Gambler 2_2_2"
@@ -94,10 +121,52 @@ class TestPSOGambler2_2_2(TestPlayer):
 
     def test_init(self):
         # Check for a few known keys
-        known_pairs = {('CD', 'DD', 'DD'): 0.24523149, ('CD', 'CC', 'DD'): 0.}
+        known_pairs = {('CD', 'DD', 'DD'): 0.24523149,
+                       ('CD', 'CC', 'DD'): 0.}
         player = self.player()
         for k, v in known_pairs.items():
             self.assertEqual(player.lookup_table[k], v)
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+        self.responses_test([C] * 197, [C] * 197, [C])
+
+
+class TestPSOGambler1_1_1(TestPlayer):
+
+    name = "PSO Gambler 1_1_1"
+    player = axelrod.PSOGambler1_1_1
+
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """Starts by cooperating."""
+        self.first_play_test(C)
+        self.responses_test([C] * 197, [C] * 197, [C])
+
+
+class TestPSOGambler2_2_2_Noise05(TestPlayer):
+    name = "PSO Gambler 2_2_2 Noise 05"
+    player = axelrod.PSOGambler2_2_2_Noise05
+
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
     def test_strategy(self):
         """Starts by cooperating."""

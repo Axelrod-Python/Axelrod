@@ -19,7 +19,7 @@ class TestSplitWeights(unittest.TestCase):
 
 class TestEvolvedANN(TestPlayer):
 
-    name = "EvolvedANN"
+    name = "Evolved ANN"
     player = axelrod.EvolvedANN
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -36,10 +36,49 @@ class TestEvolvedANN(TestPlayer):
         self.first_play_test(C)
 
 
+class TestEvolvedANN5(TestPlayer):
+
+    name = "Evolved ANN 5"
+    player = axelrod.EvolvedANN5
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Test initial play sequence
+        self.first_play_test(C)
+
+
+class TestEvolvedANNNoise05(TestPlayer):
+
+    name = "Evolved ANN 5 Noise 05"
+    player = axelrod.EvolvedANNNoise05
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Test initial play sequence
+        self.first_play_test(C)
+
+
+
 class TestEvolvedANNvsCooperator(TestHeadsUp):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN(), axelrod.Cooperator(),
-                         [C, C, C, C, C], [C] * 5)
+                         [C] * 5, [C] * 5)
 
 
 class TestEvolvedANNvsDefector(TestHeadsUp):
@@ -47,7 +86,33 @@ class TestEvolvedANNvsDefector(TestHeadsUp):
         self.versus_test(axelrod.EvolvedANN(), axelrod.Defector(),
                          [C, C, D, D, D], [D] * 5)
 
+
 class TestEvolvedANNvsTFT(TestHeadsUp):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN(), axelrod.TitForTat(),
                          [C] * 5, [C] * 5)
+
+
+class TestEvolvedANN5vsCooperator(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.EvolvedANN5(), axelrod.Cooperator(),
+                         [C] * 5, [C] * 5)
+
+
+class TestEvolvedANN5vsDefector(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.EvolvedANN5(), axelrod.Defector(),
+                         [C] * 5 + [D], [D] * 6)
+
+
+class TestEvolvedANNNoise05vsCooperator(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.EvolvedANNNoise05(), axelrod.Cooperator(),
+                         [C] * 5, [C] * 5)
+
+
+class TestEvolvedANNNoise05vsDefector(TestHeadsUp):
+    def test_rounds(self):
+        self.versus_test(axelrod.EvolvedANNNoise05(), axelrod.Defector(),
+                         [C] * 10, [D] * 10)
+

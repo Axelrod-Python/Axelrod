@@ -43,12 +43,15 @@ class PSOGamblerMem1(Gambler):
     A 1x1x0 PSOGambler trained with pyswarm. This is the 'optimal' memory one
     strategy trained against the set of short run time strategies in the
     Axelrod library.
+
+    Names:
+        - PSO Gambler Mem1: Original name by Marc Harper
     """
 
     name = "PSO Gambler Mem1"
 
     def __init__(self):
-        pattern = tables[('Mem1', 1, 1, 0)]
+        pattern = tables[("PSO Gambler Mem1", 1, 1, 0)]
         lookup_table = create_lookup_table_from_pattern(
             plays=1, op_plays=1, op_start_plays=0,
             pattern=pattern)
@@ -59,27 +62,33 @@ class PSOGamblerMem1(Gambler):
 class PSOGambler1_1_1(Gambler):
     """
     A 1x1x1 PSOGambler trained with pyswarm.
+
+    Names:
+        - PSO Gambler 1_1_1: Original name by Marc Harper
     """
 
     name = "PSO Gambler 1_1_1"
 
     def __init__(self):
-        pattern = tables[('2', 2, 2, 2)]
+        pattern = tables[("PSO Gambler 1_1_1", 1, 1, 1)]
         lookup_table = create_lookup_table_from_pattern(
-            plays=2, op_plays=2, op_start_plays=2,
+            plays=1, op_plays=1, op_start_plays=1,
             pattern=pattern)
         Gambler.__init__(self, lookup_table=lookup_table)
 
 
 class PSOGambler2_2_2(Gambler):
     """
-    A 2x2x2 PSOGambler trained with pyswarm.
+    A 2x2x2 PSOGambler trained with pyswarm. Original version by @GDKO.
+
+    Names:
+        - PSO Gambler 2_2_2: Original name by Marc Harper
     """
 
     name = "PSO Gambler 2_2_2"
 
     def __init__(self):
-        pattern = tables[('2', 2, 2, 2)]
+        pattern = tables[("PSO Gambler 2_2_2", 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
             plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)
@@ -88,12 +97,17 @@ class PSOGambler2_2_2(Gambler):
 
 class PSOGambler2_2_2_Noise05(Gambler):
     """
+    A 2x2x2 PSOGambler trained with pyswarm with noise=0.05.
+
+    Names:
+        - PSO Gambler 2_2_2 Noise 05: Original name by Marc Harper
+
     """
 
-    name = "PSO Gambler Noise 05"
+    name = "PSO Gambler 2_2_2 Noise 05"
 
     def __init__(self):
-        pattern = tables[('05_noise', 2, 2, 2)]
+        pattern = tables[("PSO Gambler 2_2_2 Noise 05", 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
             plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)

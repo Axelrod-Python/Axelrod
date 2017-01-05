@@ -42,6 +42,12 @@ class SimpleHMM(object):
         self.state = initial_state
 
     def is_well_formed(self):
+        """
+        Determines if the HMM parameters are well-formed:
+            - Both matrices are stochastic
+            - Emissions probabilities are in [0, 1]
+            - The initial state is valid.
+        """
         if not is_stochastic_matrix(self.transitions_C):
             return False
         if not is_stochastic_matrix(self.transitions_D):
@@ -54,7 +60,12 @@ class SimpleHMM(object):
         return True
 
     def move(self, opponent_action):
-        """Changes state and computes the response action."""
+        """Changes state and computes the response action.
+
+        Parameters
+            opponent_action: Axelrod.Action
+                The opponent's last action.
+        """
         num_states = len(self.emission_probabilities)
         if opponent_action == C:
             next_state = choice(num_states, 1, p=self.transitions_C[self.state])
@@ -67,11 +78,12 @@ class SimpleHMM(object):
 
 
 class HMMPlayer(Player):
-    """Abstract base class for Hidden Markov Model players.
+    """
+    Abstract base class for Hidden Markov Model players.
 
     Names
 
-        - HMMPlayer
+        - HMM Player
     """
 
     name = "HMM Player"
@@ -104,6 +116,7 @@ class HMMPlayer(Player):
         self.classifier['stochastic'] = self.is_stochastic()
 
     def is_stochastic(self):
+        """Determines if the player is stochastic."""
         # If the transitions matrices and emission_probabilities are all 0 or 1
         # Then the player is stochastic
         values = set(self.hmm.emission_probabilities)
@@ -134,11 +147,22 @@ class EvolvedHMM5(HMMPlayer):
     An HMM-based player with five hidden states trained with an evolutionary
     algorithm.
 
-    Names
+    Names:
 
-        - EvolvedHMM5
+        - Evolved HMM 5
     """
-    name = "EvolvedHMM5"
+    name = "Evolved HMM 5"
+
+    classifier = {
+        'memory_depth': 5,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
 
     @init_args
     def __init__(self):

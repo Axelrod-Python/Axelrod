@@ -41,7 +41,7 @@ class MoranProcess(object):
 
         If the mutation_rate is 0, the population will eventually fixate on
         exactly one player type. In this case a StopIteration exception is
-        raised and the play stops. If mutation_rate is not zero, then the
+        raised and the play stops. If the mutation_rate is not zero, then the
         process will iterate indefinitely, so mp.play() will never exit, and
         you should use the class as an iterator instead.
 

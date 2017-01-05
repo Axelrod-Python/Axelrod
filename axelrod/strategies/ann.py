@@ -31,7 +31,26 @@ def split_weights(weights, num_features, num_hidden):
 
 
 class ANN(Player):
-    """A single layer neural network based strategy."""
+    """A single layer neural network based strategy, with the following
+    features:
+    * Opponent's first move is C
+    * Opponent's first move is D
+    * Opponent's second move is C
+    * Opponent's second move is D
+    * Player's previous move is C
+    * Player's previous move is D
+    * Player's second previous move is C
+    * Player's second previous move is D
+    * Opponent's previous move is C
+    * Opponent's previous move is D
+    * Opponent's second previous move is C
+    * Opponent's second previous move is D
+    * Total opponent cooperations
+    * Total opponent defections
+    * Total player cooperations
+    * Total player defections
+    * Round number
+    """
     name = 'ANN'
     classifier = {
         'memory_depth': float('inf'),
@@ -165,14 +184,14 @@ class EvolvedANN(ANN):
 
     Names:
 
-     - EvolvedANN: : Original name by Martin Jones.
+     - Evolved ANN: Original name by Martin Jones.
     """
 
-    name = "EvolvedANN"
+    name = "Evolved ANN"
 
     @init_args
     def __init__(self):
-        num_features, num_hidden, weights = nn_weights['1']
+        num_features, num_hidden, weights = nn_weights["Evolved ANN"]
         ANN.__init__(self, weights, num_features, num_hidden)
 
 
@@ -183,29 +202,30 @@ class EvolvedANN5(ANN):
 
     Names:
 
-     - EvolvedANN5: : Original name by Marc Harper.
+     - Evolved ANN 5: Original name by Marc Harper.
     """
 
-    name = "EvolvedANN5"
+    name = "Evolved ANN 5"
 
     @init_args
     def __init__(self):
-        num_features, num_hidden, weights = nn_weights['5']
+        num_features, num_hidden, weights = nn_weights["Evolved ANN 5"]
         ANN.__init__(self, weights, num_features, num_hidden)
 
 
 class EvolvedANNNoise05(ANN):
     """
-    A strategy based on a pre-trained neural network, trained with noise=0.05.
+    A strategy based on a pre-trained neural network with a hidden layer of
+    size 10, trained with noise=0.05.
 
     Names:
 
-     - EvolvedANNNoise05: Original name by Marc Harper.
+     - Evolved ANN Noise 05: Original name by Marc Harper.
     """
 
-    name = "EvolvedANNNoise05"
+    name = "Evolved ANN 5 Noise 05"
 
     @init_args
     def __init__(self):
-        num_features, num_hidden, weights = nn_weights['05']
+        num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
         ANN.__init__(self, weights, num_features, num_hidden)
