@@ -1,6 +1,7 @@
 from axelrod import Player, random_choice
 
 
+
 class BetterAndBetter(Player):
     """
     Defects with probability of '(1000 - current turn) / 1000'.
@@ -25,4 +26,5 @@ class BetterAndBetter(Player):
     def strategy(self, opponent):
         current_round = len(self.history) + 1
         probability = current_round / 1000
+        probability = min(probability, 1)
         return random_choice(probability)

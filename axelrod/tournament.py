@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from collections import defaultdict
 from multiprocessing import Process, Queue, cpu_count
 from tempfile import NamedTemporaryFile
@@ -11,7 +9,9 @@ import warnings
 from axelrod import on_windows
 from .game import Game
 from .match import Match
-from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches
+from .match_generator import (
+    RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches,
+    ProbEndSpatialMatches)
 from .result_set import ResultSetFromFile, ResultSet
 
 
@@ -47,7 +47,6 @@ class Tournament(object):
         self.name = name
         self.turns = turns
         self.noise = noise
-        self.num_interactions = 0
         self.players = players
         self.repetitions = repetitions
         self.match_generator = match_generator(
@@ -75,7 +74,7 @@ class Tournament(object):
              processes=None, progress_bar=True,
              keep_interactions=False, in_memory=False):
         """
-        Plays the tournament and passes the results to the ResultSet class
+        Plays the tournament and passes the results to the ResultSet class.
 
         Parameters
         ----------
@@ -132,7 +131,7 @@ class Tournament(object):
     def _build_result_set(self, progress_bar=True, keep_interactions=False,
                           in_memory=False):
         """
-        Build the result set (used by the play method)
+        Build the result set (used by the play method).
 
         Returns
         -------
@@ -141,7 +140,6 @@ class Tournament(object):
         if not in_memory:
             result_set = ResultSetFromFile(filename=self.filename,
                                            progress_bar=progress_bar,
-                                           num_interactions=self.num_interactions,
                                            repetitions=self.repetitions,
                                            players=[str(p) for p in self.players],
                                            keep_interactions=keep_interactions,
@@ -150,7 +148,6 @@ class Tournament(object):
         else:
             result_set = ResultSet(players=[str(p) for p in self.players],
                                    interactions=self.interactions_dict,
-                                   num_interactions=self.num_interactions,
                                    repetitions=self.repetitions,
                                    progress_bar=progress_bar,
                                    game=self.game)
@@ -158,7 +155,7 @@ class Tournament(object):
 
     def _run_serial(self, progress_bar=False):
         """
-        Run all matches in serial
+        Run all matches in serial.
 
         Parameters
         ----------
@@ -196,7 +193,6 @@ class Tournament(object):
                 row.append(history1)
                 row.append(history2)
                 self.writer.writerow(row)
-                self.num_interactions += 1
 
     def _write_interactions_to_dict(self, results):
         """Write the interactions to memory"""
@@ -206,11 +202,10 @@ class Tournament(object):
                     self.interactions_dict[index_pair].append(interaction)
                 except KeyError:
                     self.interactions_dict[index_pair] = [interaction]
-                self.num_interactions += 1
 
     def _run_parallel(self, processes=2, progress_bar=False):
         """
-        Run all matches in parallel
+        Run all matches in parallel.
 
         Parameters
         ----------
@@ -270,7 +265,7 @@ class Tournament(object):
 
     def _process_done_queue(self, workers, done_queue, progress_bar=False):
         """
-        Retrieves the matches from the parallel sub-processes
+        Retrieves the matches from the parallel sub-processes.
 
         Parameters
         ----------
@@ -344,21 +339,18 @@ class Tournament(object):
 
 class ProbEndTournament(Tournament):
     """
-    A tournament in which the player don't know the length of a given match. The
-    length of a match is equivalent to randomly sampling after each round
+    A tournament in which the players don't know the length of a given match.
+    The length of a match is equivalent to randomly sampling after each round
     whether or not to continue.
     """
 
-    def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
-                 name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 noise=0, with_morality=True):
+    def __init__(self, players, name='axelrod', game=None, prob_end=.5,
+                 repetitions=10, noise=0, with_morality=True):
         """
         Parameters
         ----------
         players : list
             A list of axelrod.Player objects
-        match_generator : class
-            A class that must be descended from axelrod.MatchGenerator
         name : string
             A name for the tournament
         game : axelrod.Game
@@ -418,7 +410,7 @@ class SpatialTournament(Tournament):
 class ProbEndSpatialTournament(ProbEndTournament):
     """
     A tournament in which the players are allocated in a graph as nodes
-    and they players only play the others that are connected to with an edge.
+    and the players only play the others that are connected to with an edge.
     Players do not know the length of a given match (it is randomly sampled).
     """
     def __init__(self, players, edges, name='axelrod', game=None, prob_end=.5,

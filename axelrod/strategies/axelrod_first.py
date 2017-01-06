@@ -56,7 +56,8 @@ class Davis(Player):
 
 class RevisedDowning(Player):
     """Revised Downing attempts to determine if players are cooperative or not.
-    If so, it cooperates with them. This strategy would have won Axelrod's first tournament.
+    If so, it cooperates with them. This strategy would have won Axelrod's first
+    tournament.
 
     Names:
 
@@ -83,8 +84,8 @@ class RevisedDowning(Player):
         self.bad = 0.0
         self.nice1 = 0
         self.nice2 = 0
-        self.total_C = 0 # not the same as self.cooperations
-        self.total_D = 0 # not the same as self.defections
+        self.total_C = 0  # not the same as self.cooperations
+        self.total_D = 0  # not the same as self.defections
 
     def strategy(self, opponent):
         round_number = len(self.history) + 1
@@ -164,11 +165,11 @@ class Feld(Player):
         """
         Parameters
         ----------
-        start_coop_prob, float
+        start_coop_prob : float
             The initial probability to cooperate
-        end_coop_prob, float
+        end_coop_prob : float
             The final probability to cooperate
-        rounds_of_decay, int
+        rounds_of_decay : int
             The number of rounds to linearly decrease from start_coop_prob
             to end_coop_prob
         """
@@ -252,7 +253,7 @@ class Joss(MemoryOnePlayer):
         """
         Parameters
         ----------
-        p, float
+        p : float
             The probability of cooperating when the previous round was (C, C)
             or (D, C), i.e. the opponent cooperated.
         """
@@ -268,9 +269,9 @@ class Nydegger(Player):
     """
     Submitted to Axelrod's first tournament by Rudy Nydegger.
 
-    The program begins with tit for tat for the first three moves, except
-    that if it was the only one to cooperate on the first move and the only one
-    to defect on the second move, it defects on the third move. After the third
+    The program begins with tit for tat for the first three moves, except that
+    if it was the only one to cooperate on the first move and the only one to
+    defect on the second move, it defects on the third move. After the third
     move, its choice is determined from the 3 preceding outcomes in the
     following manner.
 
@@ -380,7 +381,7 @@ class Shubik(Player):
             return C
         if opponent.history[-1] == D:
             # Retaliate against defections
-            if self.history[-1] == C: # it's on now!
+            if self.history[-1] == C:  # it's on now!
                 # Lengthen the retaliation period
                 self.is_retaliating = True
                 self.retaliation_length += 1

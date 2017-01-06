@@ -301,7 +301,7 @@ class MoranProcessGraph(MoranProcess):
             probability `mutation_rate`
         mode: string, bd
             Birth-Death (bd) or Death-Birth (db)
-        match_class: subclass of Match
+        match_class: subclass of axelrod.Match
             The match type to use for scoring
         """
         MoranProcess.__init__(self, players, turns=turns, noise=noise,

@@ -1,12 +1,14 @@
-import axelrod as axl
-import numpy as np
-import matplotlib.pyplot as plt
-import tqdm
-from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
-from axelrod.interaction_utils import compute_final_score_per_turn, read_interactions_from_file
-from axelrod import on_windows
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
+
+import matplotlib.pyplot as plt
+import numpy as np
+import tqdm
+
+import axelrod as axl
+from axelrod import on_windows
+from axelrod.interaction_utils import compute_final_score_per_turn, read_interactions_from_file
+from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 
 
 Point = namedtuple('Point', 'x y')
@@ -308,7 +310,8 @@ class AshlockFingerprint():
         plotting_data = np.flipud(shaped_data)
         return plotting_data
 
-    def plot(self, col_map='seismic', interpolation='none', title=None, colorbar=True, labels=True):
+    def plot(self, col_map='seismic', interpolation='none', title=None,
+             colorbar=True, labels=True):
         """Plot the results of the spatial tournament.
 
         Parameters

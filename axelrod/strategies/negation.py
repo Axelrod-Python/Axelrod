@@ -31,4 +31,3 @@ class Negation(Player):
 
         # Act opposite of opponent otherwise
         return flip_action(opponent.history[-1])
-

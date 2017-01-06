@@ -1,5 +1,7 @@
 from axelrod import Actions, Player
 
+C, D = Actions.C, Actions.D
+
 
 C, D = Actions.C, Actions.D
 

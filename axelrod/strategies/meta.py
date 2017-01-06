@@ -40,7 +40,6 @@ class MetaPlayer(Player):
 
         # Make sure we don't use any meta players to avoid infinite recursion.
         self.team = [t for t in self.team if not issubclass(t, MetaPlayer)]
-        self.nteam = len(self.team)
 
         # Initiate all the player in out team.
         self.team = [t() for t in self.team]

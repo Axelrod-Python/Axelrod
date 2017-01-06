@@ -26,7 +26,7 @@ class CotoDeRatio(Player):
         # Avoid initial division by zero
         if not opponent.defections:
             return D
-        # Otherwise compare ratio to golden mean
+        # Otherwise compare ratio to ratio
         cooperations = opponent.cooperations + self.cooperations
         defections = float(opponent.defections + self.defections)
         if cooperations / defections > self.ratio:

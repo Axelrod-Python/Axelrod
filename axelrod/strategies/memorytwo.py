@@ -43,7 +43,7 @@ class MEM2(Player):
     def strategy(self, opponent):
         # Update Histories
         # Note that this assumes that TFT and TFTT do not use internal counters,
-        # Rather that they examine the actual history of play
+        # rather that they examine the actual history of play.
         if len(self.history) > 0:
             for v in self.players.values():
                 v.history.append(self.history[-1])

@@ -117,7 +117,7 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
-        self.assertEqual(tournament.num_interactions, 75)
+        self.assertIsInstance(results, axelrod.ResultSet)
 
     def test_serial_play_with_different_game(self):
         # Test that a non default game is passed to the result set
@@ -129,6 +129,7 @@ class TestTournament(unittest.TestCase):
             turns=1,
             repetitions=1)
         results = tournament.play(progress_bar=False)
+        self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.game.RPST(), (-1, -1, -1, -1))
 
     def test_no_progress_bar_play(self):
@@ -244,7 +245,6 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
         results = tournament.play(processes=2, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(tournament.num_interactions, 75)
 
         # The following relates to #516
         players = [axelrod.Cooperator(), axelrod.Defector(),

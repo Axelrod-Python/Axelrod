@@ -26,7 +26,7 @@ class Random(Player):
         """
         Parameters
         ----------
-        p, float
+        p : float
             The probability to cooperate
 
         Special Cases
