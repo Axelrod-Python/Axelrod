@@ -8,8 +8,6 @@ import copy
 import axelrod
 from .test_player import TestPlayer, TestHeadsUp
 
-import copy
-
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
@@ -38,10 +36,10 @@ class TestGambler(TestPlayer):
         self.assertEqual(player.strategy(opponent), C)
         # Test default table
         tft_table = {
-            ('', 'C', 'D'): 0,
-            ('', 'D', 'D'): 0,
-            ('', 'C', 'C'): 1,
-            ('', 'D', 'C'): 1,
+            ('', C, D): 0,
+            ('', D, D): 0,
+            ('', C, C): 1,
+            ('', D, C): 1,
         }
         player = self.player(tft_table)
         opponent = axelrod.Defector()
@@ -50,14 +48,13 @@ class TestGambler(TestPlayer):
         player.play(opponent)
         self.assertEqual(player.history[-1], D)
         # Test malformed tables
-        table = {(C, C, C): 1, ('DD', 'DD', 'C'): 1}
+        table = {(C, C, C): 1, (D + D, D + D, C): 1}
         with self.assertRaises(ValueError):
             player = self.player(table)
 
-
     def test_strategy(self):
-        self.responses_test([C] * 4, [C, C, C, C], [C])
-        self.responses_test([C] * 5, [C, C, C, C, D], [D])
+        self.responses_test(C, C * 4, C * 4)
+        self.responses_test(D, C * 5, C * 4 + D)
 
     def test_defector_table(self):
         """
@@ -68,15 +65,15 @@ class TestGambler(TestPlayer):
         constructor with the lookup table we want.
         """
         defector_table = {
-            ('', C, D) : 0,
-            ('', D, D) : 0,
-            ('', C, C) : 0,
-            ('', D, C) : 0,
+            ('', C, D): 0,
+            ('', D, D): 0,
+            ('', C, C): 0,
+            ('', D, C): 0,
         }
-        self.player = lambda : axelrod.Gambler(defector_table)
-        self.responses_test([C, C], [C, C], [D])
-        self.responses_test([C, D], [D, C], [D])
-        self.responses_test([D, D], [D, D], [D])
+        self.player = lambda: axelrod.Gambler(defector_table)
+        self.responses_test(D, C + C, C + C)
+        self.responses_test(D, C + D, D + C)
+        self.responses_test(D, D + D, D + D)
 
 
 class TestPSOGamblerMem1(TestPlayer):
@@ -101,7 +98,7 @@ class TestPSOGamblerMem1(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C] * 197, [C] * 197, [C])
+        self.responses_test(C, C * 197, C * 197)
 
 
 class TestPSOGambler2_2_2(TestPlayer):
@@ -130,7 +127,7 @@ class TestPSOGambler2_2_2(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C] * 197, [C] * 197, [C])
+        self.responses_test(C, C * 197, C * 197)
 
 
 class TestPSOGambler1_1_1(TestPlayer):
@@ -151,7 +148,7 @@ class TestPSOGambler1_1_1(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C] * 197, [C] * 197, [C])
+        self.responses_test(C, C * 197, C * 197)
 
 
 class TestPSOGambler2_2_2_Noise05(TestPlayer):
@@ -171,7 +168,7 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C] * 197, [C] * 197, [C])
+        self.responses_test(C, C * 197, C * 197)
 
 
 # Some heads up tests for PSOGambler

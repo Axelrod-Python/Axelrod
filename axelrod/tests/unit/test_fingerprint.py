@@ -1,7 +1,6 @@
 import unittest
-import axelrod as axl
-from axelrod.fingerprint import *
 from hypothesis import given
+from axelrod.fingerprint import *
 from axelrod.tests.property import strategy_lists
 
 
@@ -125,7 +124,8 @@ class TestFingerprint(unittest.TestCase):
 
     def test_serial_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False)
+        data = af.fingerprint(turns=10, repetitions=2, step=0.5,
+                              progress_bar=False)
         edge_keys = sorted(list(af.interactions.keys()))
         coord_keys = sorted(list(data.keys()))
         self.assertEqual(af.step, 0.5)

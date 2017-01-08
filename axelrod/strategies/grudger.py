@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class Grudger(Player):
     """
     A player starts by cooperating however will defect if at any point the

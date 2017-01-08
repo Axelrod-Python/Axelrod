@@ -1,4 +1,4 @@
-"""Test for the punisher strategy."""
+"""Tests for the punisher strategy."""
 
 import axelrod
 from .test_player import TestPlayer
@@ -23,38 +23,36 @@ class TestPunisher(TestPlayer):
     def test_init(self):
         """Tests for the __init__ method."""
         P1 = axelrod.Punisher()
-        self.assertEqual(P1.history, [])
+        self.assertEqual(len(P1.history), 0)
         self.assertEqual(P1.mem_length, 1)
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 1)
 
     def test_strategy(self):
-        self.responses_test([], [], [C], attrs={"grudged": False})
-        self.responses_test([C], [C], [C], attrs={"grudged": False})
-        self.responses_test([C], [D], [D], attrs={"grudged": True})
+        self.responses_test(C, attrs={"grudged": False})
+        self.responses_test(C, C, C, attrs={"grudged": False})
+        self.responses_test(D, C, D, attrs={"grudged": True})
         for i in range(10):
-            self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [D],
+            self.responses_test(D, C + C + D * i, C + D + C * i,
                                 attrs={"grudged": True, "grudge_memory": i,
                                        "mem_length": 10})
         # Eventually the grudge is dropped
         i = 11
-        self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [C],
+        self.responses_test(C, C * 2 + D * i, C + D + C * i,
                             attrs={"grudged": False, "grudge_memory": 0,
                                     "mem_length": 10})
 
         # Grudged again on opponent's D
-        self.responses_test([C, C] + [D] * i + [C], [C, D] + [C] * i + [D], [D],
+        self.responses_test(D, C + C + D * i + C, C + D + C * i + D,
                             attrs={"grudged": True, "grudge_memory": 0,
                                    "mem_length": 2})
 
     def test_reset_method(self):
         """Tests the reset method."""
         P1 = axelrod.Punisher()
-        P1.history = [C, D, D, D]
         P1.grudged = True
         P1.grudge_memory = 4
         P1.reset()
-        self.assertEqual(P1.history, [])
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)
 
@@ -76,40 +74,37 @@ class TestInversePunisher(TestPlayer):
     def test_init(self):
         """Tests for the __init__ method."""
         P1 = axelrod.InversePunisher()
-        self.assertEqual(P1.history, [])
+        self.assertEqual(len(P1.history), 0)
         self.assertEqual(P1.mem_length, 1)
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 1)
 
     def test_strategy(self):
-        self.responses_test([], [], [C], attrs={"grudged": False})
-        self.responses_test([C], [C], [C], attrs={"grudged": False})
-        self.responses_test([C], [D], [D], attrs={"grudged": True})
+        self.responses_test(C, attrs={"grudged": False})
+        self.responses_test(C, C, C, attrs={"grudged": False})
+        self.responses_test(D, C, D, attrs={"grudged": True})
         for i in range(10):
-            self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [D],
+            self.responses_test(D, C + C + D * i, C + D + C * i,
                                 attrs={"grudged": True, "grudge_memory": i,
                                        "mem_length": 10})
         # Eventually the grudge is dropped
         i = 11
-        self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [C],
+        self.responses_test(C, C + C + D * i, C + D + C * i,
                             attrs={"grudged": False, "grudge_memory": 0,
-                                    "mem_length": 10})
+                                   "mem_length": 10})
         # Grudged again on opponent's D
-        self.responses_test([C, C] + [D] * i + [C], [C, D] + [C] * i + [D], [D],
+        self.responses_test(D, C + C + D * i + C, C + D + C * i + D,
                             attrs={"grudged": True, "grudge_memory": 0,
                                    "mem_length": 17})
-
         # Test a different grudge length period
-        self.responses_test([C] * 5, [C] * 4 + [D],
-                            [D], attrs={"grudged": True, "grudge_memory": 0,
-                                        "mem_length": 16})
+        self.responses_test(D, C * 5, C * 4 + D,
+                            attrs={"grudged": True, "grudge_memory": 0,
+                                   "mem_length": 16})
 
     def test_reset_method(self):
         P1 = axelrod.InversePunisher()
-        P1.history = [C, D, D, D]
         P1.grudged = True
         P1.grudge_memory = 4
         P1.reset()
-        self.assertEqual(P1.history, [])
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)

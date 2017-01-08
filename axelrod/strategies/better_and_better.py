@@ -1,6 +1,5 @@
-from axelrod import Actions, Player, random_choice
+from axelrod import Player, random_choice
 
-C, D = Actions.C, Actions.D
 
 class BetterAndBetter(Player):
     """

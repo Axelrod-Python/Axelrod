@@ -4,7 +4,6 @@ import random
 import unittest
 
 import axelrod
-
 from .test_player import TestPlayer
 from axelrod.strategies.hunter import detect_cycle
 
@@ -13,15 +12,15 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestCycleDetection(unittest.TestCase):
     def test_cycles(self):
-        history = [C] * 10
+        history = C * 10
         self.assertEqual(detect_cycle(history), (C,))
         self.assertEqual(detect_cycle(history, min_size=2), (C, C))
-        history = [C, D] * 10
+        history = (C + D) * 10
         self.assertEqual(detect_cycle(history, min_size=2), (C, D))
         self.assertEqual(detect_cycle(history, min_size=3), (C, D, C, D))
-        history = [C, D, C] * 10
+        history = (C + D + C) * 10
         self.assertTrue(detect_cycle(history), (C, D, C))
-        history = [C, C, D] * 10
+        history = (C + C + D) * 10
         self.assertTrue(detect_cycle(history), (C, C, D))
 
     def test_noncycles(self):
@@ -48,8 +47,8 @@ class TestDefectorHunter(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         for i in range(3):
-            self.responses_test([C] * i, [D] * i, [C])
-        self.responses_test([C] * 4, [D] * 4, [D])
+            self.responses_test(C, C * i, D * i)
+        self.responses_test(D, C * 4, D * 4)
 
 
 class TestCooperatorHunter(TestPlayer):
@@ -69,8 +68,8 @@ class TestCooperatorHunter(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         for i in range(3):
-            self.responses_test([C] * i, [C] * i, [C])
-        self.responses_test([C] * 4, [C] * 4, [D])
+            self.responses_test(C, C * i, C * i)
+        self.responses_test(D, C * 4, C * 4)
 
 
 class TestAlternatorHunter(TestPlayer):
@@ -89,12 +88,12 @@ class TestAlternatorHunter(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C] * 2, [C, D], [C])
-        self.responses_test([C] * 3, [C, D, C], [C])
-        self.responses_test([C] * 4, [C, D] * 2, [C])
-        self.responses_test([C] * 5, [C, D] * 2 + [C], [C])
-        self.responses_test([C] * 6, [C, D] * 3, [D])
-        self.responses_test([C] * 7, [C, D] * 3 + [C], [D])
+        self.responses_test(C, C * 2, C + D)
+        self.responses_test(C, C * 3, C + D + C)
+        self.responses_test(C, C * 4, (C + D) * 2)
+        self.responses_test(C, C * 5, (C + D) * 2 + C)
+        self.responses_test(D, C * 6, (C + D) * 3)
+        self.responses_test(D, C * 7, (C + D) * 3 + C)
 
 
 class TestCycleHunter(TestPlayer):
@@ -178,7 +177,7 @@ class TestMathConstantHunter(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([C] * 8, [C] * 7 + [D], [D])
+        self.responses_test(D, C * 8, C * 7 + D)
 
 
 class TestRandomHunter(TestPlayer):
@@ -196,23 +195,23 @@ class TestRandomHunter(TestPlayer):
     }
 
     def test_strategy(self):
-
         # We should catch the alternator here.
-        self.responses_test([C] * 12, [C, D] * 6, [D])
+        self.responses_test(D, C * 12, (C + D) * 6)
 
         # It is still possible for this test to fail, but very unlikely.
-        history1 = [C] * 100
-        history2 = [random.choice([C, D]) for i in range(100)]
-        self.responses_test(history1, history2, D)
+        history1 = C * 100
+        history2 = [random.choice([C, D]) for _ in range(100)]
+        self.responses_test(D, history1, history2)
 
-        history1 = [D] * 100
-        history2 = [random.choice([C, D]) for i in range(100)]
-        self.responses_test(history1, history2, D)
+        history1 = D * 100
+        history2 = [random.choice([C, D]) for _ in range(100)]
+        self.responses_test(D, history1, history2)
 
     def test_reset(self):
         player = self.player()
         opponent = axelrod.Cooperator()
-        for _ in range(100): player.play(opponent)
+        for _ in range(100):
+            player.play(opponent)
         self.assertFalse(player.countCC == 0)
         player.reset()
         self.assertTrue(player.countCC == 0)

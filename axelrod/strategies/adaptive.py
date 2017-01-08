@@ -28,7 +28,7 @@ class Adaptive(Player):
     def __init__(self, initial_plays=None):
         Player.__init__(self)
         if not initial_plays:
-            initial_plays = [C] * 6 + [D] * 5
+            initial_plays = C * 6 + D * 5
         self.initial_plays = initial_plays
         self.scores = {C: 0, D: 0}
 

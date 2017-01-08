@@ -195,6 +195,7 @@ class MetaHunter(MetaPlayer):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
         # Notice that we don't include the cooperator hunter, because it leads
         # to excessive defection and therefore bad performance against
@@ -219,7 +220,7 @@ class MetaHunter(MetaPlayer):
         # false-positives. So go ahead and use it, but only for longer
         # histories.
         if len(opponent.history) > 100:
-            return D if opponent.history[-1:] == [D] else C
+            return D if opponent.history[-1:] == D else C
         else:
             return C
 
@@ -238,6 +239,7 @@ class MetaHunterAggressive(MetaPlayer):
         'manipulates_state': False
     }
 
+    @init_args
     def __init__(self):
         # This version uses CooperatorHunter
         team = [DefectorHunter, AlternatorHunter, RandomHunter,
@@ -257,7 +259,7 @@ class MetaHunterAggressive(MetaPlayer):
         # false-positives. So go ahead and use it, but only for longer
         # histories.
         if len(opponent.history) > 100:
-            return D if opponent.history[-1:] == [D] else C
+            return D if opponent.history[-1:] == D else C
         else:
             return C
 

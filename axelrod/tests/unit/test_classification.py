@@ -197,7 +197,7 @@ class TestStrategies(unittest.TestCase):
         self.assertEqual(str_reps(long_run_time_strategies),
                          str_reps(axl.long_run_time_strategies))
         self.assertTrue(all(s().classifier['long_run_time']
-                             for s in axl.long_run_time_strategies))
+                            for s in axl.long_run_time_strategies))
 
     def test_short_run_strategies(self):
         short_run_time_strategies = [s for s in axl.strategies

@@ -194,6 +194,7 @@ class Winner12(LookerUp):
     """
     name = "Winner12"
 
+    @init_args
     def __init__(self):
         lookup_table_keys = create_lookup_table_keys(
             plays=1, op_plays=2, op_start_plays=0)
@@ -214,6 +215,7 @@ class Winner21(LookerUp):
     """
     name = "Winner21"
 
+    @init_args
     def __init__(self):
         lookup_table_keys = create_lookup_table_keys(
             plays=2, op_plays=1, op_start_plays=0)

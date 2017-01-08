@@ -13,8 +13,12 @@ class Champion(Player):
     """
     Strategy submitted to Axelrod's second tournament by Danny Champion.
 
-    This player cooperates on the first 10 moves and plays Tit for Tat for the next 15 more moves. After 25 moves, the program cooperates unless all the following are true: the other player defected on the previous move, the other player cooperated less than 60% and the random number between 0 and 1 is greater that the other player's cooperation rate.
-    
+    This player cooperates on the first 10 moves and plays Tit for Tat for the
+    next 15 more moves. After 25 moves, the program cooperates unless all the
+    following are true: the other player defected on the previous move, the
+    other player cooperated less than 60% and the random number between 0 and 1
+    is greater that the other player's cooperation rate.
+
     Names:
 
     - Champion: [Axelrod1980b]_
@@ -55,7 +59,10 @@ class Eatherley(Player):
     """
     Strategy submitted to Axelrod's second tournament by Graham Eatherley.
 
-    A player that keeps track of how many times in the game the other player defected. After the other player defects, it defects with a probability equal to the ratio of the other's total defections to the total moves to that point.
+    A player that keeps track of how many times in the game the other player
+    defected. After the other player defects, it defects with a probability
+    equal to the ratio of the other's total defections to the total moves to
+    that point.
 
     Names:
 
@@ -91,7 +98,9 @@ class Tester(Player):
     """
     Submitted to Axelrod's second tournament by David Gladstein.
 
-    Defects on the first move and plays Tit For Tat if the opponent ever defects (after one apology cooperation round). Otherwise alternate cooperation and defection.
+    Defects on the first move and plays Tit For Tat if the opponent ever defects
+    (after one apology cooperation round). Otherwise alternate cooperation and
+    defection.
 
     Names:
 
@@ -119,7 +128,7 @@ class Tester(Player):
             return D
         # Am I TFT?
         if self.is_TFT:
-            return D if opponent.history[-1:] == [D] else C
+            return D if opponent.history[-1:] == D else C
         else:
             # Did opponent defect?
             if opponent.history[-1] == D:

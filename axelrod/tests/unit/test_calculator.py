@@ -1,7 +1,6 @@
 """Tests for calculator strategies."""
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -23,23 +22,14 @@ class TestCalculator(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-
-        P1 = axelrod.Calculator()
-        P1.history = [C] * 20
-        P2 = axelrod.Player()
-        P2.history = [C, D] * 10
-        # Defects on cycle detection
-        self.assertEqual(D, P1.strategy(P2))
-
+        # Test cycle detection
+        self.responses_test(D, C * 20, (C + D) * 10)
         # Test non-cycle response
-        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C]
-        P2.history = history
-        self.assertEqual(C, P1.strategy(P2))
-
+        history = C * 2 + D + C * 2 + D + C * 3 + D + C * 4 + D + C * 5
+        self.responses_test(C, C * 20, history)
         # Test post 20 rounds responses
-        self.responses_test([C] * 21, [C] * 21, [D])
-        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D]
-        self.responses_test([C] * 21, history, [D])
-        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D, C]
-        self.responses_test([C] * 22, history, [C])
-
+        self.responses_test(D, C * 21, C * 21)
+        history = C * 2 + D + C * 2 + D + C * 3 + D + C * 4 + D + C * 5 + D
+        self.responses_test(D, C * 21, history)
+        history += C
+        self.responses_test(C, C * 22, history)

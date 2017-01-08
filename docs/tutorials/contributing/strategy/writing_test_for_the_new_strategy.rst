@@ -37,7 +37,7 @@ As an example, the tests for Tit-For-Tat are as follows::
 
         def test_effect_of_strategy(self):
             """Repeats last action of opponent history."""
-            self.markov_test([C, D, C, D])
+            self.second_play_test([C, D, C, D])
             self.responses_test([C] * 4, [C, C, C, C], [C])
             self.responses_test([C] * 5, [C, C, C, C, D], [D])
 
@@ -72,11 +72,11 @@ All three of these functions can take an optional keyword argument
         P2.history = []
         self.assertEqual(P1.strategy(P2), 'C')
 
-2. The member function :code:`markov_test` takes a list of four plays, each
+2. The member function :code:`second_play_test` takes a list of four plays, each
    following one round of CC, CD, DC, and DD respectively::
 
     def test_effect_of_strategy(self):
-        self.markov_test(['C', 'D', 'D', 'C'])
+        self.second_play_test(['C', 'D', 'D', 'C'])
 
    This is equivalent to::
 

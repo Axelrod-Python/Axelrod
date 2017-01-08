@@ -1,7 +1,7 @@
 from collections import defaultdict
+import copy
 from functools import wraps
 import random
-import copy
 
 from axelrod import Actions, flip_action
 from .game import DefaultGame
@@ -71,6 +71,7 @@ def init_args(func):
     def wrapper(self, *args, **kwargs):
         r = func(self, *args, **kwargs)
         self.init_args = args
+        self.init_kwargs = kwargs
         return r
     return wrapper
 
@@ -104,6 +105,7 @@ class Player(object):
                 self.classifier[dimension] = self.default_classifier[dimension]
         self.state_distribution = defaultdict(int)
         self.init_args = ()
+        self.init_kwargs = dict()
         self.set_match_attributes()
 
     def receive_match_attributes(self):
@@ -159,7 +161,7 @@ class Player(object):
         # be significant changes required throughout the library.
         # Consider overriding in special cases only if necessary
         cls = self.__class__
-        new_player = cls(*self.init_args)
+        new_player = cls(*self.init_args, **self.init_kwargs)
         new_player.match_attributes = dict(self.match_attributes)
         return new_player
 
@@ -178,16 +180,13 @@ class Player(object):
 
     @history.setter
     def history(self, obj):
-        if isinstance(obj, list):
-            self._history = History(history=obj)
-        elif isinstance(obj, History):
-            self._history = obj.copy()
+        self._history = History(history=obj)
 
     @property
     def cooperations(self):
-        return self.history.cooperations()
+        return self.history.cooperations
 
     @property
     def defections(self):
-        return self.history.defections()
+        return self.history.defections
 

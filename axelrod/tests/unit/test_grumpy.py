@@ -1,4 +1,4 @@
-"""Test for the grumpy strategy."""
+"""Tests for the grumpy strategy."""
 
 import axelrod
 from .test_player import TestPlayer, test_responses, TestOpponent
@@ -20,50 +20,31 @@ class TestGrumpy(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_initial_nice_strategy(self):
-        """
-        Starts by cooperating
-        """
-        self.first_play_test(C)
-
-    def test_initial_grumpy_strategy(self):
-        """
-        Starts by defecting if grumpy
-        """
-        P1 = axelrod.Grumpy(starting_state = 'Grumpy')
-        P2 = TestOpponent()
-        self.assertEqual(P1.strategy(P2), D)
-
     def test_strategy(self):
-        """
-        Tests that grumpy will play c until threshold is ht at which point it will become grumpy.
-        Player will then not become nice until lower nice threshold is hit.
-        """
-        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
-        P2 = TestOpponent()
-        test_responses(self, P1, P2, [C, D, D, D], [C, C, C, C], [C])
+        # Starts by cooperating.
+        self.first_play_test(C)
+        # Starts by defecting if grumpy initially.
+        self.responses_test(D, init_kwargs={"starting_state": "Grumpy"})
+        # Tests that grumpy will play C until threshold is hit at which point it
+        # will become grumpy. Player will then not become nice until lower nice
+        # threshold is hit.
 
-        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
-        P2 = TestOpponent()
-        test_responses(self, P1, P2, [C, C, D, D, D], [D, D, D, D, D], [D])
-
-        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
-        P2 = TestOpponent()
-        test_responses(self, P1, P2, [C, C, D, D, D, D, D, D],
-                       [D, D, D, D, D, C, C, C], [D])
-
-        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
-        P2 = TestOpponent()
-        test_responses(self, P1, P2, [C, C, D, D, D, D, D, D, D, D, D],
-                       [D, D, D, D, D, C, C, C, C, C, C], [C])
+        self.responses_test(C, C + D * 3, C * 4,
+                            init_kwargs={"grumpy_threshold": 3,
+                                         "nice_threshold": 0},
+                            attrs={"state": "Nice"})
+        self.responses_test(D, C * 2 + D * 3, D * 5,
+                            init_kwargs={"grumpy_threshold": 3,
+                                         "nice_threshold": 0})
+        self.responses_test(D, C * 2 + D * 6, D * 5 + C * 3,
+                            init_kwargs={"grumpy_threshold": 3,
+                                         "nice_threshold": 0})
+        self.responses_test(C, C * 2 + D * 9, D * 5 + C * 6,
+                            init_kwargs={"grumpy_threshold": 3,
+                                         "nice_threshold": 0})
 
     def test_reset_method(self):
-        """
-        tests the reset method
-        """
-        P1 = axelrod.Grumpy(starting_state = 'Grumpy')
-        P1.history = [C, D, D, D]
+        P1 = axelrod.Grumpy(starting_state='Grumpy')
         P1.state = 'Nice'
         P1.reset()
-        self.assertEqual(P1.history, [])
         self.assertEqual(P1.state, 'Grumpy')

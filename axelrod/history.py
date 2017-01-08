@@ -1,52 +1,72 @@
 from collections import Counter, defaultdict
 
+from .actions import Actions
+
+C, D = Actions.C, Actions.D
+
 
 class History(object):
     def __init__(self, history=None):
+        self._history = ""
+        self._counter = Counter()
         if isinstance(history, History):
             history = history._history
-        self._history = []
-        self._counter = Counter()
         if history:
-            self.extend(list(history))
+            self.extend(history)
 
     def append(self, play):
-        self._history.append(play)
+        # self._history.append(play)
+        self._history += play
         self._counter[play] += 1
 
+    @property
     def cooperations(self):
-        return self._counter['C']
+        return self._counter[C]
 
     def copy(self):
         new_history = History(self._history)
         return new_history
 
+    @property
     def defections(self):
-        return self._counter['D']
+        return self._counter[D]
 
-    def extend(self, list_):
-        self._history.extend(list_)
-        self._counter.update(list_)
+    def extend(self, plays):
+        for play in plays:
+            self.append(play)
 
     def pop(self, index):
-        play = self._history.pop(index)
+        # play = self._history.pop(index)
+        play = self._history[index]
+        self._history = self._history[0:index] + self._history[index+1:]
         self._counter[play] -= 1
         return play
 
     def reset(self):
-        self._history = []
+        self._history = ""
         self._counter = Counter()
 
     def __eq__(self, other):
         # Allow comparison to lists and strings
         if isinstance(other, str):
-            other = list(str)
-        if isinstance(other, list):
             other_history = other
-        else:
+        elif isinstance(other, list):
+            other_history = "".join(other)
+        elif isinstance(other, History):
             other_history = other._history
+        else:
+            raise ValueError("Cannot compare types.")
 
         return (self._history == other_history)
+
+    def __add__(self, other):
+        if isinstance(other, list):
+            temp = self._history + ''.join(other)
+        if isinstance(other, str):
+            temp = self._history + other
+        elif isinstance(other, History):
+            temp = self._history + other._history
+        return History(temp)
 
     def __getitem__(self, key):
         # Passthrough keys and slice objects

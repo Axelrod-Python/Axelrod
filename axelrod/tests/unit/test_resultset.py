@@ -1,13 +1,12 @@
-import unittest
-import axelrod
-import axelrod.interaction_utils as iu
-
-from numpy import mean, std, nanmedian
-
 import csv
 from collections import Counter
+import unittest
 
 from hypothesis import given, settings
+from numpy import mean, std, nanmedian
+
+import axelrod
+import axelrod.interaction_utils as iu
 from axelrod.tests.property import tournaments, prob_end_tournaments
 
 

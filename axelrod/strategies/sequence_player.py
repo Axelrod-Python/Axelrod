@@ -2,6 +2,9 @@ from axelrod import Actions, Player, init_args
 from axelrod._strategy_utils import thue_morse_generator
 
 
+C, D = Actions.C, Actions.D
+
+
 class SequencePlayer(Player):
     """Abstract base class for players that use a generated sequence to
     determine their plays.
@@ -20,9 +23,9 @@ class SequencePlayer(Player):
         By default, treat values like python truth values. Override in child
         classes for alternate behaviors."""
         if value == 0:
-            return Actions.D
+            return D
         else:
-            return Actions.C
+            return C
 
     def strategy(self, opponent):
         # Iterate through the sequence and apply the meta strategy
@@ -90,6 +93,6 @@ class ThueMorseInverse(ThueMorse):
     def meta_strategy(self, value):
         # Switch the default cooperate and defect action on 0 or 1
         if value == 0:
-            return Actions.C
+            return C
         else:
-            return Actions.D
+            return D

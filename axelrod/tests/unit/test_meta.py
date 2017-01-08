@@ -1,6 +1,5 @@
 """Tests for the various Meta strategies."""
 
-import copy
 import random
 
 import axelrod
@@ -185,14 +184,9 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-
-        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
-        P2 = axelrod.Cooperator()
-        test_responses(self, P1, P2, [C] * 4, [C] * 4, [C] * 4)
-
-        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
-        P2 = axelrod.Defector()
-        test_responses(self, P1, P2, [C] * 4, [D] * 4, [D] * 4)
+        team = [axelrod.Cooperator, axelrod.Defector]
+        self.responses_test(C * 4, C * 4, C * 4, init_args=[team])
+        self.responses_test(D * 4, C * 4, D * 4, init_args=[team])
 
 
 class TestMetaHunter(TestMetaPlayer):
@@ -214,20 +208,20 @@ class TestMetaHunter(TestMetaPlayer):
 
         # We are not using the Cooperator Hunter here, so this should lead to
         #  cooperation.
-        self.responses_test([C, C, C, C], [C, C, C, C], [C])
+        self.responses_test(C, C * 4, C * 4)
 
         # After long histories tit-for-tat should come into play.
-        self.responses_test([C] * 101, [C] * 100 + [D], [D])
+        self.responses_test(D, C * 101, C * 100 + D)
 
         # All these others, however, should trigger a defection for the hunter.
-        self.responses_test([C] * 4, [D] * 4, [D])
-        self.responses_test([C] * 6, [C, D] * 3, [D])
-        self.responses_test([C] * 8, [C, C, C, D, C, C, C, D], [D])
-        self.responses_test([C] * 100,
-                            [random.choice([C, D]) for i in range(100)], [D])
+        self.responses_test(D, C * 4, D * 4)
+        self.responses_test(D, C * 6, (C + D) * 3)
+        self.responses_test(D, C * 8, [C, C, C, D, C, C, C, D])
+        self.responses_test(D, C * 100,
+                            [random.choice([C, D]) for _ in range(100)])
         # Test post 100 rounds responses
-        self.responses_test([C] * 101, [C] * 101, [C])
-        self.responses_test([C] * 101, [C] * 100 + [D], [D])
+        self.responses_test(C, C * 101, C * 101)
+        self.responses_test(D, C * 101, C * 100 + D)
 
 
 class TestMetaHunterAggressive(TestMetaPlayer):
@@ -249,20 +243,20 @@ class TestMetaHunterAggressive(TestMetaPlayer):
 
         # We are using CooperatorHunter here, so this should lead to
         # defection
-        self.responses_test([C, C, C, C], [C, C, C, C], [D])
+        self.responses_test(D, C * 4, C * 4)
 
         # After long histories tit-for-tat should come into play.
-        self.responses_test([C] * 101, [C] * 100 + [D], [D])
+        self.responses_test(D, C * 101, C * 100 + D)
 
         # All these others, however, should trigger a defection for the hunter.
-        self.responses_test([C] * 4, [D] * 4, [D])
-        self.responses_test([C] * 6, [C, D] * 3, [D])
-        self.responses_test([C] * 8, [C, C, C, D, C, C, C, D], [D])
-        self.responses_test([C] * 100,
-                            [random.choice([C, D]) for i in range(100)], [D])
+        self.responses_test(D, C * 4, D * 4)
+        self.responses_test(D, C * 6, (C + D) * 3)
+        self.responses_test(D, C * 8, (C * 3 + D) * 2)
+        self.responses_test(D, C * 100,
+                            [random.choice([C, D]) for _ in range(100)])
         # Test post 100 rounds responses
-        self.responses_test([C] * 101, [C] * 101, [D])
-        self.responses_test([C] * 101, [C] * 100 + [D], [D])
+        self.responses_test(D, C * 101, C * 101)
+        self.responses_test(D, C * 101, C * 100 + D)
 
 
 class TestMetaMajorityMemoryOne(TestMetaPlayer):

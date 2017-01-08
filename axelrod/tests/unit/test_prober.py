@@ -1,8 +1,6 @@
 """Tests for prober strategies."""
 
 import axelrod
-import random
-
 from .test_player import TestPlayer, test_responses
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -24,16 +22,16 @@ class TestCollectiveStrategy(TestPlayer):
 
     def test_initial_strategy(self):
         """Starts by playing CD."""
-        self.responses_test([], [], [C, D])
+        self.responses_test(C + D)
 
     def test_strategy(self):
         # Defects forever unless opponent matched first two moves
-        self.responses_test([C, D], [C, C], [D] * 10)
-        self.responses_test([C, D], [D, C], [D] * 10)
-        self.responses_test([C, D], [D, D], [D] * 10)
+        self.responses_test(D * 10, C + D, C + C)
+        self.responses_test(D * 10, C + D, D + C)
+        self.responses_test(D * 10, C + D, D + D)
 
-        self.responses_test([C, D], [C, D], [C] * 10)
-        self.responses_test([C, D, D], [C, D, D], [D] * 10)
+        self.responses_test(C * 10, C + D, C + D)
+        self.responses_test(D * 10, C + D + D, C + D + D)
 
 
 class TestProber(TestPlayer):
@@ -50,20 +48,18 @@ class TestProber(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_initial_strategy(self):
-        """Starts by playing DCC."""
-        self.responses_test([], [], [D, C, C])
-
     def test_strategy(self):
+        # Starts by playing DCC.
+        self.responses_test(D + C + C)
         # Defects forever if opponent cooperated in moves 2 and 3
-        self.responses_test([D, C, C], [C, C, C], [D] * 10)
-        self.responses_test([D, C, C], [D, C, C], [D] * 10)
+        self.responses_test(D * 10, D + C + C, C * 3)
+        self.responses_test(D * 10, D + C + C, D + C + C)
 
         # Otherwise it plays like TFT
-        self.responses_test([D, C, C], [C, D, C], [C])
-        self.responses_test([D, C, C], [C, D, D], [D])
-        self.responses_test([D, C, C, C], [C, D, C, D], [D])
-        self.responses_test([D, C, C, D], [C, D, D], [D])
+        self.responses_test(C, [D, C, C], [C, D, C])
+        self.responses_test(D, [D, C, C], [C, D, D])
+        self.responses_test(D, [D, C, C, C], [C, D, C, D])
+        self.responses_test(D, [D, C, C, D], [C, D, D])
 
 
 class TestProber2(TestPlayer):
@@ -80,20 +76,19 @@ class TestProber2(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_initial_strategy(self):
-        """Starts by playing DCC."""
-        self.responses_test([], [], [D, C, C])
-
     def test_strategy(self):
+        # Starts by playing DCC.
+        self.responses_test(D + C + C)
+
         # Cooperates forever if opponent played D, C in moves 2 and 3
-        self.responses_test([D, C, C], [C, D, C], [C] * 10)
-        self.responses_test([D, C, C], [D, D, C], [C] * 10)
+        self.responses_test(C * 10, [D, C, C], [C, D, C])
+        self.responses_test(C * 10, [D, C, C], [D, D, C])
 
         # Otherwise it plays like TFT
-        self.responses_test([D, C, C], [C, C, C], [C])
-        self.responses_test([D, C, C], [C, D, D], [D])
-        self.responses_test([D, C, C, D], [C, D, D, D], [D])
-        self.responses_test([D, C, C, D], [C, D, D, C], [C])
+        self.responses_test(C, [D, C, C], [C, C, C])
+        self.responses_test(D, [D, C, C], [C, D, D])
+        self.responses_test(D, [D, C, C, D], [C, D, D, D])
+        self.responses_test(C, [D, C, C, D], [C, D, D, C])
 
 
 class TestProber3(TestPlayer):
@@ -110,21 +105,20 @@ class TestProber3(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_initial_strategy(self):
-        """Starts by playing DC."""
-        self.responses_test([], [], [D, C])
-
     def test_strategy(self):
+        # Starts by playing DC.
+        self.responses_test(D + C)
+
         # Defects forever if opponent played C in move 2
         self.responses_test([D, C], [C, C], [D] * 10)
         self.responses_test([D, C], [D, C], [D] * 10)
 
         # Otherwise it plays like TFT
-        self.responses_test([D, C, C], [C, D], [D])
-        self.responses_test([D, C, C], [D, D], [D])
-        self.responses_test([D, C, C, D], [C, D, C], [C])
-        self.responses_test([D, C, C, D], [D, D, D], [D])
-        self.responses_test([D, C, C, D, C], [C, D, C, C], [C])
+        self.responses_test(D, [D, C, C], [C, D])
+        self.responses_test(D, [D, C, C], [D, D])
+        self.responses_test(C, [D, C, C, D], [C, D, C])
+        self.responses_test(D, [D, C, C, D], [D, D, D])
+        self.responses_test(C, [D, C, C, D, C], [C, D, C, C])
 
 
 class TestProber4(TestPlayer):
@@ -144,11 +138,10 @@ class TestProber4(TestPlayer):
         C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
     ]
 
-    def test_initial_strategy(self):
-        """Starts by playing CCDCDDDCCDCDCCDCDDCD."""
-        self.responses_test([], [], self.initial_sequence)
-
     def test_strategy(self):
+        # Starts by playing CCDCDDDCCDCDCCDCDDCD.
+        self.responses_test(self.initial_sequence)
+
         # After playing the initial sequence defects forever
         # if the absolute difference in the number of retaliating
         # and provocative defections of the opponent is smaller or equal to 2
@@ -163,10 +156,10 @@ class TestProber4(TestPlayer):
         ]
 
         history1 = self.initial_sequence
-        responses = [D] * 10
+        responses = D * 10
         attrs = {'turned_defector': True}
         for history2 in provocative_histories:
-            self.responses_test(history1, history2, responses, attrs=attrs)
+            self.responses_test(responses, history1, history2, attrs=attrs)
 
         # Otherwise cooperates for 5 rounds
         unprovocative_histories = [
@@ -180,24 +173,24 @@ class TestProber4(TestPlayer):
         responses = [C] * 5
         attrs = {'turned_defector': False}
         for history2 in unprovocative_histories:
-            self.responses_test(history1, history2, responses, attrs=attrs)
+            self.responses_test(responses, history1, history2, attrs=attrs)
 
         # and plays like TFT afterwards
             history1 += responses
             history2 += responses
-            self.responses_test(history1, history2, [C], attrs=attrs)
+            self.responses_test(C, history1, history2, attrs=attrs)
 
-            history1 += [C]
-            history2 += [D]
-            self.responses_test(history1, history2, [D], attrs=attrs)
+            history1 += C
+            history2 += D
+            self.responses_test(D, history1, history2, attrs=attrs)
 
-            history1 += [D]
-            history2 += [C]
-            self.responses_test(history1, history2, [C], attrs=attrs)
+            history1 += D
+            history2 += C
+            self.responses_test(C, history1, history2, attrs=attrs)
 
-            history1 += [C]
-            history2 += [D]
-            self.responses_test(history1, history2, [D], attrs=attrs)
+            history1 += C
+            history2 += D
+            self.responses_test(D, history1, history2, attrs=attrs)
 
 
 class TestHardProber(TestPlayer):
@@ -214,24 +207,23 @@ class TestHardProber(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_initial_strategy(self):
-        """Starts by playing DC."""
-        self.responses_test([], [], [D, D, C, C])
-
     def test_strategy(self):
+        # Starts by playing D C C C."""
+        self.responses_test(D + D + C + C)
+
         # Cooperates forever if opponent played C in moves 2 and 3
-        self.responses_test([D, D, C, C], [C, C, C, C], [D] * 10)
-        self.responses_test([D, D, C, C], [C, C, C, D], [D] * 10)
-        self.responses_test([D, D, C, C], [D, C, C, C], [D] * 10)
-        self.responses_test([D, D, C, C], [D, C, C, D], [D] * 10)
+        self.responses_test(D * 10, [D, D, C, C], [C, C, C, C])
+        self.responses_test(D * 10, [D, D, C, C], [C, C, C, D])
+        self.responses_test(D * 10, [D, D, C, C], [D, C, C, C])
+        self.responses_test(D * 10, [D, D, C, C], [D, C, C, D])
 
         # Otherwise it plays like TFT
-        self.responses_test([D, D, C, C], [C, C, D, C], [C, C])
-        self.responses_test([D, D, C, C], [C, C, D, D], [D])
-        self.responses_test([D, D, C, C], [D, D, C, C], [C, C])
-        self.responses_test([D, D, C, C], [D, D, C, D], [D])
-        self.responses_test([D, D, C, C, D], [C, C, D, D], [D])
-        self.responses_test([D, D, C, C, D], [D, D, C, C], [C])
+        self.responses_test(C + C, [D, D, C, C], [C, C, D, C])
+        self.responses_test(D, [D, D, C, C], [C, C, D, D])
+        self.responses_test(C + C, [D, D, C, C], [D, D, C, C])
+        self.responses_test(D, [D, D, C, C], [D, D, C, D])
+        self.responses_test(D, [D, D, C, C, D], [C, C, D, D])
+        self.responses_test(C, [D, D, C, C, D], [D, D, C, C])
 
 
 class TestNaiveProber(TestPlayer):
@@ -249,24 +241,22 @@ class TestNaiveProber(TestPlayer):
     }
 
     def test_strategy(self):
-        "Randomly defects and always retaliates like tit for tat."
+        """Randomly defects and always retaliates like tit for tat."""
         self.first_play_test(C)
         # Always retaliate a defection
-        self.responses_test([C] * 2, [C, D], [D])
+        self.responses_test(D, C + C, C + D)
 
-    def test_random_defection(self):
         # Random defection
         player = self.player(0.4)
         opponent = axelrod.Random()
-        test_responses(self, player, opponent, [C], [C], [D], random_seed=1)
+        test_responses(self, player, opponent, D, C, C, random_seed=1)
 
-    def test_reduction_to_TFT(self):
         player = self.player(0)
         opponent = axelrod.Random()
-        test_responses(self, player, opponent, [C], [C], [C], random_seed=1)
-        test_responses(self, player, opponent, [C], [D], [D])
-        test_responses(self, player, opponent, [C, D], [D, C], [C])
-        test_responses(self, player, opponent, [C, D], [D, D], [D])
+        test_responses(self, player, opponent, C, C, C, random_seed=1)
+        test_responses(self, player, opponent, D, C, D)
+        test_responses(self, player, opponent, C, C + D, D + C)
+        test_responses(self, player, opponent, D, C + D, D + D)
 
 
 class TestRemorsefulProber(TestPlayer):
@@ -287,49 +277,42 @@ class TestRemorsefulProber(TestPlayer):
         """Randomly defects (probes) and always retaliates like tit for tat."""
         self.first_play_test(C)
 
-        player = self.player(0.4)
-        opponent = axelrod.Random()
-        player.history = [C, C]
-        opponent.history = [C, D]
-        self.assertEqual(player.strategy(opponent), D)
+        # Test retaliation
+        self.responses_test(C, C, C, random_seed=1)
+        self.responses_test(D, C + C, C + D)
+        self.responses_test(C, C + C + D, C + D + C)
+
+        # Test Random defection
+        self.responses_test(D, C, C, init_kwargs={'p': 0.4}, random_seed=5)
+        self.responses_test(C, C, C, init_kwargs={'p': 0.1}, random_seed=5)
 
     def test_remorse(self):
         """After probing, if opponent retaliates, will offer a C."""
-        player = self.player(0.4)
-        opponent = axelrod.Cooperator()
 
-        test_responses(self, player, opponent, [C], [C], [C],
-                       random_seed=0, attrs={'probing': False})
+        self.responses_test(C, C, C, init_kwargs={'p': 0.4}, random_seed=4,
+                            attrs={'probing': False})
 
-        test_responses(self, player, opponent, [C], [C], [D],
-                       random_seed=1, attrs={'probing': True})
+        self.responses_test(D, C, C, init_kwargs={'p': 0.4}, random_seed=5,
+                            attrs={'probing': True})
 
-        test_responses(self, player, opponent, [C, D], [C, D], [D],
-                       attrs={'probing': False})
+        self.responses_test(C, C + D, C + D, init_kwargs={'p': 0.4},
+                            random_seed=5, attrs={'probing': False})
 
-        test_responses(self, player, opponent, [C, D, C], [C, D, D], [D],
-                       attrs={'probing': False})
+        self.responses_test(D, C + D + C, C + D + D, init_kwargs={'p': 0.4},
+                            random_seed=5, attrs={'probing': False})
 
     def test_reduction_to_TFT(self):
-        player = self.player(0)
-        opponent = axelrod.Random()
-        test_responses(self, player, opponent, [C], [C], [C], random_seed=1,
-                       attrs={'probing': False})
-        test_responses(self, player, opponent, [C], [D], [D],
-                       attrs={'probing': False})
-        test_responses(self, player, opponent, [C, D], [D, C], [C],
-                       attrs={'probing': False})
-        test_responses(self, player, opponent, [C, D], [D, D], [D],
-                       attrs={'probing': False})
+        self.responses_test(C, init_kwargs={'p': 0},
+                            attrs={'probing': False})
+        self.responses_test(C, C, C, init_kwargs={'p': 0},
+                            attrs={'probing': False})
+        self.responses_test(D, C, D, init_kwargs={'p': 0},
+                            attrs={'probing': False})
+        self.responses_test(D, C + C, C + D, init_kwargs={'p': 0},
+                            attrs={'probing': False})
 
-    def test_reset_probing(self):
-        player = self.player(0.4)
+    def test_reset(self):
+        player = self.player()
         player.probing = True
         player.reset()
         self.assertFalse(player.probing)
-
-    def test_random_defection(self):
-        # Random defection
-        player = self.player(0.4)
-        opponent = axelrod.Random()
-        test_responses(self, player, opponent, [C], [C], [D], random_seed=1)

@@ -41,9 +41,7 @@ class RiskyQLearner(Player):
         # Set this explicitely, since the constructor of super will not pick it up
         # for any subclasses that do not override methods using random calls.
         self.classifier['stochastic'] = True
-
         self.prev_action = random_choice()
-        self.history = []
         self.score = 0
         self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0]))})
         self.Vs = OrderedDict({'': 0})

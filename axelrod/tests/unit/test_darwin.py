@@ -1,6 +1,4 @@
-"""
-    Tests for the Darwin PD strategy.
-"""
+"""Tests for the Darwin PD strategy."""
 
 import axelrod
 from .test_player import TestPlayer
@@ -24,14 +22,16 @@ class TestDarwin(TestPlayer):
     def test_strategy(self):
         p1 = self.player()
         p2 = axelrod.Cooperator()
-        self.assertEqual(p1.strategy(p2), C) # Always cooperate first.
+        # Always cooperate first.
+        self.assertEqual(p1.strategy(p2), C)
         for i in range(10):
             p1.play(p2)
         self.assertEqual(p1.strategy(p2), C)
 
         p1 = self.player()
         p2 = axelrod.Defector()
-        self.assertEqual(p1.strategy(p2), C) # Always cooperate first.
+        # Always cooperate first.
+        self.assertEqual(p1.strategy(p2), C)
         for i in range(10):
             p1.play(p2)
         self.assertEqual(p1.strategy(p2), C)
@@ -57,7 +57,7 @@ class TestDarwin(TestPlayer):
         """Is instance correctly reset between rounds"""
         p1 = self.player()
         p1.reset()
-        self.assertEqual(p1.history, [])
+        self.assertEqual(len(p1.history), 0)
         self.assertEqual(p1.genome[0], C)
 
     def test_unique_genome(self):

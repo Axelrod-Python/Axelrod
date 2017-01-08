@@ -3,8 +3,8 @@ from axelrod import Actions, Player, random_choice
 
 class AverageCopier(Player):
     """
-    The player will cooperate with probability p if the opponent's cooperation ratio is p.
-    Starts with random decision.
+    The player will cooperate with probability p if the opponent's cooperation
+    ratio is p. Starts with a random decision.
     """
 
     name = 'Average Copier'

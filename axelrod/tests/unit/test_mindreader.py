@@ -1,9 +1,9 @@
-"""Test for the mindreader strategy."""
+"""Tests for the mindreader strategy."""
 
 import axelrod
-
-from .test_player import TestPlayer
 from axelrod._strategy_utils import simulate_match
+from .test_player import TestPlayer
+
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -48,7 +48,7 @@ class TestMindReader(TestPlayer):
 
     def test_vs_tit_for_tat(self):
         """
-        Will keep nasty strategies happy if it can
+        Will keep nasty strategies happy if it can.
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.TitForTat()
@@ -56,43 +56,31 @@ class TestMindReader(TestPlayer):
 
     def test_simulate_matches(self):
         """
-        Simulates a number of matches
+        Simulates a number of matches.
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Grudger()
         simulate_match(P1, P2, C, 4)
-        self.assertEqual(P2.history, [C, C, C, C])
+        self.assertEqual(P2.history, C * 4)
 
     def test_history_is_same(self):
         """
-        Checks that the history is not altered by the player
+        Checks that the history is not altered by the player.
         """
         P1 = axelrod.MindReader()
         P2 = axelrod.Grudger()
-        P1.history = [C, C]
-        P2.history = [C, D]
+        P1.play(P2)
+        P1.play(P2)
         P1.strategy(P2)
-        self.assertEqual(P1.history, [C, C])
-        self.assertEqual(P2.history, [C, D])
+        self.assertEqual(P1.history, C + C)
+        self.assertEqual(P2.history, C + C)
 
     def test_vs_geller(self):
-        """Ensures that a recursion error does not occur """
+        """Ensures that a recursion error does not occur."""
         P1 = axelrod.MindReader()
         P2 = axelrod.Geller()
         P1.strategy(P2)
         P2.strategy(P1)
-
-    def test_init(self):
-        """Tests for init method """
-        P1 = axelrod.MindReader()
-        self.assertEqual(P1.history, [])
-
-    def test_reset(self):
-        """Tests to see if the class is reset correctly """
-        P1 = axelrod.MindReader()
-        P1.history = [C, D, D, D]
-        P1.reset()
-        self.assertEqual(P1.history, [])
 
 
 class TestProtectedMindReader(TestPlayer):

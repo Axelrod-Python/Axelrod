@@ -1,8 +1,9 @@
+"""Tests for Backstabber strategy."""
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
 
 class TestBackStabber(TestPlayer):
 
@@ -23,25 +24,20 @@ class TestBackStabber(TestPlayer):
         Forgives the first 3 defections but on the fourth
         will defect forever. Defects after the 198th round unconditionally.
         """
-
         self.first_play_test(C)
 
         # Forgives three defections
-        self.responses_test([C], [D], [C], tournament_length=200)
-        self.responses_test([C, C], [D, D], [C], tournament_length=200)
-        self.responses_test([C, C, C], [D, D, D], [C], tournament_length=200)
-        self.responses_test([C, C, C, C], [D, D, D, D], [D],
-                            tournament_length=200)
+        self.responses_test(C, C, D, tournament_length=200)
+        self.responses_test(C, C * 2, D * 2, tournament_length=200)
+        self.responses_test(C, C * 3, D * 3, tournament_length=200)
+        self.responses_test(D, C * 4, D * 4, tournament_length=200)
 
         # Defects on rounds 199, and 200 no matter what
-        self.responses_test([C] * 197, [C] * 197, [C, D, D],
-                            tournament_length=200)
+        self.responses_test(C + D + D, C * 197, C * 197, tournament_length=200)
         # Test that exceeds tournament length
-        self.responses_test([C] * 198, [C] * 198, [D, D, C],
-                            tournament_length=200)
+        self.responses_test(D + D + C, C * 198, C * 198, tournament_length=200)
         # But only if the tournament is known
-        self.responses_test([C] * 198, [C] * 198, [C, C, C],
-                            tournament_length=-1)
+        self.responses_test(C * 3, C * 198, C * 198, tournament_length=-1)
 
 
 class TestDoubleCrosser(TestPlayer):
@@ -69,18 +65,16 @@ class TestDoubleCrosser(TestPlayer):
         self.first_play_test(C)
 
         # Forgives three defections
-        self.responses_test([C], [D], [C], tournament_length=200)
-        self.responses_test([C, C], [D, D], [C], tournament_length=200)
-        self.responses_test([C, C, C], [D, D, D], [C], tournament_length=200)
-        self.responses_test([C, C, C, C], [D, D, D, D], [D],
-                            tournament_length=200)
+        self.responses_test(C, C, D, tournament_length=200)
+        self.responses_test(C, C * 2, D * 2, tournament_length=200)
+        self.responses_test(C, C * 3, D * 3, tournament_length=200)
+        self.responses_test(D, C * 4, D * 4, tournament_length=200)
 
         # If opponent did not defect in the first six rounds, cooperate until
         # round 180
-        self.responses_test([C] * 6, [C] * 6, [C] * 174, tournament_length=200)
-        self.responses_test([C] * 12, [C] * 6 + [D] + [C] * 5, [C] * 160,
+        self.responses_test(C * 174, C * 6, C * 6, tournament_length=200)
+        self.responses_test(C* 160, C * 12, C * 6 + D + C * 5,
                             tournament_length=200)
 
         # Defects on rounds 199, and 200 no matter what
-        self.responses_test([C] * 197, [C] * 197, [C, D, D],
-                            tournament_length=200)
+        self.responses_test(C + D + D, C * 197, C * 197, tournament_length=200)

@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class Punisher(Player):
     """
     A player starts by cooperating however will defect if at any point the
@@ -88,7 +89,6 @@ class InversePunisher(Player):
 
     def __init__(self):
         super(InversePunisher, self).__init__()
-        self.history = []
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1

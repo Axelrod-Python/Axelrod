@@ -27,7 +27,7 @@ class Handshake(Player):
     def __init__(self, initial_plays=None):
         Player.__init__(self)
         if not initial_plays:
-            initial_plays = [C, D]
+            initial_plays = C + D
         self.initial_plays = initial_plays
 
     def strategy(self, opponent):

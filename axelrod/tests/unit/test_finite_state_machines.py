@@ -4,7 +4,6 @@ import unittest
 import axelrod
 from .test_player import TestHeadsUp, TestPlayer
 
-
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
@@ -38,8 +37,8 @@ class TestFSMPlayers(unittest.TestCase):
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
-        self.assertEqual(opponent.history, [C, D] * 3)
-        self.assertEqual(player.history, [C] * 6)
+        self.assertEqual(opponent.history, (C + D) * 3)
+        self.assertEqual(player.history, C * 6)
 
     def test_defector(self):
         """Tests that the player defined by the table for Defector is in fact
@@ -49,8 +48,8 @@ class TestFSMPlayers(unittest.TestCase):
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
-        self.assertEqual(opponent.history, [C, D] * 3)
-        self.assertEqual(player.history, [D] * 6)
+        self.assertEqual(opponent.history, (C + D) * 3)
+        self.assertEqual(player.history, D * 6)
 
     def test_tft(self):
         """Tests that the player defined by the table for TFT is in fact
@@ -60,8 +59,8 @@ class TestFSMPlayers(unittest.TestCase):
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
-        self.assertEqual(opponent.history, [C, D] * 3)
-        self.assertEqual(player.history, [C, C, D, C, D, C])
+        self.assertEqual(opponent.history, (C + D) * 3)
+        self.assertEqual(player.history, C + C + D + C + D + C)
 
     def test_wsls(self):
         """Tests that the player defined by the table for TFT is in fact
@@ -71,8 +70,8 @@ class TestFSMPlayers(unittest.TestCase):
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
-        self.assertEqual(opponent.history, [C, D] * 3)
-        self.assertEqual(player.history, [C, C, D, D, C, C])
+        self.assertEqual(opponent.history, (C + D) * 3)
+        self.assertEqual(player.history, C + C + D + D + C + C)
 
     def test_malformed_tables(self):
         # Test a malformed table
@@ -193,10 +192,10 @@ class TestPun1(TestFSMPlayer):
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(D)
-        self.responses_test([D, C], [C, C], [C])
-        self.responses_test([D, C], [D, C], [C])
-        self.responses_test([D, C, C], [C, C, C], [C])
-        self.responses_test([D, C, C, C], [C, C, C, D], [D])
+        self.responses_test(C, D + C, C + C)
+        self.responses_test(C, D + C, D + C)
+        self.responses_test(C, D + C + C, C * 3)
+        self.responses_test(D, D + 3 * C, 3 * C + D)
 
 
 class TestRaider(TestFSMPlayer):
@@ -366,7 +365,7 @@ class TestFortress3vsTitForTat(TestHeadsUp):
 class TestFortress3vsCooperator(TestHeadsUp):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress3(), axelrod.Cooperator(),
-                         [D, D, D, D, D, D], [C] * 6)
+                         D * 6, C * 6)
 
 
 class TestFortress4vsFortress4(TestHeadsUp):
@@ -384,4 +383,4 @@ class TestFortress4vsTitForTat(TestHeadsUp):
 class TestFortress4vsCooperator(TestHeadsUp):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress4(), axelrod.Cooperator(),
-                         [D, D, D, D, D, D], [C] * 6)
+                         [D, D, D, D, D, D], C * 6)

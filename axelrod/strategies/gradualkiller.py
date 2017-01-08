@@ -1,9 +1,10 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 from axelrod.strategy_transformers import InitialTransformer
 
 C, D = Actions.C, Actions.D
 
-@InitialTransformer((D, D, D, D, D, C, C), name_prefix=None)
+
+@InitialTransformer(D * 5 + C * 2, name_prefix=None)
 class GradualKiller(Player):
     """
     It begins by defecting in the first five moves, then cooperates two times.
@@ -17,10 +18,9 @@ class GradualKiller(Player):
     - Gradual Killer: [PRISON1998]_
     """
 
-    # These are various properties for the strategy
     name = 'Gradual Killer'
     classifier = {
-        'memory_depth': float('Inf'),
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -30,6 +30,6 @@ class GradualKiller(Player):
     }
 
     def strategy(self, opponent):
-        if opponent.history[5:7] == [D, D]:
+        if opponent.history[5:7] == D + D:
             return D
         return C

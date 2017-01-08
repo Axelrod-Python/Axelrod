@@ -1,9 +1,10 @@
-"""Test for the Neg Strategy"""
+"""Tests for the Negation strategy."""
 
 import axelrod
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
 
 class TestNegation(TestPlayer):
 
@@ -19,7 +20,8 @@ class TestNegation(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_effect_of_strategy(self):
+    def test_strategy(self):
+        self.first_play_test(C, random_seed=1)
+        self.first_play_test(D, random_seed=2)
         """Repeats opposite of opponents last action."""
-        self.markov_test([D, C, D, C])
-		
+        self.second_play_test(D, C, D, C)

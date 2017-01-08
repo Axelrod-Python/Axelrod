@@ -3,6 +3,7 @@ from axelrod import Actions, Player, init_args
 
 C, D = Actions.C, Actions.D
 
+
 class OnceBitten(Player):
     """
     Cooperates once when the opponent defects, but if they defect twice in a row defaults to forgetful grudger for 10 turns defecting
