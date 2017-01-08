@@ -48,3 +48,10 @@ class TestHistory(unittest.TestCase):
         h3 = History([C, C, D, D])
         self.assertEqual(h3.cooperations, 2)
         self.assertEqual(h3.defections, 2)
+
+    def test_pop(self):
+        h1 = History([C, D])
+        self.assertEqual(len(h1), 2)
+        play = h1.pop(-1)
+        self.assertEqual(play, D)
+        self.assertEqual(len(h1), 1)
