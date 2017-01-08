@@ -245,9 +245,6 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         # defection
         self.responses_test(D, C * 4, C * 4)
 
-        # After long histories tit-for-tat should come into play.
-        self.responses_test(D, C * 101, C * 100 + D)
-
         # All these others, however, should trigger a defection for the hunter.
         self.responses_test(D, C * 4, D * 4)
         self.responses_test(D, C * 6, (C + D) * 3)
@@ -255,8 +252,8 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         self.responses_test(D, C * 100,
                             [random.choice([C, D]) for _ in range(100)])
         # Test post 100 rounds responses
-        self.responses_test(D, C * 101, C * 101)
-        self.responses_test(D, C * 101, C * 100 + D)
+        self.responses_test(D * 5, C * 101, C * 101)
+        self.responses_test(D * 5, C * 101, C * 100 + D)
 
 
 class TestMetaMajorityMemoryOne(TestMetaPlayer):

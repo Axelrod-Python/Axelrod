@@ -50,9 +50,10 @@ class HistoryList(object):
         elif isinstance(other, list):
             # other_history = "".join(other)
             other_history = other
-        elif isinstance(other, History):
+        elif isinstance(other, HistoryList):
             other_history = other._history
         else:
+            print(other)
             raise ValueError("Cannot compare types.")
 
         return (self._history == other_history)
@@ -63,9 +64,9 @@ class HistoryList(object):
             temp = self._history + other
         if isinstance(other, str):
             temp = self._history + list(other)
-        elif isinstance(other, History):
+        elif isinstance(other, HistoryList):
             temp = self._history + other._history
-        return History(temp)
+        return HistoryList(temp)
 
     def __getitem__(self, key):
         # Passthrough keys and slice objects
@@ -125,7 +126,7 @@ class HistoryString(object):
             other_history = other
         elif isinstance(other, list):
             other_history = "".join(other)
-        elif isinstance(other, History):
+        elif isinstance(other, HistoryString):
             other_history = other._history
         else:
             raise ValueError("Cannot compare types.")
@@ -137,9 +138,9 @@ class HistoryString(object):
             temp = self._history + ''.join(other)
         if isinstance(other, str):
             temp = self._history + other
-        elif isinstance(other, History):
+        elif isinstance(other, HistoryString):
             temp = self._history + other._history
-        return History(temp)
+        return HistoryString(temp)
 
     def __getitem__(self, key):
         # Passthrough keys and slice objects

@@ -68,7 +68,7 @@ class TestPi(TestPlayer):
         defects."""
         self.responses_test(D, C * 4, C * 3 + D)
 
-    def Test_when_less_than_pi(self):
+    def test_when_less_than_pi(self):
         """Tests that if the ratio of Cs to Ds is less than pi then strategy
         co-operates."""
         self.responses_test(C, C * 4, C + C + D + D)
