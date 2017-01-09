@@ -121,8 +121,9 @@ class TestCycleHunter(TestPlayer):
                 player.play(opponent)
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers
-        for opponent in [axelrod.Random(), axelrod.AntiCycler(),
-                         axelrod.Cooperator(), axelrod.Defector()]:
+        axelrod.seed(43)
+        for opponent in [axelrod.Cooperator(), axelrod.Defector(),
+                         axelrod.Random(), axelrod.AntiCycler()]:
             player.reset()
             for i in range(30):
                 player.play(opponent)
@@ -154,6 +155,7 @@ class TestEventualCycleHunter(TestPlayer):
                 player.play(opponent)
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers and cooperators
+        axelrod.seed(43)
         for opponent in [axelrod.Random(), axelrod.AntiCycler(),
                          axelrod.DoubleCrosser(), axelrod.Cooperator()]:
             player.reset()

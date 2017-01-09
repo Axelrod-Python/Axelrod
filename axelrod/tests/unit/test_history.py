@@ -1,7 +1,7 @@
 import unittest
 
 from axelrod import Actions
-from ...history import HistoryString, HistoryList
+from axelrod.history import HistoryString, HistoryList
 
 C, D = Actions.C, Actions.D
 

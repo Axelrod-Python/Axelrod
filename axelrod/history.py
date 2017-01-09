@@ -7,6 +7,7 @@ C, D = Actions.C, Actions.D
 
 class HistoryList(object):
     def __init__(self, history=None):
+        self._len = 0
         self._history = []
         self._counter = Counter()
         if isinstance(history, History):
@@ -15,6 +16,7 @@ class HistoryList(object):
             self.extend(history)
 
     def append(self, play):
+        self._len += 1
         self._history.append(play)
         self._counter[play] += 1
 
@@ -39,7 +41,9 @@ class HistoryList(object):
         return play
 
     def reset(self):
+        del self._history
         self._history = []
+        self._len = 0
         self._counter = Counter()
 
     def __eq__(self, other):
@@ -62,7 +66,7 @@ class HistoryList(object):
         if isinstance(other, list):
             # temp = self._history + ''.join(other)
             temp = self._history + other
-        if isinstance(other, str):
+        elif isinstance(other, str):
             temp = self._history + list(other)
         elif isinstance(other, HistoryList):
             temp = self._history + other._history
@@ -72,8 +76,15 @@ class HistoryList(object):
         # Passthrough keys and slice objects
         return "".join(self._history[key])
 
+    def __str__(self):
+        return "".join(self._history)
+
+    def __list__(self):
+        return self._history
+
     def __len__(self):
-        return len(self._history)
+        return self._len
+        # return len(self._history)
 
     def __repr__(self):
         return "History: " + ''.join(self._history)
@@ -82,6 +93,7 @@ class HistoryList(object):
 class HistoryString(object):
     def __init__(self, history=None):
         self._history = ""
+        self._len = 0
         self._counter = Counter()
         if isinstance(history, History):
             history = history._history
@@ -91,6 +103,7 @@ class HistoryString(object):
     def append(self, play):
         self._history += play
         self._counter[play] += 1
+        self._len += 1
 
     @property
     def cooperations(self):
@@ -114,45 +127,54 @@ class HistoryString(object):
         play = self._history[index]
         self._history = self._history[:index] + self._history[index+1:]
         self._counter[play] -= 1
+        self._len -= 1
         return play
 
     def reset(self):
         self._history = ""
         self._counter = Counter()
+        self._len = 0
+
+    def __add__(self, other):
+        if isinstance(other, HistoryString):
+            temp = self._history + other._history
+        elif isinstance(other, str):
+            temp = self._history + other
+        elif isinstance(other, list):
+            temp = self._history + ''.join(other)
+        return HistoryString(temp)
 
     def __eq__(self, other):
         # Allow comparison to lists and strings
-        if isinstance(other, str):
+        if isinstance(other, HistoryString):
+            other_history = other._history
+        elif isinstance(other, str):
             other_history = other
         elif isinstance(other, list):
             other_history = "".join(other)
-        elif isinstance(other, HistoryString):
-            other_history = other._history
         else:
             raise ValueError("Cannot compare types.")
 
         return (self._history == other_history)
 
-    def __add__(self, other):
-        if isinstance(other, list):
-            temp = self._history + ''.join(other)
-        if isinstance(other, str):
-            temp = self._history + other
-        elif isinstance(other, HistoryString):
-            temp = self._history + other._history
-        return HistoryString(temp)
-
     def __getitem__(self, key):
         # Passthrough keys and slice objects
-        return "".join(self._history[key])
+        return self._history[key]
+
+    def __str__(self):
+        return self._history
+
+    def __list__(self):
+        return list(self._history)
 
     def __len__(self):
-        return len(self._history)
+        return self._len
+        # return len(self._history)
 
     def __repr__(self):
         return "History: " + ''.join(self._history)
 
-History = HistoryList
+History = HistoryString
 
 
 class JointHistory(object):
