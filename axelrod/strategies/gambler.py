@@ -5,7 +5,7 @@ For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
 
-from axelrod import Actions, random_choice, load_pso_tables
+from axelrod import Actions, init_args, load_pso_tables, random_choice
 from .lookerup import LookerUp, create_lookup_table_from_pattern
 
 
@@ -50,6 +50,7 @@ class PSOGamblerMem1(Gambler):
 
     name = "PSO Gambler Mem1"
 
+    @init_args
     def __init__(self):
         pattern = tables[("PSO Gambler Mem1", 1, 1, 0)]
         lookup_table = create_lookup_table_from_pattern(
@@ -69,6 +70,7 @@ class PSOGambler1_1_1(Gambler):
 
     name = "PSO Gambler 1_1_1"
 
+    @init_args
     def __init__(self):
         pattern = tables[("PSO Gambler 1_1_1", 1, 1, 1)]
         lookup_table = create_lookup_table_from_pattern(
@@ -87,6 +89,7 @@ class PSOGambler2_2_2(Gambler):
 
     name = "PSO Gambler 2_2_2"
 
+    @init_args
     def __init__(self):
         pattern = tables[("PSO Gambler 2_2_2", 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
@@ -106,6 +109,7 @@ class PSOGambler2_2_2_Noise05(Gambler):
 
     name = "PSO Gambler 2_2_2 Noise 05"
 
+    @init_args
     def __init__(self):
         pattern = tables[("PSO Gambler 2_2_2 Noise 05", 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(

@@ -1,9 +1,11 @@
 import unittest
-from axelrod.strategies._filters import *
-from axelrod import filtered_strategies
+
 from hypothesis import given, example
 from hypothesis.strategies import integers
-import operator
+
+from axelrod import filtered_strategies
+from axelrod.strategies._filters import *
+
 
 
 class TestFilters(unittest.TestCase):

@@ -85,7 +85,7 @@ class Match(object):
     @property
     def _cache_update_required(self):
         """
-        A boolean to show whether the deterministic cache should be updated
+        A boolean to show whether the deterministic cache should be updated.
         """
         return (
             not self.noise and
@@ -152,11 +152,11 @@ class Match(object):
         return self.players[winner_index]
 
     def cooperation(self):
-        """Returns the count of cooperations by each player"""
+        """Returns the count of cooperations by each player."""
         return iu.compute_cooperations(self.result)
 
     def normalised_cooperation(self):
-        """Returns the count of cooperations by each player per turn"""
+        """Returns the count of cooperations by each player per turn."""
         return iu.compute_normalised_cooperation(self.result)
 
     def state_distribution(self):

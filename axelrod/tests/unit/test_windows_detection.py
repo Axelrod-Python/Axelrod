@@ -2,6 +2,7 @@ import unittest
 import os
 import axelrod
 
+
 class TestWindowsDetection(unittest.TestCase):
 
     @unittest.skipIf(os.name == 'nt',

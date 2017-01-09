@@ -37,7 +37,8 @@ class TestEcosystem(unittest.TestCase):
         self.assertEqual(list(set(pops[0])), [0.25])
 
         # Can pass list of initial population distributions
-        eco = axelrod.Ecosystem(self.res_cooperators, population=[.7, .25, .03, .02])
+        eco = axelrod.Ecosystem(self.res_cooperators,
+                                population=[.7, .25, .03, .02])
         pops = eco.population_sizes
         self.assertEqual(eco.nplayers, 4)
         self.assertEqual(len(pops), 1)
@@ -55,10 +56,12 @@ class TestEcosystem(unittest.TestCase):
         self.assertEqual(pops[0], [.7, .25, .03, .02])
 
         # If passed list is of incorrect size get error
-        self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators, population=[.7, .2, .03, .1, .1])
+        self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators,
+                          population=[.7, .2, .03, .1, .1])
 
         # If passed list has negative values
-        self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators, population=[.7, -.2, .03, .2])
+        self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators,
+                          population=[.7, -.2, .03, .2])
 
     def test_fitness(self):
         fitness = lambda p: 2 * p

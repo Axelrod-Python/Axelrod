@@ -45,7 +45,8 @@ class Grumpy(Player):
         and nicer the more they cooperate.
 
         Starts off Nice, but becomes grumpy once the grumpiness threshold is hit.
-        Won't become nice once that grumpy threshold is hit, but must reach a much lower threshold before it becomes nice again.
+        Won't become nice once that grumpy threshold is hit, but must reach a
+        much lower threshold before it becomes nice again.
         """
 
         self.grumpiness = opponent.defections - opponent.cooperations

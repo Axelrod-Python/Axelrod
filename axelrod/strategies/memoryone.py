@@ -1,7 +1,7 @@
 from axelrod import Actions, Player, init_args, random_choice
 
-
 C, D = Actions.C, Actions.D
+
 
 class MemoryOnePlayer(Player):
     """Uses a four-vector for strategies based on the last round of play,
@@ -55,7 +55,8 @@ class MemoryOnePlayer(Player):
         if not all(0 <= p <= 1 for p in four_vector):
             raise ValueError('An element in the probability vector, %s, is not between 0 and 1.' % str(four_vector))
 
-        self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)], map(float, four_vector)))
+        self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)],
+                                     map(float, four_vector)))
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent):
@@ -82,7 +83,7 @@ class WinStayLoseShift(MemoryOnePlayer):
 
     name = 'Win-Stay Lose-Shift'
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
+        'memory_depth': 1,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -108,7 +109,7 @@ class WinShiftLoseStay(MemoryOnePlayer):
 
     name = 'Win-Shift Lose-Stay'
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
+        'memory_depth': 1,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -134,7 +135,7 @@ class GTFT(MemoryOnePlayer):
 
     name = 'GTFT'
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
+        'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(["game"]),
         'long_run_time': False,
@@ -237,7 +238,7 @@ class LRPlayer(MemoryOnePlayer):
 
     name = 'LinearRelation'
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
+        'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(["game"]),
         'long_run_time': False,

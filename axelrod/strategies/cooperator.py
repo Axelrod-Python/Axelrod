@@ -43,6 +43,6 @@ class TrickyCooperator(Player):
         Defect once in a while in order to get a better payout, when the opponent
         has not defected in the last ten turns and only cooperated during last 3 turns.
         """
-        if D not in opponent.history[-10:] and opponent.history[-3:] == [C]*3:
+        if D not in opponent.history[-10:] and opponent.history[-3:] == C * 3:
             return D
         return C

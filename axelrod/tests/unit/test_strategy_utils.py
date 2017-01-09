@@ -20,8 +20,8 @@ class TestDetectCycle(unittest.TestCase):
         self.assertIsNotNone(detect_cycle(history))
 
     def test_no_cycle(self):
-        history = [C, D, C, C]
+        history = C + D + C + C
         self.assertIsNone(detect_cycle(history))
 
-        history = [D, D, C, C, C]
+        history = D * 2 + C * 3
         self.assertIsNone(detect_cycle(history))

@@ -7,7 +7,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestAPavlov2006(TestPlayer):
-    name = "Adapative Pavlov 2006"
+    name = "Adaptive Pavlov 2006"
     player = axelrod.APavlov2006
 
     expected_classifier = {
@@ -22,19 +22,19 @@ class TestAPavlov2006(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C] * 6, [C] * 6, [C],
+        self.responses_test(C, C * 6, C * 6,
                             attrs={"opponent_class": "Cooperative"})
-        self.responses_test([C, D, D, D, D, D], [D] * 6, [D],
+        self.responses_test(D, C + D * 5, D * 6,
                             attrs={"opponent_class": "ALLD"})
-        self.responses_test([C, D, C, D, C, D], [D, C, D, C, D, C], [C, C],
+        self.responses_test(C + C, (C + D) * 3, (D + C) * 3,
                             attrs={"opponent_class": "STFT"})
-        self.responses_test([C, D, D, C, D, D], [D, D, C, D, D, C], [D],
+        self.responses_test(D, (C + D + D) * 2, (D + D + C) * 2,
                             attrs={"opponent_class": "PavlovD"})
-        self.responses_test([C, D, D, C, D, D, C], [D, D, C, D, D, C, D], [C],
+        self.responses_test(C, (C + D + D) * 2 + C, (D + D + C) * 2 + D,
                             attrs={"opponent_class": "PavlovD"})
-        self.responses_test([C, D, D, C, D, D], [C, C, C, D, D, D], [D],
+        self.responses_test(D, (C + D + D) * 2, C * 3 + D * 3,
                             attrs={"opponent_class": "Random"})
-        self.responses_test([C, D, D, D, C, C], [D, D, D, C, C, C], [D],
+        self.responses_test(D, C + D * 3 + C * 2, D * 3 + C * 3,
                             attrs={"opponent_class": "Random"})
 
     def test_reset(self):
@@ -44,8 +44,9 @@ class TestAPavlov2006(TestPlayer):
         player.reset()
         self.assertEqual(player.opponent_class, None)
 
+
 class TestAPavlov2011(TestPlayer):
-    name = "Adapative Pavlov 2011"
+    name = "Adaptive Pavlov 2011"
     player = axelrod.APavlov2011
 
     expected_classifier = {
@@ -60,24 +61,21 @@ class TestAPavlov2011(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C] * 6, [C] * 6, [C],
+        self.responses_test(C, C * 6, C * 6,
                             attrs={"opponent_class": "Cooperative"})
-        self.responses_test([C, D, D, D, D, D], [D] * 6, [D],
+        self.responses_test(D, C + D * 5, D * 6,
                             attrs={"opponent_class": "ALLD"})
-        self.responses_test([C, C, D, D, D, D], [C] + [D] * 5, [D],
+        self.responses_test(D, C * 2 + D * 4, C + D * 5,
                             attrs={"opponent_class": "ALLD"})
-        self.responses_test([C, C, C, D, D, D], [C, C] + [D] * 4, [D],
+        self.responses_test(D, C * 3 + D * 3, C * 2 + D * 4,
                             attrs={"opponent_class": "ALLD"})
-        self.responses_test([C, C, D, D, C, D], [C, D, D, C, D, D], [D],
+        self.responses_test(D, C * 2 + D * 2 + C + D, (C + D * 2) * 2,
                             attrs={"opponent_class": "ALLD"})
-
-        self.responses_test([C, C, D, D, D, C], [C, D, D, C, C, D], [C],
+        self.responses_test(C, C * 2 + D * 3 + C, C + D * 2 + C * 2 + D,
                             attrs={"opponent_class": "STFT"})
-        self.responses_test([C, C, D, C, D, C], [C, D, C, D, C, D], [C],
+        self.responses_test(C, C * 2 + (D + C) * 2, (C + D) * 3,
                             attrs={"opponent_class": "STFT"})
-        self.responses_test([C, D, D, D, C, C], [D, D, D, C, C, C], [C],
-                            attrs={"opponent_class": "STFT"})
-        self.responses_test([C, D, D, D, C, C], [D, D, D, C, C, C], [C],
+        self.responses_test(C, C + D * 3 + C * 2, D * 3 + C * 3,
                             attrs={"opponent_class": "STFT"})
 
         # Specific case for STFT when responding with TFT
@@ -90,14 +88,15 @@ class TestAPavlov2011(TestPlayer):
         opponent.history.append(C)
         self.assertEqual(player.strategy(opponent), C)
 
-        self.responses_test([C, C, C, C, C, D], [C, C, C, C, D, D], [D],
+        self.responses_test(D, C * 5 + D, C * 4 + D * 2,
                             attrs={"opponent_class": "Random"})
-        self.responses_test([C, D, D, C, C, C], [D, D, C, C, C, C], [D],
+        self.responses_test(D, C + D * 2 + C * 3, D * 2 + C * 4,
                             attrs={"opponent_class": "Random"})
 
     def test_reset(self):
         player = self.player()
         opponent = axelrod.Cooperator()
-        [player.play(opponent) for _ in range(10)]
+        for _ in range(10):
+            player.play(opponent)
         player.reset()
         self.assertEqual(player.opponent_class, None)

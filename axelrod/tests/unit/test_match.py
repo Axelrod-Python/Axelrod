@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
 import unittest
+from hypothesis import given, example
+from hypothesis.strategies import integers, floats, assume
 import axelrod
 from axelrod import Actions
 from axelrod.deterministic_cache import DeterministicCache
-
-from hypothesis import given, example
-from hypothesis.strategies import integers, floats, assume
-
 from axelrod.tests.property import games
 
 C, D = Actions.C, Actions.D
@@ -41,7 +38,8 @@ class TestMatch(unittest.TestCase):
             'game': game,
             'noise': 0.5
         }
-        match = axelrod.Match((p1, p2), turns, game=game, match_attributes=match_attributes)
+        match = axelrod.Match((p1, p2), turns, game=game,
+                              match_attributes=match_attributes)
         self.assertEqual(match.players[0].match_attributes['length'], 500)
         self.assertEqual(match.players[0].match_attributes['noise'], 0.5)
 

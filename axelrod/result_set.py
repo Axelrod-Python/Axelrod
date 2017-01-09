@@ -31,7 +31,7 @@ class ResultSet(object):
     """A class to hold the results of a tournament."""
 
     def __init__(self, players, interactions, repetitions=False,
-                 progress_bar=True, game=None, num_interactions=False):
+                 progress_bar=True, game=None):
         """
         Parameters
         ----------
@@ -42,9 +42,7 @@ class ResultSet(object):
                 interactions (1 for each repetition)
             repetitions : int
                 The number of repetitions
-            num_interactions : int
-                The number of interactions
-            game : axlerod.game
+            game : axelrod.game
                 The particular game used.
             progress_bar : bool
                 Whether or not to create a progress bar which will be updated
@@ -81,7 +79,7 @@ class ResultSet(object):
 
     def _update_players(self, index_pair, players):
         """
-        During a read of the data, update the internal players dictionary
+        During a read of the data, update the internal players dictionary.
 
         Parameters
         ----------
@@ -97,7 +95,7 @@ class ResultSet(object):
 
     def _update_repetitions(self, index_pair, nbr=1):
         """
-        During a read of the data, update the internal repetitions dictionary
+        During a read of the data, update the internal repetitions dictionary.
 
         Parameters
         ----------
@@ -114,7 +112,7 @@ class ResultSet(object):
 
     def _build_repetitions(self):
         """
-        Count the number of repetitions
+        Count the number of repetitions.
 
         Returns
         -------
@@ -129,7 +127,7 @@ class ResultSet(object):
 
     def _build_players(self):
         """
-        List the players
+        List the players.
 
         Returns
         -------
@@ -150,8 +148,8 @@ class ResultSet(object):
         Returns:
         --------
 
-        The eigenmoses rating as defined in:
-        http://www.scottaaronson.com/morality.pdf
+            The eigenmoses rating as defined in:
+            http://www.scottaaronson.com/morality.pdf
         """
         eigenvector, eigenvalue = eigen.principal_eigenvector(
             self.vengeful_cooperation)
@@ -164,8 +162,8 @@ class ResultSet(object):
         Returns:
         --------
 
-        The eigenjesus rating as defined in:
-        http://www.scottaaronson.com/morality.pdf
+            The eigenjesus rating as defined in:
+            http://www.scottaaronson.com/morality.pdf
         """
         eigenvector, eigenvalue = eigen.principal_eigenvector(
             self.normalised_cooperation)
@@ -413,7 +411,7 @@ class ResultSet(object):
 
     def _update_payoffs(self, p1, p2, scores_per_turn):
         """
-        During a read of the data, update the payoffs attribute
+        During a read of the data, update the payoffs attribute.
 
         Parameters
         ----------
@@ -429,7 +427,7 @@ class ResultSet(object):
 
     def _update_score_diffs(self, repetition, p1, p2, scores_per_turn):
         """
-        During a read of the data, update the score diffs attribute
+        During a read of the data, update the score diffs attribute.
 
         Parameters
         ----------
@@ -445,7 +443,7 @@ class ResultSet(object):
 
     def _update_normalised_cooperation(self, p1, p2, interaction):
         """
-        During a read of the data, update the normalised cooperation attribute
+        During a read of the data, update the normalised cooperation attribute.
 
         Parameters
         ----------
@@ -462,7 +460,7 @@ class ResultSet(object):
 
     def _update_wins(self, repetition, p1, p2, interaction):
         """
-        During a read of the data, update the wins attribute
+        During a read of the data, update the wins attribute.
 
         Parameters
         ----------
@@ -483,7 +481,7 @@ class ResultSet(object):
 
     def _update_scores(self, repetition, p1, p2, interaction):
         """
-        During a read of the data, update the scores attribute
+        During a read of the data, update the scores attribute.
 
         Parameters
         ----------
@@ -502,7 +500,7 @@ class ResultSet(object):
 
     def _update_normalised_scores(self, repetition, p1, p2, scores_per_turn):
         """
-        During a read of the data, update the normalised scores attribute
+        During a read of the data, update the normalised scores attribute.
 
         Parameters
         ----------
@@ -520,7 +518,7 @@ class ResultSet(object):
 
     def _update_cooperation(self, p1, p2, cooperations):
         """
-        During a read of the data, update the cooperation attribute
+        During a read of the data, update the cooperation attribute.
 
         Parameters
         ----------
@@ -536,7 +534,7 @@ class ResultSet(object):
     def _update_initial_cooperation_count(self, p1, p2, initial_cooperations):
         """
         During a read of the data, update the initial cooperation count
-        attribute
+        attribute.
 
         Parameters
         ----------
@@ -553,7 +551,7 @@ class ResultSet(object):
 
     def _update_state_distribution(self, p1, p2, counter):
         """
-        During a read of the data, update the state_distribution attribute
+        During a read of the data, update the state_distribution attribute.
 
         Parameters
         ----------
@@ -570,7 +568,7 @@ class ResultSet(object):
 
     def _update_good_partner_matrix(self, p1, p2, cooperations):
         """
-        During a read of the data, update the good partner matrix attribute
+        During a read of the data, update the good partner matrix attribute.
 
         Parameters
         ----------
@@ -587,7 +585,7 @@ class ResultSet(object):
 
     def _summarise_normalised_scores(self):
         """
-        At the end of a read of the data, finalise the normalised scores
+        At the end of a read of the data, finalise the normalised scores.
         """
         for i, rep in enumerate(self.normalised_scores):
             for j, player_scores in enumerate(rep):
@@ -602,7 +600,7 @@ class ResultSet(object):
 
     def _summarise_normalised_cooperation(self):
         """
-        At the end of a read of the data, finalise the normalised cooperation
+        At the end of a read of the data, finalise the normalised cooperation.
         """
         for i, rep in enumerate(self.normalised_cooperation):
             for j, cooperation in enumerate(rep):
@@ -618,7 +616,7 @@ class ResultSet(object):
     @update_progress_bar
     def _build_good_partner_rating(self):
         """
-        At the end of a read of the data, build the good partner rating
+        At the end of a read of the data, build the good partner rating.
         attribute
         """
         return [sum(self.good_partner_matrix[player]) /
@@ -629,7 +627,7 @@ class ResultSet(object):
     def _build_initial_cooperation_rate(self):
         """
         At the end of a read of the data, build the normalised initial
-        cooperation rate attribute
+        cooperation rate attribute.
         """
         return [self.initial_cooperation_count[player] /
                 max(1, float(self.total_interactions[player]))
@@ -712,7 +710,7 @@ class ResultSet(object):
 
     def __eq__(self, other):
         """
-        Check equality of results set
+        Check equality of results set.
 
         Parameters
         ----------
@@ -742,7 +740,7 @@ class ResultSet(object):
 
     def __ne__(self, other):
         """
-        Check inequality of results set
+        Check inequality of results set.
 
         Parameters
         ----------
@@ -818,7 +816,7 @@ class ResultSet(object):
 
     def read_match_chunks(self, progress_bar=False):
         """
-        A generator to return a given repetitions of matches
+        A generator to return a given repetitions of matches.
 
         Parameters
         ----------
@@ -850,7 +848,7 @@ class ResultSet(object):
 
     def _read_players_and_repetition_numbers(self, progress_bar=False):
         """
-        Read the players and the repetitions numbers
+        Read the players and the repetitions numbers.
 
         Parameters
         ----------

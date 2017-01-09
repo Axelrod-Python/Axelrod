@@ -14,7 +14,7 @@ class APavlov2006(Player):
     uncooperative opponents.
     """
 
-    name = "Adapative Pavlov 2006"
+    name = "Adaptive Pavlov 2006"
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -32,16 +32,16 @@ class APavlov2006(Player):
     def strategy(self, opponent):
         # TFT for six rounds
         if len(self.history) < 6:
-            return D if opponent.history[-1:] == [D] else C
+            return D if opponent.history[-1:] == D else C
         # Classify opponent
         if len(self.history) % 6 == 0:
-            if opponent.history[-6:] == [C] * 6:
+            if opponent.history[-6:] == C * 6:
                 self.opponent_class = "Cooperative"
-            if opponent.history[-6:] == [D] * 6:
+            if opponent.history[-6:] == D * 6:
                 self.opponent_class = "ALLD"
-            if opponent.history[-6:] == [D, C, D, C, D, C]:
+            if opponent.history[-6:] == D + C + D + C + D + C:
                 self.opponent_class = "STFT"
-            if opponent.history[-6:] == [D, D, C, D, D, C]:
+            if opponent.history[-6:] == D + D + C + D + D + C:
                 self.opponent_class = "PavlovD"
             if not self.opponent_class:
                 self.opponent_class = "Random"
@@ -53,7 +53,7 @@ class APavlov2006(Player):
             if len(self.history) % 6 in [0, 1]:
                 return C
             # TFT
-            if opponent.history[-1:] == [D]:
+            if opponent.history[-1:] == D:
                 return D
         if self.opponent_class == "PavlovD":
             # Return D then C for the period
@@ -61,7 +61,7 @@ class APavlov2006(Player):
                 return D
         if self.opponent_class == "Cooperative":
             # TFT
-            if opponent.history[-1:] == [D]:
+            if opponent.history[-1:] == D:
                 return D
         return C
 
@@ -81,7 +81,7 @@ class APavlov2011(Player):
     uncooperative opponents.
     """
 
-    name = "Adapative Pavlov 2011"
+    name = "Adaptive Pavlov 2011"
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -99,26 +99,26 @@ class APavlov2011(Player):
     def strategy(self, opponent):
         # TFT for six rounds
         if len(self.history) < 6:
-            return D if opponent.history[-1:] == [D] else C
+            return D if opponent.history[-1:] == D else C
         if len(self.history) % 6 == 0:
             # Classify opponent
-            if opponent.history[-6:] == [C] * 6:
+            if opponent.history[-6:] == C * 6:
                 self.opponent_class = "Cooperative"
-            if opponent.history[-6:].count(D) >= 4:
+            elif opponent.history[-6:].count(D) >= 4:
                 self.opponent_class = "ALLD"
-            if opponent.history[-6:].count(D) == 3:
+            elif opponent.history[-6:].count(D) == 3:
                 self.opponent_class = "STFT"
-            if not self.opponent_class:
+            elif not self.opponent_class:
                 self.opponent_class = "Random"
         # Play according to classification
         if self.opponent_class in ["Random", "ALLD"]:
             return D
         if self.opponent_class == "STFT":
             # TFTT
-            return D if opponent.history[-2:] == [D, D] else C
+            return D if opponent.history[-2:] == D + D else C
         if self.opponent_class == "Cooperative":
             # TFT
-            return D if opponent.history[-1:] == [D] else C
+            return D if opponent.history[-1:] == D else C
 
     def reset(self):
         Player.reset(self)

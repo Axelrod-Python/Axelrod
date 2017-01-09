@@ -1,6 +1,6 @@
 import unittest
-import axelrod
 
+import axelrod
 from axelrod import MockPlayer, simulate_play, update_history
 from axelrod.tests.unit.test_player import TestOpponent
 
@@ -10,10 +10,10 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 class TestMockPlayer(unittest.TestCase):
 
     def test_strategy(self):
-        for move in [C, D]:
-            m = MockPlayer(axelrod.Player(), move)
+        for action in [C, D]:
+            m = MockPlayer(axelrod.Player(), action)
             p2 = axelrod.Player()
-            self.assertEqual(move, m.strategy(p2))
+            self.assertEqual(action, m.strategy(p2))
 
     def test_cloning(self):
         p1 = axelrod.Cooperator()
@@ -40,8 +40,8 @@ class TestUpdateHistories(unittest.TestCase):
         p2 = TestOpponent()
         update_history(p1, C)
         update_history(p2, C)
-        self.assertEqual(p1.history, [C])
-        self.assertEqual(p2.history, [C])
+        self.assertEqual(p1.history, C)
+        self.assertEqual(p2.history, C)
         self.assertEqual(p1.cooperations, 1)
         self.assertEqual(p2.cooperations, 1)
         self.assertEqual(p1.defections, 0)
@@ -49,8 +49,8 @@ class TestUpdateHistories(unittest.TestCase):
 
         update_history(p1, D)
         update_history(p2, D)
-        self.assertEqual(p1.history, [C, D])
-        self.assertEqual(p2.history, [C, D])
+        self.assertEqual(p1.history, C + D)
+        self.assertEqual(p2.history, C + D)
         self.assertEqual(p1.cooperations, 1)
         self.assertEqual(p2.cooperations, 1)
         self.assertEqual(p1.defections, 1)
@@ -91,5 +91,5 @@ class TestSimulatePlay(unittest.TestCase):
         self.assertEqual(p1.defections, 0)
         self.assertEqual(p2.defections, 2)
 
-        self.assertEqual(p1.history, [C] * 2)
-        self.assertEqual(p2.history, [D] * 2)
+        self.assertEqual(p1.history, C * 2)
+        self.assertEqual(p2.history, D * 2)

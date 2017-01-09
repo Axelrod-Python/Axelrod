@@ -13,6 +13,7 @@ import random
 from numpy.random import choice
 from .actions import Actions, flip_action
 from .random_ import random_choice
+from .history import History
 
 
 C, D = Actions.C, Actions.D
@@ -283,7 +284,7 @@ def history_track_wrapper(player, opponent, action):
     try:
         player._recorded_history.append(action)
     except AttributeError:
-        player._recorded_history = [action]
+        player._recorded_history = History(action)
     return action
 
 

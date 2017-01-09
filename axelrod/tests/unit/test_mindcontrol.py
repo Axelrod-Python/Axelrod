@@ -37,28 +37,6 @@ class TestMindController(TestPlayer):
         self.assertEqual(P1.strategy(P2), D)
         self.assertEqual(P2.strategy(P1), C)
 
-    def test_vs_grudger(self):
-        """ Will force even Grudger to forget its grudges"""
-
-        P1 = axelrod.MindController()
-        P2 = axelrod.Grudger()
-        P1.history = [D, D, D, D]
-        self.assertEqual(P1.strategy(P2), D)
-        self.assertEqual(P2.strategy(P1), C)
-
-    def test_init(self):
-        """Test to make sure parameters are initialised correctly """
-
-        P1 = axelrod.MindController()
-        self.assertEqual(P1.history, [])
-
-    def test_reset(self):
-        """ test for the reset method """
-        P1 = axelrod.MindController()
-        P1.history = [C, D, D, D]
-        P1.reset()
-        self.assertEqual(P1.history, [])
-
 
 class TestMindWarper(TestMindController):
 
@@ -76,15 +54,15 @@ class TestMindWarper(TestMindController):
 
     def test_setattr(self):
         player = self.player()
-        player.strategy = lambda opponent: 'C'
+        player.strategy = lambda opponent: C
 
     def test_strategy(self):
         player = self.player()
         opponent = axelrod.Defector()
         play1 = player.strategy(opponent)
         play2 = opponent.strategy(player)
-        self.assertEqual(play1, 'D')
-        self.assertEqual(play2, 'C')
+        self.assertEqual(play1, D)
+        self.assertEqual(play2, C)
 
 
 class TestMindBender(TestMindController):
@@ -106,5 +84,5 @@ class TestMindBender(TestMindController):
         opponent = axelrod.Defector()
         play1 = player.strategy(opponent)
         play2 = opponent.strategy(player)
-        self.assertEqual(play1, 'D')
-        self.assertEqual(play2, 'C')
+        self.assertEqual(play1, D)
+        self.assertEqual(play2, C)

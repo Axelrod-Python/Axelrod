@@ -1,4 +1,4 @@
-"""Test for the qlearner strategy."""
+"""Tests for the qlearner strategy."""
 
 import random
 
@@ -38,7 +38,8 @@ class TestRiskyQLearner(TestPlayer):
         simulate_play(p1, p2)
         self.assertEqual(p1.Qs, {'': {C: 0, D: 0.9}, '0.0': {C: 0, D: 0}})
         simulate_play(p1, p2)
-        self.assertEqual(p1.Qs,{'': {C: 0, D: 0.9}, '0.0': {C: 2.7, D: 0}, 'C1.0': {C: 0, D: 0}})
+        self.assertEqual(p1.Qs, {'': {C: 0, D: 0.9}, '0.0': {C: 2.7, D: 0},
+                                 'C1.0': {C: 0, D: 0}})
 
     def test_vs_update(self):
         """Test that the q and v values update."""
@@ -76,11 +77,9 @@ class TestRiskyQLearner(TestPlayer):
         P1 = axelrod.RiskyQLearner()
         P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
         P1.Vs = {'': 0, '0.0': 0}
-        P1.history = [C, D, D, D]
         P1.prev_state = C
         P1.reset()
         self.assertEqual(P1.prev_state, '')
-        self.assertEqual(P1.history, [])
         self.assertEqual(P1.Vs, {'': 0})
         self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})
 
@@ -109,7 +108,8 @@ class TestArrogantQLearner(TestPlayer):
         play_1, play_2 = simulate_play(p1, p2)
         self.assertEqual(p1.Qs, {'': {C: 0, D: 0.9}, '0.0': {C: 0, D: 0}})
         simulate_play(p1, p2)
-        self.assertEqual(p1.Qs,{'': {C: 0, D: 0.9}, '0.0': {C: 2.7, D: 0}, 'C1.0': {C: 0, D: 0}})
+        self.assertEqual(p1.Qs, {'': {C: 0, D: 0.9}, '0.0': {C: 2.7, D: 0},
+                                 'C1.0': {C: 0, D: 0}})
 
     def test_vs_update(self):
         """
@@ -149,11 +149,9 @@ class TestArrogantQLearner(TestPlayer):
         P1 = axelrod.ArrogantQLearner()
         P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
         P1.Vs = {'': 0, '0.0': 0}
-        P1.history = [C, D, D, D]
         P1.prev_state = C
         P1.reset()
         self.assertEqual(P1.prev_state, '')
-        self.assertEqual(P1.history, [])
         self.assertEqual(P1.Vs, {'':0})
         self.assertEqual(P1.Qs, {'':{C:0, D:0}})
 
@@ -180,7 +178,9 @@ class TestHesitantQLearner(TestPlayer):
         simulate_play(p1, p2)
         self.assertEqual(p1.Qs, {'': {C: 0, D: 0.1}, '0.0': {C: 0, D: 0}})
         simulate_play(p1, p2)
-        self.assertEqual(p1.Qs,{'': {C: 0, D: 0.1}, '0.0': {C: 0.30000000000000004, D: 0}, 'C1.0': {C: 0, D: 0}})
+        self.assertEqual(p1.Qs, {'': {C: 0, D: 0.1},
+                                 '0.0': {C: 0.30000000000000004, D: 0},
+                                 'C1.0': {C: 0, D: 0}})
 
     def test_vs_update(self):
         """
@@ -192,7 +192,8 @@ class TestHesitantQLearner(TestPlayer):
         simulate_play(p1, p2)
         self.assertEqual(p1.Vs, {'': 0.1, '0.0': 0})
         simulate_play(p1, p2)
-        self.assertEqual(p1.Vs,{'': 0.1, '0.0': 0.30000000000000004, 'C1.0': 0})
+        self.assertEqual(p1.Vs, {'': 0.1, '0.0': 0.30000000000000004,
+                                 'C1.0': 0})
 
     def test_prev_state_updates(self):
         """
@@ -222,11 +223,9 @@ class TestHesitantQLearner(TestPlayer):
         P1 = axelrod.HesitantQLearner()
         P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
         P1.Vs = {'': 0, '0.0': 0}
-        P1.history = [C, D, D, D]
         P1.prev_state = C
         P1.reset()
         self.assertEqual(P1.prev_state, '')
-        self.assertEqual(P1.history, [])
         self.assertEqual(P1.Vs, {'': 0})
         self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})
 
@@ -253,7 +252,9 @@ class TestCautiousQLearner(TestPlayer):
         simulate_play(p1, p2)
         self.assertEqual(p1.Qs, {'': {C: 0, D: 0.1}, '0.0': {C: 0, D: 0}})
         simulate_play(p1, p2)
-        self.assertEqual(p1.Qs,{'': {C: 0, D: 0.1}, '0.0': {C: 0.30000000000000004, D: 0}, 'C1.0': {C: 0, D: 0.0}})
+        self.assertEqual(p1.Qs, {'': {C: 0, D: 0.1},
+                                 '0.0': {C: 0.30000000000000004, D: 0},
+                                 'C1.0': {C: 0, D: 0.0}})
 
     def test_vs_update(self):
         """Test that the q and v values update."""
@@ -263,7 +264,8 @@ class TestCautiousQLearner(TestPlayer):
         simulate_play(p1, p2)
         self.assertEqual(p1.Vs, {'': 0.1, '0.0': 0})
         simulate_play(p1, p2)
-        self.assertEqual(p1.Vs,{'': 0.1, '0.0': 0.30000000000000004, 'C1.0': 0})
+        self.assertEqual(p1.Vs, {'': 0.1, '0.0': 0.30000000000000004,
+                                 'C1.0': 0})
 
     def test_prev_state_updates(self):
         """Test that the q and v values update."""
@@ -282,17 +284,15 @@ class TestCautiousQLearner(TestPlayer):
         p1.state = 'CCDC'
         p1.Qs = {'': {C: 0, D: 0}, 'CCDC': {C: 2, D: 6}}
         p2 = axelrod.Cooperator()
-        test_responses(self, p1, p2, [], [], [C, C, C, C, C, C, C])
+        test_responses(self, p1, p2, C * 7)
 
     def test_reset_method(self):
         """Tests the reset method."""
         P1 = axelrod.CautiousQLearner()
         P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
         P1.Vs = {'': 0, '0.0': 0}
-        P1.history = [C, D, D, D]
         P1.prev_state = C
         P1.reset()
         self.assertEqual(P1.prev_state, '')
-        self.assertEqual(P1.history, [])
         self.assertEqual(P1.Vs, {'': 0})
         self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})

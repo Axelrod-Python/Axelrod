@@ -4,25 +4,19 @@ import csv
 import logging
 from multiprocessing import Queue, cpu_count
 import unittest
+from unittest.mock import MagicMock
 import warnings
 
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers, floats
-from axelrod.tests.property import (tournaments,
-                                    prob_end_tournaments,
-                                    spatial_tournaments,
-                                    strategy_lists)
 
 import axelrod
+from axelrod import Actions
+from axelrod.tests.property import (
+    tournaments, prob_end_tournaments, spatial_tournaments, strategy_lists)
 
 
-try:
-    # Python 3
-    from unittest.mock import MagicMock
-except ImportError:
-    # Python 2
-    from mock import MagicMock
-
+C, D = Actions.C, Actions.D
 test_strategies = [axelrod.Cooperator,
                    axelrod.TitForTat,
                    axelrod.Defector,
@@ -30,11 +24,8 @@ test_strategies = [axelrod.Cooperator,
                    axelrod.GoByMajority]
 test_repetitions = 5
 test_turns = 100
-
 test_prob_end = .5
-
 test_edges = [(0, 1), (1, 2), (3, 4)]
-
 deterministic_strategies = [s for s in axelrod.strategies
                             if not s().classifier['stochastic']]
 
@@ -76,7 +67,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(
             tournament.players[0].match_attributes['game'], axelrod.Game
         )
-        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, self.test_turns)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
@@ -126,7 +117,7 @@ class TestTournament(unittest.TestCase):
             turns=200,
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
-        self.assertEqual(tournament.num_interactions, 75)
+        self.assertIsInstance(results, axelrod.ResultSet)
 
     def test_serial_play_with_different_game(self):
         # Test that a non default game is passed to the result set
@@ -138,6 +129,7 @@ class TestTournament(unittest.TestCase):
             turns=1,
             repetitions=1)
         results = tournament.play(progress_bar=False)
+        self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(results.game.RPST(), (-1, -1, -1, -1))
 
     def test_no_progress_bar_play(self):
@@ -148,7 +140,6 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=200,
             repetitions=self.test_repetitions)
-
 
         # Test with build results
         results = tournament.play(progress_bar=False)
@@ -221,7 +212,6 @@ class TestTournament(unittest.TestCase):
     @example(tournament=axelrod.Tournament(players=[s() for s in
         test_strategies], turns=test_turns, repetitions=test_repetitions)
         )
-
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
@@ -255,7 +245,6 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
         results = tournament.play(processes=2, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(tournament.num_interactions, 75)
 
         # The following relates to #516
         players = [axelrod.Cooperator(), axelrod.Defector(),
@@ -503,36 +492,37 @@ class TestTournament(unittest.TestCase):
         tournament.play(filename=self.filename, progress_bar=False)
         with open(self.filename, 'r') as f:
             written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
-            expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
-                             [0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
-                             [1, 2, 'Tit For Tat', 'Defector', 'CD', 'DD'],
-                             [1, 2, 'Tit For Tat', 'Defector', 'CD', 'DD'],
-                             [0, 0, 'Cooperator', 'Cooperator', 'CC', 'CC'],
-                             [0, 0, 'Cooperator', 'Cooperator', 'CC', 'CC'],
-                             [3, 3, 'Grudger', 'Grudger', 'CC', 'CC'],
-                             [3, 3, 'Grudger', 'Grudger', 'CC', 'CC'],
-                             [2, 2, 'Defector', 'Defector', 'DD', 'DD'],
-                             [2, 2, 'Defector', 'Defector', 'DD', 'DD'],
-                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CC', 'CC'],
-                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CC', 'CC'],
-                             [1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CC', 'CC'],
-                             [1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CC', 'CC'],
-                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CC', 'CC'],
-                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CC', 'CC'],
-                             [1, 3, 'Tit For Tat', 'Grudger', 'CC', 'CC'],
-                             [1, 3, 'Tit For Tat', 'Grudger', 'CC', 'CC'],
-                             [2, 3, 'Defector', 'Grudger', 'DD', 'CD'],
-                             [2, 3, 'Defector', 'Grudger', 'DD', 'CD'],
-                             [0, 4, 'Cooperator', 'Soft Go By Majority', 'CC', 'CC'],
-                             [0, 4, 'Cooperator', 'Soft Go By Majority', 'CC', 'CC'],
-                             [2, 4, 'Defector', 'Soft Go By Majority', 'DD', 'CD'],
-                             [2, 4, 'Defector', 'Soft Go By Majority', 'DD', 'CD'],
-                             [0, 3, 'Cooperator', 'Grudger', 'CC', 'CC'],
-                             [0, 3, 'Cooperator', 'Grudger', 'CC', 'CC'],
-                             [3, 4, 'Grudger', 'Soft Go By Majority', 'CC', 'CC'],
-                             [3, 4, 'Grudger', 'Soft Go By Majority', 'CC', 'CC'],
-                             [0, 2, 'Cooperator', 'Defector', 'CC', 'DD'],
-                             [0, 2, 'Cooperator', 'Defector', 'CC', 'DD']]
+            expected_data = [
+                [0, 1, 'Cooperator', 'Tit For Tat', C + C, C + C],
+                [0, 1, 'Cooperator', 'Tit For Tat', C + C, C + C],
+                [1, 2, 'Tit For Tat', 'Defector', C + D, D + D],
+                [1, 2, 'Tit For Tat', 'Defector', C + D, D + D],
+                [0, 0, 'Cooperator', 'Cooperator', C + C, C + C],
+                [0, 0, 'Cooperator', 'Cooperator', C + C, C + C],
+                [3, 3, 'Grudger', 'Grudger', C + C, C + C],
+                [3, 3, 'Grudger', 'Grudger', C + C, C + C],
+                [2, 2, 'Defector', 'Defector', D + D, D + D],
+                [2, 2, 'Defector', 'Defector', D + D, D + D],
+                [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', C + C, C + C],
+                [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', C + C, C + C],
+                [1, 4, 'Tit For Tat', 'Soft Go By Majority', C + C, C + C],
+                [1, 4, 'Tit For Tat', 'Soft Go By Majority', C + C, C + C],
+                [1, 1, 'Tit For Tat', 'Tit For Tat', C + C, C + C],
+                [1, 1, 'Tit For Tat', 'Tit For Tat', C + C, C + C],
+                [1, 3, 'Tit For Tat', 'Grudger', C + C, C + C],
+                [1, 3, 'Tit For Tat', 'Grudger', C + C, C + C],
+                [2, 3, 'Defector', 'Grudger', D + D, C + D],
+                [2, 3, 'Defector', 'Grudger', D + D, C + D],
+                [0, 4, 'Cooperator', 'Soft Go By Majority', C + C, C + C],
+                [0, 4, 'Cooperator', 'Soft Go By Majority', C + C, C + C],
+                [2, 4, 'Defector', 'Soft Go By Majority', D + D, C + D],
+                [2, 4, 'Defector', 'Soft Go By Majority', D + D, C + D],
+                [0, 3, 'Cooperator', 'Grudger', C + C, C + C],
+                [0, 3, 'Cooperator', 'Grudger', C + C, C + C],
+                [3, 4, 'Grudger', 'Soft Go By Majority', C + C, C + C],
+                [3, 4, 'Grudger', 'Soft Go By Majority', C + C, C + C],
+                [0, 2, 'Cooperator', 'Defector', C + C, D + D],
+                [0, 2, 'Cooperator', 'Defector', C + C, D + D]]
             self.assertEqual(sorted(written_data), sorted(expected_data))
 
 
@@ -555,7 +545,7 @@ class TestProbEndTournament(unittest.TestCase):
             noise=0.2)
         self.assertEqual(tournament.match_generator.prob_end, tournament.prob_end)
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, float("inf"))
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
@@ -617,7 +607,7 @@ class TestSpatialTournament(unittest.TestCase):
             noise=0.2)
         self.assertEqual(tournament.match_generator.edges, tournament.edges)
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, 100)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
@@ -723,7 +713,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
             noise=0.2)
         self.assertEqual(tournament.match_generator.edges, tournament.edges)
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, float("inf"))
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
@@ -772,7 +762,6 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         self.assertEqual(results.scores, spatial_results.scores)
         self.assertEqual(results.cooperation,
                          spatial_results.cooperation)
-
 
     @given(tournament=spatial_tournaments(strategies=axelrod.basic_strategies,
                                           max_turns=1, max_noise=0,

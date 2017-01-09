@@ -28,8 +28,11 @@ class WorseAndWorse(Player):
 
     def strategy(self, opponent):
         current_round = len(self.history) + 1
-        probability = 1 - current_round / 1000
-        return random_choice(probability)
+        p = 1 - current_round / 1000
+        p = min(p, 1)
+        p = max(0, p)
+        return random_choice(p)
+
 
 
 class KnowledgeableWorseAndWorse(Player):
@@ -55,8 +58,10 @@ class KnowledgeableWorseAndWorse(Player):
     def strategy(self, opponent):
         current_round = len(self.history) + 1
         expected_length = self.match_attributes['length']
-        probability = 1 - current_round / expected_length
-        return random_choice(probability)
+        p = 1 - current_round / expected_length
+        p = min(p, 1)
+        p = max(0, p)
+        return random_choice(p)
 
 
 class WorseAndWorse2(Player):

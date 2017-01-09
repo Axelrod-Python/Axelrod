@@ -2,6 +2,7 @@ import random
 import numpy
 from axelrod import Actions
 
+C, D = Actions.C, Actions.D
 
 def random_choice(p=0.5):
     """
@@ -20,16 +21,17 @@ def random_choice(p=0.5):
     -------
     axelrod.Actions.C or axelrod.Actions.D
     """
+    assert (p >= 0) and (p <= 1)
     if p == 0:
-        return Actions.D
+        return D
 
     if p == 1:
-        return Actions.C
+        return C
 
     r = random.random()
     if r < p:
-        return Actions.C
-    return Actions.D
+        return C
+    return D
 
 
 def randrange(a, b):

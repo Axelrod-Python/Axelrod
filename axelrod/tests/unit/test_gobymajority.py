@@ -1,7 +1,6 @@
-"""Test for the go by majority strategy."""
+"""Tests for the gobymajority strategy."""
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -32,8 +31,8 @@ class TestGoByMajority(TestPlayer):
         If opponent cooperates at least as often as they defect then the player
         cooperates
         """
-        self.responses_test([C, D, D, D], [D, D, C, C], [C])
-        self.responses_test([C, C, D, D, C], [D, D, C, C, D], [D])
+        self.responses_test(C, C + D * 3, D + D + C + C)
+        self.responses_test(D, C + C + D + D + C, D + D + C + C + D)
 
         # Test tie break rule for soft=False
         player = self.player(soft=False)
@@ -78,23 +77,29 @@ class TestHardGoByMajority(TestGoByMajority):
     def test_strategy(self):
         """
         If opponent cooperates strictly more often as they defect then the
-        player cooperates
+        player cooperates.
         """
-        self.responses_test([C, D, D, D], [D, D, C, C], [D])
-        self.responses_test([C, C, D, D, C], [D, D, C, C, D], [D])
+        self.responses_test(D, C + D * 3, D + D + C + C)
+        self.responses_test(D, C + C + D + D + C, D + D + C + C + D)
 
         # Test tie break rule for soft=True
         player = self.player(soft=True)
         opponent = axelrod.Cooperator()
-        self.assertEqual('C', player.strategy(opponent))
+        self.assertEqual(C, player.strategy(opponent))
 
 
 def factory_TestGoByRecentMajority(L, soft=True):
 
+    prefix = "Hard"
+    prefix2 = "Hard"
+    if soft:
+        prefix = "Soft"
+        prefix2 = ""
+
     class TestGoByRecentMajority(TestPlayer):
 
-        name = "Soft Go By Majority: %i" % L
-        player = getattr(axelrod, 'GoByMajority%i' % L)
+        name = "{} Go By Majority: {}".format(prefix, L)
+        player = getattr(axelrod, "{}GoByMajority{}".format(prefix2, L))
 
         expected_classifier = {
             'stochastic': False,
@@ -108,41 +113,29 @@ def factory_TestGoByRecentMajority(L, soft=True):
 
         def test_initial_strategy(self):
             """Starts by cooperating."""
-            self.first_play_test(C)
+            if soft:
+                self.first_play_test(C)
+            else:
+                self.first_play_test(D)
 
         def test_strategy(self):
             """If opponent cooperates at least as often as they defect then the
             player cooperates."""
-            P1 = self.player()
-            P2 = axelrod.Player()
-            P1.history = [D] * int(1.5 * L)
-            P2.history = [D] * (L - 1) + [C] * (L // 2 + 1)
-            self.assertEqual(P1.strategy(P2), C)
-            P1.history = [C] * int(1.5 * L)
-            P2.history = [C] * (L - 1) + [D] * (L // 2 + 1)
-            self.assertEqual(P1.strategy(P2), D)
 
-    if not soft:  # Overwrite test class
+            self.responses_test(C, C * L, C * (L // 2 + 1) + D * (L // 2 - 1))
+            self.responses_test(D, C * L, D * (L // 2 + 1) + C * (L // 2 - 1))
 
-        class TestGoByRecentMajority(TestGoByRecentMajority):
-            name = "Hard Go By Majority: %i" % L
-            player = getattr(axelrod, 'HardGoByMajority%i' % L)
+            k = L
+            if L % 2 == 1:
+                k -= 1
 
-            expected_classifier = {
-                'stochastic': False,
-                'memory_depth': L,
-                'makes_use_of': set(),
-                'long_run_time': False,
-                'inspects_source': False,
-                'manipulates_source': False,
-                'manipulates_state': False
-            }
-
-            def test_initial_strategy(self):
-                """Starts by defecting."""
-                self.first_play_test(D)
+            if soft:
+                self.responses_test(C, C * k, C * (k // 2) + D * (k // 2))
+            else:
+                self.responses_test(D, C * k, C * (k // 2) + D * (k // 2))
 
     return TestGoByRecentMajority
+
 
 TestGoByMajority5 = factory_TestGoByRecentMajority(5)
 TestGoByMajority10 = factory_TestGoByRecentMajority(10)

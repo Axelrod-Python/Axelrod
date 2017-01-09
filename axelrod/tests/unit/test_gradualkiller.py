@@ -1,13 +1,7 @@
-"""Test for the gradual killer strategy."""
+"""Tests for the gradual killer strategy."""
 
 import axelrod
-from .test_player import TestHeadsUp, TestPlayer
-
-from hypothesis import given
-from hypothesis.strategies import integers
-from axelrod.tests.property import strategy_lists
-
-import random
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -28,77 +22,22 @@ class TestGradualKiller(TestPlayer):
     def test_strategy(self):
         """Starts by Defecting."""
         self.first_play_test(D)
+        self.second_play_test(D, D, D, D)
+        self.responses_test(D * 5 + C * 2)
 
-    def test_effect_of_strategy(self):
-        """Fist seven moves."""
-        self.markov_test([D, D, D, D])
-        self.responses_test([], [], [D, D, D, D, D, C, C])
+        self.responses_test(C * 4, D * 5 + C * 2, C * 7)
 
-    def test_effect_of_strategy_with_history_CC(self):
-        """Continues with C if opponent played CC on 6 and 7."""
-        P1 = axelrod.GradualKiller()
-        P2 = axelrod.Player()
-        P1.history = [D, D, D, D, D, C, C]
-        P2.history = [C, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C]
-        P2.history = [C, C, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C]
-        P2.history = [C, C, C, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C, C]
-        P2.history = [C, C, C, C, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.responses_test(C, D * 5 + C * 2, C * 6 + D)
+        self.responses_test(C, D * 5 + C * 3, C * 6 + D * 2)
+        self.responses_test(C, D * 5 + C * 4, C * 6 + D * 2 + C)
+        self.responses_test(C, D * 5 + C * 5, C * 6 + D * 2 + C + C)
 
-    def test_effect_of_strategy_with_history_CD(self):
-        """Continues with C if opponent played CD on 6 and 7."""
-        P1 = axelrod.GradualKiller()
-        P2 = axelrod.Player()
-        P1.history = [D, D, D, D, D, C, C]
-        P2.history = [C, C, C, C, C, C, D]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C]
-        P2.history = [C, C, C, C, C, C, D, D]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C]
-        P2.history = [C, C, C, C, C, C, D, D, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C, C]
-        P2.history = [C, C, C, C, C, C, D, D, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
+        self.responses_test(C, D * 5 + C * 2, C * 5 + D + C)
+        self.responses_test(C, D * 5 + C * 3, C * 5 + D + C * 2)
+        self.responses_test(C, D * 5 + C * 4, C * 5 + D + C * 2 + D)
+        self.responses_test(C, D * 5 + C * 5, C * 5 + D + C * 2 + D * 2)
 
-    def test_effect_of_strategy_with_history_DC(self):
-        """Continues with C if opponent played DC on 6 and 7."""
-        P1 = axelrod.GradualKiller()
-        P2 = axelrod.Player()
-        P1.history = [D, D, D, D, D, C, C]
-        P2.history = [C, C, C, C, C, D, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C]
-        P2.history = [C, C, C, C, C, D, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C]
-        P2.history = [C, C, C, C, C, D, C, C, D]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C, C]
-        P2.history = [C, C, C, C, C, D, C, C, D, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-
-    def test_effect_of_strategy_with_history_CC(self):
-        """Continues with D if opponent played DD on 6 and 7."""
-        P1 = axelrod.GradualKiller()
-        P2 = axelrod.Player()
-        P1.history = [D, D, D, D, D, C, C]
-        P2.history = [C, C, C, C, C, D, D]
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = [D, D, D, D, D, C, C, D]
-        P2.history = [C, C, C, C, C, D, D, C]
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = [D, D, D, D, D, C, C, D, D]
-        P2.history = [C, C, C, C, C, D, D, C, C]
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = [D, D, D, D, D, C, C, D, D, D]
-        P2.history = [C, C, C, C, C, D, D, C, C, D]
-        self.assertEqual(P1.strategy(P2), 'D')
-
+        self.responses_test(D, D * 5 + C * 2, C * 5 + D * 2)
+        self.responses_test(D, D * 5 + C * 2 + D, C * 5 + D * 2 + C)
+        self.responses_test(D, D * 5 + C * 2 + D * 2, C * 5 + D * 2 + C * 2)
+        self.responses_test(D, D * 5 + C * 2 + D * 3, C * 5 + D * 2 + C * 2 + D)

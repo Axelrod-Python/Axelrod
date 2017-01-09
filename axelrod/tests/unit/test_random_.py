@@ -1,8 +1,8 @@
-"""Test for the random strategy."""
+"""Tests for the random utilities."""
 
-import numpy
 import random
 import unittest
+import numpy
 
 from axelrod import random_choice, seed, Actions
 

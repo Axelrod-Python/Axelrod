@@ -128,14 +128,14 @@ class TestTransformers(unittest.TestCase):
         p2 = axelrod.Cooperator()
         for _ in range(5):
             p1.play(p2)
-        self.assertEqual(p1.history, [C, C, C, C, C])
+        self.assertEqual(p1.history, C * 5)
 
         probability = (0, 1)
         p1 = JossAnnTransformer(probability)(axelrod.Cooperator)()
         p2 = axelrod.Cooperator()
         for _ in range(5):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, D, D, D, D])
+        self.assertEqual(p1.history, D * 5)
 
         probability = (0.3, 0.3)
         p1 = JossAnnTransformer(probability)(axelrod.TitForTat)()
@@ -143,7 +143,7 @@ class TestTransformers(unittest.TestCase):
         axelrod.seed(0)
         for _ in range(5):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, C, C, D, D])
+        self.assertEqual(p1.history, D + C + C + D + D)
 
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""
@@ -153,7 +153,7 @@ class TestTransformers(unittest.TestCase):
         p2 = NoisyTransformer(0.5)(axelrod.Cooperator)()
         for _ in range(10):
             p1.play(p2)
-        self.assertEqual(p2.history, [C, C, C, C, C, C, D, D, C, C])
+        self.assertEqual(p2.history, C * 6 + D + D + C + C)
 
     def test_forgiving(self):
         """Tests that the forgiving transformer flips some defections."""
@@ -182,19 +182,19 @@ class TestTransformers(unittest.TestCase):
         """Tests the FinalTransformer when tournament length is known."""
         # Final play transformer
         p1 = axelrod.Cooperator()
-        p2 = FinalTransformer([D, D, D])(axelrod.Cooperator)()
+        p2 = FinalTransformer(D * 3)(axelrod.Cooperator)()
         p2.match_attributes["length"] = 6
         for _ in range(6):
             p1.play(p2)
-        self.assertEqual(p2.history, [C, C, C, D, D, D])
+        self.assertEqual(p2.history, C * 3 + D * 3)
 
     def test_final_transformer2(self):
         """Tests the FinalTransformer when tournament length is not known."""
         p1 = axelrod.Cooperator()
-        p2 = FinalTransformer([D, D])(axelrod.Cooperator)()
+        p2 = FinalTransformer(D + D)(axelrod.Cooperator)()
         for _ in range(6):
             p1.play(p2)
-        self.assertEqual(p2.history, [C, C, C, C, C, C])
+        self.assertEqual(p2.history, C * 6)
 
     def test_history_track(self):
         """Tests the history tracking transformer."""
@@ -206,31 +206,32 @@ class TestTransformers(unittest.TestCase):
 
     def test_composition(self):
         """Tests that transformations can be chained or composed."""
-        cls1 = InitialTransformer([D, D])(axelrod.Cooperator)
-        cls2 = FinalTransformer([D, D])(cls1)
+        cls1 = InitialTransformer(D + D)(axelrod.Cooperator)
+        cls2 = FinalTransformer(D + D)(cls1)
         p1 = cls2()
         p2 = axelrod.Cooperator()
         p1.match_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
+        self.assertEqual(p1.history, D * 2 + 4 * C + 2 * D)
 
-        cls1 = FinalTransformer([D, D])(InitialTransformer([D, D])(axelrod.Cooperator))
+        cls1 = FinalTransformer(D + D)(InitialTransformer(D + D)(axelrod.Cooperator))
         p1 = cls1()
         p2 = axelrod.Cooperator()
         p1.match_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
+        self.assertEqual(p1.history, D * 2 + 4 * C + 2 * D)
 
     def test_compose_transformers(self):
-        cls1 = compose_transformers(FinalTransformer([D, D]), InitialTransformer([D, D]))
+        cls1 = compose_transformers(FinalTransformer(D + D),
+                                    InitialTransformer(D + D))
         p1 = cls1(axelrod.Cooperator)()
         p2 = axelrod.Cooperator()
         p1.match_attributes["length"] = 8
         for _ in range(8):
             p1.play(p2)
-        self.assertEqual(p1.history, [D, D, C, C, C, C, D, D])
+        self.assertEqual(p1.history, D * 2 + 4 * C + 2 * D)
 
     def test_retailiation(self):
         """Tests the RetaliateTransformer."""
@@ -238,8 +239,8 @@ class TestTransformers(unittest.TestCase):
         p2 = axelrod.Defector()
         for _ in range(5):
             p1.play(p2)
-        self.assertEqual(p1.history, [C, D, D, D, D])
-        self.assertEqual(p2.history, [D, D, D, D, D])
+        self.assertEqual(p1.history, C + 4 * D)
+        self.assertEqual(p2.history, 5 * D)
 
         p1 = RetaliationTransformer(1)(axelrod.Cooperator)()
         p2 = axelrod.Alternator()
@@ -280,13 +281,13 @@ class TestTransformers(unittest.TestCase):
 
     def test_apology(self):
         """Tests the ApologyTransformer."""
-        ApologizingDefector = ApologyTransformer([D], [C])(axelrod.Defector)
+        ApologizingDefector = ApologyTransformer(D, C)(axelrod.Defector)
         p1 = ApologizingDefector()
         p2 = axelrod.Cooperator()
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p1.history, [D, C, D, C, D])
-        ApologizingDefector = ApologyTransformer([D, D], [C, C])(axelrod.Defector)
+        ApologizingDefector = ApologyTransformer(D + D, C + C)(axelrod.Defector)
         p1 = ApologizingDefector()
         p2 = axelrod.Cooperator()
         for _ in range(6):
@@ -341,7 +342,7 @@ class TestTransformers(unittest.TestCase):
 
     def test_deadlock(self):
         """Test the DeadlockBreakingTransformer."""
-        # We can induce a deadlock by alterting TFT to defect first
+        # We can induce a deadlock by altering TFT to defect first
         p1 = axelrod.TitForTat()
         p2 = InitialTransformer([D])(axelrod.TitForTat)()
         for _ in range(4):
@@ -399,7 +400,7 @@ class TestTransformers(unittest.TestCase):
 
     def test_nilpotency(self):
         """Show that some of the transformers are (sometimes) nilpotent, i.e.
-        that transfomer(transformer(PlayerClass)) == PlayerClass"""
+        that transformer(transformer(PlayerClass)) == PlayerClass"""
         for transformer in [IdentityTransformer(),
                             FlipTransformer(),
                             TrackHistoryTransformer()]:
@@ -409,7 +410,7 @@ class TestTransformers(unittest.TestCase):
                     transformed = transformer(transformer(PlayerClass))()
                     for _ in range(5):
                         self.assertEqual(player.strategy(third_player),
-                                        transformed.strategy(third_player))
+                                         transformed.strategy(third_player))
                         player.play(third_player)
                         third_player.history.pop(-1)
                         transformed.play(third_player)
@@ -433,7 +434,7 @@ class TestTransformers(unittest.TestCase):
                     transformed = transformer(transformer(PlayerClass))()
                     for i in range(5):
                         self.assertEqual(player.strategy(third_player),
-                                        transformed.strategy(third_player))
+                                         transformed.strategy(third_player))
                         player.play(third_player)
                         third_player.history.pop(-1)
                         transformed.play(third_player)
@@ -465,7 +466,7 @@ class TestRUAisTFT(TestTitForTat):
     player = TFT
     name = "RUA Cooperator"
     expected_classifier = {
-        'memory_depth': 0, # really 1
+        'memory_depth': 0,  # really 1
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

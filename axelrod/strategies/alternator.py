@@ -1,5 +1,10 @@
 from axelrod import Actions, Player
 
+C, D = Actions.C, Actions.D
+
+
+C, D = Actions.C, Actions.D
+
 
 class Alternator(Player):
     """A player who alternates between cooperating and defecting."""
@@ -17,7 +22,7 @@ class Alternator(Player):
 
     def strategy(self, opponent):
         if len(self.history) == 0:
-            return Actions.C
-        if self.history[-1] == Actions.C:
-            return Actions.D
-        return Actions.C
+            return C
+        if self.history[-1] == C:
+            return D
+        return C

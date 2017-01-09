@@ -6,6 +6,7 @@ from axelrod._strategy_utils import look_ahead
 
 C, D = Actions.C, Actions.D
 
+
 class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what to do."""
 

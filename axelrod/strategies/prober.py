@@ -1,6 +1,7 @@
+from axelrod import random_choice
+
 from axelrod import Actions, Player, init_args, random_choice
 
-import random
 
 C, D = Actions.C, Actions.D
 
@@ -37,7 +38,7 @@ class CollectiveStrategy(Player):
             return D
         if opponent.defections > 1:
             return D
-        if opponent.history[0:2] == [C, D]:
+        if opponent.history[0:2] == C + D:
             return C
         return D
 
@@ -68,11 +69,11 @@ class Prober(Player):
         if turn == 2:
             return C
         if turn > 2:
-            if opponent.history[1: 3] == [C, C]:
+            if opponent.history[1: 3] == C + C:
                 return D
             else:
                 # TFT
-                return D if opponent.history[-1:] == [D] else C
+                return D if opponent.history[-1:] == D else C
 
 
 class Prober2(Player):
@@ -101,11 +102,11 @@ class Prober2(Player):
         if turn == 2:
             return C
         if turn > 2:
-            if opponent.history[1: 3] == [D, C]:
+            if opponent.history[1: 3] == D + C:
                 return C
             else:
                 # TFT
-                return D if opponent.history[-1:] == [D] else C
+                return D if opponent.history[-1:] == D else C
 
 
 class Prober3(Player):
@@ -136,7 +137,7 @@ class Prober3(Player):
                 return D
             else:
                 # TFT
-                return D if opponent.history[-1:] == [D] else C
+                return D if opponent.history[-1:] == D else C
 
 
 class Prober4(Player):
@@ -228,11 +229,11 @@ class HardProber(Player):
         if turn == 3:
             return C
         if turn > 3:
-            if opponent.history[1: 3] == [C, C]:
+            if opponent.history[1: 3] == C + C:
                 return D
             else:
                 # TFT
-                return D if opponent.history[-1:] == [D] else C
+                return D if opponent.history[-1:] == D else C
 
 
 class NaiveProber(Player):
@@ -261,7 +262,7 @@ class NaiveProber(Player):
         """
         Parameters
         ----------
-        p, float
+        p : float
             The probability to defect randomly
         """
         Player.__init__(self)
@@ -315,7 +316,7 @@ class RemorsefulProber(NaiveProber):
 
     @init_args
     def __init__(self, p=0.1):
-        NaiveProber.__init__(self, p)
+        NaiveProber.__init__(self, p=p)
         self.probing = False
 
     def strategy(self, opponent):
@@ -330,7 +331,8 @@ class RemorsefulProber(NaiveProber):
             return D
 
         # Otherwise cooperate with probability 1 - self.p
-        if random.random() < 1 - self.p:
+        # if random.random() < 1 - self.p:
+        if random_choice(1 - self.p) == C:
             self.probing = False
             return C
 
@@ -338,5 +340,5 @@ class RemorsefulProber(NaiveProber):
         return D
 
     def reset(self):
-        Player.reset(self)
+        NaiveProber.reset(self)
         self.probing = False

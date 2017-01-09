@@ -22,7 +22,7 @@ class ActionValidator(Validator):
     def validate(self, document):
         text = document.text
 
-        if text and text.upper() not in ['C', 'D']:
+        if text and text.upper() not in C + D:
             raise ValidationError(
                 message='Action must be C or D',
                 cursor_position=0)
@@ -51,7 +51,7 @@ class Human(Player):
     }
 
     @init_args
-    def __init__(self, name='Human', c_symbol='C', d_symbol='D'):
+    def __init__(self, name='Human', c_symbol=C, d_symbol=D):
         """
         Parameters
         ----------

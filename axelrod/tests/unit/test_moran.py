@@ -131,7 +131,9 @@ class TestMoranProcess(unittest.TestCase):
         p3 = axelrod.Defector()
         players = [p1, p2, p3]
         mp = MoranProcess(players, mutation_rate=0.2)
-        self.assertDictEqual(mp.mutation_targets, {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]})
+        self.assertDictEqual(
+            mp.mutation_targets,
+            {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]})
         # Test that mutation causes the population to alternate between fixations
         counters = [
             Counter({'Cooperator': 3}),

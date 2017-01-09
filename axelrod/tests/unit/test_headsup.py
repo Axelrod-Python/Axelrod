@@ -1,4 +1,4 @@
-"""Test for the cooperator strategy."""
+"""Various 1v1 matches."""
 
 import axelrod
 
@@ -11,7 +11,7 @@ class TestTFTvsWSLS(TestHeadsUp):
     """Test TFT vs WSLS"""
     def test_rounds(self):
         self.versus_test(axelrod.TitForTat(), axelrod.WinStayLoseShift(),
-                         [C, C, C, C], [C, C, C, C])
+                         C * 4, C * 4)
 
 
 class TestTFTvSTFT(TestHeadsUp):
@@ -60,14 +60,14 @@ class FoolMeOncevsSTFT(TestHeadsUp):
     """Test Fool Me Once vs Suspicious TFT"""
     def test_rounds(self):
         self.versus_test(axelrod.FoolMeOnce(), axelrod.SuspiciousTitForTat(),
-                         [C] * 9, [D] + [C] * 8)
+                         C * 9, D + C * 8)
 
 
 class GrudgervsSTFT(TestHeadsUp):
     """Test Grudger vs Suspicious TFT"""
     def test_rounds(self):
         self.versus_test(axelrod.Grudger(), axelrod.SuspiciousTitForTat(),
-                         [C] + [D] * 9, [D, C] + [D] * 8)
+                         C + D * 9, D + C + D * 8)
 
 
 class TestWSLSvsBully(TestHeadsUp):

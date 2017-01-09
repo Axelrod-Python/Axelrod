@@ -2,7 +2,7 @@
 
 import itertools
 import axelrod
-from .test_player import TestPlayer, test_four_vector
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -22,9 +22,8 @@ class TestAntiCycler(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating"""
-        responses = [C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C]
-        self.responses_test([], [], responses)
+        responses = C + D + C + C + D + C * 3 + D + C * 4 + D + C * 3
+        self.responses_test(responses)
 
 
 def test_cycler_factory(cycle):
@@ -44,10 +43,9 @@ def test_cycler_factory(cycle):
         }
 
         def test_strategy(self):
-            """Starts by cooperating"""
             for i in range(20):
                 responses = itertools.islice(itertools.cycle(cycle), i)
-            self.responses_test([], [], responses)
+            self.responses_test(responses)
 
     return TestCycler
 

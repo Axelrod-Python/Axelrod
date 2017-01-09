@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
-import unittest
-import tempfile
 from collections import Counter
+import tempfile
+import unittest
+
 import axelrod
 import axelrod.interaction_utils as iu
-
 from axelrod import Actions
 
 C, D = Actions.C, Actions.D
@@ -18,16 +17,15 @@ class TestMatch(unittest.TestCase):
     winners = [False, 0, 1, None]
     cooperations = [(1, 1), (0, 2), (2, 1), None]
     normalised_cooperations = [(.5, .5), (0, 1), (1, .5), None]
-    state_distribution = [Counter({('C', 'D'): 1, ('D', 'C'): 1}),
-                          Counter({('D', 'C'): 2}),
-                          Counter({('C', 'C'): 1, ('C', 'D'): 1}),
+    state_distribution = [Counter({(C, D): 1, (D, C): 1}),
+                          Counter({(D, C): 2}),
+                          Counter({(C, C): 1, (C, D): 1}),
                           None]
-    normalised_state_distribution = [Counter({('C', 'D'): 0.5, ('D', 'C'): 0.5}),
-                                     Counter({('D', 'C'): 1.0}),
-                                     Counter({('C', 'C'): 0.5, ('C', 'D'): 0.5}),
+    normalised_state_distribution = [Counter({(C, D): 0.5, (D, C): 0.5}),
+                                     Counter({(D, C): 1.0}),
+                                     Counter({(C, C): 0.5, (C, D): 0.5}),
                                      None]
     sparklines = [ u'█ \n █', u'  \n██', u'██\n█ ', None ]
-
 
     def test_compute_scores(self):
         for inter, score in zip(self.interactions, self.scores):
@@ -74,11 +72,11 @@ class TestMatch(unittest.TestCase):
         tournament = axelrod.Tournament(players=players, turns=2, repetitions=3)
         tournament.play(filename=tmp_file.name)
         tmp_file.close()
-        expected_interactions = {(0, 0): [[('C', 'C'), ('C', 'C')] for _ in
+        expected_interactions = {(0, 0): [[(C, C), (C, C)] for _ in
                                           range(3)],
-                                 (0, 1): [[('C', 'D'), ('C', 'D')] for _ in
+                                 (0, 1): [[(C, D), (C, D)] for _ in
                                           range(3)],
-                                 (1, 1): [[('D', 'D'), ('D', 'D')] for _ in
+                                 (1, 1): [[(D, D), (D, D)] for _ in
                                           range(3)]}
         interactions = iu.read_interactions_from_file(tmp_file.name,
                                                       progress_bar=False)
@@ -86,5 +84,5 @@ class TestMatch(unittest.TestCase):
 
     def test_string_to_interactions(self):
         string = 'CDCDDD'
-        interactions = [('C', 'D'), ('C', 'D'), ('D', 'D')]
+        interactions = [(C, D), (C, D), (D, D)]
         self.assertEqual(iu.string_to_interactions(string), interactions)

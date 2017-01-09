@@ -5,8 +5,7 @@ Additional strategies from Axelrod's first tournament.
 import random
 
 from axelrod import Actions, Player, init_args, flip_action, random_choice
-
-from.memoryone import MemoryOnePlayer
+from .memoryone import MemoryOnePlayer
 
 C, D = Actions.C, Actions.D
 
@@ -57,7 +56,8 @@ class Davis(Player):
 
 class RevisedDowning(Player):
     """Revised Downing attempts to determine if players are cooperative or not.
-    If so, it cooperates with them. This strategy would have won Axelrod's first tournament.
+    If so, it cooperates with them. This strategy would have won Axelrod's first
+    tournament.
 
     Names:
 
@@ -84,8 +84,8 @@ class RevisedDowning(Player):
         self.bad = 0.0
         self.nice1 = 0
         self.nice2 = 0
-        self.total_C = 0 # note the same as self.cooperations
-        self.total_D = 0 # note the same as self.defections
+        self.total_C = 0  # not the same as self.cooperations
+        self.total_D = 0  # not the same as self.defections
 
     def strategy(self, opponent):
         round_number = len(self.history) + 1
@@ -132,8 +132,8 @@ class RevisedDowning(Player):
         self.bad = 0.0
         self.nice1 = 0
         self.nice2 = 0
-        self.total_C = 0 # not the same as self.cooperations
-        self.total_D = 0 # not the same as self.defections
+        self.total_C = 0  # not the same as self.cooperations
+        self.total_D = 0  # not the same as self.defections
 
 
 class Feld(Player):
@@ -150,7 +150,7 @@ class Feld(Player):
 
     name = "Feld"
     classifier = {
-        'memory_depth': 200, # Varies actually, eventually becomes depth 1
+        'memory_depth': 200,  # Varies actually, eventually becomes depth 1
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -165,11 +165,11 @@ class Feld(Player):
         """
         Parameters
         ----------
-        start_coop_prob, float
+        start_coop_prob : float
             The initial probability to cooperate
-        end_coop_prob, float
+        end_coop_prob : float
             The final probability to cooperate
-        rounds_of_decay, int
+        rounds_of_decay : int
             The number of rounds to linearly decrease from start_coop_prob
             to end_coop_prob
         """
@@ -229,7 +229,7 @@ class Grofman(Player):
             return opponent.history[-1]
         if self.history[-1] == opponent.history[-1]:
             return C
-        return random_choice(2./ 7)
+        return random_choice(2. / 7)
 
 
 
@@ -253,7 +253,7 @@ class Joss(MemoryOnePlayer):
         """
         Parameters
         ----------
-        p, float
+        p : float
             The probability of cooperating when the previous round was (C, C)
             or (D, C), i.e. the opponent cooperated.
         """
@@ -269,12 +269,22 @@ class Nydegger(Player):
     """
     Submitted to Axelrod's first tournament by Rudy Nydegger.
 
-    The program begins with tit for tat for the first three moves, except 
-    that if it was the only one to cooperate on the first move and the only one to defect on the second move, it defects on the third move. After the third move, its choice is determined from the 3 preceding outcomes in the following manner.
+    The program begins with tit for tat for the first three moves, except that
+    if it was the only one to cooperate on the first move and the only one to
+    defect on the second move, it defects on the third move. After the third
+    move, its choice is determined from the 3 preceding outcomes in the
+    following manner.
 
-    Let A be the sum formed by counting the other's defection as 2 points and one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding three moves in chronological order. The choice can be described as defecting only when A equals 1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
+    Let A be the sum formed by counting the other's defection as 2 points and
+    one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding
+    three moves in chronological order. The choice can be described as defecting
+    only when A equals 1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49,
+    54, 55, 58, or 61.
 
-    Thus if all three preceding moves are mutual defection, A = 63 and the rule cooperates. This rule was designed for use in laboratory experiments as a stooge which had a memory and appeared to be trustworthy, potentially cooperative, but not gullible.
+    Thus if all three preceding moves are mutual defection, A = 63 and the
+    player cooperates. This rule was designed for use in laboratory experiments
+    as a stooge which had a memory and appeared to be trustworthy, potentially
+    cooperative, but not gullible.
 
     Names:
 
@@ -317,7 +327,7 @@ class Nydegger(Player):
             # TFT
             return D if opponent.history[-1] == D else C
         if len(self.history) == 2:
-            if opponent.history[0: 2] == [D, C]:
+            if opponent.history[:2] == D + C:
                 return D
             else:
                 # TFT
@@ -333,9 +343,8 @@ class Shubik(Player):
     """
     Submitted to Axelrod's first tournament by Martin Shubik.
 
-    Plays like Tit-For-Tat with the following modification. After
-    each retaliation, the number of rounds that Shubik retaliates
-    increases by 1.
+    Plays like Tit-For-Tat with the following modification. After each
+    retaliation, the number of rounds that Shubik retaliates increases by 1.
 
     Names:
 
@@ -372,7 +381,7 @@ class Shubik(Player):
             return C
         if opponent.history[-1] == D:
             # Retaliate against defections
-            if self.history[-1] == C: # it's on now!
+            if self.history[-1] == C:  # it's on now!
                 # Lengthen the retaliation period
                 self.is_retaliating = True
                 self.retaliation_length += 1
@@ -411,7 +420,7 @@ class Tullock(Player):
 
     name = "Tullock"
     classifier = {
-        'memory_depth': 11, # long memory, modified by init
+        'memory_depth': 11,  # long memory, modified by init
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -451,14 +460,15 @@ class UnnamedStrategy(Player):
     is also adjusted.
 
     Fourteenth Place with 282.2 points is a 77-line program by a graduate
-    student of political science whose dissertation is in game theory. This rule has
-    a probability of cooperating, P, which is initially 30% and is updated every 10
-    moves. P is adjusted if the other player seems random, very cooperative, or
-    very uncooperative. P is also adjusted after move 130 if the rule has a lower
-    score than the other player. Unfortunately, the complex process of adjustment
-    frequently left the probability of cooperation in the 30% to 70% range, and
-    therefore the rule appeared random to many other players.
-    
+    student of political science whose dissertation is in game theory. This rule
+    has a probability of cooperating, P, which is initially 30% and is updated
+    every 10 moves. P is adjusted if the other player seems random, very
+    cooperative, or very uncooperative. P is also adjusted after move 130 if the
+    rule has a lower score than the other player. Unfortunately, the complex
+    process of adjustment frequently left the probability of cooperation in the
+    30% to 70% range, and therefore the rule appeared random to many other
+    players.
+
     Names:
 
     - Unnamed Strategy: [Axelrod1980]_

@@ -3,14 +3,16 @@ from axelrod import Actions, Player, init_args
 
 C, D = Actions.C, Actions.D
 
+
 class OnceBitten(Player):
     """
-    Cooperates once when the opponent defects, but if they defect twice in a row defaults to forgetful grudger for 10 turns defecting
+    Cooperates once when the opponent defects, but if they defect twice in a row
+    defaults to forgetful grudger for 10 turns defecting
     """
 
     name = 'Once Bitten'
     classifier = {
-        'memory_depth': 12,  # Long memory
+        'memory_depth': 12,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -100,7 +102,7 @@ class ForgetfulFoolMeOnce(Player):
         """
         Parameters
         ----------
-        forget_probability, float
+        forget_probability:  float
             The probability of forgetting the count of opponent defections.
         """
         Player.__init__(self)

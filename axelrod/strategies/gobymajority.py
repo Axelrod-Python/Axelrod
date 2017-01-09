@@ -18,7 +18,7 @@ class GoByMajority(Player):
     default this is 0)
     """
 
-    name = 'Go By Marjority'
+    name = 'Go By Majority'
     classifier = {
         'stochastic': False,
         'inspects_source': False,
@@ -66,8 +66,8 @@ class GoByMajority(Player):
         """
 
         history = opponent.history[-self.memory:]
-        defections = sum([s == D for s in history])
-        cooperations = sum([s == C for s in history])
+        defections = history.count(D)
+        cooperations = history.count(C)
         if defections > cooperations:
             return D
         if defections == cooperations:

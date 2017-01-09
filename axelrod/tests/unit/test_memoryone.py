@@ -1,4 +1,4 @@
-"""Test for the memoryone strategies."""
+"""Tests for the memoryone strategies."""
 
 import unittest
 
@@ -9,9 +9,10 @@ from .test_player import TestPlayer, test_four_vector
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
+
 class TestGenericPlayerOne(unittest.TestCase):
     """
-    A class to test the naming and classification of generic memory one players
+    A class to test the naming and classification of generic memory one players.
     """
     p1 = axelrod.MemoryOnePlayer((0, 0, 0, 0))
     p2 = axelrod.MemoryOnePlayer((1, 0, 1, 0))
@@ -55,7 +56,7 @@ class TestWinStayLoseShift(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Check that switches if does not get best payoff."""
-        self.markov_test([C, D, D, C])
+        self.second_play_test(C, D, D, C)
 
 
 class TestWinShiftLoseStayTestPlayer(TestPlayer):
@@ -78,7 +79,7 @@ class TestWinShiftLoseStayTestPlayer(TestPlayer):
 
     def test_effect_of_strategy(self):
         """Check that switches if does not get best payoff."""
-        self.markov_test([D, C, C, D])
+        self.second_play_test(D, C, C, D)
 
 
 class TestGTFT(TestPlayer):
@@ -129,11 +130,11 @@ class TestFirmButFair(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C], [C], [C])
-        self.responses_test([C], [D], [D])
-        self.responses_test([D], [C], [C])
-        self.responses_test([D], [D], [C], random_seed=1)
-        self.responses_test([D], [D], [D], random_seed=2)
+        self.responses_test(C, C, C)
+        self.responses_test(D, C, D)
+        self.responses_test(C, D, C)
+        self.responses_test(C, D, D, random_seed=1)
+        self.responses_test(D, D, D, random_seed=2)
 
 class TestStochasticCooperator(TestPlayer):
 
@@ -150,21 +151,20 @@ class TestStochasticCooperator(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 0.935, (C, D): 0.229, (D, C): 0.266, (D, D): 0.42}
+        expected_dictionary = {(C, C): 0.935, (C, D): 0.229, (D, C): 0.266,
+                               (D, D): 0.42}
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
         # With probability 0.065 will defect
-        self.responses_test([C], [C], [D, C, C, C], random_seed=15)
+        self.responses_test(D + C * 3, C, C, random_seed=15)
         # With probability 0.266 will cooperate
-        self.responses_test([C], [D], [C], random_seed=1)
+        self.responses_test(C, C, D, random_seed=1)
         # With probability 0.42 will cooperate
-        self.responses_test([D], [C], [C], random_seed=3)
+        self.responses_test(C, D, C, random_seed=3)
         # With probability 0.229 will cooperate
-        self.responses_test([D], [D], [C], random_seed=13)
+        self.responses_test(C, D, D, random_seed=13)
 
 
 class TestStochasticWSLS(TestPlayer):
@@ -181,24 +181,23 @@ class TestStochasticWSLS(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
-        self.first_play_test(C)
-
     def test_four_vector(self):
         player = self.player()
         ep = player.ep
-        expected_dictionary = {(C, C): 1.-ep, (C, D): ep, (D, C): ep, (D, D): 1.-ep}
+        expected_dictionary = {(C, C): 1.-ep, (C, D): ep, (D, C): ep,
+                               (D, D): 1.-ep}
         test_four_vector(self, expected_dictionary)
 
-    def test_effect_of_strategy(self):
+    def test_strategy(self):
+        self.first_play_test(C)
         # With probability 0.05 will defect
-        self.responses_test([C], [C], [D], random_seed=2)
+        self.responses_test(D, C, C, random_seed=2)
         # With probability 0.05 will cooperate
-        self.responses_test([C], [D], [C], random_seed=31)
+        self.responses_test(C, C, D, random_seed=31)
         # With probability 0.05 will cooperate
-        self.responses_test([D], [C], [C], random_seed=31)
+        self.responses_test(C, D, C, random_seed=31)
         # With probability 0.05 will defect
-        self.responses_test([D], [D], [D], random_seed=2)
+        self.responses_test(D, D, D, random_seed=2)
 
 
 class TestMemoryOnePlayer(unittest.TestCase):
@@ -247,10 +246,10 @@ class TestZDExtort2(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        self.responses_test([C], [C], [D, D, C, C], random_seed=2)
-        self.responses_test([C], [D], [D, D, C, C], random_seed=2)
-        self.responses_test([D], [C], [D, D, C, C], random_seed=2)
-        self.responses_test([C], [D], [D, D, C, C], random_seed=2)
+        self.responses_test(D + D + C + C, C, C, random_seed=2)
+        self.responses_test(D + D + C + C, C, D, random_seed=2)
+        self.responses_test(D + D + C + C, D, C, random_seed=2)
+        self.responses_test(D + D + C + C, C, D, random_seed=2)
 
 
 class TestZDExtort2v2(TestPlayer):
@@ -344,10 +343,10 @@ class TestZDGTFT2(TestPlayer):
         self.first_play_test(C)
 
     def test_effect_of_strategy(self):
-        self.responses_test([C], [C], [C, C, C, C], random_seed=2)
-        self.responses_test([C], [D], [D], random_seed=2)
-        self.responses_test([D], [C], [C, C, C, C], random_seed=2)
-        self.responses_test([D], [D], [D], random_seed=2)
+        self.responses_test(C * 4, C, C, random_seed=2)
+        self.responses_test(D, C, D, random_seed=2)
+        self.responses_test(C * 4, D, C, random_seed=2)
+        self.responses_test(D, D, D, random_seed=2)
 
 
 class TestZDSet2(TestPlayer):
@@ -392,8 +391,8 @@ class TestSoftJoss(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.responses_test([C], [C], [C], random_seed=2)
-        self.responses_test([C], [D], [D], random_seed=5)
+        self.responses_test(C, C, C, random_seed=2)
+        self.responses_test(D, C, D, random_seed=5)
 
 
 class TestALLCorALLD(TestPlayer):
@@ -411,8 +410,8 @@ class TestALLCorALLD(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([], [], [D] * 10, random_seed=2)
-        self.responses_test([], [], [C] * 10, random_seed=3)
-        self.responses_test([], [], [C] * 10, random_seed=4)
-        self.responses_test([], [], [D] * 10, random_seed=5)
-        self.responses_test([], [], [D] * 10, random_seed=6)
+        self.responses_test(D * 10, random_seed=2)
+        self.responses_test(C * 10, random_seed=3)
+        self.responses_test(C * 10, random_seed=4)
+        self.responses_test(D * 10, random_seed=5)
+        self.responses_test(D * 10, random_seed=6)

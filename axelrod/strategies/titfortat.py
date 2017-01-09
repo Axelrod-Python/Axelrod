@@ -64,7 +64,7 @@ class TitFor2Tats(Player):
 
     @staticmethod
     def strategy(opponent):
-        return D if opponent.history[-2:] == [D, D] else C
+        return D if opponent.history[-2:] == D + D else C
 
 
 class TwoTitsForTat(Player):
@@ -118,7 +118,7 @@ class Bully(Player):
 
     @staticmethod
     def strategy(opponent):
-        return C if opponent.history[-1:] == [D] else D
+        return C if opponent.history[-1:] == D else D
 
 
 class SneakyTitForTat(Player):
@@ -172,7 +172,7 @@ class SuspiciousTitForTat(Player):
 
     @staticmethod
     def strategy(opponent):
-        return C if opponent.history[-1:] == [C] else D
+        return C if opponent.history[-1:] == C else D
 
 
 class AntiTitForTat(Player):
@@ -197,7 +197,7 @@ class AntiTitForTat(Player):
 
     @staticmethod
     def strategy(opponent):
-        return D if opponent.history[-1:] == [C] else C
+        return D if opponent.history[-1:] == C else C
 
 
 class HardTitForTat(Player):
@@ -257,7 +257,7 @@ class HardTitFor2Tats(Player):
         if not opponent.history:
             return C
         # Defects if two consecutive D in the opponent's last three moves
-        history_string = "".join(opponent.history[-3:])
+        history_string = opponent.history[-3:]
         if 'DD' in history_string:
             return D
         # Otherwise cooperates
@@ -300,7 +300,7 @@ class OmegaTFT(Player):
             return C
         # TFT on round 2
         if len(self.history) == 1:
-            return D if opponent.history[-1:] == [D] else C
+            return D if opponent.history[-1:] == D else C
 
         # Are we deadlocked? (in a CD -> DC loop)
         if (self.deadlock_counter >= self.deadlock_threshold):
@@ -311,7 +311,7 @@ class OmegaTFT(Player):
                 self.deadlock_counter = 0
         else:
             # Update counters
-            if opponent.history[-2:] == [C, C]:
+            if opponent.history[-2:] == C + C:
                 self.randomness_counter -= 1
             # If the opponent's move changed, increase the counter
             if opponent.history[-2] != opponent.history[-1]:
@@ -326,7 +326,7 @@ class OmegaTFT(Player):
                 self.move = D
             else:
                 # TFT
-                self.move = D if opponent.history[-1:] == [D] else C
+                self.move = D if opponent.history[-1:] == D else C
                 # Check for deadlock
                 if opponent.history[-2] != opponent.history[-1]:
                     self.deadlock_counter += 1
@@ -447,7 +447,11 @@ class ContriteTitForTat(Player):
     def reset(self):
         Player.reset(self)
         self.contrite = False
-        self._recorded_history = []
+        try:
+            self._recorded_history.reset()
+        except AttributeError:
+            # The history object may not exist if no plays have occurred.
+            pass
 
 
 class SlowTitForTwoTats(Player):
@@ -589,7 +593,7 @@ class SpitefulTitForTat(Player):
         if not self.history:
             return C
 
-        if opponent.history[-2:] == [D, D]:
+        if opponent.history[-2:] == D + D:
             self.retaliating = True
 
         if self.retaliating:
