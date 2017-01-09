@@ -44,6 +44,13 @@ class CooperatorHunter(Player):
         return C
 
 
+def is_alternator(history):
+    for i in range(len(history) - 1):
+        if history[i] == history[i+1]:
+            return False
+    return True
+
+
 class AlternatorHunter(Player):
     """A player who hunts for alternators."""
 
@@ -58,11 +65,23 @@ class AlternatorHunter(Player):
         'manipulates_state': False
     }
 
+    def __init__(self):
+        Player.__init__(self)
+        self.is_alt = False
+
     def strategy(self, opponent):
-        oh = opponent.history
-        if len(self.history) >= 6 and all([oh[i] != oh[i+1] for i in range(len(oh)-1)]):
+        if len(opponent.history) < 6:
+            return C
+        if len(self.history) == 6:
+            if is_alternator(opponent.history):
+                self.is_alt = True
+        if self.is_alt:
             return D
         return C
+
+    def reset(self):
+        Player.reset(self)
+        self.is_alt = False
 
 
 class CycleHunter(Player):
@@ -80,36 +99,40 @@ class CycleHunter(Player):
         'manipulates_state': False
     }
 
-    @staticmethod
-    def strategy(opponent):
-        cycle = detect_cycle(opponent.history, min_size=2)
+    def __init__(self):
+        Player.__init__(self)
+        self.cycle = None
+
+    def strategy(self, opponent):
+        if self.cycle:
+            return D
+        cycle = detect_cycle(opponent.history, min_size=3)
         if cycle:
             if len(set(cycle)) > 1:
+                self.cycle = cycle
                 return D
         return C
 
+    def reset(self):
+        Player.reset(self)
+        self.cycle = None
 
-class EventualCycleHunter(Player):
-    """Hunts strategies that eventually play cyclically"""
+
+class EventualCycleHunter(CycleHunter):
+    """Hunts strategies that eventually play cyclically."""
 
     name = 'Eventual Cycle Hunter'
-    classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
 
-    @staticmethod
-    def strategy(opponent):
+    def strategy(self, opponent):
         if len(opponent.history) < 10:
             return C
         if len(opponent.history) == opponent.cooperations:
             return C
-        if detect_cycle(opponent.history, offset=15):
+        if len(opponent.history) % 10 == 0:
+            # recheck
+            self.cycle = detect_cycle(opponent.history, offset=10,
+                                      min_size=3)
+        if self.cycle:
             return D
         else:
             return C
