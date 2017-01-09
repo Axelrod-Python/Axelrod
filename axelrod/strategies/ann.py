@@ -2,7 +2,6 @@
 
 # Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
 # Original Author: Martin Jones, @mojones
-<<<<<<< HEAD
 """
 
 import numpy as np
