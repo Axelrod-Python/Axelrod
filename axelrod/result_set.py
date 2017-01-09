@@ -354,7 +354,7 @@ class ResultSet(object):
             counters = []
             for counter in player:
                 total = sum(counter.values())
-                counters.append(Counter({key: float(value) / total for
+                counters.append(Counter({key: value / total for
                                          key, value in counter.items()}))
             norm.append(counters)
         return norm
