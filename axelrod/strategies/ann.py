@@ -34,6 +34,96 @@ def split_weights(weights, num_features, num_hidden):
     return (input2hidden, hidden2output, bias)
 
 
+def compute_features(player, opponent):
+    """
+    Compute history features for Neural Network:
+    * Opponent's first move is C
+    * Opponent's first move is D
+    * Opponent's second move is C
+    * Opponent's second move is D
+    * Player's previous move is C
+    * Player's previous move is D
+    * Player's second previous move is C
+    * Player's second previous move is D
+    * Opponent's previous move is C
+    * Opponent's previous move is D
+    * Opponent's second previous move is C
+    * Opponent's second previous move is D
+    * Total opponent cooperations
+    * Total opponent defections
+    * Total player cooperations
+    * Total player defections
+    * Round number
+    """
+    if len(opponent.history) == 0:
+        opponent_first_c = 0
+        opponent_first_d = 0
+        opponent_second_c = 0
+        opponent_second_d = 0
+        my_previous_c = 0
+        my_previous_d = 0
+        my_previous2_c = 0
+        my_previous2_d = 0
+        opponent_previous_c = 0
+        opponent_previous_d = 0
+        opponent_previous2_c = 0
+        opponent_previous2_d = 0
+
+    elif len(opponent.history) == 1:
+        opponent_first_c = 1 if opponent.history[0] == C else 0
+        opponent_first_d = 1 if opponent.history[0] == D else 0
+        opponent_second_c = 0
+        opponent_second_d = 0
+        my_previous_c = 1 if player.history[-1] == C else 0
+        my_previous_d = 0 if player.history[-1] == D else 0
+        my_previous2_c = 0
+        my_previous2_d = 0
+        opponent_previous_c = 1 if opponent.history[-1] == C else 0
+        opponent_previous_d = 1 if opponent.history[-1] == D else 0
+        opponent_previous2_c = 0
+        opponent_previous2_d = 0
+
+    else:
+        opponent_first_c = 1 if opponent.history[0] == C else 0
+        opponent_first_d = 1 if opponent.history[0] == D else 0
+        opponent_second_c = 1 if opponent.history[1] == C else 0
+        opponent_second_d = 1 if opponent.history[1] == D else 0
+        my_previous_c = 1 if player.history[-1] == C else 0
+        my_previous_d = 0 if player.history[-1] == D else 0
+        my_previous2_c = 1 if player.history[-2] == C else 0
+        my_previous2_d = 1 if player.history[-2] == D else 0
+        opponent_previous_c = 1 if opponent.history[-1] == C else 0
+        opponent_previous_d = 1 if opponent.history[-1] == D else 0
+        opponent_previous2_c = 1 if opponent.history[-2] == C else 0
+        opponent_previous2_d = 1 if opponent.history[-2] == D else 0
+
+    # Remaining Features
+    total_opponent_c = opponent.cooperations
+    total_opponent_d = opponent.defections
+    total_player_c = player.cooperations
+    total_player_d = player.defections
+
+    return [
+        opponent_first_c,
+        opponent_first_d,
+        opponent_second_c,
+        opponent_second_d,
+        my_previous_c,
+        my_previous_d,
+        my_previous2_c,
+        my_previous2_d,
+        opponent_previous_c,
+        opponent_previous_d,
+        opponent_previous2_c,
+        opponent_previous2_d,
+        total_opponent_c,
+        total_opponent_d,
+        total_player_c,
+        total_player_d,
+        len(player.history)
+    ]
+
+
 class ANN(Player):
     """A single layer neural network based strategy, with the following
     features:
@@ -86,79 +176,8 @@ class ANN(Player):
                               self.hidden_to_output_layer_weights)
         return output_value
 
-    def compute_features(self, opponent):
-        # Compute features for Neural Network
-        # These are True/False 0/1
-        if len(opponent.history) == 0:
-            opponent_first_c = 0
-            opponent_first_d = 0
-            opponent_second_c = 0
-            opponent_second_d = 0
-            my_previous_c = 0
-            my_previous_d = 0
-            my_previous2_c = 0
-            my_previous2_d = 0
-            opponent_previous_c = 0
-            opponent_previous_d = 0
-            opponent_previous2_c = 0
-            opponent_previous2_d = 0
-
-        elif len(opponent.history) == 1:
-            opponent_first_c = 1 if opponent.history[0] == C else 0
-            opponent_first_d = 1 if opponent.history[0] == D else 0
-            opponent_second_c = 0
-            opponent_second_d = 0
-            my_previous_c = 1 if self.history[-1] == C else 0
-            my_previous_d = 0 if self.history[-1] == D else 0
-            my_previous2_c = 0
-            my_previous2_d = 0
-            opponent_previous_c = 1 if opponent.history[-1] == C else 0
-            opponent_previous_d = 1 if opponent.history[-1] == D else 0
-            opponent_previous2_c = 0
-            opponent_previous2_d = 0
-
-        else:
-            opponent_first_c = 1 if opponent.history[0] == C else 0
-            opponent_first_d = 1 if opponent.history[0] == D else 0
-            opponent_second_c = 1 if opponent.history[1] == C else 0
-            opponent_second_d = 1 if opponent.history[1] == D else 0
-            my_previous_c = 1 if self.history[-1] == C else 0
-            my_previous_d = 0 if self.history[-1] == D else 0
-            my_previous2_c = 1 if self.history[-2] == C else 0
-            my_previous2_d = 1 if self.history[-2] == D else 0
-            opponent_previous_c = 1 if opponent.history[-1] == C else 0
-            opponent_previous_d = 1 if opponent.history[-1] == D else 0
-            opponent_previous2_c = 1 if opponent.history[-2] == C else 0
-            opponent_previous2_d = 1 if opponent.history[-2] == D else 0
-
-        # Remaining Features
-        total_opponent_c = opponent.cooperations
-        total_opponent_d = opponent.defections
-        total_self_c = self.cooperations
-        total_self_d = self.defections
-
-        return [
-            opponent_first_c,
-            opponent_first_d,
-            opponent_second_c,
-            opponent_second_d,
-            my_previous_c,
-            my_previous_d,
-            my_previous2_c,
-            my_previous2_d,
-            opponent_previous_c,
-            opponent_previous_d,
-            opponent_previous2_c,
-            opponent_previous2_d,
-            total_opponent_c,
-            total_opponent_d,
-            total_self_c,
-            total_self_d,
-            len(self.history)
-        ]
-
     def strategy(self, opponent):
-        features = self.compute_features(opponent)
+        features = compute_features(self, opponent)
         output = self.activate(features)
         if output > 0:
             return C
