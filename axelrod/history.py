@@ -38,6 +38,8 @@ class HistoryList(object):
 
     def pop(self, index):
         play = self._history.pop(index)
+        self._counter[play] -= 1
+        self._len -= 1
         return play
 
     def reset(self):
