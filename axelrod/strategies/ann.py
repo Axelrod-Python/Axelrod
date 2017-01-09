@@ -1,10 +1,14 @@
 # Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
 # Original Author: Martin Jones, @mojones
+import numpy as np
 
 from axelrod import Actions, Player, load_weights
 
 C, D = Actions.C, Actions.D
 nn_weights = load_weights()
+
+
+relu = np.vectorize(lambda x: max(x, 0))
 
 
 def split_weights(weights, num_features, num_hidden):
@@ -65,35 +69,21 @@ class ANN(Player):
     def __init__(self, weights, num_features, num_hidden):
         super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
-        self.input_to_hidden_layer_weights = i2h
-        self.hidden_to_output_layer_weights = h2o
-        self.bias_weights = bias
-        self.input_values = num_features
-        self.hidden_layer_size = num_hidden
+        self.input_to_hidden_layer_weights = np.matrix(i2h)
+        self.hidden_to_output_layer_weights = np.array(h2o)
+        self.bias_weights = np.array(bias)
 
     def activate(self, inputs):
-        """Compute the output of the neural network."""
-        # Calculate values of hidden nodes
-        hidden_values = []
-        for i in range(self.hidden_layer_size):
-            hidden_node_value = 0
-            bias_weight = self.bias_weights[i]
-            hidden_node_value += bias_weight
-            for j in range(self.input_values):
-                weight = self.input_to_hidden_layer_weights[i][j]
-                hidden_node_value += inputs[j] * weight
-
-            # ReLU activation function
-            hidden_node_value = max(hidden_node_value, 0)
-
-            hidden_values.append(hidden_node_value)
-
-        # Calculate output value
-        output_value = 0
-        for i in range(self.hidden_layer_size):
-            output_value += hidden_values[i] * \
-                            self.hidden_to_output_layer_weights[i]
-
+        """
+        Compute the output of the neural network:
+            output = relu(inputs * weights + bias) * output_weights
+        """
+        inputs = np.array(inputs)
+        hidden_values = self.bias_weights + np.dot(
+            self.input_to_hidden_layer_weights, inputs)
+        hidden_values = relu(hidden_values)
+        output_value = np.dot(hidden_values,
+                              self.hidden_to_output_layer_weights)
         return output_value
 
     def compute_features(self, opponent):

@@ -2,6 +2,8 @@ import random
 import unittest
 import warnings
 
+import numpy as np
+
 import axelrod
 from axelrod import DefaultGame, MockPlayer, Player, simulate_play
 
@@ -221,7 +223,10 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player().state_distribution, dict())
 
         for k, v in p_clone.__dict__.items():
-            self.assertEqual(v, getattr(p_clone, k))
+            try:
+                self.assertEqual(v, getattr(p_clone, k))
+            except ValueError:
+                self.assertTrue(np.array_equal(v, getattr(p_clone, k)))
 
     def test_reset_clone(self):
         """Make sure history resetting with cloning works correctly, regardless
