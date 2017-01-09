@@ -1,5 +1,9 @@
+"""Artificial Neural Network based strategy.
+
 # Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
 # Original Author: Martin Jones, @mojones
+"""
+
 import numpy as np
 
 from axelrod import Actions, Player, load_weights
@@ -8,30 +12,8 @@ C, D = Actions.C, Actions.D
 nn_weights = load_weights()
 
 
+# Neural Network and Activation functions
 relu = np.vectorize(lambda x: max(x, 0))
-
-
-def split_weights(weights, num_features, num_hidden):
-    """Splits the input vector into the the NN bias weights and layer
-    parameters."""
-    # Check weights is the right length
-    expected_length = num_hidden * 2 + num_features * num_hidden
-    if expected_length != len(weights):
-        raise ValueError("NN weights array has an incorrect size.")
-
-    number_of_input_to_hidden_weights = num_features * num_hidden
-    number_of_hidden_to_output_weights = num_hidden
-
-    input2hidden = []
-    for i in range(0, number_of_input_to_hidden_weights, num_features):
-        input2hidden.append(weights[i:i + num_features])
-
-    start = number_of_input_to_hidden_weights
-    end = number_of_input_to_hidden_weights + number_of_hidden_to_output_weights
-
-    hidden2output = weights[start: end]
-    bias = weights[end:]
-    return (input2hidden, hidden2output, bias)
 
 
 def compute_features(player, opponent):
@@ -123,6 +105,39 @@ def compute_features(player, opponent):
         len(player.history)
     ]
 
+def activate(bias, hidden, output, inputs):
+    """
+    Compute the output of the neural network:
+        output = relu(inputs * hidden_weights + bias) * output_weights
+    """
+    inputs = np.array(inputs)
+    hidden_values = bias + np.dot(hidden, inputs)
+    hidden_values = relu(hidden_values)
+    output_value = np.dot(hidden_values, output)
+    return output_value
+
+def split_weights(weights, num_features, num_hidden):
+    """Splits the input vector into the the NN bias weights and layer
+    parameters."""
+    # Check weights is the right length
+    expected_length = num_hidden * 2 + num_features * num_hidden
+    if expected_length != len(weights):
+        raise ValueError("NN weights array has an incorrect size.")
+
+    number_of_input_to_hidden_weights = num_features * num_hidden
+    number_of_hidden_to_output_weights = num_hidden
+
+    input2hidden = []
+    for i in range(0, number_of_input_to_hidden_weights, num_features):
+        input2hidden.append(weights[i:i + num_features])
+
+    start = number_of_input_to_hidden_weights
+    end = number_of_input_to_hidden_weights + number_of_hidden_to_output_weights
+
+    hidden2output = weights[start: end]
+    bias = weights[end:]
+    return (input2hidden, hidden2output, bias)
+
 
 class ANN(Player):
     """A single layer neural network based strategy, with the following
@@ -163,22 +178,12 @@ class ANN(Player):
         self.hidden_to_output_layer_weights = np.array(h2o)
         self.bias_weights = np.array(bias)
 
-    def activate(self, inputs):
-        """
-        Compute the output of the neural network:
-            output = relu(inputs * weights + bias) * output_weights
-        """
-        inputs = np.array(inputs)
-        hidden_values = self.bias_weights + np.dot(
-            self.input_to_hidden_layer_weights, inputs)
-        hidden_values = relu(hidden_values)
-        output_value = np.dot(hidden_values,
-                              self.hidden_to_output_layer_weights)
-        return output_value
-
     def strategy(self, opponent):
         features = compute_features(self, opponent)
-        output = self.activate(features)
+        output = activate(self.bias_weights,
+                          self.input_to_hidden_layer_weights,
+                          self.hidden_to_output_layer_weights,
+                          features)
         if output > 0:
             return C
         else:
