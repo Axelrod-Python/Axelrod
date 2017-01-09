@@ -2,6 +2,7 @@
 
 # Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
 # Original Author: Martin Jones, @mojones
+<<<<<<< HEAD
 """
 
 import numpy as np
@@ -10,7 +11,6 @@ from axelrod import Actions, Player, load_weights
 
 C, D = Actions.C, Actions.D
 nn_weights = load_weights()
-
 
 # Neural Network and Activation functions
 relu = np.vectorize(lambda x: max(x, 0))
@@ -105,6 +105,7 @@ def compute_features(player, opponent):
         len(player.history)
     ]
 
+
 def activate(bias, hidden, output, inputs):
     """
     Compute the output of the neural network:
@@ -115,6 +116,7 @@ def activate(bias, hidden, output, inputs):
     hidden_values = relu(hidden_values)
     output_value = np.dot(hidden_values, output)
     return output_value
+
 
 def split_weights(weights, num_features, num_hidden):
     """Splits the input vector into the the NN bias weights and layer
