@@ -119,3 +119,36 @@ class InversePunisher(Player):
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1
+
+class LevelPunisher(Player):
+    """
+    Names:
+
+    - Level Punisher: Original by Geraint Palmer
+    """
+
+    name = 'Level Punisher'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super(LevelPunisher, self).__init__()
+        self.history = []
+        self.mem_length = 1
+        self.grudged = False
+        self.grudge_memory = 1
+
+
+    def reset(self):
+        """Resets internal variables and history"""
+        Player.reset(self)
+        self.grudged = False
+        self.grudge_memory = 0
+        self.mem_length = 1
