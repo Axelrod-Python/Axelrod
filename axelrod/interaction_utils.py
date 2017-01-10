@@ -83,7 +83,7 @@ def compute_normalised_cooperation(interactions):
     num_turns = len(interactions)
     cooperation = compute_cooperations(interactions)
 
-    normalised_cooperation = tuple([c / float(num_turns) for c in cooperation])
+    normalised_cooperation = tuple([c / num_turns for c in cooperation])
 
     return normalised_cooperation
 
