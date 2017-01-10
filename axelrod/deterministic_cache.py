@@ -1,9 +1,4 @@
-try:
-    # Python 2.x
-    from UserDict import UserDict
-except ImportError:
-    # Python 3.x
-    from collections import UserDict
+from collections import UserDict
 import pickle
 
 from axelrod import Player
