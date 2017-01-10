@@ -46,7 +46,7 @@ def compute_final_score_per_turn(interactions, game=None):
         return None
 
     final_score_per_turn = tuple(
-        sum([score[player_index] for score in scores]) / (float(num_turns))
+        sum([score[player_index] for score in scores]) / num_turns
         for player_index in [0, 1])
     return final_score_per_turn
 
