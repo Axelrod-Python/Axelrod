@@ -136,12 +136,12 @@ def compute_normalised_state_distribution(interactions):
     return normalized_count
 
 
-def sparkline(actions, c_symbol=u'█', d_symbol=u' '):
-    return u''.join([
+def sparkline(actions, c_symbol='█', d_symbol=' '):
+    return ''.join([
         c_symbol if play == 'C' else d_symbol for play in actions])
 
 
-def compute_sparklines(interactions, c_symbol=u'█', d_symbol=u' '):
+def compute_sparklines(interactions, c_symbol='█', d_symbol=' '):
     """Returns the sparklines for a set of interactions"""
     if len(interactions) == 0:
         return None
@@ -149,7 +149,7 @@ def compute_sparklines(interactions, c_symbol=u'█', d_symbol=u' '):
     histories = list(zip(*interactions))
     return (
         sparkline(histories[0], c_symbol, d_symbol) +
-        u'\n' +
+        '\n' +
         sparkline(histories[1], c_symbol, d_symbol))
 
 
