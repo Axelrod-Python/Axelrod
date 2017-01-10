@@ -1,4 +1,3 @@
-from __future__ import division
 from math import ceil, log
 import random
 
@@ -165,7 +164,7 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
 
     def estimated_size(self):
         """Rough estimate of the number of matches that will be generated."""
-        size = self.__len__() * (1. / self.prob_end) * self.repetitions
+        size = self.__len__() * (1 / self.prob_end) * self.repetitions
         return size
 
 
