@@ -46,7 +46,7 @@ class CooperatorHunter(Player):
 
 def is_alternator(history):
     for i in range(len(history) - 1):
-        if history[i] == history[i+1]:
+        if history[i] == history[i + 1]:
             return False
     return True
 
