@@ -129,10 +129,7 @@ def compute_normalised_state_distribution(interactions):
         return None
 
     interactions_count = Counter(interactions)
-    total = sum(interactions_count.values(), 0.0)
-    # By starting the sum with 0.0 we make sure total is a floating point value,
-    # avoiding the Python 2 floor division behaviour of / with integer operands
-    # (Stack Overflow)
+    total = sum(interactions_count.values(), 0)
 
     normalized_count = Counter({key: value / total for key, value in
                                 interactions_count.items()})
