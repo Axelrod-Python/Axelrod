@@ -144,8 +144,14 @@ class LevelPunisher(Player):
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1
+        
+    def strategy(self, opponent):
+        
+        if self.grudge_memory >= self.mem_length:
+            self.grudge_memory = 0
+            self.grudged = False
 
-
+        
     def reset(self):
         """Resets internal variables and history"""
         Player.reset(self)
