@@ -4,6 +4,7 @@ import csv
 import logging
 from multiprocessing import Queue, cpu_count
 import unittest
+from unittest.mock import MagicMock
 import warnings
 
 from hypothesis import given, example, settings
@@ -15,13 +16,6 @@ from axelrod.tests.property import (tournaments,
 
 import axelrod
 
-
-try:
-    # Python 3
-    from unittest.mock import MagicMock
-except ImportError:
-    # Python 2
-    from mock import MagicMock
 
 test_strategies = [axelrod.Cooperator,
                    axelrod.TitForTat,
