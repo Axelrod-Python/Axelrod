@@ -112,7 +112,7 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         noise : float, 0
             The probability that a player's intended action should be flipped
         """
-        super(ProbEndRoundRobinMatches, self).__init__(
+        super().__init__(
             players, turns=float("inf"), game=game, repetitions=repetitions,
             noise=noise)
         self.prob_end = prob_end
@@ -220,8 +220,7 @@ class SpatialMatches(RoundRobinMatches):
         if not graph_is_connected(edges, players):
             raise ValueError("The graph edges do not include all players.")
         self.edges = edges
-        super(SpatialMatches, self).__init__(players, turns, game, repetitions,
-                                             noise)
+        super().__init__(players, turns, game, repetitions, noise)
 
     def build_match_chunks(self):
         for edge in self.edges:

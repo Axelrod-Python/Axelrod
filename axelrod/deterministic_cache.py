@@ -36,7 +36,7 @@ class DeterministicCache(UserDict):
         file_name : string
             Path to a previously saved cache file
         """
-        UserDict.__init__(self)
+        super().__init__()
         self.mutable = True
         if file_name is not None:
             self.load(file_name)
@@ -51,13 +51,13 @@ class DeterministicCache(UserDict):
         return key[0].name, key[1].name, key[2]
 
     def __delitem__(self, key):
-        return UserDict.__delitem__(self, self._key_transform(key))
+        return super().__delitem__(self._key_transform(key))
 
     def __getitem__(self, key):
-        return UserDict.__getitem__(self, self._key_transform(key))
+        return super().__getitem__(self._key_transform(key))
 
     def __contains__(self, key):
-        return UserDict.__contains__(self, self._key_transform(key))
+        return super().__contains__(self._key_transform(key))
 
     def __setitem__(self, key, value):
         """Overrides the UserDict.__setitem__ method in order to validate
@@ -73,7 +73,7 @@ class DeterministicCache(UserDict):
             raise ValueError(
                 'Value must be a list with length equal to turns attribute')
 
-        UserDict.__setitem__(self, self._key_transform(key), value)
+        super().__setitem__(self._key_transform(key), value)
 
     def _is_valid_key(self, key):
         """Validate a proposed dictionary key

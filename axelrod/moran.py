@@ -304,7 +304,7 @@ class MoranProcessGraph(MoranProcess):
         match_class: subclass of Match
             The match type to use for scoring
         """
-        MoranProcess.__init__(self, players, turns=turns, noise=noise,
+        super().__init__(players, turns=turns, noise=noise,
                               deterministic_cache=deterministic_cache,
                               mutation_rate=mutation_rate, mode=mode)
         if not reproduction_graph:
