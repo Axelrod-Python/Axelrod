@@ -64,7 +64,7 @@ class Human(Player):
             A symbol to denote defection within the history toolbar
             and prompt
         """
-        Player.__init__(self)
+        super().__init__()
         self.name = name
         self.symbols = {
             C: c_symbol,

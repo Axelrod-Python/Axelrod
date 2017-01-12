@@ -33,7 +33,7 @@ class Grumpy(Player):
             The threshold of opponent defections - cooperations to become
             nice
         """
-        super(Grumpy, self).__init__()
+        super().__init__()
         self.history = []
         self.state = starting_state
         self.starting_state = starting_state
@@ -64,5 +64,5 @@ class Grumpy(Player):
 
     def reset(self):
         """Resets score, history and state for the next round of the tournement."""
-        Player.reset(self)
+        super().reset()
         self.state = self.starting_state

@@ -170,7 +170,7 @@ class RandomHunter(Player):
     def __init__(self):
         self.countCC = 0
         self.countDD = 0
-        Player.__init__(self)
+        super().__init__()
 
     def strategy(self, opponent):
         """
@@ -199,4 +199,4 @@ class RandomHunter(Player):
     def reset(self):
         self.countCC = 0
         self.countDD = 0
-        Player.reset(self)
+        super().reset()

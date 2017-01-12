@@ -21,7 +21,7 @@ class Calculator(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.joss_instance = Joss()
 
     def strategy(self, opponent):
@@ -44,5 +44,5 @@ class Calculator(Player):
             return Actions.D if opponent.history[-1:] == [Actions.D] else Actions.C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.joss_instance = Joss()

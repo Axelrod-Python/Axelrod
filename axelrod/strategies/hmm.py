@@ -102,7 +102,7 @@ class HMMPlayer(Player):
     def __init__(self, transitions_C=None, transitions_D=None,
                  emission_probabilities=None, initial_state=0,
                  initial_action=C):
-        Player.__init__(self)
+        super().__init__()
         if not transitions_C:
             transitions_C = [[1]]
             transitions_D = [[1]]
@@ -138,7 +138,7 @@ class HMMPlayer(Player):
             return action
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.hmm.state = self.initial_state
 
 
@@ -181,6 +181,6 @@ class EvolvedHMM5(HMMPlayer):
                [0, 0.287, 0.456, 0.146, 0.111]]
 
         emissions = [1, 0, 0, 1, 0.111]
-        HMMPlayer.__init__(self, t_C, t_D, emissions, initial_state,
+        super().__init__(t_C, t_D, emissions, initial_state,
                            initial_action)
 

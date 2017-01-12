@@ -42,7 +42,7 @@ class Davis(Player):
         rounds_to_cooperate: int, 10
            The number of rounds to cooperate initially
         """
-        Player.__init__(self)
+        super().__init__()
         self._rounds_to_cooperate = rounds_to_cooperate
 
     def strategy(self, opponent):
@@ -78,7 +78,7 @@ class RevisedDowning(Player):
 
     @init_args
     def __init__(self, revised=True):
-        Player.__init__(self)
+        super().__init__()
         self.revised = revised
         self.good = 1.0
         self.bad = 0.0
@@ -127,7 +127,7 @@ class RevisedDowning(Player):
         return self.move
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.good = 1.0
         self.bad = 0.0
         self.nice1 = 0
@@ -173,7 +173,7 @@ class Feld(Player):
             The number of rounds to linearly decrease from start_coop_prob
             to end_coop_prob
         """
-        Player.__init__(self)
+        super().__init__()
         self._start_coop_prob = start_coop_prob
         self._end_coop_prob = end_coop_prob
         self._rounds_of_decay = rounds_of_decay
@@ -259,7 +259,7 @@ class Joss(MemoryOnePlayer):
         """
         four_vector = (p, 0, p, 0)
         self.p = p
-        super(Joss, self).__init__(four_vector)
+        super().__init__(four_vector)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -299,7 +299,7 @@ class Nydegger(Player):
                           (C, D): 2,
                           (D, C): 1,
                           (D, D): 3}
-        super(Nydegger, self).__init__()
+        super().__init__()
 
     @staticmethod
     def score_history(my_history, opponent_history, score_map):
@@ -354,7 +354,7 @@ class Shubik(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.is_retaliating = False
         self.retaliation_length = 0
         self.retaliation_remaining = 0
@@ -391,7 +391,7 @@ class Shubik(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.is_retaliating = False
         self.retaliation_length = 0
         self.retaliation_remaining = 0
@@ -428,7 +428,7 @@ class Tullock(Player):
         rounds_to_cooperate: int, 10
            The number of rounds to cooperate initially
         """
-        Player.__init__(self)
+        super().__init__()
         self._rounds_to_cooperate = rounds_to_cooperate
         self.__class__.memory_depth = rounds_to_cooperate
 

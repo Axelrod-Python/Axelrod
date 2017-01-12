@@ -55,7 +55,7 @@ class PSOGamblerMem1(Gambler):
         lookup_table = create_lookup_table_from_pattern(
             plays=1, op_plays=1, op_start_plays=0,
             pattern=pattern)
-        Gambler.__init__(self, lookup_table=lookup_table)
+        super().__init__(lookup_table=lookup_table)
         self.classifier['memory_depth'] = 1
 
 
@@ -74,7 +74,7 @@ class PSOGambler1_1_1(Gambler):
         lookup_table = create_lookup_table_from_pattern(
             plays=1, op_plays=1, op_start_plays=1,
             pattern=pattern)
-        Gambler.__init__(self, lookup_table=lookup_table)
+        super().__init__(lookup_table=lookup_table)
 
 
 class PSOGambler2_2_2(Gambler):
@@ -92,7 +92,7 @@ class PSOGambler2_2_2(Gambler):
         lookup_table = create_lookup_table_from_pattern(
             plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)
-        Gambler.__init__(self, lookup_table=lookup_table)
+        super().__init__(lookup_table=lookup_table)
 
 
 class PSOGambler2_2_2_Noise05(Gambler):
@@ -111,4 +111,4 @@ class PSOGambler2_2_2_Noise05(Gambler):
         lookup_table = create_lookup_table_from_pattern(
             plays=2, op_plays=2, op_start_plays=2,
             pattern=pattern)
-        Gambler.__init__(self, lookup_table=lookup_table)
+        super().__init__(lookup_table=lookup_table)

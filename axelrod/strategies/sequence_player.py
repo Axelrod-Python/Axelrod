@@ -9,7 +9,7 @@ class SequencePlayer(Player):
 
     @init_args
     def __init__(self, generator_function, generator_args=()):
-        Player.__init__(self)
+        super().__init__()
         # Initialize the sequence generator
         self.generator_function = generator_function
         self.generator_args = generator_args
@@ -31,7 +31,7 @@ class SequencePlayer(Player):
 
     def reset(self):
         # Be sure to reset the sequence generator
-        Player.reset(self)
+        super().reset()
         self.sequence_generator = self.generator_function(*self.generator_args)
 
 
@@ -61,7 +61,7 @@ class ThueMorse(SequencePlayer):
 
     @init_args
     def __init__(self):
-        SequencePlayer.__init__(self, thue_morse_generator, (0,))
+        super().__init__(thue_morse_generator, (0,))
 
 
 class ThueMorseInverse(ThueMorse):
@@ -85,7 +85,7 @@ class ThueMorseInverse(ThueMorse):
 
     @init_args
     def __init__(self):
-        SequencePlayer.__init__(self, thue_morse_generator, (0,))
+        super(ThueMorse, self).__init__(thue_morse_generator, (0,))
 
     def meta_strategy(self, value):
         # Switch the default cooperate and defect action on 0 or 1

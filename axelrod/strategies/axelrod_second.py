@@ -110,7 +110,7 @@ class Tester(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.is_TFT = False
 
     def strategy(self, opponent):
@@ -131,5 +131,5 @@ class Tester(Player):
             return flip_action(self.history[-1])
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.is_TFT = False

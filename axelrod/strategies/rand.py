@@ -34,7 +34,7 @@ class Random(Player):
         Random(0) is equivalent to Defector
         Random(1) is equivalent to Cooperator
         """
-        Player.__init__(self)
+        super().__init__()
         self.p = p
         if p in [0, 1]:
             self.classifier['stochastic'] = False
