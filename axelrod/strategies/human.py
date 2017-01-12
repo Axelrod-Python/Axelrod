@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from os import linesep
 from axelrod import Actions, Player, init_args
 from prompt_toolkit import prompt

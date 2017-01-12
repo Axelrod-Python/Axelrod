@@ -39,9 +39,9 @@ class TestPlot(unittest.TestCase):
 
         cls.test_result_set = axelrod.ResultSet(cls.players, cls.interactions)
         cls.expected_boxplot_dataset = [
-               [(17.0 / 5 + 9.0 / 5) / 2 for _ in range(3)],
-               [(13.0 / 5 + 4.0 / 5) / 2 for _ in range(3)],
-               [3.0 / 2 for _ in range(3)]
+               [(17 / 5 + 9 / 5) / 2 for _ in range(3)],
+               [(13 / 5 + 4 / 5) / 2 for _ in range(3)],
+               [3 / 2 for _ in range(3)]
                ]
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]
         cls.expected_boxplot_xticks_labels = ['Defector', 'Tit For Tat', 'Alternator']
@@ -53,9 +53,9 @@ class TestPlot(unittest.TestCase):
                ]
 
         cls.expected_payoff_dataset = [
-            [0, mean([9/5.0 for _ in range(3)]), mean([17/5.0 for _ in range(3)])],
-            [mean([4/5.0 for _ in range(3)]), 0, mean([13/5.0 for _ in range(3)])],
-            [mean([2/5.0 for _ in range(3)]), mean([13/5.0 for _ in range(3)]), 0]
+            [0, mean([9/5 for _ in range(3)]), mean([17/5 for _ in range(3)])],
+            [mean([4/5 for _ in range(3)]), 0, mean([13/5 for _ in range(3)])],
+            [mean([2/5 for _ in range(3)]), mean([13/5 for _ in range(3)]), 0]
         ]
         cls.expected_winplot_dataset = ([[2, 2, 2], [0, 0, 0], [0, 0, 0]],
                                         ['Defector', 'Tit For Tat', 'Alternator'])

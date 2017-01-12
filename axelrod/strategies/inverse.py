@@ -30,4 +30,4 @@ class Inverse(Player):
         if index is None:
             return C
 
-        return random_choice(1 - 1 / float(abs(index)))
+        return random_choice(1 - 1 / abs(index))

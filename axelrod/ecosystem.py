@@ -24,7 +24,7 @@ class Ecosystem(object):
             elif len(population) != self.nplayers:
                 raise TypeError("Population vector must be same size as number of players")
             else:
-                norm = float(sum(population))
+                norm = sum(population)
                 self.population_sizes = [[p / norm for p in population]]
         else:
             self.population_sizes = [[1 / self.nplayers for i in range(self.nplayers)]]

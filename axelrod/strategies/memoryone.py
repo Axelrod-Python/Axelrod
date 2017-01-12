@@ -161,7 +161,7 @@ class GTFT(MemoryOnePlayer):
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
         if self.p is None:
-            self.p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
+            self.p = min(1 - (T - R) / (R - S), (R - P) / (T - P))
         four_vector = [1, self.p, 1, self.p]
         self.set_four_vector(four_vector)
 
@@ -181,7 +181,7 @@ class FirmButFair(MemoryOnePlayer):
 
     @init_args
     def __init__(self):
-        four_vector = (1, 0, 1, 2./3)
+        four_vector = (1, 0, 1, 2/3)
         super().__init__(four_vector)
         self.set_four_vector(four_vector)
 
@@ -282,7 +282,7 @@ class ZDExtort2(LRPlayer):
     name = 'ZD-Extort-2'
 
     @init_args
-    def __init__(self, phi=1./9, s=0.5):
+    def __init__(self, phi=1/9, s=0.5):
         """
         Parameters
 
@@ -307,7 +307,7 @@ class ZDExtort2v2(LRPlayer):
     name = 'ZD-Extort-2 v2'
 
     @init_args
-    def __init__(self, phi=1./8, s=0.5, l=1):
+    def __init__(self, phi=1/8, s=0.5, l=1):
         """
         Parameters
 
@@ -332,7 +332,7 @@ class ZDExtort4(LRPlayer):
     name = 'ZD-Extort-4'
 
     @init_args
-    def __init__(self, phi=4./17, s=0.25, l=1):
+    def __init__(self, phi=4/17, s=0.25, l=1):
         """
         Parameters
 
@@ -356,7 +356,7 @@ class ZDGen2(LRPlayer):
     name = 'ZD-GEN-2'
 
     @init_args
-    def __init__(self, phi=1./8, s=0.5, l=3):
+    def __init__(self, phi=1/8, s=0.5, l=3):
         """
         Parameters
 
@@ -405,7 +405,7 @@ class ZDSet2(LRPlayer):
     name = 'ZD-SET-2'
 
     @init_args
-    def __init__(self, phi=1./4, s=0., l=2):
+    def __init__(self, phi=1/4, s=0., l=2):
         """
         Parameters
 

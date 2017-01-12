@@ -109,12 +109,12 @@ class RevisedDowning(Player):
                 if opponent.history[-1] == C:
                     self.nice2 += 1
                 self.total_D += 1
-                self.bad = float(self.nice2) / self.total_D
+                self.bad = self.nice2 / self.total_D
             else:
                 if opponent.history[-1] == C:
                     self.nice1 += 1
                 self.total_C += 1
-                self.good = float(self.nice1) / self.total_C
+                self.good = self.nice1 / self.total_C
         # Make a decision based on the accrued counts
         c = 6.0 * self.good - 8.0 * self.bad - 2
         alt = 4.0 * self.good - 5.0 * self.bad - 1
@@ -183,7 +183,7 @@ class Feld(Player):
         something simple that decreases monotonically from 1.0 to 0.5 over
         200 rounds."""
         diff = (self._end_coop_prob - self._start_coop_prob)
-        slope = diff / float(self._rounds_of_decay)
+        slope = diff / self._rounds_of_decay
         rounds = len(self.history)
         return max(self._start_coop_prob + slope * rounds,
                    self._end_coop_prob)
@@ -229,7 +229,7 @@ class Grofman(Player):
             return opponent.history[-1]
         if self.history[-1] == opponent.history[-1]:
             return C
-        return random_choice(2./ 7)
+        return random_choice(2 / 7)
 
 
 
@@ -437,7 +437,7 @@ class Tullock(Player):
         if len(self.history) < rounds:
             return C
         cooperate_count = opponent.history[-rounds:].count(C)
-        prop_cooperate = cooperate_count / float(rounds)
+        prop_cooperate = cooperate_count / rounds
         prob_cooperate = max(0, prop_cooperate - 0.10)
         return random_choice(prob_cooperate)
 
@@ -480,5 +480,5 @@ class UnnamedStrategy(Player):
 
     @staticmethod
     def strategy(opponent):
-        r = random.uniform(3, 7) / float(10)
+        r = random.uniform(3, 7) / 10
         return random_choice(r)

@@ -189,9 +189,9 @@ class RandomHunter(Player):
         if n > 10:
             probabilities = []
             if self.cooperations > 5:
-                probabilities.append(1.0 * self.countCC / self.cooperations)
+                probabilities.append(self.countCC / self.cooperations)
             if self.defections > 5:
-                probabilities.append(1.0 * self.countDD / self.defections)
+                probabilities.append(self.countDD / self.defections)
             if probabilities and all([abs(p - 0.5) < 0.25 for p in probabilities]):
                 return D
         return C

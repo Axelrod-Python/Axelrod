@@ -37,13 +37,13 @@ class Champion(Player):
         # Cooperate for the first 1/20-th of the game
         if current_round == 0:
             return C
-        if current_round < expected_length / 20.:
+        if current_round < expected_length / 20:
             return C
         # Mirror partner for the next phase
-        if current_round < expected_length * 5 / 40.:
+        if current_round < expected_length * 5 / 40:
             return opponent.history[-1]
         # Now cooperate unless all of the necessary conditions are true
-        defection_prop = float(opponent.defections) / len(opponent.history)
+        defection_prop = opponent.defections / len(opponent.history)
         if opponent.history[-1] == D:
             r = random.random()
             if defection_prop > max(0.4, r):
@@ -83,7 +83,7 @@ class Eatherley(Player):
             return C
         # Respond to defections with probability equal to opponent's total
         # proportion of defections
-        defection_prop = float(opponent.defections) / len(opponent.history)
+        defection_prop = opponent.defections / len(opponent.history)
         return random_choice(1 - defection_prop)
 
 
