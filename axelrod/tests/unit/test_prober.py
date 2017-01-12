@@ -299,7 +299,7 @@ class TestRemorsefulProber(TestPlayer):
         opponent = axelrod.Cooperator()
 
         test_responses(self, player, opponent, [C], [C], [C],
-                       random_seed=0, attrs={'probing': False})
+                       random_seed=3, attrs={'probing': False})
 
         test_responses(self, player, opponent, [C], [C], [D],
                        random_seed=1, attrs={'probing': True})
