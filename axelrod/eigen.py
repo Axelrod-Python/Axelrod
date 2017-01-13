@@ -6,23 +6,28 @@ eigenvectors.
 """
 
 import numpy
+from typing import NamedTuple
 
 
-def normalise(nvec):
+Eigenvector = NamedTuple('Eigenvector',
+			[('vector', numpy.ndarray), ('eigenvalue', float)])
+
+
+def normalise(nvec: numpy.ndarray) -> numpy.ndarray:
     """Normalises the given numpy array."""
     with numpy.errstate(invalid='ignore'):
         result = nvec / numpy.sqrt(numpy.dot(nvec, nvec))
     return result
 
 
-def squared_error(vector_1, vector_2):
+def squared_error(vector_1: numpy.ndarray, vector_2: numpy.ndarray) -> float:
     """Computes the squared error between two numpy arrays."""
     diff = vector_1 - vector_2
     s = numpy.dot(diff, diff)
     return numpy.sqrt(s)
 
 
-def power_iteration(mat, initial):
+def power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray:
     """
     Generator of successive approximations.
 
@@ -44,7 +49,7 @@ def power_iteration(mat, initial):
         yield vec
 
 
-def principal_eigenvector(mat, maximum_iterations=1000, max_error=1e-3):
+def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000, max_error=1e-3) -> Eigenvector:
     """
     Computes the (normalised) principal eigenvector of the given matrix.
 
