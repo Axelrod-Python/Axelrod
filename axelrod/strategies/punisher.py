@@ -150,8 +150,16 @@ class LevelPunisher(Player):
         if self.grudge_memory >= self.mem_length:
             self.grudge_memory = 0
             self.grudged = False
-
         
+        if self.grudged:
+            self.grudge_memory += 1
+            return D
+        elif len(opponent.history) <= 10: return D
+            else:
+                if float(len(opponent.history) - sum(opponent.history)) / len(opponent.history) > 0.2:
+                    return C
+                else: return D
+
     def reset(self):
         """Resets internal variables and history"""
         Player.reset(self)
