@@ -6,11 +6,7 @@ eigenvectors.
 """
 
 import numpy
-from typing import NamedTuple
-
-
-Eigenvector = NamedTuple('Eigenvector',
-			[('vector', numpy.ndarray), ('eigenvalue', float)])
+from typing import Tuple
 
 
 def normalise(nvec: numpy.ndarray) -> numpy.ndarray:
@@ -49,7 +45,7 @@ def power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray:
         yield vec
 
 
-def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000, max_error=1e-3) -> Eigenvector:
+def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000, max_error=1e-3) -> Tuple[numpy.ndarray, float]:
     """
     Computes the (normalised) principal eigenvector of the given matrix.
 
