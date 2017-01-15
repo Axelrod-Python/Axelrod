@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -24,7 +24,6 @@ class Adaptive(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, initial_plays=None):
         super().__init__()
         if not initial_plays:

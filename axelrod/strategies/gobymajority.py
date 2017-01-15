@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 
 import copy
 
@@ -29,7 +29,6 @@ class GoByMajority(Player):
         'memory_depth': float('inf')  # memory_depth may be altered by __init__
     }
 
-    @init_args
     def __init__(self, memory_depth=float('inf'), soft=True):
         """
         Parameters
@@ -86,7 +85,6 @@ class GoByMajority40(GoByMajority):
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 40
 
-    @init_args
     def __init__(self, memory_depth=40, soft=True):
         super().__init__(memory_depth=memory_depth, soft=soft)
 
@@ -99,7 +97,6 @@ class GoByMajority20(GoByMajority):
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 20
 
-    @init_args
     def __init__(self, memory_depth=20, soft=True):
         super().__init__(memory_depth=memory_depth, soft=soft)
 
@@ -112,7 +109,6 @@ class GoByMajority10(GoByMajority):
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 10
 
-    @init_args
     def __init__(self, memory_depth=10, soft=True):
         super().__init__(memory_depth=memory_depth, soft=soft)
 
@@ -125,7 +121,6 @@ class GoByMajority5(GoByMajority):
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 5
 
-    @init_args
     def __init__(self, memory_depth=5, soft=True):
         super().__init__(memory_depth=memory_depth, soft=soft)
 
@@ -140,7 +135,6 @@ class HardGoByMajority(GoByMajority):
     """
     name = 'Hard Go By Majority'
 
-    @init_args
     def __init__(self, memory_depth=float('inf'), soft=False):
         super().__init__(memory_depth=memory_depth, soft=soft)
 
@@ -153,7 +147,6 @@ class HardGoByMajority40(HardGoByMajority):
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 40
 
-    @init_args
     def __init__(self, memory_depth=40, soft=False):
         super().__init__(memory_depth=memory_depth, soft=soft)
 
@@ -166,7 +159,6 @@ class HardGoByMajority20(HardGoByMajority):
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 20
 
-    @init_args
     def __init__(self, memory_depth=20, soft=False):
         super().__init__(memory_depth=memory_depth, soft=soft)
 
@@ -179,7 +171,6 @@ class HardGoByMajority10(HardGoByMajority):
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 10
 
-    @init_args
     def __init__(self, memory_depth=10, soft=False):
         super().__init__(memory_depth=memory_depth, soft=soft)
 
@@ -192,6 +183,5 @@ class HardGoByMajority5(HardGoByMajority):
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 5
 
-    @init_args
     def __init__(self, memory_depth=5, soft=False):
         super().__init__(memory_depth=memory_depth, soft=soft)

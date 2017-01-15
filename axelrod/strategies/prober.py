@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args, random_choice
+from axelrod import Actions, Player, random_choice
 
 import random
 
@@ -256,7 +256,6 @@ class NaiveProber(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, p=0.1):
         """
         Parameters
@@ -313,7 +312,6 @@ class RemorsefulProber(NaiveProber):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, p=0.1):
         super().__init__(p)
         self.probing = False

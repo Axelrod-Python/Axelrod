@@ -4,7 +4,7 @@ Additional strategies from Axelrod's first tournament.
 
 import random
 
-from axelrod import Actions, Player, init_args, flip_action, random_choice
+from axelrod import Actions, Player, flip_action, random_choice
 
 from.memoryone import MemoryOnePlayer
 
@@ -34,7 +34,6 @@ class Davis(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, rounds_to_cooperate=10):
         """
         Parameters
@@ -76,7 +75,6 @@ class RevisedDowning(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, revised=True):
         super().__init__()
         self.revised = revised
@@ -159,7 +157,6 @@ class Feld(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
                  rounds_of_decay=200):
         """
@@ -248,7 +245,6 @@ class Joss(MemoryOnePlayer):
 
     name = "Joss"
 
-    @init_args
     def __init__(self, p=0.9):
         """
         Parameters
@@ -269,7 +265,7 @@ class Nydegger(Player):
     """
     Submitted to Axelrod's first tournament by Rudy Nydegger.
 
-    The program begins with tit for tat for the first three moves, except 
+    The program begins with tit for tat for the first three moves, except
     that if it was the only one to cooperate on the first move and the only one to defect on the second move, it defects on the third move. After the third move, its choice is determined from the 3 preceding outcomes in the following manner.
 
     Let A be the sum formed by counting the other's defection as 2 points and one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding three moves in chronological order. The choice can be described as defecting only when A equals 1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
@@ -420,7 +416,6 @@ class Tullock(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, rounds_to_cooperate=11):
         """
         Parameters
@@ -458,7 +453,7 @@ class UnnamedStrategy(Player):
     score than the other player. Unfortunately, the complex process of adjustment
     frequently left the probability of cooperation in the 30% to 70% range, and
     therefore the rule appeared random to many other players.
-    
+
     Names:
 
     - Unnamed Strategy: [Axelrod1980]_

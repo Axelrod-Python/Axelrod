@@ -1,4 +1,4 @@
-from axelrod import Player, init_args, random_choice
+from axelrod import Player, random_choice
 
 
 class Random(Player):
@@ -21,7 +21,6 @@ class Random(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, p=0.5):
         """
         Parameters

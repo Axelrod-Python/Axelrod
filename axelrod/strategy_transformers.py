@@ -191,7 +191,8 @@ def dual_wrapper(player, opponent, proposed_action):
     action: an axelrod.Action, C or D
     """
     if not player.history:
-        player.original_player = player.original_class(*player.init_args)
+        player.original_player = player.original_class(*player.init_args,
+                                                       **player.init_kwargs)
 
     action = player.original_player.strategy(opponent)
     player.original_player.history.append(action)

@@ -1,7 +1,7 @@
 # Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
 # Original Author: Martin Jones, @mojones
 
-from axelrod import Actions, Player, init_args, load_weights
+from axelrod import Actions, Player, load_weights
 
 C, D = Actions.C, Actions.D
 nn_weights = load_weights()
@@ -62,7 +62,6 @@ class ANN(Player):
         'long_run_time': False
     }
 
-    @init_args
     def __init__(self, weights, num_features, num_hidden):
         super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
@@ -189,7 +188,6 @@ class EvolvedANN(ANN):
 
     name = "Evolved ANN"
 
-    @init_args
     def __init__(self):
         num_features, num_hidden, weights = nn_weights["Evolved ANN"]
         super().__init__(weights, num_features, num_hidden)
@@ -207,7 +205,6 @@ class EvolvedANN5(ANN):
 
     name = "Evolved ANN 5"
 
-    @init_args
     def __init__(self):
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5"]
         super().__init__(weights, num_features, num_hidden)
@@ -225,7 +222,6 @@ class EvolvedANNNoise05(ANN):
 
     name = "Evolved ANN 5 Noise 05"
 
-    @init_args
     def __init__(self):
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
         super().__init__(weights, num_features, num_hidden)

@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -19,7 +19,6 @@ class Grumpy(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, starting_state='Nice', grumpy_threshold=10,
                  nice_threshold=-10):
         """

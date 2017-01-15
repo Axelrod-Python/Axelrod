@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class Forgiver(Player):
     """
     A player starts by cooperating however will defect if at any point
