@@ -3,6 +3,7 @@ from axelrod import Actions, Player, init_args, random_choice
 
 C, D = Actions.C, Actions.D
 
+
 class MemoryOnePlayer(Player):
     """Uses a four-vector for strategies based on the last round of play,
     (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift.

@@ -89,12 +89,20 @@ class TestAlternatorHunter(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C] * 2, [C, D], [C])
-        self.responses_test([C] * 3, [C, D, C], [C])
-        self.responses_test([C] * 4, [C, D] * 2, [C])
-        self.responses_test([C] * 5, [C, D] * 2 + [C], [C])
-        self.responses_test([C] * 6, [C, D] * 3, [D])
-        self.responses_test([C] * 7, [C, D] * 3 + [C], [D])
+        self.responses_test([C] * 2, [C, D], [C], attrs={'is_alt': False})
+        self.responses_test([C] * 3, [C, D, C], [C], attrs={'is_alt': False})
+        self.responses_test([C] * 4, [C, D] * 2, [C], attrs={'is_alt': False})
+        self.responses_test([C] * 5, [C, D] * 2 + [C], [C],
+                            attrs={'is_alt': False})
+        self.responses_test([C] * 6, [C, D] * 3, [D], attrs={'is_alt': True})
+        self.responses_test([C] * 7, [C, D] * 3 + [C], [D],
+                            attrs={'is_alt': True})
+
+    def test_reset_attr(self):
+        p = self.player()
+        p.is_alt = True
+        p.reset()
+        self.assertFalse(p.is_alt)
 
 
 class TestCycleHunter(TestPlayer):
@@ -122,6 +130,7 @@ class TestCycleHunter(TestPlayer):
                 player.play(opponent)
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers
+        axelrod.seed(40)
         for opponent in [axelrod.Random(), axelrod.AntiCycler(),
                          axelrod.Cooperator(), axelrod.Defector()]:
             player.reset()
@@ -129,11 +138,17 @@ class TestCycleHunter(TestPlayer):
                 player.play(opponent)
             self.assertEqual(player.history[-1], C)
 
+    def test_reset_attr(self):
+        p = self.player()
+        p.cycle = "CCDDCD"
+        p.reset()
+        self.assertEqual(p.cycle, None)
+
 
 class TestEventualCycleHunter(TestPlayer):
 
-    name = "Cycle Hunter"
-    player = axelrod.CycleHunter
+    name = "Eventual Cycle Hunter"
+    player = axelrod.EventualCycleHunter
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
         'stochastic': False,
@@ -155,12 +170,19 @@ class TestEventualCycleHunter(TestPlayer):
                 player.play(opponent)
             self.assertEqual(player.history[-1], D)
         # Test against non-cyclers and cooperators
+        axelrod.seed(43)
         for opponent in [axelrod.Random(), axelrod.AntiCycler(),
                          axelrod.DoubleCrosser(), axelrod.Cooperator()]:
             player.reset()
             for i in range(50):
                 player.play(opponent)
             self.assertEqual(player.history[-1], C)
+
+    def test_reset_attr(self):
+        p = self.player()
+        p.cycle = "CCDDCD"
+        p.reset()
+        self.assertEqual(p.cycle, None)
 
 
 class TestMathConstantHunter(TestPlayer):

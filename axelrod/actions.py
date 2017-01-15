@@ -1,10 +1,13 @@
+from typing import NewType
+
+Action = NewType('Action', str)
 
 class Actions(object):
     C = 'C'
     D = 'D'
 
 
-def flip_action(action):
+def flip_action(action: Action) -> Action:
     if action == Actions.C:
         return Actions.D
     elif action == Actions.D:
