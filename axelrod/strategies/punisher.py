@@ -129,7 +129,7 @@ class LevelPunisher(Player):
 
     name = 'Level Punisher'
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
+        'memory_depth': 1,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -138,31 +138,9 @@ class LevelPunisher(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
-        super(LevelPunisher, self).__init__()
-        self.history = []
-        self.mem_length = 1
-        self.grudged = False
-        self.grudge_memory = 1
-        
     def strategy(self, opponent):
-        
-        if self.grudge_memory >= self.mem_length:
-            self.grudge_memory = 0
-            self.grudged = False
-        
-        if self.grudged:
-            self.grudge_memory += 1
-            return D
-        elif len(opponent.history) <= 10: return D
+        if len(opponent.history) <= 10: return D
             else:
                 if float(len(opponent.history) - sum(opponent.history)) / len(opponent.history) > 0.2:
                     return C
                 else: return D
-
-    def reset(self):
-        """Resets internal variables and history"""
-        Player.reset(self)
-        self.grudged = False
-        self.grudge_memory = 0
-        self.mem_length = 1
