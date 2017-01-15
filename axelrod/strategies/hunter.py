@@ -66,7 +66,7 @@ class AlternatorHunter(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.is_alt = False
 
     def strategy(self, opponent):
@@ -80,7 +80,7 @@ class AlternatorHunter(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.is_alt = False
 
 
@@ -100,7 +100,7 @@ class CycleHunter(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.cycle = None
 
     def strategy(self, opponent):
@@ -114,7 +114,7 @@ class CycleHunter(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.cycle = None
 
 
