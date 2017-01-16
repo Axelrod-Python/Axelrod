@@ -27,7 +27,7 @@ class Negation(Player):
     def strategy(self, opponent):
         # Random first move
         if not self.history:
-            return random_choice();
+            return random_choice()
         # Act opposite of opponent otherwise
         return flip_action(opponent.history[-1])
 

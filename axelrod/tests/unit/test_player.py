@@ -1,5 +1,4 @@
 import random
-import warnings
 import unittest
 
 import axelrod
@@ -8,6 +7,8 @@ from axelrod import DefaultGame, MockPlayer, Player, simulate_play
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
+
+# Generic strategy functions for testing
 
 def cooperate(*args):
     return C
@@ -161,7 +162,7 @@ class TestOpponent(Player):
 
 
 class TestPlayer(unittest.TestCase):
-    "A Test class from which other player test classes are inherited"
+    """A Test class from which other player test classes are inherited."""
     player = TestOpponent
     expected_class_classifier = None
 

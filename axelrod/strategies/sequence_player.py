@@ -1,6 +1,8 @@
 from axelrod import Actions, Player
 from axelrod._strategy_utils import thue_morse_generator
 
+C, D = Actions.C, Actions.D
+
 
 class SequencePlayer(Player):
     """Abstract base class for players that use a generated sequence to
@@ -87,6 +89,6 @@ class ThueMorseInverse(ThueMorse):
     def meta_strategy(self, value):
         # Switch the default cooperate and defect action on 0 or 1
         if value == 0:
-            return Actions.C
+            return C
         else:
-            return Actions.D
+            return D

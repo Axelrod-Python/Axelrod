@@ -1,4 +1,3 @@
-
 """
 Strategy Transformers -- class decorators that transform the behavior of any
 strategy.
@@ -9,7 +8,6 @@ See the various Meta strategies for another type of transformation.
 import collections
 import inspect
 import random
-
 from numpy.random import choice
 from .actions import Actions, flip_action
 from .random_ import random_choice
@@ -17,8 +15,10 @@ from .random_ import random_choice
 
 C, D = Actions.C, Actions.D
 
-# Note: After a transformation is applied, the player's history is overwritten with the modified history just like in
-# the noisy tournament case. This can lead to unexpected behavior, such as when FlipTransform is applied to Alternator.
+# Note: After a transformation is applied, the player's history is overwritten
+# with the modified history just like in the noisy tournament case. This can
+# lead to unexpected behavior, such as when FlipTransform is applied to
+# Alternator.
 
 
 def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
@@ -71,7 +71,8 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             args = self.args
             kwargs = self.kwargs
             try:
-                # If "name_prefix" in kwargs remove as only want decorator arguments
+                # If "name_prefix" in kwargs remove as only want decorator
+                # arguments
                 del kwargs["name_prefix"]
             except KeyError:
                 pass
@@ -134,7 +135,8 @@ def compose_transformers(t1, t2):
     return Composition()
 
 
-def generic_strategy_wrapper(player, opponent, proposed_action, *args, **kwargs):
+def generic_strategy_wrapper(player, opponent, proposed_action, *args,
+                             **kwargs):
     """
     Strategy wrapper functions should be of the following form.
 

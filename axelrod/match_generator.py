@@ -193,7 +193,6 @@ def graph_is_connected(edges, players):
     return player_indices == node_indices
 
 
-
 class SpatialMatches(RoundRobinMatches):
     """
     A class that generates spatially-structured matches.

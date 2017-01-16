@@ -111,7 +111,7 @@ class Match(object):
 
         i.e. One entry per turn containing a pair of actions.
         """
-        if (self._stochastic or self._cache_key not in self._cache):
+        if self._stochastic or (self._cache_key not in self._cache):
             turn = 0
             for p in self.players:
                 p.reset()

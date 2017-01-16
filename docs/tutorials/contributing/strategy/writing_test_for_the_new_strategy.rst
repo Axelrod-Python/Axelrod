@@ -6,14 +6,12 @@ where :code:`<library>.py` is the name of the file you have created or similarly
 add tests to the test file that is already present in the
 :code:`axelrod/tests/unit/` directory.
 
-Typically we want to test the following:
+Typically we want to test the following::
 
-* That the strategy behaves as intended on the first move and subsequent moves,
-triggering any expected actions
-
-* That the strategy initializes correctly
-
-* That the strategy resets and clones correctly
+    * That the strategy behaves as intended on the first move and subsequent
+    moves, triggering any expected actions
+    * That the strategy initializes correctly
+    * That the strategy resets and clones correctly
 
 If the strategy does not use any internal variables then there are generic tests
 that are automatically invoked to verify proper initialization, resetting, and
@@ -25,19 +23,20 @@ how a strategy plays.
 * `first_play_test(action, seed=None)` tests the strategy's first action, taking
 an optional random seed in case the strategy is stochastic. If so, please
 include cases where both outcomes are observed, e.g.::
-
+```
     def test_strategy(self):
         self.first_play_test(C, seed=11)
         self.first_play_test(D, seed=23)
+```
 
 * `second_play_test(rCC, rCD, rDC, rDD, seed=None)` tests the strategies actions
 in the four possible second rounds of play, depending on the move the the
 strategy and the opponent in the first round.
 
-* `responses_test(responses, history1, history2, ...)` is a powerful test that
-can handle a variety of situations, testing the first X actions, the actions
-played in response to given player histories, and can also check that internal
-attributes are set.
+* `responses_test(responses, history1=None, history2=None, ...)` is a powerful
+test that can handle a variety of situations, testing the first X actions, the
+actions played in response to given player histories, and can also check that
+internal attributes are set.
 
 As an example, the tests for Tit-For-Tat are as follows::
 
