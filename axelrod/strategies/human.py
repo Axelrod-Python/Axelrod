@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from os import linesep
 from axelrod import Actions, Player, init_args
 from prompt_toolkit import prompt
@@ -64,7 +63,7 @@ class Human(Player):
             A symbol to denote defection within the history toolbar
             and prompt
         """
-        Player.__init__(self)
+        super().__init__()
         self.name = name
         self.symbols = {
             C: c_symbol,

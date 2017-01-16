@@ -104,7 +104,7 @@ class LookerUp(Player):
         """
         If no lookup table is provided to the constructor, then use the TFT one.
         """
-        Player.__init__(self)
+        super().__init__()
 
         if not lookup_table:
             lookup_table = {
@@ -201,7 +201,7 @@ class Winner12(LookerUp):
         pattern = 'CDCDDCDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
-        LookerUp.__init__(self, lookup_table=lookup_table,
+        super().__init__(lookup_table=lookup_table,
                           initial_actions=(C, C))
 
 
@@ -221,5 +221,5 @@ class Winner21(LookerUp):
         pattern = 'CDCDCDDD'
         # Zip together the keys and the action pattern to get the lookup table.
         lookup_table = dict(zip(lookup_table_keys, pattern))
-        LookerUp.__init__(self, lookup_table=lookup_table,
+        super().__init__(lookup_table=lookup_table,
                           initial_actions=(D, C))

@@ -58,8 +58,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Axelrod'
-copyright = u'2015, Vincent Knight'
+project = 'Axelrod'
+copyright = '2015, Vincent Knight'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -216,8 +216,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'Axelrod.tex', u'Axelrod Documentation',
-   u'Vincent Knight', 'manual'),
+  ('index', 'Axelrod.tex', 'Axelrod Documentation',
+   'Vincent Knight', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -246,8 +246,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'axelrod', u'Axelrod Documentation',
-     [u'Vincent Knight'], 1)
+    ('index', 'axelrod', 'Axelrod Documentation',
+     ['Vincent Knight'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -260,8 +260,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'Axelrod', u'Axelrod Documentation',
-   u'Vincent Knight', 'Axelrod', 'One line description of project.',
+  ('index', 'Axelrod', 'Axelrod Documentation',
+   'Vincent Knight', 'Axelrod', 'One line description of project.',
    'Miscellaneous'),
 ]
 

@@ -64,7 +64,7 @@ class ANN(Player):
 
     @init_args
     def __init__(self, weights, num_features, num_hidden):
-        Player.__init__(self)
+        super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
         self.input_to_hidden_layer_weights = i2h
         self.hidden_to_output_layer_weights = h2o
@@ -192,7 +192,7 @@ class EvolvedANN(ANN):
     @init_args
     def __init__(self):
         num_features, num_hidden, weights = nn_weights["Evolved ANN"]
-        ANN.__init__(self, weights, num_features, num_hidden)
+        super().__init__(weights, num_features, num_hidden)
 
 
 class EvolvedANN5(ANN):
@@ -210,7 +210,7 @@ class EvolvedANN5(ANN):
     @init_args
     def __init__(self):
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5"]
-        ANN.__init__(self, weights, num_features, num_hidden)
+        super().__init__(weights, num_features, num_hidden)
 
 
 class EvolvedANNNoise05(ANN):
@@ -228,4 +228,4 @@ class EvolvedANNNoise05(ANN):
     @init_args
     def __init__(self):
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
-        ANN.__init__(self, weights, num_features, num_hidden)
+        super().__init__(weights, num_features, num_hidden)

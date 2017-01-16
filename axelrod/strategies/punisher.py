@@ -29,7 +29,7 @@ class Punisher(Player):
         """
         Initialised the player
         """
-        super(Punisher, self).__init__()
+        super().__init__()
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1
@@ -58,7 +58,7 @@ class Punisher(Player):
         """
         Resets scores and history
         """
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1
@@ -87,7 +87,7 @@ class InversePunisher(Player):
     }
 
     def __init__(self):
-        super(InversePunisher, self).__init__()
+        super().__init__()
         self.history = []
         self.mem_length = 1
         self.grudged = False
@@ -115,7 +115,7 @@ class InversePunisher(Player):
 
     def reset(self):
         """Resets internal variables and history"""
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1

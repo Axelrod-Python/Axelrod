@@ -30,7 +30,7 @@ class MEM2(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.players = {
             "TFT" : TitForTat(),
             "TFTT": TitFor2Tats(),
@@ -62,7 +62,7 @@ class MEM2(Player):
         return self.players[self.play_as].strategy(opponent)
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         for v in self.players.values():
             v.reset()
         self.play_as = "TFT"

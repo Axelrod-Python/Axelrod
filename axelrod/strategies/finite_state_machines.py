@@ -55,7 +55,7 @@ class FSMPlayer(Player):
             transitions = [(1, C, 1, C), (1, D, 1, D)]
             initial_state = 1
             initial_action = C
-        Player.__init__(self)
+        super().__init__()
         self.initial_state = initial_state
         self.initial_action = initial_action
         self.fsm = SimpleFSM(transitions, initial_state)
@@ -71,7 +71,7 @@ class FSMPlayer(Player):
             return action
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.fsm.state = self.initial_state
 
 
@@ -102,7 +102,7 @@ class Fortress3(FSMPlayer):
             (3, D, 1, D)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=D)
+        super().__init__(transitions, initial_state=1, initial_action=D)
 
 
 class Fortress4(FSMPlayer):
@@ -134,7 +134,7 @@ class Fortress4(FSMPlayer):
             (4, D, 1, D)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=D)
+        super().__init__(transitions, initial_state=1, initial_action=D)
 
 
 class Predator(FSMPlayer):
@@ -174,7 +174,7 @@ class Predator(FSMPlayer):
             (8, D, 6, D)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=C)
+        super().__init__(transitions, initial_state=1, initial_action=C)
 
 
 class Pun1(FSMPlayer):
@@ -204,7 +204,7 @@ class Pun1(FSMPlayer):
             (2, D, 1, D)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=D)
+        super().__init__(transitions, initial_state=1, initial_action=D)
 
 
 class Raider(FSMPlayer):
@@ -234,7 +234,7 @@ class Raider(FSMPlayer):
             (3, D, 1, C)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=D)
+        super().__init__(transitions, initial_state=0, initial_action=D)
 
 
 class Ripoff(FSMPlayer):
@@ -262,7 +262,7 @@ class Ripoff(FSMPlayer):
             (3, D, 3, D)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=D)
+        super().__init__(transitions, initial_state=1, initial_action=D)
 
 
 class SolutionB1(FSMPlayer):
@@ -290,7 +290,7 @@ class SolutionB1(FSMPlayer):
             (3, D, 3, C)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=D)
+        super().__init__(transitions, initial_state=1, initial_action=D)
 
 
 class SolutionB5(FSMPlayer):
@@ -324,7 +324,7 @@ class SolutionB5(FSMPlayer):
             (6, D, 5, D)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=D)
+        super().__init__(transitions, initial_state=1, initial_action=D)
 
 
 class Thumper(FSMPlayer):
@@ -350,7 +350,7 @@ class Thumper(FSMPlayer):
             (2, D, 1, D)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=1, initial_action=C)
+        super().__init__(transitions, initial_state=1, initial_action=C)
 
 
 class EvolvedFSM4(FSMPlayer):
@@ -386,7 +386,7 @@ class EvolvedFSM4(FSMPlayer):
             (3, D, 1, D)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
+        super().__init__(transitions, initial_state=0, initial_action=C)
 
 
 class EvolvedFSM16(FSMPlayer):
@@ -447,7 +447,7 @@ class EvolvedFSM16(FSMPlayer):
             (15, D, 2, C)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
+        super().__init__(transitions, initial_state=0, initial_action=C)
 
 
 class EvolvedFSM16Noise05(FSMPlayer):
@@ -508,4 +508,4 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (15, D, 11, C)
         )
 
-        FSMPlayer.__init__(self, transitions, initial_state=0, initial_action=C)
+        super().__init__(transitions, initial_state=0, initial_action=C)

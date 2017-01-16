@@ -66,7 +66,7 @@ class AlternatorHunter(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.is_alt = False
 
     def strategy(self, opponent):
@@ -80,7 +80,7 @@ class AlternatorHunter(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.is_alt = False
 
 
@@ -100,7 +100,7 @@ class CycleHunter(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.cycle = None
 
     def strategy(self, opponent):
@@ -114,7 +114,7 @@ class CycleHunter(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.cycle = None
 
 
@@ -193,7 +193,7 @@ class RandomHunter(Player):
     def __init__(self):
         self.countCC = 0
         self.countDD = 0
-        Player.__init__(self)
+        super().__init__()
 
     def strategy(self, opponent):
         """
@@ -212,9 +212,9 @@ class RandomHunter(Player):
         if n > 10:
             probabilities = []
             if self.cooperations > 5:
-                probabilities.append(1.0 * self.countCC / self.cooperations)
+                probabilities.append(self.countCC / self.cooperations)
             if self.defections > 5:
-                probabilities.append(1.0 * self.countDD / self.defections)
+                probabilities.append(self.countDD / self.defections)
             if probabilities and all([abs(p - 0.5) < 0.25 for p in probabilities]):
                 return D
         return C
@@ -222,4 +222,4 @@ class RandomHunter(Player):
     def reset(self):
         self.countCC = 0
         self.countDD = 0
-        Player.reset(self)
+        super().reset()

@@ -20,7 +20,7 @@ class OnceBitten(Player):
     }
 
     def __init__(self):
-        super(OnceBitten, self).__init__()
+        super().__init__()
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0
@@ -47,7 +47,7 @@ class OnceBitten(Player):
 
     def reset(self):
         """Resets grudge memory and history."""
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
 
@@ -103,7 +103,7 @@ class ForgetfulFoolMeOnce(Player):
         forget_probability, float
             The probability of forgetting the count of opponent defections.
         """
-        Player.__init__(self)
+        super().__init__()
         self.D_count = 0
         self._initial = C
         self.forget_probability = forget_probability
@@ -121,7 +121,7 @@ class ForgetfulFoolMeOnce(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.D_count = 0
 
 

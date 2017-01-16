@@ -42,7 +42,7 @@ class GoByMajority(Player):
             cooperation and defection probabilities are equal.
         """
 
-        Player.__init__(self)
+        super().__init__()
         self.soft = soft
         self.classifier['memory_depth'] = memory_depth
         if self.classifier['memory_depth'] < float('inf'):
@@ -88,8 +88,7 @@ class GoByMajority40(GoByMajority):
 
     @init_args
     def __init__(self, memory_depth=40, soft=True):
-        super(GoByMajority40, self).__init__(memory_depth=memory_depth,
-                                             soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)
 
 
 class GoByMajority20(GoByMajority):
@@ -102,8 +101,7 @@ class GoByMajority20(GoByMajority):
 
     @init_args
     def __init__(self, memory_depth=20, soft=True):
-        super(GoByMajority20, self).__init__(memory_depth=memory_depth,
-                                                 soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)
 
 
 class GoByMajority10(GoByMajority):
@@ -116,8 +114,7 @@ class GoByMajority10(GoByMajority):
 
     @init_args
     def __init__(self, memory_depth=10, soft=True):
-        super(GoByMajority10, self).__init__(memory_depth=memory_depth,
-                                                 soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)
 
 
 class GoByMajority5(GoByMajority):
@@ -130,8 +127,7 @@ class GoByMajority5(GoByMajority):
 
     @init_args
     def __init__(self, memory_depth=5, soft=True):
-        super(GoByMajority5, self).__init__(memory_depth=memory_depth,
-                                                soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)
 
 
 class HardGoByMajority(GoByMajority):
@@ -146,8 +142,7 @@ class HardGoByMajority(GoByMajority):
 
     @init_args
     def __init__(self, memory_depth=float('inf'), soft=False):
-        super(HardGoByMajority, self).__init__(memory_depth=memory_depth,
-                                               soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)
 
 
 class HardGoByMajority40(HardGoByMajority):
@@ -160,8 +155,7 @@ class HardGoByMajority40(HardGoByMajority):
 
     @init_args
     def __init__(self, memory_depth=40, soft=False):
-        super(HardGoByMajority40, self).__init__(memory_depth=memory_depth,
-                                                 soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)
 
 
 class HardGoByMajority20(HardGoByMajority):
@@ -174,8 +168,7 @@ class HardGoByMajority20(HardGoByMajority):
 
     @init_args
     def __init__(self, memory_depth=20, soft=False):
-        super(HardGoByMajority20, self).__init__(memory_depth=memory_depth,
-                                                 soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)
 
 
 class HardGoByMajority10(HardGoByMajority):
@@ -188,8 +181,7 @@ class HardGoByMajority10(HardGoByMajority):
 
     @init_args
     def __init__(self, memory_depth=10, soft=False):
-        super(HardGoByMajority10, self).__init__(memory_depth=memory_depth,
-                                                 soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)
 
 
 class HardGoByMajority5(HardGoByMajority):
@@ -202,5 +194,4 @@ class HardGoByMajority5(HardGoByMajority):
 
     @init_args
     def __init__(self, memory_depth=5, soft=False):
-        super(HardGoByMajority5, self).__init__(memory_depth=memory_depth,
-                                                soft=soft)
+        super().__init__(memory_depth=memory_depth, soft=soft)

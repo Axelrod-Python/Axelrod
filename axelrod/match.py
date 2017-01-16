@@ -171,7 +171,7 @@ class Match(object):
         """
         return iu.compute_normalised_state_distribution(self.result)
 
-    def sparklines(self, c_symbol=u'█', d_symbol=u' '):
+    def sparklines(self, c_symbol='█', d_symbol=' '):
         return iu.compute_sparklines(self.result, c_symbol, d_symbol)
 
     def __len__(self):

@@ -99,7 +99,7 @@ class TestGTFT(TestPlayer):
 
     def test_four_vector(self):
         (R, P, S, T) = Game().RPST()
-        p = min(1 - float(T - R) / (R - S), float(R - P) / (T - P))
+        p = min(1 - (T - R) / (R - S), (R - P) / (T - P))
         expected_dictionary = {(C, C): 1., (C, D): p, (D, C): 1., (D, D): p}
         test_four_vector(self, expected_dictionary)
 
@@ -124,7 +124,7 @@ class TestFirmButFair(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 1, (C, D): 0, (D, C): 1, (D, D): 2./3}
+        expected_dictionary = {(C, C): 1, (C, D): 0, (D, C): 1, (D, D): 2/3}
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
@@ -239,7 +239,7 @@ class TestZDExtort2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 8./9, (C, D): 0.5, (D, C): 1./3,
+        expected_dictionary = {(C, C): 8/9, (C, D): 0.5, (D, C): 1/3,
                                (D, D): 0.}
         test_four_vector(self, expected_dictionary)
 
@@ -268,7 +268,7 @@ class TestZDExtort2v2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 7./8, (C, D): 7./16, (D, C): 3./8,
+        expected_dictionary = {(C, C): 7/8, (C, D): 7/16, (D, C): 3/8,
                                (D, D): 0.}
         test_four_vector(self, expected_dictionary)
 
@@ -291,7 +291,7 @@ class TestZDExtort4(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 11./17, (C, D): 0, (D, C): 8./17,
+        expected_dictionary = {(C, C): 11/17, (C, D): 0, (D, C): 8/17,
                                (D, D): 0.}
         test_four_vector(self, expected_dictionary)
 
@@ -314,8 +314,8 @@ class TestZDGen2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 1, (C, D): 9./16, (D, C): 1./2,
-                               (D, D): 1./8}
+        expected_dictionary = {(C, C): 1, (C, D): 9/16, (D, C): 1/2,
+                               (D, D): 1/8}
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
@@ -336,7 +336,7 @@ class TestZDGTFT2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 1., (C, D): 1./8, (D, C): 1.,
+        expected_dictionary = {(C, C): 1., (C, D): 1/8, (D, C): 1.,
                                (D, D): 0.25}
         test_four_vector(self, expected_dictionary)
 
@@ -365,8 +365,8 @@ class TestZDSet2(TestPlayer):
     }
 
     def test_four_vector(self):
-        expected_dictionary = {(C, C): 3./4, (C, D): 1./4, (D, C): 1./2,
-                               (D, D): 1./4}
+        expected_dictionary = {(C, C): 3/4, (C, D): 1/4, (D, C): 1/2,
+                               (D, D): 1/4}
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):

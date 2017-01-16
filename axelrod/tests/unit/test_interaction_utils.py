@@ -26,7 +26,7 @@ class TestMatch(unittest.TestCase):
                                      Counter({('D', 'C'): 1.0}),
                                      Counter({('C', 'C'): 0.5, ('C', 'D'): 0.5}),
                                      None]
-    sparklines = [ u'█ \n █', u'  \n██', u'██\n█ ', None ]
+    sparklines = [ '█ \n █', '  \n██', '██\n█ ', None ]
 
 
     def test_compute_scores(self):

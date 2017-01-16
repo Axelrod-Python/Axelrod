@@ -52,7 +52,7 @@ class ForgetfulGrudger(Player):
 
     def __init__(self):
         """Initialised the player."""
-        super(ForgetfulGrudger, self).__init__()
+        super().__init__()
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0
@@ -74,7 +74,7 @@ class ForgetfulGrudger(Player):
 
     def reset(self):
         """Resets scores and history."""
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
 
@@ -151,7 +151,7 @@ class SoftGrudger(Player):
 
     def __init__(self):
         """Initialised the player."""
-        super(SoftGrudger, self).__init__()
+        super().__init__()
         self.grudged = False
         self.grudge_memory = 0
 
@@ -172,7 +172,7 @@ class SoftGrudger(Player):
 
     def reset(self):
         """Resets scores and history."""
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
 

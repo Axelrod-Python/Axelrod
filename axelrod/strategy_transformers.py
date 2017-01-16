@@ -361,7 +361,7 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
         mutate_prob = sum(probability)  # Prob of mutation
         if mutate_prob > 0:
             # Distribution of choice of mutation:
-            normalised_prob = [prob / float(mutate_prob)
+            normalised_prob = [prob / mutate_prob
                                for prob in probability]
             if random.random() < mutate_prob:
                 p = choice(list(m_player), p=normalised_prob)()

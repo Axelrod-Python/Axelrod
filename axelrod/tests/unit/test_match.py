@@ -134,12 +134,12 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.final_score_per_turn(), None)
         match.play()
-        self.assertEqual(match.final_score_per_turn(), (2/float(turns), 7/float(turns)))
+        self.assertEqual(match.final_score_per_turn(), (2/turns, 7/turns))
 
         match = axelrod.Match((player2, player1), turns)
         self.assertEqual(match.final_score_per_turn(), None)
         match.play()
-        self.assertEqual(match.final_score_per_turn(), (7/float(turns), 2/float(turns)))
+        self.assertEqual(match.final_score_per_turn(), (7/turns, 2/turns))
 
     def test_winner(self):
         player1 = axelrod.TitForTat()
@@ -187,7 +187,7 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.normalised_cooperation(), None)
         match.play()
-        self.assertEqual(match.normalised_cooperation(), (3/float(turns), 2/float(turns)))
+        self.assertEqual(match.normalised_cooperation(), (3/turns, 2/turns))
 
         player1 = axelrod.Alternator()
         player2 = axelrod.Defector()
@@ -195,13 +195,13 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.normalised_cooperation(), None)
         match.play()
-        self.assertEqual(match.normalised_cooperation(), (2/float(turns), 0/float(turns)))
+        self.assertEqual(match.normalised_cooperation(), (2/turns, 0/turns))
 
     def test_sparklines(self):
         players = (axelrod.Cooperator(), axelrod.Alternator())
         match = axelrod.Match(players, 4)
         match.play()
-        expected_sparklines = u'████\n█ █ '
+        expected_sparklines = '████\n█ █ '
         self.assertEqual(match.sparklines(), expected_sparklines)
-        expected_sparklines = u'XXXX\nXYXY'
+        expected_sparklines = 'XXXX\nXYXY'
         self.assertEqual(match.sparklines('X', 'Y'), expected_sparklines)

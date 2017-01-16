@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from collections import defaultdict
 from multiprocessing import Process, Queue, cpu_count
 from tempfile import NamedTemporaryFile
@@ -372,7 +370,7 @@ class ProbEndTournament(Tournament):
         with_morality : boolean
             Whether morality metrics should be calculated
         """
-        super(ProbEndTournament, self).__init__(
+        super().__init__(
             players, name=name, game=game, turns=float("inf"),
             repetitions=repetitions, noise=noise, with_morality=with_morality)
 
@@ -406,7 +404,7 @@ class SpatialTournament(Tournament):
         with_morality : boolean
             Whether morality metrics should be calculated
         """
-        super(SpatialTournament, self).__init__(
+        super().__init__(
             players, name=name, game=game, turns=turns,
             repetitions=repetitions, noise=noise, with_morality=with_morality)
 
@@ -443,7 +441,7 @@ class ProbEndSpatialTournament(ProbEndTournament):
         with_morality : boolean
             Whether morality metrics should be calculated
         """
-        super(ProbEndSpatialTournament, self).__init__(
+        super().__init__(
             players, name=name, game=game, prob_end=prob_end,
             repetitions=repetitions, noise=noise, with_morality=with_morality)
 

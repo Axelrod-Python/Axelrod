@@ -233,7 +233,7 @@ class Plot(object):
         ticks = []
         for i, n in enumerate(self.result_set.ranked_names):
             x = -0.01
-            y = (i + 0.5) * 1.0 / self.result_set.nplayers
+            y = (i + 0.5) * 1 / self.result_set.nplayers
             ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False,
                              va='center', ha='right', fontsize=5)
             ticks.append(y)

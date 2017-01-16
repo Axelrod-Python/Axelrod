@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 import unittest
 import axelrod
 from axelrod.tests.property import (strategy_lists,

@@ -46,7 +46,7 @@ def compute_final_score_per_turn(interactions, game=None):
         return None
 
     final_score_per_turn = tuple(
-        sum([score[player_index] for score in scores]) / (float(num_turns))
+        sum([score[player_index] for score in scores]) / num_turns
         for player_index in [0, 1])
     return final_score_per_turn
 
@@ -83,7 +83,7 @@ def compute_normalised_cooperation(interactions):
     num_turns = len(interactions)
     cooperation = compute_cooperations(interactions)
 
-    normalised_cooperation = tuple([c / float(num_turns) for c in cooperation])
+    normalised_cooperation = tuple([c / num_turns for c in cooperation])
 
     return normalised_cooperation
 
@@ -129,22 +129,19 @@ def compute_normalised_state_distribution(interactions):
         return None
 
     interactions_count = Counter(interactions)
-    total = sum(interactions_count.values(), 0.0)
-    # By starting the sum with 0.0 we make sure total is a floating point value,
-    # avoiding the Python 2 floor division behaviour of / with integer operands
-    # (Stack Overflow)
+    total = sum(interactions_count.values(), 0)
 
     normalized_count = Counter({key: value / total for key, value in
                                 interactions_count.items()})
     return normalized_count
 
 
-def sparkline(actions, c_symbol=u'█', d_symbol=u' '):
-    return u''.join([
+def sparkline(actions, c_symbol='█', d_symbol=' '):
+    return ''.join([
         c_symbol if play == 'C' else d_symbol for play in actions])
 
 
-def compute_sparklines(interactions, c_symbol=u'█', d_symbol=u' '):
+def compute_sparklines(interactions, c_symbol='█', d_symbol=' '):
     """Returns the sparklines for a set of interactions"""
     if len(interactions) == 0:
         return None
@@ -152,7 +149,7 @@ def compute_sparklines(interactions, c_symbol=u'█', d_symbol=u' '):
     histories = list(zip(*interactions))
     return (
         sparkline(histories[0], c_symbol, d_symbol) +
-        u'\n' +
+        '\n' +
         sparkline(histories[1], c_symbol, d_symbol))
 
 

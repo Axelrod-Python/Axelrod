@@ -42,7 +42,7 @@ class Davis(Player):
         rounds_to_cooperate: int, 10
            The number of rounds to cooperate initially
         """
-        Player.__init__(self)
+        super().__init__()
         self._rounds_to_cooperate = rounds_to_cooperate
 
     def strategy(self, opponent):
@@ -78,7 +78,7 @@ class RevisedDowning(Player):
 
     @init_args
     def __init__(self, revised=True):
-        Player.__init__(self)
+        super().__init__()
         self.revised = revised
         self.good = 1.0
         self.bad = 0.0
@@ -109,12 +109,12 @@ class RevisedDowning(Player):
                 if opponent.history[-1] == C:
                     self.nice2 += 1
                 self.total_D += 1
-                self.bad = float(self.nice2) / self.total_D
+                self.bad = self.nice2 / self.total_D
             else:
                 if opponent.history[-1] == C:
                     self.nice1 += 1
                 self.total_C += 1
-                self.good = float(self.nice1) / self.total_C
+                self.good = self.nice1 / self.total_C
         # Make a decision based on the accrued counts
         c = 6.0 * self.good - 8.0 * self.bad - 2
         alt = 4.0 * self.good - 5.0 * self.bad - 1
@@ -127,7 +127,7 @@ class RevisedDowning(Player):
         return self.move
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.good = 1.0
         self.bad = 0.0
         self.nice1 = 0
@@ -173,7 +173,7 @@ class Feld(Player):
             The number of rounds to linearly decrease from start_coop_prob
             to end_coop_prob
         """
-        Player.__init__(self)
+        super().__init__()
         self._start_coop_prob = start_coop_prob
         self._end_coop_prob = end_coop_prob
         self._rounds_of_decay = rounds_of_decay
@@ -183,7 +183,7 @@ class Feld(Player):
         something simple that decreases monotonically from 1.0 to 0.5 over
         200 rounds."""
         diff = (self._end_coop_prob - self._start_coop_prob)
-        slope = diff / float(self._rounds_of_decay)
+        slope = diff / self._rounds_of_decay
         rounds = len(self.history)
         return max(self._start_coop_prob + slope * rounds,
                    self._end_coop_prob)
@@ -229,7 +229,7 @@ class Grofman(Player):
             return opponent.history[-1]
         if self.history[-1] == opponent.history[-1]:
             return C
-        return random_choice(2./ 7)
+        return random_choice(2 / 7)
 
 
 
@@ -259,7 +259,7 @@ class Joss(MemoryOnePlayer):
         """
         four_vector = (p, 0, p, 0)
         self.p = p
-        super(Joss, self).__init__(four_vector)
+        super().__init__(four_vector)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -299,7 +299,7 @@ class Nydegger(Player):
                           (C, D): 2,
                           (D, C): 1,
                           (D, D): 3}
-        super(Nydegger, self).__init__()
+        super().__init__()
 
     @staticmethod
     def score_history(my_history, opponent_history, score_map):
@@ -354,7 +354,7 @@ class Shubik(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.is_retaliating = False
         self.retaliation_length = 0
         self.retaliation_remaining = 0
@@ -391,7 +391,7 @@ class Shubik(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.is_retaliating = False
         self.retaliation_length = 0
         self.retaliation_remaining = 0
@@ -428,7 +428,7 @@ class Tullock(Player):
         rounds_to_cooperate: int, 10
            The number of rounds to cooperate initially
         """
-        Player.__init__(self)
+        super().__init__()
         self._rounds_to_cooperate = rounds_to_cooperate
         self.__class__.memory_depth = rounds_to_cooperate
 
@@ -437,7 +437,7 @@ class Tullock(Player):
         if len(self.history) < rounds:
             return C
         cooperate_count = opponent.history[-rounds:].count(C)
-        prop_cooperate = cooperate_count / float(rounds)
+        prop_cooperate = cooperate_count / rounds
         prob_cooperate = max(0, prop_cooperate - 0.10)
         return random_choice(prob_cooperate)
 
@@ -480,5 +480,5 @@ class UnnamedStrategy(Player):
 
     @staticmethod
     def strategy(opponent):
-        r = random.uniform(3, 7) / float(10)
+        r = random.uniform(3, 7) / 10
         return random_choice(r)
