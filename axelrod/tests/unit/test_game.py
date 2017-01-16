@@ -1,10 +1,9 @@
 import unittest
 from hypothesis import given
-from hypothesis.strategies import integers, tuples
-
-from axelrod.tests.property import *
 
 import axelrod
+from axelrod.tests.property import *
+
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 

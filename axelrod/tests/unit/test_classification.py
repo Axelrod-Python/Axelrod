@@ -1,4 +1,4 @@
-"""Tests for the classification"""
+"""Tests for the classification."""
 
 import unittest
 import axelrod as axl
@@ -55,32 +55,35 @@ class TestClassification(unittest.TestCase):
 
     def test_obey_axelrod(self):
         """A test that verifies if the obey_axl function works correctly"""
-        known_cheaters = [axl.Darwin,
-                          axl.Geller,
-                          axl.GellerCooperator,
-                          axl.GellerDefector,
-                          axl.MindBender,
-                          axl.MindController,
-                          axl.MindWarper,
-                          axl.MindReader]
+        known_cheaters = [
+            axl.Darwin,
+            axl.Geller,
+            axl.GellerCooperator,
+            axl.GellerDefector,
+            axl.MindBender,
+            axl.MindController,
+            axl.MindWarper,
+            axl.MindReader]
 
-        known_basic = [axl.Alternator,
-                       axl.AntiTitForTat,
-                       axl.Bully,
-                       axl.Cooperator,
-                       axl.Defector,
-                       axl.GoByMajority,
-                       axl.SuspiciousTitForTat,
-                       axl.TitForTat,
-                       axl.WinStayLoseShift]
+        known_basic = [
+            axl.Alternator,
+            axl.AntiTitForTat,
+            axl.Bully,
+            axl.Cooperator,
+            axl.Defector,
+            axl.GoByMajority,
+            axl.SuspiciousTitForTat,
+            axl.TitForTat,
+            axl.WinStayLoseShift]
 
-        known_ordinary = [axl.AverageCopier,
-                          axl.ForgivingTitForTat,
-                          axl.GoByMajority20,
-                          axl.GTFT,
-                          axl.Grudger,
-                          axl.Inverse,
-                          axl.Random]
+        known_ordinary = [
+            axl.AverageCopier,
+            axl.ForgivingTitForTat,
+            axl.GoByMajority20,
+            axl.GTFT,
+            axl.Grudger,
+            axl.Inverse,
+            axl.Random]
 
         for strategy in known_cheaters:
             self.assertFalse(axl.obey_axelrod(strategy()), msg=strategy)
@@ -93,31 +96,34 @@ class TestClassification(unittest.TestCase):
 
     def test_is_basic(self):
         """A test that verifies if the is_basic function works correctly"""
-        known_cheaters = [axl.Darwin,
-                          axl.Geller,
-                          axl.GellerCooperator,
-                          axl.GellerDefector,
-                          axl.MindBender,
-                          axl.MindController,
-                          axl.MindWarper,
-                          axl.MindReader]
+        known_cheaters = [
+            axl.Darwin,
+            axl.Geller,
+            axl.GellerCooperator,
+            axl.GellerDefector,
+            axl.MindBender,
+            axl.MindController,
+            axl.MindWarper,
+            axl.MindReader]
 
-        known_basic = [axl.Alternator,
-                       axl.AntiTitForTat,
-                       axl.Bully,
-                       axl.Cooperator,
-                       axl.Defector,
-                       axl.SuspiciousTitForTat,
-                       axl.TitForTat,
-                       axl.WinStayLoseShift]
+        known_basic = [
+            axl.Alternator,
+            axl.AntiTitForTat,
+            axl.Bully,
+            axl.Cooperator,
+            axl.Defector,
+            axl.SuspiciousTitForTat,
+            axl.TitForTat,
+            axl.WinStayLoseShift]
 
-        known_ordinary = [axl.AverageCopier,
-                          axl.ForgivingTitForTat,
-                          axl.GoByMajority20,
-                          axl.GTFT,
-                          axl.Grudger,
-                          axl.Inverse,
-                          axl.Random]
+        known_ordinary = [
+            axl.AverageCopier,
+            axl.ForgivingTitForTat,
+            axl.GoByMajority20,
+            axl.GTFT,
+            axl.Grudger,
+            axl.Inverse,
+            axl.Random]
 
         for strategy in known_cheaters:
             self.assertFalse(axl.is_basic(strategy()), msg=strategy)
@@ -137,33 +143,38 @@ def str_reps(xs):
 class TestStrategies(unittest.TestCase):
 
     def test_strategy_list(self):
-        for strategy_list in ["all_strategies",
-                              "demo_strategies",
-                              "basic_strategies",
-                              "long_run_time_strategies",
-                              "strategies",
-                              "ordinary_strategies",
-                              "cheating_strategies"]:
+        for strategy_list in [
+            "all_strategies",
+            "demo_strategies",
+            "basic_strategies",
+            "long_run_time_strategies",
+            "strategies",
+            "ordinary_strategies",
+            "cheating_strategies"]:
             self.assertTrue(hasattr(axl, strategy_list))
 
     def test_lists_not_empty(self):
-        for strategy_list in [axl.all_strategies,
-                              axl.demo_strategies,
-                              axl.basic_strategies,
-                              axl.long_run_time_strategies,
-                              axl.strategies,
-                              axl.ordinary_strategies,
-                              axl.cheating_strategies]:
+        for strategy_list in [
+            axl.all_strategies,
+            axl.demo_strategies,
+            axl.basic_strategies,
+            axl.long_run_time_strategies,
+            axl.strategies,
+            axl.ordinary_strategies,
+            axl.cheating_strategies
+        ]:
             self.assertTrue(len(strategy_list) > 0)
 
     def test_inclusion_of_strategy_lists(self):
         all_strategies_set = set(axl.all_strategies)
-        for strategy_list in [axl.demo_strategies,
-                              axl.basic_strategies,
-                              axl.long_run_time_strategies,
-                              axl.strategies,
-                              axl.ordinary_strategies,
-                              axl.cheating_strategies]:
+        for strategy_list in [
+            axl.demo_strategies,
+            axl.basic_strategies,
+            axl.long_run_time_strategies,
+            axl.strategies,
+            axl.ordinary_strategies,
+            axl.cheating_strategies
+        ]:
             self.assertTrue(str_reps(strategy_list).issubset(
                 str_reps(all_strategies_set)))
 
@@ -175,23 +186,24 @@ class TestStrategies(unittest.TestCase):
                 str_reps(strategies_set)))
 
     def test_long_run_strategies(self):
-        long_run_time_strategies = [axl.MetaMajority,
-                                    axl.MetaMinority,
-                                    axl.MetaWinner,
-                                    axl.MetaWinnerEnsemble,
-                                    axl.MetaMajorityFiniteMemory,
-                                    axl.MetaWinnerFiniteMemory,
-                                    axl.MetaMajorityLongMemory,
-                                    axl.MetaWinnerLongMemory,
-                                    axl.MetaMixer,
-                                    axl.NMWEFiniteMemory,
-                                    axl.MetaWinnerDeterministic,
-                                    axl.NMWELongMemory,
-                                    axl.NMWEStochastic,
-                                    axl.NMWEDeterministic,
-                                    axl.MetaWinnerStochastic,
-                                    axl.NiceMetaWinner,
-                                    axl.NiceMetaWinnerEnsemble
+        long_run_time_strategies = [
+            axl.MetaMajority,
+            axl.MetaMinority,
+            axl.MetaWinner,
+            axl.MetaWinnerEnsemble,
+            axl.MetaMajorityFiniteMemory,
+            axl.MetaWinnerFiniteMemory,
+            axl.MetaMajorityLongMemory,
+            axl.MetaWinnerLongMemory,
+            axl.MetaMixer,
+            axl.NMWEFiniteMemory,
+            axl.MetaWinnerDeterministic,
+            axl.NMWELongMemory,
+            axl.NMWEStochastic,
+            axl.NMWEDeterministic,
+            axl.MetaWinnerStochastic,
+            axl.NiceMetaWinner,
+            axl.NiceMetaWinnerEnsemble
         ]
 
         self.assertEqual(str_reps(long_run_time_strategies),
@@ -216,10 +228,11 @@ class TestStrategies(unittest.TestCase):
                          str_reps(axl.long_run_time_strategies))
 
     def test_demo_strategies(self):
-        demo_strategies = [axl.Cooperator,
-                           axl.Defector,
-                           axl.TitForTat,
-                           axl.Grudger,
-                           axl.Random]
-        self.assertTrue(str_reps(demo_strategies),
-                        str_reps(axl.demo_strategies))
+        demo_strategies = [
+            axl.Cooperator,
+            axl.Defector,
+            axl.TitForTat,
+            axl.Grudger,
+            axl.Random]
+        self.assertTrue(
+            str_reps(demo_strategies), str_reps(axl.demo_strategies))

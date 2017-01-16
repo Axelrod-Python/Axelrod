@@ -82,12 +82,12 @@ class TestFSMPlayers(unittest.TestCase):
                        (2, D, 3, C),
                        (3, C, 3, C))
         player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
-                                initial_action=C)
+                                   initial_action=C)
         self.assertFalse(check_state_transitions(player.fsm.state_transitions))
 
         transitions = [(1, D, 2, D)]
         player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
-                                initial_action=C)
+                                   initial_action=C)
         self.assertFalse(check_state_transitions(player.fsm.state_transitions))
 
 

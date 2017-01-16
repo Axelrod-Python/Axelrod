@@ -1,4 +1,4 @@
-"""Test for the Second Axelrod strategies."""
+"""Tests for the Second Axelrod strategies."""
 
 import random
 
@@ -72,8 +72,7 @@ class TestEatherley(TestPlayer):
         # Initially cooperates
         self.first_play_test(C)
         # Test cooperate after opponent cooperates
-        self.responses_test([C], [C], [C])
-        self.responses_test([C], [C, C], [C, C])
+        self.responses_test([C, C], [C], [C])
         self.responses_test([C], [D, C], [D, C])
         self.responses_test([C], [D, C, C], [D, C, C])
         # Test defection after opponent defection

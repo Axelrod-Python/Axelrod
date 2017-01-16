@@ -22,17 +22,15 @@ how a strategy plays.
 
 * `first_play_test(action, seed=None)` tests the strategy's first action, taking
 an optional random seed in case the strategy is stochastic. If so, please
-include cases where both outcomes are observed, e.g.::
+include cases where both outcomes are observed, e.g.:
 ```
     def test_strategy(self):
         self.first_play_test(C, seed=11)
         self.first_play_test(D, seed=23)
 ```
-
 * `second_play_test(rCC, rCD, rDC, rDD, seed=None)` tests the strategies actions
 in the four possible second rounds of play, depending on the move the the
 strategy and the opponent in the first round.
-
 * `responses_test(responses, history1=None, history2=None, ...)` is a powerful
 test that can handle a variety of situations, testing the first X actions, the
 actions played in response to given player histories, and can also check that

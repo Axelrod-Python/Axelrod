@@ -22,7 +22,7 @@ class TestAdaptive(TestPlayer):
 
     def test_strategy(self):
         # Test initial play sequence
-        self.responses_test([C] * 6 + [D] * 5, [], [])
+        self.responses_test([C] * 6 + [D] * 5)
 
     def test_scoring(self):
         player = axelrod.Adaptive()
@@ -42,17 +42,20 @@ class TestAdaptivevsCooperator(TestMatch):
         self.versus_test(axelrod.Adaptive(), axelrod.Cooperator(),
                          [C] * 6 + [D] * 5 + [D] * 3, [C] * 14)
 
+
 class TestAdaptivevsDefector(TestMatch):
     """Test TFT vs WSLS"""
     def test_rounds(self):
         self.versus_test(axelrod.Adaptive(), axelrod.Defector(),
                          [C] * 6 + [D] * 5 + [D] * 3, [D] * 14)
 
+
 class TestAdaptivevsAlternator(TestMatch):
     """Test TFT vs WSLS"""
     def test_rounds(self):
         self.versus_test(axelrod.Adaptive(), axelrod.Alternator(),
                          [C] * 6 + [D] * 5 + [D] * 3, [C, D] * 7)
+
 
 class TestAdaptivevsTFT(TestMatch):
     """Test TFT vs WSLS"""

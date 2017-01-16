@@ -1,4 +1,4 @@
-"""Test APavlov."""
+"""Tests APavlov strategies."""
 
 import axelrod
 from .test_player import TestPlayer

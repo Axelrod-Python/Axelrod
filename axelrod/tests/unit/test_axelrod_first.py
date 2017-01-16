@@ -1,4 +1,4 @@
-"""Test for the First Axelrod strategies."""
+"""Tests for the First Axelrod strategies."""
 
 import random
 
@@ -41,8 +41,8 @@ class TestDavis(TestPlayer):
         # (after 10 rounds)
         self.responses_test([C], [C, D, D, D], [C, C, C, C])
         self.responses_test([C], [C, C, D, D, D], [C, D, C, C, C])
-        self.responses_test([D], [C] * 10 + [C, C, D, D, D], [C] * 10 +
-                            [C, D, C, C, C])
+        self.responses_test([D], [C] * 10 + [C, C, D, D, D],
+                            [C] * 10 + [C, D, C, C, C])
 
 
 class TestRevisedDowning(TestPlayer):
@@ -141,8 +141,7 @@ class TestGrofman(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([C, C])
-        self.responses_test([C], [C, C], [C, C])
+        self.responses_test([C, C, C])
         self.responses_test([D], [C, C], [C, D])
         self.responses_test([C], [C] * 6, [C] * 6)
         self.responses_test([D], [C] * 6, [D] * 6)
@@ -210,8 +209,7 @@ class TestNydegger(TestPlayer):
     def test_strategy(self):
         # Test TFT-type initial play
         self.first_play_test(C)
-        self.responses_test([C], [C], [C])
-        self.responses_test([C], [C, C], [C, C])
+        self.responses_test([C, C], [C], [C])
         self.responses_test([D], [C], [D])
         self.responses_test([D], [C, D], [D, C])
         self.responses_test([D], [C, D], [D, D])

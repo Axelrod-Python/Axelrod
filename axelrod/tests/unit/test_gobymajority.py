@@ -115,10 +115,10 @@ def factory_TestGoByRecentMajority(L, soft=True):
             self.responses_test([D], [C] * L,
                                 [D] * (L // 2 + 1) + [C] * (L // 2 - 1))
 
+            # Test 50:50 play difference with soft
             k = L
             if L % 2 == 1:
                 k -= 1
-
             if soft:
                 self.responses_test([C], [C] * k,
                                     [C] * (k // 2) + [D] * (k // 2))

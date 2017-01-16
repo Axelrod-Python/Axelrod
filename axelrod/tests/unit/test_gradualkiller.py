@@ -20,7 +20,7 @@ class TestGradualKiller(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by Defecting.
+        # Starts by defecting.
         self.first_play_test(D)
         self.second_play_test(D, D, D, D)
         # First seven moves.

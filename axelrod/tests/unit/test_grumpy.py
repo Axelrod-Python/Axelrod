@@ -24,34 +24,29 @@ class TestGrumpy(TestPlayer):
         # Starts by cooperating.
         self.first_play_test(C)
         # Starts by defecting if grumpy initially.
-        P1 = axelrod.Grumpy(starting_state='Grumpy')
-        P2 = TestOpponent()
-        self.assertEqual(P1.strategy(P2), D)
+        self.responses_test(D, init_kwargs={"starting_state": "Grumpy"})
+        # Tests that grumpy will play C until threshold is hit at which point it
+        # will become grumpy. Player will then not become nice until lower nice
+        # threshold is hit.
 
-        # Tests that grumpy will play C until threshold is hit at which point
-        # it will become grumpy. Player will then not become nice until lower
-        # nice threshold is hit.
-        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
-        P2 = TestOpponent()
-        test_responses(self, P1, P2, [C], [C, D, D, D], [C, C, C, C])
-
-        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
-        P2 = TestOpponent()
-        test_responses(self, P1, P2, [D], [C, C, D, D, D], [D, D, D, D, D])
-
-        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
-        P2 = TestOpponent()
-        test_responses(self, P1, P2, [D], [C, C, D, D, D, D, D, D],
-                       [D, D, D, D, D, C, C, C])
-
-        P1 = axelrod.Grumpy(grumpy_threshold=3, nice_threshold=0)
-        P2 = TestOpponent()
-        test_responses(self, P1, P2, [C], [C, C, D, D, D, D, D, D, D, D, D],
-                       [D, D, D, D, D, C, C, C, C, C, C])
+        self.responses_test([C], [C, D, D, D], [C, C, C, C],
+                            init_kwargs={"grumpy_threshold": 3,
+                                         "nice_threshold": 0},
+                            attrs={"state": "Nice"})
+        self.responses_test([D], [C, C, D, D, D], [D, D, D, D, D],
+                            init_kwargs={"grumpy_threshold": 3,
+                                         "nice_threshold": 0})
+        self.responses_test([D], [C, C, D, D, D, D, D, D],
+                            [D, D, D, D, D, C, C, C],
+                            init_kwargs={"grumpy_threshold": 3,
+                                         "nice_threshold": 0})
+        self.responses_test([C], [C, C, D, D, D, D, D, D, D, D, D],
+                            [D, D, D, D, D, C, C, C, C, C, C],
+                            init_kwargs={"grumpy_threshold": 3,
+                                         "nice_threshold": 0})
 
     def test_reset(self):
         P1 = axelrod.Grumpy(starting_state='Grumpy')
-        P1.history = [C, D, D, D]
         P1.state = 'Nice'
         P1.reset()
         self.assertEqual(P1.state, 'Grumpy')

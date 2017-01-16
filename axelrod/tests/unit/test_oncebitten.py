@@ -26,7 +26,7 @@ class TestOnceBitten(TestPlayer):
         """If opponent defects at any point then the player will defect
         forever."""
         # Become grudged if the opponent defects twice in a row
-        self.responses_test([C], [], [], attrs={"grudged": False})
+        self.responses_test([C], attrs={"grudged": False})
         self.responses_test([C], [C], [C], attrs={"grudged": False})
         self.responses_test([C], [C, C], [C, C], attrs={"grudged": False})
         self.responses_test([C], [C, C, C], [C, C, D], attrs={"grudged": False})
@@ -36,12 +36,11 @@ class TestOnceBitten(TestPlayer):
         mem_length = self.player().mem_length
         for i in range(mem_length - 1):
             self.responses_test([D], [C, C, C, C] + [D] * i,
-                                [C, C, D, D] + [D] * i, attrs={"grudged": True,
-                                                               "grudge_memory": i})
+                                [C, C, D, D] + [D] * i,
+                                attrs={"grudged": True, "grudge_memory": i})
         i = mem_length + 1
         self.responses_test([C], [C, C, C, C] + [D] * i, [C, C, D, D] + [C] * i,
-                            attrs={"grudged": False,
-                                   "grudge_memory": 0})
+                            attrs={"grudged": False, "grudge_memory": 0})
 
     def test_reset(self):
         """Check that grudged gets reset properly"""

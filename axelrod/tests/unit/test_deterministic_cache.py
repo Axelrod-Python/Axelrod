@@ -5,6 +5,7 @@ from axelrod import Actions, Defector, DeterministicCache, Random, TitForTat
 
 C, D = Actions.C, Actions.D
 
+
 class TestDeterministicCache(unittest.TestCase):
 
     @classmethod

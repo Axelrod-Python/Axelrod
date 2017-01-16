@@ -1,9 +1,10 @@
+from os import linesep
 from unittest import TestCase
+from prompt_toolkit.validation import ValidationError
 from axelrod import Actions, Player
 from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
-from prompt_toolkit.validation import ValidationError
-from os import linesep
+
 
 C, D = Actions.C, Actions.D
 
@@ -56,9 +57,9 @@ class TestHumanClass(TestPlayer):
 
         human.history = [C]
         human.opponent_history = [C]
-        expected_content = "History (Human, opponent): [(C, C)]"
+        expected_content = "History (Human, opponent): [('C', 'C')]"
         actual_content = human._history_toolbar(None)[0][1]
-        self.assertIn('History (Human, opponent)', expected_content)
+        self.assertIn(actual_content, expected_content)
 
     def test_status_messages(self):
         human = Human()

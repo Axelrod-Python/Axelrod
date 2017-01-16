@@ -4,9 +4,9 @@ import random
 import unittest
 
 import axelrod
-
-from .test_player import TestPlayer
 from axelrod.strategies.hunter import detect_cycle
+from .test_player import TestPlayer
+
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 

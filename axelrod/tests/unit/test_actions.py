@@ -12,6 +12,8 @@ class TestAction(unittest.TestCase):
         self.assertEqual(D, 'D')
         self.assertNotEqual(D, 'd')
         self.assertNotEqual(C, 'c')
+        self.assertNotEqual(D, 0)
+        self.assertNotEqual(C, 1)
         self.assertNotEqual(C, D)
 
     def test_flip_action(self):
