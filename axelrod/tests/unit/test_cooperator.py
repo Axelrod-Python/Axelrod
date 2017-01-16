@@ -1,4 +1,4 @@
-"""Test for the Cooperator strategy."""
+"""Tests for the Cooperator strategy."""
 
 import axelrod
 from .test_player import TestPlayer

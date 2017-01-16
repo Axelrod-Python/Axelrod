@@ -1,8 +1,9 @@
 import random
+import warnings
 import unittest
 
 import axelrod
-from axelrod import DefaultGame, Player, simulate_play
+from axelrod import DefaultGame, MockPlayer, Player, simulate_play
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -131,7 +132,7 @@ def test_responses(test_class, player1, player2, responses, history1=None,
     # method. Still need to append history manually.
     if history1 and history2:
         for h1, h2 in zip(history1, history2):
-            simulate_play(player1, player2, h1, h2)
+            s1, s2 = simulate_play(player1, player2, h1, h2)
     # Run the tests
     for response in responses:
         s1, s2 = simulate_play(player1, player2)
@@ -265,10 +266,14 @@ class TestPlayer(unittest.TestCase):
     def second_play_test(self, rCC, rCD, rDC, rDD, seed=None):
         """Test responses to the four possible one round histories. Input
         responses is simply the four responses to CC, CD, DC, and DD."""
-        self.responses_test(rCC, [C], [C], seed=seed)
-        self.responses_test(rCD, [C], [D], seed=seed)
-        self.responses_test(rDC, [D], [C], seed=seed)
-        self.responses_test(rDD, [D], [D], seed=seed)
+        test_responses(self, self.player(), axelrod.Cooperator(),
+                       rCC, [C], [C], seed=seed)
+        test_responses(self, self.player(), axelrod.Defector(),
+                       rCD, [C], [D], seed=seed)
+        test_responses(self, self.player(), axelrod.Cooperator(),
+                       rDC, [D], [C], seed=seed)
+        test_responses(self, self.player(), axelrod.Defector(),
+                       rDD, [D], [D], seed=seed)
 
     def responses_test(self, responses, history1=None, history2=None,
                        seed=None, tournament_length=200, attrs=None,
@@ -285,10 +290,8 @@ class TestPlayer(unittest.TestCase):
 
         player1 = self.player(*init_args, **init_kwargs)
         player1.set_match_attributes(length=tournament_length)
-        # player1.match_attributes['length'] = tournament_length
-        player2 = TestOpponent()
+        player2 = MockPlayer()
         player2.set_match_attributes(length=tournament_length)
-        # player2.match_attributes['length'] = tournament_length
         test_responses(self, player1, player2, responses, history1, history2,
                        seed=seed, attrs=attrs)
 

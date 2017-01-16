@@ -23,9 +23,7 @@ class TestAlternator(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-        # Simply does the opposite to what the strategy did last time.
-        self.second_play_test(D, D, C, C)
         for i in range(10):
             self.responses_test([C, D] * i)
-        self.responses_test([C], [C, D, D, D], [C, C, C, C])
-        self.responses_test([D], [C, C, D, D, C], [C, D, C, C, C])
+        self.responses_test([C], [C, D, C, D], [C, C, C, C])
+        self.responses_test([D], [C, D, C, D, C], [C, C, C, C, C])

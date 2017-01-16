@@ -9,27 +9,31 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 class TestMockPlayer(unittest.TestCase):
 
     def test_strategy(self):
-        for move in [C, D]:
-            m = MockPlayer(axelrod.Player(), move)
+        for action in [C, D]:
+            m = MockPlayer( [action])
             p2 = axelrod.Player()
-            self.assertEqual(move, m.strategy(p2))
+            self.assertEqual(action, m.strategy(p2))
 
-    def test_cloning(self):
-        p1 = axelrod.Cooperator()
-        p2 = axelrod.Defector()
-        moves = 10
-        for i in range(moves):
-            p1.play(p2)
-        m1 = MockPlayer(p1, C)
-        m2 = MockPlayer(p2, D)
-        self.assertEqual(m1.move, C)
-        self.assertEqual(m1.history, p1.history)
-        self.assertEqual(m1.cooperations, p1.cooperations)
-        self.assertEqual(m1.defections, p1.defections)
-        self.assertEqual(m2.move, D)
-        self.assertEqual(m2.history, p2.history)
-        self.assertEqual(m2.cooperations, p2.cooperations)
-        self.assertEqual(m2.defections, p2.defections)
+        actions = [C, C, D, D, C, C]
+        m = MockPlayer(actions)
+        p2 = axelrod.Player()
+        for action in actions:
+            self.assertEqual(action, m.strategy(p2))
+
+    def test_history(self):
+        t = TestOpponent()
+        m1 = MockPlayer([C], history=[C]*10)
+        self.assertEqual(m1.actions[0], C)
+        self.assertEqual(m1.history, [C] * 10)
+        self.assertEqual(m1.cooperations, 10)
+        self.assertEqual(m1.defections, 0)
+        self.assertEqual(m1.strategy(t), C)
+        m2 = MockPlayer([D], history=[D]*10)
+        self.assertEqual(m2.actions[0], D)
+        self.assertEqual(m2.history, [D] * 10)
+        self.assertEqual(m2.cooperations, 0)
+        self.assertEqual(m2.defections, 10)
+        self.assertEqual(m2.strategy(t), D)
 
 
 class TestUpdateHistories(unittest.TestCase):
@@ -67,9 +71,10 @@ class TestSimulatePlay(unittest.TestCase):
         self.assertEqual(p1.defections, 0)
         self.assertEqual(p2.defections, 0)
 
+        # TestOpponent always returns C
         for h1 in [C, D]:
             for h2 in [C, D]:
-                self.assertEqual(simulate_play(p1, p2, h1, h2), (h1, h2))
+                self.assertEqual(simulate_play(p1, p2, h1, h2), (C, C))
         self.assertEqual(p1.cooperations, 3)
         self.assertEqual(p2.cooperations, 3)
         self.assertEqual(p1.defections, 2)

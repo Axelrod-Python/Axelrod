@@ -1,55 +1,69 @@
 from collections import defaultdict
-import copy
-from axelrod import (Actions, Player, get_state_distribution_from_history,
-                     update_history, update_state_distribution)
+import warnings
+from axelrod import (Actions, Player, update_history, update_state_distribution)
 
 C, D = Actions.C, Actions.D
 
 
 class MockPlayer(Player):
-    """Creates a mock player that enforces a particular next move for a given
-    player."""
+    """Creates a mock player that copies a history and state distribution to
+    simulate a history of play, and then plays a given sequence of actions. If
+    no actions are given, plays like Cooperator.
+    """
 
-    def __init__(self, player, move):
+    name = "Mock Player"
+
+    def __init__(self, actions=None, history=None, state_dist=None):
         # Need to retain history for opponents that examine opponents history
         # Do a deep copy just to be safe
         super().__init__()
-        self.history = copy.deepcopy(player.history)
-        self.cooperations = player.cooperations
-        self.defections = player.defections
-        self.move = move
+        if history:
+            # Make sure we both copy the history and get the right counts
+            # for cooperations and defections.
+            for action in history:
+                    update_history(self, action)
+        if state_dist:
+            self.state_distribution = dict(state_dist)
+        if actions:
+            self.actions = list(actions)
+        else:
+            self.actions = []
 
     def strategy(self, opponent):
-        # Just return the saved move
-        return self.move
+        # Return the next saved action, if present.
+        try:
+            action = self.actions.pop(0)
+            return action
+        except IndexError:
+            return C
 
 
 def simulate_play(P1, P2, h1=None, h2=None):
     """
     Simulates play with or without forced history. If h1 and h2 are given, these
-    moves are enforced in the players strategy. This generally should not be
+    actions are enforced in the players strategy. This generally should not be
     necessary, but various tests may force impossible or unlikely histories.
     """
 
     if h1 and h2:
-        # Simulate Players
-        mock_P1 = MockPlayer(P1, h1)
-        mock_P2 = MockPlayer(P2, h1)
-        mock_P1.state_distribution = defaultdict(
-            int, zip(P1.history, P2.history))
-        mock_P2.state_distribution = defaultdict(
-            int, zip(P2.history, P1.history))
+        mock_P1 = MockPlayer(actions=[h1], history=P1.history)
+        mock_P2 = MockPlayer(actions=[h2], history=P2.history)
         # Force plays
-
         s1 = P1.strategy(mock_P2)
         s2 = P2.strategy(mock_P1)
+        if (s1 != h1) or (s2 != h2):
+            warnings.warn(
+            "Simulated play mismatch with expected history: Round was "
+            "({}, {}) but ({}, {}) was expected for player: {}".format(
+                s1, s2, h1, h2, str(P1))
+            )
         # Record intended history
         # Update Cooperation / Defection counts
         update_history(P1, h1)
         update_history(P2, h2)
         update_state_distribution(P1, h1, h2)
         update_state_distribution(P2, h2, h1)
-        return (h1, h2)
+        return (s1, s2)
     else:
         s1 = P1.strategy(P2)
         s2 = P2.strategy(P1)
