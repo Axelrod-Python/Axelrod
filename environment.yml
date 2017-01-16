@@ -1,6 +1,6 @@
 name: py35
 dependencies:
-- python=3.5.1=0
+- python=3.5.2
 - numpy>=1.9.2
 - matplotlib>=1.4.2
 - pip:
