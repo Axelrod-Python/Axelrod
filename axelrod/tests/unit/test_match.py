@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 import unittest
-import axelrod
-from axelrod import Actions
-from axelrod.deterministic_cache import DeterministicCache
 
 from hypothesis import given, example
 from hypothesis.strategies import integers, floats, assume
 
+import axelrod
+from axelrod import Actions
+from axelrod.deterministic_cache import DeterministicCache
 from axelrod.tests.property import games
 
 C, D = Actions.C, Actions.D

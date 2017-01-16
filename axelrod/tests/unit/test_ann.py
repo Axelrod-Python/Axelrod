@@ -1,9 +1,10 @@
-"""Test for the Adaptive strategy."""
+"""Tests for the Adaptive strategy."""
 import unittest
 
 import axelrod
-from .test_player import TestHeadsUp, TestPlayer
 from axelrod.strategies.ann import split_weights
+from .test_player import TestHeadsUp, TestPlayer
+
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -72,7 +73,6 @@ class TestEvolvedANNNoise05(TestPlayer):
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(C)
-
 
 
 class TestEvolvedANNvsCooperator(TestHeadsUp):

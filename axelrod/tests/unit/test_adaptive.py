@@ -1,7 +1,6 @@
-"""Test for the Adaptive strategy."""
+"""Tests for the Adaptive strategy."""
 
 import axelrod
-
 from .test_player import TestHeadsUp, TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -23,7 +22,7 @@ class TestAdaptive(TestPlayer):
 
     def test_strategy(self):
         # Test initial play sequence
-        self.responses_test([], [], [C] * 6 + [D] * 5)
+        self.responses_test([C] * 6 + [D] * 5, [], [])
 
     def test_scoring(self):
         player = axelrod.Adaptive()

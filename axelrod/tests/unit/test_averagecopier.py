@@ -1,7 +1,6 @@
-"""Test for the average_copier strategy."""
+"""Tests for the AverageCopier strategies."""
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -22,19 +21,13 @@ class TestAverageCopier(TestPlayer):
     }
 
     def test_strategy(self):
-        """Test that the first strategy is picked randomly."""
-        self.responses_test([], [], [C], random_seed=1)
-        self.responses_test([], [], [D], random_seed=2)
-
-    def test_when_oppenent_all_Cs(self):
-        """Tests that if opponent has played all C then player chooses C."""
-        self.responses_test([C, C, C, C], [C, C, C, C], [C, C, C],
-                            random_seed=5)
-
-    def test_when_opponent_all_Ds(self):
-        """Tests that if opponent has played all D then player chooses D."""
-        self.responses_test([C, C, C, C], [D, D, D, D], [D, D, D],
-                            random_seed=5)
+        # Test that the first strategy is picked randomly.
+        self.responses_test([C], seed=1)
+        self.responses_test([D], seed=2)
+        # Tests that if opponent has played all C then player chooses C.
+        self.responses_test([C, C, C], [C, C, C, C], [C, C, C, C], seed=5)
+        # Tests that if opponent has played all D then player chooses D.
+        self.responses_test([D, D, D], [C, C, C, C], [D, D, D, D], seed=5)
 
 
 class TestNiceAverageCopier(TestPlayer):
@@ -52,19 +45,9 @@ class TestNiceAverageCopier(TestPlayer):
     }
 
     def test_strategy(self):
-        """Test that the first strategy is cooperation."""
+        # Cooperates initially.
         self.first_play_test(C)
-
-    def test_when_oppenent_all_Cs(self):
-        """
-        Tests that if opponent has played all C then player chooses C
-        """
-        self.responses_test([C, C, C, C], [C, C, C, C], [C, C, C],
-                            random_seed=5)
-
-    def test_when_opponent_all_Ds(self):
-        """
-        Tests that if opponent has played all D then player chooses D
-        """
-        self.responses_test([D, D, D, D], [D, D, D, D], [D, D, D],
-                            random_seed=5)
+        # If opponent has played all C then player chooses C.
+        self.responses_test([C, C, C], [C, C, C, C], [C, C, C, C], seed=5)
+        # If opponent has played all D then player chooses D.
+        self.responses_test([D, D, D], [D, D, D, D], [D, D, D, D], seed=5)

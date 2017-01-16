@@ -193,10 +193,10 @@ class TestPun1(TestFSMPlayer):
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(D)
-        self.responses_test([D, C], [C, C], [C])
-        self.responses_test([D, C], [D, C], [C])
-        self.responses_test([D, C, C], [C, C, C], [C])
-        self.responses_test([D, C, C, C], [C, C, C, D], [D])
+        self.responses_test([C], [D, C], [C, C])
+        self.responses_test([C], [D, C], [D, C])
+        self.responses_test([C], [D, C, C], [C, C, C])
+        self.responses_test([D], [D, C, C, C], [C, C, C, D])
 
 
 class TestRaider(TestFSMPlayer):

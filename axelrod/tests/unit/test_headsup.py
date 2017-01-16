@@ -1,7 +1,6 @@
-"""Test for the cooperator strategy."""
+"""Strategy match tests."""
 
 import axelrod
-
 from .test_player import TestHeadsUp
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -39,14 +38,14 @@ class TestZDGTFT2vsBully(TestHeadsUp):
     """Test ZDGTFT2 vs Bully"""
     def test_rounds(self):
         self.versus_test(axelrod.ZDGTFT2(), axelrod.Bully(), [C, D, D, C, C, C],
-            [D, D, C, C, D, D], random_seed=2)
+            [D, D, C, C, D, D], seed=2)
 
 
 class TestZDExtort2vsTFT(TestHeadsUp):
     """Test ZDExtort2 vs Bully"""
     def test_rounds(self):
         self.versus_test(axelrod.ZDExtort2(), axelrod.TitForTat(),
-                         [C, D, D, D, D, D], [C, C, D, D, D, D], random_seed=2)
+                         [C, D, D, D, D, D], [C, C, D, D, D, D], seed=2)
 
 
 class FoolMeOncevsBully(TestHeadsUp):

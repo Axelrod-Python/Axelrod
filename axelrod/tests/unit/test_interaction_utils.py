@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-import unittest
-import tempfile
 from collections import Counter
+import tempfile
+import unittest
+
 import axelrod
+from axelrod import Actions
 import axelrod.interaction_utils as iu
 
-from axelrod import Actions
 
 C, D = Actions.C, Actions.D
 
@@ -27,7 +27,6 @@ class TestMatch(unittest.TestCase):
                                      Counter({('C', 'C'): 0.5, ('C', 'D'): 0.5}),
                                      None]
     sparklines = [ '█ \n █', '  \n██', '██\n█ ', None ]
-
 
     def test_compute_scores(self):
         for inter, score in zip(self.interactions, self.scores):

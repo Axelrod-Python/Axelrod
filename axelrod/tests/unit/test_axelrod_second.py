@@ -1,9 +1,8 @@
-"""Test for the inverse strategy."""
+"""Test for the Second Axelrod strategies."""
 
 import random
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -30,13 +29,13 @@ class TestChampion(TestPlayer):
         random_sample = []
         for i in range(10):
             random_sample.append(random.choice([C, D]))
-            self.responses_test([C] * i, random_sample, [C])
+            self.responses_test([C], [C] * i, random_sample)
 
         # Mirror opponent in the next stage (15 rounds by default)
         my_responses = [C] * 10
         for i in range(15):
-            self.responses_test(my_responses, random_sample,
-                                [random_sample[-1]])
+            self.responses_test([random_sample[-1]], my_responses,
+                                random_sample)
             my_responses.append(random_sample[-1])
             random_sample.append(random.choice([C, D]))
 
@@ -45,14 +44,14 @@ class TestChampion(TestPlayer):
         for i in range(5):
             my_responses.append(C)
             random_sample.append(C)
-            self.responses_test(my_responses, random_sample, [C])
+            self.responses_test([C], my_responses, random_sample)
 
-        self.responses_test(my_responses + [C], random_sample + [D], [C],
-                            random_seed=50)
-        self.responses_test(my_responses + [C], random_sample + [D], [C],
-                            random_seed=30)
-        self.responses_test(my_responses + [C] * 40, random_sample + [D] * 40,
-                            [D], random_seed=40)
+        self.responses_test([C], my_responses + [C], random_sample + [D],
+                            seed=50)
+        self.responses_test([C], my_responses + [C], random_sample + [D],
+                            seed=30)
+        self.responses_test([D], my_responses + [C] * 40,
+                            random_sample + [D] * 40, seed=40)
 
 
 class TestEatherley(TestPlayer):
@@ -74,13 +73,13 @@ class TestEatherley(TestPlayer):
         self.first_play_test(C)
         # Test cooperate after opponent cooperates
         self.responses_test([C], [C], [C])
-        self.responses_test([C, C], [C, C], [C])
-        self.responses_test([D, C], [D, C], [C])
-        self.responses_test([D, C, C], [D, C, C], [C])
+        self.responses_test([C], [C, C], [C, C])
+        self.responses_test([C], [D, C], [D, C])
+        self.responses_test([C], [D, C, C], [D, C, C])
         # Test defection after opponent defection
         self.responses_test([D], [D], [D])
-        self.responses_test([D, D], [D, D], [D])
-        self.responses_test([D, C, C, D], [D, C, C, D], [C, C], random_seed=8)
+        self.responses_test([D], [D, D], [D, D])
+        self.responses_test([C, C], [D, C, C, D], [D, C, C, D], seed=8)
 
 
 class TestTester(TestPlayer):
@@ -104,17 +103,17 @@ class TestTester(TestPlayer):
     def test_effect_of_strategy(self):
 
         # Test Alternating CD
-        self.responses_test([D], [C], [C])
-        self.responses_test([D, C], [C, C], [C])
-        self.responses_test([D, C, C], [C, C, C], [D])
-        self.responses_test([D, C, C, D], [C, C, C, C], [C])
-        self.responses_test([D, C, C, D, C], [C, C, C, C, C], [D])
+        self.responses_test([C], [D], [C])
+        self.responses_test([C], [D, C], [C, C])
+        self.responses_test([D], [D, C, C], [C, C, C])
+        self.responses_test([C], [D, C, C, D], [C, C, C, C])
+        self.responses_test([D], [D, C, C, D, C], [C, C, C, C, C])
 
         # Test cooperation after opponent defection
-        self.responses_test([D, C], [D, C], [C])
+        self.responses_test([C], [D, C], [D, C])
 
         # Test TFT after defection
-        self.responses_test([D, C, C], [D, C, C], [C])
-        self.responses_test([D, C, C, C], [D, C, C, C], [C])
-        self.responses_test([D, C, D], [D, D, D], [D])
-        self.responses_test([D, C, C], [D, C, D], [D])
+        self.responses_test([C], [D, C, C], [D, C, C])
+        self.responses_test([C], [D, C, C, C], [D, C, C, C])
+        self.responses_test([D], [D, C, D], [D, D, D])
+        self.responses_test([D], [D, C, C], [D, C, D])

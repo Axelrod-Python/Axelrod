@@ -1,9 +1,7 @@
-"""Test for the random strategy."""
-
-import numpy
+"""Tests for the random functions."""
 import random
 import unittest
-
+import numpy
 from axelrod import random_choice, seed, Actions
 
 C, D = Actions.C, Actions.D
@@ -34,11 +32,10 @@ class TestRandom_(unittest.TestCase):
 
     def test_seed_not_offset_by_deterministic_call(self):
         """Test that when called with p = 0 or 1, the random seed is not
-        affected"""
+        affected."""
         for p in [0, 1]:
             seed(0)
             r = random.random()
-
-            random.seed(0)
+            seed(0)
             random_choice(p)
             self.assertEqual(r, random.random())

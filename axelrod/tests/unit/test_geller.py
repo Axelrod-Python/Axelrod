@@ -1,7 +1,6 @@
-"""Test for the geller strategy."""
+"""Tests for the Geller strategy."""
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -22,8 +21,7 @@ class TestGeller(TestPlayer):
     }
 
     def test_strategy(self):
-        """Should cooperate against cooperaters and defect against defectors."""
-
+        """Should cooperate against cooperators and defect against defectors."""
         P1 = self.player()
         P2 = axelrod.Cooperator()
         self.assertEqual(P1.strategy(P2), C)

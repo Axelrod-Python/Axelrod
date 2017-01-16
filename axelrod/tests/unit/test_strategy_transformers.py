@@ -352,7 +352,8 @@ class TestTransformers(unittest.TestCase):
         # Now let's use the transformer to break the deadlock to achieve
         # Mutual cooperation
         p1 = axelrod.TitForTat()
-        p2 = DeadlockBreakingTransformer()(InitialTransformer([D])(axelrod.TitForTat))()
+        p2 = DeadlockBreakingTransformer()(
+            InitialTransformer([D])(axelrod.TitForTat))()
         for _ in range(4):
             p1.play(p2)
         self.assertEqual(p1.history, [C, D, C, C])
@@ -399,7 +400,7 @@ class TestTransformers(unittest.TestCase):
 
     def test_nilpotency(self):
         """Show that some of the transformers are (sometimes) nilpotent, i.e.
-        that transfomer(transformer(PlayerClass)) == PlayerClass"""
+        that transformer(transformer(PlayerClass)) == PlayerClass"""
         for transformer in [IdentityTransformer(),
                             FlipTransformer(),
                             TrackHistoryTransformer()]:
@@ -416,7 +417,7 @@ class TestTransformers(unittest.TestCase):
 
     def test_idempotency(self):
         """Show that these transformers are idempotent, i.e. that
-        transfomer(transformer(PlayerClass)) == transformer(PlayerClass).
+        transformer(transformer(PlayerClass)) == transformer(PlayerClass).
         That means that the transformer is a projection on the set of
         strategies."""
         for transformer in [IdentityTransformer(), GrudgeTransformer(1),
@@ -460,6 +461,7 @@ class TestTransformers(unittest.TestCase):
 
 TFT = RetaliateUntilApologyTransformer()(axelrod.Cooperator)
 
+
 class TestRUAisTFT(TestTitForTat):
     # This runs the 7 TFT tests when unittest is invoked
     player = TFT
@@ -476,6 +478,7 @@ class TestRUAisTFT(TestTitForTat):
 
 # Test that FlipTransformer(Defector) == Cooperator
 Cooperator2 = FlipTransformer()(axelrod.Defector)
+
 
 class TestFlipDefector(TestCooperator):
     # This runs the 7 TFT tests when unittest is invoked

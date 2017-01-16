@@ -33,7 +33,6 @@ class Grumpy(Player):
             nice
         """
         super().__init__()
-        self.history = []
         self.state = starting_state
         self.starting_state = starting_state
         self.grumpy_threshold = grumpy_threshold
@@ -43,25 +42,27 @@ class Grumpy(Player):
         """A player that gets grumpier the more the opposition defects,
         and nicer the more they cooperate.
 
-        Starts off Nice, but becomes grumpy once the grumpiness threshold is hit.
-        Won't become nice once that grumpy threshold is hit, but must reach a much lower threshold before it becomes nice again.
+        Starts off Nice, but becomes grumpy once the grumpiness threshold is
+        hit. Won't become nice once that grumpy threshold is hit, but must
+        reach a much lower threshold before it becomes nice again.
         """
 
-        self.grumpiness = opponent.defections - opponent.cooperations
+        grumpiness = opponent.defections - opponent.cooperations
 
         if self.state == 'Nice':
-            if self.grumpiness > self.grumpy_threshold:
+            if grumpiness > self.grumpy_threshold:
                 self.state = 'Grumpy'
                 return D
             return C
 
         if self.state == 'Grumpy':
-            if self.grumpiness < self.nice_threshold:
+            if grumpiness < self.nice_threshold:
                 self.state = 'Nice'
                 return C
             return D
 
     def reset(self):
-        """Resets score, history and state for the next round of the tournement."""
+        """Resets score, history and state for the next round of the
+        tournament."""
         super().reset()
         self.state = self.starting_state
