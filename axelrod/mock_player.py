@@ -1,6 +1,7 @@
+from collections import defaultdict
 import copy
-from axelrod import get_state_distribution_from_history, Player, \
-    update_history, update_state_distribution,  Actions
+from axelrod import (Actions, Player, get_state_distribution_from_history,
+                     update_history, update_state_distribution)
 
 C, D = Actions.C, Actions.D
 
@@ -31,16 +32,23 @@ def simulate_play(P1, P2, h1=None, h2=None):
     """
 
     if h1 and h2:
-        # Simulate Plays
-        s1 = P1.strategy(MockPlayer(P2, h2))
-        s2 = P2.strategy(MockPlayer(P1, h1))
+        # Simulate Players
+        mock_P1 = MockPlayer(P1, h1)
+        mock_P2 = MockPlayer(P2, h1)
+        mock_P1.state_distribution = defaultdict(
+            int, zip(P1.history, P2.history))
+        mock_P2.state_distribution = defaultdict(
+            int, zip(P2.history, P1.history))
+        # Force plays
+
+        s1 = P1.strategy(mock_P2)
+        s2 = P2.strategy(mock_P1)
         # Record intended history
         # Update Cooperation / Defection counts
         update_history(P1, h1)
         update_history(P2, h2)
-        get_state_distribution_from_history(P1, h1, h2)
-        get_state_distribution_from_history(P2, h2, h1)
-
+        update_state_distribution(P1, h1, h2)
+        update_state_distribution(P2, h2, h1)
         return (h1, h2)
     else:
         s1 = P1.strategy(P2)

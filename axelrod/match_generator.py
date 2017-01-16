@@ -77,9 +77,8 @@ class RoundRobinMatches(MatchGenerator):
 
     def __len__(self):
         """
-        The size of the generator.
-        This corresponds to the number of match chunks as it
-        ignores repetitions.
+        The size of the generator. This corresponds to the number of match
+        chunks as it ignores repetitions.
         """
         n = len(self.players)
         num_matches = int(n * (n - 1) // 2 + n)
@@ -170,9 +169,10 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
 
 def graph_is_connected(edges, players):
     """
-    Test if a set of edges defines a complete graph on a set of players.
-
-    This is used by the spatial tournaments.
+    Test if the set of edges defines a graph in which each player is connected
+    to at least one other player. This function does not test if the graph is
+    fully connected in the sense that each node is reachable from every other
+    node.
 
     Parameters:
     -----------
@@ -181,7 +181,7 @@ def graph_is_connected(edges, players):
 
     Returns:
     --------
-    boolean : True if the graph is connected
+    boolean : True if the graph is connected as specified above.
     """
     # Check if all players are connected.
     player_indices = set(range(len(players)))

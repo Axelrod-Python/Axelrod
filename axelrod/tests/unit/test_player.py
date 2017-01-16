@@ -70,11 +70,12 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_state_distribution(self):
         player1, player2 = self.player(), self.player()
-        history_1 = [C, C, D, D, C]
-        history_2 = [C, D, C, D, D]
         player1.strategy = randomize
         player2.strategy = randomize
-        simulate_play(player1, player2, history_1, history_2)
+        history_1 = [C, C, D, D, C]
+        history_2 = [C, D, C, D, D]
+        for h1, h2 in zip(history_1, history_2):
+            simulate_play(player1, player2, h1, h2)
         self.assertEqual(player1.state_distribution,
                          {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1})
         self.assertEqual(player2.state_distribution,

@@ -1,12 +1,13 @@
-import axelrod as axl
+from collections import namedtuple
+from tempfile import NamedTemporaryFile
 import numpy as np
 import matplotlib.pyplot as plt
 import tqdm
-from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
-from axelrod.interaction_utils import compute_final_score_per_turn, read_interactions_from_file
+import axelrod as axl
 from axelrod import on_windows
-from collections import namedtuple
-from tempfile import NamedTemporaryFile
+from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
+from axelrod.interaction_utils import (compute_final_score_per_turn,
+                                       read_interactions_from_file)
 
 
 Point = namedtuple('Point', 'x y')
