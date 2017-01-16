@@ -10,8 +10,8 @@ dependencies:
 - wheel=0.29.0=py35_0
 - xz=5.0.5=1
 - zlib=1.2.8=0
-- numpy>=1.9.2
-- matplotlib>=1.4.2
+- numpy
+- matplotlib
 - pip:
    - pyparsing==2.1.1 # Due to https://github.com/Axelrod-Python/Axelrod/issues/584
    - hypothesis>=3.2
