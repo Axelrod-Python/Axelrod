@@ -3,7 +3,6 @@ from itertools import product
 import sys
 
 from axelrod import Actions, Player, init_args, load_lookerup_tables
-from axelrod.strategy_transformers import InitialTransformer
 
 module = sys.modules[__name__]
 C, D = Actions.C, Actions.D
@@ -22,6 +21,7 @@ def create_lookup_table_keys(plays, op_plays, op_start_plays):
     lookup_table_keys = list(product(opponent_starts, self_histories,
                                      other_histories))
     return lookup_table_keys
+
 
 def create_lookup_table_from_pattern(plays, op_plays, op_start_plays, pattern):
     lookup_table_keys = create_lookup_table_keys(
@@ -99,7 +99,6 @@ class LookerUp(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, lookup_table=None, initial_actions=None):
         """
         If no lookup table is provided to the constructor, then use the TFT one.

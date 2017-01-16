@@ -1,6 +1,6 @@
 from numpy.random import choice
 
-from axelrod import Actions, Player, init_args, random_choice
+from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
 
@@ -98,7 +98,6 @@ class HMMPlayer(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, transitions_C=None, transitions_D=None,
                  emission_probabilities=None, initial_state=0,
                  initial_action=C):
@@ -163,8 +162,6 @@ class EvolvedHMM5(HMMPlayer):
         'manipulates_state': False
     }
 
-
-    @init_args
     def __init__(self):
         initial_state = 3
         initial_action = C
@@ -183,4 +180,3 @@ class EvolvedHMM5(HMMPlayer):
         emissions = [1, 0, 0, 1, 0.111]
         super().__init__(t_C, t_D, emissions, initial_state,
                            initial_action)
-

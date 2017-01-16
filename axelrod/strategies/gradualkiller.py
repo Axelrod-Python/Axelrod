@@ -1,7 +1,8 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 from axelrod.strategy_transformers import InitialTransformer
 
 C, D = Actions.C, Actions.D
+
 
 @InitialTransformer((D, D, D, D, D, C, C), name_prefix=None)
 class GradualKiller(Player):

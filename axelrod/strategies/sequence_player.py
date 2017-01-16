@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 from axelrod._strategy_utils import thue_morse_generator
 
 
@@ -7,7 +7,6 @@ class SequencePlayer(Player):
     determine their plays.
     """
 
-    @init_args
     def __init__(self, generator_function, generator_args=()):
         super().__init__()
         # Initialize the sequence generator
@@ -59,7 +58,6 @@ class ThueMorse(SequencePlayer):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self):
         super().__init__(thue_morse_generator, (0,))
 
@@ -83,7 +81,6 @@ class ThueMorseInverse(ThueMorse):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self):
         super(ThueMorse, self).__init__(thue_morse_generator, (0,))
 

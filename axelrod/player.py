@@ -77,6 +77,7 @@ def init_args(func):
     def wrapper(self, *args, **kwargs):
         r = func(self, *args, **kwargs)
         self.init_args = args
+        self.init_kwargs = kwargs
         return r
     return wrapper
 
@@ -99,6 +100,13 @@ class Player(object):
         'manipulates_state': None
     }
 
+    def __new__(cls, *args, **kwargs):
+        """Caches arguments for Player cloning."""
+        obj = super().__new__(cls)
+        obj.init_args = args
+        obj.init_kwargs = kwargs
+        return obj
+
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
@@ -111,7 +119,6 @@ class Player(object):
         self.cooperations = 0
         self.defections = 0
         self.state_distribution = defaultdict(int)
-        self.init_args = ()
         self.set_match_attributes()
 
     def receive_match_attributes(self):
@@ -162,12 +169,12 @@ class Player(object):
         """Clones the player without history, reapplying configuration
         parameters as necessary."""
 
-        # You may be tempted to reimplement using the `copy` module
+        # You may be tempted to re-implement using the `copy` module
         # Note that this would require a deepcopy in some cases and there may
         # be significant changes required throughout the library.
-        # Consider overriding in special cases only if necessary
+        # Override in special cases only if absolutely necessary
         cls = self.__class__
-        new_player = cls(*self.init_args)
+        new_player = cls(*self.init_args, **self.init_kwargs)
         new_player.match_attributes = copy.copy(self.match_attributes)
         return new_player
 

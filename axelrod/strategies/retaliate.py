@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -26,7 +26,6 @@ class Retaliate(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, retaliation_threshold=0.1):
         """
         Uses the basic init from the Player class, but also set the name to
@@ -112,7 +111,6 @@ class LimitedRetaliate(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, retaliation_threshold=0.1, retaliation_limit=20):
         """
         Parameters

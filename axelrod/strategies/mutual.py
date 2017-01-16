@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 from axelrod.random_ import random_choice
 
 C, D = Actions.C, Actions.D

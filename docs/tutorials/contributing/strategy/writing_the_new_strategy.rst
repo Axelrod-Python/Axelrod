@@ -143,12 +143,7 @@ Now we have separate names for different instantiations::
 This helps distinguish players in tournaments that have multiple instances of the
 same strategy. If you modify the :code:`__repr__` method of player, be sure to
 add an appropriate test.
-
-Similarly, if your strategy's :code:`__init__` method takes any parameters other
-than :code:`self`, you can decorate it with :code:`@init_args` to ensure that
-when it is cloned that the correct parameter values will be applied.
-(This will trip a test if ommitted.)
-
+    
 There are various examples of helpful functions and properties that make
 writing strategies easier. Do not hesitate to get in touch with the
 Axelrod-Python team for guidance.

@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args, random_choice
+from axelrod import Actions, Player, random_choice
 
 
 C, D = Actions.C, Actions.D
@@ -21,7 +21,6 @@ class MemoryOnePlayer(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, four_vector=None, initial=C):
         """
         Parameters
@@ -92,7 +91,6 @@ class WinStayLoseShift(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, initial=C):
         super().__init__()
         self.set_four_vector([1, 0, 0, 1])
@@ -118,7 +116,6 @@ class WinShiftLoseStay(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, initial=D):
         super().__init__()
         self.set_four_vector([0, 1, 1, 0])
@@ -180,7 +177,6 @@ class FirmButFair(MemoryOnePlayer):
 
     name = 'Firm But Fair'
 
-    @init_args
     def __init__(self):
         four_vector = (1, 0, 1, 2/3)
         super().__init__(four_vector)
@@ -192,7 +188,6 @@ class StochasticCooperator(MemoryOnePlayer):
 
     name = 'Stochastic Cooperator'
 
-    @init_args
     def __init__(self):
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super().__init__(four_vector)
@@ -204,7 +199,6 @@ class StochasticWSLS(MemoryOnePlayer):
 
     name = 'Stochastic WSLS'
 
-    @init_args
     def __init__(self, ep=0.05):
         """
         Parameters
@@ -282,8 +276,7 @@ class ZDExtort2(LRPlayer):
 
     name = 'ZD-Extort-2'
 
-    @init_args
-    def __init__(self, phi=1/9, s=0.5):
+    def __init__    (self, phi=1/9, s=0.5):
         """
         Parameters
 
@@ -307,7 +300,6 @@ class ZDExtort2v2(LRPlayer):
 
     name = 'ZD-Extort-2 v2'
 
-    @init_args
     def __init__(self, phi=1/8, s=0.5, l=1):
         """
         Parameters
@@ -332,7 +324,6 @@ class ZDExtort4(LRPlayer):
 
     name = 'ZD-Extort-4'
 
-    @init_args
     def __init__(self, phi=4/17, s=0.25, l=1):
         """
         Parameters
@@ -356,7 +347,6 @@ class ZDGen2(LRPlayer):
 
     name = 'ZD-GEN-2'
 
-    @init_args
     def __init__(self, phi=1/8, s=0.5, l=3):
         """
         Parameters
@@ -380,7 +370,6 @@ class ZDGTFT2(LRPlayer):
 
     name = 'ZD-GTFT-2'
 
-    @init_args
     def __init__(self, phi=0.25, s=0.5):
         """
         Parameters
@@ -405,7 +394,6 @@ class ZDSet2(LRPlayer):
 
     name = 'ZD-SET-2'
 
-    @init_args
     def __init__(self, phi=1/4, s=0., l=2):
         """
         Parameters
@@ -435,7 +423,6 @@ class SoftJoss(MemoryOnePlayer):
 
     name = "Soft Joss"
 
-    @init_args
     def __init__(self, q=0.9):
         """
         Parameters

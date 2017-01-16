@@ -1,7 +1,8 @@
 import random
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
+
 
 class OnceBitten(Player):
     """
@@ -95,7 +96,6 @@ class ForgetfulFoolMeOnce(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, forget_probability=0.05):
         """
         Parameters

@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
-
 import inspect
 
 from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
+
 
 class Geller(Player):
     """Observes what the player will do in the next round and adjust.

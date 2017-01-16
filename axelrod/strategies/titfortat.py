@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 from axelrod.strategy_transformers import TrackHistoryTransformer
 
 C, D = Actions.C, Actions.D
@@ -286,7 +286,6 @@ class OmegaTFT(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, deadlock_threshold=3, randomness_threshold=8):
         super().__init__()
         self.deadlock_threshold = deadlock_threshold
@@ -527,7 +526,6 @@ class AdaptiveTitForTat(Player):
     }
     world = 0.5
 
-    @init_args
     def __init__(self, rate=0.5):
         super().__init__()
         self.rate, self.starting_rate = rate, rate
