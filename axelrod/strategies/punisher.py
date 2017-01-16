@@ -124,7 +124,7 @@ class LevelPunisher(Player):
     """
     Names:
 
-    - Level Punisher: Original by Geraint Palmer
+    - Level Punisher
     """
 
     name = 'Level Punisher'
@@ -139,8 +139,9 @@ class LevelPunisher(Player):
     }
 
     def strategy(self, opponent):
-        if len(opponent.history) <= 10: return D
-            else:
-                if float(len(opponent.history) - sum(opponent.history)) / len(opponent.history) > 0.2:
-                    return C
-                else: return D
+        if len(opponent.history) <= 10:
+            return D
+        elif float(len(opponent.history) - sum(opponent.history)) / len(opponent.history) > 0.2:
+            return C
+        else:
+            return D
