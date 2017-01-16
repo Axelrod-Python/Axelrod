@@ -1,4 +1,3 @@
-from collections import defaultdict
 import warnings
 from axelrod import (Actions, Player, update_history, update_state_distribution)
 

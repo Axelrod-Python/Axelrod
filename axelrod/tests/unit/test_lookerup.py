@@ -5,7 +5,7 @@ import unittest
 import axelrod
 from axelrod.strategies.lookerup import (
     create_lookup_table_keys, create_lookup_table_from_pattern)
-from .test_player import TestPlayer, TestHeadsUp
+from .test_player import TestPlayer, TestMatch
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -181,26 +181,26 @@ class TestGeneratedPlayers(unittest.TestCase):
 
 
 # Some heads up tests for EvolvedLookerUp
-class EvolvedLookerUpvsDefector(TestHeadsUp):
+class EvolvedLookerUpvsDefector(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.Defector(),
                          [C, C, D], [D, D, D])
 
 
-class EvolvedLookerUpvsCooperator(TestHeadsUp):
+class EvolvedLookerUpvsCooperator(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.Cooperator(),
                          [C] * 10, [C] * 10)
 
 
-class EvolvedLookerUpvsTFT(TestHeadsUp):
+class EvolvedLookerUpvsTFT(TestMatch):
     def test_vs(self):
         outcomes = zip()
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.TitForTat(),
                          [C] * 10, [C] * 10)
 
 
-class EvolvedLookerUpvsAlternator(TestHeadsUp):
+class EvolvedLookerUpvsAlternator(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.Alternator(),
                          [C, C, C, D, D, D], [C, D, C, D, C, D])

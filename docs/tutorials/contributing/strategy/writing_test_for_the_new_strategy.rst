@@ -135,18 +135,18 @@ All three of these functions can take an optional keyword argument
        self.responses_test([C], [C] * 6, [C] * 6,
                        attrs={"opponent_class": "Cooperative"})
 
-Finally, there is a :code:`TestHeadsUp` class that streamlines the testing of
+Finally, there is a :code:`TestMatch` class that streamlines the testing of
 two strategies playing each other using a test function :code:`versus_test`. For
 example, to test several rounds of play of :code:`TitForTwoTats` versus
 :code:`Bully`::
 
-    class TestTF2TvsBully(TestHeadsUp):
+    class TestTF2TvsBully(TestMatch):
         """Test Tit for Two Tats vs Bully"""
         def test_rounds(self):
             outcomes = [[C, D], [C, D], [D, D], [D, C], [C, C], [C, D], [C, D], [D, D]]
             self.versus_test(axelrod.TitFor2Tats, axelrod.Bully, outcomes)
 
-Using `TestHeadsUp` is essentially equivalent to playing a short `Match` between
+Using `TestMatch` is essentially equivalent to playing a short `Match` between
 the players and checking the outcome.
 
 The function :code:`versus_test` also accepts a :code:`random_seed` keyword, and

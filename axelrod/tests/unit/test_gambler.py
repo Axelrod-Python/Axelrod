@@ -6,7 +6,7 @@ Most tests come form the LookerUp test suite
 import copy
 
 import axelrod
-from .test_player import TestPlayer, TestHeadsUp
+from .test_player import TestPlayer, TestMatch
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -171,25 +171,25 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
 
 
 # Some heads up tests for PSOGambler
-class PSOGambler2_2_2vsDefector(TestHeadsUp):
+class PSOGambler2_2_2vsDefector(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Defector(),
                          [C, C, D, D], [D, D, D, D])
 
 
-class PSOGambler2_2_2vsCooperator(TestHeadsUp):
+class PSOGambler2_2_2vsCooperator(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Cooperator(),
                          [C, C, C, C], [C, C, C, C])
 
 
-class PSOGambler2_2_2vsTFT(TestHeadsUp):
+class PSOGambler2_2_2vsTFT(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.TitForTat(),
                          [C, C, C, C], [C, C, C, C])
 
 
-class PSOGambler2_2_2vsAlternator(TestHeadsUp):
+class PSOGambler2_2_2vsAlternator(TestMatch):
     def test_vs(self):
         axelrod.seed(10)
         self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Alternator(),

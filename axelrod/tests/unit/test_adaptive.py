@@ -1,7 +1,7 @@
 """Tests for the Adaptive strategy."""
 
 import axelrod
-from .test_player import TestHeadsUp, TestPlayer
+from .test_player import TestMatch, TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -36,25 +36,25 @@ class TestAdaptive(TestPlayer):
         self.assertEqual(0, player.scores[C])
 
 
-class TestAdaptivevsCooperator(TestHeadsUp):
+class TestAdaptivevsCooperator(TestMatch):
     """Test TFT vs WSLS"""
     def test_rounds(self):
         self.versus_test(axelrod.Adaptive(), axelrod.Cooperator(),
                          [C] * 6 + [D] * 5 + [D] * 3, [C] * 14)
 
-class TestAdaptivevsDefector(TestHeadsUp):
+class TestAdaptivevsDefector(TestMatch):
     """Test TFT vs WSLS"""
     def test_rounds(self):
         self.versus_test(axelrod.Adaptive(), axelrod.Defector(),
                          [C] * 6 + [D] * 5 + [D] * 3, [D] * 14)
 
-class TestAdaptivevsAlternator(TestHeadsUp):
+class TestAdaptivevsAlternator(TestMatch):
     """Test TFT vs WSLS"""
     def test_rounds(self):
         self.versus_test(axelrod.Adaptive(), axelrod.Alternator(),
                          [C] * 6 + [D] * 5 + [D] * 3, [C, D] * 7)
 
-class TestAdaptivevsTFT(TestHeadsUp):
+class TestAdaptivevsTFT(TestMatch):
     """Test TFT vs WSLS"""
     def test_rounds(self):
         self.versus_test(axelrod.Adaptive(), axelrod.TitForTat(),

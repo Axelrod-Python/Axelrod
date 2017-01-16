@@ -2,7 +2,7 @@
 import unittest
 
 import axelrod
-from .test_player import TestHeadsUp, TestPlayer
+from .test_player import TestMatch, TestPlayer
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -351,37 +351,37 @@ class TestEvolvedFSM16Noise05(TestFSMPlayer):
         self.first_play_test(C)
 
 
-class TestFortress3vsFortress3(TestHeadsUp):
+class TestFortress3vsFortress3(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress3(), axelrod.Fortress3(),
                          [D, D, C, C, C], [D, D, C, C, C])
 
 
-class TestFortress3vsTitForTat(TestHeadsUp):
+class TestFortress3vsTitForTat(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress3(), axelrod.TitForTat(),
                          [D, D, D, C], [C, D, D, D])
 
 
-class TestFortress3vsCooperator(TestHeadsUp):
+class TestFortress3vsCooperator(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress3(), axelrod.Cooperator(),
                          [D, D, D, D, D, D], [C] * 6)
 
 
-class TestFortress4vsFortress4(TestHeadsUp):
+class TestFortress4vsFortress4(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress4(), axelrod.Fortress4(),
                          [D, D, D, C, C, C], [D, D, D, C, C, C])
 
 
-class TestFortress4vsTitForTat(TestHeadsUp):
+class TestFortress4vsTitForTat(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress4(), axelrod.TitForTat(),
                          [D, D, D, D, C, D], [C, D, D, D, D, C])
 
 
-class TestFortress4vsCooperator(TestHeadsUp):
+class TestFortress4vsCooperator(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.Fortress4(), axelrod.Cooperator(),
                          [D, D, D, D, D, D], [C] * 6)

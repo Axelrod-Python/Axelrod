@@ -5,7 +5,7 @@ from hypothesis import given
 from hypothesis.strategies import integers
 import axelrod
 from axelrod.tests.property import strategy_lists
-from .test_player import TestHeadsUp, TestPlayer
+from .test_player import TestMatch, TestPlayer
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -249,7 +249,7 @@ class OmegaTFT(TestPlayer):
         self.assertEqual(player.deadlock_counter, 0)
 
 
-class TestOmegaTFTvsSTFT(TestHeadsUp):
+class TestOmegaTFTvsSTFT(TestMatch):
     def test_rounds(self):
         self.versus_test(
             axelrod.OmegaTFT(), axelrod.SuspiciousTitForTat(),
@@ -258,7 +258,7 @@ class TestOmegaTFTvsSTFT(TestHeadsUp):
         )
 
 
-class TestOmegaTFTvsAlternator(TestHeadsUp):
+class TestOmegaTFTvsAlternator(TestMatch):
     def test_rounds(self):
         self.versus_test(
             axelrod.OmegaTFT(), axelrod.Alternator(),

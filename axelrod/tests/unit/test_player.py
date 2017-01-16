@@ -332,19 +332,26 @@ class TestPlayer(unittest.TestCase):
                 (key, player.classifier[key], self.expected_classifier[key]))
 
 
-class TestHeadsUp(unittest.TestCase):
-    """Test class for heads up play between two given players."""
+class TestMatch(unittest.TestCase):
+    """Test class for heads up play between two given players. Plays an
+    axelrod match between the two players."""
 
     def versus_test(self, player1, player2, expected_actions1,
-                    expected_actions2, seed=None):
+                    expected_actions2, noise=None, seed=None):
         """Tests a sequence of outcomes for two given players."""
+        if len(expected_actions1) != len(expected_actions2):
+            raise ValueError("Mismatched History lengths.")
         if seed:
             axelrod.seed(seed)
-        # Test sequence of play
-        for outcome1, outcome2 in zip(expected_actions1, expected_actions2):
+        turns = len(expected_actions1)
+        match = axelrod.Match((player1, player2), turns=turns, noise=noise)
+        match.play()
+        # Test expected sequence of play.
+        for i, (outcome1, outcome2) in enumerate(
+            zip(expected_actions1, expected_actions2)):
             player1.play(player2)
-            self.assertEqual(player1.history[-1], outcome1)
-            self.assertEqual(player2.history[-1], outcome2)
+            self.assertEqual(player1.history[i], outcome1)
+            self.assertEqual(player2.history[i], outcome2)
 
 
 def test_four_vector(test_class, expected_dictionary):

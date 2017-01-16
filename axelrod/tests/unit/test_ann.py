@@ -3,7 +3,7 @@ import unittest
 
 import axelrod
 from axelrod.strategies.ann import split_weights
-from .test_player import TestHeadsUp, TestPlayer
+from .test_player import TestMatch, TestPlayer
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -75,43 +75,43 @@ class TestEvolvedANNNoise05(TestPlayer):
         self.first_play_test(C)
 
 
-class TestEvolvedANNvsCooperator(TestHeadsUp):
+class TestEvolvedANNvsCooperator(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN(), axelrod.Cooperator(),
                          [C] * 5, [C] * 5)
 
 
-class TestEvolvedANNvsDefector(TestHeadsUp):
+class TestEvolvedANNvsDefector(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN(), axelrod.Defector(),
                          [C, C, D, D, D], [D] * 5)
 
 
-class TestEvolvedANNvsTFT(TestHeadsUp):
+class TestEvolvedANNvsTFT(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN(), axelrod.TitForTat(),
                          [C] * 5, [C] * 5)
 
 
-class TestEvolvedANN5vsCooperator(TestHeadsUp):
+class TestEvolvedANN5vsCooperator(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN5(), axelrod.Cooperator(),
                          [C] * 5, [C] * 5)
 
 
-class TestEvolvedANN5vsDefector(TestHeadsUp):
+class TestEvolvedANN5vsDefector(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN5(), axelrod.Defector(),
                          [C] * 5 + [D], [D] * 6)
 
 
-class TestEvolvedANNNoise05vsCooperator(TestHeadsUp):
+class TestEvolvedANNNoise05vsCooperator(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANNNoise05(), axelrod.Cooperator(),
                          [C] * 5, [C] * 5)
 
 
-class TestEvolvedANNNoise05vsDefector(TestHeadsUp):
+class TestEvolvedANNNoise05vsDefector(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANNNoise05(), axelrod.Defector(),
                          [C] * 10, [D] * 10)
