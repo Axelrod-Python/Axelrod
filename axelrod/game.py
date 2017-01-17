@@ -1,7 +1,6 @@
 from axelrod import Actions
 from typing import Tuple
 
-pair = Tuple[int, int]
 C, D = Actions.C, Actions.D
 
 
@@ -25,7 +24,7 @@ class Game(object):
         T = self.scores[(D, C)][0]
         return (R, P, S, T)
 
-    def score(self, pair) -> pair:
+    def score(self, pair) -> Tuple[int, int]:
         """Return the appropriate score for decision pair.
 
         Returns the appropriate score (as a tuple) from the scores dictionary
