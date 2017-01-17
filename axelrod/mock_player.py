@@ -37,31 +37,31 @@ class MockPlayer(Player):
             return C
 
 
-def simulate_play(player1, player2, h1=None, h2=None):
+def simulate_play(player1, player2, action1=None, action2=None):
     """
-    Simulates play with or without forced history. If h1 and h2 are given, these
+    Simulates play with or without forced history. If action1 and action2 are given, these
     actions are enforced in the players strategy. This generally should not be
     necessary, but various tests may force impossible or unlikely histories.
     """
 
-    if h1 and h2:
-        mock_player1 = MockPlayer(actions=[h1], history=player1.history)
-        mock_player2 = MockPlayer(actions=[h2], history=player2.history)
+    if action1 and action2:
+        mock_player1 = MockPlayer(actions=[action1], history=player1.history)
+        mock_player2 = MockPlayer(actions=[action2], history=player2.history)
         # Force plays
         s1 = player1.strategy(mock_player2)
         s2 = player2.strategy(mock_player1)
-        if (s1 != h1) or (s2 != h2):
+        if (s1 != action1) or (s2 != action2):
             warnings.warn(
             "Simulated play mismatch with expected history: Round was "
             "({}, {}) but ({}, {}) was expected for player: {}".format(
-                s1, s2, h1, h2, str(player1))
+                s1, s2, action1, action2, str(player1))
             )
         # Record intended history
         # Update Cooperation / Defection counts
-        update_history(player1, h1)
-        update_history(player2, h2)
-        update_state_distribution(player1, h1, h2)
-        update_state_distribution(player2, h2, h1)
+        update_history(player1, action1)
+        update_history(player2, action2)
+        update_state_distribution(player1, action1, action2)
+        update_state_distribution(player2, action2, action1)
         return (s1, s2)
     else:
         s1 = player1.strategy(player2)

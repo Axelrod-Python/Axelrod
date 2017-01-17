@@ -32,7 +32,7 @@ how a strategy plays.
   in the four possible second rounds of play, depending on the move the the
   strategy and the opponent in the first round.
 * `responses_test(responses, history1=None, history2=None, ...)` is a powerful
-  test that can handle a variety of situations, testing the first X actions, the
+  test that can handle a variety of situations, testing the first n actions, the
   actions played in response to given player histories, and can also check that
   internal attributes are set.
 
@@ -64,9 +64,9 @@ As an example, the tests for Tit-For-Tat are as follows::
             # Starts by cooperating.
             self.first_play_test(C)
             # Repeats last action of opponent history.
-            self.second_play_test([C, D, C, D])
-            self.responses_test([C], [C] * 4, [C, C, C, C])
-            self.responses_test([D], [C] * 5, [C, C, C, C, D])
+            self.second_play_test(C, D, C, D)
+            self.responses_test([C], [C, C, C, C], [C, C, C, C])
+            self.responses_test([D], [C, C, C, C, C], [C, C, C, C, D])
 
 The :code:`test_strategy` method mainly checks that the
 :code:`strategy` method in the :code:`TitForTat` class works as expected:
@@ -74,16 +74,26 @@ The :code:`test_strategy` method mainly checks that the
 1. If the opponent's last strategy was :code:`C`: then :code:`TitForTat` should
    cooperate::
 
-    self.responses_test([C], [C] * 4, [C, C, C, C])
+    self.responses_test(responses=[C], history1=[C], history2=[C])
 
-2. If the opponent's last strategy was :code:`D`: then :code:`TitForTat` should
-   defect::
+Or simply::
 
-    self.responses_test([D], [C] * 5, [C, C, C, C, D])
+    self.responses_test([C], [C], [C])
 
-We have added some convenience member functions to the :code:`TestPlayer` class.
-All three of these functions can take an optional keyword argument
-:code:`seed` (useful for stochastic strategies).
+2. If the opponent's last strategy was :code:`D`: after four cooperates then
+ :code:`TitForTat` should defect. Note that we need to give the history for
+ :code:`TitForTat` as well::
+
+    self.responses_test(responses=[D], history1=[C, C, C, C, C],
+                        history2=[C, C, C, C, D])
+
+Or::
+
+    self.responses_test([D], [C, C, C, C, C], [C, C, C, C, D])
+
+Here are some additional examples and explanations of the convenience member
+functions. All three of these functions can take an optional keyword argument
+:code:`seed` (useful and necessary for stochastic strategies).
 
 1. The member function :code:`first_play_test` tests the first strategy, e.g.::
 
@@ -97,21 +107,23 @@ All three of these functions can take an optional keyword argument
     self.assertEqual(P1.strategy(P2), 'C')
 
 2. The member function :code:`second_play_test` takes a list of four plays, each
-   following one round of CC, CD, DC, and DD respectively::
+   following one round of CC, CD, DC, and DD respectively. So for example here
+   we test that Tit for tat will cooperate if and only if the opponent
+   cooperates in the previous round::
 
     self.second_play_test('C', 'D', 'D', 'C')
 
-   This is equivalent to choosing an opponent will play C or D as needed and
-   checking the next move. This function can also take an optional random seed
-   argument `seed`.
+   This is equivalent to choosing if an opponent will play C or D following the
+   last round of play and checking the player's subsequent action. This
+   function can also take an optional random seed argument :code:`seed`.
 
 3. The member function :code:`responses_test` takes arbitrary histories for each
    player and tests a list of expected next responses::
 
-    def test_effect_of_strategy(self):
+    def test_strategy(self):
         self.responses_test([D, C, C, C], [C], [C], random_seed=15)
 
-   In this case each player has their history simulated to  be :code:`[C]` and
+   In this case each player has their history simulated to be :code:`[C]` and
    the expected responses are D, C, C, C. Note that the histories will elongate
    as the responses accumulated, with the opponent accruing cooperations.
 
