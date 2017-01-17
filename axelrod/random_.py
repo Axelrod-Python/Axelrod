@@ -1,9 +1,10 @@
 import random
 import numpy
 from axelrod import Actions
+from axelrod.actions import Action
 
 
-def random_choice(p=0.5: float):
+def random_choice(p: float = 0.5) -> Action:
     """
     Return 'C' with probability `p`, else return 'D'
 
