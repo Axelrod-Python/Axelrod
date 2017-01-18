@@ -30,12 +30,12 @@ class TestDavis(TestPlayer):
 
     def test_strategy(self):
         # Cooperates for the first ten rounds
-        history1 = []
-        history2 = []
+        player_history = []
+        opponent_history = []
         for i in range(9):
-            history2.append(random.choice([C, D]))
-            history1.append(C)
-            self.responses_test([C], history1, history2)
+            opponent_history.append(random.choice([C, D]))
+            player_history.append(C)
+            self.responses_test([C], player_history, opponent_history)
 
         # If opponent defects at any point then the player will defect forever
         # (after 10 rounds)
@@ -120,10 +120,12 @@ class TestFeld(TestPlayer):
         p1.history = [C] * 200
         self.assertEqual(0.5, p1._cooperation_probability())
         # Test beyond 200 rounds
-        history_1 = [C] * 200
-        history_2 = [C] * 200
-        self.responses_test([C, C, D, D], history_1, history_2, seed=1)
-        self.responses_test([D, D, D, D], history_1, history_2, seed=50)
+        player_history = [C] * 200
+        opponent_history = [C] * 200
+        self.responses_test([C, C, D, D], player_history, opponent_history,
+                            seed=1)
+        self.responses_test([D, D, D, D], player_history, opponent_history,
+                            seed=50)
 
 
 class TestGrofman(TestPlayer):
@@ -259,9 +261,9 @@ class TestShubik(TestPlayer):
         self.responses_test([C], [C, D, C, D, D], [D, C, D, D, C])
         # Retaliate thrice and forgive
         self.responses_test([D, D, D], [C, D, C, D, D, C], [D, C, D, C, C, D])
-        history_1 = [C, D, C, D, D, C, D, D, D]
-        history_2 = [D, C, D, C, C, D, C, C, C]
-        self.responses_test([C], history_1, history_2)
+        player_history = [C, D, C, D, D, C, D, D, D]
+        opponent_history = [D, C, D, C, C, D, C, C, C]
+        self.responses_test([C], player_history, opponent_history)
 
 
 class TestTullock(TestPlayer):
@@ -282,23 +284,25 @@ class TestTullock(TestPlayer):
         """Cooperates for first ten rounds"""
         self.first_play_test(C)
         for i in range(10):
-            history_1 = [C] * i
-            history_2 = [C] * i
-            self.responses_test([C], history_1, history_2)
+            player_history = [C] * i
+            opponent_history = [C] * i
+            self.responses_test([C], player_history, opponent_history)
         # Now cooperate 10% less than opponent
-        history_1 = [C] * 11
-        history_2 = [D] * 11
-        self.responses_test([D], history_1, history_2, seed=10)
-        history_1 = [C] * 11
-        history_2 = [D] * 10 + [C]
-        self.responses_test([D], history_1, history_2, seed=10)
+        player_history = [C] * 11
+        opponent_history = [D] * 11
+        self.responses_test([D], player_history, opponent_history, seed=10)
+        player_history = [C] * 11
+        opponent_history = [D] * 10 + [C]
+        self.responses_test([D], player_history, opponent_history, seed=10)
         # Test beyond 10 rounds
-        history_1 = [C] * 11
-        history_2 = [D] * 5 + [C] * 6
-        self.responses_test([D, D, D, D], history_1, history_2, seed=20)
-        history_1 = [C] * 11
-        history_2 = [C] * 9 + [D] * 2
-        self.responses_test([C, D, D, C], history_1, history_2, seed=25)
+        player_history = [C] * 11
+        opponent_history = [D] * 5 + [C] * 6
+        self.responses_test([D, D, D, D], player_history, opponent_history,
+                            seed=20)
+        player_history = [C] * 11
+        opponent_history = [C] * 9 + [D] * 2
+        self.responses_test([C, D, D, C], player_history, opponent_history,
+                            seed=25)
 
 
 class TestUnnamedStrategy(TestPlayer):

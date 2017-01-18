@@ -280,9 +280,9 @@ class TestPlayer(unittest.TestCase):
             test_responses(self, self.player(), axelrod.Defector(),
                            rDD, D, D, seed=seed)
 
-    def responses_test(self, responses, history1=None, history2=None,
-                       seed=None, length=200, attrs=None, init_args=None,
-                       init_kwargs=None):
+    def responses_test(self, responses, player_history=None,
+                       opponent_history=None, seed=None, length=200, attrs=None,
+                       init_args=None, init_kwargs=None):
         """Test responses to arbitrary histories. A match is played where the
         histories are enforced and the sequence of plays in responses is
         checked to be the outcome. Internal variables can be checked with the
@@ -293,7 +293,7 @@ class TestPlayer(unittest.TestCase):
         ----------
         responses: History or sequence of axelrod.Actions
             The expected outcomes
-        history1, history2: sequences of prior history to enforce
+        player_history, opponent_history: sequences of prior history to enforce
         seed: int
             A random seed if needed for reproducibility
         length: int
@@ -315,20 +315,20 @@ class TestPlayer(unittest.TestCase):
         player1.set_match_attributes(length=length)
         player2 = MockPlayer()
         player2.set_match_attributes(length=length)
-        test_responses(self, player1, player2, responses, history1, history2,
-                       seed=seed, attrs=attrs)
+        test_responses(self, player1, player2, responses, player_history,
+                       opponent_history, seed=seed, attrs=attrs)
 
         # Test that we get the same sequence after a reset
         player1.reset()
         player2.reset()
-        test_responses(self, player1, player2, responses, history1, history2,
-                       seed=seed, attrs=attrs)
+        test_responses(self, player1, player2, responses, player_history,
+                       opponent_history, seed=seed, attrs=attrs)
 
         # Test that we get the same sequence after a clone
         player1 = player1.clone()
         player2 = player2.clone()
-        test_responses(self, player1, player2, responses, history1, history2,
-                       seed=seed, attrs=attrs)
+        test_responses(self, player1, player2, responses, player_history,
+                       opponent_history, seed=seed, attrs=attrs)
 
     def classifier_test(self, expected_class_classifier=None):
         """Test that the keys in the expected_classifier dictionary give the

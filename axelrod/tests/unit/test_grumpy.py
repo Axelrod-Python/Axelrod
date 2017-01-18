@@ -1,7 +1,7 @@
 """Tests for the Grumpy strategy."""
 
 import axelrod
-from .test_player import TestPlayer, test_responses, TestOpponent
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -30,9 +30,9 @@ class TestGrumpy(TestPlayer):
         # threshold is hit.
 
         self.responses_test([C], [C, D, D, D], [C, C, C, C],
+                            attrs={"state": "Nice"},
                             init_kwargs={"grumpy_threshold": 3,
-                                         "nice_threshold": 0},
-                            attrs={"state": "Nice"})
+                                         "nice_threshold": 0})
         self.responses_test([D], [C, C, D, D, D], [D, D, D, D, D],
                             init_kwargs={"grumpy_threshold": 3,
                                          "nice_threshold": 0})

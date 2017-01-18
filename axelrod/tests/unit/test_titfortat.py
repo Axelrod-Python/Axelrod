@@ -285,64 +285,57 @@ class TestGradual(TestPlayer):
         self.first_play_test(C)
         # Punishes defection with a growing number of defections and calms
         # the opponent with two cooperations in a row.
-        self.responses_test(
-            [C], [C], [C], attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 0
-            })
-        self.responses_test(
-            [D], [C], [D], attrs={
-                "calming": False,
-                "punishing": True,
-                "punishment_count": 1,
-                "punishment_limit": 1
-            })
-        self.responses_test(
-            [C], [C, D], [D, C], attrs={
-                "calming": True,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 1
-            })
-        self.responses_test(
-            [C], [C, D, C], [D, C, D], attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 1
-            })
-        self.responses_test(
-            [C], [C, D, C, C], [D, C, D, C], attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 1
-            })
-        self.responses_test(
-            [C], [C, D, C, D, C], [D, C, D, C, C], attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 1
-            })
-        self.responses_test(
-            [D], [C, D, C, D, C, C], [D, C, D, C, C, D], attrs={
-                "calming": False,
-                "punishing": True,
-                "punishment_count": 1,
-                "punishment_limit": 2
-            })
-        self.responses_test(
-            [D], [C, D, C, D, D, C, D], [D, C, D, C, C, D, C], attrs={
-                "calming": False,
-                "punishing": True,
-                "punishment_count": 2,
-                "punishment_limit": 2
-            })
-        self.responses_test(
-            [C], [C, D, C, D, D, C, D, D], [D, C, D, C, C, D, C, C], attrs={
+        self.responses_test([C], [C], [C], attrs={
+            "calming": False,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 0
+        })
+        self.responses_test([D], [C], [D], attrs={
+            "calming": False,
+            "punishing": True,
+            "punishment_count": 1,
+            "punishment_limit": 1
+        })
+        self.responses_test([C], [C, D], [D, C], attrs={
+            "calming": True,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 1
+        })
+        self.responses_test([C], [C, D, C], [D, C, D], attrs={
+            "calming": False,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 1
+        })
+        self.responses_test([C], [C, D, C, C], [D, C, D, C], attrs={
+            "calming": False,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 1
+        })
+        self.responses_test([C], [C, D, C, D, C], [D, C, D, C, C], attrs={
+            "calming": False,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 1
+        })
+        self.responses_test([D], [C, D, C, D, C, C], [D, C, D, C, C, D], attrs={
+            "calming": False,
+            "punishing": True,
+            "punishment_count": 1,
+            "punishment_limit": 2
+        })
+        self.responses_test([D], [C, D, C, D, D, C, D], [D, C, D, C, C, D, C],
+                            attrs={
+                                "calming": False,
+                                "punishing": True,
+                                "punishment_count": 2,
+                                "punishment_limit": 2
+                            })
+        self.responses_test([C], [C, D, C, D, D, C, D, D],
+                            [D, C, D, C, C, D, C, C], attrs={
                 "calming": True,
                 "punishing": False,
                 "punishment_count": 0,

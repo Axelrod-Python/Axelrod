@@ -50,8 +50,7 @@ class TestLimitedRetaliate(TestPlayer):
         self.first_play_test(C)
 
         # If opponent has never defected, co-operate
-        self.responses_test([C], [C] * 4, [C] * 4,
-                            attrs={"retaliating": False})
+        self.responses_test([C], [C] * 4, [C] * 4, attrs={"retaliating": False})
 
         # Retaliate after a (C, D) round.
         self.responses_test([D], [C, C, C, C, D], [C, C, C, D, C],

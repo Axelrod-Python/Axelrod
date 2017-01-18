@@ -47,8 +47,8 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
 3. The member function :code:`responses_test` takes arbitrary histories for each
    player and tests a list of expected next responses::
 
-    self.responses_test(responses=[D, C, C, C], history1=[C], history2=[C],
-                        seed=None)
+    self.responses_test(responses=[D, C, C, C], player_history=[C],
+                        opponent_history=[C], seed=None)
 
    In this case each player has their history simulated to be :code:`[C]` and
    the expected responses are D, C, C, C. Note that the histories will elongate
@@ -69,7 +69,7 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
    :code:`"Cooperative"`::
 
        self.responses_test([C], [C] * 6, [C] * 6,
-                       attrs={"opponent_class": "Cooperative"})
+                           attrs={"opponent_class": "Cooperative"})
 
 As an example, the tests for Tit-For-Tat are as follows::
 
@@ -109,7 +109,7 @@ The :code:`test_strategy` method mainly checks that the
 1. If the opponent's last strategy was :code:`C`: then :code:`TitForTat` should
    cooperate::
 
-    self.responses_test(responses=[C], history1=[C], history2=[C])
+    self.responses_test(responses=[C], player_history=[C], opponent_history=[C])
 
    Or simply::
 
@@ -119,8 +119,8 @@ The :code:`test_strategy` method mainly checks that the
    :code:`TitForTat` should defect. Note that we need to give the history for
    :code:`TitForTat` as well::
 
-    self.responses_test(responses=[D], history1=[C, C, C, C, C],
-                        history2=[C, C, C, C, D])
+    self.responses_test(responses=[D], player_history=[C, C, C, C, C],
+                        opponent_history=[C, C, C, C, D])
 
    Or::
 
