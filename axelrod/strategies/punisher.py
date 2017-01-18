@@ -67,8 +67,9 @@ class Punisher(Player):
 
 class InversePunisher(Player):
     """
-    An inverted version of Punisher. Similarly the player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after mem_length matches, with 1 <= mem_length <= 20. This time mem_length is
+    An inverted version of Punisher. The player starts by cooperating however
+    will defect if at any point the opponent has defected, and forgets after
+    mem_length matches, with 1 <= mem_length <= 20. This time mem_length is
     proportional to the amount of time the opponent has played C.
 
     Names:
@@ -96,7 +97,9 @@ class InversePunisher(Player):
 
     def strategy(self, opponent):
         """
-        Begins by playing C, then plays D for an amount of rounds proportional to the opponents historical '%' of playing C if the opponent ever plays D
+        Begins by playing C, then plays D for an amount of rounds proportional
+        to the opponents historical '%' of playing C if the opponent ever plays
+        D.
         """
 
         if self.grudge_memory >= self.mem_length:

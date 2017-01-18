@@ -15,6 +15,7 @@ def load_file(filename, directory):
         rows.append(s)
     return rows
 
+
 def load_weights(filename="ann_weights.csv", directory="data"):
     """Load Neural Network Weights."""
     rows = load_file(filename, directory)
@@ -27,6 +28,7 @@ def load_weights(filename="ann_weights.csv", directory="data"):
         d[name] = (num_features, num_hidden, weights)
     return d
 
+
 def load_lookerup_tables(filename="lookup_tables.csv", directory="data"):
     """Load lookup tables."""
     rows = load_file(filename, directory)
@@ -35,6 +37,7 @@ def load_lookerup_tables(filename="lookup_tables.csv", directory="data"):
         name, a, b, c, initial, pattern = row
         d[(name, int(a), int(b), int(c))] = (initial, pattern)
     return d
+
 
 def load_pso_tables(filename="pso_gambler.csv", directory="data"):
     """Load lookup tables."""

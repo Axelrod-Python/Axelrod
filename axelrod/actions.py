@@ -2,6 +2,7 @@ from typing import NewType
 
 Action = NewType('Action', str)
 
+
 class Actions(object):
     C = 'C'
     D = 'D'

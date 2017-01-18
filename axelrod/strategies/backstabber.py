@@ -30,6 +30,7 @@ class BackStabber(Player):
             return D
         return C
 
+
 @FinalTransformer((D, D), name_prefix=None) # End with two defections
 class DoubleCrosser(Player):
     """

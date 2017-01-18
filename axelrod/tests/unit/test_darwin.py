@@ -1,11 +1,10 @@
-"""
-    Tests for the Darwin PD strategy.
-"""
+"""Tests for the Darwin PD strategy."""
 
 import axelrod
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
 
 class TestDarwin(TestPlayer):
 
@@ -24,14 +23,14 @@ class TestDarwin(TestPlayer):
     def test_strategy(self):
         p1 = self.player()
         p2 = axelrod.Cooperator()
-        self.assertEqual(p1.strategy(p2), C) # Always cooperate first.
+        self.assertEqual(p1.strategy(p2), C)  # Always cooperate first.
         for i in range(10):
             p1.play(p2)
         self.assertEqual(p1.strategy(p2), C)
 
         p1 = self.player()
         p2 = axelrod.Defector()
-        self.assertEqual(p1.strategy(p2), C) # Always cooperate first.
+        self.assertEqual(p1.strategy(p2), C)  # Always cooperate first.
         for i in range(10):
             p1.play(p2)
         self.assertEqual(p1.strategy(p2), C)

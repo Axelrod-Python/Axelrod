@@ -6,7 +6,8 @@ C, D = Actions.C, Actions.D
 
 class OnceBitten(Player):
     """
-    Cooperates once when the opponent defects, but if they defect twice in a row defaults to forgetful grudger for 10 turns defecting
+    Cooperates once when the opponent defects, but if they defect twice in a row
+    defaults to forgetful grudger for 10 turns defecting.
     """
 
     name = 'Once Bitten'
@@ -29,7 +30,7 @@ class OnceBitten(Player):
     def strategy(self, opponent):
         """
         Begins by playing C, then plays D for mem_length rounds if the opponent
-        ever plays D twice in a row
+        ever plays D twice in a row.
         """
         if self.grudge_memory >= self.mem_length:
             self.grudge_memory = 0

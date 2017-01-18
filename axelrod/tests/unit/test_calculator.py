@@ -1,7 +1,6 @@
-"""Tests for calculator strategies."""
+"""Tests for Calculator strategy."""
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -37,9 +36,11 @@ class TestCalculator(TestPlayer):
         self.assertEqual(C, P1.strategy(P2))
 
         # Test post 20 rounds responses
-        self.responses_test([C] * 21, [C] * 21, [D])
-        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D]
-        self.responses_test([C] * 21, history, [D])
-        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D, C]
-        self.responses_test([C] * 22, history, [C])
+        self.responses_test([D], [C] * 21, [C] * 21)
+        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C,
+                   D]
+        self.responses_test([D], [C] * 21, history)
+        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C,
+                   D, C]
+        self.responses_test([C], [C] * 22, history)
 

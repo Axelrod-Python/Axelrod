@@ -63,7 +63,8 @@ class TestMoranProcess(unittest.TestCase):
             self.assertIsNotNone(mp.winning_strategy_name)
 
     def test_death_birth_outcomes(self):
-        """Show that birth-death and death-birth can produce different outcomes."""
+        """Show that birth-death and death-birth can produce different
+        outcomes."""
         seeds = [(1, True), (23, False)]
         players = []
         N = 6
@@ -95,8 +96,10 @@ class TestMoranProcess(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         random.seed(5)
         mp = MoranProcess((p1, p2), mutation_rate=0.2)
-        self.assertDictEqual(mp.mutation_targets, {str(p1): [p2], str(p2): [p1]})
-        # Test that mutation causes the population to alternate between fixations
+        self.assertDictEqual(mp.mutation_targets,
+                             {str(p1): [p2], str(p2): [p1]})
+        # Test that mutation causes the population to alternate between
+        # fixations
         counters = [
             Counter({'Cooperator': 2}),
             Counter({'Defector': 2}),
@@ -131,8 +134,10 @@ class TestMoranProcess(unittest.TestCase):
         p3 = axelrod.Defector()
         players = [p1, p2, p3]
         mp = MoranProcess(players, mutation_rate=0.2)
-        self.assertDictEqual(mp.mutation_targets, {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]})
-        # Test that mutation causes the population to alternate between fixations
+        self.assertDictEqual(mp.mutation_targets, {
+            str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]})
+        # Test that mutation causes the population to alternate between
+        # fixations
         counters = [
             Counter({'Cooperator': 3}),
             Counter({'Defector': 3}),

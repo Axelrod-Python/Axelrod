@@ -2,7 +2,8 @@ import random
 
 
 class Ecosystem(object):
-    """Create an ecosystem based on the payoff matrix from an Axelrod tournament."""
+    """Create an ecosystem based on the payoff matrix from an Axelrod
+    tournament."""
 
     def __init__(self, results, fitness=None, population=None):
 

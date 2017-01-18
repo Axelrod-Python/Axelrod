@@ -5,7 +5,7 @@ import unittest
 import axelrod
 from axelrod.strategies.lookerup import (
     create_lookup_table_keys, create_lookup_table_from_pattern)
-from .test_player import TestPlayer, TestHeadsUp
+from .test_player import TestPlayer, TestMatch
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -70,9 +70,9 @@ class TestLookerUp(TestPlayer):
             player = self.player(table)
 
     def test_strategy(self):
-        self.markov_test([C, D, C, D])  # TFT
-        self.responses_test([C] * 4, [C, C, C, C], [C])
-        self.responses_test([C] * 5, [C, C, C, C, D], [D])
+        self.second_play_test(C, D, C, D)  # TFT
+        self.responses_test([C], [C] * 4, [C, C, C, C])
+        self.responses_test([D], [C] * 5, [C, C, C, C, D])
 
     def test_defector_table(self):
         """
@@ -89,9 +89,9 @@ class TestLookerUp(TestPlayer):
             ('', D, C): D,
         }
         self.player = lambda : axelrod.LookerUp(defector_table)
-        self.responses_test([C, C], [C, C], [D])
-        self.responses_test([C, D], [D, C], [D])
-        self.responses_test([D, D], [D, D], [D])
+        self.responses_test([D], [C, C], [C, C])
+        self.responses_test([D], [C, D], [D, C])
+        self.responses_test([D], [D, D], [D, D])
 
     def test_zero_tables(self):
         """Test the corner case where n=0."""
@@ -127,16 +127,16 @@ class TestLookerUp(TestPlayer):
         self.player = lambda: axelrod.LookerUp(first_move_table)
 
         # if the opponent started by cooperating, we should always cooperate
-        self.responses_test([C, C, C], [C, C, C], [C])
-        self.responses_test([D, D, D], [C, C, C], [C])
-        self.responses_test([C, C, C], [C, D, C], [C])
-        self.responses_test([C, C, D], [C, D, C], [C])
+        self.responses_test([C], [C, C, C], [C, C, C])
+        self.responses_test([C], [D, D, D], [C, C, C])
+        self.responses_test([C], [C, C, C], [C, D, C])
+        self.responses_test([C], [C, C, D], [C, D, C])
 
         # if the opponent started by defecting, we should always defect
-        self.responses_test([C, C, C], [D, C, C], [D])
-        self.responses_test([D, D, D], [D, C, C], [D])
-        self.responses_test([C, C, C], [D, D, C], [D])
-        self.responses_test([C, C, D], [D, D, C], [D])
+        self.responses_test([D], [C, C, C], [D, C, C])
+        self.responses_test([D], [D, D, D], [D, C, C])
+        self.responses_test([D], [C, C, C], [D, D, C])
+        self.responses_test([D], [C, C, D], [D, D, C])
 
 
 class TestEvolvedLookerUp2_2_2(TestPlayer):
@@ -181,26 +181,26 @@ class TestGeneratedPlayers(unittest.TestCase):
 
 
 # Some heads up tests for EvolvedLookerUp
-class EvolvedLookerUpvsDefector(TestHeadsUp):
+class EvolvedLookerUpvsDefector(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.Defector(),
                          [C, C, D], [D, D, D])
 
 
-class EvolvedLookerUpvsCooperator(TestHeadsUp):
+class EvolvedLookerUpvsCooperator(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.Cooperator(),
                          [C] * 10, [C] * 10)
 
 
-class EvolvedLookerUpvsTFT(TestHeadsUp):
+class EvolvedLookerUpvsTFT(TestMatch):
     def test_vs(self):
         outcomes = zip()
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.TitForTat(),
                          [C] * 10, [C] * 10)
 
 
-class EvolvedLookerUpvsAlternator(TestHeadsUp):
+class EvolvedLookerUpvsAlternator(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.EvolvedLookerUp2_2_2(), axelrod.Alternator(),
                          [C, C, C, D, D, D], [C, D, C, D, C, D])
@@ -225,7 +225,7 @@ class TestWinner12(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating twice."""
-        self.responses_test([], [], [C, C])
+        self.responses_test([C, C])
 
 
 class TestWinner21(TestPlayer):
@@ -245,7 +245,6 @@ class TestWinner21(TestPlayer):
     expected_class_classifier = copy.copy(expected_classifier)
     expected_class_classifier['memory_depth'] = float('inf')
 
-
     def test_strategy(self):
         """Starts by cooperating twice."""
-        self.responses_test([], [], [D, C])
+        self.responses_test([D, C])

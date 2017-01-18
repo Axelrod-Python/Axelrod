@@ -1,9 +1,10 @@
+from os import linesep
 from unittest import TestCase
+from prompt_toolkit.validation import ValidationError
 from axelrod import Actions, Player
 from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
-from prompt_toolkit.validation import ValidationError
-from os import linesep
+
 
 C, D = Actions.C, Actions.D
 
@@ -20,7 +21,7 @@ class TestDocument(object):
 class TestActionValidator(TestCase):
 
     def test_validator(self):
-        test_documents = [TestDocument(x) for x in ['C', 'c', 'd', 'D']]
+        test_documents = [TestDocument(x) for x in [C, C, D, D]]
         for test_document in test_documents:
             ActionValidator().validate(test_document)
 
@@ -54,14 +55,11 @@ class TestHumanClass(TestPlayer):
         actual_content = human._history_toolbar(None)[0][1]
         self.assertEqual(actual_content, expected_content)
 
-        human.history = ['C']
-        human.opponent_history = ['C']
-        # We can't test for this expected content properly until we drop
-        # support for Python 2 as the strings within a string aren't handled
-        # properly.
+        human.history = [C]
+        human.opponent_history = [C]
         expected_content = "History (Human, opponent): [('C', 'C')]"
         actual_content = human._history_toolbar(None)[0][1]
-        self.assertIn('History (Human, opponent)', actual_content)
+        self.assertIn(actual_content, expected_content)
 
     def test_status_messages(self):
         human = Human()
@@ -72,8 +70,8 @@ class TestHumanClass(TestPlayer):
         actual_messages = human._status_messages()
         self.assertEqual(actual_messages, expected_messages)
 
-        human.history = ['C']
-        human.opponent_history = ['C']
+        human.history = [C]
+        human.opponent_history = [C]
         expected_print_message = (
             '{}Turn 1: Human played C, opponent played C'.format(linesep)
         )
@@ -90,15 +88,6 @@ class TestHumanClass(TestPlayer):
 
     def test_strategy(self):
         human = Human()
-        expected_action = 'C'
-        actual_action = human.strategy(Player(), lambda: 'C')
+        expected_action = C
+        actual_action = human.strategy(Player(), lambda: C)
         self.assertEqual(actual_action, expected_action)
-
-    def test_reset(self):
-        # Overwrite standard test to prevent input blocking
-        p = self.player()
-        p.reset()
-        self.assertEqual(p.history, [])
-        self.assertEqual(self.player().cooperations, 0)
-        self.assertEqual(self.player().defections, 0)
-        self.assertEqual(self.player().state_distribution, {})

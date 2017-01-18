@@ -1,7 +1,6 @@
-"""Test for the defector strategy."""
+"""Tests for the Defector strategy."""
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -22,12 +21,9 @@ class TestDefector(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Test that always defects.
         self.first_play_test(D)
-
-    def test_effect_of_strategy(self):
-        """Test that always defects."""
-        self.markov_test([D, D, D, D])
+        self.second_play_test(D, D, D, D)
 
 
 class TestTrickyDefector(TestPlayer):
@@ -45,14 +41,12 @@ class TestTrickyDefector(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by defecting.
         self.first_play_test(D)
-
-    def test_effect_of_strategy(self):
-        """Test if it tries to trick opponent"""
-        self.markov_test([D, D, D, D])
-        self.responses_test([C, C, C], [C, C, C], [D])
-        self.responses_test([C, C, C, D, D], [C, C, C, C, D], [D])
+        self.second_play_test(D, D, D, D)
+        # Test if strategy tries to trick opponent.
+        self.responses_test([D], [C, C, C], [C, C, C])
+        self.responses_test([D], [C, C, C, D, D], [C, C, C, C, D])
         history = [C, C, C, D, D] + [C] * 11
         opponent_history = [C, C, C, C, D] + [D] + [C] * 10
-        self.responses_test(history, opponent_history,[D])
+        self.responses_test([D], history, opponent_history)

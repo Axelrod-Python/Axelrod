@@ -69,7 +69,7 @@ class Darwin(Player):
     def reset(self):
         """ Reset instance properties. """
         super().reset()
-        Darwin.genome[0] = C # Ensure initial Cooperate
+        Darwin.genome[0] = C  # Ensure initial Cooperate
 
     def mutate(self, outcome, trial):
         """ Select response according to outcome. """

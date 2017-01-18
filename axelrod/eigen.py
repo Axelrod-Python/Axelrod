@@ -45,7 +45,8 @@ def power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray:
         yield vec
 
 
-def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000, max_error=1e-3) -> Tuple[numpy.ndarray, float]:
+def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000,
+                          max_error=1e-3) -> Tuple[numpy.ndarray, float]:
     """
     Computes the (normalised) principal eigenvector of the given matrix.
 

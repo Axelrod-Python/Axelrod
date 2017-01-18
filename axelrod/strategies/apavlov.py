@@ -14,7 +14,7 @@ class APavlov2006(Player):
     uncooperative opponents.
     """
 
-    name = "Adapative Pavlov 2006"
+    name = "Adaptive Pavlov 2006"
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -81,7 +81,7 @@ class APavlov2011(Player):
     uncooperative opponents.
     """
 
-    name = "Adapative Pavlov 2011"
+    name = "Adaptive Pavlov 2011"
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,

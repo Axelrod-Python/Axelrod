@@ -30,7 +30,8 @@ class Grudger(Player):
 
     @staticmethod
     def strategy(opponent):
-        """Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D."""
+        """Begins by playing C, then plays D for the remaining rounds if the
+        opponent ever plays D."""
         if opponent.defections:
             return D
         return C
