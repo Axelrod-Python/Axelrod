@@ -1,9 +1,10 @@
 import random
 import numpy
 from axelrod import Actions
+from axelrod.actions import Action
 
 
-def random_choice(p=0.5):
+def random_choice(p: float = 0.5) -> Action:
     """
     Return 'C' with probability `p`, else return 'D'
 
@@ -32,7 +33,7 @@ def random_choice(p=0.5):
     return Actions.D
 
 
-def randrange(a, b):
+def randrange(a: int, b: int) -> int:
     """Python 2 / 3 compatible randrange. Returns a random integer uniformly
     between a and b (inclusive)"""
     c = b - a
