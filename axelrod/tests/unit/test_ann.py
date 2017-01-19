@@ -1,4 +1,4 @@
-"""Tests for the Adaptive strategy."""
+"""Tests for the ANN strategy."""
 import unittest
 
 import axelrod
@@ -84,7 +84,7 @@ class TestEvolvedANNvsCooperator(TestMatch):
 class TestEvolvedANNvsDefector(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN(), axelrod.Defector(),
-                         [C, C, D, D, D], [D] * 5)
+                         [C, D, D, D, D], [D] * 5)
 
 
 class TestEvolvedANNvsTFT(TestMatch):
@@ -102,7 +102,7 @@ class TestEvolvedANN5vsCooperator(TestMatch):
 class TestEvolvedANN5vsDefector(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANN5(), axelrod.Defector(),
-                         [C] * 5 + [D], [D] * 6)
+                         [C] * 4 + [D], [D] * 5)
 
 
 class TestEvolvedANNNoise05vsCooperator(TestMatch):
@@ -114,5 +114,4 @@ class TestEvolvedANNNoise05vsCooperator(TestMatch):
 class TestEvolvedANNNoise05vsDefector(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedANNNoise05(), axelrod.Defector(),
-                         [C] * 10, [D] * 10)
-
+                         [C, D, C], [D] * 3)
