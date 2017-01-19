@@ -234,7 +234,10 @@ class TestPlayer(unittest.TestCase):
         player = self.player()
         clone = player.clone()
         for k, v in clone.__dict__.items():
-            self.assertEqual(v, getattr(clone, k))
+            if isinstance(v, np.ndarray):
+                self.assertTrue(np.array_equal(v, getattr(clone, k)))
+            else:
+                self.assertEqual(v, getattr(clone, k))
 
     def test_clone(self):
         # Test that the cloned player produces identical play
