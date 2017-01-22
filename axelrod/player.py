@@ -1,15 +1,16 @@
+from collections import defaultdict
 import copy
 import inspect
 import itertools
 import random
 import types
-from collections import defaultdict
 from typing import Any, Dict
 
 import numpy as np
-from axelrod.action import Action
 
-from .game import DefaultGame
+from axelrod.action import Action
+from axelrod.game import DefaultGame
+from axelrod.history import History
 
 C, D = Action.C, Action.D
 
@@ -50,13 +51,7 @@ def obey_axelrod(s):
 
 def update_history(player, move):
     """Updates histories and cooperation / defections counts following play."""
-    # Update histories
     player.history.append(move)
-    # Update player counts of cooperation and defection
-    if move == C:
-        player.cooperations += 1
-    elif move == D:
-        player.defections += 1
 
 
 def get_state_distribution_from_history(player, history_1, history_2):
@@ -68,7 +63,7 @@ def get_state_distribution_from_history(player, history_1, history_2):
 def update_state_distribution(player, action, reply):
     """Updates state_distribution following play. """
     last_turn = (action, reply)
-    player.state_distribution[last_turn] += 1
+    player.history.state_distribution[last_turn] += 1
 
 
 class Player(object):
@@ -116,14 +111,13 @@ class Player(object):
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
-        self.history = []
+        self._history = History()
         self.classifier = copy.deepcopy(self.classifier)
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
-        self.cooperations = 0
-        self.defections = 0
-        self.state_distribution = defaultdict(int)
+        self.init_args = ()
+        self.init_kwargs = dict()
         self.set_match_attributes()
 
     def __eq__(self, other):
@@ -232,7 +226,7 @@ class Player(object):
         # You may be tempted to re-implement using the `copy` module
         # Note that this would require a deepcopy in some cases and there may
         # be significant changes required throughout the library.
-        # Override in special cases only if absolutely necessary
+        # Consider overriding in special cases only if necessary
         cls = self.__class__
         new_player = cls(**self.init_kwargs)
         new_player.match_attributes = copy.copy(self.match_attributes)
@@ -245,8 +239,25 @@ class Player(object):
         of players) to reset a player's state to its initial starting point.
         It ensures that no 'memory' of previous matches is carried forward.
         """
-        self.history = []
-        self.cooperations = 0
-        self.defections = 0
-        self.state_distribution = defaultdict(int)
+        self._history.reset()
         self.__init__(**self.init_kwargs)
+
+    @property
+    def history(self):
+        return self._history
+
+    @history.setter
+    def history(self, obj):
+        self._history = History(history=obj)
+
+    @property
+    def cooperations(self):
+        return self.history.cooperations
+
+    @property
+    def defections(self):
+        return self.history.defections
+
+    @property
+    def state_distribution(self):
+        return self.history.state_distribution

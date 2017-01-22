@@ -8,6 +8,7 @@ from axelrod.action import Action
 from axelrod.random_ import random_choice, seed, Pdf
 from axelrod.plot import Plot
 from axelrod.game import DefaultGame, Game
+from axelrod.history import History
 from axelrod.player import (
     get_state_distribution_from_history,
     is_basic,
