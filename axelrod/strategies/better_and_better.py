@@ -2,6 +2,7 @@ from axelrod import Actions, Player, random_choice
 
 C, D = Actions.C, Actions.D
 
+
 class BetterAndBetter(Player):
     """
     Defects with probability of '(1000 - current turn) / 1000'.

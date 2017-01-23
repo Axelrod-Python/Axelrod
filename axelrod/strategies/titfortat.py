@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 from axelrod.strategy_transformers import TrackHistoryTransformer
 
 C, D = Actions.C, Actions.D
@@ -286,9 +286,8 @@ class OmegaTFT(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, deadlock_threshold=3, randomness_threshold=8):
-        Player.__init__(self)
+        super().__init__()
         self.deadlock_threshold = deadlock_threshold
         self.randomness_threshold = randomness_threshold
         self.randomness_counter = 0
@@ -335,7 +334,7 @@ class OmegaTFT(Player):
         return self.move
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.randomness_counter = 0
         self.deadlock_counter = 0
 
@@ -364,7 +363,7 @@ class Gradual(Player):
 
     def __init__(self):
 
-        Player.__init__(self)
+        super().__init__()
         self.calming = False
         self.punishing = False
         self.punishment_count = 0
@@ -395,7 +394,7 @@ class Gradual(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.calming = False
         self.punishing = False
         self.punishment_count = 0
@@ -445,7 +444,7 @@ class ContriteTitForTat(Player):
         return opponent.history[-1]
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.contrite = False
         self._recorded_history = []
 
@@ -527,9 +526,8 @@ class AdaptiveTitForTat(Player):
     }
     world = 0.5
 
-    @init_args
     def __init__(self, rate=0.5):
-        Player.__init__(self)
+        super().__init__()
         self.rate, self.starting_rate = rate, rate
 
     def strategy(self, opponent):
@@ -549,7 +547,7 @@ class AdaptiveTitForTat(Player):
 
     def reset(self):
 
-        Player.reset(self)
+        super().reset()
         self.world = 0.5
         self.rate = self.starting_rate
 
@@ -581,7 +579,7 @@ class SpitefulTitForTat(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.retaliating = False
 
     def strategy(self, opponent):
@@ -601,5 +599,5 @@ class SpitefulTitForTat(Player):
             return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.retaliating = False

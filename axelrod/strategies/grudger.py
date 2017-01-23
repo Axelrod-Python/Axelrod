@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class Grudger(Player):
     """
     A player starts by cooperating however will defect if at any point the
@@ -29,7 +30,8 @@ class Grudger(Player):
 
     @staticmethod
     def strategy(opponent):
-        """Begins by playing C, then plays D for the remaining rounds if the opponent ever plays D."""
+        """Begins by playing C, then plays D for the remaining rounds if the
+        opponent ever plays D."""
         if opponent.defections:
             return D
         return C
@@ -52,7 +54,7 @@ class ForgetfulGrudger(Player):
 
     def __init__(self):
         """Initialised the player."""
-        super(ForgetfulGrudger, self).__init__()
+        super().__init__()
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0
@@ -74,7 +76,7 @@ class ForgetfulGrudger(Player):
 
     def reset(self):
         """Resets scores and history."""
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
 
@@ -151,7 +153,7 @@ class SoftGrudger(Player):
 
     def __init__(self):
         """Initialised the player."""
-        super(SoftGrudger, self).__init__()
+        super().__init__()
         self.grudged = False
         self.grudge_memory = 0
 
@@ -172,7 +174,7 @@ class SoftGrudger(Player):
 
     def reset(self):
         """Resets scores and history."""
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
 

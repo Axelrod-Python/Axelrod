@@ -1,14 +1,11 @@
-"""
-Test for the Gambler strategy.
-Most tests come form the LookerUp test suite
+"""Test for the Gambler strategy.
+Most tests come form the LookerUp test suite.
 """
 
 import copy
 
 import axelrod
-from .test_player import TestPlayer, TestHeadsUp
-
-import copy
+from .test_player import TestPlayer, TestMatch
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -54,10 +51,9 @@ class TestGambler(TestPlayer):
         with self.assertRaises(ValueError):
             player = self.player(table)
 
-
     def test_strategy(self):
-        self.responses_test([C] * 4, [C, C, C, C], [C])
-        self.responses_test([C] * 5, [C, C, C, C, D], [D])
+        self.responses_test([C], [C] * 4, [C, C, C, C])
+        self.responses_test([D], [C] * 5, [C, C, C, C, D])
 
     def test_defector_table(self):
         """
@@ -74,9 +70,9 @@ class TestGambler(TestPlayer):
             ('', D, C) : 0,
         }
         self.player = lambda : axelrod.Gambler(defector_table)
-        self.responses_test([C, C], [C, C], [D])
-        self.responses_test([C, D], [D, C], [D])
-        self.responses_test([D, D], [D, D], [D])
+        self.responses_test([D], [C, C], [C, C])
+        self.responses_test([D], [C, D], [D, C])
+        self.responses_test([D], [D, D], [D, D])
 
 
 class TestPSOGamblerMem1(TestPlayer):
@@ -97,11 +93,10 @@ class TestPSOGamblerMem1(TestPlayer):
     expected_class_classifier = copy.copy(expected_classifier)
     expected_class_classifier['memory_depth'] = float('inf')
 
-
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C] * 197, [C] * 197, [C])
+        self.responses_test([C], [C] * 197, [C] * 197)
 
 
 class TestPSOGambler2_2_2(TestPlayer):
@@ -130,7 +125,7 @@ class TestPSOGambler2_2_2(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C] * 197, [C] * 197, [C])
+        self.responses_test([C], [C] * 197, [C] * 197)
 
 
 class TestPSOGambler1_1_1(TestPlayer):
@@ -151,7 +146,7 @@ class TestPSOGambler1_1_1(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C] * 197, [C] * 197, [C])
+        self.responses_test([C], [C] * 197, [C] * 197)
 
 
 class TestPSOGambler2_2_2_Noise05(TestPlayer):
@@ -171,29 +166,29 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C] * 197, [C] * 197, [C])
+        self.responses_test([C], [C] * 197, [C] * 197)
 
 
 # Some heads up tests for PSOGambler
-class PSOGambler2_2_2vsDefector(TestHeadsUp):
+class PSOGambler2_2_2vsDefector(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Defector(),
                          [C, C, D, D], [D, D, D, D])
 
 
-class PSOGambler2_2_2vsCooperator(TestHeadsUp):
+class PSOGambler2_2_2vsCooperator(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Cooperator(),
                          [C, C, C, C], [C, C, C, C])
 
 
-class PSOGambler2_2_2vsTFT(TestHeadsUp):
+class PSOGambler2_2_2vsTFT(TestMatch):
     def test_vs(self):
         self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.TitForTat(),
                          [C, C, C, C], [C, C, C, C])
 
 
-class PSOGambler2_2_2vsAlternator(TestHeadsUp):
+class PSOGambler2_2_2vsAlternator(TestMatch):
     def test_vs(self):
         axelrod.seed(10)
         self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Alternator(),

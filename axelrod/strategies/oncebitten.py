@@ -1,11 +1,13 @@
 import random
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class OnceBitten(Player):
     """
-    Cooperates once when the opponent defects, but if they defect twice in a row defaults to forgetful grudger for 10 turns defecting
+    Cooperates once when the opponent defects, but if they defect twice in a row
+    defaults to forgetful grudger for 10 turns defecting.
     """
 
     name = 'Once Bitten'
@@ -20,7 +22,7 @@ class OnceBitten(Player):
     }
 
     def __init__(self):
-        super(OnceBitten, self).__init__()
+        super().__init__()
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0
@@ -28,7 +30,7 @@ class OnceBitten(Player):
     def strategy(self, opponent):
         """
         Begins by playing C, then plays D for mem_length rounds if the opponent
-        ever plays D twice in a row
+        ever plays D twice in a row.
         """
         if self.grudge_memory >= self.mem_length:
             self.grudge_memory = 0
@@ -47,7 +49,7 @@ class OnceBitten(Player):
 
     def reset(self):
         """Resets grudge memory and history."""
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
 
@@ -95,7 +97,6 @@ class ForgetfulFoolMeOnce(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, forget_probability=0.05):
         """
         Parameters
@@ -103,7 +104,7 @@ class ForgetfulFoolMeOnce(Player):
         forget_probability, float
             The probability of forgetting the count of opponent defections.
         """
-        Player.__init__(self)
+        super().__init__()
         self.D_count = 0
         self._initial = C
         self.forget_probability = forget_probability
@@ -121,7 +122,7 @@ class ForgetfulFoolMeOnce(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.D_count = 0
 
 

@@ -1,13 +1,12 @@
-import unittest
-import axelrod
-import axelrod.interaction_utils as iu
-
-from numpy import mean, std, nanmedian
-
 import csv
 from collections import Counter
+import unittest
 
 from hypothesis import given, settings
+from numpy import mean, std, nanmedian
+
+import axelrod
+import axelrod.interaction_utils as iu
 from axelrod.tests.property import tournaments, prob_end_tournaments
 
 
@@ -62,9 +61,9 @@ class TestResultSet(unittest.TestCase):
                 ]
 
         cls.expected_normalised_scores =[
-               [3.0 / 2 for _ in range(3)],
-               [(13.0 / 5 + 4.0 / 5) / 2 for _ in range(3)],
-               [(17.0 / 5 + 9.0 / 5) / 2 for _ in range(3)],
+               [3 / 2 for _ in range(3)],
+               [(13 / 5 + 4 / 5) / 2 for _ in range(3)],
+               [(17 / 5 + 9 / 5) / 2 for _ in range(3)],
                 ]
 
         cls.expected_ranking = [2, 1, 0]
@@ -78,9 +77,9 @@ class TestResultSet(unittest.TestCase):
         ]
 
         cls.expected_payoffs = [
-            [[], [13/5.0 for _ in range(3)], [2/5.0 for _ in range(3)]],
-            [[13/5.0 for _ in range(3)], [], [4/5.0 for _ in range(3)]],
-            [[17/5.0 for _ in range(3)], [9/5.0 for _ in range(3)], []]
+            [[], [13/5 for _ in range(3)], [2/5 for _ in range(3)]],
+            [[13/5 for _ in range(3)], [], [4/5 for _ in range(3)]],
+            [[17/5 for _ in range(3)], [9/5 for _ in range(3)], []]
         ]
 
         cls.expected_score_diffs = [
@@ -103,15 +102,15 @@ class TestResultSet(unittest.TestCase):
 
         # Recalculating to deal with numeric imprecision
         cls.expected_payoff_matrix = [
-            [0, mean([13/5.0 for _ in range(3)]), mean([2/5.0 for _ in range(3)])],
-            [mean([13/5.0 for _ in range(3)]), 0, mean([4/5.0 for _ in range(3)])],
-            [mean([17/5.0 for _ in range(3)]), mean([9/5.0 for _ in range(3)]), 0]
+            [0, mean([13/5 for _ in range(3)]), mean([2/5 for _ in range(3)])],
+            [mean([13/5 for _ in range(3)]), 0, mean([4/5 for _ in range(3)])],
+            [mean([17/5 for _ in range(3)]), mean([9/5 for _ in range(3)]), 0]
         ]
 
         cls.expected_payoff_stddevs = [
-            [0, std([13/5.0 for _ in range(3)]), std([2/5.0 for _ in range(3)])],
-            [std([13/5.0 for _ in range(3)]), 0, std([4/5.0 for _ in range(3)])],
-            [std([17/5.0 for _ in range(3)]), std([9/5.0 for _ in range(3)]), 0]
+            [0, std([13/5 for _ in range(3)]), std([2/5 for _ in range(3)])],
+            [std([13/5 for _ in range(3)]), 0, std([4/5 for _ in range(3)])],
+            [std([17/5 for _ in range(3)]), std([9/5 for _ in range(3)]), 0]
         ]
 
         cls.expected_cooperation = [
@@ -128,8 +127,8 @@ class TestResultSet(unittest.TestCase):
             ]
 
         cls.expected_normalised_cooperation = [
-                [0, mean([3 / 5.0 for _ in range(3)]), mean([3 / 5.0 for _ in range(3)])],
-                [mean([3 / 5.0 for _ in range(3)]), 0, mean([1 / 5.0 for _ in range(3)])],
+                [0, mean([3 / 5 for _ in range(3)]), mean([3 / 5 for _ in range(3)])],
+                [mean([3 / 5 for _ in range(3)]), 0, mean([1 / 5 for _ in range(3)])],
                 [0, 0, 0],
             ]
 
@@ -161,8 +160,8 @@ class TestResultSet(unittest.TestCase):
                                    for row in cls.expected_normalised_cooperation]
 
         cls.expected_cooperating_rating = [
-                18.0 / 30,
-                12.0 / 30,
+                18 / 30,
+                12 / 30,
                 0
             ]
 
@@ -770,9 +769,9 @@ class TestResultSetSpatialStructure(TestResultSet):
                 ]
 
         cls.expected_normalised_scores =[
-               [3.0 / 2 for _ in range(3)],
-               [(13.0 / 5 )  for _ in range(3)],
-               [(17.0 / 5 )  for _ in range(3)],
+               [3 / 2 for _ in range(3)],
+               [(13 / 5 )  for _ in range(3)],
+               [(17 / 5 )  for _ in range(3)],
                 ]
 
         cls.expected_ranking = [2, 1, 0]
@@ -786,9 +785,9 @@ class TestResultSetSpatialStructure(TestResultSet):
         ]
 
         cls.expected_payoffs = [
-            [[], [13/5.0 for _ in range(3)], [2/5.0 for _ in range(3)]],
-            [[13/5.0 for _ in range(3)], [], []],
-            [[17/5.0 for _ in range(3)], [], []]
+            [[], [13/5 for _ in range(3)], [2/5 for _ in range(3)]],
+            [[13/5 for _ in range(3)], [], []],
+            [[17/5 for _ in range(3)], [], []]
         ]
 
         cls.expected_score_diffs = [
@@ -811,15 +810,15 @@ class TestResultSetSpatialStructure(TestResultSet):
 
         # Recalculating to deal with numeric imprecision
         cls.expected_payoff_matrix = [
-            [0, mean([13/5.0 for _ in range(3)]), mean([2/5.0 for _ in range(3)])],
-            [mean([13/5.0 for _ in range(3)]), 0, 0 ],
-            [mean([17/5.0 for _ in range(3)]), 0 , 0]
+            [0, mean([13/5 for _ in range(3)]), mean([2/5 for _ in range(3)])],
+            [mean([13/5 for _ in range(3)]), 0, 0 ],
+            [mean([17/5 for _ in range(3)]), 0 , 0]
         ]
 
         cls.expected_payoff_stddevs = [
-            [0, std([13/5.0 for _ in range(3)]), std([2/5.0 for _ in range(3)])],
-            [std([13/5.0 for _ in range(3)]), 0, 0 ],
-            [std([17/5.0 for _ in range(3)]), 0, 0 ]
+            [0, std([13/5 for _ in range(3)]), std([2/5 for _ in range(3)])],
+            [std([13/5 for _ in range(3)]), 0, 0 ],
+            [std([17/5 for _ in range(3)]), 0, 0 ]
         ]
 
         cls.expected_cooperation = [
@@ -829,8 +828,8 @@ class TestResultSetSpatialStructure(TestResultSet):
             ]
 
         cls.expected_normalised_cooperation = [
-            [0, mean([3 / 5.0 for _ in range(3)]), mean([3 / 5.0 for _ in range(3)])],
-            [mean([3 / 5.0 for _ in range(3)]), 0, 0 ],
+            [0, mean([3 / 5 for _ in range(3)]), mean([3 / 5 for _ in range(3)])],
+            [mean([3 / 5 for _ in range(3)]), 0, 0 ],
             [0, 0, 0],
             ]
 
@@ -841,8 +840,8 @@ class TestResultSetSpatialStructure(TestResultSet):
                                    for row in cls.expected_normalised_cooperation]
 
         cls.expected_cooperating_rating = [
-                18.0 / 30,
-                9.0 / 15,
+                18 / 30,
+                9 / 15,
                 0
             ]
 
@@ -975,9 +974,9 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                 ]
 
         cls.expected_normalised_scores =[
-               [(13.0 / 5 )  for _ in range(3)],
-               [(13.0 / 5 )  for _ in range(3)],
-               [(25.0 / 5 )  for _ in range(3)],
+               [(13 / 5 )  for _ in range(3)],
+               [(13 / 5 )  for _ in range(3)],
+               [(25 / 5 )  for _ in range(3)],
                [0  for _ in range(3)]
                 ]
 
@@ -993,9 +992,9 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
         ]
 
         cls.expected_payoffs = [
-             [[], [13/5.0 for _ in range(3)], [], []],
-             [[13/5.0 for _ in range(3)], [], [], []],
-             [[], [], [], [25/5.0 for _ in range(3)]],
+             [[], [13/5 for _ in range(3)], [], []],
+             [[13/5 for _ in range(3)], [], [], []],
+             [[], [], [], [25/5 for _ in range(3)]],
              [[], [], [0 for _ in range(3)], []]
         ]
 
@@ -1027,16 +1026,16 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
 
         # Recalculating to deal with numeric imprecision
         cls.expected_payoff_matrix = [
-            [0, mean([13/5.0 for _ in range(3)]), 0, 0],
-            [mean([13/5.0 for _ in range(3)]), 0, 0, 0],
-            [0, 0, 0, mean([25/5.0 for _ in range(3)])],
+            [0, mean([13/5 for _ in range(3)]), 0, 0],
+            [mean([13/5 for _ in range(3)]), 0, 0, 0],
+            [0, 0, 0, mean([25/5 for _ in range(3)])],
             [0, 0, 0, 0]
         ]
 
         cls.expected_payoff_stddevs = [
-            [0, std([13/5.0 for _ in range(3)]), 0, 0],
-            [std([13/5.0 for _ in range(3)]), 0, 0, 0],
-            [0, 0, 0, std([25/5.0 for _ in range(3)])],
+            [0, std([13/5 for _ in range(3)]), 0, 0],
+            [std([13/5 for _ in range(3)]), 0, 0, 0],
+            [0, 0, 0, std([25/5 for _ in range(3)])],
             [0, 0, 0, 0]
         ]
 
@@ -1048,10 +1047,10 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
             ]
 
         cls.expected_normalised_cooperation = [
-                [0.0, mean([3 / 5.0 for _ in range(3)]), 0.0, 0.0],
-                [mean([3 / 5.0 for _ in range(3)]), 0.0, 0.0, 0.0],
+                [0.0, mean([3 / 5 for _ in range(3)]), 0.0, 0.0],
+                [mean([3 / 5 for _ in range(3)]), 0.0, 0.0, 0.0],
                 [0.0, 0.0, 0.0, 0.0],
-                [0.0, 0.0, mean([5 / 5.0 for _ in range(3)]), 0.0]
+                [0.0, 0.0, mean([5 / 5 for _ in range(3)]), 0.0]
                 ]
 
         cls.expected_initial_cooperation_count = [3.0, 3.0, 0, 3.0]
@@ -1061,8 +1060,8 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                                    for row in cls.expected_normalised_cooperation]
 
         cls.expected_cooperating_rating = [
-                18.0 / 30,
-                18.0 / 30,
+                18 / 30,
+                18 / 30,
                 0.0,
                 30 / 30
             ]
@@ -1179,10 +1178,10 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
         ]
 
         cls.expected_payoffs = [
-             [[11 /5.0 for _ in range(3)], [], [], []],
-             [[], [15 /5.0 for _ in range(3)], [], []],
-             [[], [], [5 /5.0 for _ in range(3)], []],
-             [[], [], [], [15 /5.0 for _ in range(3)]]
+             [[11 /5 for _ in range(3)], [], [], []],
+             [[], [15 /5 for _ in range(3)], [], []],
+             [[], [], [5 /5 for _ in range(3)], []],
+             [[], [], [], [15 /5 for _ in range(3)]]
         ]
 
         cls.expected_score_diffs = [
@@ -1195,17 +1194,17 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
         # Recalculating to deal with numeric imprecision
         cls.expected_payoff_matrix = [
-            [mean([11/5.0 for _ in range(3)]),0, 0, 0],
-            [0, mean([15/5.0 for _ in range(3)]), 0, 0],
-            [0, 0, mean([5/5.0 for _ in range(3)]), 0],
-            [0, 0, 0, mean([15/5.0 for _ in range(3)])]
+            [mean([11/5 for _ in range(3)]),0, 0, 0],
+            [0, mean([15/5 for _ in range(3)]), 0, 0],
+            [0, 0, mean([5/5 for _ in range(3)]), 0],
+            [0, 0, 0, mean([15/5 for _ in range(3)])]
         ]
 
         cls.expected_payoff_stddevs = [
-            [std([11/5.0 for _ in range(3)]),0, 0, 0],
-            [0, std([15/5.0 for _ in range(3)]), 0, 0],
-            [0, 0, std([5/5.0 for _ in range(3)]), 0],
-            [0, 0, 0, std([15/5.0 for _ in range(3)])]
+            [std([11/5 for _ in range(3)]),0, 0, 0],
+            [0, std([15/5 for _ in range(3)]), 0, 0],
+            [0, 0, std([5/5 for _ in range(3)]), 0],
+            [0, 0, 0, std([15/5 for _ in range(3)])]
         ]
 
         cls.expected_cooperation = [
@@ -1213,10 +1212,10 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
             ]
 
         cls.expected_normalised_cooperation = [
-                [mean([3 / 5.0 for _ in range(3)]), 0.0, 0.0, 0.0],
-                [0.0, mean([5 / 5.0 for _ in range(3)]), 0.0, 0.0],
+                [mean([3 / 5 for _ in range(3)]), 0.0, 0.0, 0.0],
+                [0.0, mean([5 / 5 for _ in range(3)]), 0.0, 0.0],
                 [0.0, 0.0, 0.0, 0.0],
-                [0.0, 0.0, 0.0, mean([5 / 5.0 for _ in range(3)])]
+                [0.0, 0.0, 0.0, mean([5 / 5 for _ in range(3)])]
                 ]
 
         cls.expected_initial_cooperation_count = [0, 0, 0, 0]

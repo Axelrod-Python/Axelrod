@@ -1,9 +1,9 @@
-import unittest
-import os
-import sys
-from axelrod import DeterministicCache, TitForTat, Defector, Random
-
 import pickle
+import os
+import unittest
+from axelrod import Actions, Defector, DeterministicCache, Random, TitForTat
+
+C, D = Actions.C, Actions.D
 
 
 class TestDeterministicCache(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestDeterministicCache(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.test_key = (TitForTat(), Defector(), 3)
-        cls.test_value = [('C', 'D'), ('D', 'D'), ('D', 'D')]
+        cls.test_value = [(C, D), (D, D), (D, D)]
         cls.test_save_file = 'test_cache_save.txt'
         cls.test_load_file = 'test_cache_load.txt'
         cls.test_pickle = b'\x80\x03}q\x00X\x0b\x00\x00\x00Tit For Tatq\x01X\x08\x00\x00\x00Defectorq\x02K\x03\x87q\x03]q\x04(X\x01\x00\x00\x00Cq\x05X\x01\x00\x00\x00Dq\x06\x86q\x07h\x06h\x06\x86q\x08h\x06h\x06\x86q\tes.'

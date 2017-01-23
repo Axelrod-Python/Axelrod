@@ -1,4 +1,3 @@
-from __future__ import division
 from math import ceil, log
 import random
 
@@ -78,9 +77,8 @@ class RoundRobinMatches(MatchGenerator):
 
     def __len__(self):
         """
-        The size of the generator.
-        This corresponds to the number of match chunks as it
-        ignores repetitions.
+        The size of the generator. This corresponds to the number of match
+        chunks as it ignores repetitions.
         """
         n = len(self.players)
         num_matches = int(n * (n - 1) // 2 + n)
@@ -113,7 +111,7 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
         noise : float, 0
             The probability that a player's intended action should be flipped
         """
-        super(ProbEndRoundRobinMatches, self).__init__(
+        super().__init__(
             players, turns=float("inf"), game=game, repetitions=repetitions,
             noise=noise)
         self.prob_end = prob_end
@@ -165,15 +163,16 @@ class ProbEndRoundRobinMatches(RoundRobinMatches):
 
     def estimated_size(self):
         """Rough estimate of the number of matches that will be generated."""
-        size = self.__len__() * (1. / self.prob_end) * self.repetitions
+        size = self.__len__() * (1 / self.prob_end) * self.repetitions
         return size
 
 
 def graph_is_connected(edges, players):
     """
-    Test if a set of edges defines a complete graph on a set of players.
-
-    This is used by the spatial tournaments.
+    Test if the set of edges defines a graph in which each player is connected
+    to at least one other player. This function does not test if the graph is
+    fully connected in the sense that each node is reachable from every other
+    node.
 
     Parameters:
     -----------
@@ -182,7 +181,7 @@ def graph_is_connected(edges, players):
 
     Returns:
     --------
-    boolean : True if the graph is connected
+    boolean : True if the graph is connected as specified above.
     """
     # Check if all players are connected.
     player_indices = set(range(len(players)))
@@ -192,7 +191,6 @@ def graph_is_connected(edges, players):
             node_indices.add(node)
 
     return player_indices == node_indices
-
 
 
 class SpatialMatches(RoundRobinMatches):
@@ -221,8 +219,7 @@ class SpatialMatches(RoundRobinMatches):
         if not graph_is_connected(edges, players):
             raise ValueError("The graph edges do not include all players.")
         self.edges = edges
-        super(SpatialMatches, self).__init__(players, turns, game, repetitions,
-                                             noise)
+        super().__init__(players, turns, game, repetitions, noise)
 
     def build_match_chunks(self):
         for edge in self.edges:

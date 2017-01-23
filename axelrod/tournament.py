@@ -1,12 +1,11 @@
-from __future__ import absolute_import
-
 from collections import defaultdict
-from multiprocessing import Process, Queue, cpu_count
-from tempfile import NamedTemporaryFile
 import csv
 import logging
-import tqdm
+from multiprocessing import Process, Queue, cpu_count
+from tempfile import NamedTemporaryFile
 import warnings
+
+import tqdm
 
 from axelrod import on_windows
 from .game import Game
@@ -108,7 +107,9 @@ class Tournament(object):
         self.setup_output(filename, in_memory)
 
         if not build_results and not filename:
-            warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
+            warnings.warn(
+                "Tournament results will not be accessible since "
+                "build_results=False and no filename was supplied.")
 
         if (processes is None) or (on_windows):
             self._run_serial(progress_bar=progress_bar)
@@ -139,21 +140,22 @@ class Tournament(object):
         axelrod.BigResultSet
         """
         if not in_memory:
-            result_set = ResultSetFromFile(filename=self.filename,
-                                           progress_bar=progress_bar,
-                                           num_interactions=self.num_interactions,
-                                           repetitions=self.repetitions,
-                                           players=[str(p) for p in self.players],
-                                           keep_interactions=keep_interactions,
-                                           game=self.game)
+            result_set = ResultSetFromFile(
+                filename=self.filename,
+                progress_bar=progress_bar,
+                num_interactions=self.num_interactions,
+                repetitions=self.repetitions,
+                players=[str(p) for p in self.players],
+                keep_interactions=keep_interactions,
+                game=self.game)
             self.outputfile.close()
         else:
-            result_set = ResultSet(players=[str(p) for p in self.players],
-                                   interactions=self.interactions_dict,
-                                   num_interactions=self.num_interactions,
-                                   repetitions=self.repetitions,
-                                   progress_bar=progress_bar,
-                                   game=self.game)
+            result_set = ResultSet(
+                players=[str(p) for p in self.players],
+                interactions=self.interactions_dict,
+                repetitions=self.repetitions,
+                progress_bar=progress_bar,
+                game=self.game)
         return result_set
 
     def _run_serial(self, progress_bar=False):
@@ -349,16 +351,13 @@ class ProbEndTournament(Tournament):
     whether or not to continue.
     """
 
-    def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
-                 name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 noise=0, with_morality=True):
+    def __init__(self, players, name='axelrod', game=None, prob_end=.5,
+                 repetitions=10, noise=0, with_morality=True):
         """
         Parameters
         ----------
         players : list
             A list of axelrod.Player objects
-        match_generator : class
-            A class that must be descended from axelrod.MatchGenerator
         name : string
             A name for the tournament
         game : axelrod.Game
@@ -372,7 +371,7 @@ class ProbEndTournament(Tournament):
         with_morality : boolean
             Whether morality metrics should be calculated
         """
-        super(ProbEndTournament, self).__init__(
+        super().__init__(
             players, name=name, game=game, turns=float("inf"),
             repetitions=repetitions, noise=noise, with_morality=with_morality)
 
@@ -406,7 +405,7 @@ class SpatialTournament(Tournament):
         with_morality : boolean
             Whether morality metrics should be calculated
         """
-        super(SpatialTournament, self).__init__(
+        super().__init__(
             players, name=name, game=game, turns=turns,
             repetitions=repetitions, noise=noise, with_morality=with_morality)
 
@@ -443,7 +442,7 @@ class ProbEndSpatialTournament(ProbEndTournament):
         with_morality : boolean
             Whether morality metrics should be calculated
         """
-        super(ProbEndSpatialTournament, self).__init__(
+        super().__init__(
             players, name=name, game=game, prob_end=prob_end,
             repetitions=repetitions, noise=noise, with_morality=with_morality)
 

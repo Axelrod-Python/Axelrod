@@ -1,7 +1,6 @@
 import unittest
-import axelrod as axl
-from axelrod.fingerprint import *
 from hypothesis import given
+from axelrod.fingerprint import *
 from axelrod.tests.property import strategy_lists
 
 

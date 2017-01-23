@@ -1,4 +1,5 @@
 from axelrod import Actions
+from typing import Tuple
 
 C, D = Actions.C, Actions.D
 
@@ -6,7 +7,7 @@ C, D = Actions.C, Actions.D
 class Game(object):
     """A class to hold the game matrix and to score a game accordingly."""
 
-    def __init__(self, r=3, s=0, t=5, p=1):
+    def __init__(self, r: int =3, s: int=0, t: int=5, p:int=1):
         self.scores = {
             (C, C): (r, r),
             (D, D): (p, p),
@@ -23,7 +24,7 @@ class Game(object):
         T = self.scores[(D, C)][0]
         return (R, P, S, T)
 
-    def score(self, pair):
+    def score(self, pair) -> Tuple[int, int]:
         """Return the appropriate score for decision pair.
 
         Returns the appropriate score (as a tuple) from the scores dictionary

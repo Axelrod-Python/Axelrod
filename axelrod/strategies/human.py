@@ -1,6 +1,5 @@
-from __future__ import unicode_literals
 from os import linesep
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 from prompt_toolkit import prompt
 from prompt_toolkit.token import Token
 from prompt_toolkit.styles import style_from_dict
@@ -50,7 +49,6 @@ class Human(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, name='Human', c_symbol='C', d_symbol='D'):
         """
         Parameters
@@ -64,7 +62,7 @@ class Human(Player):
             A symbol to denote defection within the history toolbar
             and prompt
         """
-        Player.__init__(self)
+        super().__init__()
         self.name = name
         self.symbols = {
             C: c_symbol,

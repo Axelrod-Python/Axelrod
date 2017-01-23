@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args, obey_axelrod
+from axelrod import Actions, Player, obey_axelrod
 from axelrod.strategy_transformers import NiceTransformer
 from ._strategies import all_strategies
 from .hunter import (
@@ -26,9 +26,8 @@ class MetaPlayer(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, team=None):
-        super(MetaPlayer, self).__init__()
+        super().__init__()
         # The default is to use all strategies available, but we need to import
         # the list at runtime, since _strategies import also _this_ module
         # before defining the list.
@@ -74,7 +73,7 @@ class MetaPlayer(Player):
         return 'C'
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         # Reset each player as well
         for player in self.team:
             player.reset()
@@ -85,9 +84,8 @@ class MetaMajority(MetaPlayer):
 
     name = "Meta Majority"
 
-    @init_args
     def __init__(self, team=None):
-        super(MetaMajority, self).__init__(team=team)
+        super().__init__(team=team)
 
     @staticmethod
     def meta_strategy(results, opponent):
@@ -101,9 +99,8 @@ class MetaMinority(MetaPlayer):
 
     name = "Meta Minority"
 
-    @init_args
     def __init__(self, team=None):
-        super(MetaMinority, self).__init__(team=team)
+        super().__init__(team=team)
 
     @staticmethod
     def meta_strategy(results, opponent):
@@ -117,9 +114,8 @@ class MetaWinner(MetaPlayer):
 
     name = "Meta Winner"
 
-    @init_args
     def __init__(self, team=None):
-        super(MetaWinner, self).__init__(team=team)
+        super().__init__(team=team)
         # For each player, we will keep the history of proposed moves and
         # a running score since the beginning of the game.
         self.scores = [0] * len(self.team)
@@ -146,7 +142,7 @@ class MetaWinner(MetaPlayer):
         return bestresult
 
     def reset(self):
-        MetaPlayer.reset(self)
+        super().reset()
         self.scores = [0] * len(self.team)
 
 
@@ -206,7 +202,7 @@ class MetaHunter(MetaPlayer):
         team = [DefectorHunter, AlternatorHunter, RandomHunter,
                 MathConstantHunter, CycleHunter, EventualCycleHunter]
 
-        super(MetaHunter, self).__init__(team=team)
+        super().__init__(team=team)
 
     @staticmethod
     def meta_strategy(results, opponent):
@@ -244,7 +240,7 @@ class MetaHunterAggressive(MetaPlayer):
                 MathConstantHunter, CycleHunter, EventualCycleHunter,
                 CooperatorHunter]
 
-        super(MetaHunterAggressive, self).__init__(team=team)
+        super().__init__(team=team)
 
     @staticmethod
     def meta_strategy(results, opponent):
@@ -267,10 +263,9 @@ class MetaMajorityMemoryOne(MetaMajority):
 
     name = "Meta Majority Memory One"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
-        super(MetaMajorityMemoryOne, self).__init__(team=team)
+        super().__init__(team=team)
         self.classifier["long_run_time"] = False
 
 
@@ -279,11 +274,10 @@ class MetaMajorityFiniteMemory(MetaMajority):
 
     name = "Meta Majority Finite Memory"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
-        super(MetaMajorityFiniteMemory, self).__init__(team=team)
+        super().__init__(team=team)
 
 
 class MetaMajorityLongMemory(MetaMajority):
@@ -291,11 +285,10 @@ class MetaMajorityLongMemory(MetaMajority):
 
     name = "Meta Majority Long Memory"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
-        super(MetaMajorityLongMemory, self).__init__(team=team)
+        super().__init__(team=team)
 
 
 class MetaWinnerMemoryOne(MetaWinner):
@@ -303,10 +296,9 @@ class MetaWinnerMemoryOne(MetaWinner):
 
     name = "Meta Winner Memory One"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth'] <= 1]
-        super(MetaWinnerMemoryOne, self).__init__(team=team)
+        super().__init__(team=team)
         self.classifier["long_run_time"] = False
 
 
@@ -315,11 +307,10 @@ class MetaWinnerFiniteMemory(MetaWinner):
 
     name = "Meta Winner Finite Memory"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
-        super(MetaWinnerFiniteMemory, self).__init__(team=team)
+        super().__init__(team=team)
 
 
 class MetaWinnerLongMemory(MetaWinner):
@@ -327,11 +318,10 @@ class MetaWinnerLongMemory(MetaWinner):
 
     name = "Meta Winner Long Memory"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
-        super(MetaWinnerLongMemory, self).__init__(team=team)
+        super().__init__(team=team)
 
 
 class MetaWinnerDeterministic(MetaWinner):
@@ -339,11 +329,10 @@ class MetaWinnerDeterministic(MetaWinner):
 
     name = "Meta Winner Deterministic"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 not s().classifier['stochastic']]
-        super(MetaWinnerDeterministic, self).__init__(team=team)
+        super().__init__(team=team)
         self.classifier['stochastic'] = False
 
 
@@ -352,11 +341,10 @@ class MetaWinnerStochastic(MetaWinner):
 
     name = "Meta Winner Stochastic"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 s().classifier['stochastic']]
-        super(MetaWinnerStochastic, self).__init__(team=team)
+        super().__init__(team=team)
 
 
 class MetaMixer(MetaPlayer):
@@ -387,10 +375,9 @@ class MetaMixer(MetaPlayer):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, team=None, distribution=None):
         self.distribution = distribution
-        super(MetaMixer, self).__init__(team=team)
+        super().__init__(team=team)
 
     def meta_strategy(self, results, opponent):
         """Using the numpy.random choice function to sample with weights"""
@@ -402,11 +389,10 @@ class NMWEDeterministic(NiceMetaWinnerEnsemble):
 
     name = "NMWE Deterministic"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 not s().classifier['stochastic']]
-        super(NMWEDeterministic, self).__init__(team=team)
+        super().__init__(team=team)
         self.classifier["stochastic"] = True
 
 
@@ -415,11 +401,10 @@ class NMWEStochastic(NiceMetaWinnerEnsemble):
 
     name = "NMWE Stochastic"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 s().classifier['stochastic']]
-        super(NMWEStochastic, self).__init__(team=team)
+        super().__init__(team=team)
 
 
 class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
@@ -427,11 +412,10 @@ class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
 
     name = "NMWE Finite Memory"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 < float('inf')]
-        super(NMWEFiniteMemory, self).__init__(team=team)
+        super().__init__(team=team)
 
 
 class NMWELongMemory(NiceMetaWinnerEnsemble):
@@ -439,11 +423,10 @@ class NMWELongMemory(NiceMetaWinnerEnsemble):
 
     name = "NMWE Long Memory"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 == float('inf')]
-        super(NMWELongMemory, self).__init__(team=team)
+        super().__init__(team=team)
 
 
 class NMWEMemoryOne(NiceMetaWinnerEnsemble):
@@ -451,9 +434,8 @@ class NMWEMemoryOne(NiceMetaWinnerEnsemble):
 
     name = "NMWE Memory One"
 
-    @init_args
     def __init__(self):
         team = [s for s in ordinary_strategies if s().classifier['memory_depth']
                 <= 1]
-        super(NMWEMemoryOne, self).__init__(team=team)
+        super().__init__(team=team)
         self.classifier["long_run_time"] = False

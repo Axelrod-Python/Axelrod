@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from .alternator import Alternator
 from .adaptive import Adaptive
 from .ann import EvolvedANN, EvolvedANN5, EvolvedANNNoise05

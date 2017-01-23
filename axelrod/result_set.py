@@ -1,13 +1,14 @@
+from collections import namedtuple, Counter
 import csv
+
+from numpy import mean, nanmedian, std
 import tqdm
 
-from collections import namedtuple, Counter
-from numpy import mean, nanmedian, std
-
+from axelrod import Actions
+import axelrod.interaction_utils as iu
 from . import eigen
 from .game import Game
-import axelrod.interaction_utils as iu
-from axelrod import Actions
+
 
 C, D = Actions.C, Actions.D
 
@@ -31,7 +32,7 @@ class ResultSet(object):
     """A class to hold the results of a tournament."""
 
     def __init__(self, players, interactions, repetitions=False,
-                 progress_bar=True, game=None, num_interactions=False):
+                 progress_bar=True, game=None):
         """
         Parameters
         ----------
@@ -42,8 +43,6 @@ class ResultSet(object):
                 interactions (1 for each repetition)
             repetitions : int
                 The number of repetitions
-            num_interactions : int
-                The number of interactions
             game : axlerod.game
                 The particular game used.
             progress_bar : bool
@@ -200,7 +199,7 @@ class ResultSet(object):
                    enumerate(total_length_v_opponent)]
 
         # Max is to deal with edge cases of matches that have no turns
-        return [sum(cs) / max(1, float(sum(ls))) for cs, ls
+        return [sum(cs) / max(1, sum(ls)) for cs, ls
                 in zip(self.cooperation, lengths)]
 
     @update_progress_bar
@@ -354,7 +353,7 @@ class ResultSet(object):
             counters = []
             for counter in player:
                 total = sum(counter.values())
-                counters.append(Counter({key: float(value) / total for
+                counters.append(Counter({key: value / total for
                                          key, value in counter.items()}))
             norm.append(counters)
         return norm
@@ -622,7 +621,7 @@ class ResultSet(object):
         attribute
         """
         return [sum(self.good_partner_matrix[player]) /
-                max(1, float(self.total_interactions[player]))
+                max(1, self.total_interactions[player])
                 for player in range(self.nplayers)]
 
     @update_progress_bar
@@ -632,7 +631,7 @@ class ResultSet(object):
         cooperation rate attribute
         """
         return [self.initial_cooperation_count[player] /
-                max(1, float(self.total_interactions[player]))
+                max(1, self.total_interactions[player])
                 for player in range(self.nplayers)]
 
     def _build_score_related_metrics(self, progress_bar=False,
@@ -783,7 +782,7 @@ class ResultSet(object):
                 p = sum([opp[state] for j, opp in enumerate(player) if i != j])
                 counts.append(p)
             try:
-                counts = [float(c) / sum(counts) for c in counts]
+                counts = [c / sum(counts) for c in counts]
             except ZeroDivisionError:
                 counts = [0 for c in counts]
             state_prob.append(counts)

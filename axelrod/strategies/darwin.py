@@ -36,7 +36,7 @@ class Darwin(Player):
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
     def __init__(self):
-        super(Darwin, self).__init__()
+        super().__init__()
         self.response = Darwin.genome[0]
 
     def receive_match_attributes(self):
@@ -68,8 +68,8 @@ class Darwin(Player):
 
     def reset(self):
         """ Reset instance properties. """
-        Player.reset(self)
-        Darwin.genome[0] = C # Ensure initial Cooperate
+        super().reset()
+        Darwin.genome[0] = C  # Ensure initial Cooperate
 
     def mutate(self, outcome, trial):
         """ Select response according to outcome. """

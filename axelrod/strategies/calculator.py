@@ -2,6 +2,8 @@ from axelrod import Actions, Player
 from .axelrod_first import Joss
 from axelrod._strategy_utils import detect_cycle
 
+C, D = Actions.C, Actions.D
+
 
 class Calculator(Player):
     """
@@ -21,7 +23,7 @@ class Calculator(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.joss_instance = Joss()
 
     def strategy(self, opponent):
@@ -38,11 +40,11 @@ class Calculator(Player):
 
     def extended_strategy(self, opponent):
         if self.cycle:
-            return Actions.D
+            return D
         else:
             # TFT
-            return Actions.D if opponent.history[-1:] == [Actions.D] else Actions.C
+            return D if opponent.history[-1:] == [D] else C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.joss_instance = Joss()

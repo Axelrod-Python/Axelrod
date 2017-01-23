@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -24,9 +24,8 @@ class Adaptive(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, initial_plays=None):
-        Player.__init__(self)
+        super().__init__()
         if not initial_plays:
             initial_plays = [C] * 6 + [D] * 5
         self.initial_plays = initial_plays
@@ -53,5 +52,5 @@ class Adaptive(Player):
         return D
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.scores = {C: 0, D: 0}

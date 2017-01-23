@@ -36,7 +36,7 @@ class RiskyQLearner(Player):
     def __init__(self):
         """Initialises the player by picking a random strategy."""
 
-        super(RiskyQLearner, self).__init__()
+        super().__init__()
 
         # Set this explicitely, since the constructor of super will not pick it up
         # for any subclasses that do not override methods using random calls.
@@ -106,7 +106,7 @@ class RiskyQLearner(Player):
         """
         Resets scores and history
         """
-        Player.reset(self)
+        super().reset()
 
         self.Qs = {'': {C: 0, D: 0}}
         self.Vs = {'': 0}

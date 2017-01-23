@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class Punisher(Player):
     """
     A player starts by cooperating however will defect if at any point the
@@ -29,7 +30,7 @@ class Punisher(Player):
         """
         Initialised the player
         """
-        super(Punisher, self).__init__()
+        super().__init__()
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1
@@ -58,7 +59,7 @@ class Punisher(Player):
         """
         Resets scores and history
         """
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1
@@ -66,8 +67,9 @@ class Punisher(Player):
 
 class InversePunisher(Player):
     """
-    An inverted version of Punisher. Similarly the player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after mem_length matches, with 1 <= mem_length <= 20. This time mem_length is
+    An inverted version of Punisher. The player starts by cooperating however
+    will defect if at any point the opponent has defected, and forgets after
+    mem_length matches, with 1 <= mem_length <= 20. This time mem_length is
     proportional to the amount of time the opponent has played C.
 
     Names:
@@ -87,7 +89,7 @@ class InversePunisher(Player):
     }
 
     def __init__(self):
-        super(InversePunisher, self).__init__()
+        super().__init__()
         self.history = []
         self.mem_length = 1
         self.grudged = False
@@ -95,7 +97,9 @@ class InversePunisher(Player):
 
     def strategy(self, opponent):
         """
-        Begins by playing C, then plays D for an amount of rounds proportional to the opponents historical '%' of playing C if the opponent ever plays D
+        Begins by playing C, then plays D for an amount of rounds proportional
+        to the opponents historical '%' of playing C if the opponent ever plays
+        D.
         """
 
         if self.grudge_memory >= self.mem_length:
@@ -115,7 +119,7 @@ class InversePunisher(Player):
 
     def reset(self):
         """Resets internal variables and history"""
-        Player.reset(self)
+        super().reset()
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1

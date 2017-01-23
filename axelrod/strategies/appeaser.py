@@ -2,6 +2,7 @@ from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
+
 class Appeaser(Player):
     """A player who tries to guess what the opponent wants.
 

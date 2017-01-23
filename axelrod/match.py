@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 from axelrod import Actions, Game
+import axelrod.interaction_utils as iu
 from .deterministic_cache import DeterministicCache
 
-import axelrod.interaction_utils as iu
 
 C, D = Actions.C, Actions.D
 
@@ -85,7 +84,7 @@ class Match(object):
     @property
     def _cache_update_required(self):
         """
-        A boolean to show whether the deterministic cache should be updated
+        A boolean to show whether the deterministic cache should be updated.
         """
         return (
             not self.noise and
@@ -112,7 +111,7 @@ class Match(object):
 
         i.e. One entry per turn containing a pair of actions.
         """
-        if (self._stochastic or self._cache_key not in self._cache):
+        if self._stochastic or (self._cache_key not in self._cache):
             turn = 0
             for p in self.players:
                 p.reset()
@@ -135,15 +134,15 @@ class Match(object):
         return iu.compute_scores(self.result, self.game)
 
     def final_score(self):
-        """Returns the final score for a Match"""
+        """Returns the final score for a Match."""
         return iu.compute_final_score(self.result, self.game)
 
     def final_score_per_turn(self):
-        """Returns the mean score per round for a Match"""
+        """Returns the mean score per round for a Match."""
         return iu.compute_final_score_per_turn(self.result, self.game)
 
     def winner(self):
-        """Returns the winner of the Match"""
+        """Returns the winner of the Match."""
         winner_index = iu.compute_winner_index(self.result, self.game)
         if winner_index is False:  # No winner
             return False
@@ -152,11 +151,11 @@ class Match(object):
         return self.players[winner_index]
 
     def cooperation(self):
-        """Returns the count of cooperations by each player"""
+        """Returns the count of cooperations by each player."""
         return iu.compute_cooperations(self.result)
 
     def normalised_cooperation(self):
-        """Returns the count of cooperations by each player per turn"""
+        """Returns the count of cooperations by each player per turn."""
         return iu.compute_normalised_cooperation(self.result)
 
     def state_distribution(self):
@@ -171,7 +170,7 @@ class Match(object):
         """
         return iu.compute_normalised_state_distribution(self.result)
 
-    def sparklines(self, c_symbol=u'█', d_symbol=u' '):
+    def sparklines(self, c_symbol='█', d_symbol=' '):
         return iu.compute_sparklines(self.result, c_symbol, d_symbol)
 
     def __len__(self):

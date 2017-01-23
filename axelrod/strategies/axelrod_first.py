@@ -4,8 +4,7 @@ Additional strategies from Axelrod's first tournament.
 
 import random
 
-from axelrod import Actions, Player, init_args, flip_action, random_choice
-
+from axelrod import Actions, Player, flip_action, random_choice
 from.memoryone import MemoryOnePlayer
 
 C, D = Actions.C, Actions.D
@@ -34,7 +33,6 @@ class Davis(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, rounds_to_cooperate=10):
         """
         Parameters
@@ -42,7 +40,7 @@ class Davis(Player):
         rounds_to_cooperate: int, 10
            The number of rounds to cooperate initially
         """
-        Player.__init__(self)
+        super().__init__()
         self._rounds_to_cooperate = rounds_to_cooperate
 
     def strategy(self, opponent):
@@ -57,7 +55,8 @@ class Davis(Player):
 
 class RevisedDowning(Player):
     """Revised Downing attempts to determine if players are cooperative or not.
-    If so, it cooperates with them. This strategy would have won Axelrod's first tournament.
+    If so, it cooperates with them. This strategy would have won Axelrod's first
+    tournament.
 
     Names:
 
@@ -76,9 +75,8 @@ class RevisedDowning(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, revised=True):
-        Player.__init__(self)
+        super().__init__()
         self.revised = revised
         self.good = 1.0
         self.bad = 0.0
@@ -109,12 +107,12 @@ class RevisedDowning(Player):
                 if opponent.history[-1] == C:
                     self.nice2 += 1
                 self.total_D += 1
-                self.bad = float(self.nice2) / self.total_D
+                self.bad = self.nice2 / self.total_D
             else:
                 if opponent.history[-1] == C:
                     self.nice1 += 1
                 self.total_C += 1
-                self.good = float(self.nice1) / self.total_C
+                self.good = self.nice1 / self.total_C
         # Make a decision based on the accrued counts
         c = 6.0 * self.good - 8.0 * self.bad - 2
         alt = 4.0 * self.good - 5.0 * self.bad - 1
@@ -127,7 +125,7 @@ class RevisedDowning(Player):
         return self.move
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.good = 1.0
         self.bad = 0.0
         self.nice1 = 0
@@ -159,7 +157,6 @@ class Feld(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
                  rounds_of_decay=200):
         """
@@ -173,7 +170,7 @@ class Feld(Player):
             The number of rounds to linearly decrease from start_coop_prob
             to end_coop_prob
         """
-        Player.__init__(self)
+        super().__init__()
         self._start_coop_prob = start_coop_prob
         self._end_coop_prob = end_coop_prob
         self._rounds_of_decay = rounds_of_decay
@@ -183,7 +180,7 @@ class Feld(Player):
         something simple that decreases monotonically from 1.0 to 0.5 over
         200 rounds."""
         diff = (self._end_coop_prob - self._start_coop_prob)
-        slope = diff / float(self._rounds_of_decay)
+        slope = diff / self._rounds_of_decay
         rounds = len(self.history)
         return max(self._start_coop_prob + slope * rounds,
                    self._end_coop_prob)
@@ -229,7 +226,7 @@ class Grofman(Player):
             return opponent.history[-1]
         if self.history[-1] == opponent.history[-1]:
             return C
-        return random_choice(2./ 7)
+        return random_choice(2 / 7)
 
 
 
@@ -248,7 +245,6 @@ class Joss(MemoryOnePlayer):
 
     name = "Joss"
 
-    @init_args
     def __init__(self, p=0.9):
         """
         Parameters
@@ -259,7 +255,7 @@ class Joss(MemoryOnePlayer):
         """
         four_vector = (p, 0, p, 0)
         self.p = p
-        super(Joss, self).__init__(four_vector)
+        super().__init__(four_vector)
 
     def __repr__(self):
         return "%s: %s" % (self.name, round(self.p, 2))
@@ -269,12 +265,22 @@ class Nydegger(Player):
     """
     Submitted to Axelrod's first tournament by Rudy Nydegger.
 
-    The program begins with tit for tat for the first three moves, except 
-    that if it was the only one to cooperate on the first move and the only one to defect on the second move, it defects on the third move. After the third move, its choice is determined from the 3 preceding outcomes in the following manner.
+    The program begins with tit for tat for the first three moves, except
+    that if it was the only one to cooperate on the first move and the only one
+    to defect on the second move, it defects on the third move. After the
+    third move, its choice is determined from the 3 preceding outcomes in the
+    following manner.
 
-    Let A be the sum formed by counting the other's defection as 2 points and one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding three moves in chronological order. The choice can be described as defecting only when A equals 1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
+    Let A be the sum formed by counting the other's defection as 2 points and
+    one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding
+    three moves in chronological order. The choice can be described as defecting
+    only when A equals
+    1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
 
-    Thus if all three preceding moves are mutual defection, A = 63 and the rule cooperates. This rule was designed for use in laboratory experiments as a stooge which had a memory and appeared to be trustworthy, potentially cooperative, but not gullible.
+    Thus if all three preceding moves are mutual defection, A = 63 and the rule
+    cooperates. This rule was designed for use in laboratory experiments as a
+    stooge which had a memory and appeared to be trustworthy, potentially
+    cooperative, but not gullible.
 
     Names:
 
@@ -299,7 +305,7 @@ class Nydegger(Player):
                           (C, D): 2,
                           (D, C): 1,
                           (D, D): 3}
-        super(Nydegger, self).__init__()
+        super().__init__()
 
     @staticmethod
     def score_history(my_history, opponent_history, score_map):
@@ -333,9 +339,8 @@ class Shubik(Player):
     """
     Submitted to Axelrod's first tournament by Martin Shubik.
 
-    Plays like Tit-For-Tat with the following modification. After
-    each retaliation, the number of rounds that Shubik retaliates
-    increases by 1.
+    Plays like Tit-For-Tat with the following modification. After each
+    retaliation, the number of rounds that Shubik retaliates increases by 1.
 
     Names:
 
@@ -354,7 +359,7 @@ class Shubik(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.is_retaliating = False
         self.retaliation_length = 0
         self.retaliation_remaining = 0
@@ -391,7 +396,7 @@ class Shubik(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.is_retaliating = False
         self.retaliation_length = 0
         self.retaliation_remaining = 0
@@ -420,7 +425,6 @@ class Tullock(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, rounds_to_cooperate=11):
         """
         Parameters
@@ -428,7 +432,7 @@ class Tullock(Player):
         rounds_to_cooperate: int, 10
            The number of rounds to cooperate initially
         """
-        Player.__init__(self)
+        super().__init__()
         self._rounds_to_cooperate = rounds_to_cooperate
         self.__class__.memory_depth = rounds_to_cooperate
 
@@ -437,7 +441,7 @@ class Tullock(Player):
         if len(self.history) < rounds:
             return C
         cooperate_count = opponent.history[-rounds:].count(C)
-        prop_cooperate = cooperate_count / float(rounds)
+        prop_cooperate = cooperate_count / rounds
         prob_cooperate = max(0, prop_cooperate - 0.10)
         return random_choice(prob_cooperate)
 
@@ -451,14 +455,14 @@ class UnnamedStrategy(Player):
     is also adjusted.
 
     Fourteenth Place with 282.2 points is a 77-line program by a graduate
-    student of political science whose dissertation is in game theory. This rule has
-    a probability of cooperating, P, which is initially 30% and is updated every 10
-    moves. P is adjusted if the other player seems random, very cooperative, or
-    very uncooperative. P is also adjusted after move 130 if the rule has a lower
-    score than the other player. Unfortunately, the complex process of adjustment
-    frequently left the probability of cooperation in the 30% to 70% range, and
-    therefore the rule appeared random to many other players.
-    
+    student of political science whose dissertation is in game theory. This rule
+    has a probability of cooperating, P, which is initially 30% and is updated
+    every 10 moves. P is adjusted if the other player seems random, very
+    cooperative, or very uncooperative. P is also adjusted after move 130 if the
+    rule has a lower score than the other player. Unfortunately, the complex
+    process of adjustment frequently left the probability of cooperation in the
+    30% to 70% range, and therefore the rule appeared random to many other players.
+
     Names:
 
     - Unnamed Strategy: [Axelrod1980]_
@@ -480,5 +484,5 @@ class UnnamedStrategy(Player):
 
     @staticmethod
     def strategy(opponent):
-        r = random.uniform(3, 7) / float(10)
+        r = random.uniform(3, 7) / 10
         return random_choice(r)

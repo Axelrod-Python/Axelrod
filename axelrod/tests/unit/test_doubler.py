@@ -1,7 +1,6 @@
-"""Test for the doubler strategy."""
+"""Tests for the Doubler strategy."""
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -28,11 +27,11 @@ class TestDoubler(TestPlayer):
         # Defects when the opponent has defected and
         # the opponent's cooperation count
         # is less than twice their defection count
-        self.responses_test([C], [D], [D])
-        self.responses_test([D, D], [D, D], [D])
-        self.responses_test([C, D], [C, D], [D])
-        self.responses_test([C, C, D], [C, C, D], [D])
+        self.responses_test([D], [C], [D])
+        self.responses_test([D], [D, D], [D, D])
+        self.responses_test([D], [C, D], [C, D])
+        self.responses_test([D], [C, C, D], [C, C, D])
 
         # Cooperates otherwise
         self.responses_test([C], [C], [C])
-        self.responses_test([C, C, C, C], [C, C, C, D], [C])
+        self.responses_test([C], [C, C, C, C], [C, C, C, D])

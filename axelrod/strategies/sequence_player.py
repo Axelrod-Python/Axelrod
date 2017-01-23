@@ -1,5 +1,7 @@
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 from axelrod._strategy_utils import thue_morse_generator
+
+C, D = Actions.C, Actions.D
 
 
 class SequencePlayer(Player):
@@ -7,9 +9,8 @@ class SequencePlayer(Player):
     determine their plays.
     """
 
-    @init_args
     def __init__(self, generator_function, generator_args=()):
-        Player.__init__(self)
+        super().__init__()
         # Initialize the sequence generator
         self.generator_function = generator_function
         self.generator_args = generator_args
@@ -31,7 +32,7 @@ class SequencePlayer(Player):
 
     def reset(self):
         # Be sure to reset the sequence generator
-        Player.reset(self)
+        super().reset()
         self.sequence_generator = self.generator_function(*self.generator_args)
 
 
@@ -59,9 +60,8 @@ class ThueMorse(SequencePlayer):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self):
-        SequencePlayer.__init__(self, thue_morse_generator, (0,))
+        super().__init__(thue_morse_generator, (0,))
 
 
 class ThueMorseInverse(ThueMorse):
@@ -83,13 +83,12 @@ class ThueMorseInverse(ThueMorse):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self):
-        SequencePlayer.__init__(self, thue_morse_generator, (0,))
+        super(ThueMorse, self).__init__(thue_morse_generator, (0,))
 
     def meta_strategy(self, value):
         # Switch the default cooperate and defect action on 0 or 1
         if value == 0:
-            return Actions.C
+            return C
         else:
-            return Actions.D
+            return D

@@ -1,4 +1,4 @@
-from axelrod import Actions, Player, init_args, random_choice
+from axelrod import Actions, Player, random_choice
 
 import random
 
@@ -164,7 +164,7 @@ class Prober4(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.init_sequence = [
             C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
         ]
@@ -194,7 +194,7 @@ class Prober4(Player):
             return D if opponent.history[-1] == D else C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.just_Ds = 0
         self.unjust_Ds = 0
         self.turned_defector = False
@@ -256,7 +256,6 @@ class NaiveProber(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, p=0.1):
         """
         Parameters
@@ -264,7 +263,7 @@ class NaiveProber(Player):
         p, float
             The probability to defect randomly
         """
-        Player.__init__(self)
+        super().__init__()
         self.p = p
         if (self.p == 0) or (self.p == 1):
             self.classifier['stochastic'] = False
@@ -313,9 +312,8 @@ class RemorsefulProber(NaiveProber):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, p=0.1):
-        NaiveProber.__init__(self, p)
+        super().__init__(p)
         self.probing = False
 
     def strategy(self, opponent):
@@ -338,5 +336,5 @@ class RemorsefulProber(NaiveProber):
         return D
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.probing = False

@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-import unittest
-import tempfile
 from collections import Counter
+import tempfile
+import unittest
+
 import axelrod
+from axelrod import Actions
 import axelrod.interaction_utils as iu
 
-from axelrod import Actions
 
 C, D = Actions.C, Actions.D
 
@@ -22,12 +22,12 @@ class TestMatch(unittest.TestCase):
                           Counter({('D', 'C'): 2}),
                           Counter({('C', 'C'): 1, ('C', 'D'): 1}),
                           None]
-    normalised_state_distribution = [Counter({('C', 'D'): 0.5, ('D', 'C'): 0.5}),
-                                     Counter({('D', 'C'): 1.0}),
-                                     Counter({('C', 'C'): 0.5, ('C', 'D'): 0.5}),
-                                     None]
-    sparklines = [ u'█ \n █', u'  \n██', u'██\n█ ', None ]
-
+    normalised_state_distribution = [
+        Counter({('C', 'D'): 0.5, ('D', 'C'): 0.5}),
+        Counter({('D', 'C'): 1.0}),
+        Counter({('C', 'C'): 0.5, ('C', 'D'): 0.5}),
+        None]
+    sparklines = [ '█ \n █', '  \n██', '██\n█ ', None ]
 
     def test_compute_scores(self):
         for inter, score in zip(self.interactions, self.scores):

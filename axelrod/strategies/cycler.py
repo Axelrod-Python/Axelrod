@@ -21,7 +21,7 @@ class AntiCycler(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.cycle_length = 1
         self.cycle_counter = 0
 
@@ -35,7 +35,7 @@ class AntiCycler(Player):
             return Actions.D
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.cycle_length = 1
         self.cycle_counter = 0
 
@@ -66,7 +66,7 @@ class Cycler(Player):
         Alternator is equivalent to Cycler("CD")
 
         """
-        Player.__init__(self)
+        super().__init__()
         self.cycle = cycle
         self.name = "Cycler {}".format(cycle)
         self.classifier['memory_depth'] = len(cycle) - 1
@@ -85,7 +85,7 @@ class CyclerDC(Cycler):
 
     @init_args
     def __init__(self, cycle="DC"):
-        Cycler.__init__(self, cycle=cycle)
+        super().__init__(cycle=cycle)
 
 
 class CyclerCCD(Cycler):
@@ -96,7 +96,7 @@ class CyclerCCD(Cycler):
 
     @init_args
     def __init__(self, cycle="CCD"):
-        Cycler.__init__(self, cycle=cycle)
+        super().__init__(cycle=cycle)
 
 
 class CyclerDDC(Cycler):
@@ -107,7 +107,7 @@ class CyclerDDC(Cycler):
 
     @init_args
     def __init__(self, cycle="DDC"):
-        Cycler.__init__(self, cycle=cycle)
+        super().__init__(cycle=cycle)
 
 
 class CyclerCCCD(Cycler):
@@ -118,7 +118,7 @@ class CyclerCCCD(Cycler):
 
     @init_args
     def __init__(self, cycle="CCCD"):
-        Cycler.__init__(self, cycle=cycle)
+        super().__init__(cycle=cycle)
 
 
 class CyclerCCCCCD(Cycler):
@@ -129,7 +129,7 @@ class CyclerCCCCCD(Cycler):
 
     @init_args
     def __init__(self, cycle="CCCCCD"):
-        Cycler.__init__(self, cycle=cycle)
+        super().__init__(cycle=cycle)
 
 
 class CyclerCCCDCD(Cycler):
@@ -140,4 +140,4 @@ class CyclerCCCDCD(Cycler):
 
     @init_args
     def __init__(self, cycle="CCCDCD"):
-        Cycler.__init__(self, cycle=cycle)
+        super().__init__(cycle=cycle)

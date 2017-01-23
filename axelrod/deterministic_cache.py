@@ -1,9 +1,4 @@
-try:
-    # Python 2.x
-    from UserDict import UserDict
-except ImportError:
-    # Python 3.x
-    from collections import UserDict
+from collections import UserDict
 import pickle
 
 from typing import Tuple
@@ -12,7 +7,7 @@ from axelrod import Player
 
 
 class DeterministicCache(UserDict):
-    """A class to cache the results of deterministic matches
+    """A class to cache the results of deterministic matches.
 
     For fixed length matches with no noise between pairs of deterministic
     players, the results will always be the same. We can hold those results
@@ -43,12 +38,14 @@ class DeterministicCache(UserDict):
         file_name : string
             Path to a previously saved cache file
         """
-        UserDict.__init__(self)
+        super().__init__()
         self.mutable = True
         if file_name is not None:
             self.load(file_name)
 
-    def _key_transform(self, key: Tuple[]):
+    @staticmethod
+    def _key_transform(key):
+
         """
         Parameters
         ----------
@@ -58,13 +55,13 @@ class DeterministicCache(UserDict):
         return key[0].name, key[1].name, key[2]
 
     def __delitem__(self, key):
-        return UserDict.__delitem__(self, self._key_transform(key))
+        return super().__delitem__(self._key_transform(key))
 
     def __getitem__(self, key):
-        return UserDict.__getitem__(self, self._key_transform(key))
+        return super().__getitem__(self._key_transform(key))
 
     def __contains__(self, key):
-        return UserDict.__contains__(self, self._key_transform(key))
+        return super().__contains__(self._key_transform(key))
 
     def __setitem__(self, key, value):
         """Overrides the UserDict.__setitem__ method in order to validate
@@ -74,16 +71,18 @@ class DeterministicCache(UserDict):
 
         if not self._is_valid_key(key):
             raise ValueError(
-                'Key must be a tuple of 2 deterministic axelrod Player classes and an integer')
+                "Key must be a tuple of 2 deterministic axelrod Player classes "
+                "and an integer")
 
         if not self._is_valid_value(value):
             raise ValueError(
                 'Value must be a list with length equal to turns attribute')
 
-        UserDict.__setitem__(self, self._key_transform(key), value)
-
-    def _is_valid_key(self, key) -> bool :
-        """Validate a proposed dictionary key
+        super().__setitem__(self._key_transform(key), val
+    
+    @staticmethod
+    def _is_valid_key(key) -> bool :
+        """Validate a proposed dictionary key.
 
         Parameters
         ----------
@@ -119,8 +118,9 @@ class DeterministicCache(UserDict):
 
         return True
 
-    def _is_valid_value(self, value) -> bool:
-        """Validate a proposed dictionary value
+    @staticmethod
+    def _is_valid_value(value) -> bool:
+        """Validate a proposed dictionary value.
 
         Parameters
         ----------
@@ -150,7 +150,7 @@ class DeterministicCache(UserDict):
 
     def load(self, file_name: str):
         """Load a previously saved cache into the dictionary
-
+        
         Parameters
         ----------
         file_name : string
@@ -163,5 +163,6 @@ class DeterministicCache(UserDict):
             self.data = data
         else:
             raise ValueError(
-                'Cache file exists but is not the correct format. Try deleting and re-building the cache file.')
+                "Cache file exists but is not the correct format. "
+                "Try deleting and re-building the cache file.")
         return True

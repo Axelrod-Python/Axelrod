@@ -1,11 +1,9 @@
-"""Tests for strategies Desperate, Hopeless, Willing, and Grim"""
+"""Tests for strategies Desperate, Hopeless, Willing, and Grim."""
 import axelrod
-
-from axelrod.random_ import seed
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
 
 class TestDesperate(TestPlayer):
 
@@ -22,15 +20,11 @@ class TestDesperate(TestPlayer):
     }
 
     def test_strategy(self):
-        seed(1)
-        self.first_play_test(C)
-        seed(2)
-        self.first_play_test(D)
-
-    def test_responses(self):
-        self.responses_test([C] * 4, [D] * 4, [D])
-        self.responses_test([D, D, C], [C, C, D], [D])
-        self.responses_test([D, D, D], [C, C, D], [C])
+        self.first_play_test(C, seed=1)
+        self.first_play_test(D, seed=2)
+        self.responses_test([D], [C] * 4, [D] * 4)
+        self.responses_test([D], [D, D, C], [C, C, D])
+        self.responses_test([C], [D, D, D], [C, C, D])
 
 
 class TestHopeless(TestPlayer):
@@ -48,15 +42,12 @@ class TestHopeless(TestPlayer):
     }
 
     def test_strategy(self):
-        seed(1)
-        self.first_play_test(C)
-        seed(2)
-        self.first_play_test(D)
+        self.first_play_test(C, seed=1)
+        self.first_play_test(D, seed=2)
+        self.responses_test([C], [C] * 4, [D] * 4)
+        self.responses_test([C], [D] * 5, [C] * 5)
+        self.responses_test([D], [C, D, C], [C, C, C])
 
-    def test_responses(self):
-        self.responses_test([C] * 4, [D] * 4, [C])
-        self.responses_test([D] * 5, [C] * 5, [C])
-        self.responses_test([C, D, C], [C, C, C], [D])
 
 class TestWilling(TestPlayer):
 
@@ -73,12 +64,8 @@ class TestWilling(TestPlayer):
     }
 
     def test_strategy(self):
-        seed(1)
-        self.first_play_test(C)
-        seed(2)
-        self.first_play_test(D)
-
-    def test_responses(self):
-        self.responses_test([C] * 4, [D] * 4, [C])
-        self.responses_test([D] * 5, [C] * 5, [C])
-        self.responses_test([C, C, D], [C, C, D], [D])
+        self.first_play_test(C, seed=1)
+        self.first_play_test(D, seed=2)
+        self.responses_test([C], [C] * 4, [D] * 4)
+        self.responses_test([C], [D] * 5, [C] * 5)
+        self.responses_test([D], [C, C, D], [C, C, D])

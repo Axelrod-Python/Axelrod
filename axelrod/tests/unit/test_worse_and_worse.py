@@ -1,10 +1,10 @@
-"""Test for the Worse and Worse strategies."""
+"""Tests for the WorseAndWorse strategies."""
 
 import axelrod
-
-from .test_player import TestPlayer, TestHeadsUp
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
+
 
 class TestWorseAndWorse(TestPlayer):
 
@@ -21,40 +21,10 @@ class TestWorseAndWorse(TestPlayer):
     }
 
     def test_strategy(self):
-        """
-        Test that the strategy gives expected behaviour
-        """
-
-        axelrod.seed(8)
-        opponent = axelrod.Cooperator()
-        player = axelrod.WorseAndWorse()
-        match = axelrod.Match((opponent, player), turns=10)
-        self.assertEqual(match.play(), [('C', 'C'),
-                                        ('C', 'C'),
-                                        ('C', 'C'),
-                                        ('C', 'C'),
-                                        ('C', 'C'),
-                                        ('C', 'C'),
-                                        ('C', 'D'),
-                                        ('C', 'C'),
-                                        ('C', 'C'),
-                                        ('C', 'C')])
-
-        # Test that behaviour does not depend on opponent
-        opponent = axelrod.Defector()
-        player = axelrod.WorseAndWorse()
-        axelrod.seed(8)
-        match = axelrod.Match((opponent, player), turns=10)
-        self.assertEqual(match.play(), [('D', 'C'),
-                                        ('D', 'C'),
-                                        ('D', 'C'),
-                                        ('D', 'C'),
-                                        ('D', 'C'),
-                                        ('D', 'C'),
-                                        ('D', 'D'),
-                                        ('D', 'C'),
-                                        ('D', 'C'),
-                                        ('D', 'C')])
+        """Test that the strategy gives expected behaviour."""
+        self.first_play_test(C)
+        self.responses_test([C] * 6 + [D] + [C] * 3, seed=8)
+        self.responses_test([C] * 4 + [D] + [C] * 3, [C, C], [D, D], seed=8)
 
 
 class TestWorseAndWorseRandom(TestPlayer):
@@ -72,9 +42,12 @@ class TestWorseAndWorseRandom(TestPlayer):
     }
 
     def test_strategy(self):
-        """
-        Test that the strategy gives expected behaviour
-        """
+        """Test that the strategy gives expected behaviour."""
+        self.first_play_test(C)
+        # self.responses_test([C] + [D] * 4, seed=1)
+        # self.responses_test([C] * 4 + [D] + [C] * 3, [C, C],
+        #                     [D, D], seed=1)
+
         axelrod.seed(1)
         opponent = axelrod.Cooperator()
         player = axelrod.KnowledgeableWorseAndWorse()
@@ -122,25 +95,20 @@ class TestWorseAndWorse2(TestPlayer):
     }
 
     def test_strategy(self):
-        """
-        Test that the strategy gives expected behaviour
-        """
-
+        """Test that the strategy gives expected behaviour."""
         # Test that first move is C
         self.first_play_test('C')
-
         # Test that given a history, next move matches opponent (round <= 20)
         self.responses_test([C], [C], [C])
-        self.responses_test([C, C], [C, D], [D])
-        self.responses_test([C] * 19, [C] * 19, [C])
-        self.responses_test([C] * 19, [C] * 18 + [D], [D])
-
+        self.responses_test([D], [C, C], [C, D])
+        self.responses_test([C], [C] * 19, [C] * 19)
+        self.responses_test([D], [C] * 19, [C] * 18 + [D])
         # Test that after round 20, strategy follows stochastic behaviour given
         # a seed
-        self.responses_test([C] * 20, [C] * 20, [C, D, C, C, C, C, D, C, C, C],
-                            random_seed=8)
-        self.responses_test([C] * 20, [C] * 20, [D, D, C, C, D, C, C, C, C, C],
-                            random_seed=2)
+        self.responses_test([C, D, C, C, C, C, D, C, C, C], [C] * 20, [C] * 20,
+                            seed=8)
+        self.responses_test([D, D, C, C, D, C, C, C, C, C], [C] * 20, [C] * 20,
+                            seed=2)
 
 
 class TestWorseAndWorse3(TestPlayer):
@@ -158,22 +126,16 @@ class TestWorseAndWorse3(TestPlayer):
     }
 
     def test_strategy(self):
-        """
-        Test that the strategy gives expected behaviour
-        """
-
+        """Test that the strategy gives expected behaviour."""
         # Test that first move is C
-        self.first_play_test('C')
-
+        self.first_play_test(C)
         # Test that if opponent only defects, strategy also defects
-        self.responses_test([D] * 5, [D] * 5, [D])
-
+        self.responses_test([D], [D] * 5, [D] * 5)
         # Test that if opponent only cooperates, strategy also cooperates
-        self.responses_test([C] * 5, [C] * 5, [C])
-
+        self.responses_test([C], [C] * 5, [C] * 5)
         # Test that given a non 0/1 probability of defecting, strategy follows
         # stochastic behaviour, given a seed
-        self.responses_test([C] * 5, [C, D, C, D, C],
-                            [D, C, C, D, C, C, C, C, C, C], random_seed=8)
-        self.responses_test([C] * 5, [D] * 5, [D, D, D, C, C, D, D, D, C, C],
-                            random_seed=2)
+        self.responses_test([D, C, C, D, C, C, C, C, C, C], [C] * 5,
+                            [C, D, C, D, C], seed=8)
+        self.responses_test([D, D, D, C, C, D, D, D, C, C], [C] * 5, [D] * 5,
+                            seed=2)

@@ -1,13 +1,12 @@
-"""Test for the tit for tat strategies."""
-
-import axelrod
-from .test_player import TestHeadsUp, TestPlayer
-
-from hypothesis import given
-from hypothesis.strategies import integers
-from axelrod.tests.property import strategy_lists
+"""Tests for the tit for tat strategies."""
 
 import random
+from hypothesis import given
+from hypothesis.strategies import integers
+import axelrod
+from axelrod.tests.property import strategy_lists
+from .test_player import TestMatch, TestPlayer
+
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -31,14 +30,12 @@ class TestTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Repeats last action of opponent history."""
-        self.markov_test([C, D, C, D])
-        self.responses_test([C] * 4, [C, C, C, C], [C])
-        self.responses_test([C] * 5, [C, C, C, C, D], [D])
+        # Repeats last action of opponent history.
+        self.second_play_test(C, D, C, D)
+        self.responses_test([C], [C] * 4, [C, C, C, C])
+        self.responses_test([D], [C] * 5, [C, C, C, C, D])
 
 
 class TestTitFor2Tats(TestPlayer):
@@ -55,13 +52,11 @@ class TestTitFor2Tats(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Will defect only when last two turns of opponent were defections."""
-        self.responses_test([C, C, C], [D, D, D], [D])
-        self.responses_test([C, C, D, D], [D, D, D, C], [C])
+        # Will defect only when last two turns of opponent were defections.
+        self.responses_test([D], [C, C, C], [D, D, D])
+        self.responses_test([C], [C, C, D, D], [D, D, D, C])
 
 
 class TestTwoTitsForTat(TestPlayer):
@@ -78,15 +73,13 @@ class TestTwoTitsForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Will defect twice when last turn of opponent was defection."""
-        self.responses_test([C], [D], [D])
-        self.responses_test([C, C], [D, D], [D])
-        self.responses_test([C, C, C], [D, D, C], [D])
-        self.responses_test([C, C, D, D], [D, D, C, C], [C])
+        # Will defect twice when last turn of opponent was defection.
+        self.responses_test([D], [C], [D])
+        self.responses_test([D], [C, C], [D, D])
+        self.responses_test([D], [C, C, C], [D, D, C])
+        self.responses_test([C], [C, C, D, D], [D, D, C, C])
 
 
 class TestBully(TestPlayer):
@@ -103,12 +96,10 @@ class TestBully(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by defecting"""
+        # Starts by defecting.
         self.first_play_test(D)
-
-    def test_effect_of_strategy(self):
-        """Will do opposite of what opponent does."""
-        self.markov_test([D, C, D, C])
+        # Will do opposite of what opponent does.
+        self.second_play_test(D, C, D, C)
 
 
 class TestSneakyTitForTat(TestPlayer):
@@ -125,14 +116,12 @@ class TestSneakyTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Will try defecting after two turns of cooperation, but will stop
-        if punished."""
-        self.responses_test([C, C], [C, C], [D])
-        self.responses_test([C, C, D, D], [C, C, C, D], [C])
+        # Will try defecting after two turns of cooperation, but will stop
+        # if punished.
+        self.responses_test([D], [C, C], [C, C])
+        self.responses_test([C], [C, C, D, D], [C, C, C, D])
 
 
 class TestSuspiciousTitForTat(TestPlayer):
@@ -149,13 +138,11 @@ class TestSuspiciousTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by Defecting"""
+        # Starts by Defecting
         self.first_play_test(D)
-
-    def test_effect_of_strategy(self):
-        """Plays like TFT after the first move, repeating the opponents last
-        move."""
-        self.markov_test([C, D, C, D])
+        # Plays like TFT after the first move, repeating the opponents last
+        # move.
+        self.second_play_test(C, D, C, D)
 
 
 class TestAntiTitForTat(TestPlayer):
@@ -172,12 +159,10 @@ class TestAntiTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by Cooperating"""
+        # Starts by Cooperating
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Will do opposite of what opponent does."""
-        self.markov_test([D, C, D, C])
+        # Will do opposite of what opponent does.
+        self.second_play_test(D, C, D, C)
 
 
 class TestHardTitForTat(TestPlayer):
@@ -194,16 +179,14 @@ class TestHardTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Repeats last action of opponent history."""
-        self.responses_test([C, C, C], [C, C, C], [C])
-        self.responses_test([C, C, C], [D, C, C], [D])
-        self.responses_test([C, C, C], [C, D, C], [D])
-        self.responses_test([C, C, C], [C, C, D], [D])
-        self.responses_test([C, C, C, C], [D, C, C, C], [C])
+        # Repeats last action of opponent history.
+        self.responses_test([C], [C, C, C], [C, C, C])
+        self.responses_test([D], [C, C, C], [D, C, C])
+        self.responses_test([D], [C, C, C], [C, D, C])
+        self.responses_test([D], [C, C, C], [C, C, D])
+        self.responses_test([C], [C, C, C, C], [D, C, C, C])
 
 
 class TestHardTitFor2Tats(TestPlayer):
@@ -220,23 +203,21 @@ class TestHardTitFor2Tats(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
+        # Repeats last action of opponent history.
+        self.responses_test([C], [C, C, C], [C, C, C])
+        self.responses_test([C], [C, C, C], [D, C, C])
+        self.responses_test([C], [C, C, C], [C, D, C])
+        self.responses_test([C], [C, C, C], [C, C, D])
 
-    def test_effect_of_strategy(self):
-        """Repeats last action of opponent history."""
-        self.responses_test([C, C, C], [C, C, C], [C])
-        self.responses_test([C, C, C], [D, C, C], [C])
-        self.responses_test([C, C, C], [C, D, C], [C])
-        self.responses_test([C, C, C], [C, C, D], [C])
+        self.responses_test([C], [C, C, C], [D, C, D])
+        self.responses_test([D], [C, C, C], [D, D, C])
+        self.responses_test([D], [C, C, C], [C, D, D])
 
-        self.responses_test([C, C, C], [D, C, D], [C])
-        self.responses_test([C, C, C], [D, D, C], [D])
-        self.responses_test([C, C, C], [C, D, D], [D])
-
-        self.responses_test([C, C, C, C], [D, C, C, C], [C])
-        self.responses_test([C, C, C, C], [D, D, C, C], [C])
-        self.responses_test([C, C, C, C], [C, D, D, C], [D])
+        self.responses_test([C], [C, C, C, C], [D, C, C, C])
+        self.responses_test([C], [C, C, C, C], [D, D, C, C])
+        self.responses_test([D], [C, C, C, C], [C, D, D, C])
 
 
 class OmegaTFT(TestPlayer):
@@ -254,10 +235,10 @@ class OmegaTFT(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
         for i in range(10):
-            self.responses_test([C] * i, [C] * i, [C])
+            self.responses_test([C], [C] * i, [C] * i)
 
     def test_reset(self):
         player = self.player()
@@ -268,7 +249,7 @@ class OmegaTFT(TestPlayer):
         self.assertEqual(player.deadlock_counter, 0)
 
 
-class TestOmegaTFTvsSTFT(TestHeadsUp):
+class TestOmegaTFTvsSTFT(TestMatch):
     def test_rounds(self):
         self.versus_test(
             axelrod.OmegaTFT(), axelrod.SuspiciousTitForTat(),
@@ -277,7 +258,7 @@ class TestOmegaTFTvsSTFT(TestHeadsUp):
         )
 
 
-class TestOmegaTFTvsAlternator(TestHeadsUp):
+class TestOmegaTFTvsAlternator(TestMatch):
     def test_rounds(self):
         self.versus_test(
             axelrod.OmegaTFT(), axelrod.Alternator(),
@@ -300,102 +281,73 @@ class TestGradual(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Punishes defection with a growing number of defections and calms
-        the opponent with two Cooperations in a row"""
-        self.responses_test(
-            [C], [C], [C],
-            attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 0
-            }
-        )
-        self.responses_test(
-            [C], [D], [D],
-            attrs={
-                "calming": False,
-                "punishing": True,
-                "punishment_count": 1,
-                "punishment_limit": 1
-            }
-        )
-        self.responses_test(
-            [C, D], [D, C], [C],
-            attrs={
-                "calming": True,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 1
-            }
-        )
-        self.responses_test(
-            [C, D, C], [D, C, D], [C],
-            attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 1
-            }
-        )
-        self.responses_test(
-            [C, D, C, C], [D, C, D, C], [C],
-            attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 1
-            }
-        )
-        self.responses_test(
-            [C, D, C, D, C], [D, C, D, C, C], [C],
-            attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 1
-            }
-        )
-        self.responses_test(
-            [C, D, C, D, C, C], [D, C, D, C, C, D], [D],
-            attrs={
-                "calming": False,
-                "punishing": True,
-                "punishment_count": 1,
-                "punishment_limit": 2
-            }
-        )
-        self.responses_test(
-            [C, D, C, D, D, C, D], [D, C, D, C, C, D, C], [D],
-            attrs={
-                "calming": False,
-                "punishing": True,
-                "punishment_count": 2,
-                "punishment_limit": 2
-            }
-        )
-        self.responses_test(
-            [C, D, C, D, D, C, D, D], [D, C, D, C, C, D, C, C], [C],
-            attrs={
+        # Punishes defection with a growing number of defections and calms
+        # the opponent with two cooperations in a row.
+        self.responses_test([C], [C], [C], attrs={
+            "calming": False,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 0
+        })
+        self.responses_test([D], [C], [D], attrs={
+            "calming": False,
+            "punishing": True,
+            "punishment_count": 1,
+            "punishment_limit": 1
+        })
+        self.responses_test([C], [C, D], [D, C], attrs={
+            "calming": True,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 1
+        })
+        self.responses_test([C], [C, D, C], [D, C, D], attrs={
+            "calming": False,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 1
+        })
+        self.responses_test([C], [C, D, C, C], [D, C, D, C], attrs={
+            "calming": False,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 1
+        })
+        self.responses_test([C], [C, D, C, D, C], [D, C, D, C, C], attrs={
+            "calming": False,
+            "punishing": False,
+            "punishment_count": 0,
+            "punishment_limit": 1
+        })
+        self.responses_test([D], [C, D, C, D, C, C], [D, C, D, C, C, D], attrs={
+            "calming": False,
+            "punishing": True,
+            "punishment_count": 1,
+            "punishment_limit": 2
+        })
+        self.responses_test([D], [C, D, C, D, D, C, D], [D, C, D, C, C, D, C],
+                            attrs={
+                                "calming": False,
+                                "punishing": True,
+                                "punishment_count": 2,
+                                "punishment_limit": 2
+                            })
+        self.responses_test([C], [C, D, C, D, D, C, D, D],
+                            [D, C, D, C, C, D, C, C], attrs={
                 "calming": True,
                 "punishing": False,
                 "punishment_count": 0,
                 "punishment_limit": 2
-            }
-        )
-        self.responses_test(
-            [C, D, C, D, D, C, D, D, C], [D, C, D, C, C, D, C, C, C], [C],
-            attrs={
+            })
+        self.responses_test([C], [C, D, C, D, D, C, D, D, C],
+                            [D, C, D, C, C, D, C, C, C], attrs={
                 "calming": False,
                 "punishing": False,
                 "punishment_count": 0,
                 "punishment_limit": 2
-            }
-        )
+            })
 
     def test_reset_cleans_all(self):
         p = axelrod.Gradual()
@@ -419,7 +371,7 @@ class TestGradual(TestPlayer):
         "Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner's
         Dilemma" Proc. Artif. Life 1996
 
-        This test just ensures that the strategy is as was originally defined
+        This test just ensures that the strategy is as was originally defined.
         """
         player = axelrod.Gradual()
 
@@ -517,15 +469,13 @@ class TestSlowTitForTwoTats(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """If opponent plays the same move twice, repeats last action of
-        opponent history."""
-        self.responses_test([C] * 2, [C, C], [C])
-        self.responses_test([C] * 3, [C, D, C], [C])
-        self.responses_test([C] * 3, [C, D, D], [D])
+        # If opponent plays the same move twice, repeats last action of
+        # opponent history.
+        self.responses_test([C], [C] * 2, [C, C])
+        self.responses_test([C], [C] * 3, [C, D, C])
+        self.responses_test([D], [C] * 3, [C, D, D])
 
 
 class TestAdaptiveTitForTat(TestPlayer):
@@ -542,12 +492,9 @@ class TestAdaptiveTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Start by cooperating."""
+        # Start by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-
-        self.markov_test(['C', 'D', 'C', 'D'])
+        self.second_play_test(C, D, C, D)
 
         p1, p2 = self.player(), self.player()
         p1.play(p2)
@@ -576,22 +523,17 @@ class TestSpitefulTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Repeats last action of opponent history until 2 consecutive
-        defections, then always defects"""
-        self.markov_test([C, D, C, D])
-        self.responses_test(
-            [C] * 4, [C, C, C, C], [C], attrs={"retaliating": False}
-        )
-        self.responses_test(
-            [C] * 5, [C, C, C, C, D], [D], attrs={"retaliating": False}
-        )
-        self.responses_test(
-            [C] * 5, [C, C, D, D, C], [D], attrs={"retaliating": True}
-        )
+        # Repeats last action of opponent history until 2 consecutive
+        # defections, then always defects
+        self.second_play_test(C, D, C, D)
+        self.responses_test([C], [C] * 4, [C, C, C, C],
+                            attrs={"retaliating": False})
+        self.responses_test([D], [C] * 5, [C, C, C, C, D],
+                            attrs={"retaliating": False})
+        self.responses_test([D], [C] * 5, [C, C, D, D, C],
+                            attrs={"retaliating": True})
 
     def test_reset_retaliating(self):
         player = self.player()

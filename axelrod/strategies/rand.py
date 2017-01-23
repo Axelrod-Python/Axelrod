@@ -1,4 +1,4 @@
-from axelrod import Player, init_args, random_choice
+from axelrod import Player, random_choice
 
 
 class Random(Player):
@@ -21,7 +21,6 @@ class Random(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, p=0.5):
         """
         Parameters
@@ -34,7 +33,7 @@ class Random(Player):
         Random(0) is equivalent to Defector
         Random(1) is equivalent to Cooperator
         """
-        Player.__init__(self)
+        super().__init__()
         self.p = p
         if p in [0, 1]:
             self.classifier['stochastic'] = False

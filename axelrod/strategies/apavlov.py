@@ -14,7 +14,7 @@ class APavlov2006(Player):
     uncooperative opponents.
     """
 
-    name = "Adapative Pavlov 2006"
+    name = "Adaptive Pavlov 2006"
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -26,7 +26,7 @@ class APavlov2006(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.opponent_class = None
 
     def strategy(self, opponent):
@@ -66,7 +66,7 @@ class APavlov2006(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.opponent_class = None
 
 
@@ -81,7 +81,7 @@ class APavlov2011(Player):
     uncooperative opponents.
     """
 
-    name = "Adapative Pavlov 2011"
+    name = "Adaptive Pavlov 2011"
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -93,7 +93,7 @@ class APavlov2011(Player):
     }
 
     def __init__(self):
-        Player.__init__(self)
+        super().__init__()
         self.opponent_class = None
 
     def strategy(self, opponent):
@@ -121,5 +121,5 @@ class APavlov2011(Player):
             return D if opponent.history[-1:] == [D] else C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.opponent_class = None

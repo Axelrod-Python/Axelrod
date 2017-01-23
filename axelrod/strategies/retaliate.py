@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from axelrod import Actions, Player, init_args
+from axelrod import Actions, Player
 
 C, D = Actions.C, Actions.D
 
@@ -26,13 +26,12 @@ class Retaliate(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, retaliation_threshold=0.1):
         """
         Uses the basic init from the Player class, but also set the name to
         include the retaliation setting.
         """
-        Player.__init__(self)
+        super().__init__()
         self.retaliation_threshold = retaliation_threshold
         self.name = (
             'Retaliate (' +
@@ -55,7 +54,7 @@ class Retaliate(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.play_counts = defaultdict(int)
 
 
@@ -71,8 +70,7 @@ class Retaliate2(Retaliate):
     name = 'Retaliate 2'
 
     def __init__(self, retaliation_threshold=0.08):
-        super(Retaliate2, self).__init__(
-            retaliation_threshold=retaliation_threshold)
+        super().__init__(retaliation_threshold=retaliation_threshold)
 
 
 class Retaliate3(Retaliate):
@@ -87,8 +85,7 @@ class Retaliate3(Retaliate):
     name = 'Retaliate 3'
 
     def __init__(self, retaliation_threshold=0.05):
-        super(Retaliate3, self).__init__(
-            retaliation_threshold=retaliation_threshold)
+        super().__init__(retaliation_threshold=retaliation_threshold)
 
 
 class LimitedRetaliate(Player):
@@ -114,7 +111,6 @@ class LimitedRetaliate(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, retaliation_threshold=0.1, retaliation_limit=20):
         """
         Parameters
@@ -126,7 +122,7 @@ class LimitedRetaliate(Player):
             The maximum number of retaliations until the strategy returns to
             cooperation
         """
-        Player.__init__(self)
+        super().__init__()
         self.retaliating = False
         self.retaliation_count = 0
         self.retaliation_threshold = retaliation_threshold
@@ -167,7 +163,7 @@ class LimitedRetaliate(Player):
         return C
 
     def reset(self):
-        Player.reset(self)
+        super().reset()
         self.play_counts = defaultdict(int)
         self.retaliating = False
         self.retaliation_count = 0
@@ -186,7 +182,7 @@ class LimitedRetaliate2(LimitedRetaliate):
     name = 'Limited Retaliate 2'
 
     def __init__(self, retaliation_threshold=0.08, retaliation_limit=15):
-        super(LimitedRetaliate2, self).__init__(
+        super().__init__(
             retaliation_threshold=retaliation_threshold,
             retaliation_limit=retaliation_limit)
 
@@ -204,6 +200,6 @@ class LimitedRetaliate3(LimitedRetaliate):
     name = 'Limited Retaliate 3'
 
     def __init__(self, retaliation_threshold=0.05, retaliation_limit=20):
-        super(LimitedRetaliate3, self).__init__(
+        super().__init__(
             retaliation_threshold=retaliation_threshold,
             retaliation_limit=retaliation_limit)

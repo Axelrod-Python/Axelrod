@@ -1,9 +1,9 @@
-"""Test for the mindreader strategy."""
+"""Tests for the Mindreader strategy."""
 
 import axelrod
-
-from .test_player import TestPlayer
 from axelrod._strategy_utils import simulate_match
+from .test_player import TestPlayer
+
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
