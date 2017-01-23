@@ -6,6 +6,8 @@ except ImportError:
     from collections import UserDict
 import pickle
 
+from typing import Tuple
+
 from axelrod import Player
 
 
@@ -34,7 +36,7 @@ class DeterministicCache(UserDict):
     methods to save/load the cache to/from a file.
     """
 
-    def __init__(self, file_name=None):
+    def __init__(self, file_name: str = None):
         """
         Parameters
         ----------
@@ -46,7 +48,7 @@ class DeterministicCache(UserDict):
         if file_name is not None:
             self.load(file_name)
 
-    def _key_transform(self, key):
+    def _key_transform(self, key: Tuple[]):
         """
         Parameters
         ----------
@@ -80,7 +82,7 @@ class DeterministicCache(UserDict):
 
         UserDict.__setitem__(self, self._key_transform(key), value)
 
-    def _is_valid_key(self, key):
+    def _is_valid_key(self, key) -> bool :
         """Validate a proposed dictionary key
 
         Parameters
@@ -117,7 +119,7 @@ class DeterministicCache(UserDict):
 
         return True
 
-    def _is_valid_value(self, value):
+    def _is_valid_value(self, value) -> bool:
         """Validate a proposed dictionary value
 
         Parameters
@@ -134,7 +136,7 @@ class DeterministicCache(UserDict):
 
         return True
 
-    def save(self, file_name):
+    def save(self, file_name: str):
         """Serialise the cache dictionary to a file
 
         Parameters
@@ -146,7 +148,7 @@ class DeterministicCache(UserDict):
             pickle.dump(self.data, io)
         return True
 
-    def load(self, file_name):
+    def load(self, file_name: str):
         """Load a previously saved cache into the dictionary
 
         Parameters
