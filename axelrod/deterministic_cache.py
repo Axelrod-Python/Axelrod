@@ -1,5 +1,6 @@
 from collections import UserDict
 import pickle
+from typing import Tuple
 
 from axelrod import Player
 
@@ -42,7 +43,7 @@ class DeterministicCache(UserDict):
             self.load(file_name)
 
     @staticmethod
-    def _key_transform(key):
+    def _key_transform(key: Tuple[str, str, int]):
         """
         Parameters
         ----------
@@ -78,7 +79,7 @@ class DeterministicCache(UserDict):
         super().__setitem__(self._key_transform(key), value)
 
     @staticmethod
-    def _is_valid_key(key):
+    def _is_valid_key(key) -> boolean:
         """Validate a proposed dictionary key.
 
         Parameters
@@ -145,7 +146,7 @@ class DeterministicCache(UserDict):
             pickle.dump(self.data, io)
         return True
 
-    def load(self, file_name: str):
+    def load(self, file_name: str) -> boolean:
         """Load a previously saved cache into the dictionary.
 
         Parameters
