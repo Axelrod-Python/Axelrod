@@ -15,7 +15,7 @@
 Axelrod
 =======
 
-A python library with the following principles and goals:
+A Python library with the following principles and goals:
 
 1. Enabling the reproduction of previous Iterated Prisoner's Dilemma research
    as easily as possible.
