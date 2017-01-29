@@ -52,16 +52,16 @@ class DeterministicCache(UserDict):
         """
         return key[0].name, key[1].name, key[2]
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: Tuple[str, str, int]):
         return super().__delitem__(self._key_transform(key))
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: Tuple[str, str, int]):
         return super().__getitem__(self._key_transform(key))
 
-    def __contains__(self, key):
+    def __contains__(self, key: Tuple[str, str, int]):
         return super().__contains__(self._key_transform(key))
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: Tuple[str, str, int], value):
         """Overrides the UserDict.__setitem__ method in order to validate
         the key/value and also to set the turns attribute"""
         if not self.mutable:
@@ -79,7 +79,7 @@ class DeterministicCache(UserDict):
         super().__setitem__(self._key_transform(key), value)
 
     @staticmethod
-    def _is_valid_key(key) -> boolean:
+    def _is_valid_key(key: Tuple[str, str, int]) -> bool:
         """Validate a proposed dictionary key.
 
         Parameters
@@ -117,7 +117,7 @@ class DeterministicCache(UserDict):
         return True
 
     @staticmethod
-    def _is_valid_value(value) -> boolean:
+    def _is_valid_value(value) -> bool:
         """Validate a proposed dictionary value.
 
         Parameters
