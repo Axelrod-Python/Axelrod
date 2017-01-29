@@ -1,6 +1,8 @@
 from collections import UserDict
 import pickle
 
+from typing import Tuple
+
 from axelrod import Player
 
 
@@ -29,7 +31,7 @@ class DeterministicCache(UserDict):
     methods to save/load the cache to/from a file.
     """
 
-    def __init__(self, file_name=None):
+    def __init__(self, file_name: str = None):
         """
         Parameters
         ----------
@@ -43,6 +45,7 @@ class DeterministicCache(UserDict):
 
     @staticmethod
     def _key_transform(key):
+
         """
         Parameters
         ----------
@@ -75,10 +78,10 @@ class DeterministicCache(UserDict):
             raise ValueError(
                 'Value must be a list with length equal to turns attribute')
 
-        super().__setitem__(self._key_transform(key), value)
-
+        super().__setitem__(self._key_transform(key), val
+    
     @staticmethod
-    def _is_valid_key(key):
+    def _is_valid_key(key) -> bool :
         """Validate a proposed dictionary key.
 
         Parameters
@@ -116,7 +119,7 @@ class DeterministicCache(UserDict):
         return True
 
     @staticmethod
-    def _is_valid_value(value):
+    def _is_valid_value(value) -> bool:
         """Validate a proposed dictionary value.
 
         Parameters
@@ -133,8 +136,8 @@ class DeterministicCache(UserDict):
 
         return True
 
-    def save(self, file_name):
-        """Serialise the cache dictionary to a file.
+    def save(self, file_name: str):
+        """Serialise the cache dictionary to a file
 
         Parameters
         ----------
@@ -145,9 +148,9 @@ class DeterministicCache(UserDict):
             pickle.dump(self.data, io)
         return True
 
-    def load(self, file_name):
-        """Load a previously saved cache into the dictionary.
-
+    def load(self, file_name: str):
+        """Load a previously saved cache into the dictionary
+        
         Parameters
         ----------
         file_name : string
