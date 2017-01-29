@@ -129,21 +129,9 @@ class TestLevelPunisher(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([], [], [C], attrs={"grudged": False})
-        self.responses_test([C], [C], [C], attrs={"grudged": False})
-        self.responses_test([C], [D], [D], attrs={"grudged": True})
-        for i in range(10):
-            self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [D],
-                                attrs={"grudged": True, "grudge_memory": i,
-                                       "mem_length": 10})
-        # Eventually the grudge is dropped
-        i = 11
-        self.responses_test([C, C] + [D] * i, [C, D] + [C] * i, [C],
-                            attrs={"grudged": False, "grudge_memory": 0,
-                                    "mem_length": 10})
-
-        # Grudged again on opponent's D
-        self.responses_test([C, C] + [D] * i + [C], [C, D] + [C] * i + [D], [D],
-                            attrs={"grudged": True, "grudge_memory": 0,
-                                   "mem_length": 2})
-
+        # Starts by Cooperating
+        self.first_play_test(C)
+        
+        # Defects if the turns played are less than 10.
+        self.responses_test([D], [D], [D])
+        self.responses_test([D], [C], [D, C, D, C])
