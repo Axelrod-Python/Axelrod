@@ -129,7 +129,7 @@ class LevelPunisher(Player):
 
     name = 'Level Punisher'
     classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'), # Long Memory
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -141,7 +141,7 @@ class LevelPunisher(Player):
     def strategy(self, opponent):
         if len(opponent.history) <= 10:
             return D
-        elif (len(opponent.history) - sum(opponent.cooperations)) / len(opponent.history) > 0.2:
+        elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.2:
             return C
         else:
             return D
