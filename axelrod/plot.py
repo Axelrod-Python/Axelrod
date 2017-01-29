@@ -2,6 +2,8 @@ from numpy import arange, median, nan_to_num
 import tqdm
 import warnings
 
+import axelrod
+
 matplotlib_installed = True
 try:
     import matplotlib
@@ -28,7 +30,7 @@ def default_cmap():
 
 
 class Plot(object):
-    def __init__(self, result_set):
+    def __init__(self, result_set: axelrod.result_set.ResultSetFromFile):
         self.result_set = result_set
         self.matplotlib_installed = matplotlib_installed
         self.nplayers = self.result_set.nplayers
