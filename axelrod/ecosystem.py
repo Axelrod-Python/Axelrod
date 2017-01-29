@@ -1,11 +1,12 @@
 import random
 from typing import List
+from types import FunctionType
 
 class Ecosystem(object):
     """Create an ecosystem based on the payoff matrix from an Axelrod
     tournament."""
 
-    def __init__(self, results, fitness=None, population: List[int] =None):
+    def __init__(self, results: axelrod.result_set.ResultSetFromFile, fitness: FunctionType =None, population: List[int] =None):
 
         self.results = results
         self.nplayers = self.results.nplayers
