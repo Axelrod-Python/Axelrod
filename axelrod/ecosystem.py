@@ -1,3 +1,4 @@
+import axelrod
 import random
 from typing import List
 from types import FunctionType
