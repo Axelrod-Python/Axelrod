@@ -1,11 +1,11 @@
 import random
-
+from typing import List
 
 class Ecosystem(object):
     """Create an ecosystem based on the payoff matrix from an Axelrod
     tournament."""
 
-    def __init__(self, results, fitness=None, population=None):
+    def __init__(self, results, fitness=None, population: List[int] =None):
 
         self.results = results
         self.nplayers = self.results.nplayers
@@ -37,7 +37,7 @@ class Ecosystem(object):
         else:
             self.fitness = lambda p: p
 
-    def reproduce(self, turns):
+    def reproduce(self, turns: int):
 
         for iturn in range(turns):
 
