@@ -1,4 +1,5 @@
 import warnings
+import axelrod
 from axelrod import Actions, Player, update_history, update_state_distribution
 
 C, D = Actions.C, Actions.D
@@ -28,7 +29,7 @@ class MockPlayer(Player):
         else:
             self.actions = []
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: axelrod.player.Player):
         # Return the next saved action, if present.
         try:
             action = self.actions.pop(0)
@@ -37,7 +38,7 @@ class MockPlayer(Player):
             return C
 
 
-def simulate_play(player1, player2, action1=None, action2=None):
+def simulate_play(player1: axelrod.player.Player, player2: axelrod.player.Player, action1: axelrod.actions.Action =None, action2: axelrod.actions.Action=None):
     """
     Simulates play with or without forced history. If action1 and action2 are given, these
     actions are enforced in the players strategy. This generally should not be
