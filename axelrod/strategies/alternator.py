@@ -1,4 +1,5 @@
 from axelrod import Actions, Player
+import axelrod
 
 C, D = Actions.C, Actions.D
 
@@ -17,7 +18,7 @@ class Alternator(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: axelrod.player.Player) -> axelrod.actions.Action:
         if len(self.history) == 0:
             return C
         if self.history[-1] == C:
