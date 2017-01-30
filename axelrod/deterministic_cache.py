@@ -146,7 +146,7 @@ class DeterministicCache(UserDict):
             pickle.dump(self.data, io)
         return True
 
-    def load(self, file_name: str) -> boolean:
+    def load(self, file_name: str) -> bool:
         """Load a previously saved cache into the dictionary.
 
         Parameters
