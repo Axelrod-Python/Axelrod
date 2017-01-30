@@ -42,7 +42,7 @@ class Adaptive(Player):
             scores = game.score(last_round)
             self.scores[last_round[0]] += scores[0]
 
-    def strategy(self, opponent: axelrod.player.Player):
+    def strategy(self, opponent: axelrod.player.Player)-> axelrod.actions.Action:
         # Update scores from the last play
         self.score_last_round(opponent)
         # Begin by playing the sequence C,C,C,C,C,C,D,D,D,D,D
