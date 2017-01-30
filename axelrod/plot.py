@@ -1,8 +1,7 @@
+import axelrod
 from numpy import arange, median, nan_to_num
 import tqdm
 import warnings
-
-import axelrod
 
 matplotlib_installed = True
 try:
@@ -205,7 +204,7 @@ class Plot(object):
 
     # Ecological Plot
 
-    def stackplot(self, eco, title=None, logscale=True, ax=None):
+    def stackplot(self, eco, title=None, logscale: bool =True, ax=None):
         if not self.matplotlib_installed:
             return None
 
@@ -248,8 +247,8 @@ class Plot(object):
 
         return figure
 
-    def save_all_plots(self, prefix="axelrod", title_prefix="axelrod",
-                       filetype="svg", progress_bar=True):
+    def save_all_plots(self, prefix: str ="axelrod", title_prefix: str ="axelrod",
+                       filetype: str ="svg", progress_bar: bool =True):
         """
         A method to save all plots to file.
 
