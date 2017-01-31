@@ -1,7 +1,9 @@
-import axelrod
+from axelrod.result_set import ResultSet
 from numpy import arange, median, nan_to_num
 import tqdm
 import warnings
+
+from typing import List, Union
 
 matplotlib_installed = True
 try:
@@ -18,8 +20,12 @@ except RuntimeError:
         'could be caused by using a virtual environment on OSX. See ' +
         'http://matplotlib.org/faq/virtualenv_faq.html for details.')
 
+axType = matplotlib.axes._subplots.AxesSubplot
+titleType = List[str]
+namesType = List[str]
+dataType = List[List[Union[int, float]]]
 
-def default_cmap():
+def default_cmap() -> str:
     """Sets a default matplotlib colormap based on the version."""
     s = matplotlib.__version__.split('.')
     if int(s[0]) >= 1 and int(s[1]) >= 5:
@@ -29,7 +35,7 @@ def default_cmap():
 
 
 class Plot(object):
-    def __init__(self, result_set: axelrod.result_set.ResultSetFromFile):
+    def __init__(self, result_set: ResultSet) -> None:
         self.result_set = result_set
         self.matplotlib_installed = matplotlib_installed
         self.nplayers = self.result_set.nplayers
@@ -76,7 +82,7 @@ class Plot(object):
     def _boxplot_xticks_labels(self):
         return [str(n) for n in self.result_set.ranked_names]
 
-    def boxplot(self, title=None, ax=None):
+    def boxplot(self, title: titleType =None, ax: axType =None):
         """For the specific mean score boxplot."""
         data = self._boxplot_dataset
         names = self._boxplot_xticks_labels
@@ -95,7 +101,7 @@ class Plot(object):
         ranked_names = [str(self.players[x[-1]]) for x in medians]
         return wins, ranked_names
 
-    def winplot(self, title=None, ax=None):
+    def winplot(self, title: titleType =None, ax: axType =None):
         """Plots the distributions for the number of wins for each strategy."""
         if not self.matplotlib_installed:
             return None
@@ -120,7 +126,7 @@ class Plot(object):
         ranked_names = [str(self.players[i]) for i in ordering]
         return diffs, ranked_names
 
-    def sdvplot(self, title=None, ax=None):
+    def sdvplot(self, title: titleType =None, ax: axType =None):
         """Score difference violinplots to visualize the distributions of how
         players attain their payoffs."""
         diffs, ranked_names = self._sdv_plot_dataset
@@ -134,7 +140,7 @@ class Plot(object):
                  for length in rep[playeri]] for playeri in
                 self.result_set.ranking]
 
-    def lengthplot(self, title=None, ax=None):
+    def lengthplot(self, title: titleType =None, ax: axType =None):
         """For the specific match length boxplot."""
         data = self._lengthplot_dataset
         names = self._boxplot_xticks_labels
@@ -160,7 +166,7 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return matrix, ranked_names
 
-    def _payoff_heatmap(self, data, names, title=None, ax=None):
+    def _payoff_heatmap(self, data: dataType, names: namesType, title: titleType =None, ax: axType =None):
         """Generic heatmap plot"""
         if not self.matplotlib_installed:
             return None
@@ -189,13 +195,13 @@ class Plot(object):
         plt.colorbar(mat, cax=cax)
         return figure
 
-    def pdplot(self, title=None, ax=None):
+    def pdplot(self, title: titleType =None, ax: axType =None):
         """Payoff difference heatmap to visualize the distributions of how
         players attain their payoffs."""
         matrix, names = self._pdplot_dataset
         return self._payoff_heatmap(matrix, names, title=title, ax=ax)
 
-    def payoff(self, title=None, ax=None):
+    def payoff(self, title: titleType =None, ax: axType =None):
         """Payoff heatmap to visualize the distributions of how
         players attain their payoffs."""
         data = self._payoff_dataset
@@ -204,7 +210,7 @@ class Plot(object):
 
     # Ecological Plot
 
-    def stackplot(self, eco, title=None, logscale: bool =True, ax=None):
+    def stackplot(self, eco, title: titleType =None, logscale: bool =True, ax: axType =None):
         if not self.matplotlib_installed:
             return None
 
