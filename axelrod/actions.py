@@ -1,6 +1,6 @@
-from typing import NewType
 
-Action = NewType('Action', str)
+# Type alias for actions.
+Action = str
 
 
 class Actions(object):
