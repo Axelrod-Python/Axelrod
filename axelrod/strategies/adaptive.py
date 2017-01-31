@@ -27,7 +27,7 @@ class Adaptive(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, initial_plays: List[axelrod.actions.Action] =None):
+    def __init__(self, initial_plays: List[axelrod.actions.Action] =None) -> None:
         super().__init__()
         if not initial_plays:
             initial_plays = [C] * 6 + [D] * 5
