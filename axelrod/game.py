@@ -1,13 +1,15 @@
 from .actions import Action, Actions
-from typing import Tuple
+from typing import Tuple, Union
 
 C, D = Actions.C, Actions.D
+
+Score = Union[int, float]
 
 
 class Game(object):
     """A class to hold the game matrix and to score a game accordingly."""
 
-    def __init__(self, r: int=3, s: int=0, t: int=5, p: int=1) -> None:
+    def __init__(self, r: Score=3, s: Score=0, t: Score=5, p: Score=1) -> None:
         self.scores = {
             (C, C): (r, r),
             (D, D): (p, p),
@@ -15,7 +17,7 @@ class Game(object):
             (D, C): (t, s),
         }
 
-    def RPST(self) -> Tuple[int, int, int, int]:
+    def RPST(self) -> Tuple[Score, Score, Score, Score]:
         """Return the values in the game matrix in the Press and Dyson
         notation."""
         R = self.scores[(C, C)][0]
@@ -24,7 +26,7 @@ class Game(object):
         T = self.scores[(D, C)][0]
         return (R, P, S, T)
 
-    def score(self, pair: Tuple[Action, Action]) -> Tuple[int, int]:
+    def score(self, pair: Tuple[Action, Action]) -> Tuple[Score, Score]:
         """Return the appropriate score for decision pair.
 
         Returns the appropriate score (as a tuple) from the scores dictionary
