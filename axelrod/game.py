@@ -1,4 +1,4 @@
-from axelrod import Action, Actions
+from .actions import Action, Actions
 from typing import Tuple
 
 C, D = Actions.C, Actions.D

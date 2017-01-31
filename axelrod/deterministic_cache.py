@@ -1,8 +1,9 @@
 from collections import UserDict
 import pickle
-from typing import Tuple
+from typing import List, Tuple
 
-from axelrod import Action, Player
+from .actions import Action
+from .player import Player
 
 
 CachePlayerKey = Tuple[Player, Player, int]
