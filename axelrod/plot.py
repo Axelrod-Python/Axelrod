@@ -24,8 +24,9 @@ axType = matplotlib.axes._subplots.AxesSubplot
 titleType = List[str]
 namesType = List[str]
 dataType = List[List[Union[int, float]]]
+figureType = matplotlib.figure.Figure
 
-def default_cmap() -> str:
+    def default_cmap() -> str:
     """Sets a default matplotlib colormap based on the version."""
     s = matplotlib.__version__.split('.')
     if int(s[0]) >= 1 and int(s[1]) >= 5:
@@ -41,7 +42,7 @@ class Plot(object):
         self.nplayers = self.result_set.nplayers
         self.players = self.result_set.players
 
-    def _violinplot(self, data, names, title=None, ax=None):
+    def _violinplot(self, data, names, title=None, ax=None) -> figureType:
         """For making violinplots."""
         if not self.matplotlib_installed:
             return None
@@ -82,7 +83,7 @@ class Plot(object):
     def _boxplot_xticks_labels(self):
         return [str(n) for n in self.result_set.ranked_names]
 
-    def boxplot(self, title: titleType =None, ax: axType =None):
+    def boxplot(self, title: titleType =None, ax: axType =None) -> figureType:
         """For the specific mean score boxplot."""
         data = self._boxplot_dataset
         names = self._boxplot_xticks_labels
@@ -101,7 +102,7 @@ class Plot(object):
         ranked_names = [str(self.players[x[-1]]) for x in medians]
         return wins, ranked_names
 
-    def winplot(self, title: titleType =None, ax: axType =None):
+    def winplot(self, title: titleType =None, ax: axType =None) -> figureType:
         """Plots the distributions for the number of wins for each strategy."""
         if not self.matplotlib_installed:
             return None
@@ -126,7 +127,7 @@ class Plot(object):
         ranked_names = [str(self.players[i]) for i in ordering]
         return diffs, ranked_names
 
-    def sdvplot(self, title: titleType =None, ax: axType =None):
+    def sdvplot(self, title: titleType =None, ax: axType =None) -> figureType:
         """Score difference violinplots to visualize the distributions of how
         players attain their payoffs."""
         diffs, ranked_names = self._sdv_plot_dataset
@@ -140,7 +141,7 @@ class Plot(object):
                  for length in rep[playeri]] for playeri in
                 self.result_set.ranking]
 
-    def lengthplot(self, title: titleType =None, ax: axType =None):
+    def lengthplot(self, title: titleType =None, ax: axType =None) -> figureType:
         """For the specific match length boxplot."""
         data = self._lengthplot_dataset
         names = self._boxplot_xticks_labels
@@ -166,7 +167,7 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return matrix, ranked_names
 
-    def _payoff_heatmap(self, data: dataType, names: namesType, title: titleType =None, ax: axType =None):
+    def _payoff_heatmap(self, data: dataType, names: namesType, title: titleType =None, ax: axType =None) -> figureType:
         """Generic heatmap plot"""
         if not self.matplotlib_installed:
             return None
@@ -210,7 +211,7 @@ class Plot(object):
 
     # Ecological Plot
 
-    def stackplot(self, eco, title: titleType =None, logscale: bool =True, ax: axType =None):
+    def stackplot(self, eco, title: titleType =None, logscale: bool =True, ax: axType =None) -> figureType:
         if not self.matplotlib_installed:
             return None
 
