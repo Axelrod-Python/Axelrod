@@ -129,9 +129,9 @@ class TestLevelPunisher(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by Defecting
-        self.first_play_test(D)
+        # Starts by Cooperating
+        self.first_play_test(C)
         
         # Defects if the turns played are less than 10.
-        self.responses_test([D], [D], [D])
-        self.responses_test([D], [C], [D, C, D, C])
+        self.responses_test([C], [C], [C])
+        self.responses_test([C], [C], [C, D, C, D])
