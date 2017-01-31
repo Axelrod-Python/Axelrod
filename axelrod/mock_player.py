@@ -16,7 +16,7 @@ class MockPlayer(Player):
 
     name = "Mock Player"
 
-    def __init__(self, actions: List[Action] =None, history: List[Action] =None, state_dist: defaultdict =None):
+    def __init__(self, actions: List[Action] =None, history: List[Action] =None, state_dist: defaultdict =None) -> None:
         # Need to retain history for opponents that examine opponents history
         # Do a deep copy just to be safe
         super().__init__()
