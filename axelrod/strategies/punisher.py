@@ -143,8 +143,8 @@ class LevelPunisher(Player):
 
     def strategy(self, opponent):
         if len(opponent.history) <= 10:
-            return D
-        elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.2:
             return C
-        else:
+        elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.2:
             return D
+        else:
+            return C
