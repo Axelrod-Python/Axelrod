@@ -1,7 +1,9 @@
 import pkg_resources
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Union
 
-def load_file(filename: str, directory: str) -> List[List[str]]:
+filenameType = Union[str, bytes]
+
+def load_file(filename: filenameType, directory: str) -> List[List[str]]:
     """Loads a data file stored in the Axelrod library's data subdirectory,
     likely for parameters for a strategy."""
     path = '/'.join((directory, filename))
@@ -16,7 +18,7 @@ def load_file(filename: str, directory: str) -> List[List[str]]:
     return rows
 
 
-def load_weights(filename: str ="ann_weights.csv", directory: str ="data") -> Dict[str, Tuple[int, int, List[float]]]:
+def load_weights(filename: filenameType ="ann_weights.csv", directory: str ="data") -> Dict[str, Tuple[int, int, List[float]]]:
     """Load Neural Network Weights."""
     rows = load_file(filename, directory)
     d = dict()
@@ -29,7 +31,7 @@ def load_weights(filename: str ="ann_weights.csv", directory: str ="data") -> Di
     return d
 
 
-def load_lookerup_tables(filename: str ="lookup_tables.csv", directory: str ="data") -> Dict[Tuple[str, int, int, int], Tuple[str, str]]:
+def load_lookerup_tables(filename: filenameType ="lookup_tables.csv", directory: str ="data") -> Dict[Tuple[str, int, int, int], Tuple[str, str]]:
     """Load lookup tables."""
     rows = load_file(filename, directory)
     d = dict()
@@ -39,7 +41,7 @@ def load_lookerup_tables(filename: str ="lookup_tables.csv", directory: str ="da
     return d
 
 
-def load_pso_tables(filename: str ="pso_gambler.csv", directory: str ="data") -> Dict[Tuple[str, int, int, int], List[float]]:
+def load_pso_tables(filename: filenameType ="pso_gambler.csv", directory: str ="data") -> Dict[Tuple[str, int, int, int], List[float]]:
     """Load lookup tables."""
     rows = load_file(filename, directory)
     d = dict()
