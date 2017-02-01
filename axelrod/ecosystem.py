@@ -1,8 +1,6 @@
 from axelrod.result_set import ResultSet
 import random
-from typing import List
-from types import Callable
-
+from typing import List, Callable
 class Ecosystem(object):
     """Create an ecosystem based on the payoff matrix from an Axelrod
     tournament."""
