@@ -20,7 +20,7 @@ except RuntimeError:
         'could be caused by using a virtual environment on OSX. See ' +
         'http://matplotlib.org/faq/virtualenv_faq.html for details.')
 
-axType = matplotlib.axes._subplots.AxesSubplot
+axType = matplotlib.axes.SubplotBase
 titleType = List[str]
 namesType = List[str]
 dataType = List[List[Union[int, float]]]
