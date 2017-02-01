@@ -1,13 +1,13 @@
 from axelrod.result_set import ResultSet
 import random
 from typing import List
-from types import FunctionType
+from types import Callable
 
 class Ecosystem(object):
     """Create an ecosystem based on the payoff matrix from an Axelrod
     tournament."""
 
-    def __init__(self, results: ResultSet, fitness: FunctionType =None, population: List[int] =None) -> None:
+    def __init__(self, results: ResultSet, fitness: Callable[[float], float] =None, population: List[int] =None) -> None:
 
         self.results = results
         self.nplayers = self.results.nplayers
