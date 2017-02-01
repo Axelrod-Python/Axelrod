@@ -1,4 +1,4 @@
-from axelrod import ResultSet
+from axelrod .result_set import ResultSet
 from numpy import arange, median, nan_to_num
 import tqdm
 import warnings
