@@ -27,12 +27,12 @@ dataType = List[List[Union[int, float]]]
 figureType = matplotlib.figure.Figure
 
 def default_cmap() -> str:
-"""Sets a default matplotlib colormap based on the version."""
-s = matplotlib.__version__.split('.')
-if int(s[0]) >= 1 and int(s[1]) >= 5:
-    return "viridis"
-else:
-    return 'YlGnBu'
+    """Sets a default matplotlib colormap based on the version."""
+    s = matplotlib.__version__.split('.')
+    if int(s[0]) >= 1 and int(s[1]) >= 5:
+        return "viridis"
+    else:
+        return 'YlGnBu'
 
 
 class Plot(object):
