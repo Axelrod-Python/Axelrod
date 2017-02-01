@@ -31,8 +31,8 @@ def fitness_proportionate_selection(scores: Sequence[int]) -> int :
 
 
 class MoranProcess(object):
-    def __init__(self, players, turns: int=100, noise: int=0, deterministic_cache=None,
-                 mutation_rate: int=0., mode='bd', match_class=Match):
+    def __init__(self, players, turns: int=100, noise: float=0, deterministic_cache=None,
+                 mutation_rate: float=0., mode: str='bd', match_class=Match):
         """
         An agent based Moran process class. In each round, each player plays a
         Match with each other player. Players are assigned a fitness score by
@@ -122,7 +122,7 @@ class MoranProcess(object):
             new_player = self.players[index].clone()
         return new_player
 
-    def death(self, index: int=None):
+    def death(self, index: int=None) -> int:
         """Selects the player to be removed. Note that the in the birth-death
         case, the player that is reproducing may also be replaced. However in
         the death-birth case, this player will be excluded from the choices.
@@ -132,7 +132,7 @@ class MoranProcess(object):
         i = randrange(0, len(self.players))
         return i
 
-    def birth(self, index: int=None):
+    def birth(self, index: int=None) -> int:
         """The birth event."""
         # Compute necessary fitnesses.
         scores = self.score_all()
@@ -148,7 +148,7 @@ class MoranProcess(object):
             j = fitness_proportionate_selection(scores)
         return j
 
-    def fixation_check(self):
+    def fixation_check(self) -> bool:
         """Is the population of a single type?"""
         if self.mutation_rate > 0:
             return False
@@ -321,7 +321,7 @@ class MoranProcessGraph(MoranProcess):
         self.index = dict(zip(interaction_graph.vertices(),
                               range(len(players))))
 
-    def birth(self, index: int=None):
+    def birth(self, index: int=None) -> int:
         """Compute the birth index."""
         scores = self.score_all()
         if index:
@@ -335,7 +335,7 @@ class MoranProcessGraph(MoranProcess):
             j = fitness_proportionate_selection(scores)
         return j
 
-    def death(self, index: int=None):
+    def death(self, index: int=None) -> int:
         """Selects the player to be removed."""
         if self.mode == "db":
             # Select a player to be replaced globally
