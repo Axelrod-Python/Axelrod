@@ -1,4 +1,5 @@
 from axelrod import Actions, Player
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -25,11 +26,11 @@ class APavlov2006(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.opponent_class = None
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # TFT for six rounds
         if len(self.history) < 6:
             return D if opponent.history[-1:] == [D] else C
@@ -92,11 +93,11 @@ class APavlov2011(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.opponent_class = None
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # TFT for six rounds
         if len(self.history) < 6:
             return D if opponent.history[-1:] == [D] else C
