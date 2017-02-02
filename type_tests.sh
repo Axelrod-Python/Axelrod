@@ -5,6 +5,7 @@ mypy --ignore-missing-imports --follow-imports skip axelrod/game.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/load_data_.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/mock_player.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/moran.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/plot.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/adaptive.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/alternator.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/appeaser.py
