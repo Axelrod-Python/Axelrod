@@ -15,7 +15,7 @@
 Axelrod
 =======
 
-A library with the following principles and goals:
+A Python library with the following principles and goals:
 
 1. Enabling the reproduction of previous Iterated Prisoner's Dilemma research
    as easily as possible.
@@ -26,10 +26,24 @@ A library with the following principles and goals:
 4. Emphasizing readability along with an open and welcoming community that
    is accommodating for developers and researchers of a variety of skill levels.
 
-Currently the library contains well over 100 strategies and can perform a
+Currently the library contains well over 150 strategies including classics such
+as Tit-For-Tat (TFT) and Win-Stay-Lose-Shift (WSLS), recent variants including
+zero-determinant strategies, and a variety of novel strategies including several
+machine-learning based strategies. Many strategies are parameterized, allowing
+for infinitely-many variations. We welcome new strategies and additions from the
+literature: see `#379 <https://github.com/Axelrod-Python/Axelrod/issues/379>`_
+for a list of known strategies and sources.
+
+With these strategies the library and can perform head-to-head Matches, a
 variety of tournament types (RoundRobin, Noisy, Spatially-distributed, and
-probabilistically ending) and population dynamics while taking advantage
-of multi-core processors.
+probabilistically ending) and population dynamics including the Moran process
+on graphs, while taking advantage of multi-core processors.
+
+The library emphasizes reproducibility and validity. The current test suite
+covers more than 99% of all code in the library, with many portions covered many
+times over, including `randomly generated tests
+<https://github.com/HypothesisWorks/hypothesis-python>`_ that are created and
+run regularly.
 
 **Please contribute via pull request (or just get in touch with us).**
 
