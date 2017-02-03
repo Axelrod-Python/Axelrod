@@ -10,3 +10,4 @@ mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/adaptive.
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/alternator.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/appeaser.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/averagecopier.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/calculator.py
