@@ -1,4 +1,5 @@
 from axelrod import Actions, Player, random_choice
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -21,7 +22,7 @@ class AverageCopier(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         if len(opponent.history) == 0:
             # Randomly picks a strategy (not affected by history).
             return random_choice(0.5)
@@ -44,7 +45,7 @@ class NiceAverageCopier(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         if len(opponent.history) == 0:
             return C
         p = opponent.cooperations // len(opponent.history)
