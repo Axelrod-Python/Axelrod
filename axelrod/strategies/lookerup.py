@@ -9,11 +9,6 @@ from axelrod.load_data_ import load_lookerup_tables
 module = sys.modules[__name__]
 C, D = Actions.C, Actions.D
 
-# Dictionary of table patterns
-# Keys are (name, plays, op_plays, op_start_plays)
-patterns = load_lookerup_tables()
-
-
 def create_lookup_table_keys(plays, op_plays, op_start_plays):
     """Creates the keys for a lookup table."""
     self_histories = [''.join(x) for x in product('CD', repeat=plays)]
@@ -167,77 +162,9 @@ class LookerUp(Player):
         return action
 
 
-class EvolvedLookerUp0_0_1(LookerUp):
-    """
-    A 0x0x1 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 0 0 1: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp0_0_1"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 0, 0, 1)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=0, op_plays=0, op_start_plays=1, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp0_0_2(LookerUp):
-    """
-    A 0x0x2 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 0 0 2: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp0_0_2"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 0, 0, 2)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=0, op_plays=0, op_start_plays=2, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp0_0_3(LookerUp):
-    """
-    A 0x0x3 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 0 0 3: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp0_0_3"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 0, 0, 3)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=0, op_plays=0, op_start_plays=3, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp1_1_0(LookerUp):
-    """
-    A 1x1x0 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 1 1 0: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp1_1_0"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 1, 1, 0)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=1, op_plays=1, op_start_plays=0, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
 class EvolvedLookerUp1_1_1(LookerUp):
     """
-    A 1x1x1 Lookerup trained with an evolutionary algorithm.
+    A 1_1_1 Lookerup trained with an evolutionary algorithm.
 
     Names:
         - Evolved Lookerup 1 1 1: Original name by Marc Harper
@@ -245,96 +172,13 @@ class EvolvedLookerUp1_1_1(LookerUp):
     name = "EvolvedLookerUp1_1_1"
 
     def __init__(self):
-        initial, pattern = patterns[('Evolved', 1, 1, 1)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=1, op_plays=1, op_start_plays=1, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp1_1_2(LookerUp):
-    """
-    A 1x1x2 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 1 1 2: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp1_1_2"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 1, 1, 2)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=1, op_plays=1, op_start_plays=2, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp1_1_3(LookerUp):
-    """
-    A 1x1x2 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 1 1 3: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp1_1_3"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 1, 1, 3)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=1, op_plays=1, op_start_plays=3, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp1_1_4(LookerUp):
-    """
-    A 1x1x2 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 1 1 4: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp1_1_4"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 1, 1, 4)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=1, op_plays=1, op_start_plays=4, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp2_2_0(LookerUp):
-    """
-    A 2_2_0 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 2 2 0: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp2_2_0"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 2, 2, 0)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=2, op_plays=2, op_start_plays=0, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp2_2_1(LookerUp):
-    """
-    A 2_2_1 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 2 2 1: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp2_2_1"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 2, 2, 1)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=2, op_plays=2, op_start_plays=1, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
+        pattern = 'CDDDDDCD'
+        lookup_table = create_lookup_table_from_pattern(plays=1,
+                                                        op_plays=1,
+                                                        op_start_plays=1,
+                                                        pattern=pattern)
+        super().__init__(lookup_table=lookup_table,
+                          initial_actions=(C,))
 
 
 class EvolvedLookerUp2_2_2(LookerUp):
@@ -347,130 +191,13 @@ class EvolvedLookerUp2_2_2(LookerUp):
     name = "EvolvedLookerUp2_2_2"
 
     def __init__(self):
-        initial, pattern = patterns[('Evolved', 2, 2, 2)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=2, op_plays=2, op_start_plays=2, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp2_2_3(LookerUp):
-    """
-    A 2_2_3 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 2 2 3: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp2_2_3"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 2, 2, 3)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=2, op_plays=2, op_start_plays=3, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp2_2_4(LookerUp):
-    """
-    A 2_2_4 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 2 2 4: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp2_2_4"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 2, 2, 4)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=2, op_plays=2, op_start_plays=4, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp3_3_1(LookerUp):
-    """
-    A 3_3_1 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 3 3 1: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp3_3_1"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 3, 3, 1)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=3, op_plays=3, op_start_plays=1, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp3_3_2(LookerUp):
-    """
-    A 3_3_2 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 3 3 2: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp3_3_2"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 3, 3, 2)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=3, op_plays=3, op_start_plays=2, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp3_3_3(LookerUp):
-    """
-    A 3_3_3 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 3 3 3: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp3_3_3"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 3, 3, 3)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=3, op_plays=3, op_start_plays=3, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp4_4_1(LookerUp):
-    """
-    A 4_4_1 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 4 4 1: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp4_4_1"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 4, 4, 1)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=4, op_plays=4, op_start_plays=1, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
-
-
-class EvolvedLookerUp4_4_2(LookerUp):
-    """
-    A 4_4_2 Lookerup trained with an evolutionary algorithm.
-
-    Names:
-        - Evolved Lookerup 4 4 2: Original name by Marc Harper
-    """
-    name = "EvolvedLookerUp4_4_2"
-
-    def __init__(self):
-        initial, pattern = patterns[('Evolved', 4, 4, 2)]
-        lookup_table = create_lookup_table_from_pattern(
-                plays=4, op_plays=4, op_start_plays=2, pattern=pattern)
-
-        super().__init__(lookup_table=lookup_table)
+        pattern = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
+        lookup_table = create_lookup_table_from_pattern(plays=2,
+                                                        op_plays=2,
+                                                        op_start_plays=2,
+                                                        pattern=pattern)
+        super().__init__(lookup_table=lookup_table,
+                          initial_actions=(C, C))
 
 
 class Winner12(LookerUp):
