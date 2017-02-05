@@ -6,7 +6,9 @@
 
 import numpy as np
 
-from axelrod import Actions, Player, load_weights
+from axelrod.actions import Actions
+from axelrod.player import Player
+from axelrod.load_data import load_weights
 
 C, D = Actions.C, Actions.D
 nn_weights = load_weights()

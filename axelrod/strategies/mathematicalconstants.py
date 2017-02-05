@@ -1,5 +1,4 @@
-from math import e, pi, sqrt
-
+import math
 from axelrod import Actions, Player
 
 
@@ -37,7 +36,7 @@ class Golden(CotoDeRatio):
     defections closer to the golden mean"""
 
     name = '$\phi$'
-    ratio = (1 + sqrt(5)) / 2
+    ratio = (1 + math.sqrt(5)) / 2
 
 
 class Pi(CotoDeRatio):
@@ -45,7 +44,7 @@ class Pi(CotoDeRatio):
     defections closer to the pi"""
 
     name = '$\pi$'
-    ratio = pi
+    ratio = math.pi
 
 
 class e(CotoDeRatio):
@@ -53,4 +52,4 @@ class e(CotoDeRatio):
     defections closer to the e"""
 
     name = '$e$'
-    ratio = e
+    ratio = math.e
