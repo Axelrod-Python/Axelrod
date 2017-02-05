@@ -1,12 +1,8 @@
-from functools import partial
 from itertools import product
-import sys
 
 from axelrod.actions import Actions
-from axelrod.player import Player, init_args
-from axelrod.load_data_ import load_lookerup_tables
+from axelrod.player import Player
 
-module = sys.modules[__name__]
 C, D = Actions.C, Actions.D
 
 def create_lookup_table_keys(plays, op_plays, op_start_plays):

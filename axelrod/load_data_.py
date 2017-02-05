@@ -29,16 +29,6 @@ def load_weights(filename="ann_weights.csv", directory="data"):
     return d
 
 
-def load_lookerup_tables(filename="lookup_tables.csv", directory="data"):
-    """Load lookup tables."""
-    rows = load_file(filename, directory)
-    d = dict()
-    for row in rows:
-        name, a, b, c, initial, pattern = row
-        d[(name, int(a), int(b), int(c))] = (initial, pattern)
-    return d
-
-
 def load_pso_tables(filename="pso_gambler.csv", directory="data"):
     """Load lookup tables."""
     rows = load_file(filename, directory)
