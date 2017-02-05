@@ -175,7 +175,7 @@ class EvolvedLookerUp0_0_1(LookerUp):
     name = "EvolvedLookerUp0_0_1"
 
     def __init__(self):
-        pattern = patterns[(self.name, 0, 0, 1)]
+        initial, pattern = patterns[('Evolved', 0, 0, 1)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=0, op_plays=0, op_start_plays=1, pattern=pattern)
 
@@ -192,7 +192,7 @@ class EvolvedLookerUp0_0_2(LookerUp):
     name = "EvolvedLookerUp0_0_2"
 
     def __init__(self):
-        pattern = patterns[(self.name, 0, 0, 2)]
+        initial, pattern = patterns[('Evolved', 0, 0, 2)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=0, op_plays=0, op_start_plays=2, pattern=pattern)
 
@@ -209,7 +209,7 @@ class EvolvedLookerUp0_0_3(LookerUp):
     name = "EvolvedLookerUp0_0_3"
 
     def __init__(self):
-        pattern = patterns[(self.name, 0, 0, 3)]
+        initial, pattern = patterns[('Evolved', 0, 0, 3)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=0, op_plays=0, op_start_plays=3, pattern=pattern)
 
@@ -226,7 +226,7 @@ class EvolvedLookerUp1_1_0(LookerUp):
     name = "EvolvedLookerUp1_1_0"
 
     def __init__(self):
-        pattern = patterns[(self.name, 1, 1, 0)]
+        initial, pattern = patterns[('Evolved', 1, 1, 0)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=1, op_plays=1, op_start_plays=0, pattern=pattern)
 
@@ -243,7 +243,7 @@ class EvolvedLookerUp1_1_1(LookerUp):
     name = "EvolvedLookerUp1_1_1"
 
     def __init__(self):
-        pattern = patterns[(self.name, 1, 1, 1)]
+        initial, pattern = patterns[('Evolved', 1, 1, 1)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=1, op_plays=1, op_start_plays=1, pattern=pattern)
 
@@ -260,7 +260,7 @@ class EvolvedLookerUp1_1_2(LookerUp):
     name = "EvolvedLookerUp1_1_2"
 
     def __init__(self):
-        pattern = patterns[(self.name, 1, 1, 2)]
+        initial, pattern = patterns[('Evolved', 1, 1, 2)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=1, op_plays=1, op_start_plays=2, pattern=pattern)
 
@@ -277,7 +277,7 @@ class EvolvedLookerUp1_1_3(LookerUp):
     name = "EvolvedLookerUp1_1_3"
 
     def __init__(self):
-        pattern = patterns[(self.name, 1, 1, 3)]
+        initial, pattern = patterns[('Evolved', 1, 1, 3)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=1, op_plays=1, op_start_plays=3, pattern=pattern)
 
@@ -294,7 +294,7 @@ class EvolvedLookerUp1_1_4(LookerUp):
     name = "EvolvedLookerUp1_1_4"
 
     def __init__(self):
-        pattern = patterns[(self.name, 1, 1, 4)]
+        initial, pattern = patterns[('Evolved', 1, 1, 4)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=1, op_plays=1, op_start_plays=4, pattern=pattern)
 
@@ -311,7 +311,7 @@ class EvolvedLookerUp2_2_0(LookerUp):
     name = "EvolvedLookerUp2_2_0"
 
     def __init__(self):
-        pattern = patterns[(self.name, 2, 2, 0)]
+        initial, pattern = patterns[('Evolved', 2, 2, 0)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=2, op_plays=2, op_start_plays=0, pattern=pattern)
 
@@ -328,7 +328,7 @@ class EvolvedLookerUp2_2_1(LookerUp):
     name = "EvolvedLookerUp2_2_1"
 
     def __init__(self):
-        pattern = patterns[(self.name, 2, 2, 1)]
+        initial, pattern = patterns[('Evolved', 2, 2, 1)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=2, op_plays=2, op_start_plays=1, pattern=pattern)
 
@@ -345,7 +345,7 @@ class EvolvedLookerUp2_2_2(LookerUp):
     name = "EvolvedLookerUp2_2_2"
 
     def __init__(self):
-        pattern = patterns[(self.name, 2, 2, 2)]
+        initial, pattern = patterns[('Evolved', 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=2, op_plays=2, op_start_plays=2, pattern=pattern)
 
@@ -362,7 +362,7 @@ class EvolvedLookerUp2_2_3(LookerUp):
     name = "EvolvedLookerUp2_2_3"
 
     def __init__(self):
-        pattern = patterns[(self.name, 2, 2, 3)]
+        initial, pattern = patterns[('Evolved', 2, 2, 3)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=2, op_plays=2, op_start_plays=3, pattern=pattern)
 
@@ -379,7 +379,7 @@ class EvolvedLookerUp2_2_4(LookerUp):
     name = "EvolvedLookerUp2_2_4"
 
     def __init__(self):
-        pattern = patterns[(self.name, 2, 2, 4)]
+        initial, pattern = patterns[('Evolved', 2, 2, 4)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=2, op_plays=2, op_start_plays=4, pattern=pattern)
 
@@ -396,7 +396,7 @@ class EvolvedLookerUp3_3_1(LookerUp):
     name = "EvolvedLookerUp3_3_1"
 
     def __init__(self):
-        pattern = patterns[(self.name, 3, 3, 1)]
+        initial, pattern = patterns[('Evolved', 3, 3, 1)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=3, op_plays=3, op_start_plays=1, pattern=pattern)
 
@@ -413,7 +413,7 @@ class EvolvedLookerUp3_3_2(LookerUp):
     name = "EvolvedLookerUp3_3_2"
 
     def __init__(self):
-        pattern = patterns[(self.name, 3, 3, 2)]
+        initial, pattern = patterns[('Evolved', 3, 3, 2)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=3, op_plays=3, op_start_plays=2, pattern=pattern)
 
@@ -430,7 +430,7 @@ class EvolvedLookerUp3_3_3(LookerUp):
     name = "EvolvedLookerUp3_3_3"
 
     def __init__(self):
-        pattern = patterns[(self.name, 3, 3, 3)]
+        initial, pattern = patterns[('Evolved', 3, 3, 3)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=3, op_plays=3, op_start_plays=3, pattern=pattern)
 
@@ -447,7 +447,7 @@ class EvolvedLookerUp4_4_1(LookerUp):
     name = "EvolvedLookerUp4_4_1"
 
     def __init__(self):
-        pattern = patterns[(self.name, 4, 4, 1)]
+        initial, pattern = patterns[('Evolved', 4, 4, 1)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=4, op_plays=4, op_start_plays=1, pattern=pattern)
 
@@ -464,7 +464,7 @@ class EvolvedLookerUp4_4_2(LookerUp):
     name = "EvolvedLookerUp4_4_2"
 
     def __init__(self):
-        pattern = patterns[(self.name, 4, 4, 2)]
+        initial, pattern = patterns[('Evolved', 4, 4, 2)]
         lookup_table = create_lookup_table_from_pattern(
                 plays=4, op_plays=4, op_start_plays=2, pattern=pattern)
 

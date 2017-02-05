@@ -175,8 +175,8 @@ class TestGeneratedPlayers(unittest.TestCase):
         patterns = axelrod.load_lookerup_tables()
         for k, v in patterns.items():
             name, plays, op_plays, op_start_plays = k
-            class_name = "EvolvedLookerUp{}{}_{}_{}".format(
-                name, plays, op_plays, op_start_plays)
+            class_name = "EvolvedLookerUp{}_{}_{}".format(
+                plays, op_plays, op_start_plays)
             getattr(axelrod, class_name)
 
 
