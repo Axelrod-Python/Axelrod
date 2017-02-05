@@ -1,11 +1,11 @@
+from axelrod.result_set import ResultSet
 import random
-
-
+from typing import List, Callable
 class Ecosystem(object):
     """Create an ecosystem based on the payoff matrix from an Axelrod
     tournament."""
 
-    def __init__(self, results, fitness=None, population=None):
+    def __init__(self, results: ResultSet, fitness: Callable[[float], float] =None, population: List[int] =None) -> None:
 
         self.results = results
         self.nplayers = self.results.nplayers
@@ -37,7 +37,7 @@ class Ecosystem(object):
         else:
             self.fitness = lambda p: p
 
-    def reproduce(self, turns):
+    def reproduce(self, turns: int):
 
         for iturn in range(turns):
 
@@ -50,7 +50,7 @@ class Ecosystem(object):
             # normal distribution based on the payoff matrix and its standard
             # deviations obtained from the iterated PD tournament run
             # previously.
-            payoffs = [0 for ip in plist]
+            payoffs = [0.0 for ip in plist]
             for ip in plist:
                 for jp in plist:
                     avg = self.payoff_matrix[ip][jp]
