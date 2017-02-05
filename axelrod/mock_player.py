@@ -1,6 +1,6 @@
 import warnings
-from axelrod import Actions, Player, update_history, update_state_distribution
-from axelrod.actions import Action
+from axelrod.actions import Actions, Action
+from axelrod.player import Player, update_history, update_state_distribution
 from collections import defaultdict
 
 from typing import List, Tuple

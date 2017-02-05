@@ -2,7 +2,9 @@ from functools import partial
 from itertools import product
 import sys
 
-from axelrod import Actions, Player, init_args, load_lookerup_tables
+from axelrod.actions import Actions
+from axelrod.player import Player, init_args
+from axelrod.load_data_ import load_lookerup_tables
 
 module = sys.modules[__name__]
 C, D = Actions.C, Actions.D

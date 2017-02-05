@@ -1,5 +1,6 @@
 import math
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 
 
 class CotoDeRatio(Player):
