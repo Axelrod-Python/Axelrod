@@ -170,18 +170,21 @@ class EvolvedLookerUp1_1_1(LookerUp):
         - Evolved Lookerup 1 1 1: Original name by Marc Harper
     """
     name = "EvolvedLookerUp1_1_1"
+    pattern = 'CDDDDDCD'
+    parameters = (1, 1, 1)
+    initial_actions = (C,)
 
     def __init__(self):
-        pattern = 'CDDDDDCD'
-        lookup_table = create_lookup_table_from_pattern(plays=1,
-                                                        op_plays=1,
-                                                        op_start_plays=1,
-                                                        pattern=pattern)
+        plays, op_plays, op_start_plays = self.parameters
+        lookup_table = create_lookup_table_from_pattern(plays,
+                                                        op_plays,
+                                                        op_start_plays,
+                                                        pattern=self.pattern)
         super().__init__(lookup_table=lookup_table,
-                          initial_actions=(C,))
+                          initial_actions=self.initial_actions)
 
 
-class EvolvedLookerUp2_2_2(LookerUp):
+class EvolvedLookerUp2_2_2(EvolvedLookerUp1_1_1):
     """
     A 2_2_2 Lookerup trained with an evolutionary algorithm.
 
@@ -189,18 +192,12 @@ class EvolvedLookerUp2_2_2(LookerUp):
         - Evolved Lookerup 2 2 2: Original name by Marc Harper
     """
     name = "EvolvedLookerUp2_2_2"
-
-    def __init__(self):
-        pattern = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
-        lookup_table = create_lookup_table_from_pattern(plays=2,
-                                                        op_plays=2,
-                                                        op_start_plays=2,
-                                                        pattern=pattern)
-        super().__init__(lookup_table=lookup_table,
-                          initial_actions=(C, C))
+    pattern = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
+    parameters = (2, 2, 2)
+    initial_actions = (C, C)
 
 
-class Winner12(LookerUp):
+class Winner12(EvolvedLookerUp1_1_1):
     """
     A lookup table based strategy.
 
@@ -208,19 +205,12 @@ class Winner12(LookerUp):
         - Winner12 [Mathieu2015]_
     """
     name = "Winner12"
-
-    def __init__(self):
-        lookup_table_keys = create_lookup_table_keys(
-            plays=1, op_plays=2, op_start_plays=0)
-
-        pattern = 'CDCDDCDD'
-        # Zip together the keys and the action pattern to get the lookup table.
-        lookup_table = dict(zip(lookup_table_keys, pattern))
-        super().__init__(lookup_table=lookup_table,
-                          initial_actions=(C, C))
+    pattern = 'CDCDDCDD'
+    parameters = (1, 2, 0)
+    initial_actions = (C, C)
 
 
-class Winner21(LookerUp):
+class Winner21(EvolvedLookerUp1_1_1):
     """
     A lookup table based strategy.
 
@@ -228,13 +218,6 @@ class Winner21(LookerUp):
         - Winner21 [Mathieu2015]_
     """
     name = "Winner21"
-
-    def __init__(self):
-        lookup_table_keys = create_lookup_table_keys(
-            plays=2, op_plays=1, op_start_plays=0)
-
-        pattern = 'CDCDCDDD'
-        # Zip together the keys and the action pattern to get the lookup table.
-        lookup_table = dict(zip(lookup_table_keys, pattern))
-        super().__init__(lookup_table=lookup_table,
-                          initial_actions=(D, C))
+    pattern = 'CDCDCDDD'
+    parameters = (1, 2, 0)
+    initial_actions = (D, C)
