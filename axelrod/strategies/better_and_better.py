@@ -1,4 +1,5 @@
 from axelrod import Actions, Player, random_choice
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -24,7 +25,7 @@ class BetterAndBetter(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history) + 1
         probability = current_round / 1000
         return random_choice(probability)
