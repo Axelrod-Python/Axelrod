@@ -122,12 +122,13 @@ class InversePunisher(Player):
 
 class LevelPunisher(Player):
     """
-    A player starts by defecting however will cooperate if at any point the
-    number of cooperations by opponent is greater than 20%.
-
+    A player starts by cooperating however, after 10 rounds 
+    will defect if at any point the number of defections 
+    by an opponent is greater than 20%.
+    
     Names:
 
-    - Level Punisher
+    - Level Punisher: Name from CoopSim https://github.com/jecki/CoopSim
     """
 
     name = 'Level Punisher'
