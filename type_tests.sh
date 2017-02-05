@@ -12,3 +12,4 @@ mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/appeaser.
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/averagecopier.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/apavlov.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/better_and_better.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/forgiver.py
