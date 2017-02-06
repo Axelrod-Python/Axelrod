@@ -92,11 +92,19 @@ class LookerUp(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, lookup_table=None, initial_actions=None):
+    def __init__(self, lookup_table=None, initial_actions=None,
+                 lookup_pattern=None, parameters=None):
         """
         If no lookup table is provided to the constructor, then use the TFT one.
         """
         super().__init__()
+
+        if lookup_pattern is not None:
+            plays, op_plays, op_start_plays = parameters
+            lookup_table = create_lookup_table_from_pattern(plays,
+                                                            op_plays,
+                                                            op_start_plays,
+                                                        pattern=lookup_pattern)
 
         if not lookup_table:
             lookup_table = {
@@ -158,31 +166,7 @@ class LookerUp(Player):
         return action
 
 
-class LookerUpFromPattern(LookerUp):
-    """
-    An intermediate class to create a Looker Up player from a pattern.
-
-    This class is not intended to be used but by default corresponds to TfT.
-
-    Names:
-        - Looker Up From Patter: Original name by Vince Knight
-    """
-    name = "Looker Up From Pattern"
-    pattern = 'CDCD'
-    parameters = (1, 1, 0)
-    initial_actions = (C,)
-
-    def __init__(self):
-        plays, op_plays, op_start_plays = self.parameters
-        lookup_table = create_lookup_table_from_pattern(plays,
-                                                        op_plays,
-                                                        op_start_plays,
-                                                        pattern=self.pattern)
-        super().__init__(lookup_table=lookup_table,
-                          initial_actions=self.initial_actions)
-
-
-class EvolvedLookerUp1_1_1(LookerUpFromPattern):
+class EvolvedLookerUp1_1_1(LookerUp):
     """
     A 1 1 1 Lookerup trained with an evolutionary algorithm.
 
@@ -190,12 +174,12 @@ class EvolvedLookerUp1_1_1(LookerUpFromPattern):
         - Evolved Lookerup 1 1 1: Original name by Marc Harper
     """
     name = "EvolvedLookerUp1_1_1"
-    pattern = 'CDDDDDCD'
-    parameters = (1, 1, 1)
-    initial_actions = (C,)
+    def __init__(self):
+        super().__init__(parameters=(1, 1, 1), lookup_pattern='CDDDDDCD',
+                         initial_actions=(C,))
 
 
-class EvolvedLookerUp2_2_2(LookerUpFromPattern):
+class EvolvedLookerUp2_2_2(LookerUp):
     """
     A 2 2 2 Lookerup trained with an evolutionary algorithm.
 
@@ -203,12 +187,13 @@ class EvolvedLookerUp2_2_2(LookerUpFromPattern):
         - Evolved Lookerup 2 2 2: Original name by Marc Harper
     """
     name = "EvolvedLookerUp2_2_2"
-    pattern = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
-    parameters = (2, 2, 2)
-    initial_actions = (C, C)
+    def __init__(self):
+        pattern = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
+        super().__init__(parameters=(2, 2, 2), lookup_pattern=pattern,
+                         initial_actions=(C, C))
 
 
-class Winner12(LookerUpFromPattern):
+class Winner12(LookerUp):
     """
     A lookup table based strategy.
 
@@ -216,12 +201,13 @@ class Winner12(LookerUpFromPattern):
         - Winner12 [Mathieu2015]_
     """
     name = "Winner12"
-    pattern = 'CDCDDCDD'
-    parameters = (1, 2, 0)
-    initial_actions = (C, C)
+    def __init__(self):
+        pattern = 'CDCDDCDD'
+        super().__init__(parameters=(1, 2, 0), lookup_pattern=pattern,
+                         initial_actions=(C, C))
 
 
-class Winner21(LookerUpFromPattern):
+class Winner21(LookerUp):
     """
     A lookup table based strategy.
 
@@ -229,6 +215,7 @@ class Winner21(LookerUpFromPattern):
         - Winner21 [Mathieu2015]_
     """
     name = "Winner21"
-    pattern = 'CDCDCDDD'
-    parameters = (1, 2, 0)
-    initial_actions = (D, C)
+    def __init__(self):
+        pattern = 'CDCDCDDD'
+        super().__init__(parameters=(1, 2, 0), lookup_pattern=pattern,
+                         initial_actions=(D, C))
