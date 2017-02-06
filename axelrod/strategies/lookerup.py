@@ -158,16 +158,18 @@ class LookerUp(Player):
         return action
 
 
-class EvolvedLookerUp1_1_1(LookerUp):
+class LookerUpFromPattern(LookerUp):
     """
-    A 1_1_1 Lookerup trained with an evolutionary algorithm.
+    An intermediate class to create a Looker Up player from a pattern.
+
+    This class is not intended to be used but by default corresponds to TfT.
 
     Names:
-        - Evolved Lookerup 1 1 1: Original name by Marc Harper
+        - Looker Up From Patter: Original name by Vince Knight
     """
-    name = "EvolvedLookerUp1_1_1"
-    pattern = 'CDDDDDCD'
-    parameters = (1, 1, 1)
+    name = "Looker Up From Pattern"
+    pattern = 'CDCD'
+    parameters = (1, 1, 0)
     initial_actions = (C,)
 
     def __init__(self):
@@ -180,9 +182,22 @@ class EvolvedLookerUp1_1_1(LookerUp):
                           initial_actions=self.initial_actions)
 
 
-class EvolvedLookerUp2_2_2(EvolvedLookerUp1_1_1):
+class EvolvedLookerUp1_1_1(LookerUpFromPattern):
     """
-    A 2_2_2 Lookerup trained with an evolutionary algorithm.
+    A 1 1 1 Lookerup trained with an evolutionary algorithm.
+
+    Names:
+        - Evolved Lookerup 1 1 1: Original name by Marc Harper
+    """
+    name = "EvolvedLookerUp1_1_1"
+    pattern = 'CDDDDDCD'
+    parameters = (1, 1, 1)
+    initial_actions = (C,)
+
+
+class EvolvedLookerUp2_2_2(LookerUpFromPattern):
+    """
+    A 2 2 2 Lookerup trained with an evolutionary algorithm.
 
     Names:
         - Evolved Lookerup 2 2 2: Original name by Marc Harper
@@ -193,7 +208,7 @@ class EvolvedLookerUp2_2_2(EvolvedLookerUp1_1_1):
     initial_actions = (C, C)
 
 
-class Winner12(EvolvedLookerUp1_1_1):
+class Winner12(LookerUpFromPattern):
     """
     A lookup table based strategy.
 
@@ -206,7 +221,7 @@ class Winner12(EvolvedLookerUp1_1_1):
     initial_actions = (C, C)
 
 
-class Winner21(EvolvedLookerUp1_1_1):
+class Winner21(LookerUpFromPattern):
     """
     A lookup table based strategy.
 
