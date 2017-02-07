@@ -47,6 +47,20 @@ class TestLookerUp(TestPlayer):
         with self.assertRaises(ValueError):
             player = self.player(table)
 
+    def test_pattern_init(self):
+        # Test empty table
+        pattern = "CCCC"
+        parameters = (1, 1, 0)
+        # Test default table
+        player = self.player(lookup_pattern=pattern, parameters=parameters)
+        expected_lookup_table = {
+            ('', 'C', 'D'): C,
+            ('', 'D', 'D'): C,
+            ('', 'C', 'C'): C,
+            ('', 'D', 'C'): C,
+        }
+        self.assertEqual(player.lookup_table, expected_lookup_table)
+
     def test_strategy(self):
         self.second_play_test(C, D, C, D)  # TFT
         self.responses_test([C], [C] * 4, [C, C, C, C])
