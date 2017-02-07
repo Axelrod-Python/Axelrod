@@ -5,6 +5,7 @@ Additional strategies from Axelrod's second tournament.
 import random
 
 from axelrod import Actions, Player, flip_action, random_choice
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -35,7 +36,7 @@ class Champion(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history)
         expected_length = self.match_attributes['length']
         # Cooperate for the first 1/20-th of the game
@@ -81,7 +82,7 @@ class Eatherley(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         # Cooperate on the first move
         if not len(opponent.history):
             return C
@@ -118,11 +119,11 @@ class Tester(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.is_TFT = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # Defect on the first move
         if not opponent.history:
             return D
