@@ -1,4 +1,5 @@
 from axelrod import Actions, Player
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -19,8 +20,8 @@ class Grumpy(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, starting_state='Nice', grumpy_threshold=10,
-                 nice_threshold=-10):
+    def __init__(self, starting_state: str ='Nice', grumpy_threshold: int =10,
+                 nice_threshold: int =-10) -> None:
         """
         Parameters
         ----------
@@ -38,7 +39,7 @@ class Grumpy(Player):
         self.grumpy_threshold = grumpy_threshold
         self.nice_threshold = nice_threshold
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """A player that gets grumpier the more the opposition defects,
         and nicer the more they cooperate.
 
