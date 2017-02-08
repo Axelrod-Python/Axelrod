@@ -19,3 +19,6 @@ mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/cooperato
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/axelrod_second.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/backstabber.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/defector.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/gradualkiller.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/grudger.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/grumpy.py
