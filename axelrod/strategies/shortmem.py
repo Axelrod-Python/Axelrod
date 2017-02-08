@@ -7,8 +7,8 @@ class ShortMem(Player):
     """
     A player starts by always cooperating for the first 10 moves.
     
-    The opponent answers are stored in the memory. The memory is FIFO and the maximum size of the memory is 10 results. From the tenth round on, the program analyzes the memory, and compare the number of defects and cooperates of the opponent, based in percentage. If cooperation occurs 30% more than defection, it will cooperate.
-    If defection occurs 30% more than cooperation, the program will defect. Otherwise, the program follows the TFT algorithm.
+    The opponent answers are stored in the memory, whose maximum size is 10 results. From the tenth round on, the program analyzes the memory, and compare the number of defects and cooperates of the opponent, based in percentage. If cooperation occurs 30% more than defection, it will cooperate.
+    If defection occurs 30% more than cooperation, the program will defect. Otherwise, the program follows the TitForTat algorithm.
     
     """
 
