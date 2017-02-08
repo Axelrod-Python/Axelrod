@@ -4,7 +4,13 @@ from axelrod.actions import Action
 C, D = Actions.C, Actions.D
 
 class ShortMem(Player):
-    """A player who only ever defects."""
+    """
+    A player starts by always cooperating for the first 10 moves.
+    
+    The opponent answers are stored in the memory. The memory is FIFO and the maximum size of the memory is 10 results. From the tenth round on, the program analyzes the memory, and compare the number of defects and cooperates of the opponent, based in percentage. If cooperation occurs 30% more than defection, it will cooperate.
+    If defection occurs 30% more than cooperation, the program will defect. Otherwise, the program follows the TFT algorithm.
+    
+    """
 
     name = 'ShortMem'
     classifier = {
@@ -21,6 +27,7 @@ class ShortMem(Player):
     def strategy(opponent: Player) -> Action:
         
         memoryDepth = self.classifier['memoryDepth']
+        array = self.history[:-11:-1]
         cooperateRatio = array.count('C')/memoryDepth
         defectRatio = array.count('D')/memoryDepth
         
@@ -32,5 +39,5 @@ class ShortMem(Player):
         elif defectRatio - cooperateRatio > 0.3:
             return D
         else:
-            return TitForTat().strategy(opponent)
+            return opponent.history[-1]
         
