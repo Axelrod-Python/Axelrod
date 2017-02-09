@@ -1,4 +1,5 @@
 from axelrod import Actions, Player
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -29,7 +30,7 @@ class Grudger(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         """Begins by playing C, then plays D for the remaining rounds if the
         opponent ever plays D."""
         if opponent.defections:
@@ -52,14 +53,14 @@ class ForgetfulGrudger(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialised the player."""
         super().__init__()
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """Begins by playing C, then plays D for mem_length rounds if the
         opponent ever plays D."""
         if self.grudge_memory >= self.mem_length:
@@ -97,7 +98,7 @@ class OppositeGrudger(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         """Begins by playing D, then plays C for the remaining rounds if the
         opponent ever plays C."""
         if opponent.cooperations:
@@ -120,7 +121,7 @@ class Aggravater(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         if len(opponent.history) < 3:
             return D
         elif opponent.defections:
@@ -151,13 +152,13 @@ class SoftGrudger(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialised the player."""
         super().__init__()
         self.grudged = False
         self.grudge_memory = 0
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """Begins by playing C, then plays D, D, D, D, C, C against a defection
         """
         if self.grudged:
@@ -201,7 +202,7 @@ class GrudgerAlternator(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """Begins by playing C, then plays Alternator for the remaining rounds
         if the opponent ever plays D."""
         if opponent.defections:
@@ -232,7 +233,7 @@ class EasyGo(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         """Begins by playing D, then plays C for the remaining rounds if the
         opponent ever plays D."""
         if opponent.defections:
