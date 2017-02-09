@@ -7,8 +7,7 @@ class ShortMem(Player):
     """
     A player starts by always cooperating for the first 10 moves.
     
-    The opponent answers are stored in the memory, whose maximum size is 10
-    results. From the tenth round on, the program analyzes the memory, and
+    From the tenth round on, the player analyzes the last ten actions, and
     compare the number of defects and cooperates of the opponent, based in
     percentage. If cooperation occurs 30% more than defection, it will
     cooperate.
@@ -38,12 +37,12 @@ class ShortMem(Player):
             return C
         
         array = opponent.history[:-11:-1]
-        cooperateRatio = array.count('C')
-        defectRatio = array.count('D')
+        C_counts = array.count('C')
+        D_counts = array.count('D')
             
-        if cooperateRatio - defectRatio >= 3:
+        if C_counts - D_counts >= 3:
             return C
-        elif defectRatio - cooperateRatio >= 3:
+        elif D_counts - C_counts >= 3:
             return D
         else:
             return opponent.history[-1]
