@@ -1,6 +1,6 @@
 from collections import Counter
 import random
-from typing import Sequence
+from typing import Sequence, List, Tuple
 
 import numpy as np
 
@@ -108,7 +108,7 @@ class MoranProcess(object):
             self.players.append(player)
         self.populations = [self.population_distribution()]
 
-    def mutate(self, index: int):
+    def mutate(self, index: int) -> List[str] :
         """Mutate the player at index."""
         # Choose another strategy at random from the initial population
         r = random.random()
@@ -191,7 +191,7 @@ class MoranProcess(object):
         self.fixation_check()
         return self
 
-    def _matchup_indices(self):
+    def _matchup_indices(self) -> Tuple[str]:
         """Generate the matchup pairs."""
         indices = []
         N = len(self.players)
@@ -204,7 +204,7 @@ class MoranProcess(object):
                 indices.append((i, j))
         return indices
 
-    def score_all(self):
+    def score_all(self) -> Tuple[str]:
         """Plays the next round of the process. Every player is paired up
         against every other player and the total scores are recorded."""
         N = len(self.players)
@@ -222,7 +222,7 @@ class MoranProcess(object):
         self.score_history.append(scores)
         return scores
 
-    def population_distribution(self):
+    def population_distribution(self) -> int:
         """Returns the population distribution of the last iteration."""
         player_names = [str(player) for player in self.players]
         counter = Counter(player_names)
@@ -249,7 +249,7 @@ class MoranProcess(object):
                 break
         return self.populations
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.populations)
 
 
@@ -350,7 +350,7 @@ class MoranProcessGraph(MoranProcess):
             i = self.index[vertex]
         return i
 
-    def _matchup_indices(self):
+    def _matchup_indices(self) -> Tuple[str]:
         """Generate the matchup pairs"""
         indices = set()
         # For death-birth we only want the neighbors of the dead node
@@ -373,7 +373,7 @@ class MoranProcessGraph(MoranProcess):
                 indices.add((i, j))
         return indices
 
-    def population_distribution(self):
+    def population_distribution(self) -> int:
         """Returns the population distribution of the last iteration."""
         player_names = [str(player) for player in self.players]
         counter = Counter(player_names)
