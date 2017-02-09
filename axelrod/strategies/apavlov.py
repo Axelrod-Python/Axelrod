@@ -28,7 +28,7 @@ class APavlov2006(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.opponent_class = None
+        self.opponent_class = ""
 
     def strategy(self, opponent: Player) -> Action:
         # TFT for six rounds
@@ -95,7 +95,7 @@ class APavlov2011(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.opponent_class = None
+        self.opponent_class = ""
 
     def strategy(self, opponent: Player) -> Action:
         # TFT for six rounds
