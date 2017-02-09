@@ -29,18 +29,16 @@ class ShortMem(Player):
     @staticmethod
     def strategy(opponent: Player) -> Action:
         
-        memoryDepth = self.classifier['memoryDepth']
-
-        if len(self.history) <= memoryDepth:
+        if len(opponent.history) <= 10:
             return C
         
-        array = self.history[:-11:-1]
-        cooperateRatio = array.count('C')/memoryDepth
-        defectRatio = array.count('D')/memoryDepth
+        array = opponent.history[:-11:-1]
+        cooperateRatio = array.count('C')
+        defectRatio = array.count('D')
             
-        if cooperateRatio - defectRatio > 0.3:
+        if cooperateRatio - defectRatio >= 3:
             return C
-        elif defectRatio - cooperateRatio > 0.3:
+        elif defectRatio - cooperateRatio >= 3:
             return D
         else:
             return opponent.history[-1]
