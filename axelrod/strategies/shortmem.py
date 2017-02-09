@@ -12,7 +12,7 @@ class ShortMem(Player):
     
     Names:
     
-    - ShortMem: [Andre:2013]_
+    - ShortMem: [Andre2013]_
     """
 
     name = 'ShortMem'
