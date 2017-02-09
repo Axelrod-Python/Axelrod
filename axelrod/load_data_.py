@@ -5,8 +5,8 @@ def load_file(filename: str, directory: str) -> List[List[str]]:
     """Loads a data file stored in the Axelrod library's data subdirectory,
     likely for parameters for a strategy."""
     path = '/'.join((directory, filename))
-    data = pkg_resources.resource_string(__name__, path)
-    data = data.decode('UTF-8', 'replace')
+    data_bytes = pkg_resources.resource_string(__name__, path)
+    data = data_bytes.decode('UTF-8', 'replace')
     rows = []
     for line in data.split('\n'):
         if line.startswith('#') or len(line) == 0:
