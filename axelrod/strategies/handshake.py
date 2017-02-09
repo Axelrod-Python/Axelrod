@@ -26,7 +26,7 @@ class Handshake(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, initial_plays: List[Action, Action]=None) -> None:
+    def __init__(self, initial_plays: List[Action]=None) -> None:
         super().__init__()
         if not initial_plays:
             initial_plays = [C, D]
