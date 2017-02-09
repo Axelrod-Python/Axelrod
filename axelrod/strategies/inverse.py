@@ -1,4 +1,5 @@
 from axelrod import Actions, Player, random_choice
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -19,7 +20,7 @@ class Inverse(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         """Looks at opponent history to see if they have defected.
 
         If so, player defection is inversely proportional to when this occurred.
