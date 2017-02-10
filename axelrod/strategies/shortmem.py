@@ -36,7 +36,7 @@ class ShortMem(Player):
         if len(opponent.history) <= 10:
             return C
         
-        array = opponent.history[:-11:-1]
+        array = opponent.history[-10:]
         C_counts = array.count('C')
         D_counts = array.count('D')
             
