@@ -1,5 +1,6 @@
-from axelrod import Actions, Player, random_choice
-from axelrod.actions import Action
+from axelrod.actions import Actions, Action
+from axelrod.player import Player
+from axelrod.random_ import random_choice
 
 C, D = Actions.C, Actions.D
 
@@ -21,8 +22,7 @@ class AverageCopier(Player):
         'manipulates_state': False
     }
 
-    @staticmethod
-    def strategy(opponent: Player) -> Action:
+    def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) == 0:
             # Randomly picks a strategy (not affected by history).
             return random_choice(0.5)
@@ -44,8 +44,7 @@ class NiceAverageCopier(Player):
         'manipulates_state': False
     }
 
-    @staticmethod
-    def strategy(opponent: Player) -> Action:
+    def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) == 0:
             return C
         p = opponent.cooperations // len(opponent.history)

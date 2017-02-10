@@ -1,4 +1,5 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 from axelrod._strategy_utils import detect_cycle
 
 C, D = Actions.C, Actions.D

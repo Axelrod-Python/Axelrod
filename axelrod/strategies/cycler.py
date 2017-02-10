@@ -1,5 +1,5 @@
-from axelrod import Actions, Player, init_args
-from axelrod.actions import Action
+from axelrod.actions import Actions, Action
+from axelrod.player import Player, init_args
 
 import copy
 

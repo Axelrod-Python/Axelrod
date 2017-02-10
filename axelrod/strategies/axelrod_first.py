@@ -4,7 +4,9 @@ Additional strategies from Axelrod's first tournament.
 
 import random
 
-from axelrod import Actions, Player, flip_action, random_choice
+from axelrod.actions import Actions, flip_action
+from axelrod.player import Player
+from axelrod.random_ import random_choice
 from.memoryone import MemoryOnePlayer
 
 C, D = Actions.C, Actions.D
