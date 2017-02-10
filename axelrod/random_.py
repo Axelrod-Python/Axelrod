@@ -1,7 +1,6 @@
 import random
 import numpy
-from axelrod import Actions
-from axelrod.actions import Action
+from axelrod.actions import Action, Actions
 
 
 def random_choice(p: float = 0.5) -> Action:

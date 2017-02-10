@@ -2,8 +2,8 @@
 import itertools
 from functools import lru_cache
 
-from axelrod import update_history
-from axelrod import Actions
+from axelrod.player import update_history
+from axelrod.actions import Actions
 
 from axelrod.strategies.cycler import Cycler
 

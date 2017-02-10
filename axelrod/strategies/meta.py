@@ -1,4 +1,5 @@
-from axelrod import Actions, Player, obey_axelrod
+from axelrod.actions import Actions
+from axelrod.player import Player, obey_axelrod
 from axelrod.strategy_transformers import NiceTransformer
 from ._strategies import all_strategies
 from .hunter import (

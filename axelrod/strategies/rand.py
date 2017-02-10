@@ -1,4 +1,5 @@
-from axelrod import Player, random_choice
+from axelrod.player import Player
+from axelrod.random_ import random_choice
 
 
 class Random(Player):

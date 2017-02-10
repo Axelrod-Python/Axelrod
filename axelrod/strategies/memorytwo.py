@@ -1,4 +1,5 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 from .titfortat import TitForTat, TitFor2Tats
 from .defector import Defector
 

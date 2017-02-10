@@ -1,5 +1,6 @@
 from os import linesep
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 from prompt_toolkit import prompt
 from prompt_toolkit.token import Token
 from prompt_toolkit.styles import style_from_dict
