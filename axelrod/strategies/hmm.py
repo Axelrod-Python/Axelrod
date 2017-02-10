@@ -1,6 +1,8 @@
 from numpy.random import choice
 
-from axelrod import Actions, Player, random_choice
+from axelrod.actions import Actions
+from axelrod.player import Player
+from axelrod.random_ import random_choice
 
 C, D = Actions.C, Actions.D
 

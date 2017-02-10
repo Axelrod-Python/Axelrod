@@ -44,12 +44,7 @@ from .hunter import (
     MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
 from .lookerup import (LookerUp,
-    EvolvedLookerUp0_0_1, EvolvedLookerUp0_0_2, EvolvedLookerUp0_0_3,
-    EvolvedLookerUp1_1_0, EvolvedLookerUp1_1_1, EvolvedLookerUp1_1_2,
-    EvolvedLookerUp1_1_3, EvolvedLookerUp1_1_4, EvolvedLookerUp2_2_0,
-    EvolvedLookerUp2_2_1, EvolvedLookerUp2_2_2, EvolvedLookerUp2_2_3,
-    EvolvedLookerUp2_2_4, EvolvedLookerUp3_3_1, EvolvedLookerUp3_3_2,
-    EvolvedLookerUp3_3_3, EvolvedLookerUp4_4_1, EvolvedLookerUp4_4_2,
+    EvolvedLookerUp1_1_1, EvolvedLookerUp2_2_2,
     Winner12, Winner21)
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (

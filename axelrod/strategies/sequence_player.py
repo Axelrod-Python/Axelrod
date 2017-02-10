@@ -1,4 +1,5 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 from axelrod._strategy_utils import thue_morse_generator
 
 C, D = Actions.C, Actions.D

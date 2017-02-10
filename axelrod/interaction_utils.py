@@ -10,7 +10,7 @@ interactions.
 from collections import Counter
 import csv
 
-from axelrod import Actions
+from axelrod.actions import Actions
 from .game import Game
 
 import tqdm
