@@ -1,5 +1,9 @@
 import warnings
-from axelrod import Actions, Player, update_history, update_state_distribution
+from axelrod.actions import Actions, Action
+from axelrod.player import Player, update_history, update_state_distribution
+from collections import defaultdict
+
+from typing import List, Tuple
 
 C, D = Actions.C, Actions.D
 
@@ -12,7 +16,7 @@ class MockPlayer(Player):
 
     name = "Mock Player"
 
-    def __init__(self, actions=None, history=None, state_dist=None):
+    def __init__(self, actions: List[Action] =None, history: List[Action] =None, state_dist: defaultdict =None) -> None:
         # Need to retain history for opponents that examine opponents history
         # Do a deep copy just to be safe
         super().__init__()
@@ -28,7 +32,7 @@ class MockPlayer(Player):
         else:
             self.actions = []
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # Return the next saved action, if present.
         try:
             action = self.actions.pop(0)
@@ -37,7 +41,7 @@ class MockPlayer(Player):
             return C
 
 
-def simulate_play(player1, player2, action1=None, action2=None):
+def simulate_play(player1: Player, player2: Player, action1: Action =None, action2: Action =None) -> Tuple[Action, Action]:
     """
     Simulates play with or without forced history. If action1 and action2 are given, these
     actions are enforced in the players strategy. This generally should not be

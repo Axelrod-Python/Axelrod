@@ -1,4 +1,6 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -20,8 +22,7 @@ class Forgiver(Player):
         'manipulates_state': False
     }
 
-    @staticmethod
-    def strategy(opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Begins by playing C, then plays D if the opponent has defected more than 10 percent of the time
         """
@@ -48,8 +49,7 @@ class ForgivingTitForTat(Player):
         'manipulates_state': False
     }
 
-    @staticmethod
-    def strategy(opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Begins by playing C, then plays D if,
         the opponent has defected more than 10 percent of the time,

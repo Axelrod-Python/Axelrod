@@ -1,7 +1,13 @@
 from collections import UserDict
 import pickle
+from typing import List, Tuple
 
-from axelrod import Player
+from .actions import Action
+from .player import Player
+
+
+CachePlayerKey = Tuple[Player, Player, int]
+CacheKey = Tuple[str, str, int]
 
 
 class DeterministicCache(UserDict):
@@ -29,7 +35,7 @@ class DeterministicCache(UserDict):
     methods to save/load the cache to/from a file.
     """
 
-    def __init__(self, file_name=None):
+    def __init__(self, file_name: str=None) -> None:
         """
         Parameters
         ----------
@@ -42,7 +48,7 @@ class DeterministicCache(UserDict):
             self.load(file_name)
 
     @staticmethod
-    def _key_transform(key):
+    def _key_transform(key: CachePlayerKey) -> CacheKey:
         """
         Parameters
         ----------
@@ -51,16 +57,16 @@ class DeterministicCache(UserDict):
         """
         return key[0].name, key[1].name, key[2]
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: CachePlayerKey):
         return super().__delitem__(self._key_transform(key))
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: CachePlayerKey) -> List[Tuple[Action, Action]]:
         return super().__getitem__(self._key_transform(key))
 
     def __contains__(self, key):
         return super().__contains__(self._key_transform(key))
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: CachePlayerKey, value):
         """Overrides the UserDict.__setitem__ method in order to validate
         the key/value and also to set the turns attribute"""
         if not self.mutable:
@@ -78,7 +84,7 @@ class DeterministicCache(UserDict):
         super().__setitem__(self._key_transform(key), value)
 
     @staticmethod
-    def _is_valid_key(key):
+    def _is_valid_key(key: CachePlayerKey) -> bool:
         """Validate a proposed dictionary key.
 
         Parameters
@@ -116,7 +122,7 @@ class DeterministicCache(UserDict):
         return True
 
     @staticmethod
-    def _is_valid_value(value):
+    def _is_valid_value(value: List) -> bool:
         """Validate a proposed dictionary value.
 
         Parameters
@@ -133,7 +139,7 @@ class DeterministicCache(UserDict):
 
         return True
 
-    def save(self, file_name):
+    def save(self, file_name: str) -> bool:
         """Serialise the cache dictionary to a file.
 
         Parameters
@@ -145,7 +151,7 @@ class DeterministicCache(UserDict):
             pickle.dump(self.data, io)
         return True
 
-    def load(self, file_name):
+    def load(self, file_name: str) -> bool:
         """Load a previously saved cache into the dictionary.
 
         Parameters

@@ -1,5 +1,8 @@
 import inspect
-from axelrod import Actions, Player
+from axelrod.actions import Action, Actions
+from axelrod.player import Player
+
+from typing import List
 
 C, D = Actions.C, Actions.D
 
@@ -35,14 +38,14 @@ class Darwin(Player):
     genome = [C]
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.response = Darwin.genome[0]
 
     def receive_match_attributes(self):
         self.outcomes = self.match_attributes["game"].scores
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # Frustrate psychics and ensure that simulated rounds
         # do not influence genome.
         if inspect.stack()[1][3] not in Darwin.valid_callers:

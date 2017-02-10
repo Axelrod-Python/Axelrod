@@ -77,7 +77,7 @@ class TestGradualKiller(TestPlayer):
         P2.history = [C, C, C, C, C, D, C, C, D, C]
         self.assertEqual(P1.strategy(P2), 'C')
 
-    def test_effect_of_strategy_with_history_CC(self):
+    def test_effect_of_strategy_with_history_DD(self):
         """Continues with D if opponent played DD on 6 and 7."""
         P1 = axelrod.GradualKiller()
         P2 = axelrod.Player()

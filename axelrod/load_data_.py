@@ -28,18 +28,7 @@ def load_weights(filename: str ="ann_weights.csv", directory: str ="data") -> Di
         d[name] = (num_features, num_hidden, weights)
     return d
 
-
-def load_lookerup_tables(filename: str ="lookup_tables.csv", directory: str ="data") -> Dict[Tuple[str, int, int, int], Tuple[str, str]]:
-    """Load lookup tables."""
-    rows = load_file(filename, directory)
-    d = dict()
-    for row in rows:
-        name, a, b, c, initial, pattern = row
-        d[(name, int(a), int(b), int(c))] = (initial, pattern)
-    return d
-
-
-def load_pso_tables(filename: str ="pso_gambler.csv", directory: str ="data") -> Dict[Tuple[str, int, int, int], List[float]]:
+def load_pso_tables(filename="pso_gambler.csv", directory="data"):
     """Load lookup tables."""
     rows = load_file(filename, directory)
     d = dict()
