@@ -5,7 +5,9 @@ For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
 
-from axelrod import Actions, load_pso_tables, random_choice
+from axelrod.actions import Actions
+from axelrod.load_data_ import load_pso_tables
+from axelrod.random_ import random_choice
 from .lookerup import LookerUp, create_lookup_table_from_pattern
 
 

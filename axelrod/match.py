@@ -1,4 +1,5 @@
-from axelrod import Actions, Game
+from axelrod.actions import Actions
+from axelrod.game import Game
 import axelrod.interaction_utils as iu
 from .deterministic_cache import DeterministicCache
 

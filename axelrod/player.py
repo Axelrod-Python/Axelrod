@@ -3,7 +3,7 @@ from functools import wraps
 import random
 import copy
 
-from axelrod import Actions, flip_action
+from axelrod.actions import Actions, flip_action
 from .game import DefaultGame
 
 

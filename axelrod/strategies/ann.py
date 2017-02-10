@@ -6,7 +6,9 @@
 
 import numpy as np
 
-from axelrod import Actions, Player, load_weights
+from axelrod.actions import Actions
+from axelrod.player import Player
+from axelrod.load_data_ import load_weights
 
 C, D = Actions.C, Actions.D
 nn_weights = load_weights()
@@ -104,41 +106,6 @@ def compute_features(player, opponent):
         total_player_d,
         len(player.history)
     ]
-
-
-def activate(bias, hidden, output, inputs):
-    """
-    Compute the output of the neural network:
-        output = relu(inputs * hidden_weights + bias) * output_weights
-    """
-    inputs = np.array(inputs)
-    hidden_values = bias + np.dot(hidden, inputs)
-    hidden_values = relu(hidden_values)
-    output_value = np.dot(hidden_values, output)
-    return output_value
-
-
-def split_weights(weights, num_features, num_hidden):
-    """Splits the input vector into the the NN bias weights and layer
-    parameters."""
-    # Check weights is the right length
-    expected_length = num_hidden * 2 + num_features * num_hidden
-    if expected_length != len(weights):
-        raise ValueError("NN weights array has an incorrect size.")
-
-    number_of_input_to_hidden_weights = num_features * num_hidden
-    number_of_hidden_to_output_weights = num_hidden
-
-    input2hidden = []
-    for i in range(0, number_of_input_to_hidden_weights, num_features):
-        input2hidden.append(weights[i:i + num_features])
-
-    start = number_of_input_to_hidden_weights
-    end = number_of_input_to_hidden_weights + number_of_hidden_to_output_weights
-
-    hidden2output = weights[start: end]
-    bias = weights[end:]
-    return (input2hidden, hidden2output, bias)
 
 
 def activate(bias, hidden, output, inputs):
