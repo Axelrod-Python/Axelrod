@@ -1,5 +1,7 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
+
+from typing import List
 
 C, D = Actions.C, Actions.D
 
@@ -24,13 +26,13 @@ class Handshake(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, initial_plays=None):
+    def __init__(self, initial_plays: List[Action]=None) -> None:
         super().__init__()
         if not initial_plays:
             initial_plays = [C, D]
         self.initial_plays = initial_plays
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # Begin by playing the sequence C, D
         index = len(self.history)
         if index < len(self.initial_plays):
