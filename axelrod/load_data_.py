@@ -1,12 +1,12 @@
 import pkg_resources
+from typing import List, Dict, Tuple, Union
 
-
-def load_file(filename, directory):
+def load_file(filename: str, directory: str) -> List[List[str]]:
     """Loads a data file stored in the Axelrod library's data subdirectory,
     likely for parameters for a strategy."""
     path = '/'.join((directory, filename))
-    data = pkg_resources.resource_string(__name__, path)
-    data = data.decode('UTF-8', 'replace')
+    data_bytes = pkg_resources.resource_string(__name__, path)
+    data = data_bytes.decode('UTF-8', 'replace')
     rows = []
     for line in data.split('\n'):
         if line.startswith('#') or len(line) == 0:
@@ -16,7 +16,7 @@ def load_file(filename, directory):
     return rows
 
 
-def load_weights(filename="ann_weights.csv", directory="data"):
+def load_weights(filename: str ="ann_weights.csv", directory: str ="data") -> Dict[str, Tuple[int, int, List[float]]]:
     """Load Neural Network Weights."""
     rows = load_file(filename, directory)
     d = dict()
@@ -27,7 +27,6 @@ def load_weights(filename="ann_weights.csv", directory="data"):
         weights = list(map(float, row[3:]))
         d[name] = (num_features, num_hidden, weights)
     return d
-
 
 def load_pso_tables(filename="pso_gambler.csv", directory="data"):
     """Load lookup tables."""
