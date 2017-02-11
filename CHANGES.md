@@ -49,7 +49,7 @@ Internal improvements, type hints, documentation and a new strategy
   https://github.com/Axelrod-Python/Axelrod/pull/818
 
 Here are all the commits for this PR:
-https://github.com/Axelrod-Python/Axelrod/compare/v2.3.0...v2.4.0
+https://github.com/Axelrod-Python/Axelrod/compare/v2.4.0...v2.5.0
 
 # v2.4.0, 2017-01-05
 
