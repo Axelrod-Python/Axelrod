@@ -1,3 +1,56 @@
+# v2.5.0, 2017-02-11
+
+Internal improvements, type hints, documentation and a new strategy
+
+- New strategy: ShortMem
+  https://github.com/Axelrod-Python/Axelrod/pull/857
+- A number of type hints added to the library
+  https://github.com/Axelrod-Python/Axelrod/pull/828
+  https://github.com/Axelrod-Python/Axelrod/pull/831
+  https://github.com/Axelrod-Python/Axelrod/pull/832
+  https://github.com/Axelrod-Python/Axelrod/pull/833
+  https://github.com/Axelrod-Python/Axelrod/pull/834
+  https://github.com/Axelrod-Python/Axelrod/pull/835
+  https://github.com/Axelrod-Python/Axelrod/pull/836
+  https://github.com/Axelrod-Python/Axelrod/pull/840
+  https://github.com/Axelrod-Python/Axelrod/pull/846
+  https://github.com/Axelrod-Python/Axelrod/pull/847
+  https://github.com/Axelrod-Python/Axelrod/pull/849
+  https://github.com/Axelrod-Python/Axelrod/pull/850
+  https://github.com/Axelrod-Python/Axelrod/pull/851
+  https://github.com/Axelrod-Python/Axelrod/pull/853
+  https://github.com/Axelrod-Python/Axelrod/pull/854
+  https://github.com/Axelrod-Python/Axelrod/pull/856
+  https://github.com/Axelrod-Python/Axelrod/pull/858
+  https://github.com/Axelrod-Python/Axelrod/pull/824
+  https://github.com/Axelrod-Python/Axelrod/pull/821
+  https://github.com/Axelrod-Python/Axelrod/pull/815
+  https://github.com/Axelrod-Python/Axelrod/pull/814
+- internal improvement to how players are cloned
+  https://github.com/Axelrod-Python/Axelrod/pull/817
+- Refactor/removal of dynamic classes
+  https://github.com/Axelrod-Python/Axelrod/pull/852
+- Run windows CI for py3.6
+  https://github.com/Axelrod-Python/Axelrod/pull/844
+- Run mypi on travis
+  https://github.com/Axelrod-Python/Axelrod/pull/843
+  https://github.com/Axelrod-Python/Axelrod/pull/837
+- Small update to the readme
+  https://github.com/Axelrod-Python/Axelrod/pull/829
+- Docstring fix for random
+  https://github.com/Axelrod-Python/Axelrod/pull/826
+- Improve efficiency of neural network strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/819
+- Improve efficiency of cycle detection
+  https://github.com/Axelrod-Python/Axelrod/pull/809
+- Refactor of a number of tests and test documentation
+  https://github.com/Axelrod-Python/Axelrod/pull/820
+- Large refactor thanks to dropping of python 2
+  https://github.com/Axelrod-Python/Axelrod/pull/818
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.3.0...v2.4.0
+
 # v2.4.0, 2017-01-05
 
 New machine learning strategies and moran processes on graphs.
