@@ -1,4 +1,4 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from .titfortat import TitForTat, TitFor2Tats
 from .defector import Defector
@@ -30,7 +30,7 @@ class MEM2(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.players = {
             "TFT" : TitForTat(),
@@ -41,7 +41,7 @@ class MEM2(Player):
         self.shift_counter = 3
         self.alld_counter = 0
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # Update Histories
         # Note that this assumes that TFT and TFTT do not use internal counters,
         # Rather that they examine the actual history of play
