@@ -139,4 +139,4 @@ class TestLevelPunisher(TestPlayer):
         # Check for the number of rounds greater than 10.
         self.responses_test([C], [C] * 10, [C, C, C, C, D, C, C, C, C, D])
         #Check if number of defections by opponent is greater than 20%
-        self.responses_test([D], [C] * 5, [D, D, D, D, D, C, D, D, D, D])
+        self.responses_test([D], [C] * 5, [C, C, C, C, C, D, C, C, C, C])
