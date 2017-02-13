@@ -124,3 +124,33 @@ class InversePunisher(Player):
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1
+
+class LevelPunisher(Player):
+    """
+    A player starts by cooperating however, after 10 rounds 
+    will defect if at any point the number of defections 
+    by an opponent is greater than 20%.
+    
+    Names:
+
+    - Level Punisher: Name from CoopSim https://github.com/jecki/CoopSim
+    """
+
+    name = 'Level Punisher'
+    classifier = {
+        'memory_depth': float('inf'), # Long Memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        if len(opponent.history) < 10:
+            return C
+        elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.2:
+            return D
+        else:
+            return C

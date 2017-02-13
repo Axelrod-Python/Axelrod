@@ -111,3 +111,30 @@ class TestInversePunisher(TestPlayer):
         P1.reset()
         self.assertEqual(P1.grudged, False)
         self.assertEqual(P1.grudge_memory, 0)
+
+class TestLevelPunisher(TestPlayer):
+
+    name = "Level Punisher"
+    player = axelrod.LevelPunisher
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Starts by Cooperating
+        self.first_play_test(C)
+        
+        # Defects if the turns played are less than 10.
+        self.responses_test([C], [C], [C])
+        self.responses_test([C], [C] * 4, [C, D, C, D])
+        
+        # Check for the number of rounds greater than 10.
+        self.responses_test([C], [C] * 10, [C, C, C, C, D, C, C, C, C, D])
+        #Check if number of defections by opponent is greater than 20%
+        self.responses_test([D], [C] * 10, [D, D, D, D, D, C, D, D, D, D])
