@@ -1,5 +1,6 @@
 from collections import Counter
 import random
+from typing import Sequence, List, Tuple
 
 import numpy as np
 
@@ -8,7 +9,7 @@ from .match import Match
 from .random_ import randrange
 
 
-def fitness_proportionate_selection(scores):
+def fitness_proportionate_selection(scores: Sequence[int]) -> int :
     """Randomly selects an individual proportionally to score.
 
     Parameters
@@ -30,8 +31,8 @@ def fitness_proportionate_selection(scores):
 
 
 class MoranProcess(object):
-    def __init__(self, players, turns=100, noise=0, deterministic_cache=None,
-                 mutation_rate=0., mode='bd', match_class=Match):
+    def __init__(self, players, turns: int=100, noise: float=0, deterministic_cache=None,
+                 mutation_rate: float=0., mode: str='bd', match_class=Match):
         """
         An agent based Moran process class. In each round, each player plays a
         Match with each other player. Players are assigned a fitness score by
@@ -107,7 +108,7 @@ class MoranProcess(object):
             self.players.append(player)
         self.populations = [self.population_distribution()]
 
-    def mutate(self, index):
+    def mutate(self, index: int) -> List[str] :
         """Mutate the player at index."""
         # Choose another strategy at random from the initial population
         r = random.random()
@@ -121,7 +122,7 @@ class MoranProcess(object):
             new_player = self.players[index].clone()
         return new_player
 
-    def death(self, index=None):
+    def death(self, index: int=None) -> int:
         """Selects the player to be removed. Note that the in the birth-death
         case, the player that is reproducing may also be replaced. However in
         the death-birth case, this player will be excluded from the choices.
@@ -131,7 +132,7 @@ class MoranProcess(object):
         i = randrange(0, len(self.players))
         return i
 
-    def birth(self, index=None):
+    def birth(self, index: int=None) -> int:
         """The birth event."""
         # Compute necessary fitnesses.
         scores = self.score_all()
@@ -147,7 +148,7 @@ class MoranProcess(object):
             j = fitness_proportionate_selection(scores)
         return j
 
-    def fixation_check(self):
+    def fixation_check(self) -> bool:
         """Is the population of a single type?"""
         if self.mutation_rate > 0:
             return False
@@ -190,7 +191,7 @@ class MoranProcess(object):
         self.fixation_check()
         return self
 
-    def _matchup_indices(self):
+    def _matchup_indices(self) -> Tuple[str]:
         """Generate the matchup pairs."""
         indices = []
         N = len(self.players)
@@ -203,7 +204,7 @@ class MoranProcess(object):
                 indices.append((i, j))
         return indices
 
-    def score_all(self):
+    def score_all(self) -> Tuple[str]:
         """Plays the next round of the process. Every player is paired up
         against every other player and the total scores are recorded."""
         N = len(self.players)
@@ -221,7 +222,7 @@ class MoranProcess(object):
         self.score_history.append(scores)
         return scores
 
-    def population_distribution(self):
+    def population_distribution(self) -> int:
         """Returns the population distribution of the last iteration."""
         player_names = [str(player) for player in self.players]
         counter = Counter(player_names)
@@ -248,14 +249,14 @@ class MoranProcess(object):
                 break
         return self.populations
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.populations)
 
 
 class MoranProcessGraph(MoranProcess):
     def __init__(self, players, interaction_graph, reproduction_graph=None,
-                 turns=100, noise=0, deterministic_cache=None,
-                 mutation_rate=0., mode='bd', match_class=Match):
+                 turns: int=100, noise: float =0, deterministic_cache=None,
+                 mutation_rate: float=0., mode: str='bd', match_class=Match):
         """
         An agent based Moran process class. In each round, each player plays a
         Match with each neighboring player according to the interaction graph.
@@ -320,7 +321,7 @@ class MoranProcessGraph(MoranProcess):
         self.index = dict(zip(interaction_graph.vertices(),
                               range(len(players))))
 
-    def birth(self, index=None):
+    def birth(self, index: int=None) -> int:
         """Compute the birth index."""
         scores = self.score_all()
         if index:
@@ -334,7 +335,7 @@ class MoranProcessGraph(MoranProcess):
             j = fitness_proportionate_selection(scores)
         return j
 
-    def death(self, index=None):
+    def death(self, index: int=None) -> int:
         """Selects the player to be removed."""
         if self.mode == "db":
             # Select a player to be replaced globally
@@ -349,7 +350,7 @@ class MoranProcessGraph(MoranProcess):
             i = self.index[vertex]
         return i
 
-    def _matchup_indices(self):
+    def _matchup_indices(self) -> Tuple[str]:
         """Generate the matchup pairs"""
         indices = set()
         # For death-birth we only want the neighbors of the dead node
@@ -372,7 +373,7 @@ class MoranProcessGraph(MoranProcess):
                 indices.add((i, j))
         return indices
 
-    def population_distribution(self):
+    def population_distribution(self) -> int:
         """Returns the population distribution of the last iteration."""
         player_names = [str(player) for player in self.players]
         counter = Counter(player_names)
