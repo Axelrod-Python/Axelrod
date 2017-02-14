@@ -27,3 +27,7 @@ mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/grumpy.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/handshake.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/inverse.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/mathematicalconstants.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/mindcontrol.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/mindreader.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/mutual.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/negation.py
