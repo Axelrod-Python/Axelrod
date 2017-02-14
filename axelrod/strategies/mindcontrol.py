@@ -1,4 +1,4 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
@@ -19,7 +19,7 @@ class MindController(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         """
         Alters the opponents strategy method to be a lambda function which
         always returns C. This player will then always return D to take
@@ -47,14 +47,14 @@ class MindWarper(Player):
         'manipulates_state': False
     }
 
-    def __setattr__(self, name, val):
+    def __setattr__(self, name: str, val: str):
         if name == 'strategy':
             pass
         else:
             self.__dict__[name] = val
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         opponent.strategy = lambda opponent: C
         return D
 
@@ -77,6 +77,6 @@ class MindBender(MindWarper):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         opponent.__dict__['strategy'] = lambda opponent: C
         return D
