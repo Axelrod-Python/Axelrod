@@ -1,4 +1,4 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
@@ -27,7 +27,7 @@ class Punisher(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialised the player
         """
@@ -36,7 +36,7 @@ class Punisher(Player):
         self.grudged = False
         self.grudge_memory = 1
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Begins by playing C, then plays D for an amount of rounds proportional
         to the opponents historical '%' of playing D if the opponent ever
@@ -89,14 +89,14 @@ class InversePunisher(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.history = []
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Begins by playing C, then plays D for an amount of rounds proportional
         to the opponents historical '%' of playing C if the opponent ever plays
@@ -147,7 +147,7 @@ class LevelPunisher(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) < 10:
             return C
         elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.2:
