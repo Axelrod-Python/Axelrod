@@ -1,6 +1,8 @@
+"""Tests Windows Detection."""
 import unittest
 import os
 import axelrod
+
 
 class TestWindowsDetection(unittest.TestCase):
 

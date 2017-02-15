@@ -1,10 +1,123 @@
+"""Artificial Neural Network based strategy.
+
 # Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
 # Original Author: Martin Jones, @mojones
+"""
 
-from axelrod import Actions, Player, load_weights
+import numpy as np
+
+from axelrod.actions import Actions
+from axelrod.player import Player
+from axelrod.load_data_ import load_weights
 
 C, D = Actions.C, Actions.D
 nn_weights = load_weights()
+
+
+# Neural Network and Activation functions
+relu = np.vectorize(lambda x: max(x, 0))
+
+
+def compute_features(player, opponent):
+    """
+    Compute history features for Neural Network:
+    * Opponent's first move is C
+    * Opponent's first move is D
+    * Opponent's second move is C
+    * Opponent's second move is D
+    * Player's previous move is C
+    * Player's previous move is D
+    * Player's second previous move is C
+    * Player's second previous move is D
+    * Opponent's previous move is C
+    * Opponent's previous move is D
+    * Opponent's second previous move is C
+    * Opponent's second previous move is D
+    * Total opponent cooperations
+    * Total opponent defections
+    * Total player cooperations
+    * Total player defections
+    * Round number
+    """
+    if len(opponent.history) == 0:
+        opponent_first_c = 0
+        opponent_first_d = 0
+        opponent_second_c = 0
+        opponent_second_d = 0
+        my_previous_c = 0
+        my_previous_d = 0
+        my_previous2_c = 0
+        my_previous2_d = 0
+        opponent_previous_c = 0
+        opponent_previous_d = 0
+        opponent_previous2_c = 0
+        opponent_previous2_d = 0
+
+    elif len(opponent.history) == 1:
+        opponent_first_c = 1 if opponent.history[0] == C else 0
+        opponent_first_d = 1 if opponent.history[0] == D else 0
+        opponent_second_c = 0
+        opponent_second_d = 0
+        my_previous_c = 1 if player.history[-1] == C else 0
+        my_previous_d = 0 if player.history[-1] == D else 0
+        my_previous2_c = 0
+        my_previous2_d = 0
+        opponent_previous_c = 1 if opponent.history[-1] == C else 0
+        opponent_previous_d = 1 if opponent.history[-1] == D else 0
+        opponent_previous2_c = 0
+        opponent_previous2_d = 0
+
+    else:
+        opponent_first_c = 1 if opponent.history[0] == C else 0
+        opponent_first_d = 1 if opponent.history[0] == D else 0
+        opponent_second_c = 1 if opponent.history[1] == C else 0
+        opponent_second_d = 1 if opponent.history[1] == D else 0
+        my_previous_c = 1 if player.history[-1] == C else 0
+        my_previous_d = 0 if player.history[-1] == D else 0
+        my_previous2_c = 1 if player.history[-2] == C else 0
+        my_previous2_d = 1 if player.history[-2] == D else 0
+        opponent_previous_c = 1 if opponent.history[-1] == C else 0
+        opponent_previous_d = 1 if opponent.history[-1] == D else 0
+        opponent_previous2_c = 1 if opponent.history[-2] == C else 0
+        opponent_previous2_d = 1 if opponent.history[-2] == D else 0
+
+    # Remaining Features
+    total_opponent_c = opponent.cooperations
+    total_opponent_d = opponent.defections
+    total_player_c = player.cooperations
+    total_player_d = player.defections
+
+    return [
+        opponent_first_c,
+        opponent_first_d,
+        opponent_second_c,
+        opponent_second_d,
+        my_previous_c,
+        my_previous_d,
+        my_previous2_c,
+        my_previous2_d,
+        opponent_previous_c,
+        opponent_previous_d,
+        opponent_previous2_c,
+        opponent_previous2_d,
+        total_opponent_c,
+        total_opponent_d,
+        total_player_c,
+        total_player_d,
+        len(player.history)
+    ]
+
+
+def activate(bias, hidden, output, inputs):
+    """
+    Compute the output of the neural network:
+        output = relu(inputs * hidden_weights + bias) * output_weights
+    """
+    inputs = np.array(inputs)
+    hidden_values = bias + np.dot(hidden, inputs)
+    hidden_values = relu(hidden_values)
+    output_value = np.dot(hidden_values, output)
+    return output_value
 
 
 def split_weights(weights, num_features, num_hidden):
@@ -65,111 +178,16 @@ class ANN(Player):
     def __init__(self, weights, num_features, num_hidden):
         super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
-        self.input_to_hidden_layer_weights = i2h
-        self.hidden_to_output_layer_weights = h2o
-        self.bias_weights = bias
-        self.input_values = num_features
-        self.hidden_layer_size = num_hidden
-
-    def activate(self, inputs):
-        """Compute the output of the neural network."""
-        # Calculate values of hidden nodes
-        hidden_values = []
-        for i in range(self.hidden_layer_size):
-            hidden_node_value = 0
-            bias_weight = self.bias_weights[i]
-            hidden_node_value += bias_weight
-            for j in range(self.input_values):
-                weight = self.input_to_hidden_layer_weights[i][j]
-                hidden_node_value += inputs[j] * weight
-
-            # ReLU activation function
-            hidden_node_value = max(hidden_node_value, 0)
-
-            hidden_values.append(hidden_node_value)
-
-        # Calculate output value
-        output_value = 0
-        for i in range(self.hidden_layer_size):
-            output_value += hidden_values[i] * \
-                            self.hidden_to_output_layer_weights[i]
-
-        return output_value
-
-    def compute_features(self, opponent):
-        # Compute features for Neural Network
-        # These are True/False 0/1
-        if len(opponent.history) == 0:
-            opponent_first_c = 0
-            opponent_first_d = 0
-            opponent_second_c = 0
-            opponent_second_d = 0
-            my_previous_c = 0
-            my_previous_d = 0
-            my_previous2_c = 0
-            my_previous2_d = 0
-            opponent_previous_c = 0
-            opponent_previous_d = 0
-            opponent_previous2_c = 0
-            opponent_previous2_d = 0
-
-        elif len(opponent.history) == 1:
-            opponent_first_c = 1 if opponent.history[0] == C else 0
-            opponent_first_d = 1 if opponent.history[0] == D else 0
-            opponent_second_c = 0
-            opponent_second_d = 0
-            my_previous_c = 1 if self.history[-1] == C else 0
-            my_previous_d = 0 if self.history[-1] == D else 0
-            my_previous2_c = 0
-            my_previous2_d = 0
-            opponent_previous_c = 1 if opponent.history[-1] == C else 0
-            opponent_previous_d = 1 if opponent.history[-1] == D else 0
-            opponent_previous2_c = 0
-            opponent_previous2_d = 0
-
-        else:
-            opponent_first_c = 1 if opponent.history[0] == C else 0
-            opponent_first_d = 1 if opponent.history[0] == D else 0
-            opponent_second_c = 1 if opponent.history[1] == C else 0
-            opponent_second_d = 1 if opponent.history[1] == D else 0
-            my_previous_c = 1 if self.history[-1] == C else 0
-            my_previous_d = 0 if self.history[-1] == D else 0
-            my_previous2_c = 1 if self.history[-2] == C else 0
-            my_previous2_d = 1 if self.history[-2] == D else 0
-            opponent_previous_c = 1 if opponent.history[-1] == C else 0
-            opponent_previous_d = 1 if opponent.history[-1] == D else 0
-            opponent_previous2_c = 1 if opponent.history[-2] == C else 0
-            opponent_previous2_d = 1 if opponent.history[-2] == D else 0
-
-        # Remaining Features
-        total_opponent_c = opponent.cooperations
-        total_opponent_d = opponent.defections
-        total_self_c = self.cooperations
-        total_self_d = self.defections
-
-        return [
-            opponent_first_c,
-            opponent_first_d,
-            opponent_second_c,
-            opponent_second_d,
-            my_previous_c,
-            my_previous_d,
-            my_previous2_c,
-            my_previous2_d,
-            opponent_previous_c,
-            opponent_previous_d,
-            opponent_previous2_c,
-            opponent_previous2_d,
-            total_opponent_c,
-            total_opponent_d,
-            total_self_c,
-            total_self_d,
-            len(self.history)
-        ]
+        self.input_to_hidden_layer_weights = np.matrix(i2h)
+        self.hidden_to_output_layer_weights = np.array(h2o)
+        self.bias_weights = np.array(bias)
 
     def strategy(self, opponent):
-        features = self.compute_features(opponent)
-        output = self.activate(features)
+        features = compute_features(self, opponent)
+        output = activate(self.bias_weights,
+                          self.input_to_hidden_layer_weights,
+                          self.hidden_to_output_layer_weights,
+                          features)
         if output > 0:
             return C
         else:

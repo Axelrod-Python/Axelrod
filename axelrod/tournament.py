@@ -1,10 +1,11 @@
 from collections import defaultdict
-from multiprocessing import Process, Queue, cpu_count
-from tempfile import NamedTemporaryFile
 import csv
 import logging
-import tqdm
+from multiprocessing import Process, Queue, cpu_count
+from tempfile import NamedTemporaryFile
 import warnings
+
+import tqdm
 
 from axelrod import on_windows
 from .game import Game
@@ -106,7 +107,9 @@ class Tournament(object):
         self.setup_output(filename, in_memory)
 
         if not build_results and not filename:
-            warnings.warn("Tournament results will not be accessible since build_results=False and no filename was supplied.")
+            warnings.warn(
+                "Tournament results will not be accessible since "
+                "build_results=False and no filename was supplied.")
 
         if (processes is None) or (on_windows):
             self._run_serial(progress_bar=progress_bar)
@@ -137,21 +140,22 @@ class Tournament(object):
         axelrod.BigResultSet
         """
         if not in_memory:
-            result_set = ResultSetFromFile(filename=self.filename,
-                                           progress_bar=progress_bar,
-                                           num_interactions=self.num_interactions,
-                                           repetitions=self.repetitions,
-                                           players=[str(p) for p in self.players],
-                                           keep_interactions=keep_interactions,
-                                           game=self.game)
+            result_set = ResultSetFromFile(
+                filename=self.filename,
+                progress_bar=progress_bar,
+                num_interactions=self.num_interactions,
+                repetitions=self.repetitions,
+                players=[str(p) for p in self.players],
+                keep_interactions=keep_interactions,
+                game=self.game)
             self.outputfile.close()
         else:
-            result_set = ResultSet(players=[str(p) for p in self.players],
-                                   interactions=self.interactions_dict,
-                                   num_interactions=self.num_interactions,
-                                   repetitions=self.repetitions,
-                                   progress_bar=progress_bar,
-                                   game=self.game)
+            result_set = ResultSet(
+                players=[str(p) for p in self.players],
+                interactions=self.interactions_dict,
+                repetitions=self.repetitions,
+                progress_bar=progress_bar,
+                game=self.game)
         return result_set
 
     def _run_serial(self, progress_bar=False):
@@ -347,16 +351,13 @@ class ProbEndTournament(Tournament):
     whether or not to continue.
     """
 
-    def __init__(self, players, match_generator=ProbEndRoundRobinMatches,
-                 name='axelrod', game=None, prob_end=.5, repetitions=10,
-                 noise=0, with_morality=True):
+    def __init__(self, players, name='axelrod', game=None, prob_end=.5,
+                 repetitions=10, noise=0, with_morality=True):
         """
         Parameters
         ----------
         players : list
             A list of axelrod.Player objects
-        match_generator : class
-            A class that must be descended from axelrod.MatchGenerator
         name : string
             A name for the tournament
         game : axelrod.Game

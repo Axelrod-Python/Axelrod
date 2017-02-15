@@ -4,8 +4,9 @@ Additional strategies from Axelrod's first tournament.
 
 import random
 
-from axelrod import Actions, Player, flip_action, random_choice
-
+from axelrod.actions import Actions, flip_action
+from axelrod.player import Player
+from axelrod.random_ import random_choice
 from.memoryone import MemoryOnePlayer
 
 C, D = Actions.C, Actions.D
@@ -56,7 +57,8 @@ class Davis(Player):
 
 class RevisedDowning(Player):
     """Revised Downing attempts to determine if players are cooperative or not.
-    If so, it cooperates with them. This strategy would have won Axelrod's first tournament.
+    If so, it cooperates with them. This strategy would have won Axelrod's first
+    tournament.
 
     Names:
 
@@ -266,11 +268,21 @@ class Nydegger(Player):
     Submitted to Axelrod's first tournament by Rudy Nydegger.
 
     The program begins with tit for tat for the first three moves, except
-    that if it was the only one to cooperate on the first move and the only one to defect on the second move, it defects on the third move. After the third move, its choice is determined from the 3 preceding outcomes in the following manner.
+    that if it was the only one to cooperate on the first move and the only one
+    to defect on the second move, it defects on the third move. After the
+    third move, its choice is determined from the 3 preceding outcomes in the
+    following manner.
 
-    Let A be the sum formed by counting the other's defection as 2 points and one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding three moves in chronological order. The choice can be described as defecting only when A equals 1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
+    Let A be the sum formed by counting the other's defection as 2 points and
+    one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding
+    three moves in chronological order. The choice can be described as defecting
+    only when A equals
+    1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
 
-    Thus if all three preceding moves are mutual defection, A = 63 and the rule cooperates. This rule was designed for use in laboratory experiments as a stooge which had a memory and appeared to be trustworthy, potentially cooperative, but not gullible.
+    Thus if all three preceding moves are mutual defection, A = 63 and the rule
+    cooperates. This rule was designed for use in laboratory experiments as a
+    stooge which had a memory and appeared to be trustworthy, potentially
+    cooperative, but not gullible.
 
     Names:
 
@@ -329,9 +341,8 @@ class Shubik(Player):
     """
     Submitted to Axelrod's first tournament by Martin Shubik.
 
-    Plays like Tit-For-Tat with the following modification. After
-    each retaliation, the number of rounds that Shubik retaliates
-    increases by 1.
+    Plays like Tit-For-Tat with the following modification. After each
+    retaliation, the number of rounds that Shubik retaliates increases by 1.
 
     Names:
 
@@ -446,13 +457,13 @@ class UnnamedStrategy(Player):
     is also adjusted.
 
     Fourteenth Place with 282.2 points is a 77-line program by a graduate
-    student of political science whose dissertation is in game theory. This rule has
-    a probability of cooperating, P, which is initially 30% and is updated every 10
-    moves. P is adjusted if the other player seems random, very cooperative, or
-    very uncooperative. P is also adjusted after move 130 if the rule has a lower
-    score than the other player. Unfortunately, the complex process of adjustment
-    frequently left the probability of cooperation in the 30% to 70% range, and
-    therefore the rule appeared random to many other players.
+    student of political science whose dissertation is in game theory. This rule
+    has a probability of cooperating, P, which is initially 30% and is updated
+    every 10 moves. P is adjusted if the other player seems random, very
+    cooperative, or very uncooperative. P is also adjusted after move 130 if the
+    rule has a lower score than the other player. Unfortunately, the complex
+    process of adjustment frequently left the probability of cooperation in the
+    30% to 70% range, and therefore the rule appeared random to many other players.
 
     Names:
 

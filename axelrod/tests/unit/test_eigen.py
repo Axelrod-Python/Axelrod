@@ -1,6 +1,4 @@
-"""
-Test for eigen.py
-"""
+"""Test for eigen.py."""
 
 import unittest
 

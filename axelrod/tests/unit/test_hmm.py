@@ -2,7 +2,7 @@
 import unittest
 
 import axelrod
-from .test_player import TestHeadsUp, TestPlayer
+from .test_player import TestMatch, TestPlayer
 from axelrod.strategies.hmm import SimpleHMM, is_stochastic_matrix
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -154,13 +154,13 @@ class TestEvolvedHMM5(TestPlayer):
         self.first_play_test(C)
 
 
-class TestEvolvedHMM5vsCooperator(TestHeadsUp):
+class TestEvolvedHMM5vsCooperator(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedHMM5(), axelrod.Cooperator(),
                          [C] * 5, [C] * 5)
 
 
-class TestEvolvedHMM5vsDefector(TestHeadsUp):
+class TestEvolvedHMM5vsDefector(TestMatch):
     def test_rounds(self):
         self.versus_test(axelrod.EvolvedHMM5(), axelrod.Defector(),
                          [C, C, D], [D, D, D])

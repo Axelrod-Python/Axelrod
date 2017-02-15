@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Functions to calculate results from interactions. Interactions are lists of the
 form:
@@ -8,11 +7,11 @@ form:
 This is used by both the Match class and the ResultSet class which analyse
 interactions.
 """
-import csv
 from collections import Counter
+import csv
 
+from axelrod.actions import Actions
 from .game import Game
-from axelrod import Actions
 
 import tqdm
 

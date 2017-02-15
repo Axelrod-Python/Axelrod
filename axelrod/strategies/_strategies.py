@@ -44,12 +44,7 @@ from .hunter import (
     MathConstantHunter, RandomHunter, EventualCycleHunter)
 from .inverse import Inverse
 from .lookerup import (LookerUp,
-    EvolvedLookerUp0_0_1, EvolvedLookerUp0_0_2, EvolvedLookerUp0_0_3,
-    EvolvedLookerUp1_1_0, EvolvedLookerUp1_1_1, EvolvedLookerUp1_1_2,
-    EvolvedLookerUp1_1_3, EvolvedLookerUp1_1_4, EvolvedLookerUp2_2_0,
-    EvolvedLookerUp2_2_1, EvolvedLookerUp2_2_2, EvolvedLookerUp2_2_3,
-    EvolvedLookerUp2_2_4, EvolvedLookerUp3_3_1, EvolvedLookerUp3_3_2,
-    EvolvedLookerUp3_3_3, EvolvedLookerUp4_4_1, EvolvedLookerUp4_4_2,
+    EvolvedLookerUp1_1_1, EvolvedLookerUp2_2_2,
     Winner12, Winner21)
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
@@ -64,7 +59,7 @@ from .negation import Negation
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
 from .prober import (CollectiveStrategy, Prober, Prober2, Prober3, Prober4,
                      HardProber, NaiveProber, RemorsefulProber)
-from .punisher import Punisher, InversePunisher
+from .punisher import Punisher, InversePunisher, LevelPunisher
 from .qlearner import (
     RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner)
 from .rand import Random
@@ -72,6 +67,7 @@ from .retaliate import (
     Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
     LimitedRetaliate3)
 from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
+from .shortmem import ShortMem
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
@@ -173,6 +169,7 @@ all_strategies = [
     InversePunisher,
     Joss,
     KnowledgeableWorseAndWorse,
+    LevelPunisher,
     LimitedRetaliate,
     LimitedRetaliate2,
     LimitedRetaliate3,
@@ -213,6 +210,7 @@ all_strategies = [
     RevisedDowning,
     Ripoff,
     RiskyQLearner,
+    ShortMem,
     Shubik,
     SlowTitForTwoTats,
     SneakyTitForTat,

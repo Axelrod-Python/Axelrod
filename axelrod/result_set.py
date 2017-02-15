@@ -1,13 +1,14 @@
+from collections import namedtuple, Counter
 import csv
+
+from numpy import mean, nanmedian, std
 import tqdm
 
-from collections import namedtuple, Counter
-from numpy import mean, nanmedian, std
-
+from axelrod.actions import Actions
+import axelrod.interaction_utils as iu
 from . import eigen
 from .game import Game
-import axelrod.interaction_utils as iu
-from axelrod import Actions
+
 
 C, D = Actions.C, Actions.D
 
@@ -31,7 +32,7 @@ class ResultSet(object):
     """A class to hold the results of a tournament."""
 
     def __init__(self, players, interactions, repetitions=False,
-                 progress_bar=True, game=None, num_interactions=False):
+                 progress_bar=True, game=None):
         """
         Parameters
         ----------
@@ -42,8 +43,6 @@ class ResultSet(object):
                 interactions (1 for each repetition)
             repetitions : int
                 The number of repetitions
-            num_interactions : int
-                The number of interactions
             game : axlerod.game
                 The particular game used.
             progress_bar : bool

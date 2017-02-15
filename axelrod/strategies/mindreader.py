@@ -1,13 +1,15 @@
 import inspect
 
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 from axelrod._strategy_utils import look_ahead
 
 
 C, D = Actions.C, Actions.D
 
 class MindReader(Player):
-    """A player that looks ahead at what the opponent will do and decides what to do."""
+    """A player that looks ahead at what the opponent will do and decides what
+    to do."""
 
     name = 'Mind Reader'
     classifier = {
@@ -45,8 +47,8 @@ class MindReader(Player):
 
 
 class ProtectedMindReader(MindReader):
-    """A player that looks ahead at what the opponent will do and decides what to do.
-    It is also protected from mind control strategies"""
+    """A player that looks ahead at what the opponent will do and decides what
+    to do. It is also protected from mind control strategies"""
 
     name = 'Protected Mind Reader'
     classifier = {
@@ -68,8 +70,8 @@ class ProtectedMindReader(MindReader):
             self.__dict__[name] = val
 
 class MirrorMindReader(ProtectedMindReader):
-    """A player that will mirror whatever strategy it is playing against by cheating
-    and calling the opponent's strategy function instead of its own."""
+    """A player that will mirror whatever strategy it is playing against by
+    cheating and calling the opponent's strategy function instead of its own."""
 
     name = 'Mirror Mind Reader'
 
@@ -78,16 +80,16 @@ class MirrorMindReader(ProtectedMindReader):
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
-        'inspects_source': True, # reading and copying the source of the component
-        'manipulates_source': True, # changing own source dynamically
+        'inspects_source': True,  # Reads and copies the source of the opponent
+        'manipulates_source': True,  # Changes own source dynamically
         'manipulates_state': False
     }
 
     def strategy(self, opponent):
         """Will read the mind of the opponent and play the opponent's strategy.
 
-        Also avoid infinite recursion when called by itself or another mind reader
-        or bender by cooperating.
+        Also avoid infinite recursion when called by itself or another mind
+        reader or bender by cooperating.
         """
 
         curframe = inspect.currentframe()

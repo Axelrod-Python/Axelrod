@@ -1,4 +1,5 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions, Action
+from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
 
@@ -18,7 +19,7 @@ class Cooperator(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         return C
 
 
@@ -37,7 +38,7 @@ class TrickyCooperator(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         """Almost always cooperates, but will try to trick the opponent by defecting.
 
         Defect once in a while in order to get a better payout, when the opponent

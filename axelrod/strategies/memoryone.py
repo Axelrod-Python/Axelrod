@@ -1,4 +1,6 @@
-from axelrod import Actions, Player, random_choice
+from axelrod.actions import Actions
+from axelrod.player import Player
+from axelrod.random_ import random_choice
 
 
 C, D = Actions.C, Actions.D
@@ -53,9 +55,11 @@ class MemoryOnePlayer(Player):
 
     def set_four_vector(self, four_vector):
         if not all(0 <= p <= 1 for p in four_vector):
-            raise ValueError('An element in the probability vector, %s, is not between 0 and 1.' % str(four_vector))
+            raise ValueError("An element in the probability vector, {}, is not "
+                             "between 0 and 1.".format(str(four_vector)))
 
-        self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)], map(float, four_vector)))
+        self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)],
+                                     map(float, four_vector)))
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent):
@@ -168,8 +172,8 @@ class GTFT(MemoryOnePlayer):
 
 
 class FirmButFair(MemoryOnePlayer):
-    """A strategy that cooperates on the first move, and cooperates except after receiving a
-    sucker payoff.
+    """A strategy that cooperates on the first move, and cooperates except after
+    receiving a sucker payoff.
 
     Names:
 

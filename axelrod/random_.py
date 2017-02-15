@@ -1,14 +1,13 @@
 import random
 import numpy
-from axelrod import Actions
+from axelrod.actions import Action, Actions
 
 
-def random_choice(p=0.5):
+def random_choice(p: float = 0.5) -> Action:
     """
     Return 'C' with probability `p`, else return 'D'
 
-    Emulates Python's random.choice(['C', 'D']) since it is not consistent
-    across Python 2.7 to Python 3.4
+    No random sample is carried out if p is 0 or 1.
 
     Parameters
     ----------
@@ -32,7 +31,7 @@ def random_choice(p=0.5):
     return Actions.D
 
 
-def randrange(a, b):
+def randrange(a: int, b: int) -> int:
     """Python 2 / 3 compatible randrange. Returns a random integer uniformly
     between a and b (inclusive)"""
     c = b - a

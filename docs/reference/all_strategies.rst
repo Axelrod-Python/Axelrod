@@ -132,6 +132,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.sequence_player
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.shortmem
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.titfortat
    :members:
    :undoc-members:

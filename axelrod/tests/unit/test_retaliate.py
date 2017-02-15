@@ -1,8 +1,7 @@
-"""Test for the retaliate strategy."""
+"""Tests for the retaliate strategy."""
 
 import axelrod
-
-from .test_player import TestPlayer
+from .test_player import TestPlayer, TestOpponent
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -22,16 +21,14 @@ class TestRetaliate(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """If opponent has defected more than 10 percent of the time, defect."""
+        # If opponent has defected more than 10 percent of the time, defect.
         P1 = axelrod.Retaliate()
         P2 = axelrod.Player()
-        self.responses_test([C] * 4, [C] * 4, [C])
-        self.responses_test([C, C, C, C, D], [C, C, C, D, C], [D])
-        self.responses_test([C] * 6, [C] * 5 + [D], [D])
+        self.responses_test([C], [C] * 4, [C] * 4)
+        self.responses_test([D], [C, C, C, C, D], [C, C, C, D, C])
+        self.responses_test([D], [C] * 6, [C] * 5 + [D])
 
 
 class TestLimitedRetaliate(TestPlayer):
@@ -49,38 +46,28 @@ class TestLimitedRetaliate(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
 
-    def test_effect_of_strategy(self):
-        P1 = axelrod.LimitedRetaliate()
-        P2 = axelrod.Player()
         # If opponent has never defected, co-operate
-        self.responses_test([C] * 4, [C] * 4, [C])
-        self.assertFalse(P1.retaliating)
+        self.responses_test([C], [C] * 4, [C] * 4, attrs={"retaliating": False})
 
-        # If opponent has previously defected and won,
-        # defect and be not retaliating
-        self.responses_test([C, C, C, C, D], [C, C, C, D, C], [D])
-        self.assertFalse(P1.retaliating)
+        # Retaliate after a (C, D) round.
+        self.responses_test([D], [C, C, C, C, D], [C, C, C, D, C],
+                            attrs={"retaliating": True})
+        self.responses_test([D], [C, C, C, C, C, C], [C, C, C, C, C, D],
+                            attrs={"retaliating": True})
 
         # Case were retaliation count is less than limit: cooperate, reset
         # retaliation count and be not retaliating
+        P1 = self.player()
+        P2 = TestOpponent()
         P1.history = [C, C, C, D, C]
         P2.history = [D, D, D, C, D]
         P1.retaliation_count = 1
         P1.retaliation_limit = 0
         self.assertEqual(P1.strategy(P2), C)
         self.assertEqual(P1.retaliation_count, 0)
-        self.assertFalse(P1.retaliating)
-
-        # If opponent has previously defected and won, defect and
-        # be not retaliating
-        self.responses_test([C, C, C, C, D], [C, C, C, D, C], [D])
-        self.assertFalse(P1.retaliating)
-
-        # If opponent has just defected and won, defect and be not retaliating
-        self.responses_test([C, C, C, C, C, C], [C, C, C, C, C, D], [D])
         self.assertFalse(P1.retaliating)
 
         # If I've hit the limit for retaliation attempts, co-operate
@@ -96,6 +83,5 @@ class TestLimitedRetaliate(TestPlayer):
         P1.retaliating = True
         P1.retaliation_count = 4
         P1.reset()
-        self.assertEqual(P1.history, [])
         self.assertFalse(P1.retaliating)
         self.assertEqual(P1.retaliation_count, 0)

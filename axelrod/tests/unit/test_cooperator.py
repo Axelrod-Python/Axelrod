@@ -1,7 +1,6 @@
-"""Test for the cooperator strategy."""
+"""Tests for the Cooperator strategy."""
 
 import axelrod
-
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -21,12 +20,9 @@ class TestCooperator(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Cooperates always.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Simply does the opposite to what the strategy did last time."""
-        self.markov_test([C, C, C, C])
+        self.second_play_test(C, C, C, C)
 
 
 class TestTrickyCooperator(TestPlayer):
@@ -43,13 +39,11 @@ class TestTrickyCooperator(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by cooperating."""
+        # Starts by cooperating.
         self.first_play_test(C)
-
-    def test_effect_of_strategy(self):
-        """Test if it tries to trick opponent"""
-        self.responses_test([C, C, C], [C, C, C], [D])
-        self.responses_test([C, C, C, D, D], [C, C, C, C, D], [C])
+        # Test if it tries to trick opponent.
+        self.responses_test([D], [C, C, C], [C, C, C])
+        self.responses_test([C], [C, C, C, D, D], [C, C, C, C, D])
         history = [C, C, C, D, D] + [C] * 11
         opponent_history = [C, C, C, C, D] + [D] + [C] * 10
-        self.responses_test(history, opponent_history, [D])
+        self.responses_test([D], history, opponent_history)

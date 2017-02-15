@@ -1,16 +1,9 @@
-from functools import partial
 from itertools import product
-import sys
 
-from axelrod import Actions, Player, init_args, load_lookerup_tables
+from axelrod.actions import Actions
+from axelrod.player import Player
 
-module = sys.modules[__name__]
 C, D = Actions.C, Actions.D
-
-# Dictionary of table patterns
-# Keys are (name, plays, op_plays, op_start_plays)
-patterns = load_lookerup_tables()
-
 
 def create_lookup_table_keys(plays, op_plays, op_start_plays):
     """Creates the keys for a lookup table."""
@@ -99,11 +92,19 @@ class LookerUp(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, lookup_table=None, initial_actions=None):
+    def __init__(self, lookup_table=None, initial_actions=None,
+                 lookup_pattern=None, parameters=None):
         """
         If no lookup table is provided to the constructor, then use the TFT one.
         """
         super().__init__()
+
+        if lookup_pattern is not None:
+            plays, op_plays, op_start_plays = parameters
+            lookup_table = create_lookup_table_from_pattern(plays,
+                                                            op_plays,
+                                                            op_start_plays,
+                                                        pattern=lookup_pattern)
 
         if not lookup_table:
             lookup_table = {
@@ -165,23 +166,31 @@ class LookerUp(Player):
         return action
 
 
-# Create several classes at runtime based on the data in the look up tables
-# loaded above, one for each key.
+class EvolvedLookerUp1_1_1(LookerUp):
+    """
+    A 1 1 1 Lookerup trained with an evolutionary algorithm.
 
-for k, (initial, pattern) in patterns.items():
-    name, plays, op_plays, op_start_plays = k
-    table = create_lookup_table_from_pattern(
-        plays, op_plays, op_start_plays, pattern)
-    class_name = "EvolvedLookerUp{}{}_{}_{}".format(
-        name, plays, op_plays, op_start_plays)
-    # Dynamically create the class
-    new_class = type(class_name, (LookerUp,), {})
-    new_class.__init__ = init_args(partial(
-        new_class.__init__, lookup_table=table, initial_actions=initial))
-    new_class.name = class_name
-    # Add the generated class to the module dictionary so it can be
-    # imported into other modules
-    setattr(module, class_name, new_class)
+    Names:
+        - Evolved Lookerup 1 1 1: Original name by Marc Harper
+    """
+    name = "EvolvedLookerUp1_1_1"
+    def __init__(self):
+        super().__init__(parameters=(1, 1, 1), lookup_pattern='CDDDDDCD',
+                         initial_actions=(C,))
+
+
+class EvolvedLookerUp2_2_2(LookerUp):
+    """
+    A 2 2 2 Lookerup trained with an evolutionary algorithm.
+
+    Names:
+        - Evolved Lookerup 2 2 2: Original name by Marc Harper
+    """
+    name = "EvolvedLookerUp2_2_2"
+    def __init__(self):
+        pattern = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
+        super().__init__(parameters=(2, 2, 2), lookup_pattern=pattern,
+                         initial_actions=(C, C))
 
 
 class Winner12(LookerUp):
@@ -192,16 +201,10 @@ class Winner12(LookerUp):
         - Winner12 [Mathieu2015]_
     """
     name = "Winner12"
-
     def __init__(self):
-        lookup_table_keys = create_lookup_table_keys(
-            plays=1, op_plays=2, op_start_plays=0)
-
         pattern = 'CDCDDCDD'
-        # Zip together the keys and the action pattern to get the lookup table.
-        lookup_table = dict(zip(lookup_table_keys, pattern))
-        super().__init__(lookup_table=lookup_table,
-                          initial_actions=(C, C))
+        super().__init__(parameters=(1, 2, 0), lookup_pattern=pattern,
+                         initial_actions=(C, C))
 
 
 class Winner21(LookerUp):
@@ -212,13 +215,7 @@ class Winner21(LookerUp):
         - Winner21 [Mathieu2015]_
     """
     name = "Winner21"
-
     def __init__(self):
-        lookup_table_keys = create_lookup_table_keys(
-            plays=2, op_plays=1, op_start_plays=0)
-
         pattern = 'CDCDCDDD'
-        # Zip together the keys and the action pattern to get the lookup table.
-        lookup_table = dict(zip(lookup_table_keys, pattern))
-        super().__init__(lookup_table=lookup_table,
-                          initial_actions=(D, C))
+        super().__init__(parameters=(1, 2, 0), lookup_pattern=pattern,
+                         initial_actions=(D, C))

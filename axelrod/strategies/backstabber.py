@@ -1,5 +1,7 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 from axelrod.strategy_transformers import FinalTransformer
+from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -23,12 +25,13 @@ class BackStabber(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         if not opponent.history:
             return C
         if opponent.defections > 3:
             return D
         return C
+
 
 @FinalTransformer((D, D), name_prefix=None) # End with two defections
 class DoubleCrosser(Player):
@@ -50,7 +53,7 @@ class DoubleCrosser(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         cutoff = 6
 
         if not opponent.history:

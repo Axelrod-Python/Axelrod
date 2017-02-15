@@ -1,4 +1,5 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions, Action
+from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
 
@@ -19,8 +20,8 @@ class Grumpy(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, starting_state='Nice', grumpy_threshold=10,
-                 nice_threshold=-10):
+    def __init__(self, starting_state: str ='Nice', grumpy_threshold: int =10,
+                 nice_threshold: int =-10) -> None:
         """
         Parameters
         ----------
@@ -33,35 +34,36 @@ class Grumpy(Player):
             nice
         """
         super().__init__()
-        self.history = []
         self.state = starting_state
         self.starting_state = starting_state
         self.grumpy_threshold = grumpy_threshold
         self.nice_threshold = nice_threshold
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """A player that gets grumpier the more the opposition defects,
         and nicer the more they cooperate.
 
-        Starts off Nice, but becomes grumpy once the grumpiness threshold is hit.
-        Won't become nice once that grumpy threshold is hit, but must reach a much lower threshold before it becomes nice again.
+        Starts off Nice, but becomes grumpy once the grumpiness threshold is
+        hit. Won't become nice once that grumpy threshold is hit, but must
+        reach a much lower threshold before it becomes nice again.
         """
 
-        self.grumpiness = opponent.defections - opponent.cooperations
+        grumpiness = opponent.defections - opponent.cooperations
 
         if self.state == 'Nice':
-            if self.grumpiness > self.grumpy_threshold:
+            if grumpiness > self.grumpy_threshold:
                 self.state = 'Grumpy'
                 return D
             return C
 
         if self.state == 'Grumpy':
-            if self.grumpiness < self.nice_threshold:
+            if grumpiness < self.nice_threshold:
                 self.state = 'Nice'
                 return C
             return D
 
     def reset(self):
-        """Resets score, history and state for the next round of the tournement."""
+        """Resets score, history and state for the next round of the
+        tournament."""
         super().reset()
         self.state = self.starting_state

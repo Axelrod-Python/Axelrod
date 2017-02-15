@@ -1,4 +1,5 @@
-from axelrod import Actions, Player, init_args
+from axelrod.actions import Actions, Action
+from axelrod.player import Player, init_args
 
 import copy
 
@@ -20,12 +21,12 @@ class AntiCycler(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.cycle_length = 1
         self.cycle_counter = 0
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if self.cycle_counter < self.cycle_length:
             self.cycle_counter += 1
             return Actions.C
@@ -55,7 +56,7 @@ class Cycler(Player):
     }
 
     @init_args
-    def __init__(self, cycle="CCD"):
+    def __init__(self, cycle="CCD") -> None:
         """This strategy will repeat the parameter `cycle` endlessly,
         e.g. C C D C C D C C D ...
 
@@ -71,7 +72,7 @@ class Cycler(Player):
         self.name = "Cycler {}".format(cycle)
         self.classifier['memory_depth'] = len(cycle) - 1
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         curent_round = len(self.history)
         index = curent_round % len(self.cycle)
         return self.cycle[index]
@@ -84,7 +85,7 @@ class CyclerDC(Cycler):
     classifier['memory_depth'] = 1
 
     @init_args
-    def __init__(self, cycle="DC"):
+    def __init__(self, cycle="DC") -> None:
         super().__init__(cycle=cycle)
 
 
@@ -95,7 +96,7 @@ class CyclerCCD(Cycler):
     classifier['memory_depth'] = 2
 
     @init_args
-    def __init__(self, cycle="CCD"):
+    def __init__(self, cycle="CCD") -> None:
         super().__init__(cycle=cycle)
 
 
@@ -106,7 +107,7 @@ class CyclerDDC(Cycler):
     classifier['memory_depth'] = 2
 
     @init_args
-    def __init__(self, cycle="DDC"):
+    def __init__(self, cycle="DDC") -> None:
         super().__init__(cycle=cycle)
 
 
@@ -117,7 +118,7 @@ class CyclerCCCD(Cycler):
     classifier['memory_depth'] = 3
 
     @init_args
-    def __init__(self, cycle="CCCD"):
+    def __init__(self, cycle="CCCD") -> None:
         super().__init__(cycle=cycle)
 
 
@@ -128,7 +129,7 @@ class CyclerCCCCCD(Cycler):
     classifier['memory_depth'] = 5
 
     @init_args
-    def __init__(self, cycle="CCCCCD"):
+    def __init__(self, cycle="CCCCCD") -> None:
         super().__init__(cycle=cycle)
 
 
@@ -139,5 +140,5 @@ class CyclerCCCDCD(Cycler):
     classifier['memory_depth'] = 5
 
     @init_args
-    def __init__(self, cycle="CCCDCD"):
+    def __init__(self, cycle="CCCDCD") -> None:
         super().__init__(cycle=cycle)

@@ -1,9 +1,8 @@
-"""Test for the inverse strategy."""
+"""Tests for the First Axelrod strategies."""
 
 import random
 
 import axelrod
-
 from .test_player import TestPlayer, test_four_vector
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -31,19 +30,19 @@ class TestDavis(TestPlayer):
 
     def test_strategy(self):
         # Cooperates for the first ten rounds
-        history1 = []
-        history2 = []
+        player_history = []
+        opponent_history = []
         for i in range(9):
-            history2.append(random.choice([C, D]))
-            history1.append(C)
-            self.responses_test(history1, history2, [C])
+            opponent_history.append(random.choice([C, D]))
+            player_history.append(C)
+            self.responses_test([C], player_history, opponent_history)
 
         # If opponent defects at any point then the player will defect forever
         # (after 10 rounds)
-        self.responses_test([C, D, D, D], [C, C, C, C], [C])
-        self.responses_test([C, C, D, D, D], [C, D, C, C, C], [C])
-        self.responses_test([C] * 10 + [C, C, D, D, D], [C] * 10 +
-                            [C, D, C, C, C], [D])
+        self.responses_test([C], [C, D, D, D], [C, C, C, C])
+        self.responses_test([C], [C, C, D, D, D], [C, D, C, C, C])
+        self.responses_test([D], [C] * 10 + [C, C, D, D, D],
+                            [C] * 10 + [C, D, C, C, C])
 
 
 class TestRevisedDowning(TestPlayer):
@@ -63,18 +62,18 @@ class TestRevisedDowning(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         self.responses_test([C], [C], [C])
-        self.responses_test([C], [D], [C])
-        self.responses_test([C, C], [C, C], [C])
-        self.responses_test([C, C], [C, D], [D])
-        self.responses_test([C, C], [D, C], [C])
-        self.responses_test([C, C], [D, D], [D])
-        self.responses_test([C, C, D], [C, D, C], [D])
-        self.responses_test([C, C, C], [D, C, C], [C])
-        self.responses_test([C, C, D], [C, D, D], [D])
-        self.responses_test([C, C, C], [D, C, D], [C])
-        self.responses_test([C, C, D, D], [C, D, D, D], [D])
-        self.responses_test([C, C, C, C], [D, C, D, C], [C])
-        self.responses_test([C, D, C, C, D, D], [C, C, C, C, D, D], [C])
+        self.responses_test([C], [C], [D])
+        self.responses_test([C], [C, C], [C, C])
+        self.responses_test([D], [C, C], [C, D])
+        self.responses_test([C], [C, C], [D, C])
+        self.responses_test([D], [C, C], [D, D])
+        self.responses_test([D], [C, C, D], [C, D, C])
+        self.responses_test([C], [C, C, C], [D, C, C])
+        self.responses_test([D], [C, C, D], [C, D, D])
+        self.responses_test([C], [C, C, C], [D, C, D])
+        self.responses_test([D], [C, C, D, D], [C, D, D, D])
+        self.responses_test([C], [C, C, C, C], [D, C, D, C])
+        self.responses_test([C], [C, D, C, C, D, D], [C, C, C, C, D, D])
 
     def test_not_revised(self):
         # Test not revised
@@ -102,7 +101,7 @@ class TestFeld(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         # Test retaliate
-        self.responses_test([C], [D], [D])
+        self.responses_test([D], [C], [D])
         self.responses_test([D], [D], [D])
         # Test cooperation probabilities
         p1 = self.player(start_coop_prob=1.0, end_coop_prob=0.8,
@@ -121,10 +120,12 @@ class TestFeld(TestPlayer):
         p1.history = [C] * 200
         self.assertEqual(0.5, p1._cooperation_probability())
         # Test beyond 200 rounds
-        history_1 = [C] * 200
-        history_2 = [C] * 200
-        self.responses_test(history_1, history_2, [C, C, D, D], random_seed=1)
-        self.responses_test(history_1, history_2, [D, D, D, D], random_seed=50)
+        player_history = [C] * 200
+        opponent_history = [C] * 200
+        self.responses_test([C, C, D, D], player_history, opponent_history,
+                            seed=1)
+        self.responses_test([D, D, D, D], player_history, opponent_history,
+                            seed=50)
 
 
 class TestGrofman(TestPlayer):
@@ -142,14 +143,13 @@ class TestGrofman(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([], [], [C, C])
-        self.responses_test([C, C], [C, C], [C])
-        self.responses_test([C, C], [C, D], [D])
-        self.responses_test([C] * 6, [C] * 6, [C])
-        self.responses_test([C] * 6, [D] * 6, [D])
-        self.responses_test([C] * 7, [C] * 7, [C])
-        self.responses_test([C] * 7, [D] * 7, [C], random_seed=1)
-        self.responses_test([C] * 7, [D] * 7, [D], random_seed=2)
+        self.responses_test([C, C, C])
+        self.responses_test([D], [C, C], [C, D])
+        self.responses_test([C], [C] * 6, [C] * 6)
+        self.responses_test([D], [C] * 6, [D] * 6)
+        self.responses_test([C], [C] * 7, [C] * 7)
+        self.responses_test([C], [C] * 7, [D] * 7, seed=1)
+        self.responses_test([D], [C] * 7, [D] * 7, seed=2)
 
 
 class TestJoss(TestPlayer):
@@ -171,8 +171,8 @@ class TestJoss(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.responses_test([C], [C], [D], random_seed=2)
-        self.responses_test([C], [D], [D], random_seed=4)
+        self.responses_test([D], [C], [C], seed=2)
+        self.responses_test([D], [C], [D], seed=4)
 
 
 class TestNydegger(TestPlayer):
@@ -211,20 +211,19 @@ class TestNydegger(TestPlayer):
     def test_strategy(self):
         # Test TFT-type initial play
         self.first_play_test(C)
-        self.responses_test([C], [C], [C])
-        self.responses_test([C, C], [C, C], [C])
-        self.responses_test([C], [D], [D])
-        self.responses_test([C, D], [D, C], [D])
-        self.responses_test([C, D], [D, D], [D])
+        self.responses_test([C, C], [C], [C])
+        self.responses_test([D], [C], [D])
+        self.responses_test([D], [C, D], [D, C])
+        self.responses_test([D], [C, D], [D, D])
 
         # Test trailing post-round 3 play
         for i in range(4, 9):
-            self.responses_test([C] * i, [C] * i, [C])
-            self.responses_test([D] * i, [D] * i, [C])
-            self.responses_test([C] * i + [C, D, C], [C] * i + [C, D, C], [C])
-            self.responses_test([C] * i + [D, C, D], [C] * i + [C, C, C], [D])
-            self.responses_test([C] * i + [D, C, C], [C] * i + [C, C, C], [D])
-            self.responses_test([C] * i + [C, C, C], [C] * i + [D, C, C], [C])
+            self.responses_test([C], [C] * i, [C] * i)
+            self.responses_test([C], [D] * i, [D] * i)
+            self.responses_test([C], [C] * i + [C, D, C], [C] * i + [C, D, C])
+            self.responses_test([D], [C] * i + [D, C, D], [C] * i + [C, C, C])
+            self.responses_test([D], [C] * i + [D, C, C], [C] * i + [C, C, C])
+            self.responses_test([C], [C] * i + [C, C, C], [C] * i + [D, C, C])
 
 
 class TestShubik(TestPlayer):
@@ -245,26 +244,26 @@ class TestShubik(TestPlayer):
         # Starts by Cooperating
         self.first_play_test(C)
         # Looks like Tit-For-Tat at first
-        self.markov_test([C, D, C, D])
+        self.second_play_test(C, D, C, D)
 
-    def test_effect_of_strategy(self):
-        """Plays a modified TFT."""
+        # Plays a modified TFT.
         self.responses_test([C, C, C], [C, C, C], [C, C, C])
         # Make sure that the retaliations are increasing
         # Retaliate once and forgive
-        self.responses_test([C], [D], [D])
-        self.responses_test([C, D], [D, C], [C])
-        self.responses_test([C, D, C], [D, C, C], [C])
+        self.responses_test([D], [C], [D])
+        self.responses_test([C], [C, D], [D, C])
+        self.responses_test([C], [C, D, C], [D, C, C])
         # Retaliate twice and forgive
-        self.responses_test([C, D, C], [D, C, D], [D, D])
-        self.responses_test([C, D, C, D, D], [D, C, D, C, C], [C])
-        # Opponent defection during retaliation doesn't increase retaliation period
-        self.responses_test([C, D, C, D, D], [D, C, D, D, C], [C])
+        self.responses_test([D, D], [C, D, C], [D, C, D])
+        self.responses_test([C], [C, D, C, D, D], [D, C, D, C, C])
+        # Opponent defection during retaliation doesn't increase retaliation
+        # period.
+        self.responses_test([C], [C, D, C, D, D], [D, C, D, D, C])
         # Retaliate thrice and forgive
-        self.responses_test([C, D, C, D, D, C], [D, C, D, C, C, D], [D, D, D])
-        history_1 = [C, D, C, D, D, C, D, D, D]
-        history_2 = [D, C, D, C, C, D, C, C, C]
-        self.responses_test(history_1, history_2, [C])
+        self.responses_test([D, D, D], [C, D, C, D, D, C], [D, C, D, C, C, D])
+        player_history = [C, D, C, D, D, C, D, D, D]
+        opponent_history = [D, C, D, C, C, D, C, C, C]
+        self.responses_test([C], player_history, opponent_history)
 
 
 class TestTullock(TestPlayer):
@@ -285,23 +284,25 @@ class TestTullock(TestPlayer):
         """Cooperates for first ten rounds"""
         self.first_play_test(C)
         for i in range(10):
-            history_1 = [C] * i
-            history_2 = [C] * i
-            self.responses_test(history_1, history_2, [C])
+            player_history = [C] * i
+            opponent_history = [C] * i
+            self.responses_test([C], player_history, opponent_history)
         # Now cooperate 10% less than opponent
-        history_1 = [C] * 11
-        history_2 = [D] * 11
-        self.responses_test(history_1, history_2, [D], random_seed=10)
-        history_1 = [C] * 11
-        history_2 = [D] * 10 + [C]
-        self.responses_test(history_1, history_2, [D], random_seed=10)
+        player_history = [C] * 11
+        opponent_history = [D] * 11
+        self.responses_test([D], player_history, opponent_history, seed=10)
+        player_history = [C] * 11
+        opponent_history = [D] * 10 + [C]
+        self.responses_test([D], player_history, opponent_history, seed=10)
         # Test beyond 10 rounds
-        history_1 = [C] * 11
-        history_2 = [D] * 5 + [C] * 6
-        self.responses_test(history_1, history_2, [D, D, D, D], random_seed=20)
-        history_1 = [C] * 11
-        history_2 = [C] * 9 + [D] * 2
-        self.responses_test(history_1, history_2, [C, D, D, C], random_seed=25)
+        player_history = [C] * 11
+        opponent_history = [D] * 5 + [C] * 6
+        self.responses_test([D, D, D, D], player_history, opponent_history,
+                            seed=20)
+        player_history = [C] * 11
+        opponent_history = [C] * 9 + [D] * 2
+        self.responses_test([C, D, D, C], player_history, opponent_history,
+                            seed=25)
 
 
 class TestUnnamedStrategy(TestPlayer):
@@ -319,4 +320,4 @@ class TestUnnamedStrategy(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([], [], [C, C, D, C, C, D], random_seed=10)
+        self.responses_test([C, C, D, C, C, D], seed=10)

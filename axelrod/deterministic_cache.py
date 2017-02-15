@@ -1,11 +1,17 @@
 from collections import UserDict
 import pickle
+from typing import List, Tuple
 
-from axelrod import Player
+from .actions import Action
+from .player import Player
+
+
+CachePlayerKey = Tuple[Player, Player, int]
+CacheKey = Tuple[str, str, int]
 
 
 class DeterministicCache(UserDict):
-    """A class to cache the results of deterministic matches
+    """A class to cache the results of deterministic matches.
 
     For fixed length matches with no noise between pairs of deterministic
     players, the results will always be the same. We can hold those results
@@ -29,7 +35,7 @@ class DeterministicCache(UserDict):
     methods to save/load the cache to/from a file.
     """
 
-    def __init__(self, file_name=None):
+    def __init__(self, file_name: str=None) -> None:
         """
         Parameters
         ----------
@@ -41,7 +47,8 @@ class DeterministicCache(UserDict):
         if file_name is not None:
             self.load(file_name)
 
-    def _key_transform(self, key):
+    @staticmethod
+    def _key_transform(key: CachePlayerKey) -> CacheKey:
         """
         Parameters
         ----------
@@ -50,16 +57,16 @@ class DeterministicCache(UserDict):
         """
         return key[0].name, key[1].name, key[2]
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: CachePlayerKey):
         return super().__delitem__(self._key_transform(key))
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: CachePlayerKey) -> List[Tuple[Action, Action]]:
         return super().__getitem__(self._key_transform(key))
 
     def __contains__(self, key):
         return super().__contains__(self._key_transform(key))
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: CachePlayerKey, value):
         """Overrides the UserDict.__setitem__ method in order to validate
         the key/value and also to set the turns attribute"""
         if not self.mutable:
@@ -67,7 +74,8 @@ class DeterministicCache(UserDict):
 
         if not self._is_valid_key(key):
             raise ValueError(
-                'Key must be a tuple of 2 deterministic axelrod Player classes and an integer')
+                "Key must be a tuple of 2 deterministic axelrod Player classes "
+                "and an integer")
 
         if not self._is_valid_value(value):
             raise ValueError(
@@ -75,8 +83,9 @@ class DeterministicCache(UserDict):
 
         super().__setitem__(self._key_transform(key), value)
 
-    def _is_valid_key(self, key):
-        """Validate a proposed dictionary key
+    @staticmethod
+    def _is_valid_key(key: CachePlayerKey) -> bool:
+        """Validate a proposed dictionary key.
 
         Parameters
         ----------
@@ -112,8 +121,9 @@ class DeterministicCache(UserDict):
 
         return True
 
-    def _is_valid_value(self, value):
-        """Validate a proposed dictionary value
+    @staticmethod
+    def _is_valid_value(value: List) -> bool:
+        """Validate a proposed dictionary value.
 
         Parameters
         ----------
@@ -129,8 +139,8 @@ class DeterministicCache(UserDict):
 
         return True
 
-    def save(self, file_name):
-        """Serialise the cache dictionary to a file
+    def save(self, file_name: str) -> bool:
+        """Serialise the cache dictionary to a file.
 
         Parameters
         ----------
@@ -141,8 +151,8 @@ class DeterministicCache(UserDict):
             pickle.dump(self.data, io)
         return True
 
-    def load(self, file_name):
-        """Load a previously saved cache into the dictionary
+    def load(self, file_name: str) -> bool:
+        """Load a previously saved cache into the dictionary.
 
         Parameters
         ----------
@@ -156,5 +166,6 @@ class DeterministicCache(UserDict):
             self.data = data
         else:
             raise ValueError(
-                'Cache file exists but is not the correct format. Try deleting and re-building the cache file.')
+                "Cache file exists but is not the correct format. "
+                "Try deleting and re-building the cache file.")
         return True

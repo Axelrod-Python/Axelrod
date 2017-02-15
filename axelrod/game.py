@@ -1,12 +1,15 @@
-from axelrod import Actions
+from .actions import Action, Actions
+from typing import Tuple, Union
 
 C, D = Actions.C, Actions.D
+
+Score = Union[int, float]
 
 
 class Game(object):
     """A class to hold the game matrix and to score a game accordingly."""
 
-    def __init__(self, r=3, s=0, t=5, p=1):
+    def __init__(self, r: Score=3, s: Score=0, t: Score=5, p: Score=1) -> None:
         self.scores = {
             (C, C): (r, r),
             (D, D): (p, p),
@@ -14,7 +17,7 @@ class Game(object):
             (D, C): (t, s),
         }
 
-    def RPST(self):
+    def RPST(self) -> Tuple[Score, Score, Score, Score]:
         """Return the values in the game matrix in the Press and Dyson
         notation."""
         R = self.scores[(C, C)][0]
@@ -23,7 +26,7 @@ class Game(object):
         T = self.scores[(D, C)][0]
         return (R, P, S, T)
 
-    def score(self, pair):
+    def score(self, pair: Tuple[Action, Action]) -> Tuple[Score, Score]:
         """Return the appropriate score for decision pair.
 
         Returns the appropriate score (as a tuple) from the scores dictionary
@@ -32,7 +35,8 @@ class Game(object):
         """
         return self.scores[pair]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "Axelrod game: (R,P,S,T) = {}".format(self.RPST())
+
 
 DefaultGame = Game()

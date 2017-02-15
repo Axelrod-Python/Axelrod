@@ -1,13 +1,7 @@
-"""Test for the gradual killer strategy."""
+"""Tests for the Gradual Killer strategy."""
 
 import axelrod
-from .test_player import TestHeadsUp, TestPlayer
-
-from hypothesis import given
-from hypothesis.strategies import integers
-from axelrod.tests.property import strategy_lists
-
-import random
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -26,13 +20,11 @@ class TestGradualKiller(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by Defecting."""
+        # Starts by defecting.
         self.first_play_test(D)
-
-    def test_effect_of_strategy(self):
-        """Fist seven moves."""
-        self.markov_test([D, D, D, D])
-        self.responses_test([], [], [D, D, D, D, D, C, C])
+        self.second_play_test(D, D, D, D)
+        # First seven moves.
+        self.responses_test([D, D, D, D, D, C, C])
 
     def test_effect_of_strategy_with_history_CC(self):
         """Continues with C if opponent played CC on 6 and 7."""
@@ -85,7 +77,7 @@ class TestGradualKiller(TestPlayer):
         P2.history = [C, C, C, C, C, D, C, C, D, C]
         self.assertEqual(P1.strategy(P2), 'C')
 
-    def test_effect_of_strategy_with_history_CC(self):
+    def test_effect_of_strategy_with_history_DD(self):
         """Continues with D if opponent played DD on 6 and 7."""
         P1 = axelrod.GradualKiller()
         P2 = axelrod.Player()

@@ -1,4 +1,5 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
 
@@ -10,7 +11,7 @@ class Doubler(Player):
 
     Names:
 
-    - doubler: [PRISON1998]_
+    - Doubler: [PRISON1998]_
     """
 
     name = 'Doubler'

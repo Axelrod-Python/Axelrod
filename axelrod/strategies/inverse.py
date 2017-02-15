@@ -1,4 +1,6 @@
-from axelrod import Actions, Player, random_choice
+from axelrod.actions import Actions, Action
+from axelrod.player import Player
+from axelrod.random_ import random_choice
 
 C, D = Actions.C, Actions.D
 
@@ -19,13 +21,14 @@ class Inverse(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         """Looks at opponent history to see if they have defected.
 
         If so, player defection is inversely proportional to when this occurred.
         """
 
-        index = next((index for index, value in enumerate(opponent.history, start=1) if value == D), None)
+        index = next((index for index, value in
+                      enumerate(opponent.history, start=1) if value == D), None)
 
         if index is None:
             return C

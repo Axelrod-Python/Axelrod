@@ -1,4 +1,5 @@
-from axelrod import Actions, Player
+from axelrod.actions import Actions
+from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
 
@@ -67,8 +68,9 @@ class Punisher(Player):
 
 class InversePunisher(Player):
     """
-    An inverted version of Punisher. Similarly the player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after mem_length matches, with 1 <= mem_length <= 20. This time mem_length is
+    An inverted version of Punisher. The player starts by cooperating however
+    will defect if at any point the opponent has defected, and forgets after
+    mem_length matches, with 1 <= mem_length <= 20. This time mem_length is
     proportional to the amount of time the opponent has played C.
 
     Names:
@@ -96,7 +98,9 @@ class InversePunisher(Player):
 
     def strategy(self, opponent):
         """
-        Begins by playing C, then plays D for an amount of rounds proportional to the opponents historical '%' of playing C if the opponent ever plays D
+        Begins by playing C, then plays D for an amount of rounds proportional
+        to the opponents historical '%' of playing C if the opponent ever plays
+        D.
         """
 
         if self.grudge_memory >= self.mem_length:
@@ -120,3 +124,33 @@ class InversePunisher(Player):
         self.grudged = False
         self.grudge_memory = 0
         self.mem_length = 1
+
+class LevelPunisher(Player):
+    """
+    A player starts by cooperating however, after 10 rounds 
+    will defect if at any point the number of defections 
+    by an opponent is greater than 20%.
+    
+    Names:
+
+    - Level Punisher: Name from CoopSim https://github.com/jecki/CoopSim
+    """
+
+    name = 'Level Punisher'
+    classifier = {
+        'memory_depth': float('inf'), # Long Memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent):
+        if len(opponent.history) < 10:
+            return C
+        elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.2:
+            return D
+        else:
+            return C

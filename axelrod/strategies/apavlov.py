@@ -1,4 +1,6 @@
-from axelrod import Actions, Player
+
+from axelrod.actions import Actions, Action
+from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
 
@@ -14,7 +16,7 @@ class APavlov2006(Player):
     uncooperative opponents.
     """
 
-    name = "Adapative Pavlov 2006"
+    name = "Adaptive Pavlov 2006"
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -25,11 +27,11 @@ class APavlov2006(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.opponent_class = None
+        self.opponent_class = ""
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # TFT for six rounds
         if len(self.history) < 6:
             return D if opponent.history[-1:] == [D] else C
@@ -81,7 +83,7 @@ class APavlov2011(Player):
     uncooperative opponents.
     """
 
-    name = "Adapative Pavlov 2011"
+    name = "Adaptive Pavlov 2011"
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -92,11 +94,11 @@ class APavlov2011(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.opponent_class = None
+        self.opponent_class = ""
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # TFT for six rounds
         if len(self.history) < 6:
             return D if opponent.history[-1:] == [D] else C
