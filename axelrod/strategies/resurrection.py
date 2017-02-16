@@ -5,7 +5,7 @@ from axelrod.strategy_transformers import TrackHistoryTransformer
 C, D = Actions.C, Actions.D
 
 
-class TitForTat(Player):
+class Resurrection(Player):
     """
     A player starts by cooperating and then defects if there are five
     consecutive defects by the player.
