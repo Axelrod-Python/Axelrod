@@ -14,7 +14,7 @@ class SelfSteem(Player):
     with the current iteration.
     
     If f > 0.95, 'ego' of the algorithm is inflated; always defects.
-    If 0.95 > |f| > 0.3, rational behavior; follows TitForTat algortithm.
+    If 0.95 > abs(f) > 0.3, rational behavior; follows TitForTat algortithm.
     If 0.3 > f > -0.3; random behavior.
     If f < -0.95, algorithm is at rock bottom; always cooperates.
     
