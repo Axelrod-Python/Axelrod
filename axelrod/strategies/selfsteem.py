@@ -17,6 +17,10 @@ class SelfSteem(Player):
     If 0.95 > |f| > 0.3, rational behavior; follows TitForTat algortithm.
     If 0.3 > f > -0.3; random behavior.
     If f < -0.95, algorithm is at rock bottom; always cooperates.
+    
+    Names:
+    
+    - SelfSteem: [Andre2013]_
     """
 
     name = 'SelfSteem'
@@ -32,7 +36,7 @@ class SelfSteem(Player):
 
     def strategy(self, opponent: Player) -> Action:
         turns_number = len(self.history)
-        sine_value =  sin(2*pi*turns_number/10)
+        sine_value =  sin( 2 * pi * turns_number / 10 )
           
         if sine_value > 0.95:
             return D
