@@ -67,6 +67,7 @@ from .retaliate import (
     Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
     LimitedRetaliate3)
 from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
+from .selfsteem import SelfSteem
 from .shortmem import ShortMem
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
@@ -210,6 +211,7 @@ all_strategies = [
     RevisedDowning,
     Ripoff,
     RiskyQLearner,
+    SelfSteem,
     ShortMem,
     Shubik,
     SlowTitForTwoTats,
