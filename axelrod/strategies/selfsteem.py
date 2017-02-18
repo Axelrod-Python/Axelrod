@@ -45,7 +45,7 @@ class SelfSteem(Player):
             return opponent.history[-1]
         
         elif sine_value < 0.3 and sine_value > -0.3:
-            return random.choice((C, D))
+            return random_choice()
             
         else:
             return C
