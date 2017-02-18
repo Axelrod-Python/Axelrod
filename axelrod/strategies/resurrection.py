@@ -27,7 +27,7 @@ class Resurrection(Player):
     }
 
     def strategy(self, opponent):
-        if self.history:
+        if len(self.history) == 0:
             return C
         if len(self.history) >= 5 and self.history[-5:] == [D,D,D,D,D]:
             return D
