@@ -23,6 +23,6 @@ class Resurrection(TestPlayer):
         self.first_play_test(C)
         
         # Check if the turns played are greater than 5 
-        self.responses_test([D], [C, D, D, D, D, D, C, D] , [C] * 8)
+        self.responses_test([D], [D, D, D, D, D, C, C, D] , [C] * 8)
         
         
