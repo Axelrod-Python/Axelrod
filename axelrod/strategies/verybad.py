@@ -8,7 +8,12 @@ class VeryBad(Player):
     It cooperates in the first three rounds, and uses probability
     (it implements a memory, which stores the opponent’s moves) to decide for
     cooperating or defecting.
-        
+    Due to a lack of information as to what that probability refers to in this
+    context, probability(P(X)) refers to (Count(X)/Total_Moves) in this
+    implementation
+    P(C) = Cooperations / Total_Moves
+    P(D) = Defections / Total_Moves = 1 - P(C)
+    
     Names:
     
     - VeryBad: [Andre2013]_
@@ -34,7 +39,7 @@ class VeryBad(Player):
         total_moves = len(opponent.history)
         cooperations = opponent.cooperations
         
-        cooperation_probability = cooperations / (total_moves * 1.0)
+        cooperation_probability = cooperations / total_moves
         
         if cooperation_probability > 0.5:
             return C
