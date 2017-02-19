@@ -175,10 +175,7 @@ def compute_state_to_action_distribution(interactions):
 
 def compute_normalised_state_to_action_distribution(interactions):
     """
-    Returns the normalised count of each state to action
-    for a set of interactions.
-
-    Returns a list (for each player) of normlised counts of each state to action
+    Returns a list (for each player) of normalised counts of each state to action
     pair for a set of interactions. A state to action pair is of the form:
 
     ((C, D), C)
