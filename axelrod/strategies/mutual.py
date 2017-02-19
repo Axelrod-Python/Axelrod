@@ -1,4 +1,4 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
@@ -23,7 +23,7 @@ class Desperate(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
             return random_choice()
         if self.history[-1] == D and opponent.history[-1] == D:
@@ -49,7 +49,7 @@ class Hopeless(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
             return random_choice()
         if self.history[-1] == C and opponent.history[-1] == C:
@@ -75,7 +75,7 @@ class Willing(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
             return random_choice()
         if self.history[-1] == D and opponent.history[-1] == D:
