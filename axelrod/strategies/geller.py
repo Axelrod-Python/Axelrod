@@ -1,6 +1,6 @@
 import inspect
 
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
@@ -42,7 +42,7 @@ class Geller(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Look at what the opponent will play in the next round and choose a strategy
         that gives the least jail time, which is is equivalent to playing the same
