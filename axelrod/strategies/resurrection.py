@@ -1,14 +1,13 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
-from axelrod.strategy_transformers import TrackHistoryTransformer
 
 C, D = Actions.C, Actions.D
 
 
 class Resurrection(Player):
     """
-    A player starts by cooperating and then defects if there are five
-    consecutive defects by the player.
+    A player starts by cooperating and defects if the the number of rounds 
+    played by the player is greater than five and last five rounds are defections.
     
     Names:
     - Resurrection: Name from CoopSim https://github.com/jecki/CoopSim     
@@ -26,7 +25,7 @@ class Resurrection(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0:
             return C
         if len(self.history) >= 5 and self.history[-5:] == [D,D,D,D,D]:
