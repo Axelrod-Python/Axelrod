@@ -137,8 +137,19 @@ def compute_normalised_state_distribution(interactions):
 
 def compute_state_to_action_distribution(interactions):
     """
-    Returns the count of each state to action
-    for a set of interactions.
+    Returns a list (for each player) of counts of each state to action pair
+    for a set of interactions. A state to action pair is of the form:
+
+    ((C, D), C)
+
+    Implying that from a state of (C, D) (the first player having played C and
+    the second playing D) the player in question then played C.
+
+    The following counter object, implies that the player in question was in
+    state (C, D) for a total of 12 times, subsequently cooperating 4 times and
+    defecting 8 times.
+
+    Counter({((C, D), C): 4, ((C, D), D): 8})
 
     Parameters
     ----------
@@ -149,7 +160,9 @@ def compute_state_to_action_distribution(interactions):
     Returns
     ----------
     state_to_C_distributions : List of Counter Object
-        List of Dictionaries where the keys are the states and actions
+        List of Counter objects where the keys are the states and actions and
+        the values the counts. The
+        first/second Counter corresponds to the first/second player.
     """
     if not interactions:
         return None
@@ -165,6 +178,21 @@ def compute_normalised_state_to_action_distribution(interactions):
     Returns the normalised count of each state to action
     for a set of interactions.
 
+    Returns a list (for each player) of normlised counts of each state to action
+    pair for a set of interactions. A state to action pair is of the form:
+
+    ((C, D), C)
+
+    Implying that from a state of (C, D) (the first player having played C and
+    the second playing D) the player in question then played C.
+
+    The following counter object, implies that the player in question was only
+    ever in
+    state (C, D), subsequently cooperating 1/3 of the time and
+    defecting 2/3 times.
+
+    Counter({((C, D), C): 0.333333, ((C, D), D): 0.66666667})
+
     Parameters
     ----------
     interactions : list of tuples
@@ -174,9 +202,9 @@ def compute_normalised_state_to_action_distribution(interactions):
     Returns
     ----------
     normalised_state_to_C_distributions : List of Counter Object
-        List of Dictionaries where the keys are the states and actions and the
-        values
-        the proportion of times that state resulted in a cooperation.
+        List of Counter objects where the keys are the states and actions and
+        the values the normalized counts.. The
+        first/second Counter corresponds to the first/second player.
     """
     if not interactions:
         return None
@@ -196,8 +224,6 @@ def compute_normalised_state_to_action_distribution(interactions):
                     counter[(state, 'D')] = D_count / (C_count + D_count)
         normalized_distribution.append(Counter(counter))
     return normalized_distribution
-
-
 
 
 def sparkline(actions, c_symbol='█', d_symbol=' '):
