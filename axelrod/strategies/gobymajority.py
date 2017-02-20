@@ -19,7 +19,7 @@ class GoByMajority(Player):
     default this is 0)
     """
 
-    name = 'Go By Marjority'
+    name = 'Go By Majority'
     classifier = {
         'stochastic': False,
         'inspects_source': False,
