@@ -38,3 +38,8 @@ mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/oncebitte
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/prober.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/punisher.py
 mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/rand.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/memoryone.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/worseandworse.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/titfortat.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/axelrod_first.py
+mypy --ignore-missing-imports --follow-imports skip axelrod/strategies/qlearner.py
