@@ -4,10 +4,12 @@ Additional strategies from Axelrod's first tournament.
 
 import random
 
-from axelrod.actions import Actions, flip_action
+from axelrod.actions import Actions, flip_action, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from.memoryone import MemoryOnePlayer
+
+from typing import List, Dict, Tuple
 
 C, D = Actions.C, Actions.D
 
@@ -35,7 +37,7 @@ class Davis(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, rounds_to_cooperate=10):
+    def __init__(self, rounds_to_cooperate: int =10) -> None:
         """
         Parameters
         ----------
@@ -45,7 +47,7 @@ class Davis(Player):
         super().__init__()
         self._rounds_to_cooperate = rounds_to_cooperate
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """Begins by playing C, then plays D for the remaining rounds if the
         opponent ever plays D."""
         if len(self.history) < self._rounds_to_cooperate:
@@ -77,7 +79,7 @@ class RevisedDowning(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, revised=True):
+    def __init__(self, revised: bool =True) -> None:
         super().__init__()
         self.revised = revised
         self.good = 1.0
@@ -87,7 +89,7 @@ class RevisedDowning(Player):
         self.total_C = 0 # note the same as self.cooperations
         self.total_D = 0 # note the same as self.defections
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         round_number = len(self.history) + 1
         # According to internet sources, the original implementation defected
         # on the first two moves. Otherwise it wins (if this code is removed
@@ -159,8 +161,8 @@ class Feld(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, start_coop_prob=1.0, end_coop_prob=0.5,
-                 rounds_of_decay=200):
+    def __init__(self, start_coop_prob: float =1.0, end_coop_prob: float =0.5,
+                 rounds_of_decay: int =200) -> None:
         """
         Parameters
         ----------
@@ -177,7 +179,7 @@ class Feld(Player):
         self._end_coop_prob = end_coop_prob
         self._rounds_of_decay = rounds_of_decay
 
-    def _cooperation_probability(self):
+    def _cooperation_probability(self) -> float:
         """It's not clear what the interpolating function is, so we'll do
         something simple that decreases monotonically from 1.0 to 0.5 over
         200 rounds."""
@@ -187,7 +189,7 @@ class Feld(Player):
         return max(self._start_coop_prob + slope * rounds,
                    self._end_coop_prob)
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
             return C
         if opponent.history[-1] == D:
@@ -220,7 +222,7 @@ class Grofman(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         round_number = len(self.history) + 1
         if round_number < 3:
             return C
@@ -247,7 +249,7 @@ class Joss(MemoryOnePlayer):
 
     name = "Joss"
 
-    def __init__(self, p=0.9):
+    def __init__(self, p: float =0.9) -> None:
         """
         Parameters
         ----------
@@ -259,7 +261,7 @@ class Joss(MemoryOnePlayer):
         self.p = p
         super().__init__(four_vector)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s: %s" % (self.name, round(self.p, 2))
 
 
@@ -300,7 +302,7 @@ class Nydegger(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.As = [1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 54, 55,
                    58, 61]
         self.score_map = {(C, C): 0,
@@ -310,7 +312,8 @@ class Nydegger(Player):
         super().__init__()
 
     @staticmethod
-    def score_history(my_history, opponent_history, score_map):
+    def score_history(my_history: List[Action], opponent_history: List[Action], score_map: Dict[Tuple[Action, Action], int]) -> int:
+        
         """Implements the Nydegger formula A = 16 a_1 + 4 a_2 + a_3"""
         a = 0
         for i, weight in [(-1, 16), (-2, 4), (-3, 1)]:
@@ -318,7 +321,7 @@ class Nydegger(Player):
             a += weight * score_map[plays]
         return a
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0:
             return C
         if len(self.history) == 1:
@@ -360,7 +363,7 @@ class Shubik(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.is_retaliating = False
         self.retaliation_length = 0
@@ -374,7 +377,7 @@ class Shubik(Player):
             if self.retaliation_remaining == 0:
                 self.is_retaliating = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
             return C
         if opponent.history[-1] == D:
@@ -427,7 +430,7 @@ class Tullock(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, rounds_to_cooperate=11):
+    def __init__(self, rounds_to_cooperate: int =11) -> None:
         """
         Parameters
         ----------
@@ -438,7 +441,7 @@ class Tullock(Player):
         self._rounds_to_cooperate = rounds_to_cooperate
         self.__class__.memory_depth = rounds_to_cooperate
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         rounds = self._rounds_to_cooperate
         if len(self.history) < rounds:
             return C
@@ -485,6 +488,6 @@ class UnnamedStrategy(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         r = random.uniform(3, 7) / 10
         return random_choice(r)
