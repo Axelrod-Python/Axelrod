@@ -258,7 +258,7 @@ class HardTitFor2Tats(Player):
         if not opponent.history:
             return C
         # Defects if two consecutive D in the opponent's last three moves
-        history_string = "".join(opponent: Player. -> Actihistory[-3:])
+        history_string = "".join(opponent.history[-3:])
         if 'DD' in history_string:
             return D
         # Otherwise cooperates
@@ -533,7 +533,7 @@ class AdaptiveTitForTat(Player):
 
     def strategy(self, opponent: Player) -> Action:
 
-        if len(opponent: Player. -> Actihistory) == 0:
+        if len(opponent.history) == 0:
             return C
 
         if opponent.history[-1] == C:
@@ -579,7 +579,7 @@ class SpitefulTitForTat(Player):
         'manipulates_state': False
     }
 
-    def __init__(self) -> str:
+    def __init__(self) -> None:
         super().__init__()
         self.retaliating = False
 
