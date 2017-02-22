@@ -1,6 +1,9 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod._strategy_utils import thue_morse_generator
+
+from typing import Tuple
+from types import FunctionType
 
 C, D = Actions.C, Actions.D
 
@@ -10,14 +13,14 @@ class SequencePlayer(Player):
     determine their plays.
     """
 
-    def __init__(self, generator_function, generator_args=()):
+    def __init__(self, generator_function: FunctionType, generator_args: Tuple = ()) -> None:
         super().__init__()
         # Initialize the sequence generator
         self.generator_function = generator_function
         self.generator_args = generator_args
         self.sequence_generator = self.generator_function(*self.generator_args)
 
-    def meta_strategy(self, value):
+    def meta_strategy(self, value: int) -> None:
         """Determines how to map the sequence value to cooperate or defect.
         By default, treat values like python truth values. Override in child
         classes for alternate behaviors."""
@@ -26,7 +29,7 @@ class SequencePlayer(Player):
         else:
             return Actions.C
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # Iterate through the sequence and apply the meta strategy
         for s in self.sequence_generator:
             return self.meta_strategy(s)
@@ -61,7 +64,7 @@ class ThueMorse(SequencePlayer):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(thue_morse_generator, (0,))
 
 
@@ -84,10 +87,10 @@ class ThueMorseInverse(ThueMorse):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(ThueMorse, self).__init__(thue_morse_generator, (0,))
 
-    def meta_strategy(self, value):
+    def meta_strategy(self, value: int) -> Action:
         # Switch the default cooperate and defect action on 0 or 1
         if value == 0:
             return C
