@@ -487,7 +487,7 @@ class AdaptiveTitForTat(Player):
 
     Algorithm
 
-    if (opponent: Player  -> Actiplayed C in the last cycle) then
+    if (opponent played C in the last cycle) then
     world = world + r*(1-world)
     else
     world = world + r*(0-world)
