@@ -439,7 +439,7 @@ class Tullock(Player):
         """
         super().__init__()
         self._rounds_to_cooperate = rounds_to_cooperate
-        self.__class__.memory_depth = rounds_to_cooperate
+        self.memory_depth = rounds_to_cooperate
 
     def strategy(self, opponent: Player) -> Action:
         rounds = self._rounds_to_cooperate
