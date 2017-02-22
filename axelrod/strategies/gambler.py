@@ -5,8 +5,9 @@ For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
 
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.load_data_ import load_pso_tables
+from axelrod.player import Player
 from axelrod.random_ import random_choice
 from .lookerup import LookerUp, create_lookup_table_from_pattern
 
@@ -32,7 +33,7 @@ class Gambler(LookerUp):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         action = LookerUp.strategy(self, opponent)
         # action could be 'C', 'D', or a float
         if action in [C, D]:
@@ -52,7 +53,7 @@ class PSOGamblerMem1(Gambler):
 
     name = "PSO Gambler Mem1"
 
-    def __init__(self):
+    def __init__(self) -> None:
         pattern = tables[("PSO Gambler Mem1", 1, 1, 0)]
         lookup_table = create_lookup_table_from_pattern(
             plays=1, op_plays=1, op_start_plays=0,
@@ -71,7 +72,7 @@ class PSOGambler1_1_1(Gambler):
 
     name = "PSO Gambler 1_1_1"
 
-    def __init__(self):
+    def __init__(self) -> None:
         pattern = tables[("PSO Gambler 1_1_1", 1, 1, 1)]
         lookup_table = create_lookup_table_from_pattern(
             plays=1, op_plays=1, op_start_plays=1,
@@ -89,7 +90,7 @@ class PSOGambler2_2_2(Gambler):
 
     name = "PSO Gambler 2_2_2"
 
-    def __init__(self):
+    def __init__(self) -> None:
         pattern = tables[("PSO Gambler 2_2_2", 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
             plays=2, op_plays=2, op_start_plays=2,
@@ -108,7 +109,7 @@ class PSOGambler2_2_2_Noise05(Gambler):
 
     name = "PSO Gambler 2_2_2 Noise 05"
 
-    def __init__(self):
+    def __init__(self) -> None:
         pattern = tables[("PSO Gambler 2_2_2 Noise 05", 2, 2, 2)]
         lookup_table = create_lookup_table_from_pattern(
             plays=2, op_plays=2, op_start_plays=2,
