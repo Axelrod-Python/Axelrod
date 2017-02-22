@@ -340,8 +340,9 @@ class ResultSet(object):
     @update_progress_bar
     def _build_normalised_state_distribution(self):
         """
-        Returns
-        ----------
+        Returns:
+        --------
+            norm : list
 
             Normalised state distribution. A list of lists of counter objects:
 
@@ -361,10 +362,11 @@ class ResultSet(object):
     @update_progress_bar
     def _build_normalised_state_to_action_distribution(self):
         """
-        Returns
-        ----------
+        Returns:
+        --------
+            norm : list
 
-            Normalised state distribution. A list of lists of counter objects:
+            A list of lists of counter objects.
 
             Dictionary where the keys are the states and the values are a
             normalized counts of the number of times that state goes to a given

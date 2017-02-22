@@ -2,7 +2,7 @@
 Functions to calculate results from interactions. Interactions are lists of the
 form:
 
-    [('C', 'D'), ('D', 'C'),...]
+    [(C, D), (D, C),...]
 
 This is used by both the Match class and the ResultSet class which analyse
 interactions.
@@ -145,7 +145,7 @@ def compute_state_to_action_distribution(interactions):
     Implying that from a state of (C, D) (the first player having played C and
     the second playing D) the player in question then played C.
 
-    The following counter object, implies that the player in question was in
+    The following counter object implies that the player in question was in
     state (C, D) for a total of 12 times, subsequently cooperating 4 times and
     defecting 8 times.
 
@@ -167,8 +167,8 @@ def compute_state_to_action_distribution(interactions):
     if not interactions:
         return None
 
-    distributions = [Counter([(state, outcome[j]) for state, outcome in zip(interactions,
-                                                              interactions[1:])])
+    distributions = [Counter([(state, outcome[j])
+                     for state, outcome in zip(interactions, interactions[1:])])
                      for j in range(2)]
     return distributions
 
@@ -180,13 +180,12 @@ def compute_normalised_state_to_action_distribution(interactions):
 
     ((C, D), C)
 
-    Implying that from a state of (C, D) (the first player having played C and
+    implying that from a state of (C, D) (the first player having played C and
     the second playing D) the player in question then played C.
 
     The following counter object, implies that the player in question was only
-    ever in
-    state (C, D), subsequently cooperating 1/3 of the time and
-    defecting 2/3 times.
+    ever in state (C, D), subsequently cooperating 1/3 of the time and defecting
+    2/3 times.
 
     Counter({((C, D), C): 0.333333, ((C, D), D): 0.66666667})
 
@@ -197,11 +196,11 @@ def compute_normalised_state_to_action_distribution(interactions):
         this file.
 
     Returns
-    ----------
+    -------
     normalised_state_to_C_distributions : List of Counter Object
         List of Counter objects where the keys are the states and actions and
-        the values the normalized counts.. The
-        first/second Counter corresponds to the first/second player.
+        the values the normalized counts. The first/second Counter corresponds
+        to the first/second player.
     """
     if not interactions:
         return None
@@ -210,22 +209,22 @@ def compute_normalised_state_to_action_distribution(interactions):
     normalized_distribution = []
     for player in range(2):
         counter = {}
-        for state in [('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')]:
-            C_count = distribution[player].get((state, 'C'), 0)
-            D_count = distribution[player].get((state, 'D'), 0)
+        for state in [(C, C), (C, D), (D, C), (D, D)]:
+            C_count = distribution[player].get((state, C), 0)
+            D_count = distribution[player].get((state, D), 0)
             total = C_count + D_count
             if total > 0:
                 if C_count > 0:
-                    counter[(state, 'C')] = C_count / (C_count + D_count)
+                    counter[(state, C)] = C_count / (C_count + D_count)
                 if D_count > 0:
-                    counter[(state, 'D')] = D_count / (C_count + D_count)
+                    counter[(state, D)] = D_count / (C_count + D_count)
         normalized_distribution.append(Counter(counter))
     return normalized_distribution
 
 
 def sparkline(actions, c_symbol='█', d_symbol=' '):
     return ''.join([
-        c_symbol if play == 'C' else d_symbol for play in actions])
+        c_symbol if play == C else d_symbol for play in actions])
 
 
 def compute_sparklines(interactions, c_symbol='█', d_symbol=' '):
