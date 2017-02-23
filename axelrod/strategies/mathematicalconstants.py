@@ -19,7 +19,7 @@ class CotoDeRatio(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # Initially cooperate
         if len(opponent.history) == 0:
             return C
