@@ -22,11 +22,27 @@ class TestMatch(unittest.TestCase):
                           Counter({('D', 'C'): 2}),
                           Counter({('C', 'C'): 1, ('C', 'D'): 1}),
                           None]
+    state_to_action_distribution = [[Counter({(('C', 'D'), 'D'): 1}),
+                                     Counter({(('C', 'D'), 'C'): 1})],
+                                    [Counter({(('D', 'C'), 'D'): 1}),
+                                     Counter({(('D', 'C'), 'C'): 1})],
+                                    [Counter({(('C', 'C'), 'C'): 1}),
+                                     Counter({(('C', 'C'), 'D'): 1})],
+                                    None]
+
     normalised_state_distribution = [
         Counter({('C', 'D'): 0.5, ('D', 'C'): 0.5}),
         Counter({('D', 'C'): 1.0}),
         Counter({('C', 'C'): 0.5, ('C', 'D'): 0.5}),
         None]
+    normalised_state_to_action_distribution = [[Counter({(('C', 'D'), 'D'): 1}),
+                                                Counter({(('C', 'D'), 'C'): 1})],
+                                               [Counter({(('D', 'C'), 'D'): 1}),
+                                                Counter({(('D', 'C'), 'C'): 1})],
+                                               [Counter({(('C', 'C'), 'C'): 1}),
+                                                Counter({(('C', 'C'), 'D'): 1})],
+                                               None]
+
     sparklines = [ '█ \n █', '  \n██', '██\n█ ', None ]
 
     def test_compute_scores(self):
@@ -62,6 +78,37 @@ class TestMatch(unittest.TestCase):
     def test_compute_normalised_state_distribution(self):
         for inter, dist in zip(self.interactions, self.normalised_state_distribution):
             self.assertEqual(dist, iu.compute_normalised_state_distribution(inter))
+
+    def test_compute_state_to_action_distribution(self):
+        for inter, dist in zip(self.interactions,
+                               self.state_to_action_distribution):
+            self.assertEqual(dist,
+                             iu.compute_state_to_action_distribution(inter))
+        inter = [(C, D), (D, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
+        expected_dist =[Counter({(('C', 'C'), 'C'): 1, (('D', 'C'), 'C'): 1,
+                                 (('C', 'D'), 'D'): 2, (('D', 'C'), 'D'): 1,
+                                 (('D', 'D'), 'C'): 1}),
+                        Counter({(('C', 'C'), 'D'): 1,
+                                 (('C', 'D'), 'C'): 2, (('D', 'C'), 'D'): 2,
+                                 (('D', 'D'), 'C'): 1})]
+
+        self.assertEqual(expected_dist,
+                         iu.compute_state_to_action_distribution(inter))
+
+    def test_compute_normalised_state_to_action_distribution(self):
+        for inter, dist in zip(self.interactions,
+                               self.normalised_state_to_action_distribution):
+            self.assertEqual(dist,
+                             iu.compute_normalised_state_to_action_distribution(inter))
+        inter = [(C, D), (D, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
+        expected_dist =[Counter({(('C', 'C'), 'C'): 1, (('D', 'C'), 'C'): 1 / 2,
+                                 (('C', 'D'), 'D'): 1, (('D', 'C'), 'D'): 1 / 2,
+                                 (('D', 'D'), 'C'): 1}),
+                        Counter({(('C', 'C'), 'D'): 1,
+                                 (('C', 'D'), 'C'): 1, (('D', 'C'), 'D'): 1,
+                                 (('D', 'D'), 'C'): 1})]
+        self.assertEqual(expected_dist,
+                         iu.compute_normalised_state_to_action_distribution(inter))
 
     def test_compute_sparklines(self):
         for inter, spark in zip(self.interactions, self.sparklines):

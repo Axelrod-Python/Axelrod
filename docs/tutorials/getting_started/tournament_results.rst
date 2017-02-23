@@ -24,6 +24,10 @@ This tutorial will show you how to access the various results of a tournament:
 - State distribution: the count of each type of state of a match
 - Normalised state distribution: the normalised count of each type of state of a
   match
+- State to action distribution: the count of each type of state to action pair
+  of a match
+- Normalised state distribution: the normalised count of each type of state to
+  action pair of a match
 - Initial cooperation count: the count of initial cooperation by each player.
 - Initial cooperation rate: the rate of initial cooperation by each player.
 - Cooperation rating: cooperation rating of each player
@@ -269,6 +273,58 @@ the second the action of the opponent::
       Counter({('C', 'C'): 1.0}),
       Counter()]]
 
+State to action distribution counts
+-----------------------------------
+
+This gives a total state action pair count against each opponent. A state
+corresponds to 1 turn of a match and can be one of :code:`('C', 'C'), ('C',
+'D'), ('D', 'C'), ('D', 'D')` where the first element is the action of the
+player in question and the second the action of the opponent::
+
+    >>> pprint.pprint(results.state_to_action_distribution)  # doctest: +SKIP
+    [[Counter(),
+      Counter({(('C', 'D'), 'C'): 27}),
+      Counter({(('C', 'C'), 'C'): 27}),
+      Counter({(('C', 'C'), 'C'): 27})],
+     [Counter({(('D', 'C'), 'D'): 27}),
+      Counter(),
+      Counter({(('D', 'D'), 'D'): 24, (('D', 'C'), 'D'): 3}),
+      Counter({(('D', 'D'), 'D'): 24, (('D', 'C'), 'D'): 3})],
+     [Counter({(('C', 'C'), 'C'): 27}),
+      Counter({(('D', 'D'), 'D'): 24, (('C', 'D'), 'D'): 3}),
+      Counter(),
+      Counter({(('C', 'C'), 'C'): 27})],
+     [Counter({(('C', 'C'), 'C'): 27}),
+      Counter({(('D', 'D'), 'D'): 24, (('C', 'D'), 'D'): 3}),
+      Counter({(('C', 'C'), 'C'): 27}),
+      Counter()]]
+
+Normalised state to action distribution
+---------------------------------------
+
+This gives the average rate state to action pair distribution against each
+opponent.  A state corresponds to 1 turn of a match and can be one of
+:code:`('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')` where the first element
+is the action of the player in question and the second the action of the
+opponent::
+
+    >>> pprint.pprint(results.normalised_state_to_action_distribution) # doctest: +SKIP
+    [[Counter(),
+      Counter({(('C', 'D'), 'C'): 1.0}),
+      Counter({(('C', 'C'), 'C'): 1.0}),
+      Counter({(('C', 'C'), 'C'): 1.0})],
+     [Counter({(('D', 'C'), 'D'): 1.0}),
+      Counter(),
+      Counter({(('D', 'C'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0}),
+      Counter({(('D', 'C'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0})],
+     [Counter({(('C', 'C'), 'C'): 1.0}),
+      Counter({(('C', 'D'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0}),
+      Counter(),
+      Counter({(('C', 'C'), 'C'): 1.0})],
+     [Counter({(('C', 'C'), 'C'): 1.0}),
+      Counter({(('C', 'D'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0}),
+      Counter({(('C', 'C'), 'C'): 1.0}),
+      Counter()]]
 
 Initial cooperation counts
 --------------------------
@@ -337,8 +393,8 @@ It is also possible to write this data directly to a csv file using the
     ...     csvreader = csv.reader(outfile)
     ...     for row in csvreader:
     ...         print(row)
-    ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins', 'Initial_C_rate', 'CC_rate', 'CD_rate', 'DC_rate', 'DD_rate']
-    ['0', 'Defector', '2.6...', '0.0', '3.0', '0.0', '0.0', '0.0', '0.4...', '0.6...']
-    ['1', 'Tit For Tat', '2.3...', '0.7', '0.0', '1.0', '0.66...', '0.03...', '0.0', '0.3...']
-    ['2', 'Grudger', '2.3...', '0.7', '0.0', '1.0', '0.66...', '0.03...', '0.0', '0.3...']
-    ['3', 'Cooperator', '2.0...', '1.0', '0.0', '1.0', '0.66...', '0.33...', '0.0', '0.0']
+    ['Rank', 'Name', 'Median_score', 'Cooperation_rating', 'Wins', 'Initial_C_rate', 'CC_rate', 'CD_rate', 'DC_rate', 'DD_rate', 'CC_to_C_rate', 'CD_to_C_rate', 'DC_to_C_rate', 'DD_to_C_rate']
+    ['0', 'Defector', '2.6...', '0.0', '3.0', '0.0', '0.0', '0.0', '0.4...', '0.6...', '0', '0', '0', '0']
+    ['1', 'Tit For Tat', '2.3...', '0.7', '0.0', '1.0', '0.66...', '0.03...', '0.0', '0.3...', '1.0', '0', '0', '0']
+    ['2', 'Grudger', '2.3...', '0.7', '0.0', '1.0', '0.66...', '0.03...', '0.0', '0.3...', '1.0', '0', '0', '0']
+    ['3', 'Cooperator', '2.0...', '1.0', '0.0', '1.0', '0.66...', '0.33...', '0.0', '0.0', '1.0', '1.0', '0', '0']
