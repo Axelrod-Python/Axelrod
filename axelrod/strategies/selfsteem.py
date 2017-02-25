@@ -18,6 +18,9 @@ class SelfSteem(Player):
     If 0.3 > f > -0.3; random behavior.
     If f < -0.95, algorithm is at rock bottom; always cooperates.
 
+    Futhermore, the algorithm implements a retaliation policy, if the opponent
+    defects; the sin curve is shifted. But due to lack of further information,
+    this implementation does not include a sin phase change.
     Names:
 
     - SelfSteem: [Andre2013]_
