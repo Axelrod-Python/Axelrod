@@ -21,34 +21,30 @@ The Sections of the docstring are:
 
 1. **Working of the strategy**
 
-    A brief summary on how the strategy works, E.g.
-    
-    ::
+    A brief summary on how the strategy works, E.g.::
 
-    class TitForTat(Player):
-    """
-    A player starts by cooperating and then mimics the 
-    previous action of the opponent.
-    """
+        class TitForTat(Player):
+        """
+        A player starts by cooperating and then mimics the 
+        previous action of the opponent.
+        """
 
 2. **Bibliography/Source of the strategy**
 
     A section to mention the source of the strategy
     or the paper from which the strategy was taken.
     The section must start with the """Names:""".
-    For E.g.
+    For E.g.::
     
-    ::
+        class TitForTat(Player):
+        """
+        A player starts by cooperating and then mimics the 
+        previous action of the opponent.
     
-    class TitForTat(Player):
-    """
-    A player starts by cooperating and then mimics the 
-    previous action of the opponent.
-    
-    Names:
-    - Rapoport's strategy: [Axelrod1980]_
-    - TitForTat: [Axelrod1980]_
-    """
+        Names:
+        - Rapoport's strategy: [Axelrod1980]_
+        - TitForTat: [Axelrod1980]_
+        """
     
     Here,the info written under thr Names section
     tells about the source of the TitforTat strategy.
