@@ -46,6 +46,24 @@ The Sections of the docstring are:
         - TitForTat: [Axelrod1980]_
         """
     
-   Here,the info written under thr Names section
+   Here,the info written under the Names section
    tells about the source of the TitforTat strategy.
+   `[Axelrod1980]_` corresponds to the bibliographic item in 
+   `docs/reference/bibliography.rst`. If you are using a source 
+   that is not in the bibliography please add it. 
+   
+   If you are using a software code as a source of the startegy, 
+   please cite the name of the software along with the link 
+   to the code in the `Names:` section.For E.g.::
+   
+       class Doubler(Player):
+        """
+        Cooperates except when the opponent has defected and
+        the opponent's cooperation count is less than twice their defection count.
+        
+        Names:
+        
+        - Doubler: [PRISON1998]_
+        """
     
+    Here the ``[PRISON1998]_` refers to the PRISON software.
