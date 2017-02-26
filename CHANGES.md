@@ -1,3 +1,19 @@
+# v2.6.0, 2017-02-26
+
+New strategy, state to action analysis and internal improvements
+
+- A number of type hints added to the library
+  https://github.com/Axelrod-Python/Axelrod/pull/860
+  https://github.com/Axelrod-Python/Axelrod/pull/863
+  https://github.com/Axelrod-Python/Axelrod/pull/864
+- New strategy: SelfSteem
+  https://github.com/Axelrod-Python/Axelrod/pull/866
+- Add state to action analysis
+  https://github.com/Axelrod-Python/Axelrod/pull/870
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.5.0...v2.6.0
+
 # v2.5.0, 2017-02-11
 
 Internal improvements, type hints, documentation and a new strategy
