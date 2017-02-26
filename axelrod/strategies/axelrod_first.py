@@ -312,7 +312,8 @@ class Nydegger(Player):
         super().__init__()
 
     @staticmethod
-    def score_history(my_history: List[Action], opponent_history: List[Action], score_map: Dict[Tuple[Action, Action], int]) -> int:
+    def score_history(my_history: List[Action], opponent_history: List[Action],
+        score_map: Dict[Tuple[Action, Action], int]) -> int:
         
         """Implements the Nydegger formula A = 16 a_1 + 4 a_2 + a_3"""
         a = 0
