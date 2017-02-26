@@ -6,6 +6,7 @@ Bibliography
 This is a collection of various bibliographic items referenced in the
 documentation.
 
+.. [Andre2013] Andre L. C., Honovan P., Felipe T. and Frederico G. (2013). Iterated Prisoner’s Dilemma - An extended analysis, http://abricom.org.br/wp-content/uploads/2016/03/bricsccicbic2013_submission_202.pdf
 .. [Ashlock2006] Ashlock, D., & Kim E. Y, & Leahy, N. (2006). Understanding Representational Sensitivity in the Iterated Prisoner’s Dilemma with Fingerprints. IEEE Transactions On Systems, Man, And Cybernetics, Part C: Applications And Reviews, 36 (4)
 .. [Ashlock2008] Ashlock, D., & Kim, E. Y. (2008). Fingerprinting: Visualization and automatic analysis of prisoner’s dilemma strategies. IEEE Transactions on Evolutionary Computation, 12(5), 647–659. http://doi.org/10.1109/TEVC.2008.920675
 .. [Ashlock2009] Ashlock, D., Kim, E. Y., & Ashlock, W. (2009) Fingerprint analysis of the noisy prisoner’s dilemma using a finite-state representation. IEEE Transactions on Computational Intelligence and AI in Games. 1(2), 154-167  http://doi.org/10.1109/TCIAIG.2009.2018704
@@ -37,4 +38,3 @@ documentation.
 .. [Stewart2012] Stewart, a. J., & Plotkin, J. B. (2012). Extortion and cooperation in the Prisoner’s Dilemma. Proceedings of the National Academy of Sciences, 109(26), 10134–10135. http://doi.org/10.1073/pnas.1208087109
 .. [Szabó1992] Szabó, G., & Fáth, G. (2007). Evolutionary games on graphs. Physics Reports, 446(4-6), 97–216. http://doi.org/10.1016/j.physrep.2007.04.004
 .. [Tzafestas2000] Tzafestas, E. (2000). Toward adaptive cooperative behavior. From Animals to Animals: Proceedings of the 6th International Conference on the Simulation of Adaptive Behavior {(SAB-2000)}, 2, 334–340.
-.. [Andre2013] Andre L. C., Honovan P., Felipe T. and Frederico G. (2013). Iterated Prisoner’s Dilemma - An extended analysis, http://abricom.org.br/wp-content/uploads/2016/03/bricsccicbic2013_submission_202.pdf
