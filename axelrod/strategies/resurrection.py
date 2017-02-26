@@ -6,8 +6,9 @@ C, D = Actions.C, Actions.D
 
 class Resurrection(Player):
     """
-    A player starts by cooperating and defects if the the number of rounds 
+    A player starts by cooperating and defects if the number of rounds 
     played by the player is greater than five and last five rounds are defections.
+    Otherwise, the strtategy plays like Tit-for-tat.
     
     Names:
     - Resurrection: Name from CoopSim https://github.com/jecki/CoopSim     
