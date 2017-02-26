@@ -66,4 +66,4 @@ The Sections of the docstring are:
         - Doubler: [PRISON1998]_
         """
     
-    Here the ``[PRISON1998]_` refers to the PRISON software.
+   Here the `[PRISON1998]_` refers to the PRISON software written in Java
