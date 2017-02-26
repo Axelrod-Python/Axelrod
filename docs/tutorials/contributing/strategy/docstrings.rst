@@ -46,6 +46,6 @@ The Sections of the docstring are:
         - TitForTat: [Axelrod1980]_
         """
     
-    Here,the info written under thr Names section
-    tells about the source of the TitforTat strategy.
+   Here,the info written under thr Names section
+   tells about the source of the TitforTat strategy.
     
