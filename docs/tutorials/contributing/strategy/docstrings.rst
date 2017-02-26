@@ -21,7 +21,7 @@ The Sections of the docstring are:
 
 1. **Working of the strategy**
 
-    A brief summary on how the strategy works, E.g.::
+   A brief summary on how the strategy works, E.g.::
 
         class TitForTat(Player):
         """
@@ -31,10 +31,10 @@ The Sections of the docstring are:
 
 2. **Bibliography/Source of the strategy**
 
-    A section to mention the source of the strategy
-    or the paper from which the strategy was taken.
-    The section must start with the """Names:""".
-    For E.g.::
+   A section to mention the source of the strategy
+   or the paper from which the strategy was taken.
+   The section must start with the Names section.
+   For E.g.::
     
         class TitForTat(Player):
         """
