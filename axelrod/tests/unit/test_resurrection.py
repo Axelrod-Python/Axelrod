@@ -28,4 +28,8 @@ class Resurrection(TestPlayer):
         #Check if turns played are less than 5.
         self.responses_test([C], [D, C, D, C], [C] * 4)
         
+        # Check for TFT behavior after 5 rounds
+        self.responses_test([D], [C] * 5, [C, C, C, C, C, D])
         
+        # Check for four defections and a cooperation by opponent
+        self.responses_test([C], [C] * 5, [D, D, D, D, D, C])
