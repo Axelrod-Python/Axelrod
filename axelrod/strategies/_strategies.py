@@ -74,6 +74,7 @@ from .titfortat import (
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
     SpitefulTitForTat)
+from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
 
@@ -234,6 +235,7 @@ all_strategies = [
     TrickyDefector,
     Tullock,
     TwoTitsForTat,
+    VeryBad,
     Willing,
     Winner12,
     Winner21,

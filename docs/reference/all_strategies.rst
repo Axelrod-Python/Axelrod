@@ -141,6 +141,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.titfortat
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.verybad
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.worse_and_worse
    :members:
    :undoc-members:
