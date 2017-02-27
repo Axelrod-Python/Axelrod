@@ -32,4 +32,4 @@ class Resurrection(TestPlayer):
         self.responses_test([C], [C] * 5, [C, C, C, C, C, D])
         
         # Check for four defections and a cooperation by opponent
-        self.responses_test([C], [C] * 5, [D, D, D, D, D, C])
+        self.responses_test([D], [C] * 5, [D, D, D, D, D, C])
