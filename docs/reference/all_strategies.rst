@@ -126,6 +126,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.rand
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.resurrection
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.retaliate
    :members:
    :undoc-members:
