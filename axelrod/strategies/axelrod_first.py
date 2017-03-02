@@ -37,7 +37,7 @@ class Davis(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, rounds_to_cooperate: int =10) -> None:
+    def __init__(self, rounds_to_cooperate: int = 10) -> None:
         """
         Parameters
         ----------
@@ -79,7 +79,7 @@ class RevisedDowning(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, revised: bool =True) -> None:
+    def __init__(self, revised: bool = True) -> None:
         super().__init__()
         self.revised = revised
         self.good = 1.0
@@ -161,8 +161,8 @@ class Feld(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, start_coop_prob: float =1.0, end_coop_prob: float =0.5,
-                 rounds_of_decay: int =200) -> None:
+    def __init__(self, start_coop_prob: float = 1.0, end_coop_prob: float = 0.5,
+                 rounds_of_decay: int = 200) -> None:
         """
         Parameters
         ----------
@@ -249,7 +249,7 @@ class Joss(MemoryOnePlayer):
 
     name = "Joss"
 
-    def __init__(self, p: float =0.9) -> None:
+    def __init__(self, p: float = 0.9) -> None:
         """
         Parameters
         ----------
@@ -314,7 +314,7 @@ class Nydegger(Player):
     @staticmethod
     def score_history(my_history: List[Action], opponent_history: List[Action],
         score_map: Dict[Tuple[Action, Action], int]) -> int:
-        
+
         """Implements the Nydegger formula A = 16 a_1 + 4 a_2 + a_3"""
         a = 0
         for i, weight in [(-1, 16), (-2, 4), (-3, 1)]:
@@ -431,7 +431,7 @@ class Tullock(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, rounds_to_cooperate: int =11) -> None:
+    def __init__(self, rounds_to_cooperate: int = 11) -> None:
         """
         Parameters
         ----------
