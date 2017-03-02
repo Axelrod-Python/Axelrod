@@ -27,7 +27,7 @@ class MemoryOnePlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, four_vector: type_four_vector =None, initial: Action =C) -> None:
+    def __init__(self, four_vector: type_four_vector = None, initial: Action = C) -> None:
         """
         Parameters
 
@@ -99,7 +99,7 @@ class WinStayLoseShift(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    def __init__(self, initial: Action =C) -> None:
+    def __init__(self, initial: Action = C) -> None:
         super().__init__()
         self.set_four_vector([1, 0, 0, 1])
         self._initial = initial
@@ -124,7 +124,7 @@ class WinShiftLoseStay(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    def __init__(self, initial: Action =D) -> None:
+    def __init__(self, initial: Action = D) -> None:
         super().__init__()
         self.set_four_vector([0, 1, 1, 0])
         self._initial = initial
@@ -149,7 +149,7 @@ class GTFT(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    def __init__(self, p: float =None) -> None:
+    def __init__(self, p: float = None) -> None:
         """
         Parameters
 
@@ -207,7 +207,7 @@ class StochasticWSLS(MemoryOnePlayer):
 
     name = 'Stochastic WSLS'
 
-    def __init__(self, ep: float=0.05) -> None:
+    def __init__(self, ep: float = 0.05) -> None:
         """
         Parameters
 
@@ -250,7 +250,7 @@ class LRPlayer(MemoryOnePlayer):
     }
 
 
-    def receive_match_attributes(self, phi: float =0, s: float =None, l: float =None):
+    def receive_match_attributes(self, phi: float = 0, s: float = None, l: float = None):
         """
         Parameters
 
@@ -284,7 +284,7 @@ class ZDExtort2(LRPlayer):
 
     name = 'ZD-Extort-2'
 
-    def __init__(self, phi: float =1/9, s: float =0.5) -> None:
+    def __init__(self, phi: float = 1/9, s: float = 0.5) -> None:
         """
         Parameters
 
@@ -308,7 +308,7 @@ class ZDExtort2v2(LRPlayer):
 
     name = 'ZD-Extort-2 v2'
 
-    def __init__(self, phi: float =1/8, s: float =0.5, l: float =1) -> None:
+    def __init__(self, phi: float = 1/8, s: float = 0.5, l: float = 1) -> None:
         """
         Parameters
 
@@ -332,7 +332,7 @@ class ZDExtort4(LRPlayer):
 
     name = 'ZD-Extort-4'
 
-    def __init__(self, phi: float =4/17, s: float =0.25, l: float=1) -> None:
+    def __init__(self, phi: float = 4/17, s: float = 0.25, l: float = 1) -> None:
         """
         Parameters
 
@@ -355,7 +355,7 @@ class ZDGen2(LRPlayer):
 
     name = 'ZD-GEN-2'
 
-    def __init__(self, phi: float =1/8, s: float =0.5, l: float =3) -> None:
+    def __init__(self, phi: float = 1/8, s: float = 0.5, l: float = 3) -> None:
         """
         Parameters
 
@@ -378,7 +378,7 @@ class ZDGTFT2(LRPlayer):
 
     name = 'ZD-GTFT-2'
 
-    def __init__(self, phi: float =0.25, s: float =0.5) -> None:
+    def __init__(self, phi: float = 0.25, s: float = 0.5) -> None:
         """
         Parameters
 
@@ -402,7 +402,7 @@ class ZDSet2(LRPlayer):
 
     name = 'ZD-SET-2'
 
-    def __init__(self, phi: float =1/4, s: float =0., l: float =2) -> None:
+    def __init__(self, phi: float = 1/4, s: float = 0., l: float = 2) -> None:
         """
         Parameters
 
@@ -431,7 +431,7 @@ class SoftJoss(MemoryOnePlayer):
 
     name = "Soft Joss"
 
-    def __init__(self, q: float =0.9) -> None:
+    def __init__(self, q: float = 0.9) -> None:
         """
         Parameters
 

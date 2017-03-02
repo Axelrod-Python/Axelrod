@@ -287,7 +287,7 @@ class OmegaTFT(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, deadlock_threshold: int=3, randomness_threshold: int=8) -> None:
+    def __init__(self, deadlock_threshold: int = 3, randomness_threshold: int = 8) -> None:
         super().__init__()
         self.deadlock_threshold = deadlock_threshold
         self.randomness_threshold = randomness_threshold
@@ -527,7 +527,7 @@ class AdaptiveTitForTat(Player):
     }
     world = 0.5
 
-    def __init__(self, rate: float =0.5) -> None:
+    def __init__(self, rate: float = 0.5) -> None:
         super().__init__()
         self.rate, self.starting_rate = rate, rate
 
