@@ -1,4 +1,4 @@
-"""Tests for the SelfSteem strategy."""
+"""Tests for the Stalker strategy."""
 
 import axelrod
 import random
@@ -33,12 +33,21 @@ class TestStalker(TestPlayer):
         self.responses_test([C], [C] * 7 + [C], [C] * 7 + [D])
 
         # current_average_score > 2
-        # No point in testing this case, as in the default case, wish_score = 2,
-        # therefore the above two test cases cover this case
+        self.responses_test([C], [C] * 10, [C] * 10)
 
         # 1 < current_average_score < 2
         self.responses_test([D], [C] * 7 + [C] * 5, [C] * 7 + [D] * 5)
 
         # current_average_score < 1
-        self.responses_test([D], [D] * 7 + [C] * 5, [D] * 7 + [D] * 5, seed = 15)
+        self.responses_test([D], [D] * 7 + [C] * 5, [D] * 7 + [D] * 5, seed = 6)
+        self.responses_test([C], [D] * 7 + [C] * 5, [D] * 7 + [D] * 5, seed = 7)
+
         # defect in last round
+        self.responses_test([C, D], [C] * 198, [C] * 198, length=200)
+
+    def test_reset(self):
+        """Tests to see if the score is reset correctly """
+        P1 = axelrod.Stalker()
+        P1.current_score = 14
+        P1.reset()
+        self.assertEqual(P1.current_score, 0)
