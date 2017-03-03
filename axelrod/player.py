@@ -3,9 +3,10 @@ from functools import wraps
 import random
 import copy
 
-from axelrod.actions import Actions, flip_action
+from axelrod.actions import Actions, flip_action, Action
 from .game import DefaultGame
 
+from typing import Dict, Any
 
 C, D = Actions.C, Actions.D
 
@@ -89,7 +90,7 @@ class Player(object):
     """
 
     name = "Player"
-    classifier = {}
+    classifier = {} # type: Dict[str, Any]
     default_classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),

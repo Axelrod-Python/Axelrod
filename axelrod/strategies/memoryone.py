@@ -1,6 +1,10 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
+
+from typing import List, Tuple, Union
+
+type_four_vector = Union[List[float], Tuple[float,float,float,float]]
 
 
 C, D = Actions.C, Actions.D
@@ -23,7 +27,7 @@ class MemoryOnePlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, four_vector=None, initial=C):
+    def __init__(self, four_vector: type_four_vector = None, initial: Action = C) -> None:
         """
         Parameters
 
@@ -53,7 +57,7 @@ class MemoryOnePlayer(Player):
             if self.name == 'Generic Memory One Player':
                 self.name = "%s: %s" % (self.name, four_vector)
 
-    def set_four_vector(self, four_vector):
+    def set_four_vector(self, four_vector: type_four_vector):
         if not all(0 <= p <= 1 for p in four_vector):
             raise ValueError("An element in the probability vector, {}, is not "
                              "between 0 and 1.".format(str(four_vector)))
@@ -62,7 +66,7 @@ class MemoryOnePlayer(Player):
                                      map(float, four_vector)))
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if not hasattr(self, "_four_vector"):
             raise ValueError("_four_vector not yet set")
         if len(opponent.history) == 0:
@@ -95,7 +99,7 @@ class WinStayLoseShift(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    def __init__(self, initial=C):
+    def __init__(self, initial: Action = C) -> None:
         super().__init__()
         self.set_four_vector([1, 0, 0, 1])
         self._initial = initial
@@ -120,7 +124,7 @@ class WinShiftLoseStay(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    def __init__(self, initial=D):
+    def __init__(self, initial: Action = D) -> None:
         super().__init__()
         self.set_four_vector([0, 1, 1, 0])
         self._initial = initial
@@ -145,7 +149,7 @@ class GTFT(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    def __init__(self, p=None):
+    def __init__(self, p: float = None) -> None:
         """
         Parameters
 
@@ -167,7 +171,7 @@ class GTFT(MemoryOnePlayer):
         four_vector = [1, self.p, 1, self.p]
         self.set_four_vector(four_vector)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s: %s" % (self.name, round(self.p, 2))
 
 
@@ -181,7 +185,7 @@ class FirmButFair(MemoryOnePlayer):
 
     name = 'Firm But Fair'
 
-    def __init__(self):
+    def __init__(self) -> None:
         four_vector = (1, 0, 1, 2/3)
         super().__init__(four_vector)
         self.set_four_vector(four_vector)
@@ -192,7 +196,7 @@ class StochasticCooperator(MemoryOnePlayer):
 
     name = 'Stochastic Cooperator'
 
-    def __init__(self):
+    def __init__(self) -> None:
         four_vector = (0.935, 0.229, 0.266, 0.42)
         super().__init__(four_vector)
         self.set_four_vector(four_vector)
@@ -203,7 +207,7 @@ class StochasticWSLS(MemoryOnePlayer):
 
     name = 'Stochastic WSLS'
 
-    def __init__(self, ep=0.05):
+    def __init__(self, ep: float = 0.05) -> None:
         """
         Parameters
 
@@ -246,7 +250,7 @@ class LRPlayer(MemoryOnePlayer):
     }
 
 
-    def receive_match_attributes(self, phi=0, s=None, l=None):
+    def receive_match_attributes(self, phi: float = 0, s: float = None, l: float = None):
         """
         Parameters
 
@@ -280,7 +284,7 @@ class ZDExtort2(LRPlayer):
 
     name = 'ZD-Extort-2'
 
-    def __init__    (self, phi=1/9, s=0.5):
+    def __init__(self, phi: float = 1/9, s: float = 0.5) -> None:
         """
         Parameters
 
@@ -304,7 +308,7 @@ class ZDExtort2v2(LRPlayer):
 
     name = 'ZD-Extort-2 v2'
 
-    def __init__(self, phi=1/8, s=0.5, l=1):
+    def __init__(self, phi: float = 1/8, s: float = 0.5, l: float = 1) -> None:
         """
         Parameters
 
@@ -328,7 +332,7 @@ class ZDExtort4(LRPlayer):
 
     name = 'ZD-Extort-4'
 
-    def __init__(self, phi=4/17, s=0.25, l=1):
+    def __init__(self, phi: float = 4/17, s: float = 0.25, l: float = 1) -> None:
         """
         Parameters
 
@@ -351,7 +355,7 @@ class ZDGen2(LRPlayer):
 
     name = 'ZD-GEN-2'
 
-    def __init__(self, phi=1/8, s=0.5, l=3):
+    def __init__(self, phi: float = 1/8, s: float = 0.5, l: float = 3) -> None:
         """
         Parameters
 
@@ -374,7 +378,7 @@ class ZDGTFT2(LRPlayer):
 
     name = 'ZD-GTFT-2'
 
-    def __init__(self, phi=0.25, s=0.5):
+    def __init__(self, phi: float = 0.25, s: float = 0.5) -> None:
         """
         Parameters
 
@@ -398,7 +402,7 @@ class ZDSet2(LRPlayer):
 
     name = 'ZD-SET-2'
 
-    def __init__(self, phi=1/4, s=0., l=2):
+    def __init__(self, phi: float = 1/4, s: float = 0., l: float = 2) -> None:
         """
         Parameters
 
@@ -427,7 +431,7 @@ class SoftJoss(MemoryOnePlayer):
 
     name = "Soft Joss"
 
-    def __init__(self, q=0.9):
+    def __init__(self, q: float = 0.9) -> None:
         """
         Parameters
 
@@ -443,7 +447,7 @@ class SoftJoss(MemoryOnePlayer):
         four_vector = (1., 1 - q, 1, 1 - q)
         super().__init__(four_vector)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s: %s" % (self.name, round(self.q, 2))
 
 
@@ -467,7 +471,7 @@ class ALLCorALLD(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0:
             return random_choice(0.6)
         return self.history[-1]

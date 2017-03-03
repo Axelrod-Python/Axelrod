@@ -63,6 +63,7 @@ from .punisher import Punisher, InversePunisher, LevelPunisher
 from .qlearner import (
     RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner)
 from .rand import Random
+from .resurrection import Resurrection
 from .retaliate import (
     Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
     LimitedRetaliate3)
@@ -75,6 +76,7 @@ from .titfortat import (
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
     SpitefulTitForTat)
+from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
 
@@ -206,6 +208,7 @@ all_strategies = [
     Random,
     RandomHunter,
     RemorsefulProber,
+    Resurrection,
     Retaliate,
     Retaliate2,
     Retaliate3,
@@ -236,6 +239,7 @@ all_strategies = [
     TrickyDefector,
     Tullock,
     TwoTitsForTat,
+    VeryBad,
     Willing,
     Winner12,
     Winner21,

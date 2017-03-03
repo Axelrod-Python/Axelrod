@@ -3,22 +3,25 @@ from typing import List
 from axelrod.actions import Action, Actions
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from axelrod.strategy_transformers import FinalTransformer
 
 C, D = Actions.C, Actions.D
 
-@FinalTransformer((D), name_prefix=None)  # End with defection
+@FinalTransformer((C), name_prefix=None)  # End with defection
 class Stalker(Player):
     """
-    A player starts by always cooperating for the first 10 moves.
+    This strategy is based on the feeling with the same name.
+    It is modeled on the sine curve(f = sin( 2* pi * n / 10 )), which varies
+    with the current iteration.
 
-    From the tenth round on, the player analyzes the last ten actions, and
-    compare the number of defects and cooperates of the opponent, based in
-    percentage. If cooperation occurs 30% more than defection, it will
-    cooperate.
-    If defection occurs 30% more than cooperation, the program will defect.
-    Otherwise, the program follows the TitForTat algorithm.
+    If f > 0.95, 'ego' of the algorithm is inflated; always defects.
+    If 0.95 > abs(f) > 0.3, rational behavior; follows TitForTat algortithm.
+    If 0.3 > f > -0.3; random behavior.
+    If f < -0.95, algorithm is at rock bottom; always cooperates.
 
+    Futhermore, the algorithm implements a retaliation policy, if the opponent
+    defects; the sin curve is shifted. But due to lack of further information,
+    this implementation does not include a sin phase change.
+    
     Names:
 
     - Stalker: [Andre2013]_
@@ -34,6 +37,7 @@ class Stalker(Player):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
     def __init__(self, initial_plays: List[Action] =None) -> None:
         super().__init__()
         self.R, self.P, self.S, self.T  = self.match_attributes["game"].RPST()
@@ -72,3 +76,7 @@ class Stalker(Player):
 
         elif current_average_score < 1:
             return random_choice()
+    
+    def reset(self):
+        super().reset()
+        self.scores = []
