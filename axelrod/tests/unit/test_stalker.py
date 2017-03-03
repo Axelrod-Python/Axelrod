@@ -1,0 +1,44 @@
+"""Tests for the SelfSteem strategy."""
+
+import axelrod
+import random
+from .test_player import TestPlayer
+
+C, D = axelrod.Actions.C, axelrod.Actions.D
+
+class TestStalker(TestPlayer):
+
+    name = "Stalker"
+    player = axelrod.Stalker
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Start with cooperation
+        self.first_play_test(C)
+
+        # current_average_score > very_good_score
+        self.responses_test([D], [C] * 2 + [D] * 4, [D] * 2 + [C] * 4)
+        self.responses_test([D], [D] * 2 + [C] * 4, [C] * 6)
+
+        # wish_score < current_average_score < very_good_score
+        self.responses_test([C], [C] * 7 + [D] * 2, [C] * 7 + [D] * 2)
+        self.responses_test([C], [C] * 7 + [C], [C] * 7 + [D])
+
+        # current_average_score > 2
+        # No point in testing this case, as in the default case, wish_score = 2,
+        # therefore the above two test cases cover this case
+
+        # 1 < current_average_score < 2
+        self.responses_test([D], [C] * 7 + [C] * 5, [C] * 7 + [D] * 5)
+
+        # current_average_score < 1
+        self.responses_test([D], [D] * 7 + [C] * 5, [D] * 7 + [D] * 5, seed = 15)
+        # defect in last round
