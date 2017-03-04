@@ -30,12 +30,20 @@ class TestTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
         self.first_play_test(C)
-        # Repeats last action of opponent history.
         self.second_play_test(C, D, C, D)
-        self.responses_test([C], [C] * 4, [C, C, C, C])
-        self.responses_test([D], [C] * 5, [C, C, C, C, D])
+
+        outcomes = [(C, C), (C, D), (D, C), (C, D)]
+        match = axelrod.Match((self.player(), axelrod.Alternator()), turns=4)
+        self.assertEqual(match.play(), outcomes)
+
+        outcomes = [(C, C), (C, C), (C, C), (C, C)]
+        match = axelrod.Match((self.player(), axelrod.Cooperator()), turns=4)
+        self.assertEqual(match.play(), outcomes)
+
+        outcomes = [(C, D), (D, D), (D, D), (D, D)]
+        match = axelrod.Match((self.player(), axelrod.Defector()), turns=4)
+        self.assertEqual(match.play(), outcomes)
 
 
 class TestTitFor2Tats(TestPlayer):
