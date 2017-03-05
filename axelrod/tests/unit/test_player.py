@@ -288,8 +288,67 @@ class TestPlayer(unittest.TestCase):
             test_responses(self, self.player(), axelrod.Defector(),
                            rDD, D, D, seed=seed)
 
+    def versus_test(self, opponent, expected_outcomes,
+                    noise=None, seed=None, turns=10,
+                    match_attributes=None, attrs=None,
+                    init_args=None, init_kwargs=None):
+        """
+        Tests a sequence of outcomes for two given players.
+
+        Parameters:
+        -----------
+
+        opponent: Player or list
+            An instance of a player OR a sequence of actions. If a sequence of
+            actions is passed, a Mock Player is created that cycles over that
+            sequence.
+        expected_outcomes: List
+            the expected outcomes of the match (list of tuples of actions).
+        noise: float
+            Any noise to be passed to a match
+        seed: int
+            The random seed to be used
+        length: int
+            The length of the game. If `opponent` is a sequence of actions then
+            the length is taken to be the length of the sequence.
+        match_attributes: dict
+            The match attributes to be passed to the players.  For example,
+            `{length:-1}` implies that the players do not know the length of the
+            match.
+        attrs: dict
+            dictionary of internal attributes to check at the end of all plays
+            in player
+        init_args: tuple or list
+            A list of arguments to instantiate player with
+        init_kwargs: dictionary
+            A list of keyword arguments to instantiate player with
+        """
+        if seed:
+            axelrod.seed(seed)
+
+        if type(opponent) is list:
+            opponent = MockPlayer(opponent)
+
+        turns = len(expected_outcomes)
+
+        if init_args is None:
+            init_args = ()
+        if init_kwargs is None:
+            init_kwargs = dict()
+        player = self.player(*init_args, **init_kwargs)
+
+        match = axelrod.Match((player, opponent), turns=turns, noise=noise,
+                              match_attributes=match_attributes)
+        self.assertEqual(match.play(), expected_outcomes)
+
+        if attrs:
+            player = match.players[0]
+            for attr, value in attrs.items():
+                self.assertEqual(getattr(player, attr), value)
+
     def responses_test(self, responses, player_history=None,
-                       opponent_history=None, seed=None, length=200, attrs=None,
+                       opponent_history=None, seed=None, length=200,
+                       attrs=None,
                        init_args=None, init_kwargs=None):
         """Test responses to arbitrary histories. A match is played where the
         histories are enforced and the sequence of plays in responses is
