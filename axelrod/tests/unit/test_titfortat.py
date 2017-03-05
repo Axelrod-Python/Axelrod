@@ -238,7 +238,7 @@ class TestHardTitForTat(TestPlayer):
 
         opponent_sequence = [D, C, C, C, D, C]
         outcomes = [(C, D), (D, C), (D, C), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent_sequence, outcomes)
+        self.versus_test(opponent_sequence, expected_outcomes=outcomes)
 
 
 class TestHardTitFor2Tats(TestPlayer):
@@ -261,7 +261,7 @@ class TestHardTitFor2Tats(TestPlayer):
         # Uses memory 3 to punish 2 consecutive defections
         opponent_sequence = [D, C, C, D, D, D, C]
         outcomes = [(C, D), (C, C), (C, C), (C, D), (C, D), (D, D), (D, C)]
-        self.versus_test(opponent_sequence, outcomes)
+        self.versus_test(opponent_sequence, expected_outcomes=outcomes)
 
 
 class TestOmegaTFT(TestPlayer):
@@ -284,13 +284,14 @@ class TestOmegaTFT(TestPlayer):
 
         player_history = [C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D]
         opp_history = [C, D] * 9
-        expected_outcomes = list(zip(player_history, opp_history))
-        self.versus_test(axelrod.Alternator(), expected_outcomes)
+        outcomes = list(zip(player_history, opp_history))
+        self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes)
 
         player_history =  [C, D, C, D, C, C, C, C, C]
         opp_history = [D, C, D, C, D, C, C, C, C]
-        expected_outcomes = list(zip(player_history, opp_history))
-        self.versus_test(axelrod.SuspiciousTitForTat(), expected_outcomes)
+        outcomes = list(zip(player_history, opp_history))
+        self.versus_test(axelrod.SuspiciousTitForTat(),
+                         expected_outcomes=outcomes)
 
     def test_reset(self):
         player = self.player()
@@ -502,7 +503,7 @@ class TestSlowTitForTwoTats(TestPlayer):
         opponent_sequence = [C, C, D, D, C, D, D, C, C, D, D]
         outcomes = [(C, C), (C, C), (C, D), (C, D), (D, C), (C, D), (C, D),
                     (D, C), (C, C), (C, D), (C, D)]
-        self.versus_test(opponent_sequence, outcomes)
+        self.versus_test(opponent_sequence, expected_outcomes=outcomes)
 
 
 class TestAdaptiveTitForTat(TestPlayer):
