@@ -2,6 +2,7 @@ import warnings
 from axelrod.actions import Actions, Action
 from axelrod.player import Player, update_history, update_state_distribution
 from collections import defaultdict
+from itertools import cycle
 
 from typing import List, Tuple
 
@@ -28,16 +29,16 @@ class MockPlayer(Player):
         if state_dist:
             self.state_distribution = dict(state_dist)
         if actions:
-            self.actions = list(actions)
+            self.actions = cycle(actions)
         else:
             self.actions = []
 
     def strategy(self, opponent: Player) -> Action:
         # Return the next saved action, if present.
         try:
-            action = self.actions.pop(0)
+            action = self.actions.__next__()
             return action
-        except IndexError:
+        except AttributeError:
             return C
 
 

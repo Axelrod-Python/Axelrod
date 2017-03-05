@@ -23,13 +23,14 @@ class TestMockPlayer(unittest.TestCase):
     def test_history(self):
         t = TestOpponent()
         m1 = MockPlayer([C], history=[C]*10)
-        self.assertEqual(m1.actions[0], C)
+        self.assertEqual(m1.actions.__next__(), C)
         self.assertEqual(m1.history, [C] * 10)
         self.assertEqual(m1.cooperations, 10)
         self.assertEqual(m1.defections, 0)
         self.assertEqual(m1.strategy(t), C)
+
         m2 = MockPlayer([D], history=[D]*10)
-        self.assertEqual(m2.actions[0], D)
+        self.assertEqual(m2.actions.__next__(), D)
         self.assertEqual(m2.history, [D] * 10)
         self.assertEqual(m2.cooperations, 0)
         self.assertEqual(m2.defections, 10)
