@@ -44,32 +44,40 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
    :code:`D` following the last round of play and checking the player's
    subsequent action.
 
-3. The member function :code:`responses_test` takes arbitrary histories for each
-   player and tests a list of expected next responses::
+3. The member function :code:`versus_test` can be used to test how the player
+   plays against a given opponent (from the Axelrod library or defined by a
+   cycle of actions)::
 
-    self.responses_test(responses=[D, C, C, C], player_history=[C],
-                        opponent_history=[C], seed=None)
+    self.versus_test(opponent=[C, D],
+                     expected_outcomes=[(D, C), (C, D), (C, C)], seed=None)
 
-   In this case each player has their history simulated to be :code:`[C]` and
-   the expected responses are D, C, C, C. Note that the histories will elongate
-   as the responses accumulated, with the opponent accruing cooperations.
+   In this case the player is tested against an opponent that will cycle through
+   :code:`C, D`. The :code:`expected_outcomes` are the actions player by both
+   the tested player and the opponent in the match. In this case we see that the
+   player is expected to play :code:`D, C, C` against :code:`C, D, C`.
 
-   If the given histories are not possible for the strategy then the test will
-   not be meaningful. For example, setting the history of Defector to have
-   cooperations is not a possible history of play since Defector always defects,
-   and so will not actually test the strategy correctly. The test suite will
-   warn you if it detects a mismatch in simulated history and actual history.
-
-   Note also that in general it is not a good idea to manually set the history
-   of any player.
-
-   The function :code:`responses_test` also accepts a dictionary parameter of
-   attributes to check at the end of the checks. For example this test checks
+   The function :code:`versus_test` also accepts a dictionary parameter of
+   attributes to check at the end of the match. For example this test checks
    if the player's internal variable :code:`opponent_class` is set to
    :code:`"Cooperative"`::
 
-       self.responses_test([C], [C] * 6, [C] * 6,
-                           attrs={"opponent_class": "Cooperative"})
+       outcomes = [(C, C)] * 6
+       self.versus_test(axelrod.Cooperator(), expected_outcomes=outcomes
+                        attrs={"opponent_class": "Cooperative"})
+
+   Note here that instead of passing a sequence of actions as an opponent we are
+   passing an actual player from the axelrod library.
+
+   The function :code:`versus_test` also accepts a dictionary parameter of match
+   attributes that dictate the knowledge of the players. For example this test
+   assumes that players do not know the length of the match::
+
+        outcomes = [(C, C), (C, D), (D, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes,
+                         match_attributes={"length": -1})
+
+   Note here that instead of passing a sequence of actions as an opponent we are
+   passing an actual player from the axelrod library.
 
 As an example, the tests for Tit-For-Tat are as follows::
 
@@ -90,41 +98,56 @@ As an example, the tests for Tit-For-Tat are as follows::
         expected_classifier = {
             'memory_depth': 1,
             'stochastic': False,
+            'makes_use_of': set(),
             'inspects_source': False,
             'manipulates_source': False,
             'manipulates_state': False
         }
 
         def test_strategy(self):
-            # Starts by cooperating.
             self.first_play_test(C)
-            # Repeats last action of opponent history.
-            self.second_play_test(C, D, C, D)
-            self.responses_test([C], [C, C, C, C], [C, C, C, C])
-            self.responses_test([D], [C, C, C, C, C], [C, C, C, C, D])
+            self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
 
-The :code:`test_strategy` method mainly checks that the
-:code:`strategy` method in the :code:`TitForTat` class works as expected:
+            # Play against opponents
+            outcomes = [(C, C), (C, D), (D, C), (C, D)]
+            self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes)
 
-1. If the opponent's last strategy was :code:`C`: then :code:`TitForTat` should
-   cooperate::
+            outcomes = [(C, C), (C, C), (C, C), (C, C)]
+            self.versus_test(axelrod.Cooperator(), expected_outcomes=outcomes)
 
-    self.responses_test(responses=[C], player_history=[C], opponent_history=[C])
+            outcomes = [(C, D), (D, D), (D, D), (D, D)]
+            self.versus_test(axelrod.Defector(), expected_outcomes=outcomes)
 
-   Or simply::
+            # This behaviour is independent of knowledge of the Match length
+            outcomes = [(C, C), (C, D), (D, C), (C, D)]
+            self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes,
+                             match_attributes={"length": -1})
 
-    self.responses_test([C], [C], [C])
+            # We can also test against random strategies
+            outcomes = [(C, D), (D, D), (D, C), (C, C)]
+            self.versus_test(axelrod.Random(), expected_outcomes=outcomes,
+                             seed=0)
 
-2. If the opponent's last strategy was :code:`D`: after four cooperates then
-   :code:`TitForTat` should defect. Note that we need to give the history for
-   :code:`TitForTat` as well::
+            outcomes = [(C, C), (C, D), (D, D), (D, C)]
+            self.versus_test(axelrod.Random(), expected_outcomes=outcomes,
+                             seed=1)
 
-    self.responses_test(responses=[D], player_history=[C, C, C, C, C],
-                        opponent_history=[C, C, C, C, D])
+            #  Play against sequence of moves
+            opponent_sequence = [C, D]
+            outcomes = [(C, C), (C, D), (D, C), (C, D)]
+            self.versus_test(opponent_sequence, expected_outcomes=outcomes)
 
-   Or::
+            opponent_sequence = [D, D]
+            outcomes = [(C, D), (D, D), (D, D), (D, D)]
+            self.versus_test(opponent_sequence, expected_outcomes=outcomes)
 
-    self.responses_test([D], [C, C, C, C, C], [C, C, C, C, D])
+            opponent_sequence = [C, C, D, D, C, D]
+            outcomes = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
+            self.versus_test(opponent_sequence, expected_outcomes=outcomes)
+
+
+There are other examples of using this testing framework in
+:code:`axelrod/tests/unit/test_titfortat.py`.
 
 The :code:`expected_classifier` dictionary tests that the classification of the
 strategy is as expected (the tests for this is inherited in the :code:`init`
@@ -132,20 +155,3 @@ method). Please be sure to classify new strategies according to the already
 present dimensions but if you create a new dimension you do not **need** to re
 classify all the other strategies (but feel free to! :)), but please do add it
 to the :code:`default_classifier` in the :code:`axelrod/player.py` parent class.
-
-Finally, there is a :code:`TestMatch` class that streamlines the testing of
-two strategies playing each other using a test function :code:`versus_test`. For
-example, to test several rounds of play of :code:`TitForTwoTats` versus
-:code:`Bully`::
-
-    class TestTF2TvsBully(TestMatch):
-        """Test Tit for Two Tats vs Bully"""
-        def test_rounds(self):
-            outcomes = [[C, D], [C, D], [D, D], [D, C], [C, C], [C, D], [C, D], [D, D]]
-            self.versus_test(axelrod.TitFor2Tats, axelrod.Bully, outcomes)
-
-Using :code:`TestMatch` is essentially equivalent to playing a short `Match`
-between the players and checking the outcome.
-
-The function :code:`versus_test` also accepts a :code:`seed` keyword, and
-like :code:`responses_test` the history is accumulated.
