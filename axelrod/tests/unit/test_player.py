@@ -323,8 +323,6 @@ class TestPlayer(unittest.TestCase):
         init_kwargs: dictionary
             A list of keyword arguments to instantiate player with
         """
-        if seed:
-            axelrod.seed(seed)
 
         if type(opponent) is list:
             opponent = MockPlayer(opponent)
@@ -335,6 +333,10 @@ class TestPlayer(unittest.TestCase):
             init_args = ()
         if init_kwargs is None:
             init_kwargs = dict()
+
+        if seed is not None:
+            axelrod.seed(seed)
+
         player = self.player(*init_args, **init_kwargs)
 
         match = axelrod.Match((player, opponent), turns=turns, noise=noise,
