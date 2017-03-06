@@ -324,9 +324,6 @@ class TestPlayer(unittest.TestCase):
             A list of keyword arguments to instantiate player with
         """
 
-        if type(opponent) is list:
-            opponent = MockPlayer(opponent)
-
         turns = len(expected_outcomes)
 
         if init_args is None:

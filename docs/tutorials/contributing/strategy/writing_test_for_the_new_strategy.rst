@@ -45,16 +45,18 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
    subsequent action.
 
 3. The member function :code:`versus_test` can be used to test how the player
-   plays against a given opponent (from the Axelrod library or defined by a
-   cycle of actions)::
+   plays against a given opponent::
 
-    self.versus_test(opponent=[C, D],
+    self.versus_test(opponent=axelrod.MockPlayer([C, D]),
                      expected_outcomes=[(D, C), (C, D), (C, C)], seed=None)
 
    In this case the player is tested against an opponent that will cycle through
    :code:`C, D`. The :code:`expected_outcomes` are the actions player by both
    the tested player and the opponent in the match. In this case we see that the
    player is expected to play :code:`D, C, C` against :code:`C, D, C`.
+
+   Note that you can either user a :code:`MockPlayer` that will cycle through a
+   given sequence or you can use another strategy from the Axelrod library.
 
    The function :code:`versus_test` also accepts a dictionary parameter of
    attributes to check at the end of the match. For example this test checks
@@ -75,9 +77,6 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
         outcomes = [(C, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes,
                          match_attributes={"length": -1})
-
-   Note here that instead of passing a sequence of actions as an opponent we are
-   passing an actual player from the axelrod library.
 
 As an example, the tests for Tit-For-Tat are as follows::
 
@@ -132,18 +131,15 @@ As an example, the tests for Tit-For-Tat are as follows::
             self.versus_test(axelrod.Random(), expected_outcomes=outcomes,
                              seed=1)
 
-            #  Play against sequence of moves
-            opponent_sequence = [C, D]
+            #  If you would like to test against a sequence of moves you should use
+            #  a MockPlayer
+            opponent = axelrod.MockPlayer([C, D])
             outcomes = [(C, C), (C, D), (D, C), (C, D)]
-            self.versus_test(opponent_sequence, expected_outcomes=outcomes)
+            self.versus_test(opponent, expected_outcomes=outcomes)
 
-            opponent_sequence = [D, D]
-            outcomes = [(C, D), (D, D), (D, D), (D, D)]
-            self.versus_test(opponent_sequence, expected_outcomes=outcomes)
-
-            opponent_sequence = [C, C, D, D, C, D]
+            opponent = axelrod.MockPlayer([C, C, D, D, C, D])
             outcomes = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
-            self.versus_test(opponent_sequence, expected_outcomes=outcomes)
+            self.versus_test(opponent, expected_outcomes=outcomes)
 
 
 There are other examples of using this testing framework in
