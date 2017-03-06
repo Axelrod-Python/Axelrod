@@ -291,7 +291,7 @@ class TestPlayer(unittest.TestCase):
     def versus_test(self, opponent, expected_outcomes,
                     noise=None, seed=None, turns=10,
                     match_attributes=None, attrs=None,
-                    init_args=None, init_kwargs=None):
+                    init_kwargs=None):
         """
         Tests a sequence of outcomes for two given players.
 
@@ -318,23 +318,18 @@ class TestPlayer(unittest.TestCase):
         attrs: dict
             dictionary of internal attributes to check at the end of all plays
             in player
-        init_args: tuple or list
-            A list of arguments to instantiate player with
-        init_kwargs: dictionary
-            A list of keyword arguments to instantiate player with
+        init_kwargs: dict
+            A dictionary of keyword arguments to instantiate player with
         """
 
         turns = len(expected_outcomes)
-
-        if init_args is None:
-            init_args = ()
         if init_kwargs is None:
             init_kwargs = dict()
 
         if seed is not None:
             axelrod.seed(seed)
 
-        player = self.player(*init_args, **init_kwargs)
+        player = self.player(**init_kwargs)
 
         match = axelrod.Match((player, opponent), turns=turns, noise=noise,
                               match_attributes=match_attributes)
