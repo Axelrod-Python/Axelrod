@@ -290,7 +290,7 @@ class TestOmegaTFT(TestPlayer):
         self.versus_test(axelrod.SuspiciousTitForTat(),
                          expected_outcomes=outcomes)
 
-    def test_reset(self):
+    def test_reset_counters(self):
         player = self.player()
         opponent = axelrod.Defector()
         [player.play(opponent) for _ in range(10)]

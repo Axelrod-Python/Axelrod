@@ -45,7 +45,7 @@ class TestGrumpy(TestPlayer):
                             init_kwargs={"grumpy_threshold": 3,
                                          "nice_threshold": 0})
 
-    def test_reset(self):
+    def test_reset_state(self):
         P1 = axelrod.Grumpy(starting_state='Grumpy')
         P1.state = 'Nice'
         P1.reset()
