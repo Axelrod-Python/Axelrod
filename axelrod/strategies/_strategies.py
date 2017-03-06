@@ -70,6 +70,7 @@ from .retaliate import (
 from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
 from .selfsteem import SelfSteem
 from .shortmem import ShortMem
+from .stalker import Stalker
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
@@ -224,6 +225,7 @@ all_strategies = [
     SolutionB1,
     SolutionB5,
     SpitefulTitForTat,
+    Stalker,
     StochasticCooperator,
     StochasticWSLS,
     SuspiciousTitForTat,

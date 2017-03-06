@@ -140,7 +140,10 @@ Here are the docstrings of all the strategies in the library.
    :undoc-members:
 .. automodule:: axelrod.strategies.selfsteem
    :members:
-   :undoc-members:   
+   :undoc-members:
+.. automodule:: axelrod.strategies.stalker
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.titfortat
    :members:
    :undoc-members:
