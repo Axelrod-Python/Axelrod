@@ -24,7 +24,24 @@ class TestRandom(TestPlayer):
         """Test that strategy is randomly picked (not affected by history)."""
         self.first_play_test(C, seed=1)
         self.first_play_test(D, seed=2)
-        self.responses_test([C], [C, D, C], [C, C, D], seed=1)
+
+        opponent = axelrod.MockPlayer()
+        outcomes = [(C, C), (D, C), (D, C)]
+        self.versus_test(opponent, expected_outcomes=outcomes, seed=1)
+
+        opponent = axelrod.MockPlayer()
+        outcomes = [(D, C), (D, C), (C, C)]
+        self.versus_test(opponent, expected_outcomes=outcomes, seed=2)
+
+        opponent = axelrod.MockPlayer()
+        outcomes = [(D, C), (D, C), (D, C)]
+        self.versus_test(opponent, expected_outcomes=outcomes,
+                         init_kwargs={"p": 0})
+
+        opponent = axelrod.MockPlayer()
+        outcomes = [(C, C), (C, C), (C, C)]
+        self.versus_test(opponent, expected_outcomes=outcomes,
+                         init_kwargs={"p": 1})
 
     def test_deterministic_classification(self):
         """Test classification when p is 0 or 1"""
