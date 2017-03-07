@@ -49,6 +49,7 @@ class RiskyQLearner(Player):
         self.classifier['stochastic'] = True
 
         self.prev_action = random_choice()
+        self.original_prev_action = self.prev_action
         self.history = [] # type: List[Action]
         self.score = 0
         self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0]))})
@@ -117,7 +118,7 @@ class RiskyQLearner(Player):
         self.Qs = {'': {C: 0, D: 0}}
         self.Vs = {'': 0}
         self.prev_state = ''
-        self.prev_action = random_choice()
+        self.prev_action = self.original_prev_action
 
 
 class ArrogantQLearner(RiskyQLearner):
