@@ -1,7 +1,9 @@
 from collections import defaultdict
 from functools import wraps
+import types
 import random
 import copy
+import numpy as np
 
 from axelrod.actions import Actions, flip_action, Action
 from .game import DefaultGame
@@ -189,3 +191,21 @@ class Player(object):
         self.cooperations = 0
         self.defections = 0
         self.state_distribution = defaultdict(int)
+
+    def __eq__(self, other):
+        """
+        Test if two players are equal.
+        """
+        check = self.__repr__() == other.__repr__()
+        for attribute, value in self.__dict__.items():
+            other_value = getattr(other, attribute)
+
+            if isinstance(value, np.ndarray):
+                check = check and np.array_equal(value, other_value)
+
+            elif isinstance(value, types.GeneratorType):
+                check = check and all(next(value) == next(other_value)
+                                      for _ in range(10))
+            else:
+                check = check and value == other_value
+        return check
