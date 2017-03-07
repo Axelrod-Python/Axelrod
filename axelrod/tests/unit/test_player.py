@@ -303,7 +303,7 @@ class TestPlayer(unittest.TestCase):
             actions is passed, a Mock Player is created that cycles over that
             sequence.
         expected_outcomes: List
-            the expected outcomes of the match (list of tuples of actions).
+            The expected outcomes of the match (list of tuples of actions).
         noise: float
             Any noise to be passed to a match
         seed: int
@@ -316,7 +316,7 @@ class TestPlayer(unittest.TestCase):
             `{length:-1}` implies that the players do not know the length of the
             match.
         attrs: dict
-            dictionary of internal attributes to check at the end of all plays
+            Dictionary of internal attributes to check at the end of all plays
             in player
         init_kwargs: dict
             A dictionary of keyword arguments to instantiate player with

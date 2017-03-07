@@ -26,7 +26,7 @@ class TestRandom(TestPlayer):
         self.first_play_test(D, seed=2)
 
         opponent = axelrod.MockPlayer()
-        outcomes = [(C, C), (D, C), (D, C)]
+        outcomes = [(C, C), (D, C), (D, C), (C, C)]
         self.versus_test(opponent, expected_outcomes=outcomes, seed=1)
 
         opponent = axelrod.MockPlayer()

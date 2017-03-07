@@ -34,22 +34,22 @@ class TestTitForTat(TestPlayer):
         self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
 
         # Play against opponents
-        outcomes = [(C, C), (C, D), (D, C), (C, D)]
+        outcomes = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes)
 
-        outcomes = [(C, C), (C, C), (C, C), (C, C)]
+        outcomes = [(C, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_outcomes=outcomes)
 
-        outcomes = [(C, D), (D, D), (D, D), (D, D)]
+        outcomes = [(C, D), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_outcomes=outcomes)
 
         # This behaviour is independent of knowledge of the Match length
-        outcomes = [(C, C), (C, D), (D, C), (C, D)]
+        outcomes = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes,
                          match_attributes={"length": -1})
 
         # We can also test against random strategies
-        outcomes = [(C, D), (D, D), (D, C), (C, C)]
+        outcomes = [(C, D), (D, D), (D, C), (C, C), (C, D)]
         self.versus_test(axelrod.Random(), expected_outcomes=outcomes,
                          seed=0)
 
@@ -373,18 +373,6 @@ class TestGradual(TestPlayer):
                          attrs={"calming": False, "punishing": True,
                                 "punishment_count": 2, "punishment_limit": 2})
 
-    def test_reset_cleans_all(self):
-        p = axelrod.Gradual()
-        p.calming = True
-        p.punishing = True
-        p.punishment_count = 1
-        p.punishment_limit = 1
-        p.reset()
-
-        self.assertFalse(p.calming)
-        self.assertFalse(p.punishing)
-        self.assertEqual(p.punishment_count, 0)
-        self.assertEqual(p.punishment_limit, 0)
 
     def test_output_from_literature(self):
         """
@@ -525,14 +513,6 @@ class TestAdaptiveTitForTat(TestPlayer):
         self.versus_test(self.player(), expected_outcomes=outcomes,
                          attrs={"world":0.75, "rate":0.5})
 
-    def test_world_rate_reset(self):
-        p1, p2 = self.player(), self.player()
-        p1.play(p2)
-        p1.play(p2)
-        p2.reset()
-        self.assertEqual(p2.world, 0.5)
-        self.assertEqual(p2.rate, 0.5)
-
 
 class TestSpitefulTitForTat(TestPlayer):
     name = "Spiteful Tit For Tat"
@@ -567,9 +547,3 @@ class TestSpitefulTitForTat(TestPlayer):
         outcomes = [(C, C), (C, C), (C, D), (D, D), (D, C)]
         self.versus_test(opponent, expected_outcomes=outcomes,
                          attrs={"retaliating": True})
-
-    def test_reset_retaliating(self):
-        player = self.player()
-        player.retaliating = True
-        player.reset()
-        self.assertFalse(player.retaliating)
