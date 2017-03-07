@@ -231,7 +231,7 @@ class TestPlayer(unittest.TestCase):
                 self.assertTrue(np.array_equal(reset_value, original_value),
                                 msg=attribute)
 
-            if isinstance(reset_value, types.GeneratorType):
+            elif isinstance(reset_value, types.GeneratorType):
                 for _ in range(10):
                     self.assertEqual(next(reset_value),
                                      next(original_value), msg=attribute)
