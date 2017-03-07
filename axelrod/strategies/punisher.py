@@ -62,7 +62,7 @@ class Punisher(Player):
         """
         super().reset()
         self.grudged = False
-        self.grudge_memory = 0
+        self.grudge_memory = 1
         self.mem_length = 1
 
 
@@ -122,15 +122,15 @@ class InversePunisher(Player):
         """Resets internal variables and history"""
         super().reset()
         self.grudged = False
-        self.grudge_memory = 0
+        self.grudge_memory = 1
         self.mem_length = 1
 
 class LevelPunisher(Player):
     """
-    A player starts by cooperating however, after 10 rounds 
-    will defect if at any point the number of defections 
+    A player starts by cooperating however, after 10 rounds
+    will defect if at any point the number of defections
     by an opponent is greater than 20%.
-    
+
     Names:
 
     - Level Punisher: Name from CoopSim https://github.com/jecki/CoopSim
