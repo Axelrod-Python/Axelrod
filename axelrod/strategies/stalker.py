@@ -34,7 +34,7 @@ class Stalker(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
-        'makes_use_of': set(),
+        'makes_use_of': set(["game", "length"]),
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -46,7 +46,7 @@ class Stalker(Player):
         R, P, S, T  = self.match_attributes["game"].RPST()
         self.very_good_score = R
         self.very_bad_score = P
-        self.wish_score = ( R + P ) / 2
+        self.wish_score = (R + P) / 2
         self.current_score = 0
 
     def score_last_round(self, opponent: Player):
