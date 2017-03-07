@@ -44,6 +44,7 @@ class TestCalculator(TestPlayer):
                    D, C]
         self.responses_test([C], [C] * 22, history)
 
-    def attribute_test(self, player, clone):
+    def attribute_equality_test(self, player, clone):
         """Overwrite the default test to check Joss instance"""
         self.assertIsInstance(player.joss_instance, axelrod.Joss)
+        self.assertIsInstance(clone.joss_instance, axelrod.Joss)

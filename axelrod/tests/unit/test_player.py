@@ -224,18 +224,22 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(player.defections, 0)
         self.assertEqual(player.state_distribution, dict())
 
-        self.attribute_test(player, clone)
+        self.attribute_equality_test(player, clone)
 
     def test_reset_clone(self):
         """Make sure history resetting with cloning works correctly, regardless
         if self.test_reset() is overwritten."""
         player = self.player()
         clone = player.clone()
-        self.attribute_test(player, clone)
+        self.attribute_equality_test(player, clone)
 
-    def attribute_test(self, player, clone):
+    def attribute_equality_test(self, player, clone):
         """A separate method to test equality of attributes. This method can be
-        overwritten in certain cases"""
+        overwritten in certain cases.
+
+        This method checks that all the attributes of `player` and `clone` are
+        the same which is used in the test of the cloning and the resetting.
+        """
 
         for attribute, reset_value in player.__dict__.items():
             original_value = getattr(clone, attribute)
