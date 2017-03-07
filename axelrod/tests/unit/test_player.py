@@ -207,37 +207,42 @@ class TestPlayer(unittest.TestCase):
         t_attrs = player.match_attributes
         self.assertEqual(t_attrs['noise'], .5)
 
-    def test_reset_history(self):
+    def test_reset_history_and_attributes(self):
         """Make sure resetting works correctly."""
-        if self.player.name == "Human":
-            return
-        p = self.player()
-        p_clone = p.clone()
-        player2 = axelrod.Random()
-        for _ in range(10):
-            p.play(player2)
-        p.reset()
-        self.assertEqual(len(p.history), 0)
-        self.assertEqual(self.player().cooperations, 0)
-        self.assertEqual(self.player().defections, 0)
-        self.assertEqual(self.player().state_distribution, dict())
+        player = self.player()
+        clone = player.clone()
+        opponent = axelrod.Random()
 
-        for k, v in p_clone.__dict__.items():
-            try:
-                self.assertEqual(v, getattr(p_clone, k))
-            except ValueError:
-                self.assertTrue(np.array_equal(v, getattr(p_clone, k)))
+        for seed in range(10):
+            axelrod.seed(seed)
+            player.play(opponent)
+
+        player.reset()
+        self.assertEqual(len(player.history), 0)
+        self.assertEqual(player.cooperations, 0)
+        self.assertEqual(player.defections, 0)
+        self.assertEqual(player.state_distribution, dict())
+
+        for attribute, reset_value in player.__dict__.items():
+            original_value = getattr(clone, attribute)
+            if isinstance(reset_value, np.ndarray):
+                self.assertTrue(np.array_equal(reset_value, original_value),
+                                msg=attribute)
+            else:
+                self.assertEqual(reset_value, original_value, msg=attribute)
 
     def test_reset_clone(self):
         """Make sure history resetting with cloning works correctly, regardless
         if self.test_reset() is overwritten."""
         player = self.player()
         clone = player.clone()
-        for k, v in clone.__dict__.items():
-            if isinstance(v, np.ndarray):
-                self.assertTrue(np.array_equal(v, getattr(clone, k)))
+        for attribute, value in player.__dict__.items():
+            clone_value = getattr(player, attribute)
+            if isinstance(value, np.ndarray):
+                self.assertTrue(np.array_equal(value, clone_value),
+                                msg=attribute)
             else:
-                self.assertEqual(v, getattr(clone, k))
+                self.assertEqual(value, clone_value, msg=attribute)
 
     def test_clone(self):
         # Test that the cloned player produces identical play

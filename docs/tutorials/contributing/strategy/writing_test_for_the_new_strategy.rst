@@ -11,11 +11,6 @@ Typically we want to test the following:
 * That the strategy behaves as intended on the first move and subsequent
   moves, triggering any expected actions
 * That the strategy initializes correctly
-* That the strategy resets and clones correctly
-
-If the strategy does not use any internal variables then there are generic tests
-that are automatically invoked to verify proper initialization, resetting, and
-cloning.
 
 A :code:`TestPlayer` class has been written that has a number of convenience
 methods to help write tests efficiently for how a strategy plays. It has three

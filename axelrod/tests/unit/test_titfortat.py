@@ -290,14 +290,6 @@ class TestOmegaTFT(TestPlayer):
         self.versus_test(axelrod.SuspiciousTitForTat(),
                          expected_outcomes=outcomes)
 
-    def test_reset_counters(self):
-        player = self.player()
-        opponent = axelrod.Defector()
-        [player.play(opponent) for _ in range(10)]
-        player.reset()
-        self.assertEqual(player.randomness_counter, 0)
-        self.assertEqual(player.deadlock_counter, 0)
-
 
 class TestGradual(TestPlayer):
 
@@ -460,7 +452,8 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(opponent.history, [C, D, D, D])
         self.assertFalse(ctft.contrite)
 
-    def test_reset_cleans_all(self):
+    def test_reset_history_and_attributes(self):
+        """Overwrite reset test because of decorator"""
         p = self.player()
         p.contrite = True
         p.reset()

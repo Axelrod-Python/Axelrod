@@ -91,3 +91,7 @@ class TestHumanClass(TestPlayer):
         expected_action = C
         actual_action = human.strategy(Player(), lambda: C)
         self.assertEqual(actual_action, expected_action)
+
+    def test_reset_history_and_attributes(self):
+        """Overwrite the reset method for this strategy."""
+        pass
