@@ -64,10 +64,9 @@ class SimpleHMM(object):
     def __eq__(self, other):
         """Equality of two HMMs"""
         check = True
-        check += self.transitions_C == other.transitions_C
-        check += self.transitions_D == other.transitions_D
-        check += self.emission_probabilities == other.emission_probabilities
-        check += self.state == other.state
+        for attr in ["transitions_C", "transitions_D",
+                     "emission_probabilities", "state"]:
+            check = check and getattr(self, attr) == getattr(other, attr)
         return check
 
 

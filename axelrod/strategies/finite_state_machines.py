@@ -35,8 +35,8 @@ class SimpleFSM(object):
     def __eq__(self, other):
         """Equality of two FSMs"""
         check = True
-        check += self.state == other.state
-        check += self.state_transitions == other.state_transitions
+        for attr in ["state", "state_transitions"]:
+            check = check and getattr(self, attr) == getattr(other, attr)
         return check
 
 
