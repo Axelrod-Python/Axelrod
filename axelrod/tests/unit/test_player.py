@@ -1,6 +1,7 @@
 import random
 import unittest
 import warnings
+import types
 
 import numpy as np
 
@@ -225,9 +226,15 @@ class TestPlayer(unittest.TestCase):
 
         for attribute, reset_value in player.__dict__.items():
             original_value = getattr(clone, attribute)
+
             if isinstance(reset_value, np.ndarray):
                 self.assertTrue(np.array_equal(reset_value, original_value),
                                 msg=attribute)
+
+            if isinstance(reset_value, types.GeneratorType):
+                for _ in range(10):
+                    self.assertEqual(next(reset_value),
+                                     next(original_value), msg=attribute)
             else:
                 self.assertEqual(reset_value, original_value, msg=attribute)
 
