@@ -224,6 +224,19 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(player.defections, 0)
         self.assertEqual(player.state_distribution, dict())
 
+        self.attribute_test(player, clone)
+
+    def test_reset_clone(self):
+        """Make sure history resetting with cloning works correctly, regardless
+        if self.test_reset() is overwritten."""
+        player = self.player()
+        clone = player.clone()
+        self.attribute_test(player, clone)
+
+    def attribute_test(self, player, clone):
+        """A separate method to test equality of attributes. This method can be
+        overwritten in certain cases"""
+
         for attribute, reset_value in player.__dict__.items():
             original_value = getattr(clone, attribute)
 
@@ -237,19 +250,6 @@ class TestPlayer(unittest.TestCase):
                                      next(original_value), msg=attribute)
             else:
                 self.assertEqual(reset_value, original_value, msg=attribute)
-
-    def test_reset_clone(self):
-        """Make sure history resetting with cloning works correctly, regardless
-        if self.test_reset() is overwritten."""
-        player = self.player()
-        clone = player.clone()
-        for attribute, value in player.__dict__.items():
-            clone_value = getattr(player, attribute)
-            if isinstance(value, np.ndarray):
-                self.assertTrue(np.array_equal(value, clone_value),
-                                msg=attribute)
-            else:
-                self.assertEqual(value, clone_value, msg=attribute)
 
     def test_clone(self):
         # Test that the cloned player produces identical play

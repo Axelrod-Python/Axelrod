@@ -46,9 +46,8 @@ class TestMetaPlayer(TestPlayer):
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
                                  (key, player.classifier[key], classifier[key]))
 
-    def test_reset_history_and_attributes(self):
-        player = self.player()
-        clone = player.clone()
+    def attribute_test(self, player, clone):
+        """Overwriting this specific method to check team."""
         opponent = axelrod.Cooperator()
         player.play(opponent)
         player.play(opponent)
