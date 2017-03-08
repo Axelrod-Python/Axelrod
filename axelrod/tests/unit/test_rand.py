@@ -26,21 +26,21 @@ class TestRandom(TestPlayer):
         self.first_play_test(D, seed=2)
 
         opponent = axelrod.MockPlayer()
-        outcomes = [(C, C), (D, C), (D, C), (C, C)]
-        self.versus_test(opponent, expected_outcomes=outcomes, seed=1)
+        actions = [(C, C), (D, C), (D, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions, seed=1)
 
         opponent = axelrod.MockPlayer()
-        outcomes = [(D, C), (D, C), (C, C)]
-        self.versus_test(opponent, expected_outcomes=outcomes, seed=2)
+        actions = [(D, C), (D, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions, seed=2)
 
         opponent = axelrod.MockPlayer()
-        outcomes = [(D, C), (D, C), (D, C)]
-        self.versus_test(opponent, expected_outcomes=outcomes,
+        actions = [(D, C), (D, C), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
                          init_kwargs={"p": 0})
 
         opponent = axelrod.MockPlayer()
-        outcomes = [(C, C), (C, C), (C, C)]
-        self.versus_test(opponent, expected_outcomes=outcomes,
+        actions = [(C, C), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
                          init_kwargs={"p": 1})
 
     def test_deterministic_classification(self):

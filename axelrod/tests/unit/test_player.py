@@ -304,7 +304,7 @@ class TestPlayer(unittest.TestCase):
             test_responses(self, self.player(), axelrod.Defector(),
                            rDD, D, D, seed=seed)
 
-    def versus_test(self, opponent, expected_outcomes,
+    def versus_test(self, opponent, expected_actions,
                     noise=None, seed=None, turns=10,
                     match_attributes=None, attrs=None,
                     init_kwargs=None):
@@ -318,7 +318,7 @@ class TestPlayer(unittest.TestCase):
             An instance of a player OR a sequence of actions. If a sequence of
             actions is passed, a Mock Player is created that cycles over that
             sequence.
-        expected_outcomes: List
+        expected_actions: List
             The expected outcomes of the match (list of tuples of actions).
         noise: float
             Any noise to be passed to a match
@@ -338,7 +338,7 @@ class TestPlayer(unittest.TestCase):
             A dictionary of keyword arguments to instantiate player with
         """
 
-        turns = len(expected_outcomes)
+        turns = len(expected_actions)
         if init_kwargs is None:
             init_kwargs = dict()
 
@@ -349,7 +349,7 @@ class TestPlayer(unittest.TestCase):
 
         match = axelrod.Match((player, opponent), turns=turns, noise=noise,
                               match_attributes=match_attributes)
-        self.assertEqual(match.play(), expected_outcomes)
+        self.assertEqual(match.play(), expected_actions)
 
         if attrs:
             player = match.players[0]

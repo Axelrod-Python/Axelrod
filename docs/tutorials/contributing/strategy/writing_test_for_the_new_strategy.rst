@@ -43,10 +43,10 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
    plays against a given opponent::
 
     self.versus_test(opponent=axelrod.MockPlayer([C, D]),
-                     expected_outcomes=[(D, C), (C, D), (C, C)], seed=None)
+                     expected_actions=[(D, C), (C, D), (C, C)], seed=None)
 
    In this case the player is tested against an opponent that will cycle through
-   :code:`C, D`. The :code:`expected_outcomes` are the actions player by both
+   :code:`C, D`. The :code:`expected_actions` are the actions player by both
    the tested player and the opponent in the match. In this case we see that the
    player is expected to play :code:`D, C, C` against :code:`C, D, C`.
 
@@ -58,8 +58,8 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
    if the player's internal variable :code:`opponent_class` is set to
    :code:`"Cooperative"`::
 
-       outcomes = [(C, C)] * 6
-       self.versus_test(axelrod.Cooperator(), expected_outcomes=outcomes
+       actions = [(C, C)] * 6
+       self.versus_test(axelrod.Cooperator(), expected_actions=actions
                         attrs={"opponent_class": "Cooperative"})
 
    Note here that instead of passing a sequence of actions as an opponent we are
@@ -69,16 +69,16 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
    attributes that dictate the knowledge of the players. For example this test
    assumes that players do not know the length of the match::
 
-        outcomes = [(C, C), (C, D), (D, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes,
+        actions = [(C, C), (C, D), (D, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          match_attributes={"length": -1})
 
    The function :code:`versus_test` also accepts a dictionary parameter of
    keyword arguments that dictate how the player is initiated. For example this
    test how the player plays when initialised with :code:`p=1`::
 
-        outcomes = [(C, C), (C, D), (C, C), (C, D)]
-        self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes,
+        actions = [(C, C), (C, D), (C, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          init_kwargs={"p": 1})
 
 As an example, the tests for Tit-For-Tat are as follows::
@@ -111,38 +111,38 @@ As an example, the tests for Tit-For-Tat are as follows::
             self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
 
             # Play against opponents
-            outcomes = [(C, C), (C, D), (D, C), (C, D)]
-            self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes)
+            actions = [(C, C), (C, D), (D, C), (C, D)]
+            self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
-            outcomes = [(C, C), (C, C), (C, C), (C, C)]
-            self.versus_test(axelrod.Cooperator(), expected_outcomes=outcomes)
+            actions = [(C, C), (C, C), (C, C), (C, C)]
+            self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-            outcomes = [(C, D), (D, D), (D, D), (D, D)]
-            self.versus_test(axelrod.Defector(), expected_outcomes=outcomes)
+            actions = [(C, D), (D, D), (D, D), (D, D)]
+            self.versus_test(axelrod.Defector(), expected_actions=actions)
 
             # This behaviour is independent of knowledge of the Match length
-            outcomes = [(C, C), (C, D), (D, C), (C, D)]
-            self.versus_test(axelrod.Alternator(), expected_outcomes=outcomes,
+            actions = [(C, C), (C, D), (D, C), (C, D)]
+            self.versus_test(axelrod.Alternator(), expected_actions=actions,
                              match_attributes={"length": -1})
 
             # We can also test against random strategies
-            outcomes = [(C, D), (D, D), (D, C), (C, C)]
-            self.versus_test(axelrod.Random(), expected_outcomes=outcomes,
+            actions = [(C, D), (D, D), (D, C), (C, C)]
+            self.versus_test(axelrod.Random(), expected_actions=actions,
                              seed=0)
 
-            outcomes = [(C, C), (C, D), (D, D), (D, C)]
-            self.versus_test(axelrod.Random(), expected_outcomes=outcomes,
+            actions = [(C, C), (C, D), (D, D), (D, C)]
+            self.versus_test(axelrod.Random(), expected_actions=actions,
                              seed=1)
 
             #  If you would like to test against a sequence of moves you should use
             #  a MockPlayer
             opponent = axelrod.MockPlayer([C, D])
-            outcomes = [(C, C), (C, D), (D, C), (C, D)]
-            self.versus_test(opponent, expected_outcomes=outcomes)
+            actions = [(C, C), (C, D), (D, C), (C, D)]
+            self.versus_test(opponent, expected_actions=actions)
 
             opponent = axelrod.MockPlayer([C, C, D, D, C, D])
-            outcomes = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
-            self.versus_test(opponent, expected_outcomes=outcomes)
+            actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
+            self.versus_test(opponent, expected_actions=actions)
 
 
 There are other examples of using this testing framework in
