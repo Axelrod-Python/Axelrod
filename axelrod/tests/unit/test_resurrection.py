@@ -4,7 +4,8 @@ import axelrod
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
-class Resurrection(TestPlayer):
+
+class TestResurrection(TestPlayer):
 
     name = "Resurrection"
     player = axelrod.Resurrection
@@ -33,3 +34,31 @@ class Resurrection(TestPlayer):
         
         # Check for four defections and a cooperation by opponent
         self.responses_test([D], [C] * 5, [D, D, D, D, D, C])
+
+class TestDoubleResurrection(TestPlayer):
+
+    name = "DoubleResurrection"
+    player = axelrod.Resurrection
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Starts by Cooperating
+        self.first_play_test(C)
+        
+        # Check if the turns played are greater than 5 
+        self.responses_test([C], [D, C, C, D, D, D, D, D] , [C] * 8)
+        
+        self.responses_test([D], [C, D, D, C, C, C, C, C] , [C] * 8)
+        
+        #Check if turns played are less than 5.
+        self.responses_test([C], [D, C, D, C], [C] * 4)
+        
+        
