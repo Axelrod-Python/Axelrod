@@ -34,14 +34,14 @@ class Resurrection(Player):
         else:
             return opponent.history[-1]
 
-class Resurrection(Player):
+class DoubleResurrection(Player):
     """
     A player starts by cooperating and defects if the number of rounds 
     played by the player is greater than five and the last five rounds are cooperations.
     If the last file rounds were defections, the player cooperates.
     
     Names:
-    - Resurrection: Name from CoopSim https://github.com/jecki/CoopSim     
+    - DoubleResurrection: Name from CoopSim https://github.com/jecki/CoopSim     
     """
 
     # These are various properties for the strategy
