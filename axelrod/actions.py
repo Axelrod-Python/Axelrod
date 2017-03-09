@@ -8,7 +8,7 @@ class Actions(object):
     D = 'D'
 
 
-def flip_action(action: Action) -> Action:
+def flip_action(action: Action) -> float:
     if action == Actions.C:
         return Actions.D
     elif action == Actions.D:

@@ -28,7 +28,7 @@ class WorseAndWorse(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent: Player):
+    def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history) + 1
         probability = 1 - current_round / 1000
         return random_choice(probability)
