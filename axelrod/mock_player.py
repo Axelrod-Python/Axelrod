@@ -31,7 +31,7 @@ class MockPlayer(Player):
         if actions:
             self.actions = cycle(actions)
         else:
-            self.actions = []
+            self.actions = iter([])
 
     def strategy(self, opponent: Player) -> Action:
         # Return the next saved action, if present.
