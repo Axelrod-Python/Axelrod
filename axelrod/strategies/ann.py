@@ -6,7 +6,7 @@
 
 import numpy as np
 
-from typing import List
+from typing import List, Tuple
 
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
@@ -112,7 +112,7 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
     ]
 
 
-def activate(bias, hidden, output, inputs):
+def activate(bias: List[float], hidden: List[float], output: List[float], inputs: List[int]) -> float:
     """
     Compute the output of the neural network:
         output = relu(inputs * hidden_weights + bias) * output_weights
@@ -124,7 +124,7 @@ def activate(bias, hidden, output, inputs):
     return output_value
 
 
-def split_weights(weights, num_features: int, num_hidden: int):
+def split_weights(weights: List[float], num_features: int, num_hidden: int) -> Tuple[List[List[float]], List[float], List[float]]:
     """Splits the input vector into the the NN bias weights and layer
     parameters."""
     # Check weights is the right length
@@ -179,7 +179,7 @@ class ANN(Player):
         'long_run_time': False
     }
 
-    def __init__(self, weights, num_features: int, num_hidden: int) -> None:
+    def __init__(self, weights: List[float], num_features: int, num_hidden: int) -> None:
         super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
         self.input_to_hidden_layer_weights = np.matrix(i2h)
