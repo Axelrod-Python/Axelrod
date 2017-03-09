@@ -22,6 +22,8 @@ class TestRandom(TestPlayer):
 
     def test_strategy(self):
         """Test that strategy is randomly picked (not affected by history)."""
+        self.first_play_test(C, seed=1)
+        self.first_play_test(D, seed=2)
 
         opponent = axelrod.MockPlayer()
         actions = [(C, C), (D, C), (D, C), (C, C)]
