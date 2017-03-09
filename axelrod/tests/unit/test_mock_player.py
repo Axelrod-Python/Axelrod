@@ -1,7 +1,7 @@
 import unittest
 import axelrod
 from axelrod import MockPlayer, simulate_play, update_history
-from axelrod.tests.unit.test_player import TestOpponent
+from axelrod.tests.strategies.test_player import TestOpponent
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 

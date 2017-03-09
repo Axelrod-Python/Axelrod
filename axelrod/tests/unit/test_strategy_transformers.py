@@ -4,8 +4,8 @@ import axelrod
 from axelrod import simulate_play
 from axelrod.strategy_transformers import *
 from axelrod.actions import flip_action
-from .test_titfortat import TestTitForTat
-from .test_cooperator import TestCooperator
+from axelrod.tests.strategies.test_titfortat import TestTitForTat
+from axelrod.tests.strategies.test_cooperator import TestCooperator
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
