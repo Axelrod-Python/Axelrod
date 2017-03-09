@@ -29,7 +29,7 @@ script:
   # Run the doctests
   - python doctests.py
   # Run the type checker
-  - sh ./type_tests.sh
+  - python run_mypy.py
 after_success:
   - coveralls
 notifications:
