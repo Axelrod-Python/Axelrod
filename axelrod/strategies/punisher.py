@@ -1,6 +1,8 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
+from typing import List
+
 C, D = Actions.C, Actions.D
 
 
@@ -127,10 +129,10 @@ class InversePunisher(Player):
 
 class LevelPunisher(Player):
     """
-    A player starts by cooperating however, after 10 rounds 
-    will defect if at any point the number of defections 
+    A player starts by cooperating however, after 10 rounds
+    will defect if at any point the number of defections
     by an opponent is greater than 20%.
-    
+
     Names:
 
     - Level Punisher: Name from CoopSim https://github.com/jecki/CoopSim
