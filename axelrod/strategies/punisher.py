@@ -1,6 +1,8 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
+from typing import List
+
 C, D = Actions.C, Actions.D
 
 
