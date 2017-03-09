@@ -38,7 +38,7 @@ class TestResurrection(TestPlayer):
 class TestDoubleResurrection(TestPlayer):
 
     name = "DoubleResurrection"
-    player = axelrod.Resurrection
+    player = axelrod.DoubleResurrection
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
