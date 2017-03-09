@@ -44,8 +44,7 @@ class DoubleResurrection(Player):
     - DoubleResurrection: Name from CoopSim https://github.com/jecki/CoopSim     
     """
 
-    # These are various properties for the strategy
-    name = 'Double Resurrection'
+    name = 'DoubleResurrection'
     classifier = {
         'memory_depth': 1,  
         'stochastic': False,
