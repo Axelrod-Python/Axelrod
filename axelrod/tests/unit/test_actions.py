@@ -20,5 +20,5 @@ class TestAction(unittest.TestCase):
         self.assertEqual(flip_action(D), C)
         self.assertEqual(flip_action(C), D)
 
-        with self.assertRaises(ValueError):
-            flip_action('R')
+    def test_error(self):
+        self.assertRaises(ValueError, flip_action, 'R')
