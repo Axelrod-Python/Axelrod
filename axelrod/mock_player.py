@@ -38,7 +38,7 @@ class MockPlayer(Player):
         try:
             action = self.actions.__next__()
             return action
-        except AttributeError:
+        except StopIteration:
             return C
 
 
