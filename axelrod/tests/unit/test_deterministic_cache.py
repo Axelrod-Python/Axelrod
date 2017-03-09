@@ -65,7 +65,8 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertFalse(cache._is_valid_key(('test', 'test', 'test')))
         self.assertFalse(cache._is_valid_key((TitForTat(), 'test', 2)))
         self.assertFalse(cache._is_valid_key(('test', TitForTat(), 2)))
-        self.assertFalse(cache._is_valid_key((TitForTat(), TitForTat(), TitForTat())))
+        self.assertFalse(cache._is_valid_key(
+            (TitForTat(), TitForTat(), TitForTat())))
         # Should return false if either player class is stochastic
         self.assertFalse(cache._is_valid_key((Random(), TitForTat(), 2)))
         self.assertFalse(cache._is_valid_key((TitForTat(), Random(), 2)))
