@@ -4,7 +4,7 @@ Writing tests for the new strategy
 To write tests you either need to create a file called :code:`test_<library>.py`
 where :code:`<library>.py` is the name of the file you have created or similarly
 add tests to the test file that is already present in the
-:code:`axelrod/tests/unit/` directory.
+:code:`axelrod/tests/strategies/` directory.
 
 Typically we want to test the following:
 
@@ -146,7 +146,7 @@ As an example, the tests for Tit-For-Tat are as follows::
 
 
 There are other examples of using this testing framework in
-:code:`axelrod/tests/unit/test_titfortat.py`.
+:code:`axelrod/tests/strategies/test_titfortat.py`.
 
 The :code:`expected_classifier` dictionary tests that the classification of the
 strategy is as expected (the tests for this is inherited in the :code:`init`

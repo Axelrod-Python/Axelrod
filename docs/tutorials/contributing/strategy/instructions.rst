@@ -23,7 +23,8 @@ Here is the file structure for the Axelrod repository::
     │       └── gobymajority.py
     │       └── ...
     │   └── /tests/
-    │       └── functional
+    │       └── integration
+    │       └── strategies
     │       └── unit
     │           └── test_*.py
     └── README.md
@@ -36,7 +37,7 @@ To contribute a strategy you need to follow as many of the following steps as po
 3. Update the :code:`./axelrod/strategies/_strategies.py` file.
 4. If you created a new :code:`<strategy>.py` file add it to
    :code:`.docs/reference/all_strategies.rst`.
-5. Write some unit tests in the :code:`./axelrod/tests/` directory.
+5. Write some unit tests in the :code:`./axelrod/tests/strategies/` directory.
 6. This one is also optional: ping us a message and we'll add you to the
    Contributors team. This would add an Axelrod-Python organisation badge to
    your profile.
