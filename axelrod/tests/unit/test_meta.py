@@ -46,16 +46,15 @@ class TestMetaPlayer(TestPlayer):
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
                                  (key, player.classifier[key], classifier[key]))
 
-    def test_reset(self):
-        p1 = self.player()
-        p2 = axelrod.Cooperator()
-        p1.play(p2)
-        p1.play(p2)
-        p1.play(p2)
-        p1.reset()
-        for player in p1.team:
-            self.assertEqual(len(player.history), 0)
+    def attribute_equality_test(self, player, clone):
+        """Overwriting this specific method to check team."""
+        for p1, p2 in zip(player.team, clone.team):
+            self.assertEqual(len(p1.history), 0)
+            self.assertEqual(len(p2.history), 0)
 
+        team_player_names = [p.__repr__() for p in player.team]
+        team_clone_names = [p.__repr__() for p in clone.team]
+        self.assertEqual(team_player_names, team_clone_names)
 
 class TestMetaMajority(TestMetaPlayer):
 
@@ -222,8 +221,6 @@ class TestMetaHunter(TestMetaPlayer):
         self.responses_test([D], [C] * 4, [D] * 4)
         self.responses_test([D], [C] * 6, [C, D] * 3)
         self.responses_test([D], [C] * 8, [C, C, C, D, C, C, C, D])
-        self.responses_test([D], [C] * 100,
-                            [random.choice([C, D]) for i in range(100)])
         # Test post 100 rounds responses
         self.responses_test([C], [C] * 101, [C] * 101)
         self.responses_test([D], [C] * 101, [C] * 100 + [D])
@@ -257,8 +254,6 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         self.responses_test([D], [C] * 4, [D] * 4)
         self.responses_test([D], [C] * 6, [C, D] * 3)
         self.responses_test([D], [C] * 8, [C, C, C, D, C, C, C, D])
-        self.responses_test([D], [C] * 100,
-                            [random.choice([C, D]) for i in range(100)])
         # Test post 100 rounds responses
         self.responses_test([D], [C] * 101, [C] * 101)
         self.responses_test([D], [C] * 101, [C] * 100 + [D])

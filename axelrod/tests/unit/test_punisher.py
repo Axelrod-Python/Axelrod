@@ -47,16 +47,6 @@ class TestPunisher(TestPlayer):
                             attrs={"grudged": True, "grudge_memory": 0,
                                    "mem_length": 2})
 
-    def test_reset_method(self):
-        """Tests the reset method."""
-        P1 = axelrod.Punisher()
-        P1.history = [C, D, D, D]
-        P1.grudged = True
-        P1.grudge_memory = 4
-        P1.reset()
-        self.assertEqual(P1.grudged, False)
-        self.assertEqual(P1.grudge_memory, 0)
-
 
 class TestInversePunisher(TestPlayer):
 
@@ -103,15 +93,6 @@ class TestInversePunisher(TestPlayer):
                             attrs={"grudged": True, "grudge_memory": 0,
                                    "mem_length": 16})
 
-    def test_reset_method(self):
-        P1 = axelrod.InversePunisher()
-        P1.history = [C, D, D, D]
-        P1.grudged = True
-        P1.grudge_memory = 4
-        P1.reset()
-        self.assertEqual(P1.grudged, False)
-        self.assertEqual(P1.grudge_memory, 0)
-
 class TestLevelPunisher(TestPlayer):
 
     name = "Level Punisher"
@@ -129,11 +110,11 @@ class TestLevelPunisher(TestPlayer):
     def test_strategy(self):
         # Starts by Cooperating
         self.first_play_test(C)
-        
+
         # Defects if the turns played are less than 10.
         self.responses_test([C], [C], [C])
         self.responses_test([C], [C] * 4, [C, D, C, D])
-        
+
         # Check for the number of rounds greater than 10.
         self.responses_test([C], [C] * 10, [C, C, C, C, D, C, C, C, C, D])
         #Check if number of defections by opponent is greater than 20%

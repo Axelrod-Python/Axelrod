@@ -98,12 +98,10 @@ class RevisedDowning(Player):
 
         if self.revised:
             if round_number == 1:
-                self.move = C
-                return self.move
+                return C
         elif not self.revised:
             if round_number <= 2:
-                self.move = D
-                return self.move
+                return D
 
         # Update various counts
         if round_number > 2:
@@ -121,12 +119,12 @@ class RevisedDowning(Player):
         c = 6.0 * self.good - 8.0 * self.bad - 2
         alt = 4.0 * self.good - 5.0 * self.bad - 1
         if (c >= 0 and c >= alt):
-            self.move = C
+            move = C
         elif (c >= 0 and c < alt) or (alt >= 0):
-            self.move = flip_action(self.move)
+            move = flip_action(self.history[-1])
         else:
-            self.move = D
-        return self.move
+            move = D
+        return move
 
     def reset(self):
         super().reset()

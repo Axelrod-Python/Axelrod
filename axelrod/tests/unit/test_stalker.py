@@ -13,7 +13,7 @@ class TestStalker(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
-        'makes_use_of': set(),
+        'makes_use_of': set(["game", "length"]),
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -44,10 +44,3 @@ class TestStalker(TestPlayer):
 
         # defect in last round
         self.responses_test([C, D], [C] * 198, [C] * 198, length=200)
-
-    def test_reset(self):
-        """Tests to see if the score is reset correctly """
-        P1 = axelrod.Stalker()
-        P1.current_score = 14
-        P1.reset()
-        self.assertEqual(P1.current_score, 0)

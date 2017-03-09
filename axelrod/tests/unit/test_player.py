@@ -1,6 +1,7 @@
 import random
 import unittest
 import warnings
+import types
 
 import numpy as np
 
@@ -207,37 +208,52 @@ class TestPlayer(unittest.TestCase):
         t_attrs = player.match_attributes
         self.assertEqual(t_attrs['noise'], .5)
 
-    def test_reset_history(self):
+    def test_reset_history_and_attributes(self):
         """Make sure resetting works correctly."""
-        if self.player.name == "Human":
-            return
-        p = self.player()
-        p_clone = p.clone()
-        player2 = axelrod.Random()
-        for _ in range(10):
-            p.play(player2)
-        p.reset()
-        self.assertEqual(len(p.history), 0)
-        self.assertEqual(self.player().cooperations, 0)
-        self.assertEqual(self.player().defections, 0)
-        self.assertEqual(self.player().state_distribution, dict())
+        player = self.player()
+        clone = player.clone()
+        opponent = axelrod.Random()
 
-        for k, v in p_clone.__dict__.items():
-            try:
-                self.assertEqual(v, getattr(p_clone, k))
-            except ValueError:
-                self.assertTrue(np.array_equal(v, getattr(p_clone, k)))
+        for seed in range(10):
+            axelrod.seed(seed)
+            player.play(opponent)
+
+        player.reset()
+        self.assertEqual(len(player.history), 0)
+        self.assertEqual(player.cooperations, 0)
+        self.assertEqual(player.defections, 0)
+        self.assertEqual(player.state_distribution, dict())
+
+        self.attribute_equality_test(player, clone)
 
     def test_reset_clone(self):
         """Make sure history resetting with cloning works correctly, regardless
         if self.test_reset() is overwritten."""
         player = self.player()
         clone = player.clone()
-        for k, v in clone.__dict__.items():
-            if isinstance(v, np.ndarray):
-                self.assertTrue(np.array_equal(v, getattr(clone, k)))
+        self.attribute_equality_test(player, clone)
+
+    def attribute_equality_test(self, player, clone):
+        """A separate method to test equality of attributes. This method can be
+        overwritten in certain cases.
+
+        This method checks that all the attributes of `player` and `clone` are
+        the same which is used in the test of the cloning and the resetting.
+        """
+
+        for attribute, reset_value in player.__dict__.items():
+            original_value = getattr(clone, attribute)
+
+            if isinstance(reset_value, np.ndarray):
+                self.assertTrue(np.array_equal(reset_value, original_value),
+                                msg=attribute)
+
+            elif isinstance(reset_value, types.GeneratorType):
+                for _ in range(10):
+                    self.assertEqual(next(reset_value),
+                                     next(original_value), msg=attribute)
             else:
-                self.assertEqual(v, getattr(clone, k))
+                self.assertEqual(reset_value, original_value, msg=attribute)
 
     def test_clone(self):
         # Test that the cloned player produces identical play
@@ -288,8 +304,61 @@ class TestPlayer(unittest.TestCase):
             test_responses(self, self.player(), axelrod.Defector(),
                            rDD, D, D, seed=seed)
 
+    def versus_test(self, opponent, expected_actions,
+                    noise=None, seed=None, turns=10,
+                    match_attributes=None, attrs=None,
+                    init_kwargs=None):
+        """
+        Tests a sequence of outcomes for two given players.
+
+        Parameters:
+        -----------
+
+        opponent: Player or list
+            An instance of a player OR a sequence of actions. If a sequence of
+            actions is passed, a Mock Player is created that cycles over that
+            sequence.
+        expected_actions: List
+            The expected outcomes of the match (list of tuples of actions).
+        noise: float
+            Any noise to be passed to a match
+        seed: int
+            The random seed to be used
+        length: int
+            The length of the game. If `opponent` is a sequence of actions then
+            the length is taken to be the length of the sequence.
+        match_attributes: dict
+            The match attributes to be passed to the players.  For example,
+            `{length:-1}` implies that the players do not know the length of the
+            match.
+        attrs: dict
+            Dictionary of internal attributes to check at the end of all plays
+            in player
+        init_kwargs: dict
+            A dictionary of keyword arguments to instantiate player with
+        """
+
+        turns = len(expected_actions)
+        if init_kwargs is None:
+            init_kwargs = dict()
+
+        if seed is not None:
+            axelrod.seed(seed)
+
+        player = self.player(**init_kwargs)
+
+        match = axelrod.Match((player, opponent), turns=turns, noise=noise,
+                              match_attributes=match_attributes)
+        self.assertEqual(match.play(), expected_actions)
+
+        if attrs:
+            player = match.players[0]
+            for attr, value in attrs.items():
+                self.assertEqual(getattr(player, attr), value)
+
     def responses_test(self, responses, player_history=None,
-                       opponent_history=None, seed=None, length=200, attrs=None,
+                       opponent_history=None, seed=None, length=200,
+                       attrs=None,
                        init_args=None, init_kwargs=None):
         """Test responses to arbitrary histories. A match is played where the
         histories are enforced and the sequence of plays in responses is

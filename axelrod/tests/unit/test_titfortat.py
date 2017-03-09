@@ -30,12 +30,42 @@ class TestTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
         self.first_play_test(C)
-        # Repeats last action of opponent history.
-        self.second_play_test(C, D, C, D)
-        self.responses_test([C], [C] * 4, [C, C, C, C])
-        self.responses_test([D], [C] * 5, [C, C, C, C, D])
+        self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
+
+        # Play against opponents
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        # This behaviour is independent of knowledge of the Match length
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         match_attributes={"length": -1})
+
+        # We can also test against random strategies
+        actions = [(C, D), (D, D), (D, C), (C, C), (C, D)]
+        self.versus_test(axelrod.Random(), expected_actions=actions,
+                         seed=0)
+
+        actions = [(C, C), (C, D), (D, D), (D, C)]
+        self.versus_test(axelrod.Random(), expected_actions=actions,
+                         seed=1)
+
+        #  If you would like to test against a sequence of moves you should use
+        #  a MockPlayer
+        opponent = axelrod.MockPlayer([C, D])
+        actions = [(C, C), (C, D), (D, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([C, C, D, D, C, D])
+        actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
 
 
 class TestTitFor2Tats(TestPlayer):
@@ -52,11 +82,13 @@ class TestTitFor2Tats(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
         self.first_play_test(C)
-        # Will defect only when last two turns of opponent were defections.
-        self.responses_test([D], [C, C, C], [D, D, D])
-        self.responses_test([C], [C, C, D, D], [D, D, D, C])
+        self.second_play_test(rCC=C, rCD=C, rDC=C, rDD=C)
+
+        # Will punish sequence of 2 defections but will forgive
+        opponent = axelrod.MockPlayer([D, D, D, C, C])
+        actions = [(C, D), (C, D), (D, D), (D, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions)
 
 
 class TestTwoTitsForTat(TestPlayer):
@@ -73,13 +105,13 @@ class TestTwoTitsForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
         self.first_play_test(C)
+        self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
+
         # Will defect twice when last turn of opponent was defection.
-        self.responses_test([D], [C], [D])
-        self.responses_test([D], [C, C], [D, D])
-        self.responses_test([D], [C, C, C], [D, D, C])
-        self.responses_test([C], [C, C, D, D], [D, D, C, C])
+        opponent = axelrod.MockPlayer([D, C, C, D, C])
+        actions = [(C, D), (D, C), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
 
 
 class TestBully(TestPlayer):
@@ -99,7 +131,16 @@ class TestBully(TestPlayer):
         # Starts by defecting.
         self.first_play_test(D)
         # Will do opposite of what opponent does.
-        self.second_play_test(D, C, D, C)
+        self.second_play_test(rCC=D, rCD=C, rDC=D, rDD=C)
+
+        actions = [(D, C), (D, D), (C, C), (D, D), (C, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        actions = [(D, C), (D, C), (D, C), (D, C), (D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(D, D), (C, D), (C, D), (C, D), (C, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 
 class TestSneakyTitForTat(TestPlayer):
@@ -118,10 +159,14 @@ class TestSneakyTitForTat(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-        # Will try defecting after two turns of cooperation, but will stop
-        # if punished.
-        self.responses_test([D], [C, C], [C, C])
-        self.responses_test([C], [C, C, D, D], [C, C, C, D])
+
+        opponent = axelrod.MockPlayer([C, C, C, D, C, C])
+        actions = [(C, C), (C, C), (D, C), (D, D), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Repents if punished for a defection
+        actions = [(C, C), (C, D), (D, C), (C, D), (C, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
 
 class TestSuspiciousTitForTat(TestPlayer):
@@ -142,7 +187,10 @@ class TestSuspiciousTitForTat(TestPlayer):
         self.first_play_test(D)
         # Plays like TFT after the first move, repeating the opponents last
         # move.
-        self.second_play_test(C, D, C, D)
+        self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
+
+        actions = [(D, C), (C, D)] * 8
+        self.versus_test(axelrod.TitForTat(), expected_actions=actions)
 
 
 class TestAntiTitForTat(TestPlayer):
@@ -164,13 +212,16 @@ class TestAntiTitForTat(TestPlayer):
         # Will do opposite of what opponent does.
         self.second_play_test(D, C, D, C)
 
+        actions = [(C, C), (D, C), (D, D), (C, D)] * 4
+        self.versus_test(axelrod.TitForTat(), expected_actions=actions)
+
 
 class TestHardTitForTat(TestPlayer):
 
     name = "Hard Tit For Tat"
     player = axelrod.HardTitForTat
     expected_classifier = {
-        'memory_depth': 3,  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
         'inspects_source': False,
@@ -181,12 +232,10 @@ class TestHardTitForTat(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-        # Repeats last action of opponent history.
-        self.responses_test([C], [C, C, C], [C, C, C])
-        self.responses_test([D], [C, C, C], [D, C, C])
-        self.responses_test([D], [C, C, C], [C, D, C])
-        self.responses_test([D], [C, C, C], [C, C, D])
-        self.responses_test([C], [C, C, C, C], [D, C, C, C])
+
+        opponent = axelrod.MockPlayer([D, C, C, C, D, C])
+        actions = [(C, D), (D, C), (D, C), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
 
 
 class TestHardTitFor2Tats(TestPlayer):
@@ -205,22 +254,14 @@ class TestHardTitFor2Tats(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-        # Repeats last action of opponent history.
-        self.responses_test([C], [C, C, C], [C, C, C])
-        self.responses_test([C], [C, C, C], [D, C, C])
-        self.responses_test([C], [C, C, C], [C, D, C])
-        self.responses_test([C], [C, C, C], [C, C, D])
 
-        self.responses_test([C], [C, C, C], [D, C, D])
-        self.responses_test([D], [C, C, C], [D, D, C])
-        self.responses_test([D], [C, C, C], [C, D, D])
-
-        self.responses_test([C], [C, C, C, C], [D, C, C, C])
-        self.responses_test([C], [C, C, C, C], [D, D, C, C])
-        self.responses_test([D], [C, C, C, C], [C, D, D, C])
+        # Uses memory 3 to punish 2 consecutive defections
+        opponent = axelrod.MockPlayer([D, C, C, D, D, D, C])
+        actions = [(C, D), (C, C), (C, C), (C, D), (C, D), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
 
 
-class OmegaTFT(TestPlayer):
+class TestOmegaTFT(TestPlayer):
 
     name = "Omega TFT"
     player = axelrod.OmegaTFT
@@ -237,34 +278,17 @@ class OmegaTFT(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-        for i in range(10):
-            self.responses_test([C], [C] * i, [C] * i)
 
-    def test_reset(self):
-        player = self.player()
-        opponent = axelrod.Defector()
-        [player.play(opponent) for _ in range(10)]
-        player.reset()
-        self.assertEqual(player.randomness_counter, 0)
-        self.assertEqual(player.deadlock_counter, 0)
+        player_history = [C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D]
+        opp_history = [C, D] * 9
+        actions = list(zip(player_history, opp_history))
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
-
-class TestOmegaTFTvsSTFT(TestMatch):
-    def test_rounds(self):
-        self.versus_test(
-            axelrod.OmegaTFT(), axelrod.SuspiciousTitForTat(),
-            [C, D, C, D, C, C, C, C, C],
-            [D, C, D, C, D, C, C, C, C]
-        )
-
-
-class TestOmegaTFTvsAlternator(TestMatch):
-    def test_rounds(self):
-        self.versus_test(
-            axelrod.OmegaTFT(), axelrod.Alternator(),
-            [C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D],
-            [C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D, C, D]
-        )
+        player_history =  [C, D, C, D, C, C, C, C, C]
+        opp_history = [D, C, D, C, D, C, C, C, C]
+        actions = list(zip(player_history, opp_history))
+        self.versus_test(axelrod.SuspiciousTitForTat(),
+                         expected_actions=actions)
 
 
 class TestGradual(TestPlayer):
@@ -285,82 +309,62 @@ class TestGradual(TestPlayer):
         self.first_play_test(C)
         # Punishes defection with a growing number of defections and calms
         # the opponent with two cooperations in a row.
-        self.responses_test([C], [C], [C], attrs={
-            "calming": False,
-            "punishing": False,
-            "punishment_count": 0,
-            "punishment_limit": 0
-        })
-        self.responses_test([D], [C], [D], attrs={
-            "calming": False,
-            "punishing": True,
-            "punishment_count": 1,
-            "punishment_limit": 1
-        })
-        self.responses_test([C], [C, D], [D, C], attrs={
-            "calming": True,
-            "punishing": False,
-            "punishment_count": 0,
-            "punishment_limit": 1
-        })
-        self.responses_test([C], [C, D, C], [D, C, D], attrs={
-            "calming": False,
-            "punishing": False,
-            "punishment_count": 0,
-            "punishment_limit": 1
-        })
-        self.responses_test([C], [C, D, C, C], [D, C, D, C], attrs={
-            "calming": False,
-            "punishing": False,
-            "punishment_count": 0,
-            "punishment_limit": 1
-        })
-        self.responses_test([C], [C, D, C, D, C], [D, C, D, C, C], attrs={
-            "calming": False,
-            "punishing": False,
-            "punishment_count": 0,
-            "punishment_limit": 1
-        })
-        self.responses_test([D], [C, D, C, D, C, C], [D, C, D, C, C, D], attrs={
-            "calming": False,
-            "punishing": True,
-            "punishment_count": 1,
-            "punishment_limit": 2
-        })
-        self.responses_test([D], [C, D, C, D, D, C, D], [D, C, D, C, C, D, C],
-                            attrs={
-                                "calming": False,
-                                "punishing": True,
-                                "punishment_count": 2,
-                                "punishment_limit": 2
-                            })
-        self.responses_test([C], [C, D, C, D, D, C, D, D],
-                            [D, C, D, C, C, D, C, C], attrs={
-                "calming": True,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 2
-            })
-        self.responses_test([C], [C, D, C, D, D, C, D, D, C],
-                            [D, C, D, C, C, D, C, C, C], attrs={
-                "calming": False,
-                "punishing": False,
-                "punishment_count": 0,
-                "punishment_limit": 2
-            })
+        opponent = axelrod.MockPlayer([C])
+        actions = [(C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": False, "punishing": False,
+                                "punishment_count": 0, "punishment_limit": 0})
 
-    def test_reset_cleans_all(self):
-        p = axelrod.Gradual()
-        p.calming = True
-        p.punishing = True
-        p.punishment_count = 1
-        p.punishment_limit = 1
-        p.reset()
+        opponent = axelrod.MockPlayer([D])
+        actions = [(C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": False, "punishing": False,
+                                "punishment_count": 0, "punishment_limit": 0})
 
-        self.assertFalse(p.calming)
-        self.assertFalse(p.punishing)
-        self.assertEqual(p.punishment_count, 0)
-        self.assertEqual(p.punishment_limit, 0)
+        opponent = axelrod.MockPlayer([D, C])
+        actions = [(C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": False, "punishing": True,
+                                "punishment_count": 1, "punishment_limit": 1})
+
+        opponent = axelrod.MockPlayer([D, C, C])
+        actions = [(C, D), (D, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": True, "punishing": False,
+                                "punishment_count": 0, "punishment_limit": 1})
+
+        opponent = axelrod.MockPlayer([D, C, D, C])
+        actions = [(C, D), (D, C), (C, D), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": False, "punishing": False,
+                                "punishment_count": 0, "punishment_limit": 1})
+
+        opponent = axelrod.MockPlayer([D, C, D, C, C])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": False, "punishing": False,
+                                "punishment_count": 0, "punishment_limit": 1})
+
+        opponent = axelrod.MockPlayer([D, C, D, C, C, C])
+        actions = [(C, D), (D, C), (C, D), (C, C), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": False, "punishing": False,
+                                "punishment_count": 0, "punishment_limit": 1})
+
+        opponent = axelrod.MockPlayer([D, C, D, C, C, C, D, C])
+        actions = [(C, D), (D, C), (C, D), (C, C),
+                    (C, C), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": False, "punishing": True,
+                                "punishment_count": 1, "punishment_limit": 2})
+
+        opponent = axelrod.MockPlayer([D, C, D, C, C, D, D, D])
+        actions = [(C, D), (D, C), (C, D), (C, C),
+                    (C, C), (C, D), (D, D), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"calming": False, "punishing": True,
+                                "punishment_count": 2, "punishment_limit": 2})
+
 
     def test_output_from_literature(self):
         """
@@ -373,7 +377,7 @@ class TestGradual(TestPlayer):
 
         This test just ensures that the strategy is as was originally defined.
         """
-        player = axelrod.Gradual()
+        player = self.player()
 
         opp1 = axelrod.Defector()
         match = axelrod.Match((player, opp1), 1000)
@@ -448,7 +452,8 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(opponent.history, [C, D, D, D])
         self.assertFalse(ctft.contrite)
 
-    def test_reset_cleans_all(self):
+    def test_reset_history_and_attributes(self):
+        """Overwrite reset test because of decorator"""
         p = self.player()
         p.contrite = True
         p.reset()
@@ -473,9 +478,10 @@ class TestSlowTitForTwoTats(TestPlayer):
         self.first_play_test(C)
         # If opponent plays the same move twice, repeats last action of
         # opponent history.
-        self.responses_test([C], [C] * 2, [C, C])
-        self.responses_test([C], [C] * 3, [C, D, C])
-        self.responses_test([D], [C] * 3, [C, D, D])
+        opponent = axelrod.MockPlayer([C, C, D, D, C, D, D, C, C, D, D])
+        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (C, D), (C, D),
+                    (D, C), (C, C), (C, D), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
 
 
 class TestAdaptiveTitForTat(TestPlayer):
@@ -496,18 +502,9 @@ class TestAdaptiveTitForTat(TestPlayer):
         self.first_play_test(C)
         self.second_play_test(C, D, C, D)
 
-        p1, p2 = self.player(), self.player()
-        p1.play(p2)
-        p1.play(p2)
-        self.assertEqual(p2.world, 0.75)
-
-    def test_world_rate_reset(self):
-        p1, p2 = self.player(), self.player()
-        p1.play(p2)
-        p1.play(p2)
-        p2.reset()
-        self.assertEqual(p2.world, 0.5)
-        self.assertEqual(p2.rate, 0.5)
+        actions = [(C, C), (C, C)]
+        self.versus_test(self.player(), expected_actions=actions,
+                         attrs={"world":0.75, "rate":0.5})
 
 
 class TestSpitefulTitForTat(TestPlayer):
@@ -528,15 +525,18 @@ class TestSpitefulTitForTat(TestPlayer):
         # Repeats last action of opponent history until 2 consecutive
         # defections, then always defects
         self.second_play_test(C, D, C, D)
-        self.responses_test([C], [C] * 4, [C, C, C, C],
-                            attrs={"retaliating": False})
-        self.responses_test([D], [C] * 5, [C, C, C, C, D],
-                            attrs={"retaliating": False})
-        self.responses_test([D], [C] * 5, [C, C, D, D, C],
-                            attrs={"retaliating": True})
 
-    def test_reset_retaliating(self):
-        player = self.player()
-        player.retaliating = True
-        player.reset()
-        self.assertFalse(player.retaliating)
+        opponent = axelrod.MockPlayer([C, C, C, C])
+        actions = [(C, C)] * 5
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"retaliating": False})
+
+        opponent = axelrod.MockPlayer([C, C, C, C, D, C])
+        actions = [(C, C)] * 4 + [(C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"retaliating": False})
+
+        opponent = axelrod.MockPlayer([C, C, D, D, C])
+        actions = [(C, C), (C, C), (C, D), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"retaliating": True})

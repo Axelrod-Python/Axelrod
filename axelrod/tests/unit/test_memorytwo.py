@@ -41,3 +41,16 @@ class TestMEM2(TestPlayer):
         # ALLD forever if all D twice
         self.responses_test([D] * 10, [C, D, D, D, D, D], [D, D, D, D, D, D])
         self.responses_test([D] * 9, [C] + [D] * 5 + [C] * 4, [D] * 6 + [C] * 4)
+
+    def attribute_equality_test(self, player, clone):
+        """Overwrite specific test to be able to test self.players"""
+        for p in [player, clone]:
+            self.assertEqual(p.play_as, "TFT")
+            self.assertEqual(p.shift_counter, 3)
+            self.assertEqual(p.alld_counter, 0)
+
+        for key, value in [("TFT", axelrod.TitForTat),
+                           ("TFTT", axelrod.TitFor2Tats),
+                           ("ALLD", axelrod.Defector)]:
+            self.assertEqual(p.players[key].history, [])
+            self.assertIsInstance(p.players[key], value)

@@ -32,6 +32,13 @@ class SimpleFSM(object):
         self.state = next_state
         return next_action
 
+    def __eq__(self, other):
+        """Equality of two FSMs"""
+        check = True
+        for attr in ["state", "state_transitions"]:
+            check = check and getattr(self, attr) == getattr(other, attr)
+        return check
+
 
 class FSMPlayer(Player):
     """Abstract base class for finite state machine players."""
@@ -57,6 +64,7 @@ class FSMPlayer(Player):
             initial_action = C
         super().__init__()
         self.initial_state = initial_state
+        self.state = initial_state
         self.initial_action = initial_action
         self.fsm = SimpleFSM(transitions, initial_state)
 
@@ -73,6 +81,7 @@ class FSMPlayer(Player):
     def reset(self):
         super().reset()
         self.fsm.state = self.initial_state
+        self.state = self.initial_state
 
 
 class Fortress3(FSMPlayer):

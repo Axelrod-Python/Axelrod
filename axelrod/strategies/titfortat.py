@@ -304,7 +304,7 @@ class OmegaTFT(Player):
 
         # Are we deadlocked? (in a CD -> DC loop)
         if (self.deadlock_counter >= self.deadlock_threshold):
-            self.move = C
+            move = C
             if self.deadlock_counter == self.deadlock_threshold:
                 self.deadlock_counter = self.deadlock_threshold + 1
             else:
@@ -323,16 +323,16 @@ class OmegaTFT(Player):
             # Compare counts to thresholds
             # If randomness_counter exceeds Y, Defect for the remainder
             if self.randomness_counter >= 8:
-                self.move = D
+                move = D
             else:
                 # TFT
-                self.move = D if opponent.history[-1:] == [D] else C
+                move = D if opponent.history[-1:] == [D] else C
                 # Check for deadlock
                 if opponent.history[-2] != opponent.history[-1]:
                     self.deadlock_counter += 1
                 else:
                     self.deadlock_counter = 0
-        return self.move
+        return move
 
     def reset(self):
         super().reset()

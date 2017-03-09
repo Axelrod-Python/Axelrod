@@ -61,6 +61,15 @@ class SimpleHMM(object):
             return False
         return True
 
+    def __eq__(self, other):
+        """Equality of two HMMs"""
+        check = True
+        for attr in ["transitions_C", "transitions_D",
+                     "emission_probabilities", "state"]:
+            check = check and getattr(self, attr) == getattr(other, attr)
+        return check
+
+
     def move(self, opponent_action):
         """Changes state and computes the response action.
 
@@ -114,6 +123,7 @@ class HMMPlayer(Player):
         self.hmm = SimpleHMM(transitions_C, transitions_D,
                              emission_probabilities, initial_state)
         assert self.hmm.is_well_formed()
+        self.state = self.hmm.state
         self.classifier['stochastic'] = self.is_stochastic()
 
     def is_stochastic(self):
@@ -141,6 +151,7 @@ class HMMPlayer(Player):
     def reset(self):
         super().reset()
         self.hmm.state = self.initial_state
+        self.state = self.hmm.state
 
 
 class EvolvedHMM5(HMMPlayer):
