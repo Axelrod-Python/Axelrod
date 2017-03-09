@@ -6,7 +6,9 @@
 
 import numpy as np
 
-from axelrod.actions import Actions
+from typing import List
+
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.load_data_ import load_weights
 
@@ -18,7 +20,7 @@ nn_weights = load_weights()
 relu = np.vectorize(lambda x: max(x, 0))
 
 
-def compute_features(player, opponent):
+def compute_features(player: Player, opponent: Player) -> List[int]:
     """
     Compute history features for Neural Network:
     * Opponent's first move is C
@@ -66,6 +68,8 @@ def compute_features(player, opponent):
         opponent_previous_d = 1 if opponent.history[-1] == D else 0
         opponent_previous2_c = 0
         opponent_previous2_d = 0
+
+
 
     else:
         opponent_first_c = 1 if opponent.history[0] == C else 0
@@ -120,7 +124,7 @@ def activate(bias, hidden, output, inputs):
     return output_value
 
 
-def split_weights(weights, num_features, num_hidden):
+def split_weights(weights, num_features: int, num_hidden: int):
     """Splits the input vector into the the NN bias weights and layer
     parameters."""
     # Check weights is the right length
@@ -175,14 +179,14 @@ class ANN(Player):
         'long_run_time': False
     }
 
-    def __init__(self, weights, num_features, num_hidden):
+    def __init__(self, weights, num_features: int, num_hidden: int) -> None:
         super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
         self.input_to_hidden_layer_weights = np.matrix(i2h)
         self.hidden_to_output_layer_weights = np.array(h2o)
         self.bias_weights = np.array(bias)
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         features = compute_features(self, opponent)
         output = activate(self.bias_weights,
                           self.input_to_hidden_layer_weights,
@@ -206,7 +210,7 @@ class EvolvedANN(ANN):
 
     name = "Evolved ANN"
 
-    def __init__(self):
+    def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN"]
         super().__init__(weights, num_features, num_hidden)
 
@@ -223,7 +227,7 @@ class EvolvedANN5(ANN):
 
     name = "Evolved ANN 5"
 
-    def __init__(self):
+    def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5"]
         super().__init__(weights, num_features, num_hidden)
 
@@ -240,6 +244,6 @@ class EvolvedANNNoise05(ANN):
 
     name = "Evolved ANN 5 Noise 05"
 
-    def __init__(self):
+    def __init__(self) -> None:
         num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
         super().__init__(weights, num_features, num_hidden)
