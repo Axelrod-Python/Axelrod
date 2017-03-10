@@ -110,6 +110,15 @@ class TestFingerprint(unittest.TestCase):
                               progress_bar=True)
         self.assertEqual(sorted(data.keys()), self.expected_points)
 
+    def test_fingerprint_with_filename(self):
+        filename = "test_outputs/test_fingerprint.csv"
+        af = AshlockFingerprint(self.strategy, self.probe)
+        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
+                       filename=filename)
+        with open(filename, 'r') as out:
+            data = out.read()
+            self.assertEqual(len(data.split("\n")), 10)
+
     def test_in_memory_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
         af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False,
