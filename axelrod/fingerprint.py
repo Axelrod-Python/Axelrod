@@ -258,7 +258,7 @@ class AshlockFingerprint():
 
         if on_windows and (filename is None):  # pragma: no cover
             in_memory = True
-        elif filename is not None:
+        elif filename is not None:  # pragma: no cover
             outputfile = open(filename, 'w')
             filename = outputfile.name
         else:
