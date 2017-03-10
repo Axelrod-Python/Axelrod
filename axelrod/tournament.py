@@ -101,7 +101,7 @@ class Tournament(object):
             self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
                                           desc="Playing matches")
 
-        if on_windows and (filename is None):
+        if on_windows and (filename is None):  # pragma: no cover
             in_memory = True
 
         self.setup_output(filename, in_memory)
