@@ -10,10 +10,10 @@ class TestWindowsDetection(unittest.TestCase):
                      "Skip this test if on windows")
     def test_detection_on_not_windows(self):
         """Test when not on windows"""
-        self.assertFalse(axelrod.on_windows)
+        self.assertFalse(axelrod.on_windows)  # pragma: no cover
 
     @unittest.skipIf(os.name != 'nt',
                      "Skip this test if not on windows")
     def test_detection_on_not_windows(self):
         """Test when on windows"""
-        self.assertTrue(axelrod.on_windows)
+        self.assertTrue(axelrod.on_windows)  # pragma: no cover
