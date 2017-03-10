@@ -211,7 +211,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.state_distribution(), None)
 
         match.play()
-        expected = Counter({('C', 'C'): 2, ('C', 'D'): 1})
+        expected = Counter({(C, C): 2, (C, D): 1})
         self.assertEqual(match.state_distribution(), expected)
 
         player1 = axelrod.Alternator()
@@ -221,7 +221,7 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.state_distribution(), None)
 
         match.play()
-        expected = Counter({('C', 'D'): 2, ('D', 'D'): 1})
+        expected = Counter({(C, D): 2, (D, D): 1})
         self.assertEqual(match.state_distribution(), expected)
 
     def test_normalised_state_distribution(self):
