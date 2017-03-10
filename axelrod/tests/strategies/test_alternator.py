@@ -23,7 +23,15 @@ class TestAlternator(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-        for i in range(10):
-            self.responses_test([C, D] * i)
-        self.responses_test([C], [C, D, C, D], [C, C, C, C])
-        self.responses_test([D], [C, D, C, D, C], [C, C, C, C, C])
+
+        opponent = axelrod.MockPlayer()
+        actions = [(C, C), (D, C)] * 5
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer(D)
+        actions = [(C, D), (D, D)] * 5
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C])
+        actions = [(C, D), (D, C)] * 5
+        self.versus_test(opponent, expected_actions=actions)
