@@ -118,7 +118,7 @@ class Human(Player):
             'print': print_statement
         }
 
-    def _get_human_input(self):
+    def _get_human_input(self):  # pragma: no cover
         """
         A method to prompt the user for input, validate it and display
         the bottom toolbar.
@@ -151,7 +151,7 @@ class Human(Player):
         self.status_messages = self._status_messages()
         print(self.status_messages['print'])
 
-        if not input_function:
+        if not input_function:  # pragma: no cover
             action = self._get_human_input()
         else:
             action = input_function()
