@@ -31,14 +31,14 @@ class MockPlayer(Player):
         if actions:
             self.actions = cycle(actions)
         else:
-            self.actions = []
+            self.actions = iter([])
 
     def strategy(self, opponent: Player) -> Action:
         # Return the next saved action, if present.
         try:
             action = self.actions.__next__()
             return action
-        except AttributeError:
+        except StopIteration:
             return C
 
 
