@@ -1,4 +1,5 @@
 import unittest
+from collections import Counter
 
 from hypothesis import given, example
 from hypothesis.strategies import integers, floats, assume
@@ -195,6 +196,31 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.normalised_cooperation(), None)
         match.play()
         self.assertEqual(match.normalised_cooperation(), (2/turns, 0/turns))
+
+    def test_state_distribution(self):
+        turns = 3
+        player1 = axelrod.Cooperator()
+        player2 = axelrod.Alternator()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.state_distribution(), None)
+
+        match.play()
+        expected = Counter({('C', 'C'): 2, ('C', 'D'): 1})
+        self.assertEqual(match.state_distribution(), expected)
+
+        player1 = axelrod.Alternator()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.state_distribution(), None)
+
+        match.play()
+        expected = Counter({('C', 'D'): 2, ('D', 'D'): 1})
+        self.assertEqual(match.state_distribution(), expected)
+
+    def test_normalised_state_distribution(self):
+        pass
 
     def test_sparklines(self):
         players = (axelrod.Cooperator(), axelrod.Alternator())

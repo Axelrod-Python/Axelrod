@@ -1,0 +1,34 @@
+{
+	"build_systems":
+	[
+		{
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"name": "Anaconda Python Builder",
+			"selector": "source.python",
+			"shell_cmd": "\"python\" -u \"$file\""
+		}
+	],
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				".DS_Store",
+				"*.sublime-workspace",
+				"*.pyc"
+			],
+			"folder_exclude_patterns":
+			[
+				".git",
+				".hypothesis",
+				"__pycache__",
+				".cache",
+				".eggs",
+				"*.egg-info",
+				"build",
+				"dist"
+			],
+			"path": "."
+		}
+	]
+}
