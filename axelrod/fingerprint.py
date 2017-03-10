@@ -258,15 +258,13 @@ class AshlockFingerprint():
 
         if on_windows and (filename is None):  # pragma: no cover
             in_memory = True
-        elif filename is not None:
-            outputfile = open(filename, 'w')
-            filename = outputfile.name
-        else:
+        elif filename is None:
             outputfile = NamedTemporaryFile(mode='w')
             filename = outputfile.name
 
         edges, tourn_players = self.construct_tournament_elements(
             step, progress_bar=progress_bar)
+
         self.step = step
         self.spatial_tournament = axl.SpatialTournament(
             tourn_players,
