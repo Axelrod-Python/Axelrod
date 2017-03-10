@@ -8,7 +8,7 @@ matplotlib_installed = True
 try:
     import matplotlib.pyplot
     plt = matplotlib.pyplot
-except ImportError:
+except ImportError:  # pragma: no cover
     matplotlib_installed = False
 
 
@@ -105,7 +105,7 @@ class TestPlot(unittest.TestCase):
             fig = plot.boxplot()
             self.assertIsInstance(fig, matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_boxplot_with_title(self):
@@ -115,7 +115,7 @@ class TestPlot(unittest.TestCase):
             self.assertIsInstance(fig,
                                   matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_winplot_dataset(self):
@@ -130,7 +130,7 @@ class TestPlot(unittest.TestCase):
             fig = plot.winplot()
             self.assertIsInstance(fig, matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_sdvplot(self):
@@ -139,7 +139,7 @@ class TestPlot(unittest.TestCase):
             fig = plot.sdvplot()
             self.assertIsInstance(fig, matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_lengthplot_dataset(self):
@@ -154,7 +154,7 @@ class TestPlot(unittest.TestCase):
             fig = plot.lengthplot()
             self.assertIsInstance(fig, matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_pdplot(self):
@@ -163,7 +163,7 @@ class TestPlot(unittest.TestCase):
             fig = plot.pdplot()
             self.assertIsInstance(fig, matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_payoff_dataset(self):
@@ -178,16 +178,16 @@ class TestPlot(unittest.TestCase):
             fig = plot.payoff()
             self.assertIsInstance(fig, matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_payoff_with_title(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
             fig = plot.payoff(title="dummy title")
-            self.assertIsInstance(fig,matplotlib.pyplot.Figure)
+            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_ecosystem(self):
@@ -204,7 +204,7 @@ class TestPlot(unittest.TestCase):
             fig = plot.stackplot(eco, logscale=False)
             self.assertIsInstance(fig, matplotlib.pyplot.Figure)
             plt.close(fig)
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
     def test_all_plots(self):
@@ -218,7 +218,7 @@ class TestPlot(unittest.TestCase):
                 plot.save_all_plots(prefix="test_outputs/",
                                     title_prefix="A prefix",
                                     progress_bar=False))
-        else:
+        else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
 
