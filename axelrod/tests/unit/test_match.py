@@ -41,7 +41,8 @@ class TestMatch(unittest.TestCase):
             'game': game,
             'noise': 0.5
         }
-        match = axelrod.Match((p1, p2), turns, game=game, match_attributes=match_attributes)
+        match = axelrod.Match(
+            (p1, p2), turns, game=game, match_attributes=match_attributes)
         self.assertEqual(match.players[0].match_attributes['length'], 500)
         self.assertEqual(match.players[0].match_attributes['noise'], 0.5)
 
@@ -96,7 +97,9 @@ class TestMatch(unittest.TestCase):
         expected_result = [(C, D), (C, D), (C, D)]
         self.assertEqual(match.play(), expected_result)
         self.assertEqual(
-            cache[(axelrod.Cooperator(), axelrod.Defector(), 3)], expected_result)
+            cache[(axelrod.Cooperator(), axelrod.Defector(), 3)],
+            expected_result
+        )
 
         # a deliberately incorrect result so we can tell it came from the cache
         expected_result = [(C, C), (D, D), (D, C)]
@@ -134,12 +137,12 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.final_score_per_turn(), None)
         match.play()
-        self.assertEqual(match.final_score_per_turn(), (2/turns, 7/turns))
+        self.assertEqual(match.final_score_per_turn(), (2 / turns, 7 / turns))
 
         match = axelrod.Match((player2, player1), turns)
         self.assertEqual(match.final_score_per_turn(), None)
         match.play()
-        self.assertEqual(match.final_score_per_turn(), (7/turns, 2/turns))
+        self.assertEqual(match.final_score_per_turn(), (7 / turns, 2 / turns))
 
     def test_winner(self):
         player1 = axelrod.TitForTat()
@@ -187,7 +190,8 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.normalised_cooperation(), None)
         match.play()
-        self.assertEqual(match.normalised_cooperation(), (3/turns, 2/turns))
+        self.assertEqual(
+            match.normalised_cooperation(), (3 / turns, 2 / turns))
 
         player1 = axelrod.Alternator()
         player2 = axelrod.Defector()
@@ -195,7 +199,8 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((player1, player2), turns)
         self.assertEqual(match.normalised_cooperation(), None)
         match.play()
-        self.assertEqual(match.normalised_cooperation(), (2/turns, 0/turns))
+        self.assertEqual(
+            match.normalised_cooperation(), (2 / turns, 0 / turns))
 
     def test_state_distribution(self):
         turns = 3
