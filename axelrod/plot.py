@@ -42,7 +42,7 @@ class Plot(object):
 
     def _violinplot(self, data: dataType, names: namesType, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
         """For making violinplots."""
-        if not self.matplotlib_installed:
+        if not self.matplotlib_installed:  # pragma: no cover
             return None
 
         if ax is None:
@@ -102,7 +102,7 @@ class Plot(object):
 
     def winplot(self, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
         """Plots the distributions for the number of wins for each strategy."""
-        if not self.matplotlib_installed:
+        if not self.matplotlib_installed:  # pragma: no cover
             return None
 
         data, names = self._winplot_dataset
@@ -167,7 +167,7 @@ class Plot(object):
 
     def _payoff_heatmap(self, data: dataType, names: namesType, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
         """Generic heatmap plot"""
-        if not self.matplotlib_installed:
+        if not self.matplotlib_installed:  # pragma: no cover
             return None
 
         if ax is None:
@@ -210,7 +210,7 @@ class Plot(object):
     # Ecological Plot
 
     def stackplot(self, eco, title: titleType =None, logscale: bool =True, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
-        if not self.matplotlib_installed:
+        if not self.matplotlib_installed:  # pragma: no cover
             return None
 
         populations = eco.population_sizes
