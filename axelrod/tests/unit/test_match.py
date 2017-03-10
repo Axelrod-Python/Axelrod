@@ -225,7 +225,26 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.state_distribution(), expected)
 
     def test_normalised_state_distribution(self):
-        pass
+        turns = 3
+        player1 = axelrod.Cooperator()
+        player2 = axelrod.Alternator()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.normalised_state_distribution(), None)
+
+        match.play()
+        expected = Counter({(C, C): 2 / turns, (C, D): 1 / turns})
+        self.assertEqual(match.normalised_state_distribution(), expected)
+
+        player1 = axelrod.Alternator()
+        player2 = axelrod.Defector()
+
+        match = axelrod.Match((player1, player2), turns)
+        self.assertEqual(match.normalised_state_distribution(), None)
+
+        match.play()
+        expected = Counter({(C, D): 2 / turns, (D, D): 1 / turns})
+        self.assertEqual(match.normalised_state_distribution(), expected)
 
     def test_sparklines(self):
         players = (axelrod.Cooperator(), axelrod.Alternator())
