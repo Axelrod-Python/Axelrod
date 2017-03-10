@@ -11,9 +11,9 @@ try:
     import matplotlib.pyplot as plt
     import matplotlib.transforms as transforms
     from mpl_toolkits.axes_grid1 import make_axes_locatable
-except ImportError:
+except ImportError:  # pragma: no cover
     matplotlib_installed = False
-except RuntimeError:
+except RuntimeError:  # pragma: no cover
     matplotlib_installed = False
     warnings.warn(
         'Matplotlib failed to import and so no plots will be produced. This ' +
