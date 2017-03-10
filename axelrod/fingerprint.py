@@ -217,8 +217,11 @@ class AshlockFingerprint():
             A dictionary where the keys are Points of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
-        edge_scores = [np.mean([compute_final_score_per_turn(scores)[0] for scores
-                                in interactions[edge]]) for edge in edges]
+        edge_scores = [np.mean([
+            compute_final_score_per_turn(scores)[0]
+            for scores in interactions[edge]])
+            for edge in edges
+        ]
         point_scores = dict(zip(points, edge_scores))
         return point_scores
 
@@ -253,7 +256,7 @@ class AshlockFingerprint():
             the values are the mean score for the corresponding interactions.
         """
 
-        if on_windows and (filename is None):
+        if on_windows and (filename is None):  # pragma: no cover
             in_memory = True
         elif filename is not None:
             outputfile = open(filename, 'w')
@@ -262,13 +265,14 @@ class AshlockFingerprint():
             outputfile = NamedTemporaryFile(mode='w')
             filename = outputfile.name
 
-        edges, tourn_players = self.construct_tournament_elements(step,
-                                                     progress_bar=progress_bar)
+        edges, tourn_players = self.construct_tournament_elements(
+            step, progress_bar=progress_bar)
         self.step = step
-        self.spatial_tournament = axl.SpatialTournament(tourn_players,
-                                                        turns=turns,
-                                                        repetitions=repetitions,
-                                                        edges=edges)
+        self.spatial_tournament = axl.SpatialTournament(
+            tourn_players,
+            turns=turns,
+            repetitions=repetitions,
+            edges=edges)
         self.spatial_tournament.play(build_results=False,
                                      filename=filename,
                                      processes=processes,
@@ -277,8 +281,8 @@ class AshlockFingerprint():
         if in_memory:
             self.interactions = self.spatial_tournament.interactions_dict
         else:
-            self.interactions = read_interactions_from_file(filename,
-                                                     progress_bar=progress_bar)
+            self.interactions = read_interactions_from_file(
+                filename, progress_bar=progress_bar)
 
         self.data = self.generate_data(self.interactions, self.points, edges)
         return self.data
@@ -338,7 +342,8 @@ class AshlockFingerprint():
         size = int((1 / self.step) // 1) + 1
         plotting_data = self.reshape_data(self.data, self.points, size)
         fig, ax = plt.subplots()
-        cax = ax.imshow(plotting_data, cmap=col_map, interpolation=interpolation)
+        cax = ax.imshow(
+            plotting_data, cmap=col_map, interpolation=interpolation)
 
         if colorbar:
             max_score = max(self.data.values())
