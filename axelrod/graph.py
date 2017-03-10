@@ -75,7 +75,7 @@ class Graph(object):
         return s
 
 
-## Example Graphs
+# Example Graphs
 
 
 def cycle(length, directed=False):
@@ -95,7 +95,7 @@ def cycle(length, directed=False):
     graph = Graph(directed=directed)
     edges = []
     for i in range(length - 1):
-        edges.append((i, i+1))
+        edges.append((i, i + 1))
     edges.append((length - 1, 0))
     graph.add_edges(edges)
     return graph
