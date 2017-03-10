@@ -105,14 +105,11 @@ class DeterministicCache(UserDict):
 
         # The triplet should be a pair of axelrod.Player instances and an
         # integer
-        try:
-            if not (
-                isinstance(key[0], Player) and
-                isinstance(key[1], Player) and
-                isinstance(key[2], int)
-            ):
-                return False
-        except TypeError:
+        if not (
+            isinstance(key[0], Player) and
+            isinstance(key[1], Player) and
+            isinstance(key[2], int)
+        ):
             return False
 
         # Each Player should be deterministic
