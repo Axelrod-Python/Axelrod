@@ -34,3 +34,38 @@ class Resurrection(Player):
         else:
             return opponent.history[-1]
 
+class DoubleResurrection(Player):
+    """
+    A player starts by cooperating and defects if the number of rounds 
+    played by the player is greater than five and the last five rounds are cooperations.
+    If the last five rounds were defections, the player cooperates.
+    
+    Names:
+    - DoubleResurrection: Name from CoopSim https://github.com/jecki/CoopSim     
+    """
+
+    name = 'DoubleResurrection'
+    classifier = {
+        'memory_depth': 1,  
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        
+        is_history_sufficient = len(self.history) >= 5    
+        actions = {
+            (True, 'CCCCC'): 'D',
+            (True, 'DDDDD'): 'C'
+        }
+
+        try:
+            return actions[(is_history_sufficient, self.history[-5:])]
+        except KeyError:
+            return opponent.history[-1]

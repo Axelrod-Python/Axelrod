@@ -63,7 +63,7 @@ from .punisher import Punisher, InversePunisher, LevelPunisher
 from .qlearner import (
     RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner)
 from .rand import Random
-from .resurrection import Resurrection
+from .resurrection import Resurrection, DoubleResurrection
 from .retaliate import (
     Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
     LimitedRetaliate3)
@@ -120,6 +120,7 @@ all_strategies = [
     Desperate,
     DoubleCrosser,
     Doubler,
+    DoubleResurrection,
     EasyGo,
     Eatherley,
     EventualCycleHunter,
