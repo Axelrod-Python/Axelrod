@@ -7,7 +7,7 @@ from axelrod.tests.property import strategy_lists
 matplotlib_installed = True
 try:
     import matplotlib.pyplot
-except ImportError:
+except ImportError:  # pragma: no cover
     matplotlib_installed = False
 
 
