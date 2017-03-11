@@ -60,6 +60,24 @@ class TestPlot(unittest.TestCase):
         cls.expected_winplot_dataset = ([[2, 2, 2], [0, 0, 0], [0, 0, 0]],
                                         ['Defector', 'Tit For Tat', 'Alternator'])
 
+
+    def test_default_cmap(self):
+        cmap = axelrod.plot.default_cmap()
+        self.assertEqual(cmap, 'YlGnBu')
+
+        cmap = axelrod.plot.default_cmap('0.0')
+        self.assertEqual(cmap, 'YlGnBu')
+
+        cmap = axelrod.plot.default_cmap('1.4')
+        self.assertEqual(cmap, 'YlGnBu')
+
+        cmap = axelrod.plot.default_cmap('1.7')
+        self.assertEqual(cmap, 'YlGnBu')
+
+        cmap = axelrod.plot.default_cmap('2.0')
+        self.assertEqual(cmap, 'viridis')
+
+
     def test_init(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)
