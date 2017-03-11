@@ -74,14 +74,23 @@ class TestPlot(unittest.TestCase):
             ['Defector', 'Tit For Tat', 'Alternator'])
 
     def test_default_cmap(self):
-        cmap = axelrod.plot.default_cmap()
+        cmap = axelrod.plot.default_cmap('0.0')
         self.assertEqual(cmap, 'YlGnBu')
 
-        cmap = axelrod.plot.default_cmap('0.0')
+        cmap = axelrod.plot.default_cmap('1.3alpha')
         self.assertEqual(cmap, 'YlGnBu')
 
         cmap = axelrod.plot.default_cmap('1.4')
         self.assertEqual(cmap, 'YlGnBu')
+
+        cmap = axelrod.plot.default_cmap()
+        self.assertEqual(cmap, 'viridis')
+
+        cmap = axelrod.plot.default_cmap('1.5')
+        self.assertEqual(cmap, 'viridis')
+
+        cmap = axelrod.plot.default_cmap('1.5beta')
+        self.assertEqual(cmap, 'viridis')
 
         cmap = axelrod.plot.default_cmap('1.7')
         self.assertEqual(cmap, 'viridis')

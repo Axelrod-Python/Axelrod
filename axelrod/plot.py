@@ -3,6 +3,7 @@ from numpy import arange, median, nan_to_num
 import tqdm
 import warnings
 
+from distutils.version import LooseVersion
 from typing import List, Union
 
 matplotlib_installed = True
@@ -25,18 +26,11 @@ namesType = List[str]
 dataType = List[List[Union[int, float]]]
 
 
-def default_cmap(version: str = None) -> str:
+def default_cmap(version: str = "2.0") -> str:
     """Sets a default matplotlib colormap based on the version."""
-    version_gt_1_5 = False
-    if version:
-        s = version.split('.')
-        version_gt_1_5 = (int(s[0]) == 1 and int(s[1]) >= 5) or (int(s[0]) > 1)
-
-    cmaps = {
-        True: 'viridis',
-        False: 'YlGnBu'
-    }
-    return cmaps[version_gt_1_5]
+    if LooseVersion(version) >= "1.5":
+        return 'viridis'
+    return 'YlGnBu'
 
 
 class Plot(object):
