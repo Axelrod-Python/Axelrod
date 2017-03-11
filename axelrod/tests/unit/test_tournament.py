@@ -89,7 +89,7 @@ class TestTournament(unittest.TestCase):
             repetitions=1)
         with warnings.catch_warnings(record=True) as w:
             # Check that a warning is raised if no results set is built and no
-            # filename not given
+            # filename is given
             results = tournament.play(build_results=False, progress_bar=False)
             self.assertEqual(len(w), 1)
 
