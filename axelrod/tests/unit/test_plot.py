@@ -84,7 +84,7 @@ class TestPlot(unittest.TestCase):
         self.assertEqual(cmap, 'YlGnBu')
 
         cmap = axelrod.plot.default_cmap('1.7')
-        self.assertEqual(cmap, 'YlGnBu')
+        self.assertEqual(cmap, 'viridis')
 
         cmap = axelrod.plot.default_cmap('2.0')
         self.assertEqual(cmap, 'viridis')
