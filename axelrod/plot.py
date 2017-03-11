@@ -48,7 +48,10 @@ class Plot(object):
         self.nplayers = self.result_set.nplayers
         self.players = self.result_set.players
 
-    def _violinplot(self, data: dataType, names: namesType, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
+    def _violinplot(
+        self, data: dataType, names: namesType, title: titleType = None,
+        ax: matplotlib.axes.SubplotBase = None
+    ) -> matplotlib.figure.Figure:
         """For making violinplots."""
         if not self.matplotlib_installed:  # pragma: no cover
             return None
@@ -89,11 +92,13 @@ class Plot(object):
     def _boxplot_xticks_labels(self):
         return [str(n) for n in self.result_set.ranked_names]
 
-    def boxplot(self, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
+    def boxplot(
+        self, title: titleType =None, ax: matplotlib.axes.SubplotBase = None
+    ) -> matplotlib.figure.Figure:
         """For the specific mean score boxplot."""
         data = self._boxplot_dataset
         names = self._boxplot_xticks_labels
-        figure = self._violinplot(data, names, title=title,  ax=ax)
+        figure = self._violinplot(data, names, title=title, ax=ax)
         return figure
 
     @property
@@ -108,7 +113,9 @@ class Plot(object):
         ranked_names = [str(self.players[x[-1]]) for x in medians]
         return wins, ranked_names
 
-    def winplot(self, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
+    def winplot(
+        self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
+    ) -> matplotlib.figure.Figure:
         """Plots the distributions for the number of wins for each strategy."""
         if not self.matplotlib_installed:  # pragma: no cover
             return None
@@ -133,7 +140,9 @@ class Plot(object):
         ranked_names = [str(self.players[i]) for i in ordering]
         return diffs, ranked_names
 
-    def sdvplot(self, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
+    def sdvplot(
+        self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
+    ) -> matplotlib.figure.Figure:
         """Score difference violinplots to visualize the distributions of how
         players attain their payoffs."""
         diffs, ranked_names = self._sdv_plot_dataset
@@ -147,7 +156,9 @@ class Plot(object):
                  for length in rep[playeri]] for playeri in
                 self.result_set.ranking]
 
-    def lengthplot(self, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
+    def lengthplot(
+        self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
+    ) -> matplotlib.figure.Figure:
         """For the specific match length boxplot."""
         data = self._lengthplot_dataset
         names = self._boxplot_xticks_labels
@@ -173,7 +184,10 @@ class Plot(object):
         ranked_names = [str(players[i]) for i in ordering]
         return matrix, ranked_names
 
-    def _payoff_heatmap(self, data: dataType, names: namesType, title: titleType =None, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
+    def _payoff_heatmap(
+        self, data: dataType, names: namesType, title: titleType = None,
+        ax: matplotlib.axes.SubplotBase = None
+    ) -> matplotlib.figure.Figure:
         """Generic heatmap plot"""
         if not self.matplotlib_installed:  # pragma: no cover
             return None
@@ -202,13 +216,17 @@ class Plot(object):
         plt.colorbar(mat, cax=cax)
         return figure
 
-    def pdplot(self, title: titleType =None, ax: matplotlib.axes.SubplotBase =None):
+    def pdplot(
+        self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
+    ) -> matplotlib.figure.Figure:
         """Payoff difference heatmap to visualize the distributions of how
         players attain their payoffs."""
         matrix, names = self._pdplot_dataset
         return self._payoff_heatmap(matrix, names, title=title, ax=ax)
 
-    def payoff(self, title: titleType =None, ax: matplotlib.axes.SubplotBase =None):
+    def payoff(
+        self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
+    ) -> matplotlib.figure.Figure:
         """Payoff heatmap to visualize the distributions of how
         players attain their payoffs."""
         data = self._payoff_dataset
@@ -217,7 +235,10 @@ class Plot(object):
 
     # Ecological Plot
 
-    def stackplot(self, eco, title: titleType =None, logscale: bool =True, ax: matplotlib.axes.SubplotBase =None) -> matplotlib.figure.Figure:
+    def stackplot(
+        self, eco, title: titleType = None, logscale: bool = True,
+        ax: matplotlib.axes.SubplotBase =None
+    ) -> matplotlib.figure.Figure:
         if not self.matplotlib_installed:  # pragma: no cover
             return None
 
@@ -230,7 +251,10 @@ class Plot(object):
 
         figure = ax.get_figure()
         turns = range(len(populations))
-        pops = [[populations[iturn][ir] for iturn in turns] for ir in self.result_set.ranking]
+        pops = [
+            [populations[iturn][ir] for iturn in turns]
+            for ir in self.result_set.ranking
+        ]
         ax.stackplot(turns, *pops)
 
         ax.yaxis.tick_left()
@@ -243,13 +267,15 @@ class Plot(object):
         if title is not None:
             plt.title(title)
 
-        trans = transforms.blended_transform_factory(ax.transAxes, ax.transData)
+        trans = transforms.blended_transform_factory(
+            ax.transAxes, ax.transData)
         ticks = []
         for i, n in enumerate(self.result_set.ranked_names):
             x = -0.01
             y = (i + 0.5) * 1 / self.result_set.nplayers
-            ax.annotate(n, xy=(x, y), xycoords=trans, clip_on=False,
-                             va='center', ha='right', fontsize=5)
+            ax.annotate(
+                n, xy=(x, y), xycoords=trans, clip_on=False, va='center',
+                ha='right', fontsize=5)
             ticks.append(y)
         ax.set_yticks(ticks)
         ax.tick_params(direction='out')
@@ -260,8 +286,10 @@ class Plot(object):
 
         return figure
 
-    def save_all_plots(self, prefix: str ="axelrod", title_prefix: str ="axelrod",
-                       filetype: str ="svg", progress_bar: bool =True):
+    def save_all_plots(
+        self, prefix: str ="axelrod", title_prefix: str ="axelrod",
+        filetype: str ="svg", progress_bar: bool = True
+    ) -> None:
         """
         A method to save all plots to file.
 
