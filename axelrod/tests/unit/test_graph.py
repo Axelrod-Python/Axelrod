@@ -7,19 +7,19 @@ from axelrod import graph
 class TestGraph(unittest.TestCase):
 
     def test_init(self):
-        # Undirected graph with not vertices
+        # Undirected graph with no vertices
         g = graph.Graph()
         self.assertFalse(g.directed)
         self.assertIsInstance(g.out_mapping, defaultdict)
         self.assertIsInstance(g.in_mapping, defaultdict)
-        self.assertFalse(g._edges)
+        self.assertEqual(g._edges, [])
 
         # Directed graph with no vertices
         g = graph.Graph(directed=True)
         self.assertTrue(g.directed)
         self.assertIsInstance(g.out_mapping, defaultdict)
         self.assertIsInstance(g.in_mapping, defaultdict)
-        self.assertFalse(g._edges)
+        self.assertEqual(g._edges, [])
 
         # Undirected graph with vertices and unweighted edges
         g = graph.Graph(edges=[[1, 2], [2, 3]])
