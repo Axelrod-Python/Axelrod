@@ -65,13 +65,14 @@ class Plot(object):
         spacing = 4
         positions = spacing * arange(1, self.nplayers + 1, 1)
         figure.set_size_inches(width, height)
-        plt.violinplot(data, positions=positions, widths=spacing / 2,
-                       showmedians=True, showextrema=False)
-        plt.xticks(positions, names, rotation=90)
-        plt.xlim(0, spacing * (self.nplayers + 1))
-        plt.tick_params(axis='both', which='both', labelsize=8)
+        ax.violinplot(data, positions=positions, widths=spacing / 2,
+                      showmedians=True, showextrema=False)
+        ax.set_xticks(positions)
+        ax.set_xticklabels(names, rotation=90)
+        ax.set_xlim([0, spacing * (self.nplayers + 1)])
+        ax.tick_params(axis='both', which='both', labelsize=8)
         if title:
-            plt.title(title)
+            ax.set_title(title)
         return figure
 
     # Box and Violin plots for mean score, score differences, wins, and match
@@ -260,11 +261,11 @@ class Plot(object):
         ax.yaxis.set_label_position("right")
         ax.yaxis.labelpad = 25.0
 
-        plt.ylim([0.0, 1.0])
-        plt.ylabel('Relative population size')
-        plt.xlabel('Turn')
+        ax.set_ylim([0.0, 1.0])
+        ax.set_ylabel('Relative population size')
+        ax.set_xlabel('Turn')
         if title is not None:
-            plt.title(title)
+            ax.set_title(title)
 
         trans = transforms.blended_transform_factory(
             ax.transAxes, ax.transData)

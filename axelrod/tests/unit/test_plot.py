@@ -137,6 +137,23 @@ class TestPlot(unittest.TestCase):
         else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
+    def test_boxplot_with_passed_axes(self):
+        # Test that can plot on a given matplotlib axes
+        if matplotlib_installed:
+            fig, axarr = plt.subplots(2, 2)
+            self.assertEqual(axarr[0, 1].get_ylim(), (0, 1))
+            plot = axelrod.Plot(self.test_result_set)
+            plot.boxplot(ax=axarr[0, 1])
+            self.assertNotEqual(axarr[0, 1].get_ylim(), (0, 1))
+
+            # Plot on another axes with a title
+            plot.boxplot(title="Test", ax=axarr[1, 0])
+            self.assertNotEqual(axarr[1, 0].get_ylim(), (0, 1))
+            self.assertEqual(axarr[1, 0].get_title(), "Test")
+
+        else:  # pragma: no cover
+            self.skipTest('matplotlib not installed')
+
     def test_boxplot_with_title(self):
         if matplotlib_installed:
             plot = axelrod.Plot(self.test_result_set)
@@ -219,10 +236,11 @@ class TestPlot(unittest.TestCase):
         else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
-    def test_ecosystem(self):
+    def test_stackplot(self):
         if matplotlib_installed:
             eco = axelrod.Ecosystem(self.test_result_set)
             eco.reproduce(100)
+
             plot = axelrod.Plot(self.test_result_set)
             fig = plot.stackplot(eco)
             self.assertIsInstance(fig, matplotlib.pyplot.Figure)
@@ -235,6 +253,28 @@ class TestPlot(unittest.TestCase):
             plt.close(fig)
         else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
+
+    def test_stackplot_with_passed_axes(self):
+        # Test that can plot on a given matplotlib axes
+        if matplotlib_installed:
+            eco = axelrod.Ecosystem(self.test_result_set)
+            eco.reproduce(100)
+            plot = axelrod.Plot(self.test_result_set)
+
+            fig, axarr = plt.subplots(2, 2)
+            self.assertEqual(axarr[0, 1].get_xlim(), (0, 1))
+
+            plot.stackplot(eco, ax=axarr[0, 1])
+            self.assertNotEqual(axarr[0, 1].get_xlim(), (0, 1))
+
+            # Plot on another axes with a title
+            plot.stackplot(eco ,title="dummy title", ax=axarr[1, 0])
+            self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
+            self.assertEqual(axarr[1, 0].get_title(), "dummy title")
+
+        else:  # pragma: no cover
+            self.skipTest('matplotlib not installed')
+
 
     def test_all_plots(self):
         if matplotlib_installed:
