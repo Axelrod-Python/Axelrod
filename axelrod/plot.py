@@ -93,7 +93,7 @@ class Plot(object):
         return [str(n) for n in self.result_set.ranked_names]
 
     def boxplot(
-        self, title: titleType =None, ax: matplotlib.axes.SubplotBase = None
+        self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
     ) -> matplotlib.figure.Figure:
         """For the specific mean score boxplot."""
         data = self._boxplot_dataset
