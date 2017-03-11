@@ -6,13 +6,11 @@ import warnings
 from typing import List, Union
 
 matplotlib_installed = True
-matplotlib_version = None
 try:
     import matplotlib
     import matplotlib.pyplot as plt
     import matplotlib.transforms as transforms
     from mpl_toolkits.axes_grid1 import make_axes_locatable
-    matplotlib_version = matplotlib.__version__
 except ImportError:  # pragma: no cover
     matplotlib_installed = False
 except RuntimeError:  # pragma: no cover
@@ -201,6 +199,7 @@ class Plot(object):
         width = max(self.nplayers / 4, 12)
         height = width
         figure.set_size_inches(width, height)
+        matplotlib_version = matplotlib.__version__
         cmap = default_cmap(matplotlib_version)
         mat = ax.matshow(data, cmap=cmap)
         plt.xticks(range(self.result_set.nplayers))
