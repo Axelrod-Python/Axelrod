@@ -24,13 +24,11 @@ class TestAlternator(TestPlayer):
         # Starts by cooperating.
         self.first_play_test(C)
 
-        opponent = axelrod.MockPlayer()
         actions = [(C, C), (D, C)] * 5
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer(D)
         actions = [(C, D), (D, D)] * 5
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
 
         opponent = axelrod.MockPlayer([D, C])
         actions = [(C, D), (D, C)] * 5
