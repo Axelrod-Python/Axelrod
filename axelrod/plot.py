@@ -201,7 +201,7 @@ class Plot(object):
         width = max(self.nplayers / 4, 12)
         height = width
         figure.set_size_inches(width, height)
-        cmap = default_cmap()
+        cmap = default_cmap(matplotlib_version)
         mat = ax.matshow(data, cmap=cmap)
         plt.xticks(range(self.result_set.nplayers))
         plt.yticks(range(self.result_set.nplayers))
