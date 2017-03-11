@@ -6,11 +6,13 @@ import warnings
 from typing import List, Union
 
 matplotlib_installed = True
+matplotlib_version = None
 try:
     import matplotlib
     import matplotlib.pyplot as plt
     import matplotlib.transforms as transforms
     from mpl_toolkits.axes_grid1 import make_axes_locatable
+    matplotlib_version = matplotlib.__version__
 except ImportError:  # pragma: no cover
     matplotlib_installed = False
 except RuntimeError:  # pragma: no cover
@@ -24,13 +26,19 @@ titleType = List[str]
 namesType = List[str]
 dataType = List[List[Union[int, float]]]
 
-def default_cmap() -> str:
+
+def default_cmap(version: str = None) -> str:
     """Sets a default matplotlib colormap based on the version."""
-    s = matplotlib.__version__.split('.')
-    if int(s[0]) >= 1 and int(s[1]) >= 5:
-        return "viridis"
-    else:
-        return 'YlGnBu'
+    version_gt_1_5 = False
+    if version:
+        s = version.split('.')
+        version_gt_1_5 = (int(s[0]) == 1 and int(s[1]) >= 5) or (int(s[0]) > 1)
+
+    cmaps = {
+        True: 'viridis',
+        False: 'YlGnBu'
+    }
+    return cmaps[version_gt_1_5]
 
 
 class Plot(object):
