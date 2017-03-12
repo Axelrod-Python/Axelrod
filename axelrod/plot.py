@@ -67,6 +67,7 @@ class Plot(object):
         ax.tick_params(axis='both', which='both', labelsize=8)
         if title:
             ax.set_title(title)
+        plt.tight_layout()
         return figure
 
     # Box and Violin plots for mean score, score differences, wins, and match
@@ -204,10 +205,8 @@ class Plot(object):
         ax.tick_params(axis='both', which='both', labelsize=16)
         if title:
             ax.set_xlabel(title)
-        # Make the colorbar match up with the plot
-        divider = make_axes_locatable(plt.gca())
-        cax = divider.append_axes("right", "5%", pad="3%")
-        plt.colorbar(mat, cax=cax, ax=ax)
+        figure.colorbar(mat, ax=ax)
+        plt.tight_layout()
         return figure
 
     def pdplot(
@@ -278,6 +277,7 @@ class Plot(object):
         if logscale:
             ax.set_xscale('log')
 
+        plt.tight_layout()
         return figure
 
     def save_all_plots(
