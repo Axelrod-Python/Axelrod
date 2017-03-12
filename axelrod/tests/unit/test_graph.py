@@ -147,7 +147,25 @@ class TestGraph(unittest.TestCase):
             self.assertEqual(g.in_mapping[key], expected_in_mapping[key])
 
     def test_repr(self):
-        pass
+        # Undirected graph with no vertices
+        g = graph.Graph()
+        self.assertEqual(str(g), '<Graph: None>')
+
+        # Directed graph with no vertices
+        g = graph.Graph(directed=True)
+        self.assertEqual(str(g), '<Graph: None>')
+
+        # Undirected graph with vertices and unweighted edges
+        g = graph.Graph(edges=[[1, 2], [2, 3]])
+        self.assertEqual(str(g), '<Graph: [[1, 2], [2, 3]]>')
+
+        # Undirected graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]])
+        self.assertEqual(str(g), '<Graph: [[1, 2, 10], [2, 3, 5]]>')
+
+        # Directed graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]], directed=True)
+        self.assertEqual(str(g), '<Graph: [[1, 2, 10], [2, 3, 5]]>')
 
     def test_cycle(self):
         g = graph.cycle(1, directed=False)
