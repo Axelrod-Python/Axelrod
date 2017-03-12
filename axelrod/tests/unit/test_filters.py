@@ -16,14 +16,6 @@ class TestFilters(unittest.TestCase):
             'makes_use_of': ['game', 'length']
         }
 
-    class TestStrategy2(object):
-        classifier = {
-            'stochastic': True,
-            'inspects_source': False,
-            'memory_depth': 'infinity',
-            'makes_use_of': ['game', 'length']
-        }
-
     def test_equality_filter(self):
         self.assertTrue(
             passes_operator_filter(
@@ -37,10 +29,6 @@ class TestFilters(unittest.TestCase):
         self.assertFalse(
             passes_operator_filter(
                 self.TestStrategy, 'inspects_source', True, operator.eq))
-
-        self.assertTrue(
-            passes_operator_filter(
-                self.TestStrategy2, 'memory_depth', float('inf'), operator.eq))
 
     @given(
         smaller=integers(min_value=0, max_value=9),
@@ -56,9 +44,6 @@ class TestFilters(unittest.TestCase):
             self.TestStrategy, 'memory_depth', smaller, operator.le))
         self.assertFalse(passes_operator_filter(
             self.TestStrategy, 'memory_depth', larger, operator.ge))
-
-        self.assertTrue(passes_operator_filter(
-            self.TestStrategy2, 'memory_depth', smaller, operator.ge))
 
     def test_list_filter(self):
         self.assertTrue(passes_in_list_filter(
