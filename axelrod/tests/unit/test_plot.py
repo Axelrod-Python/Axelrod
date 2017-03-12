@@ -257,6 +257,11 @@ class TestPlot(unittest.TestCase):
 
             plot.payoff(ax=axarr[0, 1])
             self.assertNotEqual(axarr[0, 1].get_xlim(), (0, 1))
+            # Ensure color bar draw at same location as boxplot
+            color_bar_bbox = fig.axes[-1].get_position().get_points()
+            payoff_bbox_coord = fig.axes[1].get_position().get_points()
+            self.assertEqual(color_bar_bbox[1, 1], payoff_bbox_coord[1, 1],
+                             msg="Color bar is not in correct location.")
 
             # Plot on another axes with a title
             plot.payoff(title="dummy title", ax=axarr[1, 0])
