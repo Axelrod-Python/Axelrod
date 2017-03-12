@@ -42,7 +42,8 @@ class TestPlot(unittest.TestCase):
                 except KeyError:
                     cls.interactions[index_pair] = [match.result]
 
-        cls.test_result_set = axelrod.ResultSet(cls.players, cls.interactions)
+        cls.test_result_set = axelrod.ResultSet(cls.players, cls.interactions,
+                                                progress_bar=False)
         cls.expected_boxplot_dataset = [
             [(17 / 5 + 9 / 5) / 2 for _ in range(3)],
             [(13 / 5 + 4 / 5) / 2 for _ in range(3)],
@@ -116,7 +117,7 @@ class TestPlot(unittest.TestCase):
             repetitions=2)
         tournament.play(filename=tmp_file.name, progress_bar=False)
         tmp_file.close()
-        rs = axelrod.ResultSetFromFile(tmp_file.name)
+        rs = axelrod.ResultSetFromFile(tmp_file.name, progress_bar=False)
 
         plot = axelrod.Plot(rs)
         self.assertEqual(plot.result_set, rs)
@@ -159,9 +160,9 @@ class TestPlot(unittest.TestCase):
             self.assertNotEqual(axarr[0, 1].get_ylim(), (0, 1))
 
             # Plot on another axes with a title
-            plot.boxplot(title="Test", ax=axarr[1, 0])
+            plot.boxplot(title="dummy title", ax=axarr[1, 0])
             self.assertNotEqual(axarr[1, 0].get_ylim(), (0, 1))
-            self.assertEqual(axarr[1, 0].get_title(), "Test")
+            self.assertEqual(axarr[1, 0].get_title(), "dummy title")
 
         else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
@@ -248,6 +249,22 @@ class TestPlot(unittest.TestCase):
         else:  # pragma: no cover
             self.skipTest('matplotlib not installed')
 
+    def test_payoff_with_passed_axes(self):
+        if matplotlib_installed:
+            plot = axelrod.Plot(self.test_result_set)
+            fig, axarr = plt.subplots(2, 2)
+            self.assertEqual(axarr[0, 1].get_xlim(), (0, 1))
+
+            plot.payoff(ax=axarr[0, 1])
+            self.assertNotEqual(axarr[0, 1].get_xlim(), (0, 1))
+
+            # Plot on another axes with a title
+            plot.payoff(title="dummy title", ax=axarr[1, 0])
+            self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
+            self.assertEqual(axarr[1, 0].get_xlabel(), "dummy title")
+        else:  # pragma: no cover
+            self.skipTest('matplotlib not installed')
+
     def test_stackplot(self):
         if matplotlib_installed:
             eco = axelrod.Ecosystem(self.test_result_set)
@@ -298,6 +315,6 @@ class TestPlot(unittest.TestCase):
             self.assertIsNone(
                 plot.save_all_plots(prefix="test_outputs/",
                                     title_prefix="A prefix",
-                                    progress_bar=False))
+                                    progress_bar=True))
         else:  # pragma: no cover
             self.skipTest('matplotlib not installed')

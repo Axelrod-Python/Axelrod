@@ -197,17 +197,17 @@ class Plot(object):
         matplotlib_version = matplotlib.__version__
         cmap = default_cmap(matplotlib_version)
         mat = ax.matshow(data, cmap=cmap)
-        plt.xticks(range(self.result_set.nplayers))
-        plt.yticks(range(self.result_set.nplayers))
+        ax.set_xticks(range(self.result_set.nplayers))
+        ax.set_yticks(range(self.result_set.nplayers))
         ax.set_xticklabels(names, rotation=90)
         ax.set_yticklabels(names)
-        plt.tick_params(axis='both', which='both', labelsize=16)
+        ax.tick_params(axis='both', which='both', labelsize=16)
         if title:
-            plt.xlabel(title)
+            ax.set_xlabel(title)
         # Make the colorbar match up with the plot
         divider = make_axes_locatable(plt.gca())
         cax = divider.append_axes("right", "5%", pad="3%")
-        plt.colorbar(mat, cax=cax)
+        plt.colorbar(mat, cax=cax, ax=ax)
         return figure
 
     def pdplot(
