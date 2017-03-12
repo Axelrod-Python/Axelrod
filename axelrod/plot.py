@@ -26,9 +26,9 @@ namesType = List[str]
 dataType = List[List[Union[int, float]]]
 
 
-def default_cmap(version: str = None) -> str:
+def default_cmap(version: str = "2.0") -> str:
     """Sets a default matplotlib colormap based on the version."""
-    if version is None or LooseVersion(version) >= "1.5":
+    if LooseVersion(version) >= "1.5":
         return 'viridis'
     return 'YlGnBu'
 
