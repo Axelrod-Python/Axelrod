@@ -86,6 +86,69 @@ class TestGraph(unittest.TestCase):
             self.assertEqual(g.in_mapping[node], expected_in_mapping[node])
         self.assertEqual(g._edges, expected_edges)
 
+    def test_out_dict(self):
+        # Undirected graph with vertices and unweighted edges
+        g = graph.Graph(edges=[[1, 2], [2, 3]])
+        expected_out_mapping = {
+            1: {2: None},
+            2: {1: None, 3: None},
+            3: {2: None}
+        }
+        for key in expected_out_mapping:
+            self.assertEqual(g.out_mapping[key], expected_out_mapping[key])
+
+        # Undirected graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]])
+        expected_out_mapping = {
+            1: {2: 10},
+            2: {1: 10, 3: 5},
+            3: {2: 5}
+        }
+        for key in expected_out_mapping:
+            self.assertEqual(g.out_mapping[key], expected_out_mapping[key])
+
+        # Directed graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]], directed=True)
+        expected_out_mapping = {
+            1: {2: 10},
+            2: {3: 5},
+        }
+        for key in expected_out_mapping:
+            self.assertEqual(g.out_mapping[key], expected_out_mapping[key])
+
+    def test_in_dict(self):
+        # Undirected graph with vertices and unweighted edges
+        g = graph.Graph(edges=[[1, 2], [2, 3]])
+        expected_in_mapping = {
+            1: {2: None},
+            2: {1: None, 3: None},
+            3: {2: None}
+        }
+        for key in expected_in_mapping:
+            self.assertEqual(g.in_mapping[key], expected_in_mapping[key])
+
+        # Undirected graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]])
+        expected_in_mapping = {
+            1: {2: 10},
+            2: {1: 10, 3: 5},
+            3: {2: 5}
+        }
+        for key in expected_in_mapping:
+            self.assertEqual(g.in_mapping[key], expected_in_mapping[key])
+
+        # Directed graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]], directed=True)
+        expected_in_mapping = {
+            2: {1: 10},
+            3: {2: 5}
+        }
+        for key in expected_in_mapping:
+            self.assertEqual(g.in_mapping[key], expected_in_mapping[key])
+
+    def test_repr(self):
+        pass
+
     def test_cycle(self):
         g = graph.cycle(1, directed=False)
         self.assertEqual(g.vertices(), [0])
