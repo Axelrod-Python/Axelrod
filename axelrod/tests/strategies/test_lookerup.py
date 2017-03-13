@@ -86,6 +86,7 @@ class TestLookerUp(TestPlayer):
         self.assertEqual(player.lookup_table, expected_lookup_table)
 
     def test_strategy(self):
+        self.first_play_test(C)
         self.second_play_test(C, D, C, D)  # TFT
         self.responses_test([C], [C] * 4, [C, C, C, C])
         self.responses_test([D], [C] * 5, [C, C, C, C, D])
