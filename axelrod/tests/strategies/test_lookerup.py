@@ -1,6 +1,5 @@
 """Test for the Looker Up strategy."""
 import copy
-import unittest
 
 import axelrod
 from axelrod.strategies.lookerup import (
@@ -27,6 +26,10 @@ class TestLookerUp(TestPlayer):
 
     expected_class_classifier = copy.copy(expected_classifier)
     expected_class_classifier['memory_depth'] = float('inf')
+
+    def test_create_lookup_table_from_pattern(self):
+        with self.assertRaises(ValueError):
+            create_lookup_table_from_pattern(2, 2, 2, 'CCC')
 
     def test_init(self):
         # Test empty table
