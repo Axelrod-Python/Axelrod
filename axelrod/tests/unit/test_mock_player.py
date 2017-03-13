@@ -39,7 +39,7 @@ class TestMockPlayer(unittest.TestCase):
 
 class TestUpdateHistories(unittest.TestCase):
 
-    def test_various(self):p
+    def test_various(self):
         p1 = TestOpponent()
         p2 = TestOpponent()
         update_history(p1, C)
