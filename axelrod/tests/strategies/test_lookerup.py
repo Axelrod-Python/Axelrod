@@ -36,6 +36,19 @@ class TestLookerUp(TestPlayer):
         self.assertEqual(actual, expected)
 
     def test_create_lookup_table_from_pattern(self):
+        expected = {
+            ('C', 'C', 'C'): 'C',
+            ('C', 'C', 'D'): 'C',
+            ('C', 'D', 'C'): 'D',
+            ('C', 'D', 'D'): 'C',
+            ('D', 'C', 'C'): 'C',
+            ('D', 'C', 'D'): 'D',
+            ('D', 'D', 'C'): 'C',
+            ('D', 'D', 'D'): 'C'
+        }
+        actual = create_lookup_table_from_pattern(1, 1, 1, 'CCDCCDCC')
+        self.assertEqual(actual, expected)
+
         with self.assertRaises(ValueError):
             create_lookup_table_from_pattern(2, 2, 2, 'CCC')
 
