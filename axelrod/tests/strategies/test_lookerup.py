@@ -91,6 +91,14 @@ class TestLookerUp(TestPlayer):
         self.responses_test([C], [C] * 4, [C, C, C, C])
         self.responses_test([D], [C] * 5, [C, C, C, C, D])
 
+        opponent = axelrod.MockPlayer()
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            init_kwargs={'parameters': (1, 1, 0)}
+        )
+
     def test_defector_table(self):
         """
         Testing a lookup table that always defects if there is enough history.
