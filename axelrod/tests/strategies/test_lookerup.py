@@ -96,7 +96,7 @@ class TestLookerUp(TestPlayer):
         self.versus_test(
             opponent,
             expected_actions=actions,
-            init_kwargs={'parameters': (1, 1, 0)}
+            init_kwargs={'parameters': (1, 0, 1)}
         )
 
     def test_defector_table(self):
