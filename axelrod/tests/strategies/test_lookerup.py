@@ -27,6 +27,14 @@ class TestLookerUp(TestPlayer):
     expected_class_classifier = copy.copy(expected_classifier)
     expected_class_classifier['memory_depth'] = float('inf')
 
+    def test_create_lookup_table_keys(self):
+        expected = [
+            ('C', 'C', 'C'), ('C', 'C', 'D'), ('C', 'D', 'C'), ('C', 'D', 'D'),
+            ('D', 'C', 'C'), ('D', 'C', 'D'), ('D', 'D', 'C'), ('D', 'D', 'D')
+        ]
+        actual = create_lookup_table_keys(1, 1, 1)
+        self.assertEqual(actual, expected)
+
     def test_create_lookup_table_from_pattern(self):
         with self.assertRaises(ValueError):
             create_lookup_table_from_pattern(2, 2, 2, 'CCC')
