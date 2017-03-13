@@ -7,6 +7,7 @@ import numpy as np
 
 import axelrod
 from axelrod import DefaultGame, MockPlayer, Player, simulate_play
+from axelrod.player import get_state_distribution_from_history
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -86,6 +87,17 @@ class TestPlayerClass(unittest.TestCase):
                          {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1})
         self.assertEqual(player2.state_distribution,
                          {(C, C): 1, (C, D): 1, (D, C): 2, (D, D): 1})
+
+    def test_get_state_distribution_from_history(self):
+        player = self.player()
+        history_1 = [C, C, D, D, C]
+        history_2 = [C, D, C, D, D]
+        get_state_distribution_from_history(
+            player, history_1, history_2)
+        self.assertEqual(
+            player.state_distribution,
+            {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1}
+        )
 
     def test_noisy_play(self):
         axelrod.seed(1)
