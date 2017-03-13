@@ -10,7 +10,7 @@ class TestMockPlayer(unittest.TestCase):
 
     def test_strategy(self):
         for action in [C, D]:
-            m = MockPlayer( [action])
+            m = MockPlayer([action])
             p2 = axelrod.Player()
             self.assertEqual(action, m.strategy(p2))
 
@@ -22,14 +22,14 @@ class TestMockPlayer(unittest.TestCase):
 
     def test_history(self):
         t = TestOpponent()
-        m1 = MockPlayer([C], history=[C]*10)
+        m1 = MockPlayer([C], history=[C] * 10)
         self.assertEqual(m1.actions.__next__(), C)
         self.assertEqual(m1.history, [C] * 10)
         self.assertEqual(m1.cooperations, 10)
         self.assertEqual(m1.defections, 0)
         self.assertEqual(m1.strategy(t), C)
 
-        m2 = MockPlayer([D], history=[D]*10)
+        m2 = MockPlayer([D], history=[D] * 10)
         self.assertEqual(m2.actions.__next__(), D)
         self.assertEqual(m2.history, [D] * 10)
         self.assertEqual(m2.cooperations, 0)
@@ -39,7 +39,7 @@ class TestMockPlayer(unittest.TestCase):
 
 class TestUpdateHistories(unittest.TestCase):
 
-    def test_various(self):
+    def test_various(self):p
         p1 = TestOpponent()
         p2 = TestOpponent()
         update_history(p1, C)
