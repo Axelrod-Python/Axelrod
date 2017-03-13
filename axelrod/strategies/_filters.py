@@ -44,10 +44,6 @@ def passes_operator_filter(player, classifier_key, value, operator):
         the value and operator passed to the function.
     """
     classifier_value = player.classifier[classifier_key]
-    if (isinstance(classifier_value, str) and
-            classifier_value.lower() == 'infinity'):
-        classifier_value = float('inf')
-
     return operator(classifier_value, value)
 
 
