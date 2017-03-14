@@ -36,6 +36,15 @@ class TestEvolvedANN(TestPlayer):
         # Test initial play sequence
         self.first_play_test(C)
 
+        actions = [(C, C)] * 5
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D)] + [(D, D)] * 5
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        actions = [(C, C)] * 5
+        self.versus_test(axelrod.TitForTat(), expected_actions=actions)
+
 
 class TestEvolvedANN5(TestPlayer):
 
@@ -54,6 +63,12 @@ class TestEvolvedANN5(TestPlayer):
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(C)
+
+        actions = [(C, C)] * 5
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D)] * 4 + [(D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 
 class TestEvolvedANNNoise05(TestPlayer):
@@ -74,44 +89,8 @@ class TestEvolvedANNNoise05(TestPlayer):
         # Test initial play sequence
         self.first_play_test(C)
 
+        actions = [(C, C)] * 5
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-class TestEvolvedANNvsCooperator(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN(), axelrod.Cooperator(),
-                         [C] * 5, [C] * 5)
-
-
-class TestEvolvedANNvsDefector(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN(), axelrod.Defector(),
-                         [C, D, D, D, D], [D] * 5)
-
-
-class TestEvolvedANNvsTFT(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN(), axelrod.TitForTat(),
-                         [C] * 5, [C] * 5)
-
-
-class TestEvolvedANN5vsCooperator(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN5(), axelrod.Cooperator(),
-                         [C] * 5, [C] * 5)
-
-
-class TestEvolvedANN5vsDefector(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANN5(), axelrod.Defector(),
-                         [C] * 4 + [D], [D] * 5)
-
-
-class TestEvolvedANNNoise05vsCooperator(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANNNoise05(), axelrod.Cooperator(),
-                         [C] * 5, [C] * 5)
-
-
-class TestEvolvedANNNoise05vsDefector(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.EvolvedANNNoise05(), axelrod.Defector(),
-                         [C, D, C], [D] * 3)
+        actions = [(C, D), (D, D), (C, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
