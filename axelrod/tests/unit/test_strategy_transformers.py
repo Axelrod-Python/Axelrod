@@ -145,6 +145,13 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p1.history, [D, C, C, D, D])
 
+        probability = (0.6, 0.6)
+        p1 = JossAnnTransformer(probability)(axelrod.Cooperator)()
+        p2 = axelrod.Cooperator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, C, D, D, C])
+
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""
         random.seed(5)
