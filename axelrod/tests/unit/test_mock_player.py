@@ -9,13 +9,12 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 class TestMockPlayer(unittest.TestCase):
 
     def test_init(self):
-        actions = 'CCD'
-        history ='CCC'
-        state_dist={(C, C): 2, (D, C): 1}
+        actions = [C, C, D]
+        history = [C, C, C]
+        state_dist = {(C, C): 2, (D, C): 1}
         m = MockPlayer(actions, history, state_dist)
         self.assertEqual(m.history, [C, C, C])
         self.assertEqual(m.state_distribution, state_dist)
-
 
     def test_strategy(self):
         for action in [C, D]:
