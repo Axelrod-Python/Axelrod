@@ -404,7 +404,7 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     action: an axelrod.Action, C or D
     """
     if sum(probability) > 1:
-        probability[:] = [i / sum(probability) for i in probability]
+        probability = tuple([i / sum(probability) for i in probability])
 
     remaining_probability = max(0, 1 - probability[0] - probability[1])
     probability += (remaining_probability,)
