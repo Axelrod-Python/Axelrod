@@ -22,27 +22,47 @@ class TestAPavlov2006(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C], [C] * 6, [C] * 6,
-                            attrs={"opponent_class": "Cooperative"})
-        self.responses_test([D], [C, D, D, D, D, D], [D] * 6,
-                            attrs={"opponent_class": "ALLD"})
-        self.responses_test([C, C], [C, D, C, D, C, D], [D, C, D, C, D, C],
-                            attrs={"opponent_class": "STFT"})
-        self.responses_test([D], [C, D, D, C, D, D], [D, D, C, D, D, C],
-                            attrs={"opponent_class": "PavlovD"})
-        self.responses_test([C], [C, D, D, C, D, D, C], [D, D, C, D, D, C, D],
-                            attrs={"opponent_class": "PavlovD"})
-        self.responses_test([D], [C, D, D, C, D, D], [C, C, C, D, D, D],
-                            attrs={"opponent_class": "Random"})
-        self.responses_test([D], [C, D, D, D, C, C], [D, D, D, C, C, C],
-                            attrs={"opponent_class": "Random"})
 
-    def test_reset(self):
-        player = self.player()
-        opponent = axelrod.Cooperator()
-        [player.play(opponent) for _ in range(10)]
-        player.reset()
-        self.assertEqual(player.opponent_class, None)
+        actions = [(C, C)] * 7
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         attrs={"opponent_class": "Cooperative"})
+
+        opponent = axelrod.MockPlayer([C] * 6 + [D])
+        actions = [(C, C)] * 6 + [(C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "Cooperative"})
+
+        actions = [(C, D)] + [(D, D)] * 6
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         attrs={"opponent_class": "ALLD"})
+
+        opponent = axelrod.MockPlayer([D, C, D, C, D, C])
+        actions = [(C, D), (D, C), (C, D), (D, C),
+                   (C, D), (D, C), (C, D), (C, C),
+                   (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "STFT"})
+
+        opponent = axelrod.MockPlayer([D, D, C, D, D, C])
+        actions = [(C, D), (D, D), (D, C), (C, D), (D, D), (D, C), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "PavlovD"})
+
+        opponent = axelrod.MockPlayer([D, D, C, D, D, C, D])
+        actions = [(C, D), (D, D), (D, C), (C, D),
+                   (D, D), (D, C), (D, D), (C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "PavlovD"})
+
+        opponent = axelrod.MockPlayer([C, C, C, D, D, D])
+        actions = [(C, C), (C, C), (C, C), (C, D), (D, D), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "Random"})
+
+        opponent = axelrod.MockPlayer([D, D, D, C, C, C])
+        actions = [(C, D), (D, D), (D, D), (D, C), (C, C), (C, C), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "Random"})
 
 
 class TestAPavlov2011(TestPlayer):
@@ -61,44 +81,57 @@ class TestAPavlov2011(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C], [C] * 6, [C] * 6,
-                            attrs={"opponent_class": "Cooperative"})
-        self.responses_test([D], [C, D, D, D, D, D], [D] * 6,
-                            attrs={"opponent_class": "ALLD"})
-        self.responses_test([D], [C, C, D, D, D, D], [C] + [D] * 5,
-                            attrs={"opponent_class": "ALLD"})
-        self.responses_test([D], [C, C, C, D, D, D], [C, C] + [D] * 4,
-                            attrs={"opponent_class": "ALLD"})
-        self.responses_test([D], [C, C, D, D, C, D], [C, D, D, C, D, D],
-                            attrs={"opponent_class": "ALLD"})
 
-        self.responses_test([C], [C, C, D, D, D, C], [C, D, D, C, C, D],
-                            attrs={"opponent_class": "STFT"})
-        self.responses_test([C], [C, C, D, C, D, C], [C, D, C, D, C, D],
-                            attrs={"opponent_class": "STFT"})
-        self.responses_test([C], [C, D, D, D, C, C], [D, D, D, C, C, C],
-                            attrs={"opponent_class": "STFT"})
-        self.responses_test([C], [C, D, D, D, C, C], [D, D, D, C, C, C],
-                            attrs={"opponent_class": "STFT"})
+        actions = [(C, C)] * 8
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         attrs={"opponent_class": "Cooperative"})
 
-        # Specific case for STFT when responding with TFT
-        opponent = axelrod.Player()
-        player = axelrod.APavlov2006()
-        player.history = [D] * 8
-        opponent.history = [D] * 8
-        player.opponent_class = "STFT"
-        self.assertEqual(player.strategy(opponent), D)
-        opponent.history.append(C)
-        self.assertEqual(player.strategy(opponent), C)
+        actions = [(C, D)] + [(D, D)] * 9
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         attrs={"opponent_class": "ALLD"})
 
-        self.responses_test([D], [C, C, C, C, C, D], [C, C, C, C, D, D],
-                            attrs={"opponent_class": "Random"})
-        self.responses_test([D], [C, D, D, C, C, C], [D, D, C, C, C, C],
-                            attrs={"opponent_class": "Random"})
+        opponent = axelrod.MockPlayer([C, D, D, D, D, D, D])
+        actions = [(C, C), (C, D)] + [(D, D)] * 5 + [(D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "ALLD"})
 
-    def test_reset(self):
-        player = self.player()
-        opponent = axelrod.Cooperator()
-        [player.play(opponent) for _ in range(10)]
-        player.reset()
-        self.assertEqual(player.opponent_class, None)
+        opponent = axelrod.MockPlayer([C, C, D, D, D, D, D])
+        actions = [(C, C), (C, C), (C, D)] + [(D, D)] * 4 + [(D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "ALLD"})
+
+        opponent = axelrod.MockPlayer([C, D, D, C, D, D, D])
+        actions = [(C, C), (C, D), (D, D), (D, C),
+                   (C, D), (D, D), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "ALLD"})
+
+        opponent = axelrod.MockPlayer([C, D, D, C, C, D, D])
+        actions = [(C, C), (C, D), (D, D), (D, C),
+                   (C, C), (C, D), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "STFT"})
+
+        opponent = axelrod.MockPlayer([C, D, C, D, C, D, D])
+        actions = [(C, C), (C, D), (D, C), (C, D),
+                   (D, C), (C, D), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "STFT"})
+
+        opponent = axelrod.MockPlayer([D, D, D, C, C, C, C])
+        actions = [(C, D), (D, D), (D, D), (D, C),
+                   (C, C), (C, C), (C, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "STFT"})
+
+        opponent = axelrod.MockPlayer([C, C, C, C, D, D])
+        actions = [(C, C), (C, C), (C, C), (C, C),
+                   (C, D), (D, D), (D, C), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "Random"})
+
+        opponent = axelrod.MockPlayer([D, D, C, C, C, C])
+        actions = [(C, D), (D, D), (D, C), (C, C),
+                   (C, C), (C, C), (D, D), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_class": "Random"})
