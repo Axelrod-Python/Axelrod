@@ -23,8 +23,17 @@ class TestAppeaser(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-        self.responses_test([C, C, C], [C], [C])
-        self.responses_test([D], [C, D, C, D], [C, C, D])
-        self.responses_test([C], [C, D, C, D, C], [C, C, D, D])
-        self.responses_test([D], [C, D, C, D, C, D], [C, C, D, D, D])
 
+        actions = [(C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D), (D, D), (C, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([C, C, D, D])
+        actions = [(C, C), (C, C), (C, D), (D, D), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([C, C, D, D, D])
+        actions = [(C, C), (C, C), (C, D), (D, D), (C, D), (D, C), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
