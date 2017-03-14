@@ -29,22 +29,22 @@ class TestLookerUp(TestPlayer):
 
     def test_create_lookup_table_keys(self):
         expected = [
-            ('C', 'C', 'C'), ('C', 'C', 'D'), ('C', 'D', 'C'), ('C', 'D', 'D'),
-            ('D', 'C', 'C'), ('D', 'C', 'D'), ('D', 'D', 'C'), ('D', 'D', 'D')
+            (C, C, C), (C, C, D), (C, D, C), (C, D, D),
+            (D, C, C), (D, C, D), (D, D, C), (D, D, D)
         ]
         actual = create_lookup_table_keys(1, 1, 1)
         self.assertEqual(actual, expected)
 
     def test_create_lookup_table_from_pattern(self):
         expected = {
-            ('C', 'C', 'C'): 'C',
-            ('C', 'C', 'D'): 'C',
-            ('C', 'D', 'C'): 'D',
-            ('C', 'D', 'D'): 'C',
-            ('D', 'C', 'C'): 'C',
-            ('D', 'C', 'D'): 'D',
-            ('D', 'D', 'C'): 'C',
-            ('D', 'D', 'D'): 'C'
+            (C, C, C): C,
+            (C, C, D): C,
+            (C, D, C): D,
+            (C, D, D): C,
+            (D, C, C): C,
+            (D, C, D): D,
+            (D, D, C): C,
+            (D, D, D): C
         }
         actual = create_lookup_table_from_pattern(1, 1, 1, 'CCDCCDCC')
         self.assertEqual(actual, expected)
@@ -60,10 +60,10 @@ class TestLookerUp(TestPlayer):
         # Test default table
         player = self.player()
         expected_lookup_table = {
-            ('', 'C', 'D'): D,
-            ('', 'D', 'D'): D,
-            ('', 'C', 'C'): C,
-            ('', 'D', 'C'): C,
+            ('', C, D): D,
+            ('', D, D): D,
+            ('', C, C): C,
+            ('', D, C): C,
         }
         self.assertEqual(player.lookup_table, expected_lookup_table)
         # Test malformed tables
@@ -78,10 +78,10 @@ class TestLookerUp(TestPlayer):
         # Test default table
         player = self.player(lookup_pattern=pattern, parameters=parameters)
         expected_lookup_table = {
-            ('', 'C', 'D'): C,
-            ('', 'D', 'D'): C,
-            ('', 'C', 'C'): C,
-            ('', 'D', 'C'): C,
+            ('', C, D): C,
+            ('', D, D): C,
+            ('', C, C): C,
+            ('', D, C): C,
         }
         self.assertEqual(player.lookup_table, expected_lookup_table)
 
@@ -201,9 +201,9 @@ class TestEvolvedLookerUp2_2_2(TestPlayer):
 
     def test_init(self):
         # Check for a few known keys
-        known_pairs = {('DD', 'CC', 'CD'): 'D', ('DC', 'CD', 'CD'): 'C',
-                       ('DD', 'CD', 'CD'): 'C', ('DC', 'DC', 'DC'): 'C',
-                       ('DD', 'DD', 'CC'): 'D', ('CD', 'CC', 'DC'): 'D'}
+        known_pairs = {('DD', 'CC', 'CD'): D, ('DC', 'CD', 'CD'): C,
+                       ('DD', 'CD', 'CD'): C, ('DC', 'DC', 'DC'): C,
+                       ('DD', 'DD', 'CC'): D, ('CD', 'CC', 'DC'): D}
         player = self.player()
         for k, v in known_pairs.items():
             self.assertEqual(player.lookup_table[k], v)
