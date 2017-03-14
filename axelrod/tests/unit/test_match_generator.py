@@ -216,7 +216,7 @@ class TestSpatialMatches(unittest.TestCase):
     def setUpClass(cls):
         cls.players = [s() for s in test_strategies]
 
-    def test_init(self):
+    def test_init_with_graph_edges_not_including_all_players(self):
         edges = [(0, 1), (1, 2)]
         with self.assertRaises(ValueError):
             axelrod.SpatialMatches(
