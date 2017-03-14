@@ -1,6 +1,5 @@
 """Test for the Looker Up strategy."""
 import copy
-import unittest
 
 import axelrod
 from axelrod.strategies.lookerup import (
@@ -28,6 +27,31 @@ class TestLookerUp(TestPlayer):
     expected_class_classifier = copy.copy(expected_classifier)
     expected_class_classifier['memory_depth'] = float('inf')
 
+    def test_create_lookup_table_keys(self):
+        expected = [
+            (C, C, C), (C, C, D), (C, D, C), (C, D, D),
+            (D, C, C), (D, C, D), (D, D, C), (D, D, D)
+        ]
+        actual = create_lookup_table_keys(1, 1, 1)
+        self.assertEqual(actual, expected)
+
+    def test_create_lookup_table_from_pattern(self):
+        expected = {
+            (C, C, C): C,
+            (C, C, D): C,
+            (C, D, C): D,
+            (C, D, D): C,
+            (D, C, C): C,
+            (D, C, D): D,
+            (D, D, C): C,
+            (D, D, D): C
+        }
+        actual = create_lookup_table_from_pattern(1, 1, 1, 'CCDCCDCC')
+        self.assertEqual(actual, expected)
+
+        with self.assertRaises(ValueError):
+            create_lookup_table_from_pattern(2, 2, 2, 'CCC')
+
     def test_init(self):
         # Test empty table
         player = self.player(dict())
@@ -36,10 +60,10 @@ class TestLookerUp(TestPlayer):
         # Test default table
         player = self.player()
         expected_lookup_table = {
-            ('', 'C', 'D'): D,
-            ('', 'D', 'D'): D,
-            ('', 'C', 'C'): C,
-            ('', 'D', 'C'): C,
+            ('', C, D): D,
+            ('', D, D): D,
+            ('', C, C): C,
+            ('', D, C): C,
         }
         self.assertEqual(player.lookup_table, expected_lookup_table)
         # Test malformed tables
@@ -54,17 +78,26 @@ class TestLookerUp(TestPlayer):
         # Test default table
         player = self.player(lookup_pattern=pattern, parameters=parameters)
         expected_lookup_table = {
-            ('', 'C', 'D'): C,
-            ('', 'D', 'D'): C,
-            ('', 'C', 'C'): C,
-            ('', 'D', 'C'): C,
+            ('', C, D): C,
+            ('', D, D): C,
+            ('', C, C): C,
+            ('', D, C): C,
         }
         self.assertEqual(player.lookup_table, expected_lookup_table)
 
     def test_strategy(self):
+        self.first_play_test(C)
         self.second_play_test(C, D, C, D)  # TFT
         self.responses_test([C], [C] * 4, [C, C, C, C])
         self.responses_test([D], [C] * 5, [C, C, C, C, D])
+
+        opponent = axelrod.MockPlayer()
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(
+            opponent,
+            expected_actions=actions,
+            init_kwargs={'parameters': (1, 0, 1)}
+        )
 
     def test_defector_table(self):
         """
@@ -168,9 +201,9 @@ class TestEvolvedLookerUp2_2_2(TestPlayer):
 
     def test_init(self):
         # Check for a few known keys
-        known_pairs = {('DD', 'CC', 'CD'): 'D', ('DC', 'CD', 'CD'): 'C',
-                       ('DD', 'CD', 'CD'): 'C', ('DC', 'DC', 'DC'): 'C',
-                       ('DD', 'DD', 'CC'): 'D', ('CD', 'CC', 'DC'): 'D'}
+        known_pairs = {('DD', 'CC', 'CD'): D, ('DC', 'CD', 'CD'): C,
+                       ('DD', 'CD', 'CD'): C, ('DC', 'DC', 'DC'): C,
+                       ('DD', 'DD', 'CC'): D, ('CD', 'CC', 'DC'): D}
         player = self.player()
         for k, v in known_pairs.items():
             self.assertEqual(player.lookup_table[k], v)
