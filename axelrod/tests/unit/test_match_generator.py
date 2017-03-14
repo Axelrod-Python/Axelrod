@@ -219,7 +219,7 @@ class TestSpatialMatches(unittest.TestCase):
     def test_init(self):
         edges = [(0, 1), (1, 2)]
         with self.assertRaises(ValueError):
-            sp = axelrod.SpatialMatches(
+            axelrod.SpatialMatches(
                 self.players, 3, test_game, 5, edges, noise=0)
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions),
