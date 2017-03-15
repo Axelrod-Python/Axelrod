@@ -248,7 +248,9 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         self.responses_test([D], [C, C, C, C], [C, C, C, C])
 
         # After long histories tit-for-tat should come into play.
-        self.responses_test([D], [C] * 101, [C] * 100 + [D])
+        letters = 'ABEFGHIJKLMNOPQRSTUVWXYZ'
+        junk_history = [random.choice(letters) for _ in range(101)]
+        self.responses_test([D], junk_history, junk_history[:100] + [D])
 
         # All these others, however, should trigger a defection for the hunter.
         self.responses_test([D], [C] * 4, [D] * 4)
