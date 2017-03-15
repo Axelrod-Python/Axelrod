@@ -49,7 +49,7 @@ class CooperatorHunter(Player):
 
 def is_alternator(history: List[Action]) -> bool:
     for i in range(len(history) - 1):
-        if history[i] == history[i + 1]:
+        if history[i] == history[i + 1] or history[i] not in (C, D):
             return False
     return True
 
