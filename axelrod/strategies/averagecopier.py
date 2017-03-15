@@ -26,7 +26,7 @@ class AverageCopier(Player):
         if len(opponent.history) == 0:
             # Randomly picks a strategy (not affected by history).
             return random_choice(0.5)
-        p = opponent.cooperations // len(opponent.history)
+        p = opponent.cooperations / len(opponent.history)
         return random_choice(p)
 
 
@@ -47,5 +47,5 @@ class NiceAverageCopier(Player):
     def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) == 0:
             return C
-        p = opponent.cooperations // len(opponent.history)
+        p = opponent.cooperations / len(opponent.history)
         return random_choice(p)

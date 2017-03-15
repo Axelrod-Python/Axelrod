@@ -22,12 +22,48 @@ class TestAverageCopier(TestPlayer):
 
     def test_strategy(self):
         # Test that the first strategy is picked randomly.
-        self.responses_test([C], seed=1)
-        self.responses_test([D], seed=2)
+        self.first_play_test(C, seed=1)
+        self.first_play_test(D, seed=2)
+
         # Tests that if opponent has played all C then player chooses C.
-        self.responses_test([C, C, C], [C, C, C, C], [C, C, C, C], seed=5)
+        actions = [(C, C)] * 10
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         seed=1)
+        actions = [(D, C)] + [(C, C)] * 9
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         seed=2)
+
         # Tests that if opponent has played all D then player chooses D.
-        self.responses_test([D, D, D], [C, C, C, C], [D, D, D, D], seed=5)
+        actions = [(C, D)] + [(D, D)] * 9
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         seed=1)
+        actions = [(D, D)] + [(D, D)] * 9
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         seed=2)
+
+        # Variable behaviour based on the history and stochastic
+
+        actions = [(C, C), (C, D), (D, C), (D, D), (C, C),
+                   (C, D), (C, C), (D, D), (D, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         seed=1)
+
+        actions = [(D, C), (C, D), (D, C), (C, D), (C, C),
+                   (D, D), (D, C), (D, D), (C, C), (D, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         seed=2)
+
+        opponent = axelrod.MockPlayer([C, C, D, D, D, D])
+        actions = [(C, C), (C, C), (C, D), (D, D), (D, D),
+                   (C, D), (D, C), (D, C), (D, D), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         seed=1)
+
+        opponent = axelrod.MockPlayer([C, C, C, D, D, D])
+        actions = [(D, C), (C, C), (C, C), (C, D), (D, D),
+                   (C, D), (C, C), (D, C), (D, C), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         seed=2)
 
 
 class TestNiceAverageCopier(TestPlayer):
@@ -45,9 +81,39 @@ class TestNiceAverageCopier(TestPlayer):
     }
 
     def test_strategy(self):
-        # Cooperates initially.
-        self.first_play_test(C)
-        # If opponent has played all C then player chooses C.
-        self.responses_test([C, C, C], [C, C, C, C], [C, C, C, C], seed=5)
-        # If opponent has played all D then player chooses D.
-        self.responses_test([D, D, D], [D, D, D, D], [D, D, D, D], seed=5)
+        # Cooperates initially (not stochastic)
+        self.first_play_test(C, seed=1)
+        self.first_play_test(C, seed=2)
+
+        # Tests that if opponent has played all C then player chooses C.
+        actions = [(C, C)] * 10
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         seed=1)
+
+        # Tests that if opponent has played all D then player chooses D.
+        actions = [(C, D)] + [(D, D)] * 9
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         seed=1)
+
+        # Variable behaviour based on the history and stochastic behaviour
+        actions = [(C, C), (C, D), (C, C), (D, D), (D, C),
+                   (C, D), (C, C), (C, D), (D, C), (D, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         seed=1)
+
+        actions = [(C, C), (C, D), (D, C), (D, D), (C, C),
+                   (C, D), (D, C), (D, D), (D, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         seed=2)
+
+        opponent = axelrod.MockPlayer([C, C, D, D, D, D])
+        actions = [(C, C), (C, C), (C, D), (C, D), (D, D),
+                   (D, D), (C, C), (D, C), (C, D), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         seed=1)
+
+        opponent = axelrod.MockPlayer([C, C, C, D, D, D])
+        actions = [(C, C), (C, C), (C, C), (C, D), (D, D),
+                   (D, D), (C, C), (C, C), (D, C), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         seed=2)
