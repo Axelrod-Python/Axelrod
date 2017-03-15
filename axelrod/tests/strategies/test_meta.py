@@ -248,6 +248,12 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         self.responses_test([D], [C, C, C, C], [C, C, C, C])
 
         # After long histories tit-for-tat should come into play.
+        # We generate a 'junk' history of length 101 in order to avoid the
+        # hunters triggering a defection as that overrides the tit-for-tat
+        # action.
+        # A genuine history (based on C or D only) which does trigger any of
+        # hunters is extremely difficult to identify. None of the strategies
+        # as at 14-Mar-2017 avoids doing so.
         letters = 'ABEFGHIJKLMNOPQRSTUVWXYZ'
         junk_history = [random.choice(letters) for _ in range(101)]
         self.responses_test([D], junk_history, junk_history[:100] + [D])
