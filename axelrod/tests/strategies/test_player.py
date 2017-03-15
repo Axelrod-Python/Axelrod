@@ -439,7 +439,7 @@ class TestMatch(unittest.TestCase):
     def versus_test(self, player1, player2, expected_actions1,
                     expected_actions2, noise=None, seed=None):
         """Tests a sequence of outcomes for two given players."""
-        if len(expected_actions1) != len(expected_actions2):  # pragma: no cover
+        if len(expected_actions1) != len(expected_actions2):
             raise ValueError("Mismatched History lengths.")
         if seed:
             axelrod.seed(seed)
@@ -453,6 +453,15 @@ class TestMatch(unittest.TestCase):
             player1.play(player2)
             self.assertEqual(player1.history[i], outcome1)
             self.assertEqual(player2.history[i], outcome2)
+
+    def test_versus_with_incorrect_history_lengths(self):
+        """Test the error raised by versus_test if expected actions do not
+        match up"""
+        with self.assertRaises(ValueError):
+            p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+            actions1 = [C, C]
+            actions2 = [C]
+            self.versus_test(p1, p2, actions1, actions2)
 
 
 def test_four_vector(test_class, expected_dictionary):
