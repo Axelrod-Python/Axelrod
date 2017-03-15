@@ -22,27 +22,28 @@ class TestDavis(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_initial_strategy(self):
-        """
-        Starts by cooperating
-        """
-        self.first_play_test(C)
-
     def test_strategy(self):
+        self.first_play_test(C)
         # Cooperates for the first ten rounds
-        player_history = []
-        opponent_history = []
-        for i in range(9):
-            opponent_history.append(random.choice([C, D]))
-            player_history.append(C)
-            self.responses_test([C], player_history, opponent_history)
+        actions = [(C, C)] * 10
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D)] * 10
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        actions = [(C, C), (C, D)] * 5
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         # If opponent defects at any point then the player will defect forever
         # (after 10 rounds)
-        self.responses_test([C], [C, D, D, D], [C, C, C, C])
-        self.responses_test([C], [C, C, D, D, D], [C, D, C, C, C])
-        self.responses_test([D], [C] * 10 + [C, C, D, D, D],
-                            [C] * 10 + [C, D, C, C, C])
+        opponent = axelrod.MockPlayer([C] * 10 + [D])
+        actions = [(C, C)] * 10 + [(C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([C] * 15 + [D])
+        actions = [(C, C)] * 15 + [(C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
 
 
 class TestRevisedDowning(TestPlayer):
@@ -61,27 +62,35 @@ class TestRevisedDowning(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C], [C], [C])
-        self.responses_test([C], [C], [D])
-        self.responses_test([C], [C, C], [C, C])
-        self.responses_test([D], [C, C], [C, D])
-        self.responses_test([C], [C, C], [D, C])
-        self.responses_test([D], [C, C], [D, D])
-        self.responses_test([D], [C, C, D], [C, D, C])
-        self.responses_test([C], [C, C, C], [D, C, C])
-        self.responses_test([D], [C, C, D], [C, D, D])
-        self.responses_test([C], [C, C, C], [D, C, D])
-        self.responses_test([D], [C, C, D, D], [C, D, D, D])
-        self.responses_test([C], [C, C, C, C], [D, C, D, C])
-        self.responses_test([C], [C, D, C, C, D, D], [C, C, C, C, D, D])
+
+        actions = [(C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D), (C, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C, C])
+        actions = [(C, D), (C, C), (C, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, D, C])
+        actions = [(C, D), (C, D), (D, C), (D, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([C, C, D, D, C, C])
+        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (D, C), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([C, C, C, C, D, D])
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (C, D), (C, C)]
+        self.versus_test(opponent, expected_actions=actions)
 
     def test_not_revised(self):
         # Test not revised
-        p1 = self.player(revised=False)
-        p2 = axelrod.Cooperator()
-        p1.play(p2)
-        p1.play(p2)
-        self.assertEqual(p1.history, [D, D])
+        player = self.player(revised=False)
+        opponent = axelrod.Cooperator()
+        match = axelrod.Match((player, opponent), turns=2)
+        self.assertEqual(match.play(), [(D, C), (D, C)])
 
 
 class TestFeld(TestPlayer):
@@ -98,11 +107,7 @@ class TestFeld(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
-        self.first_play_test(C)
-        # Test retaliate
-        self.responses_test([D], [C], [D])
-        self.responses_test([D], [D], [D])
+    def test_cooperation_probability(self):
         # Test cooperation probabilities
         p1 = self.player(start_coop_prob=1.0, end_coop_prob=0.8,
                          rounds_of_decay=100)
@@ -119,13 +124,31 @@ class TestFeld(TestPlayer):
         self.assertEqual(0.75, p1._cooperation_probability())
         p1.history = [C] * 200
         self.assertEqual(0.5, p1._cooperation_probability())
+
+    def test_decay(self):
         # Test beyond 200 rounds
-        player_history = [C] * 200
-        opponent_history = [C] * 200
-        self.responses_test([C, C, D, D], player_history, opponent_history,
-                            seed=1)
-        self.responses_test([D, D, D, D], player_history, opponent_history,
-                            seed=50)
+        for opponent in [axelrod.Cooperator(), axelrod.Defector()]:
+            player = self.player()
+            self.assertEqual(player._cooperation_probability(),
+                             player._start_coop_prob)
+            match = axelrod.Match((player, opponent), turns=201)
+            match.play()
+            self.assertEqual(player._cooperation_probability(),
+                             player._end_coop_prob)
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+        actions = [(C, C)] * 41 + [(D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         seed=1)
+
+        actions = [(C, C)] * 16 + [(D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         seed=2)
+
+        actions = [(C, D)] + [(D, D)] * 20
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 
 class TestGrofman(TestPlayer):
@@ -143,13 +166,21 @@ class TestGrofman(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([C, C, C])
-        self.responses_test([D], [C, C], [C, D])
-        self.responses_test([C], [C] * 6, [C] * 6)
-        self.responses_test([D], [C] * 6, [D] * 6)
-        self.responses_test([C], [C] * 7, [C] * 7)
-        self.responses_test([C], [C] * 7, [D] * 7, seed=1)
-        self.responses_test([D], [C] * 7, [D] * 7, seed=2)
+        self.first_play_test(C)
+
+        actions = [(C, C)] * 7
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D] * 8)
+        actions = [(C, D)] * 2 + [(D, D)] * 5 + [(C, D)] + [(C, D)]
+        self.versus_test(opponent, expected_actions=actions, seed=1)
+
+        opponent = axelrod.MockPlayer([D] * 8)
+        actions = [(C, D)] * 2 + [(D, D)] * 5 + [(C, D)] + [(D, D)]
+        self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
 class TestJoss(TestPlayer):
@@ -171,8 +202,19 @@ class TestJoss(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.responses_test([D], [C], [C], seed=2)
-        self.responses_test([D], [C], [D], seed=4)
+        self.first_play_test(C)
+
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=1)
+
+        actions = [(C, C), (D, C), (D, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=2)
+
+        actions = [(C, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
+
+        actions = [(C, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
 
 
 class TestNydegger(TestPlayer):
@@ -211,19 +253,26 @@ class TestNydegger(TestPlayer):
     def test_strategy(self):
         # Test TFT-type initial play
         self.first_play_test(C)
-        self.responses_test([C, C], [C], [C])
-        self.responses_test([D], [C], [D])
-        self.responses_test([D], [C, D], [D, C])
-        self.responses_test([D], [C, D], [D, D])
+
+        # self.responses_test([D], [C, D], [D, C])
 
         # Test trailing post-round 3 play
-        for i in range(4, 9):
-            self.responses_test([C], [C] * i, [C] * i)
-            self.responses_test([C], [D] * i, [D] * i)
-            self.responses_test([C], [C] * i + [C, D, C], [C] * i + [C, D, C])
-            self.responses_test([D], [C] * i + [D, C, D], [C] * i + [C, C, C])
-            self.responses_test([D], [C] * i + [D, C, C], [C] * i + [C, C, C])
-            self.responses_test([C], [C] * i + [C, C, C], [C] * i + [D, C, C])
+
+        actions = [(C, C)] * 9
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D), (D, D), (D, D), (C, D),
+                   (C, D), (C, D), (C, D), (C, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        actions = [(C, C), (C, D), (D, C), (C, D),
+                   (D, C), (C, D), (D, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C])
+        actions = [(C, D), (D, C), (D, D), (D, C),
+                   (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
 
 
 class TestShubik(TestPlayer):
@@ -246,24 +295,28 @@ class TestShubik(TestPlayer):
         # Looks like Tit-For-Tat at first
         self.second_play_test(C, D, C, D)
 
-        # Plays a modified TFT.
-        self.responses_test([C, C, C], [C, C, C], [C, C, C])
-        # Make sure that the retaliations are increasing
-        # Retaliate once and forgive
-        self.responses_test([D], [C], [D])
-        self.responses_test([C], [C, D], [D, C])
-        self.responses_test([C], [C, D, C], [D, C, C])
-        # Retaliate twice and forgive
-        self.responses_test([D, D], [C, D, C], [D, C, D])
-        self.responses_test([C], [C, D, C, D, D], [D, C, D, C, C])
-        # Opponent defection during retaliation doesn't increase retaliation
-        # period.
-        self.responses_test([C], [C, D, C, D, D], [D, C, D, D, C])
-        # Retaliate thrice and forgive
-        self.responses_test([D, D, D], [C, D, C, D, D, C], [D, C, D, C, C, D])
-        player_history = [C, D, C, D, D, C, D, D, D]
-        opponent_history = [D, C, D, C, C, D, C, C, C]
-        self.responses_test([C], player_history, opponent_history)
+        actions = [(C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C, C])
+        actions = [(C, D), (D, C), (C, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C, D, C, C])
+        actions = [(C, D), (D, C), (C, D), (D, C), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C, D, D, C])
+        actions = [(C, D), (D, C), (C, D), (D, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C, D, C, C, D])
+        actions = [(C, D), (D, C), (C, D), (D, C), (D, C),
+                   (C, D), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
 
 
 class TestTullock(TestPlayer):
@@ -283,26 +336,33 @@ class TestTullock(TestPlayer):
     def test_strategy(self):
         """Cooperates for first ten rounds"""
         self.first_play_test(C)
-        for i in range(10):
-            player_history = [C] * i
-            opponent_history = [C] * i
-            self.responses_test([C], player_history, opponent_history)
-        # Now cooperate 10% less than opponent
-        player_history = [C] * 11
-        opponent_history = [D] * 11
-        self.responses_test([D], player_history, opponent_history, seed=10)
-        player_history = [C] * 11
-        opponent_history = [D] * 10 + [C]
-        self.responses_test([D], player_history, opponent_history, seed=10)
+
+        actions = [(C, C), (C, D)] * 5
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        actions = [(C, D)] * 11 + [(D, D)] * 2
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D] * 10 + [C])
+        actions = [(C, D)] * 10 + [(C, C), (D, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
         # Test beyond 10 rounds
-        player_history = [C] * 11
-        opponent_history = [D] * 5 + [C] * 6
-        self.responses_test([D, D, D, D], player_history, opponent_history,
-                            seed=20)
-        player_history = [C] * 11
-        opponent_history = [C] * 9 + [D] * 2
-        self.responses_test([C, D, D, C], player_history, opponent_history,
-                            seed=25)
+        opponent = axelrod.MockPlayer([D] * 5 + [C] * 6)
+        actions = [(C, D)] * 5 + [(C, C)] * 6 + [(D, D)] * 4
+        self.versus_test(opponent, expected_actions=actions, seed=20)
+
+        opponent = axelrod.MockPlayer([D] * 5 + [C] * 6)
+        actions = [(C, D)] * 5 + [(C, C)] * 6 + [(C, D), (D, D), (D, D), (C, D)]
+        self.versus_test(opponent, expected_actions=actions, seed=1)
+
+        opponent = axelrod.MockPlayer([C] * 9 + [D] * 2)
+        actions = [(C, C)] * 9 + [(C, D)] * 2 + [(C, C), (D, C), (D, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions, seed=1)
+
+        opponent = axelrod.MockPlayer([C] * 9 + [D] * 2)
+        actions = [(C, C)] * 9 + [(C, D)] * 2 + [(D, C), (D, C), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
 class TestUnnamedStrategy(TestPlayer):
@@ -320,4 +380,11 @@ class TestUnnamedStrategy(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([C, C, D, C, C, D], seed=10)
+        self.first_play_test(C)
+
+        actions = [(D, C), (C, C), (C, C), (D, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=1)
+
+        actions = [(C, C), (C, C), (D, C), (C, C), (C, C), (D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         seed=10)
