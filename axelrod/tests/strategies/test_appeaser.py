@@ -24,10 +24,10 @@ class TestAppeaser(TestPlayer):
         # Starts by cooperating.
         self.first_play_test(C)
 
-        actions = [(C, C), (C, C), (C, C)]
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-        actions = [(C, D), (D, D), (C, D), (D, D)]
+        actions = [(C, D), (D, D), (C, D), (D, D), (C, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
         opponent = axelrod.MockPlayer([C, C, D, D])
