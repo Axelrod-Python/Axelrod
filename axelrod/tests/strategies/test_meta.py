@@ -257,7 +257,7 @@ class TestMetaHunterAggressive(TestMetaPlayer):
 
         # To test the TFT action of the strategy after 100 turns, we need to
         # remove two of the hunters from its team.
-        # It is almost impossible to identify a history which reach 100 turns
+        # It is almost impossible to identify a history which reaches 100 turns
         # without triggering one of the hunters in the default team. As at
         # 16-Mar-2017, none of the strategies in the library does so.
         team = [
