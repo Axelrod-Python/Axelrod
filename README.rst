@@ -1,5 +1,5 @@
-.. image:: https://coveralls.io/repos/Axelrod-Python/Axelrod/badge.svg
-    :target: https://coveralls.io/r/Axelrod-Python/Axelrod
+.. image:: https://coveralls.io/repos/github/Axelrod-Python/Axelrod/badge.svg?branch=master
+    :target: https://coveralls.io/github/Axelrod-Python/Axelrod?branch=master
 
 .. image:: https://img.shields.io/pypi/v/Axelrod.svg
     :target: https://pypi.python.org/pypi/Axelrod
