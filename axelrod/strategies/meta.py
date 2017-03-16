@@ -235,11 +235,12 @@ class MetaHunterAggressive(MetaPlayer):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self, team=None):
         # This version uses CooperatorHunter
-        team = [DefectorHunter, AlternatorHunter, RandomHunter,
-                MathConstantHunter, CycleHunter, EventualCycleHunter,
-                CooperatorHunter]
+        if team is None:
+            team = [DefectorHunter, AlternatorHunter, RandomHunter,
+                    MathConstantHunter, CycleHunter, EventualCycleHunter,
+                    CooperatorHunter]
 
         super().__init__(team=team)
 

@@ -247,9 +247,6 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         # defection
         self.responses_test([D], [C, C, C, C], [C, C, C, C])
 
-        # After long histories tit-for-tat should come into play.
-        self.responses_test([D], [C] * 101, [C] * 100 + [D])
-
         # All these others, however, should trigger a defection for the hunter.
         self.responses_test([D], [C] * 4, [D] * 4)
         self.responses_test([D], [C] * 6, [C, D] * 3)
@@ -257,6 +254,23 @@ class TestMetaHunterAggressive(TestMetaPlayer):
         # Test post 100 rounds responses
         self.responses_test([D], [C] * 101, [C] * 101)
         self.responses_test([D], [C] * 101, [C] * 100 + [D])
+
+        # To test the TFT action of the strategy after 100 turns, we need to
+        # remove two of the hunters from its team.
+        # It is almost impossible to identify a history which reaches 100 turns
+        # without triggering one of the hunters in the default team. As at
+        # 16-Mar-2017, none of the strategies in the library does so.
+        team = [
+            axelrod.DefectorHunter,
+            axelrod.AlternatorHunter,
+            axelrod.RandomHunter,
+            # axelrod.MathConstantHunter,
+            axelrod.CycleHunter,
+            axelrod.EventualCycleHunter,
+            # axelrod.CooperatorHunter
+        ]
+        self.responses_test(
+            [D], [C] * 101, [C] * 100 + [D], init_kwargs={'team': team})
 
 
 class TestMetaMajorityMemoryOne(TestMetaPlayer):
