@@ -129,7 +129,7 @@ paper please list it here:
 
 - `A 2015 pedagogic paper on active learning
   <https://github.com/drvinceknight/Playing-games-a-case-study-in-active-learning>`_
-  by `drvinceknight <https://twitter.com/drvinceknight>`_ published in `MSOR
+  by `drvinceknight <https://github.com/drvinceknight>`_ published in `MSOR
   Connections <https://journals.gre.ac.uk/index.php/msor/about>`_: the library
   is mentioned briefly as a way of demonstrating repeated games.
 - `A repository with various example tournaments and visualizations of strategies
@@ -147,7 +147,7 @@ paper please list it here:
 - `Survival of the fittest: Experimenting with a high performing strategy in
   other environments
   <http://vknight.org/unpeudemath/gametheory/2015/11/28/Experimenting-with-a-high-performing-evolved-strategy-in-other-environments.html>`_
-  by `drvinceknight <https://twitter.com/drvinceknight>`_
+  by `drvinceknight <https://github.com/drvinceknight>`_
 - `An open reproducible framework for the study of the iterated prisoner's
   dilemma <https://arxiv.org/abs/1604.00896>`_: a pre print of a paper describing this
   library (20 authors).
