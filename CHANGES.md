@@ -1,3 +1,42 @@
+# v2.7.0, 2017-03-17
+
+New strategies, increased test coverage, refactor of some tests, documentation
+and minor bug fixes.
+
+- New strategy: VeryBad
+  https://github.com/Axelrod-Python/Axelrod/pull/869
+- New strategy: Resurrection
+  https://github.com/Axelrod-Python/Axelrod/pull/865
+- Documentation of docstring requirements for contributions
+  https://github.com/Axelrod-Python/Axelrod/pull/872
+- Refactor tests:
+  https://github.com/Axelrod-Python/Axelrod/pull/875
+  https://github.com/Axelrod-Python/Axelrod/pull/907
+  https://github.com/Axelrod-Python/Axelrod/pull/908
+  https://github.com/Axelrod-Python/Axelrod/pull/909
+  https://github.com/Axelrod-Python/Axelrod/pull/911
+  https://github.com/Axelrod-Python/Axelrod/pull/914
+- Improved coverage:
+  https://github.com/Axelrod-Python/Axelrod/pull/899
+  https://github.com/Axelrod-Python/Axelrod/pull/900
+  https://github.com/Axelrod-Python/Axelrod/pull/901
+  https://github.com/Axelrod-Python/Axelrod/pull/902
+  https://github.com/Axelrod-Python/Axelrod/pull/904
+  https://github.com/Axelrod-Python/Axelrod/pull/905
+  https://github.com/Axelrod-Python/Axelrod/pull/910
+- Bug in plot:
+  https://github.com/Axelrod-Python/Axelrod/pull/897
+- Bug fix in deterministic cache:
+  https://github.com/Axelrod-Python/Axelrod/pull/882
+- Bug in average copier:
+  https://github.com/Axelrod-Python/Axelrod/pull/912
+- Minor function rename:
+  https://github.com/Axelrod-Python/Axelrod/pull/906
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.6.0...v2.7.0
+
 # v2.6.0, 2017-02-26
 
 New strategy, state to action analysis and internal improvements
