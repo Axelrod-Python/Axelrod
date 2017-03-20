@@ -278,17 +278,18 @@ class TestOmegaTFT(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-
-        player_history = [C, C, D, C, D, C, C, C, D, C, C, C, D, D, D, D, D, D]
-        opp_history = [C, D] * 9
-        actions = list(zip(player_history, opp_history))
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
 
         player_history =  [C, D, C, D, C, C, C, C, C]
         opp_history = [D, C, D, C, D, C, C, C, C]
         actions = list(zip(player_history, opp_history))
         self.versus_test(axelrod.SuspiciousTitForTat(),
                          expected_actions=actions)
+
+        player_history = [C, C, D, C, D, C, C, C, D, D, D, D, D, D]
+        opp_history = [C, D] * 7
+        actions = list(zip(player_history, opp_history))
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
 
 class TestGradual(TestPlayer):
