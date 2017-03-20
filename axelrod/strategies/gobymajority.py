@@ -32,7 +32,7 @@ class GoByMajority(Player):
         'memory_depth': float('inf')
     } # type: Dict[str, Any]
 
-    def __init__(self, memory_depth: float = float('inf'), soft: bool = True) -> None:
+    def __init__(self, memory_depth: int = float('inf'), soft: bool = True) -> None:
         """
         Parameters
         ----------
@@ -138,7 +138,7 @@ class HardGoByMajority(GoByMajority):
     """
     name = 'Hard Go By Majority'
 
-    def __init__(self, memory_depth: float = float('inf')) -> None:
+    def __init__(self, memory_depth: int = float('inf')) -> None:
         super().__init__(memory_depth=memory_depth, soft=False)
 
 
