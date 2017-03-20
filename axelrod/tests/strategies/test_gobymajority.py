@@ -74,10 +74,15 @@ class TestHardGoByMajority(TestGoByMajority):
         self.responses_test([D], [C, D, D, D], [D, D, C, C])
         self.responses_test([D], [C, C, D, D, C], [D, D, C, C, D])
 
-        # Test tie break rule for soft=True
-        player = self.player(soft=True)
-        opponent = axelrod.Cooperator()
-        self.assertEqual('C', player.strategy(opponent))
+    def test_soft(self):
+        pass
+
+    def test_name(self):
+        self.assertEqual(self.player().name, "Hard Go By Majority")
+
+    def test_repr(self):
+        name = str(self.player())
+        self.assertEqual(name, "Hard Go By Majority")
 
 
 def factory_TestGoByRecentMajority(L, soft=True):
