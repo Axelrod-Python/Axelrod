@@ -1,5 +1,5 @@
 from axelrod.actions import Actions, Action
-from axelrod.player import Player, init_args
+from axelrod.player import Player
 
 import copy
 
@@ -55,7 +55,6 @@ class Cycler(Player):
         'manipulates_state': False
     }
 
-    @init_args
     def __init__(self, cycle="CCD") -> None:
         """This strategy will repeat the parameter `cycle` endlessly,
         e.g. C C D C C D C C D ...
@@ -84,7 +83,6 @@ class CyclerDC(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 1
 
-    @init_args
     def __init__(self, cycle="DC") -> None:
         super().__init__(cycle=cycle)
 
@@ -95,7 +93,6 @@ class CyclerCCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
 
-    @init_args
     def __init__(self, cycle="CCD") -> None:
         super().__init__(cycle=cycle)
 
@@ -106,7 +103,6 @@ class CyclerDDC(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
 
-    @init_args
     def __init__(self, cycle="DDC") -> None:
         super().__init__(cycle=cycle)
 
@@ -117,7 +113,6 @@ class CyclerCCCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 3
 
-    @init_args
     def __init__(self, cycle="CCCD") -> None:
         super().__init__(cycle=cycle)
 
@@ -128,7 +123,6 @@ class CyclerCCCCCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 5
 
-    @init_args
     def __init__(self, cycle="CCCCCD") -> None:
         super().__init__(cycle=cycle)
 
@@ -139,6 +133,5 @@ class CyclerCCCDCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 5
 
-    @init_args
     def __init__(self, cycle="CCCDCD") -> None:
         super().__init__(cycle=cycle)

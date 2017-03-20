@@ -66,23 +66,6 @@ def update_state_distribution(player, action, reply):
     player.state_distribution[last_turn] += 1
 
 
-def init_args(func):
-    """Decorator to simplify the handling of init_args. Use whenever overriding
-    Player.__init__ in subclasses of Player that require arguments as follows:
-
-    @init_args
-    def __init__(self, myarg1, ...)
-    """
-
-    @wraps(func)
-    def wrapper(self, *args, **kwargs):
-        r = func(self, *args, **kwargs)
-        self.init_args = args
-        self.init_kwargs = kwargs
-        return r
-    return wrapper
-
-
 class Player(object):
     """A class for a player in the tournament.
 
