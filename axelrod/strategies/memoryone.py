@@ -4,7 +4,7 @@ from axelrod.random_ import random_choice
 
 from typing import List, Tuple, Union
 
-type_four_vector = Union[List[float], Tuple[float,float,float,float]]
+type_four_vector = Union[List[float], Tuple[float, float, float, float]]
 
 
 C, D = Actions.C, Actions.D
@@ -162,7 +162,6 @@ class GTFT(MemoryOnePlayer):
         """
         self.p = p
         super().__init__()
-        self.init_args = (p,)
 
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
