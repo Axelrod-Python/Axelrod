@@ -6,11 +6,12 @@ from .test_player import TestPlayer
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
-class TestGoByMajority(TestPlayer):
+class TestHardGoByMajority(TestPlayer):
 
-    name = "Soft Go By Majority"
-    player = axelrod.GoByMajority
-    default_soft = True
+    name = "Hard Go By Majority"
+    player = axelrod.HardGoByMajority
+    default_soft = False
+    eq_play = D
 
     expected_classifier = {
         'stochastic': False,
@@ -23,21 +24,38 @@ class TestGoByMajority(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating """
-        self.first_play_test(C)
+        # Starts by defecting.
+        self.first_play_test(self.eq_play)
         # If opponent cooperates at least as often as they defect then the
-        # player cooperates.
-        self.responses_test([C], [C, D, D, D], [D, D, C, C])
+        # player defects.
+        self.responses_test([self.eq_play], [C, D, D, D], [D, D, C, C])
+        # If opponent defects strictly more often than they defect then the
+        # player defects.
         self.responses_test([D], [C, C, D, D, C], [D, D, C, C, D])
+        # If opponent cooperates strictly more often than they defect then the
+        # player cooperates.
+        self.responses_test([C], [C, C, D, D, C], [D, C, C, C, D])
+
+    def test_default_soft(self):
+        player = self.player()
+        self.assertEqual(player.soft, self.default_soft)
+
+
+class TestGoByMajority(TestHardGoByMajority):
+
+    name = "Soft Go By Majority"
+    player = axelrod.GoByMajority
+    default_soft = True
+    eq_play = C
+
+    def test_strategy(self):
+        # In case of equality (including first play), cooperates.
+        super().test_strategy()
 
         # Test tie break rule for soft=False
         player = self.player(soft=False)
         opponent = axelrod.Cooperator()
         self.assertEqual('D', player.strategy(opponent))
-
-    def test_default_soft(self):
-        player = self.player()
-        self.assertEqual(player.soft, self.default_soft)
 
     def test_soft(self):
         player = self.player(soft=True)
@@ -57,31 +75,6 @@ class TestGoByMajority(TestPlayer):
         self.assertEqual(name, "Soft Go By Majority")
         player = self.player(soft=False)
         name = str(player)
-        self.assertEqual(name, "Hard Go By Majority")
-
-
-class TestHardGoByMajority(TestGoByMajority):
-
-    name = "Hard Go By Majority"
-    player = axelrod.HardGoByMajority
-    default_soft = False
-
-    def test_strategy(self):
-        # Starts by defecting.
-        self.first_play_test(D)
-        # If opponent cooperates strictly more often as they defect then the
-        # player cooperates.
-        self.responses_test([D], [C, D, D, D], [D, D, C, C])
-        self.responses_test([D], [C, C, D, D, C], [D, D, C, C, D])
-
-    def test_soft(self):
-        pass
-
-    def test_name(self):
-        self.assertEqual(self.player().name, "Hard Go By Majority")
-
-    def test_repr(self):
-        name = str(self.player())
         self.assertEqual(name, "Hard Go By Majority")
 
 
