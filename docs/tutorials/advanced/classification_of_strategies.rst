@@ -91,7 +91,7 @@ both the length of the tournament and the game being played::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    21
+    22
 
 Some strategies have been classified as having a particularly long run time::
 
