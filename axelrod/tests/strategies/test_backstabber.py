@@ -65,34 +65,59 @@ class TestDoubleCrosser(TestBackStabber):
     }
 
     def test_strategy(self):
-
         """
-        Forgives the first 3 defections but on the fourth will defect forever.
-        If the opponent did not defect in the first 6 rounds the player will
-        cooperate until the 180th round. Defects after the 198th round
-        unconditionally.
+        Forgives the first 3 defections but on the fourth
+        will defect forever. Defects on the last 2 rounds unconditionally.
+
+        If the opponent did not defect
+        in the first 6 rounds,until the 180th round, the player will only defect
+        after the opponent has defected twice in-a-row.
         """
 
-        self.special_case_strategy()
+        self._when_alt_strategy_is_triggered()
+        self._starting_defect_keeps_alt_strategy_from_triggering()
+        self._alt_strategy_stops_at_round_180()
         super(TestDoubleCrosser, self).test_strategy()
 
-    def special_case_strategy(self):
+    def _when_alt_strategy_is_triggered(self):
+        starting_cooperation = [C] * 6
+        starting_rounds = [(C, C)] * 6
 
-        """
-        6 * [C] + 2 * [D] -> D
-        6 * [C] + 20* [D] -> D
-        6 * [C] + 2 * [D] + [C] - > C
-        6 * [C] + 20 * [D] + [C] - > C
-        """
-        starting_cooperation = 6 * [C]
-        starting_rounds_with_c = 6 * [(C, C)]
-
-        starting_defection = [D] + 5 * [C]
-        starting_rounds_with_d = [(D, D)] + 5 * [(C, C)]
-
-        opponent_actions = starting_cooperation + [D, D, C]
-        expected_actions = starting_rounds_with_c + [(C, D), (C, D), (D, C)]
+        opponent_actions = starting_cooperation + [D, D, C, D]
+        expected_actions = starting_rounds + [(C, D), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
-        # Defects on rounds 199, and 200 no matter what
+        opponent_actions = starting_cooperation + [D, D, D, D, C, D]
+        expected_actions = starting_rounds + [(C, D), (C, D), (D, D), (D, D), (D, C), (C, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
+                         match_attributes={"length": 200})
+
+    def _starting_defect_keeps_alt_strategy_from_triggering(self):
+        opponent_actions_suffix = [C, D, C, D, D] + 3 * [C]
+        expected_actions_suffix = [(C, C), (C, D), (C, C), (C, D), (C, D)] + 3 * [(D, C)]
+
+        defects_on_first = [D] + [C] * 5
+        defects_on_first_actions = [(C, D)] + [(C, C)] * 5
+        self.versus_test(axelrod.MockPlayer(defects_on_first + opponent_actions_suffix),
+                         expected_actions=defects_on_first_actions + expected_actions_suffix,
+                         match_attributes={"length": 200})
+
+        defects_in_middle = [C, C, D, C, C, C]
+        defects_in_middle_actions = [(C, C), (C, C), (C, D), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.MockPlayer(defects_in_middle + opponent_actions_suffix),
+                         expected_actions=defects_in_middle_actions + expected_actions_suffix,
+                         match_attributes={"length": 200})
+
+        defects_on_last = [C] * 5 + [D]
+        defects_on_last_actions = [(C, C)] * 5 + [(C, D)]
+        self.versus_test(axelrod.MockPlayer(defects_on_last + opponent_actions_suffix),
+                         expected_actions=defects_on_last_actions + expected_actions_suffix,
+                         match_attributes={"length": 200})
+
+    def _alt_strategy_stops_at_round_180(self):
+        opponent_actions = [C] * 6 + [C, D] * 87 + [C] * 6
+        expected_actions = [(C, C)] * 6 + [(C, C), (C, D)] * 87 + [(D, C)] * 6
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
+                         match_attributes={"length": 200})
+

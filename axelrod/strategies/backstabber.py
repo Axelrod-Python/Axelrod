@@ -32,9 +32,11 @@ class BackStabber(Player):
 class DoubleCrosser(Player):
     """
     Forgives the first 3 defections but on the fourth
-    will defect forever. If the opponent did not defect
-    in the first 6 rounds the player will cooperate until
-    the 180th round. Defects on the last 2 rounds unconditionally.
+    will defect forever. Defects on the last 2 rounds unconditionally.
+
+    From rounds 7 through 179,
+    if the opponent did not defect in the first 6 rounds,
+    the player will only defect after the opponent has defected twice in-a-row.
     """
 
     name = 'DoubleCrosser'
@@ -71,11 +73,11 @@ def _alt_strategy(opponent):
 
 def _opponent_triggers_alt_strategy(opponent):
     before_alt_strategy = 6
-    alt_strategy_final_round = 180
+    after_alt_strategy = 180
     if _opponent_defected_in_first_n_rounds(opponent, before_alt_strategy):
         return False
     rounds_opponent_played = len(opponent.history)
-    return before_alt_strategy < rounds_opponent_played <= alt_strategy_final_round
+    return before_alt_strategy < rounds_opponent_played < after_alt_strategy
 
 
 def _opponent_defected_in_first_n_rounds(opponent, first_n_rounds):
