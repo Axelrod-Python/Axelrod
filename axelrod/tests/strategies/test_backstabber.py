@@ -45,8 +45,8 @@ class TestBackStabber(TestPlayer):
 class TestDoubleCrosser(TestBackStabber):
     """
     Behaves like BackStabber except when its alternate strategy is triggered.
-    The alternate strategy is triggered when opponent did not defect in the first 6 rounds, and
-    6 < the current round < 180.
+    The alternate strategy is triggered when opponent did not defect in the first 7 rounds, and
+    8 <= the current round <= 180.
     """
     name = "DoubleCrosser"
     player = axelrod.DoubleCrosser
@@ -64,8 +64,8 @@ class TestDoubleCrosser(TestBackStabber):
         """
         The alternate strategy is if opponent's last two plays were defect, then defect. Otherwise, cooperate.
         """
-        starting_cooperation = [C] * 6
-        starting_rounds = [(C, C)] * 6
+        starting_cooperation = [C] * 7
+        starting_rounds = [(C, C)] * 7
 
         opponent_actions = starting_cooperation + [D, D, C, D]
         expected_actions = starting_rounds + [(C, D), (C, D), (D, C), (C, D)]
@@ -81,26 +81,28 @@ class TestDoubleCrosser(TestBackStabber):
         opponent_actions_suffix = [C, D, C, D, D] + 3 * [C]
         expected_actions_suffix = [(C, C), (C, D), (C, C), (C, D), (C, D)] + 3 * [(D, C)]
 
-        defects_on_first = [D] + [C] * 5
-        defects_on_first_actions = [(C, D)] + [(C, C)] * 5
+        defects_on_first = [D] + [C] * 6
+        defects_on_first_actions = [(C, D)] + [(C, C)] * 6
         self.versus_test(axelrod.MockPlayer(defects_on_first + opponent_actions_suffix),
                          expected_actions=defects_on_first_actions + expected_actions_suffix,
                          match_attributes={"length": 200})
 
-        defects_in_middle = [C, C, D, C, C, C]
-        defects_in_middle_actions = [(C, C), (C, C), (C, D), (C, C), (C, C), (C, C)]
+        defects_in_middle = [C, C, C, D, C, C, C]
+        defects_in_middle_actions = [(C, C), (C, C), (C, C), (C, D), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.MockPlayer(defects_in_middle + opponent_actions_suffix),
                          expected_actions=defects_in_middle_actions + expected_actions_suffix,
                          match_attributes={"length": 200})
 
-        defects_on_last = [C] * 5 + [D]
-        defects_on_last_actions = [(C, C)] * 5 + [(C, D)]
+        defects_on_last = [C] * 6 + [D]
+        defects_on_last_actions = [(C, C)] * 6 + [(C, D)]
         self.versus_test(axelrod.MockPlayer(defects_on_last + opponent_actions_suffix),
                          expected_actions=defects_on_last_actions + expected_actions_suffix,
                          match_attributes={"length": 200})
 
-    def test_alt_strategy_stops_at_round_180(self):
-        opponent_actions = [C] * 6 + [C, D] * 87 + [C] * 6
-        expected_actions = [(C, C)] * 6 + [(C, C), (C, D)] * 87 + [(D, C)] * 6
+    def test_alt_strategy_stops_after_round_180(self):
+        one_eighty_opponent_actions = [C] * 8 + [C, D] * 86
+        one_eighty_expected_actions = [(C, C)] * 8 + [(C, C), (C, D)] * 86
+        opponent_actions = one_eighty_opponent_actions + [C] * 6
+        expected_actions = one_eighty_expected_actions + [(D, C)] * 6
         self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
                          match_attributes={"length": 200})

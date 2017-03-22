@@ -34,8 +34,8 @@ class DoubleCrosser(Player):
     Forgives the first 3 defections but on the fourth
     will defect forever. Defects on the last 2 rounds unconditionally.
 
-    From rounds 7 through 179,
-    if the opponent did not defect in the first 6 rounds,
+    If 8 <= current round <= 180,
+    if the opponent did not defect in the first 7 rounds,
     the player will only defect after the opponent has defected twice in-a-row.
     """
 
@@ -79,14 +79,16 @@ def _alt_strategy(opponent: Player) -> Action:
 
 def _opponent_triggers_alt_strategy(opponent: Player) -> bool:
     """
-    If opponent did not defect in first 6 rounds and the round is from 7 to 179, return True. Else, return False.
+    If opponent did not defect in first 7 rounds and the current round is from 8 to 180, return True.
+    Else, return False.
     """
-    before_alt_strategy = 6
-    after_alt_strategy = 180
-    if _opponent_defected_in_first_n_rounds(opponent, before_alt_strategy):
+    before_alt_strategy = 7
+    last_round_of_alt_strategy = 180
+    required_rounds_of_opponent_cooperation = before_alt_strategy
+    if _opponent_defected_in_first_n_rounds(opponent, required_rounds_of_opponent_cooperation):
         return False
-    rounds_opponent_played = len(opponent.history)
-    return before_alt_strategy < rounds_opponent_played < after_alt_strategy
+    current_round = len(opponent.history) + 1
+    return before_alt_strategy < current_round <= last_round_of_alt_strategy
 
 
 def _opponent_defected_in_first_n_rounds(opponent: Player, first_n_rounds: int) -> bool:
