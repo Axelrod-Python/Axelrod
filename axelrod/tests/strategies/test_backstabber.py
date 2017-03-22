@@ -12,7 +12,7 @@ class TestBackStabber(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'makes_use_of': set(['length']),
+        'makes_use_of': {'length'},
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -24,31 +24,40 @@ class TestBackStabber(TestPlayer):
         Forgives the first 3 defections but on the fourth
         will defect forever. Defects after the 198th round unconditionally.
         """
+        self._defects_after_four_defections()
+        self._defects_on_last_two_rounds_by_match_len()
 
+    def _defects_after_four_defections(self):
         self.first_play_test(C)
-
         # Forgives three defections
-        self.responses_test([C], [C], [D], length=200)
-        self.responses_test([C], [C, C], [D, D], length=200)
-        self.responses_test([C], [C, C, C], [D, D, D], length=200)
-        self.responses_test([D], [C, C, C, C], [D, D, D, D], length=200)
+        defector_actions = [(C, D), (C, D), (C, D), (C, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=defector_actions, match_attributes={"length": 200})
+        alternator_actions = [(C, C), (C, D)] * 4 + [(D, C), (D, D)] * 2
+        self.versus_test(axelrod.Alternator(), expected_actions=alternator_actions, match_attributes={"length": 200})
 
-        # Defects on rounds 199, and 200 no matter what
-        self.responses_test([C, D, D], [C] * 197, [C] * 197, length=200)
+    def _defects_on_last_two_rounds_by_match_len(self):
+        actions = [(C, C)] * 198 + [(D, C), (D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 200})
+
+        actions = [(C, C)] * 10 + [(D, C), (D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 12})
+
         # Test that exceeds tournament length
-        self.responses_test([D, D, C], [C] * 198, [C] * 198, length=200)
+        actions = [(C, C)] * 198 + [(D, C), (D, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 200})
         # But only if the tournament is known
-        self.responses_test([C, C, C], [C] * 198, [C] * 198, length=-1)
+        actions = [(C, C)] * 202
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": -1})
 
 
-class TestDoubleCrosser(TestPlayer):
+class TestDoubleCrosser(TestBackStabber):
 
     name = "DoubleCrosser"
     player = axelrod.DoubleCrosser
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'makes_use_of': set(['length']),
+        'makes_use_of': {'length'},
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -63,19 +72,27 @@ class TestDoubleCrosser(TestPlayer):
         cooperate until the 180th round. Defects after the 198th round
         unconditionally.
         """
-        self.first_play_test(C)
 
-        # Forgives three defections
-        self.responses_test([C], [C], [D], length=200)
-        self.responses_test([C], [C, C], [D, D], length=200)
-        self.responses_test([C], [C, C, C], [D, D, D], length=200)
-        self.responses_test([D], [C, C, C, C], [D, D, D, D], length=200)
+        self.special_case_strategy()
+        super(TestDoubleCrosser, self).test_strategy()
 
-        # If opponent did not defect in the first six rounds, cooperate until
-        # round 180
-        self.responses_test([C] * 174, [C] * 6, [C] * 6, length=200)
-        self.responses_test([C] * 160, [C] * 12, [C] * 6 + [D] + [C] * 5,
-                            length=200)
+    def special_case_strategy(self):
+
+        """
+        6 * [C] + 2 * [D] -> D
+        6 * [C] + 20* [D] -> D
+        6 * [C] + 2 * [D] + [C] - > C
+        6 * [C] + 20 * [D] + [C] - > C
+        """
+        starting_cooperation = 6 * [C]
+        starting_rounds_with_c = 6 * [(C, C)]
+
+        starting_defection = [D] + 5 * [C]
+        starting_rounds_with_d = [(D, D)] + 5 * [(C, C)]
+
+        opponent_actions = starting_cooperation + [D, D, C]
+        expected_actions = starting_rounds_with_c + [(C, D), (C, D), (D, C)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
+                         match_attributes={"length": 200})
 
         # Defects on rounds 199, and 200 no matter what
-        self.responses_test([C, D, D], [C] * 197, [C] * 197, length=200)

@@ -17,23 +17,18 @@ class BackStabber(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'makes_use_of': set(['length']),
+        'makes_use_of': {'length'},
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
 
-    @staticmethod
-    def strategy(opponent: Player) -> Action:
-        if not opponent.history:
-            return C
-        if opponent.defections > 3:
-            return D
-        return C
+    def strategy(self, opponent: Player) -> Action:
+        return _backstabber_strategy(opponent)
 
 
-@FinalTransformer((D, D), name_prefix=None) # End with two defections
+@FinalTransformer((D, D), name_prefix=None)  # End with two defections
 class DoubleCrosser(Player):
     """
     Forgives the first 3 defections but on the fourth
@@ -46,7 +41,7 @@ class DoubleCrosser(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'makes_use_of': set(['length']),
+        'makes_use_of': {'length'},
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -54,15 +49,34 @@ class DoubleCrosser(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
-        cutoff = 6
+        if self._opponent_triggers_alt_strategy(opponent):
+            return _alt_strategy(opponent)
+        return _backstabber_strategy(opponent)
 
-        if not opponent.history:
-            return C
-        if len(opponent.history) < 180:
-            if len(opponent.history) > cutoff:
-                if D not in opponent.history[:cutoff + 1]:
-                    if opponent.history[-2:] != [D, D]:  # Fail safe
-                        return C
-        if opponent.defections > 3:
-            return D
+    def _opponent_triggers_alt_strategy(self, opponent):
+        before_alt_strategy = 6
+        alt_strategy_final_round = 180
+        if _opponent_defected_in_first_n_rounds(opponent, before_alt_strategy):
+            return False
+        current_plays = len(self.history)
+        return before_alt_strategy < current_plays <= alt_strategy_final_round
+
+
+def _backstabber_strategy(opponent):
+    if not opponent.history:
         return C
+    if opponent.defections > 3:
+        return D
+    return C
+
+
+def _alt_strategy(opponent):
+    final_two_plays = opponent.history[-2:]
+    if final_two_plays == [D, D]:
+        return D
+    return C
+
+
+def _opponent_defected_in_first_n_rounds(opponent, first_n_rounds):
+    return D in opponent.history[:first_n_rounds]
+
