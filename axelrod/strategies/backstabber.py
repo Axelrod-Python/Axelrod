@@ -49,17 +49,9 @@ class DoubleCrosser(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
-        if self._opponent_triggers_alt_strategy(opponent):
+        if _opponent_triggers_alt_strategy(opponent):
             return _alt_strategy(opponent)
         return _backstabber_strategy(opponent)
-
-    def _opponent_triggers_alt_strategy(self, opponent):
-        before_alt_strategy = 6
-        alt_strategy_final_round = 180
-        if _opponent_defected_in_first_n_rounds(opponent, before_alt_strategy):
-            return False
-        current_plays = len(self.history)
-        return before_alt_strategy < current_plays <= alt_strategy_final_round
 
 
 def _backstabber_strategy(opponent):
@@ -75,6 +67,15 @@ def _alt_strategy(opponent):
     if final_two_plays == [D, D]:
         return D
     return C
+
+
+def _opponent_triggers_alt_strategy(opponent):
+    before_alt_strategy = 6
+    alt_strategy_final_round = 180
+    if _opponent_defected_in_first_n_rounds(opponent, before_alt_strategy):
+        return False
+    rounds_opponent_played = len(opponent.history)
+    return before_alt_strategy < rounds_opponent_played <= alt_strategy_final_round
 
 
 def _opponent_defected_in_first_n_rounds(opponent, first_n_rounds):
