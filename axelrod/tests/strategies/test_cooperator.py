@@ -42,8 +42,14 @@ class TestTrickyCooperator(TestPlayer):
         # Starts by cooperating.
         self.first_play_test(C)
         # Test if it tries to trick opponent.
-        self.responses_test([D], [C, C, C], [C, C, C])
-        self.responses_test([C], [C, C, C, D, D], [C, C, C, C, D])
-        history = [C, C, C, D, D] + [C] * 11
-        opponent_history = [C, C, C, C, D] + [D] + [C] * 10
-        self.responses_test([D], history, opponent_history)
+        self.versus_test(axelrod.Cooperator(), [(C, C), (C, C), (C, C), (D, C), (D, C)])
+
+        opponent_actions = [C, C, C, C, D, D]
+        expected_actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (C, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions)
+
+        opponent_actions = [C, C, C, C, D] + [D] + [C] * 10
+        expected_actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (C, D), (C, C), (C, C), (C, C), (C, C), (C, C),
+                            (C, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions)
+
