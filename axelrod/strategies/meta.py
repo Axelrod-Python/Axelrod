@@ -10,6 +10,7 @@ from .lookerup import EvolvedLookerUp2_2_2
 from .gambler import PSOGambler2_2_2
 from .backstabber import DoubleCrosser
 from .oncebitten import FoolMeOnce
+from .titfortat import Gradual
 from numpy.random import choice
 
 
@@ -367,7 +368,7 @@ class MetaWinnerTopTypes(MetaWinner):
     def __init__(self):
         team = [
             EvolvedHMM5, EvolvedLookerUp2_2_2, PSOGambler2_2_2, FoolMeOnce,
-            DoubleCrosser
+            DoubleCrosser, Gradual
         ]
         super().__init__(team=team)
 
