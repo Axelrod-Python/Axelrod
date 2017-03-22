@@ -56,7 +56,10 @@ class DoubleCrosser(Player):
         return _backstabber_strategy(opponent)
 
 
-def _backstabber_strategy(opponent):
+def _backstabber_strategy(opponent: Player) -> Action:
+    """
+    Cooperates until opponent defects a total of four times, then always defects.
+    """
     if not opponent.history:
         return C
     if opponent.defections > 3:
@@ -64,14 +67,20 @@ def _backstabber_strategy(opponent):
     return C
 
 
-def _alt_strategy(opponent):
+def _alt_strategy(opponent: Player) -> Action:
+    """
+    If opponent's last two plays were defect, then defects on next round. Otherwise, cooperates.
+    """
     final_two_plays = opponent.history[-2:]
     if final_two_plays == [D, D]:
         return D
     return C
 
 
-def _opponent_triggers_alt_strategy(opponent):
+def _opponent_triggers_alt_strategy(opponent: Player) -> bool:
+    """
+    If opponent did not defect in first 6 rounds and the round is from 7 to 179, return True. Else, return False.
+    """
     before_alt_strategy = 6
     after_alt_strategy = 180
     if _opponent_defected_in_first_n_rounds(opponent, before_alt_strategy):
@@ -80,6 +89,8 @@ def _opponent_triggers_alt_strategy(opponent):
     return before_alt_strategy < rounds_opponent_played < after_alt_strategy
 
 
-def _opponent_defected_in_first_n_rounds(opponent, first_n_rounds):
+def _opponent_defected_in_first_n_rounds(opponent: Player, first_n_rounds: int) -> bool:
+    """
+    If opponent defected in the first N rounds, return True. Else return False.
+    """
     return D in opponent.history[:first_n_rounds]
-

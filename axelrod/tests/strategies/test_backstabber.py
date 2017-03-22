@@ -19,15 +19,7 @@ class TestBackStabber(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
-        """
-        Forgives the first 3 defections but on the fourth
-        will defect forever. Defects after the 198th round unconditionally.
-        """
-        self._defects_after_four_defections()
-        self._defects_on_last_two_rounds_by_match_len()
-
-    def _defects_after_four_defections(self):
+    def test_defects_after_four_defections(self):
         self.first_play_test(C)
         # Forgives three defections
         defector_actions = [(C, D), (C, D), (C, D), (C, D), (D, D), (D, D)]
@@ -35,7 +27,7 @@ class TestBackStabber(TestPlayer):
         alternator_actions = [(C, C), (C, D)] * 4 + [(D, C), (D, D)] * 2
         self.versus_test(axelrod.Alternator(), expected_actions=alternator_actions, match_attributes={"length": 200})
 
-    def _defects_on_last_two_rounds_by_match_len(self):
+    def test_defects_on_last_two_rounds_by_match_len(self):
         actions = [(C, C)] * 198 + [(D, C), (D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 200})
 
@@ -51,7 +43,11 @@ class TestBackStabber(TestPlayer):
 
 
 class TestDoubleCrosser(TestBackStabber):
-
+    """
+    Behaves like BackStabber except when its alternate strategy is triggered.
+    The alternate strategy is triggered when opponent did not defect in the first 6 rounds, and
+    6 < the current round < 180.
+    """
     name = "DoubleCrosser"
     player = axelrod.DoubleCrosser
     expected_classifier = {
@@ -64,22 +60,10 @@ class TestDoubleCrosser(TestBackStabber):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
+    def test_when_alt_strategy_is_triggered(self):
         """
-        Forgives the first 3 defections but on the fourth
-        will defect forever. Defects on the last 2 rounds unconditionally.
-
-        If the opponent did not defect
-        in the first 6 rounds,until the 180th round, the player will only defect
-        after the opponent has defected twice in-a-row.
+        The alternate strategy is if opponent's last two plays were defect, then defect. Otherwise, cooperate.
         """
-
-        self._when_alt_strategy_is_triggered()
-        self._starting_defect_keeps_alt_strategy_from_triggering()
-        self._alt_strategy_stops_at_round_180()
-        super(TestDoubleCrosser, self).test_strategy()
-
-    def _when_alt_strategy_is_triggered(self):
         starting_cooperation = [C] * 6
         starting_rounds = [(C, C)] * 6
 
@@ -93,7 +77,7 @@ class TestDoubleCrosser(TestBackStabber):
         self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
-    def _starting_defect_keeps_alt_strategy_from_triggering(self):
+    def test_starting_defect_keeps_alt_strategy_from_triggering(self):
         opponent_actions_suffix = [C, D, C, D, D] + 3 * [C]
         expected_actions_suffix = [(C, C), (C, D), (C, C), (C, D), (C, D)] + 3 * [(D, C)]
 
@@ -115,9 +99,8 @@ class TestDoubleCrosser(TestBackStabber):
                          expected_actions=defects_on_last_actions + expected_actions_suffix,
                          match_attributes={"length": 200})
 
-    def _alt_strategy_stops_at_round_180(self):
+    def test_alt_strategy_stops_at_round_180(self):
         opponent_actions = [C] * 6 + [C, D] * 87 + [C] * 6
         expected_actions = [(C, C)] * 6 + [(C, C), (C, D)] * 87 + [(D, C)] * 6
         self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
                          match_attributes={"length": 200})
-
