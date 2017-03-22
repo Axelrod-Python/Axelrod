@@ -5,6 +5,11 @@ from ._strategies import all_strategies
 from .hunter import (
     AlternatorHunter, CooperatorHunter, CycleHunter, DefectorHunter,
     EventualCycleHunter, MathConstantHunter, RandomHunter,)
+from .hmm import EvolvedHMM5
+from .lookerup import EvolvedLookerUp2_2_2
+from .gambler import PSOGambler2_2_2
+from .backstabber import DoubleCrosser
+from .oncebitten import FoolMeOnce
 from numpy.random import choice
 
 
@@ -346,6 +351,24 @@ class MetaWinnerStochastic(MetaWinner):
     def __init__(self):
         team = [s for s in ordinary_strategies if
                 s().classifier['stochastic']]
+        super().__init__(team=team)
+
+
+class MetaWinnerTopTypes(MetaWinner):
+    """Meta Winner with a team selected from the top 5 performing types of
+    strategy as at 22-Mar-2017.
+
+    e.g. There are several HMM and EvolvedLookerUp strategies in the top 10
+    performers, but only one of each of those is selected for this team.
+    """
+
+    name = "Meta Winner Top Types"
+
+    def __init__(self):
+        team = [
+            EvolvedHMM5, EvolvedLookerUp2_2_2, PSOGambler2_2_2, FoolMeOnce,
+            DoubleCrosser
+        ]
         super().__init__(team=team)
 
 
