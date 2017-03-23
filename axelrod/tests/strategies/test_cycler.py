@@ -2,7 +2,7 @@
 
 import itertools
 import axelrod
-from axelrod import Actions
+from axelrod.actions import Action, Actions
 from .test_player import TestPlayer
 
 C, D = Actions.C, Actions.D
@@ -54,7 +54,7 @@ def test_cycler_factory(cycle):
     return TestCycler
 
 
-def _get_actions_cycle_against_cooperator(cycle_string: str) -> [(Actions, Actions)]:
+def _get_actions_cycle_against_cooperator(cycle_string: str) -> list:
     """converts str like 'CCDC' to set of actions against Cooperator [(C, C), (C, C), (D, C), (C, C)]
     (Where C=Actions.C, D=Actions.D)"""
     cooperator_opponent_action = C
@@ -65,7 +65,7 @@ def _get_actions_cycle_against_cooperator(cycle_string: str) -> [(Actions, Actio
     return out
 
 
-def _get_action(action_str: str) -> Actions:
+def _get_action(action_str: str) -> Action:
     """takes a string and returns appropriate Actions class."""
     actions = {'C': C, 'D': D}
     return actions[action_str]
