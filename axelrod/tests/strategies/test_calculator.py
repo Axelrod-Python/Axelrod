@@ -2,6 +2,7 @@
 
 import axelrod
 from .test_player import TestPlayer
+from axelrod.actions import flip_action
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -35,14 +36,37 @@ class TestCalculator(TestPlayer):
         P2.history = history
         self.assertEqual(C, P1.strategy(P2))
 
-        # Test post 20 rounds responses
-        self.responses_test([D], [C] * 21, [C] * 21)
-        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C,
-                   D]
-        self.responses_test([D], [C] * 21, history)
-        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C,
-                   D, C]
-        self.responses_test([C], [C] * 22, history)
+    def test_twenty_rounds_joss_then_defects_for_cyclers(self):
+        first_twenty = []
+        for index in range(20):
+            if index in [18, 19]:
+                first_twenty.append((D, C))
+            else:
+                first_twenty.append((C, C))
+        expected_actions = first_twenty + [(D, C), (D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions, seed=1)
+
+    def test_twenty_rounds_joss_then_tit_for_tat_for_non_cyclers(self):
+        seed = 2
+        twenty_round_non_cycle = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C]
+
+        first_twenty = []
+        for index, action in enumerate(twenty_round_non_cycle):
+            previous_action = twenty_round_non_cycle[index - 1]
+            if index == 0:
+                first_twenty.append((C, action))
+            elif index in [1, 2]:
+                first_twenty.append((flip_action(previous_action), action))
+            else:
+                first_twenty.append((previous_action, action))
+
+        self.versus_test(axelrod.MockPlayer(twenty_round_non_cycle), first_twenty, seed=seed)
+
+        after_twenty_round_non_cycle = [D, C, D, C, D, C, D, C]
+        after_first_twenty = [(C, D), (D, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
+        opponent_actions = twenty_round_non_cycle + after_twenty_round_non_cycle
+        test_actions = first_twenty + after_first_twenty
+        self.versus_test(axelrod.MockPlayer(opponent_actions), test_actions, seed=seed)
 
     def attribute_equality_test(self, player, clone):
         """Overwrite the default test to check Joss instance"""
