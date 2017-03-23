@@ -2,9 +2,10 @@
 
 import itertools
 import axelrod
+from axelrod import Actions
 from .test_player import TestPlayer
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = Actions.C, Actions.D
 
 
 class TestAntiCycler(TestPlayer):
@@ -45,11 +46,29 @@ def test_cycler_factory(cycle):
 
         def test_strategy(self):
             """Starts by cooperating"""
-            for i in range(20):
-                responses = itertools.islice(itertools.cycle(cycle), i)
-            self.responses_test(responses)
+            match_len = 20
+            actions_cycle = _get_actions_cycle_against_cooperator(cycle)
+            test_actions = list(itertools.islice(itertools.cycle(actions_cycle), match_len))
+            self.versus_test(axelrod.Cooperator(), test_actions)
 
     return TestCycler
+
+
+def _get_actions_cycle_against_cooperator(cycle_string: str) -> [(Actions, Actions)]:
+    """converts str like 'CCDC' to set of actions against Cooperator [(C, C), (C, C), (D, C), (C, C)]
+    (Where C=Actions.C, D=Actions.D)"""
+    cooperator_opponent_action = C
+    out = []
+    for action_str in cycle_string:
+        action = _get_action(action_str)
+        out.append((action, cooperator_opponent_action))
+    return out
+
+
+def _get_action(action_str: str) -> Actions:
+    """takes a string and returns appropriate Actions class."""
+    actions = {'C': C, 'D': D}
+    return actions[action_str]
 
 
 TestCyclerDC = test_cycler_factory("DC")
