@@ -52,4 +52,3 @@ class TestTrickyCooperator(TestPlayer):
         expected_actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (C, D), (C, C), (C, C), (C, C), (C, C), (C, C),
                             (C, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions)
-
