@@ -37,7 +37,7 @@ class TestCalculator(TestPlayer):
         self.assertEqual(C, P1.strategy(P2))
 
     def test_twenty_rounds_joss_then_defects_for_cyclers(self):
-        """uses axelrod.strategies.axelrod.Joss strategy for first 20 rounds"""
+        """uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
         seed = 2
         seed_two_flip_indices = [1, 3]
         twenty_alternator_actions = [C, D] * 10
@@ -48,7 +48,7 @@ class TestCalculator(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions, seed=seed)
 
     def test_twenty_rounds_joss_then_tit_for_tat_for_non_cyclers(self):
-        """uses axelrod.strategies.axelrod.Joss strategy for first 20 rounds"""
+        """uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
         seed = 2
         seed_two_flip_indices = [1, 2]
 
