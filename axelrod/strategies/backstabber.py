@@ -69,10 +69,10 @@ def _backstabber_strategy(opponent: Player) -> Action:
 
 def _alt_strategy(opponent: Player) -> Action:
     """
-    If opponent's last two plays were defect, then defects on next round. Otherwise, cooperates.
+    If opponent's previous two plays were defect, then defects on next round. Otherwise, cooperates.
     """
-    final_two_plays = opponent.history[-2:]
-    if final_two_plays == [D, D]:
+    previous_two_plays = opponent.history[-2:]
+    if previous_two_plays == [D, D]:
         return D
     return C
 
