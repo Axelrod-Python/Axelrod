@@ -72,9 +72,11 @@ class Cycler(Player):
         self.classifier['memory_depth'] = len(cycle) - 1
 
     def strategy(self, opponent: Player) -> Action:
+        actions = {'C': Actions.C, 'D': Actions.D}
         curent_round = len(self.history)
         index = curent_round % len(self.cycle)
-        return self.cycle[index]
+        action_str = self.cycle[index]
+        return actions[action_str]
 
 
 class CyclerDC(Cycler):
