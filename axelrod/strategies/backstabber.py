@@ -82,10 +82,9 @@ def _opponent_triggers_alt_strategy(opponent: Player) -> bool:
     If opponent did not defect in first 7 rounds and the current round is from 8 to 180, return True.
     Else, return False.
     """
-    before_alt_strategy = 7
+    before_alt_strategy = first_n_rounds = 7
     last_round_of_alt_strategy = 180
-    required_rounds_of_opponent_cooperation = before_alt_strategy
-    if _opponent_defected_in_first_n_rounds(opponent, required_rounds_of_opponent_cooperation):
+    if _opponent_defected_in_first_n_rounds(opponent, first_n_rounds):
         return False
     current_round = len(opponent.history) + 1
     return before_alt_strategy < current_round <= last_round_of_alt_strategy
