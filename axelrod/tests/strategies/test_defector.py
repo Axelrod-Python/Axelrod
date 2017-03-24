@@ -44,9 +44,18 @@ class TestTrickyDefector(TestPlayer):
         # Starts by defecting.
         self.first_play_test(D)
         self.second_play_test(D, D, D, D)
-        # Test if strategy tries to trick opponent.
-        self.responses_test([D], [C, C, C], [C, C, C])
-        self.responses_test([D], [C, C, C, D, D], [C, C, C, C, D])
-        history = [C, C, C, D, D] + [C] * 11
-        opponent_history = [C, C, C, C, D] + [D] + [C] * 10
-        self.responses_test([D], history, opponent_history)
+
+    def test_cooperates_if_opponent_history_has_C_and_last_three_are_D(self):
+        opponent_actions = [D, C, D, D, D] + [D, D]
+        actions = [(D, D), (D, C), (D, D), (D, D), (D, D)] + [(C, D), (C, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), actions)
+
+    def test_defects_if_opponent_never_cooperated(self):
+        opponent_actions = [D, D, D, D, D] + [D, D]
+        actions = [(D, D), (D, D), (D, D), (D, D), (D, D)] + [(D, D), (D, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), actions)
+
+    def test_defects_if_opponent_last_three_are_not_D(self):
+        opponent_actions = [D, C, D, D, D] + [C, D]
+        actions = [(D, D), (D, C), (D, D), (D, D), (D, D)] + [(C, C), (D, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), actions)
