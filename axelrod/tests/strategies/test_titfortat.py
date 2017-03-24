@@ -541,3 +541,26 @@ class TestSpitefulTitForTat(TestPlayer):
         actions = [(C, C), (C, C), (C, D), (D, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions,
                          attrs={"retaliating": True})
+
+class TestSlowTitForTwoTats2(TestPlayer):
+
+    name = "Slow Tit For Two Tats 2"
+    player = axelrod.SlowTitForTwoTats2
+    expected_classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Starts by cooperating.
+        self.first_play_test(C)
+        # If opponent plays the same move twice, repeats last action of
+        # opponent history, otherwise repeats previous move.
+        opponent = axelrod.MockPlayer([C, C, D, D, C, D, D, C, C, D, D])
+        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (D, D), (D, D),
+                    (D, C), (D, C), (C, D), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
