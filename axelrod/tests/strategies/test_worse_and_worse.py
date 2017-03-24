@@ -1,7 +1,7 @@
 """Tests for the WorseAndWorse strategies."""
 
 import axelrod
-from test_player import TestPlayer
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
