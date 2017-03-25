@@ -55,7 +55,7 @@ def test_cycler_factory(cycle_str):
 
 
 def _get_actions_cycle_against_cooperator(cycle_string: str):
-    """converts str like 'CCDC' to set of actions against Cooperator [(C, C), (C, C), (D, C), (C, C)]
+    """converts str like 'CCDC' to an itertools.cycle against Cooperator [(C, C), (C, C), (D, C), (C, C)]
     (Where C=Actions.C, D=Actions.D)"""
     cooperator_opponent_action = C
     action_iterator = str_to_actions(cycle_string)
