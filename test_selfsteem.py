@@ -36,10 +36,10 @@ class TestSelfSteem(TestPlayer):
 	    self.versus_test(opponent=axelrod.MockPlayer([D]), expected_actions = actions)
 
 	    # Check for -0.3 < f < 0.3, random
-        actions = [(D, C), (C, C), (D, C), (D, C), (C, C), (D, C)] + [(C, C)] * 6 + [(D, C),(D, C)] + [(C, C)] * 7
+	    actions = [(D, C), (C, C), (D, C), (D, C), (C, C), (D, C)] + [(C, C)] * 6 + [(D, C),(D, C)] + [(C, C)] * 7
 	    self.versus_test(opponent=axelrod.MockPlayer([C]), expected_actions = actions, seed=6)
 
-        actions = [(D, D)] * 7 + [(C, D), (C, D)] + [(D, D)] * 8 + [(C, D), (C, D), (D, D), (D, D), (D, D)]
+	    actions = [(D, D)] * 7 + [(C, D), (C, D)] + [(D, D)] * 8 + [(C, D), (C, D), (D, D), (D, D), (D, D)]
 	    self.versus_test(opponent=axelrod.MockPlayer([D]), expected_actions = actions, seed=5)
 
 	    # Check for 0.95 > abs(f) > 0.3, follows TitForTat
