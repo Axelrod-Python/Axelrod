@@ -2,7 +2,7 @@ import random
 import unittest
 import warnings
 import types
-
+import itertools
 import numpy as np
 
 import axelrod
@@ -260,7 +260,7 @@ class TestPlayer(unittest.TestCase):
                 self.assertTrue(np.array_equal(reset_value, original_value),
                                 msg=attribute)
 
-            elif isinstance(reset_value, types.GeneratorType):
+            elif isinstance(reset_value, types.GeneratorType) or isinstance(reset_value, itertools.cycle):
                 for _ in range(10):
                     self.assertEqual(next(reset_value),
                                      next(original_value), msg=attribute)

@@ -451,7 +451,7 @@ class TestTransformers(unittest.TestCase):
         FlipTransformer is applied to Alternator and CyclerCD. In other words,
         the implementation matters, not just the outcomes."""
         # Difference between Alternator and CyclerCD
-        p1 = axelrod.Cycler(cycle="CD")
+        p1 = axelrod.Cycler(cycle_str="CD")
         p2 = FlipTransformer()(axelrod.Cycler)(cycle="CD")
         for _ in range(5):
             p1.play(p2)

@@ -24,24 +24,24 @@ class TestCalculator(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
-        P1 = axelrod.Calculator()
-        P1.history = [C] * 20
-        P2 = axelrod.Player()
-        P2.history = [C, D] * 10
+        p1 = axelrod.Calculator()
+        p1.history = [C] * 20
+        p2 = axelrod.Player()
+        p2.history = [C, D] * 10
         # Defects on cycle detection
-        self.assertEqual(D, P1.strategy(P2))
+        self.assertEqual(D, p1.strategy(p2))
 
         # Test non-cycle response
         history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C]
-        P2.history = history
-        self.assertEqual(C, P1.strategy(P2))
+        p2.history = history
+        self.assertEqual(C, p1.strategy(p2))
 
     def test_twenty_rounds_joss_then_defects_for_cyclers(self):
         """uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
         seed = 2
-        seed_two_flip_indices = [1, 3]
+        flip_indices = [1, 3]
         twenty_alternator_actions = [C, D] * 10
-        twenty_test_actions = get_joss_strategy_actions(twenty_alternator_actions, seed_two_flip_indices)
+        twenty_test_actions = get_joss_strategy_actions(twenty_alternator_actions, flip_indices)
 
         expected_actions = twenty_test_actions + [(D, C), (D, D), (D, C), (D, D)]
         self.versus_test(axelrod.Alternator(), twenty_test_actions, seed=seed)
@@ -50,10 +50,10 @@ class TestCalculator(TestPlayer):
     def test_twenty_rounds_joss_then_tit_for_tat_for_non_cyclers(self):
         """uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
         seed = 2
-        seed_two_flip_indices = [1, 2]
+        flip_indices = [1, 2]
 
         twenty_non_cyclical_actions = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C]
-        twenty_test_actions = get_joss_strategy_actions(twenty_non_cyclical_actions, seed_two_flip_indices)
+        twenty_test_actions = get_joss_strategy_actions(twenty_non_cyclical_actions, flip_indices)
 
         subsequent_opponent_actions = [D, C, D, C, D, C, D, C]
         subsequent_test_actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
