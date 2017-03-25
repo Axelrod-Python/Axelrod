@@ -1,4 +1,3 @@
-from types import GeneratorType
 # Type alias for actions.
 Action = str
 
@@ -17,7 +16,7 @@ def flip_action(action: Action) -> Action:
         raise ValueError("Encountered a invalid action.")
 
 
-def str_to_actions(actions: str) -> GeneratorType:
+def str_to_actions(actions: str):
     """Takes a string like 'cCdD' and returns a generator that yields the appropriate actions."""
     for character in actions:
         as_upper = character.upper()
