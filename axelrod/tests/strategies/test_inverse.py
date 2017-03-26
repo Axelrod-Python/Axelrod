@@ -23,16 +23,23 @@ class TestInverse(TestPlayer):
     def test_strategy(self):
         # Cooperate initially.
         self.first_play_test(C)
+
         # Test that as long as the opponent has not defected the player will
         # cooperate.
-        self.responses_test([C], [C] * 4, [C] * 4)
-        self.responses_test([C], [C] * 5, [C] * 5)
+        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)])
+
         # Tests that if opponent has played all D then player chooses D.
-        self.responses_test([D], [C], [D], seed=5)
-        self.responses_test([D], [C], [D, D])
-        self.responses_test([D], [C] * 8, [D] * 8)
-        # Tests that if opponent has played all D then player chooses D.
-        self.responses_test([C], [C] * 4, [C, D, C, D], seed=6)
-        self.responses_test([C], [C] * 6, [C, C, C, C, D, D])
-        self.responses_test([D], [C] * 9, [D] * 8 + [C])
-        self.responses_test([D], [C] * 9, [D] * 8 + [C], seed=6)
+        self.versus_test(
+            axelrod.Defector(),
+            expected_actions=[(C, D)] + [(D, D)] * 9
+        )
+
+        expected_actions = [
+            (C, D), (D, C), (D, C), (D, D), (D, C),
+            (C, C), (C, C), (C, C), (C, D), (D, D),
+        ]
+        self.versus_test(
+            axelrod.MockPlayer([a[1] for a in expected_actions]),
+            expected_actions=expected_actions,
+            seed=0,
+        )
