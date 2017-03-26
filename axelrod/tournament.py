@@ -351,8 +351,8 @@ class ProbEndTournament(Tournament):
     whether or not to continue.
     """
 
-    def __init__(self, players, name='axelrod', game=None, prob_end=.5,
-                 repetitions=10, noise=0, with_morality=True):
+    def __init__(self, players: List[Player], name: str='axelrod', game: Game=None, prob_end: float=.5,
+                 repetitions: int=10, noise: float=0, with_morality: bool=True) -> None:
         """
         Parameters
         ----------
@@ -385,8 +385,8 @@ class SpatialTournament(Tournament):
     A tournament in which the players are allocated in a graph as nodes
     and they players only play the others that are connected to with an edge.
     """
-    def __init__(self, players, edges, name='axelrod', game=None, turns=200,
-                 repetitions=10, noise=0, with_morality=True):
+    def __init__(self, players: List[Player], edges, name: str='axelrod', game: Game=None, turns: int=200,
+                 repetitions: int=10, noise: float=0, with_morality: bool=True) -> None:
         """
         Parameters
         ----------
