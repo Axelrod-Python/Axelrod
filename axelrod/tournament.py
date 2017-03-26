@@ -57,7 +57,7 @@ class Tournament(object):
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
-    def setup_output(self, filename: str=None, in_memory: bool=False) -> None:
+    def setup_output(self, filename=None, in_memory=False):
         """Open a CSV writer for tournament output."""
         if in_memory:
             self.interactions_dict = {}
@@ -375,7 +375,7 @@ class ProbEndTournament(Tournament):
             Whether morality metrics should be calculated
         """
         super().__init__(
-            players, name=name, game=game, turns=float("inf"),
+            players, name=name, game=game, turns=int("inf"),
             repetitions=repetitions, noise=noise, with_morality=with_morality)
 
         self.prob_end = prob_end
