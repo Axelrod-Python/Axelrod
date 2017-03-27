@@ -4,7 +4,8 @@ import itertools
 import axelrod
 from axelrod.actions import Actions, str_to_actions
 from .test_player import TestPlayer
-from axelrod import Cycler
+from axelrod import Cycler, AntiCycler
+from axelrod._strategy_utils import detect_cycle
 
 C, D = Actions.C, Actions.D
 
@@ -23,10 +24,25 @@ class TestAntiCycler(TestPlayer):
         'manipulates_state': False
     }
 
+    def test_has_no_cycles(self):
+        test_range = 100
+        player = AntiCycler()
+        for _ in range(test_range):
+            player.play(axelrod.Cooperator())
+
+        contains_no_cycles = player.history
+        for slice_at in range(1, len(contains_no_cycles) + 1):
+            self.assertIsNone(detect_cycle(contains_no_cycles[:slice_at]))
+
     def test_strategy(self):
-        """Starts by cooperating"""
-        responses = [C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C]
-        self.responses_test(responses)
+        """rounds are CDD  CD  CCD CCCD CCCCD ..."""
+        anticycler_rounds = [C, D, D, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D]
+        num_elements = len(anticycler_rounds)
+        against_defector = list(zip(anticycler_rounds, [D] * num_elements))
+        against_cooperator = list(zip(anticycler_rounds, [C] * num_elements))
+
+        self.versus_test(axelrod.Defector(), against_defector)
+        self.versus_test(axelrod.Cooperator(), against_cooperator)
 
 
 class TestBasicCycler(TestPlayer):

@@ -3,11 +3,12 @@ from axelrod.player import Player
 import itertools
 import copy
 
+C, D = Actions.C, Actions.D
 
 class AntiCycler(Player):
     """
     A player that follows a sequence of plays that contains no cycles:
-    C CD CCD CCCD CCCCD CCCCCD ...
+    CDD  CD  CCD CCCD CCCCD ...
     """
 
     name = 'AntiCycler'
@@ -25,20 +26,28 @@ class AntiCycler(Player):
         super().__init__()
         self.cycle_length = 1
         self.cycle_counter = 0
+        self.first_three = self._get_first_three()
+
+    @staticmethod
+    def _get_first_three():
+        return [C, D, D]
 
     def strategy(self, opponent: Player) -> Action:
+        while self.first_three:
+            return self.first_three.pop(0)
         if self.cycle_counter < self.cycle_length:
             self.cycle_counter += 1
-            return Actions.C
+            return C
         else:
             self.cycle_length += 1
             self.cycle_counter = 0
-            return Actions.D
+            return D
 
     def reset(self):
         super().reset()
         self.cycle_length = 1
         self.cycle_counter = 0
+        self.first_three = self._get_first_three()
 
 
 class Cycler(Player):
