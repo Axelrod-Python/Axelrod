@@ -19,7 +19,7 @@ from typing import List
 class Tournament(object):
 
     def __init__(self, players: List[Player], match_generator: MatchGenerator=RoundRobinMatches,
-                 name: str='axelrod', game: Game=None, turns: int=200, repetitions:int =10,
+                 name: str='axelrod', game: Game=None, turns: int=200, repetitions: int=10,
                  noise: float=0, with_morality: bool=True) -> None:
         """
         Parameters
