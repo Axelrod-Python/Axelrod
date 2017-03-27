@@ -247,6 +247,10 @@ class GeneralSoftGrudger(Player):
     only punishes after its opponent defects a specified amount of times consecutively.
     The punishment is in the form of a series of defections followed by a 'penance' of
     a series of consecutive cooperations.
+
+    Names:
+
+    - General Soft Grudger: Original Name by J. Taylor Smith
     """
 
     name = 'General Soft Grudger'
@@ -279,7 +283,7 @@ class GeneralSoftGrudger(Player):
         self.n = n
         self.d = d
         self.c = c
-        self.grudge = [D]*(d-1)+[C]*c
+        self.grudge = [D] * (d - 1) + [C] * c
         self.grudged = False
         self.grudge_memory = 0
 
@@ -296,7 +300,7 @@ class GeneralSoftGrudger(Player):
                 self.grudged = False
                 self.grudge_memory = 0
             return strategy
-        elif [D]*self.n == opponent.history[-self.n:]:
+        elif [D] * self.n == opponent.history[-self.n:]:
             self.grudged = True
             return D
         return C
