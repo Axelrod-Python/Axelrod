@@ -353,8 +353,8 @@ class ProbEndTournament(Tournament):
     whether or not to continue.
     """
 
-    def __init__(self, players: List[Player], name: str='axelrod', game: Game=None, prob_end: float=.5,
-                 repetitions: int=10, noise: float=0, with_morality: bool=True) -> None:
+    def __init__(self, players, name='axelrod', game=None, prob_end=.5,
+                 repetitions=10, noise=0, with_morality=True):
         """
         Parameters
         ----------
@@ -374,7 +374,7 @@ class ProbEndTournament(Tournament):
             Whether morality metrics should be calculated
         """
         super().__init__(
-            players, name=name, game=game, turns=int("inf"),
+            players, name=name, game=game, turns=float("inf"),
             repetitions=repetitions, noise=noise, with_morality=with_morality)
 
         self.prob_end = prob_end
