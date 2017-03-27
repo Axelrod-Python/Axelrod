@@ -9,10 +9,9 @@ import tqdm
 
 from axelrod import on_windows
 from axelrod.player import Player
-from axelrod.MatchGenerator import MatchGenerator
 from .game import Game
 from .match import Match
-from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches
+from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches, MatchGenerator
 from .result_set import ResultSetFromFile, ResultSet, BigResultSet
 
 from typing import List
