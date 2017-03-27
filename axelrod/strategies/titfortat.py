@@ -602,3 +602,37 @@ class SpitefulTitForTat(Player):
     def reset(self):
         super().reset()
         self.retaliating = False
+
+class SlowTitForTwoTats2(Player):
+    """
+    A player plays C twice, then if the opponent plays the same move twice,
+    plays that move, otherwise plays previous move.
+
+    Names:
+
+    - Slow Tit For Tat [PRISON1998]_
+    """
+
+    name = 'Slow Tit For Two Tats 2'
+    classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+
+        # Start with two cooperations
+        if len(self.history) < 2:
+            return C
+
+        # Mimic if opponent plays the same move twice
+        if opponent.history[-2] == opponent.history[-1]:
+            return opponent.history[-1]
+
+        # Otherwise play previous move
+        return self.history[-1]

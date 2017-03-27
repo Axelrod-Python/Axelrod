@@ -75,7 +75,7 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
-    SpitefulTitForTat)
+    SpitefulTitForTat, SlowTitForTwoTats2)
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
@@ -219,6 +219,7 @@ all_strategies = [
     ShortMem,
     Shubik,
     SlowTitForTwoTats,
+    SlowTitForTwoTats2,
     SneakyTitForTat,
     SoftGrudger,
     SoftJoss,
