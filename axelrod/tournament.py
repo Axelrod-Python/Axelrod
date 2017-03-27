@@ -12,7 +12,7 @@ from axelrod.player import Player
 from .game import Game
 from .match import Match
 from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches, MatchGenerator
-from .result_set import ResultSetFromFile, ResultSet, BigResultSet
+from .result_set import ResultSetFromFile, ResultSet
 
 from typing import List
 
@@ -133,7 +133,7 @@ class Tournament(object):
             self.outputfile.close()
 
     def _build_result_set(self, progress_bar: bool=True, keep_interactions: bool=False,
-                          in_memory: bool=False) -> BigResultSet:
+                          in_memory: bool=False):
         """
         Build the result set (used by the play method)
 
