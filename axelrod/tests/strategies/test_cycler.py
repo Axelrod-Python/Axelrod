@@ -58,9 +58,9 @@ class TestBasicCycler(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_repr(self):
+    def test_name(self):
         cycle_str = 'DDCCDDCDCDCDC'
-        self.assertEqual(repr(Cycler(cycle_str)), 'Cycler {}'.format(cycle_str))
+        self.assertEqual(Cycler(cycle_str).name, 'Cycler {}'.format(cycle_str))
 
     def test_memory_depth_is_len_cycle_minus_one(self):
         len_ten = 'DCDCDDCDCD'
