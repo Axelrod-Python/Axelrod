@@ -239,3 +239,73 @@ class EasyGo(Player):
         if opponent.defections:
             return C
         return D
+
+class GeneralSoftGrudger(Player):
+    """
+    A generalization of the SoftGrudger strategy. SoftGrudger punishes by playing:
+    D, D, D, D, C, C. after a defection by the opponent.  GeneralSoftGrudger
+    only punishes after its opponent defects a specified amount of times consecutively.
+    The punishment is in the form of a series of defections followed by a 'penance' of
+    a series of consecutive cooperations.
+    """
+
+    name = 'General Soft Grudger'
+    classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self, n: int=1, d: int=4, c: int=2) -> None:
+        """
+        Parameters
+        ----------
+        n, int
+            The number of defections by the opponent to trigger punishment
+        d, int
+            The number of defections to punish the opponent
+        c, int
+            The number of cooperations in the 'penance' stage
+
+        Special Cases
+        -------------
+        GeneralSoftGrudger(1,4,2) is equivalent to SoftGrudger
+        """
+        super().__init__()
+        self.n = n
+        self.d = d
+        self.c = c
+        self.grudge = [D]*(d-1)+[C]*c
+        self.grudged = False
+        self.grudge_memory = 0
+
+    def strategy(self, opponent: Player) -> Action:
+        """
+        Punishes after its opponent defects 'n' times consecutively.
+        The punishment is in the form of 'd' defections followed by a penance of
+        'c' consecutive cooperations.
+        """
+        if self.grudged:
+            strategy = self.grudge[self.grudge_memory]
+            self.grudge_memory += 1
+            if self.grudge_memory == len(self.grudge):
+                self.grudged = False
+                self.grudge_memory = 0
+            return strategy
+        elif [D]*self.n == opponent.history[-self.n:]:
+            self.grudged = True
+            return D
+        return C
+
+    def reset(self):
+        """Resets scores and history."""
+        super().reset()
+        self.grudged = False
+        self.grudge_memory = 0
+
+    def __repr__(self) -> str:
+        return "%s: n=%s,d=%s,c=%s" % (self.name, self.n, self.d, self.c)
