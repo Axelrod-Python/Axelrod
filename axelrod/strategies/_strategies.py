@@ -219,6 +219,7 @@ all_strategies = [
     ShortMem,
     Shubik,
     SlowTitForTwoTats,
+    SlowTitForTwoTats2,
     SneakyTitForTat,
     SoftGrudger,
     SoftJoss,

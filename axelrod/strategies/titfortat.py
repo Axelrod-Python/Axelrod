@@ -634,5 +634,5 @@ class SlowTitForTwoTats2(Player):
         if opponent.history[-2] == opponent.history[-1]:
             return opponent.history[-1]
 
-        # Otherwise cooperate
+        # Otherwise play previous move
         return self.history[-1]
