@@ -3,7 +3,7 @@
 import axelrod
 from .test_player import TestPlayer
 from axelrod.actions import flip_action
-
+from axelrod._strategy_utils import detect_cycle
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
@@ -21,20 +21,8 @@ class TestCalculator(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
+    def test_first_play(self):
         self.first_play_test(C)
-
-        p1 = axelrod.Calculator()
-        p1.history = [C] * 20
-        p2 = axelrod.Player()
-        p2.history = [C, D] * 10
-        # Defects on cycle detection
-        self.assertEqual(D, p1.strategy(p2))
-
-        # Test non-cycle response
-        history = [C, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C]
-        p2.history = history
-        self.assertEqual(C, p1.strategy(p2))
 
     def test_twenty_rounds_joss_then_defects_for_cyclers(self):
         """uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
@@ -62,6 +50,28 @@ class TestCalculator(TestPlayer):
         test_actions = twenty_test_actions + subsequent_test_actions
         self.versus_test(axelrod.MockPlayer(twenty_non_cyclical_actions), twenty_test_actions, seed=seed)
         self.versus_test(axelrod.MockPlayer(opponent_actions), test_actions, seed=seed)
+
+    def test_edge_case_calculator_sees_cycles_of_size_ten(self):
+        seed = 3
+        ten_length_cycle = [C, D, C, C, D, C, C, C, D, C]
+        self.assertEqual(detect_cycle((ten_length_cycle * 2)), tuple(ten_length_cycle))
+
+        ten_cycle_twenty_rounds = get_joss_strategy_actions(ten_length_cycle * 2, indices_to_flip=[16])
+        opponent_actions = ten_length_cycle * 2 + [C, D, C]
+        expected = ten_cycle_twenty_rounds + [(D, C), (D, D), (D, C)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected, seed=seed)
+
+    def test_edge_case_calculator_ignores_cycles_gt_len_ten(self):
+        seed = 3
+        eleven_length_cycle = [D, D, C, C, D, C, C, C, D, C, D]
+        twenty_rounds_of_eleven_len_cycle = eleven_length_cycle + eleven_length_cycle[:9]
+        twenty_rounds = get_joss_strategy_actions(twenty_rounds_of_eleven_len_cycle, indices_to_flip=[19])
+
+        opponent_actions = twenty_rounds_of_eleven_len_cycle[: -1] + [D] + [C, D]
+        self.assertEqual(detect_cycle(opponent_actions), tuple(eleven_length_cycle))
+
+        uses_tit_for_tat_after_twenty_rounds = twenty_rounds + [(D, C), (C, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions), uses_tit_for_tat_after_twenty_rounds, seed=seed)
 
     def attribute_equality_test(self, player, clone):
         """Overwrite the default test to check Joss instance"""
