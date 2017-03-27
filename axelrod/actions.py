@@ -1,5 +1,3 @@
-from types import GeneratorType
-
 # Type alias for actions.
 Action = str
 
@@ -18,16 +16,11 @@ def flip_action(action: Action) -> Action:
         raise ValueError("Encountered a invalid action.")
 
 
-def str_to_actions(actions: str) -> GeneratorType:
-    """Takes a string like 'cCdD' and returns a generator that yields the appropriate actions."""
-    def make_generator(actions_str):
-        for character in actions_str:
-            as_upper = character.upper()
-            if as_upper == 'C':
-                yield Actions.C
-            elif as_upper == 'D':
-                yield Actions.D
-            else:
-                raise ValueError('The characters of action_str may only be "C", "c", "D" and "d"')
-
-    return make_generator(actions)
+def str_to_actions(actions: str) -> tuple:
+    """Takes a string like 'CCDD' and returns a tuple of the appropriate actions."""
+    action_dict = {'C': Actions.C,
+                   'D': Actions.D}
+    try:
+        return tuple(action_dict[action] for action in actions)
+    except KeyError:
+        raise ValueError('The characters of "actions" str may only be "C" or "D"')

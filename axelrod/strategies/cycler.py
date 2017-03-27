@@ -46,7 +46,7 @@ class Cycler(Player):
 
     name = 'Cycler'
     classifier = {
-        'memory_depth': 1,
+        'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
