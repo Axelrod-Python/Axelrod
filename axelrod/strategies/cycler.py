@@ -5,6 +5,7 @@ import copy
 
 C, D = Actions.C, Actions.D
 
+
 class AntiCycler(Player):
     """
     A player that follows a sequence of plays that contains no cycles:
