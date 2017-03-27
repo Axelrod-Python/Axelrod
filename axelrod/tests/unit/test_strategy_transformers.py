@@ -35,7 +35,12 @@ class TestTransformers(unittest.TestCase):
         cls = ForgiverTransformer(0.5)(axelrod.Alternator)
         p1 = cls()
         self.assertEqual(cls.__name__, "ForgivingAlternator")
-        self.assertEqual(p1.name, "Forgiving Alternator")
+        self.assertEqual(p1.name, "Forgiving Alternator: 0.5")
+
+        cls = InitialTransformer([D, D, C])(axelrod.Alternator)
+        p1 = cls()
+        self.assertEqual(cls.__name__, "InitialAlternator")
+        self.assertEqual(p1.name, "Initial Alternator: ['D', 'D', 'C']")
 
         cls = ForgiverTransformer(0.5, name_prefix="")(axelrod.Alternator)
         p1 = cls()

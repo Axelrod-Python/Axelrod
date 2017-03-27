@@ -109,6 +109,11 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 new_class_name = name_prefix + PlayerClass.__name__
                 # Modify the Player name (class variable inherited from Player)
                 name = name_prefix + ' ' + PlayerClass.name
+                # add eventual transformers' arguments in name
+                prefix = ': '
+                for arg in args:
+                    name += prefix + str(arg)
+                    prefix = ', '
             # Dynamically create the new class
             new_class = type(
                 new_class_name, (PlayerClass,),
