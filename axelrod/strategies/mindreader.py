@@ -32,18 +32,21 @@ class MindReader(Player):
         in this method, by defecting if the method is called by strategy
         """
 
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        calname = calframe[1][3]
-
-        if calname in ('strategy', 'simulate_match'):
-            return D
+        # curframe = inspect.currentframe()
+        # calframe = inspect.getouterframes(curframe, 2)
+        # calname = calframe[1][3]
+        #
+        # if calname in ('strategy', 'simulate_match'):
+        #     return D
 
         game = self.match_attributes["game"]
 
         best_strategy = look_ahead(self, opponent, game)
 
         return best_strategy
+
+    def strategy_for_simulation(self, opponent):
+        return D
 
 
 class ProtectedMindReader(MindReader):
@@ -92,11 +95,14 @@ class MirrorMindReader(ProtectedMindReader):
         reader or bender by cooperating.
         """
 
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        calname = calframe[1][3]
+        # curframe = inspect.currentframe()
+        # calframe = inspect.getouterframes(curframe, 2)
+        # calname = calframe[1][3]
+        #
+        # if calname in ('strategy', 'simulate_match'):
+        #     return C
 
-        if calname in ('strategy', 'simulate_match'):
-            return C
+        return opponent.strategy_for_simulation(self)
 
-        return opponent.strategy(self)
+    def strategy_for_simulation(self, opponent):
+        return C
