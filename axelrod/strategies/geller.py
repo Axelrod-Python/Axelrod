@@ -1,5 +1,3 @@
-import inspect
-
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
@@ -48,13 +46,6 @@ class Geller(Player):
         that gives the least jail time, which is is equivalent to playing the same
         strategy as that which the opponent will play.
         """
-        # curframe = inspect.currentframe()
-        # calframe = inspect.getouterframes(curframe, 2)
-        # calname = calframe[1][3]
-        # if calname == 'strategy':
-        #     return self.default()
-        # else:
-        #     return opponent.strategy(self)
         return opponent.strategy_for_simulation(self)
 
     def strategy_for_simulation(self, opponent):
