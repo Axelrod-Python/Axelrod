@@ -246,6 +246,48 @@ class TestPlayer(unittest.TestCase):
         clone = player.clone()
         self.attribute_equality_test(player, clone)
 
+    def test_equal(self):
+        """Test the player's `__eq__` function."""
+        player1 = Cooperator()
+        player2 = Cooperator()
+        self.assertEqual(player1, player1)
+        #Test with a difference in name attribute
+        player2.name = "Defector"
+        self.assertNotEqual(player1, player2)
+        #Test with a difference in classifier attribute
+        player2 = Cooperator()
+        player2.classifier['long_run_time'] = True
+        self.assertNotEqual(player1, player2)
+        #Test with a numpy.ndarray type attribute
+        player2 = Cooperator()
+        player1.test_np_array = np.ndarray(1)
+        player2.test_np_array = player1.test_np_array
+        self.assertEqual(player1, player2)
+        player2.test_np_array = np.ndarray(2)
+        self.assertNotEqual(player1, player2)
+        #Test with a Generator type attribute
+        player1 = Cooperator()
+        player2 = Cooperator()
+        player1.test_generator = range(10)
+        player2.test_generator = range(5, 25)
+        self.assertNotEqual(player1, player2)
+        player2.test_generator = range(10)
+        self.assertEqual(player1, player2)
+        #Test with an itertools generator type attribute
+        player1 = Cooperator()
+        player2 = Cooperator()
+        player1.test_itertools = itertools.count(10)
+        player2.test_itertools = itertools.repeat(10, 3)
+        self.assertNotEqual(player1, player2)
+        player2.test_itertools = player1.test_itertools
+        self.assertEqual(player1, player2)
+        #Test difference in __repr__() return
+        player2 = Cooperator()
+        player2.__repr__ = lambda: "Defector"
+        self.assertNotEqual(player1, player2)
+
+
+
     def attribute_equality_test(self, player, clone):
         """A separate method to test equality of attributes. This method can be
         overwritten in certain cases.
