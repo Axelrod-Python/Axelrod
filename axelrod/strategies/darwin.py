@@ -1,8 +1,6 @@
-import inspect
 from axelrod.actions import Action, Actions
 from axelrod.player import Player
 
-from typing import List
 
 C, D = Actions.C, Actions.D
 
@@ -28,7 +26,7 @@ class Darwin(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_source': False,
+        'inspects_source': True,  # Checks to see if opponent is using simulated matches.
         'long_run_time': False,
         'makes_use_of': set(),
         'manipulates_source': False,
@@ -46,11 +44,6 @@ class Darwin(Player):
         self.outcomes = self.match_attributes["game"].scores
 
     def strategy(self, opponent: Player) -> Action:
-        # Frustrate psychics and ensure that simulated rounds
-        # do not influence genome.
-        if inspect.stack()[1][3] not in Darwin.valid_callers:
-            return C
-
         trial = len(self.history)
 
         if trial > 0:
@@ -68,6 +61,9 @@ class Darwin(Player):
             current = opponent.history[-1]
 
         return current
+
+    def strategy_for_simulation(self, opponent):
+        return C
 
     def reset(self):
         """ Reset instance properties. """

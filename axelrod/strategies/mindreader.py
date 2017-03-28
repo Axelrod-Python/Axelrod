@@ -1,11 +1,10 @@
-import inspect
-
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod._strategy_utils import look_ahead
 
 
 C, D = Actions.C, Actions.D
+
 
 class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what
@@ -32,18 +31,14 @@ class MindReader(Player):
         in this method, by defecting if the method is called by strategy
         """
 
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        calname = calframe[1][3]
-
-        if calname in ('strategy', 'simulate_match'):
-            return D
-
         game = self.match_attributes["game"]
 
         best_strategy = look_ahead(self, opponent, game)
 
         return best_strategy
+
+    def strategy_for_simulation(self, opponent):
+        return D
 
 
 class ProtectedMindReader(MindReader):
@@ -69,6 +64,7 @@ class ProtectedMindReader(MindReader):
         else:
             self.__dict__[name] = val
 
+
 class MirrorMindReader(ProtectedMindReader):
     """A player that will mirror whatever strategy it is playing against by
     cheating and calling the opponent's strategy function instead of its own."""
@@ -91,12 +87,7 @@ class MirrorMindReader(ProtectedMindReader):
         Also avoid infinite recursion when called by itself or another mind
         reader or bender by cooperating.
         """
+        return opponent.strategy_for_simulation(self)
 
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        calname = calframe[1][3]
-
-        if calname in ('strategy', 'simulate_match'):
-            return C
-
-        return opponent.strategy(self)
+    def strategy_for_simulation(self, opponent):
+        return C

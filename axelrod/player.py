@@ -138,6 +138,9 @@ class Player(object):
     def strategy(self, opponent):
         """This is a placeholder strategy."""
         raise NotImplementedError()
+    
+    def strategy_for_simulation(self, opponent):
+        return self.strategy(opponent)
 
     def play(self, opponent, noise=0):
         """This pits two players against each other."""
