@@ -5,7 +5,8 @@ from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
-class TestCooperator(TestPlayer):
+
+class TestVeryBad(TestPlayer):
 
     name = "VeryBad"
     player = axelrod.VeryBad
@@ -18,18 +19,35 @@ class TestCooperator(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):        
-        # Starts by cooperating for the first 3 moves.
-        self.first_play_test(C)
-        self.responses_test([C], [C] * 2, [C] * 2)
-        self.responses_test([C], [C] * 3, [D] * 3)
+    def test_strategy(self):
+        # always cooperates on first move
+        self.first_play_test(play=C, seed=None)
 
-        #Cooperate if opponent's probable action to Defect
-        self.responses_test([D], [C] * 13 + [D] * 7, [D] * 16 + [C] * 4)
-            
-        #Cooperate if opponent's probable action to Cooperate
-        self.responses_test([C], [D] * 13 + [C] * 7, [C] * 12 + [D] * 8)
-        
-        #TitForTat if opponent's equally probable to Cooperate or Defect
-        self.responses_test([D], [D] * 13 + [C] * 11, [C] * 12 + [D] * 12)
-        self.responses_test([C], [D] * 13 + [C] * 11, [D] * 12 + [C] * 12)
+        # axelrod.Defector -
+        #   cooperates for the first three, defects for the rest P(C) < .5
+        self.versus_test(
+            axelrod.Defector(),
+            expected_actions=([(C, D)] * 3 + [(D, D)] * 7),
+        )
+
+        # axelrod.Cooperator -
+        #   cooperate for all, P(C) == 1
+        self.versus_test(
+            axelrod.Cooperator(),
+            expected_actions=[(C, C)],
+        )
+
+        expected_actions = [
+            (C, C),  # first three cooperate
+            (C, D),
+            (C, D),
+            (D, C),  # P(C) = .33
+            (C, C),  # P(C) = .5 (last move C)
+            (C, D),  # P(C) = .6
+            (D, D),  # P(C) = .5 (last move D)
+            (D, D),  # P(C) = .43
+            (D, C),  # P(C) = .375
+            (D, D),  # P(C) = .4
+        ]
+        mock_player = axelrod.MockPlayer([a[1] for a in expected_actions])
+        self.versus_test(mock_player, expected_actions=expected_actions)

@@ -1,6 +1,6 @@
 import unittest
 from axelrod import Actions, flip_action
-
+from axelrod.actions import str_to_actions
 
 C, D = Actions.C, Actions.D
 
@@ -22,3 +22,10 @@ class TestAction(unittest.TestCase):
 
     def test_error(self):
         self.assertRaises(ValueError, flip_action, 'R')
+
+    def test_str_to_actions(self):
+        self.assertEqual(str_to_actions('C'), (C, ))
+        self.assertEqual(str_to_actions('CDDC'), (C, D, D, C))
+
+    def test_str_to_actions_fails_fast_and_raises_value_error(self):
+        self.assertRaises(ValueError, str_to_actions, 'Cc')

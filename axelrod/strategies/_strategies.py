@@ -34,7 +34,7 @@ from .gobymajority import (GoByMajority,
     HardGoByMajority5)
 from .gradualkiller import GradualKiller
 from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
-    SoftGrudger, GrudgerAlternator, EasyGo)
+    SoftGrudger, GrudgerAlternator, EasyGo, GeneralSoftGrudger)
 from .grumpy import Grumpy
 from .handshake import Handshake
 from .hmm import HMMPlayer, EvolvedHMM5
@@ -75,7 +75,7 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
-    SpitefulTitForTat)
+    SpitefulTitForTat, SlowTitForTwoTats2)
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
@@ -146,6 +146,7 @@ all_strategies = [
     Geller,
     GellerCooperator,
     GellerDefector,
+    GeneralSoftGrudger,
     GoByMajority,
     GoByMajority10,
     GoByMajority20,
@@ -219,6 +220,7 @@ all_strategies = [
     ShortMem,
     Shubik,
     SlowTitForTwoTats,
+    SlowTitForTwoTats2,
     SneakyTitForTat,
     SoftGrudger,
     SoftJoss,

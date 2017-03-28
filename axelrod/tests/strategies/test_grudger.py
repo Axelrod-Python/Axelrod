@@ -220,3 +220,38 @@ class TestEasyGo(TestPlayer):
         # forever.
         self.responses_test([D], [C, D, D, D], [C, C, C, C])
         self.responses_test([C], [C, C, D, D, D], [C, D, C, C, C])
+
+class TestGeneralSoftGrudger(TestPlayer):
+
+    name = "General Soft Grudger: n=1,d=4,c=2"
+    player = axelrod.GeneralSoftGrudger
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        """Test strategy with multiple initial parameters"""
+
+        # Starts by cooperating.
+        self.first_play_test(C)
+
+        # Testing default parameters of n=1, d=4, c=2 (same as Soft Grudger)
+        actions = [(C, D), (D, D), (D, C), (D, C), (D, D), (C, D), (C, C), (C, C)]
+        self.versus_test(axelrod.MockPlayer([D, D, C, C]), expected_actions=actions)
+
+        # Testing n=2, d=4, c=2
+        actions = [(C, D), (C, D), (D, C), (D, C), (D, D), (D, D), (C, C), (C, C)]
+        self.versus_test(axelrod.MockPlayer([D, D, C, C]), expected_actions=actions,
+                         init_kwargs={"n": 2})
+
+        # Testing n=1, d=1, c=1
+        actions = [(C, D), (D, D), (C, C), (C, C), (C, D), (D, D), (C, C), (C, C)]
+        self.versus_test(axelrod.MockPlayer([D, D, C, C]), expected_actions=actions,
+                         init_kwargs={"n": 1, "d": 1, "c": 1})
+
