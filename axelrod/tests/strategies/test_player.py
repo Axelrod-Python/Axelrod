@@ -5,12 +5,13 @@ import types
 import itertools
 import numpy as np
 
-import axelrod
-from axelrod import DefaultGame, MockPlayer, Player, simulate_play
+from axelrod import DefaultGame, MockPlayer, Player, simulate_play, Match, seed as axlseed
+from axelrod.actions import Actions, flip_action, Action
 from axelrod.player import get_state_distribution_from_history
+from axelrod.strategies import Cooperator, Random, Defector, TitForTat
 
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = Actions.C, Actions.D
 
 
 # Generic strategy functions for testing
@@ -34,7 +35,7 @@ class TestPlayerClass(unittest.TestCase):
     classifier = {'stochastic': False}
 
     def test_add_noise(self):
-        axelrod.seed(1)
+        axlseed(1)
         noise = 0.2
         s1, s2 = C, C
         noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
@@ -100,7 +101,7 @@ class TestPlayerClass(unittest.TestCase):
         )
 
     def test_noisy_play(self):
-        axelrod.seed(1)
+        axlseed(1)
         noise = 0.2
         player1, player2 = self.player(), self.player()
         player1.strategy = cooperate
@@ -115,17 +116,17 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_clone(self):
         """Tests player cloning."""
-        player1 = axelrod.Random(0.75)  # 0.5 is the default
+        player1 = Random(0.75)  # 0.5 is the default
         player2 = player1.clone()
         turns = 50
-        for op in [axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.TitForTat()]:
+        for op in [Cooperator(), Defector(),
+                   TitForTat()]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)
             for p in [player1, player2]:
-                axelrod.seed(seed)
-                m = axelrod.Match((p, op), turns=turns)
+                axlseed(seed)
+                m = Match((p, op), turns=turns)
                 m.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
@@ -143,7 +144,7 @@ def test_responses(test_class, player1, player2, responses, history1=None,
     """
 
     if seed is not None:
-        axelrod.seed(seed)
+        axlseed(seed)
     # Force the histories, In case either history is impossible or if some
     # internal state needs to be set, actually submit to moves to the strategy
     # method. Still need to append history manually.
@@ -224,10 +225,10 @@ class TestPlayer(unittest.TestCase):
         """Make sure resetting works correctly."""
         player = self.player()
         clone = player.clone()
-        opponent = axelrod.Random()
+        opponent = Random()
 
         for seed in range(10):
-            axelrod.seed(seed)
+            axlseed(seed)
             player.play(opponent)
 
         player.reset()
@@ -283,14 +284,14 @@ class TestPlayer(unittest.TestCase):
 
         turns = 50
         r = random.random()
-        for op in [axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.TitForTat(), axelrod.Random(r)]:
+        for op in [Cooperator(), Defector(),
+                   TitForTat(), Random(r)]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)
             for p in [player1, player2]:
-                axelrod.seed(seed)
-                m = axelrod.Match((p, op), turns=turns)
+                axlseed(seed)
+                m = Match((p, op), turns=turns)
                 m.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
@@ -307,13 +308,13 @@ class TestPlayer(unittest.TestCase):
         # Test tests are likely to throw expected warnings.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            test_responses(self, self.player(), axelrod.Cooperator(),
+            test_responses(self, self.player(), Cooperator(),
                            rCC, C, C, seed=seed)
-            test_responses(self, self.player(), axelrod.Defector(),
+            test_responses(self, self.player(), Defector(),
                            rCD, C, D, seed=seed)
-            test_responses(self, self.player(), axelrod.Cooperator(),
+            test_responses(self, self.player(), Cooperator(),
                            rDC, D, C, seed=seed)
-            test_responses(self, self.player(), axelrod.Defector(),
+            test_responses(self, self.player(), Defector(),
                            rDD, D, D, seed=seed)
 
     def versus_test(self, opponent, expected_actions,
@@ -355,11 +356,11 @@ class TestPlayer(unittest.TestCase):
             init_kwargs = dict()
 
         if seed is not None:
-            axelrod.seed(seed)
+            axlseed(seed)
 
         player = self.player(**init_kwargs)
 
-        match = axelrod.Match((player, opponent), turns=turns, noise=noise,
+        match = Match((player, opponent), turns=turns, noise=noise,
                               match_attributes=match_attributes)
         self.assertEqual(match.play(), expected_actions)
 
@@ -380,7 +381,7 @@ class TestPlayer(unittest.TestCase):
 
         Parameters
         ----------
-        responses: History or sequence of axelrod.Actions
+        responses: History or sequence of Actions
             The expected outcomes
         player_history, opponent_history: sequences of prior history to enforce
         seed: int
@@ -454,9 +455,9 @@ class TestMatch(unittest.TestCase):
         if len(expected_actions1) != len(expected_actions2):
             raise ValueError("Mismatched History lengths.")
         if seed:
-            axelrod.seed(seed)
+            axlseed(seed)
         turns = len(expected_actions1)
-        match = axelrod.Match((player1, player2), turns=turns, noise=noise)
+        match = Match((player1, player2), turns=turns, noise=noise)
         match.play()
         # Test expected sequence of play.
         for i, (outcome1, outcome2) in enumerate(
@@ -470,7 +471,7 @@ class TestMatch(unittest.TestCase):
         """Test the error raised by versus_test if expected actions do not
         match up"""
         with self.assertRaises(ValueError):
-            p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+            p1, p2 = Cooperator(), Cooperator()
             actions1 = [C, C]
             actions2 = [C]
             self.versus_test(p1, p2, actions1, actions2)
