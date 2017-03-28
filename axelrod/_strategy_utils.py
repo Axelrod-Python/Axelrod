@@ -44,7 +44,7 @@ def limited_simulate_play(player_1, player_2, h1):
     player_2's strategy method to set any internal variables as needed. If you
     need a more complete simulation, see `simulate_play` in player.py. This
     function is specifically designed for the needs of MindReader."""
-    h2 = player_2.strategy(player_1)
+    h2 = player_2.strategy_for_simulation(player_1)
     update_history(player_1, h1)
     update_history(player_2, h2)
 
