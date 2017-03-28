@@ -25,7 +25,7 @@ class TestCalculator(TestPlayer):
         self.first_play_test(C)
 
     def test_twenty_rounds_joss_then_defects_for_cyclers(self):
-        """uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
+        """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
         seed = 2
         flip_indices = [1, 3]
         twenty_alternator_actions = [C, D] * 10
@@ -36,7 +36,7 @@ class TestCalculator(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions, seed=seed)
 
     def test_twenty_rounds_joss_then_tit_for_tat_for_non_cyclers(self):
-        """uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
+        """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
         seed = 2
         flip_indices = [1, 2]
 
@@ -94,8 +94,8 @@ class TestCalculator(TestPlayer):
 
 def get_joss_strategy_actions(opponent_moves: list, indices_to_flip: list) -> list:
     """
-    take a list of opponent moves and returns a tuple list of [(Joss moves, opponent moves)]
-    indices_to_flip are the indices where Joss differs from it's expected TitForTat.
+    Takes a list of opponent moves and returns a tuple list of [(Joss moves, opponent moves)].
+    "indices_to_flip" are the indices where Joss differs from it's expected TitForTat.
     Joss is from axelrod.strategies.axelrod_first.
     """
     out = []
