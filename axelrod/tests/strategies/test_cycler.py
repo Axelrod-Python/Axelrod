@@ -35,7 +35,7 @@ class TestAntiCycler(TestPlayer):
             self.assertIsNone(detect_cycle(contains_no_cycles[:slice_at]))
 
     def test_strategy(self):
-        """rounds are CDD  CD  CCD CCCD CCCCD ..."""
+        """Rounds are CDD  CD  CCD CCCD CCCCD ..."""
         anticycler_rounds = [C, D, D, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D]
         num_elements = len(anticycler_rounds)
         against_defector = list(zip(anticycler_rounds, [D] * num_elements))
@@ -105,7 +105,7 @@ def test_cycler_factory(cycle_str):
 
 
 def _get_actions_cycle_against_cooperator(cycle_string: str):
-    """converts str like 'CCDC' to an itertools.cycle against Cooperator [(C, C), (C, C), (D, C), (C, C)]
+    """Converts str like 'CCDC' to an itertools.cycle against Cooperator [(C, C), (C, C), (D, C), (C, C)]
     (Where C=Actions.C, D=Actions.D)"""
     cooperator_opponent_action = C
     action_iterator = str_to_actions(cycle_string)
