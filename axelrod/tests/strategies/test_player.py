@@ -295,20 +295,7 @@ class TestPlayer(unittest.TestCase):
         This method checks that all the attributes of `player` and `clone` are
         the same which is used in the test of the cloning and the resetting.
         """
-
-        for attribute, reset_value in player.__dict__.items():
-            original_value = getattr(clone, attribute)
-
-            if isinstance(reset_value, np.ndarray):
-                self.assertTrue(np.array_equal(reset_value, original_value),
-                                msg=attribute)
-
-            elif isinstance(reset_value, types.GeneratorType) or isinstance(reset_value, itertools.cycle):
-                for _ in range(10):
-                    self.assertEqual(next(reset_value),
-                                     next(original_value), msg=attribute)
-            else:
-                self.assertEqual(reset_value, original_value, msg=attribute)
+        self.assertEqual(player, clone)
 
     def test_clone(self):
         # Test that the cloned player produces identical play
