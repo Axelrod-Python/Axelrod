@@ -99,7 +99,6 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 return strategy_wrapper(self, opponent, proposed_action,
                                         *args, **kwargs)
 
-            # Define a new class and wrap the strategy method
             # Modify the PlayerClass name
             new_class_name = PlayerClass.__name__
             name = PlayerClass.name
@@ -109,11 +108,19 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 new_class_name = ''.join([name_prefix, PlayerClass.__name__])
                 # Modify the Player name (class variable inherited from Player)
                 name = ' '.join([name_prefix, PlayerClass.name])
+
+            # Define the new __repr__ method to add the wrapper arguments
+            # at the end of the name
+            def __repr__(self):
+                name = PlayerClass.__repr__(self)
                 # add eventual transformers' arguments in name
                 prefix = ': '
                 for arg in args:
                     name = ''.join([name, prefix, str(arg)])
                     prefix = ', '
+                return name
+
+            # Define a new class and wrap the strategy method
             # Dynamically create the new class
             new_class = type(
                 new_class_name, (PlayerClass,),
@@ -121,6 +128,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                     "name": name,
                     "original_class": PlayerClass,
                     "strategy": strategy,
+                    "__repr__": __repr__,
                     "__module__": PlayerClass.__module__,
                 })
             return new_class
