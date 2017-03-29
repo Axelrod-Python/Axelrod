@@ -84,10 +84,10 @@ class TestEatherley(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          seed=1)
 
-        opponent = axelrod.MockPlayer([D, C, C, D])
+        opponent = axelrod.MockPlayer(actions=[D, C, C, D])
         actions = [(C, D), (D, C), (C, C), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=8)
-        opponent = axelrod.MockPlayer([D, C, C, D])
+        opponent = axelrod.MockPlayer(actions=[D, C, C, D])
         actions = [(C, D), (D, C), (C, C), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
@@ -122,7 +122,7 @@ class TestTester(TestPlayer):
                          attrs={"is_TFT": True})
 
         # Now play TfT
-        opponent = axelrod.MockPlayer([C, D, C, D, D, C])
+        opponent = axelrod.MockPlayer(actions=[C, D, C, D, D, C])
         actions = [(D, C), (C, D), (C, C), (C, D), (D, D), (D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions,
                          attrs={"is_TFT": True})

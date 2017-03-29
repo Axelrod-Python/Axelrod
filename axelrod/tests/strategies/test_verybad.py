@@ -49,5 +49,5 @@ class TestVeryBad(TestPlayer):
             (D, C),  # P(C) = .375
             (D, D),  # P(C) = .4
         ]
-        mock_player = axelrod.MockPlayer([a[1] for a in expected_actions])
+        mock_player = axelrod.MockPlayer(actions=[a[1] for a in expected_actions])
         self.versus_test(mock_player, expected_actions=expected_actions)
