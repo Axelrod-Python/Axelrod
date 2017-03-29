@@ -47,9 +47,9 @@ class TestMatchOutcomes(unittest.TestCase):
         """A test based on a bug found in the cache.
 
         See: https://github.com/Axelrod-Python/Axelrod/issues/779"""
-        p1 = axelrod.MemoryOnePlayer((0, 0, 0, 0))
-        p2 = axelrod.MemoryOnePlayer((1, 0, 1, 0))
-        p3 = axelrod.MemoryOnePlayer((1, 1, 1, 0))
+        p1 = axelrod.MemoryOnePlayer(four_vector=(0, 0, 0, 0))
+        p2 = axelrod.MemoryOnePlayer(four_vector=(1, 0, 1, 0))
+        p3 = axelrod.MemoryOnePlayer(four_vector=(1, 1, 1, 0))
 
         m = axelrod.Match((p1, p2), turns=3)
         self.assertEqual(m.play(), [('C', 'C'), ('D', 'C'), ('D', 'D')])
