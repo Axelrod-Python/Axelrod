@@ -44,7 +44,6 @@ class Darwin(Player):
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
     def __init__(self) -> None:
-        self.outcomes = None
         self.response = Darwin.genome[0]
         super().__init__()
 
