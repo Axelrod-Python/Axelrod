@@ -12,32 +12,32 @@ class TestMockPlayer(unittest.TestCase):
         actions = [C, C, D]
         history = [C, C, C]
         state_dist = {(C, C): 2, (D, C): 1}
-        m = MockPlayer(actions, history, state_dist)
+        m = MockPlayer(actions=actions, history=history, state_dist=state_dist)
         self.assertEqual(m.history, [C, C, C])
         self.assertEqual(m.state_distribution, state_dist)
 
     def test_strategy(self):
         for action in [C, D]:
-            m = MockPlayer([action])
+            m = MockPlayer(actions=[action])
             p2 = axelrod.Player()
             self.assertEqual(action, m.strategy(p2))
 
         actions = [C, C, D, D, C, C]
-        m = MockPlayer(actions)
+        m = MockPlayer(actions=actions)
         p2 = axelrod.Player()
         for action in actions:
             self.assertEqual(action, m.strategy(p2))
 
     def test_history(self):
         t = TestOpponent()
-        m1 = MockPlayer([C], history=[C] * 10)
+        m1 = MockPlayer(actions=[C], history=[C] * 10)
         self.assertEqual(m1.actions.__next__(), C)
         self.assertEqual(m1.history, [C] * 10)
         self.assertEqual(m1.cooperations, 10)
         self.assertEqual(m1.defections, 0)
         self.assertEqual(m1.strategy(t), C)
 
-        m2 = MockPlayer([D], history=[D] * 10)
+        m2 = MockPlayer(actions=[D], history=[D] * 10)
         self.assertEqual(m2.actions.__next__(), D)
         self.assertEqual(m2.history, [D] * 10)
         self.assertEqual(m2.cooperations, 0)
