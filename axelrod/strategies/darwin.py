@@ -38,8 +38,9 @@ class Darwin(Player):
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
     def __init__(self) -> None:
-        super().__init__()
+        self.outcomes = None
         self.response = Darwin.genome[0]
+        super().__init__()
 
     def receive_match_attributes(self):
         self.outcomes = self.match_attributes["game"].scores
@@ -47,9 +48,7 @@ class Darwin(Player):
     def strategy(self, opponent: Player) -> Action:
         # Frustrate psychics and ensure that simulated rounds
         # do not influence genome.
-        # TODO inspect.stack slows down darwin by factor of 100
         answer = inspect.stack()
-        print(answer[1][3])
         if answer[1][3] not in Darwin.valid_callers:
             return C
 

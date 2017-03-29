@@ -15,7 +15,7 @@ class TestDarwin(TestPlayer):
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
-        'inspects_source': False,
+        'inspects_source': True,
         'manipulates_source': False,
         'manipulates_state': True
     }
@@ -33,21 +33,23 @@ class TestDarwin(TestPlayer):
     def test_strategy(self):
         p1 = self.player()
         p1.reset()
-        print(p1.genome)
-        p2 = axelrod.Cooperator()
-        self.assertEqual(p1.strategy(p2), C)  # Always cooperate first.
-        for i in range(10):
-            p1.play(p2)
-            print('cooper round {}: {}'.format(i, p1.genome))
-        self.assertEqual(p1.strategy(p2), C)
+        self.versus_test(axelrod.Cooperator(), [(C, C)] * 5)
+        self.assertEqual(p1.genome, [C] * 5)
 
-        p1 = self.player()
-        p2 = axelrod.Defector()
-        self.assertEqual(p1.strategy(p2), C)  # Always cooperate first.
-        for i in range(10):
-            p1.play(p2)
-            print('defect round {}: {}'.format(i, p1.genome))
-        self.assertEqual(p1.strategy(p2), C)
+        self.versus_test(axelrod.Defector(), [(C, D)] * 5)
+        self.assertEqual(p1.genome, [D] * 4 + [C])
+
+        # uses genome
+        self.versus_test(axelrod.Cooperator(), [(C, C)] + [(D, C)] * 3 + [(C, C)] * 2)
+
+    def test_against_geller_and_mindreader(self):
+        self.assertEqual(len(self.player.genome), 1)
+
+        self.versus_test(axelrod.GellerCooperator(), [(C, C)] * 2)
+        self.assertEqual(len(self.player.genome), 2)
+        #
+        self.versus_test(axelrod.MindReader(), [(C, D)] * 2)
+        self.assertEqual(len(self.player.genome), 2)
 
     def test_play(self):
         """valid_callers must contain at least one entry..."""
