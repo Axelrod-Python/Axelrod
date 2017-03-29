@@ -7,6 +7,7 @@ import inspect
 from axelrod.actions import Action, Actions
 from axelrod.player import Player
 
+from typing import List
 
 C, D = Actions.C, Actions.D
 
