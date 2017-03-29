@@ -59,7 +59,3 @@ class TestStalker(TestPlayer):
         # defect in last round
         actions = [(C, C)] * 199 + [(D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 200})
-        
-        # length unknown will not defect in last round
-        actions = [(C, C)] * 6
-        self.versus_test(opponent=axelrod.MockPlayer([C]), expected_actions=actions, match_attributes={"length":-1})
