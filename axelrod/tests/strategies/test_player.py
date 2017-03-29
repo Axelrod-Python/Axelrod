@@ -115,7 +115,7 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_clone(self):
         """Tests player cloning."""
-        player1 = axelrod.Random(0.75)  # 0.5 is the default
+        player1 = axelrod.Random(p=0.75)  # 0.5 is the default
         player2 = player1.clone()
         turns = 50
         for op in [axelrod.Cooperator(), axelrod.Defector(),
@@ -284,7 +284,7 @@ class TestPlayer(unittest.TestCase):
         turns = 50
         r = random.random()
         for op in [axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.TitForTat(), axelrod.Random(r)]:
+                   axelrod.TitForTat(), axelrod.Random(p=r)]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)
