@@ -21,26 +21,45 @@ class TestStalker(TestPlayer):
     }
 
     def test_strategy(self):
+        
         # Start with cooperation
         self.first_play_test(C)
 
         # current_average_score > very_good_score
-        self.responses_test([D], [C] * 2 + [D] * 4, [D] * 2 + [C] * 4)
-        self.responses_test([D], [D] * 2 + [C] * 4, [C] * 6)
-
+        actions = [(C, D), (C, D), (C, C), (D, C), (C, C), (D, D)]
+        self.versus_test(opponent=axelrod.MockPlayer([D] * 2 + [C] * 3), expected_actions=actions)
+        
+        actions = [(C, C), (C, C), (C, D), (D, D), (D, D), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.MockPlayer([C] * 2 + [D] * 4), expected_actions=actions)
+        
         # wish_score < current_average_score < very_good_score
-        self.responses_test([C], [C] * 7 + [D] * 2, [C] * 7 + [D] * 2)
-        self.responses_test([C], [C] * 7 + [C], [C] * 7 + [D])
-
+        actions = [(C, C)] * 7 + [(C, D), (C, D), (C, C), (C, C), (D, C)]
+        self.versus_test(opponent=axelrod.MockPlayer([C] * 7 + [D] * 2), expected_actions=actions)
+        
+        actions = [(C, C)] * 7 + [(C, D), (C, C), (D, C)]
+        self.versus_test(opponent=axelrod.MockPlayer([C] * 7 + [D]), expected_actions=actions)
+       
         # current_average_score > 2
-        self.responses_test([C], [C] * 10, [C] * 10)
-
+        actions = [(C, C)] * 9 + [(D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+    
         # 1 < current_average_score < 2
-        self.responses_test([D], [C] * 7 + [C] * 5, [C] * 7 + [D] * 5)
+        actions = [(C, C)] * 7 + [(C, D)] * 4 + [(D, D)]
+        self.versus_test(opponent=axelrod.MockPlayer([C] * 7 + [D] * 5), expected_actions=actions)
 
         # current_average_score < 1
-        self.responses_test([D], [D] * 7 + [C] * 5, [D] * 7 + [D] * 5, seed = 6)
-        self.responses_test([C], [D] * 7 + [C] * 5, [D] * 7 + [D] * 5, seed = 7)
-
+        actions = [(C, D)] + [(D, D)] * 2 + [(C, D)] * 3 + [(D, D),
+                   (C, D), (D, D), (C, D), (D, D), (C, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=6)
+        
+        actions = [(C, D)] * 3 + [(D, D), (C, D), (D, D), (C, D),
+                   (C, D), (D, D), (C, D), (C, D), (C, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=7)
+       
         # defect in last round
-        self.responses_test([C, D], [C] * 198, [C] * 198, length=200)
+        actions = [(C, C)] * 199 + [(D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 200})
+        
+        # length unknown will not defect in last round
+        actions = [(C, C)] * 6
+        self.versus_test(opponent=axelrod.MockPlayer([C]), expected_actions=actions, match_attributes={"length":-1})
