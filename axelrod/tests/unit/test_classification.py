@@ -23,24 +23,24 @@ class TestClassification(unittest.TestCase):
     def test_multiple_instances(self):
         """Certain instances of classes of strategies will have different
         classifiers based on the initialisation variables"""
-        P1 = axl.MemoryOnePlayer((.5, .5, .5, .5))
-        P2 = axl.MemoryOnePlayer((1, 0, 0, 1))
+        P1 = axl.MemoryOnePlayer(four_vector=(.5, .5, .5, .5))
+        P2 = axl.MemoryOnePlayer(four_vector=(1, 0, 0, 1))
         self.assertNotEqual(P1.classifier, P2.classifier)
 
         P1 = axl.Joss()
-        P2 = axl.Joss(0)
+        P2 = axl.Joss(p=0)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
-        P1 = axl.GTFT(1)
-        P2 = axl.GTFT(.5)
+        P1 = axl.GTFT(p=1)
+        P2 = axl.GTFT(p=.5)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
         P1 = axl.StochasticWSLS()
-        P2 = axl.StochasticWSLS(0)
+        P2 = axl.StochasticWSLS(ep=0)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
-        P1 = axl.GoByMajority(5)
-        P2 = axl.StochasticWSLS(.1)
+        P1 = axl.GoByMajority(memory_depth=5)
+        P2 = axl.StochasticWSLS(ep=.1)
         self.assertNotEqual(P1.classifier, P2.classifier)
 
     def test_manipulation_of_classifier(self):
