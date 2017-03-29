@@ -170,9 +170,6 @@ class GTFT(MemoryOnePlayer):
         four_vector = [1, self.p, 1, self.p]
         self.set_four_vector(four_vector)
 
-    def __repr__(self) -> str:
-        return "%s: %s" % (self.name, round(self.p, 2))
-
 
 class FirmButFair(MemoryOnePlayer):
     """A strategy that cooperates on the first move, and cooperates except after
@@ -445,9 +442,6 @@ class SoftJoss(MemoryOnePlayer):
         self.q = q
         four_vector = (1., 1 - q, 1, 1 - q)
         super().__init__(four_vector)
-
-    def __repr__(self) -> str:
-        return "%s: %s" % (self.name, round(self.q, 2))
 
 
 class ALLCorALLD(Player):

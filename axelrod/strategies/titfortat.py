@@ -552,10 +552,6 @@ class AdaptiveTitForTat(Player):
         self.world = 0.5
         self.rate = self.starting_rate
 
-    def __repr__(self) -> str:
-
-        return "%s: %s" % (self.name, round(self.rate, 2))
-
 
 class SpitefulTitForTat(Player):
     """

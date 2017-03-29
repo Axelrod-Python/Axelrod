@@ -68,7 +68,6 @@ class Cycler(Player):
         """
         super().__init__()
         self.cycle = cycle
-        self.name = "Cycler {}".format(cycle)
         self.classifier['memory_depth'] = len(cycle) - 1
 
     def strategy(self, opponent: Player) -> Action:

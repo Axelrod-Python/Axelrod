@@ -2,6 +2,7 @@ from collections import defaultdict
 from functools import wraps
 import random
 import copy
+import inspect
 
 from axelrod.actions import Actions, flip_action, Action
 from .game import DefaultGame
@@ -84,12 +85,17 @@ class Player(object):
         'manipulates_state': None
     }
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, **kwargs):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
-        obj.init_args = args
-        obj.init_kwargs = kwargs
+        obj.init_kwargs = cls.init_params(**kwargs)
         return obj
+
+    @classmethod
+    def init_params(cls, **kwargs):
+        boundargs = inspect.signature(cls.__init__).bind_partial(**kwargs)
+        boundargs.apply_defaults()
+        return boundargs.arguments
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
@@ -122,8 +128,15 @@ class Player(object):
         self.receive_match_attributes()
 
     def __repr__(self):
-        """The string method for the strategy."""
-        return self.name
+        """The string method for the strategy.
+        Appends the `__init__` parameters to the strategy's name."""
+        name =  self.name
+        prefix = ': '
+        gen = (value for value in self.init_kwargs.values() if value is not None)
+        for value in gen:
+            name = ''.join([name, prefix, str(value if not isinstance(value, float) else round(value, 2))])
+            prefix = ', '
+        return name
 
     @staticmethod
     def _add_noise(noise, s1, s2):

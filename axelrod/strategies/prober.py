@@ -281,9 +281,6 @@ class NaiveProber(Player):
         choice = random_choice(1 - self.p)
         return choice
 
-    def __repr__(self) -> str:
-        return "%s: %s" % (self.name, round(self.p, 2))
-
 
 class RemorsefulProber(NaiveProber):
     """
