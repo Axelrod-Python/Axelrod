@@ -48,8 +48,8 @@ class TestCalculator(TestPlayer):
 
         opponent_actions = twenty_non_cyclical_actions + subsequent_opponent_actions
         test_actions = twenty_test_actions + subsequent_test_actions
-        self.versus_test(axelrod.MockPlayer(twenty_non_cyclical_actions), twenty_test_actions, seed=seed)
-        self.versus_test(axelrod.MockPlayer(opponent_actions), test_actions, seed=seed)
+        self.versus_test(axelrod.MockPlayer(actions=twenty_non_cyclical_actions), twenty_test_actions, seed=seed)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), test_actions, seed=seed)
 
     def test_edge_case_calculator_sees_cycles_of_size_ten(self):
         seed = 3
@@ -59,7 +59,7 @@ class TestCalculator(TestPlayer):
         ten_cycle_twenty_rounds = get_joss_strategy_actions(ten_length_cycle * 2, indices_to_flip=[16])
         opponent_actions = ten_length_cycle * 2 + [C, D, C]
         expected = ten_cycle_twenty_rounds + [(D, C), (D, D), (D, C)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected, seed=seed)
 
     def test_edge_case_calculator_ignores_cycles_gt_len_ten(self):
         seed = 3
@@ -71,7 +71,7 @@ class TestCalculator(TestPlayer):
         self.assertEqual(detect_cycle(opponent_actions), tuple(eleven_length_cycle))
 
         uses_tit_for_tat_after_twenty_rounds = twenty_rounds + [(D, C), (C, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), uses_tit_for_tat_after_twenty_rounds, seed=seed)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), uses_tit_for_tat_after_twenty_rounds, seed=seed)
 
     def attribute_equality_test(self, player, clone):
         """Overwrite the default test to check Joss instance"""
