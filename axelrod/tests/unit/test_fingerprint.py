@@ -67,7 +67,7 @@ class TestFingerprint(unittest.TestCase):
     def test_create_jossann_parametrised_player(self):
         fingerprint = AshlockFingerprint(self.strategy)
 
-        probe = axl.Random(0.1)
+        probe = axl.Random(p=0.1)
 
         # x + y < 1
         ja = fingerprint.create_jossann((.5, .4), probe)
