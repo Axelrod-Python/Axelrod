@@ -157,7 +157,7 @@ class Player(object):
         # be significant changes required throughout the library.
         # Override in special cases only if absolutely necessary
         cls = self.__class__
-        new_player = cls(*self.init_args, **self.init_kwargs)
+        new_player = cls(**self.init_kwargs)
         new_player.match_attributes = copy.copy(self.match_attributes)
         return new_player
 
