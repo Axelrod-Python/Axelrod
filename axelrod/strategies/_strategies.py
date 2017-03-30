@@ -34,7 +34,7 @@ from .gobymajority import (GoByMajority,
     HardGoByMajority5)
 from .gradualkiller import GradualKiller
 from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
-    SoftGrudger, GrudgerAlternator, EasyGo)
+    SoftGrudger, GrudgerAlternator, EasyGo, GeneralSoftGrudger)
 from .grumpy import Grumpy
 from .handshake import Handshake
 from .hmm import HMMPlayer, EvolvedHMM5
@@ -146,6 +146,7 @@ all_strategies = [
     Geller,
     GellerCooperator,
     GellerDefector,
+    GeneralSoftGrudger,
     GoByMajority,
     GoByMajority10,
     GoByMajority20,

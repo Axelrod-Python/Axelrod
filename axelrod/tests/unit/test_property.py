@@ -233,7 +233,8 @@ class TestProbEndSpatialTournament(unittest.TestCase):
             self.assertIn(str(p), basic_player_names)
 
     @given(tournament=prob_end_spatial_tournaments(strategies=stochastic_strategies,
-                                          max_size=3))
+                                                   max_size=3,
+                                                   min_prob_end=0.2))
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_stochastic_strategies(self, tournament):
         self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)

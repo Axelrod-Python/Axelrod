@@ -1,3 +1,8 @@
+"""
+The player classes in this module do not obey standard rules of the IPD (as
+indicated by their classifier). We do not recommend putting a lot of time in to
+optimising them.
+"""
 import inspect
 
 from axelrod.actions import Actions, Action

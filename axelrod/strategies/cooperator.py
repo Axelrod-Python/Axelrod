@@ -37,13 +37,23 @@ class TrickyCooperator(Player):
         'manipulates_state': False
     }
 
-    @staticmethod
-    def strategy(opponent: Player) -> Action:
+    _min_history_required_to_try_trickiness = 3
+    _max_history_depth_for_trickiness = -10
+
+    def strategy(self, opponent: Player) -> Action:
         """Almost always cooperates, but will try to trick the opponent by defecting.
 
-        Defect once in a while in order to get a better payout, when the opponent
-        has not defected in the last ten turns and only cooperated during last 3 turns.
+        Defect once in a while in order to get a better payout.
+        After 3 rounds, if opponent has not defected to a max history depth of 10, Defect.
         """
-        if D not in opponent.history[-10:] and opponent.history[-3:] == [C]*3:
+        if (self._has_played_enough_rounds_to_be_tricky() and
+                self._opponents_has_cooperated_enough_to_be_tricky(opponent)):
             return D
         return C
+
+    def _has_played_enough_rounds_to_be_tricky(self):
+        return len(self.history) >= self._min_history_required_to_try_trickiness
+
+    def _opponents_has_cooperated_enough_to_be_tricky(self, opponent):
+        rounds_to_be_checked = opponent.history[self._max_history_depth_for_trickiness:]
+        return D not in rounds_to_be_checked
