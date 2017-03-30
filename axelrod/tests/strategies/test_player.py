@@ -42,7 +42,7 @@ class TestPlayerParameters(unittest.TestCase):
 
         # Test that the init_kwargs dict exists and is empty
         player = Player()
-        assert player.init_kwargs == {}
+        self.assertEqual(player.init_kwargs, {})
 
         # Test that passing a postional argument raises an error
         with self.assertRaises(TypeError):
@@ -57,12 +57,12 @@ class TestPlayerParameters(unittest.TestCase):
 
         # Test that the init_kwargs dict exists and is empty
         player = ParameterisedPlayer()
-        assert player.init_kwargs == {}
+        self.assertEqual(player.init_kwargs, {})
 
         # Test that passing a keyword argument successfully sets the
         # init_kwargs dict
         player = ParameterisedPlayer(parameter1='test')
-        assert player.init_kwargs == {'parameter1': 'test'}
+        self.assertEqual(player.init_kwargs, {'parameter1': 'test'})
 
         # Test that passing an unknown keyword argument raises an error
         with self.assertRaises(TypeError):
