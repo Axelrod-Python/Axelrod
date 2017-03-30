@@ -62,8 +62,7 @@ class TestPlayerParameters(unittest.TestCase):
         # Test that passing a keyword argument successfully sets the
         # init_kwargs dict
         player = ParameterisedPlayer(parameter1='test')
-        assert 'parameter1' in player.init_kwargs
-        assert player.init_kwargs['parameter1'] == 'test'
+        assert player.init_kwargs == {'parameter1': 'test'}
 
         # Test that passing a positional argument raises an error
         with self.assertRaises(TypeError):
