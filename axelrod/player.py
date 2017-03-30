@@ -88,13 +88,19 @@ class Player(object):
     def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
-        obj.init_args = ()
-        obj.init_kwargs = cls.init_params(**kwargs)
+        obj.init_kwargs = cls.init_params(*args, **kwargs)
+        if 'self' in obj.init_kwargs.keys():
+            print(obj.init_kwargs)
         return obj
 
     @classmethod
-    def init_params(cls, **kwargs):
-        boundargs = inspect.signature(cls.__init__).bind_partial(**kwargs)
+    def init_params(cls,*args, **kwargs):
+        sig = inspect.signature(cls.__init__)
+        # the 'self' parameter needs to be removed or the first *args will be assigned to it
+        new_params = dict(sig.parameters)
+        if new_params.pop('self', None) is not None:
+            sig = sig.replace(parameters=new_params.values())
+        boundargs = sig.bind_partial(*args, **kwargs)
         boundargs.apply_defaults()
         return boundargs.arguments
 
@@ -172,7 +178,7 @@ class Player(object):
         # be significant changes required throughout the library.
         # Override in special cases only if absolutely necessary
         cls = self.__class__
-        new_player = cls(*self.init_args, **self.init_kwargs)
+        new_player = cls(**self.init_kwargs)
         new_player.match_attributes = copy.copy(self.match_attributes)
         return new_player
 
