@@ -130,6 +130,8 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 
+    #TODO: add test_repr
+
 
 def test_responses(test_class, player1, player2, responses, history1=None,
                    history2=None, seed=None, attrs=None):

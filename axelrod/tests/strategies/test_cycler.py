@@ -31,7 +31,7 @@ def test_cycler_factory(cycle):
 
     class TestCycler(TestPlayer):
 
-        name = "Cycler %s" % cycle
+        name = "Cycler %s: %s" % (cycle, cycle)
         player = getattr(axelrod, 'Cycler%s' % cycle)
         expected_classifier = {
             'memory_depth': len(cycle) - 1,

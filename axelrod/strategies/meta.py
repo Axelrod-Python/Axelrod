@@ -152,7 +152,6 @@ class MetaWinner(MetaPlayer):
 
 
 NiceMetaWinner = NiceTransformer()(MetaWinner)
-NiceMetaWinner.name = "Nice Meta Winner"
 
 
 class MetaWinnerEnsemble(MetaWinner):
@@ -179,7 +178,6 @@ class MetaWinnerEnsemble(MetaWinner):
 
 
 NiceMetaWinnerEnsemble = NiceTransformer()(MetaWinnerEnsemble)
-NiceMetaWinnerEnsemble.name = "Nice Meta Winner Ensemble"
 
 
 class MetaHunter(MetaPlayer):
