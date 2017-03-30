@@ -53,7 +53,7 @@ class TestDarwin(TestPlayer):
 
     def test_play(self):
         """valid_callers must contain at least one entry..."""
-        self.assertTrue(len(self.player.valid_callers)>0)
+        self.assertTrue(len(self.player.valid_callers) > 0)
         """...and should allow round_robin.play to call"""
         self.assertTrue("play" in self.player.valid_callers)
         self.play()

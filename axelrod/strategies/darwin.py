@@ -44,8 +44,8 @@ class Darwin(Player):
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
     def __init__(self) -> None:
-        self.response = Darwin.genome[0]
         super().__init__()
+        self.response = Darwin.genome[0]
 
     def receive_match_attributes(self):
         self.outcomes = self.match_attributes["game"].scores
@@ -53,8 +53,7 @@ class Darwin(Player):
     def strategy(self, opponent: Player) -> Action:
         # Frustrate psychics and ensure that simulated rounds
         # do not influence genome.
-        answer = inspect.stack()
-        if answer[1][3] not in Darwin.valid_callers:
+        if inspect.stack()[1][3] not in Darwin.valid_callers:
             return C
 
         trial = len(self.history)
