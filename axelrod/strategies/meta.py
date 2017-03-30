@@ -1,3 +1,7 @@
+import types
+import itertools
+import numpy as np
+
 from axelrod.actions import Actions
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategy_transformers import NiceTransformer
@@ -52,9 +56,47 @@ class MetaPlayer(Player):
                     'manipulates_source',
                     'manipulates_state']:
             self.classifier[key] = any(t.classifier[key] for t in self.team)
-
         for t in self.team:
             self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
+
+    def __eq__(self, other):
+        """
+        Override Player.__eq__ to test equality of self.team
+        """
+        if self.__repr__() != other.__repr__():
+            return False
+        for attribute, value in self.__dict__.items():
+            other_value = getattr(other, attribute, None)
+
+            if isinstance(value, np.ndarray):
+                if not (np.array_equal(value, other_value)):
+                    return False
+
+            elif isinstance(value, types.GeneratorType) or isinstance(value, itertools.cycle):
+                if not (all(next(value) == next(other_value) for _ in range(10))):
+                    return False
+            elif isinstance(value, list):
+                for p1, p2 in zip(self.team, other.team):
+                    if p1.history != p2.history:
+                        return False
+                team_player_names = [p.__repr__() for p in self.team]
+                team_clone_names = [p.__repr__() for p in other.team]
+                if team_player_names != team_clone_names:
+                    return False    
+            else:
+                if value != other_value and not isinstance(value, list):
+                    return False
+        return True
+        
+    # def attribute_equality_test(self, player, clone):
+    #     """Overwriting this specific method to check team."""
+    #     for p1, p2 in zip(player.team, clone.team):
+    #         self.assertEqual(len(p1.history), 0)
+    #         self.assertEqual(len(p2.history), 0)
+
+    #     team_player_names = [p.__repr__() for p in player.team]
+    #     team_clone_names = [p.__repr__() for p in clone.team]
+    #     self.assertEqual(team_player_names, team_clone_names)
 
     def strategy(self, opponent):
         # Get the results of all our players.

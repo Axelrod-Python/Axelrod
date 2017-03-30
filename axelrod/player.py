@@ -71,7 +71,6 @@ def update_state_distribution(player, action, reply):
 
 class Player(object):
     """A class for a player in the tournament.
-
     This is an abstract base class, not intended to be used directly.
     """
 

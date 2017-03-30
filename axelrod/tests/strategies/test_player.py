@@ -5,13 +5,9 @@ import types
 import itertools
 import numpy as np
 
-from axelrod import DefaultGame, MockPlayer, Player, simulate_play, Match, seed as axlseed
-from axelrod.actions import Actions, flip_action, Action
-from axelrod.player import get_state_distribution_from_history
-from axelrod.strategies import Cooperator, Random, Defector, TitForTat
+import axelrod as axl
 
-
-C, D = Actions.C, Actions.D
+C, D = axl.Actions.C, axl.Actions.D
 
 
 # Generic strategy functions for testing
@@ -30,12 +26,12 @@ def randomize(*args):
 
 class TestPlayerClass(unittest.TestCase):
 
-    name = "Player"
-    player = Player
+    name = "axl.Player"
+    player = axl.Player
     classifier = {'stochastic': False}
 
     def test_add_noise(self):
-        axlseed(1)
+        axl.seed(1)
         noise = 0.2
         s1, s2 = C, C
         noisy_s1, noisy_s2 = self.player()._add_noise(noise, s1, s2)
@@ -83,7 +79,7 @@ class TestPlayerClass(unittest.TestCase):
         history_1 = [C, C, D, D, C]
         history_2 = [C, D, C, D, D]
         for h1, h2 in zip(history_1, history_2):
-            simulate_play(player1, player2, h1, h2)
+            axl.simulate_play(player1, player2, h1, h2)
         self.assertEqual(player1.state_distribution,
                          {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1})
         self.assertEqual(player2.state_distribution,
@@ -93,7 +89,7 @@ class TestPlayerClass(unittest.TestCase):
         player = self.player()
         history_1 = [C, C, D, D, C]
         history_2 = [C, D, C, D, D]
-        get_state_distribution_from_history(
+        axl.get_state_distribution_from_history(
             player, history_1, history_2)
         self.assertEqual(
             player.state_distribution,
@@ -101,7 +97,7 @@ class TestPlayerClass(unittest.TestCase):
         )
 
     def test_noisy_play(self):
-        axlseed(1)
+        axl.seed(1)
         noise = 0.2
         player1, player2 = self.player(), self.player()
         player1.strategy = cooperate
@@ -116,17 +112,17 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_clone(self):
         """Tests player cloning."""
-        player1 = Random(0.75)  # 0.5 is the default
+        player1 = axl.Random(0.75)  # 0.5 is the default
         player2 = player1.clone()
         turns = 50
-        for op in [Cooperator(), Defector(),
-                   TitForTat()]:
+        for op in [axl.Cooperator(), axl.Defector(),
+                   axl.TitForTat()]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)
             for p in [player1, player2]:
-                axlseed(seed)
-                m = Match((p, op), turns=turns)
+                axl.seed(seed)
+                m = axl.Match((p, op), turns=turns)
                 m.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
@@ -144,23 +140,23 @@ def test_responses(test_class, player1, player2, responses, history1=None,
     """
 
     if seed is not None:
-        axlseed(seed)
+        axl.seed(seed)
     # Force the histories, In case either history is impossible or if some
     # internal state needs to be set, actually submit to moves to the strategy
     # method. Still need to append history manually.
     if history1 and history2:
         for h1, h2 in zip(history1, history2):
-            s1, s2 = simulate_play(player1, player2, h1, h2)
+            s1, s2 = axl.simulate_play(player1, player2, h1, h2)
     # Run the tests
     for response in responses:
-        s1, s2 = simulate_play(player1, player2)
+        s1, s2 = axl.simulate_play(player1, player2)
         test_class.assertEqual(s1, response)
     if attrs:
         for attr, value in attrs.items():
             test_class.assertEqual(getattr(player1, attr), value)
 
 
-class TestOpponent(Player):
+class TestOpponent(axl.Player):
     """A player who only exists so we have something to test against"""
 
     name = 'TestPlayer'
@@ -190,7 +186,7 @@ class TestPlayer(unittest.TestCase):
             self.assertEqual(len(player.history), 0)
             self.assertEqual(
                 player.match_attributes,
-                {'length': -1, 'game': DefaultGame, 'noise': 0})
+                {'length': -1, 'game': axl.DefaultGame, 'noise': 0})
             self.assertEqual(player.cooperations, 0)
             self.assertEqual(player.defections, 0)
             self.classifier_test(self.expected_class_classifier)
@@ -225,10 +221,10 @@ class TestPlayer(unittest.TestCase):
         """Make sure resetting works correctly."""
         player = self.player()
         clone = player.clone()
-        opponent = Random()
+        opponent = axl.Random()
 
         for seed in range(10):
-            axlseed(seed)
+            axl.seed(seed)
             player.play(opponent)
 
         player.reset()
@@ -237,65 +233,71 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(player.defections, 0)
         self.assertEqual(player.state_distribution, dict())
 
-        self.attribute_equality_test(player, clone)
+        self.assertEqual(player, clone)
 
     def test_reset_clone(self):
         """Make sure history resetting with cloning works correctly, regardless
         if self.test_reset() is overwritten."""
         player = self.player()
         clone = player.clone()
-        self.attribute_equality_test(player, clone)
+        self.assertEqual(player, clone)
 
     def test_equal(self):
         """Test the player's `__eq__` function."""
-        player1 = Cooperator()
-        player2 = Cooperator()
+        player1 = axl.Cooperator()
+        player2 = axl.Cooperator()
         self.assertEqual(player1, player1)
-        #Test with a difference in name attribute
+
+    def test_not_equal_name(self):
+        """Test with a difference in name attribute"""
+        player1 = axl.Cooperator()
+        player2 = axl.Cooperator()
         player2.name = "Defector"
         self.assertNotEqual(player1, player2)
-        #Test with a difference in classifier attribute
-        player2 = Cooperator()
+    
+    def test_not_equal_classifier(self):
+        """Test with a difference in classifier attribute"""
+        player1 = axl.Cooperator()
+        player2 = axl.Cooperator()
         player2.classifier['long_run_time'] = True
         self.assertNotEqual(player1, player2)
-        #Test with a numpy.ndarray type attribute
-        player2 = Cooperator()
+    
+    def test_equal_numpy(self):
+        """Test with a numpy.ndarray type attribute"""
+        player1 = axl.Cooperator()
+        player2 = axl.Cooperator()
         player1.test_np_array = np.ndarray(1)
         player2.test_np_array = player1.test_np_array
         self.assertEqual(player1, player2)
         player2.test_np_array = np.ndarray(2)
         self.assertNotEqual(player1, player2)
-        #Test with a Generator type attribute
-        player1 = Cooperator()
-        player2 = Cooperator()
+    
+    def test_equal_generator(self):
+        """Test with a Generator type attribute"""
+        player1 = axl.Cooperator()
+        player2 = axl.Cooperator()
         player1.test_generator = range(10)
         player2.test_generator = range(5, 25)
         self.assertNotEqual(player1, player2)
         player2.test_generator = range(10)
         self.assertEqual(player1, player2)
-        #Test with an itertools generator type attribute
-        player1 = Cooperator()
-        player2 = Cooperator()
+    
+    def test_equal_itertools(self):
+        """Test with an itertools generator type attribute"""
+        player1 = axl.Cooperator()
+        player2 = axl.Cooperator()
         player1.test_itertools = itertools.count(10)
         player2.test_itertools = itertools.repeat(10, 3)
         self.assertNotEqual(player1, player2)
         player2.test_itertools = player1.test_itertools
         self.assertEqual(player1, player2)
-        #Test difference in __repr__() return
-        player2 = Cooperator()
+
+    def test_not_equal_repr(self):
+        """Test difference in __repr__() return"""
+        player1 = axl.Cooperator()
+        player2 = axl.Cooperator()
         player2.__repr__ = lambda: "Defector"
         self.assertNotEqual(player1, player2)
-
-
-
-    def attribute_equality_test(self, player, clone):
-        """A separate method to test equality of attributes. This method can be
-        overwritten in certain cases.
-
-        This method checks that all the attributes of `player` and `clone` are
-        the same which is used in the test of the cloning and the resetting.
-        """
-        self.assertEqual(player, clone)
 
     def test_clone(self):
         # Test that the cloned player produces identical play
@@ -313,14 +315,14 @@ class TestPlayer(unittest.TestCase):
 
         turns = 50
         r = random.random()
-        for op in [Cooperator(), Defector(),
-                   TitForTat(), Random(r)]:
+        for op in [axl.Cooperator(), axl.Defector(),
+                   axl.TitForTat(), axl.Random(r)]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)
             for p in [player1, player2]:
-                axlseed(seed)
-                m = Match((p, op), turns=turns)
+                axl.seed(seed)
+                m = axl.Match((p, op), turns=turns)
                 m.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
@@ -337,13 +339,13 @@ class TestPlayer(unittest.TestCase):
         # Test tests are likely to throw expected warnings.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            test_responses(self, self.player(), Cooperator(),
+            test_responses(self, self.player(), axl.Cooperator(),
                            rCC, C, C, seed=seed)
-            test_responses(self, self.player(), Defector(),
+            test_responses(self, self.player(), axl.Defector(),
                            rCD, C, D, seed=seed)
-            test_responses(self, self.player(), Cooperator(),
+            test_responses(self, self.player(), axl.Cooperator(),
                            rDC, D, C, seed=seed)
-            test_responses(self, self.player(), Defector(),
+            test_responses(self, self.player(), axl.Defector(),
                            rDD, D, D, seed=seed)
 
     def versus_test(self, opponent, expected_actions,
@@ -356,9 +358,9 @@ class TestPlayer(unittest.TestCase):
         Parameters:
         -----------
 
-        opponent: Player or list
+        opponent: axl.Player or list
             An instance of a player OR a sequence of actions. If a sequence of
-            actions is passed, a Mock Player is created that cycles over that
+            actions is passed, a Mock axl.Player is created that cycles over that
             sequence.
         expected_actions: List
             The expected outcomes of the match (list of tuples of actions).
@@ -385,11 +387,11 @@ class TestPlayer(unittest.TestCase):
             init_kwargs = dict()
 
         if seed is not None:
-            axlseed(seed)
+            axl.seed(seed)
 
         player = self.player(**init_kwargs)
 
-        match = Match((player, opponent), turns=turns, noise=noise,
+        match = axl.Match((player, opponent), turns=turns, noise=noise,
                               match_attributes=match_attributes)
         self.assertEqual(match.play(), expected_actions)
 
@@ -410,7 +412,7 @@ class TestPlayer(unittest.TestCase):
 
         Parameters
         ----------
-        responses: History or sequence of Actions
+        responses: History or sequence of axl.Actions
             The expected outcomes
         player_history, opponent_history: sequences of prior history to enforce
         seed: int
@@ -432,7 +434,7 @@ class TestPlayer(unittest.TestCase):
 
         player1 = self.player(*init_args, **init_kwargs)
         player1.set_match_attributes(length=length)
-        player2 = MockPlayer()
+        player2 = axl.MockPlayer()
         player2.set_match_attributes(length=length)
         test_responses(self, player1, player2, responses, player_history,
                        opponent_history, seed=seed, attrs=attrs)
@@ -484,9 +486,9 @@ class TestMatch(unittest.TestCase):
         if len(expected_actions1) != len(expected_actions2):
             raise ValueError("Mismatched History lengths.")
         if seed:
-            axlseed(seed)
+            axl.seed(seed)
         turns = len(expected_actions1)
-        match = Match((player1, player2), turns=turns, noise=noise)
+        match = axl.Match((player1, player2), turns=turns, noise=noise)
         match.play()
         # Test expected sequence of play.
         for i, (outcome1, outcome2) in enumerate(
@@ -500,7 +502,7 @@ class TestMatch(unittest.TestCase):
         """Test the error raised by versus_test if expected actions do not
         match up"""
         with self.assertRaises(ValueError):
-            p1, p2 = Cooperator(), Cooperator()
+            p1, p2 = axl.Cooperator(), axl.Cooperator()
             actions1 = [C, C]
             actions2 = [C]
             self.versus_test(p1, p2, actions1, actions2)
