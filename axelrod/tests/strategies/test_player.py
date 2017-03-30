@@ -27,6 +27,49 @@ def randomize(*args):
     return random.choice([C, D])
 
 
+class ParameterisedPlayer(Player):
+    """A simple Player class for testing init parameters"""
+
+    def __init__(self, parameter1=None):
+        super().__init__()
+
+
+class TestPlayerParameters(unittest.TestCase):
+    """A class to test the initialisation parameters of Players"""
+
+    def test_player(self):
+        """Tests for Players with no init parameters"""
+
+        # Test that the init_kwargs dict exists and is empty
+        player = Player()
+        assert player.init_kwargs == {}
+
+        # Test that passing a postional argument raises an error
+        with self.assertRaises(TypeError):
+            player = Player('test')
+
+        # Test that passing a keyword argument raises an error
+        with self.assertRaises(TypeError):
+            player = Player(parameter1='test')
+
+    def test_parameterised_player(self):
+        """Tests for Players with init parameters"""
+
+        # Test that the init_kwargs dict exists and is empty
+        player = ParameterisedPlayer()
+        assert player.init_kwargs == {}
+
+        # Test that passing a keyword argument successfully sets the
+        # init_kwargs dict
+        player = ParameterisedPlayer(parameter1='test')
+        assert 'parameter1' in player.init_kwargs
+        assert player.init_kwargs['parameter1'] == 'test'
+
+        # Test that passing a positional argument raises an error
+        with self.assertRaises(TypeError):
+            player = ParameterisedPlayer('test')
+
+
 class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
