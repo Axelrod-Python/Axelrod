@@ -64,6 +64,10 @@ class TestPlayerParameters(unittest.TestCase):
         player = ParameterisedPlayer(parameter1='test')
         assert player.init_kwargs == {'parameter1': 'test'}
 
+        # Test that passing an unknown keyword argument raises an error
+        with self.assertRaises(TypeError):
+            player = ParameterisedPlayer(parameter2='test')
+
         # Test that passing a positional argument raises an error
         with self.assertRaises(TypeError):
             player = ParameterisedPlayer('test')
