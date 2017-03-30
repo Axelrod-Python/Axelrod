@@ -46,5 +46,5 @@ class TestRandom(TestPlayer):
     def test_deterministic_classification(self):
         """Test classification when p is 0 or 1"""
         for p in [0, 1]:
-            player = axelrod.Random(p)
+            player = axelrod.Random(p=p)
             self.assertFalse(player.classifier['stochastic'])

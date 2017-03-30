@@ -27,6 +27,52 @@ def randomize(*args):
     return random.choice([C, D])
 
 
+class ParameterisedPlayer(Player):
+    """A simple Player class for testing init parameters"""
+
+    def __init__(self, parameter1=None):
+        super().__init__()
+
+
+class TestPlayerParameters(unittest.TestCase):
+    """A class to test the initialisation parameters of Players"""
+
+    def test_player(self):
+        """Tests for Players with no init parameters"""
+
+        # Test that the init_kwargs dict exists and is empty
+        player = Player()
+        self.assertEqual(player.init_kwargs, {})
+
+        # Test that passing a postional argument raises an error
+        with self.assertRaises(TypeError):
+            player = Player('test')
+
+        # Test that passing a keyword argument raises an error
+        with self.assertRaises(TypeError):
+            player = Player(parameter1='test')
+
+    def test_parameterised_player(self):
+        """Tests for Players with init parameters"""
+
+        # Test that the init_kwargs dict exists and is empty
+        player = ParameterisedPlayer()
+        self.assertEqual(player.init_kwargs, {})
+
+        # Test that passing a keyword argument successfully sets the
+        # init_kwargs dict
+        player = ParameterisedPlayer(parameter1='test')
+        self.assertEqual(player.init_kwargs, {'parameter1': 'test'})
+
+        # Test that passing an unknown keyword argument raises an error
+        with self.assertRaises(TypeError):
+            player = ParameterisedPlayer(parameter2='test')
+
+        # Test that passing a positional argument raises an error
+        with self.assertRaises(TypeError):
+            player = ParameterisedPlayer('test')
+
+
 class TestPlayerClass(unittest.TestCase):
 
     name = "Player"
@@ -115,7 +161,7 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_clone(self):
         """Tests player cloning."""
-        player1 = axelrod.Random(0.75)  # 0.5 is the default
+        player1 = axelrod.Random(p=0.75)  # 0.5 is the default
         player2 = player1.clone()
         turns = 50
         for op in [axelrod.Cooperator(), axelrod.Defector(),
@@ -284,7 +330,7 @@ class TestPlayer(unittest.TestCase):
         turns = 50
         r = random.random()
         for op in [axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.TitForTat(), axelrod.Random(r)]:
+                   axelrod.TitForTat(), axelrod.Random(p=r)]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)

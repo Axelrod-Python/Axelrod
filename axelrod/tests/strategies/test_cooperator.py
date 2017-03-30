@@ -46,11 +46,11 @@ class TestTrickyCooperator(TestPlayer):
 
         opponent_actions = [C, C, C, C, D, D]
         expected_actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (C, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions)
 
         opponent_actions = [C, C, C, C] + [D, D] + [C] * 10
         expected_actions = [(C, C), (C, C), (C, C), (D, C)] + [(D, D), (C, D)] + [(C, C)] * 10
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions)
 
     def test_cooperates_in_first_three_rounds(self):
         against_defector = [(C, D)] * 3
@@ -67,4 +67,4 @@ class TestTrickyCooperator(TestPlayer):
     def test_defects_when_opponent_has_no_defections_to_history_depth_ten(self):
         opponent_actions = [D] + [C] * 10 + [D, C]
         expected_actions = [(C, D)] + [(C, C)] * 10 + [(D, D), (C, C)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions)

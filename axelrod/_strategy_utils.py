@@ -74,7 +74,7 @@ def look_ahead(player_1, player_2, game, rounds=10):
     for strategy in strategies:
         # Instead of a deepcopy, create a new opponent and play out the history
         opponent_ = player_2.clone()
-        player_ = Cycler(strategy)  # Either cooperator or defector
+        player_ = Cycler(cycle=strategy)  # Either cooperator or defector
         for h1 in player_1.history:
             limited_simulate_play(player_, opponent_, h1)
 
