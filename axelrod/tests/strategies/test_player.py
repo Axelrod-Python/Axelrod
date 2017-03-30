@@ -33,6 +33,13 @@ class TestPlayerClass(unittest.TestCase):
     player = Player
     classifier = {'stochastic': False}
 
+    def _init_test(self, arg_test1='testing1', arg_test2='testing2'):
+        """A custom init method to test parameters initialisation in players """
+        self.arg_test1 = arg_test1
+        self.arg_test2 = arg_test2
+
+    ParameterisedPlayer = type('PlayerTest', (Player,), {"__init__": _init_test})
+
     def test_add_noise(self):
         axelrod.seed(1)
         noise = 0.2
@@ -131,14 +138,20 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(player1.history, player2.history)
 
     def test_init_params(self):
+        """Tests player correct parameter signature init."""
         self.assertEqual(self.player.init_params(), {})
+        self.assertEqual(self.ParameterisedPlayer.init_params(), {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
+        self.assertEqual(self.ParameterisedPlayer.init_params(arg_test1='other'), {'arg_test1': 'other', 'arg_test2': 'testing2'})
+        self.assertEqual(self.ParameterisedPlayer.init_params(arg_test2='other'), {'arg_test1': 'testing1', 'arg_test2': 'other'})
+        self.assertEqual(self.ParameterisedPlayer.init_params('other'), {'arg_test1': 'other', 'arg_test2': 'testing2'})
 
-        def init_test(self, arg_test='testing', arg_test2='testing2'):
-            self.arg_test = arg_test
-            self.arg_test2 = arg_test2
-
-        PlayerTest = type('PlayerTest', (Player,), {"__init__": init_test})
-        self.assertEqual(PlayerTest.init_params(), {'arg_test': 'testing', 'arg_test2': 'testing2'})
+    def test_init_kwargs(self):
+        """Tests player  correct parameter caching."""
+        self.assertEqual(self.player().init_kwargs, {})
+        self.assertEqual(self.ParameterisedPlayer().init_kwargs, {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
+        self.assertEqual(self.ParameterisedPlayer(arg_test1='other').init_kwargs, {'arg_test1': 'other', 'arg_test2': 'testing2'})
+        self.assertEqual(self.ParameterisedPlayer(arg_test2='other').init_kwargs, {'arg_test1': 'testing1', 'arg_test2': 'other'})
+        self.assertEqual(self.ParameterisedPlayer('other').init_kwargs, {'arg_test1': 'other', 'arg_test2': 'testing2'})
 
 
 def test_responses(test_class, player1, player2, responses, history1=None,
