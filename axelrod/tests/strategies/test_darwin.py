@@ -77,7 +77,9 @@ class TestDarwin(TestPlayer):
         p1 = self.player()
         p2 = self.player()
         self.assertIs(p1.genome, p2.genome)
+
         self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+
         self.assertEqual(p2.genome, [D, C, C, C, D])
         self.assertIs(p1.genome, p2.genome)
         p3 = self.player()
