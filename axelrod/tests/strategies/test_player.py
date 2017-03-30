@@ -115,7 +115,7 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_clone(self):
         """Tests player cloning."""
-        player1 = axelrod.Random(0.75)  # 0.5 is the default
+        player1 = axelrod.Random(p=0.75)  # 0.5 is the default
         player2 = player1.clone()
         turns = 50
         for op in [axelrod.Cooperator(), axelrod.Defector(),
@@ -130,7 +130,15 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 
-    #TODO: add test_repr
+    def test_init_params(self):
+        self.assertEqual(self.player.init_params(), {})
+
+        def init_test(self, arg_test='testing', arg_test2='testing2'):
+            self.arg_test = arg_test
+            self.arg_test2 = arg_test2
+
+        PlayerTest = type('PlayerTest', (Player,), {"__init__": init_test})
+        self.assertEqual(PlayerTest.init_params(), {'arg_test': 'testing', 'arg_test2': 'testing2'})
 
 
 def test_responses(test_class, player1, player2, responses, history1=None,
