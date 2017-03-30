@@ -26,7 +26,7 @@ class TestStalker(TestPlayer):
         self.first_play_test(C)
 
         # current_average_score > very_good_score
-        actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, C),
+        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (C, C),
                    (C, D), (C, C), (C, C), (D, D)]
         self.versus_test(opponent=axelrod.MockPlayer([C,C,D,D,C,C,D,C,C,D]), expected_actions=actions)
         
