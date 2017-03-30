@@ -8,6 +8,7 @@ import inspect
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
+from axelrod._strategy_utils import cheating_bastard
 
 C, D = Actions.C, Actions.D
 
@@ -47,19 +48,23 @@ class Geller(Player):
         'manipulates_state': False
     }
 
+    def simulation_strategy(self, opponent: Player) -> Action:
+        return self.default()
+
     def strategy(self, opponent: Player) -> Action:
         """
         Look at what the opponent will play in the next round and choose a strategy
         that gives the least jail time, which is is equivalent to playing the same
         strategy as that which the opponent will play.
         """
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        calname = calframe[1][3]
-        if calname == 'strategy':
-            return self.default()
-        else:
-            return opponent.strategy(self)
+        # curframe = inspect.currentframe()
+        # calframe = inspect.getouterframes(curframe, 2)
+        # calname = calframe[1][3]
+        # if calname == 'strategy':
+        #     return self.default()
+        # else:
+        #     return opponent.strategy(self)
+        return cheating_bastard(self, opponent)
 
 
 class GellerCooperator(Geller):

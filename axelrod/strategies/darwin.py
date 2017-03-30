@@ -50,11 +50,14 @@ class Darwin(Player):
     def receive_match_attributes(self):
         self.outcomes = self.match_attributes["game"].scores
 
+    def simulation_strategy(self, opponent: Player) -> Action:
+        return C
+
     def strategy(self, opponent: Player) -> Action:
         # Frustrate psychics and ensure that simulated rounds
         # do not influence genome.
-        if inspect.stack()[1][3] not in Darwin.valid_callers:
-            return C
+        # if inspect.stack()[1][3] not in Darwin.valid_callers:
+        #     return C
 
         trial = len(self.history)
 

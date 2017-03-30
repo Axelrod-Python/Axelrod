@@ -7,7 +7,7 @@ import inspect
 
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
-from axelrod._strategy_utils import look_ahead
+from axelrod._strategy_utils import look_ahead, cheating_bastard
 
 
 C, D = Actions.C, Actions.D
@@ -27,6 +27,9 @@ class MindReader(Player):
         'manipulates_state': False
     }
 
+    def simulation_strategy(self, opponent: Player) -> Action:
+        return D
+
     def strategy(self, opponent: Player) -> Action:
         """Pretends to play the opponent a number of times before each match.
         The primary purpose is to look far enough ahead to see if a defect will
@@ -37,12 +40,12 @@ class MindReader(Player):
         in this method, by defecting if the method is called by strategy
         """
 
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        calname = calframe[1][3]
-
-        if calname in ('strategy', 'simulate_match'):
-            return D
+        # curframe = inspect.currentframe()
+        # calframe = inspect.getouterframes(curframe, 2)
+        # calname = calframe[1][3]
+        #
+        # if calname in ('strategy', 'simulate_match'):
+        #     return D
 
         game = self.match_attributes["game"]
 
@@ -90,6 +93,9 @@ class MirrorMindReader(ProtectedMindReader):
         'manipulates_state': False
     }
 
+    def simulation_strategy(self, opponent: Player) -> Action:
+        return C
+
     def strategy(self, opponent: Player) -> Action:
         """Will read the mind of the opponent and play the opponent's strategy.
 
@@ -97,11 +103,12 @@ class MirrorMindReader(ProtectedMindReader):
         reader or bender by cooperating.
         """
 
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        calname = calframe[1][3]
-
-        if calname in ('strategy', 'simulate_match'):
-            return C
-
-        return opponent.strategy(self)
+        # curframe = inspect.currentframe()
+        # calframe = inspect.getouterframes(curframe, 2)
+        # calname = calframe[1][3]
+        #
+        # if calname in ('strategy', 'simulate_match'):
+        #     return C
+        #
+        # return opponent.strategy(self)
+        return cheating_bastard(self, opponent)
