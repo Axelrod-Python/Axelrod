@@ -46,6 +46,13 @@ class TestMetaPlayer(TestPlayer):
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
                                  (key, player.classifier[key], classifier[key]))
             
+    def test_equal_list(self):
+        player1 = axelrod.MetaPlayer(team = [axelrod.Cooperator, axelrod.Defector, axelrod.TitForTat]);
+        player2 = axelrod.MetaPlayer(team = [axelrod.Cooperator, axelrod.Random, axelrod.TitForTat]);
+        self.assertEqual(player1, player1)
+        self.assertNotEqual(player1, player2)
+
+
 
 class TestMetaMajority(TestMetaPlayer):
 

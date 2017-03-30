@@ -76,13 +76,10 @@ class MetaPlayer(Player):
                 if not (all(next(value) == next(other_value) for _ in range(10))):
                     return False
             elif isinstance(value, list):
-                for p1, p2 in zip(self.team, other.team):
-                    if p1.history != p2.history:
-                        return False
-                team_player_names = [p.__repr__() for p in self.team]
-                team_clone_names = [p.__repr__() for p in other.team]
-                if team_player_names != team_clone_names:
-                    return False    
+                team_player_attributes = [(p.name, p.classifier) for p in self.team]
+                team_clone_attributes = [(p.name, p.classifier) for p in other.team]
+                if team_player_attributes != team_clone_attributes:
+                    return False 
             else:
                 if value != other_value and not isinstance(value, list):
                     return False
