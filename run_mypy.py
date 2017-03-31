@@ -45,6 +45,7 @@ modules = ["axelrod/actions.py",
            "axelrod/strategies/qlearner.py",
            "axelrod/strategies/rand.py",
            "axelrod/strategies/titfortat.py",
+           "axelrod/strategies/hmm.py",
            "axelrod/strategies/worse_and_worse.py"]
 
 exit_codes = []

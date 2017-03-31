@@ -33,7 +33,7 @@ class Darwin(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_source': False,
+        'inspects_source': True,  # Checks to see if opponent is using simulated matches.
         'long_run_time': False,
         'makes_use_of': set(),
         'manipulates_source': False,

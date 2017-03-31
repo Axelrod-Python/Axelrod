@@ -41,8 +41,8 @@ class TestAntiCycler(TestPlayer):
         against_defector = list(zip(anticycler_rounds, [D] * num_elements))
         against_cooperator = list(zip(anticycler_rounds, [C] * num_elements))
 
-        self.versus_test(axelrod.Defector(), against_defector)
-        self.versus_test(axelrod.Cooperator(), against_cooperator)
+        self.versus_test(axelrod.Defector(), expected_actions=against_defector)
+        self.versus_test(axelrod.Cooperator(), expected_actions=against_cooperator)
 
 
 class TestBasicCycler(TestPlayer):
@@ -68,7 +68,7 @@ class TestBasicCycler(TestPlayer):
 
     def test_cycler_works_as_expected(self):
         expected = [(C, D), (D, D), (D, D), (C, D)] * 2
-        self.versus_test(axelrod.Defector(), expected, init_kwargs={'cycle': 'CDDC'})
+        self.versus_test(axelrod.Defector(), expected_actions=expected, init_kwargs={'cycle': 'CDDC'})
 
     def test_cycle_raises_value_error_on_bad_cycle_str(self):
         self.assertRaises(ValueError, Cycler, 'CdDC')
@@ -95,7 +95,7 @@ def test_cycler_factory(cycle_str):
             match_len = 20
             actions_generator = _get_actions_cycle_against_cooperator(cycle_str)
             test_actions = [next(actions_generator) for _ in range(match_len)]
-            self.versus_test(axelrod.Cooperator(), test_actions)
+            self.versus_test(axelrod.Cooperator(), expected_actions=test_actions)
 
     return TestCyclerChild
 

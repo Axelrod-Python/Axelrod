@@ -209,9 +209,9 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
-                                           max_turns=50, min_repetitions=2,
+                                           max_turns=10, min_repetitions=2,
                                            max_repetitions=4))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=10, timeout=0)
     @example(tournament=axelrod.Tournament(players=[s() for s in
         test_strategies], turns=test_turns, repetitions=test_repetitions)
         )
