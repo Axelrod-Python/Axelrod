@@ -100,9 +100,11 @@ class Player(object):
         """
         sig = inspect.signature(cls.__init__)
         # the 'self' parameter needs to be removed or the first *args will be assigned to it
-        new_params = dict(sig.parameters)
-        if new_params.pop('self', None) is not None:
-            sig = sig.replace(parameters=new_params.values())
+        self_param = sig.parameters.get('self', None)
+        if self_param is not None:
+            new_params = list(sig.parameters.values())
+            new_params.remove(self_param)
+            sig = sig.replace(parameters=new_params)
         boundargs = sig.bind_partial(*args, **kwargs)
         boundargs.apply_defaults()
         return boundargs.arguments
