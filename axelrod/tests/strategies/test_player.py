@@ -36,12 +36,15 @@ _test_classifier = {
         'manipulates_state': False
 }
 
-ParameterisedTestPlayer = type(
-    'ParameterisedTestPlayer',
-    (Player,),
-    {"__init__": lambda self, arg_test1='testing1', arg_test2='testing2': None,
-     "classifier": _test_classifier}
-)
+
+class ParameterisedTestPlayer(Player):
+    """A simple Player class for testing init parameters"""
+
+    name = 'ParameterisedTestPlayer'
+    classifier = _test_classifier
+
+    def __init__(self, arg_test1='testing1', arg_test2='testing2'):
+        super().__init__()
 
 
 class TestPlayerClass(unittest.TestCase):
