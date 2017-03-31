@@ -63,7 +63,7 @@ class SimpleHMM(object):
             return False
         return True
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Player) -> bool:
         """Equality of two HMMs"""
         check = True
         for attr in ["transitions_C", "transitions_D",
@@ -72,7 +72,7 @@ class SimpleHMM(object):
         return check
 
 
-    def move(self, opponent_action) -> Action:
+    def move(self, opponent_action: Action) -> Action:
         """Changes state and computes the response action.
 
         Parameters
@@ -140,7 +140,7 @@ class HMMPlayer(Player):
             return True
         return False
 
-    def strategy(self, opponent) -> Action:
+    def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0:
             return self.initial_action
         else:
