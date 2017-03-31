@@ -33,23 +33,20 @@ class TestDarwin(TestPlayer):
     def test_strategy(self):
         p1 = self.player()
         p1.reset()
-        self.versus_test(axelrod.Cooperator(), [(C, C)] * 5)
-        self.assertEqual(p1.genome, [C] * 5)
 
-        self.versus_test(axelrod.Defector(), [(C, D)] * 5)
-        self.assertEqual(p1.genome, [D] * 4 + [C])
+        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5, attrs={'genome': [C] * 5})
+
+        expected_genome = [D] * 4 + [C]
+        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] * 5, attrs={'genome': expected_genome})
 
         # uses genome
-        self.versus_test(axelrod.Cooperator(), [(C, C)] + [(D, C)] * 3 + [(C, C)] * 2)
+        expected_actions = [(C, C)] + [(D, C)] * 3 + [(C, C)] * 2
+        self.versus_test(axelrod.Cooperator(), expected_actions)
 
     def test_against_geller_and_mindreader(self):
-        self.assertEqual(len(self.player.genome), 1)
+        self.versus_test(axelrod.GellerCooperator(), expected_actions=[(C, C)] * 2, attrs={'genome': [C, C]})
 
-        self.versus_test(axelrod.GellerCooperator(), [(C, C)] * 2)
-        self.assertEqual(len(self.player.genome), 2)
-        #
-        self.versus_test(axelrod.MindReader(), [(C, D)] * 2)
-        self.assertEqual(len(self.player.genome), 2)
+        self.versus_test(axelrod.MindReader(), expected_actions=[(C, D)] * 2, attrs={'genome': [D, C]})
 
     def test_play(self):
         """valid_callers must contain at least one entry..."""
@@ -69,21 +66,22 @@ class TestDarwin(TestPlayer):
         self.assertEqual(p1.genome.count(C) + p1.genome.count(D), len(p1.genome))
 
     def test_reset_only_resets_first_move_of_genome(self):
-        """Is instance correctly reset between rounds"""
-        self.versus_test(axelrod.Defector(), [(C, D)] + [(D, D)] * 4)
+        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+
         p1 = self.player()
         self.assertEqual(p1.genome, [D, C, C, C, D])
         p1.reset()
         self.assertEqual(p1.history, [])
-        self.assertEqual(p1.genome[0], C)
         self.assertEqual(p1.genome, [C, C, C, C, D])
 
-    def test_unique_genome(self):
-        """Ensure genome remains unique class property"""
+    def test_all_darwin_instances_share_one_genome(self):
         p1 = self.player()
         p2 = self.player()
-        self.assertEqual(p1.genome, [C])
         self.assertIs(p1.genome, p2.genome)
-        self.versus_test(axelrod.Defector(), [(C, D)] + [(D, D)] * 4)
+
+        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+
         self.assertEqual(p2.genome, [D, C, C, C, D])
         self.assertIs(p1.genome, p2.genome)
+        p3 = self.player()
+        self.assertIs(p3.genome, p2.genome)

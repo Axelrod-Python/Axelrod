@@ -25,9 +25,11 @@ class TestBetterAndBetter(TestPlayer):
 
         self.first_play_test(D, seed=3)  # C is very unlikely
         self.first_play_test(C, seed=1514)  # first seed (starting from seed=0) that cooperates on first round
-        self.versus_test(axelrod.Defector(), [(D, D), (D, D), (D, D), (D, D), (C, D), (D, D), (D, D), (D, D), (D, D)],
+        self.versus_test(axelrod.Defector(),
+                         expected_actions=[(D, D), (D, D), (D, D), (D, D), (C, D), (D, D), (D, D), (D, D), (D, D)],
                          seed=6)
-        self.versus_test(axelrod.Cooperator(), [(D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C)],
+        self.versus_test(axelrod.Cooperator(),
+                         expected_actions=[(D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C)],
                          seed=8)
         actions = []
         for index in range(200):
