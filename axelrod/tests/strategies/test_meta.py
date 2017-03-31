@@ -45,16 +45,14 @@ class TestMetaPlayer(TestPlayer):
                              classifier[key],
                              msg="%s - Behaviour: %s != Expected Behaviour: %s" %
                                  (key, player.classifier[key], classifier[key]))
+            
+    def test_equal_list(self):
+        player1 = axelrod.MetaPlayer(team = [axelrod.Cooperator, axelrod.Defector, axelrod.TitForTat]);
+        player2 = axelrod.MetaPlayer(team = [axelrod.Cooperator, axelrod.Random, axelrod.TitForTat]);
+        self.assertEqual(player1, player1)
+        self.assertNotEqual(player1, player2)
 
-    def attribute_equality_test(self, player, clone):
-        """Overwriting this specific method to check team."""
-        for p1, p2 in zip(player.team, clone.team):
-            self.assertEqual(len(p1.history), 0)
-            self.assertEqual(len(p2.history), 0)
 
-        team_player_names = [p.__repr__() for p in player.team]
-        team_clone_names = [p.__repr__() for p in clone.team]
-        self.assertEqual(team_player_names, team_clone_names)
 
 class TestMetaMajority(TestMetaPlayer):
 

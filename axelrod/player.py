@@ -2,6 +2,9 @@ from collections import defaultdict
 from functools import wraps
 import random
 import copy
+import types
+import itertools
+import numpy as np
 
 from axelrod.actions import Actions, flip_action, Action
 from .game import DefaultGame
@@ -68,7 +71,6 @@ def update_state_distribution(player, action, reply):
 
 class Player(object):
     """A class for a player in the tournament.
-
     This is an abstract base class, not intended to be used directly.
     """
 
@@ -104,6 +106,27 @@ class Player(object):
         self.defections = 0
         self.state_distribution = defaultdict(int)
         self.set_match_attributes()
+
+    def __eq__(self, other):
+        """
+        Test if two players are equal.
+        """
+        if self.__repr__() != other.__repr__():
+            return False
+        for attribute, value in self.__dict__.items():
+            other_value = getattr(other, attribute, None)
+
+            if isinstance(value, np.ndarray):
+                if not (np.array_equal(value, other_value)):
+                    return False
+
+            elif isinstance(value, types.GeneratorType) or isinstance(value, itertools.cycle):
+                if not (all(next(value) == next(other_value) for _ in range(10))):
+                    return False
+            else:
+                if value != other_value:
+                    return False
+        return True
 
     def receive_match_attributes(self):
         # Overwrite this function if your strategy needs

@@ -32,8 +32,7 @@ class TestTournamentType(unittest.TestCase):
         self.assertEqual(tt.turns, test_turns)
         player = tt.players[0]
         opponent = tt.opponents[0]
-        self.assertEqual(player.name, opponent.name)
-        self.assertNotEqual(player, opponent)
+        self.assertNotEqual(id(player), id(opponent))
         # Check that the two player instances are wholly independent
         opponent.name = 'Test'
         self.assertNotEqual(player.name, opponent.name)

@@ -75,11 +75,6 @@ class TestCalculator(TestPlayer):
         self.versus_test(axelrod.MockPlayer(opponent_actions),
                          expected_actions=uses_tit_for_tat_after_twenty_rounds, seed=seed)
 
-    def attribute_equality_test(self, player, clone):
-        """Overwrite the default test to check Joss instance"""
-        self.assertIsInstance(player.joss_instance, axelrod.Joss)
-        self.assertIsInstance(clone.joss_instance, axelrod.Joss)
-
     def test_get_joss_strategy_actions(self):
         opponent = [C, D, D, C, C]
 
