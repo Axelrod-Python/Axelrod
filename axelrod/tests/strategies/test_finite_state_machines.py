@@ -3,6 +3,7 @@ import unittest
 
 import axelrod
 from .test_player import TestMatch, TestPlayer
+from axelrod.strategies.finite_state_machines import SimpleFSM
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -24,6 +25,48 @@ def check_state_transitions(state_transitions):
             if not ((state, action) in keys):
                 return False
     return True
+
+
+class TestSimpleFSM(unittest.TestCase):
+    def setUp(self):
+        self.two_state_transition = [(1, C, 0, C), (1, D, 0, D), (0, C, 1, D), (0, D, 1, C)]
+
+        self.two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=1)
+
+    def test__eq__true(self):
+        new_two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=1)
+        self.assertTrue(new_two_state.__eq__(self.two_state))
+        new_two_state.move(C)
+        self.two_state.move(D)
+        self.assertTrue(new_two_state.__eq__(self.two_state))
+
+    def test__eq__false_by_state(self):
+        new_two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=0)
+        self.assertFalse(new_two_state.__eq__(self.two_state))
+
+    def test__eq__false_by_transition(self):
+        new_two_state = SimpleFSM(transitions=[(1, C, 0, C), (1, D, 0, D)], initial_state=1)
+        self.assertFalse(new_two_state.__eq__(self.two_state))
+
+    def test__eq__false_by_not_SimpleFSM(self):
+        self.assertFalse(self.two_state.__eq__(3))
+
+    def test__ne__(self):
+        new_two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=1)
+        self.assertFalse(new_two_state.__ne__(self.two_state))
+        new_two_state.move(C)
+        self.assertTrue(new_two_state.__ne__(self.two_state))
+
+    def test_move(self):
+        self.assertEqual(self.two_state.move(C), C)
+        self.assertEqual(self.two_state.state, 0)
+        self.assertEqual(self.two_state.move(C), D)
+        self.assertEqual(self.two_state.state, 1)
+
+        self.assertEqual(self.two_state.move(D), D)
+        self.assertEqual(self.two_state.state, 0)
+        self.assertEqual(self.two_state.move(D), C)
+        self.assertEqual(self.two_state.state, 1)
 
 
 class TestFSMPlayers(unittest.TestCase):
@@ -76,11 +119,11 @@ class TestFSMPlayers(unittest.TestCase):
 
     def test_malformed_tables(self):
         # Test a malformed table
-        transitions = ((1, D, 2, D),
+        transitions = [(1, D, 2, D),
                        (1, C, 1, D),
                        (2, C, 1, D),
                        (2, D, 3, C),
-                       (3, C, 3, C))
+                       (3, C, 3, C)]
         player = axelrod.FSMPlayer(transitions=transitions, initial_state=1,
                                    initial_action=C)
         self.assertFalse(check_state_transitions(player.fsm.state_transitions))

@@ -47,6 +47,7 @@ class TestDarwin(TestPlayer):
 
         self.versus_test(axelrod.MindReader(), expected_actions=[(C, D)] * 2, attrs={'genome': [D, C]})
 
+    # TODO ask if the next two actually do anything not done in other tests
     def test_play(self):
         """valid_callers must contain at least one entry..."""
         self.assertTrue(len(self.player.valid_callers) > 0)
