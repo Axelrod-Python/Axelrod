@@ -89,8 +89,6 @@ class Player(object):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
         obj.init_kwargs = cls.init_params(*args, **kwargs)
-        if 'self' in obj.init_kwargs.keys():
-            print(obj.init_kwargs)
         return obj
 
     @classmethod
