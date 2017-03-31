@@ -4,8 +4,9 @@ from functools import lru_cache
 
 from axelrod.player import update_history
 from axelrod.actions import Actions
+from axelrod.strategies.cooperator import Cooperator
+from axelrod.strategies.defector import Defector
 
-from axelrod.strategies.cycler import Cycler
 
 C, D = Actions.C, Actions.D
 
@@ -68,13 +69,13 @@ def calculate_scores(p1, p2, game):
 def look_ahead(player_1, player_2, game, rounds=10):
     """Looks ahead for `rounds` and selects the next strategy appropriately."""
     results = []
-
     # Simulate plays for `rounds` rounds
+    players = {C: Cooperator(), D: Defector()}
     strategies = [C, D]
     for strategy in strategies:
         # Instead of a deepcopy, create a new opponent and play out the history
         opponent_ = player_2.clone()
-        player_ = Cycler(strategy)  # Either cooperator or defector
+        player_ = players[strategy]
         for h1 in player_1.history:
             limited_simulate_play(player_, opponent_, h1)
 
