@@ -26,11 +26,21 @@ def defect(*args):
 def randomize(*args):
     return random.choice([C, D])
 
+# Test classifier used to create tests players
+_test_classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'makes_use_of': None,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+}
 
 ParameterisedTestPlayer = type(
     'ParameterisedTestPlayer',
     (Player,),
-    {"__init__": lambda self, arg_test1='testing1', arg_test2='testing2': None}
+    {"__init__": lambda self, arg_test1='testing1', arg_test2='testing2': None,
+     "classifier": _test_classifier}
 )
 
 
@@ -194,14 +204,7 @@ class TestOpponent(Player):
     """A player who only exists so we have something to test against"""
 
     name = 'TestPlayer'
-    classifier = {
-        'memory_depth': 0,
-        'stochastic': False,
-        'makes_use_of': None,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
+    classifier = _test_classifier
 
     @staticmethod
     def strategy(opponent):
