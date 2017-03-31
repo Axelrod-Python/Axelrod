@@ -12,7 +12,7 @@ class SimpleFSM(object):
     https://en.wikipedia.org/wiki/Finite-state_machine
     """
 
-    def __init__(self, transitions: List[Tuple[int, Any, int, Any]], initial_state: int) -> None:
+    def __init__(self, transitions: List[Tuple[int, Action, int, Action]], initial_state: int) -> None:
         """
         transitions is a list of the form
         [(state, last_opponent_action, next_state, next_action), ...]
@@ -22,22 +22,42 @@ class SimpleFSM(object):
         with initial play C and initial state 1.
 
         """
-        self.state = initial_state
-        self.state_transitions = {}  # type: dict
-        for (state, opp_action, next_state, next_action) in transitions:
-            self.state_transitions[(state, opp_action)] = (next_state, next_action)
+        self._state = initial_state
+        self._state_transitions = {(current_state, input_action): (next_state, output_action) for
+                                   current_state, input_action, next_state, output_action in transitions}  # type: dict
+
+        self._raise_error_for_bad_input()
+
+    def _raise_error_for_bad_input(self):
+        callable_states = [self._state] + [pair[0] for pair in self._state_transitions.values()]
+        for state in callable_states:
+            if (state, C) not in self._state_transitions or (state, D) not in self._state_transitions:
+                raise ValueError('state: {} does not have values for both C and D'.format(state))
+
+    @property
+    def state(self) -> int:
+        return self._state
+
+    @state.setter
+    def state(self, new_state: int):
+        self._state = new_state
+        self._raise_error_for_bad_input()
+
+    @property
+    def state_transitions(self) -> dict:
+        return self._state_transitions.copy()
 
     def move(self, opponent_action: Action) -> Action:
         """Computes the response move and changes state."""
-        next_state, next_action = self.state_transitions[(self.state, opponent_action)]
-        self.state = next_state
+        next_state, next_action = self._state_transitions[(self._state, opponent_action)]
+        self._state = next_state
         return next_action
 
     def __eq__(self, other):
         """Equality of two FSMs"""
         if not isinstance(other, SimpleFSM):
             return False
-        return (self.state, self.state_transitions) == (other.state, other.state_transitions)
+        return (self._state, self._state_transitions) == (other.state, other.state_transitions)
 
     def __ne__(self, other):
         return not self == other
