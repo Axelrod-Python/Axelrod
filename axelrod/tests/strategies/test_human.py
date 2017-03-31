@@ -32,7 +32,7 @@ class TestActionValidator(TestCase):
 
 class TestHumanClass(TestPlayer):
 
-    name = "Human"
+    name = "Human: Human, C, D"
     player = Human
     expected_classifier = {
         'memory_depth': float('inf'),

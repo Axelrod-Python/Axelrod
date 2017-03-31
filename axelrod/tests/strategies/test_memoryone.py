@@ -33,7 +33,7 @@ class TestGenericPlayerOne(unittest.TestCase):
 
 class TestWinStayLoseShift(TestPlayer):
 
-    name = "Win-Stay Lose-Shift"
+    name = "Win-Stay Lose-Shift: C"
     player = axelrod.WinStayLoseShift
     expected_classifier = {
         'memory_depth': 1,
@@ -58,7 +58,7 @@ class TestWinStayLoseShift(TestPlayer):
 
 class TestWinShiftLoseStayTestPlayer(TestPlayer):
 
-    name = "Win-Shift Lose-Stay"
+    name = "Win-Shift Lose-Stay: D"
     player = axelrod.WinShiftLoseStay
     expected_classifier = {
         'memory_depth': 1,
@@ -165,7 +165,7 @@ class TestStochasticCooperator(TestPlayer):
 
 class TestStochasticWSLS(TestPlayer):
 
-    name = "Stochastic WSLS"
+    name = "Stochastic WSLS: 0.05"
     player = axelrod.StochasticWSLS
     expected_classifier = {
         'memory_depth': 1,
@@ -221,7 +221,7 @@ class TestLRPlayer(unittest.TestCase):
 
 class TestZDExtort2(TestPlayer):
 
-    name = "ZD-Extort-2"
+    name = "ZD-Extort-2: 0.11, 0.5"
     player = axelrod.ZDExtort2
     expected_classifier = {
         'memory_depth': 1,
@@ -248,7 +248,7 @@ class TestZDExtort2(TestPlayer):
 
 class TestZDExtort2v2(TestPlayer):
 
-    name = "ZD-Extort-2 v2"
+    name = "ZD-Extort-2 v2: 0.12, 0.5, 1"
     player = axelrod.ZDExtort2v2
     expected_classifier = {
         'memory_depth': 1,
@@ -271,7 +271,7 @@ class TestZDExtort2v2(TestPlayer):
 
 class TestZDExtort4(TestPlayer):
 
-    name = "ZD-Extort-4"
+    name = "ZD-Extort-4: 0.24, 0.25, 1"
     player = axelrod.ZDExtort4
     expected_classifier = {
         'memory_depth': 1,
@@ -294,7 +294,7 @@ class TestZDExtort4(TestPlayer):
 
 class TestZDGen2(TestPlayer):
 
-    name = "ZD-GEN-2"
+    name = "ZD-GEN-2: 0.12, 0.5, 3"
     player = axelrod.ZDGen2
     expected_classifier = {
         'memory_depth': 1,
@@ -317,7 +317,7 @@ class TestZDGen2(TestPlayer):
 
 class TestZDGTFT2(TestPlayer):
 
-    name = "ZD-GTFT-2"
+    name = "ZD-GTFT-2: 0.25, 0.5"
     player = axelrod.ZDGTFT2
     expected_classifier = {
         'memory_depth': 1,
@@ -343,7 +343,7 @@ class TestZDGTFT2(TestPlayer):
 
 class TestZDSet2(TestPlayer):
 
-    name = "ZD-SET-2"
+    name = "ZD-SET-2: 0.25, 0.0, 2"
     player = axelrod.ZDSet2
     expected_classifier = {
         'memory_depth': 1,

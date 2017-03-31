@@ -91,16 +91,16 @@ class AshlockFingerprint():
         x, y = point
 
         if isinstance(probe, axl.Player):
-            init_args = probe.init_args
+            init_kwargs = probe.init_kwargs
             probe = probe.__class__
         else:
-            init_args = ()
+            init_kwargs = {}
 
         if x + y >= 1:
             joss_ann = DualTransformer()(
-                JossAnnTransformer((1 - x, 1 - y))(probe))(*init_args)
+                JossAnnTransformer((1 - x, 1 - y))(probe))(**init_kwargs)
         else:
-            joss_ann = JossAnnTransformer((x, y))(probe)(*init_args)
+            joss_ann = JossAnnTransformer((x, y))(probe)(**init_kwargs)
         return joss_ann
 
     @staticmethod

@@ -8,7 +8,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestGrumpy(TestPlayer):
 
-    name = "Grumpy"
+    name = "Grumpy: Nice, 10, -10"
     player = axelrod.Grumpy
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory

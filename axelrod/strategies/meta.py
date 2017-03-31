@@ -56,6 +56,10 @@ class MetaPlayer(Player):
         for t in self.team:
             self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
 
+    def __repr__(self):
+        team_size = len(self.team)
+        return '{}: {} player{}'.format(self.name, team_size, 's' if team_size > 1 else '')
+
     def strategy(self, opponent):
         # Get the results of all our players.
         results = []
@@ -148,7 +152,6 @@ class MetaWinner(MetaPlayer):
 
 
 NiceMetaWinner = NiceTransformer()(MetaWinner)
-NiceMetaWinner.name = "Nice Meta Winner"
 
 
 class MetaWinnerEnsemble(MetaWinner):
@@ -175,7 +178,6 @@ class MetaWinnerEnsemble(MetaWinner):
 
 
 NiceMetaWinnerEnsemble = NiceTransformer()(MetaWinnerEnsemble)
-NiceMetaWinnerEnsemble.name = "Nice Meta Winner Ensemble"
 
 
 class MetaHunter(MetaPlayer):

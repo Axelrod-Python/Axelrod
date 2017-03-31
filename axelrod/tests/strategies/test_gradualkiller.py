@@ -8,7 +8,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestGradualKiller(TestPlayer):
 
-    name = "Gradual Killer"
+    name = "Gradual Killer: ('D', 'D', 'D', 'D', 'D', 'C', 'C')"
     player = axelrod.GradualKiller
     expected_classifier = {
         'memory_depth': float('Inf'),

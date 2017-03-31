@@ -26,6 +26,23 @@ def defect(*args):
 def randomize(*args):
     return random.choice([C, D])
 
+# Test classifier used to create tests players
+_test_classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'makes_use_of': None,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+}
+
+ParameterisedTestPlayer = type(
+    'ParameterisedTestPlayer',
+    (Player,),
+    {"__init__": lambda self, arg_test1='testing1', arg_test2='testing2': None,
+     "classifier": _test_classifier}
+)
+
 
 class TestPlayerClass(unittest.TestCase):
 
@@ -115,7 +132,7 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_clone(self):
         """Tests player cloning."""
-        player1 = axelrod.Random(0.75)  # 0.5 is the default
+        player1 = axelrod.Random(p=0.75)  # 0.5 is the default
         player2 = player1.clone()
         turns = 50
         for op in [axelrod.Cooperator(), axelrod.Defector(),
@@ -129,6 +146,30 @@ class TestPlayerClass(unittest.TestCase):
                 m.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
+
+    def test_init_params(self):
+        """Tests player correct parameters signature init."""
+        self.assertEqual(self.player.init_params(), {})
+        self.assertEqual(ParameterisedTestPlayer.init_params(),
+                         {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
+        self.assertEqual(ParameterisedTestPlayer.init_params(arg_test1='other'),
+                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
+        self.assertEqual(ParameterisedTestPlayer.init_params(arg_test2='other'),
+                         {'arg_test1': 'testing1', 'arg_test2': 'other'})
+        self.assertEqual(ParameterisedTestPlayer.init_params('other'),
+                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
+
+    def test_init_kwargs(self):
+        """Tests player  correct parameters caching."""
+        self.assertEqual(self.player().init_kwargs, {})
+        self.assertEqual(ParameterisedTestPlayer().init_kwargs,
+                         {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
+        self.assertEqual(ParameterisedTestPlayer(arg_test1='other').init_kwargs,
+                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
+        self.assertEqual(ParameterisedTestPlayer(arg_test2='other').init_kwargs,
+                         {'arg_test1': 'testing1', 'arg_test2': 'other'})
+        self.assertEqual(ParameterisedTestPlayer('other').init_kwargs,
+                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
 
 
 def test_responses(test_class, player1, player2, responses, history1=None,
@@ -163,14 +204,7 @@ class TestOpponent(Player):
     """A player who only exists so we have something to test against"""
 
     name = 'TestPlayer'
-    classifier = {
-        'memory_depth': 0,
-        'stochastic': False,
-        'makes_use_of': None,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
+    classifier = _test_classifier
 
     @staticmethod
     def strategy(opponent):
@@ -270,7 +304,7 @@ class TestPlayer(unittest.TestCase):
     def test_clone(self):
         # Test that the cloned player produces identical play
         player1 = self.player()
-        if str(player1) in ["Darwin", "Human"]:
+        if str(player1)[:6] in ["Darwin", "Human:"]:
             # Known exceptions
             return
         player2 = player1.clone()

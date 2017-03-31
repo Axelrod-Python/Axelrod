@@ -115,7 +115,7 @@ class TestHMMPlayers(unittest.TestCase):
 
 class TestHMMPlayer(TestPlayer):
 
-    name = "HMM Player"
+    name = "HMM Player: 0, C"
     player = axelrod.HMMPlayer
 
     expected_classifier = {

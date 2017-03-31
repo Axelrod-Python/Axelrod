@@ -79,7 +79,7 @@ class TestFoolMeOnce(TestPlayer):
 
 class TestForgetfulFoolMeOnce(TestPlayer):
 
-    name = 'Forgetful Fool Me Once'
+    name = 'Forgetful Fool Me Once: 0.05'
     player = axelrod.ForgetfulFoolMeOnce
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
