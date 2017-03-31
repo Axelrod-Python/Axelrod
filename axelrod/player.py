@@ -74,7 +74,7 @@ class Player(object):
     """
 
     name = "Player"
-    classifier = {} # type: Dict[str, Any]
+    classifier = {}  # type: Dict[str, Any]
     default_classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),
@@ -94,7 +94,12 @@ class Player(object):
         return obj
 
     @classmethod
-    def init_params(cls,*args, **kwargs):
+    def init_params(cls, *args, **kwargs):
+        """
+        Return a dictionary containing the init parameters of a strategy (without 'self').
+        Use *args and *kwargs as value if specified
+        and complete the rest with the default values.
+        """
         sig = inspect.signature(cls.__init__)
         # the 'self' parameter needs to be removed or the first *args will be assigned to it
         new_params = dict(sig.parameters)
@@ -137,7 +142,7 @@ class Player(object):
     def __repr__(self):
         """The string method for the strategy.
         Appends the `__init__` parameters to the strategy's name."""
-        name =  self.name
+        name = self.name
         prefix = ': '
         gen = (value for value in self.init_kwargs.values() if value is not None)
         for value in gen:
