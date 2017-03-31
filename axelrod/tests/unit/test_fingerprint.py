@@ -58,11 +58,11 @@ class TestFingerprint(unittest.TestCase):
 
         # x + y = 1
         ja = fingerprint.create_jossann((.4, .6), self.probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.4, 0.6)")
+        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.6, 0.4)")
 
         # x + y > 1
         ja = fingerprint.create_jossann((.5, .6), self.probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.5, 0.6)")
+        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.5, 0.4)")
 
     def test_create_jossann_parametrised_player(self):
         fingerprint = AshlockFingerprint(self.strategy)
@@ -75,11 +75,11 @@ class TestFingerprint(unittest.TestCase):
 
         # x + y = 1
         ja = fingerprint.create_jossann((.4, .6), probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.4, 0.6)")
+        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.6, 0.4)")
 
         # x + y > 1
         ja = fingerprint.create_jossann((.5, .6), probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.5, 0.6)")
+        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.5, 0.4)")
 
     def test_create_points(self):
         test_points = create_points(0.5, progress_bar=False)
