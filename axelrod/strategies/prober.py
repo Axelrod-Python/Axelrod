@@ -1,6 +1,8 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
+from typing import List
+Vector = List[float]
 
 import random
 
@@ -258,7 +260,7 @@ class NaiveProber(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, p: Player=0.1) -> None:
+    def __init__(self, p: float=0.1) -> None:
         """
         Parameters
         ----------

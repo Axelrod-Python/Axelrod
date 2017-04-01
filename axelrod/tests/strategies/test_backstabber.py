@@ -73,12 +73,12 @@ class TestDoubleCrosser(TestBackStabber):
 
         opponent_actions = starting_cooperation + [D, D, C, D]
         expected_actions = starting_rounds + [(C, D), (C, D), (D, C), (C, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
         opponent_actions = starting_cooperation + [D, D, D, D, C, D]
         expected_actions = starting_rounds + [(C, D), (C, D), (D, D), (D, D), (D, C), (C, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
     def test_starting_defect_keeps_alt_strategy_from_triggering(self):
@@ -87,19 +87,19 @@ class TestDoubleCrosser(TestBackStabber):
 
         defects_on_first = [D] + [C] * 6
         defects_on_first_actions = [(C, D)] + [(C, C)] * 6
-        self.versus_test(axelrod.MockPlayer(defects_on_first + opponent_actions_suffix),
+        self.versus_test(axelrod.MockPlayer(actions=defects_on_first + opponent_actions_suffix),
                          expected_actions=defects_on_first_actions + expected_actions_suffix,
                          match_attributes={"length": 200})
 
         defects_in_middle = [C, C, C, D, C, C, C]
         defects_in_middle_actions = [(C, C), (C, C), (C, C), (C, D), (C, C), (C, C), (C, C)]
-        self.versus_test(axelrod.MockPlayer(defects_in_middle + opponent_actions_suffix),
+        self.versus_test(axelrod.MockPlayer(actions=defects_in_middle + opponent_actions_suffix),
                          expected_actions=defects_in_middle_actions + expected_actions_suffix,
                          match_attributes={"length": 200})
 
         defects_on_last = [C] * 6 + [D]
         defects_on_last_actions = [(C, C)] * 6 + [(C, D)]
-        self.versus_test(axelrod.MockPlayer(defects_on_last + opponent_actions_suffix),
+        self.versus_test(axelrod.MockPlayer(actions=defects_on_last + opponent_actions_suffix),
                          expected_actions=defects_on_last_actions + expected_actions_suffix,
                          match_attributes={"length": 200})
 
@@ -108,7 +108,7 @@ class TestDoubleCrosser(TestBackStabber):
         one_eighty_expected_actions = [(C, C)] * 8 + [(C, C), (C, D)] * 86
         opponent_actions = one_eighty_opponent_actions + [C] * 6
         expected_actions = one_eighty_expected_actions + [(D, C)] * 6
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions,
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
 

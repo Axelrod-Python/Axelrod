@@ -39,7 +39,7 @@ class TestInverse(TestPlayer):
             (C, C), (C, C), (C, C), (C, D), (D, D),
         ]
         self.versus_test(
-            axelrod.MockPlayer([a[1] for a in expected_actions]),
+            axelrod.MockPlayer(actions=[a[1] for a in expected_actions]),
             expected_actions=expected_actions,
             seed=0,
         )

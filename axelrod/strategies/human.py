@@ -1,5 +1,5 @@
 from os import linesep
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from prompt_toolkit import prompt
 from prompt_toolkit.token import Token
@@ -19,7 +19,7 @@ class ActionValidator(Validator):
     Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#input-validation
     """
 
-    def validate(self, document):
+    def validate(self, document) -> None:
         text = document.text
 
         if text and text.upper() not in ['C', 'D']:
@@ -118,7 +118,7 @@ class Human(Player):
             'print': print_statement
         }
 
-    def _get_human_input(self):  # pragma: no cover
+    def _get_human_input(self) -> Action:  # pragma: no cover
         """
         A method to prompt the user for input, validate it and display
         the bottom toolbar.
@@ -137,7 +137,7 @@ class Human(Player):
 
         return action.upper()
 
-    def strategy(self, opponent, input_function=None):
+    def strategy(self, opponent: Player, input_function=None):
         """
         Ordinarily, the strategy prompts for keyboard input rather than
         deriving its own action.
