@@ -140,17 +140,21 @@ class TestFsmTransitions(TestPlayer):
         Then creates a versus_test of those two lists.
         """
         fsm_player = self.player()
-        transitions = fsm_player.fsm.state_transitions
+        test_fsm = self.player().fsm  # independent FSM to compare to player's actions
+        transitions = test_fsm.state_transitions
         first_opponent_move = state_and_action[0][1]
 
         expected_actions = [(fsm_player.initial_action, first_opponent_move)]
         opponent_actions = [first_opponent_move]
 
         for index in range(1, len(state_and_action)):
-            current_state_and_last_opponent_move = state_and_action[index - 1]
-            fsm_move = transitions[current_state_and_last_opponent_move][1]
+            current_state, last_opponent_move = state_and_action[index - 1]
+            fsm_move = transitions[(current_state, last_opponent_move)][1]
 
-            current_opponent_move = state_and_action[index][1]
+            new_state, current_opponent_move = state_and_action[index]
+
+            self.assertEqual(test_fsm.move(last_opponent_move), fsm_move)
+            self.assertEqual(test_fsm.state, new_state)
 
             expected_actions.append((fsm_move, current_opponent_move))
             opponent_actions.append(current_opponent_move)
@@ -198,7 +202,7 @@ class TestFortress3(TestFsmTransitions):
 
     @unittest.expectedFailure
     def test_incorrect_transitions(self):
-        state_and_actions = [(1, C), (1, C), (2, D), (3, C)]
+        state_and_actions = [(1, C), (1, D), (1, D)]
         self.transitions_test(state_and_actions)
 
 
@@ -256,8 +260,8 @@ class TestPredator(TestFsmTransitions):
     }
     """
     transitions = [
-            (0, C, 0, D),
-            (0, D, 1, D),
+                    (0, C, 0, D),  NO ROUTE
+                    (0, D, 1, D),  NO ROUTE
             (1, C, 2, D),
             (1, D, 3, D),
             (2, C, 4, C),
@@ -280,7 +284,6 @@ class TestPredator(TestFsmTransitions):
     def test_strategy(self):
         self.first_play_test(C)
 
-        # TODO CHECK POSSIBLE ISSUE - STATE: 0 CAN NEVER BE REACHED
         state_and_actions = ([(1, C), (2, C), (4, C), (2, D), (3, D), (4, D), (6, C)] +
                              [(7, D), (7, C), (8, C), (8, D), (6, D)] * 3)
         self.transitions_test(state_and_actions)
@@ -290,6 +293,8 @@ class TestPredator(TestFsmTransitions):
 
         state_and_actions = [(1, D), (3, D), (4, D), (6, D)] + [(7, D)] * 10
         self.transitions_test(state_and_actions)
+
+        # TODO NO ROUTE TO STATE: 0
 
 
 class TestPun1(TestFsmTransitions):
@@ -318,7 +323,8 @@ class TestPun1(TestFsmTransitions):
     def test_strategy(self):
         self.first_play_test(D)
 
-        
+        state_and_actions = [(1, C), (2, D), (1, D), (2, D)] * 3
+        self.transitions_test(state_and_actions)
 
 
 class TestRaider(TestFsmTransitions):
@@ -349,8 +355,16 @@ class TestRaider(TestFsmTransitions):
     """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(D)
+
+        state_and_actions = [(0, C), (2, C), (0, D), (2, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        state_and_actions = [(0, C), (2, D), (3, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        state_and_actions = [(0, C), (2, D), (3, D)] + [(1, C), (1, D)] * 5
+        self.transitions_test(state_and_actions)
 
 
 class TestRipoff(TestFsmTransitions):
@@ -379,8 +393,13 @@ class TestRipoff(TestFsmTransitions):
     """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(D)
+
+        state_and_actions = [(1, C), (2, C)] * 3 + [(1, D)] + [(3, C), (3, D)] * 5
+        self.transitions_test(state_and_actions)
+
+        state_and_actions = [(1, C), (2, D)] + [(3, D)] * 5
+        self.transitions_test(state_and_actions)
 
 
 class TestSolutionB1(TestFsmTransitions):
@@ -409,8 +428,10 @@ class TestSolutionB1(TestFsmTransitions):
     """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(D)
+
+        state_and_actions = [(1, D)] * 3 + [(1, C)] + [(2, C)] * 3 + [(2, D)] + [(3, C), (3, D)] * 3
+        self.transitions_test(state_and_actions)
 
 
 class TestSolutionB5(TestFsmTransitions):
@@ -445,8 +466,16 @@ class TestSolutionB5(TestFsmTransitions):
     """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(D)
+
+        state_and_actions = ([(1, C)] + [(2, C)] * 3 + [(2, D), (3, D)]) * 2
+        self.transitions_test(state_and_actions)
+
+        state_and_actions = [(1, C), (2, D)] + [(3, C), (6, D), (5, C), (5, D), (4, C), (3, C), (6, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        state_and_actions = [(1, D)] + [(6, D), (5, D), (4, D)] * 3
+        self.transitions_test(state_and_actions)
 
 
 class TestThumper(TestFsmTransitions):
@@ -473,8 +502,10 @@ class TestThumper(TestFsmTransitions):
     """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(C)
+
+        state_and_actions = [(1, C)] * 3 + [(1, D), (2, C), (1, D), (2, D)] * 3
+        self.transitions_test(state_and_actions)
 
 
 class TestEvolvedFSM4(TestFsmTransitions):
@@ -505,8 +536,13 @@ class TestEvolvedFSM4(TestFsmTransitions):
     """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(C)
+
+        state_and_actions = [(0, C)] * 3 + [(0, D), (2, C), (2, D), (1, D)] * 3
+        self.transitions_test(state_and_actions)
+
+        state_and_actions = [(0, D), (2, D), (1, C), (3, C), (3, C), (3, D), (1, C), (3, D), (1, D)] * 3
+        self.transitions_test(state_and_actions)
 
 
 class TestEvolvedFSM16(TestFsmTransitions):
@@ -533,8 +569,8 @@ class TestEvolvedFSM16(TestFsmTransitions):
             (2, D, 14, D),
             (3, C, 3, D),
             (3, D, 3, D),
-            (4, C, 11, D),
-            (4, D, 7, D),
+                    (4, C, 11, D),   NO ROUTE
+                    (4, D, 7, D),    NO ROUTE
             (5, C, 12, D),
             (5, D, 10, D),
             (6, C, 5, C),
@@ -543,8 +579,8 @@ class TestEvolvedFSM16(TestFsmTransitions):
             (7, D, 1, C),
             (8, C, 5, C),
             (8, D, 5, C),
-            (9, C, 10, D),
-            (9, D, 13, D),
+                    (9, C, 10, D),  NO ROUTE
+                    (9, D, 13, D),  NO ROUTE
             (10, C, 11, D),
             (10, D, 8, C),
             (11, C, 15, D),
@@ -561,8 +597,40 @@ class TestEvolvedFSM16(TestFsmTransitions):
     """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(C)
+
+        # finished: 0,
+        state_and_actions = [(0, C)] * 3 + [(0, D)] + [(12, D), (11, D), (5, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        # finished: 0, 5, 10
+        state_and_actions = [(0, D), (12, D), (11, D)] + [(5, D), (10, C), (11, D), (5, D), (10, D), (8, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        # finished: 0, 2, 5, 10, 11, 12, 15
+        state_and_actions = ([(0, D), (12, C), (8, D), (5, D), (10, C), (11, C), (15, C), (15, C), (15, D)] +
+                             [(2, C)] * 3 + [(2, D), (14, C), (13, C)])
+        self.transitions_test(state_and_actions)
+
+        # finished: 0, 2, 3, 5, 10, 11, 12, 13, 14, 15
+        to_state_fourteen = [(0, D), (12, D), (11, C), (15, D), (2, D)]
+        state_and_actions = to_state_fourteen + [(14, D), (13, C), (13, C), (13, D), (7, C)] + [(3, D), (3, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        # finished: 0, 2, 3, 5, 7, 10, 11, 12, 13, 14, 15
+        to_state_seven = to_state_fourteen + [(14, D), (13, D)]
+        state_and_actions = to_state_seven + [(7, D), (1, C)] + [(3, C)] * 5
+        self.transitions_test(state_and_actions)
+
+        # finished: 0, 1, 2, 3, 5, 10, 11, 12, 13, 14, 15
+        state_and_actions = to_state_seven + [(7, D), (1, D), (6, C), (5, D), (10, C)]
+        self.transitions_test(state_and_actions)
+
+        # finished: 0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15
+        state_and_actions = to_state_seven + [(7, D), (1, D), (6, D), (12, C), (8, D), (5, D)]
+        self.transitions_test(state_and_actions)
+
+        # TODO NO ROUTE TO STATE: 4, 9
 
 
 class TestEvolvedFSM16Noise05(TestFsmTransitions):
@@ -595,12 +663,12 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
             (5, D, 10, D),
             (6, C, 8, C),
             (6, D, 6, D),
-            (7, C, 5, D),
-            (7, D, 15, C),
+                    (7, C, 5, D),  NO ROUTE
+                    (7, D, 15, C),  NO ROUTE
             (8, C, 2, C),
             (8, D, 4, D),
-            (9, C, 15, D),
-            (9, D, 6, D),
+                    (9, C, 15, D),  NO ROUTE
+                    (9, D, 6, D),  NO ROUTE
             (10, C, 4, D),
             (10, D, 1, D),
             (11, C, 14, D),
@@ -617,5 +685,36 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
     """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(C)
+
+        # finished: 12, 13
+        state_and_actions = [(0, C), (8, C), (2, C), (12, D), (2, C), (12, C), (13, C), (13, C), (13, D)] + [(6, D)] * 3
+        self.transitions_test(state_and_actions)
+
+        # finished 2, 3, 4, 12, 13
+        state_and_actions = [(0, C), (8, C), (2, D), (3, D), (3, D), (3, C), (10, C), (4, D), (4, D), (4, C), (5, D)]
+        self.transitions_test(state_and_actions)
+
+        # finished 0, 2, 3, 4, 6, 8, 10, 12, 13
+        state_and_actions = [(0, D), (3, C), (10, D), (1, C), (13, D), (6, C), (8, D), (4, C), (5, C), (4, C), (5, D)]
+        self.transitions_test(state_and_actions)
+
+        # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15      11, 14
+        state_and_actions = [(0, D), (3, C), (10, D), (1, D), (15, C), (5, D), (10, D), (1, D), (15, D), (11, D)]
+        self.transitions_test(state_and_actions)
+
+        # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15      11, 14
+        to_state_eleven = [(0, D), (3, C), (10, D), (1, D), (15, D)]
+
+        state_and_actions = to_state_eleven + [(11, C), (14, C), (3, C), (10, D)]
+        self.transitions_test(state_and_actions)
+
+        # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 15
+        state_and_actions = to_state_eleven + [(11, D)] + [(13, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 14, 15
+        state_and_actions = to_state_eleven + [(11, C), (14, D)] + [(13, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        # TODO NO ROUTE TO STATE: 7, 9
