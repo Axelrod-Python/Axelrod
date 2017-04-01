@@ -59,7 +59,7 @@ The scores in each round::
 The :code:`MoranProcess` class also accepts an argument for a mutation rate.
 Nonzero mutation changes the Markov process so that it no longer has absorbing
 states, and will iterate forever. To prevent this, iterate with a loop (or
-function like :code:`takewhile` from :code:`itertools`):
+function like :code:`takewhile` from :code:`itertools`)::
 
     >>> import axelrod as axl
     >>> axl.seed(4) # for reproducible example
@@ -101,10 +101,9 @@ one graph is supplied to the process, the two graphs are assumed to be the same.
 
 To create a graph-based Moran process, use a graph as follows::
 
-    >>> import axelrod
     >>> from axelrod import Cooperator, Defector, MoranProcessGraph
     >>> from axelrod.graph import Graph
-    >>> axelrod.seed(40)
+    >>> axl.seed(40)
     >>> edges = [(0, 1), (1, 2), (2, 3), (3, 1)]
     >>> graph = Graph(edges)
     >>> players = [Cooperator(), Cooperator(), Cooperator(), Defector()]
@@ -118,3 +117,28 @@ You can supply the `reproduction_graph` as a keyword argument. The standard Mora
 process is equivalent to using a complete graph for both graphs.
 
 
+Approximate Moran Process
+-------------------------
+
+Due to the high computational cost of a single Moran process, an approximate
+Moran process is implemented that can make use of cached outcomes of games. The
+following code snippet will generate a Moran process in which a `Defector`
+cooperates (gets a high score) against another `Defector` (note that the
+opposite is in fact true). First the cache is built by passing counter objects
+of outcomes::
+
+    >>> from collections import Counter
+    >>> from axelrod import Pdf
+    >>> cached_outcomes = {}
+    >>> cached_outcomes[("Cooperator", "Defector")] = Pdf(Counter([(0, 5)]))
+    >>> cached_outcomes[("Cooperator", "Cooperator")] = Pdf(Counter([(3, 3)]))
+    >>> cached_outcomes[("Defector", "Defector")] = Pdf(Counter([(10, 10), (9, 9)]))
+
+Now let us create an Approximate Moran Process::
+
+    >>> axl.seed(0)
+    >>> players = [Cooperator(), Defector(), Defector(), Defector()]
+    >>> amp = axl.ApproximateMoranProcess(players, cached_outcomes)
+    >>> results = amp.play()
+    >>> amp.population_distribution()
+    Counter({'Defector': 4})
