@@ -307,7 +307,7 @@ class TestPlayer(unittest.TestCase):
     def test_clone(self):
         # Test that the cloned player produces identical play
         player1 = self.player()
-        if str(player1)[:6] in ["Darwin", "Human:"]:
+        if player1.name in ["Darwin", "Human"]:
             # Known exceptions
             return
         player2 = player1.clone()
