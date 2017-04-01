@@ -2,29 +2,11 @@
 import unittest
 
 import axelrod
-from .test_player import TestMatch, TestPlayer
+from .test_player import TestPlayer
 from axelrod.strategies.finite_state_machines import SimpleFSM
 
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
-
-
-# def check_state_transitions(state_transitions):
-#     """Checks that the supplied transitions for a finite state machine are
-#     well-formed."""
-#     keys = state_transitions.keys()
-#     values = state_transitions.values()
-#     # Check that the set of source states contains the set of sink states
-#     sources = [k[0] for k in keys]
-#     sinks = [v[0] for v in values]
-#     if not set(sinks).issubset(set(sources)):
-#         return False
-#     # Check that there are two outgoing edges for every source state
-#     for state in sources:
-#         for action in [C, D]:
-#             if not ((state, action) in keys):
-#                 return False
-#     return True
 
 
 class TestSimpleFSM(unittest.TestCase):
@@ -137,7 +119,51 @@ class TestFSMPlayer(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=expected, init_kwargs=wsls_init_kwargs)
 
 
-class TestFortress3(TestPlayer):
+class TestFsmTransitions(TestPlayer):
+    name = "FSM Player"
+    player = axelrod.FSMPlayer
+
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def transitions_test(self, state_and_action):
+        """
+        takes a list of [(initial_state, first_opponent_action), (next_state, next_opponent_action), ...]
+        and creates a list of opponent moves, and a list of expected_actions based on the FiniteStateMachine.
+        Then creates a versus_test of those two lists.
+        """
+        fsm_player = self.player()
+        transitions = fsm_player.fsm.state_transitions
+        first_opponent_move = state_and_action[0][1]
+
+        expected_actions = [(fsm_player.initial_action, first_opponent_move)]
+        opponent_actions = [first_opponent_move]
+
+        for index in range(1, len(state_and_action)):
+            current_state_and_last_opponent_move = state_and_action[index - 1]
+            fsm_move = transitions[current_state_and_last_opponent_move][1]
+
+            current_opponent_move = state_and_action[index][1]
+
+            expected_actions.append((fsm_move, current_opponent_move))
+            opponent_actions.append(current_opponent_move)
+
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions)
+
+    def test_transitions_with_default_fsm(self):
+        if self.player is axelrod.FSMPlayer:
+            state_action = [(1, C), (1, D)]
+            self.transitions_test(state_action)
+
+
+class TestFortress3(TestFsmTransitions):
 
     name = "Fortress3"
     player = axelrod.Fortress3
@@ -150,13 +176,33 @@ class TestFortress3(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+    """
+    transitions = [
+            (1, C, 1, D),
+            (1, D, 2, D),
+            (2, C, 1, D),
+            (2, D, 3, C),
+            (3, C, 3, C),
+            (3, D, 1, D)
+        ]
+    """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(D)
 
+        state_and_actions = [(1, C), (1, D), (2, C), (1, C)]
+        self.transitions_test(state_and_actions)
 
-class TestFortress4(TestPlayer):
+        state_and_actions = [(1, D), (2, D), (3, C), (3, C), (3, C), (3, D), (1, C)] * 2
+        self.transitions_test(state_and_actions)
+
+    @unittest.expectedFailure
+    def test_incorrect_transitions(self):
+        state_and_actions = [(1, C), (1, C), (2, D), (3, C)]
+        self.transitions_test(state_and_actions)
+
+
+class TestFortress4(TestFsmTransitions):
 
     name = "Fortress4"
     player = axelrod.Fortress4
@@ -169,13 +215,33 @@ class TestFortress4(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+    """
+    transitions = [
+            (1, C, 1, D),
+            (1, D, 2, D),
+            (2, C, 1, D),
+            (2, D, 3, D),
+            (3, C, 1, D),
+            (3, D, 4, C),
+            (4, C, 4, C),
+            (4, D, 1, D)
+        ]
+    """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(D)
 
+        state_and_actions = [(1, C), (1, D), (2, C)] * 3
+        self.transitions_test(state_and_actions)
 
-class TestPredator(TestPlayer):
+        state_and_actions = [(1, D), (2, D), (3, C), (1, C)] * 3
+        self.transitions_test(state_and_actions)
+
+        state_and_actions = [(1, D), (2, D), (3, D), (4, C), (4, C), (4, C), (4, C), (4, D)] * 3
+        self.transitions_test(state_and_actions)
+
+
+class TestPredator(TestFsmTransitions):
 
     name = "Predator"
     player = axelrod.Predator
@@ -188,13 +254,45 @@ class TestPredator(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+    """
+    transitions = [
+            (0, C, 0, D),
+            (0, D, 1, D),
+            (1, C, 2, D),
+            (1, D, 3, D),
+            (2, C, 4, C),
+            (2, D, 3, D),
+            (3, C, 5, D),
+            (3, D, 4, C),
+            (4, C, 2, C),
+            (4, D, 6, D),
+            (5, C, 7, D),
+            (5, D, 3, D),
+            (6, C, 7, C),
+            (6, D, 7, D),
+            (7, C, 8, D),
+            (7, D, 7, D),
+            (8, C, 8, D),
+            (8, D, 6, D)
+        ]
+    """
 
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(C)
 
+        # TODO CHECK POSSIBLE ISSUE - STATE: 0 CAN NEVER BE REACHED
+        state_and_actions = ([(1, C), (2, C), (4, C), (2, D), (3, D), (4, D), (6, C)] +
+                             [(7, D), (7, C), (8, C), (8, D), (6, D)] * 3)
+        self.transitions_test(state_and_actions)
 
-class TestPun1(TestPlayer):
+        state_and_actions = [(1, C), (2, D), (3, C), (5, D), (3, C), (5, C)] + [(7, C), (8, D), (6, C)] * 5
+        self.transitions_test(state_and_actions)
+
+        state_and_actions = [(1, D), (3, D), (4, D), (6, D)] + [(7, D)] * 10
+        self.transitions_test(state_and_actions)
+
+
+class TestPun1(TestFsmTransitions):
 
     name = "Pun1"
     player = axelrod.Pun1
@@ -208,16 +306,22 @@ class TestPun1(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (1, C, 2, C),
+            (1, D, 2, C),
+            (2, C, 1, C),
+            (2, D, 1, D)
+        ]
+    """
+
     def test_strategy(self):
-        # Test initial play sequence
         self.first_play_test(D)
-        self.responses_test([C], [D, C], [C, C])
-        self.responses_test([C], [D, C], [D, C])
-        self.responses_test([C], [D, C, C], [C, C, C])
-        self.responses_test([D], [D, C, C, C], [C, C, C, D])
+
+        
 
 
-class TestRaider(TestPlayer):
+class TestRaider(TestFsmTransitions):
 
     name = "Raider"
     player = axelrod.Raider
@@ -231,12 +335,25 @@ class TestRaider(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (0, C, 2, D),
+            (0, D, 2, D),
+            (1, C, 1, C),
+            (1, D, 1, D),
+            (2, C, 0, D),
+            (2, D, 3, C),
+            (3, C, 0, D),
+            (3, D, 1, C)
+        ]
+    """
+
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(D)
 
 
-class TestRipoff(TestPlayer):
+class TestRipoff(TestFsmTransitions):
 
     name = "Ripoff"
     player = axelrod.Ripoff
@@ -250,12 +367,23 @@ class TestRipoff(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (1, C, 2, C),
+            (1, D, 3, C),
+            (2, C, 1, D),
+            (2, D, 3, C),
+            (3, C, 3, C),  # Note that it's TFT in state 3
+            (3, D, 3, D)
+        ]
+    """
+
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(D)
 
 
-class TestSolutionB1(TestPlayer):
+class TestSolutionB1(TestFsmTransitions):
 
     name = "SolutionB1"
     player = axelrod.SolutionB1
@@ -269,12 +397,23 @@ class TestSolutionB1(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (1, C, 2, D),
+            (1, D, 1, D),
+            (2, C, 2, C),
+            (2, D, 3, C),
+            (3, C, 3, C),
+            (3, D, 3, C)
+        ]
+    """
+
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(D)
 
 
-class TestSolutionB5(TestPlayer):
+class TestSolutionB5(TestFsmTransitions):
 
     name = "SolutionB5"
     player = axelrod.SolutionB5
@@ -288,12 +427,29 @@ class TestSolutionB5(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (1, C, 2, C),
+            (1, D, 6, D),
+            (2, C, 2, C),
+            (2, D, 3, D),
+            (3, C, 6, C),
+            (3, D, 1, D),
+            (4, C, 3, C),
+            (4, D, 6, D),
+            (5, C, 5, D),
+            (5, D, 4, D),
+            (6, C, 3, C),
+            (6, D, 5, D)
+        ]
+    """
+
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(D)
 
 
-class TestThumper(TestPlayer):
+class TestThumper(TestFsmTransitions):
 
     name = "Thumper"
     player = axelrod.Thumper
@@ -307,12 +463,21 @@ class TestThumper(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (1, C, 1, C),
+            (1, D, 2, D),
+            (2, C, 1, D),
+            (2, D, 1, D)
+        ]
+    """
+
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(C)
 
 
-class TestEvolvedFSM4(TestPlayer):
+class TestEvolvedFSM4(TestFsmTransitions):
 
     name = "Evolved FSM 4"
     player = axelrod.EvolvedFSM4
@@ -326,12 +491,25 @@ class TestEvolvedFSM4(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (0, C, 0, C),
+            (0, D, 2, D),
+            (1, C, 3, D),
+            (1, D, 0, C),
+            (2, C, 2, D),
+            (2, D, 1, C),
+            (3, C, 3, D),
+            (3, D, 1, D)
+        ]
+    """
+
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(C)
 
 
-class TestEvolvedFSM16(TestPlayer):
+class TestEvolvedFSM16(TestFsmTransitions):
 
     name = "Evolved FSM 16"
     player = axelrod.EvolvedFSM16
@@ -345,12 +523,49 @@ class TestEvolvedFSM16(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (0, C, 0, C),
+            (0, D, 12, D),
+            (1, C, 3, D),
+            (1, D, 6, C),
+            (2, C, 2, D),
+            (2, D, 14, D),
+            (3, C, 3, D),
+            (3, D, 3, D),
+            (4, C, 11, D),
+            (4, D, 7, D),
+            (5, C, 12, D),
+            (5, D, 10, D),
+            (6, C, 5, C),
+            (6, D, 12, D),
+            (7, C, 3, D),
+            (7, D, 1, C),
+            (8, C, 5, C),
+            (8, D, 5, C),
+            (9, C, 10, D),
+            (9, D, 13, D),
+            (10, C, 11, D),
+            (10, D, 8, C),
+            (11, C, 15, D),
+            (11, D, 5, D),
+            (12, C, 8, C),
+            (12, D, 11, D),
+            (13, C, 13, D),
+            (13, D, 7, D),
+            (14, C, 13, D),
+            (14, D, 13, D),
+            (15, C, 15, D),
+            (15, D, 2, C)
+        ]
+    """
+
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(C)
 
 
-class TestEvolvedFSM16Noise05(TestPlayer):
+class TestEvolvedFSM16Noise05(TestFsmTransitions):
 
     name = "Evolved FSM 16 Noise 05"
     player = axelrod.EvolvedFSM16Noise05
@@ -364,42 +579,43 @@ class TestEvolvedFSM16Noise05(TestPlayer):
         'manipulates_state': False
     }
 
+    """
+    transitions = [
+            (0, C, 8, C),
+            (0, D, 3, D),
+            (1, C, 13, C),
+            (1, D, 15, D),
+            (2, C, 12, C),
+            (2, D, 3, D),
+            (3, C, 10, C),
+            (3, D, 3, D),
+            (4, C, 5, D),
+            (4, D, 4, D),
+            (5, C, 4, D),
+            (5, D, 10, D),
+            (6, C, 8, C),
+            (6, D, 6, D),
+            (7, C, 5, D),
+            (7, D, 15, C),
+            (8, C, 2, C),
+            (8, D, 4, D),
+            (9, C, 15, D),
+            (9, D, 6, D),
+            (10, C, 4, D),
+            (10, D, 1, D),
+            (11, C, 14, D),
+            (11, D, 13, C),
+            (12, C, 13, C),
+            (12, D, 2, C),
+            (13, C, 13, C),
+            (13, D, 6, C),
+            (14, C, 3, D),
+            (14, D, 13, D),
+            (15, C, 5, D),
+            (15, D, 11, C)
+        ]
+    """
+
     def test_strategy(self):
         # Test initial play sequence
         self.first_play_test(C)
-
-
-class TestFortress3vsFortress3(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.Fortress3(), axelrod.Fortress3(),
-                         [D, D, C, C, C], [D, D, C, C, C])
-
-
-class TestFortress3vsTitForTat(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.Fortress3(), axelrod.TitForTat(),
-                         [D, D, D, C], [C, D, D, D])
-
-
-class TestFortress3vsCooperator(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.Fortress3(), axelrod.Cooperator(),
-                         [D, D, D, D, D, D], [C] * 6)
-
-
-class TestFortress4vsFortress4(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.Fortress4(), axelrod.Fortress4(),
-                         [D, D, D, C, C, C], [D, D, D, C, C, C])
-
-
-class TestFortress4vsTitForTat(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.Fortress4(), axelrod.TitForTat(),
-                         [D, D, D, D, C, D], [C, D, D, D, D, C])
-
-
-class TestFortress4vsCooperator(TestMatch):
-    def test_rounds(self):
-        self.versus_test(axelrod.Fortress4(), axelrod.Cooperator(),
-                         [D, D, D, D, D, D], [C] * 6)

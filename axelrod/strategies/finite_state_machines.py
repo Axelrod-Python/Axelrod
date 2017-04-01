@@ -90,7 +90,6 @@ class FSMPlayer(Player):
             initial_action = C
         super().__init__()
         self.initial_state = initial_state
-        self.state = initial_state
         self.initial_action = initial_action
         self.fsm = SimpleFSM(transitions, initial_state)
 
@@ -99,15 +98,11 @@ class FSMPlayer(Player):
             return self.initial_action
         else:
             action = self.fsm.move(opponent.history[-1])
-            # Record the state for testing purposes, this isn't necessary
-            # for the strategy to function
-            self.state = self.fsm.state
             return action
 
     def reset(self):
         super().reset()
         self.fsm.state = self.initial_state
-        self.state = self.initial_state
 
 
 class Fortress3(FSMPlayer):
@@ -128,8 +123,8 @@ class Fortress3(FSMPlayer):
 
     def __init__(self):
         transitions = [
-            (1, D, 2, D),
             (1, C, 1, D),
+            (1, D, 2, D),
             (2, C, 1, D),
             (2, D, 3, C),
             (3, C, 3, C),
