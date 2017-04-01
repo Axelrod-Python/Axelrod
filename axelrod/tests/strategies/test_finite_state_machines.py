@@ -140,8 +140,7 @@ class TestFsmTransitions(TestPlayer):
         Then creates a versus_test of those two lists.
         """
         fsm_player = self.player()
-        test_fsm = self.player().fsm  # independent FSM to compare to player's actions
-        transitions = test_fsm.state_transitions
+        transitions = fsm_player.fsm.state_transitions
         first_opponent_move = state_and_action[0][1]
 
         expected_actions = [(fsm_player.initial_action, first_opponent_move)]
@@ -153,13 +152,21 @@ class TestFsmTransitions(TestPlayer):
 
             new_state, current_opponent_move = state_and_action[index]
 
-            self.assertEqual(test_fsm.move(last_opponent_move), fsm_move)
-            self.assertEqual(test_fsm.state, new_state)
-
             expected_actions.append((fsm_move, current_opponent_move))
             opponent_actions.append(current_opponent_move)
 
+            self.verify_against_finite_state_machine(current_state=current_state,
+                                                     expected_state=new_state,
+                                                     last_opponent_move=last_opponent_move,
+                                                     expected_move=fsm_move)
+
         self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions)
+
+    def verify_against_finite_state_machine(self, current_state, expected_state, last_opponent_move, expected_move):
+        test_fsm = self.player().fsm
+        test_fsm.state = current_state
+        self.assertEqual(test_fsm.move(last_opponent_move), expected_move)
+        self.assertEqual(test_fsm.state, expected_state)
 
     def test_transitions_with_default_fsm(self):
         if self.player is axelrod.FSMPlayer:
