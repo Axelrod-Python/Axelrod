@@ -31,8 +31,11 @@ class SimpleFSM(object):
     def _raise_error_for_bad_input(self):
         callable_states = [self._state] + [pair[0] for pair in self._state_transitions.values()]
         for state in callable_states:
-            if (state, C) not in self._state_transitions or (state, D) not in self._state_transitions:
-                raise ValueError('state: {} does not have values for both C and D'.format(state))
+            self._raise_error_for_bad_state(state)
+
+    def _raise_error_for_bad_state(self, state: int):
+        if (state, C) not in self._state_transitions or (state, D) not in self._state_transitions:
+            raise ValueError('state: {} does not have values for both C and D'.format(state))
 
     @property
     def state(self) -> int:
@@ -40,8 +43,8 @@ class SimpleFSM(object):
 
     @state.setter
     def state(self, new_state: int):
+        self._raise_error_for_bad_state(new_state)
         self._state = new_state
-        self._raise_error_for_bad_input()
 
     @property
     def state_transitions(self) -> dict:
