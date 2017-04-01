@@ -7,7 +7,7 @@ from .version import __version__
 from .load_data_ import load_pso_tables, load_weights
 from . import graph
 from .actions import Actions, flip_action
-from .random_ import random_choice, seed
+from .random_ import random_choice, seed, Pdf
 from .plot import Plot
 from .game import DefaultGame, Game
 from .player import (

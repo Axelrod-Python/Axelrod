@@ -379,23 +379,6 @@ class MoranProcessGraph(MoranProcess):
         return counter
 
 
-class Pdf(object):
-    """A class for a probability distribution"""
-    def __init__(self, counter):
-        """Take as an instance of collections.counter"""
-        self.sample_space, self.counts = zip(*counter.items())
-        self.size = len(self.sample_space)
-        self.total = sum(self.counts)
-        self.probability = list([v / self.total for v in self.counts])
-
-    def sample(self):
-        """Sample from the pdf"""
-        index = np.random.choice(a=range(self.size), p=self.probability)
-        # Numpy cannot sample from a list of n dimensional objects for n > 1,
-        # need to sample an index
-        return self.sample_space[index]
-
-
 class ApproximateMoranProcess(MoranProcess):
     """
     A class to approximate a Moran process based
