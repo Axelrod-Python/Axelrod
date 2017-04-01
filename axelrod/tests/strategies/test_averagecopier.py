@@ -53,13 +53,13 @@ class TestAverageCopier(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          seed=2)
 
-        opponent = axelrod.MockPlayer([C, C, D, D, D, D])
+        opponent = axelrod.MockPlayer(actions=[C, C, D, D, D, D])
         actions = [(C, C), (C, C), (C, D), (D, D), (D, D),
                    (C, D), (D, C), (D, C), (D, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions,
                          seed=1)
 
-        opponent = axelrod.MockPlayer([C, C, C, D, D, D])
+        opponent = axelrod.MockPlayer(actions=[C, C, C, D, D, D])
         actions = [(D, C), (C, C), (C, C), (C, D), (D, D),
                    (C, D), (C, C), (D, C), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions,
@@ -106,13 +106,13 @@ class TestNiceAverageCopier(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          seed=2)
 
-        opponent = axelrod.MockPlayer([C, C, D, D, D, D])
+        opponent = axelrod.MockPlayer(actions=[C, C, D, D, D, D])
         actions = [(C, C), (C, C), (C, D), (C, D), (D, D),
                    (D, D), (C, C), (D, C), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions,
                          seed=1)
 
-        opponent = axelrod.MockPlayer([C, C, C, D, D, D])
+        opponent = axelrod.MockPlayer(actions=[C, C, C, D, D, D])
         actions = [(C, C), (C, C), (C, C), (C, D), (D, D),
                    (D, D), (C, C), (C, C), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions,

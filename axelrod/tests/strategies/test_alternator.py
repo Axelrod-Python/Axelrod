@@ -30,6 +30,6 @@ class TestAlternator(TestPlayer):
         actions = [(C, D), (D, D)] * 5
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, C])
+        opponent = axelrod.MockPlayer(actions=[D, C])
         actions = [(C, D), (D, C)] * 5
         self.versus_test(opponent, expected_actions=actions)

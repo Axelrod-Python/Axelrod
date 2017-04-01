@@ -434,7 +434,7 @@ class TestMetaMixer(TestMetaPlayer):
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
         distribution = [.2, .5, .3]
 
-        P1 = axelrod.MetaMixer(team, distribution)
+        P1 = axelrod.MetaMixer(team=team, distribution=distribution)
         P2 = axelrod.Cooperator()
 
         for k in range(100):
@@ -444,7 +444,7 @@ class TestMetaMixer(TestMetaPlayer):
         team.append(axelrod.Defector)
         distribution = [.2, .5, .3, 0]  # If add a defector but does not occur
 
-        P1 = axelrod.MetaMixer(team, distribution)
+        P1 = axelrod.MetaMixer(team=team, distribution=distribution)
 
         for k in range(100):
             P1.play(P2)
@@ -452,7 +452,7 @@ class TestMetaMixer(TestMetaPlayer):
 
         distribution = [0, 0, 0, 1]  # If defector is only one that is played
 
-        P1 = axelrod.MetaMixer(team, distribution)
+        P1 = axelrod.MetaMixer(team=team, distribution=distribution)
 
         for k in range(100):
             P1.play(P2)
@@ -462,7 +462,7 @@ class TestMetaMixer(TestMetaPlayer):
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
         distribution = [.2, .5, .5]  # Not a valid probability distribution
 
-        P1 = axelrod.MetaMixer(team, distribution)
+        P1 = axelrod.MetaMixer(team=team, distribution=distribution)
         P2 = axelrod.Cooperator()
 
         self.assertRaises(ValueError, P1.strategy, P2)

@@ -61,8 +61,8 @@ class TestBasicCycler(TestPlayer):
     def test_memory_depth_is_len_cycle_minus_one(self):
         len_ten = 'DCDCDDCDCD'
         len_five = 'DCDDC'
-        depth_nine = Cycler(len_ten)
-        depth_four = Cycler(len_five)
+        depth_nine = Cycler(cycle=len_ten)
+        depth_four = Cycler(cycle=len_five)
         self.assertEqual(depth_nine.classifier['memory_depth'], 9)
         self.assertEqual(depth_four.classifier['memory_depth'], 4)
 
@@ -71,7 +71,7 @@ class TestBasicCycler(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=expected, init_kwargs={'cycle': 'CDDC'})
 
     def test_cycle_raises_value_error_on_bad_cycle_str(self):
-        self.assertRaises(ValueError, Cycler, 'CdDC')
+        self.assertRaises(ValueError, Cycler, cycle='CdDC')
 
 
 def test_cycler_factory(cycle_str):

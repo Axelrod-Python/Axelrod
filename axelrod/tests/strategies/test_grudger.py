@@ -243,15 +243,15 @@ class TestGeneralSoftGrudger(TestPlayer):
 
         # Testing default parameters of n=1, d=4, c=2 (same as Soft Grudger)
         actions = [(C, D), (D, D), (D, C), (D, C), (D, D), (C, D), (C, C), (C, C)]
-        self.versus_test(axelrod.MockPlayer([D, D, C, C]), expected_actions=actions)
+        self.versus_test(axelrod.MockPlayer(actions=[D, D, C, C]), expected_actions=actions)
 
         # Testing n=2, d=4, c=2
         actions = [(C, D), (C, D), (D, C), (D, C), (D, D), (D, D), (C, C), (C, C)]
-        self.versus_test(axelrod.MockPlayer([D, D, C, C]), expected_actions=actions,
+        self.versus_test(axelrod.MockPlayer(actions=[D, D, C, C]), expected_actions=actions,
                          init_kwargs={"n": 2})
 
         # Testing n=1, d=1, c=1
         actions = [(C, D), (D, D), (C, C), (C, C), (C, D), (D, D), (C, C), (C, C)]
-        self.versus_test(axelrod.MockPlayer([D, D, C, C]), expected_actions=actions,
+        self.versus_test(axelrod.MockPlayer(actions=[D, D, C, C]), expected_actions=actions,
                          init_kwargs={"n": 1, "d": 1, "c": 1})
 

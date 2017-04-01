@@ -30,7 +30,10 @@ class TestHMMPlayers(unittest.TestCase):
         t_C = [[1]]
         t_D = [[1]]
         p = [1]
-        player = axelrod.HMMPlayer(t_C, t_D, p, initial_state=0, initial_action=C)
+        player = axelrod.HMMPlayer(
+            transitions_C=t_C, transitions_D=t_D, emission_probabilities=p,
+            initial_state=0, initial_action=C
+        )
         self.assertFalse(player.is_stochastic())
         self.assertFalse(player.classifier['stochastic'])
         opponent = axelrod.Alternator()
@@ -45,7 +48,10 @@ class TestHMMPlayers(unittest.TestCase):
         t_C = [[1]]
         t_D = [[1]]
         p = [0]
-        player = axelrod.HMMPlayer(t_C, t_D, p, initial_state=0, initial_action=D)
+        player = axelrod.HMMPlayer(
+            transitions_C=t_C, transitions_D=t_D, emission_probabilities=p,
+            initial_state=0, initial_action=D
+        )
         self.assertFalse(player.is_stochastic())
         self.assertFalse(player.classifier['stochastic'])
         opponent = axelrod.Alternator()
@@ -60,7 +66,10 @@ class TestHMMPlayers(unittest.TestCase):
         t_C = [[1, 0], [1, 0]]
         t_D = [[0, 1], [0, 1]]
         p = [1, 0]
-        player = axelrod.HMMPlayer(t_C, t_D, p, initial_state=0, initial_action=C)
+        player = axelrod.HMMPlayer(
+            transitions_C=t_C, transitions_D=t_D, emission_probabilities=p,
+            initial_state=0, initial_action=C
+        )
         self.assertFalse(player.is_stochastic())
         self.assertFalse(player.classifier['stochastic'])
         opponent = axelrod.Alternator()
@@ -75,7 +84,10 @@ class TestHMMPlayers(unittest.TestCase):
         t_C = [[1, 0], [0, 1]]
         t_D = [[0, 1], [1, 0]]
         p = [1, 0]
-        player = axelrod.HMMPlayer(t_C, t_D, p, initial_state=0, initial_action=C)
+        player = axelrod.HMMPlayer(
+            transitions_C=t_C, transitions_D=t_D, emission_probabilities=p,
+            initial_state=0, initial_action=C
+        )
         self.assertFalse(player.is_stochastic())
         self.assertFalse(player.classifier['stochastic'])
         opponent = axelrod.Alternator()
@@ -129,7 +141,10 @@ class TestHMMPlayer(TestPlayer):
     }
 
     def test_reset(self):
-        player = self.player([[1]], [[1]], [0], initial_state=0)
+        player = self.player(
+            transitions_C=[[1]], transitions_D=[[1]],
+            emission_probabilities=[0], initial_state=0
+        )
         player.hmm.state = -1
         player.reset()
         self.assertFalse(player.hmm.state == -1)

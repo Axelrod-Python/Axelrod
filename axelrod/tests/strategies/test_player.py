@@ -151,7 +151,7 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(player1.history, player2.history)
 
     def test_init_params(self):
-        """Tests player correct parameters signature init."""
+        """Tests player correct parameters signature detection."""
         self.assertEqual(self.player.init_params(), {})
         self.assertEqual(ParameterisedTestPlayer.init_params(),
                          {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
@@ -164,15 +164,32 @@ class TestPlayerClass(unittest.TestCase):
 
     def test_init_kwargs(self):
         """Tests player  correct parameters caching."""
+
+        # Tests for Players with no init parameters
+
+        # Test that init_kwargs exist and are empty
         self.assertEqual(self.player().init_kwargs, {})
+        # Test that passing a postional argument raises an error
+        self.assertRaises(TypeError, Player, 'test')
+        # Test that passing a keyword argument raises an error
+        self.assertRaises(TypeError, Player, arg_test1='test')
+
+        # Tests for Players with init parameters
+
+        # Test that init_kwargs exist and contains default values
         self.assertEqual(ParameterisedTestPlayer().init_kwargs,
                          {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
+        # Test that passing a keyword argument successfully change the init_kwargs dict
         self.assertEqual(ParameterisedTestPlayer(arg_test1='other').init_kwargs,
                          {'arg_test1': 'other', 'arg_test2': 'testing2'})
         self.assertEqual(ParameterisedTestPlayer(arg_test2='other').init_kwargs,
                          {'arg_test1': 'testing1', 'arg_test2': 'other'})
-        self.assertEqual(ParameterisedTestPlayer('other').init_kwargs,
-                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
+        # Test that passing a postional argument successfully change the init_kwargs dict
+        self.assertEqual(ParameterisedTestPlayer('other', 'other2').init_kwargs,
+                         {'arg_test1': 'other', 'arg_test2': 'other2'})
+        # Test that passing an unknown keyword argument or a spare one raises an error
+        self.assertRaises(TypeError, ParameterisedTestPlayer, arg_test3='test')
+        self.assertRaises(TypeError, ParameterisedTestPlayer, 'other', 'other', 'other')
 
 
 def test_responses(test_class, player1, player2, responses, history1=None,
@@ -321,7 +338,7 @@ class TestPlayer(unittest.TestCase):
         turns = 50
         r = random.random()
         for op in [axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.TitForTat(), axelrod.Random(r)]:
+                   axelrod.TitForTat(), axelrod.Random(p=r)]:
             player1.reset()
             player2.reset()
             seed = random.randint(0, 10 ** 6)

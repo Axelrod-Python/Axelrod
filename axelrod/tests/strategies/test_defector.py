@@ -48,14 +48,20 @@ class TestTrickyDefector(TestPlayer):
     def test_cooperates_if_opponent_history_has_C_and_last_three_are_D(self):
         opponent_actions = [D, C] + [D] * 5
         actions = [(D, D), (D, C)] + [(D, D)] * 3 + [(C, D)] * 2
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=actions)
+        self.versus_test(
+            axelrod.MockPlayer(actions=opponent_actions),
+            expected_actions=actions)
 
     def test_defects_if_opponent_never_cooperated(self):
         opponent_actions = [D] * 7
         actions = [(D, D)] * 7
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=actions)
+        self.versus_test(
+            axelrod.MockPlayer(actions=opponent_actions),
+            expected_actions=actions)
 
     def test_defects_if_opponent_last_three_are_not_D(self):
         opponent_actions = [C] + [D] * 3 + [C, D]
         actions = [(D, C)] + [(D, D)] * 3 + [(C, C), (D, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=actions)
+        self.versus_test(
+            axelrod.MockPlayer(actions=opponent_actions),
+            expected_actions=actions)

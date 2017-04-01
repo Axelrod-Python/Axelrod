@@ -30,7 +30,7 @@ class TestGambler(TestPlayer):
 
     def test_init(self):
         # Test empty table
-        player = self.player(dict())
+        player = self.player(lookup_table=dict())
         opponent = axelrod.Cooperator()
         self.assertEqual(player.strategy(opponent), C)
         # Test default table
@@ -40,7 +40,7 @@ class TestGambler(TestPlayer):
             ('', 'C', 'C'): 1,
             ('', 'D', 'C'): 1,
         }
-        player = self.player(tft_table)
+        player = self.player(lookup_table=tft_table)
         opponent = axelrod.Defector()
         player.play(opponent)
         self.assertEqual(player.history[-1], C)
@@ -49,7 +49,7 @@ class TestGambler(TestPlayer):
         # Test malformed tables
         table = {(C, C, C): 1, ('DD', 'DD', 'C'): 1}
         with self.assertRaises(ValueError):
-            player = self.player(table)
+            player = self.player(lookup_table=table)
 
     def test_strategy(self):
         self.responses_test([C], [C] * 4, [C, C, C, C])
@@ -64,12 +64,12 @@ class TestGambler(TestPlayer):
         constructor with the lookup table we want.
         """
         defector_table = {
-            ('', C, D) : 0,
-            ('', D, D) : 0,
-            ('', C, C) : 0,
-            ('', D, C) : 0,
+            ('', C, D): 0,
+            ('', D, D): 0,
+            ('', C, C): 0,
+            ('', D, C): 0,
         }
-        self.player = lambda : axelrod.Gambler(defector_table)
+        self.player = lambda : axelrod.Gambler(lookup_table=defector_table)
         self.responses_test([D], [C, C], [C, C])
         self.responses_test([D], [C, D], [D, C])
         self.responses_test([D], [D, D], [D, D])

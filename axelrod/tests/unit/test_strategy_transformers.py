@@ -120,7 +120,7 @@ class TestTransformers(unittest.TestCase):
         """
         p1 = axelrod.GoByMajority()
         p2 = DualTransformer()(axelrod.GoByMajority)()
-        p3 = axelrod.Cycler('CDD')  # Cycles 'CDD'
+        p3 = axelrod.Cycler(cycle='CDD')  # Cycles 'CDD'
 
         for _ in range(10):
             p1.play(p3)

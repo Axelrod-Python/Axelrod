@@ -83,7 +83,7 @@ class TestMoranProcess(unittest.TestCase):
             self.assertEqual((winner == winner2), outcome)
 
     def test_two_random_players(self):
-        p1, p2 = axelrod.Random(0.5), axelrod.Random(0.25)
+        p1, p2 = axelrod.Random(p=0.5), axelrod.Random(p=0.25)
         random.seed(5)
         mp = MoranProcess((p1, p2))
         populations = mp.play()
