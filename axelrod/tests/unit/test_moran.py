@@ -376,11 +376,11 @@ class TestApproximateMoranProcess(unittest.TestCase):
 
     def test_next(self):
         """Test the next function of the Moran process"""
-        scores = self.amp._play_next_round()
+        scores = self.amp.score_all()
         self.assertEqual(scores, [0, 5])
-        scores = self.amp._play_next_round()
+        scores = self.amp.score_all()
         self.assertEqual(scores, [0, 5])
-        scores = self.amp._play_next_round()
+        scores = self.amp.score_all()
         self.assertEqual(scores, [0, 5])
 
     def test_getting_scores_from_cache(self):

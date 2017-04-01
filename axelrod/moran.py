@@ -377,3 +377,71 @@ class MoranProcessGraph(MoranProcess):
         player_names = [str(player) for player in self.players]
         counter = Counter(player_names)
         return counter
+
+
+class Pdf(object):
+    """A class for a probability distribution"""
+    def __init__(self, counter):
+        """Take as an instance of collections.counter"""
+        self.sample_space, self.counts = zip(*counter.items())
+        self.size = len(self.sample_space)
+        self.total = sum(self.counts)
+        self.probability = list([v / self.total for v in self.counts])
+
+    def sample(self):
+        """Sample from the pdf"""
+        index = np.random.choice(a=range(self.size), p=self.probability)
+        # Numpy cannot sample from a list of n dimensional objects for n > 1,
+        # need to sample an index
+        return self.sample_space[index]
+
+
+class ApproximateMoranProcess(MoranProcess):
+    """
+    A class to approximate a Moran process based
+    on a distribution of potential Match outcomes.
+
+    Instead of playing the matches, the result is sampled
+    from a dictionary of player tuples to distribution of match outcomes
+    """
+    def __init__(self, players, cached_outcomes, mutation_rate=0.):
+        """
+        Parameters
+        ----------
+        players: iterable of axelrod.Player subclasses
+        cached_outcomes: dictionary
+            Mapping tuples of players to instances of the moran.Pdf class.
+        mutation_rate: float, 0
+            The rate of mutation. Replicating players are mutated with
+            probability `mutation_rate`
+        """
+        super(ApproximateMoranProcess, self).__init__(
+            players, turns=0, noise=0, deterministic_cache=None,
+            mutation_rate=mutation_rate)
+        self.cached_outcomes = cached_outcomes
+
+    def score_all(self):
+        """
+        Plays the next round of the process. Every player is paired up
+        against every other player and the total scores are obtained from the
+        cached_outcomes.
+        """
+        N = len(self.players)
+        scores = [0] * N
+        for i in range(N):
+            for j in range(i + 1, N):
+                player_names = tuple([str(self.players[i]), str(self.players[j])])
+
+                cached_score = self._get_scores_from_cache(player_names)
+                scores[i] += cached_score[0]
+                scores[j] += cached_score[1]
+        self.score_history.append(scores)
+        return scores
+
+    def _get_scores_from_cache(self, player_names):
+        try:
+            match_scores = self.cached_outcomes[player_names].sample()
+            return match_scores
+        except KeyError:  # If players are stored in opposite order
+            match_scores = self.cached_outcomes[player_names[::-1]].sample()
+            return match_scores[::-1]
