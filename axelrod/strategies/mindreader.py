@@ -28,6 +28,7 @@ class MindReader(Player):
 
     @staticmethod
     def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
         return D
 
     def strategy(self, opponent: Player) -> Action:
@@ -85,6 +86,7 @@ class MirrorMindReader(ProtectedMindReader):
 
     @staticmethod
     def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
         return C
 
     def strategy(self, opponent: Player) -> Action:

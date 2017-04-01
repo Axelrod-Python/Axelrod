@@ -48,6 +48,7 @@ class Geller(Player):
 
     @staticmethod
     def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
         return random_choice(0.5)
 
     def strategy(self, opponent: Player) -> Action:
@@ -77,6 +78,7 @@ class GellerCooperator(Geller):
 
     @staticmethod
     def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
         return C
 
 
@@ -97,4 +99,5 @@ class GellerDefector(Geller):
 
     @staticmethod
     def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
         return D
