@@ -3,14 +3,13 @@ The player classes in this module do not obey standard rules of the IPD (as
 indicated by their classifier). We do not recommend putting a lot of time in to
 optimising them.
 """
-import inspect
-
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
-from axelrod._strategy_utils import look_ahead, cheating_bastard
+from axelrod._strategy_utils import look_ahead, inspect_strategy
 
 
 C, D = Actions.C, Actions.D
+
 
 class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what
@@ -27,26 +26,16 @@ class MindReader(Player):
         'manipulates_state': False
     }
 
-    def simulation_strategy(self, opponent: Player) -> Action:
+    @staticmethod
+    def foil_strategy_inspection() -> Action:
         return D
 
     def strategy(self, opponent: Player) -> Action:
-        """Pretends to play the opponent a number of times before each match.
+        """
+        Pretends to play the opponent a number of times before each match.
         The primary purpose is to look far enough ahead to see if a defect will
         be punished by the opponent.
-
-        If the MindReader attempts to play itself (or another similar
-        strategy), then it will cause a recursion loop, so this is also handled
-        in this method, by defecting if the method is called by strategy
         """
-
-        # curframe = inspect.currentframe()
-        # calframe = inspect.getouterframes(curframe, 2)
-        # calname = calframe[1][3]
-        #
-        # if calname in ('strategy', 'simulate_match'):
-        #     return D
-
         game = self.match_attributes["game"]
 
         best_strategy = look_ahead(self, opponent, game)
@@ -77,6 +66,7 @@ class ProtectedMindReader(MindReader):
         else:
             self.__dict__[name] = val
 
+
 class MirrorMindReader(ProtectedMindReader):
     """A player that will mirror whatever strategy it is playing against by
     cheating and calling the opponent's strategy function instead of its own."""
@@ -93,22 +83,10 @@ class MirrorMindReader(ProtectedMindReader):
         'manipulates_state': False
     }
 
-    def simulation_strategy(self, opponent: Player) -> Action:
+    @staticmethod
+    def foil_strategy_inspection() -> Action:
         return C
 
     def strategy(self, opponent: Player) -> Action:
-        """Will read the mind of the opponent and play the opponent's strategy.
-
-        Also avoid infinite recursion when called by itself or another mind
-        reader or bender by cooperating.
-        """
-
-        # curframe = inspect.currentframe()
-        # calframe = inspect.getouterframes(curframe, 2)
-        # calname = calframe[1][3]
-        #
-        # if calname in ('strategy', 'simulate_match'):
-        #     return C
-        #
-        # return opponent.strategy(self)
-        return cheating_bastard(self, opponent)
+        """Will read the mind of the opponent and play the opponent's strategy. """
+        return inspect_strategy(self, opponent)

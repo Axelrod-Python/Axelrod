@@ -3,11 +3,8 @@ The player class in this module does not obey standard rules of the IPD (as
 indicated by their classifier). We do not recommend putting a lot of time in to
 optimising it.
 """
-import inspect
 from axelrod.actions import Action, Actions
 from axelrod.player import Player
-
-from typing import List
 
 C, D = Actions.C, Actions.D
 
@@ -44,21 +41,18 @@ class Darwin(Player):
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
     def __init__(self) -> None:
-        super().__init__()
+        self.outcomes = None  # type: dict
         self.response = Darwin.genome[0]
+        super().__init__()
 
     def receive_match_attributes(self):
         self.outcomes = self.match_attributes["game"].scores
 
-    def simulation_strategy(self, opponent: Player) -> Action:
+    @staticmethod
+    def foil_strategy_inspection() -> Action:
         return C
 
     def strategy(self, opponent: Player) -> Action:
-        # Frustrate psychics and ensure that simulated rounds
-        # do not influence genome.
-        # if inspect.stack()[1][3] not in Darwin.valid_callers:
-        #     return C
-
         trial = len(self.history)
 
         if trial > 0:
