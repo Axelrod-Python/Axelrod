@@ -51,6 +51,15 @@ class GoByMajority(Player):
             self.memory = self.classifier['memory_depth']
         else:
             self.memory = 0
+        self.name = (
+            'Go By Majority' + (self.memory > 0) * (": %i" % self.memory))
+        if self.soft:
+            self.name = "Soft " + self.name
+        else:
+            self.name = "Hard " + self.name
+
+    def __repr__(self):
+        return self.name
 
     def strategy(self, opponent: Player) -> Action:
         """This is affected by the history of the opponent.
@@ -77,7 +86,7 @@ class GoByMajority40(GoByMajority):
     """
     GoByMajority player with a memory of 40.
     """
-    name = 'Soft Go By Majority 40'
+    name = 'Go By Majority 40'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 40
 
@@ -89,7 +98,7 @@ class GoByMajority20(GoByMajority):
     """
     GoByMajority player with a memory of 20.
     """
-    name = 'Soft Go By Majority 20'
+    name = 'Go By Majority 20'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 20
 
@@ -101,7 +110,7 @@ class GoByMajority10(GoByMajority):
     """
     GoByMajority player with a memory of 10.
     """
-    name = 'Soft Go By Majority 10'
+    name = 'Go By Majority 10'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 10
 
@@ -113,7 +122,7 @@ class GoByMajority5(GoByMajority):
     """
     GoByMajority player with a memory of 5.
     """
-    name = 'Soft Go By Majority 5'
+    name = 'Go By Majority 5'
     classifier = copy.copy(GoByMajority.classifier)
     classifier['memory_depth'] = 5
 

@@ -8,7 +8,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestHardGoByMajority(TestPlayer):
 
-    name = "Hard Go By Majority: inf"
+    name = "Hard Go By Majority"
     player = axelrod.HardGoByMajority
     default_soft = False
     eq_play = D
@@ -43,7 +43,7 @@ class TestHardGoByMajority(TestPlayer):
 
 class TestGoByMajority(TestHardGoByMajority):
 
-    name = "Go By Majority: inf, True"
+    name = "Soft Go By Majority"
     player = axelrod.GoByMajority
     default_soft = True
     eq_play = C
@@ -63,6 +63,20 @@ class TestGoByMajority(TestHardGoByMajority):
         player = self.player(soft=False)
         self.assertFalse(player.soft)
 
+    def test_name(self):
+        player = self.player(soft=True)
+        self.assertEqual(player.name, "Soft Go By Majority")
+        player = self.player(soft=False)
+        self.assertEqual(player.name, "Hard Go By Majority")
+
+    def test_repr(self):
+        player = self.player(soft=True)
+        name = str(player)
+        self.assertEqual(name, "Soft Go By Majority")
+        player = self.player(soft=False)
+        name = str(player)
+        self.assertEqual(name, "Hard Go By Majority")
+
 
 def factory_TestGoByRecentMajority(L, soft=True):
 
@@ -74,7 +88,7 @@ def factory_TestGoByRecentMajority(L, soft=True):
 
     class TestGoByRecentMajority(TestPlayer):
 
-        name = "{} Go By Majority {}".format(prefix, L)
+        name = "{} Go By Majority: {}".format(prefix, L)
         player = getattr(axelrod, "{}GoByMajority{}".format(prefix2, L))
 
         expected_classifier = {
