@@ -36,11 +36,11 @@ class TestDavis(TestPlayer):
 
         # If opponent defects at any point then the player will defect forever
         # (after 10 rounds)
-        opponent = axelrod.MockPlayer([C] * 10 + [D])
+        opponent = axelrod.MockPlayer(actions=[C] * 10 + [D])
         actions = [(C, C)] * 10 + [(C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([C] * 15 + [D])
+        opponent = axelrod.MockPlayer(actions=[C] * 15 + [D])
         actions = [(C, C)] * 15 + [(C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
@@ -69,19 +69,19 @@ class TestRevisedDowning(TestPlayer):
         actions = [(C, D), (C, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, C, C])
+        opponent = axelrod.MockPlayer(actions=[D, C, C])
         actions = [(C, D), (C, C), (C, C), (C, D)]
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, D, C])
+        opponent = axelrod.MockPlayer(actions=[D, D, C])
         actions = [(C, D), (C, D), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([C, C, D, D, C, C])
+        opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, C])
         actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([C, C, C, C, D, D])
+        opponent = axelrod.MockPlayer(actions=[C, C, C, C, D, D])
         actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (C, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions)
 
@@ -174,11 +174,11 @@ class TestGrofman(TestPlayer):
         actions = [(C, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D] * 8)
+        opponent = axelrod.MockPlayer(actions=[D] * 8)
         actions = [(C, D)] * 2 + [(D, D)] * 5 + [(C, D)] + [(C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
-        opponent = axelrod.MockPlayer([D] * 8)
+        opponent = axelrod.MockPlayer(actions=[D] * 8)
         actions = [(C, D)] * 2 + [(D, D)] * 5 + [(C, D)] + [(D, D)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
@@ -269,7 +269,7 @@ class TestNydegger(TestPlayer):
                    (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, C])
+        opponent = axelrod.MockPlayer(actions=[D, C])
         actions = [(C, D), (D, C), (D, D), (D, C),
                    (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
@@ -301,19 +301,19 @@ class TestShubik(TestPlayer):
         actions = [(C, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, C, C])
+        opponent = axelrod.MockPlayer(actions=[D, C, C])
         actions = [(C, D), (D, C), (C, C), (C, D)]
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, C, D, C, C])
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C])
         actions = [(C, D), (D, C), (C, D), (D, C), (D, C), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, C, D, D, C])
+        opponent = axelrod.MockPlayer(actions=[D, C, D, D, C])
         actions = [(C, D), (D, C), (C, D), (D, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D, C, D, C, C, D])
+        opponent = axelrod.MockPlayer(actions=[D, C, D, C, C, D])
         actions = [(C, D), (D, C), (C, D), (D, C), (D, C),
                    (C, D), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
@@ -343,24 +343,24 @@ class TestTullock(TestPlayer):
         actions = [(C, D)] * 11 + [(D, D)] * 2
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
-        opponent = axelrod.MockPlayer([D] * 10 + [C])
+        opponent = axelrod.MockPlayer(actions=[D] * 10 + [C])
         actions = [(C, D)] * 10 + [(C, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
 
         # Test beyond 10 rounds
-        opponent = axelrod.MockPlayer([D] * 5 + [C] * 6)
+        opponent = axelrod.MockPlayer(actions=[D] * 5 + [C] * 6)
         actions = [(C, D)] * 5 + [(C, C)] * 6 + [(D, D)] * 4
         self.versus_test(opponent, expected_actions=actions, seed=20)
 
-        opponent = axelrod.MockPlayer([D] * 5 + [C] * 6)
+        opponent = axelrod.MockPlayer(actions=[D] * 5 + [C] * 6)
         actions = [(C, D)] * 5 + [(C, C)] * 6 + [(C, D), (D, D), (D, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
-        opponent = axelrod.MockPlayer([C] * 9 + [D] * 2)
+        opponent = axelrod.MockPlayer(actions=[C] * 9 + [D] * 2)
         actions = [(C, C)] * 9 + [(C, D)] * 2 + [(C, C), (D, C), (D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=1)
 
-        opponent = axelrod.MockPlayer([C] * 9 + [D] * 2)
+        opponent = axelrod.MockPlayer(actions=[C] * 9 + [D] * 2)
         actions = [(C, C)] * 9 + [(C, D)] * 2 + [(D, C), (D, C), (C, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 

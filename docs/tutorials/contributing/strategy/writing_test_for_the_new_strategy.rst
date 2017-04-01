@@ -42,7 +42,7 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
 3. The member function :code:`versus_test` can be used to test how the player
    plays against a given opponent::
 
-    self.versus_test(opponent=axelrod.MockPlayer([C, D]),
+    self.versus_test(opponent=axelrod.MockPlayer(actions=[C, D]),
                      expected_actions=[(D, C), (C, D), (C, C)], seed=None)
 
    In this case the player is tested against an opponent that will cycle through
@@ -136,11 +136,11 @@ As an example, the tests for Tit-For-Tat are as follows::
 
             #  If you would like to test against a sequence of moves you should use
             #  a MockPlayer
-            opponent = axelrod.MockPlayer([C, D])
+            opponent = axelrod.MockPlayer(actions=[C, D])
             actions = [(C, C), (C, D), (D, C), (C, D)]
             self.versus_test(opponent, expected_actions=actions)
 
-            opponent = axelrod.MockPlayer([C, C, D, D, C, D])
+            opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D])
             actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
             self.versus_test(opponent, expected_actions=actions)
 

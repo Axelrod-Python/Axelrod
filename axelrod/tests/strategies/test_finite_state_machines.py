@@ -34,7 +34,8 @@ class TestFSMPlayers(unittest.TestCase):
         """Tests that the player defined by the table for Cooperator is in fact
         Cooperator."""
         transitions = [(1, C, 1, C), (1, D, 1, C)]
-        player = axelrod.FSMPlayer(transitions, initial_state=1, initial_action=C)
+        player = axelrod.FSMPlayer(
+            transitions=transitions, initial_state=1, initial_action=C)
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -45,7 +46,8 @@ class TestFSMPlayers(unittest.TestCase):
         """Tests that the player defined by the table for Defector is in fact
         Defector."""
         transitions = [(1, C, 1, D), (1, D, 1, D)]
-        player = axelrod.FSMPlayer(transitions, initial_state=1, initial_action=D)
+        player = axelrod.FSMPlayer(
+            transitions=transitions, initial_state=1, initial_action=D)
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -56,7 +58,8 @@ class TestFSMPlayers(unittest.TestCase):
         """Tests that the player defined by the table for TFT is in fact
         TFT."""
         transitions = [(1, C, 1, C), (1, D, 1, D)]
-        player = axelrod.FSMPlayer(transitions, initial_state=1, initial_action=C)
+        player = axelrod.FSMPlayer(
+            transitions=transitions, initial_state=1, initial_action=C)
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)
@@ -67,7 +70,8 @@ class TestFSMPlayers(unittest.TestCase):
         """Tests that the player defined by the table for TFT is in fact
         WSLS (also known as Pavlov."""
         transitions = [(1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)]
-        player = axelrod.FSMPlayer(transitions, initial_state=1, initial_action=C)
+        player = axelrod.FSMPlayer(
+            transitions=transitions, initial_state=1, initial_action=C)
         opponent = axelrod.Alternator()
         for i in range(6):
             player.play(opponent)

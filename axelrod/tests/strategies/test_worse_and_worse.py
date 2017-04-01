@@ -92,18 +92,18 @@ class TestWorseAndWorse2(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions = actions)
                           
         actions = [(C, C), (C, C), (C, D),(D, C)]
-        self.versus_test(opponent=axelrod.MockPlayer([C,C,D,C]), expected_actions = actions)
+        self.versus_test(opponent=axelrod.MockPlayer(actions=[C,C,D,C]), expected_actions = actions)
 
         actions = [(C, C)] * 18 + [(C, D), (D, C)]
-        self.versus_test(opponent=axelrod.MockPlayer([C] * 18 + [D, C]), expected_actions = actions)
+        self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 18 + [D, C]), expected_actions = actions)
 
         # After round 20, strategy follows stochastic behavior given a seed
         actions = [(C, C)] * 20 + [(C, D), (D, C), (C, C), (C, D)] 
-        self.versus_test(opponent=axelrod.MockPlayer([C] * 20 + [D, C, C, D]), expected_actions = actions, 
+        self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 20 + [D, C, C, D]), expected_actions = actions, 
                          seed=8)
 
         actions = [(C, C)] * 20 + [(D, D), (D, C)] + [(C, C)] * 2 + [(D, C)]
-        self.versus_test(opponent=axelrod.MockPlayer([C] * 20 + [D, C, C, C]), expected_actions = actions, 
+        self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 20 + [D, C, C, C]), expected_actions = actions, 
                          seed=2)
                          
 
@@ -138,4 +138,4 @@ class TestWorseAndWorse3(TestPlayer):
         # Test that given a non 0/1 probability of defecting, strategy follows
         # stochastic behaviour, given a seed
         actions = [(C, C), (C, D), (C, C), (D, D), (C, C), (D, C)]
-        self.versus_test(axelrod.MockPlayer([C,D,C,D,C]), expected_actions=actions, seed=8)
+        self.versus_test(axelrod.MockPlayer(actions=[C,D,C,D,C]), expected_actions=actions, seed=8)

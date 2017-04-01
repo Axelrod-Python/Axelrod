@@ -54,7 +54,7 @@ class TestLookerUp(TestPlayer):
 
     def test_init(self):
         # Test empty table
-        player = self.player(dict())
+        player = self.player(lookup_table=dict())
         opponent = axelrod.Cooperator()
         self.assertEqual(player.strategy(opponent), C)
         # Test default table
@@ -69,7 +69,7 @@ class TestLookerUp(TestPlayer):
         # Test malformed tables
         table = {('', C, C): C, ('', 'DD', 'DD'): C}
         with self.assertRaises(ValueError):
-            player = self.player(table)
+            player = self.player(lookup_table=table)
 
     def test_pattern_init(self):
         # Test empty table
@@ -123,7 +123,7 @@ class TestLookerUp(TestPlayer):
             ('', C, C): D,
             ('', D, C): D,
         }
-        self.player = lambda : axelrod.LookerUp(defector_table)
+        self.player = lambda : axelrod.LookerUp(lookup_table=defector_table)
         self.responses_test([D], [C, C], [C, C])
         self.responses_test([D], [C, D], [D, C])
         self.responses_test([D], [D, D], [D, D])
@@ -135,7 +135,7 @@ class TestLookerUp(TestPlayer):
             plays=0, op_plays=2, op_start_plays=0)
 
         lookup_table = dict(zip(lookup_table_keys, pattern))
-        player = axelrod.LookerUp(lookup_table)
+        player = axelrod.LookerUp(lookup_table=lookup_table)
         self.assertEqual(player.plays, 0)
         opp = axelrod.Cooperator()
         # This shouldn't throw an exception.
@@ -159,7 +159,7 @@ class TestLookerUp(TestPlayer):
             (D, D, C): D,
         }
 
-        self.player = lambda: axelrod.LookerUp(first_move_table)
+        self.player = lambda: axelrod.LookerUp(lookup_table=first_move_table)
 
         # if the opponent started by cooperating, we should always cooperate
         self.responses_test([C], [C, C, C], [C, C, C])
