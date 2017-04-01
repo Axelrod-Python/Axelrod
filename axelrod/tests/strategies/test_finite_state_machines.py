@@ -706,11 +706,11 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
         state_and_actions = [(0, D), (3, C), (10, D), (1, C), (13, D), (6, C), (8, D), (4, C), (5, C), (4, C), (5, D)]
         self.transitions_test(state_and_actions)
 
-        # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15      11, 14
+        # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15
         state_and_actions = [(0, D), (3, C), (10, D), (1, D), (15, C), (5, D), (10, D), (1, D), (15, D), (11, D)]
         self.transitions_test(state_and_actions)
 
-        # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15      11, 14
+        # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15      
         to_state_eleven = [(0, D), (3, C), (10, D), (1, D), (15, D)]
 
         state_and_actions = to_state_eleven + [(11, C), (14, C), (3, C), (10, D)]
