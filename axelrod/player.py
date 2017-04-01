@@ -145,7 +145,7 @@ class Player(object):
         prefix = ': '
         gen = (value for value in self.init_kwargs.values() if value is not None)
         for value in gen:
-            name = ''.join([name, prefix, str(value if not isinstance(value, float) else round(value, 4))])
+            name = ''.join([name, prefix, str(value)])
             prefix = ', '
         return name
 

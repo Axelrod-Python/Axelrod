@@ -221,7 +221,7 @@ class TestLRPlayer(unittest.TestCase):
 
 class TestZDExtort2(TestPlayer):
 
-    name = "ZD-Extort-2: 0.1111, 0.5"
+    name = "ZD-Extort-2: 0.1111111111111111, 0.5"
     player = axelrod.ZDExtort2
     expected_classifier = {
         'memory_depth': 1,
@@ -271,7 +271,7 @@ class TestZDExtort2v2(TestPlayer):
 
 class TestZDExtort4(TestPlayer):
 
-    name = "ZD-Extort-4: 0.2353, 0.25, 1"
+    name = "ZD-Extort-4: 0.23529411764705882, 0.25, 1"
     player = axelrod.ZDExtort4
     expected_classifier = {
         'memory_depth': 1,
