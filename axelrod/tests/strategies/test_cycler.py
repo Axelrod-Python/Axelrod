@@ -46,7 +46,7 @@ class TestAntiCycler(TestPlayer):
 
 
 class TestBasicCycler(TestPlayer):
-    name = "Cycler CCD"
+    name = "Cycler: CCD"
     player = Cycler
     expected_classifier = {
         'memory_depth': 2,
@@ -57,11 +57,6 @@ class TestBasicCycler(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    def test_name(self):
-        cycle_str = 'DDCCDDCDCDCDC'
-        self.assertEqual(
-            Cycler(cycle=cycle_str).name, 'Cycler {}'.format(cycle_str))
 
     def test_memory_depth_is_len_cycle_minus_one(self):
         len_ten = 'DCDCDDCDCD'

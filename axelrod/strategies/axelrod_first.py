@@ -259,9 +259,6 @@ class Joss(MemoryOnePlayer):
         self.p = p
         super().__init__(four_vector)
 
-    def __repr__(self) -> str:
-        return "%s: %s" % (self.name, round(self.p, 2))
-
 
 class Nydegger(Player):
     """

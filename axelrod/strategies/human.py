@@ -50,7 +50,7 @@ class Human(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, name='Human', c_symbol='C', d_symbol='D'):
+    def __init__(self, name='human', c_symbol='C', d_symbol='D'):
         """
         Parameters
         ----------
@@ -64,7 +64,7 @@ class Human(Player):
             and prompt
         """
         super().__init__()
-        self.name = name
+        self.human_name = name
         self.symbols = {
             C: c_symbol,
             D: d_symbol
@@ -81,7 +81,7 @@ class Human(Player):
             self.symbols[action] for action in self.opponent_history]
         history = list(zip(my_history, opponent_history))
         if self.history:
-            content = 'History ({}, opponent): {}'.format(self.name, history)
+            content = 'History ({}, opponent): {}'.format(self.human_name, history)
         else:
             content = ''
         return [(Token.Toolbar, content)]
@@ -105,7 +105,7 @@ class Human(Player):
             toolbar = self._history_toolbar
             print_statement = (
                 '{}Turn {}: {} played {}, opponent played {}'.format(
-                    linesep, len(self.history), self.name,
+                    linesep, len(self.history), self.human_name,
                     self.symbols[self.history[-1]],
                     self.symbols[self.opponent_history[-1]])
             )
@@ -130,7 +130,7 @@ class Human(Player):
         """
         action = prompt(
             'Turn {} action [C or D] for {}: '.format(
-                len(self.history) + 1, self.name),
+                len(self.history) + 1, self.human_name),
             validator=ActionValidator(),
             get_bottom_toolbar_tokens=self.status_messages['toolbar'],
             style=toolbar_style)

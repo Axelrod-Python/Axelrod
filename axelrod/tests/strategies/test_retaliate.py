@@ -8,7 +8,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestRetaliate(TestPlayer):
 
-    name = "Retaliate (0.1)"
+    name = "Retaliate: 0.1"
     player = axelrod.Retaliate
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory
@@ -33,7 +33,7 @@ class TestRetaliate(TestPlayer):
 
 class TestLimitedRetaliate(TestPlayer):
 
-    name = 'Limited Retaliate (0.1/20)'
+    name = 'Limited Retaliate: 0.1, 20'
     player = axelrod.LimitedRetaliate
     expected_classifier = {
         'memory_depth': float('inf'),  # Long memory

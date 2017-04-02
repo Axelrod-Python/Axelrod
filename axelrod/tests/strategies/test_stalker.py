@@ -8,7 +8,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestStalker(TestPlayer):
 
-    name = "Stalker"
+    name = "Stalker: D"
     player = axelrod.Stalker
     expected_classifier = {
         'memory_depth': float('inf'),

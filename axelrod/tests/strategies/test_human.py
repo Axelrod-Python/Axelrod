@@ -32,7 +32,7 @@ class TestActionValidator(TestCase):
 
 class TestHumanClass(TestPlayer):
 
-    name = "Human"
+    name = "Human: human, C, D"
     player = Human
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -46,7 +46,7 @@ class TestHumanClass(TestPlayer):
 
     def test_init(self):
         human = Human(name='test human', c_symbol='X', d_symbol='Y')
-        self.assertEqual(human.name, 'test human')
+        self.assertEqual(human.human_name, 'test human')
         self.assertEqual(human.symbols, {C: 'X', D: 'Y'})
 
     def test_history_toolbar(self):
@@ -57,7 +57,7 @@ class TestHumanClass(TestPlayer):
 
         human.history = [C]
         human.opponent_history = [C]
-        expected_content = "History (Human, opponent): [('C', 'C')]"
+        expected_content = "History (human, opponent): [('C', 'C')]"
         actual_content = human._history_toolbar(None)[0][1]
         self.assertIn(actual_content, expected_content)
 
@@ -73,7 +73,7 @@ class TestHumanClass(TestPlayer):
         human.history = [C]
         human.opponent_history = [C]
         expected_print_message = (
-            '{}Turn 1: Human played C, opponent played C'.format(linesep)
+            '{}Turn 1: human played C, opponent played C'.format(linesep)
         )
         actual_messages = human._status_messages()
         self.assertEqual(actual_messages['print'], expected_print_message)

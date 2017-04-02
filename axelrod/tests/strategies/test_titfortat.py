@@ -263,7 +263,7 @@ class TestHardTitFor2Tats(TestPlayer):
 
 class TestOmegaTFT(TestPlayer):
 
-    name = "Omega TFT"
+    name = "Omega TFT: 3, 8"
     player = axelrod.OmegaTFT
 
     expected_classifier = {

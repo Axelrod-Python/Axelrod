@@ -10,7 +10,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestDavis(TestPlayer):
 
-    name = "Davis"
+    name = "Davis: 10"
     player = axelrod.Davis
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -45,10 +45,9 @@ class TestDavis(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
-
 class TestRevisedDowning(TestPlayer):
 
-    name = "Revised Downing"
+    name = "Revised Downing: True"
     player = axelrod.RevisedDowning
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -95,7 +94,7 @@ class TestRevisedDowning(TestPlayer):
 
 class TestFeld(TestPlayer):
 
-    name = "Feld"
+    name = "Feld: 1.0, 0.5, 200"
     player = axelrod.Feld
     expected_classifier = {
         'memory_depth': 200,
@@ -321,7 +320,7 @@ class TestShubik(TestPlayer):
 
 class TestTullock(TestPlayer):
 
-    name = "Tullock"
+    name = "Tullock: 11"
     player = axelrod.Tullock
     expected_classifier = {
         'memory_depth': 11,

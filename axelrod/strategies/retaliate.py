@@ -34,9 +34,6 @@ class Retaliate(Player):
         """
         super().__init__()
         self.retaliation_threshold = retaliation_threshold
-        self.name = (
-            'Retaliate (' +
-            str(self.retaliation_threshold) + ')')
         self.play_counts = defaultdict(int) # type: defaultdict
 
     def strategy(self, opponent: Player) -> Action:
@@ -129,11 +126,6 @@ class LimitedRetaliate(Player):
         self.retaliation_threshold = retaliation_threshold
         self.retaliation_limit = retaliation_limit
         self.play_counts = defaultdict(int) # type: defaultdict
-
-        self.name = (
-            'Limited Retaliate (' +
-            str(self.retaliation_threshold) +
-            '/' + str(self.retaliation_limit) + ')')
 
     def strategy(self, opponent: Player) -> Action:
         """

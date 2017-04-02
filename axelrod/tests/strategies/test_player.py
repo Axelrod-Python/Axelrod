@@ -26,56 +26,25 @@ def defect(*args):
 def randomize(*args):
     return random.choice([C, D])
 
+# Test classifier used to create tests players
+_test_classifier = {
+        'memory_depth': 0,
+        'stochastic': False,
+        'makes_use_of': None,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+}
 
-class ParameterisedPlayer(Player):
+
+class ParameterisedTestPlayer(Player):
     """A simple Player class for testing init parameters"""
 
-    def __init__(self, parameter1=None):
+    name = 'ParameterisedTestPlayer'
+    classifier = _test_classifier
+
+    def __init__(self, arg_test1='testing1', arg_test2='testing2'):
         super().__init__()
-
-
-class TestPlayerParameters(unittest.TestCase):
-    """A class to test the initialisation parameters of Players"""
-
-    def test_player(self):
-        """Tests for Players with no init parameters"""
-
-        # Test that init_args and init_kwargs exist and are empty
-        player = Player()
-        self.assertEqual(player.init_args, ())
-        self.assertEqual(player.init_kwargs, {})
-
-        # Test that passing a postional argument raises an error
-        with self.assertRaises(TypeError):
-            player = Player('test')
-
-        # Test that passing a keyword argument raises an error
-        with self.assertRaises(TypeError):
-            player = Player(parameter1='test')
-
-    def test_parameterised_player(self):
-        """Tests for Players with init parameters"""
-
-        # Test that init_args and init_kwargs exist and are empty
-        player = ParameterisedPlayer()
-        self.assertEqual(player.init_args, ())
-        self.assertEqual(player.init_kwargs, {})
-
-        # Test that passing a keyword argument successfully sets the
-        # init_kwargs dict
-        player = ParameterisedPlayer(parameter1='test')
-        self.assertEqual(player.init_args, ())
-        self.assertEqual(player.init_kwargs, {'parameter1': 'test'})
-
-        # Test that passing a postional argument successfully sets the
-        # init_args tuple
-        player = ParameterisedPlayer('test')
-        self.assertEqual(player.init_args, ('test',))
-        self.assertEqual(player.init_kwargs, {})
-
-        # Test that passing an unknown keyword argument raises an error
-        with self.assertRaises(TypeError):
-            player = ParameterisedPlayer(parameter2='test')
 
 
 class TestPlayerClass(unittest.TestCase):
@@ -181,6 +150,47 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 
+    def test_init_params(self):
+        """Tests player correct parameters signature detection."""
+        self.assertEqual(self.player.init_params(), {})
+        self.assertEqual(ParameterisedTestPlayer.init_params(),
+                         {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
+        self.assertEqual(ParameterisedTestPlayer.init_params(arg_test1='other'),
+                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
+        self.assertEqual(ParameterisedTestPlayer.init_params(arg_test2='other'),
+                         {'arg_test1': 'testing1', 'arg_test2': 'other'})
+        self.assertEqual(ParameterisedTestPlayer.init_params('other'),
+                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
+
+    def test_init_kwargs(self):
+        """Tests player  correct parameters caching."""
+
+        # Tests for Players with no init parameters
+
+        # Test that init_kwargs exist and are empty
+        self.assertEqual(self.player().init_kwargs, {})
+        # Test that passing a postional argument raises an error
+        self.assertRaises(TypeError, Player, 'test')
+        # Test that passing a keyword argument raises an error
+        self.assertRaises(TypeError, Player, arg_test1='test')
+
+        # Tests for Players with init parameters
+
+        # Test that init_kwargs exist and contains default values
+        self.assertEqual(ParameterisedTestPlayer().init_kwargs,
+                         {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
+        # Test that passing a keyword argument successfully change the init_kwargs dict
+        self.assertEqual(ParameterisedTestPlayer(arg_test1='other').init_kwargs,
+                         {'arg_test1': 'other', 'arg_test2': 'testing2'})
+        self.assertEqual(ParameterisedTestPlayer(arg_test2='other').init_kwargs,
+                         {'arg_test1': 'testing1', 'arg_test2': 'other'})
+        # Test that passing a postional argument successfully change the init_kwargs dict
+        self.assertEqual(ParameterisedTestPlayer('other', 'other2').init_kwargs,
+                         {'arg_test1': 'other', 'arg_test2': 'other2'})
+        # Test that passing an unknown keyword argument or a spare one raises an error
+        self.assertRaises(TypeError, ParameterisedTestPlayer, arg_test3='test')
+        self.assertRaises(TypeError, ParameterisedTestPlayer, 'other', 'other', 'other')
+
 
 def test_responses(test_class, player1, player2, responses, history1=None,
                    history2=None, seed=None, attrs=None):
@@ -214,14 +224,7 @@ class TestOpponent(Player):
     """A player who only exists so we have something to test against"""
 
     name = 'TestPlayer'
-    classifier = {
-        'memory_depth': 0,
-        'stochastic': False,
-        'makes_use_of': None,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
+    classifier = _test_classifier
 
     @staticmethod
     def strategy(opponent):
@@ -321,7 +324,7 @@ class TestPlayer(unittest.TestCase):
     def test_clone(self):
         # Test that the cloned player produces identical play
         player1 = self.player()
-        if str(player1) in ["Darwin", "Human"]:
+        if player1.name in ["Darwin", "Human"]:
             # Known exceptions
             return
         player2 = player1.clone()
