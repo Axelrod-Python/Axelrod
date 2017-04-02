@@ -160,7 +160,7 @@ class TestFsmTransitions(TestPlayer):
                                                      last_opponent_move=last_opponent_move,
                                                      expected_move=fsm_move)
 
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected_actions)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions)
 
     def verify_against_finite_state_machine(self, current_state, expected_state, last_opponent_move, expected_move):
         test_fsm = self.player().fsm
