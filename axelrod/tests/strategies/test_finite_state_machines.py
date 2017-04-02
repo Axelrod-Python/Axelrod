@@ -11,7 +11,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestSimpleFSM(unittest.TestCase):
     def setUp(self):
-        self.two_state_transition = [(1, C, 0, C), (1, D, 0, D), (0, C, 1, D), (0, D, 1, C)]
+        self.two_state_transition = ((1, C, 0, C), (1, D, 0, D), (0, C, 1, D), (0, D, 1, C))
 
         self.two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=1)
 
@@ -27,7 +27,7 @@ class TestSimpleFSM(unittest.TestCase):
         self.assertFalse(new_two_state.__eq__(self.two_state))
 
     def test__eq__false_by_transition(self):
-        different_transitions = [(1, C, 0, D), (1, D, 0, D), (0, C, 1, D), (0, D, 1, C)]
+        different_transitions = ((1, C, 0, D), (1, D, 0, D), (0, C, 1, D), (0, D, 1, C))
         new_two_state = SimpleFSM(transitions=different_transitions, initial_state=1)
 
         self.assertFalse(new_two_state.__eq__(self.two_state))
@@ -70,7 +70,7 @@ class TestFSMPlayer(TestPlayer):
     """Test a few sample tables to make sure that the finite state machines are
     working as intended."""
 
-    name = "FSM Player"
+    name = "FSM Player: ((1, 'C', 1, 'C'), (1, 'D', 1, 'D')), 1, C"
     player = axelrod.FSMPlayer
 
     expected_classifier = {
@@ -120,7 +120,7 @@ class TestFSMPlayer(TestPlayer):
 
 
 class TestFsmTransitions(TestPlayer):
-    name = "FSM Player"
+    name = "FSM Player: ((1, 'C', 1, 'C'), (1, 'D', 1, 'D')), 1, C"
     player = axelrod.FSMPlayer
 
     expected_classifier = {
