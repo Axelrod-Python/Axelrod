@@ -1,6 +1,6 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
-from typing import Tuple, Any, List
+from typing import Tuple, List
 
 C, D = Actions.C, Actions.D
 
@@ -29,7 +29,8 @@ class SimpleFSM(object):
         self._raise_error_for_bad_input()
 
     def _raise_error_for_bad_input(self):
-        callable_states = [self._state] + [pair[0] for pair in self._state_transitions.values()]
+        callable_states = set(pair[0] for pair in self._state_transitions.values())
+        callable_states.add(self._state)
         for state in callable_states:
             self._raise_error_for_bad_state(state)
 
@@ -62,9 +63,6 @@ class SimpleFSM(object):
             return False
         return (self._state, self._state_transitions) == (other.state, other.state_transitions)
 
-    def __ne__(self, other):
-        return not self == other
-
 
 class FSMPlayer(Player):
     """Abstract base class for finite state machine players."""
@@ -81,8 +79,8 @@ class FSMPlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, transitions: List[Tuple[int, Any, int, Any]] =None, initial_state: int =None,
-                 initial_action: Action =None) -> None:
+    def __init__(self, transitions: List[Tuple[int, Action, int, Action]] = None, initial_state: int = None,
+                 initial_action: Action = None) -> None:
 
         if not transitions:
             # Tit For Tat
@@ -204,7 +202,7 @@ class Predator(FSMPlayer):
             (8, D, 6, D)
         ]
 
-        super().__init__(transitions, initial_state=1, initial_action=C)
+        super().__init__(transitions, initial_state=0, initial_action=C)
 
 
 class Pun1(FSMPlayer):
@@ -443,8 +441,8 @@ class EvolvedFSM16(FSMPlayer):
             (2, D, 14, D),
             (3, C, 3, D),
             (3, D, 3, D),
-            (4, C, 11, D),
-            (4, D, 7, D),
+            # (4, C, 11, D), FSM created by ML algorithm never calls
+            # (4, D, 7, D),  states 4 or 9.
             (5, C, 12, D),
             (5, D, 10, D),
             (6, C, 5, C),
@@ -453,8 +451,8 @@ class EvolvedFSM16(FSMPlayer):
             (7, D, 1, C),
             (8, C, 5, C),
             (8, D, 5, C),
-            (9, C, 10, D),
-            (9, D, 13, D),
+            # (9, C, 10, D),
+            # (9, D, 13, D),
             (10, C, 11, D),
             (10, D, 8, C),
             (11, C, 15, D),
@@ -509,12 +507,12 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (5, D, 10, D),
             (6, C, 8, C),
             (6, D, 6, D),
-            (7, C, 5, D),
-            (7, D, 15, C),
+            # (7, C, 5, D),  FSM created by ML algorithm never calls
+            # (7, D, 15, C), states 7 or 9
             (8, C, 2, C),
             (8, D, 4, D),
-            (9, C, 15, D),
-            (9, D, 6, D),
+            # (9, C, 15, D),
+            # (9, D, 6, D),
             (10, C, 4, D),
             (10, D, 1, D),
             (11, C, 14, D),

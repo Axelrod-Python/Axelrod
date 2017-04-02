@@ -267,8 +267,8 @@ class TestPredator(TestFsmTransitions):
     }
     """
     transitions = [
-                    (0, C, 0, D),  NO ROUTE
-                    (0, D, 1, D),  NO ROUTE
+            (0, C, 0, D),
+            (0, D, 1, D),
             (1, C, 2, D),
             (1, D, 3, D),
             (2, C, 4, C),
@@ -291,17 +291,15 @@ class TestPredator(TestFsmTransitions):
     def test_strategy(self):
         self.first_play_test(C)
 
-        state_and_actions = ([(1, C), (2, C), (4, C), (2, D), (3, D), (4, D), (6, C)] +
+        state_and_actions = ([(0, D), (1, C), (2, C), (4, C), (2, D), (3, D), (4, D), (6, C)] +
                              [(7, D), (7, C), (8, C), (8, D), (6, D)] * 3)
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(1, C), (2, D), (3, C), (5, D), (3, C), (5, C)] + [(7, C), (8, D), (6, C)] * 5
+        state_and_actions = [(0, D), (1, C), (2, D), (3, C), (5, D), (3, C), (5, C)] + [(7, C), (8, D), (6, C)] * 5
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(1, D), (3, D), (4, D), (6, D)] + [(7, D)] * 10
+        state_and_actions = [(0, C), (0, D)] + [(1, D), (3, D), (4, D), (6, D)] + [(7, D)] * 10
         self.transitions_test(state_and_actions)
-
-        # TODO NO ROUTE TO STATE: 0
 
 
 class TestPun1(TestFsmTransitions):
@@ -576,8 +574,8 @@ class TestEvolvedFSM16(TestFsmTransitions):
             (2, D, 14, D),
             (3, C, 3, D),
             (3, D, 3, D),
-                    (4, C, 11, D),   NO ROUTE
-                    (4, D, 7, D),    NO ROUTE
+            # (4, C, 11, D), FSM created by ML algorithm never calls
+            # (4, D, 7, D),  states 4 or 9.
             (5, C, 12, D),
             (5, D, 10, D),
             (6, C, 5, C),
@@ -586,8 +584,8 @@ class TestEvolvedFSM16(TestFsmTransitions):
             (7, D, 1, C),
             (8, C, 5, C),
             (8, D, 5, C),
-                    (9, C, 10, D),  NO ROUTE
-                    (9, D, 13, D),  NO ROUTE
+            # (9, C, 10, D),
+            # (9, D, 13, D),
             (10, C, 11, D),
             (10, D, 8, C),
             (11, C, 15, D),
@@ -637,8 +635,6 @@ class TestEvolvedFSM16(TestFsmTransitions):
         state_and_actions = to_state_seven + [(7, D), (1, D), (6, D), (12, C), (8, D), (5, D)]
         self.transitions_test(state_and_actions)
 
-        # TODO NO ROUTE TO STATE: 4, 9
-
 
 class TestEvolvedFSM16Noise05(TestFsmTransitions):
 
@@ -670,12 +666,12 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
             (5, D, 10, D),
             (6, C, 8, C),
             (6, D, 6, D),
-                    (7, C, 5, D),  NO ROUTE
-                    (7, D, 15, C),  NO ROUTE
+            # (7, C, 5, D),  FSM created by ML algorithm never calls
+            # (7, D, 15, C), states 7 or 9
             (8, C, 2, C),
             (8, D, 4, D),
-                    (9, C, 15, D),  NO ROUTE
-                    (9, D, 6, D),  NO ROUTE
+            # (9, C, 15, D),
+            # (9, D, 6, D),
             (10, C, 4, D),
             (10, D, 1, D),
             (11, C, 14, D),
@@ -723,5 +719,3 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
         # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 14, 15
         state_and_actions = to_state_eleven + [(11, C), (14, D)] + [(13, C)] * 3
         self.transitions_test(state_and_actions)
-
-        # TODO NO ROUTE TO STATE: 7, 9
