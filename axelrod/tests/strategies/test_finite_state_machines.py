@@ -184,8 +184,8 @@ class TestFsmTransitions(TestPlayer):
         owned_states = set(pair[0] for pair in transitions.keys())
 
         un_callable_states = owned_states.difference(called_states)
-        if un_callable_states:
-            raise AssertionError('The following states are un-callable: {}'.format(un_callable_states))
+        error_message = 'The following states are un-reachable: {}'.format(list(un_callable_states))
+        self.assertEqual(error_message, 'The following states are un-reachable: []')
 
 
 class TestFortress3(TestFsmTransitions):
