@@ -157,3 +157,9 @@ class Human(Player):
             action = input_function()
 
         return action
+
+    def __repr__(self):
+        """
+        Override the default __repr__ of the class
+        """
+        return "Human: {}".format(self.human_name)

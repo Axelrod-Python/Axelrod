@@ -95,3 +95,12 @@ class TestHumanClass(TestPlayer):
     def test_reset_history_and_attributes(self):
         """Overwrite the reset method for this strategy."""
         pass
+
+    def test_repr(self):
+        human = Human()
+        self.assertEqual(human.__repr__(), "Human: human")
+
+        human = Human(name="John Nash")
+        self.assertEqual(human.__repr__(), "Human: John Nash")
+        human = Human(name="John Nash", c_symbol="1", d_symbol="2")
+        self.assertEqual(human.__repr__(), "Human: John Nash")
