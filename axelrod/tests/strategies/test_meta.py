@@ -56,6 +56,12 @@ class TestMetaPlayer(TestPlayer):
         team_clone_names = [p.__repr__() for p in clone.team]
         self.assertEqual(team_player_names, team_clone_names)
 
+    def test_repr(self):
+        player = self.player()
+        team_size = len(player.team)
+        self.assertEqual(str(player), '{}: {} player{}'.format(self.name, team_size, 's' if team_size > 1 else ''))
+
+
 class TestMetaMajority(TestMetaPlayer):
 
     name = "Meta Majority"

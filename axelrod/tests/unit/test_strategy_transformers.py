@@ -42,6 +42,17 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(cls.__name__, "Alternator")
         self.assertEqual(p1.name, "Alternator")
 
+    def test_repr(self):
+        """Tests that the player __repr__ is properly modified to add
+        Transformer's parameters.
+        """
+        self.assertEqual(str(ForgiverTransformer(0.5)(axelrod.Alternator)()), "Forgiving Alternator: 0.5")
+        self.assertEqual(str(InitialTransformer([D, D, C])(axelrod.Alternator)()),
+                         "Initial Alternator: ['D', 'D', 'C']")
+        self.assertEqual(str(FlipTransformer()(axelrod.Random)(0.1)), "Flipped Random: 0.1")
+        self.assertEqual(str(MixedTransformer(0.3, (axelrod.Alternator, axelrod.Bully))(axelrod.Random)(0.1)),
+                         "Mutated Random: 0.1: 0.3, ['Alternator', 'Bully']")
+
     def test_cloning(self):
         """Tests that Player.clone preserves the application of transformations.
         """
@@ -417,7 +428,7 @@ class TestTransformers(unittest.TestCase):
                     transformed = transformer(transformer(PlayerClass))()
                     for _ in range(5):
                         self.assertEqual(player.strategy(third_player),
-                                        transformed.strategy(third_player))
+                                         transformed.strategy(third_player))
                         player.play(third_player)
                         third_player.history.pop(-1)
                         transformed.play(third_player)
@@ -441,7 +452,7 @@ class TestTransformers(unittest.TestCase):
                     transformed = transformer(transformer(PlayerClass))()
                     for i in range(5):
                         self.assertEqual(player.strategy(third_player),
-                                        transformed.strategy(third_player))
+                                         transformed.strategy(third_player))
                         player.play(third_player)
                         third_player.history.pop(-1)
                         transformed.play(third_player)
@@ -474,7 +485,7 @@ class TestRUAisTFT(TestTitForTat):
     player = TFT
     name = "RUA Cooperator"
     expected_classifier = {
-        'memory_depth': 0, # really 1
+        'memory_depth': 0,  # really 1
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

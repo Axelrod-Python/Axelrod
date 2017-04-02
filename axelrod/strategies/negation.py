@@ -8,7 +8,7 @@ C, D = Actions.C, Actions.D
 class Negation(Player):
     """
     A player starts by cooperating or defecting randomly if it's their first move,
-     then simply doing the opposite of the opponents last move thereafter.
+    then simply doing the opposite of the opponents last move thereafter.
 
     Names:
 

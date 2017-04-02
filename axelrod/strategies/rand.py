@@ -42,6 +42,3 @@ class Random(Player):
 
     def strategy(self, opponent: Player) -> Action:
         return random_choice(self.p)
-
-    def __repr__(self) -> str:
-        return "%s: %s" % (self.name, round(self.p, 2))

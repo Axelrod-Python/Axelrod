@@ -51,13 +51,15 @@ class GoByMajority(Player):
             self.memory = self.classifier['memory_depth']
         else:
             self.memory = 0
-
         self.name = (
             'Go By Majority' + (self.memory > 0) * (": %i" % self.memory))
         if self.soft:
             self.name = "Soft " + self.name
         else:
             self.name = "Hard " + self.name
+
+    def __repr__(self):
+        return self.name
 
     def strategy(self, opponent: Player) -> Action:
         """This is affected by the history of the opponent.

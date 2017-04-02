@@ -79,7 +79,6 @@ class Cycler(Player):
         super().__init__()
         self.cycle_str = cycle
         self.cycle = self.get_new_itertools_cycle()
-        self.name = "Cycler {}".format(cycle)
         self.classifier['memory_depth'] = len(cycle) - 1
 
     def get_new_itertools_cycle(self):
@@ -99,8 +98,8 @@ class CyclerDC(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 1
 
-    def __init__(self, cycle="DC") -> None:
-        super().__init__(cycle=cycle)
+    def __init__(self) -> None:
+        super().__init__(cycle="DC")
 
 
 class CyclerCCD(Cycler):
@@ -109,8 +108,8 @@ class CyclerCCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
 
-    def __init__(self, cycle="CCD") -> None:
-        super().__init__(cycle=cycle)
+    def __init__(self) -> None:
+        super().__init__(cycle="CCD")
 
 
 class CyclerDDC(Cycler):
@@ -119,8 +118,8 @@ class CyclerDDC(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
 
-    def __init__(self, cycle="DDC") -> None:
-        super().__init__(cycle=cycle)
+    def __init__(self) -> None:
+        super().__init__(cycle="DDC")
 
 
 class CyclerCCCD(Cycler):
@@ -129,8 +128,8 @@ class CyclerCCCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 3
 
-    def __init__(self, cycle="CCCD") -> None:
-        super().__init__(cycle=cycle)
+    def __init__(self) -> None:
+        super().__init__(cycle="CCCD")
 
 
 class CyclerCCCCCD(Cycler):
@@ -139,8 +138,8 @@ class CyclerCCCCCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 5
 
-    def __init__(self, cycle="CCCCCD") -> None:
-        super().__init__(cycle=cycle)
+    def __init__(self) -> None:
+        super().__init__(cycle="CCCCCD")
 
 
 class CyclerCCCDCD(Cycler):
@@ -149,5 +148,5 @@ class CyclerCCCDCD(Cycler):
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 5
 
-    def __init__(self, cycle="CCCDCD") -> None:
-        super().__init__(cycle=cycle)
+    def __init__(self) -> None:
+        super().__init__(cycle="CCCDCD")
