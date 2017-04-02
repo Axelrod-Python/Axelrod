@@ -173,6 +173,20 @@ class TestFsmTransitions(TestPlayer):
             state_action = [(1, C), (1, D)]
             self.transitions_test(state_action)
 
+    def test_all_states_reachable(self):
+        player = self.player()
+        initial_state = player.initial_state
+        transitions = player.fsm.state_transitions
+
+        called_states = set(pair[0] for pair in transitions.values())
+        called_states.add(initial_state)
+
+        owned_states = set(pair[0] for pair in transitions.keys())
+
+        un_callable_states = owned_states.difference(called_states)
+        if un_callable_states:
+            raise AssertionError('The following states are un-callable: {}'.format(un_callable_states))
+
 
 class TestFortress3(TestFsmTransitions):
 

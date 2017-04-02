@@ -1,6 +1,5 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
-from typing import Tuple, List
 
 C, D = Actions.C, Actions.D
 
@@ -12,13 +11,13 @@ class SimpleFSM(object):
     https://en.wikipedia.org/wiki/Finite-state_machine
     """
 
-    def __init__(self, transitions: List[Tuple[int, Action, int, Action]], initial_state: int) -> None:
+    def __init__(self, transitions: tuple, initial_state: int) -> None:
         """
         transitions is a list of the form
-        [(state, last_opponent_action, next_state, next_action), ...]
+        ((state, last_opponent_action, next_state, next_action), ...)
 
         TitForTat would be represented with the following table:
-        [(1, C, 1, C), (1, D, 1, D)]
+        ((1, C, 1, C), (1, D, 1, D))
         with initial play C and initial state 1.
 
         """
@@ -79,14 +78,10 @@ class FSMPlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, transitions: List[Tuple[int, Action, int, Action]] = None, initial_state: int = None,
-                 initial_action: Action = None) -> None:
+    def __init__(self, transitions: tuple = ((1, C, 1, C), (1, D, 1, D)),
+                 initial_state: int = 1,
+                 initial_action: Action = C) -> None:
 
-        if not transitions:
-            # Tit For Tat
-            transitions = [(1, C, 1, C), (1, D, 1, D)]
-            initial_state = 1
-            initial_action = C
         super().__init__()
         self.initial_state = initial_state
         self.initial_action = initial_action
@@ -121,15 +116,14 @@ class Fortress3(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
-
+        transitions = (
             (1, C, 1, D),
             (1, D, 2, D),
             (2, C, 1, D),
             (2, D, 3, C),
             (3, C, 3, C),
             (3, D, 1, D)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
@@ -151,7 +145,7 @@ class Fortress4(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (1, C, 1, D),
             (1, D, 2, D),
             (2, C, 1, D),
@@ -160,7 +154,7 @@ class Fortress4(FSMPlayer):
             (3, D, 4, C),
             (4, C, 4, C),
             (4, D, 1, D)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
@@ -180,8 +174,7 @@ class Predator(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
-
+        transitions = (
             (0, C, 0, D),
             (0, D, 1, D),
             (1, C, 2, D),
@@ -200,7 +193,7 @@ class Predator(FSMPlayer):
             (7, D, 7, D),
             (8, C, 8, D),
             (8, D, 6, D)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
 
@@ -224,12 +217,12 @@ class Pun1(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (1, C, 2, C),
             (1, D, 2, C),
             (2, C, 1, C),
             (2, D, 1, D)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
@@ -249,7 +242,7 @@ class Raider(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (0, C, 2, D),
             (0, D, 2, D),
             (1, C, 1, C),
@@ -258,7 +251,7 @@ class Raider(FSMPlayer):
             (2, D, 3, C),
             (3, C, 0, D),
             (3, D, 1, C)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=D)
 
@@ -278,14 +271,14 @@ class Ripoff(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (1, C, 2, C),
             (1, D, 3, C),
             (2, C, 1, D),
             (2, D, 3, C),
             (3, C, 3, C),  # Note that it's TFT in state 3
             (3, D, 3, D)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
@@ -305,14 +298,14 @@ class SolutionB1(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (1, C, 2, D),
             (1, D, 1, D),
             (2, C, 2, C),
             (2, D, 3, C),
             (3, C, 3, C),
             (3, D, 3, C)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
@@ -332,7 +325,7 @@ class SolutionB5(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (1, C, 2, C),
             (1, D, 6, D),
             (2, C, 2, C),
@@ -345,7 +338,7 @@ class SolutionB5(FSMPlayer):
             (5, D, 4, D),
             (6, C, 3, C),
             (6, D, 5, D)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
@@ -365,12 +358,12 @@ class Thumper(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (1, C, 1, C),
             (1, D, 2, D),
             (2, C, 1, D),
             (2, D, 1, D)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=C)
 
@@ -396,7 +389,7 @@ class EvolvedFSM4(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (0, C, 0, C),
             (0, D, 2, D),
             (1, C, 3, D),
@@ -405,7 +398,7 @@ class EvolvedFSM4(FSMPlayer):
             (2, D, 1, C),
             (3, C, 3, D),
             (3, D, 1, D)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
 
@@ -432,7 +425,7 @@ class EvolvedFSM16(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (0, C, 0, C),
             (0, D, 12, D),
             (1, C, 3, D),
@@ -441,8 +434,7 @@ class EvolvedFSM16(FSMPlayer):
             (2, D, 14, D),
             (3, C, 3, D),
             (3, D, 3, D),
-            # (4, C, 11, D), FSM created by ML algorithm never calls
-            # (4, D, 7, D),  states 4 or 9.
+
             (5, C, 12, D),
             (5, D, 10, D),
             (6, C, 5, C),
@@ -451,8 +443,7 @@ class EvolvedFSM16(FSMPlayer):
             (7, D, 1, C),
             (8, C, 5, C),
             (8, D, 5, C),
-            # (9, C, 10, D),
-            # (9, D, 13, D),
+
             (10, C, 11, D),
             (10, D, 8, C),
             (11, C, 15, D),
@@ -465,7 +456,7 @@ class EvolvedFSM16(FSMPlayer):
             (14, D, 13, D),
             (15, C, 15, D),
             (15, D, 2, C)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
 
@@ -492,7 +483,7 @@ class EvolvedFSM16Noise05(FSMPlayer):
     }
 
     def __init__(self) -> None:
-        transitions = [
+        transitions = (
             (0, C, 8, C),
             (0, D, 3, D),
             (1, C, 13, C),
@@ -507,12 +498,10 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (5, D, 10, D),
             (6, C, 8, C),
             (6, D, 6, D),
-            # (7, C, 5, D),  FSM created by ML algorithm never calls
-            # (7, D, 15, C), states 7 or 9
+
             (8, C, 2, C),
             (8, D, 4, D),
-            # (9, C, 15, D),
-            # (9, D, 6, D),
+
             (10, C, 4, D),
             (10, D, 1, D),
             (11, C, 14, D),
@@ -525,6 +514,6 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (14, D, 13, D),
             (15, C, 5, D),
             (15, D, 11, C)
-        ]
+        )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
