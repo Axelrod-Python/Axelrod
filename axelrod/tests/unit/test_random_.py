@@ -44,8 +44,8 @@ class TestRandom_(unittest.TestCase):
 
 class TestPdf(unittest.TestCase):
     """A suite of tests for the Pdf class"""
-    observations = [('C', 'D')] * 4 + [('C', 'C')] * 12 + \
-                   [('D', 'C')] * 2 + [('D', 'D')] * 15
+    observations = [(C, D)] * 4 + [(C, C)] * 12 + \
+                   [(D, C)] * 2 + [(D, D)] * 15
     counter = Counter(observations)
     pdf = Pdf(counter)
 
