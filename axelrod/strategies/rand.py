@@ -1,4 +1,5 @@
 from axelrod.player import Player
+from axelrod.actions import Action
 from axelrod.random_ import random_choice
 
 
@@ -22,7 +23,7 @@ class Random(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, p=0.5):
+    def __init__(self, p: float=0.5) -> None:
         """
         Parameters
         ----------
@@ -39,8 +40,5 @@ class Random(Player):
         if p in [0, 1]:
             self.classifier['stochastic'] = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         return random_choice(self.p)
-
-    def __repr__(self):
-        return "%s: %s" % (self.name, round(self.p, 2))

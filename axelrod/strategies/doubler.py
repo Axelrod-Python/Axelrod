@@ -1,4 +1,4 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
@@ -25,7 +25,7 @@ class Doubler(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if not self.history:
             return C
         if (opponent.history[-1] == D and

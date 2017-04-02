@@ -122,10 +122,6 @@ class TestResultSet(unittest.TestCase):
         cls.expected_initial_cooperation_count = [6, 6, 0]
         cls.expected_initial_cooperation_rate = [1, 1, 0]
 
-        cls.expected_state_distribution = [
-                [], [], []
-            ]
-
         cls.expected_normalised_cooperation = [
                 [0, mean([3 / 5 for _ in range(3)]), mean([3 / 5 for _ in range(3)])],
                 [mean([3 / 5 for _ in range(3)]), 0, mean([1 / 5 for _ in range(3)])],
@@ -155,6 +151,34 @@ class TestResultSet(unittest.TestCase):
                  Counter({('D', 'D'): 0.8, ('D', 'C'): 0.2}),
                  Counter()]
             ]
+
+        cls.expected_state_to_action_distribution = [
+             [Counter(),
+              Counter({(('C', 'C'), 'D'): 3, (('C', 'D'), 'D'): 3,
+			   		(('D', 'C'), 'C'): 6}),
+              Counter({(('C', 'D'), 'D'): 6, (('D', 'D'), 'C'): 6})],
+             [Counter({(('C', 'C'), 'C'): 3, (('D', 'C'), 'C'): 3,
+			   		(('C', 'D'), 'D'): 6}),
+              Counter(),
+              Counter({(('C', 'D'), 'D'): 3, (('D', 'D'), 'D'): 9})],
+             [Counter({(('D', 'C'), 'D'): 6, (('D', 'D'), 'D'): 6}),
+              Counter({(('D', 'C'), 'D'): 3, (('D', 'D'), 'D'): 9}),
+              Counter()]
+             ]
+
+        cls.expected_normalised_state_to_action_distribution = [
+             [Counter(),
+              Counter({(('C', 'C'), 'D'): 1, (('C', 'D'), 'D'): 1,
+			   		(('D', 'C'), 'C'): 1}),
+              Counter({(('C', 'D'), 'D'): 1, (('D', 'D'), 'C'): 1})],
+             [Counter({(('C', 'C'), 'C'): 1, (('D', 'C'), 'C'): 1,
+			   		   (('C', 'D'), 'D'): 1}),
+              Counter(),
+              Counter({(('C', 'D'), 'D'): 1, (('D', 'D'), 'D'): 1})],
+             [Counter({(('D', 'C'), 'D'): 1, (('D', 'D'), 'D'): 1}),
+              Counter({(('D', 'C'), 'D'): 1, (('D', 'D'), 'D'): 1}),
+              Counter()]
+             ]
 
         cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
                                    for row in cls.expected_normalised_cooperation]
@@ -225,13 +249,13 @@ class TestResultSet(unittest.TestCase):
     def test_with_progress_bar(self):
         rs = axelrod.ResultSet(self.players, self.interactions)
         self.assertTrue(rs.progress_bar)
-        self.assertEqual(rs.progress_bar.total, 12 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.total, 13 + 2 * rs.nplayers)
         self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=True)
         self.assertTrue(rs.progress_bar)
-        self.assertEqual(rs.progress_bar.total, 12 + 2 * rs.nplayers)
+        self.assertEqual(rs.progress_bar.total, 13 + 2 * rs.nplayers)
         self.assertEqual(rs.progress_bar.n, rs.progress_bar.total)
 
     def test_match_lengths(self):
@@ -387,6 +411,24 @@ class TestResultSet(unittest.TestCase):
         self.assertEqual(rs.normalised_state_distribution,
                          self.expected_normalised_state_distribution)
 
+    def test_state_to_action_distribution(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.state_to_action_distribution, list)
+        self.assertEqual(len(rs.state_to_action_distribution), rs.nplayers)
+        self.assertEqual(rs.state_to_action_distribution,
+                         self.expected_state_to_action_distribution)
+
+    def test_normalised_state_to_action_distribution(self):
+        rs = axelrod.ResultSet(self.players, self.interactions,
+                               progress_bar=False)
+        self.assertIsInstance(rs.normalised_state_to_action_distribution, list)
+        self.assertEqual(len(rs.normalised_state_to_action_distribution),
+                         rs.nplayers)
+        self.assertEqual(rs.normalised_state_to_action_distribution,
+                         self.expected_normalised_state_to_action_distribution)
+
+
     def test_vengeful_cooperation(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)
@@ -485,6 +527,10 @@ class TestResultSet(unittest.TestCase):
 
         for player in sd:
             self.assertEqual(player.CC_rate + player.CD_rate + player.DC_rate + player.DD_rate, 1)
+            for rate in [player.CC_to_C_rate, player.CD_to_C_rate,
+                         player.DC_to_C_rate, player.DD_to_C_rate]:
+                self.assertLessEqual(rate, 1)
+                self.assertGreaterEqual(rate, 0)
 
     def test_write_summary(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
@@ -495,7 +541,7 @@ class TestResultSet(unittest.TestCase):
             csvreader = csv.reader(csvfile)
             for row in csvreader:
                 ranked_names.append(row[1])
-                self.assertEqual(len(row), 10)
+                self.assertEqual(len(row), 14)
         self.assertEqual(ranked_names[0], "Name")
         self.assertEqual(ranked_names[1:], rs.ranked_names)
 
@@ -889,6 +935,29 @@ class TestResultSetSpatialStructure(TestResultSet):
               [Counter({('D', 'C'): 0.6, ('D', 'D'): 0.4}), Counter(), Counter()]
             ]
 
+        cls.expected_state_to_action_distribution = [
+            [Counter(),
+             Counter({(('C', 'C'), 'D'): 3,
+                      (('C', 'D'), 'D'): 3,
+                      (('D', 'C'), 'C'): 6}),
+             Counter({(('C', 'D'), 'D'): 6,
+                      (('D', 'D'), 'C'): 6})],
+            [Counter({(('C', 'C'), 'C'): 3, (('D', 'C'), 'C'): 3,
+                      (('C', 'D'), 'D'): 6}), Counter(), Counter()],
+            [Counter({(('D', 'C'), 'D'): 6, (('D', 'D'), 'D'): 6}),
+             Counter(), Counter()]]
+
+        cls.expected_normalised_state_to_action_distribution = [
+            [Counter(),
+             Counter({(('C', 'C'), 'D'): 1.0, (('C', 'D'), 'D'): 1.0,
+                      (('D', 'C'), 'C'): 1.0}),
+             Counter({(('C', 'D'), 'D'): 1.0, (('D', 'D'), 'C'): 1.0})],
+            [Counter({(('C', 'C'), 'C'): 1.0, (('D', 'C'), 'C'): 1.0,
+                      (('C', 'D'), 'D'): 1.0}),
+             Counter(), Counter()],
+            [Counter({(('D', 'C'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0}),
+             Counter(), Counter()]]
+
     def test_match_lengths(self):
         """
         Overwriting match lengths test. This method, among other things, checks
@@ -1120,6 +1189,29 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                [Counter(), Counter(), Counter({('C', 'D'): 1.0}), Counter()]
             ]
 
+        cls.expected_state_to_action_distribution = [
+            [Counter(),
+             Counter({(('C', 'C'), 'D'): 3, (('C', 'D'), 'D'): 3,
+                      (('D', 'C'), 'C'): 6}),
+             Counter(), Counter()],
+            [Counter({(('C', 'C'), 'C'): 3, (('D', 'C'), 'C'): 3,
+                      (('C', 'D'), 'D'): 6}),
+             Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter({(('D', 'C'), 'D'): 12})],
+            [Counter(), Counter(), Counter({(('C', 'D'), 'C'): 12}), Counter()]]
+
+        cls.expected_normalised_state_to_action_distribution = [
+            [Counter(),
+             Counter({(('C', 'C'), 'D'): 1.0, (('C', 'D'), 'D'): 1.0,
+                      (('D', 'C'), 'C'): 1.0}),
+             Counter(), Counter()],
+            [Counter({(('C', 'C'), 'C'): 1.0, (('D', 'C'), 'C'): 1.0,
+                      (('C', 'D'), 'D'): 1.0}),
+             Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter({(('D', 'C'), 'D'): 1.0})],
+            [Counter(), Counter(), Counter({(('C', 'D'), 'C'): 1.0}), Counter()]]
+
+
 
 class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
@@ -1263,6 +1355,20 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
                 [Counter(), Counter(), Counter(), Counter()],
                 [Counter(), Counter(), Counter(), Counter()]
             ]
+
+        cls.expected_state_to_action_distribution = [
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()]
+           ]
+
+        cls.expected_normalised_state_to_action_distribution = [
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()]
+           ]
 
 
     def test_equality(self):

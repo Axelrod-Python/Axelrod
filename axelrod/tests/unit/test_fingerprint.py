@@ -7,7 +7,7 @@ from axelrod.tests.property import strategy_lists
 matplotlib_installed = True
 try:
     import matplotlib.pyplot
-except ImportError:
+except ImportError:  # pragma: no cover
     matplotlib_installed = False
 
 
@@ -54,32 +54,32 @@ class TestFingerprint(unittest.TestCase):
 
         # x + y < 1
         ja = fingerprint.create_jossann((.5, .4), self.probe)
-        self.assertEqual(str(ja), "Joss-Ann Tit For Tat")
+        self.assertEqual(str(ja), "Joss-Ann Tit For Tat: (0.5, 0.4)")
 
         # x + y = 1
         ja = fingerprint.create_jossann((.4, .6), self.probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat")
+        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.6, 0.4)")
 
         # x + y > 1
         ja = fingerprint.create_jossann((.5, .6), self.probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat")
+        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.5, 0.4)")
 
     def test_create_jossann_parametrised_player(self):
         fingerprint = AshlockFingerprint(self.strategy)
 
-        probe = axl.Random(0.1)
+        probe = axl.Random(p=0.1)
 
         # x + y < 1
         ja = fingerprint.create_jossann((.5, .4), probe)
-        self.assertEqual(str(ja), "Joss-Ann Random: 0.1")
+        self.assertEqual(str(ja), "Joss-Ann Random: 0.1: (0.5, 0.4)")
 
         # x + y = 1
         ja = fingerprint.create_jossann((.4, .6), probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1")
+        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.6, 0.4)")
 
         # x + y > 1
         ja = fingerprint.create_jossann((.5, .6), probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1")
+        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.5, 0.4)")
 
     def test_create_points(self):
         test_points = create_points(0.5, progress_bar=False)
@@ -109,6 +109,15 @@ class TestFingerprint(unittest.TestCase):
         data = af.fingerprint(turns=10, repetitions=2, step=0.5,
                               progress_bar=True)
         self.assertEqual(sorted(data.keys()), self.expected_points)
+
+    def test_fingerprint_with_filename(self):
+        filename = "test_outputs/test_fingerprint.csv"
+        af = AshlockFingerprint(self.strategy, self.probe)
+        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
+                       filename=filename)
+        with open(filename, 'r') as out:
+            data = out.read()
+            self.assertEqual(len(data.split("\n")), 10)
 
     def test_in_memory_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)

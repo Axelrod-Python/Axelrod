@@ -1,5 +1,7 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
+
+from typing import List
 
 C, D = Actions.C, Actions.D
 
@@ -27,7 +29,7 @@ class Punisher(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialised the player
         """
@@ -36,7 +38,7 @@ class Punisher(Player):
         self.grudged = False
         self.grudge_memory = 1
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Begins by playing C, then plays D for an amount of rounds proportional
         to the opponents historical '%' of playing D if the opponent ever
@@ -62,7 +64,7 @@ class Punisher(Player):
         """
         super().reset()
         self.grudged = False
-        self.grudge_memory = 0
+        self.grudge_memory = 1
         self.mem_length = 1
 
 
@@ -89,14 +91,14 @@ class InversePunisher(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.history = []
+        self.history = [] # type: List[Action]
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Begins by playing C, then plays D for an amount of rounds proportional
         to the opponents historical '%' of playing C if the opponent ever plays
@@ -122,15 +124,15 @@ class InversePunisher(Player):
         """Resets internal variables and history"""
         super().reset()
         self.grudged = False
-        self.grudge_memory = 0
+        self.grudge_memory = 1
         self.mem_length = 1
 
 class LevelPunisher(Player):
     """
-    A player starts by cooperating however, after 10 rounds 
-    will defect if at any point the number of defections 
+    A player starts by cooperating however, after 10 rounds
+    will defect if at any point the number of defections
     by an opponent is greater than 20%.
-    
+
     Names:
 
     - Level Punisher: Name from CoopSim https://github.com/jecki/CoopSim
@@ -147,7 +149,7 @@ class LevelPunisher(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) < 10:
             return C
         elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.2:

@@ -1,4 +1,4 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.strategy_transformers import TrackHistoryTransformer
 
@@ -32,7 +32,7 @@ class TitForTat(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""
         # First move
         if not self.history:
@@ -64,7 +64,7 @@ class TitFor2Tats(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         return D if opponent.history[-2:] == [D, D] else C
 
 
@@ -89,7 +89,7 @@ class TwoTitsForTat(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         return D if D in opponent.history[-2:] else C
 
 
@@ -118,7 +118,7 @@ class Bully(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         return C if opponent.history[-1:] == [D] else D
 
 
@@ -141,7 +141,7 @@ class SneakyTitForTat(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(self.history) < 2:
             return "C"
         if D not in opponent.history:
@@ -172,7 +172,7 @@ class SuspiciousTitForTat(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         return C if opponent.history[-1:] == [C] else D
 
 
@@ -197,7 +197,7 @@ class AntiTitForTat(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         return D if opponent.history[-1:] == [C] else C
 
 
@@ -221,7 +221,7 @@ class HardTitForTat(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         # Cooperate on the first move
         if not opponent.history:
             return C
@@ -253,7 +253,7 @@ class HardTitFor2Tats(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         # Cooperate on the first move
         if not opponent.history:
             return C
@@ -287,24 +287,24 @@ class OmegaTFT(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, deadlock_threshold=3, randomness_threshold=8):
+    def __init__(self, deadlock_threshold: int = 3, randomness_threshold: int = 8) -> None:
         super().__init__()
         self.deadlock_threshold = deadlock_threshold
         self.randomness_threshold = randomness_threshold
         self.randomness_counter = 0
         self.deadlock_counter = 0
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # Cooperate on the first move
         if not self.history:
             return C
         # TFT on round 2
         if len(self.history) == 1:
-            return D if opponent.history[-1:] == [D] else C
+            return opponent.history[-1]
 
         # Are we deadlocked? (in a CD -> DC loop)
         if (self.deadlock_counter >= self.deadlock_threshold):
-            self.move = C
+            move = C
             if self.deadlock_counter == self.deadlock_threshold:
                 self.deadlock_counter = self.deadlock_threshold + 1
             else:
@@ -318,21 +318,21 @@ class OmegaTFT(Player):
                 self.randomness_counter += 1
             # If the opponent's last move differed from mine,
             # increase the counter
-            if self.history[-1] == opponent.history[-1]:
+            if self.history[-1] != opponent.history[-1]:
                 self.randomness_counter += 1
             # Compare counts to thresholds
             # If randomness_counter exceeds Y, Defect for the remainder
-            if self.randomness_counter >= 8:
-                self.move = D
+            if self.randomness_counter >= self.randomness_threshold:
+                move = D
             else:
                 # TFT
-                self.move = D if opponent.history[-1:] == [D] else C
+                move = opponent.history[-1]
                 # Check for deadlock
                 if opponent.history[-2] != opponent.history[-1]:
                     self.deadlock_counter += 1
                 else:
                     self.deadlock_counter = 0
-        return self.move
+        return move
 
     def reset(self):
         super().reset()
@@ -362,7 +362,7 @@ class Gradual(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         super().__init__()
         self.calming = False
@@ -370,7 +370,7 @@ class Gradual(Player):
         self.punishment_count = 0
         self.punishment_limit = 0
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
 
         if self.calming:
             self.calming = False
@@ -427,7 +427,7 @@ class ContriteTitForTat(Player):
     }
     contrite = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
 
         if not opponent.history:
             return C
@@ -468,7 +468,7 @@ class SlowTitForTwoTats(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
 
         # Start with two cooperations
         if len(self.history) < 2:
@@ -527,11 +527,11 @@ class AdaptiveTitForTat(Player):
     }
     world = 0.5
 
-    def __init__(self, rate=0.5):
+    def __init__(self, rate: float = 0.5) -> None:
         super().__init__()
         self.rate, self.starting_rate = rate, rate
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
 
         if len(opponent.history) == 0:
             return C
@@ -551,10 +551,6 @@ class AdaptiveTitForTat(Player):
         super().reset()
         self.world = 0.5
         self.rate = self.starting_rate
-
-    def __repr__(self):
-
-        return "%s: %s" % (self.name, round(self.rate, 2))
 
 
 class SpitefulTitForTat(Player):
@@ -579,11 +575,11 @@ class SpitefulTitForTat(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.retaliating = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # First move
         if not self.history:
             return C
@@ -602,3 +598,37 @@ class SpitefulTitForTat(Player):
     def reset(self):
         super().reset()
         self.retaliating = False
+
+class SlowTitForTwoTats2(Player):
+    """
+    A player plays C twice, then if the opponent plays the same move twice,
+    plays that move, otherwise plays previous move.
+
+    Names:
+
+    - Slow Tit For Tat [PRISON1998]_
+    """
+
+    name = 'Slow Tit For Two Tats 2'
+    classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+
+        # Start with two cooperations
+        if len(self.history) < 2:
+            return C
+
+        # Mimic if opponent plays the same move twice
+        if opponent.history[-2] == opponent.history[-1]:
+            return opponent.history[-1]
+
+        # Otherwise play previous move
+        return self.history[-1]

@@ -1,13 +1,15 @@
 from numpy.random import choice
 
-from axelrod.actions import Actions
+from axelrod.actions import Actions , Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
 C, D = Actions.C, Actions.D
 
+#Type Hinting has not finished yet
+#Lines 9 and 10 will be deleted
 
-def is_stochastic_matrix(m, ep=1e-8):
+def is_stochastic_matrix(m, ep=1e-8) -> bool:
     """Checks that the matrix m (a list of lists) is a stochastic matrix."""
     for i in range(len(m)):
         for j in range(len(m[i])):
@@ -29,7 +31,7 @@ class SimpleHMM(object):
     """
 
     def __init__(self, transitions_C, transitions_D, emission_probabilities,
-                 initial_state):
+                 initial_state) -> None:
         """
         Params
         ------
@@ -43,7 +45,7 @@ class SimpleHMM(object):
         self.emission_probabilities = emission_probabilities
         self.state = initial_state
 
-    def is_well_formed(self):
+    def is_well_formed(self) -> bool:
         """
         Determines if the HMM parameters are well-formed:
             - Both matrices are stochastic
@@ -61,7 +63,16 @@ class SimpleHMM(object):
             return False
         return True
 
-    def move(self, opponent_action):
+    def __eq__(self, other: Player) -> bool:
+        """Equality of two HMMs"""
+        check = True
+        for attr in ["transitions_C", "transitions_D",
+                     "emission_probabilities", "state"]:
+            check = check and getattr(self, attr) == getattr(other, attr)
+        return check
+
+
+    def move(self, opponent_action: Action) -> Action:
         """Changes state and computes the response action.
 
         Parameters
@@ -102,7 +113,7 @@ class HMMPlayer(Player):
 
     def __init__(self, transitions_C=None, transitions_D=None,
                  emission_probabilities=None, initial_state=0,
-                 initial_action=C):
+                 initial_action=C) -> None:
         super().__init__()
         if not transitions_C:
             transitions_C = [[1]]
@@ -114,9 +125,10 @@ class HMMPlayer(Player):
         self.hmm = SimpleHMM(transitions_C, transitions_D,
                              emission_probabilities, initial_state)
         assert self.hmm.is_well_formed()
+        self.state = self.hmm.state
         self.classifier['stochastic'] = self.is_stochastic()
 
-    def is_stochastic(self):
+    def is_stochastic(self) -> bool:
         """Determines if the player is stochastic."""
         # If the transitions matrices and emission_probabilities are all 0 or 1
         # Then the player is stochastic
@@ -128,7 +140,7 @@ class HMMPlayer(Player):
             return True
         return False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(self.history) == 0:
             return self.initial_action
         else:
@@ -138,9 +150,10 @@ class HMMPlayer(Player):
             self.state = self.hmm.state
             return action
 
-    def reset(self):
+    def reset(self) -> None:
         super().reset()
         self.hmm.state = self.initial_state
+        self.state = self.hmm.state
 
 
 class EvolvedHMM5(HMMPlayer):
@@ -164,7 +177,7 @@ class EvolvedHMM5(HMMPlayer):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         initial_state = 3
         initial_action = C
         t_C = [[1, 0, 0, 0, 0],

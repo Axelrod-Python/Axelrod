@@ -11,11 +11,12 @@ If you are developing new tests for the suite, it is useful to run a single test
 file so that you don't have to wait for the entire suite each time.  For
 example, to run only the tests for the Grudger strategy::
 
-    $ python -m unittest axelrod.tests.unit.test_grudger
+    $ python -m unittest axelrod.tests.strategies.test_grudger
 
-The test suite is divided into two categories: unit tests and integration tests.
+The test suite is divided into three categories: strategy tests, unit tests and integration tests.
 Each can be run individually::
 
+    $ python -m unittest discover -s axelrod.tests.strategies
     $ python -m unittest discover -s axelrod.tests.unit
     $ python -m unittest discover -s axelrod.tests.integration
 

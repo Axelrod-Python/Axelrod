@@ -1,4 +1,4 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
@@ -28,7 +28,7 @@ class WorseAndWorse(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history) + 1
         probability = 1 - current_round / 1000
         return random_choice(probability)
@@ -54,7 +54,7 @@ class KnowledgeableWorseAndWorse(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history) + 1
         expected_length = self.match_attributes['length']
         probability = 1 - current_round / expected_length
@@ -82,7 +82,7 @@ class WorseAndWorse2(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history) + 1
 
         if current_round == 1:
@@ -116,7 +116,7 @@ class WorseAndWorse3(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history) + 1
 
         if current_round == 1:

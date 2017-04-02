@@ -4,8 +4,8 @@ import axelrod
 from axelrod import simulate_play
 from axelrod.strategy_transformers import *
 from axelrod.actions import flip_action
-from .test_titfortat import TestTitForTat
-from .test_cooperator import TestCooperator
+from axelrod.tests.strategies.test_titfortat import TestTitForTat
+from axelrod.tests.strategies.test_cooperator import TestCooperator
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -41,6 +41,17 @@ class TestTransformers(unittest.TestCase):
         p1 = cls()
         self.assertEqual(cls.__name__, "Alternator")
         self.assertEqual(p1.name, "Alternator")
+
+    def test_repr(self):
+        """Tests that the player __repr__ is properly modified to add
+        Transformer's parameters.
+        """
+        self.assertEqual(str(ForgiverTransformer(0.5)(axelrod.Alternator)()), "Forgiving Alternator: 0.5")
+        self.assertEqual(str(InitialTransformer([D, D, C])(axelrod.Alternator)()),
+                         "Initial Alternator: ['D', 'D', 'C']")
+        self.assertEqual(str(FlipTransformer()(axelrod.Random)(0.1)), "Flipped Random: 0.1")
+        self.assertEqual(str(MixedTransformer(0.3, (axelrod.Alternator, axelrod.Bully))(axelrod.Random)(0.1)),
+                         "Mutated Random: 0.1: 0.3, ['Alternator', 'Bully']")
 
     def test_cloning(self):
         """Tests that Player.clone preserves the application of transformations.
@@ -109,7 +120,7 @@ class TestTransformers(unittest.TestCase):
         """
         p1 = axelrod.GoByMajority()
         p2 = DualTransformer()(axelrod.GoByMajority)()
-        p3 = axelrod.Cycler('CDD')  # Cycles 'CDD'
+        p3 = axelrod.Cycler(cycle='CDD')  # Cycles 'CDD'
 
         for _ in range(10):
             p1.play(p3)
@@ -144,6 +155,13 @@ class TestTransformers(unittest.TestCase):
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p1.history, [D, C, C, D, D])
+
+        probability = (0.6, 0.6)
+        p1 = JossAnnTransformer(probability)(axelrod.Cooperator)()
+        p2 = axelrod.Cooperator()
+        for _ in range(5):
+            p1.play(p2)
+        self.assertEqual(p1.history, [D, C, D, D, C])
 
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""
@@ -410,7 +428,7 @@ class TestTransformers(unittest.TestCase):
                     transformed = transformer(transformer(PlayerClass))()
                     for _ in range(5):
                         self.assertEqual(player.strategy(third_player),
-                                        transformed.strategy(third_player))
+                                         transformed.strategy(third_player))
                         player.play(third_player)
                         third_player.history.pop(-1)
                         transformed.play(third_player)
@@ -434,7 +452,7 @@ class TestTransformers(unittest.TestCase):
                     transformed = transformer(transformer(PlayerClass))()
                     for i in range(5):
                         self.assertEqual(player.strategy(third_player),
-                                        transformed.strategy(third_player))
+                                         transformed.strategy(third_player))
                         player.play(third_player)
                         third_player.history.pop(-1)
                         transformed.play(third_player)
@@ -467,7 +485,7 @@ class TestRUAisTFT(TestTitForTat):
     player = TFT
     name = "RUA Cooperator"
     expected_classifier = {
-        'memory_depth': 0, # really 1
+        'memory_depth': 0,  # really 1
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

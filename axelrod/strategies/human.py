@@ -1,5 +1,5 @@
 from os import linesep
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from prompt_toolkit import prompt
 from prompt_toolkit.token import Token
@@ -19,7 +19,7 @@ class ActionValidator(Validator):
     Described at http://python-prompt-toolkit.readthedocs.io/en/latest/pages/building_prompts.html#input-validation
     """
 
-    def validate(self, document):
+    def validate(self, document) -> None:
         text = document.text
 
         if text and text.upper() not in ['C', 'D']:
@@ -50,7 +50,7 @@ class Human(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, name='Human', c_symbol='C', d_symbol='D'):
+    def __init__(self, name='human', c_symbol='C', d_symbol='D'):
         """
         Parameters
         ----------
@@ -64,7 +64,7 @@ class Human(Player):
             and prompt
         """
         super().__init__()
-        self.name = name
+        self.human_name = name
         self.symbols = {
             C: c_symbol,
             D: d_symbol
@@ -81,7 +81,7 @@ class Human(Player):
             self.symbols[action] for action in self.opponent_history]
         history = list(zip(my_history, opponent_history))
         if self.history:
-            content = 'History ({}, opponent): {}'.format(self.name, history)
+            content = 'History ({}, opponent): {}'.format(self.human_name, history)
         else:
             content = ''
         return [(Token.Toolbar, content)]
@@ -105,7 +105,7 @@ class Human(Player):
             toolbar = self._history_toolbar
             print_statement = (
                 '{}Turn {}: {} played {}, opponent played {}'.format(
-                    linesep, len(self.history), self.name,
+                    linesep, len(self.history), self.human_name,
                     self.symbols[self.history[-1]],
                     self.symbols[self.opponent_history[-1]])
             )
@@ -118,7 +118,7 @@ class Human(Player):
             'print': print_statement
         }
 
-    def _get_human_input(self):
+    def _get_human_input(self) -> Action:  # pragma: no cover
         """
         A method to prompt the user for input, validate it and display
         the bottom toolbar.
@@ -130,14 +130,14 @@ class Human(Player):
         """
         action = prompt(
             'Turn {} action [C or D] for {}: '.format(
-                len(self.history) + 1, self.name),
+                len(self.history) + 1, self.human_name),
             validator=ActionValidator(),
             get_bottom_toolbar_tokens=self.status_messages['toolbar'],
             style=toolbar_style)
 
         return action.upper()
 
-    def strategy(self, opponent, input_function=None):
+    def strategy(self, opponent: Player, input_function=None):
         """
         Ordinarily, the strategy prompts for keyboard input rather than
         deriving its own action.
@@ -151,9 +151,15 @@ class Human(Player):
         self.status_messages = self._status_messages()
         print(self.status_messages['print'])
 
-        if not input_function:
+        if not input_function:  # pragma: no cover
             action = self._get_human_input()
         else:
             action = input_function()
 
         return action
+
+    def __repr__(self):
+        """
+        Override the default __repr__ of the class
+        """
+        return "Human: {}".format(self.human_name)

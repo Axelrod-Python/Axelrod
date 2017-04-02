@@ -1,3 +1,92 @@
+# v2.8.0, 2017-04-02
+
+Source code cleanup, test refactor, new strategies and improved `__repr__` of
+strategies
+
+- Improved/refactored source code:
+  https://github.com/Axelrod-Python/Axelrod/pull/917
+  https://github.com/Axelrod-Python/Axelrod/pull/952
+- Internal improvement: remove the `init_args` decorator as superseded by the
+  `kward_args`:
+  https://github.com/Axelrod-Python/Axelrod/pull/918
+- Strategy `__repr__` now automatically includes all parameters of a strategy:
+  https://github.com/Axelrod-Python/Axelrod/pull/953
+  https://github.com/Axelrod-Python/Axelrod/pull/922
+- Type hints:
+  https://github.com/Axelrod-Python/Axelrod/pull/883
+  https://github.com/Axelrod-Python/Axelrod/pull/935
+  https://github.com/Axelrod-Python/Axelrod/pull/949
+  https://github.com/Axelrod-Python/Axelrod/pull/951
+- Refactor of tests:
+  https://github.com/Axelrod-Python/Axelrod/pull/924
+  https://github.com/Axelrod-Python/Axelrod/pull/927
+  https://github.com/Axelrod-Python/Axelrod/pull/928
+  https://github.com/Axelrod-Python/Axelrod/pull/933
+  https://github.com/Axelrod-Python/Axelrod/pull/934
+  https://github.com/Axelrod-Python/Axelrod/pull/937
+- New strategy: `SlowTitForTwoTats2`
+  https://github.com/Axelrod-Python/Axelrod/pull/926
+- New strategy: `GeneralSoftGrudger`
+  https://github.com/Axelrod-Python/Axelrod/pull/936
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.7.0...v2.8.0
+
+# v2.7.0, 2017-03-17
+
+New strategies, increased test coverage, refactor of some tests, documentation
+and minor bug fixes.
+
+- New strategy: VeryBad
+  https://github.com/Axelrod-Python/Axelrod/pull/869
+- New strategy: Resurrection
+  https://github.com/Axelrod-Python/Axelrod/pull/865
+- Documentation of docstring requirements for contributions
+  https://github.com/Axelrod-Python/Axelrod/pull/872
+- Refactor tests:
+  https://github.com/Axelrod-Python/Axelrod/pull/875
+  https://github.com/Axelrod-Python/Axelrod/pull/907
+  https://github.com/Axelrod-Python/Axelrod/pull/908
+  https://github.com/Axelrod-Python/Axelrod/pull/909
+  https://github.com/Axelrod-Python/Axelrod/pull/911
+  https://github.com/Axelrod-Python/Axelrod/pull/914
+- Improved coverage:
+  https://github.com/Axelrod-Python/Axelrod/pull/899
+  https://github.com/Axelrod-Python/Axelrod/pull/900
+  https://github.com/Axelrod-Python/Axelrod/pull/901
+  https://github.com/Axelrod-Python/Axelrod/pull/902
+  https://github.com/Axelrod-Python/Axelrod/pull/904
+  https://github.com/Axelrod-Python/Axelrod/pull/905
+  https://github.com/Axelrod-Python/Axelrod/pull/910
+- Bug in plot:
+  https://github.com/Axelrod-Python/Axelrod/pull/897
+- Bug fix in deterministic cache:
+  https://github.com/Axelrod-Python/Axelrod/pull/882
+- Bug in average copier:
+  https://github.com/Axelrod-Python/Axelrod/pull/912
+- Minor function rename:
+  https://github.com/Axelrod-Python/Axelrod/pull/906
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.6.0...v2.7.0
+
+# v2.6.0, 2017-02-26
+
+New strategy, state to action analysis and internal improvements
+
+- A number of type hints added to the library
+  https://github.com/Axelrod-Python/Axelrod/pull/860
+  https://github.com/Axelrod-Python/Axelrod/pull/863
+  https://github.com/Axelrod-Python/Axelrod/pull/864
+- New strategy: SelfSteem
+  https://github.com/Axelrod-Python/Axelrod/pull/866
+- Add state to action analysis
+  https://github.com/Axelrod-Python/Axelrod/pull/870
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.5.0...v2.6.0
+
 # v2.5.0, 2017-02-11
 
 Internal improvements, type hints, documentation and a new strategy

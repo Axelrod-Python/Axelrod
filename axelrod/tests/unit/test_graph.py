@@ -1,9 +1,171 @@
 import unittest
+from collections import defaultdict
 
 from axelrod import graph
 
 
 class TestGraph(unittest.TestCase):
+
+    def test_init(self):
+        # Undirected graph with no vertices
+        g = graph.Graph()
+        self.assertFalse(g.directed)
+        self.assertIsInstance(g.out_mapping, defaultdict)
+        self.assertIsInstance(g.in_mapping, defaultdict)
+        self.assertEqual(g._edges, [])
+
+        # Directed graph with no vertices
+        g = graph.Graph(directed=True)
+        self.assertTrue(g.directed)
+        self.assertIsInstance(g.out_mapping, defaultdict)
+        self.assertIsInstance(g.in_mapping, defaultdict)
+        self.assertEqual(g._edges, [])
+
+        # Undirected graph with vertices and unweighted edges
+        g = graph.Graph(edges=[[1, 2], [2, 3]])
+        expected_edges = [(1, 2), (2, 1), (2, 3), (3, 2)]
+        expected_out_mapping = {
+            1: {2: None},
+            2: {1: None, 3: None},
+            3: {2: None}
+        }
+        expected_in_mapping = {
+            1: {2: None},
+            2: {1: None, 3: None},
+            3: {2: None}
+        }
+
+        self.assertFalse(g.directed)
+        self.assertEqual(len(g.out_mapping), len(expected_out_mapping))
+        for node in expected_out_mapping:
+            self.assertEqual(g.out_mapping[node], expected_out_mapping[node])
+        self.assertEqual(len(g.in_mapping), len(expected_in_mapping))
+        for node in expected_in_mapping:
+            self.assertEqual(g.in_mapping[node], expected_in_mapping[node])
+        self.assertEqual(g._edges, expected_edges)
+
+        # Undirected graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]])
+        expected_edges = [(1, 2), (2, 1), (2, 3), (3, 2)]
+        expected_out_mapping = {
+            1: {2: 10},
+            2: {1: 10, 3: 5},
+            3: {2: 5}
+        }
+        expected_in_mapping = {
+            1: {2: 10},
+            2: {1: 10, 3: 5},
+            3: {2: 5}
+        }
+        self.assertFalse(g.directed)
+        self.assertEqual(len(g.out_mapping), len(expected_out_mapping))
+        for node in expected_out_mapping:
+            self.assertEqual(g.out_mapping[node], expected_out_mapping[node])
+        self.assertEqual(len(g.in_mapping), len(expected_in_mapping))
+        for node in expected_in_mapping:
+            self.assertEqual(g.in_mapping[node], expected_in_mapping[node])
+        self.assertEqual(g._edges, expected_edges)
+
+        # Directed graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]], directed=True)
+        expected_edges = [(1, 2), (2, 3)]
+        expected_out_mapping = {
+            1: {2: 10},
+            2: {3: 5},
+        }
+        expected_in_mapping = {
+            2: {1: 10},
+            3: {2: 5}
+        }
+        self.assertTrue(g.directed)
+        self.assertEqual(len(g.out_mapping), len(expected_out_mapping))
+        for node in expected_out_mapping:
+            self.assertEqual(g.out_mapping[node], expected_out_mapping[node])
+        self.assertEqual(len(g.in_mapping), len(expected_in_mapping))
+        for node in expected_in_mapping:
+            self.assertEqual(g.in_mapping[node], expected_in_mapping[node])
+        self.assertEqual(g._edges, expected_edges)
+
+    def test_out_dict(self):
+        # Undirected graph with vertices and unweighted edges
+        g = graph.Graph(edges=[[1, 2], [2, 3]])
+        expected_out_mapping = {
+            1: {2: None},
+            2: {1: None, 3: None},
+            3: {2: None}
+        }
+        for key in expected_out_mapping:
+            self.assertEqual(g.out_dict(key), expected_out_mapping[key])
+
+        # Undirected graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]])
+        expected_out_mapping = {
+            1: {2: 10},
+            2: {1: 10, 3: 5},
+            3: {2: 5}
+        }
+        for key in expected_out_mapping:
+            self.assertEqual(g.out_dict(key), expected_out_mapping[key])
+
+        # Directed graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]], directed=True)
+        expected_out_mapping = {
+            1: {2: 10},
+            2: {3: 5},
+        }
+        for key in expected_out_mapping:
+            self.assertEqual(g.out_dict(key), expected_out_mapping[key])
+
+    def test_in_dict(self):
+        # Undirected graph with vertices and unweighted edges
+        g = graph.Graph(edges=[[1, 2], [2, 3]])
+        expected_in_mapping = {
+            1: {2: None},
+            2: {1: None, 3: None},
+            3: {2: None}
+        }
+        for key in expected_in_mapping:
+            self.assertEqual(g.in_dict(key), expected_in_mapping[key])
+
+        # Undirected graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]])
+        expected_in_mapping = {
+            1: {2: 10},
+            2: {1: 10, 3: 5},
+            3: {2: 5}
+        }
+        for key in expected_in_mapping:
+            self.assertEqual(g.in_dict(key), expected_in_mapping[key])
+
+        # Directed graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]], directed=True)
+        expected_in_mapping = {
+            2: {1: 10},
+            3: {2: 5}
+        }
+        for key in expected_in_mapping:
+            self.assertEqual(g.in_dict(key), expected_in_mapping[key])
+
+    def test_repr(self):
+        # Undirected graph with no vertices
+        g = graph.Graph()
+        self.assertEqual(str(g), '<Graph: None>')
+
+        # Directed graph with no vertices
+        g = graph.Graph(directed=True)
+        self.assertEqual(str(g), '<Graph: None>')
+
+        # Undirected graph with vertices and unweighted edges
+        g = graph.Graph(edges=[[1, 2], [2, 3]])
+        self.assertEqual(str(g), '<Graph: [[1, 2], [2, 3]]>')
+
+        # Undirected graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]])
+        self.assertEqual(str(g), '<Graph: [[1, 2, 10], [2, 3, 5]]>')
+
+        # Directed graph with vertices and weighted edges
+        g = graph.Graph(edges=[[1, 2, 10], [2, 3, 5]], directed=True)
+        self.assertEqual(str(g), '<Graph: [[1, 2, 10], [2, 3, 5]]>')
 
     def test_cycle(self):
         g = graph.cycle(1, directed=False)

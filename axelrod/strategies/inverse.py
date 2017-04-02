@@ -27,8 +27,9 @@ class Inverse(Player):
         If so, player defection is inversely proportional to when this occurred.
         """
 
+        # calculate how many turns ago the opponent defected
         index = next((index for index, value in
-                      enumerate(opponent.history, start=1) if value == D), None)
+                      enumerate(opponent.history[::-1], start=1) if value == D), None)
 
         if index is None:
             return C

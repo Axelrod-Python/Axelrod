@@ -1,3 +1,8 @@
+"""
+The player class in this module does not obey standard rules of the IPD (as
+indicated by their classifier). We do not recommend putting a lot of time in to
+optimising it.
+"""
 import inspect
 from axelrod.actions import Action, Actions
 from axelrod.player import Player
@@ -28,7 +33,7 @@ class Darwin(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
-        'inspects_source': False,
+        'inspects_source': True,  # Checks to see if opponent is using simulated matches.
         'long_run_time': False,
         'makes_use_of': set(),
         'manipulates_source': False,

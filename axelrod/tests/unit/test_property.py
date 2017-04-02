@@ -38,16 +38,6 @@ class TestStrategyList(unittest.TestCase):
             self.assertIsInstance(player, axelrod.Player)
             self.assertIn(str(player), basic_player_names)
 
-    @given(strategies=strategy_lists(strategies=stochastic_strategies))
-    @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, strategies):
-        self.assertIsInstance(strategies, list)
-        stochastic_player_names = [str(s()) for s in stochastic_strategies]
-        for strategy in strategies:
-            player = strategy()
-            self.assertIsInstance(player, axelrod.Player)
-            self.assertIn(str(player), stochastic_player_names)
-
 
 class TestMatch(unittest.TestCase):
     """
@@ -109,15 +99,6 @@ class TestTournament(unittest.TestCase):
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
 
-    @given(tournament=tournaments(strategies=stochastic_strategies,
-                                  max_size=3))
-    @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.Tournament)
-        stochastic_player_names = [str(s()) for s in stochastic_strategies]
-        for p in tournament.players:
-            self.assertIn(str(p), stochastic_player_names)
-
 
 class TestProbEndTournament(unittest.TestCase):
 
@@ -149,15 +130,6 @@ class TestProbEndTournament(unittest.TestCase):
         basic_player_names = [str(s()) for s in axelrod.basic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
-
-    @given(tournament=prob_end_tournaments(strategies=stochastic_strategies,
-                                           max_size=3))
-    @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.ProbEndTournament)
-        stochastic_player_names = [str(s()) for s in stochastic_strategies]
-        for p in tournament.players:
-            self.assertIn(str(p), stochastic_player_names)
 
 
 class TestSpatialTournament(unittest.TestCase):
@@ -191,14 +163,6 @@ class TestSpatialTournament(unittest.TestCase):
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
 
-    @given(tournament=spatial_tournaments(strategies=stochastic_strategies,
-                                          max_size=3))
-    @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.SpatialTournament)
-        stochastic_player_names = [str(s()) for s in stochastic_strategies]
-        for p in tournament.players:
-            self.assertIn(str(p), stochastic_player_names)
 
 
 class TestProbEndSpatialTournament(unittest.TestCase):
@@ -231,15 +195,6 @@ class TestProbEndSpatialTournament(unittest.TestCase):
         basic_player_names = [str(s()) for s in axelrod.basic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
-
-    @given(tournament=prob_end_spatial_tournaments(strategies=stochastic_strategies,
-                                          max_size=3))
-    @settings(max_examples=10, timeout=0)
-    def test_decorator_with_stochastic_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)
-        stochastic_player_names = [str(s()) for s in stochastic_strategies]
-        for p in tournament.players:
-            self.assertIn(str(p), stochastic_player_names)
 
 
 class TestGame(unittest.TestCase):

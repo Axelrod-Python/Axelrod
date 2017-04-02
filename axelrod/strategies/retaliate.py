@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
@@ -27,19 +27,16 @@ class Retaliate(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, retaliation_threshold=0.1):
+    def __init__(self, retaliation_threshold: float = 0.1) -> None:
         """
         Uses the basic init from the Player class, but also set the name to
         include the retaliation setting.
         """
         super().__init__()
         self.retaliation_threshold = retaliation_threshold
-        self.name = (
-            'Retaliate (' +
-            str(self.retaliation_threshold) + ')')
-        self.play_counts = defaultdict(int)
+        self.play_counts = defaultdict(int) # type: defaultdict
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         If the opponent has played D to my C more often than x% of the time
         that I've done the same to him, play D. Otherwise, play C.
@@ -70,7 +67,7 @@ class Retaliate2(Retaliate):
 
     name = 'Retaliate 2'
 
-    def __init__(self, retaliation_threshold=0.08):
+    def __init__(self, retaliation_threshold: float = 0.08) -> None:
         super().__init__(retaliation_threshold=retaliation_threshold)
 
 
@@ -85,7 +82,7 @@ class Retaliate3(Retaliate):
 
     name = 'Retaliate 3'
 
-    def __init__(self, retaliation_threshold=0.05):
+    def __init__(self, retaliation_threshold: float = 0.05) -> None:
         super().__init__(retaliation_threshold=retaliation_threshold)
 
 
@@ -112,7 +109,7 @@ class LimitedRetaliate(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, retaliation_threshold=0.1, retaliation_limit=20):
+    def __init__(self, retaliation_threshold: float = 0.1, retaliation_limit: int = 20) -> None:
         """
         Parameters
         ----------
@@ -128,14 +125,9 @@ class LimitedRetaliate(Player):
         self.retaliation_count = 0
         self.retaliation_threshold = retaliation_threshold
         self.retaliation_limit = retaliation_limit
-        self.play_counts = defaultdict(int)
+        self.play_counts = defaultdict(int) # type: defaultdict
 
-        self.name = (
-            'Limited Retaliate (' +
-            str(self.retaliation_threshold) +
-            '/' + str(self.retaliation_limit) + ')')
-
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         If the opponent has played D to my C more often than x% of the time
         that I've done the same to him, retaliate by playing D but stop doing
@@ -182,7 +174,7 @@ class LimitedRetaliate2(LimitedRetaliate):
 
     name = 'Limited Retaliate 2'
 
-    def __init__(self, retaliation_threshold=0.08, retaliation_limit=15):
+    def __init__(self, retaliation_threshold: float = 0.08, retaliation_limit: int = 15) -> None:
         super().__init__(
             retaliation_threshold=retaliation_threshold,
             retaliation_limit=retaliation_limit)
@@ -200,7 +192,7 @@ class LimitedRetaliate3(LimitedRetaliate):
 
     name = 'Limited Retaliate 3'
 
-    def __init__(self, retaliation_threshold=0.05, retaliation_limit=20):
+    def __init__(self, retaliation_threshold: float = 0.05, retaliation_limit: int = 20) -> None:
         super().__init__(
             retaliation_threshold=retaliation_threshold,
             retaliation_limit=retaliation_limit)

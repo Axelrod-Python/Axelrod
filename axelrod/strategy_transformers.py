@@ -99,16 +99,34 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 return strategy_wrapper(self, opponent, proposed_action,
                                         *args, **kwargs)
 
-            # Define a new class and wrap the strategy method
             # Modify the PlayerClass name
             new_class_name = PlayerClass.__name__
             name = PlayerClass.name
             name_prefix = self.name_prefix
             if name_prefix:
                 # Modify the Player name (class variable inherited from Player)
-                new_class_name = name_prefix + PlayerClass.__name__
+                new_class_name = ''.join([name_prefix, PlayerClass.__name__])
                 # Modify the Player name (class variable inherited from Player)
-                name = name_prefix + ' ' + PlayerClass.name
+                name = ' '.join([name_prefix, PlayerClass.name])
+
+            # Define the new __repr__ method to add the wrapper arguments
+            # at the end of the name
+            def __repr__(self):
+                name = PlayerClass.__repr__(self)
+                # add eventual transformers' arguments in name
+                prefix = ': '
+                for arg in args:
+                    try:
+                        arg = [player.name for player in arg]
+                    except TypeError:
+                        pass
+                    except AttributeError:
+                        pass
+                    name = ''.join([name, prefix, str(arg)])
+                    prefix = ', '
+                return name
+
+            # Define a new class and wrap the strategy method
             # Dynamically create the new class
             new_class = type(
                 new_class_name, (PlayerClass,),
@@ -116,6 +134,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                     "name": name,
                     "original_class": PlayerClass,
                     "strategy": strategy,
+                    "__repr__": __repr__,
                     "__module__": PlayerClass.__module__,
                 })
             return new_class
@@ -193,8 +212,7 @@ def dual_wrapper(player, opponent, proposed_action):
     action: an axelrod.Action, C or D
     """
     if not player.history:
-        player.original_player = player.original_class(*player.init_args,
-                                                       **player.init_kwargs)
+        player.original_player = player.original_class(**player.init_kwargs)
 
     action = player.original_player.strategy(opponent)
     player.original_player.history.append(action)
@@ -404,7 +422,7 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     action: an axelrod.Action, C or D
     """
     if sum(probability) > 1:
-        probability[:] = [i / sum(probability) for i in probability]
+        probability = tuple([i / sum(probability) for i in probability])
 
     remaining_probability = max(0, 1 - probability[0] - probability[1])
     probability += (remaining_probability,)

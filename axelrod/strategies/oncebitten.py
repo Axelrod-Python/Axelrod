@@ -1,5 +1,5 @@
 import random
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
@@ -22,13 +22,13 @@ class OnceBitten(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.mem_length = 10
         self.grudged = False
         self.grudge_memory = 0
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Begins by playing C, then plays D for mem_length rounds if the opponent
         ever plays D twice in a row.
@@ -72,7 +72,7 @@ class FoolMeOnce(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         if not opponent.history:
             return C
         if opponent.defections > 1:
@@ -98,7 +98,7 @@ class ForgetfulFoolMeOnce(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, forget_probability=0.05):
+    def __init__(self, forget_probability: float=0.05) -> None:
         """
         Parameters
         ----------
@@ -110,7 +110,7 @@ class ForgetfulFoolMeOnce(Player):
         self._initial = C
         self.forget_probability = forget_probability
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         r = random.random()
         if not opponent.history:
             return self._initial
@@ -145,7 +145,7 @@ class FoolMeForever(Player):
     }
 
     @staticmethod
-    def strategy(opponent):
+    def strategy(opponent: Player) -> Action:
         if opponent.defections > 0:
             return C
         return D

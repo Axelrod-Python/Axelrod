@@ -1,6 +1,8 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod._strategy_utils import detect_cycle
+
+from typing import List, Tuple
 
 C, D = Actions.C, Actions.D
 
@@ -19,7 +21,7 @@ class DefectorHunter(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(self.history) >= 4 and len(opponent.history) == opponent.defections:
             return D
         return C
@@ -39,13 +41,13 @@ class CooperatorHunter(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(self.history) >= 4 and len(opponent.history) == opponent.cooperations:
             return D
         return C
 
 
-def is_alternator(history):
+def is_alternator(history: List[Action]) -> bool:
     for i in range(len(history) - 1):
         if history[i] == history[i + 1]:
             return False
@@ -66,11 +68,11 @@ class AlternatorHunter(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.is_alt = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) < 6:
             return C
         if len(self.history) == 6:
@@ -100,11 +102,11 @@ class CycleHunter(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.cycle = None
+        self.cycle = None # type: Tuple[Action]
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if self.cycle:
             return D
         cycle = detect_cycle(opponent.history, min_size=3)
@@ -124,7 +126,7 @@ class EventualCycleHunter(CycleHunter):
 
     name = 'Eventual Cycle Hunter'
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> None:
         if len(opponent.history) < 10:
             return C
         if len(opponent.history) == opponent.cooperations:
@@ -153,7 +155,7 @@ class MathConstantHunter(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         Check whether the number of cooperations in the first and second halves
         of the history are close. The variance of the uniform distribution (1/4)
@@ -191,12 +193,12 @@ class RandomHunter(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.countCC = 0
         self.countDD = 0
         super().__init__()
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """
         A random player is unpredictable, which means the conditional frequency
         of cooperation after cooperation, and defection after defections, should

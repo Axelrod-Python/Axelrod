@@ -1,9 +1,13 @@
 from collections import OrderedDict
 import random
 
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
+
+from typing import List, Dict, Union
+
+Score = Union[int, float]
 
 C, D = Actions.C, Actions.D
 
@@ -35,7 +39,7 @@ class RiskyQLearner(Player):
     action_selection_parameter = 0.1
     memory_length = 12
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialises the player by picking a random strategy."""
 
         super().__init__()
@@ -45,7 +49,8 @@ class RiskyQLearner(Player):
         self.classifier['stochastic'] = True
 
         self.prev_action = random_choice()
-        self.history = []
+        self.original_prev_action = self.prev_action
+        self.history = [] # type: List[Action]
         self.score = 0
         self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0]))})
         self.Vs = OrderedDict({'': 0})
@@ -55,7 +60,7 @@ class RiskyQLearner(Player):
         (R, P, S, T) = self.match_attributes["game"].RPST()
         self.payoff_matrix = {C: {C: R, D: S}, D: {C: T, D: P}}
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """Runs a qlearn algorithm while the tournament is running."""
         state = self.find_state(opponent)
         reward = self.find_reward(opponent)
@@ -68,7 +73,7 @@ class RiskyQLearner(Player):
         self.prev_action = action
         return action
 
-    def select_action(self, state):
+    def select_action(self, state: str) -> Action:
         """
         Selects the action based on the epsilon-soft policy
         """
@@ -78,7 +83,7 @@ class RiskyQLearner(Player):
             return max(self.Qs[state], key=lambda x: self.Qs[state][x])
         return random_choice()
 
-    def find_state(self, opponent):
+    def find_state(self, opponent: Player) -> str:
         """
         Finds the my_state (the opponents last n moves +
         its previous proportion of playing C) as a hashable state
@@ -86,14 +91,14 @@ class RiskyQLearner(Player):
         prob = '{:.1f}'.format(opponent.cooperations)
         return ''.join(opponent.history[-self.memory_length:]) + prob
 
-    def perform_q_learning(self, prev_state, state, action, reward):
+    def perform_q_learning(self, prev_state: str, state: str, action: Action, reward):
         """
         Performs the qlearning algorithm
         """
         self.Qs[prev_state][action] = (1.-self.learning_rate)*self.Qs[prev_state][action] + self.learning_rate*(reward + self.discount_rate*self.Vs[state])
         self.Vs[prev_state] = max(self.Qs[prev_state].values())
 
-    def find_reward(self, opponent):
+    def find_reward(self, opponent: Player) -> Dict[Action, Dict[Action, Score]]:
         """
         Finds the reward gained on the last iteration
         """
@@ -113,7 +118,7 @@ class RiskyQLearner(Player):
         self.Qs = {'': {C: 0, D: 0}}
         self.Vs = {'': 0}
         self.prev_state = ''
-        self.prev_action = random_choice()
+        self.prev_action = self.original_prev_action
 
 
 class ArrogantQLearner(RiskyQLearner):

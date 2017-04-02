@@ -27,7 +27,7 @@ the initialisation depending on input parameters. A good example of this is the
 :code:`Joss` strategy::
 
     >>> joss = axelrod.Joss()
-    >>> boring_joss = axelrod.Joss(1)
+    >>> boring_joss = axelrod.Joss(p=1)
     >>> joss.classifier['stochastic'], boring_joss.classifier['stochastic']
     (True, False)
 

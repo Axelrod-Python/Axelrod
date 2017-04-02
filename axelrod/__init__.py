@@ -11,7 +11,7 @@ from .random_ import random_choice, seed
 from .plot import Plot
 from .game import DefaultGame, Game
 from .player import (
-    get_state_distribution_from_history, init_args, is_basic, obey_axelrod,
+    get_state_distribution_from_history, is_basic, obey_axelrod,
     update_history, update_state_distribution, Player)
 from .mock_player import MockPlayer, simulate_play
 from .match import Match

@@ -1,6 +1,8 @@
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
+from typing import List
+Vector = List[float]
 
 import random
 
@@ -31,7 +33,7 @@ class CollectiveStrategy(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)
         if turn == 0:
             return C
@@ -61,7 +63,7 @@ class Prober(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)
         if turn == 0:
             return D
@@ -94,7 +96,7 @@ class Prober2(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)
         if turn == 0:
             return D
@@ -127,7 +129,7 @@ class Prober3(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)
         if turn == 0:
             return D
@@ -165,7 +167,7 @@ class Prober4(Player):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.init_sequence = [
             C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
@@ -174,7 +176,7 @@ class Prober4(Player):
         self.unjust_Ds = 0
         self.turned_defector = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         if not self.history:
             return self.init_sequence[0]
         turn = len(self.history)
@@ -219,7 +221,7 @@ class HardProber(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         turn = len(self.history)
         if turn == 0:
             return D
@@ -258,7 +260,7 @@ class NaiveProber(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, p=0.1):
+    def __init__(self, p: float=0.1) -> None:
         """
         Parameters
         ----------
@@ -270,7 +272,7 @@ class NaiveProber(Player):
         if (self.p == 0) or (self.p == 1):
             self.classifier['stochastic'] = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # First move
         if len(self.history) == 0:
             return C
@@ -280,9 +282,6 @@ class NaiveProber(Player):
         # Otherwise cooperate, defect with probability 1 - self.p
         choice = random_choice(1 - self.p)
         return choice
-
-    def __repr__(self):
-        return "%s: %s" % (self.name, round(self.p, 2))
 
 
 class RemorsefulProber(NaiveProber):
@@ -314,11 +313,11 @@ class RemorsefulProber(NaiveProber):
         'manipulates_state': False
     }
 
-    def __init__(self, p=0.1):
+    def __init__(self, p: float=0.1) -> None:
         super().__init__(p)
         self.probing = False
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         # First move
         if len(self.history) == 0:
             return C

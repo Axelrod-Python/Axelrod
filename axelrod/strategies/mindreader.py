@@ -1,6 +1,11 @@
+"""
+The player classes in this module do not obey standard rules of the IPD (as
+indicated by their classifier). We do not recommend putting a lot of time in to
+optimising them.
+"""
 import inspect
 
-from axelrod.actions import Actions
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod._strategy_utils import look_ahead
 
@@ -22,7 +27,7 @@ class MindReader(Player):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """Pretends to play the opponent a number of times before each match.
         The primary purpose is to look far enough ahead to see if a defect will
         be punished by the opponent.
@@ -61,7 +66,7 @@ class ProtectedMindReader(MindReader):
         'manipulates_state': False
     }
 
-    def __setattr__(self, name, val):
+    def __setattr__(self, name: str, val: str):
         """Stops any other strategy altering the methods of this class """
 
         if name == 'strategy':
@@ -85,7 +90,7 @@ class MirrorMindReader(ProtectedMindReader):
         'manipulates_state': False
     }
 
-    def strategy(self, opponent):
+    def strategy(self, opponent: Player) -> Action:
         """Will read the mind of the opponent and play the opponent's strategy.
 
         Also avoid infinite recursion when called by itself or another mind

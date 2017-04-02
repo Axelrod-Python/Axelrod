@@ -68,8 +68,8 @@ and/or as a probe.
 This allows for the fingerprinting of parametrized strategies::
 
     >>> axl.seed(0)
-    >>> player = axl.Random(.1)
-    >>> probe = axl.GTFT(.9)
+    >>> player = axl.Random(p=.1)
+    >>> probe = axl.GTFT(p=.9)
     >>> af = axl.AshlockFingerprint(player, probe)
     >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2)
     >>> data

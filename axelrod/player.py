@@ -2,10 +2,12 @@ from collections import defaultdict
 from functools import wraps
 import random
 import copy
+import inspect
 
-from axelrod.actions import Actions, flip_action
+from axelrod.actions import Actions, flip_action, Action
 from .game import DefaultGame
 
+from typing import Dict, Any
 
 C, D = Actions.C, Actions.D
 
@@ -65,23 +67,6 @@ def update_state_distribution(player, action, reply):
     player.state_distribution[last_turn] += 1
 
 
-def init_args(func):
-    """Decorator to simplify the handling of init_args. Use whenever overriding
-    Player.__init__ in subclasses of Player that require arguments as follows:
-
-    @init_args
-    def __init__(self, myarg1, ...)
-    """
-
-    @wraps(func)
-    def wrapper(self, *args, **kwargs):
-        r = func(self, *args, **kwargs)
-        self.init_args = args
-        self.init_kwargs = kwargs
-        return r
-    return wrapper
-
-
 class Player(object):
     """A class for a player in the tournament.
 
@@ -89,7 +74,7 @@ class Player(object):
     """
 
     name = "Player"
-    classifier = {}
+    classifier = {}  # type: Dict[str, Any]
     default_classifier = {
         'stochastic': False,
         'memory_depth': float('inf'),
@@ -103,9 +88,25 @@ class Player(object):
     def __new__(cls, *args, **kwargs):
         """Caches arguments for Player cloning."""
         obj = super().__new__(cls)
-        obj.init_args = args
-        obj.init_kwargs = kwargs
+        obj.init_kwargs = cls.init_params(*args, **kwargs)
         return obj
+
+    @classmethod
+    def init_params(cls, *args, **kwargs):
+        """
+        Return a dictionary containing the init parameters of a strategy (without 'self').
+        Use *args and *kwargs as value if specified
+        and complete the rest with the default values.
+        """
+        sig = inspect.signature(cls.__init__)
+        # the 'self' parameter needs to be removed or the first *args will be assigned to it
+        self_param = sig.parameters.get('self')
+        new_params = list(sig.parameters.values())
+        new_params.remove(self_param)
+        sig = sig.replace(parameters=new_params)
+        boundargs = sig.bind_partial(*args, **kwargs)
+        boundargs.apply_defaults()
+        return boundargs.arguments
 
     def __init__(self):
         """Initiates an empty history and 0 score for a player."""
@@ -138,8 +139,15 @@ class Player(object):
         self.receive_match_attributes()
 
     def __repr__(self):
-        """The string method for the strategy."""
-        return self.name
+        """The string method for the strategy.
+        Appends the `__init__` parameters to the strategy's name."""
+        name = self.name
+        prefix = ': '
+        gen = (value for value in self.init_kwargs.values() if value is not None)
+        for value in gen:
+            name = ''.join([name, prefix, str(value)])
+            prefix = ', '
+        return name
 
     @staticmethod
     def _add_noise(noise, s1, s2):
@@ -174,7 +182,7 @@ class Player(object):
         # be significant changes required throughout the library.
         # Override in special cases only if absolutely necessary
         cls = self.__class__
-        new_player = cls(*self.init_args, **self.init_kwargs)
+        new_player = cls(**self.init_kwargs)
         new_player.match_attributes = copy.copy(self.match_attributes)
         return new_player
 

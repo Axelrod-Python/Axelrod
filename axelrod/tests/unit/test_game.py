@@ -55,4 +55,5 @@ class TestGame(unittest.TestCase):
     @given(game=games())
     def test_repr(self, game):
         expected_repr = "Axelrod game: (R,P,S,T) = {}".format(game.RPST())
+        self.assertEqual(expected_repr, game.__repr__())
         self.assertEqual(expected_repr, str(game))

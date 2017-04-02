@@ -102,5 +102,16 @@ ENV/
 # Rope project settings
 .ropeproject
 
+
 # Pycharm Files
 .idea/
+
+# Sublime Text settings
+*.sublime-*
+
+# Jetbrain editor settings
+.idea/
+
+# Docker files
+Dockerfile
+docker-compose.yml

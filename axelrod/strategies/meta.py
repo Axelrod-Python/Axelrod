@@ -56,6 +56,10 @@ class MetaPlayer(Player):
         for t in self.team:
             self.classifier['makes_use_of'].update(t.classifier['makes_use_of'])
 
+    def __repr__(self):
+        team_size = len(self.team)
+        return '{}: {} player{}'.format(self.name, team_size, 's' if team_size > 1 else '')
+
     def strategy(self, opponent):
         # Get the results of all our players.
         results = []
@@ -148,7 +152,6 @@ class MetaWinner(MetaPlayer):
 
 
 NiceMetaWinner = NiceTransformer()(MetaWinner)
-NiceMetaWinner.name = "Nice Meta Winner"
 
 
 class MetaWinnerEnsemble(MetaWinner):
@@ -175,7 +178,6 @@ class MetaWinnerEnsemble(MetaWinner):
 
 
 NiceMetaWinnerEnsemble = NiceTransformer()(MetaWinnerEnsemble)
-NiceMetaWinnerEnsemble.name = "Nice Meta Winner Ensemble"
 
 
 class MetaHunter(MetaPlayer):
@@ -235,11 +237,12 @@ class MetaHunterAggressive(MetaPlayer):
         'manipulates_state': False
     }
 
-    def __init__(self):
+    def __init__(self, team=None):
         # This version uses CooperatorHunter
-        team = [DefectorHunter, AlternatorHunter, RandomHunter,
-                MathConstantHunter, CycleHunter, EventualCycleHunter,
-                CooperatorHunter]
+        if team is None:
+            team = [DefectorHunter, AlternatorHunter, RandomHunter,
+                    MathConstantHunter, CycleHunter, EventualCycleHunter,
+                    CooperatorHunter]
 
         super().__init__(team=team)
 
