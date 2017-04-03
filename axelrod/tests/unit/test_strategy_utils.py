@@ -2,11 +2,13 @@
 
 import unittest
 
+import axelrod
+
 from hypothesis import given
 from hypothesis.strategies import sampled_from, lists, integers
 
 from axelrod import Actions
-from axelrod._strategy_utils import detect_cycle
+from axelrod._strategy_utils import detect_cycle, inspect_strategy
 
 C, D = Actions.C, Actions.D
 
@@ -48,3 +50,26 @@ class TestDetectCycle(unittest.TestCase):
     def test_cycle_greater_than_max_size_returns_none(self):
         self.assertEqual(detect_cycle([C, C, D] * 2, min_size=1, max_size=3), (C, C, D))
         self.assertIsNone(detect_cycle([C, C, D] * 2, min_size=1, max_size=2))
+
+
+class TestInspectStrategy(unittest.TestCase):
+
+    def test_strategies_without_countermeasures_return_their_strategy(self):
+        tft = axelrod.TitForTat()
+        inspector = axelrod.Alternator()
+
+        tft.play(inspector)
+        self.assertEqual(tft.history, [C])
+        self.assertEqual(inspect_strategy(inspector=inspector, opponent=tft), C)
+        tft.play(inspector)
+        self.assertEqual(tft.history, [C, C])
+        self.assertEqual(inspect_strategy(inspector=inspector, opponent=tft), D)
+        self.assertEqual(tft.strategy(inspector), D)
+
+    def test_strategies_with_countermeasures_return_their_countermeasures(self):
+        d_geller = axelrod.GellerDefector()
+        inspector = axelrod.Cooperator()
+        d_geller.play(inspector)
+
+        self.assertEqual(inspect_strategy(inspector=inspector, opponent=d_geller), D)
+        self.assertEqual(d_geller.strategy(inspector), C)

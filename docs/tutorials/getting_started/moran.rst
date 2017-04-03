@@ -22,44 +22,62 @@ type. That type is declared the winner. To run an instance of the process with
 the library, proceed as follows::
 
     >>> import axelrod as axl
+    >>> axl.seed(0)
     >>> players = [axl.Cooperator(), axl.Defector(),
     ...               axl.TitForTat(), axl.Grudger()]
     >>> mp = axl.MoranProcess(players)
     >>> populations = mp.play()
-    >>> mp.winning_strategy_name   # doctest: +SKIP
-    Defector
+    >>> mp.winning_strategy_name
+    'Grudger'
 
 You can access some attributes of the process, such as the number of rounds::
 
-    >>> len(mp)  # doctest: +SKIP
-    6
+    >>> len(mp)
+    14
 
 The sequence of populations::
 
     >>> import pprint
     >>> pprint.pprint(populations)  # doctest: +SKIP
-    [Counter({'Defector': 1, 'Cooperator': 1, 'Grudger': 1, 'Tit For Tat': 1}),
-    Counter({'Defector': 1, 'Cooperator': 1, 'Grudger': 1, 'Tit For Tat': 1}),
-    Counter({'Defector': 2, 'Cooperator': 1, 'Grudger': 1}),
-    Counter({'Defector': 3, 'Grudger': 1}),
-    Counter({'Defector': 3, 'Grudger': 1}),
-    Counter({'Defector': 4})]
+    [Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
+     Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
+     Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
+     Counter({'Tit For Tat': 2, 'Grudger': 1, 'Cooperator': 1}),
+     Counter({'Grudger': 2, 'Cooperator': 1, 'Tit For Tat': 1}),
+     Counter({'Grudger': 3, 'Cooperator': 1}),
+     Counter({'Grudger': 3, 'Cooperator': 1}),
+     Counter({'Grudger': 3, 'Cooperator': 1}),
+     Counter({'Grudger': 3, 'Cooperator': 1}),
+     Counter({'Grudger': 3, 'Cooperator': 1}),
+     Counter({'Grudger': 3, 'Cooperator': 1}),
+     Counter({'Grudger': 3, 'Cooperator': 1}),
+     Counter({'Grudger': 3, 'Cooperator': 1}),
+     Counter({'Grudger': 4})]
+
 
 The scores in each round::
 
-    >>> for row in mp.score_history: # doctest: +SKIP
+    >>> for row in mp.score_history:
     ...     print([round(element, 1) for element in row])
-    [[6.0, 7.08, 6.99, 6.99],
-    [6.0, 7.08, 6.99, 6.99],
-    [3.0, 7.04, 7.04, 4.98],
-    [3.04, 3.04, 3.04, 2.97],
-    [3.04, 3.04, 3.04, 2.97]]
+    [6.0, 7.1, 7.0, 7.0]
+    [6.0, 7.1, 7.0, 7.0]
+    [6.0, 7.1, 7.0, 7.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
 
 
 The :code:`MoranProcess` class also accepts an argument for a mutation rate.
 Nonzero mutation changes the Markov process so that it no longer has absorbing
 states, and will iterate forever. To prevent this, iterate with a loop (or
-function like :code:`takewhile` from :code:`itertools`):
+function like :code:`takewhile` from :code:`itertools`)::
 
     >>> import axelrod as axl
     >>> axl.seed(4) # for reproducible example
@@ -77,8 +95,8 @@ Moran Process on Graphs
 -----------------------
 
 The library also provides a graph-based Moran process [Shakarian2013]_ with
-`MoranProcessGraph`.  To use this class you must supply at least one
-`Axelrod.graph.Graph` object, which can be initialized with just a list of
+:code:`MoranProcessGraph`.  To use this class you must supply at least one
+:code:`Axelrod.graph.Graph` object, which can be initialized with just a list of
 edges::
 
     edges = [(source_1, target1), (source2, target2), ...]
@@ -101,20 +119,40 @@ one graph is supplied to the process, the two graphs are assumed to be the same.
 
 To create a graph-based Moran process, use a graph as follows::
 
-    >>> import axelrod
-    >>> from axelrod import Cooperator, Defector, MoranProcessGraph
     >>> from axelrod.graph import Graph
-    >>> axelrod.seed(40)
+    >>> axl.seed(40)
     >>> edges = [(0, 1), (1, 2), (2, 3), (3, 1)]
     >>> graph = Graph(edges)
-    >>> players = [Cooperator(), Cooperator(), Cooperator(), Defector()]
-    >>> mp = MoranProcessGraph(players, interaction_graph=graph)
+    >>> players = [axl.Cooperator(), axl.Cooperator(), axl.Cooperator(), axl.Defector()]
+    >>> mp = axl.MoranProcessGraph(players, interaction_graph=graph)
     >>> results = mp.play()
     >>> mp.population_distribution()
     Counter({'Cooperator': 4})
-
 
 You can supply the `reproduction_graph` as a keyword argument. The standard Moran
 process is equivalent to using a complete graph for both graphs.
 
 
+Approximate Moran Process
+-------------------------
+
+Due to the high computational cost of a single Moran process, an approximate
+Moran process is implemented that can make use of cached outcomes of games. The
+following code snippet will generate a Moran process in which a `Defector`
+cooperates (gets a high score) against another `Defector`. First the cache is
+built by passing counter objects of outcomes::
+
+    >>> from collections import Counter
+    >>> cached_outcomes = {}
+    >>> cached_outcomes[("Cooperator", "Defector")] = axl.Pdf(Counter([(0, 5)]))
+    >>> cached_outcomes[("Cooperator", "Cooperator")] = axl.Pdf(Counter([(3, 3)]))
+    >>> cached_outcomes[("Defector", "Defector")] = axl.Pdf(Counter([(10, 10), (9, 9)]))
+
+Now let us create an Approximate Moran Process::
+
+    >>> axl.seed(0)
+    >>> players = [axl.Cooperator(), axl.Defector(), axl.Defector(), axl.Defector()]
+    >>> amp = axl.ApproximateMoranProcess(players, cached_outcomes)
+    >>> results = amp.play()
+    >>> amp.population_distribution()
+    Counter({'Defector': 4})

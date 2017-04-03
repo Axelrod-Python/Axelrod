@@ -6,7 +6,8 @@ import unittest
 from hypothesis import given, example, settings
 
 import axelrod
-from axelrod import Match, MoranProcess, MoranProcessGraph
+from axelrod import (Match, MoranProcess,
+                     ApproximateMoranProcess, MoranProcessGraph, Pdf)
 from axelrod.moran import fitness_proportionate_selection
 from axelrod.tests.property import strategy_lists
 
@@ -309,3 +310,49 @@ class GraphMoranProcess(unittest.TestCase):
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)
 
+
+class TestApproximateMoranProcess(unittest.TestCase):
+    """A suite of tests for the ApproximateMoranProcess"""
+    players = [axelrod.Cooperator(), axelrod.Defector()]
+    cached_outcomes = {}
+
+    counter = Counter([(0, 5)])
+    pdf = Pdf(counter)
+    cached_outcomes[('Cooperator', 'Defector')] = pdf
+
+    counter = Counter([(3, 3)])
+    pdf = Pdf(counter)
+    cached_outcomes[('Cooperator', 'Cooperator')] = pdf
+
+    counter = Counter([(1, 1)])
+    pdf = Pdf(counter)
+    cached_outcomes[('Defector', 'Defector')] = pdf
+
+    amp = ApproximateMoranProcess(players, cached_outcomes)
+
+    def test_init(self):
+        """Test the initialisation process"""
+        self.assertEqual(set(self.amp.cached_outcomes.keys()),
+                         set([('Cooperator', 'Defector'),
+                              ('Cooperator', 'Cooperator'),
+                              ('Defector', 'Defector')]))
+        self.assertEqual(self.amp.players, self.players)
+        self.assertEqual(self.amp.turns, 0)
+        self.assertEqual(self.amp.noise, 0)
+
+    def test_next(self):
+        """Test the next function of the Moran process"""
+        scores = self.amp.score_all()
+        self.assertEqual(scores, [0, 5])
+        scores = self.amp.score_all()
+        self.assertEqual(scores, [0, 5])
+        scores = self.amp.score_all()
+        self.assertEqual(scores, [0, 5])
+
+    def test_getting_scores_from_cache(self):
+        """Test that read of scores from cache works (independent of ordering of
+        player names"""
+        scores = self.amp._get_scores_from_cache(("Cooperator", "Defector"))
+        self.assertEqual(scores, (0, 5))
+        scores = self.amp._get_scores_from_cache(("Defector", "Cooperator"))
+        self.assertEqual(scores, (5, 0))
