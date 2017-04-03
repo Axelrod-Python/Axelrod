@@ -20,9 +20,15 @@ class TestDarwin(TestPlayer):
         'manipulates_state': True
     }
 
+    @classmethod
+    def tearDownClass(cls):
+        """After all tests have run, makes sure the Darwin genome is reset."""
+        cls.player.reset_genome()
+        super(TestDarwin, cls).tearDownClass()
+
     def setUp(self):
         """Each test starts with a fresh genome."""
-        self.player.genome = [C]
+        self.player.reset_genome()
         super(TestDarwin, self).setUp()
 
     def test_setup(self):
@@ -71,3 +77,8 @@ class TestDarwin(TestPlayer):
         self.assertIs(p1.genome, p2.genome)
         p3 = self.player()
         self.assertIs(p3.genome, p2.genome)
+
+    def test_reset_genome(self):
+        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
+        self.player.reset_genome()
+        self.assertEqual(self.player().genome, [C])
