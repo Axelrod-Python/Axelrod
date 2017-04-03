@@ -11,11 +11,15 @@ The project follows the following guidelines:
 2. Try as best as possible to follow `PEP8
    <https://www.python.org/dev/peps/pep-0008/>`_ which includes **using
    descriptive variable names**.
-3. Testing: the project uses the `unittest
+3. Commits: Please try to use commit messages that give a meaningful history
+   for anyone using git's log features. Try to use messages that complete sentence,
+   "If merged, this commit will...." There is some excellent guidance on the subject
+   from `Chris Beams <https://chris.beams.io/posts/git-commit/>`
+4. Testing: the project uses the `unittest
    <https://docs.python.org/2/library/unittest.html>`_ library and has a nice
    testing suite that makes some things very easy to write tests for. Please try
    to increase the test coverage on pull requests.
-4. Merging pull-requests: We require two of the (currently four) core-team
+5. Merging pull-requests: We require two of the (currently three) core-team
    maintainers to merge. Opening a PR for early
    feedback or to check test coverage is OK, just indicate that the PR is not ready
    to merge (and update when it is).
