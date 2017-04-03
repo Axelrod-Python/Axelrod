@@ -77,7 +77,12 @@ class Darwin(Player):
         super().reset()
         Darwin.genome[0] = C  # Ensure initial Cooperate
 
-    def mutate(self, outcome, trial):
+    def mutate(self, outcome: tuple, trial: int) -> None:
         """ Select response according to outcome. """
         if outcome[0] < 3 and (len(Darwin.genome) >= trial):
             self.response = D if Darwin.genome[trial-1] == C else C
+
+    @staticmethod
+    def reset_genome() -> None:
+        """For use in testing methods."""
+        Darwin.genome = [C]

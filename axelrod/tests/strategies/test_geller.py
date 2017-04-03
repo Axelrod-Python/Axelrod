@@ -20,6 +20,17 @@ class TestGeller(TestPlayer):
         'manipulates_source': False
     }
 
+    @classmethod
+    def tearDownClass(cls):
+        """After all tests have run, makes sure the Darwin genome is reset."""
+        axelrod.Darwin.reset_genome()
+        super(TestGeller, cls).tearDownClass()
+
+    def setUp(self):
+        """Each test starts with the basic Darwin genome."""
+        axelrod.Darwin.reset_genome()
+        super(TestGeller, self).setUp()
+
     def test_foil_strategy_inspection(self):
         axelrod.seed(2)
         player = self.player()
@@ -88,6 +99,7 @@ class TestGellerDefector(TestGeller):
         self.assertEqual(player.foil_strategy_inspection(), D)
 
     def test_returns_foil_inspection_strategy_of_opponent(self):
+
         self.versus_test(axelrod.GellerDefector(), expected_actions=[(D, D), (D, D), (D, D), (D, D)])
 
         self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
