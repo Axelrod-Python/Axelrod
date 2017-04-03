@@ -40,12 +40,20 @@ def detect_cycle(history, min_size=1, max_size=12, offset=0):
     return None
 
 
+def inspect_strategy(inspector, opponent):
+    """Simulate one round vs opponent unless opponent has an inspection countermeasure."""
+    if hasattr(opponent, 'foil_strategy_inspection'):
+        return opponent.foil_strategy_inspection()
+    else:
+        return opponent.strategy(inspector)
+
+
 def limited_simulate_play(player_1, player_2, h1):
     """Here we want to replay player_1's history to player_2, allowing
     player_2's strategy method to set any internal variables as needed. If you
     need a more complete simulation, see `simulate_play` in player.py. This
     function is specifically designed for the needs of MindReader."""
-    h2 = player_2.strategy(player_1)
+    h2 = inspect_strategy(player_1, player_2)
     update_history(player_1, h1)
     update_history(player_2, h2)
 
