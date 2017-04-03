@@ -129,8 +129,8 @@ To create a graph-based Moran process, use a graph as follows::
     >>> mp.population_distribution()
     Counter({'Cooperator': 4})
 
-You can supply the `reproduction_graph` as a keyword argument. The standard Moran
-process is equivalent to using a complete graph for both graphs.
+You can supply the :code:`reproduction_graph` as a keyword argument. The
+standard Moran process is equivalent to using a complete graph for both graphs.
 
 
 Approximate Moran Process
