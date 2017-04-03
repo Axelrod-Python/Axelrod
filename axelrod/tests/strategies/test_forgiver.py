@@ -76,6 +76,12 @@ class TestForgivingTitForTat(TestPlayer):
         now_tft = only_cooperates + [(D, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.MockPlayer(actions=now_alternator), expected_actions=now_tft)
 
-        back_to_le_ten_percent = now_alternator + [C] * 17 + ([C] * 9 + [D]) * 5
-        back_to_cooperator = only_cooperates + [(C, C)] * 17 + ([(C, C)] * 9 + [(C, D)]) * 5
-        self.versus_test(axelrod.MockPlayer(actions=back_to_le_ten_percent), expected_actions=back_to_cooperator)
+    def reverts_to_cooperator_if_defections_become_le_ten_percent(self):
+        four_defections = [D, D, D, D]
+        first_four = [(C, D)] + [(D, D)] * 3
+        defections_at_ten_pct = four_defections + [C] * 3
+        tft = first_four + [(D, C)] + [(C, C)] * 36
+
+        maintain_ten_pct = defections_at_ten_pct + ([C] * 9 + [D]) * 3
+        now_cooperates = tft + [(C, C)] * 30
+        self.versus_test(axelrod.MockPlayer(actions=maintain_ten_pct), expected_actions=now_cooperates)
