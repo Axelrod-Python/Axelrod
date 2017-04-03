@@ -12,6 +12,8 @@ Contents:
    noisy_tournaments.rst
    probabilistict_end_tournaments.rst
    spatial_tournaments.rst
+   moran_processes_on_graphs.rst
+   approximate_moran_processes.rst
    morality_metrics.rst
    ecological_variant.rst
    fingerprinting.rst

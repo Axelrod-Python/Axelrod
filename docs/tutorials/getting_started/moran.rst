@@ -90,69 +90,7 @@ function like :code:`takewhile` from :code:`itertools`)::
     >>> mp.population_distribution()
     Counter({'Cooperator': 4})
 
+Other types of implemented Moran processes:
 
-Moran Process on Graphs
------------------------
-
-The library also provides a graph-based Moran process [Shakarian2013]_ with
-:code:`MoranProcessGraph`.  To use this class you must supply at least one
-:code:`Axelrod.graph.Graph` object, which can be initialized with just a list of
-edges::
-
-    edges = [(source_1, target1), (source2, target2), ...]
-
-The nodes can be any hashable object (integers, strings, etc.). For example::
-
-    >>> from axelrod.graph import Graph
-    >>> edges = [(0, 1), (1, 2), (2, 3), (3, 1)]
-    >>> graph = Graph(edges)
-
-Graphs are undirected by default. Various intermediates such as the list of
-neighbors are cached for efficiency by the graph object.
-
-A Moran process can be invoked with one or two graphs. The first graph, the
-*interaction graph*, dictates how players are matched up in the scoring phase.
-Each player plays a match with each neighbor. The second graph dictates how
-players replace another during reproduction. When an individual is selected to
-reproduce, it replaces one of its neighbors in the *reproduction graph*. If only
-one graph is supplied to the process, the two graphs are assumed to be the same.
-
-To create a graph-based Moran process, use a graph as follows::
-
-    >>> from axelrod.graph import Graph
-    >>> axl.seed(40)
-    >>> edges = [(0, 1), (1, 2), (2, 3), (3, 1)]
-    >>> graph = Graph(edges)
-    >>> players = [axl.Cooperator(), axl.Cooperator(), axl.Cooperator(), axl.Defector()]
-    >>> mp = axl.MoranProcessGraph(players, interaction_graph=graph)
-    >>> results = mp.play()
-    >>> mp.population_distribution()
-    Counter({'Cooperator': 4})
-
-You can supply the :code:`reproduction_graph` as a keyword argument. The
-standard Moran process is equivalent to using a complete graph for both graphs.
-
-
-Approximate Moran Process
--------------------------
-
-Due to the high computational cost of a single Moran process, an approximate
-Moran process is implemented that can make use of cached outcomes of games. The
-following code snippet will generate a Moran process in which a `Defector`
-cooperates (gets a high score) against another `Defector`. First the cache is
-built by passing counter objects of outcomes::
-
-    >>> from collections import Counter
-    >>> cached_outcomes = {}
-    >>> cached_outcomes[("Cooperator", "Defector")] = axl.Pdf(Counter([(0, 5)]))
-    >>> cached_outcomes[("Cooperator", "Cooperator")] = axl.Pdf(Counter([(3, 3)]))
-    >>> cached_outcomes[("Defector", "Defector")] = axl.Pdf(Counter([(10, 10), (9, 9)]))
-
-Now let us create an Approximate Moran Process::
-
-    >>> axl.seed(0)
-    >>> players = [axl.Cooperator(), axl.Defector(), axl.Defector(), axl.Defector()]
-    >>> amp = axl.ApproximateMoranProcess(players, cached_outcomes)
-    >>> results = amp.play()
-    >>> amp.population_distribution()
-    Counter({'Defector': 4})
+- :ref:`moran-process-on-graphs`
+- :ref:`approximate-moran-process`
