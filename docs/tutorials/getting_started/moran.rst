@@ -24,7 +24,7 @@ the library, proceed as follows::
     >>> import axelrod as axl
     >>> axl.seed(0)
     >>> players = [axl.Cooperator(), axl.Defector(),
-    ...               axl.TitForTat(), axl.Grudger()]
+    ...            axl.TitForTat(), axl.Grudger()]
     >>> mp = axl.MoranProcess(players)
     >>> populations = mp.play()
     >>> mp.winning_strategy_name
