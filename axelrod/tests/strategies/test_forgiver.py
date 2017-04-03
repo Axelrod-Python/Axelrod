@@ -24,9 +24,20 @@ class TestForgiver(TestPlayer):
         # Starts by cooperating.
         self.first_play_test(C)
         # If opponent has defected more than 10 percent of the time, defect.
-        self.responses_test([C], [C, C, C, C], [C, C, C, C])
-        self.responses_test([D], [C, C, C, C, D], [C, C, C, D, C])
-        self.responses_test([C], [C] * 11, [C] * 10 + [D])
+        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 10)
+
+        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 10)
+
+    def test_cooperates_if_opponent_defections_is_ten_pct_and_defects_if_opponent_defections_gt_ten_pct(self):
+        final_action_lowers_defections_to_ten_percent = [D] + [C] * 9
+        expected = [(C, D)] + [(D, C)] * 9
+        self.versus_test(axelrod.MockPlayer(actions=final_action_lowers_defections_to_ten_percent),
+                         expected_actions=expected * 5)
+
+    def test_never_defects_if_opponent_defections_le_ten_percent(self):
+        defections_always_le_ten_percent = [C] * 9 + [D]
+        expected = [(C, C)] * 9 + [(C, D)]
+        self.versus_test(axelrod.MockPlayer(actions=defections_always_le_ten_percent), expected_actions=expected * 5)
 
 
 class TestForgivingTitForTat(TestPlayer):
@@ -46,6 +57,25 @@ class TestForgivingTitForTat(TestPlayer):
     def test_strategy(self):
         # Starts by cooperating.
         self.first_play_test(C)
-        self.responses_test([C], [C, C, C, C], [C, C, C, C])
-        self.responses_test([C], [C, C, C, C, D], [C, C, C, D, C])
-        self.responses_test([D], [C] * 11, [C] * 9 + [D] * 2)
+
+        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5)
+        self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 5)
+        self.versus_test(axelrod.Alternator(), expected_actions=[(C, C)] + [(C, D), (D, C)] * 5)
+
+    def test_never_defects_if_opponent_defections_le_ten_percent(self):
+        defections_always_le_ten_percent = [C] * 9 + [D]
+        expected = [(C, C)] * 9 + [(C, D)]
+        self.versus_test(axelrod.MockPlayer(actions=defections_always_le_ten_percent), expected_actions=expected * 5)
+
+    def plays_tit_for_tat_while_defections_gt_ten_percent(self):
+        before_tft = (19 * [C] + [D]) * 3 + [D, D, D]
+        only_cooperates = ([(C, C)] * 19 + [(C, D)]) * 3 + [(D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.MockPlayer(actions=before_tft), expected_actions=only_cooperates)
+
+        now_alternator = before_tft + [C, D, C, D, C]
+        now_tft = only_cooperates + [(D, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.MockPlayer(actions=now_alternator), expected_actions=now_tft)
+
+        back_to_le_ten_percent = now_alternator + [C] * 17 + ([C] * 9 + [D]) * 5
+        back_to_cooperator = only_cooperates + [(C, C)] * 17 + ([(C, C)] * 9 + [(C, D)]) * 5
+        self.versus_test(axelrod.MockPlayer(actions=back_to_le_ten_percent), expected_actions=back_to_cooperator)
