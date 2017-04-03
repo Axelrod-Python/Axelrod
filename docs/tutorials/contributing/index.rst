@@ -12,3 +12,4 @@ Contents:
    guidelines.rst
    strategy/index.rst
    library/index.rst
+   running_tests.rst
