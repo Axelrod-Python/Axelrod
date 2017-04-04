@@ -202,14 +202,14 @@ class TestFortress3(TestFsmTransitions):
         'manipulates_state': False
     }
     """
-    transitions = [
+    transitions = (
             (1, C, 1, D),
             (1, D, 2, D),
             (2, C, 1, D),
             (2, D, 3, C),
             (3, C, 3, C),
             (3, D, 1, D)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -241,7 +241,7 @@ class TestFortress4(TestFsmTransitions):
         'manipulates_state': False
     }
     """
-    transitions = [
+    transitions = (
             (1, C, 1, D),
             (1, D, 2, D),
             (2, C, 1, D),
@@ -250,7 +250,7 @@ class TestFortress4(TestFsmTransitions):
             (3, D, 4, C),
             (4, C, 4, C),
             (4, D, 1, D)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -280,7 +280,7 @@ class TestPredator(TestFsmTransitions):
         'manipulates_state': False
     }
     """
-    transitions = [
+    transitions = (
             (0, C, 0, D),
             (0, D, 1, D),
             (1, C, 2, D),
@@ -299,7 +299,7 @@ class TestPredator(TestFsmTransitions):
             (7, D, 7, D),
             (8, C, 8, D),
             (8, D, 6, D)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -331,12 +331,12 @@ class TestPun1(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    transitions = (
             (1, C, 2, C),
             (1, D, 2, C),
             (2, C, 1, C),
             (2, D, 1, D)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -361,7 +361,7 @@ class TestRaider(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    transitions = (
             (0, C, 2, D),
             (0, D, 2, D),
             (1, C, 1, C),
@@ -370,7 +370,7 @@ class TestRaider(TestFsmTransitions):
             (2, D, 3, C),
             (3, C, 0, D),
             (3, D, 1, C)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -401,14 +401,14 @@ class TestRipoff(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    transitions = (
             (1, C, 2, C),
             (1, D, 3, C),
             (2, C, 1, D),
             (2, D, 3, C),
             (3, C, 3, C),  # Note that it's TFT in state 3
             (3, D, 3, D)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -436,14 +436,14 @@ class TestSolutionB1(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    transitions = (
             (1, C, 2, D),
             (1, D, 1, D),
             (2, C, 2, C),
             (2, D, 3, C),
             (3, C, 3, C),
             (3, D, 3, C)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -468,7 +468,7 @@ class TestSolutionB5(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    transitions = (
             (1, C, 2, C),
             (1, D, 6, D),
             (2, C, 2, C),
@@ -481,7 +481,7 @@ class TestSolutionB5(TestFsmTransitions):
             (5, D, 4, D),
             (6, C, 3, C),
             (6, D, 5, D)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -512,12 +512,12 @@ class TestThumper(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    transitions = (
             (1, C, 1, C),
             (1, D, 2, D),
             (2, C, 1, D),
             (2, D, 1, D)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -542,7 +542,7 @@ class TestEvolvedFSM4(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    transitions = (
             (0, C, 0, C),
             (0, D, 2, D),
             (1, C, 3, D),
@@ -551,7 +551,7 @@ class TestEvolvedFSM4(TestFsmTransitions):
             (2, D, 1, C),
             (3, C, 3, D),
             (3, D, 1, D)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -579,7 +579,8 @@ class TestEvolvedFSM16(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    FSM created by ML algorithm never called states 4 or 9, so they were deleted.
+    transitions = (
             (0, C, 0, C),
             (0, D, 12, D),
             (1, C, 3, D),
@@ -588,8 +589,7 @@ class TestEvolvedFSM16(TestFsmTransitions):
             (2, D, 14, D),
             (3, C, 3, D),
             (3, D, 3, D),
-            # (4, C, 11, D), FSM created by ML algorithm never calls
-            # (4, D, 7, D),  states 4 or 9.
+
             (5, C, 12, D),
             (5, D, 10, D),
             (6, C, 5, C),
@@ -598,8 +598,7 @@ class TestEvolvedFSM16(TestFsmTransitions):
             (7, D, 1, C),
             (8, C, 5, C),
             (8, D, 5, C),
-            # (9, C, 10, D),
-            # (9, D, 13, D),
+
             (10, C, 11, D),
             (10, D, 8, C),
             (11, C, 15, D),
@@ -612,7 +611,7 @@ class TestEvolvedFSM16(TestFsmTransitions):
             (14, D, 13, D),
             (15, C, 15, D),
             (15, D, 2, C)
-        ]
+        )
     """
 
     def test_strategy(self):
@@ -665,7 +664,8 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
     }
 
     """
-    transitions = [
+    FSM created by ML algorithm never called states 7 or 9, so they were deleted.
+    transitions = (
             (0, C, 8, C),
             (0, D, 3, D),
             (1, C, 13, C),
@@ -680,12 +680,10 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
             (5, D, 10, D),
             (6, C, 8, C),
             (6, D, 6, D),
-            # (7, C, 5, D),  FSM created by ML algorithm never calls
-            # (7, D, 15, C), states 7 or 9
+
             (8, C, 2, C),
             (8, D, 4, D),
-            # (9, C, 15, D),
-            # (9, D, 6, D),
+
             (10, C, 4, D),
             (10, D, 1, D),
             (11, C, 14, D),
@@ -698,7 +696,7 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
             (14, D, 13, D),
             (15, C, 5, D),
             (15, D, 11, C)
-        ]
+        )
     """
 
     def test_strategy(self):
