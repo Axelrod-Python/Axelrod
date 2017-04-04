@@ -31,12 +31,12 @@ class TestLookerUp(TestPlayer):
     def test_create_lookup_table_keys(self):
         expected = [
             ((C,), (C,), (C,)),
-            ((C,), (D,), (C,)),
-            ((D,), (C,), (C,)),
-            ((D,), (D,), (C,)),
             ((C,), (C,), (D,)),
+            ((C,), (D,), (C,)),
             ((C,), (D,), (D,)),
+            ((D,), (C,), (C,)),
             ((D,), (C,), (D,)),
+            ((D,), (D,), (C,)),
             ((D,), (D,), (D,))
         ]
         actual = create_lookup_table_keys(1, 1, 1)
@@ -45,12 +45,12 @@ class TestLookerUp(TestPlayer):
     def test_create_lookup_table_from_pattern(self):
         expected = {
             ((C, ), (C, ), (C, )): C,
-            ((C, ), (D, ), (C, )): C,
-            ((D, ), (C, ), (C, )): D,
-            ((D, ), (D, ), (C, )): C,
             ((C, ), (C, ), (D, )): C,
-            ((C, ), (D, ), (D, )): D,
-            ((D, ), (C, ), (D, )): C,
+            ((C, ), (D, ), (C, )): D,
+            ((C, ), (D, ), (D, )): C,
+            ((D, ), (C, ), (C, )): C,
+            ((D, ), (C, ), (D, )): D,
+            ((D, ), (D, ), (C, )): C,
             ((D, ), (D, ), (D, )): C
         }
         actual = create_lookup_table_from_pattern(1, 1, 1, str_to_actions('CCDCCDCC'))

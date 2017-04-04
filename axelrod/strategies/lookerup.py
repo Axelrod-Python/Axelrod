@@ -15,12 +15,8 @@ def create_lookup_table_keys(plays: int, op_plays: int, op_start_plays: int):
     other_histories = product((C, D), repeat=op_plays)
     opponent_starts = product((C, D), repeat=op_start_plays)
 
-    iterator = product(opponent_starts, self_histories, other_histories)
-    keys = []
-    for starts, self, other in iterator:
-        keys.append(ActionKeys(self, other, starts))
-
-    return keys
+    iterator = product(self_histories, other_histories, opponent_starts)
+    return [ActionKeys(*action_tuples) for action_tuples in iterator]
 
 
 def create_lookup_table_from_pattern(plays: int, op_plays: int, op_start_plays: int, pattern: tuple):
@@ -183,7 +179,8 @@ class EvolvedLookerUp1_1_1(LookerUp):
     name = "EvolvedLookerUp1_1_1"
 
     def __init__(self) -> None:
-        super().__init__(parameters=(1, 1, 1), lookup_pattern='CDDDDDCD',
+        # original = 'CDDDDDCD'
+        super().__init__(parameters=(1, 1, 1), lookup_pattern='CDDDDCDD',
                          initial_actions=(C,))
 
 
@@ -197,7 +194,8 @@ class EvolvedLookerUp2_2_2(LookerUp):
     name = "EvolvedLookerUp2_2_2"
 
     def __init__(self) -> None:
-        pattern = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
+        # original = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
+        pattern = 'CDDCDCDDCDDDCDDDDDCDCDCCCDDCCDCDDDCCCCCDDDCDDDDDDDDDCCDDCDDDCCCD'
         super().__init__(parameters=(2, 2, 2), lookup_pattern=pattern,
                          initial_actions=(C, C))
 
