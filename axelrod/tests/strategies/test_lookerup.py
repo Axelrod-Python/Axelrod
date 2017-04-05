@@ -2,7 +2,7 @@
 import copy
 
 import axelrod
-from axelrod.strategies.lookerup import create_lookup_table_keys, create_lookup_table_from_pattern, ActionKeys
+from axelrod.strategies.lookerup import create_lookup_table_keys, create_lookup_table_from_tuple, ActionKeys
 from .test_player import TestPlayer, TestMatch
 
 from axelrod.actions import str_to_actions
@@ -53,11 +53,11 @@ class TestLookerUp(TestPlayer):
             ((D, ), (D, ), (C, )): C,
             ((D, ), (D, ), (D, )): C
         }
-        actual = create_lookup_table_from_pattern(1, 1, 1, str_to_actions('CCDCCDCC'))
+        actual = create_lookup_table_from_tuple(1, 1, 1, str_to_actions('CCDCCDCC'))
         self.assertEqual(actual, expected)
 
         with self.assertRaises(ValueError):
-            create_lookup_table_from_pattern(2, 2, 2, str_to_actions('CCC'))
+            create_lookup_table_from_tuple(2, 2, 2, str_to_actions('CCC'))
 
     def test_init(self):
         # Test empty table
