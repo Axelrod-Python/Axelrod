@@ -10,6 +10,7 @@ ActionKeys = namedtuple('ActionKeys', 'player, opponent, opponent_starts')
 
 
 def make_keys_into_action_keys(lookup_table: dict) -> dict:
+    """Returns a dict where all keys are ActionKeys."""
     new_table = lookup_table.copy()
     if any(not isinstance(key, ActionKeys) for key in new_table):
         new_table = {ActionKeys(*key): value for key, value in new_table.items()}
@@ -27,6 +28,7 @@ def create_lookup_table_keys(plays: int, op_plays: int, op_start_plays: int) -> 
 
 
 def create_lookup_table_from_tuple(plays: int, op_plays: int, op_start_plays: int, pattern: tuple) -> dict:
+    """Creates a set of keys, and maps a tuple of actions to those keys. Returns that dictionary."""
     lookup_table_keys = create_lookup_table_keys(plays=plays, op_plays=op_plays, op_start_plays=op_start_plays)
     if len(lookup_table_keys) != len(pattern):
         raise ValueError("Table keys and pattern are not of the same size.")
@@ -35,6 +37,7 @@ def create_lookup_table_from_tuple(plays: int, op_plays: int, op_start_plays: in
 
 
 def create_lookup_table_from_string(plays: int, op_plays: int, op_start_plays: int, pattern_string: str) -> dict:
+    """Creates a set of keys, and maps a string of actions (such as "DDCDC") to those keys. Returns that dictionary."""
     pattern_to_pass_in = str_to_actions(pattern_string)
     lookup_table = create_lookup_table_from_tuple(plays=plays,
                                                   op_plays=op_plays,
@@ -132,6 +135,7 @@ class LookerUp(Player):
         self._set_memory_depth()
 
         self.initial_actions = self._get_initial_actions(initial_actions)
+        self._initial_actions_pool = list(self.initial_actions)
 
         self._raise_error_for_bad_lookup_table()
 
@@ -157,10 +161,11 @@ class LookerUp(Player):
             self.classifier['memory_depth'] = float('inf')
 
     def _get_initial_actions(self, initial_actions):
+        """Initial actions will always be cut down to table_depth."""
+        table_depth = max(self.plays, self.op_plays, self.op_start_plays)
         if not initial_actions:
-            table_depth = max(self.plays, self.op_plays, self.op_start_plays)
             initial_actions = tuple([C] * table_depth)
-        return initial_actions
+        return initial_actions[:table_depth]
 
     def _raise_error_for_bad_lookup_table(self):
         if any(
@@ -172,21 +177,22 @@ class LookerUp(Player):
             raise ValueError("All table elements must have the same size")
 
     def strategy(self, opponent):
-        # If there isn't enough history to lookup an action, us initial actions.
-        table_depth = max(self.plays, self.op_plays, self.op_start_plays)
-        if len(self.history) < table_depth:
-            return self.initial_actions[len(self.history)]
+        while self._initial_actions_pool:
+            return self._initial_actions_pool.pop(0)
 
-        my_last_n_plays = self.history[-1 * self.plays:] if self.plays else []
+        player_last_n_plays = self.history[-1 * self.plays:] if self.plays else []
         opponent_last_n_plays = opponent.history[-1 * self.op_plays:] if self.op_plays else []
         opponent_starting_plays = opponent.history[:self.op_start_plays]
 
-        key = ActionKeys(player=tuple(my_last_n_plays),
+        key = ActionKeys(player=tuple(player_last_n_plays),
                          opponent=tuple(opponent_last_n_plays),
                          opponent_starts=tuple(opponent_starting_plays))
 
         return self.lookup_table[key]
 
+    def reset(self):
+        super(LookerUp, self).reset()
+        self._initial_actions_pool = list(self.initial_actions)
 
 class EvolvedLookerUp1_1_1(LookerUp):
     """
