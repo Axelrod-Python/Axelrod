@@ -56,7 +56,7 @@ class PSOGamblerMem1(Gambler):
     def __init__(self) -> None:
         pattern = tables[("PSO Gambler Mem1", 1, 1, 0)]
         lookup_table = create_lookup_table_from_tuple(
-            plays=1, op_plays=1, op_start_plays=0,
+            plays=1, op_plays=1, op_initial_plays=0,
             pattern=pattern)
         super().__init__(lookup_table=lookup_table)
         self.classifier['memory_depth'] = 1
@@ -75,7 +75,7 @@ class PSOGambler1_1_1(Gambler):
     def __init__(self) -> None:
         pattern = tables[("PSO Gambler 1_1_1", 1, 1, 1)]
         lookup_table = create_lookup_table_from_tuple(
-            plays=1, op_plays=1, op_start_plays=1,
+            plays=1, op_plays=1, op_initial_plays=1,
             pattern=pattern)
         super().__init__(lookup_table=lookup_table)
 
@@ -93,7 +93,7 @@ class PSOGambler2_2_2(Gambler):
     def __init__(self) -> None:
         pattern = tables[("PSO Gambler 2_2_2", 2, 2, 2)]
         lookup_table = create_lookup_table_from_tuple(
-            plays=2, op_plays=2, op_start_plays=2,
+            plays=2, op_plays=2, op_initial_plays=2,
             pattern=pattern)
         super().__init__(lookup_table=lookup_table)
 
@@ -112,6 +112,6 @@ class PSOGambler2_2_2_Noise05(Gambler):
     def __init__(self) -> None:
         pattern = tables[("PSO Gambler 2_2_2 Noise 05", 2, 2, 2)]
         lookup_table = create_lookup_table_from_tuple(
-            plays=2, op_plays=2, op_start_plays=2,
+            plays=2, op_plays=2, op_initial_plays=2,
             pattern=pattern)
         super().__init__(lookup_table=lookup_table)
