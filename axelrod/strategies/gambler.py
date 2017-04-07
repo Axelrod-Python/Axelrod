@@ -24,7 +24,7 @@ class Gambler(LookerUp):
 
     name = 'Gambler'
     classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -32,11 +32,6 @@ class Gambler(LookerUp):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    def __init__(self, lookup_table: dict = None, initial_actions: tuple = None,
-                 lookup_pattern: str = None, parameters: tuple = None) -> None:
-        super(Gambler, self).__init__(lookup_table=lookup_table, initial_actions=initial_actions,
-                                      lookup_pattern=lookup_pattern, parameters=parameters)
 
     def strategy(self, opponent: Player) -> Action:
         action = super(Gambler, self).strategy(opponent)

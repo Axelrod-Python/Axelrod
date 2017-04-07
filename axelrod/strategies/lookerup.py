@@ -170,9 +170,9 @@ class LookerUp(Player):
                            ', '.join(key.op_initial_plays),
                            self.lookup_table[key])
                           for key in ordered_keys]
-        header = 'self_plays / op_plays / op_initial_plays\n'
-        justify = len(header) // 3 - 1
-        display = '{results[0]:^{justify}},{results[1]:^{justify}},{results[2]:^{justify}}: {results[3]},'
+        header = 'op_starts  / self_plays / op_plays\n'
+        justify = len(header) // 3
+        display = '{results[2]:^{justify}},{results[0]:^{justify}},{results[1]:^{justify}}: {results[3]},'
         lines = [display.format(results=result, justify=justify) for result in diplay_results]
         return header + '\n'.join(lines) + '\n'
 

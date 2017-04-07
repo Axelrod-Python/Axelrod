@@ -5,7 +5,7 @@ Most tests come form the LookerUp test suite.
 import copy
 
 import axelrod
-from .test_player import TestPlayer, TestMatch
+from .test_player import TestPlayer
 from .test_lookerup import convert_original_to_current
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -25,6 +25,9 @@ class TestGambler(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = float('inf')
 
     def test_strategy(self):
         tft_table = {((), (D,), ()): 0,
@@ -53,6 +56,8 @@ class TestPSOGamblerMem1(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = float('inf')
 
     def test_new_data(self):
         original_data = {
@@ -89,9 +94,6 @@ class TestPSOGambler1_1_1(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['memory_depth'] = 1
 
     def test_new_data(self):
         original_data = {
@@ -141,9 +143,6 @@ class TestPSOGambler2_2_2(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['memory_depth'] = 1
 
     def test_new_data(self):
         original_data = {
@@ -256,9 +255,6 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['memory_depth'] = 1
 
     def test_new_data(self):
         original_data = {
