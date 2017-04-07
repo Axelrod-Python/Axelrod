@@ -161,6 +161,21 @@ class LookerUp(Player):
         super(LookerUp, self).reset()
         self._initial_actions_pool = list(self.initial_actions)
 
+    def lookup_table_display(self) -> str:
+        """Returns a string of the lookup table sorted by op_initial_plays first for easier grouping."""
+        ordered_keys = sorted(self.lookup_table, key=lambda actions: (actions.op_initial_plays, actions.self_plays,
+                                                                      actions.op_plays))
+        diplay_results = [(', '.join(key.self_plays),
+                           ', '.join(key.op_plays),
+                           ', '.join(key.op_initial_plays),
+                           self.lookup_table[key])
+                          for key in ordered_keys]
+        header = 'self_plays / op_plays / op_initial_plays\n'
+        justify = len(header) // 3 - 1
+        display = '{results[0]:^{justify}},{results[1]:^{justify}},{results[2]:^{justify}}: {results[3]},'
+        lines = [display.format(results=result, justify=justify) for result in diplay_results]
+        return header + '\n'.join(lines) + '\n'
+
 
 class EvolvedLookerUp1_1_1(LookerUp):
     """

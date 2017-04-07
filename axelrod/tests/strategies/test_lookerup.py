@@ -5,7 +5,7 @@ import copy
 import axelrod
 from axelrod.strategies.lookerup import (get_last_n_plays, make_keys_into_action_keys, create_lookup_table_keys,
                                          create_lookup_table_from_tuple, create_lookup_table_from_string, ActionKeys)
-from .test_player import TestPlayer, TestMatch
+from .test_player import TestPlayer
 
 from axelrod.actions import str_to_actions
 
@@ -92,6 +92,30 @@ class TestModuleLevelFunctions(unittest.TestCase):
         player.history = [C, D, C]
         self.assertEqual(get_last_n_plays(player, 0), ())
         self.assertEqual(get_last_n_plays(player, 2), (D, C))
+
+    def test_lookup_table_display(self):
+        lookup_table = {
+            ActionKeys(self_plays=(C, C), op_plays=(), op_initial_plays=(C,)): C,
+            ActionKeys(self_plays=(C, C), op_plays=(), op_initial_plays=(D,)): C,
+            ActionKeys(self_plays=(C, D), op_plays=(), op_initial_plays=(C,)): C,
+            ActionKeys(self_plays=(C, D), op_plays=(), op_initial_plays=(D,)): C,
+            ActionKeys(self_plays=(D, C), op_plays=(), op_initial_plays=(C,)): C,
+            ActionKeys(self_plays=(D, C), op_plays=(), op_initial_plays=(D,)): C,
+            ActionKeys(self_plays=(D, D), op_plays=(), op_initial_plays=(C,)): C,
+            ActionKeys(self_plays=(D, D), op_plays=(), op_initial_plays=(D,)): C,
+        }
+        player = axelrod.LookerUp(lookup_table=lookup_table)
+        self.assertEqual(player.lookup_table_display(),
+                         ("self_plays / op_plays / op_initial_plays\n" +
+                          "    C, C    ,            ,     C      : C,\n" +
+                          "    C, D    ,            ,     C      : C,\n" +
+                          "    D, C    ,            ,     C      : C,\n" +
+                          "    D, D    ,            ,     C      : C,\n" +
+                          "    C, C    ,            ,     D      : C,\n" +
+                          "    C, D    ,            ,     D      : C,\n" +
+                          "    D, C    ,            ,     D      : C,\n" +
+                          "    D, D    ,            ,     D      : C,\n")
+                         )
 
 
 class TestLookerUp(TestPlayer):
@@ -193,6 +217,16 @@ class TestLookerUp(TestPlayer):
         table = {((C,), (C,), ()): C, ((D,), (D,), ()): C}
         with self.assertRaises(ValueError):
             axelrod.LookerUp(lookup_table=table)
+
+    def test_set_memory_depth(self):
+        mem_depth_1 = axelrod.LookerUp(lookup_pattern='CC', parameters=(1, 0, 0))
+        self.assertEqual(mem_depth_1.classifier['memory_depth'], 1)
+
+        mem_depth_3 = axelrod.LookerUp(lookup_pattern='C' * 16, parameters=(1, 3, 0))
+        self.assertEqual(mem_depth_3.classifier['memory_depth'], 3)
+
+        mem_depth_inf = axelrod.LookerUp(lookup_pattern='CC', parameters=(0, 0, 1))
+        self.assertEqual(mem_depth_inf.classifier['memory_depth'], float('inf'))
 
     def test_strategy(self):
         self.first_play_test(C)

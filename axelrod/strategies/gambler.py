@@ -24,7 +24,7 @@ class Gambler(LookerUp):
 
     name = 'Gambler'
     classifier = {
-        'memory_depth': float('inf'),
+        'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -32,6 +32,11 @@ class Gambler(LookerUp):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    def __init__(self, lookup_table: dict = None, initial_actions: tuple = None,
+                 lookup_pattern: str = None, parameters: tuple = None) -> None:
+        super(Gambler, self).__init__(lookup_table=lookup_table, initial_actions=initial_actions,
+                                      lookup_pattern=lookup_pattern, parameters=parameters)
 
     def strategy(self, opponent: Player) -> Action:
         action = super(Gambler, self).strategy(opponent)
@@ -59,7 +64,6 @@ class PSOGamblerMem1(Gambler):
             plays=1, op_plays=1, op_initial_plays=0,
             pattern=pattern)
         super().__init__(lookup_table=lookup_table)
-        self.classifier['memory_depth'] = 1
 
 
 class PSOGambler1_1_1(Gambler):

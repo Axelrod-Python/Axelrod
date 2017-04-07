@@ -17,7 +17,7 @@ class TestGambler(TestPlayer):
     player = axelrod.Gambler
 
     expected_classifier = {
-        'memory_depth': 1,  # Default TFT table
+        'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -25,55 +25,18 @@ class TestGambler(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-    
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['memory_depth'] = float('inf')
-
-    def test_init(self):
-        # Test empty table
-        player = self.player(lookup_table=dict())
-        opponent = axelrod.Cooperator()
-        self.assertEqual(player.strategy(opponent), C)
-        # Test default table
-        tft_table = {
-            ((C,), (D,), ()): 0,
-            ((D,), (D,), ()): 0,
-            ((C,), (C,), ()): 1,
-            ((D,), (C,), ()): 1
-        }
-        player = self.player(lookup_table=tft_table)
-        opponent = axelrod.Defector()
-        player.play(opponent)
-        self.assertEqual(player.history[-1], C)
-        player.play(opponent)
-        self.assertEqual(player.history[-1], D)
-        # Test malformed tables
-        table = {(C, C, C): 1, ('DD', 'DD', 'C'): 1}
-        with self.assertRaises(ValueError):
-            player = self.player(lookup_table=table)
 
     def test_strategy(self):
-        self.responses_test([C], [C] * 4, [C, C, C, C])
-        self.responses_test([D], [C] * 5, [C, C, C, C, D])
+        tft_table = {((), (D,), ()): 0,
+                     ((), (C,), ()): 1}
+        self.versus_test(axelrod.Alternator(), expected_actions=[(C, C)] + [(C, D), (D, C)] * 5,
+                         init_kwargs={'lookup_table': tft_table})
 
-    def test_defector_table(self):
-        """
-        Testing a lookup table that always defects if there is enough history.
-        In order for the testing framework to be able to construct new player
-        objects for the test, self.player needs to be callable with no
-        arguments, thus we use a lambda expression which will call the
-        constructor with the lookup table we want.
-        """
-        defector_table = {
-            ((C,), (D,), ()): 0,
-            ((D,), (D,), ()): 0,
-            ((C,), (C,), ()): 0,
-            ((D,), (C,), ()): 0
-        }
-        self.player = lambda : axelrod.Gambler(lookup_table=defector_table)
-        self.responses_test([D], [C, C], [C, C])
-        self.responses_test([D], [C, D], [D, C])
-        self.responses_test([D], [D, D], [D, D])
+    def test_stochastic_values(self):
+        stochastic_lookup = {((), (), ()): 0.3}
+        expected_actions = [(C, C), (D, C), (D, C), (C, C), (D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=expected_actions,
+                         init_kwargs={'lookup_table': stochastic_lookup}, seed=1)
 
 
 class TestPSOGamblerMem1(TestPlayer):
@@ -91,9 +54,6 @@ class TestPSOGamblerMem1(TestPlayer):
         'manipulates_state': False
     }
 
-    expected_class_classifier = copy.copy(expected_classifier)
-    expected_class_classifier['memory_depth'] = float('inf')
-
     def test_new_data(self):
         original_data = {
             ('', 'C', 'C'): 1.0,
@@ -104,9 +64,15 @@ class TestPSOGamblerMem1(TestPlayer):
         self.assertEqual(self.player().lookup_table, converted_original)
 
     def test_strategy(self):
-        """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C], [C] * 197, [C] * 197)
+        vs_cooperator = [(C, C)] * 5
+        self.versus_test(axelrod.Cooperator(), expected_actions=vs_cooperator)
+
+    def test_defects_forever_with_correct_conditions(self):
+        seed = 1
+        opponent = [D, D] + [C] * 10
+        expected = [(C, D), (C, D), (D, C)] + [(D, C)] * 9
+        self.versus_test(axelrod.MockPlayer(actions=opponent), expected_actions=expected, seed=seed)
 
 
 class TestPSOGambler1_1_1(TestPlayer):
@@ -124,6 +90,9 @@ class TestPSOGambler1_1_1(TestPlayer):
         'manipulates_state': False
     }
 
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = 1
+
     def test_new_data(self):
         original_data = {
             ('C', 'C', 'C'): 1.0,
@@ -140,7 +109,22 @@ class TestPSOGambler1_1_1(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C], [C] * 197, [C] * 197)
+
+    def test_cooperate_forever(self):
+        seed = 2
+        opponent = [D] * 3 + [C] * 10
+        expected = [(C, D), (D, D), (D, D)] + [(C, C)] * 10
+        self.versus_test(axelrod.MockPlayer(opponent), expected_actions=expected, seed=seed)
+
+    def test_defect_forever(self):
+        seed = 2
+        opponent = [C] + [D] + [C] * 10
+        expected = [(C, C), (C, D)] + [(D, C)] * 10
+        self.versus_test(axelrod.MockPlayer(opponent), expected_actions=expected, seed=seed)
+
+        opponent = [D] + [C] * 10
+        expected = [(C, D)] + [(D, C)] * 10
+        self.versus_test(axelrod.MockPlayer(opponent), expected_actions=expected, seed=seed)
 
 
 class TestPSOGambler2_2_2(TestPlayer):
@@ -157,6 +141,9 @@ class TestPSOGambler2_2_2(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = 1
 
     def test_new_data(self):
         original_data = {
@@ -227,20 +214,33 @@ class TestPSOGambler2_2_2(TestPlayer):
         converted_original = convert_original_to_current(original_data)
         self.assertEqual(self.player().lookup_table, converted_original)
 
-    def test_init(self):
-        # Check for a few known keys
-        known_pairs = {
-            ((D, D), (D, D), (C, D)): 0.24523149,
-            ((D, D), (C, C), (C, D)): 0,
-        }
-        player = self.player()
-        for k, v in known_pairs.items():
-            self.assertEqual(player.lookup_table[k], v)
-
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C], [C] * 197, [C] * 197)
+        self.second_play_test(C, C, C, C)
+
+    def test_vs_defector(self):
+        expected = [(C, D), (C, D)] + [(D, D)] * 10
+        self.versus_test(axelrod.Defector(), expected_actions=expected)
+
+    def test_vs_cooperator(self):
+        expected = [(C, C)] * 10
+        self.versus_test(axelrod.Cooperator(), expected_actions=expected)
+
+    def test_vs_alternator(self):
+        seed = 1
+        expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=seed)
+
+    def test_vs_DCDDC(self):
+        seed = 2
+        opponent_plays = [D, C, D, D, C]
+        expected = [(C, D), (C, C), (D, D), (D, D), (C, C), (D, D), (D, C), (D, D), (D, D), (C, C)]
+        self.versus_test(axelrod.MockPlayer(opponent_plays), expected, seed=seed)
+
+        new_seed = 139  # First seed with different result.
+        expected[5] = (C, D)
+        self.versus_test(axelrod.MockPlayer(opponent_plays), expected, seed=new_seed)
 
 
 class TestPSOGambler2_2_2_Noise05(TestPlayer):
@@ -256,6 +256,9 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = 1
 
     def test_new_data(self):
         original_data = {
@@ -329,30 +332,37 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
     def test_strategy(self):
         """Starts by cooperating."""
         self.first_play_test(C)
-        self.responses_test([C], [C] * 197, [C] * 197)
+        self.second_play_test(C, C, C, C)
 
+    def test_vs_defector(self):
+        expected = [(C, D), (C, D)] + [(D, D)] * 10
+        self.versus_test(axelrod.Defector(), expected_actions=expected)
 
-# Some heads up tests for PSOGambler
-class PSOGambler2_2_2vsDefector(TestMatch):
-    def test_vs(self):
-        self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Defector(),
-                         [C, C, D, D], [D, D, D, D])
+    def test_vs_cooperator(self):
+        expected = [(C, C)] * 10
+        self.versus_test(axelrod.Cooperator(), expected_actions=expected)
 
+    def test_vs_alternator(self):
+        seed = 2
+        expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (C, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=seed)
 
-class PSOGambler2_2_2vsCooperator(TestMatch):
-    def test_vs(self):
-        self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Cooperator(),
-                         [C, C, C, C], [C, C, C, C])
+        new_seed = 1
+        expected[4] = (C, C)
+        expected[6] = (D, C)
+        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=new_seed)
 
+    def test_vs_DCDDC(self):
 
-class PSOGambler2_2_2vsTFT(TestMatch):
-    def test_vs(self):
-        self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.TitForTat(),
-                         [C, C, C, C], [C, C, C, C])
+        seed = 1
+        opponent_plays = [D, C, D, D, C]
+        expected = [(C, D), (C, C), (D, D), (D, D), (C, C), (D, D), (D, C), (C, D), (C, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_plays), expected, seed=seed)
 
+        new_seed = 3
+        expected[8] = (D, D)
+        self.versus_test(axelrod.MockPlayer(opponent_plays), expected, seed=new_seed)
 
-class PSOGambler2_2_2vsAlternator(TestMatch):
-    def test_vs(self):
-        axelrod.seed(10)
-        self.versus_test(axelrod.PSOGambler2_2_2(), axelrod.Alternator(),
-                         [C, C, C, C, C, C, C], [C, D, C, D, C, D, C])
+        new_seed = 2
+        new_expected = expected[:6] + [(C, C), (D, D), (D, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_plays), new_expected, seed=new_seed)
