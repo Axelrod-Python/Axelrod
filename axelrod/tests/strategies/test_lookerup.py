@@ -99,6 +99,26 @@ class TestLookupTable(unittest.TestCase):
                           "           ,  D, D, D  ,           : C,\n")
                          )
 
+    def test_equality_true(self):
+        table_a = LookupTable(self.lookup_dict)
+        table_b = LookupTable(self.lookup_dict)
+        self.assertTrue(table_a.__eq__(table_b))
+
+    def test_equality_false(self):
+        table_a = LookupTable.from_pattern((C, D), 1, 0, 0)
+        table_b = LookupTable.from_pattern((D, C), 1, 0, 0)
+        table_c = LookupTable.from_pattern((C, D), 0, 1, 0)
+        self.assertFalse(table_a.__eq__(table_b))
+        self.assertFalse(table_a.__eq__(table_c))
+        self.assertFalse(table_a.__eq__(table_a.dictionary))
+
+    def test_not_equal(self):
+        table_a = LookupTable(self.lookup_dict)
+        table_b = LookupTable(self.lookup_dict)
+        not_equal = LookupTable.from_pattern((C, C), 1, 0, 0)
+        self.assertFalse(table_a.__ne__(table_b))
+        self.assertTrue(table_a.__ne__(not_equal))
+
 
 class TestLookupTableHelperFunctions(unittest.TestCase):
 

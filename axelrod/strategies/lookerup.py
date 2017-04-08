@@ -12,9 +12,7 @@ ActionKeys = namedtuple('ActionKeys', 'self_plays, op_plays, op_openings')
 
 class LookupTable(object):
     """
-    ---------------------------------------------------------
     The object used by LookerUp to determine its next action.
-    ---------------------------------------------------------
 
     An object that creates a table of all possible plays to a specified depth and the action to be returned for each
     combination of plays. The "get" method returns the appropriate response. For the table containing::
