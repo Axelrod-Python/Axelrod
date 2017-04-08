@@ -9,7 +9,7 @@ from axelrod.actions import Actions, Action
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from .lookerup import LookerUp, create_lookup_table_from_tuple
+from .lookerup import LookerUp, ActionKeys
 
 
 C, D = Actions.C, Actions.D
@@ -36,7 +36,7 @@ class Gambler(LookerUp):
     def strategy(self, opponent: Player) -> Action:
         action = super(Gambler, self).strategy(opponent)
         # action could be 'C', 'D', or a float
-        if action in [C, D]:
+        if isinstance(action, Action):
             return action
         return random_choice(action)
 
@@ -55,10 +55,9 @@ class PSOGamblerMem1(Gambler):
 
     def __init__(self) -> None:
         pattern = tables[("PSO Gambler Mem1", 1, 1, 0)]
-        lookup_table = create_lookup_table_from_tuple(
-            plays=1, op_plays=1, op_initial_plays=0,
-            pattern=pattern)
-        super().__init__(lookup_table=lookup_table)
+        parameters = ActionKeys(self_plays=1, op_plays=1, op_openings=0)
+
+        super().__init__(parameters=parameters, pattern=pattern)
 
 
 class PSOGambler1_1_1(Gambler):
@@ -73,10 +72,9 @@ class PSOGambler1_1_1(Gambler):
 
     def __init__(self) -> None:
         pattern = tables[("PSO Gambler 1_1_1", 1, 1, 1)]
-        lookup_table = create_lookup_table_from_tuple(
-            plays=1, op_plays=1, op_initial_plays=1,
-            pattern=pattern)
-        super().__init__(lookup_table=lookup_table)
+        parameters = ActionKeys(self_plays=1, op_plays=1, op_openings=1)
+
+        super().__init__(parameters=parameters, pattern=pattern)
 
 
 class PSOGambler2_2_2(Gambler):
@@ -91,10 +89,9 @@ class PSOGambler2_2_2(Gambler):
 
     def __init__(self) -> None:
         pattern = tables[("PSO Gambler 2_2_2", 2, 2, 2)]
-        lookup_table = create_lookup_table_from_tuple(
-            plays=2, op_plays=2, op_initial_plays=2,
-            pattern=pattern)
-        super().__init__(lookup_table=lookup_table)
+        parameters = ActionKeys(self_plays=2, op_plays=2, op_openings=2)
+
+        super().__init__(parameters=parameters, pattern=pattern)
 
 
 class PSOGambler2_2_2_Noise05(Gambler):
@@ -110,7 +107,6 @@ class PSOGambler2_2_2_Noise05(Gambler):
 
     def __init__(self) -> None:
         pattern = tables[("PSO Gambler 2_2_2 Noise 05", 2, 2, 2)]
-        lookup_table = create_lookup_table_from_tuple(
-            plays=2, op_plays=2, op_initial_plays=2,
-            pattern=pattern)
-        super().__init__(lookup_table=lookup_table)
+        parameters = ActionKeys(self_plays=2, op_plays=2, op_openings=2)
+
+        super().__init__(parameters=parameters, pattern=pattern)

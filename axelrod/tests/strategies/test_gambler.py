@@ -33,13 +33,13 @@ class TestGambler(TestPlayer):
         tft_table = {((), (D,), ()): 0,
                      ((), (C,), ()): 1}
         self.versus_test(axelrod.Alternator(), expected_actions=[(C, C)] + [(C, D), (D, C)] * 5,
-                         init_kwargs={'lookup_table': tft_table})
+                         init_kwargs={'lookup_dict': tft_table})
 
     def test_stochastic_values(self):
         stochastic_lookup = {((), (), ()): 0.3}
         expected_actions = [(C, C), (D, C), (D, C), (C, C), (D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=expected_actions,
-                         init_kwargs={'lookup_table': stochastic_lookup}, seed=1)
+                         init_kwargs={'lookup_dict': stochastic_lookup}, seed=1)
 
 
 class TestPSOGamblerMem1(TestPlayer):
@@ -66,7 +66,7 @@ class TestPSOGamblerMem1(TestPlayer):
             ('', 'D', 'C'): 0.0,
             ('', 'D', 'D'): 0.12050939}
         converted_original = convert_original_to_current(original_data)
-        self.assertEqual(self.player().lookup_table, converted_original)
+        self.assertEqual(self.player().lookup_dict, converted_original)
 
     def test_strategy(self):
         self.first_play_test(C)
@@ -106,7 +106,7 @@ class TestPSOGambler1_1_1(TestPlayer):
             ('D', 'D', 'C'): 0.0,
             ('D', 'D', 'D'): 0.11886807}
         converted_original = convert_original_to_current(original_data)
-        self.assertEqual(self.player().lookup_table, converted_original)
+        self.assertEqual(self.player().lookup_dict, converted_original)
 
     def test_strategy(self):
         """Starts by cooperating."""
@@ -211,7 +211,7 @@ class TestPSOGambler2_2_2(TestPlayer):
             ('DD', 'DD', 'DC'): 0.77344942,
             ('DD', 'DD', 'DD'): 0.0}
         converted_original = convert_original_to_current(original_data)
-        self.assertEqual(self.player().lookup_table, converted_original)
+        self.assertEqual(self.player().lookup_dict, converted_original)
 
     def test_strategy(self):
         """Starts by cooperating."""
@@ -323,7 +323,7 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
             ('DD', 'DD', 'DC'): 0.0,
             ('DD', 'DD', 'DD'): 0.0}
         converted_original = convert_original_to_current(original_data)
-        self.assertEqual(self.player().lookup_table, converted_original)
+        self.assertEqual(self.player().lookup_dict, converted_original)
 
     def test_strategy(self):
         """Starts by cooperating."""
