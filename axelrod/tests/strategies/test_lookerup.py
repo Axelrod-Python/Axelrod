@@ -12,88 +12,6 @@ from axelrod.actions import str_to_actions
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
-class TestModuleLevelFunctions(unittest.TestCase):
-
-    def test_action_keys_equals_tuple(self):
-        self.assertEqual(ActionKeys(1, 2, 3), (1, 2, 3))
-
-    def test_actions_keys_assign_values(self):
-        self.assertEqual(ActionKeys(op_plays=2, self_plays=1, op_initial_plays=3), ActionKeys(1, 2, 3))
-
-    def test_make_keys_into_action_keys(self):
-        old = {((C, D), (C,), ()): 1,
-               ((D, D), (D,), ()): 2}
-        new = make_keys_into_action_keys(old)
-        self.assertNotIsInstance(next(iter(old)), ActionKeys)
-        self.assertIsInstance(next(iter(new)), ActionKeys)
-        self.assertTrue(new.__eq__(old))
-        self.assertTrue(old.__eq__(new))
-
-    def test_make_keys_into_action_keys_always_returns_new_dict(self):
-        old = {ActionKeys((C, D), (C,), ()): 1,
-               ActionKeys((D, D), (D,), ()): 2}
-        self.assertIsNot(old, make_keys_into_action_keys(old))
-
-    def test_create_lookup_table_keys(self):
-        expected = [
-            ActionKeys((C, C), (C,), ()),
-            ActionKeys((C, C), (D,), ()),
-            ActionKeys((C, D), (C,), ()),
-            ActionKeys((C, D), (D,), ()),
-            ActionKeys((D, C), (C,), ()),
-            ActionKeys((D, C), (D,), ()),
-            ActionKeys((D, D), (C,), ()),
-            ActionKeys((D, D), (D,), ())
-        ]
-        actual = create_lookup_table_keys(plays=2, op_plays=1, op_initial_plays=0)
-        self.assertEqual(actual, expected)
-        self.assertIsInstance(actual[0], ActionKeys)
-
-    def test_create_lookup_table_from_tuple(self):
-        expected = {
-            ActionKeys((C,), (C,), (C,)): C,
-            ActionKeys((C,), (C,), (D,)): C,
-            ActionKeys((C,), (D,), (C,)): D,
-            ActionKeys((C,), (D,), (D,)): C,
-            ActionKeys((D,), (C,), (C,)): C,
-            ActionKeys((D,), (C,), (D,)): D,
-            ActionKeys((D,), (D,), (C,)): C,
-            ActionKeys((D,), (D,), (D,)): C
-        }
-        actual = create_lookup_table_from_tuple(1, 1, 1, str_to_actions('CCDCCDCC'))
-        self.assertEqual(actual, expected)
-        self.assertIsInstance(next(iter(actual)), ActionKeys)
-
-    def test_create_lookup_table_from_tuple_raises_error_when_keys_and_values_not_same_len(self):
-        with self.assertRaises(ValueError):
-            create_lookup_table_from_tuple(2, 2, 2, str_to_actions('CCC'))
-
-    def test_create_lookup_table_from_string(self):
-        expected = {
-            ActionKeys((C,), (C,), (C,)): C,
-            ActionKeys((C,), (C,), (D,)): C,
-            ActionKeys((C,), (D,), (C,)): D,
-            ActionKeys((C,), (D,), (D,)): C,
-            ActionKeys((D,), (C,), (C,)): C,
-            ActionKeys((D,), (C,), (D,)): D,
-            ActionKeys((D,), (D,), (C,)): C,
-            ActionKeys((D,), (D,), (D,)): C
-        }
-        actual = create_lookup_table_from_string(1, 1, 1, 'CCDCCDCC')
-        self.assertEqual(actual, expected)
-        self.assertIsInstance(next(iter(actual)), ActionKeys)
-
-    def test_create_lookup_table_from_string_raises_error_when_keys_and_values_not_same_len(self):
-        with self.assertRaises(ValueError):
-            create_lookup_table_from_string(2, 2, 2, 'CCC')
-
-    def test_get_last_n_plays(self):
-        player = axelrod.Player()
-        player.history = [C, D, C]
-        self.assertEqual(get_last_n_plays(player, 0), ())
-        self.assertEqual(get_last_n_plays(player, 2), (D, C))
-
-
 class TestLookerUp(TestPlayer):
 
     name = "LookerUp"
@@ -114,8 +32,8 @@ class TestLookerUp(TestPlayer):
 
     def test_default_init(self):
         player = self.player()
-        expected = {ActionKeys((), (D, ), ()): D,
-                    ActionKeys((), (C, ), ()): C}
+        expected = {ActionKeys((), (D,), ()): D,
+                    ActionKeys((), (C,), ()): C}
         self.assertEqual(player.lookup_table, expected)
         self.assertEqual(player.initial_actions, (C,))
 
@@ -142,7 +60,7 @@ class TestLookerUp(TestPlayer):
         default = {ActionKeys((), (D,), ()): D,
                    ActionKeys((), (C,), ()): C}
         pattern = "CC"
-        parameters = (0, 1, 0)
+        parameters = ActionKeys(self_plays=0, op_plays=1, op_initial_plays=0)
         player1 = axelrod.LookerUp(lookup_pattern=pattern)
         player2 = axelrod.LookerUp(parameters=parameters)
 
@@ -168,7 +86,7 @@ class TestLookerUp(TestPlayer):
             ((D,), (C,), ()): D
         }
         pattern = "CCCCCCCC"
-        parameters = (1, 1, 1)
+        parameters = ActionKeys(self_plays=1, op_plays=1, op_initial_plays=1)
         player = axelrod.LookerUp(lookup_table=lookup_table, lookup_pattern=pattern, parameters=parameters)
 
         self.assertEqual(player.lookup_table, lookup_table)
@@ -181,10 +99,10 @@ class TestLookerUp(TestPlayer):
     def test_initial_actions_makes_up_missing_actions_with_c(self):
         initial_acitons = (D,)
         table_depth_three = axelrod.LookerUp(initial_actions=initial_acitons, lookup_pattern='CCCCCCCC',
-                                             parameters=(3, 0, 0))
+                                             parameters=ActionKeys(3, 0, 0))
         self.assertEqual(table_depth_three.initial_actions, (D, C, C))
 
-    def test_init_raises_error_when_keys_for_lookup_tabledo_not_match_each_other(self):
+    def test_init_raises_error_when_keys_for_lookup_table_do_not_match_each_other(self):
         table = {((C,), (C,), ()): C, ((D, D), (D, D), ()): C}
         with self.assertRaises(ValueError):
             axelrod.LookerUp(lookup_table=table)
@@ -195,13 +113,13 @@ class TestLookerUp(TestPlayer):
             axelrod.LookerUp(lookup_table=table)
 
     def test_set_memory_depth(self):
-        mem_depth_1 = axelrod.LookerUp(lookup_pattern='CC', parameters=(1, 0, 0))
+        mem_depth_1 = axelrod.LookerUp(lookup_pattern='CC', parameters=ActionKeys(1, 0, 0))
         self.assertEqual(mem_depth_1.classifier['memory_depth'], 1)
 
-        mem_depth_3 = axelrod.LookerUp(lookup_pattern='C' * 16, parameters=(1, 3, 0))
+        mem_depth_3 = axelrod.LookerUp(lookup_pattern='C' * 16, parameters=ActionKeys(1, 3, 0))
         self.assertEqual(mem_depth_3.classifier['memory_depth'], 3)
 
-        mem_depth_inf = axelrod.LookerUp(lookup_pattern='CC', parameters=(0, 0, 1))
+        mem_depth_inf = axelrod.LookerUp(lookup_pattern='CC', parameters=ActionKeys(0, 0, 1))
         self.assertEqual(mem_depth_inf.classifier['memory_depth'], float('inf'))
 
     def test_strategy(self):
@@ -211,25 +129,26 @@ class TestLookerUp(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
+    def test_cooperator_table(self):
         lookup_table = {((), (), ()): C}
         actions = [(C, D)] * 5
         self.versus_test(axelrod.Defector(), expected_actions=actions, init_kwargs={'lookup_table': lookup_table})
 
-    def test_defector_table(self):
+    def test_defector_table_with_initial_cooperate(self):
         """
         Testing a lookup table that always defects IF there is enough history.
         """
-        defector_table = {((C, ), (D, ), ()): D,
-                          ((D, ), (D, ), ()): D,
-                          ((C, ), (C, ), ()): D,
-                          ((D, ), (C, ), ()): D}
+        defector_table = {((C,), (D,), ()): D,
+                          ((D,), (D,), ()): D,
+                          ((C,), (C,), ()): D,
+                          ((D,), (C,), ()): D}
         actions = [(C, C)] + [(D, D), (D, C)] * 4
         self.versus_test(axelrod.Alternator(), expected_actions=actions, init_kwargs={'lookup_table': defector_table})
 
     def test_zero_tables(self):
         """Test the corner case where n=0."""
         anti_tft_pattern = "DC"
-        parameters = (0, 1, 0)
+        parameters = ActionKeys(self_plays=0, op_plays=1, op_initial_plays=0)
 
         tft_vs_alternator = [(C, C)] + [(D, D), (C, C)] * 5
         self.versus_test(axelrod.Alternator(), expected_actions=tft_vs_alternator,
@@ -271,6 +190,21 @@ class TestLookerUp(TestPlayer):
                           "     D     ,   D, C    ,           : C,\n" +
                           "     D     ,   D, D    ,           : C,\n")
                          )
+
+        player = axelrod.LookerUp(parameters=ActionKeys(self_plays=3, op_plays=0, op_initial_plays=0),
+                                  lookup_pattern='C' * 8)
+        self.assertEqual(player.lookup_table_display(),
+                         ("op_starts  / self_plays / op_plays\n" +
+                          "           ,  C, C, C  ,           : C,\n" +
+                          "           ,  C, C, D  ,           : C,\n" +
+                          "           ,  C, D, C  ,           : C,\n" +
+                          "           ,  C, D, D  ,           : C,\n" +
+                          "           ,  D, C, C  ,           : C,\n" +
+                          "           ,  D, C, D  ,           : C,\n" +
+                          "           ,  D, D, C  ,           : C,\n" +
+                          "           ,  D, D, D  ,           : C,\n")
+                         )
+
 
 class TestEvolvedLookerUp1_1_1(TestPlayer):
 
@@ -405,14 +339,14 @@ class TestEvolvedLookerUp2_2_2(TestPlayer):
         self.second_play_test(C, C, C, C)
 
     def test_vs_initial_defector(self):
-        opponent = [D, D] + [C, D] * 3
+        opponent_actions = [D, D] + [C, D] * 3
         expected = [(C, D), (C, D)] + [(D, C), (C, D)] * 3
-        self.versus_test(axelrod.MockPlayer(actions=opponent), expected_actions=expected)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected)
 
     def test_vs_initial_d_c(self):
-        opponent = [D, C] + [C, D] * 3
+        opponent_actions = [D, C] + [C, D] * 3
         expected = [(C, D), (C, C)] + [(D, C), (C, D), (C, C), (D, D), (C, C), (C, D)]
-        self.versus_test(axelrod.MockPlayer(actions=opponent), expected_actions=expected)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected)
 
 
 class TestWinner12(TestPlayer):
@@ -498,6 +432,89 @@ class TestWinner21(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=[(D, C)] + [(C, C)] * 10)
 
         self.versus_test(axelrod.Defector(), expected_actions=([(D, D), (C, D)] + [(D, D)] * 10))
+
+
+class TestModuleLevelFunctions(unittest.TestCase):
+
+    def test_action_keys_equals_tuple(self):
+        self.assertEqual(ActionKeys(1, 2, 3), (1, 2, 3))
+
+    def test_actions_keys_assign_values(self):
+        self.assertEqual(ActionKeys(op_plays=2, self_plays=1, op_initial_plays=3), ActionKeys(1, 2, 3))
+
+    def test_make_keys_into_action_keys(self):
+        old = {((C, D), (C,), ()): 1,
+               ((D, D), (D,), ()): 2}
+        new = make_keys_into_action_keys(old)
+        self.assertNotIsInstance(next(iter(old)), ActionKeys)
+        self.assertIsInstance(next(iter(new)), ActionKeys)
+        self.assertTrue(new.__eq__(old))
+        self.assertTrue(old.__eq__(new))
+
+    def test_make_keys_into_action_keys_always_returns_new_dict(self):
+        old = {ActionKeys((C, D), (C,), ()): 1,
+               ActionKeys((D, D), (D,), ()): 2}
+        self.assertIsNot(old, make_keys_into_action_keys(old))
+
+    def test_create_lookup_table_keys(self):
+        expected = [
+            ActionKeys((C, C), (C,), ()),
+            ActionKeys((C, C), (D,), ()),
+            ActionKeys((C, D), (C,), ()),
+            ActionKeys((C, D), (D,), ()),
+            ActionKeys((D, C), (C,), ()),
+            ActionKeys((D, C), (D,), ()),
+            ActionKeys((D, D), (C,), ()),
+            ActionKeys((D, D), (D,), ())
+        ]
+        actual = create_lookup_table_keys(plays=2, op_plays=1, op_initial_plays=0)
+        self.assertEqual(actual, expected)
+        self.assertIsInstance(actual[0], ActionKeys)
+
+    def test_create_lookup_table_from_tuple(self):
+        expected = {
+            ActionKeys((C,), (C,), (C,)): C,
+            ActionKeys((C,), (C,), (D,)): C,
+            ActionKeys((C,), (D,), (C,)): D,
+            ActionKeys((C,), (D,), (D,)): C,
+            ActionKeys((D,), (C,), (C,)): C,
+            ActionKeys((D,), (C,), (D,)): D,
+            ActionKeys((D,), (D,), (C,)): C,
+            ActionKeys((D,), (D,), (D,)): C
+        }
+        actual = create_lookup_table_from_tuple(plays=1, op_plays=1, op_initial_plays=1,
+                                                pattern=(C, C, D, C, C, D, C, C))
+        self.assertEqual(actual, expected)
+        self.assertIsInstance(next(iter(actual)), ActionKeys)
+
+    def test_create_lookup_table_from_tuple_raises_error_when_keys_and_values_not_same_len(self):
+        with self.assertRaises(ValueError):
+            create_lookup_table_from_tuple(plays=1, op_plays=2, op_initial_plays=2, pattern=(C, C, C))
+
+    def test_create_lookup_table_from_string(self):
+        expected = {
+            ActionKeys((C,), (C,), (C,)): C,
+            ActionKeys((C,), (C,), (D,)): C,
+            ActionKeys((C,), (D,), (C,)): D,
+            ActionKeys((C,), (D,), (D,)): C,
+            ActionKeys((D,), (C,), (C,)): C,
+            ActionKeys((D,), (C,), (D,)): D,
+            ActionKeys((D,), (D,), (C,)): C,
+            ActionKeys((D,), (D,), (D,)): C
+        }
+        actual = create_lookup_table_from_string(plays=1, op_plays=1, op_initial_plays=1, pattern_string='CCDCCDCC')
+        self.assertEqual(actual, expected)
+        self.assertIsInstance(next(iter(actual)), ActionKeys)
+
+    def test_create_lookup_table_from_string_raises_error_when_keys_and_values_not_same_len(self):
+        with self.assertRaises(ValueError):
+            create_lookup_table_from_string(plays=2, op_plays=2, op_initial_plays=2, pattern_string='CCC')
+
+    def test_get_last_n_plays(self):
+        player = axelrod.Player()
+        player.history = [C, D, C]
+        self.assertEqual(get_last_n_plays(player=player, depth=0), ())
+        self.assertEqual(get_last_n_plays(player=player, depth=2), (D, C))
 
 
 class TestDictConversionFunctions(unittest.TestCase):

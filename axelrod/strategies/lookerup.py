@@ -83,7 +83,7 @@ class LookerUp(Player):
                                 ActionKeys(self_plays=(), op_plays=(C,), op_initial_plays=()): C}
 
     def __init__(self, lookup_table: dict = None, initial_actions: tuple = None,
-                 lookup_pattern: str = None, parameters: tuple = None) -> None:
+                 lookup_pattern: str = None, parameters: ActionKeys = None) -> None:
 
         super().__init__()
 
@@ -188,7 +188,8 @@ class EvolvedLookerUp1_1_1(LookerUp):
 
     def __init__(self) -> None:
         # original = 'CDDDDDCD'
-        super().__init__(parameters=(1, 1, 1), lookup_pattern='CDDDDCDD',
+        params = ActionKeys(self_plays=1, op_plays=1, op_initial_plays=1)
+        super().__init__(parameters=params, lookup_pattern='CDDDDCDD',
                          initial_actions=(C,))
 
 
@@ -203,8 +204,9 @@ class EvolvedLookerUp2_2_2(LookerUp):
 
     def __init__(self) -> None:
         # original = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
+        params = ActionKeys(self_plays=2, op_plays=2, op_initial_plays=2)
         pattern = 'CDDCDCDDCDDDCDDDDDCDCDCCCDDCCDCDDDCCCCCDDDCDDDDDDDDDCCDDCDDDCCCD'
-        super().__init__(parameters=(2, 2, 2), lookup_pattern=pattern,
+        super().__init__(parameters=params, lookup_pattern=pattern,
                          initial_actions=(C, C))
 
 
@@ -218,8 +220,9 @@ class Winner12(LookerUp):
     name = "Winner12"
 
     def __init__(self) -> None:
+        params = ActionKeys(self_plays=1, op_plays=2, op_initial_plays=0)
         pattern = 'CDCDDCDD'
-        super().__init__(parameters=(1, 2, 0), lookup_pattern=pattern,
+        super().__init__(parameters=params, lookup_pattern=pattern,
                          initial_actions=(C, C))
 
 
@@ -233,8 +236,9 @@ class Winner21(LookerUp):
     name = "Winner21"
 
     def __init__(self) -> None:
+        params = ActionKeys(self_plays=1, op_plays=2, op_initial_plays=0)
         pattern = 'CDCDCDDD'
-        super().__init__(parameters=(1, 2, 0), lookup_pattern=pattern,
+        super().__init__(parameters=params, lookup_pattern=pattern,
                          initial_actions=(D, C))
 
 

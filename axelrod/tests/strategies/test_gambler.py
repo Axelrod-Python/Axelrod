@@ -75,9 +75,9 @@ class TestPSOGamblerMem1(TestPlayer):
 
     def test_defects_forever_with_correct_conditions(self):
         seed = 1
-        opponent = [D, D] + [C] * 10
+        opponent_actions = [D, D] + [C] * 10
         expected = [(C, D), (C, D), (D, C)] + [(D, C)] * 9
-        self.versus_test(axelrod.MockPlayer(actions=opponent), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected, seed=seed)
 
 
 class TestPSOGambler1_1_1(TestPlayer):
@@ -120,13 +120,13 @@ class TestPSOGambler1_1_1(TestPlayer):
 
     def test_defect_forever(self):
         seed = 2
-        opponent = [C] + [D] + [C] * 10
+        opponent_actions = [C] + [D] + [C] * 10
         expected = [(C, C), (C, D)] + [(D, C)] * 10
-        self.versus_test(axelrod.MockPlayer(opponent), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected, seed=seed)
 
-        opponent = [D] + [C] * 10
+        opponent_actions = [D] + [C] * 10
         expected = [(C, D)] + [(D, C)] * 10
-        self.versus_test(axelrod.MockPlayer(opponent), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected, seed=seed)
 
 
 class TestPSOGambler2_2_2(TestPlayer):
@@ -233,13 +233,13 @@ class TestPSOGambler2_2_2(TestPlayer):
 
     def test_vs_DCDDC(self):
         seed = 2
-        opponent_plays = [D, C, D, D, C]
+        opponent_actions = [D, C, D, D, C]
         expected = [(C, D), (C, C), (D, D), (D, D), (C, C), (D, D), (D, C), (D, D), (D, D), (C, C)]
-        self.versus_test(axelrod.MockPlayer(opponent_plays), expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected, seed=seed)
 
         new_seed = 139  # First seed with different result.
         expected[5] = (C, D)
-        self.versus_test(axelrod.MockPlayer(opponent_plays), expected, seed=new_seed)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected, seed=new_seed)
 
 
 class TestPSOGambler2_2_2_Noise05(TestPlayer):
@@ -349,16 +349,16 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=new_seed)
 
     def test_vs_DCDDC(self):
+        opponent_actions = [D, C, D, D, C]
 
         seed = 1
-        opponent_plays = [D, C, D, D, C]
         expected = [(C, D), (C, C), (D, D), (D, D), (C, C), (D, D), (D, C), (C, D), (C, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_plays), expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected, seed=seed)
 
         new_seed = 3
         expected[8] = (D, D)
-        self.versus_test(axelrod.MockPlayer(opponent_plays), expected, seed=new_seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions), expected, seed=new_seed)
 
         new_seed = 2
         new_expected = expected[:6] + [(C, C), (D, D), (D, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_plays), new_expected, seed=new_seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions), new_expected, seed=new_seed)
