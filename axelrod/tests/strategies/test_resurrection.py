@@ -52,10 +52,11 @@ class TestDoubleResurrection(TestPlayer):
         # Starts by Cooperating
         self.first_play_test(C)
         
-        # Check if the turns played are greater than 5 
-        self.responses_test([C], [D, C, C, D, D, D, D, D] , [C] * 8)
-        
-        self.responses_test([D], [C, D, D, C, C, C, C, C] , [C] * 8)
-        
-        #Check if turns played are less than 5.
-        self.responses_test([C], [D, C, D, C], [C] * 4)
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
