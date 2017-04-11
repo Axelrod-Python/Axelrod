@@ -1,3 +1,29 @@
+# v2.9.0, 2017-04-11
+
+Approximate Moran process, test refactor, tweak to the Human play repr,
+documentation and an
+internal improvement to some cheating strategies.
+
+- Small fix to the repr for the Human strategy:
+  https://github.com/Axelrod-Python/Axelrod/pull/959
+- Speedup to Geller, Darwin and MindReader
+  https://github.com/Axelrod-Python/Axelrod/pull/950
+- Add documentation details for running tests
+  https://github.com/Axelrod-Python/Axelrod/pull/954
+- Add documentation for commit message guidelines:
+  https://github.com/Axelrod-Python/Axelrod/pull/963
+- Fragment the Moran process documentation
+  https://github.com/Axelrod-Python/Axelrod/pull/962
+- Add an approximate Moran process
+  https://github.com/Axelrod-Python/Axelrod/pull/955
+- Test refactor:
+  https://github.com/Axelrod-Python/Axelrod/pull/964
+- Refactor of the finite state machines:
+  https://github.com/Axelrod-Python/Axelrod/pull/956
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.8.0...v2.9.0
+
 # v2.8.0, 2017-04-02
 
 Source code cleanup, test refactor, new strategies and improved `__repr__` of
