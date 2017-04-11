@@ -204,7 +204,9 @@ class TestFsmTransitions(TestPlayer):
         self.assertEqual(un_callable_states, set(), msg=extra_info)
 
     def test_strategy(self):
-        """A particular FSM test"""
+        """
+        Regression test for init without specifying initial state or action
+        """
         transitions = ((0, C, 0, C), (0, D, 3, C), (1, C, 5, D),
                        (1, D, 0, C), (2, C, 3, C), (2, D, 2, D),
                        (3, C, 4, D), (3, D, 6, D), (4, C, 3, C),
