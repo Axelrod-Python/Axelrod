@@ -14,47 +14,8 @@ from axelrod.interaction_utils import (
 Point = namedtuple('Point', 'x y')
 
 
-def create_points(step, progress_bar=True):
-    """Creates a set of Points over the unit square.
-
-    A Point has coordinates (x, y). This function constructs points that are
-    separated by a step equal to `step`. The points are over the unit
-    square which implies that the number created will be (1/`step` + 1)^2.
-
-    Parameters
-    ----------
-    step : float
-        The separation between each Point. Smaller steps will produce more
-        Points with coordinates that will be closer together.
-    progress_bar : bool
-        Whether or not to create a progress bar which will be updated
-
-    Returns
-    ----------
-    points : list
-        of Point objects with coordinates (x, y)
-    """
-    num = int((1 / step) // 1) + 1
-
-    if progress_bar:
-        p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
-
-    points = []
-    for x in np.linspace(0, 1, num):
-        for y in np.linspace(0, 1, num):
-            points.append(Point(x, y))
-
-            if progress_bar:
-                p_bar.update()
-
-    if progress_bar:
-        p_bar.close()
-
-    return points
-
-
-class AshlockFingerprint():
-    def __init__(self, strategy, probe=axl.TitForTat):
+class AshlockFingerprint(object):
+    def __init__(self, strategy, probe=axl.TitForTat, step: float = 0.01, progress_bar: bool = True):
         """
         Parameters
         ----------
@@ -68,9 +29,27 @@ class AshlockFingerprint():
         """
         self.strategy = strategy
         self.probe = probe
+        self._step = step
+        self.progress_bar = progress_bar
+        self.points = self.create_points()
 
-    @staticmethod
-    def create_jossann(point, probe):
+        self.interactions = []
+        self.spatial_tournament = None  # type: axl.SpatialTournament
+        self.data = {}
+
+    @property
+    def step(self):
+        return self._step
+
+    @step.setter
+    def step(self, new_step: float):
+        self._step = new_step
+        self.points = self.create_points()
+
+    def create_points(self):
+        return create_points(self._step, self.progress_bar)
+
+    def create_jossann(self, point):
         """Creates a JossAnn probe player that matches the Point.
 
         If the coordinates of point sums to more than 1 the parameters are
@@ -80,8 +59,6 @@ class AshlockFingerprint():
         Parameters
         ----------
         point : Point
-        probe : class
-            A class that must be descended from axelrod.strategies
 
         Returns
         ----------
@@ -89,34 +66,26 @@ class AshlockFingerprint():
             `JossAnnTransformer` with parameters that correspond to `point`.
         """
         x, y = point
+        probe_creator = self.probe
 
-        if isinstance(probe, axl.Player):
-            init_kwargs = probe.init_kwargs
-            probe = probe.__class__
+        if isinstance(probe_creator, axl.Player):
+            init_kwargs = probe_creator.init_kwargs
+            probe_creator = probe_creator.__class__
         else:
             init_kwargs = {}
 
         if x + y >= 1:
             joss_ann = DualTransformer()(
-                JossAnnTransformer((1 - x, 1 - y))(probe))(**init_kwargs)
+                JossAnnTransformer((1 - x, 1 - y))(probe_creator))(**init_kwargs)
         else:
-            joss_ann = JossAnnTransformer((x, y))(probe)(**init_kwargs)
+            joss_ann = JossAnnTransformer((x, y))(probe_creator)(**init_kwargs)
         return joss_ann
 
-    @staticmethod
-    def create_edges(points, progress_bar=True):
+    def create_edges(self):
         """Creates a set of edges for a spatial tournament.
 
         Constructs edges that correspond to `points`. All edges begin at 0, and
         connect to the index +1 of the probe.
-
-        Parameters
-        ----------
-        points : list
-            of Point objects with coordinates (x, y)
-        progress_bar : bool
-            Whether or not to create a progress bar which will be updated
-
 
         Returns
         ----------
@@ -125,25 +94,18 @@ class AshlockFingerprint():
             first element. The second element is the index of the
             corresponding probe (+1 to allow for including the Strategy).
         """
-        if progress_bar:
-            points = tqdm.tqdm(points, desc="Generating network edges")
-        edges = [(0, index + 1) for index, point in enumerate(points)]
+        if self.progress_bar:
+            points = tqdm.tqdm(self.points, desc="Generating network edges")
+        else:
+            points = self.points
+        edges = [(0, probe_index) for probe_index in range(1, len(points) + 1)]
         return edges
 
-    def create_probes(self, probe, points, progress_bar=True):
+    def create_probes(self):
         """Creates a set of probe strategies over the unit square.
 
         Constructs probe strategies that correspond to points with coordinates
         (x, y). The probes are created using the `JossAnnTransformer`.
-
-        Parameters
-        ----------
-        probe : class
-            A class that must be descended from axelrod.strategies.
-        points : list
-            of Point objects with coordinates (x, y)
-        progress_bar : bool
-            Whether or not to create a progress bar which will be updated
 
         Returns
         ----------
@@ -151,22 +113,18 @@ class AshlockFingerprint():
             A list of `JossAnnTransformer` players with parameters that
             correspond to point.
         """
-        if progress_bar:
-            points = tqdm.tqdm(points, desc="Generating probes")
-        probes = [self.create_jossann(point, probe) for point in points]
+        if self.progress_bar:
+            points = tqdm.tqdm(self.points, desc="Generating probes")
+        else:
+            points = self.points
+        probes = [self.create_jossann(point) for point in points]
         return probes
 
-    def construct_tournament_elements(self, step, progress_bar=True):
+    def construct_tournament_elements(self):
         """Build the elements required for a spatial tournament
 
         Parameters
         ----------
-        step : float
-            The separation between each Point. Smaller steps will
-            produce more Points that will be closer together.
-        progress_bar : bool
-            Whether or not to create a progress bar which will be updated
-
 
         Returns
         ----------
@@ -180,10 +138,8 @@ class AshlockFingerprint():
             original player, the rest are the probes.
 
         """
-        self.points = create_points(step, progress_bar=progress_bar)
-        edges = self.create_edges(self.points, progress_bar=progress_bar)
-        probe_players = self.create_probes(self.probe, self.points,
-                                           progress_bar=progress_bar)
+        edges = self.create_edges()
+        probe_players = self.create_probes()
 
         if isinstance(self.strategy, axl.Player):
             tournament_players = [self.strategy] + probe_players
@@ -225,8 +181,8 @@ class AshlockFingerprint():
         point_scores = dict(zip(points, edge_scores))
         return point_scores
 
-    def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None,
-                    filename=None, in_memory=False, progress_bar=True):
+    def fingerprint(self, turns: int = 50, repetitions: int = 10, new_step: float = None, processes: int = None,
+                    filename: str = None, in_memory: bool =False, progress_bar: bool = True) -> dict:
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
@@ -241,13 +197,16 @@ class AshlockFingerprint():
             The number of turns per match
         repetitions : integer, optional
             The number of times the round robin should be repeated
-        step : float, optional
+        new_step : float, optional
             The separation between each Point. Smaller steps will
             produce more Points that will be closer together.
         processes : integer, optional
             The number of processes to be used for parallel processing
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
+        filename : str
+            File where results are saved.
+        in_memory : bool
 
         Returns
         ----------
@@ -259,13 +218,13 @@ class AshlockFingerprint():
         if on_windows and (filename is None):  # pragma: no cover
             in_memory = True
         elif filename is None:
-            outputfile = NamedTemporaryFile(mode='w')
-            filename = outputfile.name
+            output_file = NamedTemporaryFile(mode='w')
+            filename = output_file.name
 
-        edges, tourn_players = self.construct_tournament_elements(
-            step, progress_bar=progress_bar)
+        edges, tourn_players = self.construct_tournament_elements()
 
-        self.step = step
+        if new_step:
+            self.step = new_step
         self.spatial_tournament = axl.SpatialTournament(
             tourn_players,
             turns=turns,
@@ -337,7 +296,7 @@ class AshlockFingerprint():
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
-        size = int((1 / self.step) // 1) + 1
+        size = int((1 / self._step) // 1) + 1
         plotting_data = self.reshape_data(self.data, self.points, size)
         fig, ax = plt.subplots()
         cax = ax.imshow(
@@ -361,3 +320,42 @@ class AshlockFingerprint():
         if title is not None:
             plt.title(title)
         return fig
+
+
+def create_points(step: float, progress_bar: bool = True) -> list:
+    """Creates a set of Points over the unit square.
+
+    A Point has coordinates (x, y). This function constructs points that are
+    separated by a step equal to `step`. The points are over the unit
+    square which implies that the number created will be (1/`step` + 1)^2.
+
+    Parameters
+    ----------
+    step : float
+        The separation between each Point. Smaller steps will produce more
+        Points with coordinates that will be closer together.
+    progress_bar : bool
+        Whether or not to create a progress bar which will be updated
+
+    Returns
+    ----------
+    points : list
+        of Point objects with coordinates (x, y)
+    """
+    num = int((1 / step) // 1) + 1
+    p_bar = None
+    if progress_bar:
+        p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
+
+    points = []
+    for x in np.linspace(0, 1, num):
+        for y in np.linspace(0, 1, num):
+            points.append(Point(x, y))
+
+            if p_bar:
+                p_bar.update()
+
+    if p_bar:
+        p_bar.close()
+
+    return points
