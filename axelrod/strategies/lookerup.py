@@ -46,11 +46,12 @@ class LookupTable(object):
                     ((D,), (C,), ()): D}
 
     LookupTable.from_pattern() creates an ordered list of keys for you and maps
-    the pattern to the keys.
-    LookupTable.from_pattern(
-        pattern=(C, D, D, C),
-        player_depth=0, op_depth=1, op_openings_depth=1
-    )
+    the pattern to the keys.::
+
+        LookupTable.from_pattern(pattern=(C, D, D, C),
+            player_depth=0, op_depth=1, op_openings_depth=1
+        )
+
     creates the dictionary::
 
         {Plays(self_plays=(), op_plays=(C), op_openings=(C)): C,
@@ -232,10 +233,12 @@ class LookerUp(Player):
 
     The dictionary must contain all possible permutations of C's and D's.
 
-    LookerUp can also be instantiated with pattern=str/tuple of actions, and
-    parameters=Plays(self_plays=player_depth: int,
-                     op_plays=op_depth: int,
-                     op_openings=op_openings_depth: int).
+    | LookerUp can also be instantiated with pattern=str/tuple of actions, and
+    | parameters=Plays(
+    |     self_plays=player_depth: int,
+    |     op_plays=op_depth: int,
+    |     op_openings=op_openings_depth: int).
+
     It will create keys of len=2 ** (sum(parameters)) and map the pattern to
     the keys.
 
