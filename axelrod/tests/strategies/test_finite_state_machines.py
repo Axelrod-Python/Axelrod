@@ -11,24 +11,30 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestSimpleFSM(unittest.TestCase):
     def setUp(self):
-        self.two_state_transition = ((1, C, 0, C), (1, D, 0, D), (0, C, 1, D), (0, D, 1, C))
+        self.two_state_transition = ((1, C, 0, C), (1, D, 0, D),
+                                     (0, C, 1, D), (0, D, 1, C))
 
-        self.two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=1)
+        self.two_state = SimpleFSM(transitions=self.two_state_transition,
+                                   initial_state=1)
 
     def test__eq__true(self):
-        new_two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=1)
+        new_two_state = SimpleFSM(transitions=self.two_state_transition,
+                                  initial_state=1)
         self.assertTrue(new_two_state.__eq__(self.two_state))
         new_two_state.move(C)
         self.two_state.move(D)
         self.assertTrue(new_two_state.__eq__(self.two_state))
 
     def test__eq__false_by_state(self):
-        new_two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=0)
+        new_two_state = SimpleFSM(transitions=self.two_state_transition,
+                                  initial_state=0)
         self.assertFalse(new_two_state.__eq__(self.two_state))
 
     def test__eq__false_by_transition(self):
-        different_transitions = ((1, C, 0, D), (1, D, 0, D), (0, C, 1, D), (0, D, 1, C))
-        new_two_state = SimpleFSM(transitions=different_transitions, initial_state=1)
+        different_transitions = ((1, C, 0, D), (1, D, 0, D),
+                                 (0, C, 1, D), (0, D, 1, C))
+        new_two_state = SimpleFSM(transitions=different_transitions,
+                                  initial_state=1)
 
         self.assertFalse(new_two_state.__eq__(self.two_state))
 
@@ -36,7 +42,8 @@ class TestSimpleFSM(unittest.TestCase):
         self.assertFalse(self.two_state.__eq__(3))
 
     def test__ne__(self):
-        new_two_state = SimpleFSM(transitions=self.two_state_transition, initial_state=1)
+        new_two_state = SimpleFSM(transitions=self.two_state_transition,
+                                  initial_state=1)
         self.assertFalse(new_two_state.__ne__(self.two_state))
         new_two_state.move(C)
         self.assertTrue(new_two_state.__ne__(self.two_state))
@@ -53,11 +60,13 @@ class TestSimpleFSM(unittest.TestCase):
         self.assertEqual(self.two_state.state, 1)
 
     def test_bad_transitions_raise_error(self):
-        bad_transitions = [(1, C, 0, D), (1, D, 0, D), (0, C, 1, D)]
-        self.assertRaises(ValueError, SimpleFSM, transitions=bad_transitions, initial_state=1)
+        bad_transitions = ((1, C, 0, D), (1, D, 0, D), (0, C, 1, D))
+        self.assertRaises(ValueError, SimpleFSM, transitions=bad_transitions,
+                          initial_state=1)
 
     def test_bad_initial_state_raises_error(self):
-        self.assertRaises(ValueError, SimpleFSM, transitions=self.two_state_transition, initial_state=5)
+        self.assertRaises(ValueError, SimpleFSM,
+                          transitions=self.two_state_transition, initial_state=5)
 
     def test_state_setter_raises_error_for_bad_input(self):
         with self.assertRaises(ValueError) as cm:
@@ -86,7 +95,7 @@ class TestFSMPlayer(TestPlayer):
     def test_cooperator(self):
         """Tests that the player defined by the table for Cooperator is in fact
         Cooperator."""
-        cooperator_init_kwargs = {'transitions': [(1, C, 1, C), (1, D, 1, C)],
+        cooperator_init_kwargs = {'transitions': ((1, C, 1, C), (1, D, 1, C)),
                                   'initial_state': 1,
                                   'initial_action': C}
         self.versus_test(axelrod.Alternator(), expected_actions=[(C, C), (C, D)] * 5,
@@ -95,28 +104,32 @@ class TestFSMPlayer(TestPlayer):
     def test_defector(self):
         """Tests that the player defined by the table for Defector is in fact
         Defector."""
-        defector_init_kwargs = {'transitions': [(1, C, 1, D), (1, D, 1, D)],
+        defector_init_kwargs = {'transitions': ((1, C, 1, D), (1, D, 1, D)),
                                 'initial_state': 1,
                                 'initial_action': D}
-        self.versus_test(axelrod.Alternator(), expected_actions=[(D, C), (D, D)] * 5, init_kwargs=defector_init_kwargs)
+        self.versus_test(axelrod.Alternator(), expected_actions=[(D, C), (D, D)] * 5,
+                         init_kwargs=defector_init_kwargs)
 
     def test_tft(self):
         """Tests that the player defined by the table for TFT is in fact
         TFT."""
-        tft_init_kwargs = {'transitions': [(1, C, 1, C), (1, D, 1, D)],
+        tft_init_kwargs = {'transitions': ((1, C, 1, C), (1, D, 1, D)),
                            'initial_state': 1,
                            'initial_action': C}
-        self.versus_test(axelrod.Alternator(), expected_actions=[(C, C)] + [(C, D), (D, C)] * 5,
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=[(C, C)] + [(C, D), (D, C)] * 5,
                          init_kwargs=tft_init_kwargs)
 
     def test_wsls(self):
         """Tests that the player defined by the table for TFT is in fact
         WSLS (also known as Pavlov."""
-        wsls_init_kwargs = {'transitions': [(1, C, 1, C), (1, D, 2, D), (2, C, 2, D), (2, D, 1, C)],
+        wsls_init_kwargs = {'transitions': ((1, C, 1, C), (1, D, 2, D),
+                                            (2, C, 2, D), (2, D, 1, C)),
                             'initial_state': 1,
                             'initial_action': C}
         expected = [(C, C), (C, D), (D, C), (D, D)] * 3
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, init_kwargs=wsls_init_kwargs)
+        self.versus_test(axelrod.Alternator(), expected_actions=expected,
+                         init_kwargs=wsls_init_kwargs)
 
 
 class TestFsmTransitions(TestPlayer):
@@ -135,9 +148,10 @@ class TestFsmTransitions(TestPlayer):
 
     def transitions_test(self, state_and_action):
         """
-        takes a list of [(initial_state, first_opponent_action), (next_state, next_opponent_action), ...]
-        and creates a list of opponent moves, and a list of expected_actions based on the FiniteStateMachine.
-        Then creates a versus_test of those two lists.
+        takes a list of [(initial_state, first_opponent_action), (next_state,
+        next_opponent_action), ...] and creates a list of opponent moves, and a
+        list of expected_actions based on the FiniteStateMachine.  Then creates
+        a versus_test of those two lists.
         """
         fsm_player = self.player()
         transitions = fsm_player.fsm.state_transitions
@@ -160,9 +174,11 @@ class TestFsmTransitions(TestPlayer):
                                                      last_opponent_move=last_opponent_move,
                                                      expected_move=fsm_move)
 
-        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
+                         expected_actions=expected_actions)
 
-    def verify_against_finite_state_machine(self, current_state, expected_state, last_opponent_move, expected_move):
+    def verify_against_finite_state_machine(self, current_state, expected_state,
+                                            last_opponent_move, expected_move):
         test_fsm = self.player().fsm
         test_fsm.state = current_state
         self.assertEqual(test_fsm.move(last_opponent_move), expected_move)
@@ -186,6 +202,21 @@ class TestFsmTransitions(TestPlayer):
         un_callable_states = owned_states.difference(called_states)
         extra_info = 'The following states are un-reachable: {}'.format(un_callable_states)
         self.assertEqual(un_callable_states, set(), msg=extra_info)
+
+    def test_strategy(self):
+        """
+        Regression test for init without specifying initial state or action
+        """
+        transitions = ((0, C, 0, C), (0, D, 3, C), (1, C, 5, D),
+                       (1, D, 0, C), (2, C, 3, C), (2, D, 2, D),
+                       (3, C, 4, D), (3, D, 6, D), (4, C, 3, C),
+                       (4, D, 1, D), (5, C, 6, C), (5, D, 3, D),
+                       (6, C, 6, D), (6, D, 6, D), (7, C, 7, D),
+                       (7, D, 5, C))
+        opponent = axelrod.MockPlayer([D, D, C, C, D])
+        actions = [(C, D), (C, D), (C, C), (D, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs={"transitions": transitions})
 
 
 class TestFortress3(TestFsmTransitions):
@@ -218,7 +249,8 @@ class TestFortress3(TestFsmTransitions):
         state_and_actions = [(1, C), (1, D), (2, C), (1, C)]
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(1, D), (2, D), (3, C), (3, C), (3, C), (3, D), (1, C)] * 2
+        state_and_actions = [(1, D), (2, D), (3, C), (3, C),
+                             (3, C), (3, D), (1, C)] * 2
         self.transitions_test(state_and_actions)
 
     @unittest.expectedFailure
@@ -262,7 +294,8 @@ class TestFortress4(TestFsmTransitions):
         state_and_actions = [(1, D), (2, D), (3, C), (1, C)] * 3
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(1, D), (2, D), (3, D), (4, C), (4, C), (4, C), (4, C), (4, D)] * 3
+        state_and_actions = [(1, D), (2, D), (3, D), (4, C),
+                             (4, C), (4, C), (4, C), (4, D)] * 3
         self.transitions_test(state_and_actions)
 
 
@@ -309,7 +342,8 @@ class TestPredator(TestFsmTransitions):
                              [(7, D), (7, C), (8, C), (8, D), (6, D)] * 3)
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(0, D), (1, C), (2, D), (3, C), (5, D), (3, C), (5, C)] + [(7, C), (8, D), (6, C)] * 5
+        state_and_actions = ([(0, D), (1, C), (2, D), (3, C), (5, D), (3, C), (5, C)] +
+                             [(7, C), (8, D), (6, C)] * 5)
         self.transitions_test(state_and_actions)
 
         state_and_actions = [(0, C), (0, D)] + [(1, D), (3, D), (4, D), (6, D)] + [(7, D)] * 10
@@ -449,7 +483,8 @@ class TestSolutionB1(TestFsmTransitions):
     def test_strategy(self):
         self.first_play_test(D)
 
-        state_and_actions = [(1, D)] * 3 + [(1, C)] + [(2, C)] * 3 + [(2, D)] + [(3, C), (3, D)] * 3
+        state_and_actions = ([(1, D)] * 3 + [(1, C)] + [(2, C)] * 3 +
+                             [(2, D)] + [(3, C), (3, D)] * 3)
         self.transitions_test(state_and_actions)
 
 
@@ -490,7 +525,8 @@ class TestSolutionB5(TestFsmTransitions):
         state_and_actions = ([(1, C)] + [(2, C)] * 3 + [(2, D), (3, D)]) * 2
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(1, C), (2, D)] + [(3, C), (6, D), (5, C), (5, D), (4, C), (3, C), (6, C)] * 3
+        state_and_actions = [(1, C), (2, D)] + [(3, C), (6, D), (5, C), (5, D),
+                                                (4, C), (3, C), (6, C)] * 3
         self.transitions_test(state_and_actions)
 
         state_and_actions = [(1, D)] + [(6, D), (5, D), (4, D)] * 3
@@ -560,7 +596,8 @@ class TestEvolvedFSM4(TestFsmTransitions):
         state_and_actions = [(0, C)] * 3 + [(0, D), (2, C), (2, D), (1, D)] * 3
         self.transitions_test(state_and_actions)
 
-        state_and_actions = [(0, D), (2, D), (1, C), (3, C), (3, C), (3, D), (1, C), (3, D), (1, D)] * 3
+        state_and_actions = [(0, D), (2, D), (1, C), (3, C), (3, C),
+                             (3, D), (1, C), (3, D), (1, D)] * 3
         self.transitions_test(state_and_actions)
 
 
@@ -622,17 +659,22 @@ class TestEvolvedFSM16(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
         # finished: 0, 5, 10
-        state_and_actions = [(0, D), (12, D), (11, D)] + [(5, D), (10, C), (11, D), (5, D), (10, D), (8, C)] * 3
+        state_and_actions = ([(0, D), (12, D), (11, D)] +
+                             [(5, D), (10, C), (11, D), (5, D), (10, D), (8, C)]
+                             * 3)
         self.transitions_test(state_and_actions)
 
         # finished: 0, 2, 5, 10, 11, 12, 15
-        state_and_actions = ([(0, D), (12, C), (8, D), (5, D), (10, C), (11, C), (15, C), (15, C), (15, D)] +
+        state_and_actions = ([(0, D), (12, C), (8, D), (5, D),
+                              (10, C), (11, C), (15, C), (15, C), (15, D)] +
                              [(2, C)] * 3 + [(2, D), (14, C), (13, C)])
         self.transitions_test(state_and_actions)
 
         # finished: 0, 2, 3, 5, 10, 11, 12, 13, 14, 15
         to_state_fourteen = [(0, D), (12, D), (11, C), (15, D), (2, D)]
-        state_and_actions = to_state_fourteen + [(14, D), (13, C), (13, C), (13, D), (7, C)] + [(3, D), (3, C)] * 3
+        state_and_actions = (to_state_fourteen +
+                             [(14, D), (13, C), (13, C), (13, D), (7, C)] +
+                             [(3, D), (3, C)] * 3)
         self.transitions_test(state_and_actions)
 
         # finished: 0, 2, 3, 5, 7, 10, 11, 12, 13, 14, 15
@@ -641,11 +683,13 @@ class TestEvolvedFSM16(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
         # finished: 0, 1, 2, 3, 5, 10, 11, 12, 13, 14, 15
-        state_and_actions = to_state_seven + [(7, D), (1, D), (6, C), (5, D), (10, C)]
+        state_and_actions = to_state_seven + [(7, D), (1, D), (6, C),
+                                              (5, D), (10, C)]
         self.transitions_test(state_and_actions)
 
         # finished: 0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15
-        state_and_actions = to_state_seven + [(7, D), (1, D), (6, D), (12, C), (8, D), (5, D)]
+        state_and_actions = to_state_seven + [(7, D), (1, D), (6, D),
+                                              (12, C), (8, D), (5, D)]
         self.transitions_test(state_and_actions)
 
 
@@ -703,25 +747,30 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
         self.first_play_test(C)
 
         # finished: 12, 13
-        state_and_actions = [(0, C), (8, C), (2, C), (12, D), (2, C), (12, C), (13, C), (13, C), (13, D)] + [(6, D)] * 3
+        state_and_actions = [(0, C), (8, C), (2, C), (12, D), (2, C), (12, C),
+                             (13, C), (13, C), (13, D)] + [(6, D)] * 3
         self.transitions_test(state_and_actions)
 
         # finished 2, 3, 4, 12, 13
-        state_and_actions = [(0, C), (8, C), (2, D), (3, D), (3, D), (3, C), (10, C), (4, D), (4, D), (4, C), (5, D)]
+        state_and_actions = [(0, C), (8, C), (2, D), (3, D), (3, D), (3, C),
+                             (10, C), (4, D), (4, D), (4, C), (5, D)]
         self.transitions_test(state_and_actions)
 
         # finished 0, 2, 3, 4, 6, 8, 10, 12, 13
-        state_and_actions = [(0, D), (3, C), (10, D), (1, C), (13, D), (6, C), (8, D), (4, C), (5, C), (4, C), (5, D)]
+        state_and_actions = [(0, D), (3, C), (10, D), (1, C), (13, D),
+                             (6, C), (8, D), (4, C), (5, C), (4, C), (5, D)]
         self.transitions_test(state_and_actions)
 
         # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15
-        state_and_actions = [(0, D), (3, C), (10, D), (1, D), (15, C), (5, D), (10, D), (1, D), (15, D), (11, D)]
+        state_and_actions = [(0, D), (3, C), (10, D), (1, D), (15, C),
+                             (5, D), (10, D), (1, D), (15, D), (11, D)]
         self.transitions_test(state_and_actions)
 
         # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 15
         to_state_eleven = [(0, D), (3, C), (10, D), (1, D), (15, D)]
 
-        state_and_actions = to_state_eleven + [(11, C), (14, C), (3, C), (10, D)]
+        state_and_actions = to_state_eleven + [(11, C), (14, C),
+                                               (3, C), (10, D)]
         self.transitions_test(state_and_actions)
 
         # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 15
