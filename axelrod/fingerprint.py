@@ -15,7 +15,8 @@ Point = namedtuple('Point', 'x y')
 
 
 class AshlockFingerprint(object):
-    def __init__(self, strategy, probe=axl.TitForTat, step: float = 0.01, progress_bar: bool = True):
+    def __init__(self, strategy, probe=axl.TitForTat, step: float = 0.01,
+                 progress_bar: bool = False) -> None:
         """
         Parameters
         ----------
@@ -27,15 +28,16 @@ class AshlockFingerprint(object):
             axelrod.Player.
             Default: Tit For Tat
         """
-        self.strategy = strategy
-        self.probe = probe
+        self.player = create_player(strategy)
+        self._probe_class, self._probe_kwargs = get_class_and_kwargs(probe)
         self._step = step
         self.progress_bar = progress_bar
         self.points = self.create_points()
+        self.probe_list = self.create_probes()
 
-        self.interactions = []
+        self.interactions = {}  # type: dict
         self.spatial_tournament = None  # type: axl.SpatialTournament
-        self.data = {}
+        self.data = {}  # type: dict
 
     @property
     def step(self):
@@ -45,74 +47,26 @@ class AshlockFingerprint(object):
     def step(self, new_step: float):
         self._step = new_step
         self.points = self.create_points()
+        self.probe_list = self.create_probes()
+
+    @property
+    def probe(self):
+        return self._probe_class(**self._probe_kwargs)
+
+    @probe.setter
+    def probe(self, new_probe):
+        self._probe_class, self._probe_kwargs = get_class_and_kwargs(new_probe)
+        self.probe_list = self.create_probes()
 
     def create_points(self):
         return create_points(self._step, self.progress_bar)
 
-    def create_jossann(self, point):
-        """Creates a JossAnn probe player that matches the Point.
-
-        If the coordinates of point sums to more than 1 the parameters are
-        flipped and subtracted from 1 to give meaningful probabilities. We also
-        use the Dual of the probe. This is outlined further in [Ashlock2010]_.
-
-        Parameters
-        ----------
-        point : Point
-
-        Returns
-        ----------
-        joss_ann: Joss-AnnTitForTat object
-            `JossAnnTransformer` with parameters that correspond to `point`.
-        """
-        x, y = point
-        probe_creator = self.probe
-
-        if isinstance(probe_creator, axl.Player):
-            init_kwargs = probe_creator.init_kwargs
-            probe_creator = probe_creator.__class__
-        else:
-            init_kwargs = {}
-
-        if x + y >= 1:
-            joss_ann = DualTransformer()(
-                JossAnnTransformer((1 - x, 1 - y))(probe_creator))(**init_kwargs)
-        else:
-            joss_ann = JossAnnTransformer((x, y))(probe_creator)(**init_kwargs)
-        return joss_ann
-
-    def create_edges(self):
-        """Creates a set of edges for a spatial tournament.
-
-        Constructs edges that correspond to `points`. All edges begin at 0, and
-        connect to the index +1 of the probe.
-
-        Returns
-        ----------
-        edges : list of tuples
-            A list containing tuples of length 2. All tuples will have 0 as the
-            first element. The second element is the index of the
-            corresponding probe (+1 to allow for including the Strategy).
-        """
-        if self.progress_bar:
-            points = tqdm.tqdm(self.points, desc="Generating network edges")
-        else:
-            points = self.points
-        edges = [(0, probe_index) for probe_index in range(1, len(points) + 1)]
-        return edges
-
     def create_probes(self):
-        """Creates a set of probe strategies over the unit square.
+        """Creates a list of probe strategies over the unit square.
 
         Constructs probe strategies that correspond to points with coordinates
-        (x, y). The probes are created using the `JossAnnTransformer`.
-
-        Returns
-        ----------
-        probes : list
-            A list of `JossAnnTransformer` players with parameters that
-            correspond to point.
-        """
+        (x, y). The probes are created using the `JossAnnTransformer` and
+        `DualTransformer`."""
         if self.progress_bar:
             points = tqdm.tqdm(self.points, desc="Generating probes")
         else:
@@ -120,69 +74,28 @@ class AshlockFingerprint(object):
         probes = [self.create_jossann(point) for point in points]
         return probes
 
-    def construct_tournament_elements(self):
-        """Build the elements required for a spatial tournament
+    def create_jossann(self, point):
+        """Creates a JossAnn probe player that matches the Point.
 
-        Parameters
-        ----------
-
-        Returns
-        ----------
-        edges : list of tuples
-            A list containing tuples of length 2. All tuples will have either 0
-            or 1 as the first element. The second element is the index of the
-            corresponding probe (+1 to allow for including the Strategy).
-
-        tournament_players : list
-            A list containing instances of axelrod.Player. The first item is the
-            original player, the rest are the probes.
-
+        If the coordinates of point sums to more than 1 the parameters are
+        flipped and subtracted from 1 to give meaningful probabilities. We also
+        use the Dual of the probe. This is outlined further in [Ashlock2010]_.
         """
-        edges = self.create_edges()
-        probe_players = self.create_probes()
+        x, y = point
 
-        if isinstance(self.strategy, axl.Player):
-            tournament_players = [self.strategy] + probe_players
+        if x + y >= 1:
+            joss_ann = DualTransformer()(
+                JossAnnTransformer((1 - x, 1 - y))(self._probe_class)
+            )(**self._probe_kwargs)
         else:
-            tournament_players = [self.strategy()] + probe_players
+            joss_ann = JossAnnTransformer((x, y))(
+                self._probe_class)(**self._probe_kwargs)
+        return joss_ann
 
-        return edges, tournament_players
-
-    @staticmethod
-    def generate_data(interactions, points, edges):
-        """Generates useful data from a spatial tournament.
-
-        Matches interactions from `results` to their corresponding Point in
-        `probe_points`.
-
-        Parameters
-        ----------
-        interactions : dictionary
-            A dictionary mapping edges to the corresponding interactions of
-            those players.
-        points : list
-            of Point objects with coordinates (x, y).
-        edges : list of tuples
-            A list containing tuples of length 2. All tuples will have either 0
-            or 1 as the first element. The second element is the index of the
-            corresponding probe (+1 to allow for including the Strategy).
-
-        Returns
-        ----------
-        point_scores : dictionary
-            A dictionary where the keys are Points of the form (x, y) and
-            the values are the mean score for the corresponding interactions.
-        """
-        edge_scores = [np.mean([
-            compute_final_score_per_turn(scores)[0]
-            for scores in interactions[edge]])
-            for edge in edges
-        ]
-        point_scores = dict(zip(points, edge_scores))
-        return point_scores
-
-    def fingerprint(self, turns: int = 50, repetitions: int = 10, new_step: float = None, processes: int = None,
-                    filename: str = None, in_memory: bool =False, progress_bar: bool = True) -> dict:
+    def fingerprint(self, turns: int = 50, repetitions: int = 10,
+                    new_step: float = None, processes: int = None,
+                    filename: str = None, in_memory: bool =False,
+                    progress_bar: bool = True) -> dict:
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
@@ -220,11 +133,12 @@ class AshlockFingerprint(object):
         elif filename is None:
             output_file = NamedTemporaryFile(mode='w')
             filename = output_file.name
-
-        edges, tourn_players = self.construct_tournament_elements()
-
         if new_step:
             self.step = new_step
+
+        edges = self._create_edges()
+        tourn_players = [self.player] + self.probe_list
+
         self.spatial_tournament = axl.SpatialTournament(
             tourn_players,
             turns=turns,
@@ -241,36 +155,62 @@ class AshlockFingerprint(object):
             self.interactions = read_interactions_from_file(
                 filename, progress_bar=progress_bar)
 
-        self.data = self.generate_data(self.interactions, self.points, edges)
+        self.data = self._generate_data(edges)
         return self.data
 
-    @staticmethod
-    def reshape_data(data, points, size):
-        """Shape the data so that it can be plotted easily.
-
-        Parameters
-        ----------
-        data : dictionary
-            A dictionary where the keys are Points of the form (x, y) and
-            the values are the mean score for the corresponding interactions.
-
-        points : list
-            of Point objects with coordinates (x, y).
-
-        size : int
-            The number of Points in every row/column.
+    def _create_edges(self):
+        """Creates a list of edges for a spatial tournament.
 
         Returns
         ----------
-        plotting_data : list
-            2-D numpy array of the scores, correctly shaped to ensure that the
-            score corresponding to Point (0, 0) is in the left hand corner ie.
-            the standard origin.
+        edges : list of tuples
+            A list containing tuples of length 2. All tuples will have 0 as the
+            first element. The second element is the index of the
+            corresponding probe (+1 to allow for including the Strategy).
         """
-        ordered_data = [data[point] for point in points]
-        shaped_data = np.reshape(ordered_data, (size, size), order='F')
-        plotting_data = np.flipud(shaped_data)
-        return plotting_data
+        if self.progress_bar:
+            points = tqdm.tqdm(self.points, desc="Generating network edges")
+        else:
+            points = self.points
+        edges = [(0, probe_index) for probe_index in range(1, len(points) + 1)]
+        return edges
+
+    def _generate_data(self, edges: list) -> dict:
+        """Generates useful data from a spatial tournament.
+
+        Matches interactions from `results` to their corresponding Point in
+        `probe_points`.
+
+        Parameters
+        ----------
+        edges : list of tuples
+            A list containing tuples of length 2. All tuples will have either 0
+            or 1 as the first element. The second element is the index of the
+            corresponding probe (+1 to allow for including the Strategy).
+
+        Returns
+        ----------
+        point_scores : dictionary
+            A dictionary where the keys are Points of the form (x, y) and
+            the values are the mean score for the corresponding interactions.
+        """
+        edge_scores = [np.mean([
+                                   compute_final_score_per_turn(scores)[0]
+                                   for scores in self.interactions[edge]])
+                       for edge in edges
+                       ]
+        point_scores = dict(zip(self.points, edge_scores))
+        return point_scores
+
+
+    def plot(self):
+        pass
+
+class DataManipulation(object):
+
+    def __init__(self, data: dict, points: list) -> None:
+        self.data = data.copy()
+        self.points = points[:]
 
     def plot(self, col_map='seismic', interpolation='none', title=None,
              colorbar=True, labels=True):
@@ -296,8 +236,8 @@ class AshlockFingerprint(object):
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
-        size = int((1 / self._step) // 1) + 1
-        plotting_data = self.reshape_data(self.data, self.points, size)
+
+        plotting_data = self.reshape_data()
         fig, ax = plt.subplots()
         cax = ax.imshow(
             plotting_data, cmap=col_map, interpolation=interpolation)
@@ -321,6 +261,22 @@ class AshlockFingerprint(object):
             plt.title(title)
         return fig
 
+    def reshape_data(self):
+        """Shape the data so that it can be plotted easily.
+
+        Returns
+        ----------
+        plotting_data : list
+            2-D numpy array of the scores, correctly shaped to ensure that the
+            score corresponding to Point (0, 0) is in the left hand corner ie.
+            the standard origin.
+        """
+        size = int(len(self.points) ** 0.5)
+        ordered_data = [self.data[point] for point in self.points]
+        shaped_data = np.reshape(ordered_data, (size, size), order='F')
+        plotting_data = np.flipud(shaped_data)
+        return plotting_data
+
 
 def create_points(step: float, progress_bar: bool = True) -> list:
     """Creates a set of Points over the unit square.
@@ -342,14 +298,14 @@ def create_points(step: float, progress_bar: bool = True) -> list:
     points : list
         of Point objects with coordinates (x, y)
     """
-    num = int((1 / step) // 1) + 1
+    points_per_side = int(1 / step) + 1
     p_bar = None
     if progress_bar:
-        p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
+        p_bar = tqdm.tqdm(total=points_per_side ** 2, desc="Generating points")
 
     points = []
-    for x in np.linspace(0, 1, num):
-        for y in np.linspace(0, 1, num):
+    for x in np.linspace(0, 1, points_per_side):
+        for y in np.linspace(0, 1, points_per_side):
             points.append(Point(x, y))
 
             if p_bar:
@@ -359,3 +315,14 @@ def create_points(step: float, progress_bar: bool = True) -> list:
         p_bar.close()
 
     return points
+
+
+def get_class_and_kwargs(strategy_or_player):
+    probe_player = create_player(strategy_or_player)
+    return probe_player.__class__, probe_player.init_kwargs
+
+
+def create_player(strategy_or_player):
+    if isinstance(strategy_or_player, axl.Player):
+        return strategy_or_player
+    return strategy_or_player()
