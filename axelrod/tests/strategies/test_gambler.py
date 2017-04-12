@@ -32,13 +32,15 @@ class TestGambler(TestPlayer):
     def test_strategy(self):
         tft_table = {((), (D,), ()): 0,
                      ((), (C,), ()): 1}
-        self.versus_test(axelrod.Alternator(), expected_actions=[(C, C)] + [(C, D), (D, C)] * 5,
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=[(C, C)] + [(C, D), (D, C)] * 5,
                          init_kwargs={'lookup_dict': tft_table})
 
     def test_stochastic_values(self):
         stochastic_lookup = {((), (), ()): 0.3}
         expected_actions = [(C, C), (D, C), (D, C), (C, C), (D, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=expected_actions,
+        self.versus_test(axelrod.Cooperator(),
+                         expected_actions=expected_actions,
                          init_kwargs={'lookup_dict': stochastic_lookup}, seed=1)
 
 
@@ -77,7 +79,9 @@ class TestPSOGamblerMem1(TestPlayer):
         seed = 1
         opponent_actions = [D, D] + [C] * 10
         expected = [(C, D), (C, D), (D, C)] + [(D, C)] * 9
-        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
+                         expected_actions=expected,
+                         seed=seed)
 
 
 class TestPSOGambler1_1_1(TestPlayer):
@@ -116,17 +120,23 @@ class TestPSOGambler1_1_1(TestPlayer):
         seed = 2
         opponent = [D] * 3 + [C] * 10
         expected = [(C, D), (D, D), (D, D)] + [(C, C)] * 10
-        self.versus_test(axelrod.MockPlayer(opponent), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(opponent),
+                         expected_actions=expected,
+                         seed=seed)
 
     def test_defect_forever(self):
         seed = 2
         opponent_actions = [C] + [D] + [C] * 10
         expected = [(C, C), (C, D)] + [(D, C)] * 10
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions),
+                         expected_actions=expected,
+                         seed=seed)
 
         opponent_actions = [D] + [C] * 10
         expected = [(C, D)] + [(D, C)] * 10
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions),
+                         expected_actions=expected,
+                         seed=seed)
 
 
 class TestPSOGambler2_2_2(TestPlayer):
@@ -229,17 +239,24 @@ class TestPSOGambler2_2_2(TestPlayer):
     def test_vs_alternator(self):
         seed = 1
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=expected,
+                         seed=seed)
 
     def test_vs_DCDDC(self):
         seed = 2
         opponent_actions = [D, C, D, D, C]
-        expected = [(C, D), (C, C), (D, D), (D, D), (C, C), (D, D), (D, C), (D, D), (D, D), (C, C)]
-        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected, seed=seed)
+        expected = [(C, D), (C, C), (D, D), (D, D), (C, C),
+                    (D, D), (D, C), (D, D), (D, D), (C, C)]
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
+                         expected_actions=expected,
+                         seed=seed)
 
         new_seed = 139  # First seed with different result.
         expected[5] = (C, D)
-        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected, seed=new_seed)
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
+                         expected_actions=expected,
+                         seed=new_seed)
 
 
 class TestPSOGambler2_2_2_Noise05(TestPlayer):
@@ -341,24 +358,35 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
     def test_vs_alternator(self):
         seed = 2
         expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (C, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=seed)
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=expected,
+                         seed=seed)
 
         new_seed = 1
         expected[4] = (C, C)
         expected[6] = (D, C)
-        self.versus_test(axelrod.Alternator(), expected_actions=expected, seed=new_seed)
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=expected,
+                         seed=new_seed)
 
     def test_vs_DCDDC(self):
         opponent_actions = [D, C, D, D, C]
 
         seed = 1
-        expected = [(C, D), (C, C), (D, D), (D, D), (C, C), (D, D), (D, C), (C, D), (C, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected, seed=seed)
+        expected = [(C, D), (C, C), (D, D), (D, D), (C, C),
+                    (D, D), (D, C), (C, D), (C, D)]
+        self.versus_test(axelrod.MockPlayer(opponent_actions),
+                         expected_actions=expected,
+                         seed=seed)
 
         new_seed = 3
         expected[8] = (D, D)
-        self.versus_test(axelrod.MockPlayer(opponent_actions), expected, seed=new_seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions),
+                         expected_actions=expected,
+                         seed=new_seed)
 
         new_seed = 2
         new_expected = expected[:6] + [(C, C), (D, D), (D, D)]
-        self.versus_test(axelrod.MockPlayer(opponent_actions), new_expected, seed=new_seed)
+        self.versus_test(axelrod.MockPlayer(opponent_actions),
+                         expected_actions=new_expected,
+                         seed=new_seed)
