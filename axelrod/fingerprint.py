@@ -48,7 +48,8 @@ class AshlockFingerprint(object):
 
     @property
     def step(self):
-        return self._step
+        integer_inverse = int(1 / self._step)
+        return 1.0 / integer_inverse
 
     @step.setter
     def step(self, new_step: float):
@@ -151,12 +152,12 @@ class AshlockFingerprint(object):
         if new_step:
             self.step = new_step
 
-        tourn_players = [self.player] + self._probe_list
+        tournament_players = [self.player] + self._probe_list
         edges = [(0, probe_index) for probe_index in
                  range(1, len(self._probe_list) + 1)]
 
         self.spatial_tournament = axl.SpatialTournament(
-            tourn_players,
+            tournament_players,
             turns=turns,
             repetitions=repetitions,
             edges=edges
