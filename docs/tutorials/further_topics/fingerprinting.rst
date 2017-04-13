@@ -23,8 +23,8 @@ Here is how to create a fingerprint of :code:`WinStayLoseShift` using
     >>> axl.seed(0)  # Fingerprinting is a random process
     >>> strategy = axl.WinStayLoseShift
     >>> probe = axl.TitForTat
-    >>> af = axl.AshlockFingerprint(strategy, probe)
-    >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2)
+    >>> af = axl.AshlockFingerprint(strategy, probe=probe, step=0.2)
+    >>> data = af.fingerprint(turns=10, repetitions=2)
     >>> data
     {...
     >>> data[(0, 0)]
@@ -45,7 +45,7 @@ In reality we would need much more detail to make this plot useful.
 
 Running the above with the following parameters::
 
-    >>> af.fingerprint(turns=50, repetitions=2, step=0.01)  # doctest: +SKIP
+    >>> af.fingerprint(turns=50, repetitions=2, new_step=0.01)  # doctest: +SKIP
 
 We get the plot:
 
@@ -70,8 +70,8 @@ This allows for the fingerprinting of parametrized strategies::
     >>> axl.seed(0)
     >>> player = axl.Random(p=.1)
     >>> probe = axl.GTFT(p=.9)
-    >>> af = axl.AshlockFingerprint(player, probe)
-    >>> data = af.fingerprint(turns=10, repetitions=2, step=0.2)
+    >>> af = axl.AshlockFingerprint(player, probe=probe, step=0.2)
+    >>> data = af.fingerprint(turns=10, repetitions=2)
     >>> data
     {...
     >>> data[(0, 0)]

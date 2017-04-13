@@ -234,6 +234,16 @@ class TestFingerprint(unittest.TestCase):
 
         self.assertEqual(fp.data[Point(0.5, 0.5)], avg_score)
 
+    def test_fingerprint_new_step(self):
+        fp = AshlockFingerprint(self.strategy, step=0.5)
+        self.assertEqual(len(fp.points), 9)
+
+        fp.fingerprint(new_step=0.25)
+        self.assertEqual(len(fp.points), 25)
+        self.assertEqual(fp.step, 0.25)
+        self.assertEqual(len(fp.interactions), 25)
+        self.assertEqual(len(fp.data), 25)
+
     def test_fingerprint_with_filename(self):
         filename = "test_outputs/test_fingerprint.csv"
         af = AshlockFingerprint(self.strategy, probe=self.probe_class, step=0.5,
