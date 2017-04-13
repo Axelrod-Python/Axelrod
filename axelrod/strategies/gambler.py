@@ -34,11 +34,10 @@ class Gambler(LookerUp):
     }
 
     def strategy(self, opponent: Player) -> Action:
-        action = super(Gambler, self).strategy(opponent)
-        # action could be 'C', 'D', or a float
-        if isinstance(action, Action):
-            return action
-        return random_choice(action)
+        actions_or_float = super(Gambler, self).strategy(opponent)
+        if isinstance(actions_or_float, Action):
+            return actions_or_float
+        return random_choice(actions_or_float)
 
 
 class PSOGamblerMem1(Gambler):

@@ -233,11 +233,12 @@ class LookerUp(Player):
 
     The dictionary must contain all possible permutations of C's and D's.
 
-    | LookerUp can also be instantiated with pattern=str/tuple of actions, and
-    | parameters=Plays(
-    |     self_plays=player_depth: int,
-    |     op_plays=op_depth: int,
-    |     op_openings=op_openings_depth: int).
+    LookerUp can also be instantiated with `pattern=str/tuple` of actions, and::
+
+        parameters=Plays(
+            self_plays=player_depth: int,
+            op_plays=op_depth: int,
+            op_openings=op_openings_depth: int)
 
     It will create keys of len=2 ** (sum(parameters)) and map the pattern to
     the keys.
@@ -368,7 +369,6 @@ class EvolvedLookerUp1_1_1(LookerUp):
     name = "EvolvedLookerUp1_1_1"
 
     def __init__(self) -> None:
-        # original = 'CDDDDDCD'
         params = Plays(self_plays=1, op_plays=1, op_openings=1)
         super().__init__(parameters=params, pattern='CDDDDCDD',
                          initial_actions=(C,))
@@ -384,7 +384,6 @@ class EvolvedLookerUp2_2_2(LookerUp):
     name = "EvolvedLookerUp2_2_2"
 
     def __init__(self) -> None:
-        # original = 'CDCCDCCCDCDDDCCCDCDDDDDDDCDDDCDCDDDDCCDCCCCDDDDCCDDDDCCDCDDDDDDD'
         params = Plays(self_plays=2, op_plays=2, op_openings=2)
         pattern = 'CDDCDCDDCDDDCDDDDDCDCDCCCDDCCDCDDDCCCCCDDDCDDDDDDDDDCCDDCDDDCCCD'
         super().__init__(parameters=params, pattern=pattern,
