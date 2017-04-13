@@ -128,6 +128,18 @@ class TestFingerprint(unittest.TestCase):
         for probe in fp._probe_list:
             self.assertIn('Cooperator', str(probe))
 
+    def test_changing_setter_does_not_change_data(self):
+        fp = AshlockFingerprint(self.strategy, step=0.5)
+        fp.fingerprint(turns=10, repetitions=1)
+        old_data = fp.data.copy()
+        old_interactions = fp.interactions.copy()
+
+        fp.step = 0.1
+        fp.probe = axl.Cooperator
+
+        self.assertEqual(old_data, fp.data)
+        self.assertEqual(old_interactions, fp.interactions)
+
     def test_probe_list_maps_to_points(self):
         """probe is Joss-AnnTitForTat(x, y) if x + y < 1. Else is
         DualJoss-AnnTitForTat(1-x, 1-y)"""
