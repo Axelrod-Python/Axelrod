@@ -6,6 +6,7 @@ See the various Meta strategies for another type of transformation.
 """
 
 import collections
+import copy
 import inspect
 import random
 from numpy.random import choice
@@ -21,7 +22,8 @@ C, D = Actions.C, Actions.D
 # Alternator.
 
 
-def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
+def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
+                               reclassifier=None):
     """Modify an existing strategy dynamically by wrapping the strategy
     method with the argument `strategy_wrapper`.
 
@@ -37,6 +39,8 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
         Any keyword arguments to pass to the wrapper
     name_prefix: string, "Transformed "
         A string to prepend to the strategy and class name
+    reclassifier: function,
+        A function to use to update the class's classifier.
     """
 
     # Create a class that applies a wrapper function to the strategy method
@@ -52,14 +56,17 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
             else:
                 self.name_prefix = name_prefix
 
+            if "reclassifier" in kwargs:
+                self.reclassifier = kwargs["reclassifier"]
+            else:
+                self.reclassifier = reclassifier
+
         def __call__(self, PlayerClass):
             """
             Parameters
             ----------
             PlayerClass: A subclass of axelrod.Player, e.g. Cooperator
                 The Player Class to modify
-            name_prefix: str
-                A string to prepend to the Player and Class name
 
             Returns
             -------
@@ -74,6 +81,10 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 # If "name_prefix" in kwargs remove as only want decorator
                 # arguments
                 del kwargs["name_prefix"]
+            except KeyError:
+                pass
+            try:
+                del kwargs["reclassifier"]
             except KeyError:
                 pass
 
@@ -109,6 +120,12 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                 # Modify the Player name (class variable inherited from Player)
                 name = ' '.join([name_prefix, PlayerClass.name])
 
+            original_classifier = copy.deepcopy(PlayerClass.classifier) # Copy
+            if reclassifier is not None:
+                classifier = reclassifier(original_classifier, *args, **kwargs,)
+            else:
+                classifier = original_classifier
+
             # Define the new __repr__ method to add the wrapper arguments
             # at the end of the name
             def __repr__(self):
@@ -136,6 +153,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None):
                     "strategy": strategy,
                     "__repr__": __repr__,
                     "__module__": PlayerClass.__module__,
+                    "classifier": classifier,
                 })
             return new_class
     return Decorator
@@ -229,9 +247,14 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
         return flip_action(action)
     return action
 
+def noisy_reclassifier(original_classifier, noise):
+    """Function to reclassify the strategy"""
+    if noise not in [0, 1]:
+        original_classifier["stochastic"] = True
+    return original_classifier
 
 NoisyTransformer = StrategyTransformerFactory(
-    noisy_wrapper, name_prefix="Noisy")
+    noisy_wrapper, name_prefix="Noisy", reclassifier=noisy_reclassifier)
 
 
 def forgiver_wrapper(player, opponent, action, p):
@@ -241,9 +264,15 @@ def forgiver_wrapper(player, opponent, action, p):
         return random_choice(p)
     return C
 
+def forgiver_reclassifier(original_classifier, p):
+    """Function to reclassify the strategy"""
+    if p not in [0, 1]:
+        original_classifier["stochastic"] = True
+    return original_classifier
 
 ForgiverTransformer = StrategyTransformerFactory(
-    forgiver_wrapper, name_prefix="Forgiving")
+    forgiver_wrapper, name_prefix="Forgiving",
+    reclassifier=forgiver_reclassifier)
 
 
 def nice_wrapper(player, opponent, action):
@@ -278,7 +307,6 @@ def final_sequence(player, opponent, action, seq):
     list is exhausted."""
 
     length = player.match_attributes["length"]
-    player.classifier["makes_use_of"].update(["length"])
 
     if length < 0:  # default is -1
         return action
@@ -294,9 +322,15 @@ def final_sequence(player, opponent, action, seq):
         return seq[-index]
     return action
 
+def final_reclassifier(original_classifier, seq):
+    """Reclassify the strategy"""
+    original_classifier["makes_use_of"].update(["length"])
+    return original_classifier
+
 
 FinalTransformer = StrategyTransformerFactory(final_sequence,
-                                              name_prefix="Final")
+                                              name_prefix="Final",
+                                              reclassifier=final_reclassifier)
 
 
 def history_track_wrapper(player, opponent, action):
@@ -391,9 +425,13 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
 
     return action
 
+def mixed_reclassifier(original_classifier, probability, m_player):
+    """Function to reclassify the strategy"""
+    original_classifier["stochastic"] = True
+    return original_classifier
 
 MixedTransformer = StrategyTransformerFactory(
-    mixed_wrapper, name_prefix="Mutated")
+    mixed_wrapper, name_prefix="Mutated", reclassifier=mixed_reclassifier)
 
 
 def joss_ann_wrapper(player, opponent, proposed_action, probability):
@@ -424,15 +462,33 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     if sum(probability) > 1:
         probability = tuple([i / sum(probability) for i in probability])
 
+    if 1 not in probability or max(probability) == 0:
+        player.classifier["stochastric"] = True
+
     remaining_probability = max(0, 1 - probability[0] - probability[1])
     probability += (remaining_probability,)
     options = [C, D, proposed_action]
     action = choice(options, p=probability)
     return action
 
+def jossann_reclassifier(original_classifier, probability):
+    """
+    Reclassify: note that if probabilities are (0, 1) or (1, 0) then we override
+    the original classifier.
+    """
+    if sum(probability) > 1:
+        probability = tuple([i / sum(probability) for i in probability])
+
+    if probability in [(1, 0), (0, 1)]:
+        original_classifier["stochastic"] = False
+    elif sum(probability) != 0:
+        original_classifier["stochastic"] = True
+
+    return original_classifier
+
 
 JossAnnTransformer = StrategyTransformerFactory(
-    joss_ann_wrapper, name_prefix="Joss-Ann")
+    joss_ann_wrapper, name_prefix="Joss-Ann", reclassifier=jossann_reclassifier)
 
 
 # Strategy wrappers as classes
