@@ -462,9 +462,6 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     if sum(probability) > 1:
         probability = tuple([i / sum(probability) for i in probability])
 
-    if 1 not in probability or max(probability) == 0:
-        player.classifier["stochastric"] = True
-
     remaining_probability = max(0, 1 - probability[0] - probability[1])
     probability += (remaining_probability,)
     options = [C, D, proposed_action]
