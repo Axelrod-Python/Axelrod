@@ -183,6 +183,22 @@ class TestTransformers(unittest.TestCase):
         self.assertTrue(p1.classifier["stochastic"])
         self.assertTrue(p1().classifier["stochastic"])
 
+        probability = (0, .5)
+        p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
+        self.assertTrue(p1.classifier["stochastic"])
+        self.assertTrue(p1().classifier["stochastic"])
+
+        probability = (0, 0)
+        p1 = JossAnnTransformer(probability)(axelrod.TitForTat)
+        self.assertFalse(p1.classifier["stochastic"])
+        self.assertFalse(p1().classifier["stochastic"])
+
+        probability = (0, 0)
+        p1 = JossAnnTransformer(probability)(axelrod.Random)
+        self.assertTrue(p1.classifier["stochastic"])
+        self.assertTrue(p1().classifier["stochastic"])
+
+
     def test_noisy_transformer(self):
         """Tests that the noisy transformed does flip some moves."""
         random.seed(5)
@@ -251,6 +267,7 @@ class TestTransformers(unittest.TestCase):
         p1 = axelrod.Cooperator()
         p2 = FinalTransformer([D, D, D])(axelrod.Cooperator)()
         self.assertEqual(p2.classifier['makes_use_of'], set(["length"]))
+        self.assertEqual(axelrod.Cooperator.classifier['makes_use_of'], set([]))
 
         p2.match_attributes["length"] = 6
         for _ in range(6):
