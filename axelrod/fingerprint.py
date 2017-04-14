@@ -15,6 +15,99 @@ from axelrod.interaction_utils import (
 Point = namedtuple('Point', 'x y')
 
 
+class ProbeGenerator(object):
+    def __init__(self, probe):
+        self._probe_class, self._probe_kwargs = get_class_and_kwargs(probe)
+
+    def get_probe(self, point):
+        x, y = point
+        if x + y >= 1:
+            joss_ann = DualTransformer()(
+                JossAnnTransformer((1 - x, 1 - y))(self._probe_class)
+            )(**self._probe_kwargs)
+        else:
+            joss_ann = JossAnnTransformer((x, y))(
+                self._probe_class
+            )(**self._probe_kwargs)
+        return joss_ann
+
+    def get_probe_dict(self, point_list):
+        return {point: self.get_probe(point) for point in point_list}
+
+    def get_probe_dict_from_interval(self, interval):
+        point_list = create_points(interval)
+        return self.get_probe_dict(point_list)
+
+
+class TournamentGenerator(object):
+    def __init__(self, player, probe, interval):
+        self._player = create_player(player)
+        self._probe_gen = ProbeGenerator(probe)
+        self._points = create_points(interval)
+
+    def get_points_to_edges(self):
+        return {point: (0, index + 1)
+                for index, point in enumerate(self._points)}
+
+    def get_tournament(self, **tournament_kwargs):
+        players = [self._player]
+        edges = []
+        edge_map = self.get_points_to_edges()
+        probe_map = self._probe_gen.get_probe_dict(self._points)
+
+        for point in self._points:
+            players.append(probe_map[point])
+            edges.append(edge_map[point])
+
+        return axl.SpatialTournament(players=players, edges=edges,
+                                     **tournament_kwargs)
+
+
+class DataMasher(object):
+    def __init__(self, point_edge_map, interactions_dict):
+        self._point_to_edge = point_edge_map.copy()
+        self._interactions = interactions_dict.copy()
+
+    def get_points_interactions_dict(self):
+        return {point: self._interactions[edge]
+                for point, edge in self._point_to_edge.items()}
+
+    def get_averages_dict(self):
+        point_interactions = self.get_points_interactions_dict()
+        return {point: get_average_score(matches_list)
+                for point, matches_list in point_interactions.items()}
+
+    def get_plotting_data(self):
+        ordered_edges = [point_edge[1] for point_edge
+                         in sorted(self._point_to_edge.items())]
+        side_len = int(round(len(ordered_edges) ** 0.5))
+
+        ordered_data = [get_average_score(self._interactions[edge])
+                        for edge in ordered_edges]
+        shaped_data = np.reshape(ordered_data, (side_len, side_len), order='F')
+        plotting_data = np.flipud(shaped_data)
+        return plotting_data
+
+
+def get_average_score(matches_list):
+        match_scores = [compute_final_score_per_turn(match)[0]
+                        for match in matches_list]
+        return np.mean(match_scores)
+
+
+def create_points(interval) -> list:
+    points_per_side = int(1 / interval) + 1
+    points = []
+    for x in np.linspace(0, 1, points_per_side):
+        for y in np.linspace(0, 1, points_per_side):
+            points.append(Point(x, y))
+    return points
+"""
+the above objects and functions can be called/created as needed for whatever
+funkiness AshlockFingerprint wants.  If other fingerprints show up, they
+might even be easily extendable.
+"""
+
 class AshlockFingerprint(object):
     def __init__(self, strategy: Any, probe: Any = axl.TitForTat,
                  step: float = 0.01, progress_bar: bool = True) -> None:
