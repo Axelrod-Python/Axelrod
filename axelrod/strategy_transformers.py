@@ -56,11 +56,6 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             else:
                 self.name_prefix = name_prefix
 
-            if "reclassifier" in kwargs:
-                self.reclassifier = kwargs["reclassifier"]
-            else:
-                self.reclassifier = reclassifier
-
         def __call__(self, PlayerClass):
             """
             Parameters
