@@ -383,7 +383,7 @@ class TestTransformers(unittest.TestCase):
         """Tests the MixedTransformer."""
         probability = 1
         MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
-        self.assertTrue(MD.classifier["stochastic"])
+        self.assertFalse(MD.classifier["stochastic"])
 
         p1 = MD()
         p2 = axelrod.Cooperator()
@@ -393,6 +393,7 @@ class TestTransformers(unittest.TestCase):
 
         probability = 0
         MD = MixedTransformer(probability, axelrod.Cooperator)(axelrod.Defector)
+        self.assertFalse(MD.classifier["stochastic"])
 
         p1 = MD()
         p2 = axelrod.Cooperator()
@@ -406,6 +407,7 @@ class TestTransformers(unittest.TestCase):
         probability = [.3, .2, 0]
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
         MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
+        self.assertTrue(MD.classifier["stochastic"])
 
         p1 = MD()
         # Against a cooperator we see that we only cooperate
@@ -418,6 +420,7 @@ class TestTransformers(unittest.TestCase):
         probability = (0, 0, 1)  # Note can also pass tuple
         strategies = [axelrod.TitForTat, axelrod.Grudger, axelrod.Defector]
         MD = MixedTransformer(probability, strategies)(axelrod.Cooperator)
+        self.assertFalse(MD.classifier["stochastic"])
 
         p1 = MD()
         # Against a cooperator we see that we only cooperate
