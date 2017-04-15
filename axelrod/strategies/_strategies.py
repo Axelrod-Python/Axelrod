@@ -16,6 +16,7 @@ from .cycler import (
     AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD,
     CyclerDC, CyclerDDC, CyclerCCCDCD)
 from .darwin import Darwin
+from .dbs import DBS
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
 from .finite_state_machines import (
@@ -115,6 +116,7 @@ all_strategies = [
     CyclerCCCDCD,
     Darwin,
     Davis,
+    DBS,
     Defector,
     DefectorHunter,
     Desperate,
