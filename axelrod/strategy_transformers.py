@@ -422,6 +422,20 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
 
 def mixed_reclassifier(original_classifier, probability, m_player):
     """Function to reclassify the strategy"""
+    # If a single probability, player is passed
+    if isinstance(probability, float) or isinstance(probability, int):
+        m_player = [m_player]
+        probability = [probability]
+
+    if min(probability) == max(probability) == 0:  # No probability given
+        return original_classifier
+
+    if 1 in probability:  # If all probability  given to one player
+        player = m_player[probability.index(1)]
+        original_classifier["stochastic"] = player.classifier["stochastic"]
+        return original_classifier
+
+    # Otherwise: stochastic.
     original_classifier["stochastic"] = True
     return original_classifier
 
