@@ -57,15 +57,15 @@ class AshlockFingerprint(object):
                                                       step)
         tournament_kwargs = {'turns': turns, 'repetitions': repetitions}
 
-        play_kwargs = _get_play_kwargs(filename=filename, in_memory=in_memory,
-                                       processes=processes,
-                                       progress_bar=progress_bar)
+        filename, in_memory = update_according_to_os(filename, in_memory)
 
         tournament = tournament_creator.get_tournament(**tournament_kwargs)
-        tournament.play(**play_kwargs)
+        tournament.play(filename=filename, in_memory=in_memory,
+                        processes=processes, progress_bar=progress_bar,
+                        build_results=False)
 
         point_edge_map = tournament_creator.get_points_to_edges()
-        if play_kwargs['in_memory']:
+        if in_memory:
             interactions = tournament.interactions_dict
         else:
             interactions = read_interactions_from_file(
@@ -124,23 +124,15 @@ class AshlockFingerprint(object):
         return fig
 
 
-def _get_play_kwargs(filename: Any, in_memory: bool,
-                     processes: Union[int, None], progress_bar: bool
-                     ) -> Dict[str, Any]:
-    """Adjust and build the kwargs for tournament.play() based on issues
-    with Windows OS."""
-    play_kwargs = {'build_results': False,
-                   'processes': processes,
-                   'progress_bar': progress_bar}
-
+def update_according_to_os(filename: Union[str, None],
+                           in_memory: bool) -> Tuple[str, bool]:
+    """Adjust filename and in_memory according to O.S."""
     if on_windows and filename is None:  # pragma: no cover
         in_memory = True
     elif filename is None:
         output_file = NamedTemporaryFile(mode='w')
         filename = output_file.name
-    play_kwargs['filename'] = filename
-    play_kwargs['in_memory'] = in_memory
-    return play_kwargs
+    return filename, in_memory
 
 
 class SpatialTournamentCreator(object):

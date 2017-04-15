@@ -3,8 +3,8 @@ import axelrod as axl
 from hypothesis import given
 from axelrod.fingerprint import (
     AshlockFingerprint, Point, create_player, get_class_and_kwargs,
-    _get_play_kwargs, SpatialTournamentCreator, JossAnnProbeCreator,
-    DataOrganizer, create_points, get_mean_score,
+    SpatialTournamentCreator, JossAnnProbeCreator,
+    DataOrganizer, create_points, get_mean_score, update_according_to_os
 )
 from axelrod.tests.property import strategy_lists
 
@@ -40,44 +40,24 @@ class TestModuleFunctions(unittest.TestCase):
         self.assertEqual(strategy, axl.Cycler)
         self.assertEqual(kwargs, axl.Cycler().init_kwargs)
 
-    # TODO get explanation of necessity of this
-    # TODO why is there no checking of processes. no need?
     @unittest.skipIf(axl.on_windows,
                      "Windows cannot write to file????")
-    def test_get_play_kwargs_no_filename_not_on_windows(self):
-        expected = {'build_results': False,
-                    'processes': 2,
-                    'progress_bar': True,
-                    'in_memory': False}
-        play_kwargs = _get_play_kwargs(filename=None, in_memory=False,
-                                       processes=2, progress_bar=True)
-        for key, value in expected.items():
-            self.assertEqual(value, play_kwargs[key])
-
-        self.assertIsNotNone(play_kwargs['filename'])
+    def test_update_according_to_os_no_filename_not_on_windows(self):
+        filename, in_memory = update_according_to_os(None, False)
+        self.assertFalse(in_memory)
+        self.assertIsNotNone(filename)
 
     @unittest.skipIf(not axl.on_windows,
-                     "Parallel processing not supported on Windows")
-    def test_get_play_kwargs_no_filename_on_windows(self):
-        expected = {'build_results': False,
-                    'processes': 2,
-                    'progress_bar': True,
-                    'in_memory': True}
-        play_kwargs = _get_play_kwargs(filename=None, in_memory=False,
-                                       processes=2, progress_bar=True)
-        for key, value in expected.items():
-            self.assertEqual(value, play_kwargs[key])
-        self.assertIsNone(play_kwargs['filename'])
+                     "Windows cannot write to file????")
+    def test_update_according_to_os_no_filename_on_windows(self):
+        filename, in_memory = update_according_to_os(None, False)
+        self.assertTrue(in_memory)
+        self.assertIsNone(filename)
 
-    def test_get_play_kwargs_no_special_case(self):
-        expected = {'build_results': False,
-                    'processes': None,
-                    'progress_bar': True,
-                    'in_memory': False,
-                    'filename': 'bobo_knows'}
-        play_kwargs = _get_play_kwargs(filename='bobo_knows', in_memory=False,
-                                       processes=None, progress_bar=True)
-        self.assertEqual(expected, play_kwargs)
+    def test_update_according_to_os_no_special_case(self):
+        filename, in_memory = update_according_to_os('bobo_knows', False)
+        self.assertFalse(in_memory)
+        self.assertEqual(filename, 'bobo_knows')
 
     def test_create_points(self):
         expected = [Point(0.0, 0.0), Point(0.0, 1.0),
