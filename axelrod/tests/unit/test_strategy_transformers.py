@@ -423,7 +423,7 @@ class TestTransformers(unittest.TestCase):
         self.assertFalse(MD.classifier["stochastic"])
 
         p1 = MD()
-        # Against a cooperator we see that we only cooperate
+        # Against a cooperator we see that we only defect
         p2 = axelrod.Cooperator()
         for _ in range(5):
             p1.play(p2)
