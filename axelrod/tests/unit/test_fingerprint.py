@@ -116,9 +116,14 @@ class TestJossAnnProbeCreator(unittest.TestCase):
             Point(0.5, 1.0): 'Dual Joss-Ann Tit For Tat: (0.5, 0.0)',
         }
         probe_creator = JossAnnProbeCreator(axl.TitForTat)
-        probe_dict = probe_creator.get_probe_dict(points)
-        for point, probe in probe_dict.items():
-            self.assertEqual(str(probe), expected_point_probe_str[point])
+        probe_dict = probe_creator.get_probe_dict(points, False)
+        also_probe_dict = probe_creator.get_probe_dict(points, True)
+
+        for point in probe_dict.keys():
+            self.assertEqual(str(probe_dict[point]),
+                             expected_point_probe_str[point])
+            self.assertEqual(str(also_probe_dict[point]),
+                             expected_point_probe_str[point])
 
     def test_get_probe_dict_from_step(self):
         expected_point_probe_str = {
@@ -133,9 +138,14 @@ class TestJossAnnProbeCreator(unittest.TestCase):
             Point(1.0, 1.0): 'Dual Joss-Ann Tit For Tat: (0.0, 0.0)',
         }
         probe_creator = JossAnnProbeCreator(axl.TitForTat)
-        probe_dict = probe_creator.get_probe_dict_from_step(0.5)
-        for point, probe in probe_dict.items():
-            self.assertEqual(str(probe), expected_point_probe_str[point])
+        probe_dict = probe_creator.get_probe_dict_from_step(0.5, False)
+        also_probe_dict = probe_creator.get_probe_dict_from_step(0.5, True)
+
+        for point in probe_dict.keys():
+            self.assertEqual(str(probe_dict[point]),
+                             expected_point_probe_str[point])
+            self.assertEqual(str(also_probe_dict[point]),
+                             expected_point_probe_str[point])
 
 
 class TestSpatialTournamentCreator(unittest.TestCase):
