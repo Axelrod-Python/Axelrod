@@ -1,12 +1,13 @@
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
-from typing import Any
+from typing import Any, Union, Dict, Tuple, List
 import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
 import axelrod as axl
 
 from axelrod import on_windows, Player
+from axelrod.actions import Action
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (
     compute_final_score_per_turn, read_interactions_from_file)
@@ -15,41 +16,105 @@ from axelrod.interaction_utils import (
 Point = namedtuple('Point', 'x y')
 
 
-class ProbeGenerator(object):
-    def __init__(self, probe):
-        self._probe_class, self._probe_kwargs = get_class_and_kwargs(probe)
+PlayerOrStrategy = Union[Player, type]
+Edges = Tuple[int, int]
+Matches = List[List[Tuple[Action, Action]]]
 
-    def get_probe(self, point):
-        x, y = point
-        if x + y >= 1:
-            joss_ann = DualTransformer()(
-                JossAnnTransformer((1 - x, 1 - y))(self._probe_class)
-            )(**self._probe_kwargs)
+PointsPlayers = Dict[Point, Player]
+PointsFloats = Dict[Point, float]
+PointsEdges = Dict[Point, Edges]
+PointsMatches = Dict[Point, Matches]
+
+
+class NewAshlockFingerprint(object):
+    def __init__(self, strategy: PlayerOrStrategy,
+                 probe: PlayerOrStrategy) -> None:
+        self._strategy = strategy
+        self._probe = probe
+        self._data = None  # type: DataOrganizer
+
+    @property
+    def interactions(self) -> PointsMatches:
+        if not self._data:
+            interactions = None  # type: PointsMatches
+            return interactions
+        return self._data.get_points_interactions_dict()
+
+    @property
+    def data(self) -> PointsFloats:
+        if not self._data:
+            data = None  # type: PointsFloats
+            return data
+        return self._data.get_points_averages_dict()
+
+    def fingerprint(self, turns: int = 50, repetitions: int = 10,
+                    step: float = 0.01, processes: int = None,
+                    filename: str = None, in_memory: bool = False,
+                    progress_bar: bool = True) -> PointsFloats:
+
+        tournament_creator = SpatialTournamentCreator(self._strategy,
+                                                      self._probe,
+                                                      step)
+        tournament_kwargs = {'turns': turns, 'repetitions': repetitions}
+
+        play_kwargs = _get_play_kwargs(filename=filename, in_memory=in_memory,
+                                       processes=processes,
+                                       progress_bar=progress_bar)
+
+        tournament = tournament_creator.get_tournament(**tournament_kwargs)
+        tournament.play(**play_kwargs)
+
+        point_edge_map = tournament_creator.get_points_to_edges()
+        if in_memory:
+            interactions = tournament.interactions_dict
         else:
-            joss_ann = JossAnnTransformer((x, y))(
-                self._probe_class
-            )(**self._probe_kwargs)
-        return joss_ann
+            interactions = read_interactions_from_file(
+                filename, progress_bar=progress_bar)
 
-    def get_probe_dict(self, point_list):
-        return {point: self.get_probe(point) for point in point_list}
-
-    def get_probe_dict_from_interval(self, interval):
-        point_list = create_points(interval)
-        return self.get_probe_dict(point_list)
+        self._data = DataOrganizer(point_edge_map, interactions)
+        return self.data
 
 
-class TournamentGenerator(object):
-    def __init__(self, player, probe, interval):
+def _get_play_kwargs(filename: Any, in_memory: bool,
+                     processes: Union[int, None], progress_bar: bool
+                     ) -> Dict[str, Any]:
+    """Adjust and build the kwargs for tournament.play() based on issues
+    with Windows OS."""
+    play_kwargs = {'build_results': False,
+                   'processes': processes,
+                   'progress_bar': progress_bar}
+
+    if on_windows and filename is None:  # pragma: no cover
+        in_memory = True
+    elif filename is None:
+        output_file = NamedTemporaryFile(mode='w')
+        filename = output_file.name
+    play_kwargs['filename'] = filename
+    play_kwargs['in_memory'] = in_memory
+    return play_kwargs
+
+
+class SpatialTournamentCreator(object):
+    """Creates a list of Points.  Creates probes mapped to Points.
+    Creates a SpatialTournament where player plays exactly one match with each
+    probe per repetition."""
+    def __init__(self, player: PlayerOrStrategy, probe: PlayerOrStrategy,
+                 step: float) -> None:
+        """0.0 <= step <= 1.0"""
         self._player = create_player(player)
-        self._probe_gen = ProbeGenerator(probe)
-        self._points = create_points(interval)
+        self._probe_gen = JossAnnProbeCreator(probe)
+        self._points = create_points(step)
 
-    def get_points_to_edges(self):
+    def get_points_to_edges(self) -> PointsEdges:
+        """
+
+        :return: A map of each point to corresponding key in
+            tournament.interactions_dict
+        """
         return {point: (0, index + 1)
                 for index, point in enumerate(self._points)}
 
-    def get_tournament(self, **tournament_kwargs):
+    def get_tournament(self, **tournament_kwargs) -> axl.SpatialTournament:
         players = [self._player]
         edges = []
         edge_map = self.get_points_to_edges()
@@ -63,45 +128,108 @@ class TournamentGenerator(object):
                                      **tournament_kwargs)
 
 
-class DataMasher(object):
-    def __init__(self, point_edge_map, interactions_dict):
+class JossAnnProbeCreator(object):
+    """Creates JossAnn Players and Dual JossAnn Players based on points
+    where Point(0.0) <= point <= Point(1.0, 1.0)"""
+    def __init__(self, probe: PlayerOrStrategy) -> None:
+        self._probe_class, self._probe_kwargs = get_class_and_kwargs(probe)
+
+    def get_probe(self, point: Point) -> Player:
+        x, y = point
+        if x + y >= 1:
+            joss_ann = DualTransformer()(
+                JossAnnTransformer((1 - x, 1 - y))(self._probe_class)
+            )(**self._probe_kwargs)
+        else:
+            joss_ann = JossAnnTransformer((x, y))(
+                self._probe_class
+            )(**self._probe_kwargs)
+        return joss_ann
+
+    def get_probe_dict(self, point_list: list) -> PointsPlayers:
+        return {point: self.get_probe(point) for point in point_list}
+
+    def get_probe_dict_from_step(self, step: float) -> PointsPlayers:
+        point_list = create_points(step)
+        return self.get_probe_dict(point_list)
+
+
+def create_points(step: float) -> List[Point]:
+    """
+
+    :param step: step rounds up to the nearest value such that
+        1/step == int(1/step) (so step=0.48 becomes step=0.5)
+    :return: The list of all Points in the unit square
+        where 0.0 <= Point.x or Point.y <=1.0  and Point.x|y / step ==
+        int(Point.x|y / step) (so for step=0.5, x and y are in [0.0, 0.5, 1.0])
+    """
+    points_per_side = int(1 / step) + 1
+    points = []
+    for x in np.linspace(0, 1, points_per_side):
+        for y in np.linspace(0, 1, points_per_side):
+            points.append(Point(x, y))
+    return points
+
+
+class DataOrganizer(object):
+    def __init__(self, point_edge_map: PointsEdges,
+                 interactions_dict: Dict[Edges, Matches]) -> None:
+        """
+
+        :param point_edge_map: The points in this map must make an evenly
+            spaced square with 0.0 <= Point.x or Point.y <= 1.0
+        :param interactions_dict: point_edge_map.values() ==
+            interaction_dict.keys()
+        """
+        raise_error_for_mismatched_edges(point_edge_map, interactions_dict)
+        raise_error_for_non_unit_square(sorted(point_edge_map.keys()))
         self._point_to_edge = point_edge_map.copy()
         self._interactions = interactions_dict.copy()
 
-    def get_points_interactions_dict(self):
+    def get_points_interactions_dict(self) -> PointsMatches:
         return {point: self._interactions[edge]
                 for point, edge in self._point_to_edge.items()}
 
-    def get_averages_dict(self):
+    def get_points_averages_dict(self) -> PointsFloats:
         point_interactions = self.get_points_interactions_dict()
-        return {point: get_average_score(matches_list)
+        return {point: get_mean_score(matches_list)
                 for point, matches_list in point_interactions.items()}
 
-    def get_plotting_data(self):
-        ordered_edges = [point_edge[1] for point_edge
-                         in sorted(self._point_to_edge.items())]
+    def get_plotting_data(self) -> np.ndarray:
+        ordered_edges = [item[1] for item in
+                         sorted(self._point_to_edge.items())]
         side_len = int(round(len(ordered_edges) ** 0.5))
 
-        ordered_data = [get_average_score(self._interactions[edge])
+        ordered_data = [get_mean_score(self._interactions[edge])
                         for edge in ordered_edges]
         shaped_data = np.reshape(ordered_data, (side_len, side_len), order='F')
         plotting_data = np.flipud(shaped_data)
         return plotting_data
 
 
-def get_average_score(matches_list):
+def raise_error_for_mismatched_edges(values_are_edges, keys_are_edges):
+    if sorted(values_are_edges.values()) != sorted(keys_are_edges.keys()):
+        raise ValueError('Dictionaries do not match')
+
+
+def raise_error_for_non_unit_square(sorted_points):
+    side_len = int(round(len(sorted_points) ** 0.5))
+    if (
+            sorted_points[-1] != Point(1.0, 1.0) or
+            len(sorted_points) != side_len ** 2 or
+            any(point.x != 0.0 for point in sorted_points[:side_len]) or
+            sorted_points[0].y != sorted_points[side_len].y
+    ):
+        raise ValueError('Not a square!')
+
+
+def get_mean_score(matches_list: Matches) -> float:
         match_scores = [compute_final_score_per_turn(match)[0]
                         for match in matches_list]
-        return np.mean(match_scores)
+        return sum(match_scores)/len(match_scores)
 
 
-def create_points(interval) -> list:
-    points_per_side = int(1 / interval) + 1
-    points = []
-    for x in np.linspace(0, 1, points_per_side):
-        for y in np.linspace(0, 1, points_per_side):
-            points.append(Point(x, y))
-    return points
+
 """
 the above objects and functions can be called/created as needed for whatever
 funkiness AshlockFingerprint wants.  If other fingerprints show up, they
