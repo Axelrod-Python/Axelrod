@@ -26,7 +26,7 @@ PointsEdges = Dict[Point, Edges]
 PointsMatches = Dict[Point, Matches]
 
 
-class NewAshlockFingerprint(object):
+class AshlockFingerprint(object):
     def __init__(self, strategy: PlayerOrStrategy,
                  probe: PlayerOrStrategy) -> None:
         self._strategy = strategy
@@ -65,7 +65,7 @@ class NewAshlockFingerprint(object):
         tournament.play(**play_kwargs)
 
         point_edge_map = tournament_creator.get_points_to_edges()
-        if in_memory:
+        if play_kwargs['in_memory']:
             interactions = tournament.interactions_dict
         else:
             interactions = read_interactions_from_file(
@@ -73,6 +73,55 @@ class NewAshlockFingerprint(object):
 
         self._data = DataOrganizer(point_edge_map, interactions)
         return self.data
+
+    def plot(self, col_map='seismic', interpolation='none', title=None,
+             colorbar=True, labels=True):
+        """Plot the results of the spatial tournament.
+
+        Parameters
+        ----------
+        col_map : str, optional
+            A matplotlib colour map, full list can be found at
+            http://matplotlib.org/examples/color/colormaps_reference.html
+        interpolation : str, optional
+            A matplotlib interpolation, full list can be found at
+            http://matplotlib.org/examples/images_contours_and_fields/interpolation_methods.html
+        title : str, optional
+            A title for the plot
+        colorbar : bool, optional
+            Choose whether the colorbar should be included or not
+        labels : bool, optional
+            Choose whether the axis labels and ticks should be included
+
+        Returns
+        ----------
+        figure : matplotlib figure
+            A heat plot of the results of the spatial tournament
+        """
+
+        plotting_data = self._data.get_plotting_data()
+        fig, ax = plt.subplots()
+        cax = ax.imshow(
+            plotting_data, cmap=col_map, interpolation=interpolation)
+
+        if colorbar:
+            max_score = max(self.data.values())
+            min_score = min(self.data.values())
+            ticks = [min_score, (max_score + min_score) / 2, max_score]
+            fig.colorbar(cax, ticks=ticks)
+
+        plt.xlabel('$x$')
+        plt.ylabel('$y$', rotation=0)
+        ax.tick_params(axis='both', which='both', length=0)
+        plt.xticks([0, len(plotting_data) - 1], ['0', '1'])
+        plt.yticks([0, len(plotting_data) - 1], ['1', '0'])
+
+        if not labels:
+            plt.axis('off')
+
+        if title is not None:
+            plt.title(title)
+        return fig
 
 
 def _get_play_kwargs(filename: Any, in_memory: bool,
@@ -181,8 +230,6 @@ class DataOrganizer(object):
         :param interactions_dict: point_edge_map.values() ==
             interaction_dict.keys()
         """
-        raise_error_for_mismatched_edges(point_edge_map, interactions_dict)
-        raise_error_for_non_unit_square(sorted(point_edge_map.keys()))
         self._point_to_edge = point_edge_map.copy()
         self._interactions = interactions_dict.copy()
 
@@ -207,22 +254,6 @@ class DataOrganizer(object):
         return plotting_data
 
 
-def raise_error_for_mismatched_edges(values_are_edges, keys_are_edges):
-    if sorted(values_are_edges.values()) != sorted(keys_are_edges.keys()):
-        raise ValueError('Dictionaries do not match')
-
-
-def raise_error_for_non_unit_square(sorted_points):
-    side_len = int(round(len(sorted_points) ** 0.5))
-    if (
-            sorted_points[-1] != Point(1.0, 1.0) or
-            len(sorted_points) != side_len ** 2 or
-            any(point.x != 0.0 for point in sorted_points[:side_len]) or
-            sorted_points[0].y != sorted_points[side_len].y
-    ):
-        raise ValueError('Not a square!')
-
-
 def get_mean_score(matches_list: Matches) -> float:
         match_scores = [compute_final_score_per_turn(match)[0]
                         for match in matches_list]
@@ -236,7 +267,7 @@ funkiness AshlockFingerprint wants.  If other fingerprints show up, they
 might even be easily extendable.
 """
 
-class AshlockFingerprint(object):
+class AshlockFingerprint2(object):
     def __init__(self, strategy: Any, probe: Any = axl.TitForTat,
                  step: float = 0.01, progress_bar: bool = True) -> None:
         """
