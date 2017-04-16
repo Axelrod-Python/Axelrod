@@ -26,22 +26,21 @@ class DBS(Player):
 
     Parameters:
 
-    discount_factor: discount factor used when computing discounted frequencies to learn opponent's strategy
+    discount_factor: (float, between 0 and 1) discount factor used when computing discounted frequencies to learn opponent's strategy
             default: .75
 
-    promotion_threshold: number of observations needed to promote a change in opponent's strategy
+    promotion_threshold: (int) number of observations needed to promote a change in opponent's strategy
             default: 3
 
-    violation_threshold: number of observation needed to considerate opponent's strategy has changed
+    violation_threshold: (int) number of observation needed to considerate opponent's strategy has changed
             default: 4
 
-    reject_threshold: number of observations before forgetting opponents old strategy
+    reject_threshold: (int) number of observations before forgetting opponents old strategy
             default: 3
 
-    tree_depth: depth of the tree for the tree-search algorithm. 
+    tree_depth: (int) depth of the tree for the tree-search algorithm. 
             default is 5.
             Higher depth means more time to coompute the move.
-
 
     """
 
@@ -174,7 +173,6 @@ class DBS(Player):
             self.update_history_by_cond(opponent.history)
      
             two_moves_ago = (self.history[-2],opponent.history[-2])
-            print('***{}***'.format(two_moves_ago))
             r_plus = (two_moves_ago,opponent.history[-1])
             r_minus = (two_moves_ago,({C,D}-{opponent.history[-1]}).pop())
 
@@ -182,16 +180,11 @@ class DBS(Player):
                 if self.should_promote(r_plus,self.promotion_threshold):
                     self.Rc[r_plus[0]]=action_to_int(r_plus[1])
                     self.violation_counts[r_plus[0]]=0
-                    print('---------> Promoting {}'.format(r_plus[0]))
-                    print(action_to_int(r_plus[1]))
-                    print(self.Rc)
-                    print(self.Rd)
                     self.violation_counts[r_plus[0]]=0
 
             # (if r+ or r- in Rc)
             if r_plus[0] in self.Rc.keys():
                 to_check = (C if self.Rc[r_plus[0]]==1 else D)
-                #print('already in Rc')
                 # (if r+ in Rc)
                 if r_plus[1]==to_check:
                     # set the violation count of r+ to 0
@@ -200,16 +193,11 @@ class DBS(Player):
                 elif r_minus[1]==to_check:
                     # increment violation count of r-
                     self.violation_counts[r_plus[0]]+=1
-                    print('incremented violation count of {} to {}'.format(
-                        r_plus[0],self.violation_counts[r_plus[0]]))
                     if self.should_demote(r_minus,self.violation_threshold):
                         self.Rd.update(self.Rc)
                         self.Rc.clear()
                         self.violation_counts.clear()
                         self.v=0
-                        
-                        print('Cleared Rc: {}'.format(self.Rc))
-                        print('Updated Rd: {}'.format(self.Rd))
 
             # r+ in Rc
             r_plus_in_Rc = (r_plus[0] in self.Rc.keys() and self.Rc[r_plus[0]]==action_to_int(r_plus[1]))
@@ -221,7 +209,6 @@ class DBS(Player):
 
             if self.v > self.reject_threshold or (r_plus_in_Rc and r_minus_in_Rd):
                 self.Rd.clear()
-                print('---> Cleared Rd')
                 self.v = 0
 
             # compute Rp for conditions that are neither in Rc or Rd
@@ -231,11 +218,6 @@ class DBS(Player):
                 if ((outcome not in self.Rc.keys()) and (outcome not in self.Rd.keys())):
                     # then we need to compute opponent's C answer probability
                     Rp[outcome] = self.compute_prob_rule(outcome,self.alpha)
-                    print('added {}->{} to Rp'.format(outcome,Rp[outcome]))
-
-            print('Rc: {}'.format(self.Rc))
-            print('Rd: {}'.format(self.Rd))
-            print('Rp: {}'.format(Rp))
 
             self.Pi=Policy()
             # algorithm ensure no duplicate keys -> no key overwriting
@@ -342,7 +324,6 @@ def F(begin_node,policy,max_depth):
             # this is an end node, we just return its outcome value
             return begin_node.get_value()
         elif begin_node.depth==0:
-            print("starting tree search")
             siblings = begin_node.get_siblings(policy)
             # this returns the two max expected values, for choice C or D,
             # as a tuple
@@ -364,7 +345,6 @@ def MoveGen(outcome,policy,depth_search_tree=5):
     values_of_choices = F(current_node,policy,depth_search_tree)
     # returns the Action which correspond to the best choice in terms of 
     # expected value. In case value(C)==value(D), returns C
-    print("result: {}".format(values_of_choices))
     actions_tuple = (C,D)
     return actions_tuple[values_of_choices.index(max(values_of_choices))]
 
