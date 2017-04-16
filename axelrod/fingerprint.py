@@ -51,10 +51,39 @@ class AshlockFingerprint(object):
                     step: float = 0.01, processes: int = None,
                     filename: str = None, in_memory: bool = False,
                     progress_bar: bool = True) -> PointsFloats:
-
+        """Build and play the spatial tournament.
+        Creates the probes and their edges then builds a spatial tournament.
+        When the coordinates of the probe sum to more than 1, the dual of the
+        probe is taken instead and then the Joss-Ann Transformer is applied. If
+        the coordinates sum to less than 1 (or equal), then only the Joss-Ann is
+        applied, a dual is not required.
+        Parameters
+        ----------
+        turns : integer, optional
+            The number of turns per match
+        repetitions : integer, optional
+            The number of times the round robin should be repeated
+        step : float, optional
+            The separation between each Point. Smaller steps will
+            produce more Points that will be closer together.
+        processes : integer, optional
+            The number of processes to be used for parallel processing
+        filename: str, optional
+            Name of output file.
+        in_memory: bool
+            Whether to keep the interactions in memory or use a file.
+        progress_bar : bool
+            Whether or not to create a progress bar which will be updated
+        Returns
+        ----------
+        self.data : dictionary
+            A dictionary where the keys are coordinates of the form (x, y) and
+            the values are the mean score for the corresponding interactions.
+        """
         tournament_creator = SpatialTournamentCreator(self._strategy,
                                                       self._probe,
-                                                      step)
+                                                      step,
+                                                      progress_bar)
         tournament_kwargs = {'turns': turns, 'repetitions': repetitions}
 
         filename, in_memory = update_according_to_os(filename, in_memory)
@@ -140,10 +169,10 @@ class SpatialTournamentCreator(object):
     Creates a SpatialTournament where player plays exactly one match with each
     probe per repetition."""
     def __init__(self, player: PlayerOrStrategy, probe: PlayerOrStrategy,
-                 step: float) -> None:
+                 step: float, progress_bar: bool = True) -> None:
         """0.0 <= step <= 1.0"""
         self._player = create_player(player)
-        self._probe_gen = JossAnnProbeCreator(probe)
+        self._probe_gen = JossAnnProbeCreator(probe, progress_bar)
         self._points = create_points(step)
 
     def get_points_to_edges(self) -> PointsEdges:
@@ -161,10 +190,7 @@ class SpatialTournamentCreator(object):
         edges = []
         edge_map = self.get_points_to_edges()
 
-        progress_bar = False
-        if 'progress_bar' in tournament_kwargs:
-            progress_bar = tournament_kwargs['progress_bar']
-        probe_map = self._probe_gen.get_probe_dict(self._points, progress_bar)
+        probe_map = self._probe_gen.get_probe_dict(self._points)
 
         for point in self._points:
             players.append(probe_map[point])
@@ -177,8 +203,10 @@ class SpatialTournamentCreator(object):
 class JossAnnProbeCreator(object):
     """Creates JossAnn Players and Dual JossAnn Players based on points
     where Point(0.0) <= point <= Point(1.0, 1.0)"""
-    def __init__(self, probe: PlayerOrStrategy) -> None:
+    def __init__(self, probe: PlayerOrStrategy,
+                 progress_bar: bool = True) -> None:
         self._probe_class, self._probe_kwargs = get_class_and_kwargs(probe)
+        self._progress_bar = progress_bar
 
     def get_probe(self, point: Point) -> Player:
         x, y = point
@@ -192,16 +220,22 @@ class JossAnnProbeCreator(object):
             )(**self._probe_kwargs)
         return joss_ann
 
-    def get_probe_dict(self, point_list: list,
-                       progress_bar: bool) -> PointsPlayers:
-        if progress_bar:
+    def get_probe_dict(self, point_list: list) -> PointsPlayers:
+        """
+
+        :param point_list: 0.0 <= Point.x, Point.y <= 1.0
+        """
+        if self._progress_bar:
             point_list = tqdm.tqdm(point_list, desc="Generating probes")
         return {point: self.get_probe(point) for point in point_list}
 
-    def get_probe_dict_from_step(self, step: float,
-                                 progress_bar: bool) -> PointsPlayers:
+    def get_probe_dict_from_step(self, step: float) -> PointsPlayers:
+        """
+
+        :param step: 0.0 < step <= 1.0
+        """
         point_list = create_points(step)
-        return self.get_probe_dict(point_list, progress_bar)
+        return self.get_probe_dict(point_list)
 
 
 def get_class_and_kwargs(strategy_or_player: Any) -> tuple:

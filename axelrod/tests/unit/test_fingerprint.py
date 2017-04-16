@@ -40,19 +40,14 @@ class TestModuleFunctions(unittest.TestCase):
         self.assertEqual(strategy, axl.Cycler)
         self.assertEqual(kwargs, axl.Cycler().init_kwargs)
 
-    @unittest.skipIf(axl.on_windows,
-                     "Windows cannot write to file????")
-    def test_update_according_to_os_no_filename_not_on_windows(self):
+    def test_update_according_to_os_filename_none_windows_vs_other(self):
         filename, in_memory = update_according_to_os(None, False)
-        self.assertFalse(in_memory)
-        self.assertIsNotNone(filename)
-
-    @unittest.skipIf(not axl.on_windows,
-                     "Windows cannot write to file????")
-    def test_update_according_to_os_no_filename_on_windows(self):
-        filename, in_memory = update_according_to_os(None, False)
-        self.assertTrue(in_memory)
-        self.assertIsNone(filename)
+        if axl.on_windows:
+            self.assertTrue(in_memory)
+            self.assertIsNone(filename)
+        else:
+            self.assertFalse(in_memory)
+            self.assertIsNotNone(filename)
 
     def test_update_according_to_os_no_special_case(self):
         filename, in_memory = update_according_to_os('bobo_knows', False)
@@ -115,14 +110,17 @@ class TestJossAnnProbeCreator(unittest.TestCase):
             Point(0.0, 0.5): 'Joss-Ann Tit For Tat: (0.0, 0.5)',
             Point(0.5, 1.0): 'Dual Joss-Ann Tit For Tat: (0.5, 0.0)',
         }
-        probe_creator = JossAnnProbeCreator(axl.TitForTat)
-        probe_dict = probe_creator.get_probe_dict(points, False)
-        also_probe_dict = probe_creator.get_probe_dict(points, True)
+        probe_creator = JossAnnProbeCreator(
+            axl.TitForTat, progress_bar=False)
+        alt_probe_creator = JossAnnProbeCreator(
+            axl.TitForTat, progress_bar=True)
+        probe_dict = probe_creator.get_probe_dict(points)
+        alt_probe_dict = alt_probe_creator.get_probe_dict(points)
 
         for point in probe_dict.keys():
             self.assertEqual(str(probe_dict[point]),
                              expected_point_probe_str[point])
-            self.assertEqual(str(also_probe_dict[point]),
+            self.assertEqual(str(alt_probe_dict[point]),
                              expected_point_probe_str[point])
 
     def test_get_probe_dict_from_step(self):
@@ -137,28 +135,31 @@ class TestJossAnnProbeCreator(unittest.TestCase):
             Point(1.0, 0.5): 'Dual Joss-Ann Tit For Tat: (0.0, 0.5)',
             Point(1.0, 1.0): 'Dual Joss-Ann Tit For Tat: (0.0, 0.0)',
         }
-        probe_creator = JossAnnProbeCreator(axl.TitForTat)
-        probe_dict = probe_creator.get_probe_dict_from_step(0.5, False)
-        also_probe_dict = probe_creator.get_probe_dict_from_step(0.5, True)
+        probe_creator = JossAnnProbeCreator(
+            axl.TitForTat, progress_bar=False)
+        alt_probe_creator = JossAnnProbeCreator(
+            axl.TitForTat, progress_bar=True)
+        probe_dict = probe_creator.get_probe_dict_from_step(0.5)
+        alt_probe_dict = alt_probe_creator.get_probe_dict_from_step(0.5)
 
         for point in probe_dict.keys():
             self.assertEqual(str(probe_dict[point]),
                              expected_point_probe_str[point])
-            self.assertEqual(str(also_probe_dict[point]),
+            self.assertEqual(str(alt_probe_dict[point]),
                              expected_point_probe_str[point])
 
 
 class TestSpatialTournamentCreator(unittest.TestCase):
     def test_get_points_to_edges(self):
-        tournament_creator = SpatialTournamentCreator(axl.Cooperator,
-                                                      axl.Cooperator, 1.0)
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cooperator, probe=axl.TitForTat, step=1.0)
         expected = {Point(0.0, 0.0): (0, 1), Point(0.0, 1.0): (0, 2),
                     Point(1.0, 0.0): (0, 3), Point(1.0, 1.0): (0, 4)}
         self.assertEqual(tournament_creator.get_points_to_edges(), expected)
 
     def test_get_tournament_default_args(self):
-        tournament_creator = SpatialTournamentCreator(axl.Cooperator,
-                                                      axl.TitForTat, 1.0)
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cooperator, probe=axl.TitForTat, step=1.0)
         tournament = tournament_creator.get_tournament()
         expected_player_strings = [
             'Cooperator',
@@ -176,8 +177,8 @@ class TestSpatialTournamentCreator(unittest.TestCase):
         self.assertEqual(tournament.name, 'axelrod')
 
     def test_get_tournament_new_args(self):
-        tournament_creator = SpatialTournamentCreator(axl.Cooperator,
-                                                      axl.TitForTat, 1.0)
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cooperator, probe=axl.TitForTat, step=1.0)
         new_kwargs = {'turns': 2, 'repetitions': 1, 'noise': 0.5,
                       'name': 'super_badass_tournament_of_awesomeness'}
         tournament = tournament_creator.get_tournament(**new_kwargs)
@@ -198,17 +199,25 @@ class TestSpatialTournamentCreator(unittest.TestCase):
                          'super_badass_tournament_of_awesomeness')
 
     def test_player_as_instance(self):
-        tournament_creator = SpatialTournamentCreator(axl.Cycler('DDD'),
-                                                      axl.TitForTat, 1.0)
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cycler('DDD'), probe=axl.TitForTat, step=1.0)
         tournament = tournament_creator.get_tournament()
         self.assertEqual(str(tournament.players[0]), 'Cycler: DDD')
 
     def test_probe_as_instance(self):
-        tournament_creator = SpatialTournamentCreator(axl.Cooperator,
-                                                      axl.Cycler('DDD'), 1.0)
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cooperator, probe=axl.Cycler('DDD'), step=1.0)
         tournament = tournament_creator.get_tournament()
         self.assertEqual(str(tournament.players[1]),
                          'Joss-Ann Cycler: DDD: (0.0, 0.0)')
+
+    def test_progress_bar_false(self):
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cycler('DDD'), probe=axl.TitForTat, step=1.0,
+            progress_bar=False
+        )
+        tournament = tournament_creator.get_tournament()
+        self.assertEqual(str(tournament.players[0]), 'Cycler: DDD')
 
 
 class TestDataOrganizer(unittest.TestCase):
