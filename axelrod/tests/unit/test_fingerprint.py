@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 import axelrod as axl
 from hypothesis import given
 from axelrod.fingerprint import (
@@ -20,6 +21,7 @@ C, D = axl.Actions.C, axl.Actions.D
 
 
 class TestModuleFunctions(unittest.TestCase):
+
     def test_create_player_from_instance(self):
         new_player = create_player(axl.Cycler('DDD'))
         self.assertIsInstance(new_player, axl.Cycler)
@@ -40,16 +42,19 @@ class TestModuleFunctions(unittest.TestCase):
         self.assertEqual(strategy, axl.Cycler)
         self.assertEqual(kwargs, axl.Cycler().init_kwargs)
 
-    def test_update_according_to_os_filename_none_windows_vs_other(self):
+    @patch("axelrod.on_windows", True)
+    def test_update_according_to_os_filename_none_on_windows(self):
+        self.assertTrue(axl.on_windows)
         filename, in_memory = update_according_to_os(None, False)
-        if axl.on_windows:
-            expected_in_memory = True
-            expected_filename_type = type(None)
-        else:
-            expected_in_memory = False
-            expected_filename_type = str
-        self.assertEqual(in_memory, expected_in_memory)
-        self.assertIsInstance(filename, expected_filename_type)
+        self.assertTrue(in_memory)
+        self.assertIsNone(filename)
+
+    @patch("axelrod.on_windows", False)
+    def test_update_according_to_os_filename_none_not_on_windows(self):
+        self.assertFalse(axl.on_windows)
+        filename, in_memory = update_according_to_os(None, False)
+        self.assertFalse(in_memory)
+        self.assertIsInstance(filename, str)
 
     def test_update_according_to_os_no_special_case(self):
         filename, in_memory = update_according_to_os('bobo_knows', False)

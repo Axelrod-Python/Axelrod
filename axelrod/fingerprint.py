@@ -6,7 +6,7 @@ import numpy as np
 import tqdm
 import axelrod as axl
 
-from axelrod import on_windows, Player
+from axelrod import Player
 from axelrod.actions import Action
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (
@@ -80,15 +80,13 @@ class AshlockFingerprint(object):
             A dictionary where the keys are coordinates of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
-        tournament_creator = SpatialTournamentCreator(self._strategy,
-                                                      self._probe,
-                                                      step,
-                                                      progress_bar)
+        tournament_creator = SpatialTournamentCreator(
+            player=self._strategy, probe=self._probe,
+            step=step, progress_bar=progress_bar)
         tournament_kwargs = {'turns': turns, 'repetitions': repetitions}
+        tournament = tournament_creator.get_tournament(**tournament_kwargs)
 
         filename, in_memory = update_according_to_os(filename, in_memory)
-
-        tournament = tournament_creator.get_tournament(**tournament_kwargs)
         tournament.play(filename=filename, in_memory=in_memory,
                         processes=processes, progress_bar=progress_bar,
                         build_results=False)
@@ -156,11 +154,11 @@ class AshlockFingerprint(object):
 def update_according_to_os(filename: Union[str, None],
                            in_memory: bool) -> Tuple[str, bool]:
     """Adjust filename and in_memory according to O.S."""
-    if on_windows and filename is None:  # pragma: no cover
+    if axl.on_windows and filename is None:  # pragma: no cover
         in_memory = True
     elif filename is None:
-        output_file = NamedTemporaryFile(mode='w')
-        filename = output_file.name
+        with NamedTemporaryFile(mode='w') as file:
+            filename = file.name
     return filename, in_memory
 
 
