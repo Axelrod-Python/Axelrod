@@ -23,6 +23,7 @@ class DBS(Player):
 
 
     Default values for the parameters are the suggested values in the article 
+    When more noise you can try to diminish violation_threshold and rejection_threshold
 
     Parameters:
 
@@ -32,10 +33,10 @@ class DBS(Player):
     promotion_threshold: (int) number of observations needed to promote a change in opponent's strategy
             default: 3
 
-    violation_threshold: (int) number of observation needed to considerate opponent's strategy has changed
+    violation_threshold: (int) number of observation needed to considerate opponent's strategy has changed. Seems good to lower it when noise increase
             default: 4
 
-    reject_threshold: (int) number of observations before forgetting opponents old strategy
+    reject_threshold: (int) number of observations before forgetting opponents old strategy. Seems good to lower it when noise increase
             default: 3
 
     tree_depth: (int) depth of the tree for the tree-search algorithm. 
