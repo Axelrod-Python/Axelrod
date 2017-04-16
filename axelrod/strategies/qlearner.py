@@ -48,8 +48,8 @@ class RiskyQLearner(Player):
         # for any subclasses that do not override methods using random calls.
         self.classifier['stochastic'] = True
 
-        self.prev_action = None
-        self.original_prev_action = None
+        self.prev_action = None # type: Action
+        self.original_prev_action = None # type: Action
         self.history = [] # type: List[Action]
         self.score = 0
         self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0]))})
