@@ -229,14 +229,6 @@ class JossAnnProbeCreator(object):
             point_list = tqdm.tqdm(point_list, desc="Generating probes")
         return {point: self.get_probe(point) for point in point_list}
 
-    def get_probe_dict_from_step(self, step: float) -> PointsPlayers:
-        """
-
-        :param step: 0.0 < step <= 1.0
-        """
-        point_list = create_points(step)
-        return self.get_probe_dict(point_list)
-
 
 def get_class_and_kwargs(strategy_or_player: Any) -> tuple:
     """If strategy, returns a class and kwargs to create default player.

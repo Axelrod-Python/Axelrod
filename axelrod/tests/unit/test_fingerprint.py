@@ -43,11 +43,13 @@ class TestModuleFunctions(unittest.TestCase):
     def test_update_according_to_os_filename_none_windows_vs_other(self):
         filename, in_memory = update_according_to_os(None, False)
         if axl.on_windows:
-            self.assertTrue(in_memory)
-            self.assertIsNone(filename)
+            expected_in_memory = True
+            expected_filename_type = type(None)
         else:
-            self.assertFalse(in_memory)
-            self.assertIsNotNone(filename)
+            expected_in_memory = False
+            expected_filename_type = str
+        self.assertEqual(in_memory, expected_in_memory)
+        self.assertIsInstance(filename, expected_filename_type)
 
     def test_update_according_to_os_no_special_case(self):
         filename, in_memory = update_according_to_os('bobo_knows', False)
@@ -116,31 +118,6 @@ class TestJossAnnProbeCreator(unittest.TestCase):
             axl.TitForTat, progress_bar=True)
         probe_dict = probe_creator.get_probe_dict(points)
         alt_probe_dict = alt_probe_creator.get_probe_dict(points)
-
-        for point in probe_dict.keys():
-            self.assertEqual(str(probe_dict[point]),
-                             expected_point_probe_str[point])
-            self.assertEqual(str(alt_probe_dict[point]),
-                             expected_point_probe_str[point])
-
-    def test_get_probe_dict_from_step(self):
-        expected_point_probe_str = {
-            Point(0.0, 0.0): 'Joss-Ann Tit For Tat: (0.0, 0.0)',
-            Point(0.0, 0.5): 'Joss-Ann Tit For Tat: (0.0, 0.5)',
-            Point(0.0, 1.0): 'Dual Joss-Ann Tit For Tat: (1.0, 0.0)',
-            Point(0.5, 0.0): 'Joss-Ann Tit For Tat: (0.5, 0.0)',
-            Point(0.5, 0.5): 'Dual Joss-Ann Tit For Tat: (0.5, 0.5)',
-            Point(0.5, 1.0): 'Dual Joss-Ann Tit For Tat: (0.5, 0.0)',
-            Point(1.0, 0.0): 'Dual Joss-Ann Tit For Tat: (0.0, 1.0)',
-            Point(1.0, 0.5): 'Dual Joss-Ann Tit For Tat: (0.0, 0.5)',
-            Point(1.0, 1.0): 'Dual Joss-Ann Tit For Tat: (0.0, 0.0)',
-        }
-        probe_creator = JossAnnProbeCreator(
-            axl.TitForTat, progress_bar=False)
-        alt_probe_creator = JossAnnProbeCreator(
-            axl.TitForTat, progress_bar=True)
-        probe_dict = probe_creator.get_probe_dict_from_step(0.5)
-        alt_probe_dict = alt_probe_creator.get_probe_dict_from_step(0.5)
 
         for point in probe_dict.keys():
             self.assertEqual(str(probe_dict[point]),
