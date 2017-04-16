@@ -1,6 +1,6 @@
 """Tests for the Stalker strategy."""
 
-import axl as axl
+import axelrod as axl
 import random
 from .test_player import TestPlayer
 
@@ -9,7 +9,7 @@ C, D = axl.Actions.C, axl.Actions.D
 class TestStalker(TestPlayer):
 
     name = "Stalker: D"
-    player = axelrod.Stalker
+    player = axl.Stalker
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
