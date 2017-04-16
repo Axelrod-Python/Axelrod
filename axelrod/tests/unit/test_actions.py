@@ -24,6 +24,7 @@ class TestAction(unittest.TestCase):
         self.assertRaises(ValueError, flip_action, 'R')
 
     def test_str_to_actions(self):
+        self.assertEqual(str_to_actions(''), ())
         self.assertEqual(str_to_actions('C'), (C, ))
         self.assertEqual(str_to_actions('CDDC'), (C, D, D, C))
 
