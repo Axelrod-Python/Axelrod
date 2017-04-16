@@ -2,6 +2,7 @@ import unittest
 from hypothesis import given
 from axelrod.fingerprint import *
 from axelrod.tests.property import strategy_lists
+import axelrod as axl
 
 
 matplotlib_installed = True
@@ -53,15 +54,15 @@ class TestFingerprint(unittest.TestCase):
         fingerprint = AshlockFingerprint(self.strategy)
 
         # x + y < 1
-        ja = fingerprint.create_jossann((.5, .4), self.probe)
+        ja = create_jossann((.5, .4), self.probe)
         self.assertEqual(str(ja), "Joss-Ann Tit For Tat: (0.5, 0.4)")
 
         # x + y = 1
-        ja = fingerprint.create_jossann((.4, .6), self.probe)
+        ja = create_jossann((.4, .6), self.probe)
         self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.6, 0.4)")
 
         # x + y > 1
-        ja = fingerprint.create_jossann((.5, .6), self.probe)
+        ja = create_jossann((.5, .6), self.probe)
         self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.5, 0.4)")
 
     def test_create_jossann_parametrised_player(self):
@@ -70,15 +71,15 @@ class TestFingerprint(unittest.TestCase):
         probe = axl.Random(p=0.1)
 
         # x + y < 1
-        ja = fingerprint.create_jossann((.5, .4), probe)
+        ja = create_jossann((.5, .4), probe)
         self.assertEqual(str(ja), "Joss-Ann Random: 0.1: (0.5, 0.4)")
 
         # x + y = 1
-        ja = fingerprint.create_jossann((.4, .6), probe)
+        ja = create_jossann((.4, .6), probe)
         self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.6, 0.4)")
 
         # x + y > 1
-        ja = fingerprint.create_jossann((.5, .6), probe)
+        ja = create_jossann((.5, .6), probe)
         self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.5, 0.4)")
 
     def test_create_points(self):
@@ -87,13 +88,13 @@ class TestFingerprint(unittest.TestCase):
 
     def test_create_probes(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        probes = af.create_probes(self.probe, self.expected_points,
+        probes = create_probes(self.probe, self.expected_points,
                                   progress_bar=False)
         self.assertEqual(len(probes), 9)
 
     def test_create_edges(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        edges = af.create_edges(self.expected_points, progress_bar=False)
+        edges = create_edges(self.expected_points, progress_bar=False)
         self.assertEqual(edges, self.expected_edges)
 
     def test_construct_tournament_elemets(self):
@@ -161,7 +162,7 @@ class TestFingerprint(unittest.TestCase):
                                                    edges=edges)
         results = spatial_tournament.play(progress_bar=False,
                                           keep_interactions=True)
-        data = af.generate_data(results.interactions, self.expected_points,
+        data = generate_data(results.interactions, self.expected_points,
                                 self.expected_edges)
         keys = sorted(list(data.keys()))
         values = [0 < score < 5 for score in data.values()]
@@ -191,7 +192,7 @@ class TestFingerprint(unittest.TestCase):
                             [9, 2, 1],
                             [5, 8, 2]]
         af = AshlockFingerprint(self.strategy, self.probe)
-        plotting_data = af.reshape_data(test_data, test_points, 3)
+        plotting_data = reshape_data(test_data, test_points, 3)
         for i in range(len(plotting_data)):
             self.assertEqual(list(plotting_data[i]), test_shaped_data[i])
 
@@ -206,7 +207,7 @@ class TestFingerprint(unittest.TestCase):
         self.assertIsInstance(r, matplotlib.pyplot.Figure)
         t = af.plot(title='Title')
         self.assertIsInstance(t, matplotlib.pyplot.Figure)
-        u = af.plot(colorbar=False)
+        u = af.plot(color_bar=False)
         self.assertIsInstance(u, matplotlib.pyplot.Figure)
         v = af.plot(labels=False)
         self.assertIsInstance(v, matplotlib.pyplot.Figure)
