@@ -36,7 +36,7 @@ class DBS(Player):
             default: 4
 
     reject_threshold: number of observations before forgetting opponents old strategy
-            default: 4
+            default: 3
 
     tree_depth: depth of the tree for the tree-search algorithm. 
             default is 5.
@@ -60,7 +60,7 @@ class DBS(Player):
 
     
     # best value for reject_threshold ? not mentioned in the article
-    def __init__(self, discount_factor=.75, promotion_threshold=3, violation_threshold=4, reject_threshold=4,tree_depth=5): 
+    def __init__(self, discount_factor=.75, promotion_threshold=3, violation_threshold=4, reject_threshold=3,tree_depth=5): 
         super().__init__()
 
         # default opponent's policy is TitForTat
@@ -219,7 +219,7 @@ class DBS(Player):
             if r_minus_in_Rd:
                 self.v+=1
 
-            if self.v >= self.reject_threshold or (r_plus_in_Rc and r_minus_in_Rd):
+            if self.v > self.reject_threshold or (r_plus_in_Rc and r_minus_in_Rd):
                 self.Rd.clear()
                 print('---> Cleared Rd')
                 self.v = 0
@@ -370,18 +370,4 @@ def MoveGen(outcome,policy,depth_search_tree=5):
 
 
 
-
-# test
-# --------------
-
-if __name__=='__main__':
-
-
-    tit_for_tat = Policy.prob_policy(1.,1.,0.,0.)
-    other_pol = Policy.prob_policy(.7,.6,0.4,0.4)
-    nodeCC = DeterministNode(C,C,0)
-    #result = F(nodeCC,other_pol,5)
-    #print("result: {}".format(result))
-
-    print(MoveGen((C,C),other_pol))
 

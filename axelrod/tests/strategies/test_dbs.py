@@ -7,7 +7,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestDBS(TestPlayer):
-    name = "DBS: 0.75, 3, 4, 4, 5"
+    name = "DBS: 0.75, 3, 4, 3, 5"
     player = axelrod.DBS
 
     expected_classifier = {

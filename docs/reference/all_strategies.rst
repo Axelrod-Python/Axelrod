@@ -48,6 +48,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.darwin
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.dbs
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.defector
    :members:
    :undoc-members:
