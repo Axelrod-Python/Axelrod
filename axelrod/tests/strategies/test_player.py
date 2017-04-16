@@ -9,6 +9,8 @@ import axelrod
 from axelrod import DefaultGame, MockPlayer, Player, simulate_play
 from axelrod.player import get_state_distribution_from_history
 
+from hypothesis import given
+from axelrod.tests.property import strategy_lists
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -150,6 +152,78 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 
+    def test_equality(self):
+        """Test the equality method for some bespoke cases"""
+        # Check repr
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        self.assertEqual(p1, p2)
+        p1.__repr__ = lambda :"John Nash"
+        self.assertNotEqual(p1, p2)
+
+        # Check attributes
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        p1.test = "29"
+        self.assertNotEqual(p1, p2)
+
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        p2.test = "29"
+        self.assertNotEqual(p1, p2)
+
+    def test_equality_for_numpy_array(self):
+        # Check numpy array attribute (a special case)
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+
+        p1.array = np.array([0, 1])
+        p2.array = np.array([0, 1])
+        self.assertEqual(p1, p2)
+
+        p2.array = np.array([1, 0])
+        self.assertNotEqual(p1, p2)
+
+    def test_equality_for_generator(self):
+        # Check generator attribute (a special case)
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        # Check that the generator is still the same
+        p1.generator = (i for i in range(10))
+        p2.generator = (i for i in range(10))
+        self.assertEqual(p1, p2)
+
+        _ = next(p2.generator)
+        self.assertNotEqual(p1, p2)
+
+        # Check that internal generator object has not been changed
+        self.assertEqual(list(p1.generator), list(range(10)))
+        self.assertEqual(list(p2.generator), list(range(1, 10)))
+
+    def test_equality_for_cycle(self):
+        # Check cycle attribute (a special case)
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        # Check that the cycle is still the same
+        p1.cycle = itertools.cycle(range(10))
+        p2.cycle = itertools.cycle(range(10))
+        self.assertEqual(p1, p2)
+
+        _ = next(p2.cycle)
+        self.assertNotEqual(p1, p2)
+
+        # Check that internal generator object has not been changed
+        self.assertEqual(next(p1.cycle), 0)
+        self.assertEqual(next(p2.cycle), 1)
+
+    def test_equaity_on_init(self):
+        """Test all instances of a strategy are equal on init"""
+        for s in axelrod.strategies:
+            p1, p2 = s(), s()
+            # Check twice (so testing equality doesn't change anything)
+            self.assertEqual(p1, p2)
+            self.assertEqual(p1, p2)
+
     def test_init_params(self):
         """Tests player correct parameters signature detection."""
         self.assertEqual(self.player.init_params(), {})
@@ -285,41 +359,14 @@ class TestPlayer(unittest.TestCase):
             player.play(opponent)
 
         player.reset()
-        self.assertEqual(len(player.history), 0)
-        self.assertEqual(player.cooperations, 0)
-        self.assertEqual(player.defections, 0)
-        self.assertEqual(player.state_distribution, dict())
-
-        self.attribute_equality_test(player, clone)
+        self.assertEqual(player, clone)
 
     def test_reset_clone(self):
         """Make sure history resetting with cloning works correctly, regardless
         if self.test_reset() is overwritten."""
         player = self.player()
         clone = player.clone()
-        self.attribute_equality_test(player, clone)
-
-    def attribute_equality_test(self, player, clone):
-        """A separate method to test equality of attributes. This method can be
-        overwritten in certain cases.
-
-        This method checks that all the attributes of `player` and `clone` are
-        the same which is used in the test of the cloning and the resetting.
-        """
-
-        for attribute, reset_value in player.__dict__.items():
-            original_value = getattr(clone, attribute)
-
-            if isinstance(reset_value, np.ndarray):
-                self.assertTrue(np.array_equal(reset_value, original_value),
-                                msg=attribute)
-
-            elif isinstance(reset_value, types.GeneratorType) or isinstance(reset_value, itertools.cycle):
-                for _ in range(10):
-                    self.assertEqual(next(reset_value),
-                                     next(original_value), msg=attribute)
-            else:
-                self.assertEqual(reset_value, original_value, msg=attribute)
+        self.assertEqual(player, clone)
 
     def test_clone(self):
         # Test that the cloned player produces identical play

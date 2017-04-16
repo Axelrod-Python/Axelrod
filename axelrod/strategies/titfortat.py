@@ -425,7 +425,11 @@ class ContriteTitForTat(Player):
         'manipulates_source': False,
         'manipulates_state': False
     }
-    contrite = False
+
+    def __init__(self):
+        super().__init__()
+        self.contrite = False
+        self._recorded_history = []
 
     def strategy(self, opponent: Player) -> Action:
 

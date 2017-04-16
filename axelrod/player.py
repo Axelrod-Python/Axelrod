@@ -3,6 +3,9 @@ from functools import wraps
 import random
 import copy
 import inspect
+import types
+import numpy as np
+import itertools
 
 from axelrod.actions import Actions, flip_action, Action
 from .game import DefaultGame
@@ -121,6 +124,44 @@ class Player(object):
         self.defections = 0
         self.state_distribution = defaultdict(int)
         self.set_match_attributes()
+
+
+    def __eq__(self, other):
+        """
+        Test if two players are equal.
+        """
+        if self.__repr__() != other.__repr__():
+            return False
+        for attribute in set(list(self.__dict__.keys()) +
+                             list(other.__dict__.keys())):
+
+            value = getattr(self, attribute, None)
+            other_value = getattr(other, attribute, None)
+
+            if isinstance(value, np.ndarray):
+                if not (np.array_equal(value, other_value)):
+                    return False
+
+            elif isinstance(value, types.GeneratorType) or \
+                 isinstance(value, itertools.cycle):
+
+                # Split the original generator so it is not touched
+                generator, original_value = itertools.tee(value)
+                other_generator, original_other_value = itertools.tee(other_value)
+
+                setattr(self, attribute,
+                        (ele for ele in original_value))
+                setattr(other, attribute,
+                        (ele for ele in original_other_value))
+
+                if not (all(next(generator) == next(other_generator)
+                        for _ in range(200))):
+                    return False
+            else:
+                if value != other_value:
+                    return False
+        return True
+
 
     def receive_match_attributes(self):
         # Overwrite this function if your strategy needs
