@@ -19,6 +19,9 @@ class DBS(Player):
 
     From the learned opponent's strategy, a tree search is used to choose the best move
 
+
+
+
     Default values for the parameters are the suggested values in the article 
 
     Parameters:
@@ -86,6 +89,27 @@ class DBS(Player):
         self.history_by_cond[(C,D)]=([1],[1])
         self.history_by_cond[(D,C)]=([0],[1])
         self.history_by_cond[(D,D)]=([0],[1])
+
+
+    def reset(self):
+        super().reset()
+        self.Rd = Policy.prob_policy(1,1,0,0)
+        self.Rc = Policy()
+        self.Pi = self.Rd   # policy used by MoveGen
+        self.violation_counts = Policy()
+        #self.reject_threshold = reject_threshold
+        #self.violation_threshold = violation_threshold
+        #self.promotion_threshold = promotion_threshold
+        #self.tree_depth = tree_depth
+        self.v = 0
+        #self.alpha = discount_factor
+        self.history_by_cond = {}
+        self.history_by_cond[(C,C)]=([1],[1])
+        self.history_by_cond[(C,D)]=([1],[1])
+        self.history_by_cond[(D,C)]=([0],[1])
+        self.history_by_cond[(D,D)]=([0],[1])
+
+
 
     def should_promote(self,r_plus,promotion_threshold=3):
         if r_plus[1]==C:
