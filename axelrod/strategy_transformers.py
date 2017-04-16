@@ -40,7 +40,8 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
     name_prefix: string, "Transformed "
         A string to prepend to the strategy and class name
     reclassifier: function,
-        A function to use to update the class's classifier.
+        A function which will update the classifier of the strategy being
+        transformed
     """
 
     # Create a class that applies a wrapper function to the strategy method
@@ -244,7 +245,7 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
 
 def noisy_reclassifier(original_classifier, noise):
     """Function to reclassify the strategy"""
-    if noise not in [0, 1]:
+    if noise not in (0, 1):
         original_classifier["stochastic"] = True
     return original_classifier
 
@@ -261,7 +262,7 @@ def forgiver_wrapper(player, opponent, action, p):
 
 def forgiver_reclassifier(original_classifier, p):
     """Function to reclassify the strategy"""
-    if p not in [0, 1]:
+    if p not in (0, 1):
         original_classifier["stochastic"] = True
     return original_classifier
 
