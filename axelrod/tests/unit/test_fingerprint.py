@@ -1,6 +1,12 @@
 import unittest
+from unittest.mock import patch
+import axelrod as axl
 from hypothesis import given
-from axelrod.fingerprint import *
+from axelrod.fingerprint import (
+    AshlockFingerprint, Point, create_player, get_class_and_kwargs,
+    SpatialTournamentCreator, JossAnnProbeCreator,
+    DataOrganizer, create_points, get_mean_score, update_according_to_os
+)
 from axelrod.tests.property import strategy_lists
 
 
@@ -11,193 +17,316 @@ except ImportError:  # pragma: no cover
     matplotlib_installed = False
 
 
+C, D = axl.Actions.C, axl.Actions.D
+
+
+class TestModuleFunctions(unittest.TestCase):
+
+    def test_create_player_from_instance(self):
+        new_player = create_player(axl.Cycler('DDD'))
+        self.assertIsInstance(new_player, axl.Cycler)
+        self.assertEqual(new_player.init_kwargs, {'cycle': 'DDD'})
+
+    def test_create_player_from_class(self):
+        new_player = create_player(axl.Cycler)
+        self.assertIsInstance(new_player, axl.Cycler)
+        self.assertEqual(new_player.init_kwargs, axl.Cycler().init_kwargs)
+
+    def test_get_class_and_kwargs_from_instance(self):
+        strategy, kwargs = get_class_and_kwargs(axl.Cycler('DDD'))
+        self.assertEqual(strategy, axl.Cycler)
+        self.assertEqual(kwargs, {'cycle': 'DDD'})
+
+    def test_get_class_and_kwargs_from_class(self):
+        strategy, kwargs = get_class_and_kwargs(axl.Cycler)
+        self.assertEqual(strategy, axl.Cycler)
+        self.assertEqual(kwargs, axl.Cycler().init_kwargs)
+
+    @patch("axelrod.on_windows", True)
+    def test_update_according_to_os_filename_none_on_windows(self):
+        self.assertTrue(axl.on_windows)
+        filename, in_memory = update_according_to_os(None, False)
+        self.assertTrue(in_memory)
+        self.assertIsNone(filename)
+
+    @patch("axelrod.on_windows", False)
+    def test_update_according_to_os_filename_none_not_on_windows(self):
+        self.assertFalse(axl.on_windows)
+        filename, in_memory = update_according_to_os(None, False)
+        self.assertFalse(in_memory)
+        self.assertIsInstance(filename, str)
+
+    def test_update_according_to_os_no_special_case(self):
+        filename, in_memory = update_according_to_os('bobo_knows', False)
+        self.assertFalse(in_memory)
+        self.assertEqual(filename, 'bobo_knows')
+
+    def test_create_points(self):
+        expected = [Point(0.0, 0.0), Point(0.0, 1.0),
+                    Point(1.0, 0.0), Point(1.0, 1.0)]
+        self.assertEqual(expected, create_points(1.0))
+
+    def test_create_points_rounds_up_to_nearest_whole(self):
+        step_one = [Point(0.0, 0.0), Point(0.0, 1.0),
+                    Point(1.0, 0.0), Point(1.0, 1.0)]
+        step_two = [Point(0.0, 0.0), Point(0.0, 0.5), Point(0.0, 1.0),
+                    Point(0.5, 0.0), Point(0.5, 0.5), Point(0.5, 1.0),
+                    Point(1.0, 0.0), Point(1.0, 0.5), Point(1.0, 1.0)]
+        self.assertEqual(step_one, create_points(0.51))
+        self.assertEqual(step_two, create_points(0.5))
+
+    def test_create_point_with_fraction_that_is_not_finite_decimal(self):
+        points = create_points(0.3)
+        self.assertEqual(points[7][1], 1.0)
+        self.assertAlmostEqual(points[7][0], 0.33333333, places=7)
+
+    def test_get_mean_score(self):
+        matches = [[(C, C), (C, D), (D, C)],
+                   [(D, C), (D, D)]]
+        match_scores = [(3 + 0 + 5) / 3, (5 + 1) / 2]
+        mean = (match_scores[0] + match_scores[1]) / 2.0
+
+        self.assertEqual(get_mean_score(matches), mean)
+
+
+class TestJossAnnProbeCreator(unittest.TestCase):
+    def test_get_probe_joss_ann(self):
+        probe_creator = JossAnnProbeCreator(axl.Cooperator)
+        probe = probe_creator.get_probe(Point(0.5, 0.3))
+        self.assertEqual(str(probe), 'Joss-Ann Cooperator: (0.5, 0.3)')
+
+    def test_get_probe_dual_joss_ann(self):
+        probe_creator = JossAnnProbeCreator(axl.Cooperator)
+        probe = probe_creator.get_probe(Point(0.5, 0.5))
+        self.assertEqual(str(probe), 'Dual Joss-Ann Cooperator: (0.5, 0.5)')
+
+    def test_get_probe_probe_creator_passed_instance(self):
+        probe_creator = JossAnnProbeCreator(axl.Cycler('DDD'))
+        probe = probe_creator.get_probe(Point(0.2, 0.2))
+        self.assertEqual(str(probe), 'Joss-Ann Cycler: DDD: (0.2, 0.2)')
+
+    def test_get_probe_probe_creator_passed_strategy_uses_default(self):
+        probe_creator = JossAnnProbeCreator(axl.Cycler)
+        probe = probe_creator.get_probe(Point(0.2, 0.2))
+        self.assertEqual(str(probe), 'Joss-Ann Cycler: CCD: (0.2, 0.2)')
+
+    def test_get_probe_dict_from_point_list(self):
+        points = [Point(0.0, 0.0), Point(0.0, 0.5), Point(0.5, 1.0)]
+        expected_point_probe_str = {
+            Point(0.0, 0.0): 'Joss-Ann Tit For Tat: (0.0, 0.0)',
+            Point(0.0, 0.5): 'Joss-Ann Tit For Tat: (0.0, 0.5)',
+            Point(0.5, 1.0): 'Dual Joss-Ann Tit For Tat: (0.5, 0.0)',
+        }
+        probe_creator = JossAnnProbeCreator(
+            axl.TitForTat, progress_bar=False)
+        alt_probe_creator = JossAnnProbeCreator(
+            axl.TitForTat, progress_bar=True)
+        probe_dict = probe_creator.get_probe_dict(points)
+        alt_probe_dict = alt_probe_creator.get_probe_dict(points)
+
+        for point in probe_dict.keys():
+            self.assertEqual(str(probe_dict[point]),
+                             expected_point_probe_str[point])
+            self.assertEqual(str(alt_probe_dict[point]),
+                             expected_point_probe_str[point])
+
+
+class TestSpatialTournamentCreator(unittest.TestCase):
+    def test_get_points_to_edges(self):
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cooperator, probe=axl.TitForTat, step=1.0)
+        expected = {Point(0.0, 0.0): (0, 1), Point(0.0, 1.0): (0, 2),
+                    Point(1.0, 0.0): (0, 3), Point(1.0, 1.0): (0, 4)}
+        self.assertEqual(tournament_creator.get_points_to_edges(), expected)
+
+    def test_get_tournament_default_args(self):
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cooperator, probe=axl.TitForTat, step=1.0)
+        tournament = tournament_creator.get_tournament()
+        expected_player_strings = [
+            'Cooperator',
+            'Joss-Ann Tit For Tat: (0.0, 0.0)',
+            'Dual Joss-Ann Tit For Tat: (1.0, 0.0)',
+            'Dual Joss-Ann Tit For Tat: (0.0, 1.0)',
+            'Dual Joss-Ann Tit For Tat: (0.0, 0.0)']
+
+        self.assertEqual(tournament.edges, [(0, 1), (0, 2), (0, 3), (0, 4)])
+        self.assertEqual([str(player) for player in tournament.players],
+                         expected_player_strings)
+        self.assertEqual(tournament.noise, 0)
+        self.assertEqual(tournament.turns, 200)
+        self.assertEqual(tournament.repetitions, 10)
+        self.assertEqual(tournament.name, 'axelrod')
+
+    def test_get_tournament_new_args(self):
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cooperator, probe=axl.TitForTat, step=1.0)
+        new_kwargs = {'turns': 2, 'repetitions': 1, 'noise': 0.5,
+                      'name': 'super_badass_tournament_of_awesomeness'}
+        tournament = tournament_creator.get_tournament(**new_kwargs)
+        expected_player_strings = [
+            'Cooperator',
+            'Joss-Ann Tit For Tat: (0.0, 0.0)',
+            'Dual Joss-Ann Tit For Tat: (1.0, 0.0)',
+            'Dual Joss-Ann Tit For Tat: (0.0, 1.0)',
+            'Dual Joss-Ann Tit For Tat: (0.0, 0.0)']
+
+        self.assertEqual(tournament.edges, [(0, 1), (0, 2), (0, 3), (0, 4)])
+        self.assertEqual([str(player) for player in tournament.players],
+                         expected_player_strings)
+        self.assertEqual(tournament.noise, 0.5)
+        self.assertEqual(tournament.turns, 2)
+        self.assertEqual(tournament.repetitions, 1)
+        self.assertEqual(tournament.name,
+                         'super_badass_tournament_of_awesomeness')
+
+    def test_player_as_instance(self):
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cycler('DDD'), probe=axl.TitForTat, step=1.0)
+        tournament = tournament_creator.get_tournament()
+        self.assertEqual(str(tournament.players[0]), 'Cycler: DDD')
+
+    def test_probe_as_instance(self):
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cooperator, probe=axl.Cycler('DDD'), step=1.0)
+        tournament = tournament_creator.get_tournament()
+        self.assertEqual(str(tournament.players[1]),
+                         'Joss-Ann Cycler: DDD: (0.0, 0.0)')
+
+    def test_progress_bar_false(self):
+        tournament_creator = SpatialTournamentCreator(
+            player=axl.Cycler('DDD'), probe=axl.TitForTat, step=1.0,
+            progress_bar=False
+        )
+        tournament = tournament_creator.get_tournament()
+        self.assertEqual(str(tournament.players[0]), 'Cycler: DDD')
+
+
+class TestDataOrganizer(unittest.TestCase):
+    def setUp(self):
+        self.points_edges = {
+            Point(0.0, 0.0): (0, 1),
+            Point(0.0, 0.5): (0, 2),
+            Point(0.0, 1.0): (0, 3),
+            Point(0.5, 0.0): (0, 4),
+            Point(0.5, 0.5): (0, 5),
+            Point(0.5, 1.0): (0, 6),
+            Point(1.0, 0.0): (0, 7),
+            Point(1.0, 0.5): (0, 8),
+            Point(1.0, 1.0): (0, 9),
+
+        }
+        self.interactions = {
+            (0, 1): [[(C, C), (C, C)]],
+            (0, 2): [[(C, C), (C, D)]],
+            (0, 3): [[(C, C), (D, C)]],
+            (0, 4): [[(C, C), (D, D)]],
+            (0, 5): [[(C, D), (D, C)]],
+            (0, 6): [[(C, D), (C, D)]],
+            (0, 7): [[(C, D), (D, D)]],
+            (0, 8): [[(D, D), (D, D)]],
+            (0, 9): [[(D, C), (D, C)]],
+        }
+        self.organizer = DataOrganizer(self.points_edges, self.interactions)
+
+    def test_get_points_interactions_dict(self):
+        expected = {
+            Point(0.0, 0.0): [[(C, C), (C, C)]],
+            Point(0.0, 0.5): [[(C, C), (C, D)]],
+            Point(0.0, 1.0): [[(C, C), (D, C)]],
+            Point(0.5, 0.0): [[(C, C), (D, D)]],
+            Point(0.5, 0.5): [[(C, D), (D, C)]],
+            Point(0.5, 1.0): [[(C, D), (C, D)]],
+            Point(1.0, 0.0): [[(C, D), (D, D)]],
+            Point(1.0, 0.5): [[(D, D), (D, D)]],
+            Point(1.0, 1.0): [[(D, C), (D, C)]],
+        }
+        self.assertEqual(expected,
+                         self.organizer.get_points_interactions_dict())
+
+    def test_get_points_averages_dict(self):
+        expected = {
+            Point(0.0, 0.0): 3.0,
+            Point(0.0, 0.5): 1.5,
+            Point(0.0, 1.0): 4.0,
+            Point(0.5, 0.0): 2.0,
+            Point(0.5, 0.5): 2.5,
+            Point(0.5, 1.0): 0.0,
+            Point(1.0, 0.0): 0.5,
+            Point(1.0, 0.5): 1.0,
+            Point(1.0, 1.0): 5.0,
+        }
+        self.assertEqual(expected, self.organizer.get_points_averages_dict())
+
+    def test_get_plotting_data(self):
+        expected = [[4.0, 0.0, 5.0],
+                    [1.5, 2.5, 1.0],
+                    [3.0, 2.0, 0.5]]
+
+        plot_data = self.organizer.get_plotting_data()
+        for i in range(len(plot_data)):
+            self.assertEqual(list(plot_data[i]), expected[i])
+
+
 class TestFingerprint(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.strategy = axl.WinStayLoseShift
-        cls.probe = axl.TitForTat
-        cls.expected_points = [(0.0, 0.0), (0.0, 0.5), (0.0, 1.0),
-                               (0.5, 0.0), (0.5, 0.5), (0.5, 1.0),
-                               (1.0, 0.0), (1.0, 0.5), (1.0, 1.0)]
-        cls.expected_edges = [(0, 1), (0, 2), (0, 3),
-                              (0, 4), (0, 5), (0, 6),
-                              (0, 7), (0, 8), (0, 9)]
+        cls.probe_class = axl.TitForTat
 
-    def test_default_init(self):
-        fingerprint = AshlockFingerprint(self.strategy)
-        self.assertEqual(fingerprint.strategy, self.strategy)
-        self.assertEqual(fingerprint.probe, self.probe)
+    def setUp(self):
+        self.simple_af = AshlockFingerprint(axl.Cooperator, axl.Cooperator)
+        self.simple_interactions = {
+            Point(0.0, 0.0): [[(C, C), (C, C)]],
+            Point(0.0, 1.0): [[(C, D), (C, D)]],
+            Point(1.0, 0.0): [[(C, C), (C, C)]],
+            Point(1.0, 1.0): [[(C, D), (C, D)]]
+        }
+        self.simple_data = {
+            Point(0.0, 0.0): 3.0,
+            Point(0.0, 1.0): 0.0,
+            Point(1.0, 0.0): 3.0,
+            Point(1.0, 1.0): 0.0
+        }
 
-    def test_init(self):
-        fingerprint = AshlockFingerprint(self.strategy, self.probe)
-        self.assertEqual(fingerprint.strategy, self.strategy)
-        self.assertEqual(fingerprint.probe, self.probe)
+    def test_data_and_interactions_when_none(self):
+        self.assertIsNone(self.simple_af.data)
+        self.assertIsNone(self.simple_af.interactions)
 
-    def test_init_with_instance(self):
-        player = self.strategy()
-        fingerprint = AshlockFingerprint(player)
-        self.assertEqual(fingerprint.strategy, player)
-        self.assertEqual(fingerprint.probe, self.probe)
+    def test_data_and_interactions(self):
+        self.simple_af.fingerprint(turns=2, repetitions=1, step=1.0)
 
-        probe_player = self.probe()
-        fingerprint = AshlockFingerprint(self.strategy, probe_player)
-        self.assertEqual(fingerprint.strategy, self.strategy)
-        self.assertEqual(fingerprint.probe, probe_player)
-
-        fingerprint = AshlockFingerprint(player, probe_player)
-        self.assertEqual(fingerprint.strategy, player)
-        self.assertEqual(fingerprint.probe, probe_player)
-
-    def test_create_jossann(self):
-        fingerprint = AshlockFingerprint(self.strategy)
-
-        # x + y < 1
-        ja = fingerprint.create_jossann((.5, .4), self.probe)
-        self.assertEqual(str(ja), "Joss-Ann Tit For Tat: (0.5, 0.4)")
-
-        # x + y = 1
-        ja = fingerprint.create_jossann((.4, .6), self.probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.6, 0.4)")
-
-        # x + y > 1
-        ja = fingerprint.create_jossann((.5, .6), self.probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Tit For Tat: (0.5, 0.4)")
-
-    def test_create_jossann_parametrised_player(self):
-        fingerprint = AshlockFingerprint(self.strategy)
-
-        probe = axl.Random(p=0.1)
-
-        # x + y < 1
-        ja = fingerprint.create_jossann((.5, .4), probe)
-        self.assertEqual(str(ja), "Joss-Ann Random: 0.1: (0.5, 0.4)")
-
-        # x + y = 1
-        ja = fingerprint.create_jossann((.4, .6), probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.6, 0.4)")
-
-        # x + y > 1
-        ja = fingerprint.create_jossann((.5, .6), probe)
-        self.assertEqual(str(ja), "Dual Joss-Ann Random: 0.1: (0.5, 0.4)")
-
-    def test_create_points(self):
-        test_points = create_points(0.5, progress_bar=False)
-        self.assertEqual(test_points, self.expected_points)
-
-    def test_create_probes(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        probes = af.create_probes(self.probe, self.expected_points,
-                                  progress_bar=False)
-        self.assertEqual(len(probes), 9)
-
-    def test_create_edges(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        edges = af.create_edges(self.expected_points, progress_bar=False)
-        self.assertEqual(edges, self.expected_edges)
-
-    def test_construct_tournament_elemets(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        edges, tournament_players = af.construct_tournament_elements(0.5,
-                                                            progress_bar=False)
-        self.assertEqual(edges, self.expected_edges)
-        self.assertEqual(len(tournament_players), 10)
-        self.assertEqual(tournament_players[0].__class__, af.strategy)
-
-    def test_progress_bar_fingerprint(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=10, repetitions=2, step=0.5,
-                              progress_bar=True)
-        self.assertEqual(sorted(data.keys()), self.expected_points)
+        self.assertEqual(self.simple_af.interactions, self.simple_interactions)
+        self.assertEqual(self.simple_af.data, self.simple_data)
 
     def test_fingerprint_with_filename(self):
         filename = "test_outputs/test_fingerprint.csv"
-        af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
-                       filename=filename)
+        af = AshlockFingerprint(self.strategy, probe=self.probe_class)
+        af.fingerprint(turns=1, repetitions=1, filename=filename, step=0.5,
+                       progress_bar=False)
         with open(filename, 'r') as out:
             data = out.read()
             self.assertEqual(len(data.split("\n")), 10)
 
     def test_in_memory_fingerprint(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False,
-                       in_memory=True)
-        edge_keys = sorted(list(af.interactions.keys()))
-        coord_keys = sorted(list(af.data.keys()))
-        self.assertEqual(af.step, 0.5)
-        self.assertEqual(af.spatial_tournament.interactions_dict,
-                         af.interactions)
-        self.assertEqual(edge_keys, self.expected_edges)
-        self.assertEqual(coord_keys, self.expected_points)
-
-    def test_serial_fingerprint(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False)
-        edge_keys = sorted(list(af.interactions.keys()))
-        coord_keys = sorted(list(data.keys()))
-        self.assertEqual(af.step, 0.5)
-        self.assertEqual(edge_keys, self.expected_edges)
-        self.assertEqual(coord_keys, self.expected_points)
+        self.simple_af.fingerprint(turns=2, repetitions=1, step=1.0,
+                                   in_memory=True)
+        self.assertEqual(self.simple_af.interactions, self.simple_interactions)
+        self.assertEqual(self.simple_af.data, self.simple_data)
 
     @unittest.skipIf(axl.on_windows,
                      "Parallel processing not supported on Windows")
     def test_parallel_fingerprint(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.5, processes=2,
-                       progress_bar=False)
-        edge_keys = sorted(list(af.interactions.keys()))
-        coord_keys = sorted(list(af.data.keys()))
-        self.assertEqual(af.step, 0.5)
-        self.assertEqual(edge_keys, self.expected_edges)
-        self.assertEqual(coord_keys, self.expected_points)
-
-    def test_generate_data(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        edges, players = af.construct_tournament_elements(0.5)
-        spatial_tournament = axl.SpatialTournament(players,
-                                                   turns=10,
-                                                   repetitions=2,
-                                                   edges=edges)
-        results = spatial_tournament.play(progress_bar=False,
-                                          keep_interactions=True)
-        data = af.generate_data(results.interactions, self.expected_points,
-                                self.expected_edges)
-        keys = sorted(list(data.keys()))
-        values = [0 < score < 5 for score in data.values()]
-        self.assertEqual(sorted(keys), self.expected_points)
-        self.assertEqual(all(values), True)
-
-    def test_reshape_data(self):
-        test_points = [Point(x=0.0, y=0.0),
-                       Point(x=0.0, y=0.5),
-                       Point(x=0.0, y=1.0),
-                       Point(x=0.5, y=0.0),
-                       Point(x=0.5, y=0.5),
-                       Point(x=0.5, y=1.0),
-                       Point(x=1.0, y=0.0),
-                       Point(x=1.0, y=0.5),
-                       Point(x=1.0, y=1.0)]
-        test_data = {Point(x=0.0, y=0.0): 5,
-                     Point(x=0.0, y=0.5): 9,
-                     Point(x=0.0, y=1.0): 3,
-                     Point(x=0.5, y=0.0): 8,
-                     Point(x=0.5, y=0.5): 2,
-                     Point(x=0.5, y=1.0): 4,
-                     Point(x=1.0, y=0.0): 2,
-                     Point(x=1.0, y=0.5): 1,
-                     Point(x=1.0, y=1.0): 9}
-        test_shaped_data = [[3, 4, 9],
-                            [9, 2, 1],
-                            [5, 8, 2]]
-        af = AshlockFingerprint(self.strategy, self.probe)
-        plotting_data = af.reshape_data(test_data, test_points, 3)
-        for i in range(len(plotting_data)):
-            self.assertEqual(list(plotting_data[i]), test_shaped_data[i])
+        self.simple_af.fingerprint(turns=2, repetitions=1, step=1.0,
+                                   processes=2)
+        self.assertEqual(self.simple_af.interactions, self.simple_interactions)
+        self.assertEqual(self.simple_af.data, self.simple_data)
 
     def test_plot(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.25, progress_bar=False)
+        af = AshlockFingerprint(self.strategy, self.probe_class)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.25,
+                              progress_bar=False)
         p = af.plot()
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
         q = af.plot(col_map='jet')
@@ -211,7 +340,7 @@ class TestFingerprint(unittest.TestCase):
         v = af.plot(labels=False)
         self.assertIsInstance(v, matplotlib.pyplot.Figure)
 
-    def test_wsls_fingerprint(self):
+    def test_wsls_fingerprint_and_progress_bar(self):
         axl.seed(0)  # Fingerprinting is a random process
         test_data = {Point(x=0.0, y=0.0): 3.0,
                      Point(x=0.0, y=0.25): 1.46,
@@ -239,8 +368,9 @@ class TestFingerprint(unittest.TestCase):
                      Point(x=1.0, y=0.75): 4.9,
                      Point(x=1.0, y=1.0): 1.3}
 
-        af = axl.AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=50, repetitions=2, step=0.25)
+        af = axl.AshlockFingerprint(self.strategy, self.probe_class)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.25,
+                              progress_bar=True)
 
         for key, value in data.items():
             self.assertAlmostEqual(value, test_data[key])
@@ -272,8 +402,9 @@ class TestFingerprint(unittest.TestCase):
                      Point(x=1.0, y=0.5): 2.56,
                      Point(x=1.0, y=0.75): 2.44,
                      Point(x=1.0, y=1.0): 2.18}
-        af = axl.AshlockFingerprint(axl.TitForTat, self.probe)
-        data = af.fingerprint(turns=50, repetitions=2, step=0.25)
+        af = axl.AshlockFingerprint(axl.TitForTat, self.probe_class)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.25,
+                              progress_bar=False)
 
         for key, value in data.items():
             self.assertAlmostEqual(value, test_data[key])
@@ -305,8 +436,9 @@ class TestFingerprint(unittest.TestCase):
                      Point(x=1.0, y=0.5): 1.64,
                      Point(x=1.0, y=0.75): 2.08,
                      Point(x=1.0, y=1.0): 2.26}
-        af = axl.AshlockFingerprint(axl.GoByMajority, self.probe)
-        data = af.fingerprint(turns=50, repetitions=2, step=0.25)
+        af = axl.AshlockFingerprint(axl.GoByMajority, self.probe_class)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.25,
+                              progress_bar=False)
 
         for key, value in data.items():
             self.assertAlmostEqual(value, test_data[key])
@@ -319,21 +451,21 @@ class TestFingerprint(unittest.TestCase):
         """
         strategy, probe = strategy_pair
         af = AshlockFingerprint(strategy, probe)
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
+        data = af.fingerprint(turns=2, repetitions=2, step=1.0,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy(), probe)
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
+        data = af.fingerprint(turns=2, repetitions=2, step=1.0,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy, probe())
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
+        data = af.fingerprint(turns=2, repetitions=2, step=1.0,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy(), probe())
-        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
+        data = af.fingerprint(turns=2, repetitions=2, step=1.0,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
