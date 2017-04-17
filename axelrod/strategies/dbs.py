@@ -10,8 +10,7 @@ def action_to_int(action):
 
 class DBS(Player):
     """
-    Desired Belief Strategy as described in:
-    Accident or Intention: That Is the Question (in the Noisy Iterated Prisoner's Dilemma) by Tsz-Chiu Au and Dana Nau from University of Maryland
+    Desired Belief Strategy as described in [Au2006]_
     http://www.cs.utexas.edu/%7Echiu/papers/Au06NoisyIPD.pdf
 
     A strategy that learns the opponent's strategy, and use symbolic noise de-
