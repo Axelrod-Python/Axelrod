@@ -293,9 +293,19 @@ def initial_sequence(player, opponent, action, initial_seq):
         return initial_seq[index]
     return action
 
+def initial_reclassifier(original_classifier, initial_seq):
+    """
+    If needed this extends the memory depth to be the length of the initial
+    sequence
+    """
+    original_classifier["memory_depth"] = max(len(initial_seq),
+                                            original_classifier["memory_depth"])
+    return original_classifier
+
 
 InitialTransformer = StrategyTransformerFactory(initial_sequence,
-                                                name_prefix="Initial")
+                                            name_prefix="Initial",
+                                            reclassifier=initial_reclassifier)
 
 
 def final_sequence(player, opponent, action, seq):
@@ -321,6 +331,8 @@ def final_sequence(player, opponent, action, seq):
 def final_reclassifier(original_classifier, seq):
     """Reclassify the strategy"""
     original_classifier["makes_use_of"].update(["length"])
+    original_classifier["memory_depth"] = max(len(seq),
+                                            original_classifier["memory_depth"])
     return original_classifier
 
 

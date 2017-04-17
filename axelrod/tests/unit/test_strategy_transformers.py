@@ -250,7 +250,9 @@ class TestTransformers(unittest.TestCase):
     def test_initial_transformer(self):
         """Tests the InitialTransformer."""
         p1 = axelrod.Cooperator()
+        self.assertEqual(p1.classifier["memory_depth"], 0)
         p2 = InitialTransformer([D, D])(axelrod.Cooperator)()
+        self.assertEqual(p2.classifier["memory_depth"], 2)
         for _ in range(5):
             p1.play(p2)
         self.assertEqual(p2.history, [D, D, C, C, C])
@@ -261,18 +263,25 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p2.history, [D, D, C, D, C])
 
+        p3 = InitialTransformer([D, D])(axelrod.Grudger)()
+        self.assertEqual(p3.classifier["memory_depth"], float('inf'))
+
     def test_final_transformer(self):
         """Tests the FinalTransformer when tournament length is known."""
         # Final play transformer
         p1 = axelrod.Cooperator()
         p2 = FinalTransformer([D, D, D])(axelrod.Cooperator)()
         self.assertEqual(p2.classifier['makes_use_of'], set(["length"]))
+        self.assertEqual(p2.classifier['memory_depth'], 3)
         self.assertEqual(axelrod.Cooperator.classifier['makes_use_of'], set([]))
 
         p2.match_attributes["length"] = 6
-        for _ in range(6):
+        for _ in range(8):
             p1.play(p2)
-        self.assertEqual(p2.history, [C, C, C, D, D, D])
+        self.assertEqual(p2.history, [C, C, C, D, D, D, C, C])
+
+        p3 = FinalTransformer([D, D])(axelrod.Grudger)()
+        self.assertEqual(p3.classifier["memory_depth"], float('inf'))
 
     def test_final_transformer2(self):
         """Tests the FinalTransformer when tournament length is not known."""
