@@ -65,10 +65,10 @@ class DBS(Player):
         super().__init__()
 
         # default opponent's policy is TitForTat
-        self.Rd = Policy.prob_policy(1, 1, 0, 0)
-        self.Rc = Policy()
+        self.Rd = create_policy(1, 1, 0, 0)
+        self.Rc = {}
         self.Pi = self.Rd   # policy used by MoveGen
-        self.violation_counts = Policy()
+        self.violation_counts = {}
         self.reject_threshold = reject_threshold
         self.violation_threshold = violation_threshold
         self.promotion_threshold = promotion_threshold
@@ -93,10 +93,10 @@ class DBS(Player):
 
     def reset(self):
         super().reset()
-        self.Rd = Policy.prob_policy(1, 1, 0, 0)
-        self.Rc = Policy()
+        self.Rd = create_policy(1, 1, 0, 0)
+        self.Rc = {}
         self.Pi = self.Rd   # policy used by MoveGen
-        self.violation_counts = Policy()
+        self.violation_counts = {}
         self.v = 0
         self.history_by_cond = {}
         self.history_by_cond[(C, C)] = ([1], [1])
@@ -220,7 +220,7 @@ class DBS(Player):
                 self.v = 0
 
             # compute Rp for conditions that are neither in Rc or Rd
-            Rp = Policy()
+            Rp = {}
             all_cond = [(C, C), (C, D), (D, C), (D, D)]
             for outcome in all_cond:
                 if ((outcome not in self.Rc.keys()) 
@@ -228,7 +228,7 @@ class DBS(Player):
                     # then we need to compute opponent's C answer probability
                     Rp[outcome] = self.compute_prob_rule(outcome, self.alpha)
 
-            self.Pi = Policy()
+            self.Pi = {}
             # algorithm ensure no duplicate keys -> no key overwriting
             self.Pi.update(self.Rc)
             self.Pi.update(self.Rd)
@@ -237,29 +237,6 @@ class DBS(Player):
         # React to the opponent's last move
         return MoveGen((self.history[-1], opponent.history[-1]), self.Pi,
                 depth_search_tree=self.tree_depth)
-
-
-class Policy(dict):
-    """
-    Policy as defined in the reference, i.e. a set of (last_move,p) 
-    where p is the probability to cooperate in the next move 
-    considering last move
-    """
-
-    def __init__(self):
-        super().__init__()
-
-    @classmethod
-    def prob_policy(cls, pCC, pCD, pDC, pDD):
-        pol = cls()
-        pol[(C, C)] = pCC
-        pol[(C, D)] = pCD
-        pol[(D, C)] = pDC
-        pol[(D, D)] = pDD
-        return pol
-    
-    def proba(self, action1, action2):
-        return self[(action1, action2)]
 
 
 class Node(object):
@@ -315,10 +292,10 @@ class DeterministNode(Node):
         same depth
         """
         c_choice = StochasticNode(
-                C, policy.proba(self.action1, self.action2), self.depth
+                C, policy[(self.action1, self.action2)], self.depth
                 )
         d_choice = StochasticNode(
-                D, policy.proba(self.action1, self.action2), self.depth
+                D, policy[(self.action1, self.action2)], self.depth
                 )
         return (c_choice, d_choice)
 
@@ -336,6 +313,21 @@ class DeterministNode(Node):
             return 1
 
 
+def create_policy(pCC, pCD, pDC, pDD):
+    """
+    Creates a dict that represents a Policy.
+    As defined in the reference, a Policy is a set of (prev_move, p) 
+    where p is the probability to cooperate after prev_move,
+    where prev_move can be (C, C), (C, D), (D, C) or (D, D)
+    """
+    pol = {}
+    pol[(C, C)] = pCC
+    pol[(C, D)] = pCD
+    pol[(D, C)] = pDC
+    pol[(D, D)] = pDD
+    return pol
+
+
 def action_to_int(action):
     return (1 if action == C else 0)
 
@@ -348,8 +340,8 @@ def F(begin_node, policy, max_depth):
         # depth is < max_depth
         siblings = begin_node.get_siblings()
         # The stochastic node value is the expected values of siblings
-        node_value = begin_node.pC * F(siblings[0], policy, max_depth) 
-            + (1 - begin_node.pC) * F(siblings[1], policy, max_depth)
+        node_value = (begin_node.pC * F(siblings[0], policy, max_depth) 
+            + (1 - begin_node.pC) * F(siblings[1], policy, max_depth))
         return node_value
     else:   # determinist node
         if begin_node.depth == max_depth:
@@ -367,8 +359,8 @@ def F(begin_node, policy, max_depth):
             siblings = begin_node.get_siblings(policy)
             # the determinist node value is the max of both siblings values
             # + the score of the outcome of the node
-            a = F(siblings[0], policy,max_depth)
-            b = F(siblings[1], policy,max_depth)
+            a = F(siblings[0], policy, max_depth)
+            b = F(siblings[1], policy, max_depth)
             node_value = max(a, b) + begin_node.get_value()
             return node_value
     
