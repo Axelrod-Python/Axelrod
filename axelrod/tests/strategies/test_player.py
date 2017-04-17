@@ -185,34 +185,49 @@ class TestPlayerClass(unittest.TestCase):
         self.assertNotEqual(p1, p2)
 
     def test_equality_for_generator(self):
-        # Check generator attribute (a special case)
+        """Test equality works with generator attribute and that the generator
+        attribute is not altered during checking of equality"""
         p1 = axelrod.Cooperator()
         p2 = axelrod.Cooperator()
-        # Check that the generator is still the same
+
+        # Check that players are equal with generator
         p1.generator = (i for i in range(10))
         p2.generator = (i for i in range(10))
         self.assertEqual(p1, p2)
 
-        _ = next(p2.generator)
+        # Check state of one generator (ensure it hasn't changed)
+        n = next(p2.generator)
+        self.assertEqual(n, 0)
+
+        # Players are no longer equal (one generator has changed)
         self.assertNotEqual(p1, p2)
 
-        # Check that internal generator object has not been changed
+        # Check that internal generator object has not been changed for either
+        # player after latest equal check.
         self.assertEqual(list(p1.generator), list(range(10)))
         self.assertEqual(list(p2.generator), list(range(1, 10)))
 
     def test_equality_for_cycle(self):
+        """Test equality works with cycle attribute and that the cycle attribute
+        is not altered during checking of equality"""
         # Check cycle attribute (a special case)
         p1 = axelrod.Cooperator()
         p2 = axelrod.Cooperator()
-        # Check that the cycle is still the same
+
+        # Check that players are equal with cycle
         p1.cycle = itertools.cycle(range(10))
         p2.cycle = itertools.cycle(range(10))
         self.assertEqual(p1, p2)
 
-        _ = next(p2.cycle)
+        # Check state of one generator (ensure it hasn't changed)
+        n = next(p2.cycle)
+        self.assertEqual(n, 0)
+
+        # Players are no longer equal (one generator has changed)
         self.assertNotEqual(p1, p2)
 
-        # Check that internal generator object has not been changed
+        # Check that internal cycle object has not been changed for either
+        # player after latest not equal check.
         self.assertEqual(next(p1.cycle), 0)
         self.assertEqual(next(p2.cycle), 1)
 
