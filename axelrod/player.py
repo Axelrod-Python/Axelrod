@@ -149,10 +149,17 @@ class Player(object):
                 generator, original_value = itertools.tee(value)
                 other_generator, original_other_value = itertools.tee(other_value)
 
-                setattr(self, attribute,
-                        (ele for ele in original_value))
-                setattr(other, attribute,
-                        (ele for ele in original_other_value))
+
+                if isinstance(value, types.GeneratorType):
+                    setattr(self, attribute,
+                            (ele for ele in original_value))
+                    setattr(other, attribute,
+                            (ele for ele in original_other_value))
+                else:
+                    setattr(self, attribute,
+                            itertools.cycle(original_value))
+                    setattr(other, attribute,
+                            itertools.cycle(original_other_value))
 
                 if not (all(next(generator) == next(other_generator)
                         for _ in range(200))):

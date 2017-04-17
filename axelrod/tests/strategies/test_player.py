@@ -207,6 +207,9 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(list(p1.generator), list(range(10)))
         self.assertEqual(list(p2.generator), list(range(1, 10)))
 
+        # Check that type is generator
+        self.assertIsInstance(p2.generator, types.GeneratorType)
+
     def test_equality_for_cycle(self):
         """Test equality works with cycle attribute and that the cycle attribute
         is not altered during checking of equality"""
@@ -231,11 +234,15 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(next(p1.cycle), 0)
         self.assertEqual(next(p2.cycle), 1)
 
+        # Check that type is cycle
+        self.assertIsInstance(p2.cycle, itertools.cycle)
+
     def test_equaity_on_init(self):
         """Test all instances of a strategy are equal on init"""
         for s in axelrod.strategies:
             p1, p2 = s(), s()
-            # Check twice (so testing equality doesn't change anything)
+            # Check three times (so testing equality doesn't change anything)
+            self.assertEqual(p1, p2)
             self.assertEqual(p1, p2)
             self.assertEqual(p1, p2)
 
