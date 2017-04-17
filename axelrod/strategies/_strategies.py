@@ -120,6 +120,7 @@ all_strategies = [
     Desperate,
     DoubleCrosser,
     Doubler,
+    DoubleResurrection,
     EasyGo,
     Eatherley,
     EventualCycleHunter,
