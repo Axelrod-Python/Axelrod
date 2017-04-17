@@ -1,3 +1,22 @@
+# v2.10.0, 2017-04-17
+
+Bug fix in strategy transformers, new strategy, internal refactor of strategies,
+fix bibtex in citation file.
+
+- Fix a bug: ensure strategy transformers also transform classification
+  https://github.com/Axelrod-Python/Axelrod/pull/972
+- Add DoubleResurrection strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/965
+- Refactor of LookerUp and Gambler
+  https://github.com/Axelrod-Python/Axelrod/pull/966
+- Add regression test for FSM players
+  https://github.com/Axelrod-Python/Axelrod/pull/967
+- Bibtex fix in CITATION.rst
+  https://github.com/Axelrod-Python/Axelrod/pull/968
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.10.0...v2.10.0
+
 # v2.9.0, 2017-04-11
 
 Approximate Moran process, test refactor, tweak to the Human play repr,
