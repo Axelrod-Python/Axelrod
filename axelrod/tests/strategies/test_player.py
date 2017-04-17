@@ -158,7 +158,7 @@ class TestPlayerClass(unittest.TestCase):
         p1 = axelrod.Cooperator()
         p2 = axelrod.Cooperator()
         self.assertEqual(p1, p2)
-        p1.__repr__ = lambda :"John Nash"
+        p1.__repr__ = lambda: "John Nash"
         self.assertNotEqual(p1, p2)
 
         # Check attributes
