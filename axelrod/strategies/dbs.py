@@ -332,8 +332,12 @@ def action_to_int(action):
     return (1 if action == C else 0)
 
 
-def F(begin_node, policy, max_depth):
-    "tree search function (minimax search procedure)"
+def minimax_tree_search(begin_node, policy, max_depth):
+    """
+    tree search function (minimax search procedure)
+    build by recursion the tree corresponding to a game against 
+    opponent's policy, and solve it
+    """
     if begin_node.is_stochastic():
         # a stochastic node cannot has the same depth than its parent
         # node hence there is no need to check that his 
@@ -371,7 +375,8 @@ def MoveGen(outcome, policy, depth_search_tree=5):
     using tree-search procedure
     """
     current_node = DeterministNode(outcome[0], outcome[1], depth=0)
-    values_of_choices = F(current_node, policy, depth_search_tree)
+    values_of_choices = minimax_tree_search(
+            current_node, policy, depth_search_tree)
     # returns the Action which correspond to the best choice in terms of 
     # expected value. In case value(C) == value(D), returns C
     actions_tuple = (C, D)
