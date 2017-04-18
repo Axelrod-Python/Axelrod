@@ -26,7 +26,7 @@ import numpy as np
 import tqdm
 import axelrod as axl
 
-from axelrod import on_windows, Player, SpatialTournament
+from axelrod import Player, SpatialTournament
 from axelrod.actions import Action
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (
@@ -112,7 +112,7 @@ class AshlockFingerprint(object):
             the values are the mean score for the corresponding interactions.
         """
 
-        if on_windows and (filename is None):  # pragma: no cover
+        if axl.on_windows and (filename is None):  # pragma: no cover
             in_memory = True
         elif filename is None:
             output_file = NamedTemporaryFile(mode='w')
