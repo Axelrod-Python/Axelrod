@@ -164,6 +164,12 @@ class Player(object):
                 if not (all(next(generator) == next(other_generator)
                         for _ in range(200))):
                     return False
+
+            # Code for a strange edge case where each strategy points at each
+            # other
+            elif (value is other and other_value is self):
+                    pass
+
             else:
                 if value != other_value:
                     return False

@@ -172,6 +172,20 @@ class TestPlayerClass(unittest.TestCase):
         p2.test = "29"
         self.assertNotEqual(p1, p2)
 
+        p1.test = "29"
+        self.assertEqual(p1, p2)
+
+        # Check that attributes of both players are tested.
+        p1.another_attribute = [1, 2, 3]
+        self.assertNotEqual(p1, p2)
+        p2.another_attribute = [1, 2, 3]
+        self.assertEqual(p1, p2)
+
+        p2.another_attribute_2 = {1: 2}
+        self.assertNotEqual(p1, p2)
+        p1.another_attribute_2 = {1: 2}
+        self.assertEqual(p1, p2)
+
     def test_equality_for_numpy_array(self):
         # Check numpy array attribute (a special case)
         p1 = axelrod.Cooperator()
@@ -245,6 +259,40 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(p1, p2)
             self.assertEqual(p1, p2)
             self.assertEqual(p1, p2)
+
+    def test_equaity_on_with_player_attributes(self):
+        """Test for a strange edge case where players have pointers to each
+        other"""
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+
+        # If pointing at each other
+        p1.player = p2
+        p2.player = p1
+        self.assertEqual(p1, p2)
+
+        # Still checking other attributes.
+        p1.test_attribute = "29"
+        self.assertNotEqual(p1, p2)
+
+        # If pointing at same strategy instances
+        p1.player = axelrod.Cooperator()
+        p2.player = axelrod.Cooperator()
+        p2.test_attribute = "29"
+        self.assertEqual(p1, p2)
+
+
+        # If pointing at different strategy instances
+        p1.player = axelrod.Cooperator()
+        p2.player = axelrod.Defector()
+        self.assertNotEqual(p1, p2)
+
+        # If different strategies pointing at same strategy instances
+        p3 = axelrod.Defector()
+        p1.player = axelrod.Cooperator()
+        p3.player = axelrod.Cooperator()
+        self.assertNotEqual(p1, p3)
+
 
     def test_init_params(self):
         """Tests player correct parameters signature detection."""
