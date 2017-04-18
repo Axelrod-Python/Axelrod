@@ -417,21 +417,21 @@ class TestFingerprint(unittest.TestCase):
         """
         strategy, probe = strategy_pair
         af = AshlockFingerprint(strategy, probe)
-        data = af.fingerprint(turns=2, repetitions=2, step=1.0,
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy(), probe)
-        data = af.fingerprint(turns=2, repetitions=2, step=1.0,
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy, probe())
-        data = af.fingerprint(turns=2, repetitions=2, step=1.0,
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
 
         af = AshlockFingerprint(strategy(), probe())
-        data = af.fingerprint(turns=2, repetitions=2, step=1.0,
+        data = af.fingerprint(turns=2, repetitions=2, step=0.5,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
