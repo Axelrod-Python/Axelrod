@@ -1,3 +1,23 @@
+"""
+changelog:
+
+added/changed docstring
+
+- AshlockFingerprint - added summary
+- fingerprint - step added one line
+- fingerprint - added missing params
+- construct_tournament_elements - step added one sentence
+- create_jossann - probe param now class or instance not class
+
+code:
+
+create_points - `num = int((1 / step) // 1) + 1` to `num = int(1 / step) + 1`
+plot - `size = int((1 / self.step)) // 1 + 1` to `size = int(1 / self.step) + 1`
+__init__ - explicitly created all the class values and assigned to None.
+
+"""
+
+
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
 from typing import Tuple, List, Dict, Union, Any
@@ -24,10 +44,7 @@ PointList = List[Point]
 PlayerList = List[Player]
 
 EdgesToMatches = Dict[Edge, Matches]
-PointsToPlayers = Dict[Point, Player]
 PointsToFloats = Dict[Point, float]
-PointsToEdges = Dict[Point, Edge]
-PointsToMatches = Dict[Point, Matches]
 
 
 class AshlockFingerprint(object):
@@ -75,7 +92,7 @@ class AshlockFingerprint(object):
         repetitions : integer, optional
             The number of times the each match is repeated
         step : float, optional
-            0.0 <= step <= 1.0
+            0.0 < step <= 1.0
             The separation between each Point. Smaller steps will
             produce more Points that will be closer together.
         processes : integer, optional
@@ -182,8 +199,9 @@ class AshlockFingerprint(object):
         Parameters
         ----------
         step : float
+            0.0 < step <= 1.0.
             The separation between each Point. Smaller steps will
-            produce more Points that will be closer together. 0.0 <= step <= 1.0
+            produce more Points that will be closer together.
         progress_bar : bool
             Whether or not to show a progress bar while building the player
             list.
@@ -320,8 +338,8 @@ def create_jossann(point: Point, probe: Any) -> Player:
     Parameters
     ----------
     point : Point
-    probe : class
-        A class that must be descended from axelrod.strategies
+    probe : class or Player
+        A class or instance that must be descended from axelrod.strategies
 
     Returns
     ----------

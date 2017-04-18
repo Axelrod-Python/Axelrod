@@ -1,3 +1,17 @@
+"""
+added or modified tests
+
+line
+
+- 38 to 62
+- 95
+- 105
+- 110
+- 211
+- 235
+
+"""
+
 import unittest
 from hypothesis import given
 from axelrod.fingerprint import *
@@ -44,6 +58,11 @@ class TestFingerPrintHelpers(unittest.TestCase):
                           (0, 7), (0, 8), (0, 9)]
         edges = create_edges(points, progress_bar=False)
         self.assertEqual(edges, expected_edges)
+
+    def test_create_edges_progress_bar_true(self):
+        points = [(0.0, 0.0), (0.0, 0.5)]
+        edges = create_edges(points, progress_bar=True)
+        self.assertEqual(edges, [(0, 1), (0, 2)])
 
     def test_create_jossann(self):
         probe = axl.TitForTat
@@ -186,6 +205,14 @@ class TestFingerprint(unittest.TestCase):
         af = AshlockFingerprint(self.strategy, self.probe)
         edges, tournament_players = af.construct_tournament_elements(
             0.5, progress_bar=False)
+        self.assertEqual(edges, self.expected_edges)
+        self.assertEqual(len(tournament_players), 10)
+        self.assertEqual(tournament_players[0].__class__, af.strategy)
+
+    def test_construct_tournament_elements_progress_bar_true(self):
+        af = AshlockFingerprint(self.strategy, self.probe)
+        edges, tournament_players = af.construct_tournament_elements(
+            0.5, progress_bar=True)
         self.assertEqual(edges, self.expected_edges)
         self.assertEqual(len(tournament_players), 10)
         self.assertEqual(tournament_players[0].__class__, af.strategy)
