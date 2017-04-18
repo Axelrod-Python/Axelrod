@@ -4,3 +4,4 @@ matplotlib>=1.4.2
 hypothesis>=3.2
 tqdm==3.4.0
 prompt-toolkit>=1.0.7
+scipy>=0.18.0
