@@ -90,7 +90,7 @@ class AshlockFingerprint(object):
         turns : integer, optional
             The number of turns per match
         repetitions : integer, optional
-            The number of times the each match is repeated
+            The number of times the round robin should be repeated
         step : float, optional
             0.0 < step <= 1.0
             The separation between each Point. Smaller steps will
@@ -103,13 +103,13 @@ class AshlockFingerprint(object):
             True=tournament.interactions_dict is stored only in memory
             False=tournament.interactions_dict is stored only on file
         progress_bar : bool
-            Whether or not to show progress bars during steps of data creation.
+            Whether or not to create a progress bar which will be updated
 
         Returns
         ----------
         self.data : dictionary(Point, float)
-            The mean score for all matches against the probe corresponding to
-            each Point
+            A dictionary where the keys are coordinates of the form (x, y) and
+            the values are the mean score for the corresponding interactions.
         """
 
         if on_windows and (filename is None):  # pragma: no cover
