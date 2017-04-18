@@ -40,10 +40,11 @@ class AshlockFingerprint(object):
         Parameters
         ----------
         strategy : class or instance
-            Player instance or Player class to be fingerprinted.
+            A class that must be descended from axelrod.Player or an instance of
+            axelrod.Player.
         probe : class or instance
-            Player instance or Player class that is the "canvas" for
-            the fingerprint.
+            A class that must be descended from axelrod.Player or an instance of
+            axelrod.Player.
             Default: Tit For Tat
         """
         self.strategy = strategy
@@ -59,17 +60,8 @@ class AshlockFingerprint(object):
         processes: int = None, filename: str = None, in_memory: bool = False,
         progress_bar: bool = True
     ) -> PointsToFloats:
-        """Creates the data that is the fingerprint of self.strategy.
+        """Build and play the spatial tournament.
 
-        The data is created by running matches of turns (turns) a (repetition)
-        number of times for probes corresponding to each point of a square.
-
-        The square is made of points from Point(0.0, 0.0) to Point(1.0, 1.0)
-        and goes in increments of size:(step) rounded up nearest fraction with
-        numerator=1.  step=0.48 becomes x,y values in [0.0, 1/2, 1.0],
-        step=0.3 values round up to [0.0, 1/3, 2/3, 1.0].
-
-        ??CAN THE TWO PARAGRAPHS ABOVE REPLACE THE PARAGRAPH BELOW??
         Creates the probes and their edges then builds a spatial tournament.
         When the coordinates of the probe sum to more than 1, the dual of the
         probe is taken instead and then the Joss-Ann Transformer is applied. If
@@ -84,7 +76,6 @@ class AshlockFingerprint(object):
             The number of times the each match is repeated
         step : float, optional
             0.0 <= step <= 1.0
-            IF NEW DESCRIPTION IS GOOD, CAN REMOVE THESE TWO LINES.
             The separation between each Point. Smaller steps will
             produce more Points that will be closer together.
         processes : integer, optional
@@ -158,7 +149,7 @@ class AshlockFingerprint(object):
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
-        size = int((1 / self.step) // 1) + 1
+        size = int(1 / self.step) + 1
         plotting_data = reshape_data(self.data, self.points, size)
         fig, ax = plt.subplots()
         cax = ax.imshow(
@@ -244,7 +235,7 @@ def create_points(step: float, progress_bar: bool = True) -> PointList:
     points : list
         of Point objects with coordinates (x, y)
     """
-    num = int((1 / step) // 1) + 1
+    num = int(1 / step) + 1
 
     p_bar = None
     if progress_bar:
@@ -265,7 +256,10 @@ def create_points(step: float, progress_bar: bool = True) -> PointList:
 
 
 def create_edges(points: PointList, progress_bar: bool = True) -> EdgeList:
-    """Each Point corresponds to a probe Player. Returns
+    """Creates a set of edges for a spatial tournament.
+
+    Constructs edges that correspond to `points`. All edges begin at 0, and
+    connect to the index +1 of the probe.
 
     Parameters
     ----------
