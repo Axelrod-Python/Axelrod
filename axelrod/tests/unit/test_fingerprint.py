@@ -233,17 +233,12 @@ class TestFingerprint(unittest.TestCase):
             self.assertEqual(len(data.split("\n")), 10)
 
     def test_fingerprint_with_filename_none_and_in_memory_false(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
+        af = AshlockFingerprint(axl.Cooperator, axl.Cooperator)
+        af.fingerprint(turns=1, repetitions=1, step=1.0, progress_bar=False,
                        filename=None, in_memory=False)
-
-        edge_keys = sorted(list(af.interactions.keys()))
-        coord_keys = sorted(list(af.data.keys()))
-        self.assertEqual(af.step, 0.5)
-        self.assertEqual(af.spatial_tournament.interactions_dict,
-                         af.interactions)
-        self.assertEqual(edge_keys, self.expected_edges)
-        self.assertEqual(coord_keys, self.expected_points)
+        interactions = {(0, 1): [[(C, C)]], (0, 2): [[(C, D)]],
+                        (0, 3): [[(C, C)]], (0, 4): [[(C, D)]]}
+        self.assertEqual(af.interactions, interactions)
 
     def test_in_memory_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
