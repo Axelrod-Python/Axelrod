@@ -187,7 +187,7 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(p1, p2)
 
     def test_equality_for_numpy_array(self):
-        # Check numpy array attribute (a special case)
+        """Check numpy array attribute (a special case)"""
         p1 = axelrod.Cooperator()
         p2 = axelrod.Cooperator()
 
@@ -251,8 +251,8 @@ class TestPlayerClass(unittest.TestCase):
         # Check that type is cycle
         self.assertIsInstance(p2.cycle, itertools.cycle)
 
-    def test_equaity_on_init(self):
-        """Test all instances of a strategy are equal on init"""
+    def test_equality_on_init(self):
+        """Test instances of all strategies are equal on init"""
         for s in axelrod.strategies:
             p1, p2 = s(), s()
             # Check three times (so testing equality doesn't change anything)
@@ -260,7 +260,7 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(p1, p2)
             self.assertEqual(p1, p2)
 
-    def test_equaity_on_with_player_attributes(self):
+    def test_equality_with_player_as_attributes(self):
         """Test for a strange edge case where players have pointers to each
         other"""
         p1 = axelrod.Cooperator()
