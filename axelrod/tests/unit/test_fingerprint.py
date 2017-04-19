@@ -1,19 +1,4 @@
-"""
-added or modified tests
-
-line
-
-- 38 to 62
-- 95
-- 105
-- 110
-- 211
-- 235
-
-"""
-
 import unittest
-from unittest.mock import patch
 from hypothesis import given
 from axelrod.fingerprint import *
 from axelrod.tests.property import strategy_lists
@@ -233,27 +218,6 @@ class TestFingerprint(unittest.TestCase):
             data = out.read()
             self.assertEqual(len(data.split("\n")), 10)
 
-    @unittest.skipIf(axl.on_windows,
-                     "Windows has issues with NamedTemporaryFile.")
-    def test_fingerprint_not_on_windows_filename_none_and_in_memory_false(self):
-        af = AshlockFingerprint(axl.Cooperator, axl.Cooperator)
-        af.fingerprint(turns=1, repetitions=1, step=1.0, progress_bar=False,
-                       filename=None, in_memory=False)
-        interactions = {(0, 1): [[(C, C)]], (0, 2): [[(C, D)]],
-                        (0, 3): [[(C, C)]], (0, 4): [[(C, D)]]}
-        self.assertEqual(af.interactions, interactions)
-        self.assertFalse(hasattr(af.spatial_tournament, 'interactions_dict'))
-
-    @patch("axelrod.on_windows", True)
-    def test_fingerprint_on_windows_filename_none_and_in_memory_false(self):
-        af = AshlockFingerprint(axl.Cooperator, axl.Cooperator)
-        af.fingerprint(turns=1, repetitions=1, step=1.0, progress_bar=False,
-                       filename=None, in_memory=False)
-        interactions = {(0, 1): [[(C, C)]], (0, 2): [[(C, D)]],
-                        (0, 3): [[(C, C)]], (0, 4): [[(C, D)]]}
-        self.assertEqual(af.interactions, interactions)
-        self.assertEqual(af.spatial_tournament.interactions_dict, interactions)
-
     def test_in_memory_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
         af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False,
@@ -299,7 +263,7 @@ class TestFingerprint(unittest.TestCase):
         self.assertIsInstance(r, matplotlib.pyplot.Figure)
         t = af.plot(title='Title')
         self.assertIsInstance(t, matplotlib.pyplot.Figure)
-        u = af.plot(color_bar=False)
+        u = af.plot(colorbar=False)
         self.assertIsInstance(u, matplotlib.pyplot.Figure)
         v = af.plot(labels=False)
         self.assertIsInstance(v, matplotlib.pyplot.Figure)

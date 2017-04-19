@@ -1,23 +1,3 @@
-"""
-changelog:
-
-added/changed docstring
-
-- AshlockFingerprint - added summary
-- fingerprint - step added one line
-- fingerprint - added missing params
-- construct_tournament_elements - step added one sentence
-- create_jossann - probe param now class or instance not class
-
-code:
-
-create_points - `num = int((1 / step) // 1) + 1` to `num = int(1 / step) + 1`
-plot - `size = int((1 / self.step)) // 1 + 1` to `size = int(1 / self.step) + 1`
-__init__ - explicitly created all the class values and assigned to None.
-
-"""
-
-
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
 from typing import Tuple, List, Dict, Union, Any
@@ -26,8 +6,7 @@ import numpy as np
 import tqdm
 import axelrod as axl
 
-from axelrod import Player, SpatialTournament
-from axelrod.actions import Action
+from axelrod import on_windows, Player
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (
     compute_final_score_per_turn, read_interactions_from_file)
@@ -35,24 +14,10 @@ from axelrod.interaction_utils import (
 
 Point = namedtuple('Point', 'x y')
 
-PlayerOrStrategy = Union[Player, type]
-Edge = Tuple[int, int]
-Matches = List[List[Tuple[Action, Action]]]
-
-EdgeList = List[Edge]
-PointList = List[Point]
-PlayerList = List[Player]
-
-EdgesToMatches = Dict[Edge, Matches]
-PointsToFloats = Dict[Point, float]
-
 
 class AshlockFingerprint(object):
-    """Methodology for obtaining visual representation of a strategy's
-    behaviour. Plays the strategy against a probe strategy with varying noise
-    parameters."""
-    def __init__(self, strategy: PlayerOrStrategy,
-                 probe: PlayerOrStrategy = axl.TitForTat) -> None:
+    def __init__(self, strategy: Union[Player, type],
+                 probe: Union[Player, type] = axl.TitForTat) -> None:
         """
         Parameters
         ----------
@@ -66,17 +31,12 @@ class AshlockFingerprint(object):
         """
         self.strategy = strategy
         self.probe = probe
-        self.data = None  # type: PointsToFloats
-        self.points = None  # type: PointList
-        self.step = None  # type: float
-        self.interactions = None  # type: EdgesToMatches
-        self.spatial_tournament = None  # type: SpatialTournament
 
     def fingerprint(
         self, turns: int = 50, repetitions: int = 10, step: float = 0.01,
         processes: int = None, filename: str = None, in_memory: bool = False,
         progress_bar: bool = True
-    ) -> PointsToFloats:
+    ) -> Dict[Point, float]:
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
@@ -92,37 +52,31 @@ class AshlockFingerprint(object):
         repetitions : integer, optional
             The number of times the round robin should be repeated
         step : float, optional
-            0.0 < step <= 1.0
             The separation between each Point. Smaller steps will
             produce more Points that will be closer together.
         processes : integer, optional
             The number of processes to be used for parallel processing
-        filename :
-            Location of csv of tournament.interactions_dict
-        in_memory :
-            True=tournament.interactions_dict is stored only in memory
-            False=tournament.interactions_dict is stored only on file
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
 
         Returns
         ----------
-        self.data : dictionary(Point, float)
+        self.data : dictionary
             A dictionary where the keys are coordinates of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
 
-        if axl.on_windows and (filename is None):  # pragma: no cover
+        if on_windows and (filename is None):  # pragma: no cover
             in_memory = True
         elif filename is None:
-            output_file = NamedTemporaryFile(mode='w')
-            filename = output_file.name
-        edges, tournament_players = self.construct_tournament_elements(
+            outputfile = NamedTemporaryFile(mode='w')
+            filename = outputfile.name
+        edges, tourn_players = self.construct_tournament_elements(
             step, progress_bar=progress_bar)
 
         self.step = step
         self.spatial_tournament = axl.SpatialTournament(
-            tournament_players,
+            tourn_players,
             turns=turns,
             repetitions=repetitions,
             edges=edges)
@@ -142,7 +96,7 @@ class AshlockFingerprint(object):
 
     def plot(
         self, col_map: str = 'seismic', interpolation: str = 'none',
-        title: str = None, color_bar: bool = True, labels: bool = True
+        title: str = None, colorbar: bool = True, labels: bool = True
     ) -> plt.Figure:
         """Plot the results of the spatial tournament.
 
@@ -156,7 +110,7 @@ class AshlockFingerprint(object):
             http://matplotlib.org/examples/images_contours_and_fields/interpolation_methods.html
         title : str, optional
             A title for the plot
-        color_bar : bool, optional
+        colorbar : bool, optional
             Choose whether the colorbar should be included or not
         labels : bool, optional
             Choose whether the axis labels and ticks should be included
@@ -166,13 +120,13 @@ class AshlockFingerprint(object):
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
-        size = int(1 / self.step) + 1
+        size = int((1 / self.step) // 1) + 1
         plotting_data = reshape_data(self.data, self.points, size)
         fig, ax = plt.subplots()
         cax = ax.imshow(
             plotting_data, cmap=col_map, interpolation=interpolation)
 
-        if color_bar:
+        if colorbar:
             max_score = max(self.data.values())
             min_score = min(self.data.values())
             ticks = [min_score, (max_score + min_score) / 2, max_score]
@@ -193,13 +147,12 @@ class AshlockFingerprint(object):
 
     def construct_tournament_elements(
         self, step: float, progress_bar: bool = True
-    ) -> Tuple[EdgeList, PlayerList]:
+    ) -> Tuple[List[Tuple], List[Player]]:
         """Build the elements required for a spatial tournament
 
         Parameters
         ----------
         step : float
-            0.0 < step <= 1.0.
             The separation between each Point. Smaller steps will
             produce more Points that will be closer together.
         progress_bar : bool
@@ -233,7 +186,7 @@ class AshlockFingerprint(object):
         return edges, tournament_players
 
 
-def create_points(step: float, progress_bar: bool = True) -> PointList:
+def create_points(step: float, progress_bar: bool = True) -> List[Point]:
     """Creates a set of Points over the unit square.
 
     A Point has coordinates (x, y). This function constructs points that are
@@ -253,9 +206,8 @@ def create_points(step: float, progress_bar: bool = True) -> PointList:
     points : list
         of Point objects with coordinates (x, y)
     """
-    num = int(1 / step) + 1
+    num = int((1 / step) // 1) + 1
 
-    p_bar = None
     if progress_bar:
         p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
 
@@ -264,16 +216,16 @@ def create_points(step: float, progress_bar: bool = True) -> PointList:
         for y in np.linspace(0, 1, num):
             points.append(Point(x, y))
 
-            if p_bar:
+            if progress_bar:
                 p_bar.update()
 
-    if p_bar:
+    if progress_bar:
         p_bar.close()
 
     return points
 
 
-def create_edges(points: PointList, progress_bar: bool = True) -> EdgeList:
+def create_edges(points: List[Point], progress_bar: bool = True) -> List:
     """Creates a set of edges for a spatial tournament.
 
     Constructs edges that correspond to `points`. All edges begin at 0, and
@@ -300,8 +252,8 @@ def create_edges(points: PointList, progress_bar: bool = True) -> EdgeList:
     return edges
 
 
-def create_probes(probe: PlayerOrStrategy, points: PointList,
-                  progress_bar: bool = True) -> PlayerList:
+def create_probes(probe: Union[Player, type], points: List[Point],
+                  progress_bar: bool = True) -> List[Player]:
     """Creates a set of probe strategies over the unit square.
 
     Constructs probe strategies that correspond to points with coordinates
@@ -338,8 +290,8 @@ def create_jossann(point: Point, probe: Any) -> Player:
     Parameters
     ----------
     point : Point
-    probe : class or Player
-        A class or instance that must be descended from axelrod.strategies
+    probe : class
+        A class that must be descended from axelrod.strategies
 
     Returns
     ----------
@@ -362,8 +314,8 @@ def create_jossann(point: Point, probe: Any) -> Player:
     return joss_ann
 
 
-def generate_data(interactions: EdgesToMatches, points: PointList,
-                  edges: EdgeList):
+def generate_data(interactions: Dict[Tuple, List], points: List[Point],
+                  edges: List[Tuple]) -> Dict[Point, float]:
     """Generates useful data from a spatial tournament.
 
     Matches interactions from `results` to their corresponding Point in
@@ -396,7 +348,7 @@ def generate_data(interactions: EdgesToMatches, points: PointList,
     return point_scores
 
 
-def reshape_data(data: PointsToFloats, points: PointList,
+def reshape_data(data: Dict[Point, float], points: List[Point],
                  size: int) -> np.ndarray:
     """Shape the data so that it can be plotted easily.
 
