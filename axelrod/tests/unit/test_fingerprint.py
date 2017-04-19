@@ -11,6 +11,9 @@ except ImportError:  # pragma: no cover
     matplotlib_installed = False
 
 
+C, D = axl.Actions.C, axl.Actions.D
+
+
 class TestFingerprint(unittest.TestCase):
 
     @classmethod
@@ -66,20 +69,32 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(edges, self.expected_edges)
 
     def test_generate_data(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        edges, players = af.construct_tournament_elements(0.5)
-        spatial_tournament = axl.SpatialTournament(players,
-                                                   turns=10,
-                                                   repetitions=2,
-                                                   edges=edges)
-        results = spatial_tournament.play(progress_bar=False,
-                                          keep_interactions=True)
-        data = generate_data(results.interactions, self.expected_points,
+        interactions = {
+            (0, 1): [[(C, C)], [(C, C)]],
+            (0, 2): [[(C, C), (C, C)], [(C, D)]],
+            (0, 3): [[(C, C), (D, C)]],
+            (0, 4): [[(C, C), (D, C)], [(D, D)]],
+            (0, 5): [[(C, D), (D, C)]],
+            (0, 6): [[(C, D), (C, D)]],
+            (0, 7): [[(C, D), (D, D)]],
+            (0, 8): [[(D, D), (D, D)]],
+            (0, 9): [[(D, C), (D, C)]],
+        }
+
+        expected = {
+            Point(0.0, 0.0): 3.0,
+            Point(0.0, 0.5): 1.5,
+            Point(0.0, 1.0): 4.0,
+            Point(0.5, 0.0): 2.5,
+            Point(0.5, 0.5): 2.5,
+            Point(0.5, 1.0): 0.0,
+            Point(1.0, 0.0): 0.5,
+            Point(1.0, 0.5): 1.0,
+            Point(1.0, 1.0): 5.0,
+        }
+        data = generate_data(interactions, self.expected_points,
                              self.expected_edges)
-        keys = sorted(list(data.keys()))
-        values = [0 < score < 5 for score in data.values()]
-        self.assertEqual(sorted(keys), self.expected_points)
-        self.assertEqual(all(values), True)
+        self.assertEqual(data, expected)
 
     def test_reshape_data(self):
         test_points = [Point(x=0.0, y=0.0),
