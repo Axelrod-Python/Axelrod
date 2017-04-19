@@ -1,11 +1,12 @@
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
 import matplotlib.pyplot as plt
+from typing import Dict, List, Tuple, Any, Union
 import numpy as np
 import tqdm
 import axelrod as axl
 
-from axelrod import on_windows
+from axelrod import on_windows, Player
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (
     compute_final_score_per_turn, read_interactions_from_file)
@@ -14,7 +15,7 @@ from axelrod.interaction_utils import (
 Point = namedtuple('Point', 'x y')
 
 
-def create_points(step, progress_bar=True):
+def create_points(step: float, progress_bar: bool = True) ->List[Point]:
     """Creates a set of Points over the unit square.
 
     A Point has coordinates (x, y). This function constructs points that are
@@ -53,7 +54,7 @@ def create_points(step, progress_bar=True):
     return points
 
 
-def create_jossann(point, probe):
+def create_jossann(point: Point, probe: Any) -> Player:
     """Creates a JossAnn probe player that matches the Point.
 
     If the coordinates of point sums to more than 1 the parameters are
@@ -87,7 +88,8 @@ def create_jossann(point, probe):
     return joss_ann
 
 
-def create_probes(probe, points, progress_bar=True):
+def create_probes(probe: Union[type, Player], points: list,
+                  progress_bar: bool = True) -> List[Player]:
     """Creates a set of probe strategies over the unit square.
 
     Constructs probe strategies that correspond to points with coordinates
@@ -114,7 +116,7 @@ def create_probes(probe, points, progress_bar=True):
     return probes
 
 
-def create_edges(points, progress_bar=True):
+def create_edges(points: List[Point], progress_bar: bool = True) -> list:
     """Creates a set of edges for a spatial tournament.
 
     Constructs edges that correspond to `points`. All edges begin at 0, and
@@ -141,7 +143,7 @@ def create_edges(points, progress_bar=True):
     return edges
 
 
-def generate_data(interactions, points, edges):
+def generate_data(interactions: dict, points: list, edges: list) -> dict:
     """Generates useful data from a spatial tournament.
 
     Matches interactions from `results` to their corresponding Point in
@@ -174,7 +176,7 @@ def generate_data(interactions, points, edges):
     return point_scores
 
 
-def reshape_data(data, points, size):
+def reshape_data(data: dict, points: list, size: int) -> np.ndarray:
     """Shape the data so that it can be plotted easily.
 
     Parameters
@@ -203,7 +205,8 @@ def reshape_data(data, points, size):
 
 
 class AshlockFingerprint():
-    def __init__(self, strategy, probe=axl.TitForTat):
+    def __init__(self, strategy: Union[type, Player],
+                 probe: Union[type, Player]=axl.TitForTat) -> None:
         """
         Parameters
         ----------
@@ -218,7 +221,8 @@ class AshlockFingerprint():
         self.strategy = strategy
         self.probe = probe
 
-    def construct_tournament_elements(self, step, progress_bar=True):
+    def construct_tournament_elements(self, step: float,
+                                      progress_bar: bool = True) -> tuple:
         """Build the elements required for a spatial tournament
 
         Parameters
@@ -254,8 +258,11 @@ class AshlockFingerprint():
 
         return edges, tournament_players
 
-    def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None,
-                    filename=None, in_memory=False, progress_bar=True):
+    def fingerprint(
+        self, turns: int = 50, repetitions: int = 10, step: float = 0.01,
+        processes: int=None, filename: str = None, in_memory: bool = False,
+        progress_bar: bool = True
+    ) -> dict:
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
@@ -314,8 +321,9 @@ class AshlockFingerprint():
         self.data = generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, col_map='seismic', interpolation='none', title=None,
-             colorbar=True, labels=True):
+    def plot(self, col_map: str = 'seismic', interpolation: str = 'none',
+             title: str = None, colorbar: bool = True,
+             labels: bool = True) -> plt.Figure:
         """Plot the results of the spatial tournament.
 
         Parameters
