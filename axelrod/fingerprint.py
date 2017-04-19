@@ -1,7 +1,7 @@
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
 import matplotlib.pyplot as plt
-from typing import Dict, List, Tuple, Any, Union
+from typing import List, Any, Union
 import numpy as np
 import tqdm
 import axelrod as axl
@@ -249,7 +249,7 @@ class AshlockFingerprint():
         self.points = create_points(step, progress_bar=progress_bar)
         edges = create_edges(self.points, progress_bar=progress_bar)
         probe_players = create_probes(self.probe, self.points,
-                                           progress_bar=progress_bar)
+                                      progress_bar=progress_bar)
 
         if isinstance(self.strategy, axl.Player):
             tournament_players = [self.strategy] + probe_players

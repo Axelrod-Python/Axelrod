@@ -58,13 +58,12 @@ class TestFingerprint(unittest.TestCase):
 
     def test_create_probes(self):
         probes = create_probes(self.probe, self.expected_points,
-                                  progress_bar=False)
+                               progress_bar=False)
         self.assertEqual(len(probes), 9)
 
     def test_create_edges(self):
         edges = create_edges(self.expected_points, progress_bar=False)
         self.assertEqual(edges, self.expected_edges)
-
 
     def test_generate_data(self):
         af = AshlockFingerprint(self.strategy, self.probe)
@@ -76,7 +75,7 @@ class TestFingerprint(unittest.TestCase):
         results = spatial_tournament.play(progress_bar=False,
                                           keep_interactions=True)
         data = generate_data(results.interactions, self.expected_points,
-                                self.expected_edges)
+                             self.expected_edges)
         keys = sorted(list(data.keys()))
         values = [0 < score < 5 for score in data.values()]
         self.assertEqual(sorted(keys), self.expected_points)
@@ -104,7 +103,6 @@ class TestFingerprint(unittest.TestCase):
         test_shaped_data = [[3, 4, 9],
                             [9, 2, 1],
                             [5, 8, 2]]
-        af = AshlockFingerprint(self.strategy, self.probe)
         plotting_data = reshape_data(test_data, test_points, 3)
         for i in range(len(plotting_data)):
             self.assertEqual(list(plotting_data[i]), test_shaped_data[i])
@@ -136,8 +134,9 @@ class TestFingerprint(unittest.TestCase):
 
     def test_construct_tournament_elemets(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        edges, tournament_players = af.construct_tournament_elements(0.5,
-                                                            progress_bar=False)
+        edges, tournament_players = af.construct_tournament_elements(
+            0.5, progress_bar=False
+        )
         self.assertEqual(edges, self.expected_edges)
         self.assertEqual(len(tournament_players), 10)
         self.assertEqual(tournament_players[0].__class__, af.strategy)
@@ -171,7 +170,8 @@ class TestFingerprint(unittest.TestCase):
 
     def test_serial_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
-        data = af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False)
+        data = af.fingerprint(turns=10, repetitions=2, step=0.5,
+                              progress_bar=False)
         edge_keys = sorted(list(af.interactions.keys()))
         coord_keys = sorted(list(data.keys()))
         self.assertEqual(af.step, 0.5)
