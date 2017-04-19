@@ -53,6 +53,155 @@ def create_points(step, progress_bar=True):
     return points
 
 
+def create_jossann(point, probe):
+    """Creates a JossAnn probe player that matches the Point.
+
+    If the coordinates of point sums to more than 1 the parameters are
+    flipped and subtracted from 1 to give meaningful probabilities. We also
+    use the Dual of the probe. This is outlined further in [Ashlock2010]_.
+
+    Parameters
+    ----------
+    point : Point
+    probe : class
+        A class that must be descended from axelrod.strategies
+
+    Returns
+    ----------
+    joss_ann: Joss-AnnTitForTat object
+        `JossAnnTransformer` with parameters that correspond to `point`.
+    """
+    x, y = point
+
+    if isinstance(probe, axl.Player):
+        init_kwargs = probe.init_kwargs
+        probe = probe.__class__
+    else:
+        init_kwargs = {}
+
+    if x + y >= 1:
+        joss_ann = DualTransformer()(
+            JossAnnTransformer((1 - x, 1 - y))(probe))(**init_kwargs)
+    else:
+        joss_ann = JossAnnTransformer((x, y))(probe)(**init_kwargs)
+    return joss_ann
+
+
+def create_probes(probe, points, progress_bar=True):
+    """Creates a set of probe strategies over the unit square.
+
+    Constructs probe strategies that correspond to points with coordinates
+    (x, y). The probes are created using the `JossAnnTransformer`.
+
+    Parameters
+    ----------
+    probe : class
+        A class that must be descended from axelrod.strategies.
+    points : list
+        of Point objects with coordinates (x, y)
+    progress_bar : bool
+        Whether or not to create a progress bar which will be updated
+
+    Returns
+    ----------
+    probes : list
+        A list of `JossAnnTransformer` players with parameters that
+        correspond to point.
+    """
+    if progress_bar:
+        points = tqdm.tqdm(points, desc="Generating probes")
+    probes = [create_jossann(point, probe) for point in points]
+    return probes
+
+
+def create_edges(points, progress_bar=True):
+    """Creates a set of edges for a spatial tournament.
+
+    Constructs edges that correspond to `points`. All edges begin at 0, and
+    connect to the index +1 of the probe.
+
+    Parameters
+    ----------
+    points : list
+        of Point objects with coordinates (x, y)
+    progress_bar : bool
+        Whether or not to create a progress bar which will be updated
+
+
+    Returns
+    ----------
+    edges : list of tuples
+        A list containing tuples of length 2. All tuples will have 0 as the
+        first element. The second element is the index of the
+        corresponding probe (+1 to allow for including the Strategy).
+    """
+    if progress_bar:
+        points = tqdm.tqdm(points, desc="Generating network edges")
+    edges = [(0, index + 1) for index, point in enumerate(points)]
+    return edges
+
+
+def generate_data(interactions, points, edges):
+    """Generates useful data from a spatial tournament.
+
+    Matches interactions from `results` to their corresponding Point in
+    `probe_points`.
+
+    Parameters
+    ----------
+    interactions : dictionary
+        A dictionary mapping edges to the corresponding interactions of
+        those players.
+    points : list
+        of Point objects with coordinates (x, y).
+    edges : list of tuples
+        A list containing tuples of length 2. All tuples will have either 0
+        or 1 as the first element. The second element is the index of the
+        corresponding probe (+1 to allow for including the Strategy).
+
+    Returns
+    ----------
+    point_scores : dictionary
+        A dictionary where the keys are Points of the form (x, y) and
+        the values are the mean score for the corresponding interactions.
+    """
+    edge_scores = [np.mean([
+        compute_final_score_per_turn(scores)[0]
+        for scores in interactions[edge]])
+        for edge in edges
+    ]
+    point_scores = dict(zip(points, edge_scores))
+    return point_scores
+
+
+def reshape_data(data, points, size):
+    """Shape the data so that it can be plotted easily.
+
+    Parameters
+    ----------
+    data : dictionary
+        A dictionary where the keys are Points of the form (x, y) and
+        the values are the mean score for the corresponding interactions.
+
+    points : list
+        of Point objects with coordinates (x, y).
+
+    size : int
+        The number of Points in every row/column.
+
+    Returns
+    ----------
+    plotting_data : list
+        2-D numpy array of the scores, correctly shaped to ensure that the
+        score corresponding to Point (0, 0) is in the left hand corner ie.
+        the standard origin.
+    """
+    ordered_data = [data[point] for point in points]
+    shaped_data = np.reshape(ordered_data, (size, size), order='F')
+    plotting_data = np.flipud(shaped_data)
+    return plotting_data
+
+
 class AshlockFingerprint():
     def __init__(self, strategy, probe=axl.TitForTat):
         """
@@ -68,93 +217,6 @@ class AshlockFingerprint():
         """
         self.strategy = strategy
         self.probe = probe
-
-    @staticmethod
-    def create_jossann(point, probe):
-        """Creates a JossAnn probe player that matches the Point.
-
-        If the coordinates of point sums to more than 1 the parameters are
-        flipped and subtracted from 1 to give meaningful probabilities. We also
-        use the Dual of the probe. This is outlined further in [Ashlock2010]_.
-
-        Parameters
-        ----------
-        point : Point
-        probe : class
-            A class that must be descended from axelrod.strategies
-
-        Returns
-        ----------
-        joss_ann: Joss-AnnTitForTat object
-            `JossAnnTransformer` with parameters that correspond to `point`.
-        """
-        x, y = point
-
-        if isinstance(probe, axl.Player):
-            init_kwargs = probe.init_kwargs
-            probe = probe.__class__
-        else:
-            init_kwargs = {}
-
-        if x + y >= 1:
-            joss_ann = DualTransformer()(
-                JossAnnTransformer((1 - x, 1 - y))(probe))(**init_kwargs)
-        else:
-            joss_ann = JossAnnTransformer((x, y))(probe)(**init_kwargs)
-        return joss_ann
-
-    @staticmethod
-    def create_edges(points, progress_bar=True):
-        """Creates a set of edges for a spatial tournament.
-
-        Constructs edges that correspond to `points`. All edges begin at 0, and
-        connect to the index +1 of the probe.
-
-        Parameters
-        ----------
-        points : list
-            of Point objects with coordinates (x, y)
-        progress_bar : bool
-            Whether or not to create a progress bar which will be updated
-
-
-        Returns
-        ----------
-        edges : list of tuples
-            A list containing tuples of length 2. All tuples will have 0 as the
-            first element. The second element is the index of the
-            corresponding probe (+1 to allow for including the Strategy).
-        """
-        if progress_bar:
-            points = tqdm.tqdm(points, desc="Generating network edges")
-        edges = [(0, index + 1) for index, point in enumerate(points)]
-        return edges
-
-    def create_probes(self, probe, points, progress_bar=True):
-        """Creates a set of probe strategies over the unit square.
-
-        Constructs probe strategies that correspond to points with coordinates
-        (x, y). The probes are created using the `JossAnnTransformer`.
-
-        Parameters
-        ----------
-        probe : class
-            A class that must be descended from axelrod.strategies.
-        points : list
-            of Point objects with coordinates (x, y)
-        progress_bar : bool
-            Whether or not to create a progress bar which will be updated
-
-        Returns
-        ----------
-        probes : list
-            A list of `JossAnnTransformer` players with parameters that
-            correspond to point.
-        """
-        if progress_bar:
-            points = tqdm.tqdm(points, desc="Generating probes")
-        probes = [self.create_jossann(point, probe) for point in points]
-        return probes
 
     def construct_tournament_elements(self, step, progress_bar=True):
         """Build the elements required for a spatial tournament
@@ -181,8 +243,8 @@ class AshlockFingerprint():
 
         """
         self.points = create_points(step, progress_bar=progress_bar)
-        edges = self.create_edges(self.points, progress_bar=progress_bar)
-        probe_players = self.create_probes(self.probe, self.points,
+        edges = create_edges(self.points, progress_bar=progress_bar)
+        probe_players = create_probes(self.probe, self.points,
                                            progress_bar=progress_bar)
 
         if isinstance(self.strategy, axl.Player):
@@ -191,39 +253,6 @@ class AshlockFingerprint():
             tournament_players = [self.strategy()] + probe_players
 
         return edges, tournament_players
-
-    @staticmethod
-    def generate_data(interactions, points, edges):
-        """Generates useful data from a spatial tournament.
-
-        Matches interactions from `results` to their corresponding Point in
-        `probe_points`.
-
-        Parameters
-        ----------
-        interactions : dictionary
-            A dictionary mapping edges to the corresponding interactions of
-            those players.
-        points : list
-            of Point objects with coordinates (x, y).
-        edges : list of tuples
-            A list containing tuples of length 2. All tuples will have either 0
-            or 1 as the first element. The second element is the index of the
-            corresponding probe (+1 to allow for including the Strategy).
-
-        Returns
-        ----------
-        point_scores : dictionary
-            A dictionary where the keys are Points of the form (x, y) and
-            the values are the mean score for the corresponding interactions.
-        """
-        edge_scores = [np.mean([
-            compute_final_score_per_turn(scores)[0]
-            for scores in interactions[edge]])
-            for edge in edges
-        ]
-        point_scores = dict(zip(points, edge_scores))
-        return point_scores
 
     def fingerprint(self, turns=50, repetitions=10, step=0.01, processes=None,
                     filename=None, in_memory=False, progress_bar=True):
@@ -282,36 +311,8 @@ class AshlockFingerprint():
             self.interactions = read_interactions_from_file(
                 filename, progress_bar=progress_bar)
 
-        self.data = self.generate_data(self.interactions, self.points, edges)
+        self.data = generate_data(self.interactions, self.points, edges)
         return self.data
-
-    @staticmethod
-    def reshape_data(data, points, size):
-        """Shape the data so that it can be plotted easily.
-
-        Parameters
-        ----------
-        data : dictionary
-            A dictionary where the keys are Points of the form (x, y) and
-            the values are the mean score for the corresponding interactions.
-
-        points : list
-            of Point objects with coordinates (x, y).
-
-        size : int
-            The number of Points in every row/column.
-
-        Returns
-        ----------
-        plotting_data : list
-            2-D numpy array of the scores, correctly shaped to ensure that the
-            score corresponding to Point (0, 0) is in the left hand corner ie.
-            the standard origin.
-        """
-        ordered_data = [data[point] for point in points]
-        shaped_data = np.reshape(ordered_data, (size, size), order='F')
-        plotting_data = np.flipud(shaped_data)
-        return plotting_data
 
     def plot(self, col_map='seismic', interpolation='none', title=None,
              colorbar=True, labels=True):
@@ -338,7 +339,7 @@ class AshlockFingerprint():
             A heat plot of the results of the spatial tournament
         """
         size = int((1 / self.step) // 1) + 1
-        plotting_data = self.reshape_data(self.data, self.points, size)
+        plotting_data = reshape_data(self.data, self.points, size)
         fig, ax = plt.subplots()
         cax = ax.imshow(
             plotting_data, cmap=col_map, interpolation=interpolation)
