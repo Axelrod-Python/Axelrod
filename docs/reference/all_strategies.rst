@@ -96,6 +96,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.mathematicalconstants
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.memorytwo
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.memoryone
    :members:
    :undoc-members:
