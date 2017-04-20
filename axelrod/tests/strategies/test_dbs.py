@@ -7,14 +7,14 @@ from .test_player import TestPlayer
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
-class TestNode(unittest.testCase):
+class TestNode(unittest.TestCase):
     """
     Test for the base class
     """
     node = axelrod.dbs.Node()
 
     def test_get_siblings(self):
-        with self.assetRaises(NotImplementedError) as context:
+        with self.assertRaises(NotImplementedError) as context:
             self.node.get_siblings()
 
     def test_is_stochastic(self):
