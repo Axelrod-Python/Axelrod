@@ -256,8 +256,11 @@ class Node(object):
 
 
 class StochasticNode(Node):
-    "Node that have a probability p to get to each sibling"
-    "Nodes (C, *) or (D, *)"
+    """
+    Node that have a probability pC to get to each sibling
+    A StochasticNode can be written (C, X) or (D, X), with X = C with
+    a probability pC, else X = D
+    """
 
     def __init__(self, own_action, pC, depth):
         self.pC = pC
@@ -287,7 +290,7 @@ class DeterministNode(Node):
 
     def get_siblings(self, policy):
         """
-        build 2 siblings (C, *) and (D, *)
+        build 2 siblings (C, X) and (D, X)
         siblings of a DeterministicNode are Stochastic, and are of the
         same depth
         """
