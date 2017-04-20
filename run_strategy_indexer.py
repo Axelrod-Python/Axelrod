@@ -6,7 +6,7 @@ import glob
 import sys
 import os
 
-def read_index(index_path):
+def read_index(index_path: str) -> str:
     """
     Read the index of strategies
 
@@ -24,7 +24,7 @@ def read_index(index_path):
         strategies_reference = f.read()
     return strategies_reference
 
-def get_module_name(module_path):
+def get_module_name(module_path: str) -> str:
     """
     Take string of the form `./axelrod/strategies/titfortat.py` and returns
     `titfortat`.
@@ -43,9 +43,10 @@ def get_module_name(module_path):
     module_name = os.path.splitext(filename)[0]
     return module_name
 
-def check_module(module_path,
-                 index_path="./docs/reference/all_strategies.rst",
-                 excluded=("_strategies", "__init__", "_filters", "human")):
+def check_module(module_path: str,
+                 index_path: str="./docs/reference/all_strategies.rst",
+                 excluded: tuple=("_strategies", "__init__",
+                                  "_filters", "human")) -> bool:
     """
     Check if a module name is written in the index of strategies.
 
