@@ -2,7 +2,7 @@ from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
 
-C, D = Actions.C, Actions.D
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class DBS(Player):
