@@ -66,8 +66,7 @@ def check_module(module_path,
     """
     strategies_index = read_index(index_path)
     module_name = get_module_name(module_path)
-    if module_name not in excluded:
-        if module_name not in strategies_reference:
+    if module_name not in excluded and module_name not in strategies_index:
             print("{} not in index".format(module_name))
             return False
     return True
