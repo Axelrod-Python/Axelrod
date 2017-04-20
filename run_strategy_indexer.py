@@ -74,7 +74,7 @@ def check_module(module_path,
 
 if __name__ == "__main__":
 
-    modules = glob.glob("./axelrod/strategies/*py")
+    modules = glob.glob("./axelrod/strategies/*.py")
     exit_codes = []
 
     for module_path in modules:
