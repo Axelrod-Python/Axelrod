@@ -12,7 +12,7 @@ Contents:
    installation.rst
    match.rst
    tournament.rst
-   tournament_results.rst
+   summarising_tournaments.rst
    interactions.rst
    visualising_results.rst
    moran.rst
