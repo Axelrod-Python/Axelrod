@@ -69,4 +69,24 @@ class TestDBS(TestPlayer):
                 expected_actions=exp_actions, 
                 init_kwargs = init_kwargs_2
                 )
+        
+        # check that ShouldDemote mecanism works.
+        # We play against Alternator during 12 turns to make the 
+        # algorithm learn Alternator's strategy, then at turn 13 we
+        # change opponent to Defector, hence trigging ShouldDemote
+        # mecanism
+        # For this test we use violation_threshold=3
+        init_kwargs_3 = {
+                'discount_factor':.75, 'promotion_threshold':3, 
+                'violation_threshold':3, 'reject_threshold':3,
+                'tree_depth':5
+                }
+        exp_actions = [(C, C), (C, D)] * 3 + [(D, C), (C, D)] * 3 
+        exp_actions += [(D, D), (C, D)] * 3 + [(D, D)]
+        mock_actions = [C, D, C, D, C, D, C, D, C, D, C, D, D, D, D, D, D, D, D]
+        self.versus_test(
+                opponent=axelrod.MockPlayer(actions=mock_actions),
+                expected_actions=exp_actions, 
+                init_kwargs = init_kwargs_3
+                )
 

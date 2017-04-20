@@ -346,8 +346,16 @@ def minimax_tree_search(begin_node, policy, max_depth):
         # depth is < max_depth
         siblings = begin_node.get_siblings()
         # The stochastic node value is the expected values of siblings
-        node_value = (begin_node.pC * minimax_tree_search(siblings[0], policy, max_depth) 
-            + (1 - begin_node.pC) * minimax_tree_search(siblings[1], policy, max_depth))
+        node_value = (
+            begin_node.pC * minimax_tree_search(
+                                            siblings[0], 
+                                            policy, 
+                                            max_depth) 
+            + (1 - begin_node.pC) * minimax_tree_search(
+                                            siblings[1], 
+                                            policy, 
+                                            max_depth)
+            )
         return node_value
     else:   # determinist node
         if begin_node.depth == max_depth:
@@ -358,8 +366,10 @@ def minimax_tree_search(begin_node, policy, max_depth):
             # this returns the two max expected values, for choice C or D,
             # as a tuple
             return (
-                minimax_tree_search(siblings[0], policy, max_depth) + begin_node.get_value(),
-                minimax_tree_search(siblings[1], policy, max_depth) + begin_node.get_value()
+                minimax_tree_search(siblings[0], policy, max_depth) 
+                    + begin_node.get_value(),
+                minimax_tree_search(siblings[1], policy, max_depth) 
+                    + begin_node.get_value()
                 )
         elif begin_node.depth < max_depth:
             siblings = begin_node.get_siblings(policy)
