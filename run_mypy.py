@@ -3,6 +3,7 @@ import sys
 modules = ["axelrod/actions.py",
            "axelrod/deterministic_cache.py",
            "axelrod/ecosystem.py",
+           "axelrod/fingerprint.py"
            "axelrod/game.py",
            "axelrod/load_data_.py",
            "axelrod/mock_player.py",

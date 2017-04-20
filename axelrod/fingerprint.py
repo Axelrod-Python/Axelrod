@@ -15,7 +15,7 @@ from axelrod.interaction_utils import (
 Point = namedtuple('Point', 'x y')
 
 
-def create_points(step: float, progress_bar: bool = True) ->List[Point]:
+def create_points(step: float, progress_bar: bool = True) -> List[Point]:
     """Creates a set of Points over the unit square.
 
     A Point has coordinates (x, y). This function constructs points that are

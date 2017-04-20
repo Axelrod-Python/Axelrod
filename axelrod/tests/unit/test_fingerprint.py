@@ -1,6 +1,9 @@
 import unittest
 from hypothesis import given
-from axelrod.fingerprint import *
+import axelrod as axl
+from axelrod.fingerprint import (create_points, create_jossann, create_probes,
+                                 create_edges, generate_data, reshape_data,
+                                 AshlockFingerprint, Point)
 from axelrod.tests.property import strategy_lists
 
 
