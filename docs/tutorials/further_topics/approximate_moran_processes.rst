@@ -26,8 +26,9 @@ Now let us create an Approximate Moran Process::
     >>> amp.population_distribution()
     Counter({'Random: 0.5': 3})
 
-We see that the :code:`Random: 0.5` won this Moran process. This is not what happens in a
-standard Moran process where the `Random: 0.5` player will not win::
+We see that the :code:`Random: 0.5` won this Moran process. This is not what
+happens in a standard Moran process where the :code:`Random: 0.5` player will
+not win::
 
     >>> axl.seed(2)
     >>> amp = axl.MoranProcess(players)
