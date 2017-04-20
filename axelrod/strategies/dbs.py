@@ -329,7 +329,9 @@ def create_policy(pCC, pCD, pDC, pDD):
 
 
 def action_to_int(action):
-    return (1 if action == C else 0)
+    if action == C:
+        return 1
+    return 0
 
 
 def minimax_tree_search(begin_node, policy, max_depth):
