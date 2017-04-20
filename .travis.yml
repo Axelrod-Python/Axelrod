@@ -30,6 +30,8 @@ script:
   - python doctests.py
   # Run the type checker
   - python run_mypy.py
+  # Check that all strategies are in the index
+  - python run_strategy_indexer.py
 after_success:
   - coveralls
 notifications:
