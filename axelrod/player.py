@@ -47,7 +47,7 @@ def obey_axelrod(s):
         classifier['manipulates_state'])
 
 
-def update_history(player, move):
+def update_history(player, move: axelrod.actions.Action):
     """Updates histories and cooperation / defections counts following play."""
     # Update histories
     player.history.append(move)
@@ -64,7 +64,7 @@ def get_state_distribution_from_history(player, history_1, history_2):
         update_state_distribution(player, action, reply)
 
 
-def update_state_distribution(player, action, reply):
+def update_state_distribution(player, action: axelrod.actions.Action, reply):
     """Updates state_distribution following play. """
     last_turn = (action, reply)
     player.state_distribution[last_turn] += 1
@@ -182,7 +182,7 @@ class Player(object):
         # the game matrix, the number of rounds or the noise
         pass
 
-    def set_match_attributes(self, length=-1, game=None, noise=0):
+    def set_match_attributes(self, length: int=-1, game=None, noise: int=0):
         if not game:
             game = DefaultGame
         self.match_attributes = {
@@ -217,7 +217,7 @@ class Player(object):
         """This is a placeholder strategy."""
         raise NotImplementedError()
 
-    def play(self, opponent, noise=0):
+    def play(self, opponent, noise: int=0):
         """This pits two players against each other."""
         s1, s2 = self.strategy(opponent), opponent.strategy(self)
         if noise:
