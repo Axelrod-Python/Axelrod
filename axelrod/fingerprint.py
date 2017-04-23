@@ -64,8 +64,9 @@ def create_jossann(point: Point, probe: Any) -> Player:
     Parameters
     ----------
     point : Point
-    probe : class
-        A class that must be descended from axelrod.strategies
+    probe : class or instance
+        A class that must be descended from axelrod.Player or an instance of
+        axelrod.Player.
 
     Returns
     ----------
@@ -97,8 +98,9 @@ def create_probes(probe: Union[type, Player], points: list,
 
     Parameters
     ----------
-    probe : class
-        A class that must be descended from axelrod.strategies.
+    probe : class or instance
+        A class that must be descended from axelrod.Player or an instance of
+        axelrod.Player.
     points : list
         of Point objects with coordinates (x, y)
     progress_bar : bool
@@ -204,7 +206,7 @@ def reshape_data(data: dict, points: list, size: int) -> np.ndarray:
     return plotting_data
 
 
-class AshlockFingerprint():
+class AshlockFingerprint(object):
     def __init__(self, strategy: Union[type, Player],
                  probe: Union[type, Player]=axl.TitForTat) -> None:
         """
@@ -282,6 +284,12 @@ class AshlockFingerprint():
             produce more Points that will be closer together.
         processes : integer, optional
             The number of processes to be used for parallel processing
+        filename: string, optional
+            The name of the file for self.spatial_tournament's interactions.
+            if None and in_memory=False, will auto-generate a filename.
+        in_memory: bool
+            Whether self.spatial_tournament keeps interactions_dict in memory or
+            in a file.
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
 
