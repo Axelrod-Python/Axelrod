@@ -10,7 +10,7 @@ class DBS(Player):
     Desired Belief Strategy as described in [Au2006]_
     http://www.cs.utexas.edu/%7Echiu/papers/Au06NoisyIPD.pdf
 
-    A strategy that learns the opponent's strategy, and use symbolic 
+    A strategy that learns the opponent's strategy, and uses symbolic 
     noise detection for detecting whether anomalies in player’s behavior
     are deliberate or accidental, hence increasing performance in noisy 
     tournaments.  
@@ -111,8 +111,8 @@ class DBS(Player):
             opposite_action = 1
         k = 1
         count = 0
-        # We iterates on the history, while we do not encounter
-        # counter-exemples of r_plus, i.e. while we do not encounter
+        # We iterate on the history, while we do not encounter
+        # counter-examples of r_plus, i.e. while we do not encounter
         # r_minus
         while(
             k < len(self.history_by_cond[r_plus[0]][0])
@@ -129,9 +129,7 @@ class DBS(Player):
         return False
 
     def should_demote(self, r_minus, violation_threshold=4):
-        if(self.violation_counts[r_minus[0]] >= violation_threshold):
-            return True
-        return False
+        return (self.violation_counts[r_minus[0]] >= violation_threshold)
 
     def update_history_by_cond(self, opponent_history):
         two_moves_ago = (self.history[-2], opponent_history[-2])
@@ -306,14 +304,13 @@ class DeterministNode(Node):
         return False
 
     def get_value(self):
-        if (self.action1 == C and self.action2 == C):
-            return 3
-        elif (self.action1 == C and self.action2 == D):
-            return 0
-        elif (self.action1 == D and self.action2 == C):
-            return 5
-        elif (self.action1 == D and self.action2 == D):
-            return 1
+        values = {
+            (C, C): 3,
+            (C, D): 0,
+            (D, C): 5,
+            (D, D): 1
+        }
+        return values[(self.action1, self.action2)]
 
 
 def create_policy(pCC, pCD, pDC, pDD):
