@@ -22,30 +22,25 @@ class DBS(Player):
     article. When noise increases you can try to diminish 
     violation_threshold and rejection_threshold
 
-    Parameters:
-
-    discount_factor: (float, between 0 and 1) discount factor used when
-            computing discounted frequencies to learn opponent's strategy
-            defaults = .75
-
-    promotion_threshold: (int) number of observations needed to promote
-            a change in opponent's strategy
-            defaults = 3
-
-    violation_threshold: (int) number of observation needed to 
-            considerate opponent's strategy has changed. Seems good to
-            lower it when noise increases
-            defaults = 4
-
-    reject_threshold: (int) number of observations before forgetting
-            opponents old strategy. Seems good to lower it when noise
-            increases
-            default = 3
-
-    tree_depth: (int) depth of the tree for the tree-search algorithm. 
-            default is 5.
-            Higher depth means more time to coompute the move.
-
+    Parameters
+    ----------
+    discount_factor : float, optional
+        used when computing discounted frequencies to learn opponent's
+        strategy. Must be between 0 and 1. The default is 0.75
+    promotion_threshold : int, optional 
+        number of observations needed to promote a change in opponent's
+        strategy. The default is 3.
+    violation_threshold : int, optional
+        number of observations needed to considerate opponent's 
+        strategy has changed. You can lower it when noise increases.
+        The default is 4, which is good for a noise level of .1 
+    reject_threshold : int, optional
+        number of observations before forgetting opponent's previous
+        strategy. You can lower it when noise increases. The default 
+        is 3, which is good for a noise level of .1
+    tree_depth: int, optional
+        depth of the tree for the tree-search algorithm. Higher depth
+        means more time to compute the move. The default is 5
     """
 
     # These are various properties for the strategy
