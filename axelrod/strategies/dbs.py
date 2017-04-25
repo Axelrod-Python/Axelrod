@@ -115,7 +115,7 @@ class DBS(Player):
                         == opposite_action
                     and self.history_by_cond[r_plus[0]][1][1:][-k] == 1)
             ):
-            # We count every occurence of r_plus in history
+            # We count every occurrence of r_plus in history
             if (self.history_by_cond[r_plus[0]][1][1:][-k] == 1):
                 count += 1
             k += 1
