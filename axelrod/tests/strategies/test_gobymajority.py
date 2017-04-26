@@ -2,6 +2,7 @@
 
 import axelrod
 from .test_player import TestPlayer
+from axelrod import MockPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -10,8 +11,8 @@ class TestHardGoByMajority(TestPlayer):
 
     name = "Hard Go By Majority"
     player = axelrod.HardGoByMajority
-    default_soft = False
     eq_play = D
+    soft = False
 
     expected_classifier = {
         'stochastic': False,
@@ -24,40 +25,55 @@ class TestHardGoByMajority(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by defecting.
         self.first_play_test(self.eq_play)
-        # If opponent cooperates at least as often as they defect then the
-        # player defects.
-        self.responses_test([self.eq_play], [C, D, D, D], [D, D, C, C])
-        # If opponent defects strictly more often than they defect then the
-        # player defects.
-        self.responses_test([D], [C, C, D, D, C], [D, D, C, C, D])
-        # If opponent cooperates strictly more often than they defect then the
-        # player cooperates.
-        self.responses_test([C], [C, C, D, D, C], [D, C, C, C, D])
 
-    def test_default_soft(self):
+        expected, opponent_actions = self.get_infinite_memory_depth_actions()
+        self.versus_test(MockPlayer(actions=opponent_actions),
+                         expected_actions=expected)
+
+    def get_infinite_memory_depth_actions(self):
+        opponent_actions = [C, D, D]
+        first_three = [(self.eq_play, C), (C, D), (self.eq_play, D)]
+        second_three = [(D, C), (self.eq_play, D), (D, D)]
+        subsequent = [(D, C), (D, D), (D, D)]
+        expected = first_three + second_three + subsequent * 10
+        return expected, opponent_actions
+
+    def test_memory_depth(self):
+        memory_depth = 4
+        opponent_actions = [C, C, C, D, D, D]
+        first_six = [(self.eq_play, C), (C, C), (C, C),
+                     (C, D), (C, D), (self.eq_play, D)]
+        subsequent = [(D, C), (D, C), (self.eq_play, C),
+                      (C, D), (C, D), (self.eq_play, D)]
+
+        expected = first_six + subsequent * 10
+        self.versus_test(MockPlayer(actions=opponent_actions),
+                         expected_actions=expected,
+                         init_kwargs={'memory_depth': memory_depth})
+
+    def test_soft_value(self):
         player = self.player()
-        self.assertEqual(player.soft, self.default_soft)
+        self.assertFalse(player.soft)
 
 
 class TestGoByMajority(TestHardGoByMajority):
 
     name = "Soft Go By Majority"
     player = axelrod.GoByMajority
-    default_soft = True
     eq_play = C
+    soft = True
 
-    def test_strategy(self):
-        # In case of equality (including first play), cooperates.
-        super().test_strategy()
+    def test_set_soft_to_false(self):
+        self.eq_play = D
+        expected, opponent_actions = self.get_infinite_memory_depth_actions()
+        self.versus_test(MockPlayer(actions=opponent_actions),
+                         expected_actions=expected, init_kwargs={'soft': False})
+        self.eq_play = C
 
-        # Test tie break rule for soft=False
-        player = self.player(soft=False)
-        opponent = axelrod.Cooperator()
-        self.assertEqual('D', player.strategy(opponent))
-
-    def test_soft(self):
+    def test_soft_value(self):
+        default = self.player()
+        self.assertTrue(default.soft)
         player = self.player(soft=True)
         self.assertTrue(player.soft)
         player = self.player(soft=False)
@@ -68,17 +84,22 @@ class TestGoByMajority(TestHardGoByMajority):
         self.assertEqual(player.name, "Soft Go By Majority")
         player = self.player(soft=False)
         self.assertEqual(player.name, "Hard Go By Majority")
+        player = self.player(memory_depth=5)
+        self.assertEqual(player.name, "Soft Go By Majority: 5")
 
-    def test_repr(self):
+    def test_str(self):
         player = self.player(soft=True)
         name = str(player)
         self.assertEqual(name, "Soft Go By Majority")
         player = self.player(soft=False)
         name = str(player)
         self.assertEqual(name, "Hard Go By Majority")
+        player = self.player(memory_depth=5)
+        name = str(player)
+        self.assertEqual(name, "Soft Go By Majority: 5")
 
 
-def factory_TestGoByRecentMajority(L, soft=True):
+def factory_TestGoByRecentMajority(memory_depth, soft=True):
 
     prefix = "Hard"
     prefix2 = "Hard"
@@ -88,12 +109,13 @@ def factory_TestGoByRecentMajority(L, soft=True):
 
     class TestGoByRecentMajority(TestPlayer):
 
-        name = "{} Go By Majority: {}".format(prefix, L)
-        player = getattr(axelrod, "{}GoByMajority{}".format(prefix2, L))
+        name = "{} Go By Majority: {}".format(prefix, memory_depth)
+        player = getattr(axelrod, "{}GoByMajority{}".format(prefix2,
+                                                            memory_depth))
 
         expected_classifier = {
             'stochastic': False,
-            'memory_depth': L,
+            'memory_depth': memory_depth,
             'makes_use_of': set(),
             'long_run_time': False,
             'inspects_source': False,
@@ -108,21 +130,31 @@ def factory_TestGoByRecentMajority(L, soft=True):
             else:
                 self.first_play_test(D)
 
-            self.responses_test([C], [C] * L,
-                                [C] * (L // 2 + 1) + [D] * (L // 2 - 1))
-            self.responses_test([D], [C] * L,
-                                [D] * (L // 2 + 1) + [C] * (L // 2 - 1))
-
-            # Test 50:50 play difference with soft
-            k = L
-            if L % 2 == 1:
-                k -= 1
-            if soft:
-                self.responses_test([C], [C] * k,
-                                    [C] * (k // 2) + [D] * (k // 2))
+            opponent_actions = [C] * memory_depth + [D] * memory_depth
+            """
+            with memory_depth=3 always switches after
+            opponent_history=[C, C, C, D, D] (int(3*1.5) + 1 = 5)
+            with memory_depth=4 soft switches after
+            op_history=[C, C, C, C, D, D, D] (int(4*1.5) + 1 = 7)
+            and hard switches after
+            op_history=[C, C, C, C, D, D] (int(4 * 1.5) = 6)
+            """
+            if memory_depth % 2 == 1 or soft:
+                cooperation_len = int(memory_depth * 1.5) + 1
             else:
-                self.responses_test([D], [C] * k,
-                                    [C] * (k // 2) + [D] * (k // 2))
+                cooperation_len = int(memory_depth * 1.5)
+            defect_len = 2 * memory_depth - cooperation_len
+
+            if soft:
+                first_move = [C]
+            else:
+                first_move = [D]
+
+            player_actions = (first_move + [C] * (cooperation_len - 1) +
+                              [D] * defect_len)
+            expected = list(zip(player_actions, opponent_actions))
+            self.versus_test(MockPlayer(actions=opponent_actions),
+                             expected_actions=expected)
 
     return TestGoByRecentMajority
 
