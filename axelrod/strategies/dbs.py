@@ -28,8 +28,8 @@ class DBS(Player):
         used when computing discounted frequencies to learn opponent's
         strategy. Must be between 0 and 1. The default is 0.75
     promotion_threshold : int, optional 
-        number of observations needed to promote a change in opponent's
-        strategy. The default is 3.
+        number of successive observations needed to promote an
+        opponent behavior as a deterministic rule. The default is 3.
     violation_threshold : int, optional
         number of observations needed to considerate opponent's 
         strategy has changed. You can lower it when noise increases.
@@ -58,35 +58,65 @@ class DBS(Player):
     def __init__(self, discount_factor=.75, promotion_threshold=3, 
                  violation_threshold=4, reject_threshold=3, tree_depth=5): 
         super().__init__()
+        
+        # The opponent's behavior is represented by a 3 dicts :
+        # Rd, Rc, and Rp.
+        # His behavior his modeled by a set of rules. A rule is the move that 
+        # the opponent will play (C or D or a probability to play C) after a 
+        # given outcome (for instance after (C, D))
+        # A rule can be deterministic or probabilistic
+        # - Rc is the set of deterministic rules
+        # - Rp is the set of probabilistic rules
+        # - Rd is the default rule set which is used for initialization but also
+        # keeps track of previous policies when change in the opponent behavior
+        # happens, in order to have a smooth transition
+        # - Pi is a set of rules that aggregates all above sets of rules in 
+        # order to fully model the opponent's behavior
 
-        # default opponent's policy is TitForTat
+        # Default rule set Rd
+        # Default opponent's policy is TitForTat
         self.Rd = create_policy(1, 1, 0, 0)
+        # Set of current deterministic rules Rc
         self.Rc = {}
-        self.Pi = self.Rd   # policy used by MoveGen
+        # Aggregated rule set Pi
+        self.Pi = self.Rd   
+        # For each rule in Rd we need to count the number of successive 
+        # violations. Those counts are saved in violation_counts.
         self.violation_counts = {}
         self.reject_threshold = reject_threshold
         self.violation_threshold = violation_threshold
         self.promotion_threshold = promotion_threshold
         self.tree_depth = tree_depth
+        # v is a violation count used to know when to clean the default rule
+        # set Rd
         self.v = 0
+        # A discount factor for computing the probabilistic rules
         self.alpha = discount_factor
-        self.history_by_cond = {}
-        # to compute the discount frequencies, we need to keep
-        # up to date an history of what has been played for each
-        # condition:
+
+        # The probabilistic rule set Rp is not saved as an attribute, but each 
+        # rule is computed only when needed.
+        # The rules are computed as discounted frequencies of opponent's past
+        # moves. To compute the discounted frequencies, we need to keep
+        # up to date an history of what has been played following each
+        # outcome (or condition):
         # We save it as a dict history_by_cond; keys are conditions 
-        # (ex (C,C)) and values are a tuple of 2 lists (G,F)
-        # for a condition j: 
+        # (ex (C, C)) and values are a tuple of 2 lists (G, F)
+        # for a condition j and an iteration i in the match : 
         # G[i] = 1 if cond j was True at turn i-1 and C has been played
-        # by the opponent; else G[i]=0
-        # F[i] = 1 if cond j was True at turn i-1; else G[i]=0
+        # by the opponent; else G[i] = 0
+        # F[i] = 1 if cond j was True at turn i-1; else F[i]=0
+        # this representation makes the computing of discounted frequencies
+        # easy and efficient
         # initial hypothesized policy is TitForTat
-        self.history_by_cond[(C, C)] = ([1], [1])
-        self.history_by_cond[(C, D)] = ([1], [1])
-        self.history_by_cond[(D, C)] = ([0], [1])
-        self.history_by_cond[(D, D)] = ([0], [1])
+        self.history_by_cond = {
+            [(C, C)] = ([1], [1])
+            [(C, D)] = ([1], [1])
+            [(D, C)] = ([0], [1])
+            [(D, D)] = ([0], [1])
+        }
 
     def reset(self):
+        """ Reset instance properties. """
         super().reset()
         self.Rd = create_policy(1, 1, 0, 0)
         self.Rc = {}
@@ -101,7 +131,26 @@ class DBS(Player):
 
     def should_promote(self, r_plus, promotion_threshold=3):
         """
+        This function determines if the move r_plus is a deterministic
+        behavior of the opponent, and then returns True, or if r_plus 
+        is due to a random behavior (or noise) which would require a 
+        probabilistic rule, in which case it returns False
 
+        To do so it looks into the game history : if the K last times 
+        when the opponent was in the same situation than in r_plus, he 
+        played the same thing, then then r_plus is considered as a
+        deterministic rule (where K is the user-defined 
+        promotion_threshold)
+
+        Parameters
+
+        r_plus : tuple of (tuple of actions.Actions, actions.Actions) 
+            exemple: ((C, C), D) 
+            r_plus represents one outcome of the history, and the 
+            following move played by the opponent
+        promotion_threshold : int, optionnal
+            number of successive observations needed to promote an
+            opponent behavior as a deterministic rule. Default is 3.
         """
         if r_plus[1] == C:
             opposite_action = 0
@@ -127,9 +176,17 @@ class DBS(Player):
         return False
 
     def should_demote(self, r_minus, violation_threshold=4):
+        """
+        Checks if the number of successive violations of a deterministic
+        rule (in the opponent's behavior) exceeds the user-defined 
+        violation_threshold
+        """
         return (self.violation_counts[r_minus[0]] >= violation_threshold)
 
     def update_history_by_cond(self, opponent_history):
+        """
+        Updates self.history_by_cond, between each turns of the game.
+        """
         two_moves_ago = (self.history[-2], opponent_history[-2])
         for outcome,GF in self.history_by_cond.items():
             G,F = GF
@@ -143,7 +200,25 @@ class DBS(Player):
                 G.append(0)
                 F.append(0)
 
-    def compute_prob_rule(self, outcome, alpha):
+    def compute_prob_rule(self, outcome, alpha=1):
+        """
+        Uses the game history to compute the probability of the opponent
+        playing C, in the outcome situation 
+        (exemple : outcome = (C, C)).
+        When alpha = 1, the results is approximately equal to the frequency
+        of the occurence of outcome -> C. 
+        alpha is a discount factor that allows to give more weight to recent
+        events than earlier ones.
+        
+        Parameters
+
+        outcome : tuple of two actions.Actions
+            in {(C, C), (C, D), (D, C), (D, D)}
+            We want to compute the probability that the opponent plays C
+            following this outcome in the game
+        alpha : int, optionnal
+            Discount factor. Default is 1.
+        """
         G = self.history_by_cond[outcome][0]
         F = self.history_by_cond[outcome][1]
         discounted_g = 0
@@ -153,25 +228,30 @@ class DBS(Player):
             discounted_g += alpha_k * g
             discounted_f += alpha_k * f
             alpha_k = alpha * alpha_k
-        p_cond = discounted_g/discounted_f
+        p_cond = discounted_g / discounted_f
         return p_cond
 
     def strategy(self, opponent: Player) -> Action:
-
         # First move
         if not self.history:
             return C
         
         if(len(opponent.history) >= 2):
 
-            # update history_by_cond
+            # We begin by update history_by_cond
             # (i.e. update Rp)
             self.update_history_by_cond(opponent.history)
      
             two_moves_ago = (self.history[-2], opponent.history[-2])
+            # r_plus is the information of what the opponent just played,
+            # following the previous outcome two_moves_ago
             r_plus = (two_moves_ago, opponent.history[-1])
+            # r_minus is the opposite move, following the same outcome
             r_minus = (two_moves_ago, ({C, D} - {opponent.history[-1]}).pop())
 
+            # If r_plus and r_minus are not in the current set of deterministic 
+            # rules, we check if r_plus should be added to it (following the 
+            # rule defined in the should_promote function)
             if r_plus[0] not in self.Rc.keys(): 
                 if self.should_promote(r_plus, self.promotion_threshold):
                     self.Rc[r_plus[0]] = action_to_int(r_plus[1])
@@ -187,9 +267,14 @@ class DBS(Player):
                     self.violation_counts[r_plus[0]] = 0
                 # (if r- in Rc)
                 elif r_minus[1] == to_check:
-                    # increment violation count of r-
+                    # Increment violation count of r-
                     self.violation_counts[r_plus[0]] += 1
-                    if self.should_demote(r_minus,self.violation_threshold):
+                    # As we observe that the behavior of the opponent is
+                    # opposed to a rule modeled in Rc, we check if the number
+                    # of consecutive violations of this rule is superior to 
+                    # a threshold. If it is, we clean Rc, but we keep the rules
+                    # of Rc in Rd for smooth transition
+                    if self.should_demote(r_minus, self.violation_threshold):
                         self.Rd.update(self.Rc)
                         self.Rc.clear()
                         self.violation_counts.clear()
@@ -206,25 +291,28 @@ class DBS(Player):
                 and self.Rd[r_minus[0]] == action_to_int(r_minus[1])
             )
 
+            # Increment number of violations of Rd rules
             if r_minus_in_Rd:
                 self.v += 1
-
+            # If the number of violations is superior to a threshold, clean Rd
             if (self.v > self.reject_threshold 
                     or (r_plus_in_Rc and r_minus_in_Rd)):
                 self.Rd.clear()
                 self.v = 0
 
-            # compute Rp for conditions that are neither in Rc or Rd
+            # Compute Rp for conditions that are neither in Rc or Rd
             Rp = {}
             all_cond = [(C, C), (C, D), (D, C), (D, D)]
             for outcome in all_cond:
                 if ((outcome not in self.Rc.keys()) 
                     and (outcome not in self.Rd.keys())):
-                    # then we need to compute opponent's C answer probability
+                    # Compute opponent's C answer probability
                     Rp[outcome] = self.compute_prob_rule(outcome, self.alpha)
 
+            # We aggregate the rules of Rc, Rd, and Rp in a set of rule Pi
             self.Pi = {}
-            # algorithm ensure no duplicate keys -> no key overwriting
+            # The algorithm makes sure that a rule cannot be in two different
+            # sets of rule so we do not need to check for duplicates.
             self.Pi.update(self.Rc)
             self.Pi.update(self.Rd)
             self.Pi.update(Rp)
