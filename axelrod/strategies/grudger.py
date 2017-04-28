@@ -63,11 +63,11 @@ class ForgetfulGrudger(Player):
     def strategy(self, opponent: Player) -> Action:
         """Begins by playing C, then plays D for mem_length rounds if the
         opponent ever plays D."""
-        if self.grudge_memory >= self.mem_length:
+        if self.grudge_memory == self.mem_length:
             self.grudge_memory = 0
             self.grudged = False
 
-        if not self.grudged and D in opponent.history[-1:]:
+        if D in opponent.history[-1:]:
             self.grudged = True
 
         if self.grudged:
@@ -284,7 +284,7 @@ class GeneralSoftGrudger(Player):
         self.n = n
         self.d = d
         self.c = c
-        self.grudge = [D] * (d - 1) + [C] * c
+        self.grudge = [D] * d + [C] * c
         self.grudged = False
         self.grudge_memory = 0
 
@@ -294,16 +294,18 @@ class GeneralSoftGrudger(Player):
         The punishment is in the form of 'd' defections followed by a penance of
         'c' consecutive cooperations.
         """
+        if self.grudge_memory == len(self.grudge):
+            self.grudged = False
+            self.grudge_memory = 0
+
+        if [D] * self.n == opponent.history[-self.n:] or self.n == 0:
+            self.grudged = True
+
         if self.grudged:
             strategy = self.grudge[self.grudge_memory]
             self.grudge_memory += 1
-            if self.grudge_memory == len(self.grudge):
-                self.grudged = False
-                self.grudge_memory = 0
             return strategy
-        elif [D] * self.n == opponent.history[-self.n:]:
-            self.grudged = True
-            return D
+
         return C
 
     def reset(self):

@@ -288,6 +288,7 @@ class TestGeneralSoftGrudger(TestSoftGrudger):
                          init_kwargs=init_kwargs)
 
     def test_set_d_and_c(self):
+        # Sets the number of D's then C's in the grudge response.
         init_kwargs = {'d': 3, 'c': 3}
         grudge_response_d = [(D, D)] * 3 + [(C, D)] * 3
         grudge_response_c = [(D, C)] * 3 + [(C, C)] * 3
@@ -301,6 +302,53 @@ class TestGeneralSoftGrudger(TestSoftGrudger):
         opponent = axl.MockPlayer(actions=opponent_actions)
         actions_start = [(C, C)] * 10 + [(C, D)]
         subsequent = grudge_response_c + [(C, C)] * 4 + [(C, D)]
+        actions = actions_start + subsequent * 5
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs=init_kwargs)
+
+    def test_edge_case_n_is_zero(self):
+        # Always uses grudge response.
+        init_kwargs = {'n': 0}
+        grudge_response_d = [(D, D)] * 4 + [(C, D)] * 2
+        grudge_response_c = [(D, C)] * 4 + [(C, C)] * 2
+
+        opponent = axl.Defector()
+        actions = grudge_response_d * 5
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs=init_kwargs)
+
+        opponent = axl.Cooperator()
+        actions = grudge_response_c * 5
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs=init_kwargs)
+
+    def test_edge_case_d_is_zero(self):
+        # Grudge response is only C, so acts like Cooperator.
+        init_kwargs = {'d': 0}
+
+        opponent = axl.Defector()
+        actions = [(C, D)] * 5
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs=init_kwargs)
+
+        opponent = axl.Alternator()
+        actions = [(C, C), (C, D)] * 5
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs=init_kwargs)
+
+    def test_edge_case_c_is_zero(self):
+        # Grudge response is a set number of D's (defaults to 4)
+        init_kwargs = {'c': 0}
+
+        opponent = axl.Defector()
+        actions = [(C, D)] + [(D, D)] * 10
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs=init_kwargs)
+
+        opponent_actions = [C] * 10 + [D]
+        opponent = axl.MockPlayer(actions=opponent_actions)
+        actions_start = [(C, C)] * 10 + [(C, D)]
+        subsequent = [(D, C)] * 4 + [(C, C)] * 6 + [(C, D)]
         actions = actions_start + subsequent * 5
         self.versus_test(opponent, expected_actions=actions,
                          init_kwargs=init_kwargs)
