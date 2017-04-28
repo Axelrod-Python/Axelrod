@@ -8,8 +8,11 @@ documentation.
 
 .. [Andre2013] Andre L. C., Honovan P., Felipe T. and Frederico G. (2013). Iterated Prisoner’s Dilemma - An extended analysis, http://abricom.org.br/wp-content/uploads/2016/03/bricsccicbic2013_submission_202.pdf
 .. [Ashlock2006] Ashlock, D., & Kim E. Y, & Leahy, N. (2006). Understanding Representational Sensitivity in the Iterated Prisoner’s Dilemma with Fingerprints. IEEE Transactions On Systems, Man, And Cybernetics, Part C: Applications And Reviews, 36 (4)
+.. [Ashlock2006b] Ashlock, W. & Ashlock, D. (2006). Changes in Prisoner's Dilemma Strategies Over Evolutionary Time With Different Population Sizes 2006 IEEE International Conference on Evolutionary Computation. http://DOI.org/10.1109/CEC.2006.1688322
 .. [Ashlock2008] Ashlock, D., & Kim, E. Y. (2008). Fingerprinting: Visualization and automatic analysis of prisoner’s dilemma strategies. IEEE Transactions on Evolutionary Computation, 12(5), 647–659. http://doi.org/10.1109/TEVC.2008.920675
 .. [Ashlock2009] Ashlock, D., Kim, E. Y., & Ashlock, W. (2009) Fingerprint analysis of the noisy prisoner’s dilemma using a finite-state representation. IEEE Transactions on Computational Intelligence and AI in Games. 1(2), 154-167  http://doi.org/10.1109/TCIAIG.2009.2018704
+.. [Ashlock2014] Ashlock, W., Tsang, J. & Ashlock, D. (2014) The evolution of exploitation. 2014 IEEE Symposium on Foundations of Computational Intelligence (FOCI) http://DOI.org/10.1109/FOCI.2014.7007818
+.. [Ashlock2015] Ashlock, D., Brown, J.A., & Hingston P. (2015). Multiple Opponent Optimization of Prisoner’s Dilemma Playing Agents. Multiple Opponent Optimization of Prisoner’s Dilemma Playing Agents http://DOI.org/10.1109/TCIAIG.2014.2326012
 .. [Axelrod1980] Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(1), 3–25.
 .. [Axelrod1980b] Axelrod, R. (1980). More Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(3), 379-403.
 .. [Axelrod1984]  The Evolution of Cooperation. Basic Books. ISBN 0-465-02121-2.
