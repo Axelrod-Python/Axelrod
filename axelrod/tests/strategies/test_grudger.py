@@ -244,7 +244,7 @@ class TestEasyGo(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
-class TestGeneralSoftGrudger(TestSoftGrudger):
+class TestGeneralSoftGrudger(TestPlayer):
 
     name = "General Soft Grudger: n=1,d=4,c=2"
     player = axl.GeneralSoftGrudger
@@ -259,52 +259,30 @@ class TestGeneralSoftGrudger(TestSoftGrudger):
     }
 
     def test_strategy(self):
-        # the default follows SoftGrudger
-        super(TestGeneralSoftGrudger, self).test_strategy()
+        """Test strategy with multiple initial parameters"""
 
-    def test_set_n(self):
-        # grudge response only activates if opponent's last 'n' plays were D
-        init_kwargs = {'n': 3}
-        grudge_response_d = [(D, D)] * 4 + [(C, D)] * 2
-        grudge_response_c = [(D, C)] * 4 + [(C, C)] * 2
+        # Starts by cooperating.
+        self.first_play_test(C)
 
-        opponent = axl.Defector()
-        actions = [(C, D)] * 3 + grudge_response_d * 5
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
+        # Testing default parameters of n=1, d=4, c=2 (same as Soft Grudger)
+        actions = [(C, D), (D, D), (D, C), (D, C), (D, D), (C, D),
+                   (C, C), (C, C)]
+        self.versus_test(axl.MockPlayer(actions=[D, D, C, C]),
+                         expected_actions=actions)
 
-        two_defections = [C, D, D]
-        opponent = axl.MockPlayer(actions=two_defections)
-        actions = [(C, C), (C, D), (C, D)] * 5
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
+        # Testing n=2, d=4, c=2
+        actions = [(C, D), (C, D), (D, C), (D, C), (D, D), (D, D),
+                   (C, C), (C, C)]
+        self.versus_test(axl.MockPlayer(actions=[D, D, C, C]),
+                         expected_actions=actions,
+                         init_kwargs={"n": 2})
 
-        three_defections = [C] * 10 + [D, D, D]
-        opponent = axl.MockPlayer(actions=three_defections)
-        actions_start = [(C, C)] * 10 + [(C, D)] * 3
-        subsequent = grudge_response_c + [(C, C)] * 4 + [(C, D)] * 3
-        actions = actions_start + subsequent * 5
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
-
-    def test_set_d_and_c(self):
-        # Sets the number of D's then C's in the grudge response.
-        init_kwargs = {'d': 3, 'c': 3}
-        grudge_response_d = [(D, D)] * 3 + [(C, D)] * 3
-        grudge_response_c = [(D, C)] * 3 + [(C, C)] * 3
-
-        opponent = axl.Defector()
-        actions = [(C, D)] + grudge_response_d * 5
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
-
-        opponent_actions = [C] * 10 + [D]
-        opponent = axl.MockPlayer(actions=opponent_actions)
-        actions_start = [(C, C)] * 10 + [(C, D)]
-        subsequent = grudge_response_c + [(C, C)] * 4 + [(C, D)]
-        actions = actions_start + subsequent * 5
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs=init_kwargs)
+        # Testing n=1, d=1, c=1
+        actions = [(C, D), (D, D), (C, C), (C, C), (C, D), (D, D),
+                   (C, C), (C, C)]
+        self.versus_test(axl.MockPlayer(actions=[D, D, C, C]),
+                         expected_actions=actions,
+                         init_kwargs={"n": 1, "d": 1, "c": 1})
 
     def test_edge_case_n_is_zero(self):
         # Always uses grudge response.
