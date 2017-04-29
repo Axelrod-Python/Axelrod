@@ -284,7 +284,7 @@ class GeneralSoftGrudger(Player):
         self.n = n
         self.d = d
         self.c = c
-        self.grudge = [D] * d + [C] * c
+        self.grudge = [D] * (d - 1) + [C] * c
         self.grudged = False
         self.grudge_memory = 0
 
@@ -294,17 +294,16 @@ class GeneralSoftGrudger(Player):
         The punishment is in the form of 'd' defections followed by a penance of
         'c' consecutive cooperations.
         """
-        if self.grudge_memory == len(self.grudge):
-            self.grudged = False
-            self.grudge_memory = 0
-
-        if [D] * self.n == opponent.history[-self.n:] or self.n == 0:
-            self.grudged = True
-
         if self.grudged:
             strategy = self.grudge[self.grudge_memory]
             self.grudge_memory += 1
+            if self.grudge_memory == len(self.grudge):
+                self.grudged = False
+                self.grudge_memory = 0
             return strategy
+        elif [D] * self.n == opponent.history[-self.n:]:
+            self.grudged = True
+            return D
 
         return C
 
