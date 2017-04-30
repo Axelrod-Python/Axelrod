@@ -100,9 +100,16 @@ class FSMPlayer(Player):
 
 
 class Fortress3(FSMPlayer):
-    """Finite state machine player specified in DOI:10.1109/CEC.2006.1688322.
+    """Finite state machine player specified in http://DOI.org/10.1109/CEC.2006.1688322.
+
     Note that the description in http://www.graham-kendall.com/papers/lhk2011.pdf
-    is not correct."""
+    is not correct.
+
+
+    Names:
+
+    - Fortress 3: [Ashlock2006b]_
+    """
 
     name = 'Fortress3'
     classifier = {
@@ -129,9 +136,17 @@ class Fortress3(FSMPlayer):
 
 
 class Fortress4(FSMPlayer):
-    """Finite state machine player specified in DOI:10.1109/CEC.2006.1688322.
-    Note that the description in http://www.graham-kendall.com/papers/lhk2011.pdf
-    is not correct."""
+    """
+    Finite state machine player specified in
+    http://DOI.org/10.1109/CEC.2006.1688322.
+
+    Note that the description in
+    http://www.graham-kendall.com/papers/lhk2011.pdf is not correct.
+
+    Names:
+
+    - Fortress 4: [Ashlock2006b]_
+    """
 
     name = 'Fortress4'
     classifier = {
@@ -160,7 +175,14 @@ class Fortress4(FSMPlayer):
 
 
 class Predator(FSMPlayer):
-    """Finite state machine player specified in DOI:10.1109/CEC.2006.1688322."""
+    """
+    Finite state machine player specified in
+    http://DOI.org/10.1109/CEC.2006.1688322
+
+    Names:
+
+    - Predator: [Ashlock2006b]_
+    """
 
     name = 'Predator'
     classifier = {
@@ -228,7 +250,14 @@ class Pun1(FSMPlayer):
 
 
 class Raider(FSMPlayer):
-    """FSM player described in DOI:10.1109/FOCI.2014.7007818"""
+    """
+    FSM player described in http://DOI.org/10.1109/FOCI.2014.7007818
+
+
+    Names
+
+    - Raider: [Ashlock2014]_
+    """
 
     name = 'Raider'
     classifier = {
@@ -257,7 +286,13 @@ class Raider(FSMPlayer):
 
 
 class Ripoff(FSMPlayer):
-    """FSM player described in DOI:10.1109/TEVC.2008.920675."""
+    """
+    FSM player described in http://DOI.org/10.1109/TEVC.2008.920675.
+
+    Names
+
+    - Ripoff: [Ashlock2008]_
+    """
 
     name = 'Ripoff'
     classifier = {
@@ -284,7 +319,13 @@ class Ripoff(FSMPlayer):
 
 
 class SolutionB1(FSMPlayer):
-    """FSM player described in DOI:10.1109/TCIAIG.2014.2326012."""
+    """
+    FSM player described in http://DOI.org/10.1109/TCIAIG.2014.2326012.
+
+    Names
+
+    - Solution B1: [Ashlock2015]_
+    """
 
     name = 'SolutionB1'
     classifier = {
@@ -311,7 +352,14 @@ class SolutionB1(FSMPlayer):
 
 
 class SolutionB5(FSMPlayer):
-    """FSM player described in DOI:10.1109/TCIAIG.2014.2326012."""
+    """
+
+    FSM player described in http://DOI.org/10.1109/TCIAIG.2014.2326012.
+
+    Names
+
+    - Solution B5: [Ashlock2015]_
+    """
 
     name = 'SolutionB5'
     classifier = {
@@ -344,7 +392,13 @@ class SolutionB5(FSMPlayer):
 
 
 class Thumper(FSMPlayer):
-    """FSM player described in DOI:10.1109/TEVC.2008.920675."""
+    """
+    FSM player described in http://DOI.org/10.1109/TEVC.2008.920675.
+
+    Names
+
+    - Thumper: [Ashlock2008]_
+    """
 
     name = 'Thumper'
     classifier = {
