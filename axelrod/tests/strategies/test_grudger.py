@@ -55,16 +55,20 @@ class TestForgetfulGrudger(TestPlayer):
         # D ten times and then continue to check for defections.
         opponent = axl.Cooperator()
         actions = [(C, C)] * 20
-        self.versus_test(opponent, expected_actions=actions)
+        attrs = {'grudged': False, 'mem_length': 10, 'grudge_memory': 0}
+        self.versus_test(opponent, expected_actions=actions, attrs=attrs)
 
+        # grudge_memory goes to ten, resets and climbs back to five.
         opponent = axl.Defector()
-        actions = [(C, D)] + [(D, D)] * 20
-        self.versus_test(opponent, expected_actions=actions)
+        actions = [(C, D)] + [(D, D)] * 15
+        attrs = {'grudged': True, 'mem_length': 10, 'grudge_memory': 5}
+        self.versus_test(opponent, expected_actions=actions, attrs=attrs)
 
         opponent_actions = [C] * 2 + [D] + [C] * 10
         opponent = axl.MockPlayer(actions=opponent_actions)
-        expected = ([(C, C)] * 2 + [(C, D)] + [(D, C)] * 10) * 3
-        self.versus_test(opponent, expected_actions=expected)
+        actions = ([(C, C)] * 2 + [(C, D)] + [(D, C)] * 10) * 3
+        attrs = {'grudged': True, 'mem_length': 10, 'grudge_memory': 10}
+        self.versus_test(opponent, expected_actions=actions, attrs=attrs)
 
     def test_reset_method(self):
         """Tests the reset method."""
