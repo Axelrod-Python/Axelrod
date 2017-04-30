@@ -636,3 +636,30 @@ class SlowTitForTwoTats2(Player):
 
         # Otherwise play previous move
         return self.history[-1]
+
+class Alexei(Player):
+    """
+    Plays similar to Tit-for-Tat, but always defect on last turn.
+    
+    Names:
+
+    - From http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/    
+    """
+
+    name = 'Alexei'
+    classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        if opponent.history[-1] == D:
+            return D
+        return D
