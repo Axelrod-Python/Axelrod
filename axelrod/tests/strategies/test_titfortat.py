@@ -563,3 +563,54 @@ class TestSlowTitForTwoTats2(TestPlayer):
         actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (D, D), (D, D),
                     (D, C), (D, C), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions)
+
+class TestAlexei(TestPlayer):
+    """
+    Note that this test is referred to in the documentation as an example on
+    writing tests.  If you modify the tests here please also modify the
+    documentation.
+    """
+
+    name = "Alexei"
+    player = axelrod.Alexei
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
+
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         match_attributes={"length": -1})
+
+        actions = [(C, D), (D, D), (D, C), (C, C), (C, D)]
+        self.versus_test(axelrod.Random(), expected_actions=actions,
+                         seed=0)
+
+        actions = [(C, C), (C, D), (D, D), (D, C)]
+        self.versus_test(axelrod.Random(), expected_actions=actions,
+                         seed=1)
+
+        opponent = axelrod.MockPlayer(actions=[C, D])
+        actions = [(C, C), (C, D), (D, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D])
+        actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
