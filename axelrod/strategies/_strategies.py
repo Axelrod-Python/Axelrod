@@ -86,7 +86,7 @@ all_strategies = [
     Adaptive,
     AdaptiveTitForTat,
     Aggravater,
-    Alexei
+    Alexei,
     ALLCorALLD,
     Alternator,
     AlternatorHunter,
