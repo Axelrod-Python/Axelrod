@@ -75,7 +75,7 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
-    SpitefulTitForTat, SlowTitForTwoTats2)
+    SpitefulTitForTat, SlowTitForTwoTats2, Alexei)
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
@@ -86,6 +86,7 @@ all_strategies = [
     Adaptive,
     AdaptiveTitForTat,
     Aggravater,
+    Alexei
     ALLCorALLD,
     Alternator,
     AlternatorHunter,
