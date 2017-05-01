@@ -33,7 +33,7 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
    we test that Tit for tat will cooperate if and only if the opponent
    cooperates in the previous round::
 
-    self.second_play_test(rCC=C, rCD=D, rDC=D, rDD=C, seed=None)
+    self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D, seed=None)
 
    This is equivalent to choosing if an opponent will play :code:`C` or
    :code:`D` following the last round of play and checking the player's
