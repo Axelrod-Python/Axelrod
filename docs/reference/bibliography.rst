@@ -36,6 +36,7 @@ documentation.
 .. [Li2011] Li, J., Hingston, P., Member, S., & Kendall, G. (2011). Engineering Design of Strategies for Winning Iterated Prisoner ’ s Dilemma Competitions, 3(4), 348–360.
 .. [Li2014] Li, J. and Kendall, G. (2014). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826
 .. [LiS2014] Li, Siwei. (2014). Strategies in the Stochastic Iterated Prisoner's Dilemma. Available at: http://math.uchicago.edu/~may/REU2014/REUPapers/Li,Siwei.pdf
+.. [Li2014] Li, J. and Kendall, G. (2016). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826
 .. [Luis2008] Luis R. Izquierdo and Segismundo S. Izquierdo (2008). Dynamics of the Bush-Mosteller Learning Algorithm in 2x2 Games, Reinforcement Learning, Cornelius Weber,  Mark Elshaw and Norbert Michael Mayer  (Ed.), InTech, DOI: 10.5772/5282. Available from: https://www.intechopen.com/books/reinforcement_learning/dynamics_of_the_bush-mosteller_learning_algorithm_in_2x2_games
 .. [Mathieu2015] Mathieu, P. and Delahaye, J. (2015). New Winning Strategies
   for the Iterated Prisoner's Dilemma. Proceedings of the 2015
