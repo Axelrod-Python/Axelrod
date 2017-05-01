@@ -109,10 +109,10 @@ class DBS(Player):
         # easy and efficient
         # initial hypothesized policy is TitForTat
         self.history_by_cond = {
-            [(C, C)] = ([1], [1])
-            [(C, D)] = ([1], [1])
-            [(D, C)] = ([0], [1])
-            [(D, D)] = ([0], [1])
+            (C, C): ([1], [1]),
+            (C, D): ([1], [1]),
+            (D, C): ([0], [1]),
+            (D, D): ([0], [1])
         }
 
     def reset(self):
@@ -123,11 +123,13 @@ class DBS(Player):
         self.Pi = self.Rd   # policy used by MoveGen
         self.violation_counts = {}
         self.v = 0
-        self.history_by_cond = {}
-        self.history_by_cond[(C, C)] = ([1], [1])
-        self.history_by_cond[(C, D)] = ([1], [1])
-        self.history_by_cond[(D, C)] = ([0], [1])
-        self.history_by_cond[(D, D)] = ([0], [1])
+        self.history_by_cond = {
+            (C, C): ([1], [1]),
+            (C, D): ([1], [1]),
+            (D, C): ([0], [1]),
+            (D, D): ([0], [1])
+        }
+        
 
     def should_promote(self, r_plus, promotion_threshold=3):
         """
@@ -351,12 +353,20 @@ class StochasticNode(Node):
         self.own_action = own_action
 
     def get_siblings(self):
-        # siblings of a stochastic node get depth += 1 
+        """
+        Returns the siblings node of the current StochasticNode
+        There are two sibling which are DeterministicNodes, their depth
+        is equal to current node depth's + 1 
+        This function allows to build the tree
+        """
         opponent_c_choice = DeterministicNode(self.own_action, C, self.depth+1)
         opponent_d_choice = DeterministicNode(self.own_action, D, self.depth+1)
         return (opponent_c_choice, opponent_d_choice)
 
     def is_stochastic(self):
+        """
+        Returns True if self is a StochasticNode
+        """
         return True
 
 
@@ -373,9 +383,10 @@ class DeterministicNode(Node):
 
     def get_siblings(self, policy):
         """
-        build 2 siblings (C, X) and (D, X)
-        siblings of a DeterministicNode are Stochastic, and are of the
-        same depth
+        Returns the siblings node of the current DeterministicNode
+        Builds 2 siblings (C, X) and (D, X) that are StochasticNodes
+        Those siblings are of the same depth as the current node
+        Their probability pC are defined by the policy argument
         """
         c_choice = StochasticNode(
             C, policy[(self.action1, self.action2)], self.depth
@@ -386,6 +397,9 @@ class DeterministicNode(Node):
         return (c_choice, d_choice)
 
     def is_stochastic(self):
+        """
+        Returns True if self is a StochasticNode
+        """
         return False
 
     def get_value(self):
@@ -404,6 +418,11 @@ def create_policy(pCC, pCD, pDC, pDD):
     As defined in the reference, a Policy is a set of (prev_move, p) 
     where p is the probability to cooperate after prev_move,
     where prev_move can be (C, C), (C, D), (D, C) or (D, D)
+
+    Parameters
+
+    pCC, pCD, pDC, pDD : float
+        Must be between 0 and 1
     """
     return {(C, C): pCC, (C, D): pCD, (D, C): pDC, (D, D): pDD}
 
@@ -416,9 +435,11 @@ def action_to_int(action):
 
 def minimax_tree_search(begin_node, policy, max_depth):
     """
-    tree search function (minimax search procedure)
+    Tree search function (minimax search procedure)
     build by recursion the tree corresponding to a game against 
     opponent's policy, and solve it
+    Returns a tuple of two float, that are the utility of playing C,
+    and the utility of playing D
     """
     if begin_node.is_stochastic():
         # a stochastic node cannot has the same depth than its parent
@@ -459,7 +480,7 @@ def minimax_tree_search(begin_node, policy, max_depth):
 
 def MoveGen(outcome, policy, depth_search_tree=5):
     """
-    returns the best move considering opponent's policy and last move,
+    Returns the best move considering opponent's policy and last move,
     using tree-search procedure
     """
     current_node = DeterministicNode(outcome[0], outcome[1], depth=0)

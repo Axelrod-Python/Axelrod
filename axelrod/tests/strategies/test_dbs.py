@@ -3,6 +3,7 @@
 import axelrod
 import unittest
 from .test_player import TestPlayer
+from axelrod import dbs
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -11,7 +12,7 @@ class TestNode(unittest.TestCase):
     """
     Test for the base class
     """
-    node = axelrod.dbs.Node()
+    node = dbs.Node()
 
     def test_get_siblings(self):
         with self.assertRaises(NotImplementedError) as context:
@@ -20,6 +21,189 @@ class TestNode(unittest.TestCase):
     def test_is_stochastic(self):
         with self.assertRaises(NotImplementedError) as context:
             self.node.is_stochastic()
+
+
+class TestTreeSearch(unittest.TestCase):
+    """
+    A set of tests for the tree-search functions.
+    We test the answers of both minimax_tree_search and MoveGen
+    functions, against a set of classic policies (the answer being the
+    best move to play for the next turn, considering an income 
+    position (C, C), (C, D), (D, C) or (D, D))
+    For each policy, we test the answer for all income position
+    """
+    def setUp(self):
+        """
+        Initialization for tests.
+        """
+        # For each test, we check the answer againt each possible
+        # inputs, that are in self.input_pos
+        self.input_pos = [(C, C), (C, D), (D, C), (D, D)]
+        # We define the policies against which we are going to test
+        self.cooperator_policy = dbs.create_policy(1, 1, 1, 1)
+        self.defector_policy = dbs.create_policy(0, 0, 0, 0)
+        self.titForTat_policy = dbs.create_policy(1, 1, 0, 0)
+        self.alternator_policy = dbs.create_policy(0, 1, 0, 1)
+        self.grudger_policy = dbs.create_policy(1, 0, 0, 0)
+        self.random_policy = dbs.create_policy(.5, .5, .5, .5)
+
+    def test_minimaxTreeSearch_cooperator(self):
+        """
+        Tests the minimax_tree_search function when playing against a 
+        Cooperator player.
+        Output == 0 means Cooperate, 1 means Defect.
+        The best (hence expected) answer to Cooperator is to defect
+        whatever the input position is.
+        """
+        expected_output = [1, 1, 1, 1]
+        for inp, out in zip(self.input_pos, expected_output): 
+            begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
+            values = dbs.minimax_tree_search(begin_node, 
+                self.cooperator_policy, max_depth=5)
+            self.assertEqual(values.index(max(values)),out)
+
+    def test_MoveGen_cooperator(self):
+        """
+        Tests the MoveGen function when playing against a 
+        Cooperator player.
+        """
+        expected_output = [D, D, D, D]
+        for inp, out in zip(self.input_pos, expected_output): 
+            out_move = dbs.MoveGen(inp, self.cooperator_policy, 
+                depth_search_tree=5)
+            self.assertEqual(out_move, out)
+
+    def test_minimaxTreeSearch_defector(self):
+        """
+        Tests the minimax_tree_search function when playing against a 
+        Defector player.
+        The best answer to Defector is to always defect
+        """
+        expected_output = [1, 1, 1, 1]
+        for inp, out in zip(self.input_pos, expected_output): 
+            begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
+            values = dbs.minimax_tree_search(begin_node, 
+                self.defector_policy, max_depth=5)
+            self.assertEqual(values.index(max(values)),out)
+
+    def test_MoveGen_defector(self):
+        """
+        Tests the MoveGen function when playing against a 
+        Defector player.
+        """
+        expected_output = [D, D, D, D]
+        for inp, out in zip(self.input_pos, expected_output): 
+            out_move = dbs.MoveGen(inp, self.defector_policy, 
+                depth_search_tree=5)
+            self.assertEqual(out_move, out)
+
+    def test_minimaxTreeSearch_titForTat(self):
+        """
+        Tests the minimax_tree_search function when playing against a 
+        TitForTat player.
+        The best (hence expected) answer to TitFOrTat is to cooperate
+        whatever the input position is.
+        """
+        expected_output = [0, 0, 0, 0]
+        for inp, out in zip(self.input_pos, expected_output): 
+            begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
+            values = dbs.minimax_tree_search(begin_node, 
+                self.titForTat_policy, max_depth=5)
+            self.assertEqual(values.index(max(values)),out)
+
+    def test_last_node_titForTat(self):
+        """
+        Test that against TitForTat, for the last move, i.e. if tree
+        depth is 1, the algorithms defects for all input
+        """
+        expected_output = [1, 1, 1, 1]
+        for inp, out in zip(self.input_pos, expected_output): 
+            begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
+            values = dbs.minimax_tree_search(begin_node, 
+                self.titForTat_policy, max_depth=1)
+            self.assertEqual(values.index(max(values)),out)
+
+    def test_MoveGen_titForTat(self):
+        """
+        Tests the MoveGen function when playing against a 
+        TitForTat player.
+        """
+        expected_output = [C, C, C, C]
+        for inp, out in zip(self.input_pos, expected_output): 
+            out_move = dbs.MoveGen(inp, self.titForTat_policy, 
+                depth_search_tree=5)
+            self.assertEqual(out_move, out)
+
+    def test_minimaxTreeSearch_alternator(self):
+        """
+        Tests the minimax_tree_search function when playing against an 
+        Alternator player.
+        The best answer to Alternator is to always defect
+        """
+        expected_output = [1, 1, 1, 1]
+        for inp, out in zip(self.input_pos, expected_output): 
+            begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
+            values = dbs.minimax_tree_search(begin_node, 
+                self.alternator_policy, max_depth=5)
+            self.assertEqual(values.index(max(values)),out)
+
+    def test_MoveGen_alternator(self):
+        """
+        Tests the MoveGen function when playing against an 
+        Alternator player.
+        """
+        expected_output = [D, D, D, D]
+        for inp, out in zip(self.input_pos, expected_output): 
+            out_move = dbs.MoveGen(inp, self.random_policy, depth_search_tree=5)
+            self.assertEqual(out_move, out)
+
+    def test_minimaxTreeSearch_random(self):
+        """
+        Tests the minimax_tree_search function when playing against a 
+        Random player.
+        The best answer to Random is to always defect
+        """
+        expected_output = [1, 1, 1, 1]
+        for inp, out in zip(self.input_pos, expected_output): 
+            begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
+            values = dbs.minimax_tree_search(begin_node, 
+                self.random_policy, max_depth=5)
+            self.assertEqual(values.index(max(values)),out)
+
+    def test_MoveGen_random(self):
+        """
+        Tests the MoveGen function when playing against a 
+        Random player.
+        """
+        expected_output = [D, D, D, D]
+        for inp, out in zip(self.input_pos, expected_output): 
+            out_move = dbs.MoveGen(inp, self.random_policy, depth_search_tree=5)
+            self.assertEqual(out_move, out)
+
+    def test_minimaxTreeSearch_grudger(self):
+        """
+        Tests the minimax_tree_search function when playing against a 
+        Grudger player.
+        The best answer to Grudger is to cooperate if both cooperated
+        at last round, else it's to defect
+        """
+        expected_output = [0, 1, 1, 1]
+        for inp, out in zip(self.input_pos, expected_output): 
+            begin_node = dbs.DeterministicNode(inp[0], inp[1], depth=0)
+            values = dbs.minimax_tree_search(begin_node, 
+                self.grudger_policy, max_depth=5)
+            self.assertEqual(values.index(max(values)),out)
+
+    def test_MoveGen_grudger(self):
+        """
+        Tests the MoveGen function when playing against a 
+        Grudger player.
+        """
+        expected_output = [C, D, D, D]
+        for inp, out in zip(self.input_pos, expected_output): 
+            out_move = dbs.MoveGen(inp, 
+                self.grudger_policy, depth_search_tree=5)
+            self.assertEqual(out_move, out)
 
 
 class TestDBS(TestPlayer):
