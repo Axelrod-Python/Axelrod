@@ -1,3 +1,5 @@
+.. _play_contexts:
+
 Play Contexts and Generic Prisoner's Dilemma
 ============================================
 
