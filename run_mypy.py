@@ -1,13 +1,16 @@
 import subprocess
 import sys
-modules = ["axelrod/actions.py",
+modules = ["run_strategy_indexer.py",
+           "axelrod/actions.py",
            "axelrod/deterministic_cache.py",
            "axelrod/ecosystem.py",
+           "axelrod/fingerprint.py",
            "axelrod/game.py",
            "axelrod/load_data_.py",
            "axelrod/mock_player.py",
            "axelrod/moran.py",
            "axelrod/plot.py",
+           "axelrod/random_.py",
            "axelrod/tournament.py",
            "axelrod/strategies/adaptive.py",
            "axelrod/strategies/alternator.py",

@@ -9,6 +9,8 @@ import axelrod
 from axelrod import DefaultGame, MockPlayer, Player, simulate_play
 from axelrod.player import get_state_distribution_from_history
 
+from hypothesis import given
+from axelrod.tests.property import strategy_lists
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -150,6 +152,148 @@ class TestPlayerClass(unittest.TestCase):
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 
+    def test_equality(self):
+        """Test the equality method for some bespoke cases"""
+        # Check repr
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        self.assertEqual(p1, p2)
+        p1.__repr__ = lambda: "John Nash"
+        self.assertNotEqual(p1, p2)
+
+        # Check attributes
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        p1.test = "29"
+        self.assertNotEqual(p1, p2)
+
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        p2.test = "29"
+        self.assertNotEqual(p1, p2)
+
+        p1.test = "29"
+        self.assertEqual(p1, p2)
+
+        # Check that attributes of both players are tested.
+        p1.another_attribute = [1, 2, 3]
+        self.assertNotEqual(p1, p2)
+        p2.another_attribute = [1, 2, 3]
+        self.assertEqual(p1, p2)
+
+        p2.another_attribute_2 = {1: 2}
+        self.assertNotEqual(p1, p2)
+        p1.another_attribute_2 = {1: 2}
+        self.assertEqual(p1, p2)
+
+    def test_equality_for_numpy_array(self):
+        """Check numpy array attribute (a special case)"""
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+
+        p1.array = np.array([0, 1])
+        p2.array = np.array([0, 1])
+        self.assertEqual(p1, p2)
+
+        p2.array = np.array([1, 0])
+        self.assertNotEqual(p1, p2)
+
+    def test_equality_for_generator(self):
+        """Test equality works with generator attribute and that the generator
+        attribute is not altered during checking of equality"""
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+
+        # Check that players are equal with generator
+        p1.generator = (i for i in range(10))
+        p2.generator = (i for i in range(10))
+        self.assertEqual(p1, p2)
+
+        # Check state of one generator (ensure it hasn't changed)
+        n = next(p2.generator)
+        self.assertEqual(n, 0)
+
+        # Players are no longer equal (one generator has changed)
+        self.assertNotEqual(p1, p2)
+
+        # Check that internal generator object has not been changed for either
+        # player after latest equal check.
+        self.assertEqual(list(p1.generator), list(range(10)))
+        self.assertEqual(list(p2.generator), list(range(1, 10)))
+
+        # Check that type is generator
+        self.assertIsInstance(p2.generator, types.GeneratorType)
+
+    def test_equality_for_cycle(self):
+        """Test equality works with cycle attribute and that the cycle attribute
+        is not altered during checking of equality"""
+        # Check cycle attribute (a special case)
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+
+        # Check that players are equal with cycle
+        p1.cycle = itertools.cycle(range(10))
+        p2.cycle = itertools.cycle(range(10))
+        self.assertEqual(p1, p2)
+
+        # Check state of one generator (ensure it hasn't changed)
+        n = next(p2.cycle)
+        self.assertEqual(n, 0)
+
+        # Players are no longer equal (one generator has changed)
+        self.assertNotEqual(p1, p2)
+
+        # Check that internal cycle object has not been changed for either
+        # player after latest not equal check.
+        self.assertEqual(next(p1.cycle), 0)
+        self.assertEqual(next(p2.cycle), 1)
+
+        # Check that type is cycle
+        self.assertIsInstance(p2.cycle, itertools.cycle)
+
+    def test_equality_on_init(self):
+        """Test instances of all strategies are equal on init"""
+        for s in axelrod.strategies:
+            p1, p2 = s(), s()
+            # Check three times (so testing equality doesn't change anything)
+            self.assertEqual(p1, p2)
+            self.assertEqual(p1, p2)
+            self.assertEqual(p1, p2)
+
+    def test_equality_with_player_as_attributes(self):
+        """Test for a strange edge case where players have pointers to each
+        other"""
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+
+        # If pointing at each other
+        p1.player = p2
+        p2.player = p1
+        self.assertEqual(p1, p2)
+
+        # Still checking other attributes.
+        p1.test_attribute = "29"
+        self.assertNotEqual(p1, p2)
+
+        # If pointing at same strategy instances
+        p1.player = axelrod.Cooperator()
+        p2.player = axelrod.Cooperator()
+        p2.test_attribute = "29"
+        self.assertEqual(p1, p2)
+
+
+        # If pointing at different strategy instances
+        p1.player = axelrod.Cooperator()
+        p2.player = axelrod.Defector()
+        self.assertNotEqual(p1, p2)
+
+        # If different strategies pointing at same strategy instances
+        p3 = axelrod.Defector()
+        p1.player = axelrod.Cooperator()
+        p3.player = axelrod.Cooperator()
+        self.assertNotEqual(p1, p3)
+
+
     def test_init_params(self):
         """Tests player correct parameters signature detection."""
         self.assertEqual(self.player.init_params(), {})
@@ -285,41 +429,14 @@ class TestPlayer(unittest.TestCase):
             player.play(opponent)
 
         player.reset()
-        self.assertEqual(len(player.history), 0)
-        self.assertEqual(player.cooperations, 0)
-        self.assertEqual(player.defections, 0)
-        self.assertEqual(player.state_distribution, dict())
-
-        self.attribute_equality_test(player, clone)
+        self.assertEqual(player, clone)
 
     def test_reset_clone(self):
         """Make sure history resetting with cloning works correctly, regardless
         if self.test_reset() is overwritten."""
         player = self.player()
         clone = player.clone()
-        self.attribute_equality_test(player, clone)
-
-    def attribute_equality_test(self, player, clone):
-        """A separate method to test equality of attributes. This method can be
-        overwritten in certain cases.
-
-        This method checks that all the attributes of `player` and `clone` are
-        the same which is used in the test of the cloning and the resetting.
-        """
-
-        for attribute, reset_value in player.__dict__.items():
-            original_value = getattr(clone, attribute)
-
-            if isinstance(reset_value, np.ndarray):
-                self.assertTrue(np.array_equal(reset_value, original_value),
-                                msg=attribute)
-
-            elif isinstance(reset_value, types.GeneratorType) or isinstance(reset_value, itertools.cycle):
-                for _ in range(10):
-                    self.assertEqual(next(reset_value),
-                                     next(original_value), msg=attribute)
-            else:
-                self.assertEqual(reset_value, original_value, msg=attribute)
+        self.assertEqual(player, clone)
 
     def test_clone(self):
         # Test that the cloned player produces identical play

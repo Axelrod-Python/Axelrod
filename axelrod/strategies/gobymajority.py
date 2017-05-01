@@ -1,7 +1,7 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
-from typing import Dict, Any
+from typing import Dict, Any, Union
 
 import copy
 
@@ -30,23 +30,24 @@ class GoByMajority(Player):
         'manipulates_source': False,
         'manipulates_state': False,
         'memory_depth': float('inf')
-    } # type: Dict[str, Any]
+    }  # type: Dict[str, Any]
 
-    def __init__(self, memory_depth: int = float('inf'), soft: bool = True) -> None:
+    def __init__(self, memory_depth: Union[int, float] = float('inf'),
+                 soft: bool = True) -> None:
         """
         Parameters
         ----------
-        memory_depth, int >= 0
+        memory_depth: int >= 0
             The number of rounds to use for the calculation of the cooperation
             and defection probabilities of the opponent.
-        soft, bool
+        soft: bool
             Indicates whether to cooperate or not in the case that the
             cooperation and defection probabilities are equal.
         """
 
         super().__init__()
         self.soft = soft
-        self.classifier['memory_depth']  = memory_depth
+        self.classifier['memory_depth'] = memory_depth
         if self.classifier['memory_depth'] < float('inf'):
             self.memory = self.classifier['memory_depth']
         else:
@@ -140,7 +141,7 @@ class HardGoByMajority(GoByMajority):
     """
     name = 'Hard Go By Majority'
 
-    def __init__(self, memory_depth: int = float('inf')) -> None:
+    def __init__(self, memory_depth: Union[int, float] = float('inf')) -> None:
         super().__init__(memory_depth=memory_depth, soft=False)
 
 

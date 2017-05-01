@@ -12,7 +12,9 @@ Contents:
    classification_of_strategies.rst
    strategy_transformers.rst
    making_tournaments.rst
+   tournament_results.rst
    reading_and_writing_interactions.rst
    parallel_processing.rst
    using_the_cache.rst
    setting_a_seed.rst
+   player_equality.rst

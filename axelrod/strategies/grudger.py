@@ -63,15 +63,15 @@ class ForgetfulGrudger(Player):
     def strategy(self, opponent: Player) -> Action:
         """Begins by playing C, then plays D for mem_length rounds if the
         opponent ever plays D."""
-        if self.grudge_memory >= self.mem_length:
+        if self.grudge_memory == self.mem_length:
             self.grudge_memory = 0
             self.grudged = False
 
+        if D in opponent.history[-1:]:
+            self.grudged = True
+
         if self.grudged:
             self.grudge_memory += 1
-            return D
-        elif D in opponent.history[-1:]:
-            self.grudged = True
             return D
         return C
 
@@ -206,9 +206,9 @@ class GrudgerAlternator(Player):
         """Begins by playing C, then plays Alternator for the remaining rounds
         if the opponent ever plays D."""
         if opponent.defections:
-            if self.history[-1] == Actions.C:
-                return Actions.D
-        return Actions.C
+            if self.history[-1] == C:
+                return D
+        return C
 
 
 class EasyGo(Player):
@@ -240,13 +240,14 @@ class EasyGo(Player):
             return C
         return D
 
+
 class GeneralSoftGrudger(Player):
     """
-    A generalization of the SoftGrudger strategy. SoftGrudger punishes by playing:
-    D, D, D, D, C, C. after a defection by the opponent.  GeneralSoftGrudger
-    only punishes after its opponent defects a specified amount of times consecutively.
-    The punishment is in the form of a series of defections followed by a 'penance' of
-    a series of consecutive cooperations.
+    A generalization of the SoftGrudger strategy. SoftGrudger punishes by
+    playing: D, D, D, D, C, C. after a defection by the opponent.
+    GeneralSoftGrudger only punishes after its opponent defects a specified
+    amount of times consecutively. The punishment is in the form of a series of
+    defections followed by a 'penance' of a series of consecutive cooperations.
 
     Names:
 
@@ -268,11 +269,11 @@ class GeneralSoftGrudger(Player):
         """
         Parameters
         ----------
-        n, int
+        n: int
             The number of defections by the opponent to trigger punishment
-        d, int
+        d: int
             The number of defections to punish the opponent
-        c, int
+        c: int
             The number of cooperations in the 'penance' stage
 
         Special Cases
@@ -303,6 +304,7 @@ class GeneralSoftGrudger(Player):
         elif [D] * self.n == opponent.history[-self.n:]:
             self.grudged = True
             return D
+
         return C
 
     def reset(self):

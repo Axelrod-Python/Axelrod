@@ -48,8 +48,8 @@ class RiskyQLearner(Player):
         # for any subclasses that do not override methods using random calls.
         self.classifier['stochastic'] = True
 
-        self.prev_action = random_choice()
-        self.original_prev_action = self.prev_action
+        self.prev_action = None # type: Action
+        self.original_prev_action = None # type: Action
         self.history = [] # type: List[Action]
         self.score = 0
         self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0]))})
@@ -62,6 +62,9 @@ class RiskyQLearner(Player):
 
     def strategy(self, opponent: Player) -> Action:
         """Runs a qlearn algorithm while the tournament is running."""
+        if len(self.history) == 0:
+            self.prev_action = random_choice()
+            self.original_prev_action = self.prev_action
         state = self.find_state(opponent)
         reward = self.find_reward(opponent)
         if state not in self.Qs:
@@ -118,7 +121,8 @@ class RiskyQLearner(Player):
         self.Qs = {'': {C: 0, D: 0}}
         self.Vs = {'': 0}
         self.prev_state = ''
-        self.prev_action = self.original_prev_action
+        self.prev_action = None
+        self.original_prev_action = None
 
 
 class ArrogantQLearner(RiskyQLearner):

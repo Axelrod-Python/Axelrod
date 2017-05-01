@@ -407,6 +407,11 @@ class TestContriteTitForTat(TestPlayer):
     deterministic_strategies = [s for s in axelrod.strategies
                                 if not s().classifier['stochastic']]
 
+    def test_init(self):
+        ctft = self.player()
+        self.assertFalse(ctft.contrite, False)
+        self.assertEqual(ctft._recorded_history, [])
+
     @given(strategies=strategy_lists(strategies=deterministic_strategies,
                                      max_size=1),
            turns=integers(min_value=1, max_value=20))
@@ -452,13 +457,6 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(ctft._recorded_history, [C, C, C, D])
         self.assertEqual(opponent.history, [C, D, D, D])
         self.assertFalse(ctft.contrite)
-
-    def test_reset_history_and_attributes(self):
-        """Overwrite reset test because of decorator"""
-        p = self.player()
-        p.contrite = True
-        p.reset()
-        self.assertFalse(p.contrite)
 
 
 class TestSlowTitForTwoTats(TestPlayer):

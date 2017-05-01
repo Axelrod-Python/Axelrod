@@ -28,14 +28,12 @@ class TestTournamentType(unittest.TestCase):
     def test_init_with_clone(self):
         tt = axelrod.MatchGenerator(
             self.players, test_turns, test_game, test_repetitions)
-        self.assertEqual(tt.players, self.players)
         self.assertEqual(tt.turns, test_turns)
         player = tt.players[0]
         opponent = tt.opponents[0]
-        self.assertEqual(player.name, opponent.name)
-        self.assertNotEqual(player, opponent)
+        self.assertEqual(player, opponent)
         # Check that the two player instances are wholly independent
-        opponent.name = 'Test'
+        opponent.name = 'John Nash'
         self.assertNotEqual(player.name, opponent.name)
 
     def test_len(self):
