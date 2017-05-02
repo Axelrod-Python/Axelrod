@@ -10,11 +10,11 @@ class WorseAndWorse(Player):
     Defects with probability of 'current turn / 1000'. Therefore
     it is more and more likely to defect as the round goes on.
 
-    Source code available at the download tab of [PRISON1998]_
+    Source code available at the download tab of [Prison1998]_
 
 
     Names:
-        - Worse and Worse: [PRISON1998]_
+        - Worse and Worse: [Prison1998]_
     """
 
     name = 'Worse and Worse'
@@ -68,7 +68,7 @@ class WorseAndWorse2(Player):
     Therefore it is more and more likely to defect as the round goes on.
 
     Names:
-        - Worse and Worse 2: [PRISON1998]_
+        - Worse and Worse 2: [Prison1998]_
     """
 
     name = 'Worse and Worse 2'
@@ -102,7 +102,7 @@ class WorseAndWorse3(Player):
     proportion of the turns.
 
     Names:
-        - Worse and Worse 3: [PRISON1998]_
+        - Worse and Worse 3: [Prison1998]_
     """
 
     name = 'Worse and Worse 3'

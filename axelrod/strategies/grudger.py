@@ -187,7 +187,7 @@ class GrudgerAlternator(Player):
 
     Names:
 
-    - c_then_per_dc: [PRISON1998]_
+    - c_then_per_dc: [Prison1998]_
     - Grudger Alternator: Original name by Geraint Palmer
     """
 
@@ -218,7 +218,7 @@ class EasyGo(Player):
 
     Names:
 
-    - Easy Go [PRISON1998]_
+    - Easy Go [Prison1998]_
     """
 
     name = 'EasyGo'

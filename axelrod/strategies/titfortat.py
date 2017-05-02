@@ -565,7 +565,7 @@ class SpitefulTitForTat(Player):
 
     Names:
 
-    - Spiteful Tit For Tat [PRISON1998]_
+    - Spiteful Tit For Tat [Prison1998]_
     """
 
     name = 'Spiteful Tit For Tat'
@@ -610,7 +610,7 @@ class SlowTitForTwoTats2(Player):
 
     Names:
 
-    - Slow Tit For Tat [PRISON1998]_
+    - Slow Tit For Tat [Prison1998]_
     """
 
     name = 'Slow Tit For Two Tats 2'
