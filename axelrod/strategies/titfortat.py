@@ -637,6 +637,7 @@ class SlowTitForTwoTats2(Player):
         # Otherwise play previous move
         return self.history[-1]
 
+@FinalTransformer(D, name_prefix=None)
 class Alexei(Player):
     """
     Plays similar to Tit-for-Tat, but always defect on last turn.
@@ -662,4 +663,4 @@ class Alexei(Player):
             return C
         if opponent.history[-1] == D:
             return D
-        return D
+        return C
