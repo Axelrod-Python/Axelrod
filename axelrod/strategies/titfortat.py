@@ -603,6 +603,7 @@ class SpitefulTitForTat(Player):
         super().reset()
         self.retaliating = False
 
+
 class SlowTitForTwoTats2(Player):
     """
     A player plays C twice, then if the opponent plays the same move twice,
