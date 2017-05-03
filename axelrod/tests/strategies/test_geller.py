@@ -20,15 +20,38 @@ class TestGeller(TestPlayer):
         'manipulates_source': False
     }
 
+    @classmethod
+    def tearDownClass(cls):
+        """After all tests have run, makes sure the Darwin genome is reset."""
+        axelrod.Darwin.reset_genome()
+        super(TestGeller, cls).tearDownClass()
+
+    def setUp(self):
+        """Each test starts with the basic Darwin genome."""
+        axelrod.Darwin.reset_genome()
+        super(TestGeller, self).setUp()
+
+    def test_foil_strategy_inspection(self):
+        axelrod.seed(2)
+        player = self.player()
+        self.assertEqual(player.foil_strategy_inspection(), D)
+        self.assertEqual(player.foil_strategy_inspection(), D)
+        self.assertEqual(player.foil_strategy_inspection(), C)
+
     def test_strategy(self):
         """Should cooperate against cooperators and defect against defectors."""
-        P1 = self.player()
-        P2 = axelrod.Cooperator()
-        self.assertEqual(P1.strategy(P2), C)
+        self.versus_test(axelrod.Defector(), expected_actions=[(D, D)] * 5)
+        self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5)
+        self.versus_test(axelrod.Alternator(), expected_actions=[(C, C), (D, D)] * 5)
 
-        P1 = self.player()
-        P2 = axelrod.Defector()
-        self.assertEqual(P1.strategy(P2), D)
+    def test_returns_foil_inspection_strategy_of_opponent(self):
+        seed = 2
+        # each Geller type returns the other's foil_inspection_strategy
+        self.versus_test(axelrod.GellerDefector(), expected_actions=[(D, D), (D, D), (D, C), (D, C)], seed=seed)
+
+        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
+
+        self.versus_test(axelrod.MindReader(), expected_actions=[(D, D), (D, C), (D, D)], seed=seed)
 
 
 class TestGellerCooperator(TestGeller):
@@ -45,10 +68,16 @@ class TestGellerCooperator(TestGeller):
         'manipulates_state': False
     }
 
-    def test_against_self(self):
-        P1 = self.player()
-        P2 = self.player()
-        self.assertEqual(P1.strategy(P2), C)
+    def test_foil_strategy_inspection(self):
+        player = self.player()
+        self.assertEqual(player.foil_strategy_inspection(), C)
+
+    def test_returns_foil_inspection_strategy_of_opponent(self):
+        self.versus_test(axelrod.GellerDefector(), expected_actions=[(D, C), (D, C), (D, C), (D, C)])
+
+        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
+
+        self.versus_test(axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)])
 
 
 class TestGellerDefector(TestGeller):
@@ -65,7 +94,14 @@ class TestGellerDefector(TestGeller):
         'manipulates_state': False
     }
 
-    def test_against_self(self):
-        P1 = self.player()
-        P2 = self.player()
-        self.assertEqual(P1.strategy(P2), D)
+    def test_foil_strategy_inspection(self):
+        player = self.player()
+        self.assertEqual(player.foil_strategy_inspection(), D)
+
+    def test_returns_foil_inspection_strategy_of_opponent(self):
+
+        self.versus_test(axelrod.GellerDefector(), expected_actions=[(D, D), (D, D), (D, D), (D, D)])
+
+        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
+
+        self.versus_test(axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)])

@@ -5,7 +5,6 @@ dependencies:
 - matplotlib>=1.4.2
 - pip:
    - docutils==0.12
-   - pyparsing==2.1.1 # Due to https://github.com/Axelrod-Python/Axelrod/issues/584
    - hypothesis>=3.2
    - tqdm==3.4.0
    - prompt-toolkit>=1.0.7

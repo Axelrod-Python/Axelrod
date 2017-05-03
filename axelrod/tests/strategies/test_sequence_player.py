@@ -43,14 +43,15 @@ class TestThueMorse(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(D)
-        self.second_play_test(C, C, C, C)
-        self.responses_test([D, C, C, D, C, D, D, C, C, D, D, C, D, C, C, D])
-        self.responses_test([C, C, D, C, D, D, C, C, D, D, C, D, C, C, D], [C],
-                            [C])
-        self.responses_test([C, C, D, C, D, D, C, C, D, D, C, D, C, C, D], [D],
-                            [D])
-        self.responses_test([C, D, D, C, C, D, D, C, D, C, C, D], [C, C, C, D],
-                            [C, C, C, D])
+
+        thue_morse_seq = [D, C, C, D, C, D, D, C, C, D, D, C, D, C, C, D, C]
+        n = len(thue_morse_seq)
+
+        actions = list(zip(thue_morse_seq, [C] * n))
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = list(zip(thue_morse_seq, [D] * n))
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 
 class TestThueMorseInverse(TestPlayer):
@@ -69,11 +70,12 @@ class TestThueMorseInverse(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.second_play_test(D, D, D, D)
-        self.responses_test([C, D, D, C, D, C, C, D, D, C, C, D, C, D, D, C])
-        self.responses_test([D, D, C, D, C, C, D, D, C, C, D, C, D, D, C], [C],
-                            [C])
-        self.responses_test([D, D, C, D, C, C, D, D, C, C, D, C, D, D, C], [D],
-                            [D])
-        self.responses_test([D, C, C, D, D, C, C, D, C, D, D, C], [C, C, C, D],
-                            [C, C, C, D])
+
+        inv_thue_morse_seq = [C, D, D, C, D, C, C, D, D, C, C, D, C, D, D, C, D]
+        n = len(inv_thue_morse_seq)
+
+        actions = list(zip(inv_thue_morse_seq, [C] * n))
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = list(zip(inv_thue_morse_seq, [D] * n))
+        self.versus_test(axelrod.Defector(), expected_actions=actions)

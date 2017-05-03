@@ -3,11 +3,11 @@ The player classes in this module do not obey standard rules of the IPD (as
 indicated by their classifier). We do not recommend putting a lot of time in to
 optimising them.
 """
-import inspect
 
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
+from axelrod._strategy_utils import inspect_strategy
 
 C, D = Actions.C, Actions.D
 
@@ -36,7 +36,6 @@ class Geller(Player):
     """
 
     name = 'Geller'
-    default = lambda self: random_choice(0.5)
     classifier = {
         'memory_depth': -1,
         'stochastic': True,
@@ -47,19 +46,19 @@ class Geller(Player):
         'manipulates_state': False
     }
 
+    @staticmethod
+    def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
+        return random_choice(0.5)
+
     def strategy(self, opponent: Player) -> Action:
         """
         Look at what the opponent will play in the next round and choose a strategy
         that gives the least jail time, which is is equivalent to playing the same
         strategy as that which the opponent will play.
         """
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        calname = calframe[1][3]
-        if calname == 'strategy':
-            return self.default()
-        else:
-            return opponent.strategy(self)
+
+        return inspect_strategy(self, opponent)
 
 
 class GellerCooperator(Geller):
@@ -67,7 +66,6 @@ class GellerCooperator(Geller):
     will cooperate.
     """
     name = 'Geller Cooperator'
-    default = lambda self: C
     classifier = {
         'memory_depth': -1,
         'stochastic': False,
@@ -77,6 +75,11 @@ class GellerCooperator(Geller):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    @staticmethod
+    def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
+        return C
 
 
 class GellerDefector(Geller):
@@ -84,7 +87,6 @@ class GellerDefector(Geller):
     will defect.
     """
     name = 'Geller Defector'
-    default = lambda self: D
     classifier = {
         'memory_depth': -1,
         'stochastic': False,
@@ -94,3 +96,8 @@ class GellerDefector(Geller):
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    @staticmethod
+    def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
+        return D

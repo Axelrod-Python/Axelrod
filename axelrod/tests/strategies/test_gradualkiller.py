@@ -1,15 +1,15 @@
 """Tests for the Gradual Killer strategy."""
 
-import axelrod
+import axelrod as axl
 from .test_player import TestPlayer
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axl.Actions.C, axl.Actions.D
 
 
 class TestGradualKiller(TestPlayer):
 
     name = "Gradual Killer: ('D', 'D', 'D', 'D', 'D', 'C', 'C')"
-    player = axelrod.GradualKiller
+    player = axl.GradualKiller
     expected_classifier = {
         'memory_depth': float('Inf'),
         'stochastic': False,
@@ -19,78 +19,57 @@ class TestGradualKiller(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
-        # Starts by defecting.
-        self.first_play_test(D)
-        self.second_play_test(D, D, D, D)
-        # First seven moves.
-        self.responses_test([D, D, D, D, D, C, C])
+    first_seven = [D, D, D, D, D, C, C]
+
+    def test_first_seven_moves_always_the_same(self):
+        opponent = axl.Cooperator()
+        actions = list(zip(self.first_seven, [C] * 7))
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axl.Defector()
+        actions = list(zip(self.first_seven, [D] * 7))
+        self.versus_test(opponent, expected_actions=actions)
+
+        opponent = axl.Alternator()
+        actions = list(zip(self.first_seven, [C, D] * 4))
+        self.versus_test(opponent, expected_actions=actions)
 
     def test_effect_of_strategy_with_history_CC(self):
         """Continues with C if opponent played CC on 6 and 7."""
-        P1 = axelrod.GradualKiller()
-        P2 = axelrod.Player()
-        P1.history = [D, D, D, D, D, C, C]
-        P2.history = [C, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C]
-        P2.history = [C, C, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C]
-        P2.history = [C, C, C, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C, C]
-        P2.history = [C, C, C, C, C, C, C, C, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
+        opponent_actions = [D] * 5 + [C, C] + [D, C] * 20
+        opponent = axl.MockPlayer(actions=opponent_actions)
+
+        start = list(zip(self.first_seven, opponent_actions[:7]))
+        actions = start + [(C, D), (C, C)] * 20
+
+        self.versus_test(opponent, expected_actions=actions)
 
     def test_effect_of_strategy_with_history_CD(self):
         """Continues with C if opponent played CD on 6 and 7."""
-        P1 = axelrod.GradualKiller()
-        P2 = axelrod.Player()
-        P1.history = [D, D, D, D, D, C, C]
-        P2.history = [C, C, C, C, C, C, D]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C]
-        P2.history = [C, C, C, C, C, C, D, D]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C]
-        P2.history = [C, C, C, C, C, C, D, D, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C, C]
-        P2.history = [C, C, C, C, C, C, D, D, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
+        opponent_actions = [D] * 5 + [C, D] + [D, C] * 20
+        opponent = axl.MockPlayer(actions=opponent_actions)
+
+        start = list(zip(self.first_seven, opponent_actions[:7]))
+        actions = start + [(C, D), (C, C)] * 20
+
+        self.versus_test(opponent, expected_actions=actions)
 
     def test_effect_of_strategy_with_history_DC(self):
         """Continues with C if opponent played DC on 6 and 7."""
-        P1 = axelrod.GradualKiller()
-        P2 = axelrod.Player()
-        P1.history = [D, D, D, D, D, C, C]
-        P2.history = [C, C, C, C, C, D, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C]
-        P2.history = [C, C, C, C, C, D, C, C]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C]
-        P2.history = [C, C, C, C, C, D, C, C, D]
-        self.assertEqual(P1.strategy(P2), 'C')
-        P1.history = [D, D, D, D, D, C, C, C, C, C]
-        P2.history = [C, C, C, C, C, D, C, C, D, C]
-        self.assertEqual(P1.strategy(P2), 'C')
+        opponent_actions = [D] * 5 + [D, C] + [D, C] * 20
+        opponent = axl.MockPlayer(actions=opponent_actions)
+
+        start = list(zip(self.first_seven, opponent_actions[:7]))
+        actions = start + [(C, D), (C, C)] * 20
+
+        self.versus_test(opponent, expected_actions=actions)
 
     def test_effect_of_strategy_with_history_DD(self):
         """Continues with D if opponent played DD on 6 and 7."""
-        P1 = axelrod.GradualKiller()
-        P2 = axelrod.Player()
-        P1.history = [D, D, D, D, D, C, C]
-        P2.history = [C, C, C, C, C, D, D]
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = [D, D, D, D, D, C, C, D]
-        P2.history = [C, C, C, C, C, D, D, C]
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = [D, D, D, D, D, C, C, D, D]
-        P2.history = [C, C, C, C, C, D, D, C, C]
-        self.assertEqual(P1.strategy(P2), 'D')
-        P1.history = [D, D, D, D, D, C, C, D, D, D]
-        P2.history = [C, C, C, C, C, D, D, C, C, D]
-        self.assertEqual(P1.strategy(P2), 'D')
+        opponent_actions = [C] * 5 + [D, D] + [D, C] * 20
+        opponent = axl.MockPlayer(actions=opponent_actions)
 
+        start = list(zip(self.first_seven, opponent_actions[:7]))
+        actions = start + [(D, D), (D, C)] * 20
+
+        self.versus_test(opponent, expected_actions=actions)

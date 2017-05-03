@@ -3,11 +3,8 @@ The player class in this module does not obey standard rules of the IPD (as
 indicated by their classifier). We do not recommend putting a lot of time in to
 optimising it.
 """
-import inspect
 from axelrod.actions import Action, Actions
 from axelrod.player import Player
-
-from typing import List
 
 C, D = Actions.C, Actions.D
 
@@ -44,18 +41,19 @@ class Darwin(Player):
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
     def __init__(self) -> None:
-        super().__init__()
+        self.outcomes = None  # type: dict
         self.response = Darwin.genome[0]
+        super().__init__()
 
     def receive_match_attributes(self):
         self.outcomes = self.match_attributes["game"].scores
 
-    def strategy(self, opponent: Player) -> Action:
-        # Frustrate psychics and ensure that simulated rounds
-        # do not influence genome.
-        if inspect.stack()[1][3] not in Darwin.valid_callers:
-            return C
+    @staticmethod
+    def foil_strategy_inspection() -> Action:
+        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
+        return C
 
+    def strategy(self, opponent: Player) -> Action:
         trial = len(self.history)
 
         if trial > 0:
@@ -79,7 +77,12 @@ class Darwin(Player):
         super().reset()
         Darwin.genome[0] = C  # Ensure initial Cooperate
 
-    def mutate(self, outcome, trial):
+    def mutate(self, outcome: tuple, trial: int) -> None:
         """ Select response according to outcome. """
         if outcome[0] < 3 and (len(Darwin.genome) >= trial):
             self.response = D if Darwin.genome[trial-1] == C else C
+
+    @staticmethod
+    def reset_genome() -> None:
+        """For use in testing methods."""
+        Darwin.genome = [C]

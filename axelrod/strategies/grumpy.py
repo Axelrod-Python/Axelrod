@@ -25,11 +25,12 @@ class Grumpy(Player):
         """
         Parameters
         ----------
-        starting_state, str: 'Nice' or 'Grumpy'
-        grumpy_threshold, int
+        starting_state: str
+            'Nice' or 'Grumpy'
+        grumpy_threshold: int
             The threshold of opponent defections - cooperations to become
             grumpy
-        nice_threshold, int
+        nice_threshold: int
             The threshold of opponent defections - cooperations to become
             nice
         """

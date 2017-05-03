@@ -22,6 +22,10 @@ class TestMindReader(TestPlayer):
         'manipulates_state': False
     }
 
+    def test_foil_inspection_strategy(self):
+        player = self.player()
+        self.assertEqual(player.foil_strategy_inspection(), D)
+
     def test_strategy(self):
         """
         Will defect against nice strategies
@@ -109,6 +113,10 @@ class TestProtectedMindReader(TestPlayer):
         'manipulates_state': False
     }
 
+    def test_foil_inspection_strategy(self):
+        player = self.player()
+        self.assertEqual(player.foil_strategy_inspection(), D)
+
     def test_strategy(self):
         """
         Will defect against nice strategies
@@ -148,6 +156,10 @@ class TestMirrorMindReader(TestPlayer):
         'manipulates_source': True, # changing own source dynamically
         'manipulates_state': False
     }
+
+    def test_foil_inspection_strategy(self):
+        player = self.player()
+        self.assertEqual(player.foil_strategy_inspection(), C)
 
     def test_strategy(self):
         P1 = axelrod.MirrorMindReader()

@@ -1,6 +1,5 @@
-pyparsing==2.1.1 # Due to https://github.com/Axelrod-Python/Axelrod/issues/584
 numpy>=1.9.2
 matplotlib>=1.4.2
 hypothesis>=3.2
-tqdm==3.4.0
+tqdm>=3.4.0
 prompt-toolkit>=1.0.7

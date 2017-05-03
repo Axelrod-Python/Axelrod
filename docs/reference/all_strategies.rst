@@ -81,6 +81,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.handshake
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.hmm
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.hunter
    :members:
    :undoc-members:
@@ -91,6 +94,9 @@ Here are the docstrings of all the strategies in the library.
    :members:
    :undoc-members:
 .. automodule:: axelrod.strategies.mathematicalconstants
+   :members:
+   :undoc-members:
+.. automodule:: axelrod.strategies.memorytwo
    :members:
    :undoc-members:
 .. automodule:: axelrod.strategies.memoryone

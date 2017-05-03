@@ -21,13 +21,18 @@ class TestHandshake(TestPlayer):
     }
 
     def test_strategy(self):
-        # Test initial play sequence
-        self.responses_test([C, D])
+        # Test first play
+        self.first_play_test(C)
 
-        self.responses_test([C] * 20, [C, D], [C, D])
-        self.responses_test([D] * 20, [C, D], [C, C])
-        self.responses_test([D] * 20, [C, D], [D, C])
-        self.responses_test([D] * 20, [C, D], [D, D])
+        actions = [(C, C), (D, D)] + [(C, C), (C, D)] * 10
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
-        self.responses_test([D], [C, D] * 2, [D, C] * 2)
-        self.responses_test([C], [C, D] * 2, [C, D] * 2)
+        actions = [(C, C), (D, C)] + [(D, C)] * 20
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C])
+        actions = [(C, D), (D, C)] + [(D, D), (D, C)] * 10
+        self.versus_test(opponent, expected_actions=actions)
+
+        actions = [(C, D), (D, D)] + [(D, D)] * 20
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
