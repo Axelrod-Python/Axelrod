@@ -651,7 +651,7 @@ class Alexei(Player):
     classifier = {
         'memory_depth': 1,
         'stochastic': False,
-        'makes_use_of': set(),
+        'makes_use_of': {'length'},
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
