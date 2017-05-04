@@ -571,7 +571,7 @@ class TestAlexei(TestPlayer):
     documentation.
     """
 
-    name = "Alexei"
+    name = "Alexei: ('D')"
     player = axelrod.Alexei
     expected_classifier = {
         'memory_depth': 1,
