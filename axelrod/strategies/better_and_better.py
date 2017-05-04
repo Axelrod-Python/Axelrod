@@ -12,7 +12,7 @@ class BetterAndBetter(Player):
     Therefore it is less and less likely to defect as the round goes on.
 
     Names:
-        - Better and Better: [PRISON1998]_
+        - Better and Better: [Prison1998]_
 
     """
 

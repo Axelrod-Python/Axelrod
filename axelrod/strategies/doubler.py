@@ -11,7 +11,7 @@ class Doubler(Player):
 
     Names:
 
-    - Doubler: [PRISON1998]_
+    - Doubler: [Prison1998]_
     """
 
     name = 'Doubler'

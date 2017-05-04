@@ -565,7 +565,7 @@ class SpitefulTitForTat(Player):
 
     Names:
 
-    - Spiteful Tit For Tat [PRISON1998]_
+    - Spiteful Tit For Tat [Prison1998]_
     """
 
     name = 'Spiteful Tit For Tat'
@@ -603,6 +603,7 @@ class SpitefulTitForTat(Player):
         super().reset()
         self.retaliating = False
 
+
 class SlowTitForTwoTats2(Player):
     """
     A player plays C twice, then if the opponent plays the same move twice,
@@ -610,7 +611,7 @@ class SlowTitForTwoTats2(Player):
 
     Names:
 
-    - Slow Tit For Tat [PRISON1998]_
+    - Slow Tit For Tat [Prison1998]_
     """
 
     name = 'Slow Tit For Two Tats 2'

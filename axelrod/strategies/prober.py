@@ -153,7 +153,7 @@ class Prober4(Player):
 
     Names:
 
-    - prober4: [PRISON1998]_
+    - prober4: [Prison1998]_
     """
 
     name = 'Prober 4'

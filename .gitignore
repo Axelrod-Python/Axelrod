@@ -102,6 +102,10 @@ ENV/
 # Rope project settings
 .ropeproject
 
+
+# Pycharm Files
+.idea/
+
 # Sublime Text settings
 *.sublime-*
 
