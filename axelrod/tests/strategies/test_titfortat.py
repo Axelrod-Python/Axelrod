@@ -589,7 +589,7 @@ class TestAlexei(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
-        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        actions = [(C, C), (C, C), (C, C), (C, C), (D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
