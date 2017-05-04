@@ -4,7 +4,7 @@ Noisy tournaments
 A common variation on iterated prisoner’s dilemma tournaments is to add
 stochasticity in the choice of actions, simply called noise. This noise is
 introduced by flipping plays between ‘C’ and ‘D’ with some probability that is
-applied to all plays after they are delivered by the player.
+applied to all plays after they are delivered by the player [Bendor1993]_.
 
 The presence of this persistent background noise causes some strategies to
 behave substantially differently. For example, :code:`TitForTat` can fall into
