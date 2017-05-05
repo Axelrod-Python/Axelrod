@@ -11,24 +11,25 @@ documentation.
 .. [Ashlock2006b] Ashlock, W. & Ashlock, D. (2006). Changes in Prisoner's Dilemma Strategies Over Evolutionary Time With Different Population Sizes 2006 IEEE International Conference on Evolutionary Computation. http://DOI.org/10.1109/CEC.2006.1688322
 .. [Ashlock2008] Ashlock, D., & Kim, E. Y. (2008). Fingerprinting: Visualization and automatic analysis of prisoner’s dilemma strategies. IEEE Transactions on Evolutionary Computation, 12(5), 647–659. http://doi.org/10.1109/TEVC.2008.920675
 .. [Ashlock2009] Ashlock, D., Kim, E. Y., & Ashlock, W. (2009) Fingerprint analysis of the noisy prisoner’s dilemma using a finite-state representation. IEEE Transactions on Computational Intelligence and AI in Games. 1(2), 154-167  http://doi.org/10.1109/TCIAIG.2009.2018704
+<<<<<<< HEAD
+.. [Au2006] Au, T.-C. and  Nau, D. S. (2006) Accident or intention: That is the question (in the iterated prisoner’s dilemma). In Proc. Int. Conf. Auton. Agents and Multiagent Syst. (AAMAS), pp. 561–568. http://www.cs.umd.edu/~nau/papers/au2006accident.pdf
+=======
 .. [Ashlock2014] Ashlock, W., Tsang, J. & Ashlock, D. (2014) The evolution of exploitation. 2014 IEEE Symposium on Foundations of Computational Intelligence (FOCI) http://DOI.org/10.1109/FOCI.2014.7007818
 .. [Ashlock2015] Ashlock, D., Brown, J.A., & Hingston P. (2015). Multiple Opponent Optimization of Prisoner’s Dilemma Playing Agents. Multiple Opponent Optimization of Prisoner’s Dilemma Playing Agents http://DOI.org/10.1109/TCIAIG.2014.2326012
-.. [Au2006] Au, T.-C. and  Nau, D. S. (2006) Accident or intention: That is the question (in the iterated prisoner’s dilemma). In Proc. Int. Conf. Auton. Agents and Multiagent Syst. (AAMAS), pp. 561–568. http://www.cs.umd.edu/~nau/papers/au2006accident.pdf
+>>>>>>> dc17f332364dbc391cf96c6d8573744239368564
 .. [Axelrod1980] Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(1), 3–25.
 .. [Axelrod1980b] Axelrod, R. (1980). More Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(3), 379-403.
 .. [Axelrod1984]  The Evolution of Cooperation. Basic Books. ISBN 0-465-02121-2.
 .. [Axelrod1995] Wu, J. and Axelrod, R. (1995). How to cope with noise in the Iterated prisoner’s dilemma, Journal of Conflict Resolution, 39(1), pp. 183–189. doi: 10.1177/0022002795039001008.
 .. [Banks1980] Banks, J. S., & Sundaram, R. K. (1990). Repeated games, finite automata, and complexity. Games and Economic Behavior, 2(2), 97–117.  http://doi.org/10.1016/0899-8256(90)90024-O
-.. [Bendor1993] Bendor, Jonathan, et al. “Cooperation Under Uncertainty: What Is New, What Is True, and What Is Important.” American Sociological Review, vol. 61, no. 2, 1996, pp. 333–338., www.jstor.org/stable/2096337.
 .. [Beaufils1997] Beaufils, B. and Delahaye, J. (1997). Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
 .. [Berg2015] Berg, P. Van Den, & Weissing, F. J. (2015). The importance of mechanisms for the evolution of cooperation. Proceedings of the Royal Society B-Biological Sciences, 282.
-.. [Flood1958] Merrill M. Flood. Some Experimental Games, 1958.
 .. [Frean1994] Frean, Marcus R. “The Prisoner's Dilemma without Synchrony.” Proceedings: Biological Sciences, vol. 257, no. 1348, 1994, pp. 75–79. www.jstor.org/stable/50253.
 .. [Hilde2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013). Adaptive dynamics of extortion and compliance, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
 .. [Kraines1989] Kraines, D. & Kraines, V. Theor Decis (1989) 26: 47.  doi:10.1007/BF00134056
 .. [Li2009] Li, J. & Kendall, G. (2009). A Strategy with Novel Evolutionary Features for the Iterated Prisoner’s Dilemma. Evolutionary Computation 17(2): 257–274.
 .. [Li2011] Li, J., Hingston, P., Member, S., & Kendall, G. (2011). Engineering Design of Strategies for Winning Iterated Prisoner ’ s Dilemma Competitions, 3(4), 348–360.
-.. [Li2016] Li, J. and Kendall, G. (2016). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826
+.. [Li2014] Li, J. and Kendall, G. (2016). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826
 .. [Mathieu2015] Mathieu, P. and Delahaye, J. (2015). New Winning Strategies
   for the Iterated Prisoner's Dilemma. Proceedings of the 2015
   International Conference on Autonomous Agents and Multiagent Systems.
@@ -36,7 +37,7 @@ documentation.
 .. [Nowak1992] Nowak, M. a., & May, R. M. (1992). Evolutionary games and spatial chaos. Nature. http://doi.org/10.1038/359826a0
 .. [Nowak1993] Nowak, M., & Sigmund, K. (1993). A strategy of win-stay, lose-shift that outperforms tit-for-tat in the Prisoner’s Dilemma game. Nature, 364(6432), 56–58. http://doi.org/10.1038/364056a0
 .. [Press2012] Press, W. H., & Dyson, F. J. (2012). Iterated Prisoner’s Dilemma contains strategies that dominate any evolutionary opponent. Proceedings of the National Academy of Sciences, 109(26), 10409–10413.  http://doi.org/10.1073/pnas.1206569109
-.. [Prison1998] LIFL (1998) PRISON. Available at: http://www.lifl.fr/IPD/ipd.frame.html (Accessed: 19 September 2016).
+.. [PRISON1998] LIFL (1998) PRISON. Available at: http://www.lifl.fr/IPD/ipd.frame.html (Accessed: 19 September 2016).
 .. [Robson1989] Robson, Arthur, (1989), EFFICIENCY IN EVOLUTIONARY GAMES: DARWIN, NASH AND SECRET HANDSHAKE, Working Papers, Michigan - Center for Research on Economic & Social Theory, http://EconPapers.repec.org/RePEc:fth:michet:89-22.
 .. [Singer-Clark2014] Singer-Clark, T. (2014). Morality Metrics On Iterated Prisoner’s Dilemma Players.
 .. [Shakarian2013] Shakarian, P., Roos, P. & Moores, G. A Novel Analytical Method for Evolutionary Graph Theory Problems.
