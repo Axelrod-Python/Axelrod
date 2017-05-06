@@ -1,3 +1,30 @@
+# v2.11.0, 2017-05-06
+
+A new strategy, improvements to documentation, player equality and some
+internal refactoring,
+
+- New strategy DBS:
+  https://github.com/Axelrod-Python/Axelrod/pull/976
+- Documentation improvements:
+  https://github.com/Axelrod-Python/Axelrod/pull/995
+  https://github.com/Axelrod-Python/Axelrod/pull/1003
+- Internal refactoring:
+  https://github.com/Axelrod-Python/Axelrod/pull/943
+  https://github.com/Axelrod-Python/Axelrod/pull/980
+  https://github.com/Axelrod-Python/Axelrod/pull/981
+  https://github.com/Axelrod-Python/Axelrod/pull/982
+  https://github.com/Axelrod-Python/Axelrod/pull/983
+  https://github.com/Axelrod-Python/Axelrod/pull/993
+  https://github.com/Axelrod-Python/Axelrod/pull/996
+- Add a development testing tool:
+  https://github.com/Axelrod-Python/Axelrod/pull/980
+- Implement an equality method on players:
+  https://github.com/Axelrod-Python/Axelrod/pull/975
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.10.0...v2.11.0
+
 # v2.10.0, 2017-04-17
 
 Bug fix in strategy transformers, new strategy, internal refactor of strategies,
@@ -15,7 +42,7 @@ fix bibtex in citation file.
   https://github.com/Axelrod-Python/Axelrod/pull/968
 
 Here are all the commits for this PR:
-https://github.com/Axelrod-Python/Axelrod/compare/v2.10.0...v2.10.0
+https://github.com/Axelrod-Python/Axelrod/compare/v2.09.0...v2.10.0
 
 # v2.9.0, 2017-04-11
 
