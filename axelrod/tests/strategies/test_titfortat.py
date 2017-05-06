@@ -571,12 +571,12 @@ class TestAlexei(TestPlayer):
     documentation.
     """
 
-    name = "Alexei: ('D')"
+    name = "Alexei: D"
     player = axelrod.Alexei
     expected_classifier = {
         'memory_depth': 1,
         'stochastic': False,
-        'makes_use_of': set(),
+        'makes_use_of': {'length'},
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
