@@ -647,7 +647,7 @@ class Alexei(Player):
     - From http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/    
     """
 
-    name = 'Alexei: D'
+    name = 'Alexei'
     classifier = {
         'memory_depth': 1,
         'stochastic': False,
