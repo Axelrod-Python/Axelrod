@@ -608,7 +608,7 @@ class TestAlexei(TestPlayer):
                          seed=1)
 
         opponent = axelrod.MockPlayer(actions=[C, D])
-        actions = [(C, C), (C, D), (D, C), (C, D)]
+        actions = [(C, C), (C, D), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D])
