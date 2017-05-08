@@ -637,7 +637,7 @@ class SlowTitForTwoTats2(Player):
         # Otherwise play previous move
         return self.history[-1]
 
-@FinalTransformer((D, ) name_prefix=None)
+@FinalTransformer((D,) name_prefix=None)
 class Alexei(Player):
     """
     Plays similar to Tit-for-Tat, but always defect on last turn.
@@ -649,7 +649,7 @@ class Alexei(Player):
 
     name = 'Alexei'
     classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': {'length'},
         'long_run_time': False,
