@@ -644,7 +644,7 @@ class Alexei(Player):
     
     Names:
 
-    - From http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/    
+    - Alexei's Strategy: [LessWrong2011]_    
     """
 
     name = 'Alexei'
