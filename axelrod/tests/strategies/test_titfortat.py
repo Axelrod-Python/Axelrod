@@ -566,15 +566,13 @@ class TestSlowTitForTwoTats2(TestPlayer):
 
 class TestAlexei(TestPlayer):
     """
-    Note that this test is referred to in the documentation as an example on
-    writing tests.  If you modify the tests here please also modify the
-    documentation.
+    Tests for the Alexei strategy
     """
 
     name = "Alexei: D"
     player = axelrod.Alexei
     expected_classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': {'length'},
         'inspects_source': False,
