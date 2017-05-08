@@ -569,7 +569,7 @@ class TestAlexei(TestPlayer):
     Tests for the Alexei strategy
     """
 
-    name = "Alexei: D"
+    name = "Alexei: ('D',)"
     player = axelrod.Alexei
     expected_classifier = {
         'memory_depth': float('inf'),
