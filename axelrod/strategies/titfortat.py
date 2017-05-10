@@ -1,6 +1,6 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
-from axelrod.strategy_transformers import TrackHistoryTransformer
+from axelrod.strategy_transformers import TrackHistoryTransformer, FinalTransformer
 
 C, D = Actions.C, Actions.D
 
@@ -637,3 +637,31 @@ class SlowTitForTwoTats2(Player):
 
         # Otherwise play previous move
         return self.history[-1]
+
+@FinalTransformer((D,), name_prefix=None)
+class Alexei(Player):
+    """
+    Plays similar to Tit-for-Tat, but always defect on last turn.
+    
+    Names:
+
+    - Alexei's Strategy: [LessWrong2011]_    
+    """
+
+    name = 'Alexei'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': {'length'},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        if opponent.history[-1] == D:
+            return D
+        return C
