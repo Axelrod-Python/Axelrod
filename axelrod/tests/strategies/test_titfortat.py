@@ -593,9 +593,13 @@ class TestAlexei(TestPlayer):
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          match_attributes={"length": -1})
+        
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
 
         actions = [(C, D), (D, D), (D, C), (C, C), (D, D)]
         self.versus_test(axelrod.Random(), expected_actions=actions,
