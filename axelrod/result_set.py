@@ -9,6 +9,7 @@ import axelrod.interaction_utils as iu
 from . import eigen
 from .game import Game
 
+from typing import List, Tuple
 
 C, D = Actions.C, Actions.D
 
@@ -31,8 +32,8 @@ def update_progress_bar(method):
 class ResultSet(object):
     """A class to hold the results of a tournament."""
 
-    def __init__(self, players, interactions, repetitions=False,
-                 progress_bar=True, game=None):
+    def __init__(self, players, interactions, repetitions: int =False,
+                 progress_bar: bool =True, game=None):
         """
         Parameters
         ----------
@@ -67,7 +68,7 @@ class ResultSet(object):
         self._build_empty_metrics()
         self._build_score_related_metrics(progress_bar=progress_bar)
 
-    def create_progress_bar(self, desc=None):
+    def create_progress_bar(self, desc: str =None):
         """
         Create a progress bar for a read through of the data file.
 
@@ -78,7 +79,7 @@ class ResultSet(object):
         """
         return tqdm.tqdm(total=self.num_matches, desc=desc)
 
-    def _update_players(self, index_pair, players):
+    def _update_players(self, index_pair: Tuple[Player], players:):
         """
         During a read of the data, update the internal players dictionary
 
@@ -94,7 +95,7 @@ class ResultSet(object):
             if index not in self.players_d:
                 self.players_d[index] = player
 
-    def _update_repetitions(self, index_pair, nbr=1):
+    def _update_repetitions(self, index_pair: Tuple[Player], nbr: int =1):
         """
         During a read of the data, update the internal repetitions dictionary
 
@@ -387,7 +388,7 @@ class ResultSet(object):
             norm.append(counters)
         return norm
 
-    def _build_empty_metrics(self, keep_interactions=False):
+    def _build_empty_metrics(self, keep_interactions: bool =False):
         """
         Creates the various empty metrics ready to be updated as the data is
         read.
@@ -425,7 +426,7 @@ class ResultSet(object):
         if keep_interactions:
             self.interactions = {}
 
-    def _update_match_lengths(self, repetition, p1, p2, interaction):
+    def _update_match_lengths(self, repetition: int, p1: int, p2: int, interaction):
         """
         During a read of the data, update the match lengths attribute
 
@@ -441,7 +442,7 @@ class ResultSet(object):
         """
         self.match_lengths[repetition][p1][p2] = len(interaction)
 
-    def _update_payoffs(self, p1, p2, scores_per_turn):
+    def _update_payoffs(self, p1: int, p2: int, scores_per_turn):
         """
         During a read of the data, update the payoffs attribute
 
@@ -457,7 +458,7 @@ class ResultSet(object):
         if p1 != p2:
             self.payoffs[p2][p1].append(scores_per_turn[1])
 
-    def _update_score_diffs(self, repetition, p1, p2, scores_per_turn):
+    def _update_score_diffs(self, repetition, p1: int, p2: int, scores_per_turn):
         """
         During a read of the data, update the score diffs attribute
 
@@ -473,7 +474,7 @@ class ResultSet(object):
         self.score_diffs[p1][p2][repetition] = diff
         self.score_diffs[p2][p1][repetition] = -diff
 
-    def _update_normalised_cooperation(self, p1, p2, interaction):
+    def _update_normalised_cooperation(self, p1: int, p2: int, interaction):
         """
         During a read of the data, update the normalised cooperation attribute
 
@@ -490,7 +491,7 @@ class ResultSet(object):
         self.normalised_cooperation[p1][p2].append(normalised_cooperations[0])
         self.normalised_cooperation[p2][p1].append(normalised_cooperations[1])
 
-    def _update_wins(self, repetition, p1, p2, interaction):
+    def _update_wins(self, repetition, p1: int, p2: int, interaction):
         """
         During a read of the data, update the wins attribute
 
@@ -511,7 +512,7 @@ class ResultSet(object):
             winner_index = index_pair[match_winner_index]
             self.wins[winner_index][repetition] += 1
 
-    def _update_scores(self, repetition, p1, p2, interaction):
+    def _update_scores(self, repetition, p1: int, p2: int, interaction):
         """
         During a read of the data, update the scores attribute
 
@@ -530,7 +531,7 @@ class ResultSet(object):
             player_score = final_scores[index]
             self.scores[player][repetition] += player_score
 
-    def _update_normalised_scores(self, repetition, p1, p2, scores_per_turn):
+    def _update_normalised_scores(self, repetition, p1: int, p2: int, scores_per_turn):
         """
         During a read of the data, update the normalised scores attribute
 
@@ -548,7 +549,7 @@ class ResultSet(object):
             score_per_turn = scores_per_turn[index]
             self.normalised_scores[player][repetition].append(score_per_turn)
 
-    def _update_cooperation(self, p1, p2, cooperations):
+    def _update_cooperation(self, p1: int, p2: int, cooperations):
         """
         During a read of the data, update the cooperation attribute
 
@@ -563,7 +564,7 @@ class ResultSet(object):
         self.cooperation[p1][p2] += cooperations[0]
         self.cooperation[p2][p1] += cooperations[1]
 
-    def _update_initial_cooperation_count(self, p1, p2, initial_cooperations):
+    def _update_initial_cooperation_count(self, p1: int, p2: int, initial_cooperations):
         """
         During a read of the data, update the initial cooperation count
         attribute
@@ -581,7 +582,7 @@ class ResultSet(object):
         self.initial_cooperation_count[p1] += initial_cooperations[0]
         self.initial_cooperation_count[p2] += initial_cooperations[1]
 
-    def _update_state_distribution(self, p1, p2, counter):
+    def _update_state_distribution(self, p1: int, p2: int, counter):
         """
         During a read of the data, update the state_distribution attribute
 
@@ -598,7 +599,7 @@ class ResultSet(object):
         counter[(C, D)], counter[(D, C)] = counter[(D, C)], counter[(C, D)]
         self.state_distribution[p2][p1] += counter
 
-    def _update_state_to_action_distribution(self, p1, p2, counter_list):
+    def _update_state_to_action_distribution(self, p1: int, p2: int, counter_list):
         """
         During a read of the data, update the state_distribution attribute
 
@@ -618,7 +619,7 @@ class ResultSet(object):
             counter[((C, D), act)], counter[((D, C), act)] = counter[((D, C), act)], counter[((C, D), act)]
         self.state_to_action_distribution[p2][p1] += counter
 
-    def _update_good_partner_matrix(self, p1, p2, cooperations):
+    def _update_good_partner_matrix(self, p1: int, p2: int, cooperations):
         """
         During a read of the data, update the good partner matrix attribute
 
@@ -685,8 +686,8 @@ class ResultSet(object):
                 max(1, self.total_interactions[player])
                 for player in range(self.nplayers)]
 
-    def _build_score_related_metrics(self, progress_bar=False,
-                                     keep_interactions=False):
+    def _build_score_related_metrics(self, progress_bar: bool =False,
+                                     keep_interactions: bool =False):
         """
         Read the data and carry out all relevant calculations.
 
@@ -888,7 +889,7 @@ class ResultSet(object):
             for player in summary_data:
                 writer.writerow(player)
 
-    def read_match_chunks(self, progress_bar=False):
+    def read_match_chunks(self, progress_bar: bool =False):
         """
         A generator to return a given repetitions of matches
 
@@ -920,7 +921,7 @@ class ResultSet(object):
         if progress_bar:
             progress_bar.close()
 
-    def _read_players_and_repetition_numbers(self, progress_bar=False):
+    def _read_players_and_repetition_numbers(self, progress_bar: bool =False):
         """
         Read the players and the repetitions numbers
 
@@ -957,9 +958,9 @@ class ResultSetFromFile(ResultSet):
     by the tournament class.
     """
 
-    def __init__(self, filename, progress_bar=True,
-                 num_interactions=False, players=False, repetitions=False,
-                 game=None, keep_interactions=False):
+    def __init__(self, filename: str, progress_bar: bool =True,
+                 num_interactions: int =False, players=False, repetitions: int =False,
+                 game=None, keep_interactions: bool =False):
         """
         Parameters
         ----------
@@ -1002,7 +1003,7 @@ class ResultSetFromFile(ResultSet):
         self._build_score_related_metrics(progress_bar=progress_bar,
                                           keep_interactions=keep_interactions)
 
-    def create_progress_bar(self, desc=None):
+    def create_progress_bar(self, desc: str =None):
         """
         Create a progress bar for a read through of the data file.
 
@@ -1016,7 +1017,7 @@ class ResultSetFromFile(ResultSet):
                 self.num_interactions = sum(1 for line in f)
         return tqdm.tqdm(total=self.num_interactions, desc=desc)
 
-    def _read_players_and_repetition_numbers(self, progress_bar=False):
+    def _read_players_and_repetition_numbers(self, progress_bar: bool =False):
         """
         Read the players and the repetitions numbers
 
@@ -1048,7 +1049,7 @@ class ResultSetFromFile(ResultSet):
 
         return players, repetitions
 
-    def read_match_chunks(self, progress_bar=False):
+    def read_match_chunks(self, progress_bar : bool =False):
         """
         A generator to return a given repetitions of matches
 
