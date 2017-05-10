@@ -584,9 +584,6 @@ class TestAlexei(TestPlayer):
         self.first_play_test(C)
         self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
 
-        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
-
         actions = [(C, C), (C, C), (C, C), (C, C), (D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
@@ -599,19 +596,6 @@ class TestAlexei(TestPlayer):
         
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
-
-
-        actions = [(C, D), (D, D), (D, C), (C, C), (D, D)]
-        self.versus_test(axelrod.Random(), expected_actions=actions,
-                         seed=0)
-
-        actions = [(C, C), (C, D), (D, D), (D, C)]
-        self.versus_test(axelrod.Random(), expected_actions=actions,
-                         seed=1)
-
-        opponent = axelrod.MockPlayer(actions=[C, D])
-        actions = [(C, C), (C, D), (D, C), (D, D)]
-        self.versus_test(opponent, expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D])
         actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (D, D)]
