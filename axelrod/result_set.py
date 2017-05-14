@@ -79,7 +79,7 @@ class ResultSet(object):
         """
         return tqdm.tqdm(total=self.num_matches, desc=desc)
 
-    def _update_players(self, index_pair: Tuple[Player], players:):
+    def _update_players(self, index_pair: Tuple[Player], players):
         """
         During a read of the data, update the internal players dictionary
 
