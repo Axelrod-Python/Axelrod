@@ -11,9 +11,9 @@ from .meta import (
     MetaMajorityMemoryOne, MetaMajorityFiniteMemory, MetaMajorityLongMemory,
     MetaMinority, MetaMixer, MetaWinner, MetaWinnerDeterministic,
     MetaWinnerEnsemble, MetaWinnerMemoryOne, MetaWinnerFiniteMemory,
-    MetaWinnerLongMemory, MetaWinnerStochastic, NMWEDeterministic,
-    NMWEFiniteMemory, NMWELongMemory, NMWEMemoryOne, NMWEStochastic,
-    NiceMetaWinner, NiceMetaWinnerEnsemble,
+    MetaWinnerLongMemory, MetaWinnerStochastic, MetaWinnerTopTypes,
+    NMWEDeterministic, NMWEFiniteMemory, NMWELongMemory, NMWEMemoryOne,
+    NMWEStochastic, NiceMetaWinner, NiceMetaWinnerEnsemble
     )
 
 all_strategies += [
@@ -32,13 +32,14 @@ all_strategies += [
     MetaWinnerFiniteMemory,
     MetaWinnerLongMemory,
     MetaWinnerStochastic,
+    MetaWinnerTopTypes,
     NMWEDeterministic,
     NMWEFiniteMemory,
     NMWELongMemory,
     NMWEMemoryOne,
     NMWEStochastic,
     NiceMetaWinner,
-    NiceMetaWinnerEnsemble
+    NiceMetaWinnerEnsemble,
 ]
 
 

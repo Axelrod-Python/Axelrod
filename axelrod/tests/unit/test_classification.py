@@ -203,6 +203,7 @@ class TestStrategies(unittest.TestCase):
             axl.NMWEStochastic,
             axl.NMWEDeterministic,
             axl.MetaWinnerStochastic,
+            axl.MetaWinnerTopTypes,
             axl.NiceMetaWinner,
             axl.NiceMetaWinnerEnsemble
         ]

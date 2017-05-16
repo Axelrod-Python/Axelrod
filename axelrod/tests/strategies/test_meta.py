@@ -405,6 +405,23 @@ class TestMetaWinnerStochastic(TestMetaPlayer):
         self.first_play_test(C)
 
 
+class TestMetaWinnerTopTypes(TestMetaPlayer):
+    name = "Meta Winner Top Types"
+    player = axelrod.MetaWinnerTopTypes
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'long_run_time': True,
+        'inspects_source': False,
+        'makes_use_of': {'game', 'length'},
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+
 class TestMetaMixer(TestMetaPlayer):
 
     name = "Meta Mixer"
