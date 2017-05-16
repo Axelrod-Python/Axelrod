@@ -566,6 +566,7 @@ class TestPlayer(unittest.TestCase):
         init_kwargs: dictionary
             A list of keyword arguments to instantiate player with
         """
+        warnings.simplefilter("ignore")
         if init_args is None:
             init_args = ()
         if init_kwargs is None:
