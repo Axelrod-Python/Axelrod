@@ -16,7 +16,6 @@ from .cycler import (
     AntiCycler, Cycler, CyclerCCD, CyclerCCCD, CyclerCCCCCD,
     CyclerDC, CyclerDDC, CyclerCCCDCD)
 from .darwin import Darwin
-from .dbs import DBS
 from .defector import Defector, TrickyDefector
 from .doubler import Doubler
 from .finite_state_machines import (
@@ -64,7 +63,7 @@ from .punisher import Punisher, InversePunisher, LevelPunisher
 from .qlearner import (
     RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner)
 from .rand import Random
-from .resurrection import Resurrection, DoubleResurrection
+from .resurrection import Resurrection
 from .retaliate import (
     Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
     LimitedRetaliate3)
@@ -76,18 +75,17 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
-    SpitefulTitForTat, SlowTitForTwoTats2, Alexei)
+    SpitefulTitForTat, SlowTitForTwoTats2)
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
-
+from .axelrod_first import SteinAndRapoport
 # Note: Meta* strategies are handled in .__init__.py
 
 all_strategies = [
     Adaptive,
     AdaptiveTitForTat,
     Aggravater,
-    Alexei,
     ALLCorALLD,
     Alternator,
     AlternatorHunter,
@@ -117,13 +115,11 @@ all_strategies = [
     CyclerCCCDCD,
     Darwin,
     Davis,
-    DBS,
     Defector,
     DefectorHunter,
     Desperate,
     DoubleCrosser,
     Doubler,
-    DoubleResurrection,
     EasyGo,
     Eatherley,
     EventualCycleHunter,
@@ -232,6 +228,7 @@ all_strategies = [
     SolutionB5,
     SpitefulTitForTat,
     Stalker,
+    SteinAndRapoport,
     StochasticCooperator,
     StochasticWSLS,
     SuspiciousTitForTat,

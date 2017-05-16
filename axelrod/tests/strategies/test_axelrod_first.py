@@ -387,3 +387,40 @@ class TestUnnamedStrategy(TestPlayer):
         actions = [(C, C), (C, C), (D, C), (C, C), (C, C), (D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          seed=10)
+
+class SteinAndRapoport(TestPlayer):
+
+    name = "SteinAndRapoport"
+    player = axelrod.SteinAndRapoport
+    expected_classifier = {
+        'memory_depth': 15,
+        'long_run_time': False,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+
+        # Our Player (SteinAndRapoport) vs Cooperator
+        # After 15th round (pvalue < alpha) still plays titfortat
+        opponent = axelrod.Cooperator()
+        actions = [(C, C)] * 17 + [(D, C)] * 2
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Our Player (SteinAndRapoport) vs Defector
+        # After 15th round (pvalue < alpha) still plays titfortat
+        opponent = axelrod.Cooperator()
+        actions = [(C, D)] * 4 + [(D, D)] * 15
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Our Player (SteinAndRapoport) vs Alternator
+        # After 15th round (pvalue > alpha) starts defect
+        opponent = axelrod.Alternator()
+        actions = [(C, C), (C, D), (C, C), (C, D), (D, C), (C, D), (D, C),
+                  (C, D), (D, C), (C, D), (D, C), (C, D),(D, C), (C, D),
+                  (D, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
