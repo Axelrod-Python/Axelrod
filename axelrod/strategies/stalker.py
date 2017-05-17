@@ -10,6 +10,7 @@ C, D = Actions.C, Actions.D
 @FinalTransformer((D), name_prefix=None)  # End with defection
 class Stalker(Player):
     """
+
     This is a strategy which is only influenced by the score.
     Its behavior is based on three values:
     the very_bad_score (all rounds in defection)
@@ -17,6 +18,7 @@ class Stalker(Player):
     wish_score (average between bad and very_good score)
 
     It starts with cooperation.
+
     - If current_average_score > very_good_score, it defects
     - If current_average_score lies in (wish_score, very_good_score) it
       cooperates

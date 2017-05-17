@@ -7,7 +7,7 @@ and edges define whether or not a given player pair will have a match.
 The initial work on spatial tournaments was done by Nowak and May in a 1992
 paper: [Nowak1992]_.
 
-Additionally, Szabó and Fáth in their 2007 paper [Szabó1992]_ consider a variety
+Additionally, Szabó and Fáth in their 2007 paper [Szabo2007]_ consider a variety
 of graphs, such as lattices, small world, scale-free graphs and evolving
 networks.
 

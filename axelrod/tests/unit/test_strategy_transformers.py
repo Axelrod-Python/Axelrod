@@ -53,6 +53,12 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(str(MixedTransformer(0.3, (axelrod.Alternator, axelrod.Bully))(axelrod.Random)(0.1)),
                          "Mutated Random: 0.1: 0.3, ['Alternator', 'Bully']")
 
+    def test_doc(self):
+        """Test that the original docstring is present"""
+        player = axelrod.Alternator()
+        transformer = InitialTransformer([D, D, C])(axelrod.Alternator)()
+        self.assertEqual(player.__doc__, transformer.__doc__)
+
     def test_cloning(self):
         """Tests that Player.clone preserves the application of transformations.
         """

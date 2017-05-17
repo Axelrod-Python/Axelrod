@@ -150,6 +150,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "__repr__": __repr__,
                     "__module__": PlayerClass.__module__,
                     "classifier": classifier,
+                    "__doc__": PlayerClass.__doc__,
                 })
             return new_class
     return Decorator
