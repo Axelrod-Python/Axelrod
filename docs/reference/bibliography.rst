@@ -22,11 +22,10 @@ documentation.
 .. [Bendor1993] Bendor, Jonathan, et al. “Cooperation Under Uncertainty: What Is New, What Is True, and What Is Important.” American Sociological Review, vol. 61, no. 2, 1996, pp. 333–338., www.jstor.org/stable/2096337.
 .. [Beaufils1997] Beaufils, B. and Delahaye, J. (1997). Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
 .. [Berg2015] Berg, P. Van Den, & Weissing, F. J. (2015). The importance of mechanisms for the evolution of cooperation. Proceedings of the Royal Society B-Biological Sciences, 282.
-.. [Flood1958] Merrill M. Flood. Some Experimental Games, 1958.
 .. [Frean1994] Frean, Marcus R. “The Prisoner's Dilemma without Synchrony.” Proceedings: Biological Sciences, vol. 257, no. 1348, 1994, pp. 75–79. www.jstor.org/stable/50253.
 .. [Hilde2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013). Adaptive dynamics of extortion and compliance, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
 .. [Kraines1989] Kraines, D. & Kraines, V. Theor Decis (1989) 26: 47.  doi:10.1007/BF00134056
-.. [LessWrong2011] Zoo of Strategies (2011) LessWrong. Available at: http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/ 
+.. [LessWrong2011] Zoo of Strategies (2011) LessWrong. Available at: http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/
 .. [Li2009] Li, J. & Kendall, G. (2009). A Strategy with Novel Evolutionary Features for the Iterated Prisoner’s Dilemma. Evolutionary Computation 17(2): 257–274.
 .. [Li2011] Li, J., Hingston, P., Member, S., & Kendall, G. (2011). Engineering Design of Strategies for Winning Iterated Prisoner ’ s Dilemma Competitions, 3(4), 348–360.
 .. [Li2016] Li, J. and Kendall, G. (2016). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826
@@ -43,5 +42,5 @@ documentation.
 .. [Shakarian2013] Shakarian, P., Roos, P. & Moores, G. A Novel Analytical Method for Evolutionary Graph Theory Problems.
 .. [Slany2007] Slany W. and Kienreich W., On some winning strategies for the iterated prisoner’s dilemma, in Kendall G., Yao X. and Chong S. (eds.) The iterated prisoner’s dilemma: 20 years on. World Scientific, chapter 8, pp. 171-204, 2007.
 .. [Stewart2012] Stewart, a. J., & Plotkin, J. B. (2012). Extortion and cooperation in the Prisoner’s Dilemma. Proceedings of the National Academy of Sciences, 109(26), 10134–10135. http://doi.org/10.1073/pnas.1208087109
-.. [Szabó1992] Szabó, G., & Fáth, G. (2007). Evolutionary games on graphs. Physics Reports, 446(4-6), 97–216. http://doi.org/10.1016/j.physrep.2007.04.004
+.. [Szabo2007] Szabó, G., & Fáth, G. (2007). Evolutionary games on graphs. Physics Reports, 446(4-6), 97–216. http://doi.org/10.1016/j.physrep.2007.04.004
 .. [Tzafestas2000] Tzafestas, E. (2000). Toward adaptive cooperative behavior. From Animals to Animals: Proceedings of the 6th International Conference on the Simulation of Adaptive Behavior {(SAB-2000)}, 2, 334–340.

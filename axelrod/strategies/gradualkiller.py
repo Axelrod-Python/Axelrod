@@ -17,7 +17,7 @@ class GradualKiller(Player):
 
     Names
 
-    - Gradual Killer: [PRISON1998]_
+    - Gradual Killer: [Prison1998]_
     """
 
     # These are various properties for the strategy
