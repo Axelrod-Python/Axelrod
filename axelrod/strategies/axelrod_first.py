@@ -2,12 +2,15 @@
 Additional strategies from Axelrod's first tournament.
 """
 
+from axelrod.strategy_transformers import FinalTransformer
 import random
 
 from axelrod.actions import Actions, flip_action, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from.memoryone import MemoryOnePlayer
+from axelrod.strategy_transformers import FinalTransformer
+from scipy.stats import chisquare
 
 from typing import List, Dict, Tuple
 
@@ -487,3 +490,76 @@ class UnnamedStrategy(Player):
     def strategy(opponent: Player) -> Action:
         r = random.uniform(3, 7) / 10
         return random_choice(r)
+
+
+
+@FinalTransformer((D, D), name_prefix=None)
+class SteinAndRapoport(Player):
+    """
+        A player who plays according to statistic methods.
+        Begins by playing C for the first four (4) rounds , then it plays
+        tit for tat and at the last 2 round it Defects. Every 15 turns it
+        run a chi-squared test to check whether the opponent behaves randomly
+        or not . In case the opponent behaves randomly then Stein_and_Rapoport
+        Defects untill the next 15 round (where we check again), otherwise he
+        still plays TitForTat.
+    """
+
+    name = 'Stein and Rapoport'
+    classifier = {
+        'memory_depth': 15,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self, alpha: float=0.05) -> None:
+        """
+        Parameters
+        ----------
+        alpha, float
+            The significant level of pvalue from chi-squared test
+            0.05 by default according to literature
+        """
+        super().__init__()
+        self.alpha = alpha
+        if (self.alpha > 1) or (self.alpha < 0):
+            self.alpha = 0.05
+
+    def strategy(self , opponent: Player) -> Action:
+        round_number = len(self.history) + 1
+
+        # First 4 moves
+        if round_number < 5 :
+            return C
+
+        # For first 15 rounds tit for tat as we dont know opponents strategy
+        if round_number < 16 :
+            if opponent.history[-1] == 'D' :
+                return D
+            else :
+                return C
+
+        if round_number >= 16 :
+            # >=16 before for the first 15 round he plays for sure titfortat
+            times15_in_list = (round_number // 15) * 15
+            # lets suppose we are in 28th round
+            # So we still play according to chi-squared test in the 15th round
+            all_c = 0 # Each time we consider the whole history
+            all_d = 0
+            for i in range (0, times15_in_list - 1):
+                if opponent.history[i] == 'C' :
+                    all_c = all_c + 1
+                else :
+                    all_d = all_d + 1
+            if chisquare([all_c, all_d]).pvalue >= self.alpha :
+                # Defect if opponent plays randomly
+                return D
+            else : # TitForTatat if opponent plays not randomly
+                if opponent.history[-1] == 'D' :
+                    return D
+                else :
+                    return C
