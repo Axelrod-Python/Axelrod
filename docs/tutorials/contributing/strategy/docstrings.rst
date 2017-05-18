@@ -49,6 +49,6 @@ The Sections of the docstring are:
 
    Here, the info written under the Names section
    tells about the source of the TitforTat strategy.
-   `[Axelrod1980]_` corresponds to the bibliographic item in
-   `docs/reference/bibliography.rst`. If you are using a source
+   :code:`[Axelrod1980]_` corresponds to the bibliographic item in
+   :code:`docs/reference/bibliography.rst`. If you are using a source
    that is not in the bibliography please add it.
