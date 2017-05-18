@@ -80,7 +80,7 @@ from .titfortat import (
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
-
+from .axelrod_first import SteinAndRapoport
 # Note: Meta* strategies are handled in .__init__.py
 
 all_strategies = [
@@ -232,6 +232,7 @@ all_strategies = [
     SolutionB5,
     SpitefulTitForTat,
     Stalker,
+    SteinAndRapoport,
     StochasticCooperator,
     StochasticWSLS,
     SuspiciousTitForTat,
