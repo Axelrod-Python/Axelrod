@@ -57,8 +57,8 @@ outputs of tournaments with a large number of strategies::
 Saving all plots
 ----------------
 
-The `axelrod.Plot` class has a method: `save_all_plots` that will save all the
-above plots to file.
+The :code:`axelrod.Plot` class has a method: :code:`save_all_plots` that will
+save all the above plots to file.
 
 Passing various objects to plot
 -------------------------------
