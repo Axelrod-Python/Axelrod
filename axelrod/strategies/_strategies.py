@@ -6,7 +6,7 @@ from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
     Davis, RevisedDowning, Feld, Grofman, Nydegger, Joss, Shubik, Tullock,
-    UnnamedStrategy)
+    UnnamedStrategy, SteinAndRapoport)
 from .axelrod_second import Champion, Eatherley, Tester
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
@@ -72,7 +72,6 @@ from .sequence_player import SequencePlayer, ThueMorse, ThueMorseInverse
 from .selfsteem import SelfSteem
 from .shortmem import ShortMem
 from .stalker import Stalker
-from .axelrod_first import SteinAndRapoport
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
