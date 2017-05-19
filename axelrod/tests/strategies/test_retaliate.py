@@ -24,11 +24,59 @@ class TestRetaliate(TestPlayer):
         # Starts by cooperating.
         self.first_play_test(C)
         # If opponent has defected more than 10 percent of the time, defect.
-        P1 = axelrod.Retaliate()
-        P2 = axelrod.Player()
-        self.responses_test([C], [C] * 4, [C] * 4)
-        self.responses_test([D], [C, C, C, C, D], [C, C, C, D, C])
-        self.responses_test([D], [C] * 6, [C] * 5 + [D])
+        opponent = axelrod.Cooperator()
+        actions = [(C, C)] * 5
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([C, C, C, D, C])
+        actions = [(C, C), (C, C), (C, C), (C, D), (D, C), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+
+class TestRetaliate2(TestPlayer):
+
+    name = "Retaliate 2: 0.08"
+    player = axelrod.Retaliate2
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Starts by cooperating.
+        self.first_play_test(C)
+        # If opponent has defected more than 8 percent of the time, defect.
+        opponent = axelrod.MockPlayer([C] * 13 + [D])
+        actions = [(C, C)] * 13 + [(C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+
+class TestRetaliate3(TestPlayer):
+
+    name = "Retaliate 3: 0.05"
+    player = axelrod.Retaliate3
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Starts by cooperating.
+        self.first_play_test(C)
+        # If opponent has defected more than 5 percent of the time, defect.
+        opponent = axelrod.MockPlayer([C] * 19 + [D])
+        actions = [(C, C)] * 19 + [(C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
 
 
 class TestLimitedRetaliate(TestPlayer):
@@ -50,38 +98,40 @@ class TestLimitedRetaliate(TestPlayer):
         self.first_play_test(C)
 
         # If opponent has never defected, co-operate
-        self.responses_test([C], [C] * 4, [C] * 4, attrs={"retaliating": False})
+        opponent = axelrod.Cooperator()
+        actions = [(C, C)] * 5
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"retaliating": False})
 
         # Retaliate after a (C, D) round.
-        self.responses_test([D], [C, C, C, C, D], [C, C, C, D, C],
-                            attrs={"retaliating": True})
-        self.responses_test([D], [C, C, C, C, C, C], [C, C, C, C, C, D],
-                            attrs={"retaliating": True})
+        opponent = axelrod.MockPlayer([C, C, C, D, C])
+        actions = [(C, C), (C, C), (C, C), (C, D), (D, C), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"retaliating": True})
 
-        # Case were retaliation count is less than limit: cooperate, reset
-        # retaliation count and be not retaliating
-        P1 = self.player()
-        P2 = TestOpponent()
-        P1.history = [C, C, C, D, C]
-        P2.history = [D, D, D, C, D]
-        P1.retaliation_count = 1
-        P1.retaliation_limit = 0
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertEqual(P1.retaliation_count, 0)
-        self.assertFalse(P1.retaliating)
+        opponent = axelrod.Alternator()
 
-        # If I've hit the limit for retaliation attempts, co-operate
-        P1.history = [C, C, C, C, D]
-        P2.history = [C, C, C, D, C]
-        P1.retaliation_count = 20
-        self.assertEqual(P1.strategy(P2), C)
-        self.assertFalse(P1.retaliating)
+        # Count retaliations
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"retaliation_count": 3})
+        opponent = axelrod.Alternator()
 
-    def test_reset(self):
-        P1 = axelrod.LimitedRetaliate()
-        P1.history = [C, C, C, C, D]
-        P1.retaliating = True
-        P1.retaliation_count = 4
-        P1.reset()
-        self.assertFalse(P1.retaliating)
-        self.assertEqual(P1.retaliation_count, 0)
+        # Cooperate if we hit the retaliation limit
+        actions = [(C, C), (C, D), (D, C), (D, D), (C, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"retaliation_count": 0},
+                         init_kwargs={"retaliation_limit": 2})
+
+        # Defect again after cooperating
+        actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (D, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"retaliation_count": 2},
+                         init_kwargs={"retaliation_limit": 2})
+
+        # Different behaviour with different retaliation threshold
+        actions = [(C, C), (C, D), (D, C), (C, D), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"retaliation_count": 0},
+                         init_kwargs={"retaliation_limit": 2,
+                                      "retaliation_threshold": 9})
