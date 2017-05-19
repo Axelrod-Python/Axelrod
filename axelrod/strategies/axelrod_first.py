@@ -492,18 +492,18 @@ class UnnamedStrategy(Player):
 
 @FinalTransformer((D, D), name_prefix=None)
 class SteinAndRapoport(Player):
-"""
-A player who plays according to statistic methods.
-Begins by playing C for the first four (4) rounds , then it plays
-tit for tat and at the last 2 round it Defects. Every 15 turns it
-run a chi-squared test to check whether the opponent behaves randomly
-or not . In case the opponent behaves randomly then Stein_and_Rapoport
-Defects untill the next 15 round (where we check again), otherwise he
-still plays TitForTat.
+    """
+    A player who plays according to statistic methods.
+    Begins by playing C for the first four (4) rounds , then it plays
+    tit for tat and at the last 2 round it Defects. Every 15 turns it
+    run a chi-squared test to check whether the opponent behaves randomly
+    or not . In case the opponent behaves randomly then Stein_and_Rapoport
+    Defects untill the next 15 round (where we check again), otherwise he
+    still plays TitForTat.0
 
-Names:
-- SteinAndRapoport [Axelrod1980]_
-"""
+    Names:
+    - SteinAndRapoport [Axelrod1980]_
+    """
 
     name = 'Stein and Rapoport'
     classifier = {
