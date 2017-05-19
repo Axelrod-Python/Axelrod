@@ -28,7 +28,7 @@ Strategies in the Axelrod's first tournament:
 +--------------------------+-------------------------------------------+--------------------------+
 | `Shubik`_                | Shubik (author's name)                    | :code:`Shubik`           |
 +--------------------------+-------------------------------------------+--------------------------+
-| `Stein and Rapoport`_    | Stein and Rapoport (authors' names)       | Not Implemented          |
+| `Stein and Rapoport`_    | Stein and Rapoport (authors' names)       | :code:`SteinAndRapoport` |
 +--------------------------+-------------------------------------------+--------------------------+
 | `Grudger`_               | Grudger (by Friedman)                     | :code:`Grudger`          |
 +--------------------------+-------------------------------------------+--------------------------+
