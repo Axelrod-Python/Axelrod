@@ -665,3 +665,36 @@ class Alexei(Player):
         if opponent.history[-1] == D:
             return D
         return C
+
+@FinalTransformer((D,), name_prefix=None)
+class EugineNier(Player):
+    """
+    Plays similar to Tit-for-Tat, but with two conditions:
+    1) Always Defect on Last Move
+    2) If other player defects five times, switch to all defect.
+    
+    Names:
+
+    - EugineNier Strategy: [LessWrong2011]_    
+    """
+
+    name = 'Alexei'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': {'length'},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        if opponent.history[-1] == D:
+            return D
+        return C
+        
+        if opponent.history[-5] == [D, D, D, D, D]:
+            return D
