@@ -5,6 +5,7 @@ from numpy import mean, nanmedian, std
 import tqdm
 
 from axelrod.actions import Actions
+from axelrod.player import Player
 import axelrod.interaction_utils as iu
 from . import eigen
 from .game import Game
