@@ -76,7 +76,7 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
-    SpitefulTitForTat, SlowTitForTwoTats2, Alexei)
+    SpitefulTitForTat, SlowTitForTwoTats2, Alexei, EugineNier)
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
@@ -126,6 +126,7 @@ all_strategies = [
     DoubleResurrection,
     EasyGo,
     Eatherley,
+    EugineNier,
     EventualCycleHunter,
     EvolvedANN,
     EvolvedANN5,
