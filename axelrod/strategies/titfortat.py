@@ -671,14 +671,14 @@ class EugineNier(Player):
     """
     Plays similar to Tit-for-Tat, but with two conditions:
     1) Always Defect on Last Move
-    2) If other player defects five times, switch to all defect.
+    2) If other player defects five times, switch to all defects.
     
     Names:
 
     - EugineNier Strategy: [LessWrong2011]_    
     """
 
-    name = 'Alexei'
+    name = 'EugineNier'
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
