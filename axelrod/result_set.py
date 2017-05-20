@@ -34,7 +34,7 @@ class ResultSet(object):
     """A class to hold the results of a tournament."""
 
     def __init__(self, players, interactions, repetitions: int =False,
-                 progress_bar: bool =True, game=None):
+                 progress_bar: bool =True, game=None) -> None:
         """
         Parameters
         ----------
@@ -961,7 +961,7 @@ class ResultSetFromFile(ResultSet):
 
     def __init__(self, filename: str, progress_bar: bool =True,
                  num_interactions: int =False, players=False, repetitions: int =False,
-                 game=None, keep_interactions: bool =False):
+                 game=None, keep_interactions: bool =False) -> None:
         """
         Parameters
         ----------
