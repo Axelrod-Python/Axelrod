@@ -26,49 +26,25 @@ class TestRiskyQLearner(TestPlayer):
     def test_payoff_matrix(self):
         (R, P, S, T) = Game().RPST()
         payoff_matrix = {C: {C: R, D: S}, D: {C: T, D: P}}
-        p1 = self.player()
-        self.assertEqual(p1.payoff_matrix, payoff_matrix)
-
-    def test_qs_update(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.RiskyQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Qs, {'': {C: 0, D: 0.9}, '0.0': {C: 0, D: 0}})
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Qs,
-                         {'': {C: 0, D: 0.9}, '0.0': {C: 2.7, D: 0},
-                          'C1.0': {C: 0, D: 0}})
-
-    def test_vs_update(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.RiskyQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Vs, {'': 0.9, '0.0': 0})
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Vs,{'': 0.9, '0.0': 2.7, 'C1.0': 0})
-
-    def test_prev_state_updates(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.RiskyQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.prev_state, '0.0')
-        simulate_play(p1, p2)
-        self.assertEqual(p1.prev_state, 'C1.0')
+        player = self.player()
+        self.assertEqual(player.payoff_matrix, payoff_matrix)
 
     def test_strategy(self):
-        """Tests that it chooses the best strategy."""
-        random.seed(5)
-        p1 = axelrod.RiskyQLearner()
-        p1.state = 'CCDC'
-        p1.Qs = {'': {C: 0, D: 0}, 'CCDC': {C: 2, D: 6}}
-        p2 = axelrod.Cooperator()
-        test_responses(self, p1, p2, [C, D, C, C, D, C, C])
+        actions = [(C, C), (D, C), (C, C), (C, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions,
+                         seed=5,
+                         attrs={"Qs": {'': {C: 0, D: 0.9},
+                                       '0.0': {C: 2.7, D: 0},
+                                       'C1.0': {C: 0, D: 4.5},
+                                       'CC2.0': {C: 2.7, D: 0},
+                                       'CCC3.0': {C: 0, D: 0}},
+                                "Vs": {'':  0.9,
+                                       '0.0': 2.7,
+                                       'C1.0': 4.5,
+                                       'CC2.0': 2.7,
+                                       'CCC3.0': 0},
+                                "prev_state": 'CCC3.0'})
 
 
 class TestArrogantQLearner(TestPlayer):
@@ -85,57 +61,22 @@ class TestArrogantQLearner(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_qs_update(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.ArrogantQLearner()
-        p2 = axelrod.Cooperator()
-        play_1, play_2 = simulate_play(p1, p2)
-        self.assertEqual(p1.Qs, {'': {C: 0, D: 0.9}, '0.0': {C: 0, D: 0}})
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Qs,{'': {C: 0, D: 0.9}, '0.0': {C: 2.7, D: 0},
-                                'C1.0': {C: 0, D: 0}})
-
-    def test_vs_update(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.ArrogantQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Vs, {'': 0.9, '0.0': 0})
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Vs,{'': 0.9, '0.0': 2.7, 'C1.0': 0})
-
-    def test_prev_state_updates(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.ArrogantQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.prev_state, '0.0')
-        simulate_play(p1, p2)
-        self.assertEqual(p1.prev_state, 'C1.0')
-
     def test_strategy(self):
-        """Tests that it chooses the best strategy."""
-        random.seed(9)
-        p1 = axelrod.ArrogantQLearner()
-        p1.state = 'CCDC'
-        p1.Qs = {'': {C: 0, D: 0}, 'CCDC': {C: 2, D: 6}}
-        p2 = axelrod.Cooperator()
-        test_responses(self, p1, p2, [C, C, C, C, C, C, C])
-
-    def test_reset_method(self):
-        """Tests the reset method."""
-        P1 = axelrod.ArrogantQLearner()
-        P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
-        P1.Vs = {'': 0, '0.0': 0}
-        P1.history = [C, D, D, D]
-        P1.prev_state = C
-        P1.reset()
-        self.assertEqual(P1.prev_state, '')
-        self.assertEqual(P1.Vs, {'':0})
-        self.assertEqual(P1.Qs, {'':{C:0, D:0}})
+        actions = [(C, C), (D, C), (C, C), (C, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions,
+                         seed=5,
+                         attrs={"Qs": {'': {C: 0, D: 0.9},
+                                       '0.0': {C: 2.7, D: 0},
+                                       'C1.0': {C: 0, D: 4.5},
+                                       'CC2.0': {C: 2.7, D: 0},
+                                       'CCC3.0': {C: 0, D: 0}},
+                                "Vs": {'':  0.9,
+                                       '0.0': 2.7,
+                                       'C1.0': 4.5,
+                                       'CC2.0': 2.7,
+                                       'CCC3.0': 0},
+                                "prev_state": 'CCC3.0'})
 
 
 class TestHesitantQLearner(TestPlayer):
@@ -152,58 +93,22 @@ class TestHesitantQLearner(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_qs_update(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.HesitantQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Qs, {'': {C: 0, D: 0.1}, '0.0': {C: 0, D: 0}})
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Qs,{'': {C: 0, D: 0.1},
-                                '0.0': {C: 0.30000000000000004, D: 0},
-                                'C1.0': {C: 0, D: 0}})
-
-    def test_vs_update(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.HesitantQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Vs, {'': 0.1, '0.0': 0})
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Vs,{'': 0.1, '0.0': 0.30000000000000004, 'C1.0': 0})
-
-    def test_prev_state_updates(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.HesitantQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.prev_state, '0.0')
-        simulate_play(p1, p2)
-        self.assertEqual(p1.prev_state, 'C1.0')
-
     def test_strategy(self):
-        """Tests that it chooses the best strategy."""
-        random.seed(9)
-        p1 = axelrod.HesitantQLearner()
-        p1.state = 'CCDC'
-        p1.Qs = {'': {C: 0, D: 0}, 'CCDC': {C: 2, D: 6}}
-        p2 = axelrod.Cooperator()
-        test_responses(self, p1, p2, [C, C, C, C, C, C, C])
-
-    def test_reset_method(self):
-        """Tests the reset method."""
-        P1 = axelrod.HesitantQLearner()
-        P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
-        P1.Vs = {'': 0, '0.0': 0}
-        P1.history = [C, D, D, D]
-        P1.prev_state = C
-        P1.reset()
-        self.assertEqual(P1.prev_state, '')
-        self.assertEqual(P1.Vs, {'': 0})
-        self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})
+        actions = [(C, D), (D, D), (C, D), (C, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions,
+                         seed=5,
+                         attrs={"Qs": {'': {C: 0, D: 0.1},
+                                       '0.0': {C: 0, D: 0},
+                                       'D0.0': {C: 0, D: 0.1},
+                                       'DD0.0': {C: 0, D: 0},
+                                       'DDD0.0': {C: 0, D: 0}},
+                                "Vs": {'':  0.1,
+                                       '0.0': 0.0,
+                                       'D0.0': 0.1,
+                                       'DD0.0': 0.0,
+                                       'DDD0.0': 0},
+                                "prev_state": 'DDD0.0'})
 
 
 class TestCautiousQLearner(TestPlayer):
@@ -220,55 +125,19 @@ class TestCautiousQLearner(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_qs_update(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.CautiousQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Qs, {'': {C: 0, D: 0.1}, '0.0': {C: 0, D: 0}})
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Qs,{'': {C: 0, D: 0.1},
-                                '0.0': {C: 0.30000000000000004, D: 0},
-                                'C1.0': {C: 0, D: 0.0}})
-
-    def test_vs_update(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.CautiousQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Vs, {'': 0.1, '0.0': 0})
-        simulate_play(p1, p2)
-        self.assertEqual(p1.Vs,{'': 0.1, '0.0': 0.30000000000000004, 'C1.0': 0})
-
-    def test_prev_state_updates(self):
-        """Test that the q and v values update."""
-        random.seed(5)
-        p1 = axelrod.CautiousQLearner()
-        p2 = axelrod.Cooperator()
-        simulate_play(p1, p2)
-        self.assertEqual(p1.prev_state, '0.0')
-        simulate_play(p1, p2)
-        self.assertEqual(p1.prev_state, 'C1.0')
-
     def test_strategy(self):
-        """Tests that it chooses the best strategy."""
-        random.seed(9)
-        p1 = axelrod.CautiousQLearner()
-        p1.state = 'CCDC'
-        p1.Qs = {'': {C: 0, D: 0}, 'CCDC': {C: 2, D: 6}}
-        p2 = axelrod.Cooperator()
-        test_responses(self, p1, p2, [C, C, C, C, C, C, C])
-
-    def test_reset_method(self):
-        """Tests the reset method."""
-        P1 = axelrod.CautiousQLearner()
-        P1.Qs = {'': {C: 0, D: -0.9}, '0.0': {C: 0, D: 0}}
-        P1.Vs = {'': 0, '0.0': 0}
-        P1.history = [C, D, D, D]
-        P1.prev_state = C
-        P1.reset()
-        self.assertEqual(P1.prev_state, '')
-        self.assertEqual(P1.Vs, {'': 0})
-        self.assertEqual(P1.Qs, {'': {C: 0, D: 0}})
+        actions = [(C, D), (D, D), (C, D), (C, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions,
+                         seed=5,
+                         attrs={"Qs": {'': {C: 0, D: 0.1},
+                                       '0.0': {C: 0, D: 0},
+                                       'D0.0': {C: 0, D: 0.1},
+                                       'DD0.0': {C: 0, D: 0},
+                                       'DDD0.0': {C: 0, D: 0}},
+                                "Vs": {'':  0.1,
+                                       '0.0': 0.0,
+                                       'D0.0': 0.1,
+                                       'DD0.0': 0.0,
+                                       'DDD0.0': 0},
+                                "prev_state": 'DDD0.0'})
