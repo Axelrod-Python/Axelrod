@@ -241,11 +241,16 @@ class Player(object):
         return new_player
 
     def reset(self):
-        """
-        Resets history.
-        When creating strategies that create new attributes then this method
-        should be re-written (in the inherited class) and should not only reset
-        history but also rest all other attributes.
+        """Resets a player to its initial state
+
+        This method is called at the beginning of each match (between a pair
+        of players) to reset a player's state to its initial starting point.
+        It ensures that no 'memory' of previous matches is carried forward.
+
+        The default method resets a player's history, cooperations, defections
+        and state_distribution. Players which have further attributes need to
+        override this method and ensure those additional attributes are also
+        reset.
         """
         self.history = []
         self.cooperations = 0
