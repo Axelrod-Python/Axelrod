@@ -634,7 +634,7 @@ class TestEugineNier(TestPlayer):
         # Plays TfT and defects in last round
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={"is_defector": False},)
+                         attrs={"is_defector": False})
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
