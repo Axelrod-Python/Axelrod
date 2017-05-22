@@ -637,3 +637,7 @@ class TestEugineNier(TestPlayer):
         opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D])
         actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
+        
+        opponent = axelrod.MockPlayer(actions=[C, D, D, D, D, D])
+        actions = [(C, C), (D, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(opponent, expected_actions=actions)
