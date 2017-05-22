@@ -8,6 +8,8 @@ from axelrod.actions import Actions, flip_action, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from.memoryone import MemoryOnePlayer
+from axelrod.strategy_transformers import FinalTransformer
+from scipy.stats import chisquare
 
 from typing import List, Dict, Tuple
 
@@ -487,3 +489,67 @@ class UnnamedStrategy(Player):
     def strategy(opponent: Player) -> Action:
         r = random.uniform(3, 7) / 10
         return random_choice(r)
+
+@FinalTransformer((D, D), name_prefix=None)
+class SteinAndRapoport(Player):
+    """
+    A player who plays according to statistic methods.
+    Begins by playing C for the first four (4) rounds, then it plays
+    tit for tat and at the last 2 round it Defects. Every 15 turns it
+    runs a chi-squared test to check whether the opponent behaves randomly
+    or not. In case the opponent behaves randomly then Stein and Rapoport
+    Defects until the next 15 round (where we check again), otherwise it
+    still plays TitForTat.0
+
+    Names:
+
+    - SteinAndRapoport [Axelrod1980]_
+    """
+
+    name = 'Stein and Rapoport'
+    classifier = {
+        'memory_depth': 15,
+        'stochastic': False,
+        'makes_use_of': {"length"},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self, alpha: float=0.05) -> None:
+        """
+        Parameters
+        ----------
+        alpha, float
+            The significant level of pvalue from chi-squared test
+            0.05 by default according to literature
+        """
+        super().__init__()
+        self.alpha = alpha
+        self.opponent_is_random = None
+
+    def strategy(self , opponent: Player) -> Action:
+        round_number = len(self.history) + 1
+
+        # First 4 moves
+        if round_number < 5:
+            return C
+        # For first 15 rounds tit for tat as we do not know opponents strategy
+        elif round_number < 15:
+            return opponent.history[-1]
+
+        if round_number % 15 == 0:
+            p_value = chisquare([opponent.cooperations,
+                                 opponent.defections]).pvalue
+            self.opponent_is_random = p_value >= self.alpha
+
+        if self.opponent_is_random:
+            # Defect if opponent plays randomly
+            return D
+        else: # TitForTatat if opponent plays not randomly
+            return opponent.history[-1]
+
+    def reset(self):
+        super().reset()
+        self.random_opponent = None

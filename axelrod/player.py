@@ -241,7 +241,8 @@ class Player(object):
         return new_player
 
     def reset(self):
-        """Resets history.
+        """
+        Resets history.
         When creating strategies that create new attributes then this method
         should be re-written (in the inherited class) and should not only reset
         history but also rest all other attributes.
