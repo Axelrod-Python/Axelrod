@@ -391,37 +391,76 @@ class TestUnnamedStrategy(TestPlayer):
 
 class SteinAndRapoport(TestPlayer):
 
-    name = "SteinAndRapoport"
+    name = "Stein and Rapoport: 0.05: ('D', 'D')"
     player = axelrod.SteinAndRapoport
     expected_classifier = {
         'memory_depth': 15,
         'long_run_time': False,
         'stochastic': False,
-        'makes_use_of': set(),
+        'makes_use_of': {'length'},
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
     }
+
+    def test_init(self):
+        player = self.player()
+        self.assertEqual(player.alpha, 0.05)
+        self.assertIsNone(player.opponent_is_random)
+
+        player = self.player(alpha=.5)
+        self.assertEqual(player.alpha, 0.5)
+        self.assertIsNone(player.opponent_is_random)
 
     def test_strategy(self):
         self.first_play_test(C)
 
         # Our Player (SteinAndRapoport) vs Cooperator
         # After 15th round (pvalue < alpha) still plays titfortat
+        # Note it always defects on the last two rounds
         opponent = axelrod.Cooperator()
         actions = [(C, C)] * 17 + [(D, C)] * 2
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_is_random": False})
+
+        actions = actions[:-2] + [(C, C)] * 2
+        self.versus_test(opponent, expected_actions=actions[:-2],
+                         match_attributes={"length": -1},
+                         attrs={"opponent_is_random": False})
 
         # Our Player (SteinAndRapoport) vs Defector
         # After 15th round (pvalue < alpha) still plays titfortat
-        opponent = axelrod.Cooperator()
+        opponent = axelrod.Defector()
         actions = [(C, D)] * 4 + [(D, D)] * 15
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_is_random": False})
 
         # Our Player (SteinAndRapoport) vs Alternator
         # After 15th round (pvalue > alpha) starts defect
         opponent = axelrod.Alternator()
-        actions = [(C, C), (C, D), (C, C), (C, D), (D, C), (C, D), (D, C),
-                  (C, D), (D, C), (C, D), (D, C), (C, D),(D, C), (C, D),
-                  (D, C), (D, D), (D, C), (D, D), (D, C)]
-        self.versus_test(opponent, expected_actions=actions)
+        actions = [(C, C), (C, D), (C, C), (C, D)]
+
+        # On 15th round carry out chisquare test
+        actions += [(D, C), (C, D)] * 5 + [(D, C)]
+
+        # Defect throughout
+        actions += [(D, D), (D, C), (D, D), (D, C)]
+
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={"opponent_is_random": True})
+
+        # The test is carried out again every 15 rounds.
+        # If the strategy alternates for the first 12 rounds and then cooperates
+        # it is no longer recognised as random
+        opponent = axelrod.MockPlayer([C, D] * 6 + [C] * 50)
+
+        actions = [(C, C), (C, D), (C, C), (C, D)]
+        # On 15th round carry out chisquare test
+        actions += [(D, C), (C, D)] * 4 + [(D, C), (C, C), (D, C)]
+        # Defect throughout and carry out chisquare test on round 30
+        # Opponent is no longer recognised as random, revert to TfT
+        actions += [(D, C)] * 14 + [(C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         match_attributes={"length": -1},
+                         attrs={"opponent_is_random": False})
+
