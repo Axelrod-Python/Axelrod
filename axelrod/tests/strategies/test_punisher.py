@@ -22,30 +22,37 @@ class TestPunisher(TestPlayer):
 
     def test_init(self):
         """Tests for the __init__ method."""
-        P1 = axelrod.Punisher()
-        self.assertEqual(P1.history, [])
-        self.assertEqual(P1.mem_length, 1)
-        self.assertEqual(P1.grudged, False)
-        self.assertEqual(P1.grudge_memory, 1)
+        player = axelrod.Punisher()
+        self.assertEqual(player.history, [])
+        self.assertEqual(player.mem_length, 1)
+        self.assertFalse(player.grudged)
+        self.assertEqual(player.grudge_memory, 1)
 
     def test_strategy(self):
-        self.responses_test([C], [], [], attrs={"grudged": False})
-        self.responses_test([C], [C], [C], attrs={"grudged": False})
-        self.responses_test([D], [C], [D], attrs={"grudged": True})
-        for i in range(10):
-            self.responses_test([D], [C, C] + [D] * i, [C, D] + [C] * i,
-                                attrs={"grudged": True, "grudge_memory": i,
-                                       "mem_length": 10})
+
+        opponent = axelrod.Alternator()
+        actions = [(C, C), (C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": True, "grudge_memory": 0})
+
+        opponent = axelrod.MockPlayer([C, D] + [C] * 10)
+        actions = [(C, C), (C, D)] + [(D, C)] * 11
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": True, "grudge_memory": 10})
+
         # Eventually the grudge is dropped
-        i = 11
-        self.responses_test([C], [C, C] + [D] * i, [C, D] + [C] * i,
-                            attrs={"grudged": False, "grudge_memory": 0,
-                                   "mem_length": 10})
+        opponent = axelrod.MockPlayer([C, D] + [C] * 10)
+        actions = [(C, C), (C, D)] + [(D, C)] * 11 + [(C, D)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": False, "grudge_memory": 0,
+                                "mem_length": 10})
 
         # Grudged again on opponent's D
-        self.responses_test([D], [C, C] + [D] * i + [C], [C, D] + [C] * i + [D],
-                            attrs={"grudged": True, "grudge_memory": 0,
-                                   "mem_length": 2})
+        opponent = axelrod.MockPlayer([C, D] + [C] * 11)
+        actions = [(C, C), (C, D)] + [(D, C)] * 11 + [(C, C), (C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": True, "grudge_memory": 0,
+                                "mem_length": 2})
 
 
 class TestInversePunisher(TestPlayer):
@@ -64,34 +71,37 @@ class TestInversePunisher(TestPlayer):
 
     def test_init(self):
         """Tests for the __init__ method."""
-        P1 = axelrod.InversePunisher()
-        self.assertEqual(P1.history, [])
-        self.assertEqual(P1.mem_length, 1)
-        self.assertEqual(P1.grudged, False)
-        self.assertEqual(P1.grudge_memory, 1)
+        player = axelrod.InversePunisher()
+        self.assertEqual(player.history, [])
+        self.assertEqual(player.mem_length, 1)
+        self.assertFalse(player.grudged)
+        self.assertEqual(player.grudge_memory, 1)
 
     def test_strategy(self):
-        self.responses_test([C], [], [], attrs={"grudged": False})
-        self.responses_test([C], [C], [C], attrs={"grudged": False})
-        self.responses_test([D], [C], [D], attrs={"grudged": True})
-        for i in range(10):
-            self.responses_test([D], [C, C] + [D] * i, [C, D] + [C] * i,
-                                attrs={"grudged": True, "grudge_memory": i,
-                                       "mem_length": 10})
-        # Eventually the grudge is dropped
-        i = 11
-        self.responses_test([C], [C, C] + [D] * i, [C, D] + [C] * i,
-                            attrs={"grudged": False, "grudge_memory": 0,
-                                   "mem_length": 10})
-        # Grudged again on opponent's D
-        self.responses_test([D], [C, C] + [D] * i + [C], [C, D] + [C] * i + [D],
-                            attrs={"grudged": True, "grudge_memory": 0,
-                                   "mem_length": 17})
+        opponent = axelrod.Alternator()
+        actions = [(C, C), (C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": True, "grudge_memory": 0})
 
-        # Test a different grudge length period
-        self.responses_test([D], [C] * 5, [C] * 4 + [D],
-                            attrs={"grudged": True, "grudge_memory": 0,
-                                   "mem_length": 16})
+        opponent = axelrod.MockPlayer([C, D] + [C] * 10)
+        actions = [(C, C), (C, D)] + [(D, C)] * 11
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": True, "grudge_memory": 10})
+
+        # Eventually the grudge is dropped
+        opponent = axelrod.MockPlayer([C, D] + [C] * 10)
+        actions = [(C, C), (C, D)] + [(D, C)] * 11 + [(C, D)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": False, "grudge_memory": 0,
+                                "mem_length": 10})
+
+        # Grudged again on opponent's D
+        opponent = axelrod.MockPlayer([C, D] + [C] * 11)
+        actions = [(C, C), (C, D)] + [(D, C)] * 11 + [(C, C), (C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": True, "grudge_memory": 0,
+                                "mem_length": 17})
+
 
 class TestLevelPunisher(TestPlayer):
 
@@ -111,11 +121,18 @@ class TestLevelPunisher(TestPlayer):
         # Starts by Cooperating
         self.first_play_test(C)
 
-        # Defects if the turns played are less than 10.
-        self.responses_test([C], [C], [C])
-        self.responses_test([C], [C] * 4, [C, D, C, D])
+        # Cooperates if the turns played are less than 10.
+        actions = [(C, C)] * 9
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
 
-        # Check for the number of rounds greater than 10.
-        self.responses_test([C], [C] * 10, [C, C, C, C, D, C, C, C, C, D])
-        #Check if number of defections by opponent is greater than 20%
-        self.responses_test([D], [C] * 10, [D, D, D, D, D, C, D, D, D, D])
+        # After 10 rounds
+        # Check if number of defections by opponent is greater than 20%
+        opponent = axelrod.MockPlayer([C] * 4 + [D] * 2 + [C] * 3 + [D])
+        actions = [(C, C)] * 4 + [(C, D)] * 2 + [(C, C)] * 3 + [(C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+        # Check if number of defections by opponent is less than 20%
+        opponent = axelrod.MockPlayer([C] * 4 + [D] + [C] * 4 + [D])
+        actions = [(C, C)] * 4 + [(C, D)] + [(C, C)] * 4 + [(C, D), (C, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
