@@ -692,9 +692,8 @@ class EugineNier(Player):
     def strategy(self, opponent: Player) -> Action:
         if not self.history:
             return C
+        if opponent.history[-5] == [D, D, D, D, D]:
+            return D
         if opponent.history[-1] == D:
             return D
         return C
-        
-        if opponent.history[-5] == [D, D, D, D, D]:
-            return D
