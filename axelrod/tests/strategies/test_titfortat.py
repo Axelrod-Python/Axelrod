@@ -633,17 +633,17 @@ class TestEugineNier(TestPlayer):
 
         # Plays TfT and defects in last round
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
-        self.versus_test(axelrod.Alternator(), expected_actions=actions
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          attrs={"is_defector": False},)
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={"is_defector": False}
+                         attrs={"is_defector": False},
                          match_attributes={"length": -1})
 
         # Becomes defector after 5 defections
         opponent = axelrod.MockPlayer(actions=[C, D, D, D, D, D, C, C])
         actions = [(C, C), (C, D), (D, D), (D, D),
                    (D, D), (D, D), (D, C), (D, C)]
-        self.versus_test(opponent, expected_actions=actions
+        self.versus_test(opponent, expected_actions=actions,
                          attrs={"is_defector": True})
