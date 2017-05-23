@@ -19,7 +19,7 @@ import mock
 
 MOCK_MODULES = [
     'scipy', 'scipy.stats','numpy', 'numpy.linalg', 'numpy.random',
-    'matplotlib.pyplot', 'matplotlib','matplotlib.transforms',
+    'matplotlib.pyplot', 'matplotlib','matplotlib.transforms', 'tqdm',
     'mpl_toolkits.axes_grid1', 'dill', 'multiprocess','prompt_toolkit',
     'prompt_toolkit.token', 'prompt_toolkit.styles','prompt_toolkit.validation']
 for mod_name in MOCK_MODULES:
