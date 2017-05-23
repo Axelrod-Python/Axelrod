@@ -1,3 +1,28 @@
+# v2.12.0, 2017-05-23
+
+New strategies and internal refactoring/improvements
+
+- New strategy Alexei:
+  https://github.com/Axelrod-Python/Axelrod/pull/997
+- New strategy Stein And Rapaport:
+  https://github.com/Axelrod-Python/Axelrod/pull/1012
+- Documentation fixes/improvements:
+  https://github.com/Axelrod-Python/Axelrod/pull/1020
+  https://github.com/Axelrod-Python/Axelrod/pull/1018
+  https://github.com/Axelrod-Python/Axelrod/pull/1013
+  https://github.com/Axelrod-Python/Axelrod/pull/1011
+  https://github.com/Axelrod-Python/Axelrod/pull/1005
+  https://github.com/Axelrod-Python/Axelrod/pull/1004
+  https://github.com/Axelrod-Python/Axelrod/pull/1003
+- Internal refactoring:
+  https://github.com/Axelrod-Python/Axelrod/pull/1017
+  https://github.com/Axelrod-Python/Axelrod/pull/1015
+  https://github.com/Axelrod-Python/Axelrod/pull/1010
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.11.0...v2.12.0
+
 # v2.11.0, 2017-05-06
 
 A new strategy, improvements to documentation, player equality and some
