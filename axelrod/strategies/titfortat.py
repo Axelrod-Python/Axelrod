@@ -696,8 +696,9 @@ class EugineNier(Player):
     def strategy(self, opponent: Player) -> Action:
         if not self.history:
             return C
-        if self.is_defector or opponent.history[-5:] == [D] * 5:
+        if not (self.is_defector) and opponent.defections >= 5:
             self.is_defector = True
+        if self.is_defector:
             return D
         return opponent.history[-1]
 

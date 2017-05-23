@@ -642,8 +642,7 @@ class TestEugineNier(TestPlayer):
                          match_attributes={"length": -1})
 
         # Becomes defector after 5 defections
-        opponent = axelrod.MockPlayer(actions=[C, D, D, D, D, D, C, C])
-        actions = [(C, C), (C, D), (D, D), (D, D),
+        opponent = axelrod.MockPlayer(actions=[D, C, D, D, D, D, C, C])
+        actions = [(C, D), (D, C), (C, D), (D, D),
                    (D, D), (D, D), (D, C), (D, C)]
-        self.versus_test(opponent, expected_actions=actions,
-                         attrs={"is_defector": True})
+        self.versus_test(opponent, expected_actions=actions)
