@@ -137,8 +137,6 @@ the opponent defects when this strategy cooperates.
 Stein and Rapoport
 ^^^^^^^^^^^^^^^^^^
 
-**Not implemented yet**
-
 This strategy plays a modification of Tit For Tat.
 
 1. It cooperates for the first 4 moves.
