@@ -23,7 +23,6 @@ class TestPunisher(TestPlayer):
     def test_init(self):
         """Tests for the __init__ method."""
         player = axelrod.Punisher()
-        self.assertEqual(player.history, [])
         self.assertEqual(player.mem_length, 1)
         self.assertFalse(player.grudged)
         self.assertEqual(player.grudge_memory, 1)
@@ -72,7 +71,6 @@ class TestInversePunisher(TestPlayer):
     def test_init(self):
         """Tests for the __init__ method."""
         player = axelrod.InversePunisher()
-        self.assertEqual(player.history, [])
         self.assertEqual(player.mem_length, 1)
         self.assertFalse(player.grudged)
         self.assertEqual(player.grudge_memory, 1)
