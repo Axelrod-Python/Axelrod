@@ -603,7 +603,7 @@ class TestAlexei(TestPlayer):
 
 class TestEugineNier(TestPlayer):
     """
-    Tests for the EugineNier strategy
+    Tests for the Eugine Nier strategy
     """
 
     name = "EugineNier: ('D',)"

@@ -645,7 +645,7 @@ class Alexei(Player):
 
     Names:
 
-    - Alexei's Strategy: [LessWrong2011]_
+    - Alexei: [LessWrong2011]_
     """
 
     name = 'Alexei'
@@ -675,7 +675,7 @@ class EugineNier(Player):
 
     Names:
 
-    - EugineNier Strategy: [LessWrong2011]_
+    - Eugine Nier: [LessWrong2011]_
     """
 
     name = 'EugineNier'
