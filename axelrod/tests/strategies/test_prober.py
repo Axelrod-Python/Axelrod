@@ -254,8 +254,9 @@ class TestNaiveProber(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         # Always retaliate a defection
-        actions = [(C, D)] + [(D, D)] * 10
-        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+        opponent = axelrod.MockPlayer([C, D, D, D, D])
+        actions = [(C, C), (C, D), (D, D), (D, D), (D, D)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
 
 
     def test_random_defection(self):
