@@ -21,15 +21,20 @@ class TestCollectiveStrategy(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by playing CD.
-        self.responses_test([C, D])
-        # Defects forever unless opponent matched first two moves
-        self.responses_test([D] * 10, [C, D], [C, C])
-        self.responses_test([D] * 10, [C, D], [D, C])
-        self.responses_test([D] * 10, [C, D], [D, D])
+        # If handshake (C, D) is used cooperate until a defection occurs and
+        # then defect throughout
+        opponent = axelrod.MockPlayer([C, D] + [C] * 10)
+        actions = [(C, C), (D, D)] + [(C, C)] * 11 + [(C, D)] + [(D, C)] * 10
+        self.versus_test(opponent=opponent, expected_actions=actions)
 
-        self.responses_test([C] * 10, [C, D], [C, D])
-        self.responses_test([D] * 10, [C, D, D], [C, D, D])
+        # If handshake is not used: defect
+        actions = [(C, C), (D, C)] + [(D, C)] * 15
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(C, D), (D, D)] + [(D, D)] * 15
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
 
 
 class TestProber(TestPlayer):
@@ -48,15 +53,23 @@ class TestProber(TestPlayer):
 
     def test_strategy(self):
         # Starts by playing DCC.
-        self.responses_test([D, C, C])
         # Defects forever if opponent cooperated in moves 2 and 3
-        self.responses_test([D] * 10, [D, C, C], [C, C, C])
-        self.responses_test([D] * 10, [D, C, C], [D, C, C])
+        actions = [(D, C), (C, C), (C, C)] + [(D, C)] * 3
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C, C])
+        actions = [(D, D), (C, C), (C, C)] + [(D, D), (D, C), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
         # Otherwise it plays like TFT
-        self.responses_test([C], [D, C, C], [C, D, C])
-        self.responses_test([D], [D, C, C], [C, D, D])
-        self.responses_test([D], [D, C, C, C], [C, D, C, D])
-        self.responses_test([D], [D, C, C, D], [C, D, D])
+        actions = [(D, C), (C, D), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        actions = [(D, D), (C, D), (C, D), (D, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
 
 
 class TestProber2(TestPlayer):
@@ -75,15 +88,27 @@ class TestProber2(TestPlayer):
 
     def test_strategy(self):
         # Starts by playing DCC.
-        self.responses_test([D, C, C])
         # Cooperates forever if opponent played D, C in moves 2 and 3
-        self.responses_test([C] * 10, [D, C, C], [C, D, C])
-        self.responses_test([C] * 10, [D, C, C], [D, D, C])
+        actions = [(D, C), (C, D), (C, C)] + [(C, D), (C, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, D, C])
+        actions = [(D, D), (C, D), (C, C)] + [(C, D), (C, D), (C, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
         # Otherwise it plays like TFT
-        self.responses_test([C], [D, C, C], [C, C, C])
-        self.responses_test([D], [D, C, C], [C, D, D])
-        self.responses_test([D], [D, C, C, D], [C, D, D, D])
-        self.responses_test([C], [D, C, C, D], [C, D, D, C])
+        actions = [(D, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(D, D), (C, D), (C, D), (D, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C])
+        actions = [(D, D), (C, C), (C, D)] + [(D, C), (C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
 
 
 class TestProber3(TestPlayer):
@@ -102,16 +127,23 @@ class TestProber3(TestPlayer):
 
     def test_strategy(self):
         # Starts by playing DC.
-        self.responses_test([D, C])
-        # Defects forever if opponent played C in move 2
-        self.responses_test([D] * 10, [D, C], [C, C])
-        self.responses_test([D] * 10, [D, C], [D, C])
+        # Defects forever if opponent played C in move 2.
+        actions = [(D, C), (C, C)] + [(D, C), (D, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C])
+        actions = [(D, D), (C, C)] + [(D, D), (D, C), (D, D)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
         # Otherwise it plays like TFT
-        self.responses_test([D], [D, C, C], [C, D])
-        self.responses_test([D], [D, C, C], [D, D])
-        self.responses_test([C], [D, C, C, D], [C, D, C])
-        self.responses_test([D], [D, C, C, D], [D, D, D])
-        self.responses_test([C], [D, C, C, D, C], [C, D, C, C])
+        actions = [(D, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        actions = [(D, D), (C, D), (D, D), (D, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
 
 
 class TestProber4(TestPlayer):
@@ -133,12 +165,9 @@ class TestProber4(TestPlayer):
 
     def test_strategy(self):
         # Starts by playing CCDCDDDCCDCDCCDCDDCD.
-        self.responses_test(self.initial_sequence)
-
         # After playing the initial sequence defects forever
         # if the absolute difference in the number of retaliating
         # and provocative defections of the opponent is smaller or equal to 2
-
         provocative_histories = [
             [C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
             [C, D, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C, C],
@@ -148,13 +177,14 @@ class TestProber4(TestPlayer):
             [D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D],
         ]
 
-        history1 = self.initial_sequence
-        responses = [D] * 10
         attrs = {'turned_defector': True}
-        for history2 in provocative_histories:
-            self.responses_test(responses, history1, history2, attrs=attrs)
+        for history in provocative_histories:
+            opponent = axelrod.MockPlayer(history + [C] * 5)
+            actions = list(zip(self.initial_sequence, history)) + [(D, C)] * 5
+            self.versus_test(opponent=opponent, expected_actions=actions,
+                             attrs=attrs)
 
-        # Otherwise cooperates for 5 rounds
+        # Otherwise cooperates for 5 rounds and plays TfT afterwards
         unprovocative_histories = [
             [C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D],
             [D, D, C, D, C, C, C, D, D, C, D, C, D, D, C, D, C, C, D, C],
@@ -163,27 +193,13 @@ class TestProber4(TestPlayer):
             [C, C, C, C, D, D, C, C, D, C, C, D, D, C, D, C, D, C, C, C],
         ]
 
-        responses = [C] * 5
         attrs = {'turned_defector': False}
-        for history2 in unprovocative_histories:
-            self.responses_test(responses, history1, history2, attrs=attrs)
-
-            # and plays like TFT afterwards
-            history1 += responses
-            history2 += responses
-            self.responses_test([C], history1, history2, attrs=attrs)
-
-            history1 += [C]
-            history2 += [D]
-            self.responses_test([D], history1, history2, attrs=attrs)
-
-            history1 += [D]
-            history2 += [C]
-            self.responses_test([C], history1, history2, attrs=attrs)
-
-            history1 += [C]
-            history2 += [D]
-            self.responses_test([D], history1, history2, attrs=attrs)
+        for history in unprovocative_histories:
+            opponent = axelrod.MockPlayer(history + [D] * 5 + [C, C])
+            actions = list(zip(self.initial_sequence, history)) + [(C, D)] * 5
+            actions += [(D, C), (C, C)]
+            self.versus_test(opponent=opponent, expected_actions=actions,
+                             attrs=attrs)
 
 
 class TestHardProber(TestPlayer):
@@ -201,20 +217,24 @@ class TestHardProber(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by playing DC.
-        self.responses_test([D, D, C, C])
-        # Cooperates forever if opponent played C in moves 2 and 3
-        self.responses_test([D] * 10, [D, D, C, C], [C, C, C, C])
-        self.responses_test([D] * 10, [D, D, C, C], [C, C, C, D])
-        self.responses_test([D] * 10, [D, D, C, C], [D, C, C, C])
-        self.responses_test([D] * 10, [D, D, C, C], [D, C, C, D])
+        # Starts by playing DDCC
+        # Defects forever if opponent played C in moves 2 and 3
+        actions = [(D, C), (D, C), (C, C), (C, C)] + [(D, C), (D, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, C, C, D])
+        actions = [(D, D), (D, C), (C, C), (C, D)] + [(D, D), (D, C), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
         # Otherwise it plays like TFT
-        self.responses_test([C, C], [D, D, C, C], [C, C, D, C])
-        self.responses_test([D], [D, D, C, C], [C, C, D, D])
-        self.responses_test([C, C], [D, D, C, C], [D, D, C, C])
-        self.responses_test([D], [D, D, C, C], [D, D, C, D])
-        self.responses_test([D], [D, D, C, C, D], [C, C, D, D])
-        self.responses_test([C], [D, D, C, C, D], [D, D, C, C])
+        actions = [(D, C), (D, D), (C, C), (C, D)] + [(D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        actions = [(D, D), (D, D), (C, D), (C, D)] + [(D, D), (D, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
 
 
 class TestNaiveProber(TestPlayer):
@@ -232,24 +252,34 @@ class TestNaiveProber(TestPlayer):
     }
 
     def test_strategy(self):
-        # Randomly defects and always retaliates like tit for tat.
         self.first_play_test(C)
         # Always retaliate a defection
-        self.responses_test([D], [C] * 2, [C, D])
+        opponent = axelrod.MockPlayer([C, D, D, D, D])
+        actions = [(C, C), (C, D), (D, D), (D, D), (D, D)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
 
     def test_random_defection(self):
-        # Random defection
-        player = self.player(p=0.4)
-        opponent = axelrod.Random()
-        test_responses(self, player, opponent, [D], [C], [C], seed=1)
+        # Unprovoked defection with small probability
+        actions = [(C, C), (D, C), (D, C), (C, C), (C, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, C), (C, C), (C, C), (C, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions, seed=5)
+
+        # Always defect when p is 1
+        actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions,
+                         init_kwargs={"p": 1})
 
     def test_reduction_to_TFT(self):
-        player = self.player(p=0)
-        opponent = axelrod.Random()
-        test_responses(self, player, opponent, [C], [C], [C], seed=1)
-        test_responses(self, player, opponent, [D], [C], [D])
-        test_responses(self, player, opponent, [C], [C, D], [D, C])
-        test_responses(self, player, opponent, [D], [C, D], [D, D])
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions,
+                         init_kwargs={"p": 0})
 
 
 class TestRemorsefulProber(TestPlayer):
@@ -267,51 +297,42 @@ class TestRemorsefulProber(TestPlayer):
     }
 
     def test_strategy(self):
-        # Randomly defects (probes) and always retaliates like tit for tat.
         self.first_play_test(C)
-        player = self.player(p=0.4)
-        opponent = axelrod.Random()
-        player.history = [C, C]
-        opponent.history = [C, D]
-        self.assertEqual(player.strategy(opponent), D)
+        # Always retaliate a defection
+        actions = [(C, D)] + [(D, D)] * 10
+        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions,
+                         attrs={"probing": False})
+
+    def test_random_defection(self):
+        # Unprovoked defection with small probability
+        actions = [(C, C), (D, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions, seed=2,
+                         attrs={"probing": True})
+
+        actions = [(C, C), (C, C), (C, C), (C, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions, seed=5,
+                         attrs={"probing": True})
+
+        # Always defect when p is 1
+        actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions,
+                         init_kwargs={"p": 1},
+                         attrs={"probing": True})
 
     def test_remorse(self):
         """After probing, if opponent retaliates, will offer a C."""
-        player = self.player(p=0.4)
-        opponent = axelrod.Cooperator()
-
-        test_responses(self, player, opponent, [C], [C], [C], seed=3,
-                       attrs={'probing': False})
-
-        test_responses(self, player, opponent, [D], [C], [C], seed=1,
-                       attrs={'probing': True})
-
-        test_responses(self, player, opponent, [D], [C, D], [C, D],
-                       attrs={'probing': False})
-
-        test_responses(self, player, opponent, [D], [C, D, C], [C, D, D],
-                       attrs={'probing': False})
+        opponent = axelrod.MockPlayer([C, C, D, C])
+        actions = [(C, C), (D, C), (D, D), (C, C)]
+        self.versus_test(opponent=opponent,
+                         expected_actions=actions, seed=2,
+                         attrs={"probing": False})
 
     def test_reduction_to_TFT(self):
-        player = self.player(p=0)
-        opponent = axelrod.Random()
-        test_responses(self, player, opponent, [C], [C], [C], seed=1,
-                       attrs={'probing': False})
-        test_responses(self, player, opponent, [D], [C], [D],
-                       attrs={'probing': False})
-        test_responses(self, player, opponent, [C], [C, D], [D, C],
-                       attrs={'probing': False})
-        test_responses(self, player, opponent, [D], [C, D], [D, D],
-                       attrs={'probing': False})
-
-    def test_reset_probing(self):
-        player = self.player(p=0.4)
-        player.probing = True
-        player.reset()
-        self.assertFalse(player.probing)
-
-    def test_random_defection(self):
-        # Random defection
-        player = self.player(p=0.4)
-        opponent = axelrod.Random()
-        test_responses(self, player, opponent, [D], [C], [C], seed=1)
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions,
+                         init_kwargs={"p": 0},
+                         attrs={"probing": False})

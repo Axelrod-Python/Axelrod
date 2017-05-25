@@ -10,7 +10,7 @@ C, D = Actions.C, Actions.D
 
 
 class CollectiveStrategy(Player):
-    """Defined in [Li2009]. 'It always cooperates in the first move and defects
+    """Defined in [Li2009]_. 'It always cooperates in the first move and defects
     in the second move. If the opponent also cooperates in the first move and
     defects in the second move, CS will cooperate until the opponent defects.
     Otherwise, CS will always defect.'
@@ -50,6 +50,10 @@ class Prober(Player):
     """
     Plays D, C, C initially. Defects forever if opponent cooperated in moves 2
     and 3. Otherwise plays TFT.
+
+    Names:
+
+        - Prober [Li2011]_
     """
 
     name = 'Prober'
@@ -83,6 +87,10 @@ class Prober2(Player):
     """
     Plays D, C, C initially. Cooperates forever if opponent played D then C
     in moves 2 and 3. Otherwise plays TFT.
+
+    Names:
+
+    - Prober 2: [Prison1998]_
     """
 
     name = 'Prober 2'
@@ -116,6 +124,10 @@ class Prober3(Player):
     """
     Plays D, C initially. Defects forever if opponent played C in moves 2.
     Otherwise plays TFT.
+
+    Names:
+
+    - Prober 3: [Prison1998]_
     """
 
     name = 'Prober 3'
@@ -153,7 +165,7 @@ class Prober4(Player):
 
     Names:
 
-    - prober4: [Prison1998]_
+    - Prober 4: [Prison1998]_
     """
 
     name = 'Prober 4'
@@ -208,6 +220,10 @@ class HardProber(Player):
     """
     Plays D, D, C, C initially. Defects forever if opponent cooperated in moves
     2 and 3. Otherwise plays TFT.
+
+    Names:
+
+    - Hard Prober: [Prison1998]_
     """
 
     name = 'Hard Prober'
@@ -243,10 +259,9 @@ class NaiveProber(Player):
     """
     Like tit-for-tat, but it occasionally defects with a small probability.
 
-    For reference see: "Engineering Design of Strategies for Winning
-    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
-    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
-    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
+    Names:
+
+    - Naive Prober: [Li2011]_
     """
 
     name = 'Naive Prober'
@@ -289,17 +304,16 @@ class RemorsefulProber(NaiveProber):
     Like Naive Prober, but it remembers if the opponent responds to a random
     defection with a defection by being remorseful and cooperating.
 
-    For reference see: "Engineering Design of Strategies for Winning
-    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
-    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
-    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
-
-    A more complete description is given in "The Selfish Gene"
-    (https://books.google.co.uk/books?id=ekonDAAAQBAJ):
+    For reference see: [Li2011]_. A more complete description is given in "The
+    Selfish Gene" (https://books.google.co.uk/books?id=ekonDAAAQBAJ):
 
     "Remorseful Prober remembers whether it has just spontaneously defected, and
     whether the result was prompt retaliation. If so, it 'remorsefully' allows
     its opponent 'one free hit' without retaliating."
+
+    Names:
+
+    - Remorseful Prober: [Li2011]_
     """
 
     name = 'Remorseful Prober'
