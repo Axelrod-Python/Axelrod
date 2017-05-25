@@ -642,10 +642,10 @@ class SlowTitForTwoTats2(Player):
 class Alexei(Player):
     """
     Plays similar to Tit-for-Tat, but always defect on last turn.
-    
+
     Names:
 
-    - Alexei's Strategy: [LessWrong2011]_    
+    - Alexei: [LessWrong2011]_
     """
 
     name = 'Alexei'
@@ -665,3 +665,43 @@ class Alexei(Player):
         if opponent.history[-1] == D:
             return D
         return C
+
+@FinalTransformer((D,), name_prefix=None)
+class EugineNier(Player):
+    """
+    Plays similar to Tit-for-Tat, but with two conditions:
+    1) Always Defect on Last Move
+    2) If other player defects five times, switch to all defects.
+
+    Names:
+
+    - Eugine Nier: [LessWrong2011]_
+    """
+
+    name = 'EugineNier'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': {'length'},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.is_defector = False
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        if not (self.is_defector) and opponent.defections >= 5:
+            self.is_defector = True
+        if self.is_defector:
+            return D
+        return opponent.history[-1]
+
+    def reset(self):
+        super().reset()
+        self.is_defector = False

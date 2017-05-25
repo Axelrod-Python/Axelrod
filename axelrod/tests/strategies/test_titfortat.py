@@ -593,10 +593,56 @@ class TestAlexei(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          match_attributes={"length": -1})
-        
+
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D])
         actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (D, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
+class TestEugineNier(TestPlayer):
+    """
+    Tests for the Eugine Nier strategy
+    """
+
+    name = "EugineNier: ('D',)"
+    player = axelrod.EugineNier
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': {'length'},
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
+
+        actions = [(C, C), (C, C), (C, C), (D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         attrs={"is_defector": False})
+
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         attrs={"is_defector": False},
+                         match_attributes={"length": -1})
+
+
+        # Plays TfT and defects in last round
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"is_defector": False})
+
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"is_defector": False},
+                         match_attributes={"length": -1})
+
+        # Becomes defector after 5 defections
+        opponent = axelrod.MockPlayer(actions=[D, C, D, D, D, D, C, C])
+        actions = [(C, D), (D, C), (C, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
