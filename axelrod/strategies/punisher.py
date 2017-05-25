@@ -52,10 +52,12 @@ class Punisher(Player):
         if self.grudged:
             self.grudge_memory += 1
             return D
+
         elif D in opponent.history[-1:]:
             self.mem_length = (opponent.defections * 20) // len(opponent.history)
             self.grudged = True
             return D
+
         return C
 
     def reset(self):
