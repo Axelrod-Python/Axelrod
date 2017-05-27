@@ -26,21 +26,23 @@ class TestOnceBitten(TestPlayer):
         """If opponent defects at any point then the player will defect
         forever."""
         # Become grudged if the opponent defects twice in a row
-        self.responses_test([C], attrs={"grudged": False})
-        self.responses_test([C], [C], [C], attrs={"grudged": False})
-        self.responses_test([C], [C, C], [C, C], attrs={"grudged": False})
-        self.responses_test([C], [C, C, C], [C, C, D], attrs={"grudged": False})
-        self.responses_test([D], [C, C, C, C], [C, C, D, D],
-                            attrs={"grudged": True})
+        opponent = axelrod.MockPlayer([C, C, C, D])
+        actions = [(C, C), (C, C), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": False, "grudge_memory": 0})
 
-        mem_length = self.player().mem_length
-        for i in range(mem_length - 1):
-            self.responses_test([D], [C, C, C, C] + [D] * i,
-                                [C, C, D, D] + [D] * i,
-                                attrs={"grudged": True, "grudge_memory": i})
-        i = mem_length + 1
-        self.responses_test([C], [C, C, C, C] + [D] * i, [C, C, D, D] + [C] * i,
-                            attrs={"grudged": False, "grudge_memory": 0})
+        opponent = axelrod.MockPlayer([C, C, C, D, D, D])
+        actions = [(C, C), (C, C), (C, C), (C, D), (C, D), (D, D),
+                   (D, C), (D, C), (D, C), (D, D), (D, D)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": True, "grudge_memory": 5})
+
+        # After 10 rounds of being grudged: forgives
+        opponent = axelrod.MockPlayer([C, D, D, C] + [C] * 10)
+        actions = [(C, C), (C, D), (C, D), (D, C)] + [(D, C)] * 10 + [(C, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         attrs={"grudged": False, "grudge_memory": 0})
+
 
     def test_reset(self):
         """Check that grudged gets reset properly"""
@@ -71,10 +73,20 @@ class TestFoolMeOnce(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
         # If opponent defects more than once, defect forever
-        self.responses_test([C], [C], [D])
-        self.responses_test([D], [C, C], [D, D])
-        self.responses_test([C], [C, C], [D, C])
-        self.responses_test([D], [C, C, C], [D, D, D])
+        actions = [(C, C)] * 10
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D] + [C] * 9)
+        actions = [(C, D)] + [(C, C)] * 9
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+        actions = [(C, D)] * 2 + [(D, D)] * 8
+        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D, D] + [C] * 9)
+        actions = [(C, D)] * 2 + [(D, C)] * 8
+        self.versus_test(opponent=opponent, expected_actions=actions)
 
 
 class TestForgetfulFoolMeOnce(TestPlayer):
@@ -95,11 +107,15 @@ class TestForgetfulFoolMeOnce(TestPlayer):
         # Test that will forgive one D but will grudge after 2 Ds, randomly
         # forgets count.
         self.first_play_test(C)
-        self.responses_test([C], [C], [D], seed=2)
-        self.responses_test([D], [C, C], [D, D])
+
+        actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2, attrs={"D_count": 2})
+
         # Sometime eventually forget count:
-        self.responses_test([D] * 18 + [C], [C, C], [D, D], seed=2,
-                            attrs={"D_count": 0})
+        actions = [(C, D), (C, D)] + [(D, D)] * 18 + [(C, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions, seed=2, attrs={"D_count": 0})
 
     def test_reset(self):
         """Check that count gets reset properly"""
@@ -129,9 +145,18 @@ class TestFoolMeForever(TestPlayer):
     }
 
     def test_strategy(self):
-        # If opponent defects more than once, defect forever.
-        self.responses_test([D])
-        self.responses_test([C], [D], [D])
-        self.responses_test([D], [D], [C])
-        self.responses_test([C], [D, C], [D, C])
-        self.responses_test([C], [D, C, C], [D, C, C])
+        # If opponent defects more than once, cooperate forever.
+        actions = [(D, C)] * 20
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(D, C), (D, D)] + [(C, C), (C, D)] * 20
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        opponent = axelrod.MockPlayer([D] + [C] * 19)
+        actions = [(D, D)] + [(C, C)] * 19
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+        actions = [(D, D)] + [(C, D)] * 19
+        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
