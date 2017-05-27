@@ -1,9 +1,6 @@
 """Tests for the various Meta strategies."""
-
-import random
-
 import axelrod
-from .test_player import TestPlayer, test_responses
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -180,13 +177,16 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
-        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
-        P2 = axelrod.Cooperator()
-        test_responses(self, P1, P2, [C] * 4, [C] * 4, [C] * 4)
-
-        P1 = axelrod.NiceMetaWinner(team=[axelrod.Cooperator, axelrod.Defector])
-        P2 = axelrod.Defector()
-        test_responses(self, P1, P2, [D] * 4, [C] * 4, [D] * 4)
+        actions = [(C, C)] * 8
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions,
+                         init_kwargs={"team": [axelrod.Cooperator,
+                                               axelrod.Defector]})
+        actions = [(C, D)] + [(D, D)] * 7
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions,
+                         init_kwargs={"team": [axelrod.Cooperator,
+                                               axelrod.Defector]})
 
 
 class TestMetaHunter(TestMetaPlayer):
@@ -208,19 +208,30 @@ class TestMetaHunter(TestMetaPlayer):
 
         # We are not using the Cooperator Hunter here, so this should lead to
         #  cooperation.
-        self.responses_test([C], [C, C, C, C], [C, C, C, C])
+        actions = [(C, C)] * 5
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
 
         # After long histories tit-for-tat should come into play.
-        self.responses_test([D], [C] * 101, [C] * 100 + [D])
+        opponent = axelrod.MockPlayer([C] * 100 + [D])
+        actions = [(C, C)] * 100 + [(C, D)] + [(D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+        actions = [(C, C)] * 102
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
 
         # All these others, however, should trigger a defection for the hunter.
-        self.responses_test([D], [C] * 4, [D] * 4)
-        self.responses_test([D], [C] * 6, [C, D] * 3)
-        self.responses_test([D], [C] * 8, [C, C, C, D, C, C, C, D])
-        # Test post 100 rounds responses
-        self.responses_test([C], [C] * 101, [C] * 101)
-        self.responses_test([D], [C] * 101, [C] * 100 + [D])
+        actions = [(C, D), (C, D), (C, D), (C, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
 
+        actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+
+        actions = [(C, C), (C, C), (C, C), (C, D),
+                   (C, C), (C, C), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.CyclerCCCD(),
+                         expected_actions=actions)
 
 class TestMetaHunterAggressive(TestMetaPlayer):
 
@@ -241,15 +252,21 @@ class TestMetaHunterAggressive(TestMetaPlayer):
 
         # We are using CooperatorHunter here, so this should lead to
         # defection
-        self.responses_test([D], [C, C, C, C], [C, C, C, C])
+        actions = [(C, C)] * 4 + [(D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
 
         # All these others, however, should trigger a defection for the hunter.
-        self.responses_test([D], [C] * 4, [D] * 4)
-        self.responses_test([D], [C] * 6, [C, D] * 3)
-        self.responses_test([D], [C] * 8, [C, C, C, D, C, C, C, D])
-        # Test post 100 rounds responses
-        self.responses_test([D], [C] * 101, [C] * 101)
-        self.responses_test([D], [C] * 101, [C] * 100 + [D])
+        actions = [(C, D), (C, D), (C, D), (C, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+
+        actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(), expected_actions=actions)
+
+        actions = [(C, C), (C, C), (C, C), (C, D),
+                   (C, C), (C, C), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.CyclerCCCD(),
+                         expected_actions=actions)
 
         # To test the TFT action of the strategy after 100 turns, we need to
         # remove two of the hunters from its team.
@@ -260,13 +277,13 @@ class TestMetaHunterAggressive(TestMetaPlayer):
             axelrod.DefectorHunter,
             axelrod.AlternatorHunter,
             axelrod.RandomHunter,
-            # axelrod.MathConstantHunter,
             axelrod.CycleHunter,
-            axelrod.EventualCycleHunter,
-            # axelrod.CooperatorHunter
+            axelrod.EventualCycleHunter
         ]
-        self.responses_test(
-            [D], [C] * 101, [C] * 100 + [D], init_kwargs={'team': team})
+        opponent = axelrod.MockPlayer([C] * 100 + [D])
+        actions = [(C, C)] * 100 + [(C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions,
+                         init_kwargs={'team': team})
 
 
 class TestMetaMajorityMemoryOne(TestMetaPlayer):
@@ -426,36 +443,36 @@ class TestMetaMixer(TestMetaPlayer):
 
         P1 = axelrod.MetaMixer(team=team, distribution=distribution)
         P2 = axelrod.Cooperator()
+        actions = [(C, C)] * 20
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions,
+                         init_kwargs={"team": team,
+                                      "distribution": distribution})
 
-        for k in range(100):
-            P1.play(P2)
-            self.assertEqual(P1.history[-1], C)
+
 
         team.append(axelrod.Defector)
         distribution = [.2, .5, .3, 0]  # If add a defector but does not occur
-
-        P1 = axelrod.MetaMixer(team=team, distribution=distribution)
-
-        for k in range(100):
-            P1.play(P2)
-            self.assertEqual(P1.history[-1], C)
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions,
+                         init_kwargs={"team": team,
+                                      "distribution": distribution})
 
         distribution = [0, 0, 0, 1]  # If defector is only one that is played
-
-        P1 = axelrod.MetaMixer(team=team, distribution=distribution)
-
-        for k in range(100):
-            P1.play(P2)
-            self.assertEqual(P1.history[-1], D)
+        actions = [(D, C)] * 20
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions,
+                         init_kwargs={"team": team,
+                                      "distribution": distribution})
 
     def test_raise_error_in_distribution(self):
         team = [axelrod.TitForTat, axelrod.Cooperator, axelrod.Grudger]
         distribution = [.2, .5, .5]  # Not a valid probability distribution
 
-        P1 = axelrod.MetaMixer(team=team, distribution=distribution)
-        P2 = axelrod.Cooperator()
+        player = axelrod.MetaMixer(team=team, distribution=distribution)
+        opponent = axelrod.Cooperator()
 
-        self.assertRaises(ValueError, P1.strategy, P2)
+        self.assertRaises(ValueError, player.strategy, opponent)
 
 
 class TestNMWEDeterministic(TestMetaPlayer):
