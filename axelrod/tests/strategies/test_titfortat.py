@@ -114,6 +114,34 @@ class TestTwoTitsForTat(TestPlayer):
         self.versus_test(opponent, expected_actions=actions)
 
 
+class TestDynamicTwoTitsForTat(TestPlayer):
+
+    name = 'Dynamic Two Tits For Tat'
+    player = axelrod.DynamicTwoTitsForTat
+    expected_classifier = {
+        'memory_depth': 2,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
+
+        # Will cooperate if opponent cooperates/.
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        # Will defect twice when last turn of opponent was defection.
+        opponent = axelrod.MockPlayer(actions=[D, C, C, D, C])
+        actions = [(C, D), (D, C), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
+        # Test against defector
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
 class TestBully(TestPlayer):
 
     name = "Bully"
