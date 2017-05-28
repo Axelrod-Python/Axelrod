@@ -91,7 +91,36 @@ class TwoTitsForTat(Player):
     @staticmethod
     def strategy(opponent: Player) -> Action:
         return D if D in opponent.history[-2:] else C
+    
+class DynamicTitForTat(Player):
+    """A player starts by cooperating and then mimics previous move by
+    opponent with a dynamic bias based off of the opponents ratio of
+    defections to cooperations towards cooporating regardless of 
+    the move."""
+    
+    name = 'Dynamic Tit for Tat'
+    classifier = {
+        'memory_depth': 2,  # Long memory, memory-2
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
 
+    @staticmethod
+    def strategy(self, opponent):
+        try:
+            if 'D' in opponent.history[-2:]:
+                if random.random() < (sum([s == 'C' for s in opponent.history]) / len(opponent.history)):
+                    return 'C'
+                else:
+                    return 'D'
+            else:
+                return 'C'
+        except IndexError:
+            return 'C'    
 
 class Bully(Player):
     """A player that behaves opposite to Tit For Tat, including first move.
