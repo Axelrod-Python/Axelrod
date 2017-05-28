@@ -89,28 +89,6 @@ class TestTitFor2Tats(TestPlayer):
         opponent = axelrod.MockPlayer(actions=[D, D, D, C, C])
         actions = [(C, D), (C, D), (D, D), (D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions)
-        
-class TestDynamicTitForTat(TestPlayer):
-
-    name = 'Dynamic Tit For Tat'
-    player = axelrod.DynamicTitForTat
-    expected_classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def test_strategy(self):
-        self.first_play_test(C)
-        self.second_play_test(rCC=C, rCD=C, rDC=C, rDD=C)
-
-        # Will punish sequence of 2 defections but will forgive
-        opponent = axelrod.MockPlayer(actions=[D, D, D, C, C])
-        actions = [(C, D), (C, D), (D, D), (D, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions)
 
 class TestTwoTitsForTat(TestPlayer):
 
