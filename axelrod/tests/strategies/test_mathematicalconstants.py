@@ -23,15 +23,18 @@ class TestGolden(TestPlayer):
     def test_strategy(self):
         # Cooperates initially.
         self.first_play_test(C)
-        # If the opposing player does not defect initially then strategy
-        # defects.
-        self.responses_test([D], [C], [C])
-        # If the ratio of Cs to Ds is greater than the golden ratio then
-        # strategy defects.
-        self.responses_test([D], [C] * 4, [C, C, D, D])
-        # If the ratio of Cs to Ds is less than the golden ratio then strategy
-        # co-operates
-        self.responses_test([C], [C] * 4, [D] * 4)
+
+        actions = [(C, C), (D, D), (C, C), (D, D), (C, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(C, D), (C, D), (C, D), (C, D), (C, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
 
 
 class TestPi(TestPlayer):
@@ -51,13 +54,18 @@ class TestPi(TestPlayer):
     def test_strategy(self):
         # Cooperates initially
         self.first_play_test(C)
-        # If the opposing player does not defect initially then strategy
-        # defects.
-        self.responses_test([D], [C], [C])
-        # If the ratio of Cs to Ds is greater than pi then strategy defects.
-        self.responses_test([D], [C] * 4, [C, C, C, D])
-        # If the ratio of Cs to Ds is less than pi then strategy co-operates.
-        self.responses_test([C], [C] * 4, [C, C, D, D])
+
+        actions = [(C, C), (D, D), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(C, D), (C, D), (C, D), (C, D), (C, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
 
 
 class Teste(TestPlayer):
@@ -77,10 +85,15 @@ class Teste(TestPlayer):
     def test_strategy(self):
         # Cooperates initially.
         self.first_play_test(C)
-        # If the opposing player does not defect initially then strategy
-        # defects.
-        self.responses_test([D], [C], [C])
-        # If the ratio of Cs to Ds is greater than e then strategy defects.
-        self.responses_test([D], [C] * 4, [C, C, D, D])
-        # If the ratio of Cs to Ds is less than e then strategy co-operates.
-        self.responses_test([C], [C] * 4, [C, D, D, D])
+
+        actions = [(C, C), (D, D), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        actions = [(C, C), (D, C), (D, C), (D, C), (D, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(C, D), (C, D), (C, D), (C, D), (C, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
