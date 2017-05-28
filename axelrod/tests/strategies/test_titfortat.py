@@ -120,7 +120,7 @@ class TestDynamicTwoTitsForTat(TestPlayer):
     player = axelrod.DynamicTwoTitsForTat
     expected_classifier = {
         'memory_depth': 2,
-        'stochastic': False,
+        'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
@@ -128,19 +128,28 @@ class TestDynamicTwoTitsForTat(TestPlayer):
     }
 
     def test_strategy(self):
+        # First move is to cooperate
         self.first_play_test(C)
-        self.second_play_test(rCC=C, rCD=D, rDC=C, rDD=D)
-
-        # Will cooperate if opponent cooperates/.
-        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
-        # Will defect twice when last turn of opponent was defection.
-        opponent = axelrod.MockPlayer(actions=[D, C, C, D, C])
-        actions = [(C, D), (D, C), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent, expected_actions=actions)
-        # Test against defector
-        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        # Test that it is stochastic        
+ 
+        opponent = axelrod.MockPlayer(actions=[D, C, D, D, C])
+        actions = [(C, D), (C,C), (C,D), (C,D), (C,C)]
+        self.versus_test(opponent, expected_actions=actions, seed=2)
+        
+        opponent = axelrod.MockPlayer(actions=[D, C, D, D, C])
+        actions = [(C, D), (C,C), (C,D), (C,D), (D,C)]
+        self.versus_test(opponent, expected_actions=actions, seed=13)
+        
+        ## Will cooperate if opponent cooperates.
+        #actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        #self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        ## Will defect twice when last turn of opponent was defection.
+        #opponent = axelrod.MockPlayer(actions=[D, C, C, D, C])
+        #actions = [(C, D), (D, C), (D, C), (C, D), (D, C)]
+        #self.versus_test(opponent, expected_actions=actions)
+        ## Test against defector
+        #actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
+        #self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 class TestBully(TestPlayer):
 
