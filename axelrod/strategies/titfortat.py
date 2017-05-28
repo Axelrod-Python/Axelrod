@@ -94,10 +94,10 @@ class TwoTitsForTat(Player):
     
 class DynamicTitForTat(Player):
     """A player starts by cooperating and then mimics previous move by
-     opponent with a dynamic bias based off of the opponents ratio of
-      defections to cooperations towards cooporating regardless of 
-      the move."""
-
+    opponent with a dynamic bias based off of the opponents ratio of
+    defections to cooperations towards cooporating regardless of 
+    the move."""
+    
     name = 'Dynamic Tit for Tat'
     classifier = {
         'memory_depth': 2,  # Long memory, memory-2
