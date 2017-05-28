@@ -263,4 +263,5 @@ all_strategies = [
     ZDGen2,
     ZDSet2,
     e,
+    DynamicTitForTat,
 ]
