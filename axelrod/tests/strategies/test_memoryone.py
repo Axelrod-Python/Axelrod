@@ -125,11 +125,18 @@ class TestFirmButFair(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C], [C], [C])
-        self.responses_test([D], [C], [D])
-        self.responses_test([C], [D], [C])
-        self.responses_test([C], [D], [D], seed=1)
-        self.responses_test([D], [D], [D], seed=2)
+
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
+
+        actions = [(C, D), (D, D), (D, D), (D, D), (C, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions, seed=0)
+
+        actions = [(C, D), (D, D), (C, D), (D, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions, seed=1)
 
 
 class TestStochasticCooperator(TestPlayer):
@@ -153,14 +160,22 @@ class TestStochasticCooperator(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        # With probability 0.065 will defect
-        self.responses_test([D, C, C, C], [C], [C], seed=15)
-        # With probability 0.266 will cooperate
-        self.responses_test([C], [C], [D], seed=1)
-        # With probability 0.42 will cooperate
-        self.responses_test([C], [D], [C], seed=3)
-        # With probability 0.229 will cooperate
-        self.responses_test([C], [D], [D], seed=13)
+
+        actions = [(C, C), (D, D), (C, C), (C, D), (C, C), (D, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=15)
+
+        actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=1)
+
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=3)
+
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=13)
 
 
 class TestStochasticWSLS(TestPlayer):
@@ -179,14 +194,22 @@ class TestStochasticWSLS(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        # With probability 0.05 will defect
-        self.responses_test([D], [C], [C], seed=2)
-        # With probability 0.05 will cooperate
-        self.responses_test([C], [C], [D], seed=31)
-        # With probability 0.05 will cooperate
-        self.responses_test([C], [D], [C], seed=31)
-        # With probability 0.05 will defect
-        self.responses_test([D], [D], [D], seed=2)
+
+        actions = [(C, C), (D, D), (C, C), (C, D), (D, C), (D, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=31)
+
+        actions = [(C, D), (D, C), (D, D), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, D), (C, C), (C, D), (D, C), (D, D), (C, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=31)
 
     def test_four_vector(self):
         player = self.player()
@@ -240,10 +263,22 @@ class TestZDExtort2(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([D, D, C, C], [C], [C], seed=2)
-        self.responses_test([D, D, C, C], [C], [D], seed=2)
-        self.responses_test([D, D, C, C], [D], [C], seed=2)
-        self.responses_test([D, D, C, C], [C], [D], seed=2)
+
+        actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, C), (C, D), (C, C), (C, D), (D, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=31)
+
+        actions = [(C, D), (D, C), (D, D), (D, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=31)
 
 
 class TestZDExtort2v2(TestPlayer):
@@ -268,6 +303,14 @@ class TestZDExtort2v2(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
+        actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=5)
+
 
 class TestZDExtort4(TestPlayer):
 
@@ -290,6 +333,14 @@ class TestZDExtort4(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
+
+        actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=5)
 
 
 class TestZDGen2(TestPlayer):
@@ -314,6 +365,22 @@ class TestZDGen2(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
+        actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=31)
+
+        actions = [(C, D), (D, C), (D, D), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=31)
+
 
 class TestZDGTFT2(TestPlayer):
 
@@ -335,10 +402,22 @@ class TestZDGTFT2(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C, C, C, C], [C], [C], seed=2)
-        self.responses_test([D], [C], [D], seed=2)
-        self.responses_test([C, C, C, C], [D], [C], seed=2)
-        self.responses_test([D], [D], [D], seed=2)
+
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=31)
+
+        actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, D), (C, C), (C, D), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=31)
 
 
 class TestZDSet2(TestPlayer):
@@ -363,6 +442,14 @@ class TestZDSet2(TestPlayer):
     def test_strategy(self):
         self.first_play_test(C)
 
+        actions = [(C, C), (D, D), (D, C), (C, D), (C, C), (D, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=5)
+
 
 class TestSoftJoss(TestPlayer):
 
@@ -383,8 +470,13 @@ class TestSoftJoss(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.responses_test([C], [C], [C], seed=2)
-        self.responses_test([D], [C], [D], seed=5)
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=2)
+
+        actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.CyclerDC(),
+                         expected_actions=actions, seed=5)
 
 
 class TestALLCorALLD(TestPlayer):
@@ -402,8 +494,10 @@ class TestALLCorALLD(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([D] * 10, seed=2)
-        self.responses_test([C] * 10, seed=3)
-        self.responses_test([C] * 10, seed=4)
-        self.responses_test([D] * 10, seed=5)
-        self.responses_test([D] * 10, seed=6)
+
+        actions = [(D, C)] * 10
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions, seed=0)
+        actions = [(C, C)] * 10
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions, seed=1)
