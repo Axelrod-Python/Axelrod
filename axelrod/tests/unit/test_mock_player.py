@@ -71,7 +71,7 @@ class TestUpdateHistories(unittest.TestCase):
 
 class TestSimulatePlay(unittest.TestCase):
 
-    def test_various(self):
+    def test_opponent_play(self):
         p1 = TestOpponent()
         p2 = TestOpponent()
         self.assertEqual(simulate_play(p1, p2), (C, C))
@@ -81,15 +81,14 @@ class TestSimulatePlay(unittest.TestCase):
         self.assertEqual(p2.defections, 0)
 
         # TestOpponent always returns C
-        for h1 in [C, D]:
-            for h2 in [C, D]:
-                self.assertEqual(simulate_play(p1, p2, h1, h2), (C, C))
-        self.assertEqual(p1.cooperations, 3)
-        self.assertEqual(p2.cooperations, 3)
-        self.assertEqual(p1.defections, 2)
-        self.assertEqual(p2.defections, 2)
+        for _ in range(4):
+            self.assertEqual(simulate_play(p1, p2, C, C), (C, C))
+        self.assertEqual(p1.cooperations, 5)
+        self.assertEqual(p2.cooperations, 5)
+        self.assertEqual(p1.defections, 0)
+        self.assertEqual(p2.defections, 0)
 
-    def test_various2(self):
+    def test_simulated_play(self):
         p1 = axelrod.Cooperator()
         p2 = axelrod.Defector()
         self.assertEqual(simulate_play(p1, p2), (C, D))
