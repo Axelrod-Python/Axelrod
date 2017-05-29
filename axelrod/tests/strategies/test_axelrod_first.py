@@ -253,8 +253,6 @@ class TestNydegger(TestPlayer):
         # Test TFT-type initial play
         self.first_play_test(C)
 
-        # self.responses_test([D], [C, D], [D, C])
-
         # Test trailing post-round 3 play
 
         actions = [(C, C)] * 9
