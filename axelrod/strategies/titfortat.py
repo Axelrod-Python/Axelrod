@@ -119,16 +119,13 @@ class DynamicTwoTitsForTat(Player):
     
     @staticmethod
     def strategy(opponent):
-		# First move
+        # First move
         if len(opponent.history) == 0:
             # Make sure we cooporate first turn
             return C
         if D in opponent.history[-2:]:
             # Probability of cooperating regardless
-            if random_choice(opponent.cooperations / len(opponent.history)):
-                return C
-            else:
-                return D
+            return random_choice(opponent.cooperations / len(opponent.history))                                                                 
         else:
             return C
 
