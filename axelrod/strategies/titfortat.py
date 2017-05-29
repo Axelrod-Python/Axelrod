@@ -100,6 +100,7 @@ class DynamicTwoTitsForTat(Player):
     opponents ratio of cooperations to total moves (so their current 
     probability of cooperating towards cooporating regardless of the 
     move (aka: forgiveness)).
+    
     Names:
 
      - Dynamic Two Tits For Tat: Original name by Grant Garrett-Grossman.
