@@ -337,7 +337,7 @@ class TestPlayerClass(unittest.TestCase):
 
 
 def test_responses(test_class, player1, player2, responses, history1=None,
-                   history2=None, seed=None, attrs=None):
+                   history2=None, seed=None):
     """
     Test responses to arbitrary histories. Used for the following tests
     in TestPlayer: first_play_test, second_play_test, and responses_test.
@@ -359,9 +359,6 @@ def test_responses(test_class, player1, player2, responses, history1=None,
     for response in responses:
         s1, s2 = simulate_play(player1, player2)
         test_class.assertEqual(s1, response)
-    if attrs:
-        for attr, value in attrs.items():
-            test_class.assertEqual(getattr(player1, attr), value)
 
 
 class TestOpponent(Player):
@@ -541,7 +538,6 @@ class TestPlayer(unittest.TestCase):
 
     def responses_test(self, responses, player_history=None,
                        opponent_history=None, seed=None, length=200,
-                       attrs=None,
                        init_args=None, init_kwargs=None):
         """Test responses to arbitrary histories. A match is played where the
         histories are enforced and the sequence of plays in responses is
@@ -576,19 +572,19 @@ class TestPlayer(unittest.TestCase):
         player2 = MockPlayer()
         player2.set_match_attributes(length=length)
         test_responses(self, player1, player2, responses, player_history,
-                       opponent_history, seed=seed, attrs=attrs)
+                       opponent_history, seed=seed)
 
         # Test that we get the same sequence after a reset
         player1.reset()
         player2.reset()
         test_responses(self, player1, player2, responses, player_history,
-                       opponent_history, seed=seed, attrs=attrs)
+                       opponent_history, seed=seed)
 
         # Test that we get the same sequence after a clone
         player1 = player1.clone()
         player2 = player2.clone()
         test_responses(self, player1, player2, responses, player_history,
-                       opponent_history, seed=seed, attrs=attrs)
+                       opponent_history, seed=seed)
 
     def classifier_test(self, expected_class_classifier=None):
         """Test that the keys in the expected_classifier dictionary give the
