@@ -1,6 +1,7 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.strategy_transformers import TrackHistoryTransformer, FinalTransformer
+from axelrod.random_ import random_choice
 
 C, D = Actions.C, Actions.D
 
@@ -92,6 +93,41 @@ class TwoTitsForTat(Player):
     def strategy(opponent: Player) -> Action:
         return D if D in opponent.history[-2:] else C
 
+class DynamicTwoTitsForTat(Player):
+    """
+    A player starts by cooperating and then punishes its opponent's 
+    defections with defections, but with a dynamic bias towards cooperating 
+    based on the opponent's ratio of cooperations to total moves 
+    (so their current probability of cooperating regardless of the 
+    opponent's move (aka: forgiveness)).
+    
+    Names:
+
+     - Dynamic Two Tits For Tat: Original name by Grant Garrett-Grossman.
+    """
+
+    name = 'Dynamic Two Tits For Tat'
+    classifier = {
+        'memory_depth': 2,  # Long memory, memory-2
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+    
+    @staticmethod
+    def strategy(opponent):
+        # First move
+        if not opponent.history:
+            # Make sure we cooporate first turn
+            return C
+        if D in opponent.history[-2:]:
+            # Probability of cooperating regardless
+            return random_choice(opponent.cooperations / len(opponent.history))                                                                 
+        else:
+            return C
 
 class Bully(Player):
     """A player that behaves opposite to Tit For Tat, including first move.
