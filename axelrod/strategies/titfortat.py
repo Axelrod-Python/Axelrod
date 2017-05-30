@@ -96,10 +96,10 @@ class TwoTitsForTat(Player):
 class DynamicTwoTitsForTat(Player):
     """
     A player starts by cooperating and then punishes its opponent's 
-    defectiions by opponent with a dynamic bias based off of the 
-    opponents ratio of cooperations to total moves (so their current 
-    probability of cooperating towards cooporating regardless of the 
-    move (aka: forgiveness)).
+    defections with defections, but with a dynamic bias towards cooperating 
+    based off of the opponent's ratio of cooperations to total moves 
+    (so their current probability of cooperating regardless of the 
+    opponent's move (aka: forgiveness)).
     
     Names:
 
@@ -120,7 +120,7 @@ class DynamicTwoTitsForTat(Player):
     @staticmethod
     def strategy(opponent):
         # First move
-        if len(opponent.history) == 0:
+        if not opponent.history:
             # Make sure we cooporate first turn
             return C
         if D in opponent.history[-2:]:
