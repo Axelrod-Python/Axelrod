@@ -97,7 +97,7 @@ class DynamicTwoTitsForTat(Player):
     """
     A player starts by cooperating and then punishes its opponent's 
     defections with defections, but with a dynamic bias towards cooperating 
-    based off of the opponent's ratio of cooperations to total moves 
+    based on the opponent's ratio of cooperations to total moves 
     (so their current probability of cooperating regardless of the 
     opponent's move (aka: forgiveness)).
     
