@@ -163,7 +163,7 @@ class Player(object):
 
                 for _ in range(200):
                     try:
-                        if not next(generator) == next(other_generator):
+                        if next(generator) != next(other_generator):
                             return False
                     except StopIteration:
                         break
