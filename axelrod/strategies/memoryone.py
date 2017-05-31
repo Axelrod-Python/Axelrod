@@ -19,7 +19,7 @@ class MemoryOnePlayer(Player):
 
     Names
 
-    - Memory One: [Nowak1989]_
+    - Memory One: [Nowak1990]_
     """
 
     name = 'Generic Memory One Player'

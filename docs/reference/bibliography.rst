@@ -34,7 +34,7 @@ documentation.
   for the Iterated Prisoner's Dilemma. Proceedings of the 2015
   International Conference on Autonomous Agents and Multiagent Systems.
 .. [Nachbar1992] Nachbar J., Evolution in the finitely repeated prisoner’s dilemma, Journal of Economic Behavior & Organization, 19(3): 307-326, 1992.
-.. [Nowak1989] Nowak, M., & Sigmund, K. (1989). Natural selection of memory-one strategies for the iterated prisoner's dilemma. Journal of Theoretical biology. http://www.sciencedirect.com/science/article/pii/0096300389900520
+.. [Nowak1990] Nowak, M., & Sigmund, K. (1990). The evolution of stochastic strategies in the Prisoner's Dilemma. Acta Applicandae Mathematica. https://link.springer.com/article/10.1007/BF00049570
 .. [Nowak1992] Nowak, M.., & May, R. M. (1992). Evolutionary games and spatial chaos. Nature. http://doi.org/10.1038/359826a0
 .. [Nowak1993] Nowak, M., & Sigmund, K. (1993). A strategy of win-stay, lose-shift that outperforms tit-for-tat in the Prisoner’s Dilemma game. Nature, 364(6432), 56–58. http://doi.org/10.1038/364056a0
 .. [Press2012] Press, W. H., & Dyson, F. J. (2012). Iterated Prisoner’s Dilemma contains strategies that dominate any evolutionary opponent. Proceedings of the National Academy of Sciences, 109(26), 10409–10413.  http://doi.org/10.1073/pnas.1206569109
