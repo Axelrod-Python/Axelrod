@@ -47,10 +47,13 @@ class TestDefectorHunter(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        for i in range(3):
-            self.responses_test([C], [C] * i, [D] * i)
-        self.responses_test([D], [C] * 4, [D] * 4)
 
+        actions = [(C, D)] * 4 + [(D, D)] * 10
+        self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
+
+        actions = [(C, C)] * 14
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
 
 class TestCooperatorHunter(TestPlayer):
 
@@ -67,10 +70,13 @@ class TestCooperatorHunter(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
-        for i in range(3):
-            self.responses_test([C], [C] * i, [C] * i)
-        self.responses_test([D], [C] * 4, [C] * 4)
+        actions = [(C, C)] * 4 + [(D, C)] * 10
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(C, D)] * 14
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
 
 
 class TestAlternatorHunter(TestPlayer):
@@ -89,14 +95,13 @@ class TestAlternatorHunter(TestPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
-        self.responses_test([C], [C] * 2, [C, D], attrs={'is_alt': False})
-        self.responses_test([C], [C] * 3, [C, D, C], attrs={'is_alt': False})
-        self.responses_test([C], [C] * 4, [C, D] * 2, attrs={'is_alt': False})
-        self.responses_test([C], [C] * 5, [C, D] * 2 + [C],
-                            attrs={'is_alt': False})
-        self.responses_test([D], [C] * 6, [C, D] * 3, attrs={'is_alt': True})
-        self.responses_test([D], [C] * 7, [C, D] * 3 + [C],
-                            attrs={'is_alt': True})
+        actions = [(C, C), (C, D)] * 3 + [(D, C), (D, D)] * 5
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, attrs={'is_alt': True})
+
+        actions = [(C, D)] * 14
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions, attrs={'is_alt': False})
 
     def test_reset_attr(self):
         p = self.player()
@@ -200,7 +205,9 @@ class TestMathConstantHunter(TestPlayer):
     }
 
     def test_strategy(self):
-        self.responses_test([D], [C] * 8, [C] * 7 + [D])
+        opponent = axelrod.MockPlayer([C] * 7 + [D] * 3)
+        actions = [(C, C)] * 7 + [(C, D)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
 
 
 class TestRandomHunter(TestPlayer):
@@ -220,16 +227,15 @@ class TestRandomHunter(TestPlayer):
     def test_strategy(self):
 
         # We should catch the alternator here.
-        self.responses_test([D], [C] * 12, [C, D] * 6)
+        actions = [(C, C), (C, D)] * 5 + [(C, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, attrs={"countCC": 5,
+                                                          "countDD": 0})
 
-        # It is still possible for this test to fail, but very unlikely.
-        history1 = [C] * 100
-        history2 = [random.choice([C, D]) for i in range(100)]
-        self.responses_test(D, history1, history2)
-
-        history1 = [D] * 100
-        history2 = [random.choice([C, D]) for i in range(100)]
-        self.responses_test(D, history1, history2)
+        actions = [(C, D)] * 14
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions, attrs={"countCC": 0,
+                                                          "countDD": 0})
 
     def test_reset(self):
         player = self.player()
