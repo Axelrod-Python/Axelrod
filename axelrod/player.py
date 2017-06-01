@@ -161,9 +161,12 @@ class Player(object):
                     setattr(other, attribute,
                             itertools.cycle(original_other_value))
 
-                if not (all(next(generator) == next(other_generator)
-                        for _ in range(200))):
-                    return False
+                for _ in range(200):
+                    try:
+                        if next(generator) != next(other_generator):
+                            return False
+                    except StopIteration:
+                        break
 
             # Code for a strange edge case where each strategy points at each
             # other

@@ -24,10 +24,6 @@ def cooperate(*args):
 def defect(*args):
     return D
 
-
-def randomize(*args):
-    return random.choice([C, D])
-
 # Test classifier used to create tests players
 _test_classifier = {
         'memory_depth': 0,
@@ -98,13 +94,10 @@ class TestPlayerClass(unittest.TestCase):
         self.assertEqual(player2.state_distribution, {(D, C): 2})
 
     def test_state_distribution(self):
-        player1, player2 = self.player(), self.player()
-        player1.strategy = randomize
-        player2.strategy = randomize
-        history_1 = [C, C, D, D, C]
-        history_2 = [C, D, C, D, D]
-        for h1, h2 in zip(history_1, history_2):
-            simulate_play(player1, player2, h1, h2)
+        player1 = axelrod.MockPlayer([C, C, D, D, C])
+        player2 = axelrod.MockPlayer([C, D, C, D, D])
+        match = axelrod.Match((player1, player2), turns=5)
+        _ = match.play()
         self.assertEqual(player1.state_distribution,
                          {(C, C): 1, (C, D): 2, (D, C): 1, (D, D): 1})
         self.assertEqual(player2.state_distribution,
