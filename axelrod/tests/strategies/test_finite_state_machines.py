@@ -173,10 +173,11 @@ class TestFSMPlayer(TestPlayer):
             expected_actions.append((fsm_move, current_opponent_move))
             opponent_actions.append(current_opponent_move)
 
-            self.verify_against_finite_state_machine(current_state=current_state,
-                                                     expected_state=new_state,
-                                                     last_opponent_move=last_opponent_move,
-                                                     expected_move=fsm_move)
+            self.verify_against_finite_state_machine(
+                current_state=current_state,
+                expected_state=new_state,
+                last_opponent_move=last_opponent_move,
+                expected_move=fsm_move)
 
         self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
                          expected_actions=expected_actions)
@@ -790,7 +791,7 @@ class TestTF1(TestFSMPlayer):
     name = "TF1"
     player = axelrod.TF1
     expected_classifier = {
-        'memory_depth': 16,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -801,13 +802,15 @@ class TestTF1(TestFSMPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
 
 class TestTF2(TestFSMPlayer):
     name = "TF2"
     player = axelrod.TF2
     expected_classifier = {
-        'memory_depth': 16,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -818,13 +821,15 @@ class TestTF2(TestFSMPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
+        actions = [(C, C), (D, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
 
 class TestTF3(TestFSMPlayer):
     name = "TF3"
     player = axelrod.TF3
     expected_classifier = {
-        'memory_depth': 8,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -835,3 +840,5 @@ class TestTF3(TestFSMPlayer):
 
     def test_strategy(self):
         self.first_play_test(C)
+        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)

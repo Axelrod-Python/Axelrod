@@ -587,7 +587,7 @@ class TF1(FSMPlayer):
 
     name = "TF1"
     classifier = {
-        'memory_depth': 16,  # Estimate
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -631,7 +631,7 @@ class TF2(FSMPlayer):
 
     name = "TF2"
     classifier = {
-        'memory_depth': 16,  # Estimate
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -675,7 +675,7 @@ class TF3(FSMPlayer):
 
     name = "TF3"
     classifier = {
-        'memory_depth': 8,  # Estimate
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
