@@ -529,56 +529,6 @@ class TestPlayer(unittest.TestCase):
             for attr, value in attrs.items():
                 self.assertEqual(getattr(player, attr), value)
 
-    def responses_test(self, responses, player_history=None,
-                       opponent_history=None, seed=None, length=200,
-                       init_args=None, init_kwargs=None):
-        """Test responses to arbitrary histories. A match is played where the
-        histories are enforced and the sequence of plays in responses is
-        checked to be the outcome. Internal variables can be checked with the
-        attrs attribute and arguments to the first player can be passed in
-        init_args.
-
-        Parameters
-        ----------
-        responses: History or sequence of axelrod.Actions
-            The expected outcomes
-        player_history, opponent_history: sequences of prior history to enforce
-        seed: int
-            A random seed if needed for reproducibility
-        length: int
-            Some players require the length of the match
-        attrs: dict
-            dictionary of internal attributes to check at the end of all plays
-            in player
-        init_args: tuple or list
-            A list of arguments to instantiate player with
-        init_kwargs: dictionary
-            A list of keyword arguments to instantiate player with
-        """
-        if init_args is None:
-            init_args = ()
-        if init_kwargs is None:
-            init_kwargs = dict()
-
-        player1 = self.player(*init_args, **init_kwargs)
-        player1.set_match_attributes(length=length)
-        player2 = MockPlayer()
-        player2.set_match_attributes(length=length)
-        test_responses(self, player1, player2, responses, player_history,
-                       opponent_history, seed=seed)
-
-        # Test that we get the same sequence after a reset
-        player1.reset()
-        player2.reset()
-        test_responses(self, player1, player2, responses, player_history,
-                       opponent_history, seed=seed)
-
-        # Test that we get the same sequence after a clone
-        player1 = player1.clone()
-        player2 = player2.clone()
-        test_responses(self, player1, player2, responses, player_history,
-                       opponent_history, seed=seed)
-
     def classifier_test(self, expected_class_classifier=None):
         """Test that the keys in the expected_classifier dictionary give the
         expected values in the player classifier dictionary. Also checks that
