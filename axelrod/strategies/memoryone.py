@@ -11,10 +11,16 @@ C, D = Actions.C, Actions.D
 
 
 class MemoryOnePlayer(Player):
-    """Uses a four-vector for strategies based on the last round of play,
+    """
+    Uses a four-vector for strategies based on the last round of play,
     (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift.
     Intended to be used as an abstract base class or to at least be supplied
-    with a initializing four_vector."""
+    with a initializing four_vector.
+
+    Names
+
+    - Memory One: [Nowak1990]_
+    """
 
     name = 'Generic Memory One Player'
     classifier = {
@@ -191,7 +197,12 @@ class FirmButFair(MemoryOnePlayer):
 
 
 class StochasticCooperator(MemoryOnePlayer):
-    """Stochastic Cooperator, http://www.nature.com/ncomms/2013/130801/ncomms3193/full/ncomms3193.html."""
+    """Stochastic Cooperator.
+
+	Names:
+
+	- Stochastic Cooperator: [Adami2013]_
+	"""
 
     name = 'Stochastic Cooperator'
 
