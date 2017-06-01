@@ -1,3 +1,33 @@
+# v2.13.0, 2017-06-01
+
+New strategies, refactor of strategy tests and minor documentation fixes.
+
+- New strategy Dynamic Two Tits for Tat:
+  https://github.com/Axelrod-Python/Axelrod/pull/1030
+- New strategy Eugine Nier
+  https://github.com/Axelrod-Python/Axelrod/pull/1016
+- New strategies: trained FSMs, TF1, TF2, TF3
+  https://github.com/Axelrod-Python/Axelrod/pull/1036
+- Small documentation fix:
+  https://github.com/Axelrod-Python/Axelrod/pull/1022
+- Refactor of strategy tests:
+  https://github.com/Axelrod-Python/Axelrod/pull/1016
+  https://github.com/Axelrod-Python/Axelrod/pull/1021
+  https://github.com/Axelrod-Python/Axelrod/pull/1022
+  https://github.com/Axelrod-Python/Axelrod/pull/1023
+  https://github.com/Axelrod-Python/Axelrod/pull/1024
+  https://github.com/Axelrod-Python/Axelrod/pull/1028
+  https://github.com/Axelrod-Python/Axelrod/pull/1029
+  https://github.com/Axelrod-Python/Axelrod/pull/1030
+  https://github.com/Axelrod-Python/Axelrod/pull/1031
+  https://github.com/Axelrod-Python/Axelrod/pull/1032
+  https://github.com/Axelrod-Python/Axelrod/pull/1033
+  https://github.com/Axelrod-Python/Axelrod/pull/1034
+  https://github.com/Axelrod-Python/Axelrod/pull/1035
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.12.0...v2.13.0
+
 # v2.12.0, 2017-05-23
 
 New strategies and internal refactoring/improvements
