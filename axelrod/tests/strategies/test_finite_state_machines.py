@@ -66,16 +66,18 @@ class TestSimpleFSM(unittest.TestCase):
 
     def test_bad_initial_state_raises_error(self):
         self.assertRaises(ValueError, SimpleFSM,
-                          transitions=self.two_state_transition, initial_state=5)
+                          transitions=self.two_state_transition,
+                          initial_state=5)
 
     def test_state_setter_raises_error_for_bad_input(self):
         with self.assertRaises(ValueError) as cm:
             self.two_state.state = 5
         error_msg = cm.exception.args[0]
-        self.assertEqual(error_msg, 'state: 5 does not have values for both C and D')
+        self.assertEqual(error_msg,
+                         'state: 5 does not have values for both C and D')
 
 
-class TestFSMPlayer(TestPlayer):
+class TestSampleFSMPlayer(TestPlayer):
     """Test a few sample tables to make sure that the finite state machines are
     working as intended."""
 
@@ -98,7 +100,8 @@ class TestFSMPlayer(TestPlayer):
         cooperator_init_kwargs = {'transitions': ((1, C, 1, C), (1, D, 1, C)),
                                   'initial_state': 1,
                                   'initial_action': C}
-        self.versus_test(axelrod.Alternator(), expected_actions=[(C, C), (C, D)] * 5,
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=[(C, C), (C, D)] * 5,
                          init_kwargs=cooperator_init_kwargs)
 
     def test_defector(self):
@@ -107,7 +110,8 @@ class TestFSMPlayer(TestPlayer):
         defector_init_kwargs = {'transitions': ((1, C, 1, D), (1, D, 1, D)),
                                 'initial_state': 1,
                                 'initial_action': D}
-        self.versus_test(axelrod.Alternator(), expected_actions=[(D, C), (D, D)] * 5,
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=[(D, C), (D, D)] * 5,
                          init_kwargs=defector_init_kwargs)
 
     def test_tft(self):
@@ -132,7 +136,7 @@ class TestFSMPlayer(TestPlayer):
                          init_kwargs=wsls_init_kwargs)
 
 
-class TestFsmTransitions(TestPlayer):
+class TestFSMPlayer(TestPlayer):
     name = "FSM Player: ((1, 'C', 1, 'C'), (1, 'D', 1, 'D')), 1, C"
     player = axelrod.FSMPlayer
 
@@ -169,10 +173,11 @@ class TestFsmTransitions(TestPlayer):
             expected_actions.append((fsm_move, current_opponent_move))
             opponent_actions.append(current_opponent_move)
 
-            self.verify_against_finite_state_machine(current_state=current_state,
-                                                     expected_state=new_state,
-                                                     last_opponent_move=last_opponent_move,
-                                                     expected_move=fsm_move)
+            self.verify_against_finite_state_machine(
+                current_state=current_state,
+                expected_state=new_state,
+                last_opponent_move=last_opponent_move,
+                expected_move=fsm_move)
 
         self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
                          expected_actions=expected_actions)
@@ -219,7 +224,7 @@ class TestFsmTransitions(TestPlayer):
                          init_kwargs={"transitions": transitions})
 
 
-class TestFortress3(TestFsmTransitions):
+class TestFortress3(TestFSMPlayer):
 
     name = "Fortress3"
     player = axelrod.Fortress3
@@ -259,7 +264,7 @@ class TestFortress3(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestFortress4(TestFsmTransitions):
+class TestFortress4(TestFSMPlayer):
 
     name = "Fortress4"
     player = axelrod.Fortress4
@@ -299,7 +304,7 @@ class TestFortress4(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestPredator(TestFsmTransitions):
+class TestPredator(TestFSMPlayer):
 
     name = "Predator"
     player = axelrod.Predator
@@ -350,7 +355,7 @@ class TestPredator(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestPun1(TestFsmTransitions):
+class TestPun1(TestFSMPlayer):
 
     name = "Pun1"
     player = axelrod.Pun1
@@ -380,7 +385,7 @@ class TestPun1(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestRaider(TestFsmTransitions):
+class TestRaider(TestFSMPlayer):
 
     name = "Raider"
     player = axelrod.Raider
@@ -420,7 +425,7 @@ class TestRaider(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestRipoff(TestFsmTransitions):
+class TestRipoff(TestFSMPlayer):
 
     name = "Ripoff"
     player = axelrod.Ripoff
@@ -455,7 +460,7 @@ class TestRipoff(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestSolutionB1(TestFsmTransitions):
+class TestSolutionB1(TestFSMPlayer):
 
     name = "SolutionB1"
     player = axelrod.SolutionB1
@@ -488,7 +493,7 @@ class TestSolutionB1(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestSolutionB5(TestFsmTransitions):
+class TestSolutionB5(TestFSMPlayer):
 
     name = "SolutionB5"
     player = axelrod.SolutionB5
@@ -533,7 +538,7 @@ class TestSolutionB5(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestThumper(TestFsmTransitions):
+class TestThumper(TestFSMPlayer):
 
     name = "Thumper"
     player = axelrod.Thumper
@@ -563,7 +568,7 @@ class TestThumper(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestEvolvedFSM4(TestFsmTransitions):
+class TestEvolvedFSM4(TestFSMPlayer):
 
     name = "Evolved FSM 4"
     player = axelrod.EvolvedFSM4
@@ -601,7 +606,7 @@ class TestEvolvedFSM4(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestEvolvedFSM16(TestFsmTransitions):
+class TestEvolvedFSM16(TestFSMPlayer):
 
     name = "Evolved FSM 16"
     player = axelrod.EvolvedFSM16
@@ -693,7 +698,7 @@ class TestEvolvedFSM16(TestFsmTransitions):
         self.transitions_test(state_and_actions)
 
 
-class TestEvolvedFSM16Noise05(TestFsmTransitions):
+class TestEvolvedFSM16Noise05(TestFSMPlayer):
 
     name = "Evolved FSM 16 Noise 05"
     player = axelrod.EvolvedFSM16Noise05
@@ -780,3 +785,60 @@ class TestEvolvedFSM16Noise05(TestFsmTransitions):
         # finished 0, 1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 14, 15
         state_and_actions = to_state_eleven + [(11, C), (14, D)] + [(13, C)] * 3
         self.transitions_test(state_and_actions)
+
+
+class TestTF1(TestFSMPlayer):
+    name = "TF1"
+    player = axelrod.TF1
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+
+class TestTF2(TestFSMPlayer):
+    name = "TF2"
+    player = axelrod.TF2
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        actions = [(C, C), (D, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+
+class TestTF3(TestFSMPlayer):
+    name = "TF3"
+    player = axelrod.TF3
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        self.first_play_test(C)
+        actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
