@@ -22,7 +22,7 @@ from .doubler import Doubler
 from .finite_state_machines import (
     Fortress3, Fortress4, Predator, Pun1, Raider, Ripoff, SolutionB1,
     SolutionB5, Thumper, FSMPlayer, EvolvedFSM4, EvolvedFSM16,
-    EvolvedFSM16Noise05)
+    EvolvedFSM16Noise05, TF1, TF2, TF3)
 from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import (
@@ -238,6 +238,9 @@ all_strategies = [
     StochasticWSLS,
     SuspiciousTitForTat,
     Tester,
+    TF1,
+    TF2,
+    TF3,
     ThueMorse,
     ThueMorseInverse,
     Thumper,

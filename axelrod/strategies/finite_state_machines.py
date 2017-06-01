@@ -571,3 +571,130 @@ class EvolvedFSM16Noise05(FSMPlayer):
         )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
+
+
+## Strategies trained with Moran process objectives
+
+
+class TF1(FSMPlayer):
+    """
+    A FSM player trained to maximize Moran fixation probabilities.
+
+    Names:
+
+        - TF1: Original name by Marc Harper
+    """
+
+    name = "TF1"
+    classifier = {
+        'memory_depth': 16,  # Estimate
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        transitions = (
+            (0, C, 7, C), (0, D, 1, C),
+            (1, C, 11, D), (1, D, 11, D),
+            (2, C, 8, D), (2, D, 8, C),
+            (3, C, 3, C), (3, D, 12, D),
+            (4, C, 6, C), (4, D, 3, C),
+            (5, C, 11, C), (5, D, 8, D),
+            (6, C, 13, D), (6, D, 14, C),
+            (7, C, 4, D), (7, D, 2, D),
+            (8, C, 14, D), (8, D, 8, D),
+            (9, C, 0, C), (9, D, 10, D),
+            (10, C, 8, C), (10, D, 15, C),
+            (11, C, 6, D), (11, D, 5, D),
+            (12, C, 6, D), (12, D, 9, D),
+            (13, C, 9, D), (13, D, 8, D),
+            (14, C, 8, D), (14, D, 13, D),
+            (15, C, 4, C), (15, D, 5, C)
+        )
+
+        super().__init__(transitions=transitions, initial_state=0,
+                         initial_action=C)
+
+
+class TF2(FSMPlayer):
+    """
+    A FSM player trained to maximize Moran fixation probabilities.
+
+    Names:
+
+        - TF2: Original name by Marc Harper
+    """
+
+    name = "TF2"
+    classifier = {
+        'memory_depth': 16,  # Estimate
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        transitions = (
+            (0, C, 13, D), (0, D, 12, D),
+            (1, C, 3, D), (1, D, 4, D),
+            (2, C, 14, D), (2, D, 9, D),
+            (3, C, 0, C), (3, D, 1, D),
+            (4, C, 1, D), (4, D, 2, D),
+            # (5, C, 12, C), (5, D, 6, C),
+            # (6, C, 1, C), (6, D, 14, D),
+            (7, C, 12, D), (7, D, 2, D),
+            (8, C, 7, D), (8, D, 9, D),
+            (9, C, 8, D), (9, D, 0, D),
+            (10, C, 2, C), (10, D, 15, C),
+            (11, C, 7, D), (11, D, 13, D),
+            (12, C, 3, C), (12, D, 8, D),
+            (13, C, 7, C), (13, D, 10, D),
+            (14, C, 10, D), (14, D, 7, D),
+            (15, C, 15, C), (15, D, 11, D)
+        )
+
+        super().__init__(transitions=transitions, initial_state=0,
+                         initial_action=C)
+
+
+class TF3(FSMPlayer):
+    """
+    A FSM player trained to maximize Moran fixation probabilities.
+
+    Names:
+
+        - TF3: Original name by Marc Harper
+    """
+
+    name = "TF3"
+    classifier = {
+        'memory_depth': 8,  # Estimate
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        transitions = (
+            (0, C, 0, C), (0, D, 3, C),
+            (1, C, 5, D), (1, D, 0, C),
+            (2, C, 3, C), (2, D, 2, D),
+            (3, C, 4, D), (3, D, 6, D),
+            (4, C, 3, C), (4, D, 1, D),
+            (5, C, 6, C), (5, D, 3, D),
+            (6, C, 6, D), (6, D, 6, D),
+            (7, C, 7, D), (7, D, 5, C)
+        )
+
+        super().__init__(transitions=transitions, initial_state=0,
+                         initial_action=C)
