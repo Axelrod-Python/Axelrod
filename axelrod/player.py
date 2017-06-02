@@ -1,16 +1,16 @@
 from collections import defaultdict
-from functools import wraps
-import random
 import copy
 import inspect
-import types
-import numpy as np
 import itertools
+import random
+import types
+from typing import Dict, Any
 
-from axelrod.actions import Actions, flip_action, Action
+import numpy as np
+
+from axelrod.actions import Actions, flip_action
 from .game import DefaultGame
 
-from typing import Dict, Any
 
 C, D = Actions.C, Actions.D
 
@@ -97,12 +97,14 @@ class Player(object):
     @classmethod
     def init_params(cls, *args, **kwargs):
         """
-        Return a dictionary containing the init parameters of a strategy (without 'self').
+        Return a dictionary containing the init parameters of a strategy
+        (without 'self').
         Use *args and *kwargs as value if specified
         and complete the rest with the default values.
         """
         sig = inspect.signature(cls.__init__)
-        # the 'self' parameter needs to be removed or the first *args will be assigned to it
+        # The 'self' parameter needs to be removed or the first *args will be
+        # assigned to it
         self_param = sig.parameters.get('self')
         new_params = list(sig.parameters.values())
         new_params.remove(self_param)
@@ -124,7 +126,6 @@ class Player(object):
         self.defections = 0
         self.state_distribution = defaultdict(int)
         self.set_match_attributes()
-
 
     def __eq__(self, other):
         """
@@ -149,7 +150,6 @@ class Player(object):
                 generator, original_value = itertools.tee(value)
                 other_generator, original_other_value = itertools.tee(other_value)
 
-
                 if isinstance(value, types.GeneratorType):
                     setattr(self, attribute,
                             (ele for ele in original_value))
@@ -171,13 +171,12 @@ class Player(object):
             # Code for a strange edge case where each strategy points at each
             # other
             elif (value is other and other_value is self):
-                    pass
+                pass
 
             else:
                 if value != other_value:
                     return False
         return True
-
 
     def receive_match_attributes(self):
         # Overwrite this function if your strategy needs

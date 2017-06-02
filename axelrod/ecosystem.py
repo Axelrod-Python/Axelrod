@@ -1,6 +1,8 @@
 from axelrod.result_set import ResultSet
 import random
 from typing import List, Callable
+
+
 class Ecosystem(object):
     """Create an ecosystem based on the payoff matrix from an Axelrod
     tournament."""
@@ -21,14 +23,17 @@ class Ecosystem(object):
         # values.
         if population:
             if min(population) < 0:
-                raise TypeError("Minimum value of population vector must be non-negative")
+                raise TypeError(
+                    "Minimum value of population vector must be non-negative")
             elif len(population) != self.nplayers:
-                raise TypeError("Population vector must be same size as number of players")
+                raise TypeError(
+                    "Population vector must be same size as number of players")
             else:
                 norm = sum(population)
                 self.population_sizes = [[p / norm for p in population]]
         else:
-            self.population_sizes = [[1 / self.nplayers for i in range(self.nplayers)]]
+            self.population_sizes = [
+                [1 / self.nplayers for _ in range(self.nplayers)]]
 
         # This function is quite arbitrary and probably only influences the
         # kinetics for the current code.

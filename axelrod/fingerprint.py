@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from typing import List, Any, Union
 import numpy as np
 import tqdm
-import axelrod as axl
 
+import axelrod as axl
 from axelrod import on_windows, Player
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (

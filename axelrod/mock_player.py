@@ -1,10 +1,11 @@
-import warnings
-from axelrod.actions import Actions, Action
-from axelrod.player import Player, update_history, update_state_distribution
 from collections import defaultdict
 from itertools import cycle
-
 from typing import List, Tuple
+import warnings
+
+from axelrod.actions import Actions, Action
+from axelrod.player import Player, update_history, update_state_distribution
+
 
 C, D = Actions.C, Actions.D
 

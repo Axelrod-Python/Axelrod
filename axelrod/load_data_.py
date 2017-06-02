@@ -1,5 +1,6 @@
 import pkg_resources
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Tuple
+
 
 def load_file(filename: str, directory: str) -> List[List[str]]:
     """Loads a data file stored in the Axelrod library's data subdirectory,
@@ -27,6 +28,7 @@ def load_weights(filename: str ="ann_weights.csv", directory: str ="data") -> Di
         weights = list(map(float, row[3:]))
         d[name] = (num_features, num_hidden, weights)
     return d
+
 
 def load_pso_tables(filename="pso_gambler.csv", directory="data"):
     """Load lookup tables."""

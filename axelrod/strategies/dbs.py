@@ -10,33 +10,33 @@ class DBS(Player):
     Desired Belief Strategy as described in [Au2006]_
     http://www.cs.utexas.edu/%7Echiu/papers/Au06NoisyIPD.pdf
 
-    A strategy that learns the opponent's strategy, and uses symbolic 
+    A strategy that learns the opponent's strategy, and uses symbolic
     noise detection for detecting whether anomalies in player’s behavior
-    are deliberate or accidental, hence increasing performance in noisy 
-    tournaments.  
+    are deliberate or accidental, hence increasing performance in noisy
+    tournaments.
 
     From the learned opponent's strategy, a tree search is used to
     choose the best move
 
     Default values for the parameters are the suggested values in the
-    article. When noise increases you can try to diminish 
+    article. When noise increases you can try to diminish
     violation_threshold and rejection_threshold
 
     Parameters
-    
+
     discount_factor : float, optional
         used when computing discounted frequencies to learn opponent's
         strategy. Must be between 0 and 1. The default is 0.75
-    promotion_threshold : int, optional 
+    promotion_threshold : int, optional
         number of successive observations needed to promote an
         opponent behavior as a deterministic rule. The default is 3.
     violation_threshold : int, optional
-        number of observations needed to considerate opponent's 
+        number of observations needed to considerate opponent's
         strategy has changed. You can lower it when noise increases.
-        The default is 4, which is good for a noise level of .1 
+        The default is 4, which is good for a noise level of .1
     reject_threshold : int, optional
         number of observations before forgetting opponent's previous
-        strategy. You can lower it when noise increases. The default 
+        strategy. You can lower it when noise increases. The default
         is 3, which is good for a noise level of .1
     tree_depth: int, optional
         depth of the tree for the tree-search algorithm. Higher depth
@@ -55,14 +55,14 @@ class DBS(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, discount_factor=.75, promotion_threshold=3, 
-                 violation_threshold=4, reject_threshold=3, tree_depth=5): 
+    def __init__(self, discount_factor=.75, promotion_threshold=3,
+                 violation_threshold=4, reject_threshold=3, tree_depth=5):
         super().__init__()
-        
+
         # The opponent's behavior is represented by a 3 dicts :
         # Rd, Rc, and Rp.
-        # His behavior his modeled by a set of rules. A rule is the move that 
-        # the opponent will play (C or D or a probability to play C) after a 
+        # His behavior his modeled by a set of rules. A rule is the move that
+        # the opponent will play (C or D or a probability to play C) after a
         # given outcome (for instance after (C, D))
         # A rule can be deterministic or probabilistic
         # - Rc is the set of deterministic rules
@@ -70,7 +70,7 @@ class DBS(Player):
         # - Rd is the default rule set which is used for initialization but also
         # keeps track of previous policies when change in the opponent behavior
         # happens, in order to have a smooth transition
-        # - Pi is a set of rules that aggregates all above sets of rules in 
+        # - Pi is a set of rules that aggregates all above sets of rules in
         # order to fully model the opponent's behavior
 
         # Default rule set Rd
@@ -79,8 +79,8 @@ class DBS(Player):
         # Set of current deterministic rules Rc
         self.Rc = {}
         # Aggregated rule set Pi
-        self.Pi = self.Rd   
-        # For each rule in Rd we need to count the number of successive 
+        self.Pi = self.Rd
+        # For each rule in Rd we need to count the number of successive
         # violations. Those counts are saved in violation_counts.
         self.violation_counts = {}
         self.reject_threshold = reject_threshold
@@ -93,15 +93,15 @@ class DBS(Player):
         # A discount factor for computing the probabilistic rules
         self.alpha = discount_factor
 
-        # The probabilistic rule set Rp is not saved as an attribute, but each 
+        # The probabilistic rule set Rp is not saved as an attribute, but each
         # rule is computed only when needed.
         # The rules are computed as discounted frequencies of opponent's past
         # moves. To compute the discounted frequencies, we need to keep
         # up to date an history of what has been played following each
         # outcome (or condition):
-        # We save it as a dict history_by_cond; keys are conditions 
+        # We save it as a dict history_by_cond; keys are conditions
         # (ex (C, C)) and values are a tuple of 2 lists (G, F)
-        # for a condition j and an iteration i in the match : 
+        # for a condition j and an iteration i in the match :
         # G[i] = 1 if cond j was True at turn i-1 and C has been played
         # by the opponent; else G[i] = 0
         # F[i] = 1 if cond j was True at turn i-1; else F[i]=0
@@ -129,26 +129,25 @@ class DBS(Player):
             (D, C): ([0], [1]),
             (D, D): ([0], [1])
         }
-        
 
     def should_promote(self, r_plus, promotion_threshold=3):
         """
         This function determines if the move r_plus is a deterministic
-        behavior of the opponent, and then returns True, or if r_plus 
-        is due to a random behavior (or noise) which would require a 
+        behavior of the opponent, and then returns True, or if r_plus
+        is due to a random behavior (or noise) which would require a
         probabilistic rule, in which case it returns False
 
-        To do so it looks into the game history : if the K last times 
-        when the opponent was in the same situation than in r_plus, he 
+        To do so it looks into the game history : if the K last times
+        when the opponent was in the same situation than in r_plus, he
         played the same thing, then then r_plus is considered as a
-        deterministic rule (where K is the user-defined 
+        deterministic rule (where K is the user-defined
         promotion_threshold)
 
         Parameters
 
-        r_plus : tuple of (tuple of actions.Actions, actions.Actions) 
-            exemple: ((C, C), D) 
-            r_plus represents one outcome of the history, and the 
+        r_plus : tuple of (tuple of actions.Actions, actions.Actions)
+            exemple: ((C, C), D)
+            r_plus represents one outcome of the history, and the
             following move played by the opponent
         promotion_threshold : int, optionnal
             number of successive observations needed to promote an
@@ -165,7 +164,7 @@ class DBS(Player):
         # r_minus
         while(
             k < len(self.history_by_cond[r_plus[0]][0])
-            and not (self.history_by_cond[r_plus[0]][0][1:][-k] 
+            and not (self.history_by_cond[r_plus[0]][0][1:][-k]
                         == opposite_action
                     and self.history_by_cond[r_plus[0]][1][1:][-k] == 1)
             ):
@@ -180,7 +179,7 @@ class DBS(Player):
     def should_demote(self, r_minus, violation_threshold=4):
         """
         Checks if the number of successive violations of a deterministic
-        rule (in the opponent's behavior) exceeds the user-defined 
+        rule (in the opponent's behavior) exceeds the user-defined
         violation_threshold
         """
         return (self.violation_counts[r_minus[0]] >= violation_threshold)
@@ -205,13 +204,13 @@ class DBS(Player):
     def compute_prob_rule(self, outcome, alpha=1):
         """
         Uses the game history to compute the probability of the opponent
-        playing C, in the outcome situation 
+        playing C, in the outcome situation
         (exemple : outcome = (C, C)).
         When alpha = 1, the results is approximately equal to the frequency
-        of the occurence of outcome -> C. 
+        of the occurence of outcome -> C.
         alpha is a discount factor that allows to give more weight to recent
         events than earlier ones.
-        
+
         Parameters
 
         outcome : tuple of two actions.Actions
@@ -237,13 +236,12 @@ class DBS(Player):
         # First move
         if not self.history:
             return C
-        
-        if(len(opponent.history) >= 2):
 
+        if len(opponent.history) >= 2:
             # We begin by update history_by_cond
             # (i.e. update Rp)
             self.update_history_by_cond(opponent.history)
-     
+
             two_moves_ago = (self.history[-2], opponent.history[-2])
             # r_plus is the information of what the opponent just played,
             # following the previous outcome two_moves_ago
@@ -251,10 +249,10 @@ class DBS(Player):
             # r_minus is the opposite move, following the same outcome
             r_minus = (two_moves_ago, ({C, D} - {opponent.history[-1]}).pop())
 
-            # If r_plus and r_minus are not in the current set of deterministic 
-            # rules, we check if r_plus should be added to it (following the 
+            # If r_plus and r_minus are not in the current set of deterministic
+            # rules, we check if r_plus should be added to it (following the
             # rule defined in the should_promote function)
-            if r_plus[0] not in self.Rc.keys(): 
+            if r_plus[0] not in self.Rc.keys():
                 if self.should_promote(r_plus, self.promotion_threshold):
                     self.Rc[r_plus[0]] = action_to_int(r_plus[1])
                     self.violation_counts[r_plus[0]] = 0
@@ -273,7 +271,7 @@ class DBS(Player):
                     self.violation_counts[r_plus[0]] += 1
                     # As we observe that the behavior of the opponent is
                     # opposed to a rule modeled in Rc, we check if the number
-                    # of consecutive violations of this rule is superior to 
+                    # of consecutive violations of this rule is superior to
                     # a threshold. If it is, we clean Rc, but we keep the rules
                     # of Rc in Rd for smooth transition
                     if self.should_demote(r_minus, self.violation_threshold):
@@ -284,7 +282,7 @@ class DBS(Player):
 
             # r+ in Rc
             r_plus_in_Rc = (
-                r_plus[0] in self.Rc.keys() 
+                r_plus[0] in self.Rc.keys()
                 and self.Rc[r_plus[0]] == action_to_int(r_plus[1])
             )
             # r- in Rd
@@ -297,7 +295,7 @@ class DBS(Player):
             if r_minus_in_Rd:
                 self.v += 1
             # If the number of violations is superior to a threshold, clean Rd
-            if (self.v > self.reject_threshold 
+            if (self.v > self.reject_threshold
                     or (r_plus_in_Rc and r_minus_in_Rd)):
                 self.Rd.clear()
                 self.v = 0
@@ -306,7 +304,7 @@ class DBS(Player):
             Rp = {}
             all_cond = [(C, C), (C, D), (D, C), (D, D)]
             for outcome in all_cond:
-                if ((outcome not in self.Rc.keys()) 
+                if ((outcome not in self.Rc.keys())
                     and (outcome not in self.Rd.keys())):
                     # Compute opponent's C answer probability
                     Rp[outcome] = self.compute_prob_rule(outcome, self.alpha)
@@ -321,7 +319,7 @@ class DBS(Player):
 
         # React to the opponent's last move
         return MoveGen((self.history[-1], opponent.history[-1]), self.Pi,
-            depth_search_tree=self.tree_depth)
+                       depth_search_tree=self.tree_depth)
 
 
 class Node(object):
@@ -356,7 +354,7 @@ class StochasticNode(Node):
         """
         Returns the siblings node of the current StochasticNode
         There are two sibling which are DeterministicNodes, their depth
-        is equal to current node depth's + 1 
+        is equal to current node depth's + 1
         This function allows to build the tree
         """
         opponent_c_choice = DeterministicNode(self.own_action, C, self.depth+1)
@@ -372,7 +370,7 @@ class StochasticNode(Node):
 
 class DeterministicNode(Node):
     """
-    Nodes (C, C), (C, D), (D, C), or (D, D) with deterministic choice 
+    Nodes (C, C), (C, D), (D, C), or (D, D) with deterministic choice
     for siblings
     """
 
@@ -415,7 +413,7 @@ class DeterministicNode(Node):
 def create_policy(pCC, pCD, pDC, pDD):
     """
     Creates a dict that represents a Policy.
-    As defined in the reference, a Policy is a set of (prev_move, p) 
+    As defined in the reference, a Policy is a set of (prev_move, p)
     where p is the probability to cooperate after prev_move,
     where prev_move can be (C, C), (C, D), (D, C) or (D, D)
 
@@ -436,20 +434,20 @@ def action_to_int(action):
 def minimax_tree_search(begin_node, policy, max_depth):
     """
     Tree search function (minimax search procedure)
-    build by recursion the tree corresponding to a game against 
+    build by recursion the tree corresponding to a game against
     opponent's policy, and solve it
     Returns a tuple of two float, that are the utility of playing C,
     and the utility of playing D
     """
     if begin_node.is_stochastic():
         # a stochastic node cannot has the same depth than its parent
-        # node hence there is no need to check that his 
+        # node hence there is no need to check that his
         # depth is < max_depth
         siblings = begin_node.get_siblings()
         # The stochastic node value is the expected values of siblings
         node_value = (
             begin_node.pC * minimax_tree_search(
-                siblings[0], policy, max_depth) 
+                siblings[0], policy, max_depth)
             + (1 - begin_node.pC) * minimax_tree_search(
                 siblings[1], policy, max_depth)
             )
@@ -463,9 +461,9 @@ def minimax_tree_search(begin_node, policy, max_depth):
             # this returns the two max expected values, for choice C or D,
             # as a tuple
             return (
-                minimax_tree_search(siblings[0], policy, max_depth) 
+                minimax_tree_search(siblings[0], policy, max_depth)
                     + begin_node.get_value(),
-                minimax_tree_search(siblings[1], policy, max_depth) 
+                minimax_tree_search(siblings[1], policy, max_depth)
                     + begin_node.get_value()
                 )
         elif begin_node.depth < max_depth:
@@ -476,7 +474,7 @@ def minimax_tree_search(begin_node, policy, max_depth):
             b = minimax_tree_search(siblings[1], policy, max_depth)
             node_value = max(a, b) + begin_node.get_value()
             return node_value
-    
+
 
 def MoveGen(outcome, policy, depth_search_tree=5):
     """
@@ -486,7 +484,7 @@ def MoveGen(outcome, policy, depth_search_tree=5):
     current_node = DeterministicNode(outcome[0], outcome[1], depth=0)
     values_of_choices = minimax_tree_search(
             current_node, policy, depth_search_tree)
-    # returns the Action which correspond to the best choice in terms of 
+    # returns the Action which correspond to the best choice in terms of
     # expected value. In case value(C) == value(D), returns C
     actions_tuple = (C, D)
     return actions_tuple[values_of_choices.index(max(values_of_choices))]

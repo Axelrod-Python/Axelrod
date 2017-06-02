@@ -9,11 +9,11 @@ interactions.
 """
 from collections import Counter
 import csv
+import tqdm
 
 from axelrod.actions import Actions
 from .game import Game
 
-import tqdm
 
 C, D = Actions.C, Actions.D
 

@@ -71,7 +71,7 @@ def passes_in_list_filter(player, classifier_key, value):
 
     Parameters
     ----------
-        strategy : a descendant class of axelrod.Player
+        player: a descendant class of axelrod.Player
         classifier_key: string
             Defining which entry from the strategy's classifier dict is to be
             tested (e.g. 'makes_use_of').
