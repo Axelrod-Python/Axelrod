@@ -36,6 +36,7 @@ class Resurrection(Player):
         else:
             return opponent.history[-1]
 
+
 class DoubleResurrection(Player):
     """
     A player starts by cooperating and defects if the number of rounds

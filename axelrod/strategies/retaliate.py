@@ -174,7 +174,8 @@ class LimitedRetaliate2(LimitedRetaliate):
 
     name = 'Limited Retaliate 2'
 
-    def __init__(self, retaliation_threshold: float = 0.08, retaliation_limit: int = 15) -> None:
+    def __init__(self, retaliation_threshold: float = 0.08,
+                 retaliation_limit: int = 15) -> None:
         super().__init__(
             retaliation_threshold=retaliation_threshold,
             retaliation_limit=retaliation_limit)
@@ -192,7 +193,8 @@ class LimitedRetaliate3(LimitedRetaliate):
 
     name = 'Limited Retaliate 3'
 
-    def __init__(self, retaliation_threshold: float = 0.05, retaliation_limit: int = 20) -> None:
+    def __init__(self, retaliation_threshold: float = 0.05,
+                 retaliation_limit: int = 20) -> None:
         super().__init__(
             retaliation_threshold=retaliation_threshold,
             retaliation_limit=retaliation_limit)

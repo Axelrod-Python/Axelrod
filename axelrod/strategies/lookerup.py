@@ -1,8 +1,10 @@
-from itertools import product
 from collections import namedtuple
-from typing import Any, TypeVar
+from itertools import product
+
 from axelrod.actions import Action, Actions, str_to_actions
 from axelrod.player import Player
+
+from typing import Any, TypeVar
 
 C, D = Actions.C, Actions.D
 

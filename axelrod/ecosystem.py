@@ -1,5 +1,5 @@
-from axelrod.result_set import ResultSet
 import random
+from axelrod.result_set import ResultSet
 from typing import List, Callable
 
 

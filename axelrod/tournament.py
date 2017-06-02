@@ -3,7 +3,6 @@ import csv
 import logging
 from multiprocessing import Process, Queue, cpu_count
 from tempfile import NamedTemporaryFile
-from typing import List
 import warnings
 
 import tqdm
@@ -16,6 +15,8 @@ from .match_generator import (
     RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches,
     ProbEndSpatialMatches, MatchGenerator)
 from .result_set import ResultSetFromFile, ResultSet
+
+from typing import List
 
 
 class Tournament(object):

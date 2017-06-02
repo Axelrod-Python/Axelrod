@@ -1,7 +1,6 @@
 from collections import namedtuple
 from tempfile import NamedTemporaryFile
 import matplotlib.pyplot as plt
-from typing import List, Any, Union
 import numpy as np
 import tqdm
 
@@ -11,6 +10,7 @@ from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (
     compute_final_score_per_turn, read_interactions_from_file)
 
+from typing import List, Any, Union
 
 Point = namedtuple('Point', 'x y')
 

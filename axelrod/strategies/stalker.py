@@ -1,11 +1,10 @@
-from typing import List
-
 from axelrod.actions import Action, Actions
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import FinalTransformer
 
 C, D = Actions.C, Actions.D
+
 
 @FinalTransformer((D), name_prefix=None)  # End with defection
 class Stalker(Player):

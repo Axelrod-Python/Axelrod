@@ -3,14 +3,14 @@ import copy
 import inspect
 import itertools
 import random
-import types
-from typing import Dict, Any
 
 import numpy as np
 
 from axelrod.actions import Actions, flip_action
 from .game import DefaultGame
 
+import types
+from typing import Dict, Any
 
 C, D = Actions.C, Actions.D
 

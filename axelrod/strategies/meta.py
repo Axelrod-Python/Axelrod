@@ -1,3 +1,5 @@
+from numpy.random import choice
+
 from axelrod.actions import Actions
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategy_transformers import NiceTransformer
@@ -5,7 +7,6 @@ from ._strategies import all_strategies
 from .hunter import (
     AlternatorHunter, CooperatorHunter, CycleHunter, DefectorHunter,
     EventualCycleHunter, MathConstantHunter, RandomHunter,)
-from numpy.random import choice
 
 
 # Needs to be computed manually to prevent circular dependency

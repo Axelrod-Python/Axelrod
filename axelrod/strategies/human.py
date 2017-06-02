@@ -1,10 +1,11 @@
 from os import linesep
-from axelrod.actions import Actions, Action
-from axelrod.player import Player
 from prompt_toolkit import prompt
 from prompt_toolkit.token import Token
 from prompt_toolkit.styles import style_from_dict
 from prompt_toolkit.validation import Validator, ValidationError
+
+from axelrod.actions import Actions, Action
+from axelrod.player import Player
 
 C, D = Actions.C, Actions.D
 

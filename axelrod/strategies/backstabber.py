@@ -1,7 +1,6 @@
-from axelrod.actions import Actions
+from axelrod.actions import Action, Actions
 from axelrod.player import Player
 from axelrod.strategy_transformers import FinalTransformer
-from axelrod.actions import Action
 
 C, D = Actions.C, Actions.D
 
@@ -58,7 +57,8 @@ class DoubleCrosser(Player):
 
 def _backstabber_strategy(opponent: Player) -> Action:
     """
-    Cooperates until opponent defects a total of four times, then always defects.
+    Cooperates until opponent defects a total of four times, then always
+    defects.
     """
     if not opponent.history:
         return C
@@ -69,7 +69,8 @@ def _backstabber_strategy(opponent: Player) -> Action:
 
 def _alt_strategy(opponent: Player) -> Action:
     """
-    If opponent's previous two plays were defect, then defects on next round. Otherwise, cooperates.
+    If opponent's previous two plays were defect, then defects on next round.
+    Otherwise, cooperates.
     """
     previous_two_plays = opponent.history[-2:]
     if previous_two_plays == [D, D]:
@@ -79,8 +80,8 @@ def _alt_strategy(opponent: Player) -> Action:
 
 def _opponent_triggers_alt_strategy(opponent: Player) -> bool:
     """
-    If opponent did not defect in first 7 rounds and the current round is from 8 to 180, return True.
-    Else, return False.
+    If opponent did not defect in first 7 rounds and the current round is from 8
+    to 180, return True. Else, return False.
     """
     before_alt_strategy = first_n_rounds = 7
     last_round_of_alt_strategy = 180
@@ -90,7 +91,8 @@ def _opponent_triggers_alt_strategy(opponent: Player) -> bool:
     return before_alt_strategy < current_round <= last_round_of_alt_strategy
 
 
-def _opponent_defected_in_first_n_rounds(opponent: Player, first_n_rounds: int) -> bool:
+def _opponent_defected_in_first_n_rounds(opponent: Player, first_n_rounds: int
+                                         ) -> bool:
     """
     If opponent defected in the first N rounds, return True. Else return False.
     """

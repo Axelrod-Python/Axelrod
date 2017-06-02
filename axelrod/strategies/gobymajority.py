@@ -1,9 +1,9 @@
+import copy
+
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 
 from typing import Dict, Any, Union
-
-import copy
 
 C, D = Actions.C, Actions.D
 

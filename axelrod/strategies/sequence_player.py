@@ -2,8 +2,8 @@ from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod._strategy_utils import thue_morse_generator
 
-from typing import Tuple
 from types import FunctionType
+from typing import Tuple
 
 C, D = Actions.C, Actions.D
 
@@ -13,7 +13,8 @@ class SequencePlayer(Player):
     determine their plays.
     """
 
-    def __init__(self, generator_function: FunctionType, generator_args: Tuple = ()) -> None:
+    def __init__(self, generator_function: FunctionType,
+                 generator_args: Tuple = ()) -> None:
         super().__init__()
         # Initialize the sequence generator
         self.generator_function = generator_function
