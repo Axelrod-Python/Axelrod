@@ -59,7 +59,6 @@ class TestRevisedDowning(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
@@ -134,7 +133,6 @@ class TestFeld(TestPlayer):
                              player._end_coop_prob)
 
     def test_strategy(self):
-
         actions = [(C, C)] * 41 + [(D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          seed=1)
@@ -162,7 +160,6 @@ class TestGrofman(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C)] * 7
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
@@ -197,7 +194,6 @@ class TestJoss(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=1)
 
@@ -320,7 +316,6 @@ class TestTullock(TestPlayer):
 
     def test_strategy(self):
         """Cooperates for first ten rounds"""
-
         actions = [(C, C), (C, D)] * 5
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
@@ -364,7 +359,6 @@ class TestUnnamedStrategy(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(D, C), (C, C), (C, C), (D, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=1)
 
@@ -397,7 +391,6 @@ class SteinAndRapoport(TestPlayer):
         self.assertIsNone(player.opponent_is_random)
 
     def test_strategy(self):
-
         # Our Player (SteinAndRapoport) vs Cooperator
         # After 15th round (pvalue < alpha) still plays titfortat
         # Note it always defects on the last two rounds

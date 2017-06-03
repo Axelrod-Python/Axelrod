@@ -173,7 +173,6 @@ class TestSneakyTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-
         opponent = axelrod.MockPlayer(actions=[C, C, C, D, C, C])
         actions = [(C, C), (C, C), (D, C), (D, D), (C, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions)
@@ -235,7 +234,6 @@ class TestHardTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-
         opponent = axelrod.MockPlayer(actions=[D, C, C, C, D, C])
         actions = [(C, D), (D, C), (D, C), (D, C), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
@@ -255,7 +253,6 @@ class TestHardTitFor2Tats(TestPlayer):
     }
 
     def test_strategy(self):
-
         # Uses memory 3 to punish 2 consecutive defections
         opponent = axelrod.MockPlayer(actions=[D, C, C, D, D, D, C])
         actions = [(C, D), (C, C), (C, C), (C, D), (C, D), (D, D), (D, C)]

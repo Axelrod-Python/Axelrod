@@ -135,7 +135,6 @@ def factory_TestGoByRecentMajority(memory_depth, soft=True):
         }
 
         def test_strategy(self):
-
             # for example memory_depth=2 plays against [C, C, D, D]
             # soft actions = [(C, C), (C, C), (C, D), (C, D)]
             # hard actions = [(D, C), (C, C), (C, D), (D, D)]

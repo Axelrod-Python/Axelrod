@@ -20,7 +20,6 @@ class TestVeryBad(TestPlayer):
     }
 
     def test_strategy(self):
-
         # axelrod.Defector -
         #   cooperates for the first three, defects for the rest P(C) < .5
         self.versus_test(

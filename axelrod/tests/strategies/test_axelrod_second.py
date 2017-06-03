@@ -22,7 +22,6 @@ class TestChampion(TestPlayer):
     }
 
     def test_strategy(self):
-
         # Cooperates for num_rounds / 20 (10 by default)
 
         actions = [(C, C), (C, D)] * 5  # Cooperate for ten rounds
@@ -103,7 +102,6 @@ class TestTester(TestPlayer):
     }
 
     def test_strategy(self):
-
         # Alternate after 3rd round if opponent only cooperates
         actions = [(D, C)] + [(C, C), (C, C)] +  [(D, C), (C, C)] * 4
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,

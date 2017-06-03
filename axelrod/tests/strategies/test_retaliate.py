@@ -88,7 +88,6 @@ class TestLimitedRetaliate(TestPlayer):
     }
 
     def test_strategy(self):
-
         # If opponent has never defected, co-operate
         opponent = axelrod.Cooperator()
         actions = [(C, C)] * 5

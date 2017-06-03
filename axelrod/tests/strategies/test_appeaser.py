@@ -21,7 +21,6 @@ class TestAppeaser(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 

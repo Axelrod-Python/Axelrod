@@ -21,7 +21,6 @@ class TestInverse(TestPlayer):
     }
 
     def test_strategy(self):
-
         # Test that as long as the opponent has not defected the player will
         # cooperate.
         self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)])

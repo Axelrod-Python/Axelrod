@@ -164,7 +164,6 @@ class TestStochasticCooperator(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C), (D, D)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=15)
@@ -197,7 +196,6 @@ class TestStochasticWSLS(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (C, C), (C, D), (D, C), (D, D)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=2)
@@ -265,7 +263,6 @@ class TestZDExtort2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=2)
@@ -303,7 +300,6 @@ class TestZDExtort2v2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=2)
@@ -333,7 +329,6 @@ class TestZDExtort4(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=2)
@@ -400,7 +395,6 @@ class TestZDGTFT2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=2)
@@ -438,7 +432,6 @@ class TestZDSet2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (D, C), (C, D), (C, C), (D, D)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=2)
@@ -491,7 +484,6 @@ class TestALLCorALLD(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(D, C)] * 10
         self.versus_test(opponent=axelrod.Cooperator(),
                          expected_actions=actions, seed=0)

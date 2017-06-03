@@ -221,7 +221,6 @@ class TestDBS(TestPlayer):
     }
 
     def test_strategy(self):
-
         default_init_kwargs = {
                 'discount_factor':.75, 'promotion_threshold':3,
                 'violation_threshold':4, 'reject_threshold':4,

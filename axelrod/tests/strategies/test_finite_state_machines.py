@@ -373,7 +373,6 @@ class TestPun1(TestFSMPlayer):
     """
 
     def test_strategy(self):
-
         state_and_actions = [(1, C), (2, D), (1, D), (2, D)] * 3
         self.transitions_test(state_and_actions)
 
@@ -406,7 +405,6 @@ class TestRaider(TestFSMPlayer):
     """
 
     def test_strategy(self):
-
         state_and_actions = [(0, C), (2, C), (0, D), (2, C)] * 3
         self.transitions_test(state_and_actions)
 
@@ -443,7 +441,6 @@ class TestRipoff(TestFSMPlayer):
     """
 
     def test_strategy(self):
-
         state_and_actions = [(1, C), (2, C)] * 3 + [(1, D)] + [(3, C), (3, D)] * 5
         self.transitions_test(state_and_actions)
 
@@ -515,7 +512,6 @@ class TestSolutionB5(TestFSMPlayer):
     """
 
     def test_strategy(self):
-
         state_and_actions = ([(1, C)] + [(2, C)] * 3 + [(2, D), (3, D)]) * 2
         self.transitions_test(state_and_actions)
 
@@ -584,7 +580,6 @@ class TestEvolvedFSM4(TestFSMPlayer):
     """
 
     def test_strategy(self):
-
         state_and_actions = [(0, C)] * 3 + [(0, D), (2, C), (2, D), (1, D)] * 3
         self.transitions_test(state_and_actions)
 
@@ -644,7 +639,6 @@ class TestEvolvedFSM16(TestFSMPlayer):
     """
 
     def test_strategy(self):
-
         # finished: 0,
         state_and_actions = [(0, C)] * 3 + [(0, D)] + [(12, D), (11, D), (5, C)] * 3
         self.transitions_test(state_and_actions)
@@ -735,7 +729,6 @@ class TestEvolvedFSM16Noise05(TestFSMPlayer):
     """
 
     def test_strategy(self):
-
         # finished: 12, 13
         state_and_actions = [(0, C), (8, C), (2, C), (12, D), (2, C), (12, C),
                              (13, C), (13, C), (13, D)] + [(6, D)] * 3

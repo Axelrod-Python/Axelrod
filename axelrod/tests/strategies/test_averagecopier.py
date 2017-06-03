@@ -77,7 +77,6 @@ class TestNiceAverageCopier(TestPlayer):
     }
 
     def test_strategy(self):
-
         # Tests that if opponent has played all C then player chooses C.
         actions = [(C, C)] * 10
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,

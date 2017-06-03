@@ -21,7 +21,6 @@ class TestGolden(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (C, C), (D, D), (C, C)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions)
@@ -50,7 +49,6 @@ class TestPi(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions)
@@ -79,7 +77,6 @@ class Teste(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions)

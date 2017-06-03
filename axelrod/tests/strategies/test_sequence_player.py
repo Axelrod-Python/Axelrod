@@ -68,7 +68,6 @@ class TestThueMorseInverse(TestPlayer):
     }
 
     def test_strategy(self):
-
         inv_thue_morse_seq = [C, D, D, C, D, C, C, D, D, C, C, D, C, D, D, C, D]
         n = len(inv_thue_morse_seq)
 

@@ -22,7 +22,6 @@ class TestBetterAndBetter(TestPlayer):
 
     def test_strategy(self):
         """Tests that the strategy gives expected behaviour."""
-
         self.versus_test(axelrod.Defector(),
                          expected_actions=[(D, D), (D, D), (D, D), (D, D),
                                            (C, D), (D, D), (D, D), (D, D),

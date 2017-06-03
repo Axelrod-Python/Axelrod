@@ -33,7 +33,6 @@ class TestEvolvedANN(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
@@ -59,7 +58,6 @@ class TestEvolvedANN5(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
@@ -82,7 +80,6 @@ class TestEvolvedANNNoise05(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 

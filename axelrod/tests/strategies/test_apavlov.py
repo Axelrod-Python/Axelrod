@@ -21,7 +21,6 @@ class TestAPavlov2006(TestPlayer):
     }
 
     def test_strategy(self):
-
         actions = [(C, C)] * 7
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          attrs={"opponent_class": "Cooperative"})

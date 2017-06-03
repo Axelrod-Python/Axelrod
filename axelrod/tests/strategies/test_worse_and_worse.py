@@ -21,7 +21,6 @@ class TestWorseAndWorse(TestPlayer):
 
     def test_strategy(self):
         """Test that the strategy gives expected behaviour."""
-
         # 6 Rounds Cooperate given seed
         actions = [(C, C)] * 6 + [(D, C)] + [(C, C)] * 3
         self.versus_test(axelrod.Cooperator(), expected_actions = actions,
@@ -49,7 +48,6 @@ class TestWorseAndWorseRandom(TestPlayer):
 
     def test_strategy(self):
         """Test that the strategy gives expected behaviour."""
-
         actions = [(C, C)] + [(D, C)] * 4
         self.versus_test(axelrod.Cooperator(), expected_actions = actions,
                          match_attributes={"length":5}, seed=1)
@@ -118,7 +116,6 @@ class TestWorseAndWorse3(TestPlayer):
 
     def test_strategy(self):
         """Test that the strategy gives expected behaviour."""
-
         # Test that if opponent only defects, strategy also defects
         actions = [(C, D)] + [(D, D)] * 4
         self.versus_test(axelrod.Defector(), expected_actions=actions)

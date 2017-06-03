@@ -53,7 +53,6 @@ class TestForgivingTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-
         self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5)
         self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 5)
         self.versus_test(axelrod.Alternator(), expected_actions=[(C, C)] + [(C, D), (D, C)] * 5)
