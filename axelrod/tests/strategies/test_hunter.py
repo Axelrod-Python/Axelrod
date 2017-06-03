@@ -46,8 +46,6 @@ class TestDefectorHunter(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
-
         actions = [(C, D)] * 4 + [(D, D)] * 10
         self.versus_test(opponent=axelrod.Defector(), expected_actions=actions)
 
@@ -94,7 +92,6 @@ class TestAlternatorHunter(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         actions = [(C, C), (C, D)] * 3 + [(D, C), (D, D)] * 5
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, attrs={'is_alt': True})
@@ -125,7 +122,6 @@ class TestCycleHunter(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         player = self.player()
         # Test against cyclers
         for opponent in [axelrod.CyclerCCD(), axelrod.CyclerCCCD(),
@@ -165,7 +161,6 @@ class TestEventualCycleHunter(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         player = self.player()
         # Test against cyclers
         for opponent in [axelrod.CyclerCCD(), axelrod.CyclerCCCD(),

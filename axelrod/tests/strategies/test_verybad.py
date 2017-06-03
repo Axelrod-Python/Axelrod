@@ -20,8 +20,6 @@ class TestVeryBad(TestPlayer):
     }
 
     def test_strategy(self):
-        # always cooperates on first move
-        self.first_play_test(play=C, seed=None)
 
         # axelrod.Defector -
         #   cooperates for the first three, defects for the rest P(C) < .5

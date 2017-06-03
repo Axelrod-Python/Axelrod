@@ -71,7 +71,6 @@ class TestPSOGamblerMem1(TestPlayer):
         self.assertEqual(self.player().lookup_dict, converted_original)
 
     def test_strategy(self):
-        self.first_play_test(C)
         vs_cooperator = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=vs_cooperator)
 
@@ -111,10 +110,6 @@ class TestPSOGambler1_1_1(TestPlayer):
             ('D', 'D', 'D'): 0.11886807}
         converted_original = convert_original_to_current(original_data)
         self.assertEqual(self.player().lookup_dict, converted_original)
-
-    def test_strategy(self):
-        """Starts by cooperating."""
-        self.first_play_test(C)
 
     def test_cooperate_forever(self):
         seed = 2
@@ -222,11 +217,6 @@ class TestPSOGambler2_2_2(TestPlayer):
             ('DD', 'DD', 'DD'): 0.0}
         converted_original = convert_original_to_current(original_data)
         self.assertEqual(self.player().lookup_dict, converted_original)
-
-    def test_strategy(self):
-        """Starts by cooperating."""
-        self.first_play_test(C)
-        self.second_play_test(C, C, C, C)
 
     def test_vs_defector(self):
         expected = [(C, D), (C, D)] + [(D, D)] * 10
@@ -341,11 +331,6 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
             ('DD', 'DD', 'DD'): 0.0}
         converted_original = convert_original_to_current(original_data)
         self.assertEqual(self.player().lookup_dict, converted_original)
-
-    def test_strategy(self):
-        """Starts by cooperating."""
-        self.first_play_test(C)
-        self.second_play_test(C, C, C, C)
 
     def test_vs_defector(self):
         expected = [(C, D), (C, D)] + [(D, D)] * 10

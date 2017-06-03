@@ -21,8 +21,6 @@ class TestRetaliate(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
-        self.first_play_test(C)
         # If opponent has defected more than 10 percent of the time, defect.
         opponent = axelrod.Cooperator()
         actions = [(C, C)] * 5
@@ -48,8 +46,6 @@ class TestRetaliate2(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
-        self.first_play_test(C)
         # If opponent has defected more than 8 percent of the time, defect.
         opponent = axelrod.MockPlayer([C] * 13 + [D])
         actions = [(C, C)] * 13 + [(C, D), (D, C)]
@@ -71,8 +67,6 @@ class TestRetaliate3(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
-        self.first_play_test(C)
         # If opponent has defected more than 5 percent of the time, defect.
         opponent = axelrod.MockPlayer([C] * 19 + [D])
         actions = [(C, C)] * 19 + [(C, D), (D, C)]
@@ -94,8 +88,6 @@ class TestLimitedRetaliate(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
-        self.first_play_test(C)
 
         # If opponent has never defected, co-operate
         opponent = axelrod.Cooperator()

@@ -21,9 +21,6 @@ class TestCalculator(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_first_play(self):
-        self.first_play_test(C)
-
     def test_twenty_rounds_joss_then_defects_for_cyclers(self):
         """Uses axelrod.strategies.axelrod_first.Joss strategy for first 20 rounds"""
         seed = 2

@@ -23,8 +23,6 @@ class TestHardGoByMajority(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_first_play(self):
-        self.first_play_test(D)
 
     def test_memory_depth_infinite_soft_is_false(self):
         init_kwargs = {}
@@ -74,9 +72,6 @@ class TestGoByMajority(TestHardGoByMajority):
     name = "Soft Go By Majority"
     player = axelrod.GoByMajority
     default_soft = True
-
-    def test_first_play(self):
-        self.first_play_test(C)
 
     def test_memory_depth_infinite_soft_is_true(self):
         opponent_actions = [C] * 50 + [D] * 100 + [C] * 52
@@ -140,11 +135,6 @@ def factory_TestGoByRecentMajority(memory_depth, soft=True):
         }
 
         def test_strategy(self):
-
-            if soft:
-                self.first_play_test(C)
-            else:
-                self.first_play_test(D)
 
             # for example memory_depth=2 plays against [C, C, D, D]
             # soft actions = [(C, C), (C, C), (C, D), (C, D)]

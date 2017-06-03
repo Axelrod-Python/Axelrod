@@ -21,10 +21,6 @@ class TestAverageCopier(TestPlayer):
     }
 
     def test_strategy(self):
-        # Test that the first strategy is picked randomly.
-        self.first_play_test(C, seed=1)
-        self.first_play_test(D, seed=2)
-
         # Tests that if opponent has played all C then player chooses C.
         actions = [(C, C)] * 10
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
@@ -81,9 +77,6 @@ class TestNiceAverageCopier(TestPlayer):
     }
 
     def test_strategy(self):
-        # Cooperates initially (not stochastic)
-        self.first_play_test(C, seed=1)
-        self.first_play_test(C, seed=2)
 
         # Tests that if opponent has played all C then player chooses C.
         actions = [(C, C)] * 10

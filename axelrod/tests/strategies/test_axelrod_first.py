@@ -23,7 +23,6 @@ class TestDavis(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         # Cooperates for the first ten rounds
         actions = [(C, C)] * 10
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
@@ -60,7 +59,6 @@ class TestRevisedDowning(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
@@ -136,7 +134,6 @@ class TestFeld(TestPlayer):
                              player._end_coop_prob)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C)] * 41 + [(D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
@@ -165,7 +162,6 @@ class TestGrofman(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C)] * 7
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
@@ -201,7 +197,6 @@ class TestJoss(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=1)
@@ -251,8 +246,6 @@ class TestNydegger(TestPlayer):
 
     def test_strategy(self):
         # Test TFT-type initial play
-        self.first_play_test(C)
-
         # Test trailing post-round 3 play
 
         actions = [(C, C)] * 9
@@ -287,11 +280,6 @@ class TestShubik(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by Cooperating
-        self.first_play_test(C)
-        # Looks like Tit-For-Tat at first
-        self.second_play_test(C, D, C, D)
-
         actions = [(C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
@@ -332,7 +320,6 @@ class TestTullock(TestPlayer):
 
     def test_strategy(self):
         """Cooperates for first ten rounds"""
-        self.first_play_test(C)
 
         actions = [(C, C), (C, D)] * 5
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
@@ -377,7 +364,6 @@ class TestUnnamedStrategy(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(D, C), (C, C), (C, C), (D, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=1)
@@ -411,7 +397,6 @@ class SteinAndRapoport(TestPlayer):
         self.assertIsNone(player.opponent_is_random)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         # Our Player (SteinAndRapoport) vs Cooperator
         # After 15th round (pvalue < alpha) still plays titfortat
@@ -461,4 +446,3 @@ class SteinAndRapoport(TestPlayer):
         self.versus_test(opponent, expected_actions=actions,
                          match_attributes={"length": -1},
                          attrs={"opponent_is_random": False})
-

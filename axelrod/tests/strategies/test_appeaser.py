@@ -21,8 +21,6 @@ class TestAppeaser(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
-        self.first_play_test(C)
 
         actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)

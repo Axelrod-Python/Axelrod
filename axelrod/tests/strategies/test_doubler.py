@@ -20,10 +20,6 @@ class TestDoubler(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_strategy(self):
-        # Starts by cooperating
-        self.first_play_test(C)
-
     def test_defects_if_opponent_last_play_is_D_and_defections_gt_two_times_cooperations(self):
         opponent_plays = [C] * 7 + [D] * 4 + [C]
         actions = [(C, C)] * 7 + [(C, D)] * 4 + [(D, C)]

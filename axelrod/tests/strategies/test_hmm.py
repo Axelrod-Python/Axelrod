@@ -166,7 +166,9 @@ class TestEvolvedHMM5(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestEvolvedHMM5vsCooperator(TestMatch):

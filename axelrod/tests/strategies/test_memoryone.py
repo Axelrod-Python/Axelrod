@@ -50,10 +50,10 @@ class TestWinStayLoseShift(TestPlayer):
                          self.expected_classifier)
 
     def test_strategy(self):
-        # Starts by cooperating
-        self.first_play_test(C)
         # Check that switches if does not get best payoff.
-        self.second_play_test(C, D, D, C)
+        actions = [(C, C), (C, D), (D, C), (D, D), (C, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestWinShiftLoseStayTestPlayer(TestPlayer):
@@ -71,10 +71,10 @@ class TestWinShiftLoseStayTestPlayer(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by defecting.
-        self.first_play_test(D)
         # Check that switches if does not get best payoff.
-        self.second_play_test(D, C, C, D)
+        actions = [(D, C), (C, D), (C, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestGTFT(TestPlayer):
@@ -91,7 +91,13 @@ class TestGTFT(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=0)
+
+        actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, seed=1)
 
     def test_four_vector(self):
         (R, P, S, T) = Game().RPST()
@@ -124,7 +130,6 @@ class TestFirmButFair(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axelrod.Alternator(),
@@ -159,7 +164,6 @@ class TestStochasticCooperator(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (D, D), (C, C), (C, D), (C, C), (D, D)]
         self.versus_test(opponent=axelrod.Alternator(),
@@ -193,7 +197,6 @@ class TestStochasticWSLS(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (D, D), (C, C), (C, D), (D, C), (D, D)]
         self.versus_test(opponent=axelrod.Alternator(),
@@ -262,7 +265,6 @@ class TestZDExtort2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
@@ -301,7 +303,6 @@ class TestZDExtort2v2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
@@ -332,7 +333,6 @@ class TestZDExtort4(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
@@ -363,7 +363,6 @@ class TestZDGen2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
@@ -401,7 +400,6 @@ class TestZDGTFT2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(opponent=axelrod.Alternator(),
@@ -440,7 +438,6 @@ class TestZDSet2(TestPlayer):
         test_four_vector(self, expected_dictionary)
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C), (D, D), (D, C), (C, D), (C, C), (D, D)]
         self.versus_test(opponent=axelrod.Alternator(),

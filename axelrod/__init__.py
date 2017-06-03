@@ -13,7 +13,7 @@ from .game import DefaultGame, Game
 from .player import (
     get_state_distribution_from_history, is_basic, obey_axelrod,
     update_history, update_state_distribution, Player)
-from .mock_player import MockPlayer, simulate_play
+from .mock_player import MockPlayer
 from .match import Match
 from .moran import MoranProcess, MoranProcessGraph, ApproximateMoranProcess
 from .strategies import *

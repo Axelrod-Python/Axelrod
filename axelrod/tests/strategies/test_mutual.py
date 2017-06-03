@@ -20,9 +20,6 @@ class TestDesperate(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C, seed=1)
-        self.first_play_test(D, seed=2)
-
         # Our Player (Desperate) vs Cooperator SEED --> 1
         opponent = axelrod.Cooperator()
         opponent_actions = [C] * 5
@@ -69,9 +66,6 @@ class TestHopeless(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C, seed=1)
-        self.first_play_test(D, seed=2)
-
         # Our Player (Hopeless) vs Cooperator SEED --> 1
         opponent = axelrod.Cooperator()
         opponent_actions = [C] * 5
@@ -119,9 +113,6 @@ class TestWilling(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C, seed=1)
-        self.first_play_test(D, seed=2)
-
         # Our Player (Willing) vs Cooperator SEED --> 1
         opponent = axelrod.Cooperator()
         opponent_actions = [C] * 5

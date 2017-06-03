@@ -22,9 +22,6 @@ class TestStalker(TestPlayer):
 
     def test_strategy(self):
 
-        # Start with cooperation
-        self.first_play_test(C)
-
 
         actions = [(C, D)] * 2 + [(C, C), (D, C), (C, C), (C, C), (D, D)]
         self.versus_test(opponent=axl.MockPlayer([D] * 2 + [C] * 4),

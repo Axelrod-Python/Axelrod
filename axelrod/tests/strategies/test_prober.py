@@ -1,7 +1,7 @@
 """Tests for Prober strategies."""
 
 import axelrod
-from .test_player import TestPlayer, test_responses
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -252,7 +252,6 @@ class TestNaiveProber(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         # Always retaliate a defection
         opponent = axelrod.MockPlayer([C, D, D, D, D])
         actions = [(C, C), (C, D), (D, D), (D, D), (D, D)]
@@ -297,7 +296,6 @@ class TestRemorsefulProber(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         # Always retaliate a defection
         actions = [(C, D)] + [(D, D)] * 10
         self.versus_test(opponent=axelrod.Defector(), expected_actions=actions,

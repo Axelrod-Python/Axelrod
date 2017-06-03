@@ -22,8 +22,6 @@ class TestChampion(TestPlayer):
     }
 
     def test_strategy(self):
-        # Initially cooperates
-        self.first_play_test(C)
 
         # Cooperates for num_rounds / 20 (10 by default)
 
@@ -66,8 +64,6 @@ class TestEatherley(TestPlayer):
     }
 
     def test_strategy(self):
-        # Initially cooperates
-        self.first_play_test(C)
         # Test cooperate after opponent cooperates
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
@@ -107,9 +103,6 @@ class TestTester(TestPlayer):
     }
 
     def test_strategy(self):
-        """Starts by defecting."""
-        self.first_play_test(D)
-
 
         # Alternate after 3rd round if opponent only cooperates
         actions = [(D, C)] + [(C, C), (C, C)] +  [(D, C), (C, C)] * 4

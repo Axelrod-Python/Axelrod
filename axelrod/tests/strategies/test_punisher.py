@@ -116,8 +116,6 @@ class TestLevelPunisher(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by Cooperating
-        self.first_play_test(C)
 
         # Cooperates if the turns played are less than 10.
         actions = [(C, C)] * 9

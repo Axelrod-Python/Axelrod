@@ -21,7 +21,6 @@ class TestAPavlov2006(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C)] * 7
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
@@ -80,7 +79,6 @@ class TestAPavlov2011(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         actions = [(C, C)] * 8
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,

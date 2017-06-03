@@ -33,8 +33,6 @@ class TestEvolvedANN(TestPlayer):
     }
 
     def test_strategy(self):
-        # Test initial play sequence
-        self.first_play_test(C)
 
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
@@ -61,8 +59,6 @@ class TestEvolvedANN5(TestPlayer):
     }
 
     def test_strategy(self):
-        # Test initial play sequence
-        self.first_play_test(C)
 
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
@@ -86,8 +82,6 @@ class TestEvolvedANNNoise05(TestPlayer):
     }
 
     def test_strategy(self):
-        # Test initial play sequence
-        self.first_play_test(C)
 
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
