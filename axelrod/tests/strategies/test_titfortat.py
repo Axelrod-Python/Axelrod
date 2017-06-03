@@ -81,7 +81,7 @@ class TestTitFor2Tats(TestPlayer):
     def test_strategy(self):
         # Will punish sequence of 2 defections but will forgive
         opponent = axelrod.MockPlayer(actions=[D, D, D, C, C])
-        actions = [(C, D), (C, D), (D, D), (D, C), (C, C)]
+        actions = [(C, D), (C, D), (D, D), (D, C), (C, C), (C, D)]
         self.versus_test(opponent, expected_actions=actions)
 
 
@@ -103,6 +103,14 @@ class TestTwoTitsForTat(TestPlayer):
         opponent = axelrod.MockPlayer(actions=[D, C, C, D, C])
         actions = [(C, D), (D, C), (D, C), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
+
+        actions = [(C, C), (C, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(C, D), (D, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions)
 
 
 class TestDynamicTwoTitsForTat(TestPlayer):
@@ -201,6 +209,13 @@ class TestSuspiciousTitForTat(TestPlayer):
         actions = [(D, C), (C, D)] * 8
         self.versus_test(axelrod.TitForTat(), expected_actions=actions)
 
+        actions = [(D, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
 
 class TestAntiTitForTat(TestPlayer):
 
@@ -237,6 +252,13 @@ class TestHardTitForTat(TestPlayer):
         opponent = axelrod.MockPlayer(actions=[D, C, C, C, D, C])
         actions = [(C, D), (D, C), (D, C), (D, C), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
+
+        actions = [(C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        actions = [(C, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 
 class TestHardTitFor2Tats(TestPlayer):
@@ -513,7 +535,7 @@ class TestSpitefulTitForTat(TestPlayer):
                          attrs={"retaliating": False})
 
         opponent = axelrod.MockPlayer(actions=[C, C, C, C, D, C])
-        actions = [(C, C)] * 4 + [(C, D), (D, C)]
+        actions = [(C, C)] * 4 + [(C, D), (D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions,
                          attrs={"retaliating": False})
 
