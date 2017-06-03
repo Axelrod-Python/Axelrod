@@ -10,24 +10,14 @@ C, D = Actions.C, Actions.D
 
 
 class MockPlayer(Player):
-    """Creates a mock player that copies a history and state distribution to
-    simulate a history of play, and then plays a given sequence of actions. If
-    no actions are given, plays like Cooperator.
+    """Creates a mock player that plays a given sequence of actions. If
+    no actions are given, plays like Cooperator. Used for testing.
     """
 
     name = "Mock Player"
 
-    def __init__(self, actions: List[Action] =None, history: List[Action] =None, state_dist: defaultdict =None) -> None:
-        # Need to retain history for opponents that examine opponents history
-        # Do a deep copy just to be safe
+    def __init__(self, actions: List[Action] = None) -> None:
         super().__init__()
-        if history:
-            # Make sure we both copy the history and get the right counts
-            # for cooperations and defections.
-            for action in history:
-                update_history(self, action)
-        if state_dist:
-            self.state_distribution = dict(state_dist)
         if actions:
             self.actions = cycle(actions)
         else:
