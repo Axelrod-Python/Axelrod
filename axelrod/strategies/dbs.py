@@ -204,8 +204,7 @@ class DBS(Player):
         Parameters
 
         outcome: tuple of two actions.Actions
-        alpha: int, optional
-            Discount factor. Default is 1.
+        alpha: int, optional. Discount factor. Default is 1.
         """
         G = self.history_by_cond[outcome][0]
         F = self.history_by_cond[outcome][1]
