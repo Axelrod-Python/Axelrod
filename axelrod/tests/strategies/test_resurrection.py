@@ -19,9 +19,6 @@ class Resurrection(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by Cooperating
-        self.first_play_test(C)
-
         # Check if the turns played are greater than 5
         actions = [(C, C), (C, C), (C, C), (C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
@@ -48,9 +45,6 @@ class TestDoubleResurrection(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by Cooperating
-        self.first_play_test(C)
-
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 

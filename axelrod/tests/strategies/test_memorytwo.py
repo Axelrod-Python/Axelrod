@@ -22,7 +22,6 @@ class TestMEM2(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         # Start with TFT
         actions = [(C, C), (C, C)]
         self.versus_test(opponent=axelrod.Cooperator(),

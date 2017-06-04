@@ -28,7 +28,6 @@ class TestPunisher(TestPlayer):
         self.assertEqual(player.grudge_memory, 1)
 
     def test_strategy(self):
-
         opponent = axelrod.Alternator()
         actions = [(C, C), (C, D), (D, C)]
         self.versus_test(opponent=opponent, expected_actions=actions,
@@ -116,9 +115,6 @@ class TestLevelPunisher(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by Cooperating
-        self.first_play_test(C)
-
         # Cooperates if the turns played are less than 10.
         actions = [(C, C)] * 9
         self.versus_test(opponent=axelrod.Cooperator(),

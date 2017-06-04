@@ -21,8 +21,9 @@ class TestCooperator(TestPlayer):
 
     def test_strategy(self):
         # Cooperates always.
-        self.first_play_test(C)
-        self.second_play_test(C, C, C, C)
+        actions = [(C, C)] + [(C, D), (C, C)] * 9
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestTrickyCooperator(TestPlayer):
@@ -39,8 +40,6 @@ class TestTrickyCooperator(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
-        self.first_play_test(C)
         # Test if it tries to trick opponent.
         self.versus_test(axelrod.Cooperator(), [(C, C), (C, C), (C, C), (D, C), (D, C)])
 

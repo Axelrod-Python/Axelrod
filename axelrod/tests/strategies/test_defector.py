@@ -22,8 +22,9 @@ class TestDefector(TestPlayer):
 
     def test_strategy(self):
         # Test that always defects.
-        self.first_play_test(D)
-        self.second_play_test(D, D, D, D)
+        actions = [(D, C)] + [(D, D), (D, C)] * 9
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestTrickyDefector(TestPlayer):
@@ -39,11 +40,6 @@ class TestTrickyDefector(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    def test_strategy(self):
-        # Starts by defecting.
-        self.first_play_test(D)
-        self.second_play_test(D, D, D, D)
 
     def test_cooperates_if_opponent_history_has_C_and_last_three_are_D(self):
         opponent_actions = [D, C] + [D] * 5

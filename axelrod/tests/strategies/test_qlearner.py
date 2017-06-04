@@ -3,8 +3,8 @@
 import random
 
 import axelrod
-from axelrod import simulate_play, Game
-from .test_player import TestPlayer, test_responses
+from axelrod import Game
+from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 

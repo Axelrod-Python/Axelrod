@@ -21,8 +21,6 @@ class TestForgiver(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
-        self.first_play_test(C)
         # If opponent has defected more than 10 percent of the time, defect.
         self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 10)
 
@@ -55,9 +53,6 @@ class TestForgivingTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        # Starts by cooperating.
-        self.first_play_test(C)
-
         self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5)
         self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 5)
         self.versus_test(axelrod.Alternator(), expected_actions=[(C, C)] + [(C, D), (D, C)] * 5)

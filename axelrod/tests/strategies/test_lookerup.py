@@ -308,11 +308,11 @@ class TestLookerUp(TestPlayer):
         self.assertEqual(mem_depth_inf.classifier['memory_depth'], float('inf'))
 
     def test_strategy(self):
-        self.first_play_test(C)
-        self.second_play_test(C, D, C, D)  # TFT
-
         actions = [(C, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        actions = [(C, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
 
     def test_cooperator_table(self):
         lookup_table = {((), (), ()): C}
@@ -402,10 +402,6 @@ class TestEvolvedLookerUp1_1_1(TestPlayer):
             ('D', 'D', 'D'): D}
         converted_original = convert_original_to_current(original_data)
         self.assertEqual(self.player().lookup_dict, converted_original)
-
-    def test_strategy(self):
-        """Starts by cooperating."""
-        self.first_play_test(C)
 
     def test_vs_initial_defector(self):
         opponent = [D, C, C, D, D, C]
@@ -504,11 +500,6 @@ class TestEvolvedLookerUp2_2_2(TestPlayer):
         converted_original = convert_original_to_current(original_data)
         self.assertEqual(self.player().lookup_dict, converted_original)
 
-    def test_strategy(self):
-        """Starts by cooperating."""
-        self.first_play_test(C)
-        self.second_play_test(C, C, C, C)
-
     def test_vs_initial_defector(self):
         opponent_actions = [D, D] + [C, D] * 3
         expected = [(C, D), (C, D)] + [(D, C), (C, D)] * 3
@@ -555,8 +546,6 @@ class TestWinner12(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating twice."""
-        self.first_play_test(C)
-        self.second_play_test(C, C, C, C)
         vs_alternator = [(C, C), (C, D), (D, C), (D, D)] * 5
         self.versus_test(axelrod.Alternator(), expected_actions=vs_alternator)
 
@@ -598,9 +587,6 @@ class TestWinner21(TestPlayer):
 
     def test_strategy(self):
         """Starts by cooperating twice."""
-        self.first_play_test(D)
-        self.second_play_test(C, C, C, C)
-
         vs_alternator = [(D, C), (C, D)] + [(D, C), (D, D)] * 5
         self.versus_test(axelrod.Alternator(), expected_actions=vs_alternator)
 

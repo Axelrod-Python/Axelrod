@@ -6,7 +6,7 @@ import itertools
 import numpy as np
 
 import axelrod
-from axelrod import DefaultGame, MockPlayer, Player, simulate_play
+from axelrod import DefaultGame, MockPlayer, Player
 from axelrod.player import get_state_distribution_from_history
 
 from hypothesis import given
@@ -329,31 +329,6 @@ class TestPlayerClass(unittest.TestCase):
         self.assertRaises(TypeError, ParameterisedTestPlayer, 'other', 'other', 'other')
 
 
-def test_responses(test_class, player1, player2, responses, history1=None,
-                   history2=None, seed=None):
-    """
-    Test responses to arbitrary histories. Used for the following tests
-    in TestPlayer: first_play_test, second_play_test, and responses_test.
-    Works for arbitrary players as well. Input response_lists is a list of
-    lists, each of which consists of a list for the history of player 1, a
-    list for the history of player 2, and a list for the subsequent moves
-    by player one to test.
-    """
-
-    if seed is not None:
-        axelrod.seed(seed)
-    # Force the histories, In case either history is impossible or if some
-    # internal state needs to be set, actually submit to moves to the strategy
-    # method. Still need to append history manually.
-    if history1 and history2:
-        for h1, h2 in zip(history1, history2):
-            s1, s2 = simulate_play(player1, player2, h1, h2)
-    # Run the tests
-    for response in responses:
-        s1, s2 = simulate_play(player1, player2)
-        test_class.assertEqual(s1, response)
-
-
 class TestOpponent(Player):
     """A player who only exists so we have something to test against"""
 
@@ -455,27 +430,6 @@ class TestPlayer(unittest.TestCase):
                 m.play()
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
-
-    def first_play_test(self, play, seed=None):
-        """Tests first move of a strategy."""
-        player1 = self.player()
-        player2 = TestOpponent()
-        test_responses(self, player1, player2, play, seed=seed)
-
-    def second_play_test(self, rCC, rCD, rDC, rDD, seed=None):
-        """Test responses to the four possible one round histories. Input
-        responses is simply the four responses to CC, CD, DC, and DD."""
-        # Test tests are likely to throw expected warnings.
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            test_responses(self, self.player(), axelrod.Cooperator(),
-                           rCC, C, C, seed=seed)
-            test_responses(self, self.player(), axelrod.Defector(),
-                           rCD, C, D, seed=seed)
-            test_responses(self, self.player(), axelrod.Cooperator(),
-                           rDC, D, C, seed=seed)
-            test_responses(self, self.player(), axelrod.Defector(),
-                           rDD, D, D, seed=seed)
 
     def versus_test(self, opponent, expected_actions,
                     noise=None, seed=None, turns=10,

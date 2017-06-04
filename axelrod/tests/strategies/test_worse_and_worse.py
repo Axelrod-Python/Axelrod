@@ -18,11 +18,9 @@ class TestWorseAndWorse(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-    
+
     def test_strategy(self):
         """Test that the strategy gives expected behaviour."""
-        self.first_play_test(C)
-
         # 6 Rounds Cooperate given seed
         actions = [(C, C)] * 6 + [(D, C)] + [(C, C)] * 3
         self.versus_test(axelrod.Cooperator(), expected_actions = actions,
@@ -33,7 +31,7 @@ class TestWorseAndWorse(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions = actions,
                          seed=8)
 
-        
+
 class TestWorseAndWorseRandom(TestPlayer):
 
     name = "Knowledgeable Worse and Worse"
@@ -50,23 +48,21 @@ class TestWorseAndWorseRandom(TestPlayer):
 
     def test_strategy(self):
         """Test that the strategy gives expected behaviour."""
-        self.first_play_test(C)
-       
         actions = [(C, C)] + [(D, C)] * 4
-        self.versus_test(axelrod.Cooperator(), expected_actions = actions, 
+        self.versus_test(axelrod.Cooperator(), expected_actions = actions,
                          match_attributes={"length":5}, seed=1)
 
         # Test that behaviour does not depend on opponent
         actions = [(C, D)] + [(D, D)] * 4
-        self.versus_test(axelrod.Defector(), expected_actions = actions, 
+        self.versus_test(axelrod.Defector(), expected_actions = actions,
                          match_attributes={"length":5}, seed=1)
 
-        # Test that behaviour changes when does not know length.        
+        # Test that behaviour changes when does not know length.
         actions = [(C, C), (C, D), (C, C), (C, D), (C, C)]
-        self.versus_test(axelrod.Alternator(), expected_actions = actions, 
+        self.versus_test(axelrod.Alternator(), expected_actions = actions,
                          match_attributes={"length":-1}, seed=1)
 
-        
+
 class TestWorseAndWorse2(TestPlayer):
 
     name = "Worse and Worse 2"
@@ -84,13 +80,10 @@ class TestWorseAndWorse2(TestPlayer):
     def test_strategy(self):
         """Test that the strategy gives expected behaviour."""
 
-        # Test that first move is C
-        self.first_play_test(C)
-
         # Test next move matches opponent
         actions = [(C, C)] * 19
         self.versus_test(axelrod.Cooperator(), expected_actions = actions)
-                          
+
         actions = [(C, C), (C, C), (C, D),(D, C)]
         self.versus_test(opponent=axelrod.MockPlayer(actions=[C,C,D,C]), expected_actions = actions)
 
@@ -98,14 +91,14 @@ class TestWorseAndWorse2(TestPlayer):
         self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 18 + [D, C]), expected_actions = actions)
 
         # After round 20, strategy follows stochastic behavior given a seed
-        actions = [(C, C)] * 20 + [(C, D), (D, C), (C, C), (C, D)] 
-        self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 20 + [D, C, C, D]), expected_actions = actions, 
+        actions = [(C, C)] * 20 + [(C, D), (D, C), (C, C), (C, D)]
+        self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 20 + [D, C, C, D]), expected_actions = actions,
                          seed=8)
 
         actions = [(C, C)] * 20 + [(D, D), (D, C)] + [(C, C)] * 2 + [(D, C)]
-        self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 20 + [D, C, C, C]), expected_actions = actions, 
+        self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 20 + [D, C, C, C]), expected_actions = actions,
                          seed=2)
-                         
+
 
 class TestWorseAndWorse3(TestPlayer):
 
@@ -123,14 +116,10 @@ class TestWorseAndWorse3(TestPlayer):
 
     def test_strategy(self):
         """Test that the strategy gives expected behaviour."""
-
-        # Test that first move is C
-        self.first_play_test(C)
-
         # Test that if opponent only defects, strategy also defects
         actions = [(C, D)] + [(D, D)] * 4
         self.versus_test(axelrod.Defector(), expected_actions=actions)
-        
+
         # Test that if opponent only cooperates, strategy also cooperates
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)

@@ -249,8 +249,6 @@ class TestFortress3(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(D)
-
         state_and_actions = [(1, C), (1, D), (2, C), (1, C)]
         self.transitions_test(state_and_actions)
 
@@ -291,8 +289,6 @@ class TestFortress4(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(D)
-
         state_and_actions = [(1, C), (1, D), (2, C)] * 3
         self.transitions_test(state_and_actions)
 
@@ -341,8 +337,6 @@ class TestPredator(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(C)
-
         state_and_actions = ([(0, D), (1, C), (2, C), (4, C), (2, D), (3, D), (4, D), (6, C)] +
                              [(7, D), (7, C), (8, C), (8, D), (6, D)] * 3)
         self.transitions_test(state_and_actions)
@@ -379,8 +373,6 @@ class TestPun1(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(D)
-
         state_and_actions = [(1, C), (2, D), (1, D), (2, D)] * 3
         self.transitions_test(state_and_actions)
 
@@ -413,8 +405,6 @@ class TestRaider(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(D)
-
         state_and_actions = [(0, C), (2, C), (0, D), (2, C)] * 3
         self.transitions_test(state_and_actions)
 
@@ -451,8 +441,6 @@ class TestRipoff(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(D)
-
         state_and_actions = [(1, C), (2, C)] * 3 + [(1, D)] + [(3, C), (3, D)] * 5
         self.transitions_test(state_and_actions)
 
@@ -486,7 +474,6 @@ class TestSolutionB1(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(D)
 
         state_and_actions = ([(1, D)] * 3 + [(1, C)] + [(2, C)] * 3 +
                              [(2, D)] + [(3, C), (3, D)] * 3)
@@ -525,8 +512,6 @@ class TestSolutionB5(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(D)
-
         state_and_actions = ([(1, C)] + [(2, C)] * 3 + [(2, D), (3, D)]) * 2
         self.transitions_test(state_and_actions)
 
@@ -562,7 +547,6 @@ class TestThumper(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(C)
 
         state_and_actions = [(1, C)] * 3 + [(1, D), (2, C), (1, D), (2, D)] * 3
         self.transitions_test(state_and_actions)
@@ -596,8 +580,6 @@ class TestEvolvedFSM4(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(C)
-
         state_and_actions = [(0, C)] * 3 + [(0, D), (2, C), (2, D), (1, D)] * 3
         self.transitions_test(state_and_actions)
 
@@ -657,8 +639,6 @@ class TestEvolvedFSM16(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(C)
-
         # finished: 0,
         state_and_actions = [(0, C)] * 3 + [(0, D)] + [(12, D), (11, D), (5, C)] * 3
         self.transitions_test(state_and_actions)
@@ -749,8 +729,6 @@ class TestEvolvedFSM16Noise05(TestFSMPlayer):
     """
 
     def test_strategy(self):
-        self.first_play_test(C)
-
         # finished: 12, 13
         state_and_actions = [(0, C), (8, C), (2, C), (12, D), (2, C), (12, C),
                              (13, C), (13, C), (13, D)] + [(6, D)] * 3
@@ -801,7 +779,6 @@ class TestTF1(TestFSMPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
@@ -820,7 +797,6 @@ class TestTF2(TestFSMPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         actions = [(C, C), (D, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
@@ -839,6 +815,5 @@ class TestTF3(TestFSMPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         actions = [(C, C), (C, D), (C, C), (D, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)

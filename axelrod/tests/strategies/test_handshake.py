@@ -21,9 +21,6 @@ class TestHandshake(TestPlayer):
     }
 
     def test_strategy(self):
-        # Test first play
-        self.first_play_test(C)
-
         actions = [(C, C), (D, D)] + [(C, C), (C, D)] * 10
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 

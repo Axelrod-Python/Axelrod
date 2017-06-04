@@ -1,7 +1,6 @@
 import unittest
 
 import axelrod
-from axelrod import simulate_play
 from axelrod.strategy_transformers import *
 from axelrod.actions import flip_action
 from axelrod.tests.strategies.test_titfortat import TestTitForTat
@@ -65,8 +64,9 @@ class TestTransformers(unittest.TestCase):
         p1 = axelrod.Cooperator()
         p2 = FlipTransformer()(axelrod.Cooperator)()  # Defector
         p3 = p2.clone()
-        self.assertEqual(simulate_play(p1, p3), (C, D))
-        self.assertEqual(simulate_play(p1, p3), (C, D))
+        match = axelrod.Match((p1, p3), turns=2)
+        results = match.play()
+        self.assertEqual(results, [(C, D), (C, D)])
 
     def test_generic(self):
         """Test that the generic wrapper does nothing."""
@@ -75,16 +75,17 @@ class TestTransformers(unittest.TestCase):
         Cooperator2 = transformer(axelrod.Cooperator)
         p1 = Cooperator2()
         p2 = axelrod.Cooperator()
-        self.assertEqual(simulate_play(p1, p2), (C, C))
-        self.assertEqual(simulate_play(p1, p2), (C, C))
+        match = axelrod.Match((p1, p2), turns=2)
+        results = match.play()
+        self.assertEqual(results, [(C, C), (C, C)])
 
     def test_flip_transformer(self):
         """Tests that FlipTransformer(Cooperator) == Defector."""
         p1 = axelrod.Cooperator()
         p2 = FlipTransformer()(axelrod.Cooperator)()  # Defector
-        self.assertEqual(simulate_play(p1, p2), (C, D))
-        self.assertEqual(simulate_play(p1, p2), (C, D))
-        self.assertEqual(simulate_play(p1, p2), (C, D))
+        match = axelrod.Match((p1, p2), turns=3)
+        results = match.play()
+        self.assertEqual(results, [(C, D), (C, D), (C, D)])
 
     def test_dual_wsls_transformer(self):
         """Tests that DualTransformer produces the opposite results when faced

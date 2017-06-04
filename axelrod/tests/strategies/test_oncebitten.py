@@ -71,7 +71,6 @@ class TestFoolMeOnce(TestPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
         # If opponent defects more than once, defect forever
         actions = [(C, C)] * 10
         self.versus_test(opponent=axelrod.Cooperator(),
@@ -106,8 +105,6 @@ class TestForgetfulFoolMeOnce(TestPlayer):
     def test_strategy(self):
         # Test that will forgive one D but will grudge after 2 Ds, randomly
         # forgets count.
-        self.first_play_test(C)
-
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=2, attrs={"D_count": 2})

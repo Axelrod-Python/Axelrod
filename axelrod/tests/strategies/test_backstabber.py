@@ -24,7 +24,6 @@ class TestBackStabber(TestPlayer):
     }
 
     def test_defects_after_four_defections(self):
-        self.first_play_test(C)
         # Forgives three defections
         defector_actions = [(C, D), (C, D), (C, D), (C, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=defector_actions, match_attributes={"length": 200})

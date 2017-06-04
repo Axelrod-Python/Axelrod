@@ -175,8 +175,6 @@ class TestNiceMetaWinnerEnsemble(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
-
         actions = [(C, C)] * 8
         self.versus_test(opponent=axelrod.Cooperator(),
                          expected_actions=actions,
@@ -204,8 +202,6 @@ class TestMetaHunter(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
-
         # We are not using the Cooperator Hunter here, so this should lead to
         #  cooperation.
         actions = [(C, C)] * 5
@@ -248,8 +244,6 @@ class TestMetaHunterAggressive(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
-
         # We are using CooperatorHunter here, so this should lead to
         # defection
         actions = [(C, C)] * 4 + [(D, C)]
@@ -300,8 +294,9 @@ class TestMetaMajorityMemoryOne(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
-
+        actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     name = "Meta Majority Finite Memory"
@@ -317,7 +312,9 @@ class TestMetaMajorityFiniteMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaMajorityLongMemory(TestMetaPlayer):
@@ -334,7 +331,9 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerMemoryOne(TestMetaPlayer):
@@ -351,7 +350,9 @@ class TestMetaWinnerMemoryOne(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerFiniteMemory(TestMetaPlayer):
@@ -368,7 +369,9 @@ class TestMetaWinnerFiniteMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerLongMemory(TestMetaPlayer):
@@ -385,7 +388,9 @@ class TestMetaWinnerLongMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerDeterministic(TestMetaPlayer):
@@ -402,7 +407,9 @@ class TestMetaWinnerDeterministic(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaWinnerStochastic(TestMetaPlayer):
@@ -419,7 +426,9 @@ class TestMetaWinnerStochastic(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestMetaMixer(TestMetaPlayer):
@@ -493,7 +502,9 @@ class TestNMWEDeterministic(TestMetaPlayer):
         pass
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestNMWEStochastic(TestMetaPlayer):
@@ -510,7 +521,9 @@ class TestNMWEStochastic(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestNMWEFiniteMemory(TestMetaPlayer):
@@ -527,7 +540,9 @@ class TestNMWEFiniteMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestNMWELongMemory(TestMetaPlayer):
@@ -544,7 +559,9 @@ class TestNMWELongMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)
 
 
 class TestNMWEMemoryOne(TestMetaPlayer):
@@ -561,4 +578,6 @@ class TestNMWEMemoryOne(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        self.first_play_test(C)
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions)

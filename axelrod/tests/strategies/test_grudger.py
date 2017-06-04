@@ -266,9 +266,6 @@ class TestGeneralSoftGrudger(TestPlayer):
     def test_strategy(self):
         """Test strategy with multiple initial parameters"""
 
-        # Starts by cooperating.
-        self.first_play_test(C)
-
         # Testing default parameters of n=1, d=4, c=2 (same as Soft Grudger)
         actions = [(C, D), (D, D), (D, C), (D, C), (D, D), (C, D),
                    (C, C), (C, C)]
