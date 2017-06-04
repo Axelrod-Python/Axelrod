@@ -3,7 +3,7 @@
 import axelrod
 import unittest
 from .test_player import TestPlayer
-from axelrod import dbs
+from axelrod.strategies import dbs
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -15,18 +15,18 @@ class TestNode(unittest.TestCase):
     node = dbs.Node()
 
     def test_get_siblings(self):
-        with self.assertRaises(NotImplementedError) as context:
+        with self.assertRaises(NotImplementedError):
             self.node.get_siblings()
 
     def test_is_stochastic(self):
-        with self.assertRaises(NotImplementedError) as context:
+        with self.assertRaises(NotImplementedError):
             self.node.is_stochastic()
 
 
 class TestTreeSearch(unittest.TestCase):
     """
     A set of tests for the tree-search functions.
-    We test the answers of both minimax_tree_search and MoveGen
+    We test the answers of both minimax_tree_search and move_gen
     functions, against a set of classic policies (the answer being the
     best move to play for the next turn, considering an income
     position (C, C), (C, D), (D, C) or (D, D))
@@ -36,7 +36,7 @@ class TestTreeSearch(unittest.TestCase):
         """
         Initialization for tests.
         """
-        # For each test, we check the answer againt each possible
+        # For each test, we check the answer against each possible
         # inputs, that are in self.input_pos
         self.input_pos = [(C, C), (C, D), (D, C), (D, D)]
         # We define the policies against which we are going to test
@@ -62,14 +62,14 @@ class TestTreeSearch(unittest.TestCase):
                 self.cooperator_policy, max_depth=5)
             self.assertEqual(values.index(max(values)),out)
 
-    def test_MoveGen_cooperator(self):
+    def test_move_gen_cooperator(self):
         """
-        Tests the MoveGen function when playing against a
+        Tests the move_gen function when playing against a
         Cooperator player.
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.MoveGen(inp, self.cooperator_policy,
+            out_move = dbs.move_gen(inp, self.cooperator_policy,
                 depth_search_tree=5)
             self.assertEqual(out_move, out)
 
@@ -86,14 +86,14 @@ class TestTreeSearch(unittest.TestCase):
                 self.defector_policy, max_depth=5)
             self.assertEqual(values.index(max(values)),out)
 
-    def test_MoveGen_defector(self):
+    def test_move_gen_defector(self):
         """
-        Tests the MoveGen function when playing against a
+        Tests the move_gen function when playing against a
         Defector player.
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.MoveGen(inp, self.defector_policy,
+            out_move = dbs.move_gen(inp, self.defector_policy,
                 depth_search_tree=5)
             self.assertEqual(out_move, out)
 
@@ -123,14 +123,14 @@ class TestTreeSearch(unittest.TestCase):
                 self.titForTat_policy, max_depth=1)
             self.assertEqual(values.index(max(values)),out)
 
-    def test_MoveGen_titForTat(self):
+    def test_move_gen_titForTat(self):
         """
-        Tests the MoveGen function when playing against a
+        Tests the move_gen function when playing against a
         TitForTat player.
         """
         expected_output = [C, C, C, C]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.MoveGen(inp, self.titForTat_policy,
+            out_move = dbs.move_gen(inp, self.titForTat_policy,
                 depth_search_tree=5)
             self.assertEqual(out_move, out)
 
@@ -147,14 +147,14 @@ class TestTreeSearch(unittest.TestCase):
                 self.alternator_policy, max_depth=5)
             self.assertEqual(values.index(max(values)),out)
 
-    def test_MoveGen_alternator(self):
+    def test_move_gen_alternator(self):
         """
-        Tests the MoveGen function when playing against an
+        Tests the move_gen function when playing against an
         Alternator player.
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.MoveGen(inp, self.random_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(inp, self.random_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_random(self):
@@ -170,14 +170,14 @@ class TestTreeSearch(unittest.TestCase):
                 self.random_policy, max_depth=5)
             self.assertEqual(values.index(max(values)),out)
 
-    def test_MoveGen_random(self):
+    def test_move_gen_random(self):
         """
-        Tests the MoveGen function when playing against a
+        Tests the move_gen function when playing against a
         Random player.
         """
         expected_output = [D, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.MoveGen(inp, self.random_policy, depth_search_tree=5)
+            out_move = dbs.move_gen(inp, self.random_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
     def test_minimaxTreeSearch_grudger(self):
@@ -194,14 +194,14 @@ class TestTreeSearch(unittest.TestCase):
                 self.grudger_policy, max_depth=5)
             self.assertEqual(values.index(max(values)),out)
 
-    def test_MoveGen_grudger(self):
+    def test_move_gen_grudger(self):
         """
-        Tests the MoveGen function when playing against a
+        Tests the move_gen function when playing against a
         Grudger player.
         """
         expected_output = [C, D, D, D]
         for inp, out in zip(self.input_pos, expected_output):
-            out_move = dbs.MoveGen(inp,
+            out_move = dbs.move_gen(inp,
                 self.grudger_policy, depth_search_tree=5)
             self.assertEqual(out_move, out)
 
