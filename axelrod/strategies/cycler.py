@@ -1,7 +1,8 @@
+import copy
+import itertools
+
 from axelrod.actions import Actions, Action, str_to_actions
 from axelrod.player import Player
-import itertools
-import copy
 
 C, D = Actions.C, Actions.D
 

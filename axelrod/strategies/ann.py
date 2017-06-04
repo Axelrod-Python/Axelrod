@@ -6,11 +6,11 @@
 
 import numpy as np
 
-from typing import List, Tuple
-
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.load_data_ import load_weights
+
+from typing import List, Tuple
 
 C, D = Actions.C, Actions.D
 nn_weights = load_weights()
@@ -68,8 +68,6 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
         opponent_previous_d = 1 if opponent.history[-1] == D else 0
         opponent_previous2_c = 0
         opponent_previous2_d = 0
-
-
 
     else:
         opponent_first_c = 1 if opponent.history[0] == C else 0
@@ -179,7 +177,8 @@ class ANN(Player):
         'long_run_time': False
     }
 
-    def __init__(self, weights: List[float], num_features: int, num_hidden: int) -> None:
+    def __init__(self, weights: List[float], num_features: int,
+                 num_hidden: int) -> None:
         super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
         self.input_to_hidden_layer_weights = np.matrix(i2h)

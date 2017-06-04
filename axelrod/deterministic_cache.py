@@ -1,10 +1,10 @@
 from collections import UserDict
 import pickle
-from typing import List, Tuple
 
 from .actions import Action
 from .player import Player
 
+from typing import List, Tuple
 
 CachePlayerKey = Tuple[Player, Player, int]
 CacheKey = Tuple[str, str, int]

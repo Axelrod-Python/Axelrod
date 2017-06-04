@@ -1,6 +1,5 @@
 from axelrod.actions import Actions, Action
 from axelrod.player import Player
-import axelrod
 
 from typing import List
 

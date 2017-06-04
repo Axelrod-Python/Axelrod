@@ -1,8 +1,9 @@
+from math import pi, sin
+
 from axelrod.actions import Action, Actions
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
-from math import pi, sin
 
 C, D = Actions.C, Actions.D
 

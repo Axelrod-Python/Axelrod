@@ -1,4 +1,4 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action, Actions
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 

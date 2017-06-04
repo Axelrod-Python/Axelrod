@@ -7,8 +7,9 @@ import random
 from axelrod.actions import Actions, flip_action, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from.memoryone import MemoryOnePlayer
 from axelrod.strategy_transformers import FinalTransformer
+from .memoryone import MemoryOnePlayer
+
 from scipy.stats import chisquare
 
 from typing import List, Dict, Tuple

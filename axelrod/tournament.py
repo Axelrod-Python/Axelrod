@@ -11,16 +11,21 @@ from axelrod import on_windows
 from axelrod.player import Player
 from .game import Game
 from .match import Match
-from .match_generator import RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches, ProbEndSpatialMatches, MatchGenerator
+from .match_generator import (
+    RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches,
+    ProbEndSpatialMatches, MatchGenerator)
 from .result_set import ResultSetFromFile, ResultSet
 
 from typing import List
 
+
 class Tournament(object):
 
-    def __init__(self, players: List[Player], match_generator: MatchGenerator=RoundRobinMatches,
-                 name: str='axelrod', game: Game=None, turns: int=200, repetitions: int=10,
-                 noise: float=0, with_morality: bool=True) -> None:
+    def __init__(self, players: List[Player],
+                 match_generator: MatchGenerator = RoundRobinMatches,
+                 name: str = 'axelrod', game: Game = None, turns: int = 200,
+                 repetitions: int = 10,
+                 noise: float = 0, with_morality: bool = True) -> None:
         """
         Parameters
         ----------
@@ -72,9 +77,10 @@ class Tournament(object):
             # Save filename for loading ResultSet later
             self.filename = filename
 
-    def play(self, build_results: bool=True, filename: str=None,
-             processes: int=None, progress_bar: bool=True,
-             keep_interactions: bool=False, in_memory: bool=False) -> ResultSetFromFile:
+    def play(self, build_results: bool = True, filename: str = None,
+             processes: int = None, progress_bar: bool = True,
+             keep_interactions: bool = False, in_memory: bool = False
+             ) -> ResultSetFromFile:
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -132,8 +138,9 @@ class Tournament(object):
         elif not in_memory:
             self.outputfile.close()
 
-    def _build_result_set(self, progress_bar: bool=True, keep_interactions: bool=False,
-                          in_memory: bool=False):
+    def _build_result_set(self, progress_bar: bool = True,
+                          keep_interactions: bool = False,
+                          in_memory: bool = False):
         """
         Build the result set (used by the play method)
 
@@ -160,7 +167,7 @@ class Tournament(object):
                 game=self.game)
         return result_set
 
-    def _run_serial(self, progress_bar: bool=False) -> bool:
+    def _run_serial(self, progress_bar: bool = False) -> bool:
         """
         Run all matches in serial
 
@@ -212,7 +219,8 @@ class Tournament(object):
                     self.interactions_dict[index_pair] = [interaction]
                 self.num_interactions += 1
 
-    def _run_parallel(self, processes: int=2, progress_bar: bool=False) -> bool:
+    def _run_parallel(self, processes: int=2, progress_bar: bool = False
+                      ) -> bool:
         """
         Run all matches in parallel
 
@@ -238,7 +246,7 @@ class Tournament(object):
 
         return True
 
-    def _n_workers(self, processes: int=2) -> int:
+    def _n_workers(self, processes: int = 2) -> int:
         """
         Determines the number of parallel processes to use.
 
@@ -252,7 +260,8 @@ class Tournament(object):
             n_workers = cpu_count()
         return n_workers
 
-    def _start_workers(self, workers: int, work_queue: Queue, done_queue: Queue) -> bool:
+    def _start_workers(self, workers: int, work_queue: Queue,
+                       done_queue: Queue) -> bool:
         """
         Initiates the sub-processes to carry out parallel processing.
 
@@ -272,7 +281,8 @@ class Tournament(object):
             process.start()
         return True
 
-    def _process_done_queue(self, workers: int, done_queue: Queue, progress_bar: bool=False):
+    def _process_done_queue(self, workers: int, done_queue: Queue,
+                            progress_bar: bool = False):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -387,8 +397,9 @@ class SpatialTournament(Tournament):
     A tournament in which the players are allocated in a graph as nodes
     and they players only play the others that are connected to with an edge.
     """
-    def __init__(self, players: List[Player], edges, name: str='axelrod', game: Game=None, turns: int=200,
-                 repetitions: int=10, noise: float=0, with_morality: bool=True) -> None:
+    def __init__(self, players: List[Player], edges, name: str = 'axelrod',
+                 game: Game = None, turns: int = 200, repetitions: int = 10,
+                 noise: float = 0, with_morality: bool = True) -> None:
         """
         Parameters
         ----------
@@ -422,8 +433,9 @@ class ProbEndSpatialTournament(ProbEndTournament):
     and they players only play the others that are connected to with an edge.
     Players do not know the length of a given match (it is randomly sampled).
     """
-    def __init__(self, players: List[Player], edges, name: str='axelrod', game: Game=None, prob_end: float=.5,
-                 repetitions: int=10, noise: float=0, with_morality: bool=True) -> None:
+    def __init__(self, players: List[Player], edges, name: str = 'axelrod',
+                 game: Game = None, prob_end: float = .5, repetitions: int = 10,
+                 noise: float = 0, with_morality: bool = True) -> None:
         """
         Parameters
         ----------
