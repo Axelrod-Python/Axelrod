@@ -17,16 +17,17 @@ documentation.
 .. [Au2006] Au, T.-C. and  Nau, D. S. (2006) Accident or intention: That is the question (in the iterated prisoner’s dilemma). In Proc. Int. Conf. Auton. Agents and Multiagent Syst. (AAMAS), pp. 561–568. http://www.cs.umd.edu/~nau/papers/au2006accident.pdf
 .. [Axelrod1980] Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(1), 3–25.
 .. [Axelrod1980b] Axelrod, R. (1980). More Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(3), 379-403.
-.. [Axelrod1984]  The Evolution of Cooperation. Basic Books. ISBN 0-465-02121-2.
+.. [Axelrod1984] The Evolution of Cooperation. Basic Books. ISBN 0-465-02121-2.
 .. [Axelrod1995] Wu, J. and Axelrod, R. (1995). How to cope with noise in the Iterated prisoner’s dilemma, Journal of Conflict Resolution, 39(1), pp. 183–189. doi: 10.1177/0022002795039001008.
 .. [Banks1980] Banks, J. S., & Sundaram, R. K. (1990). Repeated games, finite automata, and complexity. Games and Economic Behavior, 2(2), 97–117.  http://doi.org/10.1016/0899-8256(90)90024-O
-.. [Bendor1993] Bendor, Jonathan, et al. “Cooperation Under Uncertainty: What Is New, What Is True, and What Is Important.” American Sociological Review, vol. 61, no. 2, 1996, pp. 333–338., www.jstor.org/stable/2096337.
+.. [Bendor1993] Bendor, Jonathan. "Uncertainty and the Evolution of Cooperation." The Journal of Conflict Resolution, 37(4), 709–734.
 .. [Beaufils1997] Beaufils, B. and Delahaye, J. (1997). Our Meeting With Gradual: A Good Strategy For The Iterated Prisoner’s Dilemma. http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.4041
 .. [Berg2015] Berg, P. Van Den, & Weissing, F. J. (2015). The importance of mechanisms for the evolution of cooperation. Proceedings of the Royal Society B-Biological Sciences, 282.
 .. [Frean1994] Frean, Marcus R. “The Prisoner's Dilemma without Synchrony.” Proceedings: Biological Sciences, vol. 257, no. 1348, 1994, pp. 75–79. www.jstor.org/stable/50253.
 .. [Hilde2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013). Adaptive dynamics of extortion and compliance, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
 .. [Kraines1989] Kraines, D. & Kraines, V. Theor Decis (1989) 26: 47.  doi:10.1007/BF00134056
 .. [LessWrong2011] Zoo of Strategies (2011) LessWrong. Available at: http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/
+.. [Li2007] Li, J, How to Design a Strategy to Win an IPD Tournament, in Kendall G., Yao X. and Chong S. (eds.) The iterated prisoner’s dilemma: 20 years on. World Scientific, chapter 4, pp. 29-40, 2007.
 .. [Li2009] Li, J. & Kendall, G. (2009). A Strategy with Novel Evolutionary Features for the Iterated Prisoner’s Dilemma. Evolutionary Computation 17(2): 257–274.
 .. [Li2011] Li, J., Hingston, P., Member, S., & Kendall, G. (2011). Engineering Design of Strategies for Winning Iterated Prisoner ’ s Dilemma Competitions, 3(4), 348–360.
 .. [Li2016] Li, J. and Kendall, G. (2016). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826

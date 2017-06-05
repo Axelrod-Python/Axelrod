@@ -5,7 +5,13 @@ C, D = Actions.C, Actions.D
 
 
 class Alternator(Player):
-    """A player who alternates between cooperating and defecting."""
+    """
+    A player who alternates between cooperating and defecting.
+
+    Names
+
+    - Alternator: [Bendor1993]_
+    """
 
     name = 'Alternator'
     classifier = {

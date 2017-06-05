@@ -9,6 +9,10 @@ class AverageCopier(Player):
     """
     The player will cooperate with probability p if the opponent's cooperation
     ratio is p. Starts with random decision.
+
+    Names:
+
+    - Average Copier: Original name by Geraint Palmer
     """
 
     name = 'Average Copier'
@@ -31,7 +35,13 @@ class AverageCopier(Player):
 
 
 class NiceAverageCopier(Player):
-    """Same as Average Copier, but always starts by cooperating."""
+    """
+    Same as Average Copier, but always starts by cooperating.
+
+    Names:
+
+    - Average Copier: Original name by Owen Campbell
+    """
 
     name = 'Nice Average Copier'
     classifier = {

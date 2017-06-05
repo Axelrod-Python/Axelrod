@@ -6,13 +6,14 @@ C, D = Actions.C, Actions.D
 
 class APavlov2006(Player):
     """
-    APavlov as defined in http://www.cs.nott.ac.uk/~pszjl/index_files/chapter4.pdf
-    (pages 10-11).
-
     APavlov attempts to classify its opponent as one of five strategies:
     Cooperative, ALLD, STFT, PavlovD, or Random. APavlov then responds in a
     manner intended to achieve mutual cooperation or to defect against
     uncooperative opponents.
+
+    Names:
+
+    - Adaptive Pavlov 2006: [Li2007]_
     """
 
     name = "Adaptive Pavlov 2006"
@@ -73,13 +74,14 @@ class APavlov2006(Player):
 
 class APavlov2011(Player):
     """
-    APavlov as defined in http://www.graham-kendall.com/papers/lhk2011.pdf, as
-    closely as can be determined.
-
     APavlov attempts to classify its opponent as one of four strategies:
     Cooperative, ALLD, STFT, or Random. APavlov then responds in a manner
     intended to achieve mutual cooperation or to defect against
     uncooperative opponents.
+
+    Names:
+
+    - Adaptive Pavlov 2007: [Li2011]_
     """
 
     name = "Adaptive Pavlov 2011"
