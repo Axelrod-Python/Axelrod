@@ -6,9 +6,6 @@ C, D = Actions.C, Actions.D
 
 class DBS(Player):
     """
-    Desired Belief Strategy as described in [Au2006]_
-    http://www.cs.utexas.edu/%7Echiu/papers/Au06NoisyIPD.pdf
-
     A strategy that learns the opponent's strategy and uses symbolic noise
     detection for detecting whether anomalies in player’s behavior are
     deliberate or accidental. From the learned opponent's strategy, a tree
@@ -17,6 +14,10 @@ class DBS(Player):
     Default values for the parameters are the suggested values in the article.
     When noise increases you can try to diminish violation_threshold and
     rejection_threshold.
+
+    Names
+
+    - Desired Belief Strategy: [Au2006]_
     """
 
     # These are various properties for the strategy
