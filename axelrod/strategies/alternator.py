@@ -10,7 +10,7 @@ class Alternator(Player):
 
     Names
 
-    - Alternator: [Bendor1993]_
+    - Alternator: [Axelrod1984]_
     """
 
     name = 'Alternator'

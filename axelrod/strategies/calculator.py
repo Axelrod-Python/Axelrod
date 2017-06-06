@@ -14,7 +14,7 @@ class Calculator(Player):
 
     Names:
 
-    - Calculator: Original name by Marc Harper
+    - Calculator: [Prison1998]_
     """
 
     name = "Calculator"
