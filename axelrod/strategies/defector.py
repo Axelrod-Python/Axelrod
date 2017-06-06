@@ -5,7 +5,13 @@ C, D = Actions.C, Actions.D
 
 
 class Defector(Player):
-    """A player who only ever defects."""
+    """A player who only ever defects.
+
+    Names:
+
+    - Defector: [Axelrod1984]_
+    - ALLD: [Press2012]_
+    """
 
     name = 'Defector'
     classifier = {

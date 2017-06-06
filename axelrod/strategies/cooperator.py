@@ -10,6 +10,7 @@ class Cooperator(Player):
     Names:
 
     - Cooperator: [Axelrod1984]_
+    - ALLC: [Press2012]_
     """
 
     name = 'Cooperator'
