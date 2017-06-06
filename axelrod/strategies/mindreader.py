@@ -13,7 +13,12 @@ C, D = Actions.C, Actions.D
 
 class MindReader(Player):
     """A player that looks ahead at what the opponent will do and decides what
-    to do."""
+    to do.
+
+    Names:
+
+    - Mind reader: Original name by Jason Young
+    """
 
     name = 'Mind Reader'
     classifier = {
@@ -46,7 +51,12 @@ class MindReader(Player):
 
 class ProtectedMindReader(MindReader):
     """A player that looks ahead at what the opponent will do and decides what
-    to do. It is also protected from mind control strategies"""
+    to do. It is also protected from mind control strategies
+
+    Names:
+
+    - Protected Mind reader: Original name by Jason Young
+    """
 
     name = 'Protected Mind Reader'
     classifier = {
@@ -70,7 +80,12 @@ class ProtectedMindReader(MindReader):
 
 class MirrorMindReader(ProtectedMindReader):
     """A player that will mirror whatever strategy it is playing against by
-    cheating and calling the opponent's strategy function instead of its own."""
+    cheating and calling the opponent's strategy function instead of its own.
+
+    Names:
+
+    - Protected Mind reader: Original name by Brice Fernandes
+    """
 
     name = 'Mirror Mind Reader'
 

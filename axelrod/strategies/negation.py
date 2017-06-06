@@ -12,7 +12,7 @@ class Negation(Player):
 
     Names:
 
-    Negation - [http://www.prisoners-dilemma.com/competition.html]
+    - Negation: [PD2017]_
     """
 
     name = "Negation"

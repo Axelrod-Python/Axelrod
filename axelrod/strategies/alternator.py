@@ -11,6 +11,7 @@ class Alternator(Player):
     Names
 
     - Alternator: [Axelrod1984]_
+    - Periodic player CD: [Mittal2009]_
     """
 
     name = 'Alternator'

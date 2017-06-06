@@ -17,7 +17,6 @@ class Geller(Player):
 
     If unable to do this: will play randomly.
 
-    Geller - by Martin Chorley (@martinjc), heavily inspired by Matthew Williams (@voxmjw)
 
     This code is inspired by Matthew Williams' talk
     "Cheating at rock-paper-scissors — meta-programming in Python"
@@ -33,6 +32,10 @@ class Geller(Player):
 
     This is almost certainly cheating, and more than likely against the
     spirit of the 'competition' :-)
+
+    Names:
+
+    - Geller: Original name by Martin Chorley (@martinjc)
     """
 
     name = 'Geller'
@@ -64,6 +67,10 @@ class Geller(Player):
 class GellerCooperator(Geller):
     """Observes what the payer will do (like :code:`Geller`) but if unable to
     will cooperate.
+
+    Names:
+
+    - Geller Cooperator: Original name by Karol Langner
     """
     name = 'Geller Cooperator'
     classifier = {
@@ -78,13 +85,19 @@ class GellerCooperator(Geller):
 
     @staticmethod
     def foil_strategy_inspection() -> Action:
-        """Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead"""
+        """
+        Foils _strategy_utils.inspect_strategy and _strategy_utils.look_ahead
+        """
         return C
 
 
 class GellerDefector(Geller):
     """Observes what the payer will do (like :code:`Geller`) but if unable to
     will defect.
+
+    Names:
+
+    - Geller Defector: Original name by Karol Langner
     """
     name = 'Geller Defector'
     classifier = {

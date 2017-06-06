@@ -126,6 +126,7 @@ class CyclerCCD(Cycler):
     Names:
 
     - Cycler CCD: Original name by Marc Harper
+    - Periodic player CCD: [Mittal2009]_
     """
     name = 'Cycler CCD'
     classifier = copy.copy(Cycler.classifier)
@@ -142,6 +143,7 @@ class CyclerDDC(Cycler):
     Names:
 
     - Cycler DDC: Original name by Marc Harper
+    - Periodic player DDC: [Mittal2009]_
     """
     name = 'Cycler DDC'
     classifier = copy.copy(Cycler.classifier)

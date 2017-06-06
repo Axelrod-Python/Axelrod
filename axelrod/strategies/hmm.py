@@ -96,7 +96,7 @@ class HMMPlayer(Player):
 
     Names
 
-        - HMM Player
+        - HMM Player: Original name by Marc Harper
     """
 
     name = "HMM Player"
@@ -163,7 +163,7 @@ class EvolvedHMM5(HMMPlayer):
 
     Names:
 
-        - Evolved HMM 5
+        - Evolved HMM 5: Original name by Marc Harper
     """
     name = "Evolved HMM 5"
 

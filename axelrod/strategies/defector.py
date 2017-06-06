@@ -11,6 +11,7 @@ class Defector(Player):
 
     - Defector: [Axelrod1984]_
     - ALLD: [Press2012]_
+    - Always defect: [Mittal2009]_
     """
 
     name = 'Defector'
@@ -30,7 +31,12 @@ class Defector(Player):
 
 
 class TrickyDefector(Player):
-    """A defector that is trying to be tricky."""
+    """A defector that is trying to be tricky.
+
+    Names:
+
+    - Tricky Defector: Original name by Karol Langner
+    """
 
     name = "Tricky Defector"
     classifier = {

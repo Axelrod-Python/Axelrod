@@ -5,9 +5,15 @@ C, D = Actions.C, Actions.D
 
 
 class Grumpy(Player):
-    """A player that defects after a certain level of grumpiness.
+    """
+    A player that defects after a certain level of grumpiness.
     Grumpiness increases when the opponent defects and decreases
-    when the opponent co-operates."""
+    when the opponent co-operates.
+
+    Names:
+
+    - Grumpy: Original name by Jason Young
+    """
 
     name = 'Grumpy'
     classifier = {

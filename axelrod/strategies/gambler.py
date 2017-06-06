@@ -20,6 +20,10 @@ class Gambler(LookerUp):
     """
     A stochastic version of LookerUp which will select randomly an action in
     some cases.
+
+    Names:
+
+    - Gambler: Original name by Georgios Koutsovoulos
     """
 
     name = 'Gambler'
@@ -47,7 +51,8 @@ class PSOGamblerMem1(Gambler):
     Axelrod library.
 
     Names:
-        - PSO Gambler Mem1: Original name by Marc Harper
+
+    - PSO Gambler Mem1: Original name by Marc Harper
     """
 
     name = "PSO Gambler Mem1"
@@ -64,7 +69,8 @@ class PSOGambler1_1_1(Gambler):
     A 1x1x1 PSOGambler trained with pyswarm.
 
     Names:
-        - PSO Gambler 1_1_1: Original name by Marc Harper
+
+    - PSO Gambler 1_1_1: Original name by Marc Harper
     """
 
     name = "PSO Gambler 1_1_1"
@@ -78,10 +84,12 @@ class PSOGambler1_1_1(Gambler):
 
 class PSOGambler2_2_2(Gambler):
     """
-    A 2x2x2 PSOGambler trained with pyswarm. Original version by @GDKO.
+    A 2x2x2 PSOGambler trained with a particle swarm algorithm (implemented in
+    pyswarm). Original version by Georgios Koutsovoulos.
 
     Names:
-        - PSO Gambler 2_2_2: Original name by Marc Harper
+
+    - PSO Gambler 2_2_2: Original name by Marc Harper
     """
 
     name = "PSO Gambler 2_2_2"
@@ -98,8 +106,8 @@ class PSOGambler2_2_2_Noise05(Gambler):
     A 2x2x2 PSOGambler trained with pyswarm with noise=0.05.
 
     Names:
-        - PSO Gambler 2_2_2 Noise 05: Original name by Marc Harper
 
+    - PSO Gambler 2_2_2 Noise 05: Original name by Marc Harper
     """
 
     name = "PSO Gambler 2_2_2 Noise 05"

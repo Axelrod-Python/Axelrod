@@ -11,6 +11,10 @@ C, D = Actions.C, Actions.D
 class SequencePlayer(Player):
     """Abstract base class for players that use a generated sequence to
     determine their plays.
+
+    Names:
+
+    - Sequence Player: Original name by Marc Harper
     """
 
     def __init__(self, generator_function: FunctionType,

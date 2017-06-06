@@ -166,7 +166,7 @@ class SneakyTitForTat(Player):
 
     Names:
 
-    - Sneaky Tit For Tat: Reference Required
+    - Sneaky Tit For Tat: Original name by Karol Langner
     """
 
     name = "Sneaky Tit For Tat"
@@ -245,7 +245,7 @@ class HardTitForTat(Player):
 
     Names:
 
-    - Hard Tit For Tat: Reference Required
+    - Hard Tit For Tat: [PD2017]_
     """
 
     name = 'Hard Tit For Tat'
@@ -277,7 +277,7 @@ class HardTitFor2Tats(Player):
 
     Names:
 
-    - Hard Tit For Two Tats: Reference Required
+    - Hard Tit For Two Tats: [Stewart2012]_
     """
 
     name = "Hard Tit For 2 Tats"
@@ -498,6 +498,9 @@ class SlowTitForTwoTats(Player):
     A player plays C twice, then if the opponent plays the same move twice,
     plays that move.
 
+    Names:
+
+    - Slow tit for two tats: Original name by Ranjini Das
     """
 
     name = 'Slow Tit For Two Tats'
@@ -650,7 +653,7 @@ class SlowTitForTwoTats2(Player):
 
     Names:
 
-    - Slow Tit For Tat [Prison1998]_
+    - Slow Tit For Tat: [Prison1998]_
     """
 
     name = 'Slow Tit For Two Tats 2'

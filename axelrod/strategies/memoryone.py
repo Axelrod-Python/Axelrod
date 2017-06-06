@@ -89,8 +89,8 @@ class WinStayLoseShift(MemoryOnePlayer):
 
     Names:
 
-    - WSLS: [Stewart2012]_
     - Win Stay Lose Shift: [Nowak1993]_
+    - WSLS: [Stewart2012]_
     - Pavlov: [Kraines1989]_
     """
 
@@ -142,6 +142,8 @@ class GTFT(MemoryOnePlayer):
     Names:
 
     - Generous Tit For Tat: [Nowak1993]_
+    - Naive peace maker: [Torino2015]_
+    - Soft Joss: [Torino2015]_
     """
 
     name = 'GTFT'
@@ -213,7 +215,15 @@ class StochasticCooperator(MemoryOnePlayer):
 
 
 class StochasticWSLS(MemoryOnePlayer):
-    """Stochastic WSLS, similar to Generous TFT"""
+    """
+    Stochastic WSLS, similar to Generous TFT. Note that this is not the same as
+    Stochastic WSLS described in [Amaral2016]_, that strategy is a modification
+    of WSLS that learns from the performance of other strategies.
+
+    Names:
+
+    - Stochastic WSLS: Original name by Marc Harper
+    """
 
     name = 'Stochastic WSLS'
 
@@ -246,6 +256,10 @@ class LRPlayer(MemoryOnePlayer):
     This parameterization is Equation 14 in
     http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077886.
     See Figure 2 of the article for a more in-depth explanation.
+
+    Names:
+
+    - Linear Relation player: [Hilde2013]_
     """
 
     name = 'LinearRelation'
@@ -290,7 +304,13 @@ class LRPlayer(MemoryOnePlayer):
 
 
 class ZDExtort2(LRPlayer):
-    """An Extortionate Zero Determinant Strategy with l=P."""
+    """
+    An Extortionate Zero Determinant Strategy with l=P.
+
+    Names:
+
+    - Extort-2: [Stewart2012]_
+    """
 
     name = 'ZD-Extort-2'
 
@@ -314,7 +334,14 @@ class ZDExtort2(LRPlayer):
 
 
 class ZDExtort2v2(LRPlayer):
-    """An Extortionate Zero Determinant Strategy with l=1."""
+    """
+    An Extortionate Zero Determinant Strategy with l=1.
+
+
+    Names:
+
+    - EXTORT2: [Kuhn2017]_
+    """
 
     name = 'ZD-Extort-2 v2'
 
@@ -361,7 +388,13 @@ class ZDExtort4(LRPlayer):
 
 
 class ZDGen2(LRPlayer):
-    """A Generous Zero Determinant Strategy with l=3."""
+    """
+    A Generous Zero Determinant Strategy with l=3.
+
+    Names:
+
+    - GEN2: [Kuhn2017]_
+    """
 
     name = 'ZD-GEN-2'
 
@@ -384,7 +417,13 @@ class ZDGen2(LRPlayer):
 
 
 class ZDGTFT2(LRPlayer):
-    """A Generous Zero Determinant Strategy with l=R."""
+    """
+    A Generous Zero Determinant Strategy with l=R.
+
+    Names:
+
+    - ZDGTFT-2: [Stewart2012]_
+    """
 
     name = 'ZD-GTFT-2'
 
@@ -408,7 +447,13 @@ class ZDGTFT2(LRPlayer):
 
 
 class ZDSet2(LRPlayer):
-    """A Generous Zero Determinant Strategy with l=2."""
+    """
+    A Generous Zero Determinant Strategy with l=2.
+
+    Names:
+
+    - SET2: [Kuhn2017]_
+    """
 
     name = 'ZD-SET-2'
 
@@ -429,9 +474,6 @@ class ZDSet2(LRPlayer):
         super().receive_match_attributes(
             self.phi, self.s, self.l)
 
-
-### Strategies for recreating tournaments
-# See also Joss in axelrod_tournaments.py
 
 class SoftJoss(MemoryOnePlayer):
     """
@@ -468,6 +510,10 @@ class ALLCorALLD(Player):
 
     For now starting choice is random of 0.6, but that was an arbitrary choice
     at implementation time.
+
+    Names:
+
+    - ALLC or ALLD: Original name by Marc Harper
     """
 
     name = "ALLCorALLD"

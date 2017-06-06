@@ -15,7 +15,7 @@ class Punisher(Player):
 
     Names:
 
-    - Punisher: Original by Geraint Palmer
+    - Punisher: Original name by Geraint Palmer
     """
 
     name = 'Punisher'
@@ -79,7 +79,7 @@ class InversePunisher(Player):
 
     Names:
 
-    - Inverse Punisher: Original by Geraint Palmer
+    - Inverse Punisher: Original name by Geraint Palmer
     """
 
     name = 'Inverse Punisher'
@@ -137,7 +137,7 @@ class LevelPunisher(Player):
 
     Names:
 
-    - Level Punisher: Name from CoopSim https://github.com/jecki/CoopSim
+    - Level Punisher: [Eckhart2015]_
     """
 
     name = 'Level Punisher'

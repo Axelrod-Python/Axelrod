@@ -266,6 +266,10 @@ class LookerUp(Player):
 
     LookerUp's LookupTable defaults to Tit-For-Tat.  The initial_actions
     defaults to playing C.
+
+    Names:
+
+    - Lookerup: Original name by Martin Jones
     """
 
     name = 'LookerUp'
@@ -366,7 +370,8 @@ class EvolvedLookerUp1_1_1(LookerUp):
     A 1 1 1 Lookerup trained with an evolutionary algorithm.
 
     Names:
-        - Evolved Lookerup 1 1 1: Original name by Marc Harper
+
+    - Evolved Lookerup 1 1 1: Original name by Marc Harper
     """
     name = "EvolvedLookerUp1_1_1"
 
@@ -381,7 +386,8 @@ class EvolvedLookerUp2_2_2(LookerUp):
     A 2 2 2 Lookerup trained with an evolutionary algorithm.
 
     Names:
-        - Evolved Lookerup 2 2 2: Original name by Marc Harper
+
+    - Evolved Lookerup 2 2 2: Original name by Marc Harper
     """
     name = "EvolvedLookerUp2_2_2"
 
@@ -397,7 +403,8 @@ class Winner12(LookerUp):
     A lookup table based strategy.
 
     Names:
-        - Winner12 [Mathieu2015]_
+
+    - Winner12: [Mathieu2015]_
     """
     name = "Winner12"
 
@@ -413,7 +420,8 @@ class Winner21(LookerUp):
     A lookup table based strategy.
 
     Names:
-        - Winner21 [Mathieu2015]_
+
+    - Winner21: [Mathieu2015]_
     """
     name = "Winner21"
 

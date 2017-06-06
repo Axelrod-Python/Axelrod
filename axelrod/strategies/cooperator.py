@@ -11,6 +11,7 @@ class Cooperator(Player):
 
     - Cooperator: [Axelrod1984]_
     - ALLC: [Press2012]_
+    - Always cooperate: [Mittal2009]_
     """
 
     name = 'Cooperator'

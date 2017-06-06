@@ -7,7 +7,12 @@ C, D = Actions.C, Actions.D
 
 class Inverse(Player):
     """A player who defects with a probability that diminishes relative to how
-    long ago the opponent defected."""
+    long ago the opponent defected.
+
+    Names:
+
+    - Inverse: Original Name by Karol Langner
+    """
 
     name = 'Inverse'
     classifier = {
@@ -29,7 +34,8 @@ class Inverse(Player):
 
         # calculate how many turns ago the opponent defected
         index = next((index for index, value in
-                      enumerate(opponent.history[::-1], start=1) if value == D), None)
+                      enumerate(opponent.history[::-1], start=1)
+                      if value == D), None)
 
         if index is None:
             return C

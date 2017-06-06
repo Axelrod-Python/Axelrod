@@ -8,6 +8,10 @@ class Forgiver(Player):
     """
     A player starts by cooperating however will defect if at any point
     the opponent has defected more than 10 percent of the time
+
+    Names:
+
+    - Forgiver: Original name by Thomas Campbell
     """
 
     name = 'Forgiver'
@@ -36,6 +40,10 @@ class ForgivingTitForTat(Player):
     A player starts by cooperating however will defect if at any point, the
     opponent has defected more than 10 percent of the time, and their most
     recent decision was defect.
+
+    Names:
+
+    - Forgiving Tit For Tat: Original name by Thomas Campbell
     """
 
     name = 'Forgiving Tit For Tat'
