@@ -26,7 +26,7 @@ documentation.
 .. [Berg2015] Berg, P. Van Den, & Weissing, F. J. (2015). The importance of mechanisms for the evolution of cooperation. Proceedings of the Royal Society B-Biological Sciences, 282.
 .. [Eckhart2015] Eckhart Arnold (2016) CoopSim v0.9.9 beta 6.  https://github.com/jecki/CoopSim/
 .. [Frean1994] Frean, Marcus R. "The Prisoner's Dilemma without Synchrony." Proceedings: Biological Sciences, vol. 257, no. 1348, 1994, pp. 75–79. www.jstor.org/stable/50253.
-.. [Hilde2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013). Adaptive dynamics of extortion and compliance, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
+.. [Hilbe2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013). Adaptive dynamics of extortion and compliance, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
 .. [Kuhn2017] Kuhn, Steven, "Prisoner's Dilemma", The Stanford Encyclopedia of Philosophy (Spring 2017 Edition), Edward N. Zalta (ed.), https://plato.stanford.edu/archives/spr2017/entries/prisoner-dilemma/
 .. [Kraines1989] Kraines, D. & Kraines, V. Theor Decis (1989) 26: 47.  doi:10.1007/BF00134056
 .. [LessWrong2011] Zoo of Strategies (2011) LessWrong. Available at: http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/

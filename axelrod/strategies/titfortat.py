@@ -195,7 +195,7 @@ class SuspiciousTitForTat(Player):
 
     Names:
 
-    - Suspicious Tit For Tat: [Hilde2013]_
+    - Suspicious Tit For Tat: [Hilbe2013]_
     - Mistrust: [Beaufils1997]_
     """
 
@@ -221,7 +221,7 @@ class AntiTitForTat(Player):
 
     Names:
 
-    - Anti Tit For Tat: [Hilde2013]_
+    - Anti Tit For Tat: [Hilbe2013]_
     """
 
     name = 'Anti Tit For Tat'

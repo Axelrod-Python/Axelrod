@@ -259,7 +259,7 @@ class LRPlayer(MemoryOnePlayer):
 
     Names:
 
-    - Linear Relation player: [Hilde2013]_
+    - Linear Relation player: [Hilbe2013]_
     """
 
     name = 'LinearRelation'
