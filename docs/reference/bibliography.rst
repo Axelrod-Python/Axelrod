@@ -28,7 +28,7 @@ documentation.
 .. [Frean1994] Frean, Marcus R. "The Prisoner's Dilemma without Synchrony." Proceedings: Biological Sciences, vol. 257, no. 1348, 1994, pp. 75–79. www.jstor.org/stable/50253.
 .. [Hilbe2013] Hilbe, C., Nowak, M.A. and Traulsen, A. (2013). Adaptive dynamics of extortion and compliance, PLoS ONE, 8(11), p. e77886. doi: 10.1371/journal.pone.0077886.
 .. [Kuhn2017] Kuhn, Steven, "Prisoner's Dilemma", The Stanford Encyclopedia of Philosophy (Spring 2017 Edition), Edward N. Zalta (ed.), https://plato.stanford.edu/archives/spr2017/entries/prisoner-dilemma/
-.. [Kraines1989] Kraines, D. & Kraines, V. Theor Decis (1989) 26: 47.  doi:10.1007/BF00134056
+.. [Kraines1989] Kraines, David, and Vivian Kraines. "Pavlov and the prisoner's dilemma." Theory and decision 26.1 (1989): 47-79. doi:10.1007/BF00134056
 .. [LessWrong2011] Zoo of Strategies (2011) LessWrong. Available at: http://lesswrong.com/lw/7f2/prisoners_dilemma_tournament_results/
 .. [Li2007] Li, J, How to Design a Strategy to Win an IPD Tournament, in Kendall G., Yao X. and Chong S. (eds.) The iterated prisoner’s dilemma: 20 years on. World Scientific, chapter 4, pp. 29-40, 2007.
 .. [Li2009] Li, J. & Kendall, G. (2009). A Strategy with Novel Evolutionary Features for the Iterated Prisoner’s Dilemma. Evolutionary Computation 17(2): 257–274.
