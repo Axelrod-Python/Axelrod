@@ -45,7 +45,7 @@ documentation.
 .. [PD2017] http://www.prisoners-dilemma.com/competition.html (Accessed: 6 June 2017)
 .. [Press2012] Press, W. H., & Dyson, F. J. (2012). Iterated Prisoner’s Dilemma contains strategies that dominate any evolutionary opponent. Proceedings of the National Academy of Sciences, 109(26), 10409–10413.  http://doi.org/10.1073/pnas.1206569109
 .. [Prison1998] LIFL (1998) PRISON. Available at: http://www.lifl.fr/IPD/ipd.frame.html (Accessed: 19 September 2016).
-.. [Robson1989] Robson, Arthur, (1989), EFFICIENCY IN EVOLUTIONARY GAMES: DARWIN, NASH AND SECRET HANDSHAKE, Working Papers, Michigan - Center for Research on Economic & Social Theory, http://EconPapers.repec.org/RePEc:fth:michet:89-22.
+.. [Robson1990] Robson, Arthur J. "Efficiency in evolutionary games: Darwin, Nash and the secret handshake." Journal of theoretical Biology 144.3 (1990): 379-396.
 .. [Singer-Clark2014] Singer-Clark, T. (2014). Morality Metrics On Iterated Prisoner’s Dilemma Players.
 .. [Shakarian2013] Shakarian, P., Roos, P. & Moores, G. A Novel Analytical Method for Evolutionary Graph Theory Problems.
 .. [Slany2007] Slany W. and Kienreich W., On some winning strategies for the iterated prisoner’s dilemma, in Kendall G., Yao X. and Chong S. (eds.) The iterated prisoner’s dilemma: 20 years on. World Scientific, chapter 8, pp. 171-204, 2007.
