@@ -255,7 +255,7 @@ class MetaHunterAggressive(MetaPlayer):
 
     Names
 
-    - Meta Hunter: Original name by Marc Harper
+    - Meta Hunter Aggressive: Original name by Marc Harper
     """
 
     name = "Meta Hunter Aggressive"
