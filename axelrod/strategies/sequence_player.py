@@ -55,7 +55,7 @@ class ThueMorse(SequencePlayer):
 
     Names:
 
-    - Thue Morse: Original by Geraint Palmer
+    - Thue Morse: Original name by Geraint Palmer
     """
 
     name = 'ThueMorse'
@@ -78,7 +78,7 @@ class ThueMorseInverse(ThueMorse):
 
     Names:
 
-    - Inverse Thue Morse: Original by Geraint Palmer
+    - Inverse Thue Morse: Original name by Geraint Palmer
     """
 
     name = 'ThueMorseInverse'
