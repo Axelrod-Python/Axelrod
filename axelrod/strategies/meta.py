@@ -207,7 +207,7 @@ class MetaHunter(MetaPlayer):
 
     Names
 
-    - Meta Hunter: Original name by Marc Harper
+    - Meta Hunter: Original name by Karol Langner
     """
 
     name = "Meta Hunter"

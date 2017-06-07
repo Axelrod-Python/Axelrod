@@ -81,7 +81,7 @@ class APavlov2011(Player):
 
     Names:
 
-    - Adaptive Pavlov 2007: [Li2011]_
+    - Adaptive Pavlov 2011: [Li2011]_
     """
 
     name = "Adaptive Pavlov 2011"
