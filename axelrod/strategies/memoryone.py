@@ -364,8 +364,15 @@ class ZDExtort2v2(LRPlayer):
 
 
 class ZDExtort4(LRPlayer):
-    """An Extortionate Zero Determinant Strategy with l=1, s=1/4. TFT is the
-    other extreme (with l=3, s=1)"""
+    """
+    An Extortionate Zero Determinant Strategy with l=1, s=1/4. TFT is the
+    other extreme (with l=3, s=1)
+
+
+    Names:
+
+    - Extort 4: Original name by Marc Harper
+    """
 
     name = 'ZD-Extort-4'
 
@@ -479,6 +486,10 @@ class SoftJoss(MemoryOnePlayer):
     """
     Defects with probability 0.9 when the opponent defects, otherwise
     emulates Tit-For-Tat.
+
+    Names:
+
+    - Soft Joss: [Prison1998]_
     """
 
     name = "Soft Joss"
