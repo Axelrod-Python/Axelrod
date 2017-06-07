@@ -51,5 +51,5 @@ documentation.
 .. [Slany2007] Slany W. and Kienreich W., On some winning strategies for the iterated prisoner’s dilemma, in Kendall G., Yao X. and Chong S. (eds.) The iterated prisoner’s dilemma: 20 years on. World Scientific, chapter 8, pp. 171-204, 2007.
 .. [Stewart2012] Stewart, a. J., & Plotkin, J. B. (2012). Extortion and cooperation in the Prisoner’s Dilemma. Proceedings of the National Academy of Sciences, 109(26), 10134–10135. http://doi.org/10.1073/pnas.1208087109
 .. [Szabo2007] Szabó, G., & Fáth, G. (2007). Evolutionary games on graphs. Physics Reports, 446(4-6), 97–216. http://doi.org/10.1016/j.physrep.2007.04.004
-.. [Torino2015] Torino, P., & Torino, P. (2015). Exploiting Evolutionary Modeling to Prevail in Iterated Prisoner's Dilemma Tourname
+.. [Gaudesi2016] Gaudesi, Marco, et al. "Exploiting evolutionary modeling to prevail in iterated prisoner’s dilemma tournaments." IEEE Transactions on Computational Intelligence and AI in Games 8.3 (2016): 288-300.
 .. [Tzafestas2000] Tzafestas, E. (2000). Toward adaptive cooperative behavior. From Animals to Animals: Proceedings of the 6th International Conference on the Simulation of Adaptive Behavior {(SAB-2000)}, 2, 334–340.

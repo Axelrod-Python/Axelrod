@@ -142,8 +142,8 @@ class GTFT(MemoryOnePlayer):
     Names:
 
     - Generous Tit For Tat: [Nowak1993]_
-    - Naive peace maker: [Torino2015]_
-    - Soft Joss: [Torino2015]_
+    - Naive peace maker: [Gaudesi2016]_
+    - Soft Joss: [Gaudesi2016]_
     """
 
     name = 'GTFT'
