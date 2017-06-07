@@ -607,7 +607,7 @@ class SpitefulTitForTat(Player):
 
     Names:
 
-    - Spiteful Tit For Tat [Prison1998]_
+    - Spiteful Tit For Tat: [Prison1998]_
     """
 
     name = 'Spiteful Tit For Tat'

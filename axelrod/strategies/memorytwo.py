@@ -16,7 +16,7 @@ class MEM2(Player):
 
     Names:
 
-        - MEM2 [Li2014]_
+    - MEM2: [Li2014]_
     """
 
     name = 'MEM2'
