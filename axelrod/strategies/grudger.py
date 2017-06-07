@@ -14,7 +14,7 @@ class Grudger(Player):
     - Friedman's strategy: [Axelrod1980]_
     - Grudger: [Li2011]_
     - Grim: [Berg2015]_
-    - Grim Trigger: [Banks1980]_
+    - Grim Trigger: [Banks1990]_
     - Spite: [Beaufils1997]_
     """
 
