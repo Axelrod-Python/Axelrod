@@ -8,7 +8,12 @@ C, D = Actions.C, Actions.D
 
 
 class DefectorHunter(Player):
-    """A player who hunts for defectors."""
+    """A player who hunts for defectors.
+
+    Names:
+
+    Defector Hunter: Original name by Karol Langner
+    """
 
     name = 'Defector Hunter'
     classifier = {
@@ -28,7 +33,12 @@ class DefectorHunter(Player):
 
 
 class CooperatorHunter(Player):
-    """A player who hunts for cooperators."""
+    """A player who hunts for cooperators.
+
+    Names:
+
+    Cooperator Hunter: Original name by Karol Langner
+    """
 
     name = 'Cooperator Hunter'
     classifier = {
@@ -55,7 +65,12 @@ def is_alternator(history: List[Action]) -> bool:
 
 
 class AlternatorHunter(Player):
-    """A player who hunts for alternators."""
+    """A player who hunts for alternators.
+
+    Names:
+
+    Alternator Hunter: Original name by Karol Langner
+    """
 
     name = 'Alternator Hunter'
     classifier = {
@@ -89,7 +104,12 @@ class AlternatorHunter(Player):
 
 class CycleHunter(Player):
     """Hunts strategies that play cyclically, like any of the Cyclers,
-    Alternator, etc."""
+    Alternator, etc.
+
+    Names:
+
+    Cycle Hunter: Original name by Marc Harper
+    """
 
     name = 'Cycle Hunter'
     classifier = {
@@ -122,7 +142,12 @@ class CycleHunter(Player):
 
 
 class EventualCycleHunter(CycleHunter):
-    """Hunts strategies that eventually play cyclically."""
+    """Hunts strategies that eventually play cyclically.
+
+    Names:
+
+    Eventual Cycle Hunter: Original name by Marc Harper
+    """
 
     name = 'Eventual Cycle Hunter'
 
@@ -142,7 +167,12 @@ class EventualCycleHunter(CycleHunter):
 
 
 class MathConstantHunter(Player):
-    """A player who hunts for mathematical constant players."""
+    """A player who hunts for mathematical constant players.
+
+    Names:
+
+    Math Constant Hunter: Original name by Karol Langner
+    """
 
     name = "Math Constant Hunter"
     classifier = {
@@ -180,7 +210,12 @@ class MathConstantHunter(Player):
 
 
 class RandomHunter(Player):
-    """A player who hunts for random players."""
+    """A player who hunts for random players.
+
+    Names:
+
+    Random Hunter: Original name by Karol Langner
+    """
 
     name = "Random Hunter"
     classifier = {

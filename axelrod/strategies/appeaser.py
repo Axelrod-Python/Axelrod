@@ -9,6 +9,10 @@ class Appeaser(Player):
 
     Switch the classifier every time the opponent plays 'D'.
     Start with 'C', switch between 'C' and 'D' when opponent plays 'D'.
+
+    Names:
+
+    - Appeaser: Original Name by Jochen Müller
     """
 
     name = 'Appeaser'

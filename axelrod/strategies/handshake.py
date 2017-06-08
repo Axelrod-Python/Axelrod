@@ -12,7 +12,7 @@ class Handshake(Player):
 
     Names:
 
-    - Handshake: [Robson1989]_
+    - Handshake: [Robson1990]_
     """
 
     name = 'Handshake'

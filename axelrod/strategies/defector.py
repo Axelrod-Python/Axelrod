@@ -5,7 +5,14 @@ C, D = Actions.C, Actions.D
 
 
 class Defector(Player):
-    """A player who only ever defects."""
+    """A player who only ever defects.
+
+    Names:
+
+    - Defector: [Axelrod1984]_
+    - ALLD: [Press2012]_
+    - Always defect: [Mittal2009]_
+    """
 
     name = 'Defector'
     classifier = {
@@ -24,7 +31,12 @@ class Defector(Player):
 
 
 class TrickyDefector(Player):
-    """A defector that is trying to be tricky."""
+    """A defector that is trying to be tricky.
+
+    Names:
+
+    - Tricky Defector: Original name by Karol Langner
+    """
 
     name = "Tricky Defector"
     classifier = {

@@ -17,7 +17,7 @@ class CollectiveStrategy(Player):
 
     Names:
 
-        - Collective Strategy [Li2009]_
+    - Collective Strategy: [Li2009]_
 
     """
 
@@ -53,7 +53,7 @@ class Prober(Player):
 
     Names:
 
-        - Prober [Li2011]_
+    - Prober: [Li2011]_
     """
 
     name = 'Prober'

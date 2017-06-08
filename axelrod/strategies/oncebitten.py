@@ -9,6 +9,10 @@ class OnceBitten(Player):
     """
     Cooperates once when the opponent defects, but if they defect twice in a row
     defaults to forgetful grudger for 10 turns defecting.
+
+    Names:
+
+    - Once Bitten: Original name by Holly Marissa
     """
 
     name = 'Once Bitten'
@@ -58,6 +62,10 @@ class OnceBitten(Player):
 class FoolMeOnce(Player):
     """
     Forgives one D then retaliates forever on a second D.
+
+    Names:
+
+    - Fool me once: Original name by Marc Harper
     """
 
     name = 'Fool Me Once'
@@ -85,6 +93,10 @@ class ForgetfulFoolMeOnce(Player):
     Forgives one D then retaliates forever on a second D. Sometimes randomly
     forgets the defection count, and so keeps a secondary count separate from
     the standard count in Player.
+
+    Names:
+
+    - Forgetful Fool Me Once: Original name by Marc Harper
     """
 
     name = 'Forgetful Fool Me Once'
@@ -131,6 +143,10 @@ class FoolMeForever(Player):
     """
     Fool me once, shame on me. Teach a man to fool me and I'll be fooled for
     the rest of my life.
+
+    Names:
+
+    - Fool Me Forever: Original name by Marc Harper
     """
 
     name = 'Fool Me Forever'

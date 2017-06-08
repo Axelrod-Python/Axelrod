@@ -13,7 +13,7 @@ class Resurrection(Player):
     Otherwise, the strategy plays like Tit-for-tat.
 
     Names:
-    - Resurrection: Name from CoopSim https://github.com/jecki/CoopSim
+    - Resurrection: [Eckhart2015]_
     """
 
     # These are various properties for the strategy
@@ -46,7 +46,7 @@ class DoubleResurrection(Player):
     If the last five rounds were defections, the player cooperates.
 
     Names:
-    - DoubleResurrection: Name from CoopSim https://github.com/jecki/CoopSim
+    - DoubleResurrection: [Eckhart2015]_
     """
 
     name = 'DoubleResurrection'

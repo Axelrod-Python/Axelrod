@@ -10,20 +10,25 @@ C, D = Actions.C, Actions.D
 
 
 class Darwin(Player):
-    """ A strategy which accumulates a record (the 'genome') of what the most
-        favourable response in the previous round should have been, and naively
-        assumes that this will remain the correct response at the same round of
-        future trials.
+    """
+    A strategy which accumulates a record (the 'genome') of what the most
+    favourable response in the previous round should have been, and naively
+    assumes that this will remain the correct response at the same round of
+    future trials.
 
-        This 'genome' is preserved between opponents, rounds and repetitions of
-        the tournament.  It becomes a characteristic of the type and so a single
-        version of this is shared by all instances for each loading of the class.
+    This 'genome' is preserved between opponents, rounds and repetitions of
+    the tournament.  It becomes a characteristic of the type and so a single
+    version of this is shared by all instances for each loading of the class.
 
-        As this results in information being preserved between tournaments, this
-        is classified as a cheating strategy!
+    As this results in information being preserved between tournaments, this
+    is classified as a cheating strategy!
 
-        If no record yet exists, the opponent's response from the previous round
-        is returned.
+    If no record yet exists, the opponent's response from the previous round
+    is returned.
+
+    Names:
+
+    - Darwin: Original name by Paul Slavin
     """
 
     name = "Darwin"

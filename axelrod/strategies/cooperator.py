@@ -5,7 +5,14 @@ C, D = Actions.C, Actions.D
 
 
 class Cooperator(Player):
-    """A player who only ever cooperates."""
+    """A player who only ever cooperates.
+
+    Names:
+
+    - Cooperator: [Axelrod1984]_
+    - ALLC: [Press2012]_
+    - Always cooperate: [Mittal2009]_
+    """
 
     name = 'Cooperator'
     classifier = {
@@ -24,7 +31,13 @@ class Cooperator(Player):
 
 
 class TrickyCooperator(Player):
-    """A cooperator that is trying to be tricky."""
+    """
+    A cooperator that is trying to be tricky.
+
+    Names:
+
+    - Tricky Cooperator: Original name by Karol Langner
+    """
 
     name = "Tricky Cooperator"
     classifier = {

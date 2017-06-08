@@ -11,6 +11,10 @@ class AntiCycler(Player):
     """
     A player that follows a sequence of plays that contains no cycles:
     CDD  CD  CCD CCCD CCCCD ...
+
+    Names:
+
+    - Anti Cycler: Original name by Marc Harper
     """
 
     name = 'AntiCycler'
@@ -53,7 +57,13 @@ class AntiCycler(Player):
 
 
 class Cycler(Player):
-    """A player that repeats a given sequence indefinitely."""
+    """
+    A player that repeats a given sequence indefinitely.
+
+    Names:
+
+    - Cycler: Original name by Marc Harper
+    """
 
     name = 'Cycler'
     classifier = {
@@ -94,7 +104,13 @@ class Cycler(Player):
 
 
 class CyclerDC(Cycler):
+    """
+    Cycles D, C
 
+    Names:
+
+    - Cycler DC: Original name by Marc Harper
+    """
     name = 'Cycler DC'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 1
@@ -104,7 +120,14 @@ class CyclerDC(Cycler):
 
 
 class CyclerCCD(Cycler):
+    """
+    Cycles C, C, D
 
+    Names:
+
+    - Cycler CCD: Original name by Marc Harper
+    - Periodic player CCD: [Mittal2009]_
+    """
     name = 'Cycler CCD'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
@@ -114,7 +137,14 @@ class CyclerCCD(Cycler):
 
 
 class CyclerDDC(Cycler):
+    """
+    Cycles D, D, C
 
+    Names:
+
+    - Cycler DDC: Original name by Marc Harper
+    - Periodic player DDC: [Mittal2009]_
+    """
     name = 'Cycler DDC'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 2
@@ -124,7 +154,13 @@ class CyclerDDC(Cycler):
 
 
 class CyclerCCCD(Cycler):
+    """
+    Cycles C, C, C, D
 
+    Names:
+
+    - Cycler CCCD: Original name by Marc Harper
+    """
     name = 'Cycler CCCD'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 3
@@ -134,7 +170,13 @@ class CyclerCCCD(Cycler):
 
 
 class CyclerCCCCCD(Cycler):
+    """
+    Cycles C, C, C, C, C, D
 
+    Names:
+
+    - Cycler CCCD: Original name by Marc Harper
+    """
     name = 'Cycler CCCCCD'
     classifier = copy.copy(Cycler.classifier)
     classifier['memory_depth'] = 5
@@ -144,6 +186,13 @@ class CyclerCCCCCD(Cycler):
 
 
 class CyclerCCCDCD(Cycler):
+    """
+    Cycles C, C, C, D, C, D
+
+    Names:
+
+    - Cycler CCCDCD: Original name by Marc Harper
+    """
 
     name = 'Cycler CCCDCD'
     classifier = copy.copy(Cycler.classifier)

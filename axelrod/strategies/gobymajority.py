@@ -19,6 +19,11 @@ class GoByMajority(Player):
 
     An optional memory attribute will limit the number of turns remembered (by
     default this is 0)
+
+    Names:
+
+    - Go By Majority: [Axelrod1984]_
+    - Soft Majority: [Mittal2009]_
     """
 
     name = 'Go By Majority'
@@ -86,6 +91,10 @@ class GoByMajority(Player):
 class GoByMajority40(GoByMajority):
     """
     GoByMajority player with a memory of 40.
+
+    Names:
+
+    - Go By Majority 40: Original name by Karol Langner
     """
     name = 'Go By Majority 40'
     classifier = copy.copy(GoByMajority.classifier)
@@ -98,6 +107,10 @@ class GoByMajority40(GoByMajority):
 class GoByMajority20(GoByMajority):
     """
     GoByMajority player with a memory of 20.
+
+    Names:
+
+    - Go By Majority 20: Original name by Karol Langner
     """
     name = 'Go By Majority 20'
     classifier = copy.copy(GoByMajority.classifier)
@@ -110,6 +123,10 @@ class GoByMajority20(GoByMajority):
 class GoByMajority10(GoByMajority):
     """
     GoByMajority player with a memory of 10.
+
+    Names:
+
+    - Go By Majority 10: Original name by Karol Langner
     """
     name = 'Go By Majority 10'
     classifier = copy.copy(GoByMajority.classifier)
@@ -122,6 +139,10 @@ class GoByMajority10(GoByMajority):
 class GoByMajority5(GoByMajority):
     """
     GoByMajority player with a memory of 5.
+
+    Names:
+
+    - Go By Majority 5: Original name by Karol Langner
     """
     name = 'Go By Majority 5'
     classifier = copy.copy(GoByMajority.classifier)
@@ -138,6 +159,10 @@ class HardGoByMajority(GoByMajority):
 
     An optional memory attribute will limit the number of turns remembered (by
     default this is 0)
+
+	Names:
+
+    - Hard Majority: [Mittal2009]_
     """
     name = 'Hard Go By Majority'
 
@@ -148,6 +173,10 @@ class HardGoByMajority(GoByMajority):
 class HardGoByMajority40(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 40.
+
+    Names:
+
+    - Hard Go By Majority 40: Original name by Karol Langner
     """
     name = 'Hard Go By Majority 40'
     classifier = copy.copy(GoByMajority.classifier)
@@ -160,6 +189,10 @@ class HardGoByMajority40(HardGoByMajority):
 class HardGoByMajority20(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 20.
+
+    Names:
+
+    - Hard Go By Majority 20: Original name by Karol Langner
     """
     name = 'Hard Go By Majority 20'
     classifier = copy.copy(GoByMajority.classifier)
@@ -172,6 +205,10 @@ class HardGoByMajority20(HardGoByMajority):
 class HardGoByMajority10(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 10.
+
+    Names:
+
+    - Hard Go By Majority 10: Original name by Karol Langner
     """
     name = 'Hard Go By Majority 10'
     classifier = copy.copy(GoByMajority.classifier)
@@ -184,6 +221,10 @@ class HardGoByMajority10(HardGoByMajority):
 class HardGoByMajority5(HardGoByMajority):
     """
     HardGoByMajority player with a memory of 5.
+
+    Names:
+
+    - Hard Go By Majority 5: Original name by Karol Langner
     """
     name = 'Hard Go By Majority 5'
     classifier = copy.copy(GoByMajority.classifier)

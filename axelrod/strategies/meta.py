@@ -15,7 +15,13 @@ C, D = Actions.C, Actions.D
 
 
 class MetaPlayer(Player):
-    """A generic player that has its own team of players."""
+    """
+    A generic player that has its own team of players.
+
+    Names:
+
+    - Meta Player: Original name by Karol Langner
+    """
 
     name = "Meta Player"
     classifier = {
@@ -86,7 +92,12 @@ class MetaPlayer(Player):
 
 
 class MetaMajority(MetaPlayer):
-    """A player who goes by the majority vote of all other non-meta players."""
+    """A player who goes by the majority vote of all other non-meta players.
+
+    Names:
+
+    - Meta Marjority: Original name by Karol Langner
+    """
 
     name = "Meta Majority"
 
@@ -101,7 +112,12 @@ class MetaMajority(MetaPlayer):
 
 
 class MetaMinority(MetaPlayer):
-    """A player who goes by the minority vote of all other non-meta players."""
+    """A player who goes by the minority vote of all other non-meta players.
+
+    Names:
+
+    - Meta Minority: Original name by Karol Langner
+    """
 
     name = "Meta Minority"
 
@@ -116,7 +132,12 @@ class MetaMinority(MetaPlayer):
 
 
 class MetaWinner(MetaPlayer):
-    """A player who goes by the strategy of the current winner."""
+    """A player who goes by the strategy of the current winner.
+
+    Names:
+
+    - Meta Winner: Original name by Karol Langner
+    """
 
     name = "Meta Winner"
 
@@ -162,7 +183,7 @@ class MetaWinnerEnsemble(MetaWinner):
 
     Names:
 
-    Meta Winner Ensemble: Original name by Marc Harper
+    - Meta Winner Ensemble: Original name by Marc Harper
     """
 
     name = "Meta Winner Ensemble"
@@ -182,7 +203,12 @@ NiceMetaWinnerEnsemble = NiceTransformer()(MetaWinnerEnsemble)
 
 
 class MetaHunter(MetaPlayer):
-    """A player who uses a selection of hunters."""
+    """A player who uses a selection of hunters.
+
+    Names
+
+    - Meta Hunter: Original name by Karol Langner
+    """
 
     name = "Meta Hunter"
     classifier = {
@@ -225,7 +251,12 @@ class MetaHunter(MetaPlayer):
 
 
 class MetaHunterAggressive(MetaPlayer):
-    """A player who uses a selection of hunters."""
+    """A player who uses a selection of hunters.
+
+    Names
+
+    - Meta Hunter Aggressive: Original name by Marc Harper
+    """
 
     name = "Meta Hunter Aggressive"
     classifier = {
@@ -264,7 +295,12 @@ class MetaHunterAggressive(MetaPlayer):
 
 
 class MetaMajorityMemoryOne(MetaMajority):
-    """MetaMajority with the team of Memory One players"""
+    """MetaMajority with the team of Memory One players
+
+    Names
+
+    - Meta Majority Memory One: Original name by Marc Harper
+    """
 
     name = "Meta Majority Memory One"
 
@@ -275,7 +311,12 @@ class MetaMajorityMemoryOne(MetaMajority):
 
 
 class MetaMajorityFiniteMemory(MetaMajority):
-    """MetaMajority with the team of Finite Memory Players"""
+    """MetaMajority with the team of Finite Memory Players
+
+    Names
+
+    - Meta Majority Finite Memory: Original name by Marc Harper
+    """
 
     name = "Meta Majority Finite Memory"
 
@@ -286,7 +327,12 @@ class MetaMajorityFiniteMemory(MetaMajority):
 
 
 class MetaMajorityLongMemory(MetaMajority):
-    """MetaMajority with the team of Long (infinite) Memory Players"""
+    """MetaMajority with the team of Long (infinite) Memory Players
+
+    Names
+
+    - Meta Majority Long Memory: Original name by Marc Harper
+    """
 
     name = "Meta Majority Long Memory"
 
@@ -297,7 +343,12 @@ class MetaMajorityLongMemory(MetaMajority):
 
 
 class MetaWinnerMemoryOne(MetaWinner):
-    """MetaWinner with the team of Memory One players"""
+    """MetaWinner with the team of Memory One players
+
+    Names
+
+    - Meta Winner Memory Memory One: Original name by Marc Harper
+    """
 
     name = "Meta Winner Memory One"
 
@@ -308,7 +359,12 @@ class MetaWinnerMemoryOne(MetaWinner):
 
 
 class MetaWinnerFiniteMemory(MetaWinner):
-    """MetaWinner with the team of Finite Memory Players"""
+    """MetaWinner with the team of Finite Memory Players
+
+    Names
+
+    - Meta Winner Finite Memory: Original name by Marc Harper
+    """
 
     name = "Meta Winner Finite Memory"
 
@@ -319,8 +375,12 @@ class MetaWinnerFiniteMemory(MetaWinner):
 
 
 class MetaWinnerLongMemory(MetaWinner):
-    """MetaWinner with the team of Long (infinite) Memory Players"""
+    """MetaWinner with the team of Long (infinite) Memory Players
 
+    Names
+
+    - Meta Winner Long Memory: Original name by Marc Harper
+    """
     name = "Meta Winner Long Memory"
 
     def __init__(self):
@@ -330,7 +390,12 @@ class MetaWinnerLongMemory(MetaWinner):
 
 
 class MetaWinnerDeterministic(MetaWinner):
-    """Meta Winner with the team of Deterministic Players."""
+    """Meta Winner with the team of Deterministic Players.
+
+    Names
+
+    - Meta Winner Deterministic: Original name by Marc Harper
+    """
 
     name = "Meta Winner Deterministic"
 
@@ -342,7 +407,12 @@ class MetaWinnerDeterministic(MetaWinner):
 
 
 class MetaWinnerStochastic(MetaWinner):
-    """Meta Winner with the team of Stochastic Players."""
+    """Meta Winner with the team of Stochastic Players.
+
+    Names
+
+    - Meta Winner Stochastic: Original name by Marc Harper
+    """
 
     name = "Meta Winner Stochastic"
 
@@ -367,6 +437,10 @@ class MetaMixer(MetaPlayer):
     distribution : list representing a probability distribution, optional
         This gives the distribution from which to select the players.
         If none is passed will select uniformly.
+
+    Names
+
+    - Meta Mixer: Original name by Vince Knight
     """
 
     name = "Meta Mixer"
@@ -390,7 +464,12 @@ class MetaMixer(MetaPlayer):
 
 
 class NMWEDeterministic(NiceMetaWinnerEnsemble):
-    """Nice Meta Winner Ensemble with the team of Deterministic Players."""
+    """Nice Meta Winner Ensemble with the team of Deterministic Players.
+
+    Names
+
+    - Nice Meta Winner Ensemble Deterministic: Original name by Marc Harper
+    """
 
     name = "NMWE Deterministic"
 
@@ -402,7 +481,12 @@ class NMWEDeterministic(NiceMetaWinnerEnsemble):
 
 
 class NMWEStochastic(NiceMetaWinnerEnsemble):
-    """Nice Meta Winner Ensemble with the team of Stochastic Players."""
+    """Nice Meta Winner Ensemble with the team of Stochastic Players.
+
+    Names
+
+    - Nice Meta Winner Ensemble Stochastic: Original name by Marc Harper
+    """
 
     name = "NMWE Stochastic"
 
@@ -413,7 +497,12 @@ class NMWEStochastic(NiceMetaWinnerEnsemble):
 
 
 class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
-    """Nice Meta Winner Ensemble with the team of Finite Memory Players."""
+    """Nice Meta Winner Ensemble with the team of Finite Memory Players.
+
+    Names
+
+    - Nice Meta Winner Ensemble Finite Memory: Original name by Marc Harper
+    """
 
     name = "NMWE Finite Memory"
 
@@ -424,7 +513,12 @@ class NMWEFiniteMemory(NiceMetaWinnerEnsemble):
 
 
 class NMWELongMemory(NiceMetaWinnerEnsemble):
-    """Nice Meta Winner Ensemble with the team of Long Memory Players."""
+    """Nice Meta Winner Ensemble with the team of Long Memory Players.
+
+    Names
+
+    - Nice Meta Winner Ensemble Long Memory: Original name by Marc Harper
+    """
 
     name = "NMWE Long Memory"
 
@@ -435,7 +529,12 @@ class NMWELongMemory(NiceMetaWinnerEnsemble):
 
 
 class NMWEMemoryOne(NiceMetaWinnerEnsemble):
-    """Nice Meta Winner Ensemble with the team of Memory One Players."""
+    """Nice Meta Winner Ensemble with the team of Memory One Players.
+
+    Names
+
+    - Nice Meta Winner Ensemble Memory One: Original name by Marc Harper
+    """
 
     name = "NMWE Memory One"
 

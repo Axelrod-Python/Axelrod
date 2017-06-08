@@ -14,7 +14,7 @@ class Grudger(Player):
     - Friedman's strategy: [Axelrod1980]_
     - Grudger: [Li2011]_
     - Grim: [Berg2015]_
-    - Grim Trigger: [Banks1980]_
+    - Grim Trigger: [Banks1990]_
     - Spite: [Beaufils1997]_
     """
 
@@ -39,8 +39,14 @@ class Grudger(Player):
 
 
 class ForgetfulGrudger(Player):
-    """A player starts by cooperating however will defect if at any point the
-    opponent has defected, but forgets after mem_length matches."""
+    """
+    A player starts by cooperating however will defect if at any point the
+    opponent has defected, but forgets after mem_length matches.
+
+    Names:
+
+    - Forgetful Grudger: Original name by Geraint Palmer
+    """
 
     name = 'Forgetful Grudger'
     classifier = {
@@ -83,8 +89,14 @@ class ForgetfulGrudger(Player):
 
 
 class OppositeGrudger(Player):
-    """A player starts by defecting however will cooperate if at any point the
-    opponent has cooperated."""
+    """
+    A player starts by defecting however will cooperate if at any point the
+    opponent has cooperated.
+
+    Names:
+
+    - Opposite Grudger: Original name by Geraint Palmer
+    """
 
     name = 'Opposite Grudger'
     classifier = {
@@ -107,7 +119,13 @@ class OppositeGrudger(Player):
 
 
 class Aggravater(Player):
-    """Grudger, except that it defects on the first 3 turns"""
+    """
+    Grudger, except that it defects on the first 3 turns
+
+    Names
+
+    Aggravater: Original name by Thomas Campbell
+    """
 
     name = 'Aggravater'
     classifier = {
@@ -135,10 +153,7 @@ class SoftGrudger(Player):
     defecting: punishes by playing: D, D, D, D, C, C. (Will continue to
     cooperate afterwards).
 
-    For reference see: "Engineering Design of Strategies for Winning
-    Iterated Prisoner's Dilemma Competitions" by Jiawei Li, Philip Hingston,
-    and Graham Kendall.  IEEE TRANSACTIONS ON COMPUTATIONAL INTELLIGENCE AND AI
-    IN GAMES, VOL. 3, NO. 4, DECEMBER 2011
+    - Soft Grudger (SGRIM): [Li2011]_
     """
 
     name = 'Soft Grudger'
@@ -218,7 +233,8 @@ class EasyGo(Player):
 
     Names:
 
-    - Easy Go [Prison1998]_
+    - Easy Go: [Prison1998]_
+    - Reverse Grudger (RGRIM): [Li2011]_
     """
 
     name = 'EasyGo'

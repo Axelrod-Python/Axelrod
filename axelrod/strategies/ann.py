@@ -1,9 +1,3 @@
-"""Artificial Neural Network based strategy.
-
-# Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
-# Original Author: Martin Jones, @mojones
-"""
-
 import numpy as np
 
 from axelrod.actions import Actions, Action
@@ -146,7 +140,9 @@ def split_weights(weights: List[float], num_features: int, num_hidden: int) -> T
 
 
 class ANN(Player):
-    """A single layer neural network based strategy, with the following
+    """Artificial Neural Network based strategy.
+
+    A single layer neural network based strategy, with the following
     features:
     * Opponent's first move is C
     * Opponent's first move is D
@@ -165,6 +161,13 @@ class ANN(Player):
     * Total player cooperations
     * Total player defections
     * Round number
+
+    Original Source: https://gist.github.com/mojones/550b32c46a8169bb3cd89d917b73111a#file-ann-strategy-test-L60
+
+
+    Names
+
+    - Artificial Neural Network based strategy: Original name by Martin Jones
     """
     name = 'ANN'
     classifier = {

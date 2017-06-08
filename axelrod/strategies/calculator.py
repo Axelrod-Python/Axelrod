@@ -10,6 +10,11 @@ class Calculator(Player):
     """
     Plays like (Hard) Joss for the first 20 rounds. If periodic behavior is
     detected, defect forever. Otherwise play TFT.
+
+
+    Names:
+
+    - Calculator: [Prison1998]_
     """
 
     name = "Calculator"

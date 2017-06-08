@@ -5,7 +5,12 @@ C, D = Actions.C, Actions.D
 
 
 class MindController(Player):
-    """A player that changes the opponents strategy to cooperate."""
+    """A player that changes the opponents strategy to cooperate.
+
+    Names
+
+    - Mind Controller: Original name by Karol Langner
+    """
 
     name = 'Mind Controller'
     classifier = {
@@ -34,6 +39,10 @@ class MindWarper(Player):
     """
     A player that changes the opponent's strategy but blocks changes to
     its own.
+
+    Names
+
+    - Mind Warper: Original name by Karol Langner
     """
 
     name = 'Mind Warper'
@@ -63,6 +72,10 @@ class MindBender(MindWarper):
     """
     A player that changes the opponent's strategy by modifying the internal
     dictionary.
+
+    Names
+
+    - Mind Bender: Original name by Karol Langner
     """
 
     name = 'Mind Bender'

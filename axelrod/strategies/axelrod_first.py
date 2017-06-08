@@ -244,8 +244,8 @@ class Joss(MemoryOnePlayer):
 
     Names:
 
-    - Joss [Axelrod1980]_
-    - Hard Joss [Stewart2012]_
+    - Joss: [Axelrod1980]_
+    - Hard Joss: [Stewart2012]_
     """
 
     name = "Joss"
@@ -504,7 +504,7 @@ class SteinAndRapoport(Player):
 
     Names:
 
-    - SteinAndRapoport [Axelrod1980]_
+    - SteinAndRapoport: [Axelrod1980]_
     """
 
     name = 'Stein and Rapoport'

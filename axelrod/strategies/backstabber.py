@@ -10,6 +10,10 @@ class BackStabber(Player):
     """
     Forgives the first 3 defections but on the fourth
     will defect forever. Defects on the last 2 rounds unconditionally.
+
+    Names:
+
+    - Backstabber: Original name by Thomas Campbell
     """
 
     name = 'BackStabber'
@@ -36,6 +40,10 @@ class DoubleCrosser(Player):
     If 8 <= current round <= 180,
     if the opponent did not defect in the first 7 rounds,
     the player will only defect after the opponent has defected twice in-a-row.
+
+    Names:
+
+    - Double Crosser: Original name by Thomas Campbell
     """
 
     name = 'DoubleCrosser'

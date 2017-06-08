@@ -11,6 +11,10 @@ C, D = Actions.C, Actions.D
 class SequencePlayer(Player):
     """Abstract base class for players that use a generated sequence to
     determine their plays.
+
+    Names:
+
+    - Sequence Player: Original name by Marc Harper
     """
 
     def __init__(self, generator_function: FunctionType,
@@ -51,7 +55,7 @@ class ThueMorse(SequencePlayer):
 
     Names:
 
-    - Thue Morse: Original by Geraint Palmer
+    - Thue Morse: Original name by Geraint Palmer
     """
 
     name = 'ThueMorse'
@@ -74,7 +78,7 @@ class ThueMorseInverse(ThueMorse):
 
     Names:
 
-    - Inverse Thue Morse: Original by Geraint Palmer
+    - Inverse Thue Morse: Original name by Geraint Palmer
     """
 
     name = 'ThueMorseInverse'
