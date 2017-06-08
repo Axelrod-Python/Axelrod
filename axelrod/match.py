@@ -2,6 +2,8 @@ from axelrod.actions import Actions
 from axelrod.game import Game
 import axelrod.interaction_utils as iu
 from .deterministic_cache import DeterministicCache
+import random
+from math import ceil, log
 
 
 C, D = Actions.C, Actions.D
@@ -15,7 +17,8 @@ def is_stochastic(players, noise):
 
 class Match(object):
 
-    def __init__(self, players, turns, game=None, deterministic_cache=None,
+    def __init__(self, players, turns=None, prob_end=None,
+                 game=None, deterministic_cache=None,
                  noise=0, match_attributes=None):
         """
         Parameters
@@ -24,6 +27,8 @@ class Match(object):
             A pair of axelrod.Player objects
         turns : integer
             The number of turns per match
+        prob_end : float
+            The probability of a given turn ending a match
         game : axelrod.Game
             The game object used to score the match
         deterministic_cache : axelrod.DeterministicCache
@@ -35,8 +40,17 @@ class Match(object):
             The default is to use the correct values for turns, game and noise
             but these can be overridden if desired.
         """
-        self.result = []
+
+        if prob_end is not None:
+            if turns is not None:
+                turns = min(turns, sample_length(prob_end))
+            else:
+                turns = sample_length(prob_end)
+        elif turns is None:
+            turns = 20
+
         self.turns = turns
+        self.result = []
         self._cache_key = (players[0], players[1], turns)
         self.noise = noise
 
@@ -51,8 +65,9 @@ class Match(object):
             self._cache = deterministic_cache
 
         if match_attributes is None:
+            known_turns = turns if prob_end is None else float('inf')
             self.match_attributes = {
-                'length': self.turns,
+                'length': known_turns,
                 'game': self.game,
                 'noise': self.noise
             }
@@ -176,3 +191,41 @@ class Match(object):
 
     def __len__(self):
         return self.turns
+
+
+def sample_length(prob_end):
+    """
+    Sample length of a game.
+
+    This is using inverse random sample on a probability density function
+    <https://en.wikipedia.org/wiki/Probability_density_function> given by:
+
+    f(n) = p_end * (1 - p_end) ^ (n - 1)
+
+    (So the probability of length n is given by f(n))
+
+    Which gives cumulative distribution function
+    <https://en.wikipedia.org/wiki/Cumulative_distribution_function>:
+
+    F(n) = 1 - (1 - p_end) ^ n
+
+    (So the probability of length less than or equal to n is given by F(n))
+
+    Which gives for given x = F(n) (ie the random sample) gives n:
+
+    n = ceil((ln(1-x)/ln(1-p_end)))
+
+    This approach of sampling from a distribution is called inverse
+    transform sampling
+    <https://en.wikipedia.org/wiki/Inverse_transform_sampling>.
+
+    Note that this corresponds to sampling at the end of every turn whether
+    or not the Match ends.
+    """
+    try:
+        x = random.random()
+        return int(ceil(log(1 - x) / log(1 - prob_end)))
+    except ZeroDivisionError:
+        return float("inf")
+    except ValueError:
+        return 1

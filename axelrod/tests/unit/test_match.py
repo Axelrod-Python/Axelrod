@@ -32,6 +32,60 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), game.RPST())
 
+    @given(prob_end=floats(min_value=0, max_value=1), game=games())
+    def test_init_with_prob_end(self, prob_end, game):
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+        match = axelrod.Match((p1, p2), prob_end=prob_end, game=game)
+        self.assertEqual(match.result, [])
+        self.assertEqual(match.players, [p1, p2])
+        self.assertEqual(match.players[0].match_attributes['length'],
+                         float('inf'))
+        self.assertEqual(match._cache_key, (p1, p2, match.turns))
+        self.assertEqual(match._cache, {})
+        self.assertEqual(match.noise, 0)
+        self.assertEqual(match.game.RPST(), game.RPST())
+
+    @given(prob_end=floats(min_value=0, max_value=1),
+           turns=integers(min_value=1, max_value=200), game=games())
+    def test_init_with_prob_end_and_turns(self, turns, prob_end, game):
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+        match = axelrod.Match((p1, p2), turns=turns, prob_end=prob_end,
+                              game=game)
+        self.assertEqual(match.result, [])
+        self.assertEqual(match.players, [p1, p2])
+        self.assertEqual(match.players[0].match_attributes['length'],
+                         float('inf'))
+        self.assertEqual(match._cache_key, (p1, p2, match.turns))
+        self.assertLessEqual(match.turns, turns)
+        self.assertEqual(match._cache, {})
+        self.assertEqual(match.noise, 0)
+        self.assertEqual(match.game.RPST(), game.RPST())
+
+    def test_default_init(self):
+        p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+        match = axelrod.Match((p1, p2))
+        self.assertEqual(match.result, [])
+        self.assertEqual(match.players, [p1, p2])
+        self.assertEqual(match.players[0].match_attributes['length'], 20)
+        self.assertEqual(match._cache_key, (p1, p2, match.turns))
+        self.assertLessEqual(match.turns, 20)
+        self.assertEqual(match._cache, {})
+        self.assertEqual(match.noise, 0)
+        self.assertEqual(match.game.RPST(), (3, 1, 0, 5))
+
+    def test_example_prob_end_init(self):
+        for seed, expected_length in [(0, 3), (1, 1), (2, 5)]:
+            axelrod.seed(seed)
+            p1, p2 = axelrod.Cooperator(), axelrod.Cooperator()
+            match = axelrod.Match((p1, p2), prob_end=.5)
+            self.assertEqual(match.players[0].match_attributes['length'],
+                             float('inf'))
+            self.assertEqual(match.turns, expected_length)
+            self.assertEqual(match._cache_key, (p1, p2, match.turns))
+            self.assertEqual(match._cache, {})
+            self.assertEqual(match.noise, 0)
+            self.assertEqual(match.game.RPST(), (3, 1, 0, 5))
+
     @given(turns=integers(min_value=1, max_value=200), game=games())
     @example(turns=5, game=axelrod.DefaultGame)
     def test_non_default_attributes(self, turns, game):
@@ -254,3 +308,18 @@ class TestMatch(unittest.TestCase):
         self.assertEqual(match.sparklines(), expected_sparklines)
         expected_sparklines = 'XXXX\nXYXY'
         self.assertEqual(match.sparklines('X', 'Y'), expected_sparklines)
+
+
+class TestSampleLength(unittest.TestCase):
+    def test_sample_length(self):
+        for seed, prob_end, expected_length in [(0, .5, 3), (1, .5, 1),
+                                                (2, .6, 4), (3, .4, 1)]:
+            axelrod.seed(seed)
+            self.assertEqual(axelrod.match.sample_length(prob_end),
+                             expected_length)
+
+    def test_sample_with_0_prob(self):
+        self.assertEqual(axelrod.match.sample_length(0), float('inf'))
+
+    def test_sample_with_1_prob(self):
+        self.assertEqual(axelrod.match.sample_length(1), 1)
