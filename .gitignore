@@ -115,3 +115,6 @@ ENV/
 # Docker files
 Dockerfile
 docker-compose.yml
+
+# Mypy files
+.mypy_cache/
