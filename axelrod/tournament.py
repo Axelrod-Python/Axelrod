@@ -56,12 +56,8 @@ class Tournament(object):
         self.repetitions = repetitions
         self.edges = edges
 
-
-        if turns is None:
-            if prob_end is not None:
-                turns = float('inf')
-            else:
-                turns = 200
+        if turns is None and prob_end is None:
+            turns = 200
 
         self.turns = turns
         self.prob_end = prob_end
