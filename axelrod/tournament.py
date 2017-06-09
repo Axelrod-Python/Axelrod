@@ -357,8 +357,8 @@ class Tournament(object):
         player1 = self.players[p1_index].clone()
         player2 = self.players[p2_index].clone()
         match_params["players"] = (player1, player2)
-        match = Match(**match_params)
         for _ in range(repetitions):
+            match = Match(**match_params)
             match.play()
             interactions[index_pair].append(match.result)
         return interactions

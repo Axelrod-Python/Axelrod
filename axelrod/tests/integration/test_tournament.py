@@ -126,3 +126,18 @@ class TestProbEndTournament(unittest.TestCase):
         # Check that both plays always cooperated
         for rating in results.cooperating_rating:
             self.assertEqual(rating, 1)
+
+    def test_matches_have_different_length(self):
+        """
+        A match between two players should have variable length across the
+        repetitions
+        """
+        p1 = axelrod.Cooperator()
+        p2 = axelrod.Cooperator()
+        p3 = axelrod.Cooperator()
+        players = [p1, p2, p3]
+        axelrod.seed(0)
+        tournament = axelrod.Tournament(players, prob_end=.1, repetitions=2)
+        results = tournament.play(progress_bar=False)
+        # Check that match length are different across the repetitions
+        self.assertNotEqual(results.match_lengths[0], results.match_lengths[1])
