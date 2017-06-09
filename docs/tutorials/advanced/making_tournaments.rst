@@ -19,15 +19,15 @@ To do this let us create a new class to generate matches::
     >>> import axelrod as axl
     >>> import random
     >>> axl.seed(0)  # Setting a seed.
-    >>> class StochasticMatchups(axl.RoundRobinMatches):
-    ...     """Inherit from the `axelrod.match_generator.RoundRobinMatches` class"""
+    >>> class StochasticMatchups(axl.MatchGenerator):
+    ...     """Inherit from the `axelrod.match_generator.MatchGenerator` class"""
     ...
     ...     def build_match_chunks(self):
     ...         """
     ...         A generator that yields match parameters only with a given probability.
     ...
     ...         This over writes the
-    ...         `axelrod.match_generator.RoundRobinMatches.build_match_chunks` method.
+    ...         `axelrod.match_generator.MatchGenerator.build_match_chunks` method.
     ...         """
     ...         for player1_index in range(len(self.players)):
     ...             for player2_index in range(player1_index, len(self.players)):
@@ -64,15 +64,16 @@ not played `TitForTat`). The results can be viewed as before::
     >>> results.ranked_names
     ['Cooperator', 'Defector', 'Tit For Tat', 'Grudger', 'Alternator']
 
-Note: the :code:`axelrod.MatchGenerator` also has a :code:`build_single_match`
+Note: the :code:`axelrod.MatchGenerator` also has a
+:code:`build_single_match_params`
 method which can be overwritten (similarly to above) if the type of a particular
 match should be changed.
 
 For example the following could be used to create a tournament that randomly
 builds matches that were either 200 turns or single 1 shot games::
 
-    >>> class OneShotOrRepetitionMatchups(axl.RoundRobinMatches):
-    ...     """Inherit from the `axelrod.match_generator.RoundRobinMatches` class"""
+    >>> class OneShotOrRepetitionMatchups(axl.MatchGenerator):
+    ...     """Inherit from the `axelrod.match_generator.MatchGenerator` class"""
     ...
     ...
     ...     def build_single_match_params(self):
@@ -80,7 +81,7 @@ builds matches that were either 200 turns or single 1 shot games::
     ...         turns = 1
     ...         if random.random() < 0.5:
     ...             turns = 200
-    ...         return (turns, self.game, None, self.noise)
+    ...         return {"turns": turns, "game": self.game, "noise": self.noise}
 
 We can take a look at the match lengths when using this generator::
 

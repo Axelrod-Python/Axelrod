@@ -8,7 +8,7 @@ probability, [Axelrod1980b]_::
     >>> import axelrod as axl
     >>> players = [axl.Cooperator(), axl.Defector(),
     ...            axl.TitForTat(), axl.Grudger()]
-    >>> tournament = axl.ProbEndTournament(players, prob_end=0.5)
+    >>> tournament = axl.Tournament(players, prob_end=0.5)
 
 
 We can view the results in a similar way as described in

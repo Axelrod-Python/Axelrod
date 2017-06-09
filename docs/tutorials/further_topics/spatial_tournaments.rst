@@ -26,9 +26,10 @@ indices::
   ...            axl.TitForTat(), axl.Grudger()]
   >>> edges = [(0, 2), (0, 3), (1, 2), (1, 3)]
 
-To create a spatial tournament you call the :code:`SpatialTournamnent` class::
+To create a spatial tournament you pass the :code:`edges` to the
+:code:`Tournament` class::
 
-    >>> spatial_tournament = axl.SpatialTournament(players, edges=edges)
+    >>> spatial_tournament = axl.Tournament(players, edges=edges)
     >>> results = spatial_tournament.play(keep_interactions=True)
 
 We can plot the results::
@@ -49,7 +50,7 @@ We can, like any other tournament, obtain the ranks for our players::
 Let's run a small tournament of 2 :code:`turns` and 5 :code:`repetitions`
 and obtain the interactions::
 
-    >>> spatial_tournament = axl.SpatialTournament(players ,turns=2, repetitions=2, edges=edges)
+    >>> spatial_tournament = axl.Tournament(players ,turns=2, repetitions=2, edges=edges)
     >>> results = spatial_tournament.play(keep_interactions=True)
     >>> for index_pair, interaction in sorted(results.interactions.items()):
     ...     player1 = spatial_tournament.players[index_pair[0]]
@@ -63,10 +64,9 @@ and obtain the interactions::
 As anticipated  :code:`Cooperator` does not interact with :code:`Defector` neither
 :code:`TitForTat` with :code:`Grudger`.
 
-It is also possible to create a probabilistic ending spatial tournament with the
-:code:`ProbEndSpatialTournament` class::
+It is also possible to create a probabilistic ending spatial tournament::
 
-    >>> prob_end_spatial_tournament = axl.ProbEndSpatialTournament(players, edges=edges, prob_end=.1, repetitions=1)
+    >>> prob_end_spatial_tournament = axl.Tournament(players, edges=edges, prob_end=.1, repetitions=1)
     >>> prob_end_results = prob_end_spatial_tournament.play(keep_interactions=True)
 
 We see that the match lengths are no longer all equal::
