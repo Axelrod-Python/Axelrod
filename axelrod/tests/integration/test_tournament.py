@@ -121,8 +121,7 @@ class TestProbEndTournament(unittest.TestCase):
         p1 = FinalTransformer(['D', 'D'])(axelrod.Cooperator)()
         p2 = FinalTransformer(['D', 'D'])(axelrod.Cooperator)()
         players = [p1, p2]
-        tournament = axelrod.ProbEndTournament(players, prob_end=.1,
-                                               repetitions=1)
+        tournament = axelrod.Tournament(players, prob_end=.1, repetitions=1)
         results = tournament.play(progress_bar=False)
         # Check that both plays always cooperated
         for rating in results.cooperating_rating:

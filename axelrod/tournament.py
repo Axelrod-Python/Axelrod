@@ -11,21 +11,20 @@ from axelrod import on_windows
 from axelrod.player import Player
 from .game import Game
 from .match import Match
-from .match_generator import (
-    RoundRobinMatches, ProbEndRoundRobinMatches, SpatialMatches,
-    ProbEndSpatialMatches, MatchGenerator)
+from .match_generator import MatchGenerator
 from .result_set import ResultSetFromFile, ResultSet
 
-from typing import List
+from typing import List, Tuple
 
 
 class Tournament(object):
 
     def __init__(self, players: List[Player],
-                 match_generator: MatchGenerator = RoundRobinMatches,
-                 name: str = 'axelrod', game: Game = None, turns: int = 200,
-                 repetitions: int = 10,
-                 noise: float = 0, with_morality: bool = True) -> None:
+                 match_generator: MatchGenerator = MatchGenerator,
+                 name: str = 'axelrod', game: Game = None, turns: int = None,
+                 prob_end: float = None, repetitions: int = 10,
+                 noise: float = 0, with_morality: bool = True,
+                 edges: List[Tuple] = None) -> None:
         """
         Parameters
         ----------
@@ -51,13 +50,28 @@ class Tournament(object):
         else:
             self.game = game
         self.name = name
-        self.turns = turns
         self.noise = noise
         self.num_interactions = 0
         self.players = players
         self.repetitions = repetitions
-        self.match_generator = match_generator(
-            players, turns, self.game, self.repetitions, self.noise)
+        self.edges = edges
+
+
+        if turns is None:
+            if prob_end is not None:
+                turns = float('inf')
+            else:
+                turns = 200
+
+        self.turns = turns
+        self.prob_end = prob_end
+        self.match_generator = match_generator(players=players,
+                                               turns=turns,
+                                               game=self.game,
+                                               repetitions=self.repetitions,
+                                               prob_end=prob_end,
+                                               noise=self.noise,
+                                               edges=edges)
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
@@ -346,120 +360,9 @@ class Tournament(object):
         p1_index, p2_index = index_pair
         player1 = self.players[p1_index].clone()
         player2 = self.players[p2_index].clone()
-        players = (player1, player2)
-        params = [players]
-        params.extend(match_params)
-        match = Match(*params)
+        match_params["players"] = (player1, player2)
+        match = Match(**match_params)
         for _ in range(repetitions):
             match.play()
             interactions[index_pair].append(match.result)
         return interactions
-
-
-class ProbEndTournament(Tournament):
-    """
-    A tournament in which the player don't know the length of a given match. The
-    length of a match is equivalent to randomly sampling after each round
-    whether or not to continue.
-    """
-
-    def __init__(self, players, name='axelrod', game=None, prob_end=.5,
-                 repetitions=10, noise=0, with_morality=True):
-        """
-        Parameters
-        ----------
-        players : list
-            A list of axelrod.Player objects
-        name : string
-            A name for the tournament
-        game : axelrod.Game
-            The game object used to score the tournament
-        prob_end : a float
-            The probability of a given match ending
-        repetitions : integer
-            The number of times the round robin should be repeated
-        noise : float
-            The probability that a player's intended action should be flipped
-        with_morality : boolean
-            Whether morality metrics should be calculated
-        """
-        super().__init__(
-            players, name=name, game=game, turns=float("inf"),
-            repetitions=repetitions, noise=noise, with_morality=with_morality)
-
-        self.prob_end = prob_end
-        self.match_generator = ProbEndRoundRobinMatches(
-            players, prob_end, self.game, repetitions)
-
-
-class SpatialTournament(Tournament):
-    """
-    A tournament in which the players are allocated in a graph as nodes
-    and they players only play the others that are connected to with an edge.
-    """
-    def __init__(self, players: List[Player], edges, name: str = 'axelrod',
-                 game: Game = None, turns: int = 200, repetitions: int = 10,
-                 noise: float = 0, with_morality: bool = True) -> None:
-        """
-        Parameters
-        ----------
-        players : list
-            A list of axelrod.Player objects
-        name : string
-            A name for the tournament
-        game : axelrod.Game
-            The game object used to score the tournament
-        edges : list
-            A list of tuples containing the existing edges
-        repetitions : integer
-            The number of times the round robin should be repeated
-        noise : float
-            The probability that a player's intended action should be flipped
-        with_morality : boolean
-            Whether morality metrics should be calculated
-        """
-        super().__init__(
-            players, name=name, game=game, turns=turns,
-            repetitions=repetitions, noise=noise, with_morality=with_morality)
-
-        self.edges = edges
-        self.match_generator = SpatialMatches(
-            players, turns, self.game, repetitions, edges, noise)
-
-
-class ProbEndSpatialTournament(ProbEndTournament):
-    """
-    A tournament in which the players are allocated in a graph as nodes
-    and they players only play the others that are connected to with an edge.
-    Players do not know the length of a given match (it is randomly sampled).
-    """
-    def __init__(self, players: List[Player], edges, name: str = 'axelrod',
-                 game: Game = None, prob_end: float = .5, repetitions: int = 10,
-                 noise: float = 0, with_morality: bool = True) -> None:
-        """
-        Parameters
-        ----------
-        players : list
-            A list of axelrod.Player objects
-        name : string
-            A name for the tournament
-        game : axelrod.Game
-            The game object used to score the tournament
-        prob_end : a float
-            The probability of a given match ending
-        edges : list
-            A list of tuples containing the existing edges
-        repetitions : integer
-            The number of times the round robin should be repeated
-        noise : float
-            The probability that a player's intended action should be flipped
-        with_morality : boolean
-            Whether morality metrics should be calculated
-        """
-        super().__init__(
-            players, name=name, game=game, prob_end=prob_end,
-            repetitions=repetitions, noise=noise, with_morality=with_morality)
-
-        self.edges = edges
-        self.match_generator = ProbEndSpatialMatches(
-            players, prob_end, self.game, repetitions, noise, edges)

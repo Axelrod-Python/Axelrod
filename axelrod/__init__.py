@@ -19,8 +19,7 @@ from .moran import MoranProcess, MoranProcessGraph, ApproximateMoranProcess
 from .strategies import *
 from .deterministic_cache import DeterministicCache
 from .match_generator import *
-from .tournament import (
-    Tournament, ProbEndTournament, SpatialTournament, ProbEndSpatialTournament)
+from .tournament import Tournament
 from .result_set import ResultSet, ResultSetFromFile
 from .ecosystem import Ecosystem
 from .fingerprint import AshlockFingerprint

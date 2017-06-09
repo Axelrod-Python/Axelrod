@@ -81,12 +81,11 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
     def test_warning(self):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=10,
-            repetitions=1)
+        tournament = axelrod.Tournament(name=self.test_name,
+                                        players=self.players,
+                                        game=self.game,
+                                        turns=10,
+                                        repetitions=1)
         with warnings.catch_warnings(record=True) as w:
             # Check that a warning is raised if no results set is built and no
             # filename is given
@@ -209,8 +208,8 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
-                                           max_turns=10, min_repetitions=2,
-                                           max_repetitions=4))
+                                  max_turns=10, min_repetitions=2,
+                                  max_repetitions=4))
     @settings(max_examples=10, timeout=0)
     @example(tournament=axelrod.Tournament(players=[s() for s in
         test_strategies], turns=test_turns, repetitions=test_repetitions)
@@ -421,17 +420,16 @@ class TestTournament(unittest.TestCase):
     @example(turns=3)
     @example(turns=200)
     def test_play_matches(self, turns):
-        tournament = axelrod.Tournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            repetitions=self.test_repetitions)
+        tournament = axelrod.Tournament(name=self.test_name,
+                                        players=self.players,
+                                        game=self.game,
+                                        repetitions=self.test_repetitions)
 
         def make_chunk_generator():
             for player1_index in range(len(self.players)):
                 for player2_index in range(player1_index, len(self.players)):
                     index_pair = (player1_index, player2_index)
-                    match_params = (turns, self.game, None, 0)
+                    match_params = {"turns": turns, "game": self.game}
                     yield (index_pair, match_params, self.test_repetitions)
 
         chunk_generator = make_chunk_generator()
@@ -460,15 +458,15 @@ class TestTournament(unittest.TestCase):
 
     def test_write_interactions(self):
         tournament = axelrod.Tournament(
+
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=2,
             repetitions=2)
-        tournament._write_interactions = MagicMock(
-                    name='_write_interactions')
-        tournament._build_result_set = MagicMock(
-                    name='_build_result_set')  # Mocking this as it is called by play
+        tournament._write_interactions = MagicMock(name='_write_interactions')
+        # Mocking this as it is called by play
+        tournament._build_result_set = MagicMock(name='_build_result_set')
         self.assertTrue(tournament.play(filename=self.filename,
                                         progress_bar=False))
         tournament.outputfile.close()  # This is normally closed by `build_result_set`
@@ -477,12 +475,11 @@ class TestTournament(unittest.TestCase):
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
 
-        # Test when runnning in memory
-        tournament._write_interactions = MagicMock(
-                    name='_write_interactions')
+        # Test when running in memory
+        tournament._write_interactions = MagicMock(name='_write_interactions')
         self.assertTrue(tournament.play(filename=self.filename,
                                         progress_bar=False,
-                                        in_memory=True))
+                                        in_memory=False))
         # Get the calls made to write_interactions
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
@@ -541,12 +538,11 @@ class TestProbEndTournament(unittest.TestCase):
         cls.test_prob_end = test_prob_end
 
     def test_init(self):
-        tournament = axelrod.ProbEndTournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            prob_end=self.test_prob_end,
-            noise=0.2)
+        tournament = axelrod.Tournament(name=self.test_name,
+                                        players=self.players,
+                                        game=self.game,
+                                        prob_end=self.test_prob_end,
+                                        noise=0.2)
         self.assertEqual(tournament.match_generator.prob_end, tournament.prob_end)
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
@@ -566,19 +562,18 @@ class TestProbEndTournament(unittest.TestCase):
                                            max_repetitions=4))
     @settings(max_examples=50, timeout=0)
     @example(tournament=
-        axelrod.ProbEndTournament(players=[s() for s in test_strategies],
-                                  prob_end=.2, repetitions=test_repetitions)
-        )
+        axelrod.Tournament(players=[s() for s in test_strategies],
+                           prob_end=.2, repetitions=test_repetitions))
 
     # These two examples are to make sure #465 is fixed.
     # As explained there: https://github.com/Axelrod-Python/Axelrod/issues/465,
     # these two examples were identified by hypothesis.
     @example(tournament=
-        axelrod.ProbEndTournament(players=[axelrod.BackStabber(),
-                                           axelrod.MindReader()],
-                                  prob_end=.2, repetitions=1))
+        axelrod.Tournament(players=[axelrod.BackStabber(),
+                                    axelrod.MindReader()],
+                           prob_end=.2, repetitions=1))
     @example(tournament=
-        axelrod.ProbEndTournament(players=[axelrod.ThueMorse(),
+        axelrod.Tournament(players=[axelrod.ThueMorse(),
                                            axelrod.MindReader()],
                                   prob_end=.2, repetitions=1))
     def test_property_serial_play(self, tournament):
@@ -602,13 +597,12 @@ class TestSpatialTournament(unittest.TestCase):
         cls.test_edges = test_edges
 
     def test_init(self):
-        tournament = axelrod.SpatialTournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            turns=self.test_turns,
-            edges=self.test_edges,
-            noise=0.2)
+        tournament = axelrod.Tournament(name=self.test_name,
+                                        players=self.players,
+                                        game=self.game,
+                                        turns=self.test_turns,
+                                        edges=self.test_edges,
+                                        noise=0.2)
         self.assertEqual(tournament.match_generator.edges, tournament.edges)
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
@@ -647,11 +641,11 @@ class TestSpatialTournament(unittest.TestCase):
         tournament = axelrod.Tournament(players, repetitions=repetitions,
                                         turns=turns, noise=noise)
         # create a complete spatial tournament
-        spatial_tournament = axelrod.SpatialTournament(players,
-                                                       repetitions=repetitions,
-                                                       turns=turns,
-                                                       noise=noise,
-                                                       edges=edges)
+        spatial_tournament = axelrod.Tournament(players,
+                                                repetitions=repetitions,
+                                                turns=turns,
+                                                noise=noise,
+                                                edges=edges)
 
         axelrod.seed(seed)
         results = tournament.play(progress_bar=False)
@@ -684,14 +678,14 @@ class TestSpatialTournament(unittest.TestCase):
         players = [axelrod.Cooperator(), axelrod.Defector(),
                    axelrod.TitForTat(), axelrod.Grudger()]
         edges = [(0, 2), (0, 3), (1, 2), (1, 3)]
-        tournament = axelrod.SpatialTournament(players, edges=edges)
+        tournament = axelrod.Tournament(players, edges=edges)
         results = tournament.play(progress_bar=False)
         expected_ranked_names = ['Cooperator', 'Tit For Tat',
                                  'Grudger', 'Defector']
         self.assertEqual(results.ranked_names, expected_ranked_names)
 
         # Check that this tournament runs with noise
-        tournament = axelrod.SpatialTournament(players, edges=edges, noise=.5)
+        tournament = axelrod.Tournament(players, edges=edges, noise=.5)
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
@@ -708,13 +702,12 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         cls.test_edges = test_edges
 
     def test_init(self):
-        tournament = axelrod.ProbEndSpatialTournament(
-            name=self.test_name,
-            players=self.players,
-            game=self.game,
-            prob_end=self.test_prob_end,
-            edges=self.test_edges,
-            noise=0.2)
+        tournament = axelrod.Tournament(name=self.test_name,
+                                        players=self.players,
+                                        game=self.game,
+                                        prob_end=self.test_prob_end,
+                                        edges=self.test_edges,
+                                        noise=0.2)
         self.assertEqual(tournament.match_generator.edges, tournament.edges)
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
@@ -726,8 +719,6 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         self.assertEqual(tournament.noise, 0.2)
         self.assertEqual(tournament.match_generator.noise, 0.2)
         self.assertEqual(tournament.prob_end, self.test_prob_end)
-        anonymous_tournament = axelrod.Tournament(players=self.players)
-        self.assertEqual(anonymous_tournament.name, 'axelrod')
 
     @given(strategies=strategy_lists(strategies=deterministic_strategies,
                                      min_size=2, max_size=2),
@@ -744,8 +735,8 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         players = [s() for s in strategies]
 
         # create a prob end round robin tournament
-        tournament = axelrod.ProbEndTournament(players, prob_end=prob_end,
-                                               repetitions=reps)
+        tournament = axelrod.Tournament(players, prob_end=prob_end,
+                                        repetitions=reps)
         axelrod.seed(seed)
         results = tournament.play(progress_bar=False)
 
@@ -754,10 +745,9 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         edges = [(i, j) for i in range(len(players))
                  for j in range(i, len(players))]
 
-        spatial_tournament = axelrod.ProbEndSpatialTournament(players,
-                                                              prob_end=prob_end,
-                                                              repetitions=reps,
-                                                              edges=edges)
+        spatial_tournament = axelrod.Tournament(players, prob_end=prob_end,
+                                                repetitions=reps,
+                                                edges=edges)
         axelrod.seed(seed)
         spatial_results = spatial_tournament.play(progress_bar=False)
         self.assertEqual(results.match_lengths, spatial_results.match_lengths)
@@ -778,10 +768,10 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
         Tests that gives same result as the corresponding spatial round robin
         spatial tournament
         """
-        prob_end_tour = axelrod.ProbEndSpatialTournament(tournament.players,
-                                         prob_end=1,
-                                         edges=tournament.edges,
-                                         repetitions=tournament.repetitions)
+        prob_end_tour = axelrod.Tournament(tournament.players,
+                                           prob_end=1,
+                                           edges=tournament.edges,
+                                           repetitions=tournament.repetitions)
         axelrod.seed(seed)
         prob_end_results = prob_end_tour.play(progress_bar=False)
         axelrod.seed(seed)
