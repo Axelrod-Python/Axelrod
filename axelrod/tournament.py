@@ -20,7 +20,6 @@ from typing import List, Tuple
 class Tournament(object):
 
     def __init__(self, players: List[Player],
-                 match_generator: MatchGenerator = MatchGenerator,
                  name: str = 'axelrod', game: Game = None, turns: int = None,
                  prob_end: float = None, repetitions: int = 10,
                  noise: float = 0, with_morality: bool = True,
@@ -30,20 +29,24 @@ class Tournament(object):
         ----------
         players : list
             A list of axelrod.Player objects
-        match_generator : class
-            A class that must be descended from axelrod.MatchGenerator
         name : string
             A name for the tournament
         game : axelrod.Game
             The game object used to score the tournament
         turns : integer
             The number of turns per match
+        prob_end : float
+            The probability of a given turn ending a match
         repetitions : integer
             The number of times the round robin should be repeated
         noise : float
             The probability that a player's intended action should be flipped
         with_morality : boolean
             Whether morality metrics should be calculated
+        prob_end : float
+            The probability of a given turn ending a match
+        edges : list
+            A list of edges between players
         """
         if game is None:
             self.game = Game()
@@ -61,13 +64,12 @@ class Tournament(object):
 
         self.turns = turns
         self.prob_end = prob_end
-        self.match_generator = match_generator(players=players,
-                                               turns=turns,
-                                               game=self.game,
-                                               repetitions=self.repetitions,
-                                               prob_end=prob_end,
-                                               noise=self.noise,
-                                               edges=edges)
+        self.match_generator = MatchGenerator(players=players, turns=turns,
+                                              game=self.game,
+                                              repetitions=self.repetitions,
+                                              prob_end=prob_end,
+                                              noise=self.noise,
+                                              edges=edges)
         self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
