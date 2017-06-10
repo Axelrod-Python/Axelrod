@@ -12,7 +12,7 @@ Dilemma is given by::
     (3, 1, 0, 5)
 
 These :code:`Game` objects are used to score :ref:`matches <creating_matches>`,
-:ref:`tournaments <making_tournaments>` and :ref:`Moran processes
+:ref:`tournaments <creating_tournaments>` and :ref:`Moran processes
 <moran-process>`::
 
     >>> pd.score((axl.Actions.C, axl.Actions.C))
