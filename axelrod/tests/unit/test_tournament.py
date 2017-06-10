@@ -483,7 +483,7 @@ class TestTournament(unittest.TestCase):
         tournament._build_result_set = MagicMock(name='_build_result_set')
         self.assertTrue(tournament.play(filename=self.filename,
                                         progress_bar=False))
-        tournament.outputfile.close()  # This is normally closed by `build_result_set`
+        tournament.outputfile.close()  # Normally closed by `build_result_set`
 
         # Get the calls made to write_interactions
         calls = tournament._write_interactions.call_args_list
@@ -497,6 +497,7 @@ class TestTournament(unittest.TestCase):
         # Get the calls made to write_interactions
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
+        tournament.outputfile.close()  # Normally closed by `write_interactions`
 
     def test_write_to_csv(self):
         tournament = axelrod.Tournament(
