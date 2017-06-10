@@ -1,7 +1,7 @@
 import os
 
 on_windows = os.name == 'nt'
-default_turns = 200
+DEFAULT_TURNS = 200
 
 # The order of imports matters!
 from .version import __version__

@@ -106,7 +106,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
@@ -116,7 +116,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
         self.assertEqual(tournament.num_interactions, 75)
@@ -139,7 +139,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
 
@@ -164,7 +164,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
         results = tournament.play()
@@ -198,7 +198,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
         results = tournament.play(processes=2)
@@ -244,7 +244,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         results = tournament.play(processes=2, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
@@ -268,7 +268,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         tournament._write_interactions = MagicMock(
                     name='_write_interactions')
@@ -285,7 +285,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         tournament._write_interactions = MagicMock(
                     name='_write_interactions')
@@ -304,7 +304,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         self.assertEqual(tournament._n_workers(processes=1), max_processes)
 
@@ -312,7 +312,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         self.assertEqual(tournament._n_workers(processes=max_processes+2),
                                                max_processes)
@@ -330,7 +330,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions,)
         self.assertEqual(tournament._n_workers(processes=2), 2)
 
@@ -344,7 +344,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         chunks = tournament.match_generator.build_match_chunks()
         for chunk in chunks:
@@ -365,7 +365,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
         work_queue = Queue()
@@ -391,7 +391,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
@@ -405,7 +405,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.default_turns,
+            turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
         results = tournament.play(build_results=False, filename=self.filename,
@@ -418,7 +418,7 @@ class TestTournament(unittest.TestCase):
 
     @given(turns=integers(min_value=1, max_value=200))
     @example(turns=3)
-    @example(turns=axelrod.default_turns)
+    @example(turns=axelrod.DEFAULT_TURNS)
     def test_play_matches(self, turns):
         tournament = axelrod.Tournament(name=self.test_name,
                                         players=self.players,

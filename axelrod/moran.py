@@ -3,7 +3,7 @@ import random
 
 import numpy as np
 
-from axelrod import default_turns
+from axelrod import DEFAULT_TURNS
 from .deterministic_cache import DeterministicCache
 from .match import Match
 from .random_ import randrange
@@ -31,7 +31,7 @@ def fitness_proportionate_selection(scores):
 
 
 class MoranProcess(object):
-    def __init__(self, players, turns=default_turns, noise=0,
+    def __init__(self, players, turns=DEFAULT_TURNS, noise=0,
                  deterministic_cache=None, mutation_rate=0., mode='bd',
                  match_class=Match):
         """

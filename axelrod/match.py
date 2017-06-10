@@ -1,6 +1,6 @@
 from axelrod.actions import Actions
 from axelrod.game import Game
-from axelrod import default_turns
+from axelrod import DEFAULT_TURNS
 import axelrod.interaction_utils as iu
 from .deterministic_cache import DeterministicCache
 import random
@@ -42,7 +42,7 @@ class Match(object):
             but these can be overridden if desired.
         """
 
-        defaults = {(True, True): (default_turns, 0),
+        defaults = {(True, True): (DEFAULT_TURNS, 0),
                     (True, False): (float('inf'), prob_end),
                     (False, True): (turns, 0),
                     (False, False): (turns, prob_end)}

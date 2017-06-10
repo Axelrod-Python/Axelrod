@@ -7,7 +7,7 @@ import warnings
 
 import tqdm
 
-from axelrod import on_windows, default_turns
+from axelrod import on_windows, DEFAULT_TURNS
 from axelrod.player import Player
 from .game import Game
 from .match import Match
@@ -60,7 +60,7 @@ class Tournament(object):
         self.edges = edges
 
         if turns is None and prob_end is None:
-            turns = default_turns
+            turns = DEFAULT_TURNS
 
         self.turns = turns
         self.prob_end = prob_end

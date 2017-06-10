@@ -66,13 +66,13 @@ class TestMatch(unittest.TestCase):
         match = axelrod.Match((p1, p2))
         self.assertEqual(match.result, [])
         self.assertEqual(match.players, [p1, p2])
-        self.assertEqual(match.turns, axelrod.default_turns)
+        self.assertEqual(match.turns, axelrod.DEFAULT_TURNS)
         self.assertEqual(match.prob_end, 0)
         self.assertEqual(match.noise, 0)
         self.assertEqual(match.game.RPST(), (3, 1, 0, 5))
 
         self.assertEqual(match.players[0].match_attributes['length'],
-                         axelrod.default_turns)
+                         axelrod.DEFAULT_TURNS)
         self.assertEqual(match._cache, {})
 
     def test_example_prob_end(self):
