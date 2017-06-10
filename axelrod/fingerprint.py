@@ -310,11 +310,9 @@ class AshlockFingerprint(object):
             step, progress_bar=progress_bar)
 
         self.step = step
-        self.spatial_tournament = axl.SpatialTournament(
-            tourn_players,
-            turns=turns,
-            repetitions=repetitions,
-            edges=edges)
+        self.spatial_tournament = axl.Tournament(tourn_players, turns=turns,
+                                                 repetitions=repetitions,
+                                                 edges=edges)
         self.spatial_tournament.play(build_results=False,
                                      filename=filename,
                                      processes=processes,

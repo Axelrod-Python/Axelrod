@@ -39,10 +39,10 @@ The sequence of populations::
 
     >>> import pprint
     >>> pprint.pprint(populations)  # doctest: +SKIP
-    [Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
-     Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
-     Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
-     Counter({'Tit For Tat': 2, 'Grudger': 1, 'Cooperator': 1}),
+    [Counter({'Cooperator': 1, 'Tit For Tat': 1, 'Grudger': 1, 'Defector': 1}),
+     Counter({'Cooperator': 1, 'Tit For Tat': 1, 'Grudger': 1, 'Defector': 1}),
+     Counter({'Cooperator': 1, 'Tit For Tat': 1, 'Grudger': 1, 'Defector': 1}),
+     Counter({'Tit For Tat': 2, 'Cooperator': 1, 'Grudger': 1}),
      Counter({'Grudger': 2, 'Cooperator': 1, 'Tit For Tat': 1}),
      Counter({'Grudger': 3, 'Cooperator': 1}),
      Counter({'Grudger': 3, 'Cooperator': 1}),
@@ -59,9 +59,9 @@ The scores in each round::
 
     >>> for row in mp.score_history:
     ...     print([round(element, 1) for element in row])
-    [6.0, 7.1, 7.0, 7.0]
-    [6.0, 7.1, 7.0, 7.0]
-    [6.0, 7.1, 7.0, 7.0]
+    [6.0, 7.0, 7.0, 7.0]
+    [6.0, 7.0, 7.0, 7.0]
+    [6.0, 7.0, 7.0, 7.0]
     [9.0, 9.0, 9.0, 9.0]
     [9.0, 9.0, 9.0, 9.0]
     [9.0, 9.0, 9.0, 9.0]

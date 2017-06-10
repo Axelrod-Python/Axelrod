@@ -11,7 +11,6 @@ Contents:
    strategies.rst
    classification_of_strategies.rst
    strategy_transformers.rst
-   making_tournaments.rst
    tournament_results.rst
    reading_and_writing_interactions.rst
    parallel_processing.rst

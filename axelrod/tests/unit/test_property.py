@@ -114,7 +114,7 @@ class TestProbEndTournament(unittest.TestCase):
                                            max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator(self, tournament):
-        self.assertIsInstance(tournament, axelrod.ProbEndTournament)
+        self.assertIsInstance(tournament, axelrod.Tournament)
         self.assertLessEqual(tournament.prob_end, 1)
         self.assertGreaterEqual(tournament.prob_end, 0)
         self.assertLessEqual(tournament.noise, 1)
@@ -126,7 +126,7 @@ class TestProbEndTournament(unittest.TestCase):
                                            max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_given_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.ProbEndTournament)
+        self.assertIsInstance(tournament, axelrod.Tournament)
         basic_player_names = [str(s()) for s in axelrod.basic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
@@ -136,7 +136,7 @@ class TestSpatialTournament(unittest.TestCase):
 
     def test_call(self):
         tournament = spatial_tournaments().example()
-        self.assertIsInstance(tournament, axelrod.SpatialTournament)
+        self.assertIsInstance(tournament, axelrod.Tournament)
 
     @given(tournament=spatial_tournaments(min_turns=2,
                                           max_turns=50,
@@ -146,7 +146,7 @@ class TestSpatialTournament(unittest.TestCase):
                                           max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator(self, tournament):
-        self.assertIsInstance(tournament, axelrod.SpatialTournament)
+        self.assertIsInstance(tournament, axelrod.Tournament)
         self.assertLessEqual(tournament.turns, 50)
         self.assertGreaterEqual(tournament.turns, 2)
         self.assertLessEqual(tournament.noise, 1)
@@ -158,7 +158,7 @@ class TestSpatialTournament(unittest.TestCase):
                                           max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_given_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.SpatialTournament)
+        self.assertIsInstance(tournament, axelrod.Tournament)
         basic_player_names = [str(s()) for s in axelrod.basic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)
@@ -169,7 +169,7 @@ class TestProbEndSpatialTournament(unittest.TestCase):
 
     def test_call(self):
         tournament = prob_end_spatial_tournaments().example()
-        self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)
+        self.assertIsInstance(tournament, axelrod.Tournament)
 
     @given(tournament=prob_end_spatial_tournaments(min_prob_end=0,
                                                    max_prob_end=1,
@@ -179,7 +179,7 @@ class TestProbEndSpatialTournament(unittest.TestCase):
                                                    max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator(self, tournament):
-        self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)
+        self.assertIsInstance(tournament, axelrod.Tournament)
         self.assertLessEqual(tournament.prob_end, 1)
         self.assertGreaterEqual(tournament.prob_end, 0)
         self.assertLessEqual(tournament.noise, 1)
@@ -191,7 +191,7 @@ class TestProbEndSpatialTournament(unittest.TestCase):
                                           max_size=3))
     @settings(max_examples=10, timeout=0)
     def test_decorator_with_given_strategies(self, tournament):
-        self.assertIsInstance(tournament, axelrod.ProbEndSpatialTournament)
+        self.assertIsInstance(tournament, axelrod.Tournament)
         basic_player_names = [str(s()) for s in axelrod.basic_strategies]
         for p in tournament.players:
             self.assertIn(str(p), basic_player_names)

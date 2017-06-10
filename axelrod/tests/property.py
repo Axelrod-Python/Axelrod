@@ -1,9 +1,7 @@
 """
 A module for creating hypothesis based strategies for property based testing
 """
-from axelrod import (strategies, Match, Game,
-                     Tournament, ProbEndTournament,
-                     SpatialTournament, ProbEndSpatialTournament)
+from axelrod import strategies, Match, Game, Tournament
 from hypothesis.strategies import (composite, sampled_from, integers,
                                    floats, lists)
 
@@ -139,8 +137,8 @@ def prob_end_tournaments(draw, strategies=strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = ProbEndTournament(players, prob_end=prob_end,
-                                   repetitions=repetitions, noise=noise)
+    tournament = Tournament(players, prob_end=prob_end,
+                            repetitions=repetitions, noise=noise)
     return tournament
 
 
@@ -196,9 +194,9 @@ def spatial_tournaments(draw, strategies=strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = SpatialTournament(players, turns=turns,
-                                   repetitions=repetitions, noise=noise,
-                                   edges=edges)
+    tournament = Tournament(players, turns=turns,
+                            repetitions=repetitions, noise=noise,
+                            edges=edges)
     return tournament
 
 
@@ -254,9 +252,9 @@ def prob_end_spatial_tournaments(draw, strategies=strategies,
                                 max_value=max_repetitions))
     noise = draw(floats(min_value=min_noise, max_value=max_noise))
 
-    tournament = ProbEndSpatialTournament(players, prob_end=prob_end,
-                                          repetitions=repetitions,
-                                          noise=noise, edges=edges)
+    tournament = Tournament(players, prob_end=prob_end,
+                            repetitions=repetitions,
+                            noise=noise, edges=edges)
     return tournament
 
 
