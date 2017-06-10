@@ -1,5 +1,6 @@
 from axelrod.actions import Actions
 from axelrod.game import Game
+from axelrod import default_turns
 import axelrod.interaction_utils as iu
 from .deterministic_cache import DeterministicCache
 import random
@@ -41,17 +42,14 @@ class Match(object):
             but these can be overridden if desired.
         """
 
-        if prob_end is not None:
-            if turns is not None:
-                turns = min(turns, sample_length(prob_end))
-            else:
-                turns = sample_length(prob_end)
-        elif turns is None:
-            turns = default_turns
+        if turns is None:
+            self.turns = default_turns if prob_end is None else float('inf')
+        else:
+            self.turns = turns
 
-        self.turns = turns
+        self.prob_end = 0 if prob_end is None else prob_end
+
         self.result = []
-        self._cache_key = (players[0], players[1], turns)
         self.noise = noise
 
         if game is None:
@@ -65,7 +63,7 @@ class Match(object):
             self._cache = deterministic_cache
 
         if match_attributes is None:
-            known_turns = turns if prob_end is None else float('inf')
+            known_turns = self.turns if prob_end is None else float('inf')
             self.match_attributes = {
                 'length': known_turns,
                 'game': self.game,
@@ -127,20 +125,23 @@ class Match(object):
 
         i.e. One entry per turn containing a pair of actions.
         """
-        if self._stochastic or (self._cache_key not in self._cache):
-            turn = 0
+        turns = min(sample_length(self.prob_end), self.turns)
+        cache_key = (self.players[0], self.players[1], turns)
+
+        if self._stochastic or (cache_key not in self._cache):
             for p in self.players:
                 p.reset()
-            while turn < self.turns:
+            turn = 0
+            while turn < turns:
                 turn += 1
                 self.players[0].play(self.players[1], self.noise)
             result = list(
                 zip(self.players[0].history, self.players[1].history))
 
             if self._cache_update_required:
-                self._cache[self._cache_key] = result
+                self._cache[cache_key] = result
         else:
-            result = self._cache[self._cache_key]
+            result = self._cache[cache_key]
 
         self.result = result
         return result
@@ -222,10 +223,9 @@ def sample_length(prob_end):
     Note that this corresponds to sampling at the end of every turn whether
     or not the Match ends.
     """
-    try:
-        x = random.random()
-        return int(ceil(log(1 - x) / log(1 - prob_end)))
-    except ZeroDivisionError:
+    if prob_end == 0:
         return float("inf")
-    except ValueError:
+    if prob_end == 1:
         return 1
+    x = random.random()
+    return int(ceil(log(1 - x) / log(1 - prob_end)))

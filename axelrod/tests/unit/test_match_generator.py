@@ -76,8 +76,8 @@ class TestMatchGenerator(unittest.TestCase):
         match_params["players"] = players
         match = axelrod.Match(**match_params)
         self.assertIsInstance(match, axelrod.Match)
-        self.assertIsInstance(len(match), int)
-        self.assertGreater(len(match), 0)
+        with self.assertRaises(TypeError):
+            len(match)
 
     def test_build_single_match_params_with_prob_end_and_noise(self):
         rr = axelrod.MatchGenerator(players=self.players,
@@ -97,8 +97,8 @@ class TestMatchGenerator(unittest.TestCase):
         match_params["players"] = players
         match = axelrod.Match(**match_params)
         self.assertIsInstance(match, axelrod.Match)
-        self.assertIsInstance(len(match), int)
-        self.assertGreater(len(match), 0)
+        with self.assertRaises(TypeError):
+            len(match)
 
     def test_build_single_match_params_with_prob_end_and_turns(self):
         rr = axelrod.MatchGenerator(players=self.players,
