@@ -87,9 +87,3 @@ particular number will depend on the stochastic behaviour of the Moran process::
 
     >>> len(cache)  # doctest: +SKIP
     18
-
-Although, in this case the length of matches are not all the same (the default
-match length in the Moran process is 100)::
-
-    >>> list(set([length for p1, p2, length in cache.keys()]))
-    [200, 100]

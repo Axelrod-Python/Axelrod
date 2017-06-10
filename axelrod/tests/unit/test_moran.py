@@ -91,7 +91,7 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(len(mp), 2)
         self.assertEqual(len(populations), 2)
         self.assertEqual(populations, mp.populations)
-        self.assertEqual(mp.winning_strategy_name, str(p1))
+        self.assertEqual(mp.winning_strategy_name, str(p2))
 
     def test_two_players_with_mutation(self):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()

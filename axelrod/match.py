@@ -47,7 +47,7 @@ class Match(object):
             else:
                 turns = sample_length(prob_end)
         elif turns is None:
-            turns = 20
+            turns = default_turns
 
         self.turns = turns
         self.result = []

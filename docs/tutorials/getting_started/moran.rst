@@ -28,40 +28,49 @@ the library, proceed as follows::
     >>> mp = axl.MoranProcess(players)
     >>> populations = mp.play()
     >>> mp.winning_strategy_name
-    'Grudger'
+    'Cooperator'
 
 You can access some attributes of the process, such as the number of rounds::
 
     >>> len(mp)
-    14
+    18
 
 The sequence of populations::
 
     >>> import pprint
     >>> pprint.pprint(populations)  # doctest: +SKIP
-    [Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
-     Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
-     Counter({'Grudger': 1, 'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1}),
-     Counter({'Tit For Tat': 2, 'Grudger': 1, 'Cooperator': 1}),
+    [Counter({'Cooperator': 1, 'Defector': 1, 'Tit For Tat': 1, 'Grudger': 1}),
      Counter({'Grudger': 2, 'Cooperator': 1, 'Tit For Tat': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 4})]
+     Counter({'Tit For Tat': 2, 'Cooperator': 1, 'Grudger': 1}),
+     Counter({'Grudger': 2, 'Cooperator': 1, 'Tit For Tat': 1}),
+     Counter({'Tit For Tat': 2, 'Cooperator': 1, 'Grudger': 1}),
+     Counter({'Tit For Tat': 3, 'Cooperator': 1}),
+     Counter({'Cooperator': 2, 'Tit For Tat': 2}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 3, 'Tit For Tat': 1}),
+     Counter({'Cooperator': 4})]
+
 
 
 The scores in each round::
 
     >>> for row in mp.score_history:
     ...     print([round(element, 1) for element in row])
-    [6.0, 7.1, 7.0, 7.0]
-    [6.0, 7.1, 7.0, 7.0]
-    [6.0, 7.1, 7.0, 7.0]
+    [6.0, 7.0, 7.0, 7.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
+    [9.0, 9.0, 9.0, 9.0]
     [9.0, 9.0, 9.0, 9.0]
     [9.0, 9.0, 9.0, 9.0]
     [9.0, 9.0, 9.0, 9.0]
@@ -88,7 +97,7 @@ function like :code:`takewhile` from :code:`itertools`)::
     ...     if len(mp.population_distribution()) == 1:
     ...         break
     >>> mp.population_distribution()
-    Counter({'Cooperator': 4})
+    Counter({'Grudger': 4})
 
 Other types of implemented Moran processes:
 

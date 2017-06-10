@@ -1,6 +1,7 @@
 import os
 
 on_windows = os.name == 'nt'
+default_turns = 200
 
 # The order of imports matters!
 from .version import __version__
@@ -23,3 +24,4 @@ from .tournament import Tournament
 from .result_set import ResultSet, ResultSetFromFile
 from .ecosystem import Ecosystem
 from .fingerprint import AshlockFingerprint
+

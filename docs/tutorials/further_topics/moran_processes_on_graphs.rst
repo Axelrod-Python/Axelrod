@@ -37,7 +37,7 @@ To create a graph-based Moran process, use a graph as follows::
     >>> mp = axl.MoranProcessGraph(players, interaction_graph=graph)
     >>> results = mp.play()
     >>> mp.population_distribution()
-    Counter({'Cooperator': 4})
+    Counter({'Defector': 4})
 
 You can supply the `reproduction_graph` as a keyword argument. The standard Moran
 process is equivalent to using a complete graph for both graphs.
