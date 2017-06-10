@@ -130,9 +130,7 @@ class Match(object):
         if self._stochastic or (cache_key not in self._cache):
             for p in self.players:
                 p.reset()
-            turn = 0
-            while turn < turns:
-                turn += 1
+            for _ in range(turns):
                 self.players[0].play(self.players[1], self.noise)
             result = list(
                 zip(self.players[0].history, self.players[1].history))
