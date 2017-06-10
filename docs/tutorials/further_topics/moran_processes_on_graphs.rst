@@ -4,7 +4,7 @@ Moran Process on Graphs
 =======================
 
 The library also provides a graph-based Moran process [Shakarian2013]_ with
-:code:`MoranProcessGraph`.  To use this class you must supply at least one
+:code:`MoranProcess`.  To use this class you must supply at least one
 :code:`Axelrod.graph.Graph` object, which can be initialized with just a list of
 edges::
 
@@ -34,10 +34,12 @@ To create a graph-based Moran process, use a graph as follows::
     >>> edges = [(0, 1), (1, 2), (2, 3), (3, 1)]
     >>> graph = Graph(edges)
     >>> players = [axl.Cooperator(), axl.Cooperator(), axl.Cooperator(), axl.Defector()]
-    >>> mp = axl.MoranProcessGraph(players, interaction_graph=graph)
+    >>> mp = axl.MoranProcess(players, interaction_graph=graph)
     >>> results = mp.play()
     >>> mp.population_distribution()
     Counter({'Cooperator': 4})
 
-You can supply the `reproduction_graph` as a keyword argument. The standard Moran
-process is equivalent to using a complete graph for both graphs.
+You can supply the :code:`reproduction_graph` as a keyword argument. The
+standard Moran process is equivalent to using a complete graph with no loops
+for the :code:`interaction_graph` and with loops for the
+:code:`reproduction_graph`.
