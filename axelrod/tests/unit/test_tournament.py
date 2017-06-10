@@ -456,6 +456,20 @@ class TestTournament(unittest.TestCase):
         # Check that matches no longer exist
         self.assertEqual((len(list(chunk_generator))), 0)
 
+    def test_match_cache_is_used(self):
+        """
+        Create two Random players that are classified as deterministic.
+        As they are deterministic the cache will be used.
+        """
+        FakeRandom = axelrod.Random
+        FakeRandom.classifier["stochastic"] = False
+        p1 = FakeRandom()
+        p2 = FakeRandom()
+        tournament = axelrod.Tournament((p1, p2), turns=5, repetitions=2)
+        results = tournament.play(progress_bar=False)
+        for player_scores in results.scores:
+            self.assertEqual(player_scores[0], player_scores[1])
+
     def test_write_interactions(self):
         tournament = axelrod.Tournament(
 
