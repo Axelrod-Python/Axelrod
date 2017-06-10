@@ -42,12 +42,11 @@ class Match(object):
             but these can be overridden if desired.
         """
 
-        if turns is None:
-            self.turns = default_turns if prob_end is None else float('inf')
-        else:
-            self.turns = turns
-
-        self.prob_end = 0 if prob_end is None else prob_end
+        defaults = {(True, True): (default_turns, 0),
+                    (True, False): (float('inf'), prob_end),
+                    (False, True): (turns, 0),
+                    (False, False): (turns, prob_end)}
+        self.turns, self.prob_end = defaults[(turns is None, prob_end is None)]
 
         self.result = []
         self.noise = noise
