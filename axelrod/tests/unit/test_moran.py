@@ -6,10 +6,11 @@ import unittest
 from hypothesis import given, example, settings
 
 import axelrod
-from axelrod import (Match, MoranProcess,
-                     ApproximateMoranProcess, Pdf)
+from axelrod import Match, MoranProcess, ApproximateMoranProcess, Pdf
 from axelrod.moran import fitness_proportionate_selection
 from axelrod.tests.property import strategy_lists
+
+C, D = axelrod.Actions.C, axelrod.Actions.D
 
 
 class TestMoranProcess(unittest.TestCase):
@@ -297,6 +298,21 @@ class TestMoranProcess(unittest.TestCase):
         # Check that players reset
         for player, initial_player in zip(mp.players, mp.initial_players):
             self.assertEqual(str(player), str(initial_player))
+
+    def test_constant_fitness_case(self):
+        # Scores between an Alternator and Defector will be: (1,  6)
+        axelrod.seed(0)
+        players = (axelrod.Alternator(), axelrod.Alternator(),
+                   axelrod.Defector(), axelrod.Defector())
+        mp = MoranProcess(players, turns=2)
+        winners = []
+        for _ in range(100):
+            mp.play()
+            winners.append(mp.winning_strategy_name)
+            mp.reset()
+        winners = Counter(winners)
+        self.assertEqual(winners["Defector"], 88)
+
 
     def test_cache(self):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
