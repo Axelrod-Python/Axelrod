@@ -47,6 +47,12 @@ class Graph(object):
         for edge in edges:
             self.add_edge(*edge)
 
+    def add_loops(self):
+        """
+        Add all loops to edges
+        """
+        self.add_edges((i, i) for i, _ in enumerate(self.vertices()))
+
     def edges(self):
         return self._edges
 
@@ -116,13 +122,14 @@ def complete_graph(length, loops=True):
     -------
     a Graph object
     """
-    offset = 1
-    if loops:
-        offset = 0
     graph = Graph(directed=False)
     edges = []
     for i in range(length):
-        for j in range(i + offset, length):
+        for j in range(i + 1, length):
             edges.append((i, j))
     graph.add_edges(edges)
+
+    if loops:
+        graph.add_loops()
+
     return graph
