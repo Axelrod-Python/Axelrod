@@ -136,8 +136,8 @@ class MoranProcess(object):
         self.interaction_graph = interaction_graph
         self.reproduction_graph = reproduction_graph
         # Map players to graph vertices
-        self.locations = list(interaction_graph.vertices())
-        self.index = dict(zip(interaction_graph.vertices(),
+        self.locations = sorted(interaction_graph.vertices())
+        self.index = dict(zip(sorted(interaction_graph.vertices()),
                               range(len(players))))
 
     def set_players(self) -> None:
@@ -190,7 +190,7 @@ class MoranProcess(object):
             # Select locally
             # index is not None in this case
             vertex = random.choice(
-                self.reproduction_graph.out_vertices(self.locations[index]))
+                sorted(self.reproduction_graph.out_vertices(self.locations[index])))
             i = self.index[vertex]
         return i
 
@@ -290,12 +290,12 @@ class MoranProcess(object):
         if self.mode == "db":
             source = self.index[self.dead]
             self.dead = None
-            sources = self.interaction_graph.out_vertices(source)
+            sources = sorted(self.interaction_graph.out_vertices(source))
         else:
             # birth-death is global
-            sources = self.locations
+            sources = sorted(self.locations)
         for i, source in enumerate(sources):
-            for target in self.interaction_graph.out_vertices(source):
+            for target in sorted(self.interaction_graph.out_vertices(source)):
                 j = self.index[target]
                 if (self.players[i] is None) or (self.players[j] is None):
                     continue
