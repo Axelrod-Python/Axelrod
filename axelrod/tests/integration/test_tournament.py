@@ -101,14 +101,14 @@ class TestNoisyTournament(unittest.TestCase):
         # Defector should win for low noise
         players = [axelrod.Cooperator(), axelrod.Defector()]
         tournament = axelrod.Tournament(players, turns=20, repetitions=10,
-                                        with_morality=False, noise=0.)
+                                        noise=0.)
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.ranked_names[0], "Defector")
 
         # If the noise is large enough, cooperator should win
         players = [axelrod.Cooperator(), axelrod.Defector()]
         tournament = axelrod.Tournament(players, turns=20, repetitions=10,
-                                        with_morality=False, noise=0.75)
+                                        noise=0.75)
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.ranked_names[0], "Cooperator")
 

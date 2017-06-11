@@ -22,8 +22,7 @@ class Tournament(object):
     def __init__(self, players: List[Player],
                  name: str = 'axelrod', game: Game = None, turns: int = None,
                  prob_end: float = None, repetitions: int = 10,
-                 noise: float = 0, with_morality: bool = True,
-                 edges: List[Tuple] = None) -> None:
+                 noise: float = 0, edges: List[Tuple] = None) -> None:
         """
         Parameters
         ----------
@@ -41,8 +40,6 @@ class Tournament(object):
             The number of times the round robin should be repeated
         noise : float
             The probability that a player's intended action should be flipped
-        with_morality : boolean
-            Whether morality metrics should be calculated
         prob_end : float
             The probability of a given turn ending a match
         edges : list
@@ -70,7 +67,6 @@ class Tournament(object):
                                               prob_end=prob_end,
                                               noise=self.noise,
                                               edges=edges)
-        self._with_morality = with_morality
         self._logger = logging.getLogger(__name__)
 
     def setup_output(self, filename=None, in_memory=False):
