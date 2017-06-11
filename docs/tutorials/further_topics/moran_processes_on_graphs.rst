@@ -18,7 +18,7 @@ The nodes can be any hashable object (integers, strings, etc.). For example::
     >>> graph = Graph(edges)
 
 Graphs are undirected by default but you can pass :code:`directed=True` to
-create a directed graph.. Various intermediates such as the list of neighbors
+create a directed graph. Various intermediates such as the list of neighbors
 are cached for efficiency by the graph object.
 
 A Moran process can be invoked with one or two graphs. The first graph, the
