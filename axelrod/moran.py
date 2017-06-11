@@ -1,18 +1,18 @@
+"""Implementation of the Moran process on Graphs."""
+
 from collections import Counter
 import random
 
 import numpy as np
 
-from axelrod import DEFAULT_TURNS
-from axelrod import Match
-from axelrod import Player
-from .graph import complete_graph, Graph
+from axelrod import DEFAULT_TURNS, Player
 from .deterministic_cache import DeterministicCache
+from .graph import complete_graph, Graph
 from .match import Match
 from .random_ import randrange
-import copy
 
 from typing import List, Tuple, Set
+
 
 def fitness_proportionate_selection(scores: List) -> int:
     """Randomly selects an individual proportionally to score.
@@ -60,7 +60,7 @@ class MoranProcess(object):
         population. This is not the only method yet emulates the common method
         in the literature.
 
-		It is possible to pass interaction graphs and reproduction graphs to the
+        It is possible to pass interaction graphs and reproduction graphs to the
         Moran process. In this case, in each round, each player plays a
         Match with each neighboring player according to the interaction graph.
         Players are assigned a fitness score by their total score from all
@@ -85,8 +85,6 @@ class MoranProcess(object):
             probability `mutation_rate`
         mode:
             Birth-Death (bd) or Death-Birth (db)
-        match_class: subclass of Match
-            The match type to use for scoring
         interaction_graph: Axelrod.graph.Graph
             The graph in which the replicators are arranged
         reproduction_graph: Axelrod.graph.Graph
@@ -174,9 +172,9 @@ class MoranProcess(object):
         """
         Selects the player to be removed.
 
-		Note that the in the birth-death
-        case, the player that is reproducing may also be replaced. However in
-        the death-birth case, this player will be excluded from the choices.
+        Note that the in the birth-death case, the player that is reproducing
+        may also be replaced. However in the death-birth case, this player will
+        be excluded from the choices.
 
         Parameters
         ----------
@@ -278,7 +276,7 @@ class MoranProcess(object):
 
     def _matchup_indices(self) -> Set[Tuple[int, int]]:
         """
-        Generate the matchup pairs
+        Generate the matchup pairs.
 
         Returns
         -------
@@ -370,7 +368,9 @@ class MoranProcess(object):
             Returns a list of all the populations
         """
         if self.mutation_rate != 0:
-            raise ValueError("MoranProcess.play() will never exit if mutation_rate is nonzero")
+            raise ValueError(
+                "MoranProcess.play() will never exit if mutation_rate is"
+                "nonzero. Use iteration instead.")
         while True:
             try:
                 self.__next__()
