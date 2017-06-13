@@ -1,3 +1,25 @@
+# v3.0.0, 2017-06-13
+
+A single class for tournaments and Moran processes, sources for all strategies
+included in docstrings and internal refactoring,
+
+- The numerous tournament types (prob end, spatial etc) are all now created from
+  the `Tournament` class.:
+  https://github.com/Axelrod-Python/Axelrod/pull/1042
+- The graphical moran processes are now created using the `MoranProcess` class:
+  https://github.com/Axelrod-Python/Axelrod/pull/1043
+- Sources for all strategies now included in docstrings:
+  https://github.com/Axelrod-Python/Axelrod/pull/1041
+- Remove some unneeded tests:
+  https://github.com/Axelrod-Python/Axelrod/pull/1039
+- Further refactoring:
+  https://github.com/Axelrod-Python/Axelrod/pull/1044
+  https://github.com/Axelrod-Python/Axelrod/pull/1040
+  https://github.com/Axelrod-Python/Axelrod/pull/1037
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v2.13.0...v3.0.0
+
 # v2.13.0, 2017-06-01
 
 New strategies, refactor of strategy tests and minor documentation fixes.
