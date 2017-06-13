@@ -28,31 +28,34 @@ the library, proceed as follows::
     >>> mp = axl.MoranProcess(players)
     >>> populations = mp.play()
     >>> mp.winning_strategy_name
-    'Grudger'
+    'Defector'
 
 You can access some attributes of the process, such as the number of rounds::
 
     >>> len(mp)
-    14
+    16
 
 The sequence of populations::
 
     >>> import pprint
     >>> pprint.pprint(populations)  # doctest: +SKIP
-    [Counter({'Cooperator': 1, 'Tit For Tat': 1, 'Grudger': 1, 'Defector': 1}),
-     Counter({'Cooperator': 1, 'Tit For Tat': 1, 'Grudger': 1, 'Defector': 1}),
-     Counter({'Cooperator': 1, 'Tit For Tat': 1, 'Grudger': 1, 'Defector': 1}),
-     Counter({'Tit For Tat': 2, 'Cooperator': 1, 'Grudger': 1}),
-     Counter({'Grudger': 2, 'Cooperator': 1, 'Tit For Tat': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 3, 'Cooperator': 1}),
-     Counter({'Grudger': 4})]
+    [Counter({'Defector': 1, 'Tit For Tat': 1, 'Grudger': 1, 'Cooperator': 1}),
+     Counter({'Defector': 1, 'Tit For Tat': 1, 'Grudger': 1, 'Cooperator': 1}),
+     Counter({'Cooperator': 2, 'Defector': 1, 'Tit For Tat': 1}),
+     Counter({'Defector': 2, 'Cooperator': 2}),
+     Counter({'Cooperator': 3, 'Defector': 1}),
+     Counter({'Cooperator': 3, 'Defector': 1}),
+     Counter({'Defector': 2, 'Cooperator': 2}),
+     Counter({'Defector': 3, 'Cooperator': 1}),
+     Counter({'Defector': 3, 'Cooperator': 1}),
+     Counter({'Defector': 3, 'Cooperator': 1}),
+     Counter({'Defector': 3, 'Cooperator': 1}),
+     Counter({'Defector': 3, 'Cooperator': 1}),
+     Counter({'Defector': 3, 'Cooperator': 1}),
+     Counter({'Defector': 3, 'Cooperator': 1}),
+     Counter({'Defector': 3, 'Cooperator': 1}),
+     Counter({'Defector': 4})]
+
 
 
 The scores in each round::
@@ -61,17 +64,19 @@ The scores in each round::
     ...     print([round(element, 1) for element in row])
     [6.0, 7.0, 7.0, 7.0]
     [6.0, 7.0, 7.0, 7.0]
-    [6.0, 7.0, 7.0, 7.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
-    [9.0, 9.0, 9.0, 9.0]
+    [6.0, 11.0, 7.0, 6.0]
+    [3.0, 11.0, 11.0, 3.0]
+    [6.0, 15.0, 6.0, 6.0]
+    [6.0, 15.0, 6.0, 6.0]
+    [3.0, 11.0, 11.0, 3.0]
+    [7.0, 7.0, 7.0, 0.0]
+    [7.0, 7.0, 7.0, 0.0]
+    [7.0, 7.0, 7.0, 0.0]
+    [7.0, 7.0, 7.0, 0.0]
+    [7.0, 7.0, 7.0, 0.0]
+    [7.0, 7.0, 7.0, 0.0]
+    [7.0, 7.0, 7.0, 0.0]
+    [7.0, 7.0, 7.0, 0.0]
 
 
 The :code:`MoranProcess` class also accepts an argument for a mutation rate.
@@ -88,7 +93,7 @@ function like :code:`takewhile` from :code:`itertools`)::
     ...     if len(mp.population_distribution()) == 1:
     ...         break
     >>> mp.population_distribution()
-    Counter({'Cooperator': 4})
+    Counter({'Grudger': 4})
 
 Other types of implemented Moran processes:
 

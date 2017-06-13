@@ -16,7 +16,7 @@ from .player import (
     update_history, update_state_distribution, Player)
 from .mock_player import MockPlayer
 from .match import Match
-from .moran import MoranProcess, MoranProcessGraph, ApproximateMoranProcess
+from .moran import MoranProcess, ApproximateMoranProcess
 from .strategies import *
 from .deterministic_cache import DeterministicCache
 from .match_generator import *
