@@ -1,9 +1,9 @@
 """Tests for BackStabber and DoubleCrosser."""
-import axelrod
 import unittest
 
+import axelrod
 from axelrod.strategies import backstabber
-from axelrod.mock_player import Player, update_history
+from axelrod.player import Player, update_history
 from .test_player import TestPlayer
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
@@ -26,30 +26,35 @@ class TestBackStabber(TestPlayer):
     def test_defects_after_four_defections(self):
         # Forgives three defections
         defector_actions = [(C, D), (C, D), (C, D), (C, D), (D, D), (D, D)]
-        self.versus_test(axelrod.Defector(), expected_actions=defector_actions, match_attributes={"length": 200})
+        self.versus_test(axelrod.Defector(), expected_actions=defector_actions,
+                         match_attributes={"length": 200})
         alternator_actions = [(C, C), (C, D)] * 4 + [(D, C), (D, D)] * 2
-        self.versus_test(axelrod.Alternator(), expected_actions=alternator_actions, match_attributes={"length": 200})
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=alternator_actions,
+                         match_attributes={"length": 200})
 
     def test_defects_on_last_two_rounds_by_match_len(self):
         actions = [(C, C)] * 198 + [(D, C), (D, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 200})
-
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         match_attributes={"length": 200})
         actions = [(C, C)] * 10 + [(D, C), (D, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 12})
-
-        # Test that exceeds tournament length
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         match_attributes={"length": 12})
+        # Test that exceeds tournament length.
         actions = [(C, C)] * 198 + [(D, C), (D, C), (C, C), (C, C)]
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": 200})
-        # But only if the tournament is known
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         match_attributes={"length": 200})
+        # But only if the tournament is known.
         actions = [(C, C)] * 202
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, match_attributes={"length": -1})
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         match_attributes={"length": -1})
 
 
 class TestDoubleCrosser(TestBackStabber):
     """
     Behaves like BackStabber except when its alternate strategy is triggered.
-    The alternate strategy is triggered when opponent did not defect in the first 7 rounds, and
-    8 <= the current round <= 180.
+    The alternate strategy is triggered when opponent did not defect in the
+    first 7 rounds, and 8 <= the current round <= 180.
     """
     name = "DoubleCrosser: ('D', 'D')"
     player = axelrod.DoubleCrosser
@@ -65,19 +70,23 @@ class TestDoubleCrosser(TestBackStabber):
 
     def test_when_alt_strategy_is_triggered(self):
         """
-        The alternate strategy is if opponent's last two plays were defect, then defect. Otherwise, cooperate.
+        The alternate strategy is if opponent's last two plays were defect,
+        then defect. Otherwise cooperate.
         """
         starting_cooperation = [C] * 7
         starting_rounds = [(C, C)] * 7
 
         opponent_actions = starting_cooperation + [D, D, C, D]
         expected_actions = starting_rounds + [(C, D), (C, D), (D, C), (C, D)]
-        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions,
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
+                         expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
         opponent_actions = starting_cooperation + [D, D, D, D, C, D]
-        expected_actions = starting_rounds + [(C, D), (C, D), (D, D), (D, D), (D, C), (C, D)]
-        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions,
+        expected_actions = starting_rounds + [(C, D), (C, D), (D, D), (D, D),
+                                              (D, C), (C, D)]
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
+                         expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
     def test_starting_defect_keeps_alt_strategy_from_triggering(self):
@@ -86,20 +95,27 @@ class TestDoubleCrosser(TestBackStabber):
 
         defects_on_first = [D] + [C] * 6
         defects_on_first_actions = [(C, D)] + [(C, C)] * 6
-        self.versus_test(axelrod.MockPlayer(actions=defects_on_first + opponent_actions_suffix),
-                         expected_actions=defects_on_first_actions + expected_actions_suffix,
+        actions = defects_on_first + opponent_actions_suffix
+        expected_actions = defects_on_first_actions + expected_actions_suffix
+        self.versus_test(axelrod.MockPlayer(actions=actions),
+                         expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
         defects_in_middle = [C, C, C, D, C, C, C]
-        defects_in_middle_actions = [(C, C), (C, C), (C, C), (C, D), (C, C), (C, C), (C, C)]
-        self.versus_test(axelrod.MockPlayer(actions=defects_in_middle + opponent_actions_suffix),
-                         expected_actions=defects_in_middle_actions + expected_actions_suffix,
+        defects_in_middle_actions = [(C, C), (C, C), (C, C), (C, D), (C, C),
+                                     (C, C), (C, C)]
+        actions = defects_in_middle + opponent_actions_suffix
+        expected_actions = defects_in_middle_actions + expected_actions_suffix
+        self.versus_test(axelrod.MockPlayer(actions=actions),
+                         expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
         defects_on_last = [C] * 6 + [D]
         defects_on_last_actions = [(C, C)] * 6 + [(C, D)]
-        self.versus_test(axelrod.MockPlayer(actions=defects_on_last + opponent_actions_suffix),
-                         expected_actions=defects_on_last_actions + expected_actions_suffix,
+        actions = defects_on_last + opponent_actions_suffix
+        expected_actions = defects_on_last_actions + expected_actions_suffix
+        self.versus_test(axelrod.MockPlayer(actions=actions),
+                         expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
     def test_alt_strategy_stops_after_round_180(self):
@@ -107,7 +123,8 @@ class TestDoubleCrosser(TestBackStabber):
         one_eighty_expected_actions = [(C, C)] * 8 + [(C, C), (C, D)] * 86
         opponent_actions = one_eighty_opponent_actions + [C] * 6
         expected_actions = one_eighty_expected_actions + [(D, C)] * 6
-        self.versus_test(axelrod.MockPlayer(actions=opponent_actions), expected_actions=expected_actions,
+        self.versus_test(axelrod.MockPlayer(actions=opponent_actions),
+                         expected_actions=expected_actions,
                          match_attributes={"length": 200})
 
 
@@ -165,38 +182,47 @@ class TestModuleMethods(unittest.TestCase):
 
     def test_opponent_defected_in_first_n_rounds(self):
         self.update_history([C, C, C, C, D, C])
-        self.assertTrue(backstabber._opponent_defected_in_first_n_rounds(self.player, 10))
-        self.assertTrue(backstabber._opponent_defected_in_first_n_rounds(self.player, 6))
-        self.assertTrue(backstabber._opponent_defected_in_first_n_rounds(self.player, 5))
+        self.assertTrue(
+            backstabber._opponent_defected_in_first_n_rounds(self.player, 10))
+        self.assertTrue(
+            backstabber._opponent_defected_in_first_n_rounds(self.player, 6))
+        self.assertTrue(
+            backstabber._opponent_defected_in_first_n_rounds(self.player, 5))
 
-        self.assertFalse(backstabber._opponent_defected_in_first_n_rounds(self.player, 4))
+        self.assertFalse(
+            backstabber._opponent_defected_in_first_n_rounds(self.player, 4))
 
     def test_opponent_triggers_alt_strategy_false_by_defected_in_first_n_rounds(self):
         last_of_first_n_rounds = 7
         history = [C if rnd != last_of_first_n_rounds else D for rnd in range(1, 20)]
         self.update_history(history)
-        self.assertFalse(backstabber._opponent_triggers_alt_strategy(self.player))
+        self.assertFalse(
+            backstabber._opponent_triggers_alt_strategy(self.player))
 
     def test_opponent_triggers_alt_strategy_false_by_before_round_eight(self):
         current_round = 7
         history = [C] * (current_round - 1)
         self.update_history(history)
-        self.assertFalse(backstabber._opponent_triggers_alt_strategy(self.player))
+        self.assertFalse(
+            backstabber._opponent_triggers_alt_strategy(self.player))
 
     def test_opponent_triggers_alt_strategy_false_by_after_round_one_eighty(self):
         current_round = 181
         history = [C] * (current_round - 1)
         self.update_history(history)
-        self.assertFalse(backstabber._opponent_triggers_alt_strategy(self.player))
+        self.assertFalse(
+            backstabber._opponent_triggers_alt_strategy(self.player))
 
     def test_opponent_triggers_alt_strategy_true_edge_case_high(self):
         current_round = 180
         history = [C] * (current_round - 1)
         self.update_history(history)
-        self.assertTrue(backstabber._opponent_triggers_alt_strategy(self.player))
+        self.assertTrue(
+            backstabber._opponent_triggers_alt_strategy(self.player))
 
     def test_opponent_triggers_alt_strategy_true_edge_case_low(self):
         current_round = 8
         history = [C] * (current_round - 1)
         self.update_history(history)
-        self.assertTrue(backstabber._opponent_triggers_alt_strategy(self.player))
+        self.assertTrue(
+            backstabber._opponent_triggers_alt_strategy(self.player))

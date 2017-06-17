@@ -7,7 +7,9 @@ class Ecosystem(object):
     """Create an ecosystem based on the payoff matrix from an Axelrod
     tournament."""
 
-    def __init__(self, results: ResultSet, fitness: Callable[[float], float] =None, population: List[int] =None) -> None:
+    def __init__(self, results: ResultSet,
+                 fitness: Callable[[float], float] = None,
+                 population: List[int] = None) -> None:
 
         self.results = results
         self.nplayers = self.results.nplayers
@@ -45,7 +47,6 @@ class Ecosystem(object):
     def reproduce(self, turns: int):
 
         for iturn in range(turns):
-
             plist = list(range(self.nplayers))
             pops = self.population_sizes[-1]
 

@@ -1,11 +1,9 @@
-from collections import defaultdict
 from itertools import cycle
-import warnings
 
 from axelrod.actions import Actions, Action
-from axelrod.player import Player, update_history, update_state_distribution
+from axelrod.player import Player
 
-from typing import List, Tuple
+from typing import List
 
 C, D = Actions.C, Actions.D
 
@@ -19,10 +17,9 @@ class MockPlayer(Player):
 
     def __init__(self, actions: List[Action] = None) -> None:
         super().__init__()
-        if actions:
-            self.actions = cycle(actions)
-        else:
-            self.actions = iter([])
+        if not actions:
+            actions = []
+        self.actions = cycle(actions)
 
     def strategy(self, opponent: Player) -> Action:
         # Return the next saved action, if present.

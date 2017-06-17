@@ -11,13 +11,12 @@ def random_choice(p: float = 0.5) -> Action:
 
     Parameters
     ----------
-
     p : float
         The probability of picking 'C'
 
     Returns
     -------
-    axelrod.Actions.C or axelrod.Actions.D
+    axelrod.Action
     """
     if p == 0:
         return Actions.D
@@ -58,5 +57,5 @@ class Pdf(object):
         """Sample from the pdf"""
         index = numpy.random.choice(a=range(self.size), p=self.probability)
         # Numpy cannot sample from a list of n dimensional objects for n > 1,
-        # need to sample an index
+        # need to sample an index.
         return self.sample_space[index]

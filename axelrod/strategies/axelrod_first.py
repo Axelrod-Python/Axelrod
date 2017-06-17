@@ -491,6 +491,7 @@ class UnnamedStrategy(Player):
         r = random.uniform(3, 7) / 10
         return random_choice(r)
 
+
 @FinalTransformer((D, D), name_prefix=None)
 class SteinAndRapoport(Player):
     """
@@ -522,15 +523,15 @@ class SteinAndRapoport(Player):
         """
         Parameters
         ----------
-        alpha, float
-            The significant level of pvalue from chi-squared test
-            0.05 by default according to literature
+        alpha: float
+            The significant level of p-value from chi-squared test
+            005 by default according to literature
         """
         super().__init__()
         self.alpha = alpha
-        self.opponent_is_random = None
+        self.opponent_is_random = False
 
-    def strategy(self , opponent: Player) -> Action:
+    def strategy(self, opponent: Player) -> Action:
         round_number = len(self.history) + 1
 
         # First 4 moves
@@ -548,9 +549,9 @@ class SteinAndRapoport(Player):
         if self.opponent_is_random:
             # Defect if opponent plays randomly
             return D
-        else: # TitForTatat if opponent plays not randomly
+        else:  # TitForTat if opponent plays not randomly
             return opponent.history[-1]
 
     def reset(self):
         super().reset()
-        self.random_opponent = None
+        self.opponent_is_random = False

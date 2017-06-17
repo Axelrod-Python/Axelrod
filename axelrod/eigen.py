@@ -81,4 +81,4 @@ def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000,
         numpy.dot(mat_, vector), vector) / numpy.dot(vector, vector)
     # Liberate the eigenvalue from numpy
     eigenvalue = float(eigenvalue)
-    return (vector, eigenvalue)
+    return vector, eigenvalue

@@ -1,10 +1,11 @@
+from math import ceil, log
+import random
+
 from axelrod.actions import Actions
 from axelrod.game import Game
 from axelrod import DEFAULT_TURNS
 import axelrod.interaction_utils as iu
 from .deterministic_cache import DeterministicCache
-import random
-from math import ceil, log
 
 
 C, D = Actions.C, Actions.D
@@ -17,6 +18,7 @@ def is_stochastic(players, noise):
 
 
 class Match(object):
+    """The Match class conducts matches between two players."""
 
     def __init__(self, players, turns=None, prob_end=None,
                  game=None, deterministic_cache=None,
