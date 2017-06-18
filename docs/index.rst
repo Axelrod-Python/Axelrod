@@ -42,7 +42,7 @@ Every strategy is categorized on a number of dimensions, including:
     * Whether the strategy makes use of the game matrix, the length of the
       match, etc.
 
-Furthermore the library is extensively tested with 99%+ coverage, ensuring
+Furthermore the library is extensively tested with 100% coverage, ensuring
 validity and reproducibility of results!
 
 
