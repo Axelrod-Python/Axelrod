@@ -382,7 +382,7 @@ class SteinAndRapoport(TestPlayer):
     def test_init(self):
         player = self.player()
         self.assertEqual(player.alpha, 0.05)
-        self.assertIsNone(player.opponent_is_random)
+        self.assertIsFalse(player.opponent_is_random)
 
         player = self.player(alpha=.5)
         self.assertEqual(player.alpha, 0.5)

@@ -524,8 +524,8 @@ class SteinAndRapoport(Player):
         Parameters
         ----------
         alpha: float
-            The significant level of p-value from chi-squared test
-            005 by default according to literature
+            The significant level of p-value from chi-squared test with
+            alpha == 0.05 by default.
         """
         super().__init__()
         self.alpha = alpha
