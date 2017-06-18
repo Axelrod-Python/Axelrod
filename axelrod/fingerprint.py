@@ -327,14 +327,14 @@ class AshlockFingerprint(object):
         self.data = generate_data(self.interactions, self.points, edges)
         return self.data
 
-    def plot(self, col_map: str = 'seismic', interpolation: str = 'none',
+    def plot(self, cmap: str = 'seismic', interpolation: str = 'none',
              title: str = None, colorbar: bool = True,
              labels: bool = True) -> plt.Figure:
         """Plot the results of the spatial tournament.
 
         Parameters
         ----------
-        col_map : str, optional
+        cmap : str, optional
             A matplotlib colour map, full list can be found at
             http://matplotlib.org/examples/color/colormaps_reference.html
         interpolation : str, optional
@@ -356,7 +356,7 @@ class AshlockFingerprint(object):
         plotting_data = reshape_data(self.data, self.points, size)
         fig, ax = plt.subplots()
         cax = ax.imshow(
-            plotting_data, cmap=col_map, interpolation=interpolation)
+            plotting_data, cmap=cmap, interpolation=interpolation)
 
         if colorbar:
             max_score = max(self.data.values())

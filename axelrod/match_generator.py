@@ -1,7 +1,3 @@
-from math import ceil, log
-import itertools
-import random
-
 
 class MatchGenerator(object):
 

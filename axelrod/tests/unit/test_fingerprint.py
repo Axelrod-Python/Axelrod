@@ -213,7 +213,7 @@ class TestFingerprint(unittest.TestCase):
         af.fingerprint(turns=10, repetitions=2, step=0.25, progress_bar=False)
         p = af.plot()
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
-        q = af.plot(col_map='jet')
+        q = af.plot(cmap='jet')
         self.assertIsInstance(q, matplotlib.pyplot.Figure)
         r = af.plot(interpolation='bicubic')
         self.assertIsInstance(r, matplotlib.pyplot.Figure)

@@ -1,9 +1,10 @@
+import warnings
+from distutils.version import LooseVersion
+
 from .result_set import ResultSet
 from numpy import arange, median, nan_to_num
 import tqdm
-import warnings
 
-from distutils.version import LooseVersion
 from typing import List, Union
 
 matplotlib_installed = True
@@ -17,8 +18,8 @@ except ImportError:  # pragma: no cover
 except RuntimeError:  # pragma: no cover
     matplotlib_installed = False
     warnings.warn(
-        'Matplotlib failed to import and so no plots will be produced. This ' +
-        'could be caused by using a virtual environment on OSX. See ' +
+        'Matplotlib failed to import and so no plots will be produced. This '
+        'could be caused by using a virtual environment on OSX. See '
         'http://matplotlib.org/faq/virtualenv_faq.html for details.')
 
 titleType = List[str]
@@ -137,7 +138,7 @@ class Plot(object):
     def sdvplot(
         self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
     ) -> matplotlib.figure.Figure:
-        """Score difference violinplots to visualize the distributions of how
+        """Score difference violin plots to visualize the distributions of how
         players attain their payoffs."""
         diffs, ranked_names = self._sdv_plot_dataset
         figure = self._violinplot(diffs, ranked_names, title=title, ax=ax)

@@ -117,8 +117,6 @@ class Player(object):
         """Initiates an empty history and 0 score for a player."""
         self.history = []
         self.classifier = copy.deepcopy(self.classifier)
-        if self.name == "Player":
-            self.classifier['stochastic'] = False
         for dimension in self.default_classifier:
             if dimension not in self.classifier:
                 self.classifier[dimension] = self.default_classifier[dimension]
@@ -133,6 +131,7 @@ class Player(object):
         """
         if self.__repr__() != other.__repr__():
             return False
+
         for attribute in set(list(self.__dict__.keys()) +
                              list(other.__dict__.keys())):
 

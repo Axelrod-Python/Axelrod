@@ -1,16 +1,13 @@
 import random
 import unittest
-import warnings
 import types
 import itertools
 import numpy as np
 
 import axelrod
-from axelrod import DefaultGame, MockPlayer, Player
-from axelrod.player import get_state_distribution_from_history
+from axelrod import DefaultGame, Player
+from axelrod.player import get_state_distribution_from_history, update_history
 
-from hypothesis import given
-from axelrod.tests.property import strategy_lists
 
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -123,6 +120,20 @@ class TestPlayerClass(unittest.TestCase):
         player1.play(player2, noise)
         self.assertEqual(player1.history[0], D)
         self.assertEqual(player2.history[0], D)
+
+    def test_update_history(self):
+        player = Player()
+        self.assertEqual(player.history, [])
+        self.assertEqual(player.cooperations, 0)
+        self.assertEqual(player.defections, 0)
+        update_history(player, D)
+        self.assertEqual(player.history, [D])
+        self.assertEqual(player.defections, 1)
+        self.assertEqual(player.cooperations, 0)
+        update_history(player, C)
+        self.assertEqual(player.history, [D, C])
+        self.assertEqual(player.defections, 1)
+        self.assertEqual(player.cooperations, 1)
 
     def test_strategy(self):
         self.assertRaises(
@@ -274,7 +285,6 @@ class TestPlayerClass(unittest.TestCase):
         p2.test_attribute = "29"
         self.assertEqual(p1, p2)
 
-
         # If pointing at different strategy instances
         p1.player = axelrod.Cooperator()
         p2.player = axelrod.Defector()
@@ -285,7 +295,6 @@ class TestPlayerClass(unittest.TestCase):
         p1.player = axelrod.Cooperator()
         p3.player = axelrod.Cooperator()
         self.assertNotEqual(p1, p3)
-
 
     def test_init_params(self):
         """Tests player correct parameters signature detection."""
@@ -306,7 +315,7 @@ class TestPlayerClass(unittest.TestCase):
 
         # Test that init_kwargs exist and are empty
         self.assertEqual(self.player().init_kwargs, {})
-        # Test that passing a postional argument raises an error
+        # Test that passing a positional argument raises an error
         self.assertRaises(TypeError, Player, 'test')
         # Test that passing a keyword argument raises an error
         self.assertRaises(TypeError, Player, arg_test1='test')
@@ -316,17 +325,21 @@ class TestPlayerClass(unittest.TestCase):
         # Test that init_kwargs exist and contains default values
         self.assertEqual(ParameterisedTestPlayer().init_kwargs,
                          {'arg_test1': 'testing1', 'arg_test2': 'testing2'})
-        # Test that passing a keyword argument successfully change the init_kwargs dict
+        # Test that passing a keyword argument successfully change the
+        # init_kwargs dict.
         self.assertEqual(ParameterisedTestPlayer(arg_test1='other').init_kwargs,
                          {'arg_test1': 'other', 'arg_test2': 'testing2'})
         self.assertEqual(ParameterisedTestPlayer(arg_test2='other').init_kwargs,
                          {'arg_test1': 'testing1', 'arg_test2': 'other'})
-        # Test that passing a postional argument successfully change the init_kwargs dict
+        # Test that passing a positional argument successfully change the
+        # init_kwargs dict.
         self.assertEqual(ParameterisedTestPlayer('other', 'other2').init_kwargs,
                          {'arg_test1': 'other', 'arg_test2': 'other2'})
-        # Test that passing an unknown keyword argument or a spare one raises an error
+        # Test that passing an unknown keyword argument or a spare one raises
+        # an error.
         self.assertRaises(TypeError, ParameterisedTestPlayer, arg_test3='test')
-        self.assertRaises(TypeError, ParameterisedTestPlayer, 'other', 'other', 'other')
+        self.assertRaises(TypeError, ParameterisedTestPlayer, 'other', 'other',
+                          'other')
 
 
 class TestOpponent(Player):

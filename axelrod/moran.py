@@ -189,11 +189,10 @@ class MoranProcess(object):
         else:
             # Select locally
             # index is not None in this case
-            vertex = random.choice(
-                sorted(self.reproduction_graph.out_vertices(self.locations[index])))
+            vertex = random.choice(sorted(
+                self.reproduction_graph.out_vertices(self.locations[index])))
             i = self.index[vertex]
         return i
-
 
     def birth(self, index: int = None) -> int:
         """The birth event.
