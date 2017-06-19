@@ -42,8 +42,13 @@ With Axelrod you:
   population model.
 - can analyse detailed results of tournaments and matches.
 - can visualise results of tournaments.
+
+  .. image:: http://axelrod-tournament.readthedocs.io/en/latest/_images/strategies_std_boxplot.svg
+
 - can reproduce a number of contemporary research such as fingerprinting of
   strategies and morality metrics.
+
+  .. image:: https://github.com/Axelrod-Python/Axelrod-fingerprint/raw/master/assets/Tricky_Defector.png
 
 The library has 100% test coverage and is extensively documented. See the
 documentation for details and examples of all the features:
