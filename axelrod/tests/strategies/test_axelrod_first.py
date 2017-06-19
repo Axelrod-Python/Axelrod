@@ -365,7 +365,7 @@ class TestUnnamedStrategy(TestPlayer):
                          seed=10)
 
 
-class SteinAndRapoport(TestPlayer):
+class TestSteinAndRapoport(TestPlayer):
 
     name = "Stein and Rapoport: 0.05: ('D', 'D')"
     player = axelrod.SteinAndRapoport
@@ -382,11 +382,11 @@ class SteinAndRapoport(TestPlayer):
     def test_init(self):
         player = self.player()
         self.assertEqual(player.alpha, 0.05)
-        self.assertIsFalse(player.opponent_is_random)
+        self.assertFalse(player.opponent_is_random)
 
         player = self.player(alpha=.5)
         self.assertEqual(player.alpha, 0.5)
-        self.assertIsFalse(player.opponent_is_random)
+        self.assertFalse(player.opponent_is_random)
 
     def test_strategy(self):
         # Our Player (SteinAndRapoport) vs Cooperator
