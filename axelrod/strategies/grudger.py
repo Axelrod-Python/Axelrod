@@ -124,7 +124,7 @@ class Aggravater(Player):
 
     Names
 
-    Aggravater: Original name by Thomas Campbell
+    - Aggravater: Original name by Thomas Campbell
     """
 
     name = 'Aggravater'
