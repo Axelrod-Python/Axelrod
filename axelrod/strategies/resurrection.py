@@ -13,6 +13,7 @@ class Resurrection(Player):
     Otherwise, the strategy plays like Tit-for-tat.
 
     Names:
+    
     - Resurrection: [Eckhart2015]_
     """
 
@@ -46,6 +47,7 @@ class DoubleResurrection(Player):
     If the last five rounds were defections, the player cooperates.
 
     Names:
+    
     - DoubleResurrection: [Eckhart2015]_
     """
 

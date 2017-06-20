@@ -12,7 +12,7 @@ class DefectorHunter(Player):
 
     Names:
 
-    Defector Hunter: Original name by Karol Langner
+    - Defector Hunter: Original name by Karol Langner
     """
 
     name = 'Defector Hunter'
@@ -37,7 +37,7 @@ class CooperatorHunter(Player):
 
     Names:
 
-    Cooperator Hunter: Original name by Karol Langner
+    - Cooperator Hunter: Original name by Karol Langner
     """
 
     name = 'Cooperator Hunter'
@@ -69,7 +69,7 @@ class AlternatorHunter(Player):
 
     Names:
 
-    Alternator Hunter: Original name by Karol Langner
+    - Alternator Hunter: Original name by Karol Langner
     """
 
     name = 'Alternator Hunter'
@@ -108,7 +108,7 @@ class CycleHunter(Player):
 
     Names:
 
-    Cycle Hunter: Original name by Marc Harper
+    - Cycle Hunter: Original name by Marc Harper
     """
 
     name = 'Cycle Hunter'
@@ -146,7 +146,7 @@ class EventualCycleHunter(CycleHunter):
 
     Names:
 
-    Eventual Cycle Hunter: Original name by Marc Harper
+    - Eventual Cycle Hunter: Original name by Marc Harper
     """
 
     name = 'Eventual Cycle Hunter'
@@ -214,7 +214,7 @@ class RandomHunter(Player):
 
     Names:
 
-    Random Hunter: Original name by Karol Langner
+    - Random Hunter: Original name by Karol Langner
     """
 
     name = "Random Hunter"
