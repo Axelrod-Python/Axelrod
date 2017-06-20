@@ -65,7 +65,7 @@ class Geller(Player):
 
 
 class GellerCooperator(Geller):
-    """Observes what the payer will do (like :code:`Geller`) but if unable to
+    """Observes what the player will do (like :code:`Geller`) but if unable to
     will cooperate.
 
     Names:
@@ -92,7 +92,7 @@ class GellerCooperator(Geller):
 
 
 class GellerDefector(Geller):
-    """Observes what the payer will do (like :code:`Geller`) but if unable to
+    """Observes what the player will do (like :code:`Geller`) but if unable to
     will defect.
 
     Names:
