@@ -177,7 +177,7 @@ class Fortress4(FSMPlayer):
 class Predator(FSMPlayer):
     """
     Finite state machine player specified in
-    http://DOI.org/10.1109/CEC.2006.1688322
+    http://DOI.org/10.1109/CEC.2006.1688322.
 
     Names:
 
@@ -221,7 +221,7 @@ class Predator(FSMPlayer):
 
 
 class Pun1(FSMPlayer):
-    """FSM player described in [Ashlock2006].
+    """FSM player described in [Ashlock2006]_.
 
     Names:
 
@@ -252,7 +252,7 @@ class Pun1(FSMPlayer):
 
 class Raider(FSMPlayer):
     """
-    FSM player described in http://DOI.org/10.1109/FOCI.2014.7007818
+    FSM player described in http://DOI.org/10.1109/FOCI.2014.7007818.
 
 
     Names
@@ -574,7 +574,7 @@ class EvolvedFSM16Noise05(FSMPlayer):
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
 
 
-## Strategies trained with Moran process objectives
+# Strategies trained with Moran process objectives
 
 
 class TF1(FSMPlayer):
