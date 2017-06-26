@@ -11,6 +11,7 @@ C, D = Actions.C, Actions.D
 
 from enum import Enum
 import random
+from typing import Union
 
 
 class UnknownAction(ValueError):
@@ -36,6 +37,15 @@ class Actions(Enum):
             return Action.C
         else:
             raise UnknownAction('Cannot flip action: {!r}'.format(self))
+
+    @classmethod
+    def from_char(cls, character):
+        if character == 'C':
+            return cls.C
+        elif character == 'D':
+            return cls.D
+        else:
+            raise UnknownAction('Character must be "C" or "D".')
 
     @classmethod
     def random_choice(cls, p: float = 0.5) -> 'Action':
@@ -71,4 +81,8 @@ def str_to_actions(actions: str) -> tuple:
     except KeyError:
         raise UnknownAction(
             'The characters of "actions" str may only be "C" or "D"')
+
+
+def action_sequence_to_str(actions: Union[tuple, list]) -> str:
+    return "".join(map(repr, actions))
 

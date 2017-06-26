@@ -9,6 +9,7 @@ import tqdm
 
 from axelrod import on_windows, DEFAULT_TURNS
 from axelrod.player import Player
+from axelrod.actions import action_sequence_to_str
 from .game import Game
 from .match import Match
 from .match_generator import MatchGenerator
@@ -210,8 +211,8 @@ class Tournament(object):
                 row = list(index_pair)
                 row.append(str(self.players[index_pair[0]]))
                 row.append(str(self.players[index_pair[1]]))
-                history1 = "".join([i[0] for i in interaction])
-                history2 = "".join([i[1] for i in interaction])
+                history1 = action_sequence_to_str([i[0] for i in interaction])
+                history2 = action_sequence_to_str([i[1] for i in interaction])
                 row.append(history1)
                 row.append(history2)
                 self.writer.writerow(row)

@@ -10,6 +10,8 @@ import axelrod.interaction_utils as iu
 from axelrod.tests.property import tournaments, prob_end_tournaments
 
 
+C, D = axelrod.Actions.C, axelrod.Actions.D
+
 class TestResultSet(unittest.TestCase):
 
     @classmethod
@@ -130,53 +132,53 @@ class TestResultSet(unittest.TestCase):
 
         cls.expected_state_distribution = [
                 [Counter(),
-                 Counter({('D', 'C'): 6, ('C', 'D'): 6, ('C', 'C'): 3}),
-                 Counter({('C', 'D'): 9, ('D', 'D'): 6})],
-                [Counter({('D', 'C'): 6, ('C', 'D'): 6, ('C', 'C'): 3}),
+                 Counter({(D, C): 6, (C, D): 6, (C, C): 3}),
+                 Counter({(C, D): 9, (D, D): 6})],
+                [Counter({(D, C): 6, (C, D): 6, (C, C): 3}),
                  Counter(),
-                 Counter({('D', 'D'): 12, ('C', 'D'): 3})],
-                [Counter({('D', 'C'): 9, ('D', 'D'): 6}),
-                 Counter({('D', 'D'): 12, ('D', 'C'): 3}),
+                 Counter({(D, D): 12, (C, D): 3})],
+                [Counter({(D, C): 9, (D, D): 6}),
+                 Counter({(D, D): 12, (D, C): 3}),
                  Counter()]
             ]
 
         cls.expected_normalised_state_distribution = [
                 [Counter(),
-                 Counter({('D', 'C'): 0.4, ('C', 'D'): 0.4, ('C', 'C'): 0.2}),
-                 Counter({('C', 'D'): 0.6, ('D', 'D'): 0.4})],
-                [Counter({('D', 'C'): 0.4, ('C', 'D'): 0.4, ('C', 'C'): 0.2}),
+                 Counter({(D, C): 0.4, (C, D): 0.4, (C, C): 0.2}),
+                 Counter({(C, D): 0.6, (D, D): 0.4})],
+                [Counter({(D, C): 0.4, (C, D): 0.4, (C, C): 0.2}),
                  Counter(),
-                 Counter({('D', 'D'): 0.8, ('C', 'D'): 0.2})],
-                [Counter({('D', 'C'): 0.6, ('D', 'D'): 0.4}),
-                 Counter({('D', 'D'): 0.8, ('D', 'C'): 0.2}),
+                 Counter({(D, D): 0.8, (C, D): 0.2})],
+                [Counter({(D, C): 0.6, (D, D): 0.4}),
+                 Counter({(D, D): 0.8, (D, C): 0.2}),
                  Counter()]
             ]
 
         cls.expected_state_to_action_distribution = [
              [Counter(),
-              Counter({(('C', 'C'), 'D'): 3, (('C', 'D'), 'D'): 3,
-			   		(('D', 'C'), 'C'): 6}),
-              Counter({(('C', 'D'), 'D'): 6, (('D', 'D'), 'C'): 6})],
-             [Counter({(('C', 'C'), 'C'): 3, (('D', 'C'), 'C'): 3,
-			   		(('C', 'D'), 'D'): 6}),
+              Counter({((C, C), D): 3, ((C, D), D): 3,
+			   		((D, C), C): 6}),
+              Counter({((C, D), D): 6, ((D, D), C): 6})],
+             [Counter({((C, C), C): 3, ((D, C), C): 3,
+			   		((C, D), D): 6}),
               Counter(),
-              Counter({(('C', 'D'), 'D'): 3, (('D', 'D'), 'D'): 9})],
-             [Counter({(('D', 'C'), 'D'): 6, (('D', 'D'), 'D'): 6}),
-              Counter({(('D', 'C'), 'D'): 3, (('D', 'D'), 'D'): 9}),
+              Counter({((C, D), D): 3, ((D, D), D): 9})],
+             [Counter({((D, C), D): 6, ((D, D), D): 6}),
+              Counter({((D, C), D): 3, ((D, D), D): 9}),
               Counter()]
              ]
 
         cls.expected_normalised_state_to_action_distribution = [
              [Counter(),
-              Counter({(('C', 'C'), 'D'): 1, (('C', 'D'), 'D'): 1,
-			   		(('D', 'C'), 'C'): 1}),
-              Counter({(('C', 'D'), 'D'): 1, (('D', 'D'), 'C'): 1})],
-             [Counter({(('C', 'C'), 'C'): 1, (('D', 'C'), 'C'): 1,
-			   		   (('C', 'D'), 'D'): 1}),
+              Counter({((C, C), D): 1, ((C, D), D): 1,
+			   		((D, C), C): 1}),
+              Counter({((C, D), D): 1, ((D, D), C): 1})],
+             [Counter({((C, C), C): 1, ((D, C), C): 1,
+			   		   ((C, D), D): 1}),
               Counter(),
-              Counter({(('C', 'D'), 'D'): 1, (('D', 'D'), 'D'): 1})],
-             [Counter({(('D', 'C'), 'D'): 1, (('D', 'D'), 'D'): 1}),
-              Counter({(('D', 'C'), 'D'): 1, (('D', 'D'), 'D'): 1}),
+              Counter({((C, D), D): 1, ((D, D), D): 1})],
+             [Counter({((D, C), D): 1, ((D, D), D): 1}),
+              Counter({((D, C), D): 1, ((D, D), D): 1}),
               Counter()]
              ]
 
@@ -700,11 +702,11 @@ class TestResultSetFromFile(unittest.TestCase):
         matches = brs.read_match_chunks()
         chunk = next(matches)
         self.assertEqual(chunk[0],
-                         ['0'] * 2 + ['Cooperator'] * 2 + [('C', 'C')] * 2)
+                         ['0'] * 2 + ['Cooperator'] * 2 + [(C, C)] * 2)
         self.assertEqual(chunk[1],
-                         ['0'] * 2 + ['Cooperator'] * 2 + [('C', 'C')] * 2)
+                         ['0'] * 2 + ['Cooperator'] * 2 + [(C, C)] * 2)
         self.assertEqual(chunk[2],
-                         ['0'] * 2 + ['Cooperator'] * 2 + [('C', 'C')] * 2)
+                         ['0'] * 2 + ['Cooperator'] * 2 + [(C, C)] * 2)
         self.assertEqual(len(list(matches)), 5)
 
     def test_build_all(self):
@@ -917,45 +919,45 @@ class TestResultSetSpatialStructure(TestResultSet):
 
         cls.expected_state_distribution = [
               [Counter(),
-               Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
-               Counter({('C', 'D'): 9, ('D', 'D'): 6})],
-              [Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+               Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
+               Counter({(C, D): 9, (D, D): 6})],
+              [Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
                Counter(),
                Counter()],
-              [Counter({('D', 'C'): 9, ('D', 'D'): 6}), Counter(), Counter()]
+              [Counter({(D, C): 9, (D, D): 6}), Counter(), Counter()]
             ]
 
         cls.expected_normalised_state_distribution = [
               [Counter(),
-               Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
-               Counter({('C', 'D'): 0.6, ('D', 'D'): 0.4})],
-              [Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+               Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
+               Counter({(C, D): 0.6, (D, D): 0.4})],
+              [Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
                Counter(),
                Counter()],
-              [Counter({('D', 'C'): 0.6, ('D', 'D'): 0.4}), Counter(), Counter()]
+              [Counter({(D, C): 0.6, (D, D): 0.4}), Counter(), Counter()]
             ]
 
         cls.expected_state_to_action_distribution = [
             [Counter(),
-             Counter({(('C', 'C'), 'D'): 3,
-                      (('C', 'D'), 'D'): 3,
-                      (('D', 'C'), 'C'): 6}),
-             Counter({(('C', 'D'), 'D'): 6,
-                      (('D', 'D'), 'C'): 6})],
-            [Counter({(('C', 'C'), 'C'): 3, (('D', 'C'), 'C'): 3,
-                      (('C', 'D'), 'D'): 6}), Counter(), Counter()],
-            [Counter({(('D', 'C'), 'D'): 6, (('D', 'D'), 'D'): 6}),
+             Counter({((C, C), D): 3,
+                      ((C, D), D): 3,
+                      ((D, C), C): 6}),
+             Counter({((C, D), D): 6,
+                      ((D, D), C): 6})],
+            [Counter({((C, C), C): 3, ((D, C), C): 3,
+                      ((C, D), D): 6}), Counter(), Counter()],
+            [Counter({((D, C), D): 6, ((D, D), D): 6}),
              Counter(), Counter()]]
 
         cls.expected_normalised_state_to_action_distribution = [
             [Counter(),
-             Counter({(('C', 'C'), 'D'): 1.0, (('C', 'D'), 'D'): 1.0,
-                      (('D', 'C'), 'C'): 1.0}),
-             Counter({(('C', 'D'), 'D'): 1.0, (('D', 'D'), 'C'): 1.0})],
-            [Counter({(('C', 'C'), 'C'): 1.0, (('D', 'C'), 'C'): 1.0,
-                      (('C', 'D'), 'D'): 1.0}),
+             Counter({((C, C), D): 1.0, ((C, D), D): 1.0,
+                      ((D, C), C): 1.0}),
+             Counter({((C, D), D): 1.0, ((D, D), C): 1.0})],
+            [Counter({((C, C), C): 1.0, ((D, C), C): 1.0,
+                      ((C, D), D): 1.0}),
              Counter(), Counter()],
-            [Counter({(('D', 'C'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0}),
+            [Counter({((D, C), D): 1.0, ((D, D), D): 1.0}),
              Counter(), Counter()]]
 
     def test_match_lengths(self):
@@ -1165,51 +1167,51 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
 
         cls.expected_state_distribution = [
                [Counter(),
-                Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+                Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
                 Counter(),
                 Counter()],
-               [Counter({('C', 'C'): 3, ('C', 'D'): 6, ('D', 'C'): 6}),
+               [Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
                 Counter(),
                 Counter(),
                 Counter()],
-               [Counter(), Counter(), Counter(), Counter({('D', 'C'): 15})],
-               [Counter(), Counter(), Counter({('C', 'D'): 15}), Counter()]
+               [Counter(), Counter(), Counter(), Counter({(D, C): 15})],
+               [Counter(), Counter(), Counter({(C, D): 15}), Counter()]
             ]
 
         cls.expected_normalised_state_distribution = [
                [Counter(),
-                Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+                Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
                 Counter(),
                 Counter()],
-               [Counter({('C', 'C'): 0.2, ('C', 'D'): 0.4, ('D', 'C'): 0.4}),
+               [Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
                 Counter(),
                 Counter(),
                 Counter()],
-               [Counter(), Counter(), Counter(), Counter({('D', 'C'): 1.0})],
-               [Counter(), Counter(), Counter({('C', 'D'): 1.0}), Counter()]
+               [Counter(), Counter(), Counter(), Counter({(D, C): 1.0})],
+               [Counter(), Counter(), Counter({(C, D): 1.0}), Counter()]
             ]
 
         cls.expected_state_to_action_distribution = [
             [Counter(),
-             Counter({(('C', 'C'), 'D'): 3, (('C', 'D'), 'D'): 3,
-                      (('D', 'C'), 'C'): 6}),
+             Counter({((C, C), D): 3, ((C, D), D): 3,
+                      ((D, C), C): 6}),
              Counter(), Counter()],
-            [Counter({(('C', 'C'), 'C'): 3, (('D', 'C'), 'C'): 3,
-                      (('C', 'D'), 'D'): 6}),
+            [Counter({((C, C), C): 3, ((D, C), C): 3,
+                      ((C, D), D): 6}),
              Counter(), Counter(), Counter()],
-            [Counter(), Counter(), Counter(), Counter({(('D', 'C'), 'D'): 12})],
-            [Counter(), Counter(), Counter({(('C', 'D'), 'C'): 12}), Counter()]]
+            [Counter(), Counter(), Counter(), Counter({((D, C), D): 12})],
+            [Counter(), Counter(), Counter({((C, D), C): 12}), Counter()]]
 
         cls.expected_normalised_state_to_action_distribution = [
             [Counter(),
-             Counter({(('C', 'C'), 'D'): 1.0, (('C', 'D'), 'D'): 1.0,
-                      (('D', 'C'), 'C'): 1.0}),
+             Counter({((C, C), D): 1.0, ((C, D), D): 1.0,
+                      ((D, C), C): 1.0}),
              Counter(), Counter()],
-            [Counter({(('C', 'C'), 'C'): 1.0, (('D', 'C'), 'C'): 1.0,
-                      (('C', 'D'), 'D'): 1.0}),
+            [Counter({((C, C), C): 1.0, ((D, C), C): 1.0,
+                      ((C, D), D): 1.0}),
              Counter(), Counter(), Counter()],
-            [Counter(), Counter(), Counter(), Counter({(('D', 'C'), 'D'): 1.0})],
-            [Counter(), Counter(), Counter({(('C', 'D'), 'C'): 1.0}), Counter()]]
+            [Counter(), Counter(), Counter(), Counter({((D, C), D): 1.0})],
+            [Counter(), Counter(), Counter({((C, D), C): 1.0}), Counter()]]
 
 
 

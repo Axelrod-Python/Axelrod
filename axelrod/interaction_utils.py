@@ -11,7 +11,7 @@ from collections import Counter
 import csv
 import tqdm
 
-from axelrod.actions import Actions
+from axelrod.actions import Actions, str_to_actions
 from .game import Game
 
 
@@ -255,7 +255,9 @@ def read_interactions_from_file(filename, progress_bar=True,
     with open(filename, 'r') as f:
         for row in csv.reader(f):
             index_pair = (int(row[0]), int(row[1]))
-            interaction = list(zip(row[4], row[5]))
+            p1_actions = str_to_actions(row[4])
+            p2_actions = str_to_actions(row[5])
+            interaction = list(zip(p1_actions, p2_actions))
 
             try:
                 pairs_to_interactions[index_pair].append(interaction)
@@ -280,7 +282,7 @@ def string_to_interactions(string):
     interactions = []
     interactions_list = list(string)
     while interactions_list:
-        p1action = interactions_list.pop(0)
-        p2action = interactions_list.pop(0)
+        p1action = Actions.from_char(interactions_list.pop(0))
+        p2action = Actions.from_char(interactions_list.pop(0))
         interactions.append((p1action, p2action))
     return interactions
