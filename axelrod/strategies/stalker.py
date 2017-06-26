@@ -6,7 +6,7 @@ from axelrod.strategy_transformers import FinalTransformer
 C, D = Actions.C, Actions.D
 
 
-@FinalTransformer((D), name_prefix=None)  # End with defection
+@FinalTransformer((D,), name_prefix=None)  # End with defection
 class Stalker(Player):
     """
 

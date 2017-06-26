@@ -9,22 +9,56 @@ from Axelrod import Actions
 C, D = Actions.C, Actions.D
 """
 
+from enum import Enum
+import random
+
+
+class UnknownAction(ValueError):
+    def __init__(self, *args):
+        super(UnknownAction, self).__init__(*args)
+
+
+class Actions(Enum):
+
+    C = 1
+    D = 0
+
+    def __bool__(self):
+        return bool(self.value)
+
+    def __repr__(self):
+        return '{}'.format(self.name)
+
+    def flip(self):
+        if self == Action.C:
+            return Action.D
+        if self == Action.D:
+            return Action.C
+        else:
+            raise UnknownAction('Cannot flip action: {!r}'.format(self))
+
+    @classmethod
+    def random_choice(cls, p: float = 0.5) -> 'Action':
+
+        if p == 0:
+            return cls.D
+
+        if p == 1:
+            return cls.C
+
+        r = random.random()
+        if r < p:
+            return cls.C
+        return cls.D
+
 # Type alias for actions.
-Action = str
-
-
-class Actions(object):
-    C = 'C'  # type: Action
-    D = 'D'  # type: Action
+Action = Actions
 
 
 def flip_action(action: Action) -> Action:
-    if action == Actions.C:
-        return Actions.D
-    elif action == Actions.D:
-        return Actions.C
-    else:
-        raise ValueError("Encountered a invalid action.")
+    if not isinstance(action, Action):
+        raise UnknownAction('Not an Action')
+    return action.flip()
 
 
 def str_to_actions(actions: str) -> tuple:
@@ -35,5 +69,6 @@ def str_to_actions(actions: str) -> tuple:
     try:
         return tuple(action_dict[action] for action in actions)
     except KeyError:
-        raise ValueError(
+        raise UnknownAction(
             'The characters of "actions" str may only be "C" or "D"')
+

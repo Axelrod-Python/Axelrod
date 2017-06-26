@@ -182,11 +182,11 @@ class SneakyTitForTat(Player):
 
     def strategy(self, opponent: Player) -> Action:
         if len(self.history) < 2:
-            return "C"
+            return C
         if D not in opponent.history:
             return D
         if opponent.history[-1] == D and self.history[-2] == D:
-            return "C"
+            return C
         return opponent.history[-1]
 
 
@@ -297,8 +297,9 @@ class HardTitFor2Tats(Player):
         if not opponent.history:
             return C
         # Defects if two consecutive D in the opponent's last three moves
-        history_string = "".join(opponent.history[-3:])
-        if 'DD' in history_string:
+        last_three = opponent.history[-3:]
+        if any(last_three[n: n + 2] == [D, D] for n in (0, 1)):
+        # if last_three[-3: -1] == [D, D] or last_three[-2:] == [D, D]:
             return D
         # Otherwise cooperates
         return C
