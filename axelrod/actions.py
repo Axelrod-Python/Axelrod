@@ -38,8 +38,6 @@ class Actions(Enum):
             return Actions.D
         if self == Actions.D:
             return Actions.C
-        else:
-            raise UnknownAction('Cannot flip action: {!r}'.format(self))
 
     @classmethod
     def from_char(cls, character):
