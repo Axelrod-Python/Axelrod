@@ -535,7 +535,7 @@ class TestResultSet(unittest.TestCase):
                 self.assertGreaterEqual(rate, 0)
 
     # When converting Actions to Enum, test coverage gap exposed from example in
-    # docs/tutorial/getting_started/summarising_tournamens.rst
+    # docs/tutorial/getting_started/summarising_tournaments.rst
     def test_summarise_regression_test(self):
         players = [axelrod.Cooperator(), axelrod.Defector(),
                    axelrod.TitForTat(), axelrod.Grudger()]

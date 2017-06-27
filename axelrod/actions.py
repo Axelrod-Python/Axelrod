@@ -10,7 +10,6 @@ C, D = Actions.C, Actions.D
 """
 
 from enum import Enum
-import random
 from typing import Iterable
 
 
@@ -44,30 +43,15 @@ class Actions(Enum):
 
     @classmethod
     def from_char(cls, character):
-        """Converts a single character into an Action.
-        :code:`Action.from_char('C')` returns Action.C.
-        :code:`Action.from_char('CC')` raises an error.  Use
-        :code:`str_to_actions` instead."""
+        """Converts a single character into an Action. `Action.from_char('C')`
+        returns `Action.C`. `Action.from_char('CC')` raises an error. Use
+        `str_to_actions` instead."""
         if character == 'C':
             return cls.C
         elif character == 'D':
             return cls.D
         else:
             raise UnknownAction('Character must be "C" or "D".')
-
-    @classmethod
-    def random_choice(cls, p: float = 0.5) -> 'Action':
-
-        if p == 0:
-            return cls.D
-
-        if p == 1:
-            return cls.C
-
-        r = random.random()
-        if r < p:
-            return cls.C
-        return cls.D
 
 # Type alias for actions.
 Action = Actions
