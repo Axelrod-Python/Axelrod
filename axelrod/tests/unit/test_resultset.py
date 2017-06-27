@@ -534,6 +534,35 @@ class TestResultSet(unittest.TestCase):
                 self.assertLessEqual(rate, 1)
                 self.assertGreaterEqual(rate, 0)
 
+    # When converting Actions to Enum, test coverage gap exposed from example in
+    # docs/tutorial/getting_started/summarising_tournamens.rst
+    def test_summarise_regression_test(self):
+        players = [axelrod.Cooperator(), axelrod.Defector(),
+                   axelrod.TitForTat(), axelrod.Grudger()]
+        tournament = axelrod.Tournament(players, turns=10, repetitions=3)
+        results = tournament.play()
+
+        summary = [
+            (0,  'Defector',  2.6000000000000001, 0.0,  3.0,  0.0, 0.0,  0.0,
+             0.4000000000000001,0.6, 0, 0, 0,0),
+            (1,  'Tit For Tat', 2.3000000000000003, 0.7,  0.0,  1.0,
+             0.6666666666666666,  0.03333333333333333, 0.0,  0.3,
+             1.0, 0, 0, 0),
+            (2,  'Grudger',  2.3000000000000003, 0.7,  0.0,  1.0,
+             0.6666666666666666,  0.03333333333333333, 0.0,  0.3,
+             1.0, 0, 0, 0),
+            (3,  'Cooperator',  2.0, 1.0,  0.0,  1.0, 0.6666666666666666,
+             0.3333333333333333, 0.0, 0.0, 1.0, 1.0, 0, 0)
+        ]
+        for outer_index, player in enumerate(results.summarise()):
+            for inner_index, value in enumerate(player):
+                if isinstance(value, str):
+                    self.assertEqual(value, summary[outer_index][inner_index])
+                else:
+                    self.assertAlmostEqual(value,
+                                           summary[outer_index][inner_index],
+                                           places=3)
+
     def test_write_summary(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
                                progress_bar=False)

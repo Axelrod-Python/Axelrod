@@ -848,8 +848,8 @@ class ResultSet(object):
         for player in self.normalised_state_to_action_distribution:
             rates = []
             for state in states:
-                counts = [counter[(state, 'C')] for counter in player
-                          if counter[(state, 'C')] > 0]
+                counts = [counter[(state, C)] for counter in player
+                          if counter[(state, C)] > 0]
 
                 if len(counts) > 0:
                     rate = mean(counts)
