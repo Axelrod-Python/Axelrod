@@ -23,7 +23,7 @@ You will be prompted for the action to play at each turn:
 
     Turn 2: me played D, opponent played C
     Turn 3 action [C or D] for me: C
-    [('C', 'C'), ('C', 'D'), ('D', 'C')]
+    [(C, C), (C, D), (D, C)]
 
 after this, the :code:`match` object can be manipulated as described in
 :ref:`creating_matches`

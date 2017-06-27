@@ -56,10 +56,10 @@ and obtain the interactions::
     ...     player1 = spatial_tournament.players[index_pair[0]]
     ...     player2 = spatial_tournament.players[index_pair[1]]
     ...     print('%s vs %s: %s' % (player1, player2, interaction))
-    Cooperator vs Tit For Tat: [[('C', 'C'), ('C', 'C')], [('C', 'C'), ('C', 'C')]]
-    Cooperator vs Grudger: [[('C', 'C'), ('C', 'C')], [('C', 'C'), ('C', 'C')]]
-    Defector vs Tit For Tat: [[('D', 'C'), ('D', 'D')], [('D', 'C'), ('D', 'D')]]
-    Defector vs Grudger: [[('D', 'C'), ('D', 'D')], [('D', 'C'), ('D', 'D')]]
+    Cooperator vs Tit For Tat: [[(C, C), (C, C)], [(C, C), (C, C)]]
+    Cooperator vs Grudger: [[(C, C), (C, C)], [(C, C), (C, C)]]
+    Defector vs Tit For Tat: [[(D, C), (D, D)], [(D, C), (D, D)]]
+    Defector vs Grudger: [[(D, C), (D, D)], [(D, C), (D, D)]]
 
 As anticipated  :code:`Cooperator` does not interact with :code:`Defector` neither
 :code:`TitForTat` with :code:`Grudger`.

@@ -20,7 +20,7 @@ This however does not check if the players will behave in the same way. For
 example here are two equivalent players::
 
     >>> p1 = axl.Alternator()
-    >>> p2 = axl.Cycler((axl.Actions.C, axl.Actions.D))
+    >>> p2 = axl.Cycler("CD")
     >>> p1 == p2
     False
 

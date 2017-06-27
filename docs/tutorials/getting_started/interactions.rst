@@ -24,16 +24,16 @@ view the history of the interactions::
     ...     player1 = tournament.players[index_pair[0]]
     ...     player2 = tournament.players[index_pair[1]]
     ...     print('%s vs %s: %s' % (player1, player2, interaction)) # doctest: +SKIP
-    Cooperator vs Defector: [('C', 'D'), ('C', 'D'), ('C', 'D')]
-    Defector vs Tit For Tat: [('D', 'C'), ('D', 'D'), ('D', 'D')]
-    Cooperator vs Cooperator: [('C', 'C'), ('C', 'C'), ('C', 'C')]
-    Tit For Tat vs Grudger: [('C', 'C'), ('C', 'C'), ('C', 'C')]
-    Grudger vs Grudger: [('C', 'C'), ('C', 'C'), ('C', 'C')]
-    Tit For Tat vs Tit For Tat: [('C', 'C'), ('C', 'C'), ('C', 'C')]
-    Defector vs Grudger: [('D', 'C'), ('D', 'D'), ('D', 'D')]
-    Cooperator vs Grudger: [('C', 'C'), ('C', 'C'), ('C', 'C')]
-    Cooperator vs Tit For Tat: [('C', 'C'), ('C', 'C'), ('C', 'C')]
-    Defector vs Defector: [('D', 'D'), ('D', 'D'), ('D', 'D')]
+    Cooperator vs Defector: [(C, D), (C, D), (C, D)]
+    Defector vs Tit For Tat: [(D, C), (D, D), (D, D)]
+    Cooperator vs Cooperator: [(C, C), (C, C), (C, C)]
+    Tit For Tat vs Grudger: [(C, C), (C, C), (C, C)]
+    Grudger vs Grudger: [(C, C), (C, C), (C, C)]
+    Tit For Tat vs Tit For Tat: [(C, C), (C, C), (C, C)]
+    Defector vs Grudger: [(D, C), (D, D), (D, D)]
+    Cooperator vs Grudger: [(C, C), (C, C), (C, C)]
+    Cooperator vs Tit For Tat: [(C, C), (C, C), (C, C)]
+    Defector vs Defector: [(D, D), (D, D), (D, D)]
 
 We can use these interactions to reconstruct :code:`axelrod.Match` objects which
 have a variety of available methods for analysis (more information can be found
