@@ -75,15 +75,15 @@ class TestMindWarper(TestMindController):
 
     def test_setattr(self):
         player = self.player()
-        player.strategy = lambda opponent: 'C'
+        player.strategy = lambda opponent: C
 
     def test_strategy(self):
         player = self.player()
         opponent = axelrod.Defector()
         play1 = player.strategy(opponent)
         play2 = opponent.strategy(player)
-        self.assertEqual(play1, 'D')
-        self.assertEqual(play2, 'C')
+        self.assertEqual(play1, D)
+        self.assertEqual(play2, C)
 
 
 class TestMindBender(TestMindController):
@@ -105,5 +105,5 @@ class TestMindBender(TestMindController):
         opponent = axelrod.Defector()
         play1 = player.strategy(opponent)
         play2 = opponent.strategy(player)
-        self.assertEqual(play1, 'D')
-        self.assertEqual(play2, 'C')
+        self.assertEqual(play1, D)
+        self.assertEqual(play2, C)

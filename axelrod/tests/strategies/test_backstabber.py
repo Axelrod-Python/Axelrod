@@ -11,7 +11,7 @@ C, D = axelrod.Actions.C, axelrod.Actions.D
 
 class TestBackStabber(TestPlayer):
 
-    name = "BackStabber: ('D', 'D')"
+    name = "BackStabber: (D, D)"
     player = axelrod.BackStabber
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -56,7 +56,7 @@ class TestDoubleCrosser(TestBackStabber):
     The alternate strategy is triggered when opponent did not defect in the
     first 7 rounds, and 8 <= the current round <= 180.
     """
-    name = "DoubleCrosser: ('D', 'D')"
+    name = "DoubleCrosser: (D, D)"
     player = axelrod.DoubleCrosser
     expected_classifier = {
         'memory_depth': float('inf'),

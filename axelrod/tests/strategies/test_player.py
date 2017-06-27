@@ -559,6 +559,6 @@ def test_four_vector(test_class, expected_dictionary):
     a memory-one strategy and the given expected dictionary.
     """
     player1 = test_class.player()
-    for key in sorted(expected_dictionary.keys()):
+    for key in sorted(expected_dictionary.keys(), key=str):
         test_class.assertAlmostEqual(
             player1._four_vector[key], expected_dictionary[key])

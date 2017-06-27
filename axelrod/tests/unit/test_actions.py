@@ -16,17 +16,30 @@ class TestAction(unittest.TestCase):
         self.assertTrue(C)
         self.assertFalse(D)
 
-    def test_flip_action(self):
-        self.assertEqual(flip_action(D), C)
-        self.assertEqual(flip_action(C), D)
-
     def test__eq__(self):
         self.assertTrue(C == C)
         self.assertTrue(D == D)
         self.assertFalse(C == D)
         self.assertFalse(D == C)
 
-    def test_error(self):
+    def test_flip(self):
+        self.assertEqual(C.flip(), D)
+        self.assertEqual(D.flip(), C)
+
+    def test_from_char(self):
+        self.assertEqual(Actions.from_char('C'), C)
+        self.assertEqual(Actions.from_char('D'), D)
+
+    def test_from_char_error(self):
+        self.assertRaises(UnknownAction, Actions.from_char, '')
+        self.assertRaises(UnknownAction, Actions.from_char, 'c')
+        self.assertRaises(UnknownAction, Actions.from_char, 'A')
+
+    def test_flip_action(self):
+        self.assertEqual(flip_action(D), C)
+        self.assertEqual(flip_action(C), D)
+
+    def test_flip_action_error(self):
         self.assertRaises(UnknownAction, flip_action, 'R')
 
     def test_str_to_actions(self):
@@ -41,3 +54,8 @@ class TestAction(unittest.TestCase):
         self.assertEqual(action_sequence_to_str([]), "")
         self.assertEqual(action_sequence_to_str([C, D, C]), "CDC")
         self.assertEqual(action_sequence_to_str((C, C, D)), "CCD")
+
+    def test_action_sequence_to_str_with_iterable(self):
+        self.assertEqual(action_sequence_to_str(iter([C, D, C])), "CDC")
+        generator = (action for action in [C, D, C])
+        self.assertEqual(action_sequence_to_str(generator), "CDC")

@@ -1,4 +1,4 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Actions, Action, action_sequence_to_str
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import (
@@ -297,9 +297,8 @@ class HardTitFor2Tats(Player):
         if not opponent.history:
             return C
         # Defects if two consecutive D in the opponent's last three moves
-        last_three = opponent.history[-3:]
-        if any(last_three[n: n + 2] == [D, D] for n in (0, 1)):
-        # if last_three[-3: -1] == [D, D] or last_three[-2:] == [D, D]:
+        history_string = action_sequence_to_str(opponent.history[-3:])
+        if 'DD' in history_string:
             return D
         # Otherwise cooperates
         return C

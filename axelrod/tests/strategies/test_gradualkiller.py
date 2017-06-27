@@ -8,7 +8,7 @@ C, D = axl.Actions.C, axl.Actions.D
 
 class TestGradualKiller(TestPlayer):
 
-    name = "Gradual Killer: ('D', 'D', 'D', 'D', 'D', 'C', 'C')"
+    name = "Gradual Killer: (D, D, D, D, D, C, C)"
     player = axl.GradualKiller
     expected_classifier = {
         'memory_depth': float('Inf'),

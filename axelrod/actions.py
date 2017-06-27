@@ -11,7 +11,7 @@ C, D = Actions.C, Actions.D
 
 from enum import Enum
 import random
-from typing import Union
+from typing import Iterable
 
 
 class UnknownAction(ValueError):
@@ -30,16 +30,24 @@ class Actions(Enum):
     def __repr__(self):
         return '{}'.format(self.name)
 
+    def __str__(self):
+        return '{}'.format(self.name)
+
     def flip(self):
-        if self == Action.C:
-            return Action.D
-        if self == Action.D:
-            return Action.C
+        """Returns the opposite Action. """
+        if self == Actions.C:
+            return Actions.D
+        if self == Actions.D:
+            return Actions.C
         else:
             raise UnknownAction('Cannot flip action: {!r}'.format(self))
 
     @classmethod
     def from_char(cls, character):
+        """Converts a single character into an Action.
+        :code:`Action.from_char('C')` returns Action.C.
+        :code:`Action.from_char('CC')` raises an error.  Use
+        :code:`str_to_actions` instead."""
         if character == 'C':
             return cls.C
         elif character == 'D':
@@ -74,15 +82,10 @@ def flip_action(action: Action) -> Action:
 def str_to_actions(actions: str) -> tuple:
     """Takes a string like 'CCDD' and returns a tuple of the appropriate
     actions."""
-    action_dict = {'C': Actions.C,
-                   'D': Actions.D}
-    try:
-        return tuple(action_dict[action] for action in actions)
-    except KeyError:
-        raise UnknownAction(
-            'The characters of "actions" str may only be "C" or "D"')
+    return tuple(Actions.from_char(element) for element in actions)
 
 
-def action_sequence_to_str(actions: Union[tuple, list]) -> str:
+def action_sequence_to_str(actions: Iterable[Action]) -> str:
+    """Takes any iterable of Action and returns a string of 'C's
+    and 'D's.  ex: (D, D, C) -> 'DDC' """
     return "".join(map(repr, actions))
-

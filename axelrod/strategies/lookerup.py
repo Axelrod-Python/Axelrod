@@ -1,7 +1,7 @@
 from collections import namedtuple
 from itertools import product
 
-from axelrod.actions import Action, Actions, str_to_actions
+from axelrod.actions import Action, Actions, str_to_actions, action_sequence_to_str
 from axelrod.player import Player
 
 from typing import Any, TypeVar
@@ -139,7 +139,8 @@ class LookupTable(object):
         :param sort_by: only_elements='self_plays', 'op_plays', 'op_openings'
         """
         def sorter(plays):
-            return tuple(getattr(plays, field) for field in sort_by)
+            return tuple(action_sequence_to_str(
+                getattr(plays, field) for field in sort_by))
 
         col_width = 11
         sorted_keys = sorted(self._dict, key=sorter)
@@ -148,9 +149,12 @@ class LookupTable(object):
                        '{str_list[2]:^{width}}')
         display_line = header_line.replace('|', ',') + ': {str_list[3]},'
 
-        line_elements = [(', '.join(getattr(key, sort_by[0])),
-                          ', '.join(getattr(key, sort_by[1])),
-                          ', '.join(getattr(key, sort_by[2])),
+        def make_commaed_str(action_tuple):
+            return ', '.join(str(action) for action in action_tuple)
+
+        line_elements = [(make_commaed_str(getattr(key, sort_by[0])),
+                          make_commaed_str(getattr(key, sort_by[1])),
+                          make_commaed_str(getattr(key, sort_by[2])),
                           self._dict[key])
                          for key in sorted_keys]
         header = header_line.format(str_list=sort_by, width=col_width) + '\n'
