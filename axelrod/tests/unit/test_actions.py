@@ -1,7 +1,6 @@
 import unittest
 from axelrod import Actions, flip_action
-from axelrod.actions import (str_to_actions, UnknownAction,
-                             action_sequence_to_str)
+from axelrod.actions import str_to_actions, UnknownAction,  actions_to_str
 
 C, D = Actions.C, Actions.D
 
@@ -11,6 +10,10 @@ class TestAction(unittest.TestCase):
     def test_repr(self):
         self.assertEqual(repr(C), 'C')
         self.assertEqual(repr(D), 'D')
+
+    def test_str(self):
+        self.assertEqual(str(C), 'C')
+        self.assertEqual(str(D), 'D')
 
     def test_bool(self):
         self.assertTrue(C)
@@ -33,6 +36,7 @@ class TestAction(unittest.TestCase):
     def test_from_char_error(self):
         self.assertRaises(UnknownAction, Actions.from_char, '')
         self.assertRaises(UnknownAction, Actions.from_char, 'c')
+        self.assertRaises(UnknownAction, Actions.from_char, 'd')
         self.assertRaises(UnknownAction, Actions.from_char, 'A')
 
     def test_flip_action(self):
@@ -50,12 +54,12 @@ class TestAction(unittest.TestCase):
     def test_str_to_actions_fails_fast_and_raises_value_error(self):
         self.assertRaises(UnknownAction, str_to_actions, 'Cc')
 
-    def test_action_sequence_to_str(self):
-        self.assertEqual(action_sequence_to_str([]), "")
-        self.assertEqual(action_sequence_to_str([C, D, C]), "CDC")
-        self.assertEqual(action_sequence_to_str((C, C, D)), "CCD")
+    def test_actions_to_str(self):
+        self.assertEqual(actions_to_str([]), "")
+        self.assertEqual(actions_to_str([C, D, C]), "CDC")
+        self.assertEqual(actions_to_str((C, C, D)), "CCD")
 
-    def test_action_sequence_to_str_with_iterable(self):
-        self.assertEqual(action_sequence_to_str(iter([C, D, C])), "CDC")
+    def test_actions_to_str_with_iterable(self):
+        self.assertEqual(actions_to_str(iter([C, D, C])), "CDC")
         generator = (action for action in [C, D, C])
-        self.assertEqual(action_sequence_to_str(generator), "CDC")
+        self.assertEqual(actions_to_str(generator), "CDC")

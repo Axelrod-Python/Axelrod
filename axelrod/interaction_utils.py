@@ -277,7 +277,7 @@ def string_to_interactions(string):
     Converts a compact string representation of an interaction to an
     interaction:
 
-    'CDCDDD' -> [('C', 'D'), ('C', 'D'), ('D', 'D')]
+    'CDCDDD' -> [(C, D), (C, D), (D, D)]
     """
     interactions = []
     interactions_list = list(string)

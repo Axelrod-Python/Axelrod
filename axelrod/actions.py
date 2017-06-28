@@ -67,7 +67,7 @@ def str_to_actions(actions: str) -> tuple:
     return tuple(Actions.from_char(element) for element in actions)
 
 
-def action_sequence_to_str(actions: Iterable[Action]) -> str:
+def actions_to_str(actions: Iterable[Action]) -> str:
     """Takes any iterable of Action and returns a string of 'C's
     and 'D's.  ex: (D, D, C) -> 'DDC' """
     return "".join(map(repr, actions))

@@ -7,8 +7,8 @@ C, D = Actions.C, Actions.D
 class Appeaser(Player):
     """A player who tries to guess what the opponent wants.
 
-    Switch the classifier every time the opponent plays 'D'.
-    Start with 'C', switch between 'C' and 'D' when opponent plays 'D'.
+    Switch the classifier every time the opponent plays D.
+    Start with C, switch between C and D when opponent plays D.
 
     Names:
 

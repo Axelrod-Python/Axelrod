@@ -1,7 +1,7 @@
 from collections import namedtuple
 from itertools import product
 
-from axelrod.actions import Action, Actions, str_to_actions, action_sequence_to_str
+from axelrod.actions import Action, Actions, str_to_actions, actions_to_str
 from axelrod.player import Player
 
 from typing import Any, TypeVar
@@ -139,7 +139,7 @@ class LookupTable(object):
         :param sort_by: only_elements='self_plays', 'op_plays', 'op_openings'
         """
         def sorter(plays):
-            return tuple(action_sequence_to_str(
+            return tuple(actions_to_str(
                 getattr(plays, field) for field in sort_by))
 
         col_width = 11

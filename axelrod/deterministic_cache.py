@@ -25,7 +25,7 @@ class DeterministicCache(UserDict):
     resulting interactions. e.g. for a 3 turn Match between Cooperator and
     Alternator, the dictionary entry would be:
 
-    (axelrod.Cooperator, axelrod.Alternator): [('C', 'C'), ('C', 'D'), ('C', 'C')]
+    (axelrod.Cooperator, axelrod.Alternator): [(C, C), (C, D), (C, C)]
 
     Most of the functionality is provided by the UserDict class (which uses an
     instance of dict as the 'data' attribute to hold the dictionary entries).

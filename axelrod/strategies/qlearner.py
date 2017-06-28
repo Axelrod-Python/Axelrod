@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import random
 
-from axelrod.actions import Actions, Action, action_sequence_to_str
+from axelrod.actions import Actions, Action, actions_to_str
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
@@ -92,7 +92,7 @@ class RiskyQLearner(Player):
         its previous proportion of playing C) as a hashable state
         """
         prob = '{:.1f}'.format(opponent.cooperations)
-        action_str = action_sequence_to_str(
+        action_str = actions_to_str(
             opponent.history[-self.memory_length:])
         return action_str + prob
 

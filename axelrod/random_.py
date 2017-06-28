@@ -5,14 +5,14 @@ from axelrod.actions import Action, Actions
 
 def random_choice(p: float = 0.5) -> Action:
     """
-    Return 'C' with probability `p`, else return 'D'
+    Return C with probability `p`, else return D
 
     No random sample is carried out if p is 0 or 1.
 
     Parameters
     ----------
     p : float
-        The probability of picking 'C'
+        The probability of picking C
 
     Returns
     -------
