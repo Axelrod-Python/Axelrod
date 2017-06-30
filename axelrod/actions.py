@@ -13,9 +13,9 @@ from enum import Enum
 from typing import Iterable
 
 
-class UnknownAction(ValueError):
+class UnknownActionError(ValueError):
     def __init__(self, *args):
-        super(UnknownAction, self).__init__(*args)
+        super(UnknownActionError, self).__init__(*args)
 
 
 class Actions(Enum):
@@ -49,7 +49,7 @@ class Actions(Enum):
         elif character == 'D':
             return cls.D
         else:
-            raise UnknownAction('Character must be "C" or "D".')
+            raise UnknownActionError('Character must be "C" or "D".')
 
 # Type alias for actions.
 Action = Actions
@@ -57,7 +57,7 @@ Action = Actions
 
 def flip_action(action: Action) -> Action:
     if not isinstance(action, Action):
-        raise UnknownAction('Not an Action')
+        raise UnknownActionError('Not an Action')
     return action.flip()
 
 

@@ -1,6 +1,6 @@
 import unittest
 from axelrod import Actions, flip_action
-from axelrod.actions import str_to_actions, UnknownAction,  actions_to_str
+from axelrod.actions import str_to_actions, UnknownActionError,  actions_to_str
 
 C, D = Actions.C, Actions.D
 
@@ -34,17 +34,17 @@ class TestAction(unittest.TestCase):
         self.assertEqual(Actions.from_char('D'), D)
 
     def test_from_char_error(self):
-        self.assertRaises(UnknownAction, Actions.from_char, '')
-        self.assertRaises(UnknownAction, Actions.from_char, 'c')
-        self.assertRaises(UnknownAction, Actions.from_char, 'd')
-        self.assertRaises(UnknownAction, Actions.from_char, 'A')
+        self.assertRaises(UnknownActionError, Actions.from_char, '')
+        self.assertRaises(UnknownActionError, Actions.from_char, 'c')
+        self.assertRaises(UnknownActionError, Actions.from_char, 'd')
+        self.assertRaises(UnknownActionError, Actions.from_char, 'A')
 
     def test_flip_action(self):
         self.assertEqual(flip_action(D), C)
         self.assertEqual(flip_action(C), D)
 
     def test_flip_action_error(self):
-        self.assertRaises(UnknownAction, flip_action, 'R')
+        self.assertRaises(UnknownActionError, flip_action, 'R')
 
     def test_str_to_actions(self):
         self.assertEqual(str_to_actions(''), ())
@@ -52,7 +52,7 @@ class TestAction(unittest.TestCase):
         self.assertEqual(str_to_actions('CDDC'), (C, D, D, C))
 
     def test_str_to_actions_fails_fast_and_raises_value_error(self):
-        self.assertRaises(UnknownAction, str_to_actions, 'Cc')
+        self.assertRaises(UnknownActionError, str_to_actions, 'Cc')
 
     def test_actions_to_str(self):
         self.assertEqual(actions_to_str([]), "")
