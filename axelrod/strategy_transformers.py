@@ -10,7 +10,7 @@ import copy
 import inspect
 import random
 from numpy.random import choice
-from .actions import Actions, flip_action
+from .actions import Actions
 from .random_ import random_choice
 
 
@@ -200,8 +200,8 @@ IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)
 
 
 def flip_wrapper(player, opponent, action):
-    """Applies flip_action at the class level."""
-    return flip_action(action)
+    """Applies Action.flip() at the class level."""
+    return action.flip()
 
 
 FlipTransformer = StrategyTransformerFactory(
@@ -233,17 +233,17 @@ def dual_wrapper(player, opponent, proposed_action):
 
     action = player.original_player.strategy(opponent)
     player.original_player.history.append(action)
-    return flip_action(action)
+    return action.flip()
 
 
 DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
 
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
-    """Applies flip_action at the class level."""
+    """Applies Action.flip() at the class level."""
     r = random.random()
     if r < noise:
-        return flip_action(action)
+        return action.flip()
     return action
 
 def noisy_reclassifier(original_classifier, noise):

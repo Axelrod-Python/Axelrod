@@ -55,12 +55,6 @@ class Actions(Enum):
 Action = Actions
 
 
-def flip_action(action: Action) -> Action:
-    if not isinstance(action, Action):
-        raise UnknownActionError('Not an Action')
-    return action.flip()
-
-
 def str_to_actions(actions: str) -> tuple:
     """Takes a string like 'CCDD' and returns a tuple of the appropriate
     actions."""

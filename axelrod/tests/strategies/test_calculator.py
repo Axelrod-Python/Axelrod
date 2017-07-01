@@ -2,7 +2,6 @@
 
 import axelrod
 from .test_player import TestPlayer
-from axelrod.actions import flip_action
 from axelrod._strategy_utils import detect_cycle
 C, D = axelrod.Actions.C, axelrod.Actions.D
 
@@ -104,7 +103,7 @@ def get_joss_strategy_actions(opponent_moves: list, indices_to_flip: list) -> li
         if index == 0:
             out.append((C, action))
         elif index in indices_to_flip:
-            out.append((flip_action(previous_action), action))
+            out.append((previous_action.flip(), action))
         else:
             out.append((previous_action, action))
     return out
