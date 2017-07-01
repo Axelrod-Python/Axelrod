@@ -56,7 +56,7 @@ Create matches between two players::
     >>> match = axl.Match(players, 5)
     >>> interactions = match.play()
     >>> interactions
-    [('C', 'C'), ('D', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D')]
+    [(C, C), (D, C), (C, D), (D, C), (C, D)]
 
 Build full tournaments between groups of players::
 

@@ -14,7 +14,7 @@ For example, to create a 5 turn match between :code:`Cooperator` and
     >>> players = (axl.Cooperator(), axl.Alternator())
     >>> match = axl.Match(players, 5)
     >>> match.play()
-    [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
+    [(C, C), (C, D), (C, C), (C, D), (C, C)]
 
 By default, a match will not be noisy, but you can introduce noise if you wish.
 Noise is the probability with which any action dictated by a strategy will be
@@ -22,18 +22,18 @@ swapped::
 
     >>> match = axl.Match(players=players, turns=5, noise=0.2)
     >>> match.play()  # doctest: +SKIP
-    [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('D', 'D')]
+    [(D, C), (C, D), (C, C), (C, D), (D, D)]
 
 The result of the match is held as an attribute within the :code:`Match` class.
 Each time :code:`play()` is called, it will overwrite the content of that
 attribute::
 
     >>> match.result  # doctest: +SKIP
-    [('D', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('D', 'D')]
+    [(D, C), (C, D), (C, C), (C, D), (D, D)]
     >>> match.play()  # doctest: +SKIP
-    [('C', 'C'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'C')]
+    [(C, C), (C, C), (C, D), (C, C), (C, C)]
     >>> match.result  # doctest: +SKIP
-    [('C', 'C'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'C')]
+    [(C, C), (C, C), (C, D), (C, C), (C, C)]
 
 
 The result of the match can also be viewed as sparklines where cooperation is
@@ -45,7 +45,7 @@ way to view the result and can be useful for spotting patterns::
     >>> players = (axl.Cooperator(), axl.Alternator())
     >>> match = axl.Match(players, 25)
     >>> match.play()
-    [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
+    [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
     >>> print(match.sparklines())  # doctest: +SKIP
     █████████████████████████
     █ █ █ █ █ █ █ █ █ █ █ █ █
@@ -57,7 +57,7 @@ but you can use any characters you like::
     >>> players = (axl.Cooperator(), axl.Alternator())
     >>> match = axl.Match(players, 25)
     >>> match.play()
-    [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
+    [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
     >>> print(match.sparklines(c_symbol='|', d_symbol='-'))
     |||||||||||||||||||||||||
     |-|-|-|-|-|-|-|-|-|-|-|-|
@@ -69,7 +69,7 @@ A `Match` class can also score the individual turns of a match. Just call
     >>> players = (axl.Cooperator(), axl.Alternator())
     >>> match = axl.Match(players, 25)
     >>> match.play()
-    [('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C'), ('C', 'D'), ('C', 'C')]
+    [(C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C)]
     >>> match.scores()
     [(3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3), (0, 5), (3, 3)]
 

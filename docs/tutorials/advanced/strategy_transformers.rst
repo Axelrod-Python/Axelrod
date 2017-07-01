@@ -16,9 +16,9 @@ C to D and D to C::
     >>> player = FlippedCooperator()
     >>> opponent = axl.Cooperator()
     >>> player.strategy(opponent)
-    'D'
+    D
     >>> opponent.strategy(player)
-    'C'
+    C
 
 Our player was switched from a :code:`Cooperator` to a :code:`Defector` when
 we applied the transformer. The transformer also changed the name of the

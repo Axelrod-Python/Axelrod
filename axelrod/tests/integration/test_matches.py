@@ -52,10 +52,10 @@ class TestMatchOutcomes(unittest.TestCase):
         p3 = axelrod.MemoryOnePlayer(four_vector=(1, 1, 1, 0))
 
         m = axelrod.Match((p1, p2), turns=3)
-        self.assertEqual(m.play(), [('C', 'C'), ('D', 'C'), ('D', 'D')])
+        self.assertEqual(m.play(), [(C, C), (D, C), (D, D)])
 
         m = axelrod.Match((p2, p3), turns=3)
-        self.assertEqual(m.play(), [('C', 'C'), ('C', 'C'), ('C', 'C')])
+        self.assertEqual(m.play(), [(C, C), (C, C), (C, C)])
 
         m = axelrod.Match((p1, p3), turns=3)
-        self.assertEqual(m.play(), [('C', 'C'), ('D', 'C'), ('D', 'C')])
+        self.assertEqual(m.play(), [(C, C), (D, C), (D, C)])

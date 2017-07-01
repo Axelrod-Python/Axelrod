@@ -108,8 +108,9 @@ could also be in a different order.
 
 This can be transformed in to the usual interactions by zipping:
 
-    >>> list(zip("CCDC", "CDCD"))
-    [('C', 'C'), ('C', 'D'), ('D', 'C'), ('C', 'D')]
+    >>> from axelrod.actions import str_to_actions
+    >>> list(zip(str_to_actions("CCDC"), str_to_actions("CDCD")))
+    [(C, C), (C, D), (D, C), (C, D)]
 
 This should allow for easy manipulation of data outside of the capabilities
 within the library. Note that you can supply `build_results=False` as a keyword

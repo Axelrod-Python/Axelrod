@@ -224,26 +224,26 @@ State distribution counts
 -------------------------
 
 This gives a total state count against each opponent. A state corresponds to 1
-turn of a match and can be one of :code:`('C', 'C'), ('C', 'D'), ('D', 'C'),
-('D', 'D')` where the first element is the action of the player in question and
+turn of a match and can be one of :code:`(C, C), (C, D), (D, C),
+(D, D)` where the first element is the action of the player in question and
 the second the action of the opponent::
 
     >>> pprint.pprint(results.state_distribution)
     [[Counter(),
-      Counter({('C', 'D'): 30}),
-      Counter({('C', 'C'): 30}),
-      Counter({('C', 'C'): 30})],
-     [Counter({('D', 'C'): 30}),
+      Counter({(C, D): 30}),
+      Counter({(C, C): 30}),
+      Counter({(C, C): 30})],
+     [Counter({(D, C): 30}),
       Counter(),
-      Counter({('D', 'D'): 27, ('D', 'C'): 3}),
-      Counter({('D', 'D'): 27, ('D', 'C'): 3})],
-     [Counter({('C', 'C'): 30}),
-      Counter({('D', 'D'): 27, ('C', 'D'): 3}),
+      Counter({(D, D): 27, (D, C): 3}),
+      Counter({(D, D): 27, (D, C): 3})],
+     [Counter({(C, C): 30}),
+      Counter({(D, D): 27, (C, D): 3}),
       Counter(),
-      Counter({('C', 'C'): 30})],
-     [Counter({('C', 'C'): 30}),
-      Counter({('D', 'D'): 27, ('C', 'D'): 3}),
-      Counter({('C', 'C'): 30}),
+      Counter({(C, C): 30})],
+     [Counter({(C, C): 30}),
+      Counter({(D, D): 27, (C, D): 3}),
+      Counter({(C, C): 30}),
       Counter()]]
 
 Normalised state distribution
@@ -251,52 +251,52 @@ Normalised state distribution
 
 This gives the average rate state distribution against each opponent.
 A state corresponds to 1
-turn of a match and can be one of :code:`('C', 'C'), ('C', 'D'), ('D', 'C'),
-('D', 'D')` where the first element is the action of the player in question and
+turn of a match and can be one of :code:`(C, C), (C, D), (D, C),
+(D, D)` where the first element is the action of the player in question and
 the second the action of the opponent::
 
     >>> pprint.pprint(results.normalised_state_distribution)
     [[Counter(),
-      Counter({('C', 'D'): 1.0}),
-      Counter({('C', 'C'): 1.0}),
-      Counter({('C', 'C'): 1.0})],
-     [Counter({('D', 'C'): 1.0}),
+      Counter({(C, D): 1.0}),
+      Counter({(C, C): 1.0}),
+      Counter({(C, C): 1.0})],
+     [Counter({(D, C): 1.0}),
       Counter(),
-      Counter({('D', 'D'): 0.9, ('D', 'C'): 0.1}),
-      Counter({('D', 'D'): 0.9, ('D', 'C'): 0.1})],
-     [Counter({('C', 'C'): 1.0}),
-      Counter({('D', 'D'): 0.9, ('C', 'D'): 0.1}),
+      Counter({(D, D): 0.9, (D, C): 0.1}),
+      Counter({(D, D): 0.9, (D, C): 0.1})],
+     [Counter({(C, C): 1.0}),
+      Counter({(D, D): 0.9, (C, D): 0.1}),
       Counter(),
-      Counter({('C', 'C'): 1.0})],
-     [Counter({('C', 'C'): 1.0}),
-      Counter({('D', 'D'): 0.9, ('C', 'D'): 0.1}),
-      Counter({('C', 'C'): 1.0}),
+      Counter({(C, C): 1.0})],
+     [Counter({(C, C): 1.0}),
+      Counter({(D, D): 0.9, (C, D): 0.1}),
+      Counter({(C, C): 1.0}),
       Counter()]]
 
 State to action distribution counts
 -----------------------------------
 
 This gives a total state action pair count against each opponent. A state
-corresponds to 1 turn of a match and can be one of :code:`('C', 'C'), ('C',
-'D'), ('D', 'C'), ('D', 'D')` where the first element is the action of the
+corresponds to 1 turn of a match and can be one of :code:`(C, C), (C,
+D), (D, C), (D, D)` where the first element is the action of the
 player in question and the second the action of the opponent::
 
     >>> pprint.pprint(results.state_to_action_distribution)  # doctest: +SKIP
     [[Counter(),
-      Counter({(('C', 'D'), 'C'): 27}),
-      Counter({(('C', 'C'), 'C'): 27}),
-      Counter({(('C', 'C'), 'C'): 27})],
-     [Counter({(('D', 'C'), 'D'): 27}),
+      Counter({((C, D), C): 27}),
+      Counter({((C, C), C): 27}),
+      Counter({((C, C), C): 27})],
+     [Counter({((D, C), D): 27}),
       Counter(),
-      Counter({(('D', 'D'), 'D'): 24, (('D', 'C'), 'D'): 3}),
-      Counter({(('D', 'D'), 'D'): 24, (('D', 'C'), 'D'): 3})],
-     [Counter({(('C', 'C'), 'C'): 27}),
-      Counter({(('D', 'D'), 'D'): 24, (('C', 'D'), 'D'): 3}),
+      Counter({((D, D), D): 24, ((D, C), D): 3}),
+      Counter({((D, D), D): 24, ((D, C), D): 3})],
+     [Counter({((C, C), C): 27}),
+      Counter({((D, D), D): 24, ((C, D), D): 3}),
       Counter(),
-      Counter({(('C', 'C'), 'C'): 27})],
-     [Counter({(('C', 'C'), 'C'): 27}),
-      Counter({(('D', 'D'), 'D'): 24, (('C', 'D'), 'D'): 3}),
-      Counter({(('C', 'C'), 'C'): 27}),
+      Counter({((C, C), C): 27})],
+     [Counter({((C, C), C): 27}),
+      Counter({((D, D), D): 24, ((C, D), D): 3}),
+      Counter({((C, C), C): 27}),
       Counter()]]
 
 Normalised state to action distribution
@@ -304,26 +304,26 @@ Normalised state to action distribution
 
 This gives the average rate state to action pair distribution against each
 opponent.  A state corresponds to 1 turn of a match and can be one of
-:code:`('C', 'C'), ('C', 'D'), ('D', 'C'), ('D', 'D')` where the first element
+:code:`(C, C), (C, D), (D, C), (D, D)` where the first element
 is the action of the player in question and the second the action of the
 opponent::
 
     >>> pprint.pprint(results.normalised_state_to_action_distribution) # doctest: +SKIP
     [[Counter(),
-      Counter({(('C', 'D'), 'C'): 1.0}),
-      Counter({(('C', 'C'), 'C'): 1.0}),
-      Counter({(('C', 'C'), 'C'): 1.0})],
-     [Counter({(('D', 'C'), 'D'): 1.0}),
+      Counter({((C, D), C): 1.0}),
+      Counter({((C, C), C): 1.0}),
+      Counter({((C, C), C): 1.0})],
+     [Counter({((D, C), D): 1.0}),
       Counter(),
-      Counter({(('D', 'C'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0}),
-      Counter({(('D', 'C'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0})],
-     [Counter({(('C', 'C'), 'C'): 1.0}),
-      Counter({(('C', 'D'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0}),
+      Counter({((D, C), D): 1.0, ((D, D), D): 1.0}),
+      Counter({((D, C), D): 1.0, ((D, D), D): 1.0})],
+     [Counter({((C, C), C): 1.0}),
+      Counter({((C, D), D): 1.0, ((D, D), D): 1.0}),
       Counter(),
-      Counter({(('C', 'C'), 'C'): 1.0})],
-     [Counter({(('C', 'C'), 'C'): 1.0}),
-      Counter({(('C', 'D'), 'D'): 1.0, (('D', 'D'), 'D'): 1.0}),
-      Counter({(('C', 'C'), 'C'): 1.0}),
+      Counter({((C, C), C): 1.0})],
+     [Counter({((C, C), C): 1.0}),
+      Counter({((C, D), D): 1.0, ((D, D), D): 1.0}),
+      Counter({((C, C), C): 1.0}),
       Counter()]]
 
 Initial cooperation counts

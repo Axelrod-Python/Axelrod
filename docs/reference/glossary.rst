@@ -12,9 +12,9 @@ You can access these actions as follows but should not really have a reason to::
 
     >>> import axelrod as axl
     >>> axl.Actions.C
-    'C'
+    C
     >>> axl.Actions.D
-    'D'
+    D
 
 A play
 ------
@@ -48,7 +48,7 @@ used in the tournament is 200. Here is a single match between two players over
     >>> for turn in range(10):
     ...     p1.play(p2)
     >>> p1.history, p2.history
-    (['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'], ['D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D'])
+    ([C, C, C, C, C, C, C, C, C, C], [D, D, D, D, D, D, D, D, D, D])
 
 A win
 -----

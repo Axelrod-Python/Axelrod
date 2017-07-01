@@ -17,6 +17,8 @@ from axelrod.tests.property import (tournaments,
 import axelrod
 
 
+C, D = axelrod.Actions.C, axelrod.Actions.D
+
 test_strategies = [axelrod.Cooperator,
                    axelrod.TitForTat,
                    axelrod.Defector,
@@ -70,7 +72,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(
             tournament.players[0].match_attributes['game'], axelrod.Game
         )
-        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, self.test_turns)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
@@ -559,7 +561,7 @@ class TestProbEndTournament(unittest.TestCase):
                                         noise=0.2)
         self.assertEqual(tournament.match_generator.prob_end, tournament.prob_end)
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertIsNone(tournament.turns)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
@@ -618,7 +620,7 @@ class TestSpatialTournament(unittest.TestCase):
                                         noise=0.2)
         self.assertEqual(tournament.match_generator.edges, tournament.edges)
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertEqual(tournament.turns, 100)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
@@ -722,7 +724,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
                                         noise=0.2)
         self.assertEqual(tournament.match_generator.edges, tournament.edges)
         self.assertEqual(len(tournament.players), len(test_strategies))
-        self.assertEqual(tournament.game.score(('C', 'C')), (3, 3))
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
         self.assertIsNone(tournament.turns)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')

@@ -82,7 +82,7 @@ class MetaPlayer(Player):
     def meta_strategy(self, results, opponent):
         """Determine the meta result based on results of all players.
         Override this function in child classes."""
-        return 'C'
+        return C
 
     def reset(self):
         super().reset()

@@ -8,7 +8,7 @@ C, D = axl.Actions.C, axl.Actions.D
 
 class TestStalker(TestPlayer):
 
-    name = "Stalker: D"
+    name = "Stalker: (D,)"
     player = axl.Stalker
     expected_classifier = {
         'memory_depth': float('inf'),

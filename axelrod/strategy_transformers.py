@@ -130,10 +130,12 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 prefix = ': '
                 for arg in args:
                     try:
-                        arg = [player.name for player in arg]
-                    except TypeError:
-                        pass
+                        # Action has .name but should not be made into a list
+                        if not any(isinstance(el, Actions) for el in arg):
+                            arg = [player.name for player in arg]
                     except AttributeError:
+                        pass
+                    except TypeError:
                         pass
                     name = ''.join([name, prefix, str(arg)])
                     prefix = ', '

@@ -1,4 +1,4 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Actions, Action, actions_to_str
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import (
@@ -182,11 +182,11 @@ class SneakyTitForTat(Player):
 
     def strategy(self, opponent: Player) -> Action:
         if len(self.history) < 2:
-            return "C"
+            return C
         if D not in opponent.history:
             return D
         if opponent.history[-1] == D and self.history[-2] == D:
-            return "C"
+            return C
         return opponent.history[-1]
 
 
@@ -297,7 +297,7 @@ class HardTitFor2Tats(Player):
         if not opponent.history:
             return C
         # Defects if two consecutive D in the opponent's last three moves
-        history_string = "".join(opponent.history[-3:])
+        history_string = actions_to_str(opponent.history[-3:])
         if 'DD' in history_string:
             return D
         # Otherwise cooperates

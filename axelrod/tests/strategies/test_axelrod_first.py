@@ -367,7 +367,7 @@ class TestUnnamedStrategy(TestPlayer):
 
 class TestSteinAndRapoport(TestPlayer):
 
-    name = "Stein and Rapoport: 0.05: ('D', 'D')"
+    name = "Stein and Rapoport: 0.05: (D, D)"
     player = axelrod.SteinAndRapoport
     expected_classifier = {
         'memory_depth': 15,

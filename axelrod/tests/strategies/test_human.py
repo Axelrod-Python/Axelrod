@@ -1,7 +1,8 @@
 from os import linesep
 from unittest import TestCase
+from unittest.mock import patch
 from prompt_toolkit.validation import ValidationError
-from axelrod import Actions, Player
+from axelrod import Actions, Player, Cooperator
 from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
 
@@ -21,7 +22,7 @@ class TestDocument(object):
 class TestActionValidator(TestCase):
 
     def test_validator(self):
-        test_documents = [TestDocument(x) for x in [C, C, D, D]]
+        test_documents = [TestDocument(x) for x in ['C', 'c', 'D', 'd']]
         for test_document in test_documents:
             ActionValidator().validate(test_document)
 
@@ -79,12 +80,33 @@ class TestHumanClass(TestPlayer):
         self.assertEqual(actual_messages['print'], expected_print_message)
         self.assertIsNotNone(actual_messages['toolbar'])
 
-    def test_get_human_input(self):
-        # There are no tests for this method.
-        # The method purely calls prompt_toolkit.prompt which is difficult to
-        # test and we therefore rely upon the test suite of the prompt_toolkit
-        # library itself.
-        pass
+    def test_get_human_input_c(self):
+        with patch('axelrod.human.prompt', return_value='c') as prompt_:
+            actions = [(C, C)] * 5
+            self.versus_test(Cooperator(), expected_actions=actions)
+            self.assertEqual(prompt_.call_args[0],
+                             ('Turn 5 action [C or D] for human: ',))
+
+    def test_get_human_input_C(self):
+        with patch('axelrod.human.prompt', return_value='C') as prompt_:
+            actions = [(C, C)] * 5
+            self.versus_test(Cooperator(), expected_actions=actions)
+            self.assertEqual(prompt_.call_args[0],
+                             ('Turn 5 action [C or D] for human: ',))
+
+    def test_get_human_input_d(self):
+        with patch('axelrod.human.prompt', return_value='d') as prompt_:
+            actions = [(D, C)] * 5
+            self.versus_test(Cooperator(), expected_actions=actions)
+            self.assertEqual(prompt_.call_args[0],
+                             ('Turn 5 action [C or D] for human: ',))
+
+    def test_get_human_input_D(self):
+        with patch('axelrod.human.prompt', return_value='D') as prompt_:
+            actions = [(D, C)] * 5
+            self.versus_test(Cooperator(), expected_actions=actions)
+            self.assertEqual(prompt_.call_args[0],
+                             ('Turn 5 action [C or D] for human: ',))
 
     def test_strategy(self):
         human = Human()

@@ -571,7 +571,7 @@ class TestAlexei(TestPlayer):
     Tests for the Alexei strategy
     """
 
-    name = "Alexei: ('D',)"
+    name = "Alexei: (D,)"
     player = axelrod.Alexei
     expected_classifier = {
         'memory_depth': float('inf'),
@@ -605,7 +605,7 @@ class TestEugineNier(TestPlayer):
     Tests for the Eugine Nier strategy
     """
 
-    name = "EugineNier: ('D',)"
+    name = "EugineNier: (D,)"
     player = axelrod.EugineNier
     expected_classifier = {
         'memory_depth': float('inf'),

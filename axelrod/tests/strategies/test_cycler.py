@@ -68,7 +68,8 @@ class TestBasicCycler(TestPlayer):
 
     def test_cycler_works_as_expected(self):
         expected = [(C, D), (D, D), (D, D), (C, D)] * 2
-        self.versus_test(axelrod.Defector(), expected_actions=expected, init_kwargs={'cycle': 'CDDC'})
+        self.versus_test(axelrod.Defector(), expected_actions=expected,
+                         init_kwargs={'cycle': 'CDDC'})
 
     def test_cycle_raises_value_error_on_bad_cycle_str(self):
         self.assertRaises(ValueError, Cycler, cycle='CdDC')

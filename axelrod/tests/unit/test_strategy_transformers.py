@@ -47,7 +47,7 @@ class TestTransformers(unittest.TestCase):
         """
         self.assertEqual(str(ForgiverTransformer(0.5)(axelrod.Alternator)()), "Forgiving Alternator: 0.5")
         self.assertEqual(str(InitialTransformer([D, D, C])(axelrod.Alternator)()),
-                         "Initial Alternator: ['D', 'D', 'C']")
+                         "Initial Alternator: [D, D, C]")
         self.assertEqual(str(FlipTransformer()(axelrod.Random)(0.1)), "Flipped Random: 0.1")
         self.assertEqual(str(MixedTransformer(0.3, (axelrod.Alternator, axelrod.Bully))(axelrod.Random)(0.1)),
                          "Mutated Random: 0.1: 0.3, ['Alternator', 'Bully']")

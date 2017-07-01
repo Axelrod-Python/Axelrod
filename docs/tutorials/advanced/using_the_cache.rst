@@ -35,12 +35,12 @@ Let us rerun the above match but using the cache::
     >>> p1, p2 = axl.GoByMajority(), axl.Alternator()
     >>> match = axl.Match((p1, p2), turns=200, deterministic_cache=cache)
     >>> match.play()  # doctest: +ELLIPSIS
-    [('C', 'C'), ..., ('C', 'D')]
+    [(C, C), ..., (C, D)]
 
 We can take a look at the cache::
 
     >>> cache  # doctest: +ELLIPSIS
-    {('Soft Go By Majority', 'Alternator', 200): [('C', 'C'), ..., ('C', 'D')]}
+    {('Soft Go By Majority', 'Alternator', 200): [(C, C), ..., (C, D)]}
     >>> len(cache)
     1
 

@@ -136,7 +136,7 @@ class Human(Player):
             get_bottom_toolbar_tokens=self.status_messages['toolbar'],
             style=toolbar_style)
 
-        return action.upper()
+        return Actions.from_char(action.upper())
 
     def strategy(self, opponent: Player, input_function=None):
         """

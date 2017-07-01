@@ -1,27 +1,50 @@
 import unittest
 from axelrod import Actions, flip_action
-from axelrod.actions import str_to_actions
+from axelrod.actions import str_to_actions, UnknownActionError,  actions_to_str
 
 C, D = Actions.C, Actions.D
 
 
 class TestAction(unittest.TestCase):
 
-    def test_action_values(self):
-        self.assertEqual(C, 'C')
-        self.assertEqual(D, 'D')
-        self.assertNotEqual(D, 'd')
-        self.assertNotEqual(C, 'c')
-        self.assertNotEqual(D, 0)
-        self.assertNotEqual(C, 1)
-        self.assertNotEqual(C, D)
+    def test_repr(self):
+        self.assertEqual(repr(C), 'C')
+        self.assertEqual(repr(D), 'D')
+
+    def test_str(self):
+        self.assertEqual(str(C), 'C')
+        self.assertEqual(str(D), 'D')
+
+    def test_bool(self):
+        self.assertTrue(C)
+        self.assertFalse(D)
+
+    def test__eq__(self):
+        self.assertTrue(C == C)
+        self.assertTrue(D == D)
+        self.assertFalse(C == D)
+        self.assertFalse(D == C)
+
+    def test_flip(self):
+        self.assertEqual(C.flip(), D)
+        self.assertEqual(D.flip(), C)
+
+    def test_from_char(self):
+        self.assertEqual(Actions.from_char('C'), C)
+        self.assertEqual(Actions.from_char('D'), D)
+
+    def test_from_char_error(self):
+        self.assertRaises(UnknownActionError, Actions.from_char, '')
+        self.assertRaises(UnknownActionError, Actions.from_char, 'c')
+        self.assertRaises(UnknownActionError, Actions.from_char, 'd')
+        self.assertRaises(UnknownActionError, Actions.from_char, 'A')
 
     def test_flip_action(self):
         self.assertEqual(flip_action(D), C)
         self.assertEqual(flip_action(C), D)
 
-    def test_error(self):
-        self.assertRaises(ValueError, flip_action, 'R')
+    def test_flip_action_error(self):
+        self.assertRaises(UnknownActionError, flip_action, 'R')
 
     def test_str_to_actions(self):
         self.assertEqual(str_to_actions(''), ())
@@ -29,4 +52,14 @@ class TestAction(unittest.TestCase):
         self.assertEqual(str_to_actions('CDDC'), (C, D, D, C))
 
     def test_str_to_actions_fails_fast_and_raises_value_error(self):
-        self.assertRaises(ValueError, str_to_actions, 'Cc')
+        self.assertRaises(UnknownActionError, str_to_actions, 'Cc')
+
+    def test_actions_to_str(self):
+        self.assertEqual(actions_to_str([]), "")
+        self.assertEqual(actions_to_str([C, D, C]), "CDC")
+        self.assertEqual(actions_to_str((C, C, D)), "CCD")
+
+    def test_actions_to_str_with_iterable(self):
+        self.assertEqual(actions_to_str(iter([C, D, C])), "CDC")
+        generator = (action for action in [C, D, C])
+        self.assertEqual(actions_to_str(generator), "CDC")

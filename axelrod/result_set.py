@@ -4,7 +4,7 @@ import csv
 from numpy import mean, nanmedian, std
 import tqdm
 
-from axelrod.actions import Actions
+from axelrod.actions import Actions, str_to_actions
 import axelrod.interaction_utils as iu
 from . import eigen
 from .game import Game
@@ -848,8 +848,8 @@ class ResultSet(object):
         for player in self.normalised_state_to_action_distribution:
             rates = []
             for state in states:
-                counts = [counter[(state, 'C')] for counter in player
-                          if counter[(state, 'C')] > 0]
+                counts = [counter[(state, C)] for counter in player
+                          if counter[(state, C)] > 0]
 
                 if len(counts) > 0:
                     rate = mean(counts)
@@ -1075,7 +1075,9 @@ class ResultSetFromFile(ResultSet):
             count = 0
             for row in csv_reader:
                 index_and_names = row[:4]
-                interactions = list(zip(row[4], row[5]))
+                p1_actions = str_to_actions(row[4])
+                p2_actions = str_to_actions(row[5])
+                interactions = list(zip(p1_actions, p2_actions))
                 repetitions.append(index_and_names + interactions)
                 count += 1
                 if progress_bar:
