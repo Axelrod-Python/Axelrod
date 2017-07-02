@@ -200,7 +200,7 @@ IdentityTransformer = StrategyTransformerFactory(generic_strategy_wrapper)
 
 
 def flip_wrapper(player, opponent, action):
-    """Applies Action.flip() at the class level."""
+    """Flips the player's original actions."""
     return action.flip()
 
 
@@ -240,7 +240,7 @@ DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
 
 
 def noisy_wrapper(player, opponent, action, noise=0.05):
-    """Applies Action.flip() at the class level."""
+    """Flips the player's actions with probability: `noise`."""
     r = random.random()
     if r < noise:
         return action.flip()
