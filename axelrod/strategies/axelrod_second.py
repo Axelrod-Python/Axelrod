@@ -4,7 +4,7 @@ Additional strategies from Axelrod's second tournament.
 
 import random
 
-from axelrod.actions import Actions, Action, flip_action
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
@@ -139,7 +139,7 @@ class Tester(Player):
             if len(self.history) in [1, 2]:
                 return C
             # Alternate C and D
-            return flip_action(self.history[-1])
+            return self.history[-1].flip()
 
     def reset(self):
         super().reset()

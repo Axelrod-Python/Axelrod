@@ -2,7 +2,6 @@ import unittest
 
 import axelrod
 from axelrod.strategy_transformers import *
-from axelrod.actions import flip_action
 from axelrod.tests.strategies.test_titfortat import TestTitForTat
 from axelrod.tests.strategies.test_cooperator import TestCooperator
 
@@ -102,7 +101,7 @@ class TestTransformers(unittest.TestCase):
         for _ in range(10):
             p2.play(p3)
 
-        self.assertEqual(p1.history, [flip_action(x) for x in p2.history])
+        self.assertEqual(p1.history, [x.flip() for x in p2.history])
 
     def test_dual_tft_transformer(self):
         """Tests that DualTransformer produces the opposite results when faced
@@ -119,7 +118,7 @@ class TestTransformers(unittest.TestCase):
         for _ in range(10):
             p2.play(p3)
 
-        self.assertEqual(p1.history, [flip_action(x) for x in p2.history])
+        self.assertEqual(p1.history, [x.flip() for x in p2.history])
 
     def test_dual_majority_transformer(self):
         """Tests that DualTransformer produces the opposite results when faced
@@ -136,7 +135,7 @@ class TestTransformers(unittest.TestCase):
         for _ in range(10):
             p2.play(p3)
 
-        self.assertEqual(p1.history, [flip_action(x) for x in p2.history])
+        self.assertEqual(p1.history, [x.flip() for x in p2.history])
 
     def test_jossann_transformer(self):
         """Tests the JossAnn transformer.

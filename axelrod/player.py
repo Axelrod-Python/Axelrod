@@ -6,7 +6,7 @@ import random
 
 import numpy as np
 
-from axelrod.actions import Actions, flip_action
+from axelrod.actions import Actions
 from .game import DefaultGame
 
 import types
@@ -208,10 +208,10 @@ class Player(object):
     def _add_noise(noise, s1, s2):
         r = random.random()
         if r < noise:
-            s1 = flip_action(s1)
+            s1 = s1.flip()
         r = random.random()
         if r < noise:
-            s2 = flip_action(s2)
+            s2 = s2.flip()
         return s1, s2
 
     def strategy(self, opponent):

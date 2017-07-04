@@ -4,7 +4,7 @@ Additional strategies from Axelrod's first tournament.
 
 import random
 
-from axelrod.actions import Actions, flip_action, Action
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import FinalTransformer
@@ -124,7 +124,7 @@ class RevisedDowning(Player):
         if (c >= 0 and c >= alt):
             move = C
         elif (c >= 0 and c < alt) or (alt >= 0):
-            move = flip_action(self.history[-1])
+            move = self.history[-1].flip()
         else:
             move = D
         return move

@@ -1,4 +1,4 @@
-from axelrod.actions import Actions, flip_action, Action
+from axelrod.actions import Actions, Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
@@ -31,4 +31,4 @@ class Negation(Player):
         if not self.history:
             return random_choice()
         # Act opposite of opponent otherwise
-        return flip_action(opponent.history[-1])
+        return opponent.history[-1].flip()
