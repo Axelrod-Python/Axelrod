@@ -4,7 +4,7 @@ Additional strategies from Axelrod's first tournament.
 
 import random
 
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import FinalTransformer
@@ -14,7 +14,7 @@ from scipy.stats import chisquare
 
 from typing import List, Dict, Tuple
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class Davis(Player):
@@ -311,7 +311,7 @@ class Nydegger(Player):
 
     @staticmethod
     def score_history(my_history: List[Action], opponent_history: List[Action],
-        score_map: Dict[Tuple[Action, Action], int]) -> int:
+        score_map: Dict[Tuple[Action], int]) -> int:
 
         """Implements the Nydegger formula A = 16 a_1 + 4 a_2 + a_3"""
         a = 0

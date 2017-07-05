@@ -3,7 +3,7 @@
 import axelrod as axl
 from .test_player import TestPlayer
 
-C, D = axl.Actions.C, axl.Actions.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestGradualKiller(TestPlayer):

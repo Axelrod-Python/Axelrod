@@ -1,12 +1,12 @@
 import numpy as np
 
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 from axelrod.load_data_ import load_weights
 
 from typing import List, Tuple
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 nn_weights = load_weights()
 
 

@@ -1,8 +1,8 @@
 import unittest
-from axelrod import Actions
+from axelrod import Action
 from axelrod.actions import str_to_actions, UnknownActionError,  actions_to_str
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TestAction(unittest.TestCase):
@@ -30,14 +30,14 @@ class TestAction(unittest.TestCase):
         self.assertEqual(D.flip(), C)
 
     def test_from_char(self):
-        self.assertEqual(Actions.from_char('C'), C)
-        self.assertEqual(Actions.from_char('D'), D)
+        self.assertEqual(Action.from_char('C'), C)
+        self.assertEqual(Action.from_char('D'), D)
 
     def test_from_char_error(self):
-        self.assertRaises(UnknownActionError, Actions.from_char, '')
-        self.assertRaises(UnknownActionError, Actions.from_char, 'c')
-        self.assertRaises(UnknownActionError, Actions.from_char, 'd')
-        self.assertRaises(UnknownActionError, Actions.from_char, 'A')
+        self.assertRaises(UnknownActionError, Action.from_char, '')
+        self.assertRaises(UnknownActionError, Action.from_char, 'c')
+        self.assertRaises(UnknownActionError, Action.from_char, 'd')
+        self.assertRaises(UnknownActionError, Action.from_char, 'A')
 
     def test_str_to_actions(self):
         self.assertEqual(str_to_actions(''), ())

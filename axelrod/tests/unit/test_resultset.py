@@ -10,7 +10,7 @@ import axelrod.interaction_utils as iu
 from axelrod.tests.property import tournaments, prob_end_tournaments
 
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 class TestResultSet(unittest.TestCase):
 
@@ -534,7 +534,7 @@ class TestResultSet(unittest.TestCase):
                 self.assertLessEqual(rate, 1)
                 self.assertGreaterEqual(rate, 0)
 
-    # When converting Actions to Enum, test coverage gap exposed from example in
+    # When converting Action to Enum, test coverage gap exposed from example in
     # docs/tutorial/getting_started/summarising_tournaments.rst
     def test_summarise_regression_test(self):
         players = [axelrod.Cooperator(), axelrod.Defector(),

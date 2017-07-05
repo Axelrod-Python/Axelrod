@@ -4,10 +4,10 @@ from prompt_toolkit.token import Token
 from prompt_toolkit.styles import style_from_dict
 from prompt_toolkit.validation import Validator, ValidationError
 
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 toolbar_style = style_from_dict({
     Token.Toolbar: '#ffffff bg:#333333',
@@ -136,7 +136,7 @@ class Human(Player):
             get_bottom_toolbar_tokens=self.status_messages['toolbar'],
             style=toolbar_style)
 
-        return Actions.from_char(action.upper())
+        return Action.from_char(action.upper())
 
     def strategy(self, opponent: Player, input_function=None):
         """

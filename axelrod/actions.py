@@ -18,7 +18,7 @@ class UnknownActionError(ValueError):
         super(UnknownActionError, self).__init__(*args)
 
 
-class Actions(Enum):
+class Action(Enum):
 
     C = 1
     D = 0
@@ -34,10 +34,10 @@ class Actions(Enum):
 
     def flip(self):
         """Returns the opposite Action. """
-        if self == Actions.C:
-            return Actions.D
-        if self == Actions.D:
-            return Actions.C
+        if self == Action.C:
+            return Action.D
+        if self == Action.D:
+            return Action.C
 
     @classmethod
     def from_char(cls, character):
@@ -52,13 +52,13 @@ class Actions(Enum):
             raise UnknownActionError('Character must be "C" or "D".')
 
 # Type alias for actions.
-Action = Actions
+Action = Action
 
 
 def str_to_actions(actions: str) -> tuple:
     """Takes a string like 'CCDD' and returns a tuple of the appropriate
     actions."""
-    return tuple(Actions.from_char(element) for element in actions)
+    return tuple(Action.from_char(element) for element in actions)
 
 
 def actions_to_str(actions: Iterable[Action]) -> str:

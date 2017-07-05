@@ -6,7 +6,7 @@ from .test_player import TestPlayer
 from axelrod.strategies.finite_state_machines import SimpleFSM
 
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestSimpleFSM(unittest.TestCase):

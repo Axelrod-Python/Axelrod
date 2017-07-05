@@ -60,7 +60,7 @@ class DeterministicCache(UserDict):
     def __delitem__(self, key: CachePlayerKey):
         return super().__delitem__(self._key_transform(key))
 
-    def __getitem__(self, key: CachePlayerKey) -> List[Tuple[Action, Action]]:
+    def __getitem__(self, key: CachePlayerKey) -> List[Tuple[Action]]:
         return super().__getitem__(self._key_transform(key))
 
     def __contains__(self, key):

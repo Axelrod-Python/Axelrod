@@ -1,8 +1,8 @@
-from axelrod.actions import Action, Actions
+from axelrod.actions import Action
 from axelrod.player import Player
 from axelrod.strategy_transformers import FinalTransformer
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 @FinalTransformer((D, D), name_prefix=None)  # End with two defections

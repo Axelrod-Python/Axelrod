@@ -1,4 +1,4 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
@@ -7,7 +7,7 @@ from typing import List, Tuple, Union
 type_four_vector = Union[List[float], Tuple[float, float, float, float]]
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class MemoryOnePlayer(Player):

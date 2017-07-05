@@ -3,12 +3,12 @@ The player classes in this module do not obey standard rules of the IPD (as
 indicated by their classifier). We do not recommend putting a lot of time in to
 optimising them.
 """
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 from axelrod._strategy_utils import look_ahead, inspect_strategy
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class MindReader(Player):

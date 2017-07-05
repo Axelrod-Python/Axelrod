@@ -11,9 +11,9 @@ An **action** is either :code:`C` or :code:`D`.
 You can access these actions as follows but should not really have a reason to::
 
     >>> import axelrod as axl
-    >>> axl.Actions.C
+    >>> axl.Action.C
     C
-    >>> axl.Actions.D
+    >>> axl.Action.D
     D
 
 A play

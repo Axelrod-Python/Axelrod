@@ -1,11 +1,11 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 from axelrod._strategy_utils import thue_morse_generator
 
 from types import FunctionType
 from typing import Tuple
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class SequencePlayer(Player):
@@ -30,9 +30,9 @@ class SequencePlayer(Player):
         By default, treat values like python truth values. Override in child
         classes for alternate behaviors."""
         if value == 0:
-            return Actions.D
+            return Action.D
         else:
-            return Actions.C
+            return Action.C
 
     def strategy(self, opponent: Player) -> Action:
         # Iterate through the sequence and apply the meta strategy

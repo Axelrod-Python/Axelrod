@@ -6,7 +6,7 @@ from hypothesis import given
 from hypothesis.strategies import integers
 from axelrod.tests.property import strategy_lists
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 deterministic_strategies = [s for s in axelrod.strategies
                             if not s().classifier['stochastic']]

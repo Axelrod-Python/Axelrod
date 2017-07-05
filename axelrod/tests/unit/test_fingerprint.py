@@ -14,7 +14,7 @@ except ImportError:  # pragma: no cover
     matplotlib_installed = False
 
 
-C, D = axl.Actions.C, axl.Actions.D
+C, D = axl.Action.C, axl.Action.D
 
 
 class TestFingerprint(unittest.TestCase):

@@ -15,13 +15,13 @@ These :code:`Game` objects are used to score :ref:`matches <creating_matches>`,
 :ref:`tournaments <creating_tournaments>` and :ref:`Moran processes
 <moran-process>`::
 
-    >>> pd.score((axl.Actions.C, axl.Actions.C))
+    >>> pd.score((axl.Action.C, axl.Action.C))
     (3, 3)
-    >>> pd.score((axl.Actions.C, axl.Actions.D))
+    >>> pd.score((axl.Action.C, axl.Action.D))
     (0, 5)
-    >>> pd.score((axl.Actions.D, axl.Actions.C))
+    >>> pd.score((axl.Action.D, axl.Action.C))
     (5, 0)
-    >>> pd.score((axl.Actions.D, axl.Actions.D))
+    >>> pd.score((axl.Action.D, axl.Action.D))
     (1, 1)
 
 It is possible to run a matches, tournaments and Moran processes with a

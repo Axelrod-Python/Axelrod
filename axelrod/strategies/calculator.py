@@ -1,9 +1,9 @@
-from axelrod.actions import Action, Actions
+from axelrod.actions import Action
 from axelrod.player import Player
 from .axelrod_first import Joss
 from axelrod._strategy_utils import detect_cycle
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class Calculator(Player):

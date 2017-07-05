@@ -8,7 +8,7 @@ from axelrod.tests.property import strategy_lists
 from .test_player import TestMatch, TestPlayer
 
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestTitForTat(TestPlayer):

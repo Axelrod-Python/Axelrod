@@ -5,7 +5,7 @@ import axelrod
 from axelrod.strategies import dbs
 from .test_player import TestPlayer
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestNode(unittest.TestCase):

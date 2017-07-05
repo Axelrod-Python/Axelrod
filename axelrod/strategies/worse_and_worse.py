@@ -1,8 +1,8 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class WorseAndWorse(Player):

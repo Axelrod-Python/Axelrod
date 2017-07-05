@@ -5,7 +5,7 @@ import axelrod
 from .test_player import TestMatch, TestPlayer
 from axelrod.strategies.hmm import SimpleHMM, is_stochastic_matrix
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestHMMPlayers(unittest.TestCase):

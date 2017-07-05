@@ -1,11 +1,11 @@
 from itertools import cycle
 
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 
 from typing import List
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class MockPlayer(Player):

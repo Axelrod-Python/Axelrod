@@ -1,7 +1,7 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class Resurrection(Player):
@@ -13,7 +13,7 @@ class Resurrection(Player):
     Otherwise, the strategy plays like Tit-for-tat.
 
     Names:
-    
+
     - Resurrection: [Eckhart2015]_
     """
 
@@ -47,7 +47,7 @@ class DoubleResurrection(Player):
     If the last five rounds were defections, the player cooperates.
 
     Names:
-    
+
     - DoubleResurrection: [Eckhart2015]_
     """
 

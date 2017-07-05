@@ -1,10 +1,10 @@
-from axelrod.actions import Actions, Action, actions_to_str
+from axelrod.actions import Action, actions_to_str
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import (
     TrackHistoryTransformer, FinalTransformer)
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TitForTat(Player):

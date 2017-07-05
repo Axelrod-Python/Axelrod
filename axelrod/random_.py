@@ -1,6 +1,6 @@
 import random
 import numpy
-from axelrod.actions import Action, Actions
+from axelrod.actions import Action
 
 
 def random_choice(p: float = 0.5) -> Action:
@@ -19,15 +19,15 @@ def random_choice(p: float = 0.5) -> Action:
     axelrod.Action
     """
     if p == 0:
-        return Actions.D
+        return Action.D
 
     if p == 1:
-        return Actions.C
+        return Action.C
 
     r = random.random()
     if r < p:
-        return Actions.C
-    return Actions.D
+        return Action.C
+    return Action.D
 
 
 def randrange(a: int, b: int) -> int:

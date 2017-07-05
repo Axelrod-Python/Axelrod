@@ -4,7 +4,7 @@ import axelrod
 from .test_player import TestPlayer
 from axelrod import MockPlayer
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestHardGoByMajority(TestPlayer):

@@ -1,7 +1,7 @@
 import unittest
 import axelrod
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestSampleTournaments(unittest.TestCase):

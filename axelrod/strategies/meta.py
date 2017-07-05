@@ -1,6 +1,6 @@
 from numpy.random import choice
 
-from axelrod.actions import Actions
+from axelrod.actions import Action
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategy_transformers import NiceTransformer
 from ._strategies import all_strategies
@@ -11,7 +11,7 @@ from .hunter import (
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class MetaPlayer(Player):

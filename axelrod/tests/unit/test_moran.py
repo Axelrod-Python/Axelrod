@@ -10,7 +10,7 @@ from axelrod import Match, MoranProcess, ApproximateMoranProcess, Pdf
 from axelrod.moran import fitness_proportionate_selection
 from axelrod.tests.property import strategy_lists
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestMoranProcess(unittest.TestCase):

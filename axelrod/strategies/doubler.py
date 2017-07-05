@@ -1,7 +1,7 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class Doubler(Player):

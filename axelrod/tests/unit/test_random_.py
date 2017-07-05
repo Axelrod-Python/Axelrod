@@ -3,9 +3,9 @@ from collections import Counter
 import random
 import unittest
 import numpy
-from axelrod import random_choice, seed, Actions, Pdf
+from axelrod import random_choice, seed, Action, Pdf
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TestRandom_(unittest.TestCase):

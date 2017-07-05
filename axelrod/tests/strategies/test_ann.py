@@ -6,7 +6,7 @@ from axelrod.strategies.ann import split_weights
 from .test_player import TestMatch, TestPlayer
 
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestSplitWeights(unittest.TestCase):

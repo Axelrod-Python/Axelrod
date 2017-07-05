@@ -1,9 +1,9 @@
-from axelrod.actions import Actions, Action
+from axelrod.actions import Action
 from axelrod.player import Player
 from .titfortat import TitForTat, TitFor2Tats
 from .defector import Defector
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class MEM2(Player):

@@ -1,9 +1,9 @@
 import pickle
 import os
 import unittest
-from axelrod import Actions, Defector, DeterministicCache, Random, TitForTat
+from axelrod import Action, Defector, DeterministicCache, Random, TitForTat
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TestDeterministicCache(unittest.TestCase):

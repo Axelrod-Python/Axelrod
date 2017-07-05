@@ -1,14 +1,14 @@
 from math import ceil, log
 import random
 
-from axelrod.actions import Actions
+from axelrod.actions import Action
 from axelrod.game import Game
 from axelrod import DEFAULT_TURNS
 import axelrod.interaction_utils as iu
 from .deterministic_cache import DeterministicCache
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 def is_stochastic(players, noise):

@@ -63,7 +63,7 @@ As an example, the tests for Tit-For-Tat are as follows::
     import axelrod
     from test_player import TestPlayer
 
-    C, D = axelrod.Actions.C, axelrod.Actions.D
+    C, D = axelrod.Action.C, axelrod.Action.D
 
     class TestTitForTat(TestPlayer):
         """

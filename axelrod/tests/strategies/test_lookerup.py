@@ -11,7 +11,7 @@ from .test_player import TestPlayer
 
 from axelrod.actions import str_to_actions
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestLookupTable(unittest.TestCase):
