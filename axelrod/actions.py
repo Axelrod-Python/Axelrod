@@ -3,10 +3,10 @@ Defines the core actions for the Prisoner's Dilemma:
 * Cooperate
 * Defect
 
-Use Actions.C and Actions.D instead of 'C' or 'D'. For convenience you can use:
+Uses the enumeration, Action.C and Action.D. For convenience you can use:
 
-from Axelrod import Actions
-C, D = Actions.C, Actions.D
+from axelrod import Action
+C, D = Action.C, Action.D
 """
 
 from enum import Enum
@@ -50,9 +50,6 @@ class Action(Enum):
             return cls.D
         else:
             raise UnknownActionError('Character must be "C" or "D".')
-
-# Type alias for actions.
-Action = Action
 
 
 def str_to_actions(actions: str) -> tuple:
