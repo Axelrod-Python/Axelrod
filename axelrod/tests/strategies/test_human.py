@@ -2,12 +2,12 @@ from os import linesep
 from unittest import TestCase
 from unittest.mock import patch
 from prompt_toolkit.validation import ValidationError
-from axelrod import Actions, Player, Cooperator
+from axelrod import Action, Player, Cooperator
 from axelrod.strategies.human import Human, ActionValidator
 from .test_player import TestPlayer
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TestDocument(object):

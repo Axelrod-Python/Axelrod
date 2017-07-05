@@ -11,11 +11,11 @@ from collections import Counter
 import csv
 import tqdm
 
-from axelrod.actions import Actions, str_to_actions
+from axelrod.actions import Action, str_to_actions
 from .game import Game
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 def compute_scores(interactions, game=None):
@@ -282,7 +282,7 @@ def string_to_interactions(string):
     interactions = []
     interactions_list = list(string)
     while interactions_list:
-        p1action = Actions.from_char(interactions_list.pop(0))
-        p2action = Actions.from_char(interactions_list.pop(0))
+        p1action = Action.from_char(interactions_list.pop(0))
+        p2action = Action.from_char(interactions_list.pop(0))
         interactions.append((p1action, p2action))
     return interactions

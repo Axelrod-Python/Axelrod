@@ -1,7 +1,7 @@
-from axelrod import Actions, Player
+from axelrod import Player
 from axelrod.actions import Action
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class ShortMem(Player):

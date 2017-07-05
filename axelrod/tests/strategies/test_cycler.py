@@ -2,12 +2,12 @@
 
 import itertools
 import axelrod
-from axelrod.actions import Actions, str_to_actions
+from axelrod.actions import Action, str_to_actions
 from .test_player import TestPlayer
 from axelrod import Cycler, AntiCycler
 from axelrod._strategy_utils import detect_cycle
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TestAntiCycler(TestPlayer):
@@ -103,7 +103,7 @@ def test_cycler_factory(cycle_str):
 
 def _get_actions_cycle_against_cooperator(cycle_string: str):
     """Converts str like 'CCDC' to an itertools.cycle against Cooperator [(C, C), (C, C), (D, C), (C, C)]
-    (Where C=Actions.C, D=Actions.D)"""
+    (Where C=Action.C, D=Action.D)"""
     cooperator_opponent_action = C
     action_iterator = str_to_actions(cycle_string)
     out = [(action, cooperator_opponent_action) for action in action_iterator]

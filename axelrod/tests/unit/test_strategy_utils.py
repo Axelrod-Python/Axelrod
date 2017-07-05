@@ -7,10 +7,10 @@ import axelrod
 from hypothesis import given
 from hypothesis.strategies import sampled_from, lists, integers
 
-from axelrod import Actions
+from axelrod import Action
 from axelrod._strategy_utils import detect_cycle, inspect_strategy
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TestDetectCycle(unittest.TestCase):

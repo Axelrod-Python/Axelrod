@@ -3,7 +3,7 @@
 import axelrod
 from .test_player import TestPlayer
 from axelrod._strategy_utils import detect_cycle
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestCalculator(TestPlayer):

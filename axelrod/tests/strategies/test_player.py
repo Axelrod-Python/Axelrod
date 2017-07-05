@@ -9,7 +9,7 @@ from axelrod import DefaultGame, Player
 from axelrod.player import get_state_distribution_from_history, update_history
 
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 # Generic strategy functions for testing

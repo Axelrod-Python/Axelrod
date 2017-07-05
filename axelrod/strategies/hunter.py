@@ -1,10 +1,10 @@
-from axelrod.actions import Action, Actions
+from axelrod.actions import Action
 from axelrod.player import Player
 from axelrod._strategy_utils import detect_cycle
 
 from typing import List, Tuple
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class DefectorHunter(Player):

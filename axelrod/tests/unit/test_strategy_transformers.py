@@ -5,7 +5,7 @@ from axelrod.strategy_transformers import *
 from axelrod.tests.strategies.test_titfortat import TestTitForTat
 from axelrod.tests.strategies.test_cooperator import TestCooperator
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 @IdentityTransformer

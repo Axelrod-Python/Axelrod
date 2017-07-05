@@ -6,7 +6,7 @@ import axelrod
 from axelrod import Game
 from .test_player import TestPlayer
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestRiskyQLearner(TestPlayer):

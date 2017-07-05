@@ -1,7 +1,7 @@
-from .actions import Action, Actions
+from .actions import Action
 from typing import Tuple, Union
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 Score = Union[int, float]
 
@@ -26,7 +26,7 @@ class Game(object):
         T = self.scores[(D, C)][0]
         return (R, P, S, T)
 
-    def score(self, pair: Tuple[Action, Action]) -> Tuple[Score, Score]:
+    def score(self, pair: Tuple[Action]) -> Tuple[Score, Score]:
         """Return the appropriate score for decision pair.
 
         Returns the appropriate score (as a tuple) from the scores dictionary

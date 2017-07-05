@@ -1,7 +1,7 @@
-from axelrod.actions import Action, Actions
+from axelrod.actions import Action
 from axelrod.player import Player
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class DBS(Player):
@@ -140,7 +140,7 @@ class DBS(Player):
 
         Parameters
 
-        r_plus: tuple of (tuple of actions.Actions, actions.Actions)
+        r_plus: tuple of (tuple of actions.Action, actions.Action)
             example: ((C, C), D)
             r_plus represents one outcome of the history, and the
             following move played by the opponent.
@@ -204,7 +204,7 @@ class DBS(Player):
 
         Parameters
 
-        outcome: tuple of two actions.Actions
+        outcome: tuple of two actions.Action
         alpha: int, optional. Discount factor. Default is 1.
         """
         G = self.history_by_cond[outcome][0]

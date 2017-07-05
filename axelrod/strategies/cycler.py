@@ -1,10 +1,10 @@
 import copy
 import itertools
 
-from axelrod.actions import Actions, Action, str_to_actions
+from axelrod.actions import Action, str_to_actions
 from axelrod.player import Player
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class AntiCycler(Player):

@@ -4,7 +4,7 @@ import axelrod
 import random
 from .test_player import TestPlayer
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 class TestSelfSteem(TestPlayer):
 
@@ -20,7 +20,7 @@ class TestSelfSteem(TestPlayer):
     }
 
     def test_strategy(self):
-         
+
         # Check for f > 0.95, defect
         actions = [(C, C), (C, C), (D, C), (D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
@@ -28,12 +28,12 @@ class TestSelfSteem(TestPlayer):
         actions = [(C, C), (C, C), (D, C),
                    (D, C), (C, C), (D, C)] + [(C, C)] * 6 + [(D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
-            
+
         # Check for f < -0.95, cooperate
         actions = [(D, C), (C, C), (D, C),(D, C),
                    (C, C), (D, C), (C, C), (C, C)]
         self.versus_test(opponent=axelrod.MockPlayer(actions=[C]), expected_actions=actions)
-            
+
         actions = [(C, D)] + [(D, D)] * 6 + [(C, D),
                    (C, D)] + [(D, D)] * 6 + [(C, D)]
         self.versus_test(opponent=axelrod.MockPlayer(actions=[D]), expected_actions=actions)
@@ -42,7 +42,7 @@ class TestSelfSteem(TestPlayer):
         actions = [(D, C), (C, C), (D, C), (D, C),
                    (C, C), (D, C)] + [(C, C)] * 6 + [(D, C),(D, C)] + [(C, C)] * 7
         self.versus_test(opponent=axelrod.MockPlayer(actions=[C]), expected_actions=actions, seed=6)
-            
+
         actions = [(D, D)] * 7 + [(C, D), (C, D)] + [(D, D)] * 8 + [(C, D),
                    (C, D), (D, D), (D, D), (D, D)]
         self.versus_test(opponent=axelrod.MockPlayer(actions=[D]), expected_actions=actions, seed=5)

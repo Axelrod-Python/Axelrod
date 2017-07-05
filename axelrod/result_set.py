@@ -4,13 +4,13 @@ import csv
 from numpy import mean, nanmedian, std
 import tqdm
 
-from axelrod.actions import Actions, str_to_actions
+from axelrod.actions import Action, str_to_actions
 import axelrod.interaction_utils as iu
 from . import eigen
 from .game import Game
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 def update_progress_bar(method):

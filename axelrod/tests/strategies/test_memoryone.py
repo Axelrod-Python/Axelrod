@@ -7,7 +7,7 @@ from axelrod import Game
 from axelrod.strategies.memoryone import MemoryOnePlayer, LRPlayer
 from .test_player import TestPlayer, test_four_vector
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestGenericPlayerOne(unittest.TestCase):

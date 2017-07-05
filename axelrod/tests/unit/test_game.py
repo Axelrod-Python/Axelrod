@@ -5,7 +5,7 @@ import axelrod
 from axelrod.tests.property import *
 
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestGame(unittest.TestCase):

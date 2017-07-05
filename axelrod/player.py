@@ -6,13 +6,13 @@ import random
 
 import numpy as np
 
-from axelrod.actions import Actions
+from axelrod.actions import Action
 from .game import DefaultGame
 
 import types
 from typing import Dict, Any
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 # Strategy classifiers

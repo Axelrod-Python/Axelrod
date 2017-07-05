@@ -3,11 +3,11 @@ import tempfile
 import unittest
 
 import axelrod
-from axelrod import Actions
+from axelrod import Action
 import axelrod.interaction_utils as iu
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 class TestMatch(unittest.TestCase):

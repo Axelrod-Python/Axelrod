@@ -3,12 +3,12 @@ import itertools
 from functools import lru_cache
 
 from axelrod.player import update_history
-from axelrod.actions import Actions
+from axelrod.actions import Action
 from axelrod.strategies.cooperator import Cooperator
 from axelrod.strategies.defector import Defector
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 def detect_cycle(history, min_size=1, max_size=12, offset=0):

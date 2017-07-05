@@ -4,7 +4,7 @@ import axelrod as axl
 import random
 from .test_player import TestPlayer
 
-C, D = axl.Actions.C, axl.Actions.D
+C, D = axl.Action.C, axl.Action.D
 
 class TestStalker(TestPlayer):
 

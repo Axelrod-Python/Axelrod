@@ -10,11 +10,11 @@ import copy
 import inspect
 import random
 from numpy.random import choice
-from .actions import Actions
+from .actions import Action
 from .random_ import random_choice
 
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 # Note: After a transformation is applied, the player's history is overwritten
 # with the modified history just like in the noisy tournament case. This can
@@ -131,7 +131,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 for arg in args:
                     try:
                         # Action has .name but should not be made into a list
-                        if not any(isinstance(el, Actions) for el in arg):
+                        if not any(isinstance(el, Action) for el in arg):
                             arg = [player.name for player in arg]
                     except AttributeError:
                         pass

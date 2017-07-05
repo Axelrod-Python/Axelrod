@@ -1,12 +1,12 @@
 from collections import namedtuple
 from itertools import product
 
-from axelrod.actions import Action, Actions, str_to_actions, actions_to_str
+from axelrod.actions import Action, str_to_actions, actions_to_str
 from axelrod.player import Player
 
 from typing import Any, TypeVar
 
-C, D = Actions.C, Actions.D
+C, D = Action.C, Action.D
 
 
 Plays = namedtuple('Plays', 'self_plays, op_plays, op_openings')

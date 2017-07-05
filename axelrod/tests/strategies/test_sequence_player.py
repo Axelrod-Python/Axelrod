@@ -7,7 +7,7 @@ from axelrod.strategies.sequence_player import SequencePlayer
 from axelrod._strategy_utils import recursive_thue_morse
 
 
-C, D = axelrod.Actions.C, axelrod.Actions.D
+C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestThueMoreGenerator(unittest.TestCase):
