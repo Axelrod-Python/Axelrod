@@ -4,7 +4,7 @@ import csv
 from numpy import mean, nanmedian, std
 import tqdm
 
-from axelrod.actions import Action, str_to_actions
+from axelrod.action import Action, str_to_actions
 import axelrod.interaction_utils as iu
 from . import eigen
 from .game import Game

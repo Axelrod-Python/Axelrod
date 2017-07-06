@@ -4,7 +4,7 @@ from prompt_toolkit.token import Token
 from prompt_toolkit.styles import style_from_dict
 from prompt_toolkit.validation import Validator, ValidationError
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 
 C, D = Action.C, Action.D

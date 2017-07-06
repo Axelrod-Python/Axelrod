@@ -1,6 +1,6 @@
 import numpy as np
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.load_data_ import load_weights
 

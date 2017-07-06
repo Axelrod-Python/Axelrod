@@ -1,7 +1,7 @@
 from collections import namedtuple
 from itertools import product
 
-from axelrod.actions import Action, str_to_actions, actions_to_str
+from axelrod.action import Action, str_to_actions, actions_to_str
 from axelrod.player import Player
 
 from typing import Any, TypeVar

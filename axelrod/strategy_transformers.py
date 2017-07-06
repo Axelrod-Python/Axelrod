@@ -10,7 +10,7 @@ import copy
 import inspect
 import random
 from numpy.random import choice
-from .actions import Action
+from .action import Action
 from .random_ import random_choice
 
 

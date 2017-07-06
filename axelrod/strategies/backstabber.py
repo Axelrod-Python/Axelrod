@@ -1,4 +1,4 @@
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.strategy_transformers import FinalTransformer
 

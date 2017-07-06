@@ -5,7 +5,7 @@ For the original see:
  https://gist.github.com/GDKO/60c3d0fd423598f3c4e4
 """
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
 from axelrod.random_ import random_choice

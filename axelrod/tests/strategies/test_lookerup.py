@@ -9,7 +9,7 @@ from axelrod.strategies.lookerup import (
 )
 from .test_player import TestPlayer
 
-from axelrod.actions import str_to_actions
+from axelrod.action import str_to_actions
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

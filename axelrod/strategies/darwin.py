@@ -3,7 +3,7 @@ The player class in this module does not obey standard rules of the IPD (as
 indicated by their classifier). We do not recommend putting a lot of time in to
 optimising it.
 """
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 
 C, D = Action.C, Action.D

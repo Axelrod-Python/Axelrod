@@ -7,7 +7,7 @@ DEFAULT_TURNS = 200
 from .version import __version__
 from .load_data_ import load_pso_tables, load_weights
 from . import graph
-from .actions import Action
+from .action import Action
 from .random_ import random_choice, seed, Pdf
 from .plot import Plot
 from .game import DefaultGame, Game

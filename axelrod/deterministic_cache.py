@@ -1,7 +1,7 @@
 from collections import UserDict
 import pickle
 
-from .actions import Action
+from .action import Action
 from .player import Player
 
 from typing import List, Tuple

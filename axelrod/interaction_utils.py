@@ -11,7 +11,7 @@ from collections import Counter
 import csv
 import tqdm
 
-from axelrod.actions import Action, str_to_actions
+from axelrod.action import Action, str_to_actions
 from .game import Game
 
 

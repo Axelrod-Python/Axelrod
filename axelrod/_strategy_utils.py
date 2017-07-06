@@ -3,7 +3,7 @@ import itertools
 from functools import lru_cache
 
 from axelrod.player import update_history
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.strategies.cooperator import Cooperator
 from axelrod.strategies.defector import Defector
 
