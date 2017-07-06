@@ -4,7 +4,7 @@ Additional strategies from Axelrod's second tournament.
 
 import random
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 

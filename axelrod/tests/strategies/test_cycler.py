@@ -2,7 +2,7 @@
 
 import itertools
 import axelrod
-from axelrod.actions import Action, str_to_actions
+from axelrod.action import Action, str_to_actions
 from .test_player import TestPlayer
 from axelrod import Cycler, AntiCycler
 from axelrod._strategy_utils import detect_cycle

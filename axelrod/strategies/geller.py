@@ -4,7 +4,7 @@ indicated by their classifier). We do not recommend putting a lot of time in to
 optimising them.
 """
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod._strategy_utils import inspect_strategy

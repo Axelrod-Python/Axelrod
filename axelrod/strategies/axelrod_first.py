@@ -4,7 +4,7 @@ Additional strategies from Axelrod's first tournament.
 
 import random
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import FinalTransformer

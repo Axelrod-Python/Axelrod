@@ -1,6 +1,6 @@
 import math
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 
 C, D = Action.C, Action.D

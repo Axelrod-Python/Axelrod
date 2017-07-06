@@ -1,6 +1,6 @@
 import copy
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player
 
 from typing import Dict, Any, Union

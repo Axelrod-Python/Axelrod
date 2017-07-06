@@ -1,5 +1,5 @@
 from axelrod.player import Player
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.random_ import random_choice
 
 

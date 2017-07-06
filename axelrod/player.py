@@ -6,7 +6,7 @@ import random
 
 import numpy as np
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from .game import DefaultGame
 
 import types

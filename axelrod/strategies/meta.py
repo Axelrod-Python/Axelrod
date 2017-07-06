@@ -1,6 +1,6 @@
 from numpy.random import choice
 
-from axelrod.actions import Action
+from axelrod.action import Action
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategy_transformers import NiceTransformer
 from ._strategies import all_strategies

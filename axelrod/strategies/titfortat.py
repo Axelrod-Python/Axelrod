@@ -1,4 +1,4 @@
-from axelrod.actions import Action, actions_to_str
+from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import (

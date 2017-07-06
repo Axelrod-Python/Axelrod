@@ -1,7 +1,7 @@
 import subprocess
 import sys
 modules = ["run_strategy_indexer.py",
-           "axelrod/actions.py",
+           "axelrod/action.py",
            "axelrod/deterministic_cache.py",
            "axelrod/ecosystem.py",
            "axelrod/fingerprint.py",

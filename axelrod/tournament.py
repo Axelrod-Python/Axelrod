@@ -9,7 +9,7 @@ import tqdm
 
 from axelrod import on_windows, DEFAULT_TURNS
 from axelrod.player import Player
-from axelrod.actions import actions_to_str
+from axelrod.action import actions_to_str
 from .game import Game
 from .match import Match
 from .match_generator import MatchGenerator
