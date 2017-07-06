@@ -30,9 +30,9 @@ class SequencePlayer(Player):
         By default, treat values like python truth values. Override in child
         classes for alternate behaviors."""
         if value == 0:
-            return Action.D
+            return D
         else:
-            return Action.C
+            return C
 
     def strategy(self, opponent: Player) -> Action:
         # Iterate through the sequence and apply the meta strategy
