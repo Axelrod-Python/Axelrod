@@ -59,6 +59,8 @@ project please open an issue and let us know!
 Installation
 ============
 
+The library requires Python 3.4 or greater. It will not run on Python 2.
+
 The simplest way to install is::
 
     $ pip install axelrod
