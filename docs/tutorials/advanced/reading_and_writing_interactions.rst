@@ -113,24 +113,6 @@ This can be transformed in to the usual interactions by zipping:
     [(C, C), (C, D), (D, C), (C, D)]
 
 This should allow for easy manipulation of data outside of the capabilities
-within the library. Note that you can supply
-
-This can be transformed in to the usual interactions by zipping:
-
-    >>> from axelrod.action import str_to_actions
-    >>> list(zip(str_to_actions("CCDC"), str_to_actions("CDCD")))
-    [(C, C), (C, D), (D, C), (C, D)]
-
-This should allow for easy manipulation of data outside of the capabilities
-within the library. Note that you can supply
-
-This can be transformed in to the usual interactions by zipping:
-
-    >>> from axelrod.action import str_to_actions
-    >>> list(zip(str_to_actions("CCDC"), str_to_actions("CDCD")))
-    [(C, C), (C, D), (D, C), (C, D)]
-
-This should allow for easy manipulation of data outside of the capabilities
 within the library. Note that you can supply `build_results=False` as a keyword
 argument to `tournament.play()` to prevent keeping or loading interactions in
 memory, since the total memory footprint can be large for various combinations
@@ -148,3 +130,4 @@ It is also possible to generate a standard result set from a datafile::
      'Anti Tit For Tat',
      'Win-Stay Lose-Shift',
      'Cooperator']
+
