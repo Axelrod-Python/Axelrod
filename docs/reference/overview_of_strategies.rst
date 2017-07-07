@@ -392,7 +392,7 @@ earned in the previous round. WSLS is also known as "Win-Stay-Lose-Switch" and
 - :math:`P(C\,|\,DC) = 0`
 - :math:`P(C\,|\,DD) = 1`
 
-*TF2T came 7th in average score and 13th in wins in S&P's tournament.*
+*WSLS came 7th in average score and 13th in wins in S&P's tournament.*
 
 RANDOM
 ^^^^^^
@@ -536,7 +536,7 @@ elsewhere as HardProber. The strategy starts by playing D, D, C, C on the first
 four rounds and then defects forever if the opponent cooperates on rounds
 two and three. Otherwise Prober plays as TitForTat would.
 
-*Prober2 came 5th in average score and 6th in wins in S&P's tournament.*
+*HardProber came 5th in average score and 6th in wins in S&P's tournament.*
 
 NaiveProber
 ^^^^^^^^^^^
