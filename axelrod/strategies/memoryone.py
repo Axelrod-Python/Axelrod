@@ -525,6 +525,7 @@ class ALLCorALLD(Player):
     Names:
 
     - ALLC or ALLD: Original name by Marc Harper
+    - Repeat: [Akin2015]_
     """
 
     name = "ALLCorALLD"

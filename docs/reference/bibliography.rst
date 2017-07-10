@@ -7,6 +7,7 @@ This is a collection of various bibliographic items referenced in the
 documentation.
 
 .. [Adami2013] Adami C and Hintze A. (2013) Evolutionary instability of zero-determinant strategies demonstrates that winning is not everything. Nature communications. https://www.nature.com/articles/ncomms3193
+.. [Akin2015] Akin, Ethan. "What you gotta know to play good in the Iterated Prisoner’s Dilemma." Games 6.3 (2015): 175-190.
 .. [Amaral2016] Amaral, M. A., Wardil, L., Perc, M., & Da Silva, J. K. L. (2016). Stochastic win-stay-lose-shift strategy with dynamic aspirations in evolutionary social dilemmas. Physical Review E - Statistical, Nonlinear, and Soft Matter Physics, 94(3), 1–9. https://doi.org/10.1103/PhysRevE.94.032317
 .. [Andre2013] Andre L. C., Honovan P., Felipe T. and Frederico G. (2013). Iterated Prisoner’s Dilemma - An extended analysis, http://abricom.org.br/wp-content/uploads/2016/03/bricsccicbic2013_submission_202.pdf
 .. [Ashlock2006] Ashlock, D., & Kim E. Y, & Leahy, N. (2006). Understanding Representational Sensitivity in the Iterated Prisoner’s Dilemma with Fingerprints. IEEE Transactions On Systems, Man, And Cybernetics, Part C: Applications And Reviews, 36 (4)
