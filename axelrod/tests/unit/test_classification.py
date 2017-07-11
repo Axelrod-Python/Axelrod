@@ -188,21 +188,22 @@ class TestStrategies(unittest.TestCase):
 
     def test_long_run_strategies(self):
         long_run_time_strategies = [
+            axl.DBS,
             axl.MetaMajority,
-            axl.MetaMinority,
-            axl.MetaWinner,
-            axl.MetaWinnerEnsemble,
             axl.MetaMajorityFiniteMemory,
-            axl.MetaWinnerFiniteMemory,
             axl.MetaMajorityLongMemory,
-            axl.MetaWinnerLongMemory,
+            axl.MetaMinority,
             axl.MetaMixer,
-            axl.NMWEFiniteMemory,
+            axl.MetaWinner,
             axl.MetaWinnerDeterministic,
+            axl.MetaWinnerEnsemble,
+            axl.MetaWinnerFiniteMemory,
+            axl.MetaWinnerLongMemory,
+            axl.MetaWinnerStochastic,
+            axl.NMWEDeterministic,
+            axl.NMWEFiniteMemory,
             axl.NMWELongMemory,
             axl.NMWEStochastic,
-            axl.NMWEDeterministic,
-            axl.MetaWinnerStochastic,
             axl.NiceMetaWinner,
             axl.NiceMetaWinnerEnsemble
         ]
