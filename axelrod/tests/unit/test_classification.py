@@ -121,7 +121,6 @@ class TestClassification(unittest.TestCase):
             axl.ForgivingTitForTat,
             axl.GoByMajority20,
             axl.GTFT,
-            axl.Grudger,
             axl.Inverse,
             axl.Random]
 

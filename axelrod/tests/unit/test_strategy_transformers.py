@@ -269,7 +269,7 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p2.history, [D, D, C, D, C])
 
-        p3 = InitialTransformer([D, D])(axelrod.Grudger)()
+        p3 = InitialTransformer([D, D])(axelrod.Adaptive)()
         self.assertEqual(p3.classifier["memory_depth"], float('inf'))
 
     def test_final_transformer(self):
@@ -286,7 +286,7 @@ class TestTransformers(unittest.TestCase):
             p1.play(p2)
         self.assertEqual(p2.history, [C, C, C, D, D, D, C, C])
 
-        p3 = FinalTransformer([D, D])(axelrod.Grudger)()
+        p3 = FinalTransformer([D, D])(axelrod.Adaptive)()
         self.assertEqual(p3.classifier["memory_depth"], float('inf'))
 
     def test_final_transformer2(self):
