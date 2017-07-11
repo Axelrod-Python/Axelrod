@@ -310,7 +310,7 @@ class LookerUp(Player):
                           parameters: tuple) -> LookupTable:
         if lookup_dict:
             return LookupTable(lookup_dict=lookup_dict)
-        if pattern and parameters:
+        if pattern is not None and parameters is not None:
             if isinstance(pattern, str):
                 pattern = str_to_actions(pattern)
             self_depth, op_depth, op_openings_depth = parameters
