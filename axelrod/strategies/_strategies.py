@@ -51,7 +51,7 @@ from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
     StochasticCooperator, StochasticWSLS, ZDExtort2, ZDExtort2v2, ZDExtort4,
-    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay)
+    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay, ReactivePlayer)
 from .memorytwo import MEM2
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader

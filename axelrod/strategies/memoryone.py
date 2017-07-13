@@ -543,3 +543,19 @@ class ALLCorALLD(Player):
         if len(self.history) == 0:
             return random_choice(0.6)
         return self.history[-1]
+
+
+class ReactivePlayer(MemoryOnePlayer):
+    """
+    A generic reactive player. Defined by 2 probabilities conditional on the
+    opponent's last move: P(C|C), P(C|D).
+
+    Names:
+
+    - Reactive: [Nowak1989]_
+    """
+    name = "Reactive Player"
+    def __init__(self, probabilities: Tuple[float, float]) -> None:
+        four_vector = (*probabilities, *probabilities)
+        super().__init__(four_vector)
+        self.name = "%s: %s" % (self.name, probabilities)
