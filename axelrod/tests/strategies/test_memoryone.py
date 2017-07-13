@@ -490,3 +490,41 @@ class TestALLCorALLD(TestPlayer):
         actions = [(C, C)] * 10
         self.versus_test(opponent=axelrod.Cooperator(),
                          expected_actions=actions, seed=1)
+
+
+class TestGenericReactiveStrategy(unittest.TestCase):
+    """
+    Tests for the Reactive Strategy which.
+    """
+    p1 = axelrod.ReactivePlayer(probabilities=(0, 0))
+    p2 = axelrod.ReactivePlayer(probabilities=(1, 0))
+    p3 = axelrod.ReactivePlayer(probabilities=(1, 0.5))
+
+    def test_name(self):
+        self.assertEqual(self.p1.name,
+                         "Reactive Player: (0, 0)")
+        self.assertEqual(self.p2.name,
+                         "Reactive Player: (1, 0)")
+        self.assertEqual(self.p3.name,
+                         "Reactive Player: (1, 0.5)")
+
+    def test_four_vector(self):
+        self.assertEqual(self.p1._four_vector,
+                         {(C, D): 0.0, (D, C): 0.0,
+                          (C, C): 0.0, (D, D): 0.0})
+        self.assertEqual(self.p2._four_vector,
+                         {(C, D): 0.0, (D, C): 1.0,
+                          (C, C): 1.0, (D, D): 0.0})
+        self.assertEqual(self.p3._four_vector,
+                         {(C, D): 0.5, (D, C): 1.0,
+                          (C, C): 1.0, (D, D): 0.5})
+
+    def test_stochastic_classification(self):
+        self.assertFalse(self.p1.classifier['stochastic'])
+        self.assertFalse(self.p2.classifier['stochastic'])
+        self.assertTrue(self.p3.classifier['stochastic'])
+
+    def test_subclass(self):
+        self.assertIsInstance(self.p1, MemoryOnePlayer)
+        self.assertIsInstance(self.p2, MemoryOnePlayer)
+        self.assertIsInstance(self.p3, MemoryOnePlayer)
