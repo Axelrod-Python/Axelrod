@@ -1,3 +1,30 @@
+# v3.1.0, 2017-07-16
+
+New class for actions, Internal improvements, a new strategy class,
+reclassification of grudger.
+
+- Actions are now an enum class:
+  https://github.com/Axelrod-Python/Axelrod/pull/1052
+  https://github.com/Axelrod-Python/Axelrod/pull/1053
+  https://github.com/Axelrod-Python/Axelrod/pull/1054
+- Add explanation of py version to README:
+  https://github.com/Axelrod-Python/Axelrod/pull/1056
+- Documentation typo fixes:
+  https://github.com/Axelrod-Python/Axelrod/pull/1057
+- DBS strategy classified as long run time:
+  https://github.com/Axelrod-Python/Axelrod/pull/1058
+- Correct classification for Grudger:
+  https://github.com/Axelrod-Python/Axelrod/pull/1066
+- Add another source and name for ALLCorALLD:
+  https://github.com/Axelrod-Python/Axelrod/pull/1067
+- Update init parameter for lookerup:
+  https://github.com/Axelrod-Python/Axelrod/pull/1068
+- Add a reactive strategy:
+  https://github.com/Axelrod-Python/Axelrod/pull/1070
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.0.0...v3.1.0
+
 # v3.0.0, 2017-06-13
 
 A single class for tournaments and Moran processes, sources for all strategies
