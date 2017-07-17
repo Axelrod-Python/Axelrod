@@ -52,14 +52,16 @@ With Axelrod you:
   <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/visualising_results.html>`_ of tournaments.
 
   .. image:: http://axelrod.readthedocs.io/en/stable/_images/demo_strategies_boxplot.svg
-     :width: 400 px
+     :height: 300 px
+     :align: center
 
 - can reproduce a number of contemporary research topics such as `fingerprinting <http://axelrod.readthedocs.io/en/stable/tutorials/further_topics/fingerprinting.html>`_ of
   strategies and `morality metrics
   <http://axelrod.readthedocs.io/en/stable/tutorials/further_topics/morality_metrics.html>`_.
 
   .. image:: https://github.com/Axelrod-Python/Axelrod-fingerprint/raw/master/assets/Tricky_Defector.png
-     :width: 400 px
+     :height: 300 px
+     :align: center
 
 The library has 100% test coverage and is extensively documented. See the
 documentation for details and examples of all the features:
