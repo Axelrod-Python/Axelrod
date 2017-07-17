@@ -34,21 +34,32 @@ Features
 
 With Axelrod you:
 
-- have access to over 200 strategies, extendable through parametrization and
-  a collection of strategy transformers.
-- can create head to head matches between pairs of strategies.
-- can create tournaments over a number of strategies.
-- can study population dynamics through Moran processes and an infinite
-  population model.
-- can analyse detailed results of tournaments and matches.
-- can visualise results of tournaments.
+- have access `to over 200 strategies
+  <http://axelrod.readthedocs.io/en/stable/reference/all_strategies.html>`_, including original and classics like Tit
+  For Tat and Win Stay Lose Shift. These are extendable through parametrization
+  and a collection of strategy transformers.
+- can create `head to head matches
+  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/match.html>`_ between pairs of strategies.
+- can create `tournaments
+  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/tournament.html>`_ over a number of strategies.
+- can study population dynamics through `Moran processes
+  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/moran.html>`_ and an `infinite
+  population model
+  <http://axelrod.readthedocs.io/en/stable/tutorials/further_topics/ecological_variant.html>`_.
+- can analyse detailed `results of tournaments
+  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/summarising_tournaments.html>`_ and matches.
+- can `visualise results
+  <http://axelrod.readthedocs.io/en/stable/tutorials/getting_started/visualising_results.html>`_ of tournaments.
 
-  .. image:: http://axelrod-tournament.readthedocs.io/en/latest/_images/strategies_std_boxplot.svg
+  .. image:: http://axelrod.readthedocs.io/en/stable/_images/demo_strategies_boxplot.svg
+     :width: 400 px
 
-- can reproduce a number of contemporary research such as fingerprinting of
-  strategies and morality metrics.
+- can reproduce a number of contemporary research topics such as `fingerprinting <http://axelrod.readthedocs.io/en/stable/tutorials/further_topics/fingerprinting.html>`_ of
+  strategies and `morality metrics
+  <http://axelrod.readthedocs.io/en/stable/tutorials/further_topics/morality_metrics.html>`_.
 
   .. image:: https://github.com/Axelrod-Python/Axelrod-fingerprint/raw/master/assets/Tricky_Defector.png
+     :width: 400 px
 
 The library has 100% test coverage and is extensively documented. See the
 documentation for details and examples of all the features:
