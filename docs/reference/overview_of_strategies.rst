@@ -262,8 +262,7 @@ repository.
 
 Strategies in the Axelrod's second tournament:
 
-.. _GRASR: https://github.com/Axelrod-Python/TourExec/tree/master/src/grasr.f
-.. _K31R: https://github.com/Axelrod-Python/TourExec/tree/master/src/k31r.f
+.. include:: fortan_keys.rst
 
 +--------------------------+-------------------------------------------+--------------------------+
 | Original Code            | Name                                      | Axelrod Library Name     |
