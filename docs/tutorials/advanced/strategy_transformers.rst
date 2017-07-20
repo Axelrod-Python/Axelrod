@@ -50,7 +50,7 @@ Included Transformers
 
 The library includes the following transformers:
 
-* :code:`ApologizingTransformer`: Apologizes after a round of :code:`(D, C)`::
+* :code:`ApologyTransformer`: Apologizes after a round of :code:`(D, C)`::
 
     >>> ApologizingDefector = ApologyTransformer([D], [C])(axl.Defector)
     >>> player = ApologizingDefector()
@@ -126,7 +126,7 @@ The library includes the following transformers:
     >>> NoisyCooperator = NoisyTransformer(0.5)(axl.Cooperator)
     >>> player = NoisyCooperator()
 
-* :code:`RetaliateTransformer(N)`: Retaliation N times after a defection::
+* :code:`RetaliationTransformer(N)`: Retaliation N times after a defection::
 
     >>> TwoTitsForTat = RetaliationTransformer(2)(axl.Cooperator)
     >>> player = TwoTitsForTat()
