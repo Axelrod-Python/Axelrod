@@ -250,7 +250,29 @@ This strategy plays randomly (disregarding the history of play).
 Axelrod's second tournament
 ---------------------------
 
-Work in progress.
+The code was for Axelrod's second touranment was originally published by the
+`University of Michigan Center for the Study of Complex Systems <http://lsa.umich.edu/cscs/>`_
+and is now available from
+`Robert Axelrod's personal website <http://www-personal.umich.edu/~axe/research/Software/CC/CC2.html>`_.
+
+The Axelrod-Python organisation has published a
+`modified version of the original code <https://github.com/Axelrod-Python/TourExec>`_.
+In the following table, links to original code point to the Axelrod-Python
+repository.
+
+Strategies in the Axelrod's second tournament:
+
+.. _GRASR: https://github.com/Axelrod-Python/TourExec/tree/master/src/grasr.f
+.. _K31R: https://github.com/Axelrod-Python/TourExec/tree/master/src/k31r.f
+
++--------------------------+-------------------------------------------+--------------------------+
+| Name                     | Long name                                 | Axelrod Library Name     |
++==========================+===========================================+==========================+
+| GRASR_                   | Grasr                                     | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+| K31R_                    | Grisell                                   | Not Implemented          |
++--------------------------+-------------------------------------------+--------------------------+
+
 
 EATHERLEY
 ^^^^^^^^^
