@@ -747,3 +747,59 @@ class EugineNier(Player):
     def reset(self):
         super().reset()
         self.is_defector = False
+
+
+class NTitsForMTats(Player):
+    """
+    A parameterizable Tit-for-Tat,
+    The arguments are :
+    2) the number of defection before retaliation
+    3) the number of retaliations
+
+    Names:
+
+    - N Tits For M Tats: []_
+    """
+
+    name = 'N Tits For M Tats'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self, N: int=1, M: int=1) -> None:
+        """
+        Parameters
+        ----------
+        N, int
+            Number of retaliations
+        M, int
+            Number of defection before retaliation
+
+        Special Cases
+        -------------
+        NTitsForMTats(1,1) is equivalent to TitForTat
+        NTitsForMTats(1,2) is equivalent to TitFor2Tats
+        NTitsForMTats(2,1) is equivalent to TwoTitsForTat
+        NTitsForMTats(0,*) is equivalent to Cooperator
+        NTitsForMTats(*,0) is equivalent to Defector
+        """
+        super().__init__()
+        self.N = N
+        self.M = M
+        self.classifier['memory_depth'] = max([M,N])
+        self.retaliate_count = 0
+
+    def strategy(self, opponent: Player) -> Action:
+        # if opponent defected consecutively M times, start the retaliation
+        if opponent.history[-self.M:].count(D) == self.M:
+            self.retaliate_count = self.N
+        if self.retaliate_count:
+            self.retaliate_count-=1
+            return D
+        return C
