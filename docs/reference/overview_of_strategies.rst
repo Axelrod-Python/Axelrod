@@ -266,7 +266,7 @@ Strategies in the Axelrod's second tournament:
 .. _K31R: https://github.com/Axelrod-Python/TourExec/tree/master/src/k31r.f
 
 +--------------------------+-------------------------------------------+--------------------------+
-| Name                     | Long name                                 | Axelrod Library Name     |
+| Original Code            | Name                                      | Axelrod Library Name     |
 +==========================+===========================================+==========================+
 | GRASR_                   | Grasr                                     | Not Implemented          |
 +--------------------------+-------------------------------------------+--------------------------+
