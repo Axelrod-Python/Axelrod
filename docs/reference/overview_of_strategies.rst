@@ -260,8 +260,6 @@ The Axelrod-Python organisation has published a
 In the following table, links to original code point to the Axelrod-Python
 repository.
 
-Strategies in the Axelrod's second tournament:
-
 .. include:: fortan_keys.rst
 
 .. csv-table:: Strategies in Axelrod's second tournament
