@@ -296,7 +296,7 @@ repository.
    "K56R_", "Quayle", "Not Implemented"
    "K57R_", "Nydegger", ":class:`axelrod.strategies.axelrod_first.Nydegger`"
    "K58R_", "Rowsam", "Not Implemented"
-   "K59R_", "Downing", "Possibly :class:`axelrod.strategies.axelrod_first.RevisedDowning`"
+   "K59R_", "Downing", ":class:`axelrod.strategies.axelrod_first.RevisedDowning`"
    "K60R_", "Graaskamp", "Not Implemented. Currently being worked on."
    "K61R_", "Champion", ":class:`axelrod.strategies.axelrod_second.Champion`"
    "K62R_", "Hollander", "Not Implemented"
