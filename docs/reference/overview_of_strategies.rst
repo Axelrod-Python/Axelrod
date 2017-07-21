@@ -265,7 +265,7 @@ repository.
 
 .. csv-table:: Strategies in Axelrod's second tournament
    :header: "Original Code", "Name", "Axelrod Library Name"
-   :widths: 27, 24, 60
+   :widths: 12, 20, 80
 
    "GRASR_", "Grasr", "Not Implemented"
    "K31R_", "Grisell", "Not Implemented"
@@ -296,7 +296,7 @@ repository.
    "K56R_", "Quayle", "Not Implemented"
    "K57R_", "Nydegger", ":class:`axelrod.strategies.axelrod_first.Nydegger`"
    "K58R_", "Rowsam", "Not Implemented"
-   "K59R_", "Downing", "Possibly the same as :class:`axelrod.strategies.axelrod_first.UnnamedStrategy`"
+   "K59R_", "Downing", "Possibly :class:`axelrod.strategies.axelrod_first.UnnamedStrategy`"
    "K60R_", "Graaskamp", "Not Implemented. Currently being worked on."
    "K61R_", "Champion", ":class:`axelrod.strategies.axelrod_second.Champion`"
    "K62R_", "Hollander", "Not Implemented"
