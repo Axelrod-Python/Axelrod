@@ -56,7 +56,7 @@ We get the plot:
 We are also able to specify a matplotlib colour map, interpolation and can
 remove the colorbar and axis labels::
 
-    >>> p = af.plot(col_map='PuOr', interpolation='bicubic', colorbar=False, labels=False)  # doctest: +SKIP
+    >>> p = af.plot(cmap='PuOr', interpolation='bicubic', colorbar=False, labels=False)  # doctest: +SKIP
     >>> p.show()
 
 .. image:: _static/fingerprinting/WSLS_large_alt.png
