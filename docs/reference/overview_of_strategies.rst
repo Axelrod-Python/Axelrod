@@ -265,7 +265,7 @@ repository.
 
 .. csv-table:: Strategies in Axelrod's second tournament
    :header: "Original Code", "Author", "Axelrod Library Name"
-   :widths: 12, 20, 80
+   :widths: 12, 38, 50
 
    "GRASR_", "Unknown", "Not Implemented"
    "K31R_", "Gail Grisell", "Not Implemented"
