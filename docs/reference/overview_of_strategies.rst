@@ -271,7 +271,7 @@ repository.
    "K31R_", "Grisell", "Not Implemented"
    "K32R_", "Kluepfel", "Not Implemented"
    "K33R_", "Rabbie", "Not Implemented"
-   "K34R_", "Friedman", "Not Implemented"
+   "K34R_", "Friedman", ":class:`axelrod.strategies.grudger.Grudger`"
    "K35R_", "Getzler", "Not Implemented"
    "K36R_", "Hotz", "Not Implemented"
    "K37R_", "Lefevre", "Not Implemented"
