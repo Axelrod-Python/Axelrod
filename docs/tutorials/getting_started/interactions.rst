@@ -23,7 +23,7 @@ view the history of the interactions::
     >>> for index_pair, interaction in results.interactions.items():
     ...     player1 = tournament.players[index_pair[0]]
     ...     player2 = tournament.players[index_pair[1]]
-    ...     print('%s vs %s: %s' % (player1, player2, interaction)) # doctest: +SKIP
+    ...     print('%s vs %s: %s' % (player1, player2, interaction[0]))
     Cooperator vs Defector: [(C, D), (C, D), (C, D)]
     Defector vs Tit For Tat: [(D, C), (D, D), (D, D)]
     Cooperator vs Cooperator: [(C, C), (C, C), (C, C)]
@@ -44,7 +44,7 @@ in :ref:`creating_matches`)::
     ...     player1 = tournament.players[index_pair[0]]
     ...     player2 = tournament.players[index_pair[1]]
     ...     match = axl.Match([player1, player2], turns=3)
-    ...     match.result = interaction
+    ...     match.result = interaction[0]
     ...     matches.append(match)
     >>> len(matches)
     10
@@ -53,7 +53,7 @@ As an example let us view all winners of each match (:code:`False` indicates a
 tie)::
 
     >>> for match in matches:
-    ...     print("{} v {}, winner: {}".format(match.players[0], match.players[1], match.winner()))  #doctest: +SKIP
+    ...     print("{} v {}, winner: {}".format(match.players[0], match.players[1], match.winner()))
     Cooperator v Defector, winner: Defector
     Defector v Tit For Tat, winner: Defector
     Cooperator v Cooperator, winner: False
