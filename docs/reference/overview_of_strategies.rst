@@ -253,7 +253,8 @@ Axelrod's second tournament
 The code for Axelrod's second touranment was originally published by the
 `University of Michigan Center for the Study of Complex Systems <http://lsa.umich.edu/cscs/>`_
 and is now available from
-`Robert Axelrod's personal website <http://www-personal.umich.edu/~axe/research/Software/CC/CC2.html>`_.
+`Robert Axelrod's personal website <http://www-personal.umich.edu/~axe/research/Software/CC/CC2.html>`_
+(subject to a `disclaimer <http://www-personal.umich.edu/~axe/research/Software/CC/CCDisclaimer.html>`_.
 
 The Axelrod-Python organisation has published a
 `modified version of the original code <https://github.com/Axelrod-Python/TourExec>`_.
@@ -295,8 +296,8 @@ repository.
    "K56R_", "Quayle", "Not Implemented"
    "K57R_", "Nydegger", ":class:`axelrod.strategies.axelrod_first.Nydegger`"
    "K58R_", "Rowsam", "Not Implemented"
-   "K59R_", "Downing", "Not Implemented"
-   "K60R_", "Graaskamp", "Not Implemented"
+   "K59R_", "Downing", "Possibly the same as :class:`axelrod.strategies.axelrod_first.UnnamedStrategy`"
+   "K60R_", "Graaskamp", "Not Implemented. Currently being worked on."
    "K61R_", "Champion", ":class:`axelrod.strategies.axelrod_second.Champion`"
    "K62R_", "Hollander", "Not Implemented"
    "K63R_", "Duisman", "Not Implemented"
@@ -323,7 +324,7 @@ repository.
    "K83R_", "Black", "Not Implemented"
    "K84R_", "Tideman Chieruzz", "Not Implemented"
    "K85R_", "Falk Langste", "Not Implemented"
-   "K86R_", "Grofman", "Not Implemented"
+   "K86R_", "Grofman", ":class:`axelrod.strategies.axelrod_first.Grofman`"
    "K87R_", "Schurmann",  "Not Implemented"
    "K88R_", "Appold", "Not Implemented"
    "K89R_", "Snodgrass", "Not Implemented"
