@@ -331,11 +331,11 @@ repository.
    "K90R_", "John Maynard Smith", "Not Implemented"
    "K91R_", "Jonathan Pinkley", "Not Implemented"
    "K92R_", "Anatol Rapoport", "Not Implemented"
-   "K93R_", "Unknown. Probabaly Robert Axelrod", ":class:`axelrod.strategies.axelrod_first.UnnamedStrategy`"
-   "KPAVLOVC_", "Unknown. Probabaly Robert Axelrod", ":class:`axelrod.strategies.memoryone.WinStayLoseShift`"
-   "KRANDOMC_", "Unknown. Probabaly Robert Axelrod", ":class:`axelrod.strategies.rand.Random`"
-   "KTF2TC_", "Unknown. Probabaly Robert Axelrod", ":class:`axelrod.strategies.titfortat.TitFor2Tats`"
-   "KTITFORTATC_", "Unknown. Probabaly Robert Axelrod", ":class:`axelrod.strategies.titfortat.TitForTat`"
+   "K93R_", "Unknown. Probably Robert Axelrod", ":class:`axelrod.strategies.axelrod_first.UnnamedStrategy`"
+   "KPAVLOVC_", "Unknown. Probably Robert Axelrod", ":class:`axelrod.strategies.memoryone.WinStayLoseShift`"
+   "KRANDOMC_", "Unknown. Probably Robert Axelrod", ":class:`axelrod.strategies.rand.Random`"
+   "KTF2TC_", "Unknown. Probably Robert Axelrod", ":class:`axelrod.strategies.titfortat.TitFor2Tats`"
+   "KTITFORTATC_", "Unknown. Probably Robert Axelrod", ":class:`axelrod.strategies.titfortat.TitForTat`"
 
 EATHERLEY
 ^^^^^^^^^
