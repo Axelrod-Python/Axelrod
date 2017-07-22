@@ -16,7 +16,7 @@ An indication is given as to whether or not this strategy is implemented in the
 .. csv-table:: Strategies in Axelrod's first tournament
   :header: "Name", "Author", "Axelrod Library Name"
 
-  "Tit For Tat", "Unknown. Probably Robert Axelrod", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
+  "Tit For Tat", "Anatol Rapoport", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
   "`Tideman and Chieruzzi`_", "T Nicolaus Tideman and Paula Chieruzz", "Not Implemented "
   "Nydegger", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.Nydegger>`"
   "Grofman", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.Grofman>`"
@@ -30,7 +30,7 @@ An indication is given as to whether or not this strategy is implemented in the
   "Joss", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.Joss>`"
   "Tullock",  "Gordon Tullock", ":class:`Tullock <axelrod.strategies.axelrod_first.Tullock>`"
   "Unnamed Strategy", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
-  "Random", "Unknown. Probably Robert Axelrod", ":class:`Random <axelrod.strategies.rand.Random>`"
+  "Random", "Unknownd", ":class:`Random <axelrod.strategies.rand.Random>`"
 
 
 Tideman and Chieruzzi
