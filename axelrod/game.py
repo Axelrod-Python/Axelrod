@@ -38,5 +38,10 @@ class Game(object):
     def __repr__(self) -> str:
         return "Axelrod game: (R,P,S,T) = {}".format(self.RPST())
 
+    def __eq__(self, other):
+        if not isinstance(other, Game):
+            return False
+        return self.RPST() == other.RPST()
+
 
 DefaultGame = Game()
