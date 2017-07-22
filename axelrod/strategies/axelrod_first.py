@@ -260,6 +260,8 @@ class Joss(MemoryOnePlayer):
     Cooperates with probability 0.9 when the opponent cooperates, otherwise
     emulates Tit-For-Tat.
 
+    This strategy came 12th in Axelrod's original tournament.
+
     Names:
 
     - Joss: [Axelrod1980]_
@@ -291,16 +293,27 @@ class Nydegger(Player):
     third move, its choice is determined from the 3 preceding outcomes in the
     following manner.
 
-    Let A be the sum formed by counting the other's defection as 2 points and
-    one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding
-    three moves in chronological order. The choice can be described as defecting
-    only when A equals
-    1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
+    .. math::
+
+        A = 16 a_1 + 4 a_2 + a_3
+
+    Where :math:`a_i` is dependent on the outcome of the previous :math:`i` th
+    round.  If both strategies defect, :math:`a_i=3`, if the opponent only defects:
+    :math:`a_i=2` and finally if it is only this strategy that defects then
+    :math:`a_i=1`.
+
+    Finally this strategy defects if and only if:
+
+    .. math::
+
+        A \in \{1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61\}
 
     Thus if all three preceding moves are mutual defection, A = 63 and the rule
     cooperates. This rule was designed for use in laboratory experiments as a
     stooge which had a memory and appeared to be trustworthy, potentially
     cooperative, but not gullible.
+
+    This strategy came 3rd in Axelrod's original tournament.
 
     Names:
 
