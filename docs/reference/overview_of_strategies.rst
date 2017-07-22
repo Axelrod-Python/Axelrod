@@ -32,14 +32,6 @@ An indication is given as to whether or not this strategy is implemented in the
   "`Unnamed Strategy`_", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
   ":ref:`random-strategy`", "Unknown. Probably Robert Axelrod", ":class:`Random <axelrod.strategies.rand.Random>`"
 
-Tit for Tat
-^^^^^^^^^^^
-
-This strategy was referred to as the *'simplest'* strategy submitted. It
-begins by cooperating and then simply repeats the last moves made by the
-opponent.
-
-*Tit for Tat came 1st in Axelrod's original tournament.*
 
 Tideman and Chieruzzi
 ^^^^^^^^^^^^^^^^^^^^^
