@@ -24,6 +24,8 @@ class Davis(Player):
     A player starts by cooperating for 10 rounds then plays Grudger,
     defecting if at any point the opponent has defected.
 
+    This strategy came 8th in Axelrod's original tournament.
+
     Names:
 
     - Davis: [Axelrod1980]_
