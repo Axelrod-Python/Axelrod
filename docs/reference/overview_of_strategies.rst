@@ -81,7 +81,96 @@ This strategy follows the following rules:
 Axelrod's second tournament
 ---------------------------
 
-Work in progress.
+The code for Axelrod's second touranment was originally published by the
+`University of Michigan Center for the Study of Complex Systems <http://lsa.umich.edu/cscs/>`_
+and is now available from
+`Robert Axelrod's personal website <http://www-personal.umich.edu/~axe/research/Software/CC/CC2.html>`_
+subject to a `disclaimer <http://www-personal.umich.edu/~axe/research/Software/CC/CCDisclaimer.html>`_
+which states:
+
+ "All materials in this archive are copyright (c) 1996, Robert Axelrod, unless
+ otherwise noted. You are free to download these materials and use them without
+ restriction."
+
+The Axelrod-Python organisation has published a
+`modified version of the original code <https://github.com/Axelrod-Python/TourExec>`_.
+In the following table, links to original code point to the Axelrod-Python
+repository.
+
+.. include:: fortan_keys.rst
+
+.. csv-table:: Strategies in Axelrod's second tournament
+   :header: "Original Code", "Author", "Axelrod Library Name"
+
+   "GRASR_", "Unknown", "Not Implemented"
+   "K31R_", "Gail Grisell", "Not Implemented"
+   "K32R_", "Charles Kluepfel", "Not Implemented"
+   "K33R_", "Harold Rabbie", "Not Implemented"
+   "K34R_", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
+   "K35R_", "Abraham Getzler", "Not Implemented"
+   "K36R_", "Roger Hotz", "Not Implemented"
+   "K37R_", "Geroge Lefevre", "Not Implemented"
+   "K38R_", "Nelson Weiderman", "Not Implemented"
+   "K39R_", "Tom Almy", "Not Implemented"
+   "K40R_", "Robert Adams", "Not Implemented"
+   "K41R_", "Herb Weiner", "Not Implemented"
+   "K42R_", "Otto Borufsen", "Not Implemented"
+   "K43R_", "R D Anderson", "Not Implemented"
+   "K44R_", "W M Adams", "Not Implemented"
+   "K45R_", "Michael F McGurrin", "Not Implemented"
+   "K46R_", "Graham J Eatherley", ":class:`Eatherley <axelrod.strategies.axelrod_second.Eatherley>`"
+   "K47R_", "Richard Hufford", "Not Implemented"
+   "K48R_", "George Hufford", "Not Implemented"
+   "K49R_", "Rob Cave", "Not Implemented"
+   "K50R_", "Rik", "Not Implemented"
+   "K51R_", "John Willaim Colbert", "Not Implemented"
+   "K52R_", "David A Smith", "Not Implemented"
+   "K53R_", "Henry Nussbacher", "Not Implemented"
+   "K54R_", "William H Robertson", "Not Implemented"
+   "K55R_", "Steve Newman", "Not Implemented"
+   "K56R_", "Stanley F Quayle", "Not Implemented"
+   "K57R_", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.Nydegger>`"
+   "K58R_", "Glen Rowsam", "Not Implemented"
+   "K59R_", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.axelrod_first.RevisedDowning>`"
+   "K60R_", "Jim Graaskamp and Ken Katzen", "Work In Progress"
+   "K61R_", "Danny C Champion", ":class:`Champion <axelrod.strategies.axelrod_second.Champion>`"
+   "K62R_", "Howard R Hollander", "Not Implemented"
+   "K63R_", "George Duisman", "Not Implemented"
+   "K64R_", "Brian Yamachi", "Not Implemented"
+   "K65R_", "Mark F Batell", "Not Implemented"
+   "K66R_", "Ray Mikkelson", "Not Implemented"
+   "K67R_", "Craig Feathers", "Not Implemented"
+   "K68R_", "Fransois Leyvraz", "Not Implemented"
+   "K69R_", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.Joss>`"
+   "K70R_", "Robert Pebly", "Not Implemented"
+   "K71R_", "James E Hill", "Not Implemented"
+   "K72R_", "Edward C White Jr", "Not Implemented"
+   "K73R_", "Geroge Zimmerman", "Not Implemented"
+   "K74R_", "Edward Friedland", "Not Implemented"
+   "K74RXX_", "Edward Friedland", "Not Implemented"
+   "K75R_", "P D Harrington", "Not Implemented"
+   "K76R_", "David Gladstein", "Not Implemented"
+   "K77R_", "Scott Feld", ":class:`Feld <axelrod.strategies.axelrod_first.Feld>`"
+   "K78R_", "Fred Mauk", "Not Implemented"
+   "K79R_", "Dennis Ambuehl and Kevin Hickey", Not Implemented
+   "K80R_", "Robyn M Dawes and Mark Batel", Not Implemented
+   "K81R_", "Martyn Jones", "Not Implemented"
+   "K82R_", "Robert A Leyland", "Not Implemented"
+   "K83R_", "Paul E Black", "Not Implemented"
+   "K84R_", "T Nicolaus Tideman and Paula Chieruzz", "Not Implemented"
+   "K85R_", "Rober B Falk and James M Langsted", "Not Implemented"
+   "K86R_", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.Grofman>`"
+   "K87R_", "E E H Schurmann",  "Not Implemented"
+   "K88R_", "Scott Appold", "Not Implemented"
+   "K89R_", "Gene Snodgrass", "Not Implemented"
+   "K90R_", "John Maynard Smith", "Not Implemented"
+   "K91R_", "Jonathan Pinkley", "Not Implemented"
+   "K92R_", "Anatol Rapoport", "Not Implemented"
+   "K93R_", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
+   "KPAVLOVC_", "Unknown. Probably Robert Axelrod", ":class:`WinStayLoseShift <axelrod.strategies.memoryone.WinStayLoseShift>`"
+   "KRANDOMC_", "Unknown. Probably Robert Axelrod", ":class:`Random <axelrod.strategies.rand.Random>`"
+   "KTF2TC_", "Unknown. Probably Robert Axelrod", ":class:`TitFor2Tats <axelrod.strategies.titfortat.TitFor2Tats>`"
+   "KTITFORTATC_", "Unknown. Probably Robert Axelrod", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
 
 EATHERLEY
 ^^^^^^^^^
