@@ -97,22 +97,6 @@ This strategy follows the following rules:
 
 *This strategy came 9th in Axelrod's original tournament.*
 
-Unnamed Strategy
-^^^^^^^^^^^^^^^^
-
-Apparently written by a grad student in political science whose name was withheld,
-this strategy cooperates with a given probability :math:`P`. This probability
-(which has initial value .3) is updated every 10 rounds based on whether the
-opponent seems to be random, very cooperative or very uncooperative.
-Furthermore, if after round 130 the strategy is losing then :math:`P` is also
-adjusted.
-
-Since the original code is not available and was apparently complicated, we have
-implemented this strategy based on published descriptions. The strategy cooperates
-with a random probability between 0.3 and 0.7.
-
-*This strategy came 14th in Axelrod's original tournament.*
-
 .. _random-strategy:
 
 Random
