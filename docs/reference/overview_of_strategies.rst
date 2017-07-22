@@ -336,10 +336,10 @@ repository.
    "K91R_", "Jonathan Pinkley", "Not Implemented"
    "K92R_", "Anatol Rapoport", "Not Implemented"
    "K93R_", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
-   "KPAVLOVC_", "Unknown. Probably Robert Axelrod", ":class:`WinStayLoseShift <axelrod.strategies.memoryone.WinStayLoseShift>`"
-   "KRANDOMC_", "Unknown. Probably Robert Axelrod", ":class:`Random <axelrod.strategies.rand.Random>`"
-   "KTF2TC_", "Unknown. Probably Robert Axelrod", ":class:`TitFor2Tats <axelrod.strategies.titfortat.TitFor2Tats>`"
-   "KTITFORTATC_", "Unknown. Probably Robert Axelrod", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
+   "KPAVLOVC_", "Unknown", ":class:`WinStayLoseShift <axelrod.strategies.memoryone.WinStayLoseShift>`"
+   "KRANDOMC_", "Unknown", ":class:`Random <axelrod.strategies.rand.Random>`"
+   "KTF2TC_", "Unknown", ":class:`TitFor2Tats <axelrod.strategies.titfortat.TitFor2Tats>`"
+   "KTITFORTATC_", Anatol Rapoport, ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
 
 EATHERLEY
 ^^^^^^^^^
