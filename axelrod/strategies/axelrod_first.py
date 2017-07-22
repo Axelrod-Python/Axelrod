@@ -446,6 +446,8 @@ class Tullock(Player):
     Cooperates for the first 11 rounds then randomly cooperates 10% less often
     than the opponent has in previous rounds.
 
+    This strategy came 13th in Axelrod's original tournament.
+
     Names:
 
     - Tullock: [Axelrod1980]_
