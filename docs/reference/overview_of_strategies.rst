@@ -99,13 +99,6 @@ This strategy follows the following rules:
 
 .. _random-strategy:
 
-Random
-^^^^^^
-
-This strategy plays randomly (disregarding the history of play).
-
-*This strategy came 15th in Axelrod's original tournament.*
-
 Axelrod's second tournament
 ---------------------------
 

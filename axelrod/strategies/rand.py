@@ -6,6 +6,8 @@ from axelrod.random_ import random_choice
 class Random(Player):
     """A player who randomly chooses between cooperating and defecting.
 
+    This strategy came 15th in Axelrod's original tournament.
+
     Names:
 
     - Random: [Axelrod1980]_
