@@ -13,42 +13,24 @@ An indication is given as to whether or not this strategy is implemented in the
 :code:`axelrod` library. If this strategy is not implemented please do send us a
 `pull request <https://github.com/Axelrod-Python/Axelrod/pulls>`_.
 
-Strategies in the Axelrod's first tournament:
+.. csv-table:: Strategies in Axelrod's first tournament
+  :header: "Original Code", "Author", "Axelrod Library Name"
 
-+--------------------------+-------------------------------------------+--------------------------+
-| Name                     | Long name                                 | Axelrod Library Name     |
-+==========================+===========================================+==========================+
-| `Tit For Tat`_           | Tit For Tat                               | :code:`TitForTat`        |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Tideman and Chieruzzi`_ | Tideman and Chieruzzi (authors' names)    | Not Implemented          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Nydegger`_              | Nydegger (author's name)                  | :code:`Nydegger`         |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Grofman`_               | Grofman (author's name)                   | :code:`Grofman`          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Shubik`_                | Shubik (author's name)                    | :code:`Shubik`           |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Stein and Rapoport`_    | Stein and Rapoport (authors' names)       | :code:`SteinAndRapoport` |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Grudger`_               | Grudger (by Friedman)                     | :code:`Grudger`          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Davis`_                 | Davis (author's name)                     | :code:`Davis`            |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Graaskamp`_             | Graaskamp (author's name)                 | Not Implemented          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Downing`_               | Downing (author's name)                   | :code:`RevisedDowning`   |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Feld`_                  | Feld (author's name)                      | :code:`Feld`             |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Joss`_                  | Joss (author's name)                      | :code:`Joss`             |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Tullock`_               | Tullock (author's name)                   | :code:`Tullock`          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Unnamed Strategy`_      | Unnamed Strategy (by a Grad Student in    | :code:`UnnamedStrategy`  |
-|                          | Political Science)                        |                          |
-+--------------------------+-------------------------------------------+--------------------------+
-| :ref:`random-strategy`   | Random                                    | :code:`Random`           |
-+--------------------------+-------------------------------------------+--------------------------+
+  "`Tit For Tat`_", "Tit For Tat", ":code:`TitForTat`"
+  "`Tideman and Chieruzzi`_", "Tideman and Chieruzzi (authors' names)", "Not Implemented "
+  "`Nydegger`_", "Nydegger (author's name)", ":code:`Nydegger`"
+  "`Grofman`_", "Grofman (author's name)", ":code:`Grofman`"
+  "`Shubik`_", "Shubik (author's name)", ":code:`Shubik`"
+  "`Stein and Rapoport`_", "Stein and Rapoport (authors' names)", ":code:`SteinAndRapoport`"
+  "`Grudger`_", "Grudger (by Friedman)", ":code:`Grudger`"
+  "`Davis`_", "Davis (author's name)", ":code:`Davis`"
+  "`Graaskamp`_", "Graaskamp (author's name)", "Not Implemented"
+  "`Downing`_", "Downing (author's name)", ":code:`RevisedDowning`"
+  "`Feld`_", "Feld (author's name)", ":code:`Feld`"
+  "`Joss`_", "Joss (author's name)", ":code:`Joss`"
+  "`Tullock`_",  "Tullock (author's name)", ":code:`Tullock`"
+  "`Unnamed Strategy`_", "Unnamed Strategy (by a Grad Student in Political Science)", ":code:`UnnamedStrategy`"
+  ":ref:`random-strategy`", "Random", ":code:`Random`"
 
 Tit for Tat
 ^^^^^^^^^^^
