@@ -100,8 +100,8 @@ class RevisedDowning(Player):
         self.bad = 0.0
         self.nice1 = 0
         self.nice2 = 0
-        self.total_C = 0 # note the same as self.cooperations
-        self.total_D = 0 # note the same as self.defections
+        self.total_C = 0  # note the same as self.cooperations
+        self.total_D = 0  # note the same as self.defections
 
     def strategy(self, opponent: Player) -> Action:
         round_number = len(self.history) + 1
