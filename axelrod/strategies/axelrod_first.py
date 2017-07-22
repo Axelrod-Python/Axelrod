@@ -376,7 +376,7 @@ class Shubik(Player):
     Plays like Tit-For-Tat with the following modification. After each
     retaliation, the number of rounds that Shubik retaliates increases by 1.
 
-    his strategy came 5th in Axelrod's original tournament.
+    This strategy came 5th in Axelrod's original tournament.
 
     Names:
 
