@@ -57,13 +57,6 @@ the game has just started (everything is forgotten).
 
 *This strategy came 2nd in Axelrod's original tournament.*
 
-Grudger
-^^^^^^^
-
-This strategy cooperates until the opponent defects and then defects forever.
-
-*This strategy came 7th in Axelrod's original tournament.*
-
 Graaskamp
 ^^^^^^^^^
 
