@@ -37,6 +37,22 @@ class TestPickle(unittest.TestCase):
         results = match.play()
         self.assertEqual(results, [(C, C), (C, C), (D, D)])
 
+    def test_nice_transformer_called(self):
+        player = axl.NMWEDeterministic()
+        copy = pickle.loads(pickle.dumps(player))
+        opponent_1 = axl.CyclerCCCDCD()
+        opponent_2 = axl.CyclerCCCDCD()
+        axl.seed(0)
+        match_1 = axl.Match((player, opponent_1), turns=100)
+        result_1 = match_1.play()
+
+        axl.seed(0)
+        match_2 = axl.Match((copy, opponent_2), turns=100)
+        result_2 = match_2.play()
+
+
+        self.assertEqual(result_1, result_2)
+
     def test_all(self):
         for s in axl.strategies:
             player = s()
