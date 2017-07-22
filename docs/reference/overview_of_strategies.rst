@@ -58,15 +58,6 @@ the game has just started (everything is forgotten).
 *This strategy came 2nd in Axelrod's original tournament.*
 
 
-Shubik
-^^^^^^
-
-This strategy plays a modification of Tit For Tat. It starts by retaliating
-with a single defection but the number of defections increases by 1 each time
-the opponent defects when this strategy cooperates.
-
-*This strategy came 5th in Axelrod's original tournament.*
-
 Stein and Rapoport
 ^^^^^^^^^^^^^^^^^^
 
