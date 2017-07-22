@@ -97,14 +97,6 @@ This strategy follows the following rules:
 
 *This strategy came 9th in Axelrod's original tournament.*
 
-Tullock
-^^^^^^^
-
-This strategy cooperates for the first 11 rounds and then (randomly) cooperates
-10% less often than the opponent has in the previous 10 rounds.
-
-*This strategy came 13th in Axelrod's original tournament.*
-
 Unnamed Strategy
 ^^^^^^^^^^^^^^^^
 
