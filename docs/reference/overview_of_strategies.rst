@@ -14,23 +14,23 @@ An indication is given as to whether or not this strategy is implemented in the
 `pull request <https://github.com/Axelrod-Python/Axelrod/pulls>`_.
 
 .. csv-table:: Strategies in Axelrod's first tournament
-  :header: "Original Code", "Author", "Axelrod Library Name"
+  :header: "Name", "Author", "Axelrod Library Name"
 
-  "`Tit For Tat`_", "Tit For Tat", ":code:`TitForTat`"
-  "`Tideman and Chieruzzi`_", "Tideman and Chieruzzi (authors' names)", "Not Implemented "
-  "`Nydegger`_", "Nydegger (author's name)", ":code:`Nydegger`"
-  "`Grofman`_", "Grofman (author's name)", ":code:`Grofman`"
-  "`Shubik`_", "Shubik (author's name)", ":code:`Shubik`"
-  "`Stein and Rapoport`_", "Stein and Rapoport (authors' names)", ":code:`SteinAndRapoport`"
-  "`Grudger`_", "Grudger (by Friedman)", ":code:`Grudger`"
-  "`Davis`_", "Davis (author's name)", ":code:`Davis`"
-  "`Graaskamp`_", "Graaskamp (author's name)", "Not Implemented"
-  "`Downing`_", "Downing (author's name)", ":code:`RevisedDowning`"
-  "`Feld`_", "Feld (author's name)", ":code:`Feld`"
-  "`Joss`_", "Joss (author's name)", ":code:`Joss`"
-  "`Tullock`_",  "Tullock (author's name)", ":code:`Tullock`"
-  "`Unnamed Strategy`_", "Unnamed Strategy (by a Grad Student in Political Science)", ":code:`UnnamedStrategy`"
-  ":ref:`random-strategy`", "Random", ":code:`Random`"
+  "`Tit For Tat`_", "Unknown. Probably Robert Axelrod", ":code:`TitForTat`"
+  "`Tideman and Chieruzzi`_", "T Nicolaus Tideman and Paula Chieruzz", "Not Implemented "
+  "`Nydegger`_", "Rudy Nydegger", ":code:`Nydegger`"
+  "`Grofman`_", "Bernard Grofman", ":code:`Grofman`"
+  "`Shubik`_", "Shubik", ":code:`Shubik`"
+  "`Stein and Rapoport`_", "Stein and Anatol Rapoport", ":code:`SteinAndRapoport`"
+  "`Grudger`_", "James W Friedman", ":code:`Grudger`"
+  "`Davis`_", "Davis", ":code:`Davis`"
+  "`Graaskamp`_", "Jim Graaskamp", "Not Implemented"
+  "`Downing`_", "Leslie Downing", ":code:`RevisedDowning`"
+  "`Feld`_", "Scott Feld", ":code:`Feld`"
+  "`Joss`_", "Johann Joss", ":code:`Joss`"
+  "`Tullock`_",  "Tullock", ":code:`Tullock`"
+  "`Unnamed Strategy`_", "Unknown", ":code:`UnnamedStrategy`"
+  ":ref:`random-strategy`", "Unknown. Probably Robert Axelrod", ":code:`Random`"
 
 Tit for Tat
 ^^^^^^^^^^^
