@@ -128,15 +128,6 @@ This strategy cooperates until the opponent defects and then defects forever.
 
 *This strategy came 7th in Axelrod's original tournament.*
 
-
-Davis
-^^^^^
-
-This strategy is a modification of Grudger. It starts by cooperating for the
-first 10 moves and then plays Grudger.
-
-*This strategy came 8th in Axelrod's original tournament.*
-
 Graaskamp
 ^^^^^^^^^
 
