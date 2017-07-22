@@ -529,14 +529,15 @@ class UnnamedStrategy(Player):
 
 @FinalTransformer((D, D), name_prefix=None)
 class SteinAndRapoport(Player):
-    """
-    A player who plays according to statistic methods.
-    Begins by playing C for the first four (4) rounds, then it plays
-    tit for tat and at the last 2 round it Defects. Every 15 turns it
-    runs a chi-squared test to check whether the opponent behaves randomly
-    or not. In case the opponent behaves randomly then Stein and Rapoport
-    Defects until the next 15 round (where we check again), otherwise it
-    still plays TitForTat.0
+    """This strategy plays a modification of Tit For Tat.
+
+    1. It cooperates for the first 4 moves.
+    2. It defects on the last 2 moves.
+    3. Every 15 moves it makes use of a `chi-squared
+       test <http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
+       opponent is playing randomly.
+
+    This strategy came 6th in Axelrod's original tournament.
 
     Names:
 
