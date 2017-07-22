@@ -147,21 +147,6 @@ This strategy follows the following rules:
 
 *This strategy came 9th in Axelrod's original tournament.*
 
-Downing
-^^^^^^^
-
-This strategy attempts to estimate the next move of the opponent by estimating
-the probability of cooperating given that they defected (:math:`p(C|D)`) or
-cooperated on the previous round (:math:`p(C|C)`). These probabilities are
-continuously updated during play and the strategy attempts to maximise the long
-term play. Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
-
-Downing is implemented as `RevisedDowning`. Apparently in the first tournament
-the strategy was implemented incorrectly and defected on the first two rounds.
-This can be controlled by setting `revised=True` to prevent the initial defections.
-
-*This strategy came 10th in Axelrod's original tournament.*
-
 Feld
 ^^^^
 
