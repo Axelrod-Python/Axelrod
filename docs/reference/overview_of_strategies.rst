@@ -147,15 +147,6 @@ This strategy follows the following rules:
 
 *This strategy came 9th in Axelrod's original tournament.*
 
-Feld
-^^^^
-
-This strategy plays Tit For Tat, always defecting if the opponent defects but
-cooperating when the opponent cooperates with a gradually decreasing probability
-until it is only .5.
-
-*This strategy came 11th in Axelrod's original tournament.*
-
 Joss
 ^^^^
 

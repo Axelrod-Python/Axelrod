@@ -154,8 +154,11 @@ class Feld(Player):
     """
     Submitted to Axelrod's first tournament by Scott Feld.
 
-    Defects when opponent defects. Cooperates with a probability that decreases
-    to 0.5 at round 200.
+    This strategy plays Tit For Tat, always defecting if the opponent defects but
+    cooperating when the opponent cooperates with a gradually decreasing probability
+    until it is only .5.
+
+    This strategy came 11th in Axelrod's original tournament.
 
     Names:
 
