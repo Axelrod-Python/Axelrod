@@ -371,37 +371,23 @@ names and classical definitions.
 
 The following classical strategies are included in the library:
 
-+--------------+----------------------+--------------------------+
-| S&P Name     | Long name            | Axelrod Library Name     |
-+==============+======================+==========================+
-| ALLC         | Always Cooperate     | :code:`Cooperator`       |
-+--------------+----------------------+--------------------------+
-| ALLD         | Always Defect        | :code:`Defector`         |
-+--------------+----------------------+--------------------------+
-| `EXTORT-2`_  | Extort-2             | :code:`ZDExtort2`        |
-+--------------+----------------------+--------------------------+
-| `HARD_MAJO`_ | Hard majority        | :code:`HardGoByMajority` |
-+--------------+----------------------+--------------------------+
-| `HARD_JOSS`_ | Hard Joss            | :code:`Joss`             |
-+--------------+----------------------+--------------------------+
-| `HARD_TFT`_  | Hard tit for tat     | :code:`HardTitForTat`    |
-+--------------+----------------------+--------------------------+
-| `HARD_TF2T`_ | Hard tit for 2 tats  | :code:`HardTitFor2Tats`  |
-+--------------+----------------------+--------------------------+
-| TFT          | Tit-For-Tat          | :code:`TitForTat`        |
-+--------------+----------------------+--------------------------+
-| `GRIM`_      | Grim                 | :code:`Grudger`          |
-+--------------+----------------------+--------------------------+
-| `GTFT`_      | Generous Tit-For-Tat | :code:`GTFT`             |
-+--------------+----------------------+--------------------------+
-| `TF2T`_      | Tit-For-Two-Tats     | :code:`TitFor2Tats`      |
-+--------------+----------------------+--------------------------+
-| `WSLS`_      | Win-Stay-Lose-Shift  | :code:`WinStayLoseShift` |
-+--------------+----------------------+--------------------------+
-| RANDOM       | Random               | :code:`Random`           |
-+--------------+----------------------+--------------------------+
-| `ZDGTFT-2`_  | ZDGTFT-2             | :code:`ZDGTFT2`          |
-+--------------+----------------------+--------------------------+
+.. csv-table:: Strategies in Stewart and Plotkin's tournament
+  :header: "S&P Name", "Long Name", "Axelrod Library Name"
+
+  "ALLC", "Always Cooperate", ":code:`Cooperator`"
+  "ALLD", "Always Defect", ":code:`Defector`"
+  "`EXTORT-2`_", "Extort-2", ":code:`ZDExtort2`"
+  "`HARD_MAJO`_", "Hard majority", ":code:`HardGoByMajority`"
+  "`HARD_JOSS`_", "Hard Joss", ":code:`Joss`"
+  "`HARD_TFT`_", "Hard tit for tat", ":code:`HardTitForTat`"
+  "`HARD_TF2T`_", "Hard tit for 2 tats", ":code:`HardTitFor2Tats`"
+  "TFT", "Tit-For-Tat", ":code:`TitForTat`"
+  "`GRIM`_", "Grim", ":code:`Grudger`"
+  "`GTFT`_", "Generous Tit-For-Tat", ":code:`GTFT`"
+  "`TF2T`_", "Tit-For-Two-Tats", ":code:`TitFor2Tats`"
+  "`WSLS`_", "Win-Stay-Lose-Shift", ":code:`WinStayLoseShift`"
+  "RANDOM", "Random", ":code:`Random`"
+  "`ZDGTFT-2`_", "ZDGTFT-2", ":code:`ZDGTFT2`"
 
 ALLC, ALLD, TFT and RANDOM are defined above. The remaining classical
 strategies are defined below. The tournament also included two Zero Determinant
