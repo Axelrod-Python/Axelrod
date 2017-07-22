@@ -143,6 +143,15 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
 
             # Define a new class and wrap the strategy method
             # Dynamically create the new class
+            def reducer(self_):
+                class_module = __import__(self_.__module__)
+                if self_.__class__.__name__ in dir(class_module):
+                    return self_.__class__, (), self_.__dict__
+                else:
+                    print('oops {}  {}'.format(
+                        self_.__class__.__name__, self_.original_class.__name__
+                    ))
+
             new_class = type(
                 new_class_name, (PlayerClass,),
                 {
@@ -153,6 +162,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "__module__": PlayerClass.__module__,
                     "classifier": classifier,
                     "__doc__": PlayerClass.__doc__,
+                    "__reduce__": reducer
                 })
             return new_class
     return Decorator
