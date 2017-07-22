@@ -30,7 +30,7 @@ An indication is given as to whether or not this strategy is implemented in the
   "Joss", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.Joss>`"
   "Tullock",  "Gordon Tullock", ":class:`Tullock <axelrod.strategies.axelrod_first.Tullock>`"
   "Unnamed Strategy", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
-  ":ref:`random-strategy`", "Unknown. Probably Robert Axelrod", ":class:`Random <axelrod.strategies.rand.Random>`"
+  "Random", "Unknown. Probably Robert Axelrod", ":class:`Random <axelrod.strategies.rand.Random>`"
 
 
 Tideman and Chieruzzi
@@ -75,8 +75,6 @@ This strategy follows the following rules:
    moves.
 
 *This strategy came 9th in Axelrod's original tournament.*
-
-.. _random-strategy:
 
 Axelrod's second tournament
 ---------------------------
