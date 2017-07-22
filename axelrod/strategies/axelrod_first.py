@@ -251,7 +251,6 @@ class Grofman(Player):
         return random_choice(2 / 7)
 
 
-
 class Joss(MemoryOnePlayer):
     """
     Submitted to Axelrod's first tournament by Johann Joss.
