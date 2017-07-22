@@ -254,7 +254,12 @@ The code for Axelrod's second touranment was originally published by the
 `University of Michigan Center for the Study of Complex Systems <http://lsa.umich.edu/cscs/>`_
 and is now available from
 `Robert Axelrod's personal website <http://www-personal.umich.edu/~axe/research/Software/CC/CC2.html>`_
-(subject to a `disclaimer <http://www-personal.umich.edu/~axe/research/Software/CC/CCDisclaimer.html>`_).
+subject to a `disclaimer <http://www-personal.umich.edu/~axe/research/Software/CC/CCDisclaimer.html>`_
+which states:
+
+ "All materials in this archive are copyright (c) 1996, Robert Axelrod, unless
+ otherwise noted. You are free to download these materials and use them without
+ restriction."
 
 The Axelrod-Python organisation has published a
 `modified version of the original code <https://github.com/Axelrod-Python/TourExec>`_.
