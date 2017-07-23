@@ -170,16 +170,6 @@ repository.
    "KTF2TC_", "Unknown", ":class:`TitFor2Tats <axelrod.strategies.titfortat.TitFor2Tats>`"
    "KTITFORTATC_", Anatol Rapoport, ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
 
-EATHERLEY
-^^^^^^^^^
-
-This strategy was submitted by Graham Eatherley to Axelrod's second tournament
-and generally cooperates unless the opponent defects, in which case Eatherley
-defects with a probability equal to the proportion of rounds that the opponent
-has defected.
-
-*This strategy came  in Axelrod's second tournament.*
-
 TESTER
 ^^^^^^
 
