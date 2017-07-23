@@ -180,18 +180,6 @@ has defected.
 
 *This strategy came  in Axelrod's second tournament.*
 
-CHAMPION
-^^^^^^^^
-
-This strategy was submitted by Danny Champion to Axelrod's second tournament and
-operates in three phases. The first phase lasts for the first 1/20-th of the
-rounds and Champion always cooperates. In the second phase, lasting until
-4/50-th of the rounds have passed, Champion mirrors its opponent's last move. In
-the last phase, Champion cooperates unless
-- the opponent defected on the last round, and
-- the opponent has cooperated less than 60% of the rounds, and
-- a random number is greater than the proportion of rounds defected
-
 TESTER
 ^^^^^^
 
