@@ -1,3 +1,20 @@
+# v3.1.1, 2017-07-23
+
+Improvements to documentation and README.
+
+- Re write of the README
+  https://github.com/Axelrod-Python/Axelrod/pull/1072
+- Fix typos/errors in docs
+  https://github.com/Axelrod-Python/Axelrod/pull/1075
+  https://github.com/Axelrod-Python/Axelrod/pull/1077
+- Big improvement to past tournament documentation reference
+  https://github.com/Axelrod-Python/Axelrod/pull/1081
+  https://github.com/Axelrod-Python/Axelrod/pull/1080
+  https://github.com/Axelrod-Python/Axelrod/pull/1078
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.1.0...v3.1.1
+
 # v3.1.0, 2017-07-16
 
 New class for actions, Internal improvements, a new strategy class,
