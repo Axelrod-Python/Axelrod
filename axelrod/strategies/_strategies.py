@@ -193,7 +193,6 @@ all_strategies = [
     MirrorMindReader,
     Negation,
     NiceAverageCopier,
-    NTitsForMTats,
     Nydegger,
     OmegaTFT,
     OnceBitten,
