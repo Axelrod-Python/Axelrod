@@ -4,12 +4,8 @@ import axelrod
 from numpy import mean
 import tempfile
 
-matplotlib_installed = True
-try:
-    import matplotlib.pyplot
-    plt = matplotlib.pyplot
-except ImportError:  # pragma: no cover
-    matplotlib_installed = False
+import matplotlib.pyplot
+plt = matplotlib.pyplot
 
 
 class TestPlot(unittest.TestCase):
@@ -105,7 +101,6 @@ class TestPlot(unittest.TestCase):
     def test_init(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)
-        self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
 
     def test_init_from_resulsetfromfile(self):
         tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
@@ -121,7 +116,6 @@ class TestPlot(unittest.TestCase):
 
         plot = axelrod.Plot(rs)
         self.assertEqual(plot.result_set, rs)
-        self.assertEqual(matplotlib_installed, plot.matplotlib_installed)
 
     def test_boxplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -142,40 +136,30 @@ class TestPlot(unittest.TestCase):
             self.expected_boxplot_xticks_labels)
 
     def test_boxplot(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.boxplot()
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.boxplot()
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_boxplot_with_passed_axes(self):
         # Test that can plot on a given matplotlib axes
-        if matplotlib_installed:
-            fig, axarr = plt.subplots(2, 2)
-            self.assertEqual(axarr[0, 1].get_ylim(), (0, 1))
-            plot = axelrod.Plot(self.test_result_set)
-            plot.boxplot(ax=axarr[0, 1])
-            self.assertNotEqual(axarr[0, 1].get_ylim(), (0, 1))
+        fig, axarr = plt.subplots(2, 2)
+        self.assertEqual(axarr[0, 1].get_ylim(), (0, 1))
+        plot = axelrod.Plot(self.test_result_set)
+        plot.boxplot(ax=axarr[0, 1])
+        self.assertNotEqual(axarr[0, 1].get_ylim(), (0, 1))
 
-            # Plot on another axes with a title
-            plot.boxplot(title="dummy title", ax=axarr[1, 0])
-            self.assertNotEqual(axarr[1, 0].get_ylim(), (0, 1))
-            self.assertEqual(axarr[1, 0].get_title(), "dummy title")
-
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        # Plot on another axes with a title
+        plot.boxplot(title="dummy title", ax=axarr[1, 0])
+        self.assertNotEqual(axarr[1, 0].get_ylim(), (0, 1))
+        self.assertEqual(axarr[1, 0].get_title(), "dummy title")
 
     def test_boxplot_with_title(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.boxplot(title="title")
-            self.assertIsInstance(fig,
-                                  matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.boxplot(title="title")
+        self.assertIsInstance(fig,
+                              matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_winplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -184,22 +168,16 @@ class TestPlot(unittest.TestCase):
             self.expected_winplot_dataset)
 
     def test_winplot(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.winplot()
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.winplot()
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_sdvplot(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.sdvplot()
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.sdvplot()
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_lengthplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -208,22 +186,16 @@ class TestPlot(unittest.TestCase):
             self.expected_winplot_dataset)
 
     def test_lengthplot(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.lengthplot()
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.lengthplot()
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_pdplot(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.pdplot()
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.pdplot()
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_payoff_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -232,94 +204,75 @@ class TestPlot(unittest.TestCase):
             self.expected_payoff_dataset)
 
     def test_payoff(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.payoff()
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.payoff()
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_payoff_with_title(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.payoff(title="dummy title")
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.payoff(title="dummy title")
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_payoff_with_passed_axes(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            fig, axarr = plt.subplots(2, 2)
-            self.assertEqual(axarr[0, 1].get_xlim(), (0, 1))
+        plot = axelrod.Plot(self.test_result_set)
+        fig, axarr = plt.subplots(2, 2)
+        self.assertEqual(axarr[0, 1].get_xlim(), (0, 1))
 
-            plot.payoff(ax=axarr[0, 1])
-            self.assertNotEqual(axarr[0, 1].get_xlim(), (0, 1))
-            # Ensure color bar draw at same location as boxplot
-            color_bar_bbox = fig.axes[-1].get_position().get_points()
-            payoff_bbox_coord = fig.axes[1].get_position().get_points()
-            self.assertEqual(color_bar_bbox[1, 1], payoff_bbox_coord[1, 1],
-                             msg="Color bar is not in correct location.")
+        plot.payoff(ax=axarr[0, 1])
+        self.assertNotEqual(axarr[0, 1].get_xlim(), (0, 1))
+        # Ensure color bar draw at same location as boxplot
+        color_bar_bbox = fig.axes[-1].get_position().get_points()
+        payoff_bbox_coord = fig.axes[1].get_position().get_points()
+        self.assertEqual(color_bar_bbox[1, 1], payoff_bbox_coord[1, 1],
+                         msg="Color bar is not in correct location.")
 
-            # Plot on another axes with a title
-            plot.payoff(title="dummy title", ax=axarr[1, 0])
-            self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
-            self.assertEqual(axarr[1, 0].get_xlabel(), "dummy title")
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        # Plot on another axes with a title
+        plot.payoff(title="dummy title", ax=axarr[1, 0])
+        self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
+        self.assertEqual(axarr[1, 0].get_xlabel(), "dummy title")
 
     def test_stackplot(self):
-        if matplotlib_installed:
-            eco = axelrod.Ecosystem(self.test_result_set)
-            eco.reproduce(100)
+        eco = axelrod.Ecosystem(self.test_result_set)
+        eco.reproduce(100)
 
-            plot = axelrod.Plot(self.test_result_set)
-            fig = plot.stackplot(eco)
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-            fig = plot.stackplot(eco, title="dummy title")
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-            fig = plot.stackplot(eco, logscale=False)
-            self.assertIsInstance(fig, matplotlib.pyplot.Figure)
-            plt.close(fig)
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        fig = plot.stackplot(eco)
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
+        fig = plot.stackplot(eco, title="dummy title")
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
+        fig = plot.stackplot(eco, logscale=False)
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
+        plt.close(fig)
 
     def test_stackplot_with_passed_axes(self):
         # Test that can plot on a given matplotlib axes
-        if matplotlib_installed:
-            eco = axelrod.Ecosystem(self.test_result_set)
-            eco.reproduce(100)
-            plot = axelrod.Plot(self.test_result_set)
+        eco = axelrod.Ecosystem(self.test_result_set)
+        eco.reproduce(100)
+        plot = axelrod.Plot(self.test_result_set)
 
-            fig, axarr = plt.subplots(2, 2)
-            self.assertEqual(axarr[0, 1].get_xlim(), (0, 1))
+        fig, axarr = plt.subplots(2, 2)
+        self.assertEqual(axarr[0, 1].get_xlim(), (0, 1))
 
-            plot.stackplot(eco, ax=axarr[0, 1])
-            self.assertNotEqual(axarr[0, 1].get_xlim(), (0, 1))
+        plot.stackplot(eco, ax=axarr[0, 1])
+        self.assertNotEqual(axarr[0, 1].get_xlim(), (0, 1))
 
-            # Plot on another axes with a title
-            plot.stackplot(eco ,title="dummy title", ax=axarr[1, 0])
-            self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
-            self.assertEqual(axarr[1, 0].get_title(), "dummy title")
-
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        # Plot on another axes with a title
+        plot.stackplot(eco ,title="dummy title", ax=axarr[1, 0])
+        self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
+        self.assertEqual(axarr[1, 0].get_title(), "dummy title")
 
 
     def test_all_plots(self):
-        if matplotlib_installed:
-            plot = axelrod.Plot(self.test_result_set)
-            # Test that this method does not crash.
-            self.assertIsNone(
-                plot.save_all_plots(prefix="test_outputs/",
-                                    progress_bar=False))
-            self.assertIsNone(
-                plot.save_all_plots(prefix="test_outputs/",
-                                    title_prefix="A prefix",
-                                    progress_bar=True))
-        else:  # pragma: no cover
-            self.skipTest('matplotlib not installed')
+        plot = axelrod.Plot(self.test_result_set)
+        # Test that this method does not crash.
+        self.assertIsNone(
+            plot.save_all_plots(prefix="test_outputs/",
+                                progress_bar=False))
+        self.assertIsNone(
+            plot.save_all_plots(prefix="test_outputs/",
+                                title_prefix="A prefix",
+                                progress_bar=True))
