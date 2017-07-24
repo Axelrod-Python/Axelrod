@@ -6,9 +6,13 @@ C, D = axl.Action.C, axl.Action.D
 
 @st.FlipTransformer()
 @st.FlipTransformer()
-class TestFlip(axl.Cooperator):
+class DoubleFlip(axl.Cooperator):
     pass
 
+
+@st.FlipTransformer()
+class SingleFlip(axl.Cooperator):
+    pass
 
 @st.ApologyTransformer([D], [C])
 class Apology(axl.Cooperator):
