@@ -1,6 +1,8 @@
 """Tests for the tit for tat strategies."""
 
 import random
+
+import copy
 from hypothesis import given
 from hypothesis.strategies import integers
 import axelrod
@@ -642,3 +644,66 @@ class TestEugineNier(TestPlayer):
         actions = [(C, D), (D, C), (C, D), (D, D),
                    (D, D), (D, D), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
+
+
+
+class TestNTitsForMTats(TestPlayer):
+    """
+    Tests for the N Tit(s) For M Tat(s) strategy
+    """
+
+    name = 'N Tit(s) For M Tat(s): 1, 1'
+    player = axelrod.NTitsForMTats
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    expected_class_classifier = copy.copy(expected_classifier)
+    expected_class_classifier['memory_depth'] = float('inf')
+
+    def test_strategy(self):
+        TestTitForTat.test_strategy(self)
+
+        # TitFor2Tats test_strategy
+        opponent = axelrod.MockPlayer(actions=[D, D, D, C, C])
+        actions = [(C, D), (C, D), (D, D), (D, C), (C, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions, init_kwargs={'N': 1, 'M': 2})
+
+        # TwoTitsForTat test_strategy
+        opponent = axelrod.MockPlayer(actions=[D, C, C, D, C])
+        actions = [(C, D), (D, C), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions, init_kwargs={'N': 2, 'M': 1})
+        actions = [(C, C), (C, C)]
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions, init_kwargs={'N': 2, 'M': 1})
+        actions = [(C, D), (D, D), (D, D)]
+        self.versus_test(opponent=axelrod.Defector(),
+                         expected_actions=actions, init_kwargs={'N': 2, 'M': 1})
+
+        # Cooperator test_strategy
+        actions = [(C, C)] + [(C, D), (C, C)] * 9
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, init_kwargs={'N': 0, 'M': 1})
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, init_kwargs={'N': 0, 'M': 5})
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, init_kwargs={'N': 0, 'M': 0})
+
+        # Defector test_strategy
+        actions = [(D, C)] + [(D, D), (D, C)] * 9
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, init_kwargs={'N': 1, 'M': 0})
+        self.versus_test(opponent=axelrod.Alternator(),
+                         expected_actions=actions, init_kwargs={'N': 5, 'M': 0})
+
+        # Other init args
+        actions = [(C, C), (C, D), (C, D), (D, C), (D, C), (D, D), (C, C)]
+        opponent = axelrod.MockPlayer(actions=[acts[1] for acts in actions])
+        self.versus_test(opponent=opponent,
+                         expected_actions=actions, init_kwargs={'N': 3, 'M': 2})
