@@ -2,7 +2,10 @@ from setuptools import setup
 
 # Read in the requirements.txt file
 with open('requirements.txt') as f:
-    requirements = f.read().splitlines()
+    requirements = []
+    for library in f.read().splitlines():
+        if "hypothesis" not in library:  # Skip: used only for dev
+            requirements.append(library)
 
 # Read in the version number
 exec(open('axelrod/version.py', 'r').read())
@@ -13,7 +16,7 @@ setup(
     install_requires=requirements,
     author='Vince Knight, Owen Campbell, Karol Langner, Marc Harper',
     author_email=('axelrod-python@googlegroups.com'),
-    packages=['axelrod', 'axelrod.strategies', 'axelrod.tests', 'axelrod.data'],
+    packages=['axelrod', 'axelrod.strategies', 'axelrod.data'],
     url='http://axelrod.readthedocs.org/',
     license='The MIT License (MIT)',
     description='Reproduce the Axelrod iterated prisoners dilemma tournament',
