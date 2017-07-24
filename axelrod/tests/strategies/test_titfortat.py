@@ -81,9 +81,13 @@ class TestTitFor2Tats(TestPlayer):
     }
 
     def test_strategy(self):
-        # Will punish sequence of 2 defections but will forgive
+        # Will punish sequence of 2 defections but will forgive one
         opponent = axelrod.MockPlayer(actions=[D, D, D, C, C])
         actions = [(C, D), (C, D), (D, D), (D, C), (C, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
+        opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D, D, C, C, D, D])
+        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (C, D), (C, D),
+                    (D, C), (C, C), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions)
 
 
@@ -473,28 +477,6 @@ class TestContriteTitForTat(TestPlayer):
         self.assertEqual(ctft._recorded_history, [C, C, C, D])
         self.assertEqual(opponent.history, [C, D, D, D])
         self.assertFalse(ctft.contrite)
-
-
-class TestSlowTitForTwoTats(TestPlayer):
-
-    name = "Slow Tit For Two Tats"
-    player = axelrod.SlowTitForTwoTats
-    expected_classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def test_strategy(self):
-        # If opponent plays the same move twice, repeats last action of
-        # opponent history.
-        opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D, D, C, C, D, D])
-        actions = [(C, C), (C, C), (C, D), (C, D), (D, C), (C, D), (C, D),
-                    (D, C), (C, C), (C, D), (C, D)]
-        self.versus_test(opponent, expected_actions=actions)
 
 
 class TestAdaptiveTitForTat(TestPlayer):
