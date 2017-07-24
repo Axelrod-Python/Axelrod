@@ -24,6 +24,8 @@ class Davis(Player):
     A player starts by cooperating for 10 rounds then plays Grudger,
     defecting if at any point the opponent has defected.
 
+    This strategy came 8th in Axelrod's original tournament.
+
     Names:
 
     - Davis: [Axelrod1980]_
@@ -61,9 +63,18 @@ class Davis(Player):
 
 
 class RevisedDowning(Player):
-    """Revised Downing attempts to determine if players are cooperative or not.
-    If so, it cooperates with them. This strategy would have won Axelrod's first
-    tournament.
+    """This strategy attempts to estimate the next move of the opponent by estimating
+    the probability of cooperating given that they defected (:math:`p(C|D)`) or
+    cooperated on the previous round (:math:`p(C|C)`). These probabilities are
+    continuously updated during play and the strategy attempts to maximise the long
+    term play. Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
+
+    Downing is implemented as `RevisedDowning`. Apparently in the first tournament
+    the strategy was implemented incorrectly and defected on the first two rounds.
+    This can be controlled by setting `revised=True` to prevent the initial defections.
+
+    This strategy came 10th in Axelrod's original tournament but would have won
+    if it had been implemented correctly.
 
     Names:
 
@@ -89,8 +100,8 @@ class RevisedDowning(Player):
         self.bad = 0.0
         self.nice1 = 0
         self.nice2 = 0
-        self.total_C = 0 # note the same as self.cooperations
-        self.total_D = 0 # note the same as self.defections
+        self.total_C = 0  # note the same as self.cooperations
+        self.total_D = 0  # note the same as self.defections
 
     def strategy(self, opponent: Player) -> Action:
         round_number = len(self.history) + 1
@@ -143,8 +154,11 @@ class Feld(Player):
     """
     Submitted to Axelrod's first tournament by Scott Feld.
 
-    Defects when opponent defects. Cooperates with a probability that decreases
-    to 0.5 at round 200.
+    This strategy plays Tit For Tat, always defecting if the opponent defects but
+    cooperating when the opponent cooperates with a gradually decreasing probability
+    until it is only .5.
+
+    This strategy came 11th in Axelrod's original tournament.
 
     Names:
 
@@ -203,9 +217,12 @@ class Grofman(Player):
     """
     Submitted to Axelrod's first tournament by Bernard Grofman.
 
-    Cooperate on the first 2 moves. Return opponent's move for the next 5.
-    Then cooperate if the last round's moves were the same, otherwise cooperate
-    with probability 2/7.
+    Cooperate on the first two rounds and
+    returns the opponent's last action for the next 5. For the rest of the game
+    Grofman cooperates if both players selected the same action in the previous
+    round, and otherwise cooperates randomly with probability :math:`frac{2}{7}`.
+
+    This strategy came 4th in Axelrod's original tournament.
 
     Names:
 
@@ -234,13 +251,14 @@ class Grofman(Player):
         return random_choice(2 / 7)
 
 
-
 class Joss(MemoryOnePlayer):
     """
     Submitted to Axelrod's first tournament by Johann Joss.
 
     Cooperates with probability 0.9 when the opponent cooperates, otherwise
     emulates Tit-For-Tat.
+
+    This strategy came 12th in Axelrod's original tournament.
 
     Names:
 
@@ -273,16 +291,27 @@ class Nydegger(Player):
     third move, its choice is determined from the 3 preceding outcomes in the
     following manner.
 
-    Let A be the sum formed by counting the other's defection as 2 points and
-    one's own as 1 point, and giving weights of 16, 4, and 1 to the preceding
-    three moves in chronological order. The choice can be described as defecting
-    only when A equals
-    1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, or 61.
+    .. math::
+
+        A = 16 a_1 + 4 a_2 + a_3
+
+    Where :math:`a_i` is dependent on the outcome of the previous :math:`i` th
+    round.  If both strategies defect, :math:`a_i=3`, if the opponent only defects:
+    :math:`a_i=2` and finally if it is only this strategy that defects then
+    :math:`a_i=1`.
+
+    Finally this strategy defects if and only if:
+
+    .. math::
+
+        A \in \{1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61\}
 
     Thus if all three preceding moves are mutual defection, A = 63 and the rule
     cooperates. This rule was designed for use in laboratory experiments as a
     stooge which had a memory and appeared to be trustworthy, potentially
     cooperative, but not gullible.
+
+    This strategy came 3rd in Axelrod's original tournament.
 
     Names:
 
@@ -345,6 +374,8 @@ class Shubik(Player):
 
     Plays like Tit-For-Tat with the following modification. After each
     retaliation, the number of rounds that Shubik retaliates increases by 1.
+
+    This strategy came 5th in Axelrod's original tournament.
 
     Names:
 
@@ -412,6 +443,8 @@ class Tullock(Player):
 
     Cooperates for the first 11 rounds then randomly cooperates 10% less often
     than the opponent has in previous rounds.
+
+    This strategy came 13th in Axelrod's original tournament.
 
     Names:
 
@@ -494,14 +527,15 @@ class UnnamedStrategy(Player):
 
 @FinalTransformer((D, D), name_prefix=None)
 class SteinAndRapoport(Player):
-    """
-    A player who plays according to statistic methods.
-    Begins by playing C for the first four (4) rounds, then it plays
-    tit for tat and at the last 2 round it Defects. Every 15 turns it
-    runs a chi-squared test to check whether the opponent behaves randomly
-    or not. In case the opponent behaves randomly then Stein and Rapoport
-    Defects until the next 15 round (where we check again), otherwise it
-    still plays TitForTat.0
+    """This strategy plays a modification of Tit For Tat.
+
+    1. It cooperates for the first 4 moves.
+    2. It defects on the last 2 moves.
+    3. Every 15 moves it makes use of a `chi-squared
+       test <http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
+       opponent is playing randomly.
+
+    This strategy came 6th in Axelrod's original tournament.
 
     Names:
 

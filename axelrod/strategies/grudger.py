@@ -9,6 +9,8 @@ class Grudger(Player):
     A player starts by cooperating however will defect if at any point the
     opponent has defected.
 
+    This strategy came 7th in Axelrod's original tournament.
+
     Names:
 
     - Friedman's strategy: [Axelrod1980]_

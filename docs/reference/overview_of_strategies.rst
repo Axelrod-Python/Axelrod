@@ -13,51 +13,25 @@ An indication is given as to whether or not this strategy is implemented in the
 :code:`axelrod` library. If this strategy is not implemented please do send us a
 `pull request <https://github.com/Axelrod-Python/Axelrod/pulls>`_.
 
-Strategies in the Axelrod's first tournament:
+.. csv-table:: Strategies in Axelrod's first tournament
+  :header: "Name", "Author", "Axelrod Library Name"
 
-+--------------------------+-------------------------------------------+--------------------------+
-| Name                     | Long name                                 | Axelrod Library Name     |
-+==========================+===========================================+==========================+
-| `Tit For Tat`_           | Tit For Tat                               | :code:`TitForTat`        |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Tideman and Chieruzzi`_ | Tideman and Chieruzzi (authors' names)    | Not Implemented          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Nydegger`_              | Nydegger (author's name)                  | :code:`Nydegger`         |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Grofman`_               | Grofman (author's name)                   | :code:`Grofman`          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Shubik`_                | Shubik (author's name)                    | :code:`Shubik`           |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Stein and Rapoport`_    | Stein and Rapoport (authors' names)       | :code:`SteinAndRapoport` |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Grudger`_               | Grudger (by Friedman)                     | :code:`Grudger`          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Davis`_                 | Davis (author's name)                     | :code:`Davis`            |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Graaskamp`_             | Graaskamp (author's name)                 | Not Implemented          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Downing`_               | Downing (author's name)                   | :code:`RevisedDowning`   |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Feld`_                  | Feld (author's name)                      | :code:`Feld`             |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Joss`_                  | Joss (author's name)                      | :code:`Joss`             |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Tullock`_               | Tullock (author's name)                   | :code:`Tullock`          |
-+--------------------------+-------------------------------------------+--------------------------+
-| `Unnamed Strategy`_      | Unnamed Strategy (by a Grad Student in    | :code:`UnnamedStrategy`  |
-|                          | Political Science)                        |                          |
-+--------------------------+-------------------------------------------+--------------------------+
-| :ref:`random-strategy`   | Random                                    | :code:`Random`           |
-+--------------------------+-------------------------------------------+--------------------------+
+  "Tit For Tat", "Anatol Rapoport", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
+  "`Tideman and Chieruzzi`_", "T Nicolaus Tideman and Paula Chieruzz", "Not Implemented "
+  "Nydegger", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.Nydegger>`"
+  "Grofman", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.Grofman>`"
+  "Shubik", "Martin Shubik", ":class:`Shubik <axelrod.strategies.axelrod_first.Shubik>`"
+  "Stein and Rapoport", "Stein and Anatol Rapoport", ":class:`SteinAndRapoport <axelrod.strategies.axelrod_first.SteinAndRapoport>`"
+  "Grudger", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
+  "Davis", "Morton Davis", ":class:`Davis <axelrod.strategies.axelrod_first.Davis>`"
+  "`Graaskamp`_", "Jim Graaskamp", "Not Implemented"
+  "Downing", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.axelrod_first.RevisedDowning>`"
+  "Feld", "Scott Feld", ":class:`Feld <axelrod.strategies.axelrod_first.Feld>`"
+  "Joss", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.Joss>`"
+  "Tullock",  "Gordon Tullock", ":class:`Tullock <axelrod.strategies.axelrod_first.Tullock>`"
+  "Unnamed Strategy", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
+  "Random", "Unknownd", ":class:`Random <axelrod.strategies.rand.Random>`"
 
-Tit for Tat
-^^^^^^^^^^^
-
-This strategy was referred to as the *'simplest'* strategy submitted. It
-begins by cooperating and then simply repeats the last moves made by the
-opponent.
-
-*Tit for Tat came 1st in Axelrod's original tournament.*
 
 Tideman and Chieruzzi
 ^^^^^^^^^^^^^^^^^^^^^
@@ -83,86 +57,6 @@ the game has just started (everything is forgotten).
 
 *This strategy came 2nd in Axelrod's original tournament.*
 
-Nydegger
-^^^^^^^^
-
-This strategy begins by playing Tit For Tat for the first 3 rounds with the
-following modifications:
-
-**If it is the only strategy to cooperate in the first round and the only
-strategy to defect on the second round then it defects on the 3 round
-(despite the fact that Tit For Tat would now cooperate).**
-
-After these first 3 rounds the next move is made depending on the previous 3
-rounds. A score is given to these rounds according to the following
-calculation:
-
-.. math::
-
-    A = 16 a_1 + 4 a_2 + a_3
-
-Where :math:`a_i` is dependent on the outcome of the previous :math:`i` th
-round.  If both strategies defect, :math:`a_i=3`, if the opponent only defects:
-:math:`a_i=2` and finally if it is only this strategy that defects then
-:math:`a_i=1`.
-
-Finally this strategy defects if and only if:
-
-.. math::
-
-    A \in \{1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 49, 54, 55, 58, 61\}
-
-*This strategy came 3rd in Axelrod's original tournament.*
-
-Grofman
-^^^^^^^
-
-This is a pretty simple strategy: it cooperates on the first two rounds and
-returns the opponent's last action for the next 5. For the rest of the game
-Grofman cooperates if both players selected the same action in the previous
-round, and otherwise cooperates randomly with probability
-:math:`\frac{2}{7}`.
-
-*This strategy came 4th in Axelrod's original tournament.*
-
-Shubik
-^^^^^^
-
-This strategy plays a modification of Tit For Tat. It starts by retaliating
-with a single defection but the number of defections increases by 1 each time
-the opponent defects when this strategy cooperates.
-
-*This strategy came 5th in Axelrod's original tournament.*
-
-Stein and Rapoport
-^^^^^^^^^^^^^^^^^^
-
-This strategy plays a modification of Tit For Tat.
-
-1. It cooperates for the first 4 moves.
-2. It defects on the last 2 moves.
-3. Every 15 moves it makes use of a `chi-squared
-   test <http://en.wikipedia.org/wiki/Chi-squared_test>`_ to check if the
-   opponent is playing randomly.
-
-*This strategy came 6th in Axelrod's original tournament.*
-
-Grudger
-^^^^^^^
-
-This strategy cooperates until the opponent defects and then defects forever.
-
-*This strategy came 7th in Axelrod's original tournament.*
-
-
-Davis
-^^^^^
-
-This strategy is a modification of Grudger. It starts by cooperating for the
-first 10 moves and then plays Grudger.
-
-*This strategy came 8th in Axelrod's original tournament.*
-
 Graaskamp
 ^^^^^^^^^
 
@@ -182,107 +76,100 @@ This strategy follows the following rules:
 
 *This strategy came 9th in Axelrod's original tournament.*
 
-Downing
-^^^^^^^
-
-This strategy attempts to estimate the next move of the opponent by estimating
-the probability of cooperating given that they defected (:math:`p(C|D)`) or
-cooperated on the previous round (:math:`p(C|C)`). These probabilities are
-continuously updated during play and the strategy attempts to maximise the long
-term play. Note that the initial values are :math:`p(C|C)=p(C|D)=.5`.
-
-Downing is implemented as `RevisedDowning`. Apparently in the first tournament
-the strategy was implemented incorrectly and defected on the first two rounds.
-This can be controlled by setting `revised=True` to prevent the initial defections.
-
-*This strategy came 10th in Axelrod's original tournament.*
-
-Feld
-^^^^
-
-This strategy plays Tit For Tat, always defecting if the opponent defects but
-cooperating when the opponent cooperates with a gradually decreasing probability
-until it is only .5.
-
-*This strategy came 11th in Axelrod's original tournament.*
-
-Joss
-^^^^
-
-This strategy plays Tit For Tat, always defecting if the opponent defects but
-cooperating when the opponent cooperates with probability .9.
-
-*This strategy came 12th in Axelrod's original tournament.*
-
-Tullock
-^^^^^^^
-
-This strategy cooperates for the first 11 rounds and then (randomly) cooperates
-10% less often than the opponent has in the previous 10 rounds.
-
-*This strategy came 13th in Axelrod's original tournament.*
-
-Unnamed Strategy
-^^^^^^^^^^^^^^^^
-
-Apparently written by a grad student in political science whose name was withheld,
-this strategy cooperates with a given probability :math:`P`. This probability
-(which has initial value .3) is updated every 10 rounds based on whether the
-opponent seems to be random, very cooperative or very uncooperative.
-Furthermore, if after round 130 the strategy is losing then :math:`P` is also
-adjusted.
-
-Since the original code is not available and was apparently complicated, we have
-implemented this strategy based on published descriptions. The strategy cooperates
-with a random probability between 0.3 and 0.7.
-
-*This strategy came 14th in Axelrod's original tournament.*
-
-.. _random-strategy:
-
-Random
-^^^^^^
-
-This strategy plays randomly (disregarding the history of play).
-
-*This strategy came 15th in Axelrod's original tournament.*
-
 Axelrod's second tournament
 ---------------------------
 
-Work in progress.
+The code for Axelrod's second touranment was originally published by the
+`University of Michigan Center for the Study of Complex Systems <http://lsa.umich.edu/cscs/>`_
+and is now available from
+`Robert Axelrod's personal website <http://www-personal.umich.edu/~axe/research/Software/CC/CC2.html>`_
+subject to a `disclaimer <http://www-personal.umich.edu/~axe/research/Software/CC/CCDisclaimer.html>`_
+which states:
 
-EATHERLEY
-^^^^^^^^^
+ "All materials in this archive are copyright (c) 1996, Robert Axelrod, unless
+ otherwise noted. You are free to download these materials and use them without
+ restriction."
 
-This strategy was submitted by Graham Eatherley to Axelrod's second tournament
-and generally cooperates unless the opponent defects, in which case Eatherley
-defects with a probability equal to the proportion of rounds that the opponent
-has defected.
+The Axelrod-Python organisation has published a
+`modified version of the original code <https://github.com/Axelrod-Python/TourExec>`_.
+In the following table, links to original code point to the Axelrod-Python
+repository.
 
-*This strategy came  in Axelrod's second tournament.*
+.. include:: fortan_keys.rst
 
-CHAMPION
-^^^^^^^^
+.. csv-table:: Strategies in Axelrod's second tournament
+   :header: "Original Code", "Author", "Axelrod Library Name"
 
-This strategy was submitted by Danny Champion to Axelrod's second tournament and
-operates in three phases. The first phase lasts for the first 1/20-th of the
-rounds and Champion always cooperates. In the second phase, lasting until
-4/50-th of the rounds have passed, Champion mirrors its opponent's last move. In
-the last phase, Champion cooperates unless
-- the opponent defected on the last round, and
-- the opponent has cooperated less than 60% of the rounds, and
-- a random number is greater than the proportion of rounds defected
+   "GRASR_", "Unknown", "Not Implemented"
+   "K31R_", "Gail Grisell", "Not Implemented"
+   "K32R_", "Charles Kluepfel", "Not Implemented"
+   "K33R_", "Harold Rabbie", "Not Implemented"
+   "K34R_", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
+   "K35R_", "Abraham Getzler", "Not Implemented"
+   "K36R_", "Roger Hotz", "Not Implemented"
+   "K37R_", "Geroge Lefevre", "Not Implemented"
+   "K38R_", "Nelson Weiderman", "Not Implemented"
+   "K39R_", "Tom Almy", "Not Implemented"
+   "K40R_", "Robert Adams", "Not Implemented"
+   "K41R_", "Herb Weiner", "Not Implemented"
+   "K42R_", "Otto Borufsen", "Not Implemented"
+   "K43R_", "R D Anderson", "Not Implemented"
+   "K44R_", "W M Adams", "Not Implemented"
+   "K45R_", "Michael F McGurrin", "Not Implemented"
+   "K46R_", "Graham J Eatherley", ":class:`Eatherley <axelrod.strategies.axelrod_second.Eatherley>`"
+   "K47R_", "Richard Hufford", "Not Implemented"
+   "K48R_", "George Hufford", "Not Implemented"
+   "K49R_", "Rob Cave", "Not Implemented"
+   "K50R_", "Rik", "Not Implemented"
+   "K51R_", "John Willaim Colbert", "Not Implemented"
+   "K52R_", "David A Smith", "Not Implemented"
+   "K53R_", "Henry Nussbacher", "Not Implemented"
+   "K54R_", "William H Robertson", "Not Implemented"
+   "K55R_", "Steve Newman", "Not Implemented"
+   "K56R_", "Stanley F Quayle", "Not Implemented"
+   "K57R_", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.Nydegger>`"
+   "K58R_", "Glen Rowsam", "Not Implemented"
+   "K59R_", "Leslie Downing", ":class:`RevisedDowning <axelrod.strategies.axelrod_first.RevisedDowning>`"
+   "K60R_", "Jim Graaskamp and Ken Katzen", "Work In Progress"
+   "K61R_", "Danny C Champion", ":class:`Champion <axelrod.strategies.axelrod_second.Champion>`"
+   "K62R_", "Howard R Hollander", "Not Implemented"
+   "K63R_", "George Duisman", "Not Implemented"
+   "K64R_", "Brian Yamachi", "Not Implemented"
+   "K65R_", "Mark F Batell", "Not Implemented"
+   "K66R_", "Ray Mikkelson", "Not Implemented"
+   "K67R_", "Craig Feathers", "Not Implemented"
+   "K68R_", "Fransois Leyvraz", "Not Implemented"
+   "K69R_", "Johann Joss", ":class:`Joss <axelrod.strategies.axelrod_first.Joss>`"
+   "K70R_", "Robert Pebly", "Not Implemented"
+   "K71R_", "James E Hill", "Not Implemented"
+   "K72R_", "Edward C White Jr", "Not Implemented"
+   "K73R_", "Geroge Zimmerman", "Not Implemented"
+   "K74R_", "Edward Friedland", "Not Implemented"
+   "K74RXX_", "Edward Friedland", "Not Implemented"
+   "K75R_", "P D Harrington", "Not Implemented"
+   "K76R_", "David Gladstein", ":class:`Tester <axelrod.strategies.axelrod_second.Tester>`"
+   "K77R_", "Scott Feld", ":class:`Feld <axelrod.strategies.axelrod_first.Feld>`"
+   "K78R_", "Fred Mauk", "Not Implemented"
+   "K79R_", "Dennis Ambuehl and Kevin Hickey", Not Implemented
+   "K80R_", "Robyn M Dawes and Mark Batel", Not Implemented
+   "K81R_", "Martyn Jones", "Not Implemented"
+   "K82R_", "Robert A Leyland", "Not Implemented"
+   "K83R_", "Paul E Black", "Not Implemented"
+   "K84R_", "T Nicolaus Tideman and Paula Chieruzz", "Not Implemented"
+   "K85R_", "Rober B Falk and James M Langsted", "Not Implemented"
+   "K86R_", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.Grofman>`"
+   "K87R_", "E E H Schurmann",  "Not Implemented"
+   "K88R_", "Scott Appold", "Not Implemented"
+   "K89R_", "Gene Snodgrass", "Not Implemented"
+   "K90R_", "John Maynard Smith", "Not Implemented"
+   "K91R_", "Jonathan Pinkley", "Not Implemented"
+   "K92R_", "Anatol Rapoport", "Not Implemented"
+   "K93R_", "Unknown", ":class:`UnnamedStrategy <axelrod.strategies.axelrod_first.UnnamedStrategy>`"
+   "KPAVLOVC_", "Unknown", ":class:`WinStayLoseShift <axelrod.strategies.memoryone.WinStayLoseShift>`"
+   "KRANDOMC_", "Unknown", ":class:`Random <axelrod.strategies.rand.Random>`"
+   "KTF2TC_", "Unknown", ":class:`TitFor2Tats <axelrod.strategies.titfortat.TitFor2Tats>`"
+   "KTITFORTATC_", Anatol Rapoport, ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
 
-TESTER
-^^^^^^
-
-This strategy is a TFT variant that attempts to exploit certain strategies. It
-defects on the first move. If the opponent ever defects, TESTER 'apologies' by
-cooperating and then plays TFT for the rest of the game. Otherwise TESTER
-alternates cooperation and defection.
-
-*This strategy came 46th in Axelrod's second tournament.*
 
 Stewart and Plotkin's Tournament (2012)
 ---------------------------------------
@@ -300,37 +187,23 @@ names and classical definitions.
 
 The following classical strategies are included in the library:
 
-+--------------+----------------------+--------------------------+
-| S&P Name     | Long name            | Axelrod Library Name     |
-+==============+======================+==========================+
-| ALLC         | Always Cooperate     | :code:`Cooperator`       |
-+--------------+----------------------+--------------------------+
-| ALLD         | Always Defect        | :code:`Defector`         |
-+--------------+----------------------+--------------------------+
-| `EXTORT-2`_  | Extort-2             | :code:`ZDExtort2`        |
-+--------------+----------------------+--------------------------+
-| `HARD_MAJO`_ | Hard majority        | :code:`HardGoByMajority` |
-+--------------+----------------------+--------------------------+
-| `HARD_JOSS`_ | Hard Joss            | :code:`Joss`             |
-+--------------+----------------------+--------------------------+
-| `HARD_TFT`_  | Hard tit for tat     | :code:`HardTitForTat`    |
-+--------------+----------------------+--------------------------+
-| `HARD_TF2T`_ | Hard tit for 2 tats  | :code:`HardTitFor2Tats`  |
-+--------------+----------------------+--------------------------+
-| TFT          | Tit-For-Tat          | :code:`TitForTat`        |
-+--------------+----------------------+--------------------------+
-| `GRIM`_      | Grim                 | :code:`Grudger`          |
-+--------------+----------------------+--------------------------+
-| `GTFT`_      | Generous Tit-For-Tat | :code:`GTFT`             |
-+--------------+----------------------+--------------------------+
-| `TF2T`_      | Tit-For-Two-Tats     | :code:`TitFor2Tats`      |
-+--------------+----------------------+--------------------------+
-| `WSLS`_      | Win-Stay-Lose-Shift  | :code:`WinStayLoseShift` |
-+--------------+----------------------+--------------------------+
-| RANDOM       | Random               | :code:`Random`           |
-+--------------+----------------------+--------------------------+
-| `ZDGTFT-2`_  | ZDGTFT-2             | :code:`ZDGTFT2`          |
-+--------------+----------------------+--------------------------+
+.. csv-table:: Strategies in Stewart and Plotkin's tournament
+  :header: "S&P Name", "Long Name", "Axelrod Library Name"
+
+  "ALLC", "Always Cooperate", ":class:`Cooperator <axelrod.strategies.cooperator.Cooperator>`"
+  "ALLD", "Always Defect", ":class:`Defector <axelrod.strategies.defector.Defector>`"
+  "`EXTORT-2`_", "Extort-2", ":class:`ZDExtort2 <axelrod.strategies.memoryone.ZDExtort2>`"
+  "`HARD_MAJO`_", "Hard majority", ":class:`HardGoByMajority <axelrod.strategies.gobymajority.HardGoByMajority>`"
+  "`HARD_JOSS`_", "Hard Joss", ":class:`Joss <axelrod.strategies.axelrod_first.Joss>`"
+  "`HARD_TFT`_", "Hard tit for tat", ":class:`HardTitForTat <axelrod.strategies.titfortat.HardTitForTat>`"
+  "`HARD_TF2T`_", "Hard tit for 2 tats", ":class:`HardTitFor2Tats <axelrod.strategies.titfortat.HardTitFor2Tats>`"
+  "TFT", "Tit-For-Tat", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
+  "`GRIM`_", "Grim", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
+  "`GTFT`_", "Generous Tit-For-Tat", ":class:`GTFT <axelrod.strategies.memoryone.GTFT>`"
+  "`TF2T`_", "Tit-For-Two-Tats", ":class:`TitFor2Tats <axelrod.strategies.titfortat.TitFor2Tats>`"
+  "`WSLS`_", "Win-Stay-Lose-Shift", ":class:`WinStayLoseShift <axelrod.strategies.memoryone.WinStayLoseShift>`"
+  "RANDOM", "Random", ":class:`Random <axelrod.strategies.rand.Random>`"
+  "`ZDGTFT-2`_", "ZDGTFT-2", ":class:`ZDGTFT2 <axelrod.strategies.memoryone.ZDGTFT2>`"
 
 ALLC, ALLD, TFT and RANDOM are defined above. The remaining classical
 strategies are defined below. The tournament also included two Zero Determinant

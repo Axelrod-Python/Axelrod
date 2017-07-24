@@ -12,6 +12,9 @@ class TitForTat(Player):
     A player starts by cooperating and then mimics the previous action of the
     opponent.
 
+    This strategy was referred to as the *'simplest'* strategy submitted to
+    Axelrod's first tournament. It came first.
+
     Note that the code for this strategy is written in a fairly verbose
     way. This is done so that it can serve as an example strategy for
     those who might be new to Python.

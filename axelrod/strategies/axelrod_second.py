@@ -100,9 +100,12 @@ class Tester(Player):
     """
     Submitted to Axelrod's second tournament by David Gladstein.
 
-    Defects on the first move and plays Tit For Tat if the opponent ever defects
-    (after one apology cooperation round). Otherwise alternate cooperation and
-    defection.
+    This strategy is a TFT variant that attempts to exploit certain strategies. It
+    defects on the first move. If the opponent ever defects, TESTER 'apologies' by
+    cooperating and then plays TFT for the rest of the game. Otherwise TESTER
+    alternates cooperation and defection.
+
+    This strategy came 46th in Axelrod's second tournament.
 
     Names:
 
