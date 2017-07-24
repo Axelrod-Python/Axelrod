@@ -1,9 +1,9 @@
-import unittest
 import pickle
+import unittest
+
 import axelrod as axl
 from axelrod.strategy_transformers import FlipTransformer
-from axelrod.my_t import transformed, TestFlip
-
+from axelrod.tests.classes_for_testing_pickling import transformed, DoubleFlip
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -68,47 +68,23 @@ class TestPickle(unittest.TestCase):
             self.assertEqual(reconstituted, player)
 
     def test_pickling_transformers(self):
-        player = transformed[0]()
-        print(player.__dict__)
-        print(player.__class__.original_class)
 
         for s in transformed:
             player = s()
             player.play(axl.Cooperator())
-            # print(player.name, player.__class__.__name__)
             reconstituted = pickle.loads(pickle.dumps(player))
-
             self.assertEqual(reconstituted, player)
 
     def test_created(self):
         x = FlipTransformer()(axl.Cooperator)
         x = FlipTransformer()(x)
         x = FlipTransformer()(x)()
-        # print(x.__reduce__())
-        # print('created')
-        # print(repr(pickle.dumps(x)))
         z = pickle.loads(pickle.dumps(x))
-        # print(z)
-        # print(z.__dict__)
+
         self.assertEqual(x, z)
 
     def test_created_two(self):
-        # print('created_two')
-        x = TestFlip()
-        # print(x.__dict__)
-        # print(x.__class__.__dict__)
-        # print(x.__class__.__name__)
-        # print(x.__dir__())
+        x = DoubleFlip()
         z = pickle.dumps(x)
         self.assertEqual(x, pickle.loads(z))
-
-    # def test_reconsitutor(self):
-    #     x = TestFlip()
-    #     print('reconstructor')
-    #     print(x.decorator, x.original_class)
-    #     y = Reconstitutor()(x.decorator, x.original_class, x.__class__.__name__)
-    #     print(type(y))
-    #     y.__dict__.update(x.__dict__)
-    #     print(y.name)
-    #     print(y.__class__.__name__)
-    #     self.assertEqual(y, x)
+        self.assert_original_acts_same_as_pickled(x, turns=10)

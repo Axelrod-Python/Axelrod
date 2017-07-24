@@ -12,6 +12,9 @@ import random
 from numpy.random import choice
 from .action import Action
 from .random_ import random_choice
+from importlib import import_module
+from pydoc import locate
+import axelrod
 
 
 C, D = Action.C, Action.D
@@ -56,6 +59,10 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 self.name_prefix = kwargs["name_prefix"]
             else:
                 self.name_prefix = name_prefix
+
+        def __reduce__(self):
+            return StrategyTransformerFactory, (
+                strategy_wrapper, name_prefix, reclassifier)
 
         def __call__(self, PlayerClass):
             """
@@ -144,15 +151,25 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             # Define a new class and wrap the strategy method
             # Dynamically create the new class
             def reducer(self_):
-                class_module = __import__(self_.__module__)
+                class_module = import_module(self_.__module__)
                 if self_.__class__.__name__ in dir(class_module):
                     return self_.__class__, (), self_.__dict__
 
-                
                 else:
-                    print('oops {}  {}'.format(
-                        self_.__class__.__name__, self_.original_class.__name__
-                    ))
+
+                    decorators = [self_.decorator]
+                    pc = self_.original_class
+                    original_name = pc.__name__
+                    for klass in pc.mro():
+                        if hasattr(klass, 'decorator'):
+                            decorators.append(klass.decorator)
+                        if klass in axelrod.strategies:
+                            pc = klass
+                            break
+                    return (Reconstitutor(),
+                            (decorators, pc, original_name),
+                            self_.__dict__)
+
 
             new_class = type(
                 new_class_name, (PlayerClass,),
@@ -160,6 +177,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "name": name,
                     "original_class": PlayerClass,
                     "strategy": strategy,
+                    "decorator": (self, self.args, self.kwargs),
                     "__repr__": __repr__,
                     "__module__": PlayerClass.__module__,
                     "classifier": classifier,
@@ -169,6 +187,19 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             return new_class
     return Decorator
 
+class Reconstitutor(object):
+    def __init__(self):
+
+        pass
+
+    def __call__(self, decorators, player_class, original_name):
+        use_class = player_class
+
+        for decorator, args, kwargs in decorators:
+            use_class = decorator(*args, **kwargs)(use_class)
+        obj = use_class()
+        obj.__class__.__name__ = original_name
+        return obj
 
 def compose_transformers(t1, t2):
     """Compose transformers without having to invoke the first on
