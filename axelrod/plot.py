@@ -7,20 +7,10 @@ import tqdm
 
 from typing import List, Union
 
-matplotlib_installed = True
-try:
-    import matplotlib
-    import matplotlib.pyplot as plt
-    import matplotlib.transforms as transforms
-    from mpl_toolkits.axes_grid1 import make_axes_locatable
-except ImportError:  # pragma: no cover
-    matplotlib_installed = False
-except RuntimeError:  # pragma: no cover
-    matplotlib_installed = False
-    warnings.warn(
-        'Matplotlib failed to import and so no plots will be produced. This '
-        'could be caused by using a virtual environment on OSX. See '
-        'http://matplotlib.org/faq/virtualenv_faq.html for details.')
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.transforms as transforms
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 titleType = List[str]
 namesType = List[str]
@@ -37,7 +27,6 @@ def default_cmap(version: str = "2.0") -> str:
 class Plot(object):
     def __init__(self, result_set: ResultSet) -> None:
         self.result_set = result_set
-        self.matplotlib_installed = matplotlib_installed
         self.nplayers = self.result_set.nplayers
         self.players = self.result_set.players
 
@@ -46,8 +35,6 @@ class Plot(object):
         ax: matplotlib.axes.SubplotBase = None
     ) -> matplotlib.figure.Figure:
         """For making violinplots."""
-        if not self.matplotlib_installed:  # pragma: no cover
-            return None
 
         if ax is None:
             _, ax = plt.subplots()
@@ -112,8 +99,6 @@ class Plot(object):
         self, title: titleType = None, ax: matplotlib.axes.SubplotBase = None
     ) -> matplotlib.figure.Figure:
         """Plots the distributions for the number of wins for each strategy."""
-        if not self.matplotlib_installed:  # pragma: no cover
-            return None
 
         data, names = self._winplot_dataset
         figure = self._violinplot(data, names, title=title, ax=ax)
@@ -184,8 +169,6 @@ class Plot(object):
         ax: matplotlib.axes.SubplotBase = None
     ) -> matplotlib.figure.Figure:
         """Generic heatmap plot"""
-        if not self.matplotlib_installed:  # pragma: no cover
-            return None
 
         if ax is None:
             _, ax = plt.subplots()
@@ -233,8 +216,6 @@ class Plot(object):
         self, eco, title: titleType = None, logscale: bool = True,
         ax: matplotlib.axes.SubplotBase =None
     ) -> matplotlib.figure.Figure:
-        if not self.matplotlib_installed:  # pragma: no cover
-            return None
 
         populations = eco.population_sizes
 
