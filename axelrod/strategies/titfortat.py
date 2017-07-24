@@ -758,10 +758,10 @@ class NTitsForMTats(Player):
 
     Names:
 
-    - N Tits For M Tats: []_
+    - N Tit(s) For M Tat(s): []_
     """
 
-    name = 'N Tits For M Tats'
+    name = 'N Tit(s) For M Tat(s)'
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': False,
@@ -797,7 +797,7 @@ class NTitsForMTats(Player):
 
     def strategy(self, opponent: Player) -> Action:
         # if opponent defected consecutively M times, start the retaliation
-        if opponent.history[-self.M:].count(D) == self.M:
+        if not self.M or opponent.history[-self.M:].count(D) == self.M:
             self.retaliate_count = self.N
         if self.retaliate_count:
             self.retaliate_count-=1
