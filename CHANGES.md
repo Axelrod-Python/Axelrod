@@ -1,3 +1,14 @@
+# v3.1.2, 2017-07-24
+
+Minor documentation fixes
+
+- Fixes
+  https://github.com/Axelrod-Python/Axelrod/pull/1082
+  https://github.com/Axelrod-Python/Axelrod/pull/1083
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.1.1...v3.1.2
+
 # v3.1.1, 2017-07-23
 
 Improvements to documentation and README.
