@@ -75,7 +75,7 @@ from .stalker import Stalker
 from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
-    OmegaTFT, Gradual, ContriteTitForTat, SlowTitForTwoTats, AdaptiveTitForTat,
+    OmegaTFT, Gradual, ContriteTitForTat, AdaptiveTitForTat,
     SpitefulTitForTat, SlowTitForTwoTats2, Alexei, EugineNier, DynamicTwoTitsForTat, NTitsForMTats)
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
@@ -225,7 +225,6 @@ all_strategies = [
     SelfSteem,
     ShortMem,
     Shubik,
-    SlowTitForTwoTats,
     SlowTitForTwoTats2,
     SneakyTitForTat,
     SoftGrudger,
