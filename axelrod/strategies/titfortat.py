@@ -719,12 +719,12 @@ class NTitsForMTats(Player):
     """
     A parameterizable Tit-for-Tat,
     The arguments are :
-    2) the number of defection before retaliation
-    3) the number of retaliations
+    1) the number of defection before retaliation
+    2) the number of retaliations
 
     Names:
 
-    - N Tit(s) For M Tat(s): []_
+    - N Tit(s) For M Tat(s): Original name by Marc Harper
     """
 
     name = 'N Tit(s) For M Tat(s)'
