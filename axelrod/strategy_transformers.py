@@ -147,6 +147,8 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 class_module = __import__(self_.__module__)
                 if self_.__class__.__name__ in dir(class_module):
                     return self_.__class__, (), self_.__dict__
+
+                
                 else:
                     print('oops {}  {}'.format(
                         self_.__class__.__name__, self_.original_class.__name__
