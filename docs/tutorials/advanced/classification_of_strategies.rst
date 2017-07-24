@@ -57,7 +57,7 @@ make a decision::
     ... }
     >>> strategies = axl.filtered_strategies(filterset)
     >>> len(strategies)
-    28
+    29
 
 Multiple filters can be specified within the filterset dictionary. To specify a
 range of memory_depth values, we can use the 'min_memory_depth' and
