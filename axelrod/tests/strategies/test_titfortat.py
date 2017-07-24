@@ -689,3 +689,8 @@ class TestNTitsForMTats(TestPlayer):
         opponent = axelrod.MockPlayer(actions=[acts[1] for acts in actions])
         self.versus_test(opponent=opponent,
                          expected_actions=actions, init_kwargs={'N': 3, 'M': 2})
+
+    def test_varying_memory_depth(self):
+        self.assertEqual(self.player().classifier['memory_depth'], 1)
+        self.assertEqual(self.player(0, 3).classifier['memory_depth'], 3)
+        self.assertEqual(self.player(5, 3).classifier['memory_depth'], 5)
