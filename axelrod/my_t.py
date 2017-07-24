@@ -3,6 +3,7 @@ import axelrod as axl
 
 C, D = axl.Action.C, axl.Action.D
 
+
 @st.FlipTransformer()
 @st.FlipTransformer()
 class TestFlip(axl.Cooperator):
@@ -12,6 +13,7 @@ class TestFlip(axl.Cooperator):
 @st.ApologyTransformer([D], [C])
 class Apology(axl.Cooperator):
     pass
+
 
 @st.DeadlockBreakingTransformer(name_prefix=None)
 class DeadlockBreaking(axl.Cooperator):

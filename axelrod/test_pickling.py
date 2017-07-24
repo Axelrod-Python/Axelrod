@@ -9,6 +9,21 @@ C, D = axl.Action.C, axl.Action.D
 
 
 class TestPickle(unittest.TestCase):
+
+    def assert_original_acts_same_as_pickled(self, player, turns=100):
+        copy = pickle.loads(pickle.dumps(player))
+        opponent_1 = axl.CyclerCCCDCD()
+        opponent_2 = axl.CyclerCCCDCD()
+        axl.seed(0)
+        match_1 = axl.Match((player, opponent_1), turns=turns)
+        result_1 = match_1.play()
+
+        axl.seed(0)
+        match_2 = axl.Match((copy, opponent_2), turns=turns)
+        result_2 = match_2.play()
+
+        self.assertEqual(result_1, result_2)
+
     def test_parameterized_player(self):
         p1 = axl.Cooperator()
         p2 = axl.Cycler('DDCCDD')
@@ -37,21 +52,11 @@ class TestPickle(unittest.TestCase):
         results = match.play()
         self.assertEqual(results, [(C, C), (C, C), (D, D)])
 
+        self.assert_original_acts_same_as_pickled(axl.Alexei(), turns=10)
+
     def test_nice_transformer_called(self):
         player = axl.NMWEDeterministic()
-        copy = pickle.loads(pickle.dumps(player))
-        opponent_1 = axl.CyclerCCCDCD()
-        opponent_2 = axl.CyclerCCCDCD()
-        axl.seed(0)
-        match_1 = axl.Match((player, opponent_1), turns=100)
-        result_1 = match_1.play()
-
-        axl.seed(0)
-        match_2 = axl.Match((copy, opponent_2), turns=100)
-        result_2 = match_2.play()
-
-
-        self.assertEqual(result_1, result_2)
+        self.assert_original_acts_same_as_pickled(player, turns=10)
 
     def test_all(self):
         for s in axl.strategies:
