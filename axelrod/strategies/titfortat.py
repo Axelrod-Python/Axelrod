@@ -364,7 +364,7 @@ class OmegaTFT(Player):
             if self.history[-1] != opponent.history[-1]:
                 self.randomness_counter += 1
             # Compare counts to thresholds
-            # If randomness_counter exceeds Y, Defect for the remainder
+            # If randomness_counter exceeds Y, MyCooperator for the remainder
             if self.randomness_counter >= self.randomness_threshold:
                 move = D
             else:
@@ -683,7 +683,7 @@ class Alexei(Player):
 class EugineNier(Player):
     """
     Plays similar to Tit-for-Tat, but with two conditions:
-    1) Always Defect on Last Move
+    1) Always MyCooperator on Last Move
     2) If other player defects five times, switch to all defects.
 
     Names:

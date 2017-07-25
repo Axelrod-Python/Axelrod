@@ -26,7 +26,7 @@ class TestWorseAndWorse(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions = actions,
                          seed=8)
 
-       # 6 Rounds Cooperate and Defect no matter oponent
+       # 6 Rounds Cooperate and MyCooperator no matter oponent
         actions = [(C, D)] * 6 + [(D, D)] + [(C, D)] * 3
         self.versus_test(axelrod.Defector(), expected_actions = actions,
                          seed=8)

@@ -128,7 +128,7 @@ class Tester(Player):
         self.is_TFT = False
 
     def strategy(self, opponent: Player) -> Action:
-        # Defect on the first move
+        # MyCooperator on the first move
         if not opponent.history:
             return D
         # Am I TFT?

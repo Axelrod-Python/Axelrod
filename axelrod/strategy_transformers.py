@@ -150,22 +150,34 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
 
             # Define a new class and wrap the strategy method
             # Dynamically create the new class
+            def new_init(self, *args_, **kwargs_):
+                super(self, PlayerClass).__init__(*args_, **kwargs_)
+                self.original_player = self.original_class(**self.init_kwargs)
+
             def reducer(self_):
                 class_module = import_module(self_.__module__)
                 if self_.__class__.__name__ in dir(class_module):
+
                     return self_.__class__, (), self_.__dict__
 
                 else:
-
                     decorators = [self_.decorator]
                     pc = self_.original_class
                     original_name = pc.__name__
                     for klass in pc.mro():
-                        if hasattr(klass, 'decorator'):
-                            decorators.append(klass.decorator)
-                        if klass in axelrod.strategies:
+                        if not hasattr(klass, 'decorator'):
                             pc = klass
-                            break
+                            original_name = pc.__name__
+                        # if hasattr(klass, 'decorator'):
+                        #     decorators.append(klass.decorator)
+                        # if klass in axelrod.strategies:
+                        #     pc = klass
+                        #     break
+                        # if klass is axelrod.Player:
+
+                            return (NewRecon(),
+                                    (decorators, original_name, self_.__module__),
+                                    self_.__dict__)
                     return (Reconstitutor(),
                             (decorators, pc, original_name),
                             self_.__dict__)
@@ -182,10 +194,27 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "__module__": PlayerClass.__module__,
                     "classifier": classifier,
                     "__doc__": PlayerClass.__doc__,
-                    "__reduce__": reducer
+                    "__reduce__": reducer,
                 })
+            # if strategy_wrapper == dual_wrapper:
+            #     new_class.__init__ = new_init
             return new_class
     return Decorator
+
+class NewRecon(object):
+    def __init__(self):
+
+        pass
+
+    def __call__(self, decorators, original_name, mod):
+        use_module = import_module(mod)
+        use_class = getattr(use_module, original_name)
+
+        # for decorator, args, kwargs in decorators:
+        #     use_class = decorator(*args, **kwargs)(use_class)
+        obj = use_class()
+        # obj.__class__.__name__ = original_name
+        return obj
 
 class Reconstitutor(object):
     def __init__(self):
@@ -272,10 +301,19 @@ def dual_wrapper(player, opponent, proposed_action):
     action: an axelrod.Action, C or D
     """
     if not player.history:
-        player.original_player = player.original_class(**player.init_kwargs)
+        player.use_history = []
 
-    action = player.original_player.strategy(opponent)
-    player.original_player.history.append(action)
+    temp = player.history[:]
+    player.history = player.use_history[:]
+
+    if 'self' not in player.original_class.strategy.__code__.co_varnames:
+        action = player.original_class.strategy(opponent)
+    else:
+        action = player.original_class.strategy(player, opponent)
+
+    player.history = temp[:]
+
+    player.use_history.append(action)
     return action.flip()
 
 
