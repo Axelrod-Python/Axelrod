@@ -741,13 +741,13 @@ class NTitsForMTats(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, N: int=1, M: int=1) -> None:
+    def __init__(self, N: int=3, M: int=2) -> None:
         """
         Parameters
         ----------
-        N, int
+        N
             Number of retaliations
-        M, int
+        M
             Number of defection before retaliation
 
         Special Cases
@@ -769,6 +769,6 @@ class NTitsForMTats(Player):
         if not self.M or opponent.history[-self.M:].count(D) == self.M:
             self.retaliate_count = self.N
         if self.retaliate_count:
-            self.retaliate_count-=1
+            self.retaliate_count -= 1
             return D
         return C
