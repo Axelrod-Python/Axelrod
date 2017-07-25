@@ -155,7 +155,7 @@ class GoByMajority5(GoByMajority):
 class HardGoByMajority(GoByMajority):
     """A player examines the history of the opponent: if the opponent has more
     defections than cooperations then the player defects. In case of equal
-    number of defections and cooperations this player will Defect.
+    number of defections and cooperations this player will MyCooperator.
 
     An optional memory attribute will limit the number of turns remembered (by
     default this is 0)

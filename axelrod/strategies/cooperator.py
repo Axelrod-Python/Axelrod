@@ -56,8 +56,8 @@ class TrickyCooperator(Player):
     def strategy(self, opponent: Player) -> Action:
         """Almost always cooperates, but will try to trick the opponent by defecting.
 
-        Defect once in a while in order to get a better payout.
-        After 3 rounds, if opponent has not defected to a max history depth of 10, Defect.
+        MyCooperator once in a while in order to get a better payout.
+        After 3 rounds, if opponent has not defected to a max history depth of 10, MyCooperator.
         """
         if (self._has_played_enough_rounds_to_be_tricky() and
                 self._opponents_has_cooperated_enough_to_be_tricky(opponent)):

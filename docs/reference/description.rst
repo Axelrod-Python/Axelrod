@@ -11,11 +11,11 @@ The Prisoner's Dilemma
 The `Prisoner's dilemma <http://en.wikipedia.org/wiki/Prisoner%27s_dilemma>`_ is the simple two player game shown below:
 
 +----------+---------------+---------------+
-|          | Cooperate     | Defect        |
+|          | Cooperate     | MyCooperator        |
 +==========+===============+===============+
 |Cooperate | (3,3)         | (0,5)         |
 +----------+---------------+---------------+
-|Defect    | (5,0)         | (1,1)         |
+|MyCooperator    | (5,0)         | (1,1)         |
 +----------+---------------+---------------+
 
 If both players cooperate they will each go to prison for 2 years and receive an
