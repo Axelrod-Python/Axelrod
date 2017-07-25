@@ -55,6 +55,7 @@ class TitFor2Tats(Player):
     Names:
 
     - Tit for two Tats: [Axelrod1984]_
+    - Slow tit for two tats: Original name by Ranjini Das
     """
 
     name = "Tit For 2 Tats"
@@ -496,41 +497,6 @@ class ContriteTitForTat(Player):
         self._recorded_history = []
 
 
-class SlowTitForTwoTats(Player):
-    """
-    A player plays C twice, then if the opponent plays the same move twice,
-    plays that move.
-
-    Names:
-
-    - Slow tit for two tats: Original name by Ranjini Das
-    """
-
-    name = 'Slow Tit For Two Tats'
-    classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
-    }
-
-    def strategy(self, opponent: Player) -> Action:
-
-        # Start with two cooperations
-        if len(self.history) < 2:
-            return C
-
-        # Mimic if opponent plays the same move twice
-        if opponent.history[-2] == opponent.history[-1]:
-            return opponent.history[-1]
-
-        # Otherwise cooperate
-        return C
-
-
 class AdaptiveTitForTat(Player):
     """ATFT - Adaptive Tit For Tat (Basic Model)
 
@@ -750,3 +716,59 @@ class EugineNier(Player):
     def reset(self):
         super().reset()
         self.is_defector = False
+
+
+class NTitsForMTats(Player):
+    """
+    A parameterizable Tit-for-Tat,
+    The arguments are :
+    1) the number of defection before retaliation
+    2) the number of retaliations
+
+    Names:
+
+    - N Tit(s) For M Tat(s): Original name by Marc Harper
+    """
+
+    name = 'N Tit(s) For M Tat(s)'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self, N: int=3, M: int=2) -> None:
+        """
+        Parameters
+        ----------
+        N
+            Number of retaliations
+        M
+            Number of defection before retaliation
+
+        Special Cases
+        -------------
+        NTitsForMTats(1,1) is equivalent to TitForTat
+        NTitsForMTats(1,2) is equivalent to TitFor2Tats
+        NTitsForMTats(2,1) is equivalent to TwoTitsForTat
+        NTitsForMTats(0,*) is equivalent to Cooperator
+        NTitsForMTats(*,0) is equivalent to Defector
+        """
+        super().__init__()
+        self.N = N
+        self.M = M
+        self.classifier['memory_depth'] = max([M,N])
+        self.retaliate_count = 0
+
+    def strategy(self, opponent: Player) -> Action:
+        # if opponent defected consecutively M times, start the retaliation
+        if not self.M or opponent.history[-self.M:].count(D) == self.M:
+            self.retaliate_count = self.N
+        if self.retaliate_count:
+            self.retaliate_count -= 1
+            return D
+        return C
