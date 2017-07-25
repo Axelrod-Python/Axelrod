@@ -114,7 +114,7 @@ class TestLimitedRetaliate(TestPlayer):
                          attrs={"retaliation_count": 0},
                          init_kwargs={"retaliation_limit": 2})
 
-        # Defect again after cooperating
+        # MyCooperator again after cooperating
         actions = [(C, C), (C, D), (D, C), (D, D), (C, C), (D, D), (D, C)]
         self.versus_test(opponent=opponent, expected_actions=actions,
                          attrs={"retaliation_count": 2},

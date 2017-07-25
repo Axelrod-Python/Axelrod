@@ -45,7 +45,7 @@ class TestTreeSearch(unittest.TestCase):
     def test_minimaxTreeSearch_cooperator(self):
         """
         Tests the minimax_tree_search function when playing against a
-        Cooperator player. Output == 0 means Cooperate, 1 means Defect.
+        Cooperator player. Output == 0 means Cooperate, 1 means MyCooperator.
         The best (hence expected) answer to Cooperator is to defect
         whatever the input position is.
         """

@@ -417,7 +417,7 @@ class TestSteinAndRapoport(TestPlayer):
         # On 15th round carry out chi-square test.
         actions += [(D, C), (C, D)] * 5 + [(D, C)]
 
-        # Defect throughout.
+        # MyCooperator throughout.
         actions += [(D, D), (D, C), (D, D), (D, C)]
 
         self.versus_test(opponent, expected_actions=actions,
@@ -431,7 +431,7 @@ class TestSteinAndRapoport(TestPlayer):
         actions = [(C, C), (C, D), (C, C), (C, D)]
         # On 15th round carry out chi-square test.
         actions += [(D, C), (C, D)] * 4 + [(D, C), (C, C), (D, C)]
-        # Defect throughout and carry out chi-square test on round 30.
+        # MyCooperator throughout and carry out chi-square test on round 30.
         # Opponent is no longer recognised as random, revert to TFT.
         actions += [(D, C)] * 14 + [(C, C)]
         self.versus_test(opponent, expected_actions=actions,
