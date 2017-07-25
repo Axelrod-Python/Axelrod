@@ -634,10 +634,10 @@ class TestNTitsForMTats(TestPlayer):
     Tests for the N Tit(s) For M Tat(s) strategy
     """
 
-    name = 'N Tit(s) For M Tat(s): 1, 1'
+    name = 'N Tit(s) For M Tat(s): 3, 2'
     player = axelrod.NTitsForMTats
     expected_classifier = {
-        'memory_depth': 1,
+        'memory_depth': 3,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -650,23 +650,47 @@ class TestNTitsForMTats(TestPlayer):
     expected_class_classifier['memory_depth'] = float('inf')
 
     def test_strategy(self):
-        TestTitForTat.test_strategy(self)
+        # TitForTat test_strategy
+        init_kwargs = {'N': 1, 'M': 1}
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, init_kwargs=init_kwargs)
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, init_kwargs=init_kwargs)
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, init_kwargs=init_kwargs)
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         match_attributes={"length": -1}, init_kwargs=init_kwargs)
+        actions = [(C, D), (D, D), (D, C), (C, C), (C, D)]
+        self.versus_test(axelrod.Random(), expected_actions=actions,
+                         seed=0, init_kwargs=init_kwargs)
+        actions = [(C, C), (C, D), (D, D), (D, C)]
+        self.versus_test(axelrod.Random(), expected_actions=actions,
+                         seed=1, init_kwargs=init_kwargs)
+        opponent = axelrod.MockPlayer(actions=[C, D])
+        actions = [(C, C), (C, D), (D, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
+        opponent = axelrod.MockPlayer(actions=[C, C, D, D, C, D])
+        actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
         # TitFor2Tats test_strategy
+        init_kwargs = {'N': 1, 'M': 2}
         opponent = axelrod.MockPlayer(actions=[D, D, D, C, C])
         actions = [(C, D), (C, D), (D, D), (D, C), (C, C), (C, D)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs={'N': 1, 'M': 2})
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
 
         # TwoTitsForTat test_strategy
+        init_kwargs = {'N': 2, 'M': 1}
         opponent = axelrod.MockPlayer(actions=[D, C, C, D, C])
         actions = [(C, D), (D, C), (D, C), (C, D), (D, C)]
-        self.versus_test(opponent, expected_actions=actions, init_kwargs={'N': 2, 'M': 1})
+        self.versus_test(opponent, expected_actions=actions, init_kwargs=init_kwargs)
         actions = [(C, C), (C, C)]
         self.versus_test(opponent=axelrod.Cooperator(),
-                         expected_actions=actions, init_kwargs={'N': 2, 'M': 1})
+                         expected_actions=actions, init_kwargs=init_kwargs)
         actions = [(C, D), (D, D), (D, D)]
         self.versus_test(opponent=axelrod.Defector(),
-                         expected_actions=actions, init_kwargs={'N': 2, 'M': 1})
+                         expected_actions=actions, init_kwargs=init_kwargs)
 
         # Cooperator test_strategy
         actions = [(C, C)] + [(C, D), (C, C)] * 9
@@ -684,13 +708,12 @@ class TestNTitsForMTats(TestPlayer):
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, init_kwargs={'N': 5, 'M': 0})
 
-        # Other init args
+        # Default init args
         actions = [(C, C), (C, D), (C, D), (D, C), (D, C), (D, D), (C, C)]
         opponent = axelrod.MockPlayer(actions=[acts[1] for acts in actions])
-        self.versus_test(opponent=opponent,
-                         expected_actions=actions, init_kwargs={'N': 3, 'M': 2})
+        self.versus_test(opponent=opponent, expected_actions=actions)
 
     def test_varying_memory_depth(self):
-        self.assertEqual(self.player().classifier['memory_depth'], 1)
+        self.assertEqual(self.player(1, 1).classifier['memory_depth'], 1)
         self.assertEqual(self.player(0, 3).classifier['memory_depth'], 3)
         self.assertEqual(self.player(5, 3).classifier['memory_depth'], 5)
