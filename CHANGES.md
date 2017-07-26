@@ -1,3 +1,17 @@
+# v3.2.0, 2017-07-26
+
+Minor internal fixes and a new strategy
+
+- New NTitForMTats strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1084
+- Pip installing no longer installs hypothesis and tests
+  https://github.com/Axelrod-Python/Axelrod/pull/1086
+- Remove some code that checked if matplotlib was installed
+  https://github.com/Axelrod-Python/Axelrod/pull/1087
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.1.2...v3.2.0
+
 # v3.1.2, 2017-07-24
 
 Minor documentation fixes
