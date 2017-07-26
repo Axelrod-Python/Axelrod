@@ -220,7 +220,7 @@ class Grofman(Player):
     Cooperate on the first two rounds and
     returns the opponent's last action for the next 5. For the rest of the game
     Grofman cooperates if both players selected the same action in the previous
-    round, and otherwise cooperates randomly with probability :math:`frac{2}{7}`.
+    round, and otherwise cooperates randomly with probability 2/7.
 
     This strategy came 4th in Axelrod's original tournament.
 
