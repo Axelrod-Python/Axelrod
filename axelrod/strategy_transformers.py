@@ -13,8 +13,6 @@ from numpy.random import choice
 from .action import Action
 from .random_ import random_choice
 from importlib import import_module
-from pydoc import locate
-import axelrod
 
 
 C, D = Action.C, Action.D
@@ -61,6 +59,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 self.name_prefix = name_prefix
 
         def __reduce__(self):
+            # Creates only the Decorator class and not the instance
             return StrategyTransformerFactory, (
                 strategy_wrapper, name_prefix, reclassifier)
 
@@ -91,26 +90,18 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             except KeyError:
                 pass
 
-            # Is the original strategy method a static method?
-            # signature = inspect.signature(PlayerClass.strategy)
-            # strategy_args = [p.name for p in signature.parameters.values()
-            #         if p.kind == inspect.Parameter.POSITIONAL_OR_KEYWORD]
-            # is_static = True
-            # if len(strategy_args) > 1:
-            #     is_static = False
-
             # Define the new strategy method, wrapping the existing method
             # with `strategy_wrapper`
             def strategy(self, opponent):
-                if strategy_wrapper != dual_wrapper:
+                if strategy_wrapper == dual_wrapper:
+                    # Dummy Action for dual_wrapper.
+                    # This is to avoid calling the strategy twice.
+                    proposed_action = C
+                else:
                     if is_strategy_static(PlayerClass):
-                        # static method
                         proposed_action = PlayerClass.strategy(opponent)
                     else:
                         proposed_action = PlayerClass.strategy(self, opponent)
-                else:
-                    # dummy Action for dual_wrapper to avoid calling class
-                    proposed_action = C
 
                 # Apply the wrapper
                 return strategy_wrapper(self, opponent, proposed_action,
@@ -151,7 +142,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     prefix = ', '
                 return name
 
-            def new_class_reduce(self_):
+            def reduce_for_decorated_class(self_):
                 class_module = import_module(self_.__module__)
                 import_name = self_.__class__.__name__
                 if import_name in dir(class_module):
@@ -167,7 +158,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                             break
 
                     return (
-                        NewRecon(),
+                        ReConstructor(),
                         (decorators, import_name, self_.__module__),
                         self_.__dict__
                     )
@@ -185,14 +176,14 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "__module__": PlayerClass.__module__,
                     "classifier": classifier,
                     "__doc__": PlayerClass.__doc__,
-                    "__reduce__": new_class_reduce,
+                    "__reduce__": reduce_for_decorated_class,
                 })
 
             return new_class
     return Decorator
 
 
-class NewRecon(object):
+class ReConstructor(object):
     def __init__(self):
         pass
 
@@ -208,20 +199,6 @@ class NewRecon(object):
                 generated_class = decorator(*args, **kwargs)(generated_class)
             return generated_class()
 
-
-# class Reconstitutor(object):
-#     def __init__(self):
-#
-#         pass
-#
-#     def __call__(self, decorators, player_class, original_name):
-#         use_class = player_class
-#
-#         for decorator, args, kwargs in decorators:
-#             use_class = decorator(*args, **kwargs)(use_class)
-#         obj = use_class()
-#         obj.__class__.__name__ = original_name
-#         return obj
 
 def compose_transformers(t1, t2):
     """Compose transformers without having to invoke the first on
