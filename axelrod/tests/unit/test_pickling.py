@@ -2,11 +2,13 @@ import pickle
 import unittest
 
 import axelrod as axl
-from axelrod.strategy_transformers import FlipTransformer
-from axelrod.tests.classes_for_testing_pickling import (transformed, DoubleFlip,
-                                                        SingleFlip, MyCooperator,
-                                                        VariableAsClassPointer,
-                                                        Dual, Flip)
+from axelrod.strategy_transformers import FlipTransformer, DualTransformer, is_strategy_static
+from axelrod.tests.classes_for_testing_pickling import (
+    transformed, DoubleFlip, SingleFlip, MyCooperator, PointerToWrappedStrategy,
+    PointerToWrappedClassNotInStrategies, Flip)
+
+from axelrod import AshlockFingerprint, LookerUp, EvolvedLookerUp1_1_1
+
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -118,6 +120,49 @@ class TestPickle(unittest.TestCase):
         self.assert_original_plays_same_as_pickled(player, turns=10)
         self.assert_instance_with_history_equality(player)
 
-    def test_pointer_to_made_class(self):
-        player = VariableAsClassPointer()
-        self.assertEqual(player.__class__.__name__, 'FlippedFlippedCooperator')
+    def test_pointer_to_class_derived_from_strategy(self):
+        player = PointerToWrappedStrategy()
+
+        class_names = [klass.__name__ for klass in player.__class__.mro()]
+        self.assertEqual(
+            class_names,
+            ['FlippedFlippedCooperator', 'FlippedCooperator', 'Cooperator',
+             'Player', 'object']
+        )
+
+        self.assert_original_plays_same_as_pickled(player, turns=10)
+        self.assert_instance_with_history_equality(player)
+
+    def test_pointer_to_class_derived_from_Player(self):
+        player = PointerToWrappedClassNotInStrategies()
+
+        class_names = [klass.__name__ for klass in player.__class__.mro()]
+        self.assertEqual(
+            class_names,
+            ['FlippedFlippedMyDefector', 'FlippedMyDefector', 'MyDefector',
+             'Player', 'object']
+        )
+
+        self.assert_original_plays_same_as_pickled(player, turns=10)
+
+        self.assert_instance_with_history_equality(player)
+
+    def test_regression_dual_transformer_with_lookerup(self):
+        player = DualTransformer()(LookerUp)()
+        self.assert_instance_with_history_equality(player)
+
+        fp = AshlockFingerprint(axl.Cooperator, probe=LookerUp())
+        fp.fingerprint(turns=10, repetitions=2, step=0.2)
+
+        fp = AshlockFingerprint(EvolvedLookerUp1_1_1)
+        fp.fingerprint(turns=10, repetitions=2, step=0.2)
+
+        strategy = axl.WinStayLoseShift
+        probe = axl.TitForTat
+        af = axl.AshlockFingerprint(strategy, probe)
+        data = af.fingerprint(turns=50, repetitions=2, step=0.01)
+        p = af.plot()
+        p.show()
+
+
+

@@ -92,22 +92,25 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 pass
 
             # Is the original strategy method a static method?
-            signature = inspect.signature(PlayerClass.strategy)
-            strategy_args = [p.name for p in signature.parameters.values()
-                    if p.kind == inspect.Parameter.POSITIONAL_OR_KEYWORD]
-            is_static = True
-            if len(strategy_args) > 1:
-                is_static = False
+            # signature = inspect.signature(PlayerClass.strategy)
+            # strategy_args = [p.name for p in signature.parameters.values()
+            #         if p.kind == inspect.Parameter.POSITIONAL_OR_KEYWORD]
+            # is_static = True
+            # if len(strategy_args) > 1:
+            #     is_static = False
 
             # Define the new strategy method, wrapping the existing method
             # with `strategy_wrapper`
             def strategy(self, opponent):
-
-                if is_static:
-                    # static method
-                    proposed_action = PlayerClass.strategy(opponent)
+                if strategy_wrapper != dual_wrapper:
+                    if is_strategy_static(PlayerClass):
+                        # static method
+                        proposed_action = PlayerClass.strategy(opponent)
+                    else:
+                        proposed_action = PlayerClass.strategy(self, opponent)
                 else:
-                    proposed_action = PlayerClass.strategy(self, opponent)
+                    # dummy Action for dual_wrapper to avoid calling class
+                    proposed_action = C
 
                 # Apply the wrapper
                 return strategy_wrapper(self, opponent, proposed_action,
@@ -148,41 +151,29 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     prefix = ', '
                 return name
 
-            # Define a new class and wrap the strategy method
-            # Dynamically create the new class
-            def new_init(self, *args_, **kwargs_):
-                super(self, PlayerClass).__init__(*args_, **kwargs_)
-                self.original_player = self.original_class(**self.init_kwargs)
-
-            def reducer(self_):
+            def new_class_reduce(self_):
                 class_module = import_module(self_.__module__)
-                if self_.__class__.__name__ in dir(class_module):
-
+                import_name = self_.__class__.__name__
+                if import_name in dir(class_module):
                     return self_.__class__, (), self_.__dict__
 
                 else:
-                    decorators = [self_.decorator]
-                    pc = self_.original_class
-                    original_name = pc.__name__
-                    for klass in pc.mro():
-                        if not hasattr(klass, 'decorator'):
-                            pc = klass
-                            original_name = pc.__name__
-                        # if hasattr(klass, 'decorator'):
-                        #     decorators.append(klass.decorator)
-                        # if klass in axelrod.strategies:
-                        #     pc = klass
-                        #     break
-                        # if klass is axelrod.Player:
+                    decorators = []
+                    for klass in self_.__class__.mro():
+                        if hasattr(klass, 'decorator'):
+                            decorators.append(klass.decorator)
+                        else:
+                            import_name = klass.__name__
+                            break
 
-                            return (NewRecon(),
-                                    (decorators, original_name, self_.__module__),
-                                    self_.__dict__)
-                    return (Reconstitutor(),
-                            (decorators, pc, original_name),
-                            self_.__dict__)
+                    return (
+                        NewRecon(),
+                        (decorators, import_name, self_.__module__),
+                        self_.__dict__
+                    )
 
-
+            # Define a new class and wrap the strategy method
+            # Dynamically create the new class
             new_class = type(
                 new_class_name, (PlayerClass,),
                 {
@@ -194,41 +185,43 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "__module__": PlayerClass.__module__,
                     "classifier": classifier,
                     "__doc__": PlayerClass.__doc__,
-                    "__reduce__": reducer,
+                    "__reduce__": new_class_reduce,
                 })
-            # if strategy_wrapper == dual_wrapper:
-            #     new_class.__init__ = new_init
+
             return new_class
     return Decorator
 
+
 class NewRecon(object):
     def __init__(self):
-
         pass
 
-    def __call__(self, decorators, original_name, mod):
-        use_module = import_module(mod)
-        use_class = getattr(use_module, original_name)
+    def __call__(self, decorators, import_name, module_name):
+        module_ = import_module(module_name)
+        import_class = getattr(module_, import_name)
 
-        # for decorator, args, kwargs in decorators:
-        #     use_class = decorator(*args, **kwargs)(use_class)
-        obj = use_class()
-        # obj.__class__.__name__ = original_name
-        return obj
+        if hasattr(import_class, 'decorator'):
+            return import_class()
+        else:
+            generated_class = import_class
+            for decorator, args, kwargs in decorators:
+                generated_class = decorator(*args, **kwargs)(generated_class)
+            return generated_class()
 
-class Reconstitutor(object):
-    def __init__(self):
 
-        pass
-
-    def __call__(self, decorators, player_class, original_name):
-        use_class = player_class
-
-        for decorator, args, kwargs in decorators:
-            use_class = decorator(*args, **kwargs)(use_class)
-        obj = use_class()
-        obj.__class__.__name__ = original_name
-        return obj
+# class Reconstitutor(object):
+#     def __init__(self):
+#
+#         pass
+#
+#     def __call__(self, decorators, player_class, original_name):
+#         use_class = player_class
+#
+#         for decorator, args, kwargs in decorators:
+#             use_class = decorator(*args, **kwargs)(use_class)
+#         obj = use_class()
+#         obj.__class__.__name__ = original_name
+#         return obj
 
 def compose_transformers(t1, t2):
     """Compose transformers without having to invoke the first on
@@ -300,13 +293,14 @@ def dual_wrapper(player, opponent, proposed_action):
     -------
     action: an axelrod.Action, C or D
     """
+
     if not player.history:
         player.use_history = []
 
     temp = player.history[:]
     player.history = player.use_history[:]
 
-    if 'self' not in player.original_class.strategy.__code__.co_varnames:
+    if is_strategy_static(player.original_class):
         action = player.original_class.strategy(opponent)
     else:
         action = player.original_class.strategy(player, opponent)
@@ -315,6 +309,20 @@ def dual_wrapper(player, opponent, proposed_action):
 
     player.use_history.append(action)
     return action.flip()
+
+
+def is_strategy_static(player_class):
+    # signature = inspect.signature(player_class.strategy)
+    # strategy_args = [p.name for p in signature.parameters.values()
+    #         if p.kind == inspect.Parameter.POSITIONAL_OR_KEYWORD]
+    # is_static = True
+    # if len(strategy_args) > 1:
+    #     is_static = False
+    # return is_static
+    for klass in player_class.mro():
+        method = inspect.getattr_static(klass, 'strategy', default=None)
+        if method is not None:
+            return isinstance(method, staticmethod)
 
 
 DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")

@@ -4,9 +4,23 @@ import axelrod as axl
 C, D = axl.Action.C, axl.Action.D
 
 
-VariableAsClassPointer = st.FlipTransformer()(
+PointerToWrappedStrategy = st.FlipTransformer()(
     st.FlipTransformer()(axl.Cooperator)
 )
+
+
+class MyDefector(axl.Player):
+    def __init__(self):
+        super(MyDefector, self).__init__()
+
+    def strategy(self, opponent):
+        return D
+
+
+PointerToWrappedClassNotInStrategies = st.FlipTransformer()(
+    st.FlipTransformer()(MyDefector)
+)
+
 
 
 @st.FlipTransformer()
