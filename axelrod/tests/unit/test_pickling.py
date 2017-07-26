@@ -144,26 +144,31 @@ class TestPickle(unittest.TestCase):
         )
 
         self.assert_original_plays_same_as_pickled(player, turns=10)
-
         self.assert_instance_with_history_equality(player)
 
     def test_regression_dual_transformer_with_lookerup(self):
-        player = DualTransformer()(LookerUp)()
-        self.assert_instance_with_history_equality(player)
+        self.assert_dual_wrapper_correct(axl.LookerUp)
+        self.assert_dual_wrapper_correct(axl.EvolvedLookerUp2_2_2)
 
-        fp = AshlockFingerprint(axl.Cooperator, probe=LookerUp())
-        fp.fingerprint(turns=10, repetitions=2, step=0.2)
+    def test_regression_dual_transformer_with_fsm(self):
+        self.assert_dual_wrapper_correct(axl.Fortress3)
+        self.assert_dual_wrapper_correct(axl.Fortress4)
 
-        fp = AshlockFingerprint(EvolvedLookerUp1_1_1)
-        fp.fingerprint(turns=10, repetitions=2, step=0.2)
+    def assert_dual_wrapper_correct(self, player_class):
+        p1 = player_class()
+        p2 = DualTransformer()(player_class)()
+        p3 = axl.CyclerCCD()  # Cycles 'CCD'
+        for _ in range(10):
+            p1.play(p3)
 
-        strategy = axl.WinStayLoseShift
-        probe = axl.TitForTat
-        af = axl.AshlockFingerprint(strategy, probe)
-        data = af.fingerprint(turns=50, repetitions=2, step=0.01)
-        # data = af.fingerprint(turns=5, repetitions=2, step=0.1)
-        p = af.plot()
-        p.savefig('omfg')
+        p3.reset()
+
+        for _ in range(10):
+            p2.play(p3)
+
+        self.assertEqual(p1.history, [x.flip() for x in p2.history])
+
+
 
 
 
