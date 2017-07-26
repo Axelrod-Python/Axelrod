@@ -161,8 +161,9 @@ class TestPickle(unittest.TestCase):
         probe = axl.TitForTat
         af = axl.AshlockFingerprint(strategy, probe)
         data = af.fingerprint(turns=50, repetitions=2, step=0.01)
+        # data = af.fingerprint(turns=5, repetitions=2, step=0.1)
         p = af.plot()
-        p.show()
+        p.savefig('omfg')
 
 
 
