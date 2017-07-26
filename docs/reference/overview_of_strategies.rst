@@ -157,7 +157,7 @@ repository.
    "K83R_", "Paul E Black", "Not Implemented"
    "K84R_", "T Nicolaus Tideman and Paula Chieruzz", "Not Implemented"
    "K85R_", "Rober B Falk and James M Langsted", "Not Implemented"
-   "K86R_", "Bernard Grofman", "No Implemented"
+   "K86R_", "Bernard Grofman", "Not Implemented"
    "K87R_", "E E H Schurmann",  "Not Implemented"
    "K88R_", "Scott Appold", "Not Implemented"
    "K89R_", "Gene Snodgrass", "Not Implemented"
