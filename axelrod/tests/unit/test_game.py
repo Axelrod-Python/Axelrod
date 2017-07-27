@@ -29,6 +29,18 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.score((C, D)), (0, 5))
         self.assertEqual(self.game.score((D, C)), (5, 0))
 
+    def test_equality(self):
+        game_1 = Game(1, 2, 3, 4)
+        game_2 = Game(1, 2, 3, 4)
+        not_equal = Game()
+
+        self.assertEqual(game_1, game_2)
+        self.assertNotEqual(not_equal, game_1)
+
+        self.assertEqual(Game(), Game())
+
+        self.assertNotEqual(Game(), 'wrong class')
+
     @given(r=integers(), p=integers(), s=integers(), t=integers())
     def test_property_init(self, r, p, s, t):
         """Use the hypothesis library to test init"""
