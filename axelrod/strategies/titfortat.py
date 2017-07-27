@@ -649,6 +649,7 @@ class SlowTitForTwoTats2(Player):
         # Otherwise play previous move
         return self.history[-1]
 
+
 @FinalTransformer((D,), name_prefix=None)
 class Alexei(Player):
     """
@@ -676,6 +677,7 @@ class Alexei(Player):
         if opponent.history[-1] == D:
             return D
         return C
+
 
 @FinalTransformer((D,), name_prefix=None)
 class EugineNier(Player):
