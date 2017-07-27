@@ -31,7 +31,7 @@ class TestCooperator(TestPlayer):
         actions = [(C, C)] * 11 + [(C, D)] * 4
         self.versus_test(opponent=axelrod.MockPlayer(actions=[C] * 11 + [D] * 4), expected_actions=actions)
 
-        #MyCooperator if in the last ten moves, Defections - Cooperations >= 3
+        #Defect if in the last ten moves, Defections - Cooperations >= 3
         actions = [(C, D)] * 11 + [(D, C)] * 4
         self.versus_test(opponent=axelrod.MockPlayer(actions=[D] * 11 + [C] * 4), expected_actions=actions)
 
