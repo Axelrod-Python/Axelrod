@@ -717,3 +717,50 @@ class TestNTitsForMTats(TestPlayer):
         self.assertEqual(self.player(1, 1).classifier['memory_depth'], 1)
         self.assertEqual(self.player(0, 3).classifier['memory_depth'], 3)
         self.assertEqual(self.player(5, 3).classifier['memory_depth'], 5)
+
+
+class TestMichaelos(TestPlayer):
+    """
+    Tests for the Michaelos strategy
+    """
+
+    name = "Michaelos: (D,)"
+    player = axelrod.Michaelos
+    expected_classifier = {
+        'memory_depth': 1,
+        'stochastic': True,
+        'makes_use_of': {'length'},
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+
+        actions = [(C, C), (C, C), (C, C), (D, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         attrs={"is_defector": False}, seed=2)
+
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         attrs={"is_defector": False},
+                         match_attributes={"length": -1}, seed=2)
+
+        actions = [(C, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         attrs={"is_defector": False}, seed=2)
+
+        actions = [(C, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         attrs={"is_defector": False},
+                         match_attributes={"length": -1}, seed=2)
+
+        # Chance of becoming a defector is 50% after (D, C) occurs.
+        actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"is_defector": True}, seed=2)
+
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"is_defector": True},
+                         match_attributes={"length": -1}, seed=1)
