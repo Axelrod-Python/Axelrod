@@ -59,9 +59,11 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 self.name_prefix = name_prefix
 
         def __reduce__(self):
-            # Creates only the Decorator class and not the instance
-            return StrategyTransformerFactory, (
-                strategy_wrapper, name_prefix, reclassifier)
+            return (
+                DecoratorReBuilder(),
+                (strategy_wrapper, name_prefix, reclassifier,
+                 self.args, self.kwargs, self.name_prefix)
+            )
 
         def __call__(self, PlayerClass):
             """
@@ -152,13 +154,13 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     decorators = []
                     for klass in self_.__class__.mro():
                         if hasattr(klass, 'decorator'):
-                            decorators.append(klass.decorator)
+                            decorators.insert(0, klass.decorator)
                         else:
                             import_name = klass.__name__
                             break
 
                     return (
-                        ReConstructor(),
+                        StrategyReBuilder(),
                         (decorators, import_name, self_.__module__),
                         self_.__dict__
                     )
@@ -171,7 +173,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "name": name,
                     "original_class": PlayerClass,
                     "strategy": strategy,
-                    "decorator": (self, self.args, self.kwargs),
+                    "decorator": self,
                     "__repr__": __repr__,
                     "__module__": PlayerClass.__module__,
                     "classifier": classifier,
@@ -183,7 +185,32 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
     return Decorator
 
 
-class ReConstructor(object):
+def is_strategy_static(player_class):
+    """
+
+    :param player_class: Any class that inherits from axelrod.Player
+    :return: bool
+    """
+    for klass in player_class.mro():
+        method = inspect.getattr_static(klass, 'strategy', default=None)
+        if method is not None:
+            return isinstance(method, staticmethod)
+
+
+class DecoratorReBuilder(object):
+    def __init__(self):
+        pass
+
+    def __call__(self, strategy_wrapper, name_prefix, reclassifier,
+                 args, kwargs, instance_name_prefix):
+        decorator_class = StrategyTransformerFactory(
+            strategy_wrapper, name_prefix, reclassifier
+        )
+        kwargs['name_prefix'] = instance_name_prefix
+        return decorator_class(*args, **kwargs)
+
+
+class StrategyReBuilder(object):
     def __init__(self):
         pass
 
@@ -195,8 +222,8 @@ class ReConstructor(object):
             return import_class()
         else:
             generated_class = import_class
-            for decorator, args, kwargs in decorators:
-                generated_class = decorator(*args, **kwargs)(generated_class)
+            for decorator in decorators:
+                generated_class = decorator(generated_class)
             return generated_class()
 
 
@@ -286,20 +313,6 @@ def dual_wrapper(player, opponent, proposed_action):
 
     player.use_history.append(action)
     return action.flip()
-
-
-def is_strategy_static(player_class):
-    # signature = inspect.signature(player_class.strategy)
-    # strategy_args = [p.name for p in signature.parameters.values()
-    #         if p.kind == inspect.Parameter.POSITIONAL_OR_KEYWORD]
-    # is_static = True
-    # if len(strategy_args) > 1:
-    #     is_static = False
-    # return is_static
-    for klass in player_class.mro():
-        method = inspect.getattr_static(klass, 'strategy', default=None)
-        if method is not None:
-            return isinstance(method, staticmethod)
 
 
 DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
