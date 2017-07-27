@@ -14,11 +14,11 @@ generic Prisoner's dilemma:
 
 
 +----------+---------------+---------------+
-|          | Cooperate     | MyCooperator        |
+|          | Cooperate     | Defect        |
 +==========+===============+===============+
 |Cooperate | (R,R)         | (S,T)         |
 +----------+---------------+---------------+
-|MyCooperator    | (T,S)         | (P,P)         |
+|Defect    | (T,S)         | (P,P)         |
 +----------+---------------+---------------+
 
 For the above to constitute a Prisoner's dilemma, the following must hold:

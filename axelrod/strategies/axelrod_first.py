@@ -581,7 +581,7 @@ class SteinAndRapoport(Player):
             self.opponent_is_random = p_value >= self.alpha
 
         if self.opponent_is_random:
-            # MyCooperator if opponent plays randomly
+            # Defect if opponent plays randomly
             return D
         else:  # TitForTat if opponent plays not randomly
             return opponent.history[-1]
