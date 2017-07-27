@@ -15,6 +15,20 @@ class TestClass(object):
 
 class TestTransformers(unittest.TestCase):
 
+    def test_helper_function_is_strategy_static(self):
+        self.assertTrue(is_strategy_static(axelrod.Cooperator))
+        self.assertFalse(is_strategy_static(axelrod.Alternator))
+
+    def test_helper_function_is_strategy_static_with_inherited_strategy(self):
+        class NewCooperator(axelrod.Cooperator):
+            pass
+
+        class NewAlternator(axelrod.Alternator):
+            pass
+
+        self.assertTrue(is_strategy_static(NewCooperator))
+        self.assertFalse(is_strategy_static(NewAlternator))
+
     def test_all_strategies(self):
         # Attempt to transform each strategy to ensure that implementation
         # choices (like use of super) do not cause issues
