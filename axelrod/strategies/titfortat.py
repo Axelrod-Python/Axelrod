@@ -779,11 +779,11 @@ class NTitsForMTats(Player):
 @FinalTransformer((D,), name_prefix=None)
 class Michaelos(Player):
     """
-    Plays similar to Tit-for-Tat with two sxceptions
+    Plays similar to Tit-for-Tat with two exceptions:
     1) Defect on last turn.
     2) After own defection and opponent's cooperation, 50 percent of the time,
     cooperate. The other 50 percent of the time, always defect for the rest of
-    the game
+    the game.
 
     Names:
 
