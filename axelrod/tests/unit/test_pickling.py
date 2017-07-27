@@ -271,10 +271,9 @@ class TestPickle(unittest.TestCase):
         self.assert_mutated_instance_same_as_pickled(player)
 
     def test_local_class_unpicklable(self):
-        """Due to steps taken, an unpickle-able AND transformed class
-        will not raise an error until it is un-pickled. This is
-        different from the original class that raises an error when it is
-        pickled."""
+        """An unpickle-able AND transformed class will not raise an error until
+        it is un-pickled. This is different from the original class that raises
+        an error when it is pickled."""
         class LocalCooperator(axl.Player):
             def __init__(self):
                 super(LocalCooperator, self).__init__()
@@ -283,6 +282,9 @@ class TestPickle(unittest.TestCase):
                 return C
 
         un_transformed = LocalCooperator()
+        # for coverage
+        self.assertEqual(un_transformed.strategy(axl.Cooperator()), C)
+
         self.assertRaises(AttributeError, pickle.dumps, un_transformed)
 
         player = st.FlipTransformer()(LocalCooperator)()
@@ -345,8 +347,3 @@ class TestPickle(unittest.TestCase):
             p2.play(p3)
 
         self.assertEqual(p1.history, [x.flip() for x in p2.history])
-
-
-
-
-
