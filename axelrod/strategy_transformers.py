@@ -299,20 +299,29 @@ def dual_wrapper(player, opponent, proposed_action):
     """
 
     if not player.history:
-        player.use_history = []
+        player.original_player_history = []
 
-    temp = player.history[:]
-    player.history = player.use_history[:]
+    temp_history = player.history[:]
+    player.history = player.original_player_history[:]
+
+    switch_cooperations_and_defections(player)
 
     if is_strategy_static(player.original_class):
         action = player.original_class.strategy(opponent)
     else:
         action = player.original_class.strategy(player, opponent)
 
-    player.history = temp[:]
+    player.history = temp_history[:]
+    switch_cooperations_and_defections(player)
 
-    player.use_history.append(action)
+    player.original_player_history.append(action)
     return action.flip()
+
+
+def switch_cooperations_and_defections(player):
+    temp = player.cooperations
+    player.cooperations = player.defections
+    player.defections = temp
 
 
 DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")

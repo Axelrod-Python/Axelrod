@@ -326,10 +326,9 @@ class TestPickle(unittest.TestCase):
         self.assert_dual_wrapper_correct(klass)
 
     def test_dual_transformer_with_fsm_and_sequence_players(self):
-        self.assert_dual_wrapper_correct(axl.Fortress3)
-        self.assert_dual_wrapper_correct(axl.Fortress4)
 
-        self.assert_dual_wrapper_correct(axl.ThueMorse)
+        for s in axl.strategies:
+            self.assert_dual_wrapper_correct(s)
 
     def assert_dual_wrapper_correct(self, player_class):
         p1 = player_class()
