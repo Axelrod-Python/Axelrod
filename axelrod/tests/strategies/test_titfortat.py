@@ -727,7 +727,7 @@ class TestMichaelos(TestPlayer):
     name = "Michaelos: (D,)"
     player = axelrod.Michaelos
     expected_classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': {'length'},
         'inspects_source': False,
@@ -756,6 +756,10 @@ class TestMichaelos(TestPlayer):
                          match_attributes={"length": -1}, seed=2)
 
         # Chance of becoming a defector is 50% after (D, C) occurs.
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"is_defector": False}, seed=3)
+
         actions = [(C, C), (C, D), (D, C), (D, D), (D, C), (D, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          attrs={"is_defector": True}, seed=2)

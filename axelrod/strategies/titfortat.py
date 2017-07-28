@@ -792,7 +792,7 @@ class Michaelos(Player):
 
     name = 'Michaelos'
     classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': {'length'},
         'long_run_time': False,
@@ -812,7 +812,7 @@ class Michaelos(Player):
             return D
         if self.history[-1] == D and opponent.history[-1] == C:
             decision = random_choice()
-            if(decision == C):
+            if decision == C:
                 return C
             else:
                 self.is_defector = True
