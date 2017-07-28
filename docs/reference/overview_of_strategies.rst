@@ -168,7 +168,7 @@ repository.
    "KPAVLOVC_", "Unknown", ":class:`WinStayLoseShift <axelrod.strategies.memoryone.WinStayLoseShift>`"
    "KRANDOMC_", "Unknown", ":class:`Random <axelrod.strategies.rand.Random>`"
    "KTF2TC_", "Unknown", ":class:`TitFor2Tats <axelrod.strategies.titfortat.TitFor2Tats>`"
-   "KTITFORTATC_", Anatol Rapoport, ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
+   "KTITFORTATC_", "Unknown", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
 
 
 Stewart and Plotkin's Tournament (2012)
