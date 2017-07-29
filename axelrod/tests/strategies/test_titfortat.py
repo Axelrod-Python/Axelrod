@@ -550,6 +550,7 @@ class TestSlowTitForTwoTats2(TestPlayer):
                     (D, C), (D, C), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions)
 
+
 class TestAlexei(TestPlayer):
     """
     Tests for the Alexei strategy
@@ -584,6 +585,7 @@ class TestAlexei(TestPlayer):
         actions = [(C, C), (C, C), (C, D), (D, D), (D, C), (D, D)]
         self.versus_test(opponent, expected_actions=actions)
 
+
 class TestEugineNier(TestPlayer):
     """
     Tests for the Eugine Nier strategy
@@ -610,7 +612,6 @@ class TestEugineNier(TestPlayer):
                          attrs={"is_defector": False},
                          match_attributes={"length": -1})
 
-
         # Plays TfT and defects in last round
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
@@ -626,7 +627,6 @@ class TestEugineNier(TestPlayer):
         actions = [(C, D), (D, C), (C, D), (D, D),
                    (D, D), (D, D), (D, C), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
-
 
 
 class TestNTitsForMTats(TestPlayer):

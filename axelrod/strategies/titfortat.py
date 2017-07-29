@@ -649,6 +649,7 @@ class SlowTitForTwoTats2(Player):
         # Otherwise play previous move
         return self.history[-1]
 
+
 @FinalTransformer((D,), name_prefix=None)
 class Alexei(Player):
     """
@@ -676,6 +677,7 @@ class Alexei(Player):
         if opponent.history[-1] == D:
             return D
         return C
+
 
 @FinalTransformer((D,), name_prefix=None)
 class EugineNier(Player):
@@ -721,9 +723,9 @@ class EugineNier(Player):
 class NTitsForMTats(Player):
     """
     A parameterizable Tit-for-Tat,
-    The arguments are :
-    1) the number of defection before retaliation
-    2) the number of retaliations
+    The arguments are:
+    1) M: the number of defection before retaliation
+    2) N: the number of retaliations
 
     Names:
 
@@ -745,9 +747,9 @@ class NTitsForMTats(Player):
         """
         Parameters
         ----------
-        N
+        N: int
             Number of retaliations
-        M
+        M: int
             Number of defection before retaliation
 
         Special Cases
@@ -761,7 +763,7 @@ class NTitsForMTats(Player):
         super().__init__()
         self.N = N
         self.M = M
-        self.classifier['memory_depth'] = max([M,N])
+        self.classifier['memory_depth'] = max([M, N])
         self.retaliate_count = 0
 
     def strategy(self, opponent: Player) -> Action:
@@ -772,3 +774,7 @@ class NTitsForMTats(Player):
             self.retaliate_count -= 1
             return D
         return C
+
+    def reset(self):
+        super().reset()
+        self.retaliate_count = 0

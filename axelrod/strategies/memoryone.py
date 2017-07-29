@@ -1,3 +1,6 @@
+"""Memory One strategies. Note that there are Memory One strategies in other
+files, including titfortat.py and zero_determinant.py"""
+
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
@@ -33,7 +36,8 @@ class MemoryOnePlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, four_vector: type_four_vector = None, initial: Action = C) -> None:
+    def __init__(self, four_vector: type_four_vector = None,
+                 initial: Action = C) -> None:
         """
         Parameters
 
@@ -241,7 +245,7 @@ class StochasticWSLS(MemoryOnePlayer):
         """
 
         self.ep = ep
-        four_vector = (1.-ep, ep, ep, 1.-ep)
+        four_vector = (1. - ep, ep, ep, 1. - ep)
         super().__init__(four_vector)
         self.set_four_vector(four_vector)
 

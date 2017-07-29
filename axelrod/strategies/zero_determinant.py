@@ -1,10 +1,6 @@
 from axelrod.action import Action
 from .memoryone import MemoryOnePlayer
 
-# from typing import List, Tuple, Union
-# type_four_vector = Union[List[float], Tuple[float, float, float, float]]
-
-
 C, D = Action.C, Action.D
 
 
@@ -52,7 +48,7 @@ class LRPlayer(MemoryOnePlayer):
             l = R
 
         # Check parameters
-        s_min = - min((T-l) / (l-S), (l-S) / (T-l))
+        s_min = - min((T - l) / (l - S), (l - S) / (T - l))
         if (l < P) or (l > R) or (s > 1) or (s < s_min):
             raise ValueError
 
@@ -63,6 +59,35 @@ class LRPlayer(MemoryOnePlayer):
 
         four_vector = [p1, p2, p3, p4]
         self.set_four_vector(four_vector)
+
+
+class ZDExtortion(LRPlayer):
+    """
+    An example ZD Extortion player.
+
+    Names:
+
+    - ZDExtortion: [Roemheld2013]_
+    """
+
+    name = 'ZD-Extortion'
+
+    def __init__(self, phi: float = 0.2, s: float = 0.1,
+                 l: float = 1) -> None:
+        """
+        Parameters
+
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super().__init__()
+
+    def receive_match_attributes(self):
+        super().receive_match_attributes(self.phi, self.s, self.l)
 
 
 class ZDExtort2(LRPlayer):
@@ -91,8 +116,7 @@ class ZDExtort2(LRPlayer):
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
         self.l = P
-        super().receive_match_attributes(
-            self.phi, self.s, self.l)
+        super().receive_match_attributes(self.phi, self.s, self.l)
 
 
 class ZDExtort2v2(LRPlayer):
@@ -121,8 +145,38 @@ class ZDExtort2v2(LRPlayer):
         super().__init__()
 
     def receive_match_attributes(self):
-        super().receive_match_attributes(
-            self.phi, self.s, self.l)
+        super().receive_match_attributes(self.phi, self.s, self.l)
+
+
+class ZDExtort3(LRPlayer):
+    """
+    An extortionate strategy from Press and Dyson's paper an extortion factor
+    of 3.
+
+    Names:
+
+    - ZDExtort3: Original name by Marc Harper
+    - Unnamed: [Press2012]_
+    """
+
+    name = 'ZD-Extort3'
+
+    def __init__(self, phi: float = 3 / 26, s: float = 1 / 3,
+                 l: float = 1) -> None:
+        """
+        Parameters
+
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super().__init__()
+
+    def receive_match_attributes(self):
+        super().receive_match_attributes(self.phi, self.s, self.l)
 
 
 class ZDExtort4(LRPlayer):
@@ -152,8 +206,7 @@ class ZDExtort4(LRPlayer):
         super().__init__()
 
     def receive_match_attributes(self):
-        super().receive_match_attributes(
-            self.phi, self.s, self.l)
+        super().receive_match_attributes(self.phi, self.s, self.l)
 
 
 class ZDGen2(LRPlayer):
@@ -181,8 +234,7 @@ class ZDGen2(LRPlayer):
         super().__init__()
 
     def receive_match_attributes(self):
-        super().receive_match_attributes(
-            self.phi, self.s, self.l)
+        super().receive_match_attributes(self.phi, self.s, self.l)
 
 
 class ZDGTFT2(LRPlayer):
@@ -211,8 +263,35 @@ class ZDGTFT2(LRPlayer):
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
         self.l = R
-        super().receive_match_attributes(
-            self.phi, self.s, self.l)
+        super().receive_match_attributes(self.phi, self.s, self.l)
+
+
+class ZDMischief(LRPlayer):
+    """
+    An example ZD Mischief player.
+
+    Names:
+
+    - ZDMischief: [Roemheld2013]_
+    """
+
+    name = 'ZD-Mischief'
+
+    def __init__(self, phi: float = 0.1, s: float = 0., l: float = 1) -> None:
+        """
+        Parameters
+
+        phi, s: floats
+            Parameters passed through to LRPlayer to determine
+            the four vector.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super().__init__()
+
+    def receive_match_attributes(self):
+        super().receive_match_attributes(self.phi, self.s, self.l)
 
 
 class ZDSet2(LRPlayer):
@@ -240,5 +319,4 @@ class ZDSet2(LRPlayer):
         super().__init__()
 
     def receive_match_attributes(self):
-        super().receive_match_attributes(
-            self.phi, self.s, self.l)
+        super().receive_match_attributes(self.phi, self.s, self.l)
