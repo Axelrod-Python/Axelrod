@@ -400,14 +400,15 @@ class TestPlayer(unittest.TestCase):
         """Make sure resetting works correctly."""
         player = self.player()
         clone = player.clone()
-        opponent = axelrod.Random()
+        for opponent in [axelrod.Defector(), axelrod.Random(),
+                         axelrod.Alternator(), axelrod.Cooperator()]:
 
-        for seed in range(10):
-            axelrod.seed(seed)
-            player.play(opponent)
+            for seed in range(10):
+                axelrod.seed(seed)
+                player.play(opponent)
 
-        player.reset()
-        self.assertEqual(player, clone)
+            player.reset()
+            self.assertEqual(player, clone)
 
     def test_reset_clone(self):
         """Make sure history resetting with cloning works correctly, regardless
