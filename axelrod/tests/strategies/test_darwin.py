@@ -57,7 +57,8 @@ class TestDarwin(TestPlayer):
 
         self.versus_test(axelrod.MindReader(), expected_actions=[(C, D)] * 2, attrs={'genome': [D, C]})
 
-    def test_reset_only_resets_first_move_of_genome(self):
+    def test_reset_history_and_attributes(self):
+        # Overwrite this method because Darwin does not reset
         self.versus_test(axelrod.Defector(), expected_actions=[(C, D)] + [(D, D)] * 4)
 
         p1 = self.player()
