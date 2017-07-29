@@ -6,7 +6,7 @@ Player information
 It is possible to determine what information players know about their matches.
 By default all known information is given.
 For example let us create a match with 5 turns between :code:`SteinAndRapoport`
-and :code:`Aternator`. The latter of these two always defects on the last 2
+and :code:`Alternator`. The latter of these two always defects on the last 2
 turns::
 
     >>> import axelrod as axl
