@@ -22,10 +22,10 @@ turns::
 
 We can also pass this information to a tournament. Let us create a
 tournament with 5 turns but ensure the players believe the match length is
-infinite::
+infinite (unknown)::
 
     >>> tournament = axl.Tournament(players, turns=5,
-    ...                             match_attributes={"length": -1})
+    ...                             match_attributes={"length": float('inf')})
 
 The :code:`match_attributes` dictionary can also be used to pass :code:`game`
 and :code:`noise`.

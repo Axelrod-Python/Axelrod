@@ -82,11 +82,13 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(anonymous_tournament.name, 'axelrod')
 
     def test_init_with_match_attributes(self):
-        tournament = axelrod.Tournament(players=self.players,
-                                        match_attributes={"length": -1})
+        tournament = axelrod.Tournament(
+                players=self.players,
+                match_attributes={"length": float('inf')})
         mg = tournament.match_generator
         match_params = mg.build_single_match_params()
-        self.assertEqual(match_params["match_attributes"], {"length": -1})
+        self.assertEqual(match_params["match_attributes"],
+                         {"length": float('inf')})
 
     def test_warning(self):
         tournament = axelrod.Tournament(name=self.test_name,

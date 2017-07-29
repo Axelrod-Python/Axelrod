@@ -127,14 +127,15 @@ class TestMatchGenerator(unittest.TestCase):
                                     game=test_game,
                                     repetitions=test_repetitions,
                                     turns=5,
-                                    match_attributes={"length": -1})
+                                    match_attributes={"length": float('inf')})
         match_params = rr.build_single_match_params()
         self.assertIsInstance(match_params, dict)
         self.assertEqual(match_params["turns"], 5)
         self.assertEqual(match_params["game"], test_game)
         self.assertEqual(match_params["prob_end"], None)
         self.assertEqual(match_params["noise"], 0)
-        self.assertEqual(match_params["match_attributes"], {"length": -1})
+        self.assertEqual(match_params["match_attributes"],
+                         {"length": float('inf')})
 
 
         # Check that can build a match
@@ -143,7 +144,7 @@ class TestMatchGenerator(unittest.TestCase):
         match = axelrod.Match(**match_params)
         self.assertIsInstance(match, axelrod.Match)
         self.assertEqual(len(match), 5)
-        self.assertEqual(match.match_attributes, {"length": -1})
+        self.assertEqual(match.match_attributes, {"length": float('inf')})
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions))
     @example(repetitions=test_repetitions)
