@@ -162,3 +162,6 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.worse_and_worse
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.zero_determinant
+   :members:
+   :undoc-members:
