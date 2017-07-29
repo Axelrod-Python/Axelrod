@@ -16,5 +16,6 @@ Contents:
    parallel_processing.rst
    using_the_cache.rst
    setting_a_seed.rst
+   player_information.rst
    player_equality.rst
    games.rst
