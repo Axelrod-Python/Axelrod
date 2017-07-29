@@ -392,28 +392,50 @@ class TestZDMem2(TestPlayer):
     }
 
     def test_new_data(self):
-        original_data = {}
+        original_data = {
+            ('', 'CC', 'CC'): 11 /12,
+            ('', 'CC', 'CD'): 4 / 11,
+            ('', 'CC', 'DC'): 7 / 9,
+            ('', 'CC', 'DD'): 1 / 10,
+            ('', 'CD', 'CC'): 5 / 6,
+            ('', 'CD', 'CD'): 3 / 11,
+            ('', 'CD', 'DC'): 7 / 9,
+            ('', 'CD', 'DD'): 1 / 10,
+            ('', 'DC', 'CC'): 2 / 3,
+            ('', 'DC', 'CD'): 1 / 11,
+            ('', 'DC', 'DC'): 7 / 9,
+            ('', 'DC', 'DD'): 1 / 10 ,
+            ('', 'DD', 'CC'): 3 / 4,
+            ('', 'DD', 'CD'): 2 / 11,
+            ('', 'DD', 'DC'): 7 / 9,
+            ('', 'DD', 'DD'): 1 / 10,
+        }
         converted_original = convert_original_to_current(original_data)
         self.assertEqual(self.player().lookup_dict, converted_original)
 
     def test_vs_defector(self):
-        expected = [(C, D), (C, D)] + [(D, D)] * 10
-        self.versus_test(axelrod.Defector(), expected_actions=expected)
+        seed = 5
+        expected = [(C, D), (C, D), (D, D), (D, D), (D, D), (D, D), (D, D),
+                    (D, D), (C, D), (D, D)]
+
+        self.versus_test(axelrod.Defector(), expected_actions=expected,
+                         seed=seed)
 
     def test_vs_cooperator(self):
-        expected = [(C, C)] * 10
-        self.versus_test(axelrod.Cooperator(), expected_actions=expected)
+        seed = 5
+        expected = [(C, C), (C, C), (C, C), (C, C), (C, C), (D, C), (C, C),
+                    (D, C), (C, C), (C, C)]
+
+        self.versus_test(axelrod.Cooperator(), expected_actions=expected,
+                         seed=seed)
 
     def test_vs_alternator(self):
         seed = 2
-        expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (C, C)]
-        self.versus_test(axelrod.Alternator(),
-                         expected_actions=expected,
+        expected = [(C, C), (C, D), (D, C), (D, D), (C, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=expected,
                          seed=seed)
 
         new_seed = 1
-        expected[4] = (C, C)
-        expected[6] = (D, C)
-        self.versus_test(axelrod.Alternator(),
-                         expected_actions=expected,
+        expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=expected,
                          seed=new_seed)
