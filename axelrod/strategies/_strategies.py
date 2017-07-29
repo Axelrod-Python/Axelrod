@@ -27,7 +27,7 @@ from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import (
     Gambler, PSOGambler1_1_1, PSOGambler2_2_2, PSOGambler2_2_2_Noise05,
-    PSOGamblerMem1)
+    PSOGamblerMem1, ZDMem2)
 from .gobymajority import (GoByMajority,
     GoByMajority10, GoByMajority20, GoByMajority40,
     GoByMajority5,
@@ -86,6 +86,7 @@ from .zero_determinant import (
     ZDMischief, ZDSet2)
 
 # Note: Meta* strategies are handled in .__init__.py
+
 
 all_strategies = [
     Adaptive,
@@ -270,6 +271,7 @@ all_strategies = [
     ZDExtort4,
     ZDGTFT2,
     ZDGen2,
+    ZDMem2,
     ZDMischief,
     ZDSet2,
     e,

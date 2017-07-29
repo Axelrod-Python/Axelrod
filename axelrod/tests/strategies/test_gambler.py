@@ -375,3 +375,45 @@ class TestPSOGambler2_2_2_Noise05(TestPlayer):
         self.versus_test(axelrod.MockPlayer(opponent_actions),
                          expected_actions=new_expected,
                          seed=new_seed)
+
+
+class TestZDMem2(TestPlayer):
+    name = "ZD-Mem2"
+    player = axelrod.ZDMem2
+
+    expected_classifier = {
+        'memory_depth': 2,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_new_data(self):
+        original_data = {}
+        converted_original = convert_original_to_current(original_data)
+        self.assertEqual(self.player().lookup_dict, converted_original)
+
+    def test_vs_defector(self):
+        expected = [(C, D), (C, D)] + [(D, D)] * 10
+        self.versus_test(axelrod.Defector(), expected_actions=expected)
+
+    def test_vs_cooperator(self):
+        expected = [(C, C)] * 10
+        self.versus_test(axelrod.Cooperator(), expected_actions=expected)
+
+    def test_vs_alternator(self):
+        seed = 2
+        expected = [(C, C), (C, D), (C, C), (D, D), (D, C), (D, D), (C, C)]
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=expected,
+                         seed=seed)
+
+        new_seed = 1
+        expected[4] = (C, C)
+        expected[6] = (D, C)
+        self.versus_test(axelrod.Alternator(),
+                         expected_actions=expected,
+                         seed=new_seed)
