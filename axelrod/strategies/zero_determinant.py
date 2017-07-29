@@ -150,8 +150,8 @@ class ZDExtort2v2(LRPlayer):
 
 class ZDExtort3(LRPlayer):
     """
-    An extortionate strategy from Press and Dyson's paper an extortion factor
-    of 3.
+    An extortionate strategy from Press and Dyson's paper witn an extortion
+    factor of 3.
 
     Names:
 
