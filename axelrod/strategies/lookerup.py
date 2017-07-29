@@ -176,8 +176,7 @@ def make_keys_into_plays(lookup_table: dict) -> dict:
     return new_table
 
 
-def create_lookup_table_keys(player_depth: int,
-                             op_depth: int,
+def create_lookup_table_keys(player_depth: int, op_depth: int,
                              op_openings_depth: int) -> list:
     """Returns a list of Plays that has all possible permutations of C's and
     D's for each specified depth. the list is in order,
