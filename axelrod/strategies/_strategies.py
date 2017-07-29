@@ -50,8 +50,8 @@ from .lookerup import (LookerUp,
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
-    StochasticCooperator, StochasticWSLS, ZDExtort2, ZDExtort2v2, ZDExtort4,
-    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay, ReactivePlayer)
+    StochasticCooperator, StochasticWSLS, WinStayLoseShift, WinShiftLoseStay,
+    ReactivePlayer)
 from .memorytwo import MEM2
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
@@ -76,10 +76,14 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, AdaptiveTitForTat,
-    SpitefulTitForTat, SlowTitForTwoTats2, Alexei, EugineNier, DynamicTwoTitsForTat, NTitsForMTats)
+    SpitefulTitForTat, SlowTitForTwoTats2, Alexei, EugineNier,
+    DynamicTwoTitsForTat, NTitsForMTats)
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
+from .zero_determinant import (
+    ZDExtortion, ZDExtort2, ZDExtort3, ZDExtort2v2, ZDExtort4, ZDGen2, ZDGTFT2,
+    ZDMischief, ZDSet2)
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -259,11 +263,14 @@ all_strategies = [
     WorseAndWorse,
     WorseAndWorse2,
     WorseAndWorse3,
+    ZDExtortion,
     ZDExtort2,
+    ZDExtort3,
     ZDExtort2v2,
     ZDExtort4,
     ZDGTFT2,
     ZDGen2,
+    ZDMischief,
     ZDSet2,
     e,
     DynamicTwoTitsForTat,
