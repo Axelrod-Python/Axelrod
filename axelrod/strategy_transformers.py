@@ -9,9 +9,11 @@ import collections
 import copy
 import inspect
 import random
+from typing import Any
 from numpy.random import choice
 from .action import Action
 from .random_ import random_choice
+from .player import defaultdict, Player
 from importlib import import_module
 
 
@@ -59,9 +61,10 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 self.name_prefix = name_prefix
 
         def __reduce__(self):
+            factory_args = (strategy_wrapper, name_prefix, reclassifier)
             return (
                 DecoratorReBuilder(),
-                (strategy_wrapper, name_prefix, reclassifier,
+                (factory_args,
                  self.args, self.kwargs, self.name_prefix)
             )
 
@@ -96,8 +99,8 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             # with `strategy_wrapper`
             def strategy(self, opponent):
                 if strategy_wrapper == dual_wrapper:
-                    # Dummy Action for dual_wrapper.
-                    # This is to avoid calling the strategy twice.
+                    # `dual_wrapper` is a special case that must not call the
+                    # strategy here. It is called inside the wrapper, instead.
                     proposed_action = C
                 else:
                     if is_strategy_static(PlayerClass):
@@ -147,23 +150,23 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             def reduce_for_decorated_class(self_):
                 class_module = import_module(self_.__module__)
                 import_name = self_.__class__.__name__
-                if import_name in dir(class_module):
+
+                if player_can_be_pickled(self_):
                     return self_.__class__, (), self_.__dict__
 
-                else:
-                    decorators = []
-                    for klass in self_.__class__.mro():
-                        if hasattr(klass, 'decorator'):
-                            decorators.insert(0, klass.decorator)
-                        else:
-                            import_name = klass.__name__
-                            break
+                decorators = []
+                for klass in self_.__class__.mro():
+                    import_name = klass.__name__
+                    if hasattr(klass, 'decorator'):
+                        decorators.insert(0, klass.decorator)
+                    if hasattr(class_module, import_name):
+                        break
 
-                    return (
-                        StrategyReBuilder(),
-                        (decorators, import_name, self_.__module__),
-                        self_.__dict__
-                    )
+                return (
+                    StrategyReBuilder(),
+                    (decorators, import_name, self_.__module__),
+                    self_.__dict__
+                )
 
             # Define a new class and wrap the strategy method
             # Dynamically create the new class
@@ -185,11 +188,22 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
     return Decorator
 
 
-def is_strategy_static(player_class):
+def player_can_be_pickled(player: Player) -> bool:
     """
+    Returns True if pickle.dump(player) does not raise pickle.PicklingError.
+    """
+    class_module = import_module(player.__module__)
+    import_name = player.__class__.__name__
+    if not hasattr(class_module, import_name):
+        return False
 
-    :param player_class: Any class that inherits from axelrod.Player
-    :return: bool
+    to_test = getattr(class_module, import_name)
+    return to_test == player.__class__
+
+
+def is_strategy_static(player_class) -> bool:
+    """
+    Returns True if `player_class.strategy` is a `staticmethod`, else False.
     """
     for klass in player_class.mro():
         method = inspect.getattr_static(klass, 'strategy', default=None)
@@ -198,23 +212,26 @@ def is_strategy_static(player_class):
 
 
 class DecoratorReBuilder(object):
-    def __init__(self):
-        pass
+    """
+    An object to build an anonymous Decorator obj from a set of pickle-able
+    parameters.
+    """
+    def __call__(self, factory_args: tuple, args: tuple, kwargs: dict,
+                 instance_name_prefix: str) -> Any:
 
-    def __call__(self, strategy_wrapper, name_prefix, reclassifier,
-                 args, kwargs, instance_name_prefix):
-        decorator_class = StrategyTransformerFactory(
-            strategy_wrapper, name_prefix, reclassifier
-        )
+        decorator_class = StrategyTransformerFactory(*factory_args)
         kwargs['name_prefix'] = instance_name_prefix
         return decorator_class(*args, **kwargs)
 
 
 class StrategyReBuilder(object):
-    def __init__(self):
-        pass
+    """
+    An object to build a new instance of a player from an old instance
+    that could not normally be pickled.
+    """
+    def __call__(self, decorators: list, import_name: str,
+                 module_name: str) -> Player:
 
-    def __call__(self, decorators, import_name, module_name):
         module_ = import_module(module_name)
         import_class = getattr(module_, import_name)
 
@@ -277,7 +294,7 @@ FlipTransformer = StrategyTransformerFactory(
     flip_wrapper, name_prefix="Flipped")
 
 
-def dual_wrapper(player, opponent, proposed_action):
+def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
     """Wraps the players strategy function to produce the Dual.
 
     The Dual of a strategy will return the exact opposite set of moves to the
@@ -298,30 +315,51 @@ def dual_wrapper(player, opponent, proposed_action):
     action: an axelrod.Action, C or D
     """
 
-    if not player.history:
-        player.original_player_history = []
-
-    temp_history = player.history[:]
-    player.history = player.original_player_history[:]
-
-    switch_cooperations_and_defections(player)
+    flip_play_attributes(player)
 
     if is_strategy_static(player.original_class):
         action = player.original_class.strategy(opponent)
     else:
         action = player.original_class.strategy(player, opponent)
 
-    player.history = temp_history[:]
-    switch_cooperations_and_defections(player)
+    flip_play_attributes(player)
 
-    player.original_player_history.append(action)
     return action.flip()
 
 
-def switch_cooperations_and_defections(player):
+def flip_play_attributes(player: Player) -> None:
+    """
+    Flips all the attributes created by `player.play`:
+        - `player.history`,
+        - `player.cooperations`,
+        - `player.defectsions`,
+        - `player.state_distribution`,
+    """
+    flip_history(player)
+    switch_cooperations_and_defections(player)
+    flip_state_distribution(player)
+
+
+def flip_history(player: Player) -> None:
+    """Flips all the actions in `player.history`."""
+    new_history = [action.flip() for action in player.history]
+    player.history = new_history
+
+
+def switch_cooperations_and_defections(player: Player) -> None:
+    """Exchanges `player.cooperations` and `player.defections`."""
     temp = player.cooperations
     player.cooperations = player.defections
     player.defections = temp
+
+
+def flip_state_distribution(player: Player) -> None:
+    """Flips all the player's actions in `player.state_distribution`."""
+    new_distribution = defaultdict(int)
+    for key, val in player.state_distribution.items():
+        new_key = (key[0].flip(), key[1])
+        new_distribution[new_key] = val
+    player.state_distribution = new_distribution
 
 
 DualTransformer = StrategyTransformerFactory(dual_wrapper, name_prefix="Dual")
