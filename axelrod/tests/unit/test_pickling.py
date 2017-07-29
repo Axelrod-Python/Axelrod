@@ -126,9 +126,14 @@ class RetaliateUntilApology(axl.Cooperator):
 class TrackHistory(axl.Cooperator):
     pass
 
+@st.IdentityTransformer()
+class Identity(axl.Cooperator):
+    pass
+
 transformed_no_prefix = [Apology, DeadlockBreaking, Flip, Final, Forgiver,
                          Grudge, Initial, JossAnn, Mixed, Nice, Noisy,
-                         Retaliation, RetaliateUntilApology, TrackHistory, Dual]
+                         Retaliation, RetaliateUntilApology, TrackHistory, Dual,
+                         Identity]
 
 transformer_instances = [
     st.ApologyTransformer([D], [C]),
@@ -145,11 +150,16 @@ transformer_instances = [
     st.NoisyTransformer(0.2),
     st.RetaliationTransformer(3),
     st.RetaliateUntilApologyTransformer(),
-    st.TrackHistoryTransformer()
+    st.TrackHistoryTransformer(),
+    st.IdentityTransformer()
 ]
 
 
 class TestPickle(unittest.TestCase):
+
+    def assert_orignal_equals_pickled(self, player, turns=10):
+        self.assert_original_plays_same_as_pickled(player, turns)
+        self.assert_mutated_instance_same_as_pickled(player)
 
     def assert_original_plays_same_as_pickled(self, player, turns=10):
         copy = pickle.loads(pickle.dumps(player))
@@ -166,6 +176,7 @@ class TestPickle(unittest.TestCase):
         self.assertEqual(result_1, result_2)
 
     def assert_mutated_instance_same_as_pickled(self, player):
+        player.reset()
         turns = 5
         opponent = axl.Alternator()
         for _ in range(turns):
@@ -175,11 +186,11 @@ class TestPickle(unittest.TestCase):
 
     def test_parameterized_player(self):
         player = axl.Cycler('DDCCDD')
-        self.assert_mutated_instance_same_as_pickled(player)
+        self.assert_orignal_equals_pickled(player)
 
     def test_sequence_player(self):
         player = axl.ThueMorse()
-        self.assert_mutated_instance_same_as_pickled(player)
+        self.assert_orignal_equals_pickled(player)
 
     def test_final_transformer_called(self):
         player = axl.Alexei()
@@ -196,20 +207,17 @@ class TestPickle(unittest.TestCase):
 
     def test_pickling_all_strategies(self):
         for s in axl.strategies:
-            player = s()
-            player.play(axl.Cooperator())
-            reconstituted = pickle.loads(pickle.dumps(player))
-            self.assertEqual(reconstituted, player)
+            self.assert_orignal_equals_pickled(s())
 
     def test_pickling_all_transformers_as_decorated_classes(self):
         for s in transformed_no_prefix:
             player = s()
-            self.assert_mutated_instance_same_as_pickled(player)
+            self.assert_orignal_equals_pickled(player)
 
     def test_pickling_all_transformers_as_instance_called_on_a_class(self):
         for transformer in transformer_instances:
             player = transformer(axl.Cooperator)()
-            self.assert_mutated_instance_same_as_pickled(player)
+            self.assert_orignal_equals_pickled(player)
 
     def test_created_on_the_spot_multiple_transformers(self):
         klass = st.FlipTransformer()(axl.Cooperator)
@@ -218,6 +226,7 @@ class TestPickle(unittest.TestCase):
         copy = pickle.loads(pickle.dumps(player))
 
         self.assertEqual(player, copy)
+        self.assert_mutated_instance_same_as_pickled(player)
 
     def test_class_and_instance_name_different_single_flip(self):
         player = SingleFlip()
@@ -307,42 +316,9 @@ class TestPickle(unittest.TestCase):
                          'FliptasticCooperator')
         self.assert_mutated_instance_same_as_pickled(new_prefix)
 
-    def test_limitations__pickling_a_stupid_case(self):
+    def test_dynamic_class_no_name_prefix(self):
         player = st.FlipTransformer(name_prefix=None)(axl.Cooperator)()
 
         self.assertEqual(player.__class__.__name__, 'Cooperator')
+        self.assert_mutated_instance_same_as_pickled(player)
 
-        self.assertRaises(pickle.PicklingError, pickle.dumps, player)
-
-    def test_regression_test_dual_transformer_with_lookerup(self):
-        self.assert_dual_wrapper_correct(axl.LookerUp)
-        self.assert_dual_wrapper_correct(axl.EvolvedLookerUp2_2_2)
-
-    def test_regression_test_dual_jossann(self):
-        klass = st.JossAnnTransformer((0.2, 0.3))(axl.Alternator)
-        self.assert_dual_wrapper_correct(klass)
-
-        klass = st.JossAnnTransformer((0.5, 0.4))(axl.EvolvedLookerUp2_2_2)
-        self.assert_dual_wrapper_correct(klass)
-
-    def test_dual_transformer_with_fsm_and_sequence_players(self):
-
-        for s in axl.strategies:
-            self.assert_dual_wrapper_correct(s)
-
-    def assert_dual_wrapper_correct(self, player_class):
-        p1 = player_class()
-        p2 = st.DualTransformer()(player_class)()
-        p3 = axl.CyclerCCD()  # Cycles 'CCD'
-
-        axl.seed(0)
-        for _ in range(10):
-            p1.play(p3)
-
-        p3.reset()
-
-        axl.seed(0)
-        for _ in range(10):
-            p2.play(p3)
-
-        self.assertEqual(p1.history, [x.flip() for x in p2.history])
