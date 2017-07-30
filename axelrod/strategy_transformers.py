@@ -184,6 +184,9 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "__reduce__": reduce_for_decorated_class,
                 })
 
+            if strategy_wrapper == dual_wrapper:
+                setattr(new_class, 'for_dual', PlayerClass)
+
             return new_class
     return Decorator
 
@@ -317,10 +320,10 @@ def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
 
     flip_play_attributes(player)
 
-    if is_strategy_static(player.original_class):
-        action = player.original_class.strategy(opponent)
+    if is_strategy_static(player.for_dual):
+        action = player.for_dual.strategy(opponent)
     else:
-        action = player.original_class.strategy(player, opponent)
+        action = player.for_dual.strategy(player, opponent)
 
     flip_play_attributes(player)
 
