@@ -778,3 +778,52 @@ class NTitsForMTats(Player):
     def reset(self):
         super().reset()
         self.retaliate_count = 0
+
+
+@FinalTransformer((D,), name_prefix=None)
+class Michaelos(Player):
+    """
+    Plays similar to Tit-for-Tat with two exceptions:
+    1) Defect on last turn.
+    2) After own defection and opponent's cooperation, 50 percent of the time,
+    cooperate. The other 50 percent of the time, always defect for the rest of
+    the game.
+
+    Names:
+
+    - Michaelos: [LessWrong2011]_
+    """
+
+    name = 'Michaelos'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': {'length'},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.is_defector = False
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        if self.is_defector:
+            return D
+        if self.history[-1] == D and opponent.history[-1] == C:
+            decision = random_choice()
+            if decision == C:
+                return C
+            else:
+                self.is_defector = True
+                return D
+
+        return opponent.history[-1]
+
+    def reset(self):
+        super().reset()
+        self.is_defector = False
