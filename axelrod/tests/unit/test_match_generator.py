@@ -122,6 +122,30 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertGreater(len(match), 0)
         self.assertLessEqual(len(match), 10)
 
+    def test_build_single_match_params_with_fixed_length_unknown(self):
+        rr = axelrod.MatchGenerator(players=self.players,
+                                    game=test_game,
+                                    repetitions=test_repetitions,
+                                    turns=5,
+                                    match_attributes={"length": float('inf')})
+        match_params = rr.build_single_match_params()
+        self.assertIsInstance(match_params, dict)
+        self.assertEqual(match_params["turns"], 5)
+        self.assertEqual(match_params["game"], test_game)
+        self.assertEqual(match_params["prob_end"], None)
+        self.assertEqual(match_params["noise"], 0)
+        self.assertEqual(match_params["match_attributes"],
+                         {"length": float('inf')})
+
+
+        # Check that can build a match
+        players = [axelrod.Cooperator(), axelrod.Defector()]
+        match_params["players"] = players
+        match = axelrod.Match(**match_params)
+        self.assertIsInstance(match, axelrod.Match)
+        self.assertEqual(len(match), 5)
+        self.assertEqual(match.match_attributes, {"length": float('inf')})
+
     @given(repetitions=integers(min_value=1, max_value=test_repetitions))
     @example(repetitions=test_repetitions)
     def test_build_match_chunks(self, repetitions):

@@ -27,7 +27,7 @@ from .forgiver import Forgiver, ForgivingTitForTat
 from .geller import Geller, GellerCooperator, GellerDefector
 from .gambler import (
     Gambler, PSOGambler1_1_1, PSOGambler2_2_2, PSOGambler2_2_2_Noise05,
-    PSOGamblerMem1)
+    PSOGamblerMem1, ZDMem2)
 from .gobymajority import (GoByMajority,
     GoByMajority10, GoByMajority20, GoByMajority40,
     GoByMajority5,
@@ -50,8 +50,8 @@ from .lookerup import (LookerUp,
 from .mathematicalconstants import Golden, Pi, e
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
-    StochasticCooperator, StochasticWSLS, ZDExtort2, ZDExtort2v2, ZDExtort4,
-    ZDGen2, ZDGTFT2, ZDSet2, WinStayLoseShift, WinShiftLoseStay, ReactivePlayer)
+    StochasticCooperator, StochasticWSLS, WinStayLoseShift, WinShiftLoseStay,
+    ReactivePlayer)
 from .memorytwo import MEM2
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
@@ -80,8 +80,12 @@ from .titfortat import (
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
+from .zero_determinant import (
+    ZDExtortion, ZDExtort2, ZDExtort3, ZDExtort2v2, ZDExtort4, ZDGen2, ZDGTFT2,
+    ZDMischief, ZDSet2)
 
 # Note: Meta* strategies are handled in .__init__.py
+
 
 all_strategies = [
     Adaptive,
@@ -260,11 +264,15 @@ all_strategies = [
     WorseAndWorse,
     WorseAndWorse2,
     WorseAndWorse3,
+    ZDExtortion,
     ZDExtort2,
+    ZDExtort3,
     ZDExtort2v2,
     ZDExtort4,
     ZDGTFT2,
     ZDGen2,
+    ZDMem2,
+    ZDMischief,
     ZDSet2,
     e,
     DynamicTwoTitsForTat,

@@ -23,7 +23,8 @@ class Tournament(object):
     def __init__(self, players: List[Player],
                  name: str = 'axelrod', game: Game = None, turns: int = None,
                  prob_end: float = None, repetitions: int = 10,
-                 noise: float = 0, edges: List[Tuple] = None) -> None:
+                 noise: float = 0, edges: List[Tuple] = None,
+                 match_attributes: dict = None) -> None:
         """
         Parameters
         ----------
@@ -45,6 +46,10 @@ class Tournament(object):
             The probability of a given turn ending a match
         edges : list
             A list of edges between players
+        match_attributes : dict
+            Mapping attribute names to values which should be passed to players.
+            The default is to use the correct values for turns, game and noise
+            but these can be overridden if desired.
         """
         if game is None:
             self.game = Game()
@@ -67,7 +72,8 @@ class Tournament(object):
                                               repetitions=self.repetitions,
                                               prob_end=prob_end,
                                               noise=self.noise,
-                                              edges=edges)
+                                              edges=edges,
+                                              match_attributes=match_attributes)
         self._logger = logging.getLogger(__name__)
 
     def setup_output(self, filename=None, in_memory=False):

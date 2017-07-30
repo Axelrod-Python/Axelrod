@@ -35,6 +35,7 @@ documentation.
 .. [Li2009] Li, J. & Kendall, G. (2009). A Strategy with Novel Evolutionary Features for the Iterated Prisoner’s Dilemma. Evolutionary Computation 17(2): 257–274.
 .. [Li2011] Li, J., Hingston, P., Member, S., & Kendall, G. (2011). Engineering Design of Strategies for Winning Iterated Prisoner ’ s Dilemma Competitions, 3(4), 348–360.
 .. [Li2014] Li, J. and Kendall, G. (2014). The Effect of Memory Size on the Evolutionary Stability of Strategies in Iterated Prisoner's Dilemma. IEEE Transactions on Evolutionary Computation, 18(6) 819-826
+.. [LiS2014] Li, Siwei. (2014). Strategies in the Stochastic Iterated Prisoner's Dilemma. Available at: http://math.uchicago.edu/~may/REU2014/REUPapers/Li,Siwei.pdf
 .. [Mathieu2015] Mathieu, P. and Delahaye, J. (2015). New Winning Strategies
   for the Iterated Prisoner's Dilemma. Proceedings of the 2015
   International Conference on Autonomous Agents and Multiagent Systems.
@@ -48,6 +49,7 @@ documentation.
 .. [Press2012] Press, W. H., & Dyson, F. J. (2012). Iterated Prisoner’s Dilemma contains strategies that dominate any evolutionary opponent. Proceedings of the National Academy of Sciences, 109(26), 10409–10413.  http://doi.org/10.1073/pnas.1206569109
 .. [Prison1998] LIFL (1998) PRISON. Available at: http://www.lifl.fr/IPD/ipd.frame.html (Accessed: 19 September 2016).
 .. [Robson1990] Robson, Arthur J. "Efficiency in evolutionary games: Darwin, Nash and the secret handshake." Journal of theoretical Biology 144.3 (1990): 379-396.
+.. [Roemheld2013] Roemheld, Lars. "Evolutionary Extortion and Mischief: Zero Determinant strategies in iterated 2x2 games". Available at: https://arxiv.org/abs/1308.2576
 .. [Singer-Clark2014] Singer-Clark, T. (2014). Morality Metrics On Iterated Prisoner’s Dilemma Players.
 .. [Shakarian2013] Shakarian, P., Roos, P. & Moores, G. A Novel Analytical Method for Evolutionary Graph Theory Problems.
 .. [Slany2007] Slany W. and Kienreich W., On some winning strategies for the iterated prisoner’s dilemma, in Kendall G., Yao X. and Chong S. (eds.) The iterated prisoner’s dilemma: 20 years on. World Scientific, chapter 8, pp. 171-204, 2007.

@@ -117,3 +117,36 @@ class PSOGambler2_2_2_Noise05(Gambler):
         parameters = Plays(self_plays=2, op_plays=2, op_openings=2)
 
         super().__init__(parameters=parameters, pattern=pattern)
+
+
+class ZDMem2(Gambler):
+    """
+    A memory two generalization of a zero determinant player.
+
+    Names:
+
+    - ZDMem2: Original name by Marc Harper
+    - Unnamed [LiS2014]_
+
+    """
+
+    name = "ZD-Mem2"
+
+    classifier = {
+        'memory_depth': 2,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        pattern = [11 / 12, 4 / 11, 7 / 9, 1 / 10,
+                   5 / 6, 3 / 11, 7 / 9, 1 / 10,
+                   2 / 3, 1 / 11, 7 / 9, 1 / 10,
+                   3 / 4, 2 / 11, 7 / 9, 1 / 10]
+        parameters = Plays(self_plays=2, op_plays=2, op_openings=0)
+
+        super().__init__(parameters=parameters, pattern=pattern)

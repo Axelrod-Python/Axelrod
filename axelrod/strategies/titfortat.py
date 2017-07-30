@@ -723,9 +723,9 @@ class EugineNier(Player):
 class NTitsForMTats(Player):
     """
     A parameterizable Tit-for-Tat,
-    The arguments are :
-    1) the number of defection before retaliation
-    2) the number of retaliations
+    The arguments are:
+    1) M: the number of defection before retaliation
+    2) N: the number of retaliations
 
     Names:
 
@@ -747,9 +747,9 @@ class NTitsForMTats(Player):
         """
         Parameters
         ----------
-        N
+        N: int
             Number of retaliations
-        M
+        M: int
             Number of defection before retaliation
 
         Special Cases
@@ -774,6 +774,10 @@ class NTitsForMTats(Player):
             self.retaliate_count -= 1
             return D
         return C
+
+    def reset(self):
+        super().reset()
+        self.retaliate_count = 0
 
 
 @FinalTransformer((D,), name_prefix=None)

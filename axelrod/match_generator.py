@@ -2,7 +2,7 @@
 class MatchGenerator(object):
 
     def __init__(self, players, repetitions, turns=None, game=None, noise=0,
-                 prob_end=None, edges=None):
+                 prob_end=None, edges=None, match_attributes=None):
         """
         A class to generate matches. This is used by the Tournament class which
         is in charge of playing the matches and collecting the results.
@@ -23,6 +23,10 @@ class MatchGenerator(object):
             The probability that a player's intended action should be flipped
         edges : list
             A list of edges between players
+        match_attributes : dict
+            Mapping attribute names to values which should be passed to players.
+            The default is to use the correct values for turns, game and noise
+            but these can be overridden if desired.
         """
         self.players = players
         self.turns = turns
@@ -31,6 +35,7 @@ class MatchGenerator(object):
         self.noise = noise
         self.opponents = players
         self.prob_end = prob_end
+        self.match_attributes = match_attributes
 
         self.edges = edges
         if edges is not None:
@@ -68,7 +73,8 @@ class MatchGenerator(object):
         Creates a single set of match parameters.
         """
         return {"turns": self.turns, "game": self.game,
-                "noise": self.noise, "prob_end": self.prob_end}
+                "noise": self.noise, "prob_end": self.prob_end,
+                "match_attributes": self.match_attributes}
 
 
 def complete_graph(players):
