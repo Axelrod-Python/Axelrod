@@ -1,3 +1,17 @@
+# v3.3.0, 2017-07-30
+
+4 new strategies and ability to pass game information at the tournament level.
+
+- 3 new zero determinant strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/1097
+- A memory 2 zero determinant strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1099
+- Add ability for tournament to set known match attributes
+  https://github.com/Axelrod-Python/Axelrod/pull/1096
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.2.1...v3.3.0
+
 # v3.2.1, 2017-07-28
 
 Documentation fixes.
