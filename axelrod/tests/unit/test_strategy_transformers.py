@@ -254,23 +254,6 @@ class TestTransformers(unittest.TestCase):
         self.assertEqual(p1.defections, p2.defections)
         self.assertEqual(p1.state_distribution, p2.state_distribution)
 
-    def test_dual_wsls_transformer(self):
-        """Tests that DualTransformer produces the opposite results when faced
-        with the same opponent history.
-        """
-        p1 = axelrod.WinStayLoseShift()
-        p2 = DualTransformer()(axelrod.WinStayLoseShift)()
-        p3 = axelrod.CyclerCCD()  # Cycles 'CCD'
-
-        for _ in range(10):
-            p1.play(p3)
-
-        p3.reset()
-        for _ in range(10):
-            p2.play(p3)
-
-        self.assertEqual(p1.history, [x.flip() for x in p2.history])
-
     def test_dual_transformer_with_all_strategies(self):
         """Tests that DualTransformer produces the opposite results when faced
         with the same opponent history.
@@ -285,9 +268,27 @@ class TestTransformers(unittest.TestCase):
         klass = JossAnnTransformer((0.5, 0.4))(axelrod.EvolvedLookerUp2_2_2)
         self.assert_dual_wrapper_correct(klass)
 
-    # TODO change turns=100 before push
+    def test_dual_transformer_special_cases_1(self):
+        p1 = DualTransformer()(DualTransformer()(DualTransformer()(axelrod.Cooperator)))()
+        p2 = IdentityTransformer()(DualTransformer()(axelrod.Cooperator))()
+
+        for _ in range(3):
+            p1.play(p2)
+
+        self.assertEqual(p1.history, [D, D, D])
+        self.assertEqual(p2.history, [D, D, D])
+
+        p1.reset()
+
+    def test_dual_transformer_special_cases_2(self):
+        klass = IdentityTransformer()(DualTransformer()(axelrod.EvolvedANN))
+        self.assert_dual_wrapper_correct(klass)
+
+        klass = DualTransformer()(DualTransformer()(axelrod.WinStayLoseShift))
+        self.assert_dual_wrapper_correct(klass)
+
     def assert_dual_wrapper_correct(self, player_class):
-        turns = 10
+        turns = 100
 
         p1 = player_class()
         p2 = DualTransformer()(player_class)()
