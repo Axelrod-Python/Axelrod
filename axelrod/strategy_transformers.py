@@ -110,7 +110,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     proposed_action = PlayerClass.strategy(self, opponent)
 
                 if strategy_wrapper == dual_wrapper:
-                    # after dual_wrapper_figures calls the strategy, it returns
+                    # after dual_wrapper calls the strategy, it returns
                     # the Player to its original state.
                     flip_play_attributes(self)
 
