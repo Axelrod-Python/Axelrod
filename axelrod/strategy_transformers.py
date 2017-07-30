@@ -98,15 +98,21 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
             # Define the new strategy method, wrapping the existing method
             # with `strategy_wrapper`
             def strategy(self, opponent):
+
                 if strategy_wrapper == dual_wrapper:
-                    # `dual_wrapper` is a special case that must not call the
-                    # strategy here. It is called inside the wrapper, instead.
-                    proposed_action = C
+                    # dual_wrapper figures out strategy as if the Player had
+                    # played the opposite actions of its current history.
+                    flip_play_attributes(self)
+
+                if is_strategy_static(PlayerClass):
+                    proposed_action = PlayerClass.strategy(opponent)
                 else:
-                    if is_strategy_static(PlayerClass):
-                        proposed_action = PlayerClass.strategy(opponent)
-                    else:
-                        proposed_action = PlayerClass.strategy(self, opponent)
+                    proposed_action = PlayerClass.strategy(self, opponent)
+
+                if strategy_wrapper == dual_wrapper:
+                    # after dual_wrapper_figures calls the strategy, it returns
+                    # the Player to its original state.
+                    flip_play_attributes(self)
 
                 # Apply the wrapper
                 return strategy_wrapper(self, opponent, proposed_action,
@@ -183,9 +189,6 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     "__doc__": PlayerClass.__doc__,
                     "__reduce__": reduce_for_decorated_class,
                 })
-
-            if strategy_wrapper == dual_wrapper:
-                setattr(new_class, 'for_dual', PlayerClass)
 
             return new_class
     return Decorator
@@ -318,16 +321,11 @@ def dual_wrapper(player, opponent: Player, proposed_action: Action) -> Action:
     action: an axelrod.Action, C or D
     """
 
-    flip_play_attributes(player)
+    # dual_wrapper is a special case. The work of flip_play_attributes(player)
+    # is done in the strategy of the new PlayerClass created by DualTransformer.
+    # The DualTransformer is dynamically created in StrategyTransformerFactory.
 
-    if is_strategy_static(player.for_dual):
-        action = player.for_dual.strategy(opponent)
-    else:
-        action = player.for_dual.strategy(player, opponent)
-
-    flip_play_attributes(player)
-
-    return action.flip()
+    return proposed_action.flip()
 
 
 def flip_play_attributes(player: Player) -> None:

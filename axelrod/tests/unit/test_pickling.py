@@ -10,6 +10,7 @@ C, D = axl.Action.C, axl.Action.D
 
 # A set of classes to test pickling.
 
+# First set: special cases
 
 PointerToWrappedStrategy = st.FlipTransformer()(
     st.FlipTransformer()(axl.Cooperator)
@@ -29,6 +30,12 @@ PointerToWrappedClassNotInStrategies = st.FlipTransformer()(
 )
 
 
+@st.DualTransformer()
+@st.FlipTransformer()
+@st.DualTransformer()
+class TestDualTransformerIssues(axl.Cooperator):
+    pass
+
 @st.FlipTransformer()
 class MyCooperator(axl.Player):
     def strategy(self, opponent):
@@ -46,7 +53,7 @@ class SingleFlip(axl.Cooperator):
     pass
 
 
-# All the transformers
+# Second set: All the transformers
 
 @st.ApologyTransformer([D], [C], name_prefix=None)
 class Apology(axl.Cooperator):
@@ -227,6 +234,10 @@ class TestPickle(unittest.TestCase):
 
         self.assertEqual(player, copy)
         self.assert_mutated_instance_same_as_pickled(player)
+
+    def test_dual_transformer_special_case(self):
+        player = TestDualTransformerIssues()
+        self.assert_orignal_equals_pickled(player)
 
     def test_class_and_instance_name_different_single_flip(self):
         player = SingleFlip()
