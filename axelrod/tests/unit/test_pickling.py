@@ -30,19 +30,19 @@ PointerToWrappedClassNotInStrategies = st.FlipTransformer()(
 )
 
 
-@st.IdentityTransformer()
+@st.InitialTransformer((D, C, D), name_prefix=None)
 @st.DualTransformer(name_prefix=None)
 @st.FlipTransformer(name_prefix=None)
 @st.DualTransformer(name_prefix=None)
-class TestDualTransformerIssues(axl.Cooperator):
+class InterspersedDualTransformersNamePrefixAbsent(axl.Cooperator):
     pass
 
 
-@st.IdentityTransformer()
+@st.IdentityTransformer((D, D, C))
 @st.DualTransformer()
 @st.FlipTransformer()
 @st.DualTransformer()
-class TestDualTransformerIssues2(axl.Cooperator):
+class InterspersedDualTransformersNamePrefixPresent(axl.Cooperator):
     pass
 
 
@@ -174,33 +174,31 @@ transformer_instances = [
 
 class TestPickle(unittest.TestCase):
 
+    def assert_equals_instance_from_pickling(self, original_instance):
+        copy = pickle.loads(pickle.dumps(original_instance))
+        self.assertEqual(copy, original_instance)
+
     def assert_orignal_equals_pickled(self, player, turns=10):
-        self.assert_original_plays_same_as_pickled(player, turns)
-        self.assert_mutated_instance_same_as_pickled(player)
+        opponents = (axl.Defector, axl.Cooperator, axl.Random, axl.CyclerCCCDCD)
+        for opponent_class in opponents:
+            # Check that player and copy play the same way.
+            player.reset()
+            copy = pickle.loads(pickle.dumps(player))
+            opponent_1 = opponent_class()
+            opponent_2 = opponent_class()
 
-    def assert_original_plays_same_as_pickled(self, player, turns=10):
-        player.reset()
-        copy = pickle.loads(pickle.dumps(player))
-        opponent_1 = axl.CyclerCCCDCD()
-        opponent_2 = axl.CyclerCCCDCD()
-        axl.seed(0)
-        match_1 = axl.Match((player, opponent_1), turns=turns)
-        result_1 = match_1.play()
+            axl.seed(0)
+            match_1 = axl.Match((player, opponent_1), turns=turns)
+            result_1 = match_1.play()
 
-        axl.seed(0)
-        match_2 = axl.Match((copy, opponent_2), turns=turns)
-        result_2 = match_2.play()
+            axl.seed(0)
+            match_2 = axl.Match((copy, opponent_2), turns=turns)
+            result_2 = match_2.play()
 
-        self.assertEqual(result_1, result_2)
+            self.assertEqual(result_1, result_2)
 
-    def assert_mutated_instance_same_as_pickled(self, player):
-        player.reset()
-        turns = 5
-        opponent = axl.Alternator()
-        for _ in range(turns):
-            player.play(opponent)
-        new = pickle.loads(pickle.dumps(player))
-        self.assertEqual(player, new)
+            # Confirm that mutated player can be pickled correctly.
+            self.assert_equals_instance_from_pickling(player)
 
     def test_parameterized_player(self):
         player = axl.Cycler('DDCCDD')
@@ -217,12 +215,6 @@ class TestPickle(unittest.TestCase):
         results = match.play()
         self.assertEqual(results, [(C, C), (C, C), (D, D)])
 
-        self.assert_original_plays_same_as_pickled(axl.Alexei(), turns=10)
-
-    def test_nice_transformer_class(self):
-        player = axl.NMWEDeterministic()
-        self.assert_original_plays_same_as_pickled(player, turns=10)
-
     def test_pickling_all_strategies(self):
         for s in axl.strategies:
             self.assert_orignal_equals_pickled(s())
@@ -238,18 +230,36 @@ class TestPickle(unittest.TestCase):
             self.assert_orignal_equals_pickled(player)
 
     def test_created_on_the_spot_multiple_transformers(self):
-        klass = st.FlipTransformer()(axl.Cooperator)
-        klass = st.DualTransformer()(klass)
-        player = st.FinalTransformer((C, D))(klass)()
+        player_class = st.FlipTransformer()(axl.Cooperator)
+        player_class = st.DualTransformer()(player_class)
+        player = st.FinalTransformer((C, D))(player_class)()
 
         self.assert_orignal_equals_pickled(player)
 
-    def test_dual_transformer_special_case(self):
-        player = TestDualTransformerIssues()
+    def test_dual_transformer_regression_test(self):
+        """DualTransformer has failed when there were multiple DualTransformers.
+        It has also failed when DualTransformer was not the outermost
+        transformer or when other transformers were between multiple
+        DualTransformers."""
+        player = InterspersedDualTransformersNamePrefixAbsent()
         self.assert_orignal_equals_pickled(player)
 
-        player = TestDualTransformerIssues2()
+        player = InterspersedDualTransformersNamePrefixPresent()
         self.assert_orignal_equals_pickled(player)
+
+        interspersed_dual_transformers = (
+            st.TrackHistoryTransformer()(
+                st.DualTransformer()(
+                    st.InitialTransformer((C, D))(
+                        st.DualTransformer()(
+                            axl.WinStayLoseShift
+                        )
+                    )
+                )
+            )()
+        )
+
+        self.assert_orignal_equals_pickled(interspersed_dual_transformers)
 
     def test_class_and_instance_name_different_single_flip(self):
         player = SingleFlip()
@@ -265,7 +275,7 @@ class TestPickle(unittest.TestCase):
 
     def test_class_and_instance_name_different_built_from_player_class(self):
         player = MyCooperator()
-        class_names = [klass.__name__ for klass in MyCooperator.mro()]
+        class_names = [class_.__name__ for class_ in MyCooperator.mro()]
         self.assertEqual(
             class_names,
             ['FlippedMyCooperator', 'MyCooperator', 'Player', 'object']
@@ -276,7 +286,7 @@ class TestPickle(unittest.TestCase):
     def test_pointer_to_class_derived_from_strategy(self):
         player = PointerToWrappedStrategy()
 
-        class_names = [klass.__name__ for klass in player.__class__.mro()]
+        class_names = [class_.__name__ for class_ in player.__class__.mro()]
         self.assertEqual(
             class_names,
             ['FlippedFlippedCooperator', 'FlippedCooperator', 'Cooperator',
@@ -288,7 +298,7 @@ class TestPickle(unittest.TestCase):
     def test_pointer_to_class_derived_from_Player(self):
         player = PointerToWrappedClassNotInStrategies()
 
-        class_names = [klass.__name__ for klass in player.__class__.mro()]
+        class_names = [class_.__name__ for class_ in player.__class__.mro()]
         self.assertEqual(
             class_names,
             ['FlippedFlippedMyDefector', 'FlippedMyDefector', 'MyDefector',

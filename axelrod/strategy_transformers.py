@@ -154,6 +154,8 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 return name
 
             def reduce_for_decorated_class(self_):
+                """__reduce__ function for decorated class. Ensures that any
+                decorated class can be correctly pickled."""
                 class_module = import_module(self_.__module__)
                 import_name = self_.__class__.__name__
 
@@ -161,10 +163,10 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     return self_.__class__, (), self_.__dict__
 
                 decorators = []
-                for klass in self_.__class__.mro():
-                    import_name = klass.__name__
-                    if hasattr(klass, 'decorator'):
-                        decorators.insert(0, klass.decorator)
+                for class_ in self_.__class__.mro():
+                    import_name = class_.__name__
+                    if hasattr(class_, 'decorator'):
+                        decorators.insert(0, class_.decorator)
                     if hasattr(class_module, import_name):
                         break
 
@@ -211,8 +213,8 @@ def is_strategy_static(player_class) -> bool:
     """
     Returns True if `player_class.strategy` is a `staticmethod`, else False.
     """
-    for klass in player_class.mro():
-        method = inspect.getattr_static(klass, 'strategy', default=None)
+    for class_ in player_class.mro():
+        method = inspect.getattr_static(class_, 'strategy', default=None)
         if method is not None:
             return isinstance(method, staticmethod)
 
