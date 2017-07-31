@@ -262,30 +262,37 @@ class TestTransformers(unittest.TestCase):
             self.assert_dual_wrapper_correct(s)
 
     def test_dual_jossann_regression_test(self):
-        klass = JossAnnTransformer((0.2, 0.3))(axelrod.Alternator)
-        self.assert_dual_wrapper_correct(klass)
+        player_class = JossAnnTransformer((0.2, 0.3))(axelrod.Alternator)
+        self.assert_dual_wrapper_correct(player_class)
 
-        klass = JossAnnTransformer((0.5, 0.4))(axelrod.EvolvedLookerUp2_2_2)
-        self.assert_dual_wrapper_correct(klass)
+        player_class = JossAnnTransformer((0.5, 0.4))(axelrod.EvolvedLookerUp2_2_2)
+        self.assert_dual_wrapper_correct(player_class)
 
-    def test_dual_transformer_special_cases_1(self):
-        p1 = DualTransformer()(DualTransformer()(DualTransformer()(axelrod.Cooperator)))()
-        p2 = IdentityTransformer()(DualTransformer()(axelrod.Cooperator))()
+    def test_dual_transformer_simple_play_regression_test(self):
+        """DualTransformer has failed when there were multiple DualTransformers.
+        It has also failed when DualTransformer was not the outermost
+        transformer or when other transformers were between multiple
+        DualTransformers."""
+        multiple_dual_transformers = DualTransformer()(FlipTransformer()(DualTransformer()(axelrod.Cooperator)))()
+
+        dual_transformer_not_first = IdentityTransformer()(DualTransformer()(axelrod.Cooperator))()
 
         for _ in range(3):
-            p1.play(p2)
+            multiple_dual_transformers.play(dual_transformer_not_first)
 
-        self.assertEqual(p1.history, [D, D, D])
-        self.assertEqual(p2.history, [D, D, D])
+        self.assertEqual(multiple_dual_transformers.history, [D, D, D])
+        self.assertEqual(dual_transformer_not_first.history, [D, D, D])
 
-        p1.reset()
+    def test_dual_transformer_multiple_interspersed_regression_test(self):
+        """DualTransformer has failed when there were multiple DualTransformers.
+        It has also failed when DualTransformer was not the outermost
+        transformer or when other transformers were between multiple
+        DualTransformers."""
+        dual_not_first_transformer = IdentityTransformer()(DualTransformer()(axelrod.EvolvedANN))
+        self.assert_dual_wrapper_correct(dual_not_first_transformer)
 
-    def test_dual_transformer_special_cases_2(self):
-        klass = IdentityTransformer()(DualTransformer()(axelrod.EvolvedANN))
-        self.assert_dual_wrapper_correct(klass)
-
-        klass = DualTransformer()(DualTransformer()(axelrod.WinStayLoseShift))
-        self.assert_dual_wrapper_correct(klass)
+        multiple_dual_transformers = DualTransformer()(DualTransformer()(axelrod.WinStayLoseShift))
+        self.assert_dual_wrapper_correct(multiple_dual_transformers)
 
     def assert_dual_wrapper_correct(self, player_class):
         turns = 100
