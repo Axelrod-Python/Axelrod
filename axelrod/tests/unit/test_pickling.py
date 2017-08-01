@@ -247,17 +247,13 @@ class TestPickle(unittest.TestCase):
         player = InterspersedDualTransformersNamePrefixPresent()
         self.assert_orignal_equals_pickled(player)
 
-        interspersed_dual_transformers = (
-            st.TrackHistoryTransformer()(
-                st.DualTransformer()(
-                    st.InitialTransformer((C, D))(
-                        st.DualTransformer()(
-                            axl.WinStayLoseShift
-                        )
-                    )
-                )
-            )()
-        )
+        player_class = axl.WinStayLoseShift
+        player_class = st.DualTransformer()(player_class)
+        player_class = st.InitialTransformer((C, D))(player_class)
+        player_class = st.DualTransformer()(player_class)
+        player_class = st.TrackHistoryTransformer()(player_class)
+
+        interspersed_dual_transformers = player_class()
 
         self.assert_orignal_equals_pickled(interspersed_dual_transformers)
 
