@@ -7,6 +7,7 @@ See the various Meta strategies for another type of transformation.
 
 import collections
 import copy
+from importlib import import_module
 import inspect
 import random
 from typing import Any
@@ -14,7 +15,6 @@ from numpy.random import choice
 from .action import Action
 from .random_ import random_choice
 from .player import defaultdict, Player
-from importlib import import_module
 
 
 C, D = Action.C, Action.D
@@ -61,6 +61,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                 self.name_prefix = name_prefix
 
         def __reduce__(self):
+            """Gives instructions on how to pickle the Decorator object."""
             factory_args = (strategy_wrapper, name_prefix, reclassifier)
             return (
                 DecoratorReBuilder(),
@@ -110,7 +111,7 @@ def StrategyTransformerFactory(strategy_wrapper, name_prefix=None,
                     proposed_action = PlayerClass.strategy(self, opponent)
 
                 if strategy_wrapper == dual_wrapper:
-                    # after dual_wrapper calls the strategy, it returns
+                    # After dual_wrapper calls the strategy, it returns
                     # the Player to its original state.
                     flip_play_attributes(self)
 
@@ -335,7 +336,7 @@ def flip_play_attributes(player: Player) -> None:
     Flips all the attributes created by `player.play`:
         - `player.history`,
         - `player.cooperations`,
-        - `player.defectsions`,
+        - `player.defections`,
         - `player.state_distribution`,
     """
     flip_history(player)
