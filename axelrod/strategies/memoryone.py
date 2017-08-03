@@ -7,7 +7,6 @@ from axelrod.random_ import random_choice
 
 from typing import List, Tuple, Union
 
-type_four_vector = Union[List[float], Tuple[float, float, float, float]]
 
 
 C, D = Action.C, Action.D
@@ -36,7 +35,7 @@ class MemoryOnePlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, four_vector: type_four_vector = None,
+    def __init__(self, four_vector: Tuple[float, float, float, float] = None,
                  initial: Action = C) -> None:
         """
         Parameters
@@ -67,7 +66,7 @@ class MemoryOnePlayer(Player):
             if self.name == 'Generic Memory One Player':
                 self.name = "%s: %s" % (self.name, four_vector)
 
-    def set_four_vector(self, four_vector: type_four_vector):
+    def set_four_vector(self, four_vector: Tuple[float, float, float, float]):
         if not all(0 <= p <= 1 for p in four_vector):
             raise ValueError("An element in the probability vector, {}, is not "
                              "between 0 and 1.".format(str(four_vector)))
@@ -111,7 +110,7 @@ class WinStayLoseShift(MemoryOnePlayer):
 
     def __init__(self, initial: Action = C) -> None:
         super().__init__()
-        self.set_four_vector([1, 0, 0, 1])
+        self.set_four_vector((1, 0, 0, 1))
         self._initial = initial
 
 
@@ -136,7 +135,7 @@ class WinShiftLoseStay(MemoryOnePlayer):
 
     def __init__(self, initial: Action = D) -> None:
         super().__init__()
-        self.set_four_vector([0, 1, 1, 0])
+        self.set_four_vector((0, 1, 1, 0))
         self._initial = initial
 
 
