@@ -147,3 +147,64 @@ class Tester(Player):
     def reset(self):
         super().reset()
         self.is_TFT = False
+
+
+class Gladstein(Player):
+    """
+    Submitted to Axelrod's second tournament by David Gladstein.
+
+    This strategy is also known as Tester and is based of the reverse
+    engineering of the Fortran strategies from Axelrod's second tournament.
+
+    This strategy is a TFT variant that defects on the first round in order to
+    test the opponent's response. If the opponent ever defects, the strategy
+    'apologies' by cooperating and then plays TFT for the rest of the game.
+    Otherwise, it defects as much as possible subject to the constraint that
+    the ratio of its defections to moves remains under 0.5, not counting the
+    first defection.
+
+    Names:
+
+    - Gladstein: [Axelrod1980b]_
+    """
+
+    name = "Gladstein"
+    classifier = {
+        'memory_depth': 1,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        # This strategy assumes the opponent is a patsy
+        self.patsy = True
+        self.cooperation_ratio = 0
+
+    def strategy(self, opponent: Player) -> Action:
+        # Defect on the first move
+        if not self.history:
+            return D
+        # Is the opponent a patsy?
+        if self.patsy:
+            # If the opponent defects, apologize and play TFT.
+            if opponent.history[-1] == D:
+                self.patsy = False
+                return C
+            # Cooperate as long as the cooperation ratio is below 0.5
+            self.cooperation_ratio = self.cooperations / len(self.history)
+            if self.cooperation_ratio >= 0.5:
+                return D
+            return C
+        else:
+            # Play TFT
+            return opponent.history[-1]
+
+    def reset(self):
+        super().reset()
+        self.patsy = True
+        self.cooperation_ratio = 0
