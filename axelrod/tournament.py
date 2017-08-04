@@ -258,7 +258,6 @@ class Tournament(object):
             work_queue.put(chunk)
 
         self._start_workers(workers, work_queue, done_queue)
-        print('finished start_worker', done_queue.qsize())
 
         self._process_done_queue(workers, done_queue, progress_bar=progress_bar)
 
@@ -338,7 +337,6 @@ class Tournament(object):
         """
         for chunk in iter(work_queue.get, 'STOP'):
             interactions = self._play_matches(chunk)
-            print(os.getpid())
             done_queue.put(interactions)
         done_queue.put('STOP')
         return True

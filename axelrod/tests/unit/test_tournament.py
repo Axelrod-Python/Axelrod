@@ -198,24 +198,23 @@ class TestTournament(unittest.TestCase):
     #     self.assertEqual(tournament.progress_bar.total, 15)
     #     self.assertEqual(tournament.progress_bar.total,
     #                      tournament.progress_bar.n)
-    #
-    # @unittest.skipIf(axelrod.on_windows,
-    #                  "Parallel processing not supported on Windows")
-    # def test_progress_bar_play_parallel(self):
-    #     """Test that tournament plays when asking for progress bar for parallel
-    #     tournament"""
-    #     tournament = axelrod.Tournament(
-    #         name=self.test_name,
-    #         players=self.players,
-    #         game=self.game,
-    #         turns=axelrod.DEFAULT_TURNS,
-    #         repetitions=self.test_repetitions)
-    #
-    #     results = tournament.play(processes=2)
-    #     self.assertIsInstance(results, axelrod.ResultSet)
-    #
-    #     results = tournament.play(progress_bar=True)
-    #     self.assertIsInstance(results, axelrod.ResultSet)
+
+    @unittest.skip
+    def test_progress_bar_play_parallel(self):  # TODO fix it!
+        """Test that tournament plays when asking for progress bar for parallel
+        tournament"""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+
+        results = tournament.play(processes=2)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        results = tournament.play(progress_bar=True)
+        self.assertIsInstance(results, axelrod.ResultSet)
     #
     # @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
     #                               max_turns=10, min_repetitions=2,
@@ -271,6 +270,25 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play(processes=2, progress_bar=False).scores
         self.assertEqual(len(scores), len(players))
 
+    def test_parallel_play_with_writing_to_file_on_windows(self):
+        """
+        The default setting for `play` is to write to a NamedTemporaryFile.
+        This is disabled on Windows. This test ensures that parallel_play
+        does not conflict with writing the results to file.
+        """
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+
+        results = tournament.play(processes=2, progress_bar=False,
+                                  filename=self.filename)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(tournament.num_interactions, 75)
+
+
 #     def test_run_serial(self):
 #         tournament = axelrod.Tournament(
 #             name=self.test_name,
@@ -286,114 +304,108 @@ class TestTournament(unittest.TestCase):
 #         calls = tournament._write_interactions.call_args_list
 #         self.assertEqual(len(calls), 15)
 #
-#     @unittest.skipIf(axelrod.on_windows,
-#                      "Parallel processing not supported on Windows")
-#     def test_run_parallel(self):
-#         tournament = axelrod.Tournament(
-#             name=self.test_name,
-#             players=self.players,
-#             game=self.game,
-#             turns=axelrod.DEFAULT_TURNS,
-#             repetitions=self.test_repetitions)
-#         tournament._write_interactions = MagicMock(
-#                     name='_write_interactions')
-#         self.assertTrue(tournament._run_parallel())
-#
-#         # Get the calls made to write_interactions
-#         calls = tournament._write_interactions.call_args_list
-#         self.assertEqual(len(calls), 15)
-#
-#     @unittest.skipIf(axelrod.on_windows,
-#                      "Parallel processing not supported on Windows")
-#     def test_n_workers(self):
-#         max_processes = cpu_count()
-#
-#         tournament = axelrod.Tournament(
-#             name=self.test_name,
-#             players=self.players,
-#             game=self.game,
-#             turns=axelrod.DEFAULT_TURNS,
-#             repetitions=self.test_repetitions)
-#         self.assertEqual(tournament._n_workers(processes=1), max_processes)
-#
-#         tournament = axelrod.Tournament(
-#             name=self.test_name,
-#             players=self.players,
-#             game=self.game,
-#             turns=axelrod.DEFAULT_TURNS,
-#             repetitions=self.test_repetitions)
-#         self.assertEqual(tournament._n_workers(processes=max_processes+2),
-#                                                max_processes)
-#
-#     @unittest.skipIf(axelrod.on_windows,
-#                      "Parallel processing not supported on Windows")
-#     @unittest.skipIf(
-#         cpu_count() < 2,
-#         "not supported on single processor machines")
-#     def test_2_workers(self):
-#         # This is a separate test with a skip condition because we
-#         # cannot guarantee that the tests will always run on a machine
-#         # with more than one processor
-#         tournament = axelrod.Tournament(
-#             name=self.test_name,
-#             players=self.players,
-#             game=self.game,
-#             turns=axelrod.DEFAULT_TURNS,
-#             repetitions=self.test_repetitions,)
-#         self.assertEqual(tournament._n_workers(processes=2), 2)
-#
-#     @unittest.skipIf(axelrod.on_windows,
-#                      "Parallel processing not supported on Windows")
-#     def test_start_workers(self):
-#         workers = 2
-#         work_queue = Queue()
-#         done_queue = Queue()
-#         tournament = axelrod.Tournament(
-#             name=self.test_name,
-#             players=self.players,
-#             game=self.game,
-#             turns=axelrod.DEFAULT_TURNS,
-#             repetitions=self.test_repetitions)
-#         chunks = tournament.match_generator.build_match_chunks()
-#         for chunk in chunks:
-#             work_queue.put(chunk)
-#         tournament._start_workers(workers, work_queue, done_queue)
-#
-#         stops = 0
-#         while stops < workers:
-#             payoffs = done_queue.get()
-#             if payoffs == 'STOP':
-#                 stops += 1
-#         self.assertEqual(stops, workers)
-#
-#     @unittest.skipIf(axelrod.on_windows,
-#                      "Parallel processing not supported on Windows")
-#     def test_worker(self):
-#         tournament = axelrod.Tournament(
-#             name=self.test_name,
-#             players=self.players,
-#             game=self.game,
-#             turns=axelrod.DEFAULT_TURNS,
-#             repetitions=self.test_repetitions)
-#
-#         work_queue = Queue()
-#         chunks = tournament.match_generator.build_match_chunks()
-#         count = 0
-#         for chunk in chunks:
-#             work_queue.put(chunk)
-#             count += 1
-#         work_queue.put('STOP')
-#
-#         done_queue = Queue()
-#         tournament._worker(work_queue, done_queue)
-#         for r in range(count):
-#             new_matches = done_queue.get()
-#             for index_pair, matches in new_matches.items():
-#                 self.assertIsInstance(index_pair, tuple)
-#                 self.assertEqual(len(matches), self.test_repetitions)
-#         queue_stop = done_queue.get()
-#         self.assertEqual(queue_stop, 'STOP')
-#
+    def test_run_parallel(self):
+        class PickleableMock(MagicMock):
+            def __reduce__(self):
+                return MagicMock, ()
+
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+        tournament._write_interactions = PickleableMock(
+                    name='_write_interactions')
+        self.assertTrue(tournament._run_parallel())
+
+        # Get the calls made to write_interactions
+        calls = tournament._write_interactions.call_args_list
+        self.assertEqual(len(calls), 15)
+
+    def test_n_workers(self):
+        max_processes = cpu_count()
+
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+        self.assertEqual(tournament._n_workers(processes=1), max_processes)
+
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+        self.assertEqual(tournament._n_workers(processes=max_processes+2),
+                                               max_processes)
+
+    @unittest.skipIf(
+        cpu_count() < 2,
+        "not supported on single processor machines")
+    def test_2_workers(self):
+        # This is a separate test with a skip condition because we
+        # cannot guarantee that the tests will always run on a machine
+        # with more than one processor
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions,)
+        self.assertEqual(tournament._n_workers(processes=2), 2)
+
+    def test_start_workers(self):
+        workers = 2
+        work_queue = Queue()
+        done_queue = Queue()
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+        chunks = tournament.match_generator.build_match_chunks()
+        for chunk in chunks:
+            work_queue.put(chunk)
+        tournament._start_workers(workers, work_queue, done_queue)
+
+        stops = 0
+        while stops < workers:
+            payoffs = done_queue.get()
+            if payoffs == 'STOP':
+                stops += 1
+        self.assertEqual(stops, workers)
+
+    def test_worker(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+
+        work_queue = Queue()
+        chunks = tournament.match_generator.build_match_chunks()
+        count = 0
+        for chunk in chunks:
+            work_queue.put(chunk)
+            count += 1
+        work_queue.put('STOP')
+
+        done_queue = Queue()
+        tournament._worker(work_queue, done_queue)
+        for r in range(count):
+            new_matches = done_queue.get()
+            for index_pair, matches in new_matches.items():
+                self.assertIsInstance(index_pair, tuple)
+                self.assertEqual(len(matches), self.test_repetitions)
+        queue_stop = done_queue.get()
+        self.assertEqual(queue_stop, 'STOP')
+
 #     def test_build_result_set(self):
 #         tournament = axelrod.Tournament(
 #             name=self.test_name,
