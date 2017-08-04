@@ -52,7 +52,7 @@ class Champion(Player):
         defection_prop = opponent.defections / len(opponent.history)
         if opponent.history[-1] == D:
             r = random.random()
-            if defection_prop > max(0.4, r):
+            if defection_prop >= max(0.4, r):
                 return D
         return C
 
