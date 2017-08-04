@@ -4,6 +4,7 @@ import logging
 from multiprocessing import Process, Queue, cpu_count
 from tempfile import NamedTemporaryFile
 import warnings
+import os
 
 import tqdm
 
@@ -134,7 +135,7 @@ class Tournament(object):
                 "Tournament results will not be accessible since "
                 "build_results=False and no filename was supplied.")
 
-        if (processes is None) or (on_windows):
+        if processes is None:
             self._run_serial(progress_bar=progress_bar)
         else:
             self._run_parallel(processes=processes, progress_bar=progress_bar)
@@ -257,6 +258,8 @@ class Tournament(object):
             work_queue.put(chunk)
 
         self._start_workers(workers, work_queue, done_queue)
+        print('finished start_worker', done_queue.qsize())
+
         self._process_done_queue(workers, done_queue, progress_bar=progress_bar)
 
         return True
@@ -313,7 +316,6 @@ class Tournament(object):
         stops = 0
         while stops < workers:
             results = done_queue.get()
-
             if results == 'STOP':
                 stops += 1
             else:
@@ -336,6 +338,7 @@ class Tournament(object):
         """
         for chunk in iter(work_queue.get, 'STOP'):
             interactions = self._play_matches(chunk)
+            print(os.getpid())
             done_queue.put(interactions)
         done_queue.put('STOP')
         return True
