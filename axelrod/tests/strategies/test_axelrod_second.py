@@ -123,7 +123,7 @@ class TestGladstein(TestPlayer):
     name = "Gladstein"
     player = axelrod.Gladstein
     expected_classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -136,21 +136,20 @@ class TestGladstein(TestPlayer):
         # Cooperates and begins to play TFT when Alternator defects
         actions = [(D, C), (C, D), (C, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         attrs={'patsy': False, 'cooperation_ratio': 0.0})
+                         attrs={'patsy': False})
 
         # Cooperation ratio will always be less than or equal to 0.5
         actions = [(D, C), (C, C), (D, C), (C, C), (D, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
-                         attrs={'patsy': True, 'cooperation_ratio': 0.5})
+                         attrs={'patsy': True})
 
         # Apologizes immediately and plays TFT
         actions = [(D, D), (C, D), (D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions,
-                         attrs={'patsy': False, 'cooperation_ratio': 0.0})
+                         attrs={'patsy': False})
 
         # Ratio is 1/3 when MockPlayer defected for the first time.
         opponent = axelrod.MockPlayer(actions=[C, C, C, D, D])
         actions = [(D, C), (C, C), (D, C), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions,
-                         attrs={'patsy': False,
-                                'cooperation_ratio': 0.3333333333333333})
+                         attrs={'patsy': False})
