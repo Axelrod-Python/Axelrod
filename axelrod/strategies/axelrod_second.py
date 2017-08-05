@@ -153,12 +153,12 @@ class Gladstein(Player):
     """
     Submitted to Axelrod's second tournament by David Gladstein.
 
-    This strategy is also known as Tester and is based of the reverse
+    This strategy is also known as Tester and is based on the reverse
     engineering of the Fortran strategies from Axelrod's second tournament.
 
     This strategy is a TFT variant that defects on the first round in order to
     test the opponent's response. If the opponent ever defects, the strategy
-    'apologies' by cooperating and then plays TFT for the rest of the game.
+    'apologizes' by cooperating and then plays TFT for the rest of the game.
     Otherwise, it defects as much as possible subject to the constraint that
     the ratio of its defections to moves remains under 0.5, not counting the
     first defection.
@@ -166,11 +166,12 @@ class Gladstein(Player):
     Names:
 
     - Gladstein: [Axelrod1980b]_
+    - Tester: [Axelrod1980b]_
     """
 
     name = "Gladstein"
     classifier = {
-        'memory_depth': 1,
+        'memory_depth': float('inf'),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -183,7 +184,6 @@ class Gladstein(Player):
         super().__init__()
         # This strategy assumes the opponent is a patsy
         self.patsy = True
-        self.cooperation_ratio = 0
 
     def strategy(self, opponent: Player) -> Action:
         # Defect on the first move
@@ -196,8 +196,8 @@ class Gladstein(Player):
                 self.patsy = False
                 return C
             # Cooperate as long as the cooperation ratio is below 0.5
-            self.cooperation_ratio = self.cooperations / len(self.history)
-            if self.cooperation_ratio >= 0.5:
+            cooperation_ratio = self.cooperations / len(self.history)
+            if cooperation_ratio >= 0.5:
                 return D
             return C
         else:
@@ -207,4 +207,3 @@ class Gladstein(Player):
     def reset(self):
         super().reset()
         self.patsy = True
-        self.cooperation_ratio = 0
