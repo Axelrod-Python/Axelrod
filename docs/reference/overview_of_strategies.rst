@@ -147,7 +147,7 @@ repository.
    "K74R_", "Edward Friedland", "Not Implemented"
    "K74RXX_", "Edward Friedland", "Not Implemented"
    "K75R_", "Paul D Harrington", "Not Implemented"
-   "K76R_", "David Gladstein", ":class:`Gladstein <axelrod.strategies.axelrod_second.Gladstein>"
+   "K76R_", "David Gladstein", ":class:`Gladstein <axelrod.strategies.axelrod_second.Gladstein>`"
    "K77R_", "Scott Feld", "Not Implemented"
    "K78R_", "Fred Mauk", "Not Implemented"
    "K79R_", "Dennis Ambuehl and Kevin Hickey", Not Implemented
