@@ -81,17 +81,19 @@ class Tournament(object):
         """Open a CSV writer for tournament output."""
         if in_memory:
             self.interactions_dict = {}
-            self.writer = None
+            outputfile = None
+            writer = None
         else:
             if filename:
-                self.outputfile = open(filename, 'w')
+                outputfile = open(filename, 'w')
             else:
                 # Setup a temporary file
-                self.outputfile = NamedTemporaryFile(mode='w')
-                filename = self.outputfile.name
-            self.writer = csv.writer(self.outputfile, lineterminator='\n')
+                outputfile = NamedTemporaryFile(mode='w')
+                filename = outputfile.name
+            writer = csv.writer(outputfile, lineterminator='\n')
             # Save filename for loading ResultSet later
             self.filename = filename
+        return outputfile, writer
 
     def play(self, build_results: bool = True, filename: str = None,
              processes: int = None, progress_bar: bool = True,
@@ -128,7 +130,7 @@ class Tournament(object):
         if on_windows and (filename is None):  # pragma: no cover
             in_memory = True
 
-        self.setup_output(filename, in_memory)
+        outputfile, writer = self.setup_output(filename, in_memory)
 
         if not build_results and not filename:
             warnings.warn(
@@ -136,23 +138,25 @@ class Tournament(object):
                 "build_results=False and no filename was supplied.")
 
         if processes is None:
-            self._run_serial(progress_bar=progress_bar)
+            self._run_serial(progress_bar=progress_bar, writer=writer)
         else:
-            self._run_parallel(processes=processes, progress_bar=progress_bar)
+            self._run_parallel(processes=processes, progress_bar=progress_bar,
+                               writer=writer)
 
         if progress_bar:
             self.progress_bar.close()
 
         # Make sure that python has finished writing to disk
         if not in_memory:
-            self.outputfile.flush()
+            outputfile.flush()
 
         if build_results:
             return self._build_result_set(progress_bar=progress_bar,
                                           keep_interactions=keep_interactions,
                                           in_memory=in_memory)
-        elif not in_memory:
-            self.outputfile.close()
+        outputfile.close()
+        # elif not in_memory:
+        #     self.outputfile.close()
 
     def _build_result_set(self, progress_bar: bool = True,
                           keep_interactions: bool = False,
@@ -173,7 +177,7 @@ class Tournament(object):
                 players=[str(p) for p in self.players],
                 keep_interactions=keep_interactions,
                 game=self.game)
-            self.outputfile.close()
+            # self.outputfile.close()
         else:
             result_set = ResultSet(
                 players=[str(p) for p in self.players],
@@ -183,7 +187,8 @@ class Tournament(object):
                 game=self.game)
         return result_set
 
-    def _run_serial(self, progress_bar: bool = False) -> bool:
+    def _run_serial(self, progress_bar: bool = False,
+                    writer: csv.writer = None) -> bool:
         """
         Run all matches in serial
 
@@ -197,21 +202,21 @@ class Tournament(object):
 
         for chunk in chunks:
             results = self._play_matches(chunk)
-            self._write_interactions(results)
+            self._write_interactions(results, writer=writer)
 
             if progress_bar:
                 self.progress_bar.update(1)
 
         return True
 
-    def _write_interactions(self, results):
+    def _write_interactions(self, results, writer: csv.writer = None):
         """Write the interactions to file or to a dictionary"""
-        if self.writer is not None:
-          self._write_interactions_to_file(results)
+        if writer is not None:
+          self._write_interactions_to_file(results, writer)
         elif self.interactions_dict is not None:
           self._write_interactions_to_dict(results)
 
-    def _write_interactions_to_file(self, results):
+    def _write_interactions_to_file(self, results, writer: csv.writer):
         """Write the interactions to csv."""
         for index_pair, interactions in results.items():
             for interaction in interactions:
@@ -222,7 +227,7 @@ class Tournament(object):
                 history2 = actions_to_str([i[1] for i in interaction])
                 row.append(history1)
                 row.append(history2)
-                self.writer.writerow(row)
+                writer.writerow(row)
                 self.num_interactions += 1
 
     def _write_interactions_to_dict(self, results):
@@ -235,7 +240,8 @@ class Tournament(object):
                     self.interactions_dict[index_pair] = [interaction]
                 self.num_interactions += 1
 
-    def _run_parallel(self, processes: int=2, progress_bar: bool = False
+    def _run_parallel(self, processes: int=2, progress_bar: bool = False,
+                      writer: csv.writer = None
                       ) -> bool:
         """
         Run all matches in parallel
@@ -259,7 +265,8 @@ class Tournament(object):
 
         self._start_workers(workers, work_queue, done_queue)
 
-        self._process_done_queue(workers, done_queue, progress_bar=progress_bar)
+        self._process_done_queue(workers, done_queue, progress_bar=progress_bar,
+                                 writer=writer)
 
         return True
 
@@ -299,6 +306,7 @@ class Tournament(object):
         return True
 
     def _process_done_queue(self, workers: int, done_queue: Queue,
+                            writer: csv.writer=None,
                             progress_bar: bool = False):
         """
         Retrieves the matches from the parallel sub-processes
@@ -318,7 +326,7 @@ class Tournament(object):
             if results == 'STOP':
                 stops += 1
             else:
-                self._write_interactions(results)
+                self._write_interactions(results, writer)
 
                 if progress_bar:
                     self.progress_bar.update(1)
