@@ -1,4 +1,4 @@
-# v3.4.0, 2017-07-30
+# v3.4.0, 2017-08-06
 
 A new strategy, internal improvement relevant for pickling, better testing and
 minor fixes.
