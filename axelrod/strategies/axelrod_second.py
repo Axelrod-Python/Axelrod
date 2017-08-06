@@ -197,7 +197,7 @@ class Gladstein(Player):
                 return C
             # Cooperate as long as the cooperation ratio is below 0.5
             cooperation_ratio = self.cooperations / len(self.history)
-            if cooperation_ratio >= 0.5:
+            if cooperation_ratio > 0.5:
                 return D
             return C
         else:

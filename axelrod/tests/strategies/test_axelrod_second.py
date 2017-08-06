@@ -138,8 +138,8 @@ class TestGladstein(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          attrs={'patsy': False})
 
-        # Cooperation ratio will always be less than or equal to 0.5
-        actions = [(D, C), (C, C), (D, C), (C, C), (D, C)]
+        # Cooperation ratio will always be less than 0.5
+        actions = [(D, C), (C, C), (C, C), (D, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          attrs={'patsy': True})
 
@@ -150,6 +150,11 @@ class TestGladstein(TestPlayer):
 
         # Ratio is 1/3 when MockPlayer defected for the first time.
         opponent = axelrod.MockPlayer(actions=[C, C, C, D, D])
-        actions = [(D, C), (C, C), (D, C), (C, D), (C, D)]
+        actions = [(D, C), (C, C), (C, C), (D, D), (C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={'patsy': False})
+
+        opponent = axelrod.AntiTitForTat()
+        actions = [(D, C), (C, C), (C, D), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions,
                          attrs={'patsy': False})
