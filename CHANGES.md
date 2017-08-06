@@ -1,3 +1,24 @@
+# v3.4.0, 2017-07-30
+
+A new strategy, internal improvement relevant for pickling, better testing and
+minor fixes.
+
+- Gladstein, a strategy by that named author from Axelrod's second tournament
+  has been added
+  https://github.com/Axelrod-Python/Axelrod/pull/1113
+  https://github.com/Axelrod-Python/Axelrod/pull/1110
+- Internal improvement for pickling of all strategy classes
+  https://github.com/Axelrod-Python/Axelrod/pull/1092
+- Better testing of the reset method
+  https://github.com/Axelrod-Python/Axelrod/pull/1098
+- Minor tweak to a type hint
+  https://github.com/Axelrod-Python/Axelrod/pull/1108
+- Minor fix to a strategy to match description
+  https://github.com/Axelrod-Python/Axelrod/pull/1111
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.4.0...v3.3.0
+
 # v3.3.0, 2017-07-30
 
 4 new strategies and ability to pass game information at the tournament level.
