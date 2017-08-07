@@ -20,6 +20,7 @@ documentation.
 .. [Axelrod1980] Axelrod, R. (1980). Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(1), 3–25.
 .. [Axelrod1980b] Axelrod, R. (1980). More Effective Choice in the Prisoner’s Dilemma. Journal of Conflict Resolution, 24(3), 379-403.
 .. [Axelrod1984] The Evolution of Cooperation. Basic Books. ISBN 0-465-02121-2.
+.. [Axelrod1993] Axelrod, R. (1993) Center for the Study of Complex Systems Fortran source code Version 1.0. http://www-personal.umich.edu/~axe/CC/CC2/TourExec1.1.f.html
 .. [Axelrod1995] Wu, J. and Axelrod, R. (1995). How to cope with noise in the Iterated prisoner’s dilemma, Journal of Conflict Resolution, 39(1), pp. 183–189. doi: 10.1177/0022002795039001008.
 .. [Banks1990] Banks, J. S., & Sundaram, R. K. (1990). Repeated games, finite automata, and complexity. Games and Economic Behavior, 2(2), 97–117.  http://doi.org/10.1016/0899-8256(90)90024-O
 .. [Bendor1993] Bendor, Jonathan. "Uncertainty and the Evolution of Cooperation." The Journal of Conflict Resolution, 37(4), 709–734.

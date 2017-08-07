@@ -72,6 +72,9 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.gobymajority
    :members:
    :undoc-members:
+.. automodule:: axelrod.strategies.graaskamp
+   :members:
+   :undoc-members:
 .. automodule:: axelrod.strategies.gradualkiller
    :members:
    :undoc-members:

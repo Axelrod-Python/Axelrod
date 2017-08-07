@@ -33,6 +33,7 @@ from .gobymajority import (GoByMajority,
     GoByMajority5,
     HardGoByMajority, HardGoByMajority10, HardGoByMajority20, HardGoByMajority40,
     HardGoByMajority5)
+from .graaskamp import MoreGraaskamp
 from .gradualkiller import GradualKiller
 from .grudger import (Grudger, ForgetfulGrudger, OppositeGrudger, Aggravater,
     SoftGrudger, GrudgerAlternator, EasyGo, GeneralSoftGrudger)
@@ -197,6 +198,7 @@ all_strategies = [
     MindReader,
     MindWarper,
     MirrorMindReader,
+    MoreGraaskamp,
     Negation,
     NiceAverageCopier,
     NTitsForMTats,
