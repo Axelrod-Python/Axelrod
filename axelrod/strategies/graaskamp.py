@@ -24,7 +24,7 @@ class Mode(Enum):
 class MoreGraaskamp(Player):
     """
     This strategy can be described as follows:
-
+    
     1. Play tit for tat for the first 50 rounds.
     2. Defect on round 51.
     3. Play 5 further rounds of tit for tat.
@@ -34,7 +34,8 @@ class MoreGraaskamp(Player):
         2 - If the opponent's score is greater than 135 and moves 52 through 55 were
             [C, D, C, D] or [D, D, D, D], play tit for tat thereafter starting with
             cooperate
-        3 - If the opponent's score is less than or equal to 135, always defect hereafter
+        3 - If the opponent's score is less than or equal to 135, always defect 
+            hereafter
         4 - If the opponent's score is greater than 135 and moves 52 through 56 were
             [C, C, D, C, C], cooperate until and including move 118, and tit for tat
             thereafter
@@ -44,7 +45,7 @@ class MoreGraaskamp(Player):
     - GRASR: [Axelrod1993]_
     """
 
-    # These are various properties for the
+    # These are various properties of the strategy
     name = 'MoreGraaskamp'
     classifier = {
         'memory_depth': 5,
