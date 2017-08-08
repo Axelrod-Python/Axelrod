@@ -123,9 +123,9 @@ class Tournament(object):
         -------
         axelrod.ResultSetFromFile
         """
-        if progress_bar:
-            self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
-                                          desc="Playing matches")
+        # if progress_bar:
+        #     self.progress_bar = tqdm.tqdm(total=len(self.match_generator),
+        #                                   desc="Playing matches")
 
         if on_windows and (filename is None):  # pragma: no cover
             in_memory = True
@@ -143,8 +143,8 @@ class Tournament(object):
             self._run_parallel(processes=processes, progress_bar=progress_bar,
                                writer=writer)
 
-        if progress_bar:
-            self.progress_bar.close()
+        # if progress_bar:
+        #     self.progress_bar.close()
 
         # Make sure that python has finished writing to disk
         if not in_memory:
@@ -264,8 +264,12 @@ class Tournament(object):
             work_queue.put(chunk)
 
         self._start_workers(workers, work_queue, done_queue)
+        if progress_bar:
+            pbar = tqdm.tqdm(desc='hi', total=self.match_generator.size)
+        else:
+            pbar = None
 
-        self._process_done_queue(workers, done_queue, progress_bar=progress_bar,
+        self._process_done_queue(workers, done_queue, progress_bar=pbar,
                                  writer=writer)
 
         return True
@@ -307,7 +311,7 @@ class Tournament(object):
 
     def _process_done_queue(self, workers: int, done_queue: Queue,
                             writer: csv.writer=None,
-                            progress_bar: bool = False):
+                            progress_bar: tqdm.tqdm = None):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -328,8 +332,10 @@ class Tournament(object):
             else:
                 self._write_interactions(results, writer)
 
-                if progress_bar:
-                    self.progress_bar.update(1)
+                if progress_bar is not None:
+                    progress_bar.update(1)
+        if progress_bar is not None:
+            progress_bar.close()
         return True
 
     def _worker(self, work_queue: Queue, done_queue: Queue):

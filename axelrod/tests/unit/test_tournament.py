@@ -270,6 +270,19 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play(processes=2, progress_bar=False).scores
         self.assertEqual(len(scores), len(players))
 
+    # TODO remove
+    def test_all_strat(self):
+        turns = 5
+        players = [s() for s in axelrod.strategies]
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=players,
+            game=self.game,
+            turns=turns,
+            repetitions=1)
+        scores = tournament.play(processes=4, progress_bar=True).scores
+
+
     def test_parallel_play_with_writing_to_file_on_windows(self):
         """
         The default setting for `play` is to write to a NamedTemporaryFile.
