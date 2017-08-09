@@ -10,7 +10,7 @@ class TestMoreGraaskamp(TestPlayer):
     name = 'MoreGraaskamp'
     player = axelrod.MoreGraaskamp
     expected_classifier = {
-        'memory_depth': 5,
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -37,7 +37,8 @@ class TestMoreGraaskamp(TestPlayer):
         # MoreGraaskamp should revert to tit for tat for rounds 52-56
         actions += [(C, C)] * 5
         
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+            attrs={'mode': 'unknown', 'defect_round': 0})
 
     def test_against_defector(self):
         """
@@ -57,7 +58,8 @@ class TestMoreGraaskamp(TestPlayer):
         # MoreGraaskamp should revert to tit for tat for rounds 52-56
         actions += [(D, D)] * 5
 
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+            attrs={'mode': 'unknown', 'defect_round': 0})
 
     def test_against_alternator(self):
         """
@@ -75,7 +77,8 @@ class TestMoreGraaskamp(TestPlayer):
         # MoreGraaskamp should revert to tit for tat for rounds 52-56
         actions += [(C, D), (D, C)] * 2 + [(C, D)]
 
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)        
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+            attrs={'mode': 'unknown', 'defect_round': 0})
         
 
     def test_mode_defect_randomly(self):
@@ -86,14 +89,21 @@ class TestMoreGraaskamp(TestPlayer):
         """
 
         # This is essentially testing against a cooperator
-        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 49
+        # With a fixed seed of 0, the strategy defects during rounds 71, 84, 94
+        actions = [(C, C)] * 50 + [(D, C)] + [(C, C)] * 19 + [(D, C)]
 
-        # With a fixed seed of 0, the strategy defects during these rounds
-        actions[70] = (D, C)
-        actions[83] = (D, C)
-        actions[93] = (D, C)
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=0,
+            attrs={'mode': 'defect_randomly', 'defect_round': 84})
 
-        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=0)
+        actions += [(C, C)] * 12 + [(D, C)]
+
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=0,
+            attrs={'mode': 'defect_randomly', 'defect_round': 94})
+
+        actions += [(C, C)] * 9 + [(D, C)] + [(C, C)] * 6
+
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=0,
+            attrs={'mode': 'defect_randomly', 'defect_round': 102})
 
     def test_mode_tit_for_tat_late_alternator(self):
         """
@@ -122,7 +132,8 @@ class TestMoreGraaskamp(TestPlayer):
         # MoreGraaskamp should play tit for tat starting with cooperate for the rest of the game
         actions += [(C, D), (D, C)] * 22
 
-        self.versus_test(late_alternator, expected_actions=actions)
+        self.versus_test(late_alternator, expected_actions=actions,
+            attrs={'mode': 'tit_for_tat', 'defect_round': 0})
 
     def test_mode_tit_for_tat_late_defector(self):
         """
@@ -151,7 +162,8 @@ class TestMoreGraaskamp(TestPlayer):
         # MoreGraaskamp should play tit for tat starting with cooperate for the rest of the game
         actions += [(C, D)] + [(D, D)] * 43
 
-        self.versus_test(late_defector, expected_actions=actions)
+        self.versus_test(late_defector, expected_actions=actions,
+            attrs={'mode': 'tit_for_tat', 'defect_round': 0})
 
     def test_mode_always_defect(self):
         """
@@ -162,7 +174,8 @@ class TestMoreGraaskamp(TestPlayer):
         # This is essentially testing against a defector
         actions = [(C, D)] + [(D, D)] * 99
 
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+            attrs={'mode': 'always_defect', 'defect_round': 0})
 
     def test_mode_cooperate_then_tit_for_tat(self):
         """
@@ -171,7 +184,7 @@ class TestMoreGraaskamp(TestPlayer):
         until and including move 118, and plays tit for tat thereafter
         """
         
-        opponent_actions = [C] * 51 + [C, C, D, C, C] + [D, C] * 47
+        opponent_actions = [C] * 51 + [C, C, D, C, C] + [D, C]
         opponent = axelrod.MockPlayer(actions=opponent_actions)
 
         # MoreGraaskamp should cooperate in the first round
@@ -188,9 +201,19 @@ class TestMoreGraaskamp(TestPlayer):
         actions += [(C, C), (C, C), (C, D), (D, C), (C, C)]
 
         # MoreGraaskamp should cooperate until and during round 118
-        actions += [(C, D), (C, C)] * 31
+        actions += [(C, D), (C, C)]
+
+        self.versus_test(opponent, expected_actions=actions,
+            attrs={'mode': 'cooperate_then_tit_for_tat', 'defect_round': 0})
+
+        opponent_actions += [D, C] * 46
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+
+        # MoreGraaskamp should cooperate until and during round 118
+        actions += [(C, D), (C, C)] * 30
 
         # MoreGraaskamp should play tit for tat for the rest of the game
         actions += [(C, D), (D, C)] * 16
 
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(opponent, expected_actions=actions,
+            attrs={'mode': 'tit_for_tat', 'defect_round': 0})
