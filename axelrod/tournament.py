@@ -147,7 +147,6 @@ class Tournament(object):
         if self._temp_file_descriptor is not None:
             os.close(self._temp_file_descriptor)
             os.remove(self.filename)
-            self.filename = None
 
         return result_set
 
