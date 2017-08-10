@@ -196,8 +196,6 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(edge_keys, self.expected_edges)
         self.assertEqual(coord_keys, self.expected_points)
 
-    @unittest.skipIf(axl.on_windows,
-                     "Parallel processing not supported on Windows")
     def test_parallel_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
         af.fingerprint(turns=10, repetitions=2, step=0.5, processes=2,

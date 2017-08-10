@@ -80,8 +80,8 @@ class Tournament(object):
         self._logger = logging.getLogger(__name__)
 
         self.use_progress_bar = True
-        self.filename = None
-        self._temp_file_descriptor = None
+        self.filename = None  # type: str
+        self._temp_file_descriptor = None  # type: int
 
     def setup_output(self, filename=None, in_memory=False):
         """assign/create filename to self and file descriptor if file should
