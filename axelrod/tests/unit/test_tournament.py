@@ -1,18 +1,24 @@
 """Tests for the main tournament class."""
 
+from contextlib import redirect_stderr
 import csv
+import io
 import logging
 from multiprocessing import Queue, cpu_count
+import os
 import unittest
 from unittest.mock import MagicMock
 import warnings
 
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers, floats
+from tqdm import tqdm
+
 from axelrod.tests.property import (tournaments,
                                     prob_end_tournaments,
                                     spatial_tournaments,
                                     strategy_lists)
+from axelrod.tournament import _close_objects
 
 import axelrod
 
@@ -61,148 +67,90 @@ class TestTournament(unittest.TestCase):
 
         cls.filename = "test_outputs/test_tournament.csv"
 
-    # def test_init(self):
-    #     tournament = axelrod.Tournament(
-    #         name=self.test_name,
-    #         players=self.players,
-    #         game=self.game,
-    #         turns=self.test_turns,
-    #         noise=0.2)
-    #     self.assertEqual(len(tournament.players), len(test_strategies))
-    #     self.assertIsInstance(
-    #         tournament.players[0].match_attributes['game'], axelrod.Game
-    #     )
-    #     self.assertEqual(tournament.game.score((C, C)), (3, 3))
-    #     self.assertEqual(tournament.turns, self.test_turns)
-    #     self.assertEqual(tournament.repetitions, 10)
-    #     self.assertEqual(tournament.name, 'test')
-    #     self.assertIsInstance(tournament._logger, logging.Logger)
-    #     self.assertEqual(tournament.noise, 0.2)
-    #     anonymous_tournament = axelrod.Tournament(players=self.players)
-    #     self.assertEqual(anonymous_tournament.name, 'axelrod')
-    #
-    # def test_init_with_match_attributes(self):
-    #     tournament = axelrod.Tournament(
-    #             players=self.players,
-    #             match_attributes={"length": float('inf')})
-    #     mg = tournament.match_generator
-    #     match_params = mg.build_single_match_params()
-    #     self.assertEqual(match_params["match_attributes"],
-    #                      {"length": float('inf')})
-    #
-    # def test_warning(self):
-    #     tournament = axelrod.Tournament(name=self.test_name,
-    #                                     players=self.players,
-    #                                     game=self.game,
-    #                                     turns=10,
-    #                                     repetitions=1)
-    #     with warnings.catch_warnings(record=True) as w:
-    #         # Check that a warning is raised if no results set is built and no
-    #         # filename is given
-    #         results = tournament.play(build_results=False, progress_bar=False)
-    #         self.assertEqual(len(w), 1)
-    #
-    #     with warnings.catch_warnings(record=True) as w:
-    #         # Check that no warning is raised if no results set is built and a
-    #         # is filename given
-    #
-    #         tournament.play(build_results=False,
-    #                         filename=self.filename, progress_bar=False)
-    #         self.assertEqual(len(w), 0)
-    #
-    # def test_serial_play(self):
-    #     # Test that we get an instance of ResultSet
-    #     tournament = axelrod.Tournament(
-    #         name=self.test_name,
-    #         players=self.players,
-    #         game=self.game,
-    #         turns=axelrod.DEFAULT_TURNS,
-    #         repetitions=self.test_repetitions)
-    #     results = tournament.play(progress_bar=False)
-    #     self.assertIsInstance(results, axelrod.ResultSet)
-    #
-    #     # Test that _run_serial_repetitions is called with empty matches list
-    #     tournament = axelrod.Tournament(
-    #         name=self.test_name,
-    #         players=self.players,
-    #         game=self.game,
-    #         turns=axelrod.DEFAULT_TURNS,
-    #         repetitions=self.test_repetitions)
-    #     results = tournament.play(progress_bar=False)
-    #     self.assertEqual(tournament.num_interactions, 75)
-    #
-    # def test_serial_play_with_different_game(self):
-    #     # Test that a non default game is passed to the result set
-    #     game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
-    #     tournament = axelrod.Tournament(
-    #         name=self.test_name,
-    #         players=self.players,
-    #         game=game,
-    #         turns=1,
-    #         repetitions=1)
-    #     results = tournament.play(progress_bar=False)
-    #     self.assertEqual(results.game.RPST(), (-1, -1, -1, -1))
-    #
-    # def test_no_progress_bar_play(self):
-    #     """Test that progress bar is not created for progress_bar=False"""
-    #     tournament = axelrod.Tournament(
-    #         name=self.test_name,
-    #         players=self.players,
-    #         game=self.game,
-    #         turns=axelrod.DEFAULT_TURNS,
-    #         repetitions=self.test_repetitions)
-    #
-    #
-    #     # Test with build results
-    #     results = tournament.play(progress_bar=False)
-    #     self.assertIsInstance(results, axelrod.ResultSet)
-    #     # Check that no progress bar was created
-    #     call_progress_bar = lambda: tournament.progress_bar.total
-    #     self.assertRaises(AttributeError, call_progress_bar)
-    #
-    #     # Test without build results
-    #     results = tournament.play(progress_bar=False, build_results=False,
-    #                               filename=self.filename)
-    #     self.assertIsNone(results)
-    #     results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
-    #     self.assertIsInstance(results, axelrod.ResultSet)
-    #     self.assertRaises(AttributeError, call_progress_bar)
-    #
-    # def test_progress_bar_play(self):
-    #     """Test that progress bar is created by default and with True argument"""
-    #     tournament = axelrod.Tournament(
-    #         name=self.test_name,
-    #         players=self.players,
-    #         game=self.game,
-    #         turns=axelrod.DEFAULT_TURNS,
-    #         repetitions=self.test_repetitions)
-    #
-    #     results = tournament.play()
-    #     self.assertIsInstance(results, axelrod.ResultSet)
-    #     self.assertEqual(tournament.progress_bar.total, 15)
-    #     self.assertEqual(tournament.progress_bar.total,
-    #                      tournament.progress_bar.n)
-    #
-    #     results = tournament.play(progress_bar=True)
-    #     self.assertIsInstance(results, axelrod.ResultSet)
-    #     self.assertEqual(tournament.progress_bar.total, 15)
-    #     self.assertEqual(tournament.progress_bar.total,
-    #                      tournament.progress_bar.n)
-    #
-    #     # Test without build results
-    #     results = tournament.play(progress_bar=True, build_results=False,
-    #                               filename=self.filename)
-    #     self.assertIsNone(results)
-    #     results = axelrod.ResultSetFromFile(self.filename)
-    #     self.assertIsInstance(results, axelrod.ResultSet)
-    #     self.assertEqual(tournament.progress_bar.total, 15)
-    #     self.assertEqual(tournament.progress_bar.total,
-    #                      tournament.progress_bar.n)
+    def test_init(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=self.test_turns,
+            noise=0.2)
+        self.assertEqual(len(tournament.players), len(test_strategies))
+        self.assertIsInstance(
+            tournament.players[0].match_attributes['game'], axelrod.Game
+        )
+        self.assertEqual(tournament.game.score((C, C)), (3, 3))
+        self.assertEqual(tournament.turns, self.test_turns)
+        self.assertEqual(tournament.repetitions, 10)
+        self.assertEqual(tournament.name, 'test')
+        self.assertIsInstance(tournament._logger, logging.Logger)
+        self.assertEqual(tournament.noise, 0.2)
+        anonymous_tournament = axelrod.Tournament(players=self.players)
+        self.assertEqual(anonymous_tournament.name, 'axelrod')
 
-    @unittest.skip
-    def test_progress_bar_play_parallel(self):  # TODO fix it!
-        """Test that tournament plays when asking for progress bar for parallel
-        tournament"""
+    def test_init_with_match_attributes(self):
+        tournament = axelrod.Tournament(
+                players=self.players,
+                match_attributes={"length": float('inf')})
+        mg = tournament.match_generator
+        match_params = mg.build_single_match_params()
+        self.assertEqual(match_params["match_attributes"],
+                         {"length": float('inf')})
+
+    def test_warning(self):
+        tournament = axelrod.Tournament(name=self.test_name,
+                                        players=self.players,
+                                        game=self.game,
+                                        turns=10,
+                                        repetitions=1)
+        with warnings.catch_warnings(record=True) as w:
+            # Check that a warning is raised if no results set is built and no
+            # filename is given
+            results = tournament.play(build_results=False, progress_bar=False)
+            self.assertEqual(len(w), 1)
+
+        with warnings.catch_warnings(record=True) as w:
+            # Check that no warning is raised if no results set is built and a
+            # is filename given
+
+            tournament.play(build_results=False,
+                            filename=self.filename, progress_bar=False)
+            self.assertEqual(len(w), 0)
+
+    def test_serial_play(self):
+        # Test that we get an instance of ResultSet
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+        results = tournament.play(progress_bar=False)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        # Test that _run_serial_repetitions is called with empty matches list
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+        results = tournament.play(progress_bar=False)
+        self.assertEqual(tournament.num_interactions, 75)
+
+    def test_serial_play_with_different_game(self):
+        # Test that a non default game is passed to the result set
+        game = axelrod.Game(p=-1, r=-1, s=-1, t=-1)
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=game,
+            turns=1,
+            repetitions=1)
+        results = tournament.play(progress_bar=False)
+        self.assertEqual(results.game.RPST(), (-1, -1, -1, -1))
+
+    def test_no_progress_bar_play(self):
+        """Test that progress bar is not created for progress_bar=False"""
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -210,10 +158,113 @@ class TestTournament(unittest.TestCase):
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
-        results = tournament.play(processes=2)
+
+        # Test with build results
+        tournament.use_progress_bar = True
+        err = io.StringIO()
+        with redirect_stderr(err):
+            results = tournament.play(progress_bar=False)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        # Check that play re-assigned self.use_progress_bar
+        self.assertFalse(tournament.use_progress_bar)
+        # Check that no progress bar wrote output.
+        self.assertEqual(err.getvalue(), '')
+
+
+        # Test without build results
+        tournament.use_progress_bar = True
+        err = io.StringIO()
+        with redirect_stderr(err):
+            results = tournament.play(progress_bar=False, build_results=False,
+                                      filename=self.filename)
+        self.assertIsNone(results)
+        self.assertFalse(tournament.use_progress_bar)
+        self.assertEqual(err.getvalue(), '')
+
+        results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
-        results = tournament.play(progress_bar=True)
+    def test_progress_bar_play(self):
+        """Test that progress bar is created by default and with True argument"""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+
+        tournament.use_progress_bar = False
+        err = io.StringIO()
+        with redirect_stderr(err):
+            results = tournament.play()
+        self.assertIsInstance(results, axelrod.ResultSet)
+        # Check that play re-assigned self.use_progress_bar
+        self.assertTrue(tournament.use_progress_bar)
+        # Check that progress bar wrote output.
+        std_err_str = err.getvalue()
+        self.assertIn('Playing matches:', std_err_str)
+        self.assertIn('Analysing:', std_err_str)
+        self.assertIn('100%', std_err_str)
+
+        tournament.use_progress_bar = False
+        err = io.StringIO()
+        with redirect_stderr(err):
+            results = tournament.play(progress_bar=True)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertTrue(tournament.use_progress_bar)
+        std_err_str = err.getvalue()
+        self.assertIn('Playing matches:', std_err_str)
+        self.assertIn('Analysing:', std_err_str)
+        self.assertIn('100%', std_err_str)
+
+        # Test without build results
+        tournament.use_progress_bar = False
+        err = io.StringIO()
+        with redirect_stderr(err):
+            results = tournament.play(progress_bar=True, build_results=False,
+                                      filename=self.filename)
+        self.assertIsNone(results)
+        self.assertTrue(tournament.use_progress_bar)
+        std_err_str = err.getvalue()
+        self.assertIn('Playing matches:', std_err_str)
+        self.assertNotIn('Analysing:', std_err_str)
+        self.assertIn('100%', std_err_str)
+
+        results = axelrod.ResultSetFromFile(self.filename)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+    def test_progress_bar_play_parallel(self):
+        """Test that tournament plays when asking for progress bar for parallel
+        tournament and that progress bar is created."""
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+
+        err = io.StringIO()
+        with redirect_stderr(err):
+            results = tournament.play(progress_bar=False, processes=2)
+        stderr_output = err.getvalue()
+
+        self.assertNotIn('Playing matches', stderr_output)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        err = io.StringIO()
+        with redirect_stderr(err):
+            results = tournament.play(progress_bar=True, processes=2)
+        stderr_output = err.getvalue()
+
+        self.assertIn('Playing matches', stderr_output)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        err = io.StringIO()
+        with redirect_stderr(err):
+            results = tournament.play(processes=2)
+        stderr_output = err.getvalue()
+
+        self.assertIn('Playing matches', stderr_output)
         self.assertIsInstance(results, axelrod.ResultSet)
     #
     # @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
@@ -271,6 +322,7 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(len(scores), len(players))
 
     # TODO remove
+    @unittest.skip
     def test_all_strat(self):
         turns = 5
         players = [s() for s in axelrod.strategies]
@@ -282,13 +334,7 @@ class TestTournament(unittest.TestCase):
             repetitions=1)
         scores = tournament.play(processes=4, progress_bar=True).scores
 
-
-    def test_parallel_play_with_writing_to_file_on_windows(self):
-        """
-        The default setting for `play` is to write to a NamedTemporaryFile.
-        This is disabled on Windows. This test ensures that parallel_play
-        does not conflict with writing the results to file.
-        """
+    def test_parallel_play_with_writing_to_file(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -316,7 +362,7 @@ class TestTournament(unittest.TestCase):
 #         # Get the calls made to write_interactions
 #         calls = tournament._write_interactions.call_args_list
 #         self.assertEqual(len(calls), 15)
-#
+
     def test_run_parallel(self):
         class PickleableMock(MagicMock):
             def __reduce__(self):
@@ -734,6 +780,52 @@ class TestTournament(unittest.TestCase):
 #         tournament = axelrod.Tournament(players, edges=edges, noise=.5)
 #         results = tournament.play(progress_bar=False)
 #         self.assertIsInstance(results, axelrod.ResultSet)
+
+    def test_close_objects_with_none(self):
+        self.assertIsNone(_close_objects(None, None))
+
+    def test_close_objects_with_file_objs(self):
+        f1 = open('to_delete_1', 'w')
+        f2 = open('to_delete_2', 'w')
+        f2.close()
+        f2 = open('to_delete_2', 'r')
+
+        self.assertFalse(f1.closed)
+        self.assertFalse(f2.closed)
+
+        _close_objects(f1, f2)
+
+        self.assertTrue(f1.closed)
+        self.assertTrue(f2.closed)
+
+        os.remove('to_delete_1')
+        os.remove('to_delete_2')
+
+    def test_close_objects_with_tqdm(self):
+        pbar_1 = tqdm(range(5))
+        pbar_2 = tqdm(total=10, desc='hi', file=io.StringIO())
+
+        self.assertFalse(pbar_1.disable)
+        self.assertFalse(pbar_2.disable)
+
+        _close_objects(pbar_1, pbar_2)
+
+        self.assertTrue(pbar_1.disable)
+        self.assertTrue(pbar_2.disable)
+
+    def test_close_objects_with_different_objects(self):
+        file = open('to_delete_1', 'w')
+        pbar = tqdm(range(5))
+        num = 5
+        empty = None
+        word = 'hi'
+
+        _close_objects(file, pbar, num, empty, word)
+
+        self.assertTrue(pbar.disable)
+        self.assertTrue(file.closed)
+
+        os.remove('to_delete_1')
 
 
 class TestProbEndingSpatialTournament(unittest.TestCase):
