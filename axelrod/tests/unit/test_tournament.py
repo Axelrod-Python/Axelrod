@@ -187,6 +187,27 @@ class TestTournament(unittest.TestCase):
 
         self.assertFalse(os.path.isfile(self.test_tournament.filename))
 
+    def test_play_resets_filename_and_temp_file_descriptor_each_time(self):
+        self.test_tournament.play(progress_bar=False)
+        self.assertIsInstance(self.test_tournament._temp_file_descriptor, int)
+        self.assertIsInstance(self.test_tournament.filename, str)
+        old_filename = self.test_tournament.filename
+
+        self.test_tournament.play(filename=self.filename, progress_bar=False)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+        self.assertEqual(self.test_tournament.filename, self.filename)
+        self.assertNotEqual(old_filename, self.test_tournament.filename)
+
+        self.test_tournament.play(progress_bar=False)
+        self.assertIsInstance(self.test_tournament._temp_file_descriptor, int)
+        self.assertIsInstance(self.test_tournament.filename, str)
+        self.assertNotEqual(old_filename, self.test_tournament.filename)
+        self.assertNotEqual(self.test_tournament.filename, self.filename)
+
+        self.test_tournament.play(in_memory=True, progress_bar=False)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+        self.assertIsNone(self.test_tournament.filename)
+
     def test_get_file_objects_no_filename(self):
         file, writer = self.test_tournament._get_file_objects()
         self.assertIsNone(file)
@@ -389,7 +410,7 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
-        results = tournament.play(processes=4, progress_bar=False)
+        results = tournament.play(processes=2, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.num_interactions, 75)
 

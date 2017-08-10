@@ -3,7 +3,6 @@ import csv
 import logging
 from multiprocessing import Process, Queue, cpu_count
 from tempfile import mkstemp
-from typing import Any
 import warnings
 import os
 import sys
@@ -84,8 +83,8 @@ class Tournament(object):
         self._temp_file_descriptor = None  # type: int
 
     def setup_output(self, filename=None, in_memory=False):
-        """assign/create filename to self and file descriptor if file should
-        be deleted once `play` is finished. """
+        """assign/create `filename` to `self`. If file should be deleted once
+        `play` is finished, assign a file descriptor. """
         temp_file_descriptor = None
         if in_memory:
             self.interactions_dict = {}
