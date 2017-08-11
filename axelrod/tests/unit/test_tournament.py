@@ -6,6 +6,7 @@ import io
 import logging
 from multiprocessing import Queue, cpu_count
 import os
+import pickle
 import unittest
 from unittest.mock import MagicMock
 import warnings
@@ -440,7 +441,6 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(tournament.num_interactions, 75)
 
-
     def test_run_serial(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -469,6 +469,14 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
         tournament._write_interactions = PickleableMock(
                     name='_write_interactions')
+
+        # For test coverage purposes. This confirms PickleableMock can be
+        # pickled exactly once. Windows multi-processing must pickle this Mock
+        # exactly once during testing.
+        pickled = pickle.loads(pickle.dumps(tournament))
+        self.assertIsInstance(pickled._write_interactions, MagicMock)
+        self.assertRaises(pickle.PicklingError, pickle.dumps, pickled)
+
         self.assertTrue(tournament._run_parallel())
 
         # Get the calls made to write_interactions
@@ -1012,6 +1020,3 @@ class TestHelperFunctions(unittest.TestCase):
         self.assertTrue(file.closed)
 
         os.remove('to_delete_1')
-
-if __name__ == '__main__':
-    unittest.main()

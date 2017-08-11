@@ -264,7 +264,6 @@ class Tournament(object):
             work_queue.put(chunk)
 
         self._start_workers(workers, work_queue, done_queue)
-
         self._process_done_queue(workers, done_queue)
 
         return True
