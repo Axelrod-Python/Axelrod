@@ -589,3 +589,135 @@ class SteinAndRapoport(Player):
     def reset(self):
         super().reset()
         self.opponent_is_random = False
+
+
+class TidemanAndChieruzzi(Player):
+    """
+    This strategy begins by playing Tit For Tat and then things get slightly
+    complicated:
+
+    1. Every run of defections played by the opponent increases the number of
+    defections that this strategy retaliates with by 1.
+    2. The opponent is given a ‘fresh start’ if:
+        - it is 10 points behind this strategy
+        - and it has not just started a run of defections
+        - and it has been at least 20 rounds since the last ‘fresh start’
+        - and there are more than 10 rounds remaining in the tournament
+        - and the total number of defections differs from a 50-50 random sample
+        by at least 3.0 standard deviations.
+
+    A ‘fresh start’ is a sequence of two cooperations followed by an assumption
+    that the game has just started (everything is forgotten).
+
+    This strategy came 2nd in Axelrod’s original tournament.
+
+    Names:
+
+    - TidemanAndChieruzzi: [Axelrod1980]_
+    """
+
+    name = 'Tideman and Chieruzzi'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': {"game", "length"},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.is_retaliating = False
+        self.retaliation_length = 0
+        self.retaliation_remaining = 0
+        self.current_score = 0
+        self.opponent_score = 0
+        self.last_fresh_start = 0
+        self.fresh_start = False
+
+    def _decrease_retaliation_counter(self):
+        """Lower the remaining owed retaliation count and flip to non-retaliate
+        if the count drops to zero."""
+        if self.is_retaliating:
+            self.retaliation_remaining -= 1
+            if self.retaliation_remaining == 0:
+                self.is_retaliating = False
+
+    def _fresh_start(self):
+        """Give the opponent a fresh start by forgetting the past"""
+        self.is_retaliating = False
+        self.retaliation_length = 0
+        self.retaliation_remaining = 0
+
+    def _score_last_round(self, opponent: Player):
+        """Updates the scores for each player."""
+        # Load the default game if not supplied by a tournament.
+        game = self.match_attributes["game"]
+        last_round = (self.history[-1], opponent.history[-1])
+        scores = game.score(last_round)
+        self.current_score += scores[0]
+        self.opponent_score += scores[1]
+
+    def strategy(self, opponent: Player) -> Action:
+        if not opponent.history:
+            return C
+
+        # Calculate the scores.
+        self._score_last_round(opponent)
+
+        # Check if we have recently given the strategy a fresh start.
+        if self.fresh_start:
+            self.fresh_start = False
+            return C  # Second cooperation
+
+        # Check conditions to give opponent a fresh start.
+        current_round = len(self.history) + 1
+        if self.last_fresh_start == 0:
+            valid_fresh_start = True
+        # There needs to be at least 20 rounds before the next fresh start
+        else:
+            valid_fresh_start = current_round - self.last_fresh_start >= 20
+
+        if valid_fresh_start:
+            valid_points = self.current_score - self.opponent_score >= 10
+            valid_rounds = self.match_attributes['length'] - current_round >= 10
+            opponent_is_cooperating = opponent.history[-1] == C
+            if valid_points and valid_rounds and opponent_is_cooperating:
+                # 50-50 split is based off the binomial distribution.
+                N = opponent.cooperations + opponent.defections
+                # std_dev = sqrt(N*p*(1-p)) where p is 1 / 2.
+                std_deviation = (N ** (1 / 2)) / 2
+                lower = N / 2 - 3 * std_deviation
+                upper = N / 2 + 3 * std_deviation
+                if self.defections <= lower or self.defections >= upper:
+                    # Opponent deserves a fresh start
+                    self.last_fresh_start = current_round
+                    self._fresh_start()
+                    self.fresh_start = True
+                    return C  # First cooperation
+
+        if self.is_retaliating:
+            # Are we retaliating still?
+            self._decrease_retaliation_counter()
+            return D
+
+        if opponent.history[-1] == D:
+            self.is_retaliating = True
+            self.retaliation_length += 1
+            self.retaliation_remaining = self.retaliation_length
+            self._decrease_retaliation_counter()
+            return D
+
+        return C
+
+    def reset(self):
+        super().reset()
+        self.is_retaliating = False
+        self.retaliation_length = 0
+        self.retaliation_remaining = 0
+        self.current_score = 0
+        self.opponent_score = 0
+        self.last_fresh_start = 0
+        self.fresh_start = False

@@ -437,3 +437,54 @@ class TestSteinAndRapoport(TestPlayer):
         self.versus_test(opponent, expected_actions=actions,
                          match_attributes={"length": -1},
                          attrs={"opponent_is_random": False})
+
+
+class TestTidemanAndChieruzzi(TestPlayer):
+
+    name = 'Tideman and Chieruzzi'
+    player = axelrod.TidemanAndChieruzzi
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': {"game", "length"},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Cooperator Test
+        opponent = axelrod.Cooperator()
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Defector Test
+        opponent = axelrod.Defector()
+        actions = [(C, D), (D, D), (D, D), (D, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Test increasing retaliation
+        opponent = axelrod.MockPlayer([D, C])
+        actions = [(C, D), (D, C), (C, D), (D, C), (D, D),
+                   (D, C), (D, D), (D, C), (C, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={'is_retaliating': True,
+                                'retaliation_length': 4,
+                                'retaliation_remaining': 3})
+
+        # A fresh starts occurs on round 14.
+        opponent = axelrod.Cycler('DDCDD')
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (C, D), (C, D),
+                   (D, D), (D, D), (D, C), (C, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D)]
+
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={'current_score': 40, 'opponent_score': 35,
+                                'last_fresh_start': 14,
+                                'retaliation_length': 4,
+                                'retaliation_remaining': 1})
+
+
