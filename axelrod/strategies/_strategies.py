@@ -6,7 +6,7 @@ from .appeaser import Appeaser
 from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
     Davis, RevisedDowning, Feld, Grofman, Nydegger, Joss, Shubik, Tullock,
-    UnnamedStrategy, SteinAndRapoport)
+    UnnamedStrategy, SteinAndRapoport, TidemanAndChieruzzi)
 from .axelrod_second import Champion, Eatherley, Tester, Gladstein
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
@@ -250,6 +250,7 @@ all_strategies = [
     ThueMorse,
     ThueMorseInverse,
     Thumper,
+    TidemanAndChieruzzi,
     TitForTat,
     TitFor2Tats,
     TrickyCooperator,
