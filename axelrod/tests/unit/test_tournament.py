@@ -1,6 +1,5 @@
 """Tests for the main tournament class."""
 
-from contextlib import redirect_stderr
 import csv
 import io
 import logging
@@ -8,7 +7,7 @@ from multiprocessing import Queue, cpu_count
 import os
 import pickle
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 import warnings
 
 from hypothesis import given, example, settings
@@ -40,6 +39,21 @@ test_edges = [(0, 1), (1, 2), (3, 4)]
 
 deterministic_strategies = [s for s in axelrod.strategies
                             if not s().classifier['stochastic']]
+
+
+class RecordedTQDM(tqdm):
+    """This is a tqdm.tqdm that keeps a record of every RecordedTQDM created.
+    It is used to test that progress bars were correctly created and then
+    closed."""
+    record = []
+
+    def __init__(self, *args, **kwargs):
+        super(RecordedTQDM, self).__init__(*args, **kwargs)
+        RecordedTQDM.record.append(self)
+
+    @classmethod
+    def reset_record(cls):
+        cls.record = []
 
 
 class TestTournament(unittest.TestCase):
@@ -155,6 +169,14 @@ class TestTournament(unittest.TestCase):
         os.close(self.test_tournament._temp_file_descriptor)
         os.remove(self.test_tournament.filename)
 
+    def test_play_resets_num_interactions(self):
+        self.assertEqual(self.test_tournament.num_interactions, 0)
+        self.test_tournament.play(progress_bar=False)
+        self.assertEqual(self.test_tournament.num_interactions, 15)
+
+        self.test_tournament.play(progress_bar=False)
+        self.assertEqual(self.test_tournament.num_interactions, 15)
+
     def test_play_changes_use_progress_bar(self):
         self.assertTrue(self.test_tournament.use_progress_bar)
 
@@ -232,6 +254,15 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(pbar.n, 0)
         self.assertEqual(pbar.total, self.test_tournament.match_generator.size)
 
+        new_edges = [(0, 1), (1, 2), (2, 3), (3, 4)]
+        new_tournament = axelrod.Tournament(players=self.players,
+                                            edges=new_edges)
+        new_tournament.use_progress_bar = True
+        pbar = new_tournament._get_progress_bar()
+        self.assertEqual(pbar.desc, 'Playing matches: ')
+        self.assertEqual(pbar.n, 0)
+        self.assertEqual(pbar.total, len(new_edges))
+
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
@@ -265,6 +296,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.game.RPST(), (-1, -1, -1, -1))
 
+    @patch('tqdm.tqdm', RecordedTQDM)
     def test_no_progress_bar_play(self):
         """Test that progress bar is not created for progress_bar=False"""
         tournament = axelrod.Tournament(
@@ -276,25 +308,24 @@ class TestTournament(unittest.TestCase):
 
 
         # Test with build results
-        err = io.StringIO()
-        with redirect_stderr(err):
-            results = tournament.play(progress_bar=False)
+        RecordedTQDM.reset_record()
+        results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
         # Check that no progress bar wrote output.
-        self.assertEqual(err.getvalue(), '')
+        self.assertEqual(RecordedTQDM.record, [])
 
 
         # Test without build results
-        err = io.StringIO()
-        with redirect_stderr(err):
-            results = tournament.play(progress_bar=False, build_results=False,
-                                      filename=self.filename)
+        RecordedTQDM.reset_record()
+        results = tournament.play(progress_bar=False, build_results=False,
+                                  filename=self.filename)
         self.assertIsNone(results)
-        self.assertEqual(err.getvalue(), '')
+        self.assertEqual(RecordedTQDM.record, [])
 
         results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
+    @patch('tqdm.tqdm', RecordedTQDM)
     def test_progress_bar_play(self):
         """Test that progress bar is created by default and with True argument"""
         tournament = axelrod.Tournament(
@@ -304,39 +335,43 @@ class TestTournament(unittest.TestCase):
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
-        err = io.StringIO()
-        with redirect_stderr(err):
-            results = tournament.play()
+        RecordedTQDM.reset_record()
+        results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
         # Check that progress bar wrote output.
-        stderr_output = err.getvalue()
-        self.assertIn('Playing matches:', stderr_output)
-        self.assertIn('Analysing:', stderr_output)
-        self.assertIn('100%', stderr_output)
+        self.assertEqual(len(RecordedTQDM.record), 3)
+        play_pbar = RecordedTQDM.record[0]
+        self.assertEqual(play_pbar.desc, 'Playing matches: ')
+        self.assertEqual(play_pbar.n, 15)
+        self.assertEqual(play_pbar.total, 15)
+        self.assertTrue(all(pbar.disable for pbar in RecordedTQDM.record))
 
-        err = io.StringIO()
-        with redirect_stderr(err):
-            results = tournament.play(progress_bar=True)
+        RecordedTQDM.reset_record()
+        results = tournament.play(progress_bar=True)
         self.assertIsInstance(results, axelrod.ResultSet)
-        stderr_output = err.getvalue()
-        self.assertIn('Playing matches:', stderr_output)
-        self.assertIn('Analysing:', stderr_output)
-        self.assertIn('100%', stderr_output)
+        self.assertEqual(len(RecordedTQDM.record), 3)
+        play_pbar = RecordedTQDM.record[0]
+        self.assertEqual(play_pbar.desc, 'Playing matches: ')
+        self.assertEqual(play_pbar.n, 15)
+        self.assertEqual(play_pbar.total, 15)
+        self.assertTrue(play_pbar.disable)
 
         # Test without build results
-        err = io.StringIO()
-        with redirect_stderr(err):
-            results = tournament.play(progress_bar=True, build_results=False,
-                                      filename=self.filename)
+        RecordedTQDM.reset_record()
+        results = tournament.play(progress_bar=True, build_results=False,
+                                  filename=self.filename)
         self.assertIsNone(results)
-        stderr_output = err.getvalue()
-        self.assertIn('Playing matches:', stderr_output)
-        self.assertNotIn('Analysing:', stderr_output)
-        self.assertIn('100%', stderr_output)
+        self.assertEqual(len(RecordedTQDM.record), 1)
+        play_pbar = RecordedTQDM.record[0]
+        self.assertEqual(play_pbar.desc, 'Playing matches: ')
+        self.assertEqual(play_pbar.n, 15)
+        self.assertEqual(play_pbar.total, 15)
+        self.assertTrue(play_pbar.disable)
 
         results = axelrod.ResultSetFromFile(self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
 
+    @patch('tqdm.tqdm', RecordedTQDM)
     def test_progress_bar_play_parallel(self):
         """Test that tournament plays when asking for progress bar for parallel
         tournament and that progress bar is created."""
@@ -348,31 +383,35 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions)
 
         # progress_bar = False
-        err = io.StringIO()
-        with redirect_stderr(err):
-            results = tournament.play(progress_bar=False, processes=2)
-        self.assertEqual(err.getvalue(), '')
+        RecordedTQDM.reset_record()
+        results = tournament.play(progress_bar=False, processes=2)
+        self.assertEqual(RecordedTQDM.record, [])
         self.assertIsInstance(results, axelrod.ResultSet)
+
 
         # progress_bar = True
-        err = io.StringIO()
-        with redirect_stderr(err):
-            results = tournament.play(progress_bar=True, processes=2)
-        stderr_output = err.getvalue()
-
-        self.assertIn('Playing matches', stderr_output)
-        self.assertIn('100%', stderr_output)
+        RecordedTQDM.reset_record()
+        results = tournament.play(progress_bar=True, processes=2)
         self.assertIsInstance(results, axelrod.ResultSet)
+
+        self.assertEqual(len(RecordedTQDM.record), 3)
+        play_pbar = RecordedTQDM.record[0]
+        self.assertEqual(play_pbar.desc, 'Playing matches: ')
+        self.assertEqual(play_pbar.n, 15)
+        self.assertEqual(play_pbar.total, 15)
+        self.assertTrue(play_pbar.disable)
 
         # progress_bar is default
-        err = io.StringIO()
-        with redirect_stderr(err):
-            results = tournament.play(processes=2)
-        stderr_output = err.getvalue()
-
-        self.assertIn('Playing matches', stderr_output)
-        self.assertIn('100%', stderr_output)
+        RecordedTQDM.reset_record()
+        results = tournament.play(processes=2)
         self.assertIsInstance(results, axelrod.ResultSet)
+
+        self.assertEqual(len(RecordedTQDM.record), 3)
+        play_pbar = RecordedTQDM.record[0]
+        self.assertEqual(play_pbar.desc, 'Playing matches: ')
+        self.assertEqual(play_pbar.n, 15)
+        self.assertEqual(play_pbar.total, 15)
+        self.assertTrue(play_pbar.disable)
 
     @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
                                   max_turns=10, min_repetitions=2,

@@ -1,6 +1,3 @@
-import os
-
-on_windows = os.name == 'nt'
 DEFAULT_TURNS = 200
 
 # The order of imports matters!

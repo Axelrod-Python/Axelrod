@@ -1,6 +1,5 @@
 from collections import namedtuple, Counter
 import csv
-import sys
 
 from numpy import mean, nanmedian, std
 import tqdm
@@ -77,7 +76,7 @@ class ResultSet(object):
             desc : string
                 A description.
         """
-        return tqdm.tqdm(total=self.num_matches, desc=desc, file=sys.stderr)
+        return tqdm.tqdm(total=self.num_matches, desc=desc)
 
     def _update_players(self, index_pair, players):
         """
@@ -744,7 +743,7 @@ class ResultSet(object):
 
         if progress_bar:
             self.progress_bar = tqdm.tqdm(total=13 + 2 * self.nplayers,
-                                          file=sys.stderr, desc="Finishing")
+                                          desc="Finishing")
         self._summarise_normalised_scores()
         self._summarise_normalised_cooperation()
 
@@ -1015,8 +1014,7 @@ class ResultSetFromFile(ResultSet):
         if not self.num_interactions:
             with open(self.filename) as f:
                 self.num_interactions = sum(1 for line in f)
-        return tqdm.tqdm(total=self.num_interactions, desc=desc,
-                         file=sys.stderr)
+        return tqdm.tqdm(total=self.num_interactions, desc=desc)
 
     def _read_players_and_repetition_numbers(self, progress_bar=False):
         """

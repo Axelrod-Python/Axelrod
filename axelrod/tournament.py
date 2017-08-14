@@ -5,7 +5,6 @@ from multiprocessing import Process, Queue, cpu_count
 from tempfile import mkstemp
 import warnings
 import os
-import sys
 
 import tqdm
 
@@ -123,6 +122,8 @@ class Tournament(object):
         -------
         axelrod.ResultSetFromFile
         """
+        self.num_interactions = 0
+
         self.use_progress_bar = progress_bar
 
         self.setup_output(filename, in_memory)
@@ -181,7 +182,7 @@ class Tournament(object):
 
         chunks = self.match_generator.build_match_chunks()
 
-        file, writer = self._get_file_objects()
+        out_file, writer = self._get_file_objects()
         progress_bar = self._get_progress_bar()
 
         for chunk in chunks:
@@ -191,7 +192,7 @@ class Tournament(object):
             if self.use_progress_bar:
                 progress_bar.update(1)
 
-        _close_objects(file, progress_bar)
+        _close_objects(out_file, progress_bar)
 
         return True
 
@@ -207,7 +208,7 @@ class Tournament(object):
 
     def _get_progress_bar(self):
         if self.use_progress_bar:
-            return tqdm.tqdm(total=self.match_generator.size, file=sys.stderr,
+            return tqdm.tqdm(total=self.match_generator.size,
                              desc="Playing matches")
         else:
             return None
@@ -314,7 +315,7 @@ class Tournament(object):
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
         """
-        file, writer = self._get_file_objects()
+        out_file, writer = self._get_file_objects()
         progress_bar = self._get_progress_bar()
 
         stops = 0
@@ -328,7 +329,7 @@ class Tournament(object):
                 if self.use_progress_bar:
                     progress_bar.update(1)
 
-        _close_objects(file, progress_bar)
+        _close_objects(out_file, progress_bar)
         return True
 
     def _worker(self, work_queue: Queue, done_queue: Queue):
