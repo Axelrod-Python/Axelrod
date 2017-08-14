@@ -593,8 +593,8 @@ class SteinAndRapoport(Player):
 
 class TidemanAndChieruzzi(Player):
     """
-    This strategy begins by playing Tit For Tat and then things get slightly
-    complicated:
+    This strategy begins by playing Tit For Tat and then follows the following
+    rules:
 
     1. Every run of defections played by the opponent increases the number of
     defections that this strategy retaliates with by 1.
@@ -603,7 +603,7 @@ class TidemanAndChieruzzi(Player):
         - it is 10 points behind this strategy
         - and it has not just started a run of defections
         - and it has been at least 20 rounds since the last ‘fresh start’
-        - and there are more than 10 rounds remaining in the tournament
+        - and there are more than 10 rounds remaining in the match
         - and the total number of defections differs from a 50-50 random sample
           by at least 3.0 standard deviations.
 

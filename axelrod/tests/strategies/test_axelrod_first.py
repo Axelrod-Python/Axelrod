@@ -487,4 +487,23 @@ class TestTidemanAndChieruzzi(TestPlayer):
                                 'retaliation_length': 4,
                                 'retaliation_remaining': 1})
 
+        # Check standard deviation conditions.
+        # The opponent is similar to the one above except the stddev condition
+        # is not met, therefore no fresh start will be given.
+        opponent = axelrod.Cycler('DDCDDDDCDDCDCCC')
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, C), (C, D), (D, C), (D, C), (D, C),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (C, D), (D, D)]
+
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={'last_fresh_start': 0})
+
+        # Check the fresh start condition
+        opponent = axelrod.TitForTat()
+        actions = [(C, C), (C, C), (C, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={'fresh_start': False})
+
 
