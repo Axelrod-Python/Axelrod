@@ -17,7 +17,7 @@ An indication is given as to whether or not this strategy is implemented in the
   :header: "Name", "Author", "Axelrod Library Name"
 
   "Tit For Tat", "Anatol Rapoport", ":class:`TitForTat <axelrod.strategies.titfortat.TitForTat>`"
-  "`Tideman and Chieruzzi`_", "T Nicolaus Tideman and Paula Chieruzz", ":`class:TidemanAndChieruzzi <axelrod.strategies.axelrod_first.TidemanAndChieruzzi>`"
+  "`Tideman and Chieruzzi`_", "T Nicolaus Tideman and Paula Chieruzz", ":class:`TidemanAndChieruzzi <axelrod.strategies.axelrod_first.TidemanAndChieruzzi>`"
   "Nydegger", "Rudy Nydegger", ":class:`Nydegger <axelrod.strategies.axelrod_first.Nydegger>`"
   "Grofman", "Bernard Grofman", ":class:`Grofman <axelrod.strategies.axelrod_first.Grofman>`"
   "Shubik", "Martin Shubik", ":class:`Shubik <axelrod.strategies.axelrod_first.Shubik>`"
