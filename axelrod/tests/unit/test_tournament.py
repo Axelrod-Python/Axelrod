@@ -311,7 +311,7 @@ class TestTournament(unittest.TestCase):
         RecordedTQDM.reset_record()
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
-        # Check that no progress bar wrote output.
+        # Check that no progress bar was created.
         self.assertEqual(RecordedTQDM.record, [])
 
 
@@ -324,6 +324,12 @@ class TestTournament(unittest.TestCase):
 
         results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
+
+    def assert_play_pbar_correct_total_and_finished(self, pbar, total):
+        self.assertEqual(pbar.desc, 'Playing matches: ')
+        self.assertEqual(pbar.total, total)
+        self.assertEqual(pbar.n, total)
+        self.assertTrue(pbar.disable, True)
 
     @patch('tqdm.tqdm', RecordedTQDM)
     def test_progress_bar_play(self):
@@ -338,12 +344,11 @@ class TestTournament(unittest.TestCase):
         RecordedTQDM.reset_record()
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
-        # Check that progress bar wrote output.
+        # Check that progress bar was created, updated and closed.
         self.assertEqual(len(RecordedTQDM.record), 3)
         play_pbar = RecordedTQDM.record[0]
-        self.assertEqual(play_pbar.desc, 'Playing matches: ')
-        self.assertEqual(play_pbar.n, 15)
-        self.assertEqual(play_pbar.total, 15)
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
+        # Check all progress bars are closed.
         self.assertTrue(all(pbar.disable for pbar in RecordedTQDM.record))
 
         RecordedTQDM.reset_record()
@@ -351,10 +356,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
         self.assertEqual(len(RecordedTQDM.record), 3)
         play_pbar = RecordedTQDM.record[0]
-        self.assertEqual(play_pbar.desc, 'Playing matches: ')
-        self.assertEqual(play_pbar.n, 15)
-        self.assertEqual(play_pbar.total, 15)
-        self.assertTrue(play_pbar.disable)
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
         # Test without build results
         RecordedTQDM.reset_record()
@@ -363,10 +365,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsNone(results)
         self.assertEqual(len(RecordedTQDM.record), 1)
         play_pbar = RecordedTQDM.record[0]
-        self.assertEqual(play_pbar.desc, 'Playing matches: ')
-        self.assertEqual(play_pbar.n, 15)
-        self.assertEqual(play_pbar.total, 15)
-        self.assertTrue(play_pbar.disable)
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
         results = axelrod.ResultSetFromFile(self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
@@ -388,7 +387,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(RecordedTQDM.record, [])
         self.assertIsInstance(results, axelrod.ResultSet)
 
-
         # progress_bar = True
         RecordedTQDM.reset_record()
         results = tournament.play(progress_bar=True, processes=2)
@@ -396,10 +394,7 @@ class TestTournament(unittest.TestCase):
 
         self.assertEqual(len(RecordedTQDM.record), 3)
         play_pbar = RecordedTQDM.record[0]
-        self.assertEqual(play_pbar.desc, 'Playing matches: ')
-        self.assertEqual(play_pbar.n, 15)
-        self.assertEqual(play_pbar.total, 15)
-        self.assertTrue(play_pbar.disable)
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
         # progress_bar is default
         RecordedTQDM.reset_record()
@@ -408,10 +403,7 @@ class TestTournament(unittest.TestCase):
 
         self.assertEqual(len(RecordedTQDM.record), 3)
         play_pbar = RecordedTQDM.record[0]
-        self.assertEqual(play_pbar.desc, 'Playing matches: ')
-        self.assertEqual(play_pbar.n, 15)
-        self.assertEqual(play_pbar.total, 15)
-        self.assertTrue(play_pbar.disable)
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
     @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
                                   max_turns=10, min_repetitions=2,

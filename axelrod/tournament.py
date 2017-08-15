@@ -210,8 +210,7 @@ class Tournament(object):
         if self.use_progress_bar:
             return tqdm.tqdm(total=self.match_generator.size,
                              desc="Playing matches")
-        else:
-            return None
+        return None
 
     def _write_interactions(self, results, writer=None):
         """Write the interactions to file or to a dictionary"""
