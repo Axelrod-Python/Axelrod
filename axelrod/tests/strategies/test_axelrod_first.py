@@ -487,8 +487,19 @@ class TestTidemanAndChieruzzi(TestPlayer):
                                 'retaliation_length': 4,
                                 'retaliation_remaining': 1})
 
-        # Similar to the last test except the length is not given.
+        # When the length is given this strategy will not give a fresh start
         opponent = axelrod.Cycler('DDCDD')
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         match_attributes={'length': 15})
+
+        # When the length is not given this strategy will give a fresh start.
+        opponent = axelrod.Cycler('DDCDD')
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions,
                          match_attributes={'length': float('inf')})
 
