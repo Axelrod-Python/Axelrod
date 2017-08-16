@@ -487,6 +487,17 @@ class TestTidemanAndChieruzzi(TestPlayer):
                                 'retaliation_length': 4,
                                 'retaliation_remaining': 1})
 
+        # A fresh starts will not occur since the match length is not given.
+        opponent = axelrod.Cycler('DDCDD')
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         attrs={'last_fresh_start': 0},
+                         match_attributes={'length': -1})
+
         # Check standard deviation conditions.
         # The opponent is similar to the one above except the stddev condition
         # is not met, therefore no fresh start will be given.
