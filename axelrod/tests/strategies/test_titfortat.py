@@ -45,7 +45,7 @@ class TestTitForTat(TestPlayer):
         # This behaviour is independent of knowledge of the Match length
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         match_attributes={"length": -1})
+                         match_attributes={"length": float("inf")})
 
         # We can also test against random strategies
         actions = [(C, D), (D, D), (D, C), (C, C), (C, D)]
@@ -576,7 +576,7 @@ class TestAlexei(TestPlayer):
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         match_attributes={"length": -1})
+                         match_attributes={"length": float("inf")})
 
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
@@ -610,7 +610,7 @@ class TestEugineNier(TestPlayer):
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          attrs={"is_defector": False},
-                         match_attributes={"length": -1})
+                         match_attributes={"length": float("inf")})
 
         # Plays TfT and defects in last round
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D)]
@@ -620,7 +620,7 @@ class TestEugineNier(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          attrs={"is_defector": False},
-                         match_attributes={"length": -1})
+                         match_attributes={"length": float("inf")})
 
         # Becomes defector after 5 defections
         opponent = axelrod.MockPlayer(actions=[D, C, D, D, D, D, C, C])
@@ -660,7 +660,7 @@ class TestNTitsForMTats(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions, init_kwargs=init_kwargs)
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         match_attributes={"length": -1}, init_kwargs=init_kwargs)
+                         match_attributes={"length": float("inf")}, init_kwargs=init_kwargs)
         actions = [(C, D), (D, D), (D, C), (C, C), (C, D)]
         self.versus_test(axelrod.Random(), expected_actions=actions,
                          seed=0, init_kwargs=init_kwargs)
@@ -744,7 +744,7 @@ class TestMichaelos(TestPlayer):
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          attrs={"is_defector": False},
-                         match_attributes={"length": -1}, seed=2)
+                         match_attributes={"length": float("inf")}, seed=2)
 
         actions = [(C, D), (D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions,
@@ -753,7 +753,7 @@ class TestMichaelos(TestPlayer):
         actions = [(C, D), (D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions,
                          attrs={"is_defector": False},
-                         match_attributes={"length": -1}, seed=2)
+                         match_attributes={"length": float("inf")}, seed=2)
 
         # Chance of becoming a defector is 50% after (D, C) occurs.
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
@@ -767,4 +767,4 @@ class TestMichaelos(TestPlayer):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (D, D), (D, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions,
                          attrs={"is_defector": True},
-                         match_attributes={"length": -1}, seed=1)
+                         match_attributes={"length": float("inf")}, seed=1)
