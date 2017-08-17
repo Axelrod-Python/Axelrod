@@ -38,8 +38,8 @@ class ResultSet(object):
         ----------
             players : list
                 a list of player objects.
-            interactions : list
-                a list of dictionaries mapping tuples of player indices to
+            interactions : dict
+                a dictionary mapping tuples of player indices to
                 interactions (1 for each repetition)
             repetitions : int
                 The number of repetitions

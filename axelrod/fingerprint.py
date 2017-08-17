@@ -1,11 +1,12 @@
 from collections import namedtuple
-from tempfile import NamedTemporaryFile
+import os
+from tempfile import mkstemp
 import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
 
 import axelrod as axl
-from axelrod import on_windows, Player
+from axelrod import Player
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (
     compute_final_score_per_turn, read_interactions_from_file)
@@ -300,11 +301,9 @@ class AshlockFingerprint(object):
             the values are the mean score for the corresponding interactions.
         """
 
-        if on_windows and (filename is None):  # pragma: no cover
-            in_memory = True
-        elif filename is None:
-            outputfile = NamedTemporaryFile(mode='w')
-            filename = outputfile.name
+        temp_file_descriptor = None
+        if not in_memory and filename is None:
+            temp_file_descriptor, filename = mkstemp()
 
         edges, tourn_players = self.construct_tournament_elements(
             step, progress_bar=progress_bar)
@@ -323,6 +322,10 @@ class AshlockFingerprint(object):
         else:
             self.interactions = read_interactions_from_file(
                 filename, progress_bar=progress_bar)
+
+        if temp_file_descriptor is not None:
+            os.close(temp_file_descriptor)
+            os.remove(filename)
 
         self.data = generate_data(self.interactions, self.points, edges)
         return self.data

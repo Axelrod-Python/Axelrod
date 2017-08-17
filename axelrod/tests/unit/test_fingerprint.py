@@ -1,4 +1,7 @@
+import os
+from tempfile import mkstemp
 import unittest
+from unittest.mock import patch
 from hypothesis import given
 import axelrod as axl
 from axelrod.fingerprint import (create_points, create_jossann, create_probes,
@@ -15,6 +18,22 @@ except ImportError:  # pragma: no cover
 
 
 C, D = axl.Action.C, axl.Action.D
+
+
+class RecordedMksTemp(object):
+    """This object records all results from RecordedMksTemp.mkstemp. It's for
+    testing that temp files are created and then destroyed."""
+    record = []
+
+    @staticmethod
+    def mkstemp(*args, **kwargs):
+        temp_file_info = mkstemp(*args, **kwargs)
+        RecordedMksTemp.record.append(temp_file_info)
+        return temp_file_info
+
+    @staticmethod
+    def reset_record():
+        RecordedMksTemp.record = []
 
 
 class TestFingerprint(unittest.TestCase):
@@ -165,6 +184,33 @@ class TestFingerprint(unittest.TestCase):
                               progress_bar=True)
         self.assertEqual(sorted(data.keys()), self.expected_points)
 
+    @patch('axelrod.fingerprint.mkstemp', RecordedMksTemp.mkstemp)
+    def test_temp_file_creation(self):
+
+        RecordedMksTemp.reset_record()
+        af = AshlockFingerprint(self.strategy, self.probe)
+        filename = "test_outputs/test_fingerprint.csv"
+
+        # No temp file is created.
+        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
+                       in_memory=True)
+        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
+                       in_memory=True, filename=filename)
+        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
+                       in_memory=False, filename=filename)
+
+        self.assertEqual(RecordedMksTemp.record, [])
+
+        # Temp file is created and destroyed.
+        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
+                       in_memory=False, filename=None)
+
+        self.assertEqual(len(RecordedMksTemp.record), 1)
+        filename = RecordedMksTemp.record[0][1]
+        self.assertIsInstance(filename, str)
+        self.assertNotEqual(filename, '')
+        self.assertFalse(os.path.isfile(filename))
+
     def test_fingerprint_with_filename(self):
         filename = "test_outputs/test_fingerprint.csv"
         af = AshlockFingerprint(self.strategy, self.probe)
@@ -196,8 +242,6 @@ class TestFingerprint(unittest.TestCase):
         self.assertEqual(edge_keys, self.expected_edges)
         self.assertEqual(coord_keys, self.expected_points)
 
-    @unittest.skipIf(axl.on_windows,
-                     "Parallel processing not supported on Windows")
     def test_parallel_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
         af.fingerprint(turns=10, repetitions=2, step=0.5, processes=2,
