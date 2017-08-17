@@ -48,7 +48,7 @@ assumes that players do not know the length of the match::
 
      actions = [(C, C), (C, D), (D, C), (C, D)]
      self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                      match_attributes={"length": -1})
+                      match_attributes={"length": float("inf")})
 
 The function :code:`versus_test` also accepts a dictionary parameter of
 keyword arguments that dictate how the player is initiated. For example this
@@ -100,7 +100,7 @@ As an example, the tests for Tit-For-Tat are as follows::
             # This behaviour is independent of knowledge of the Match length
             actions = [(C, C), (C, D), (D, C), (C, D)]
             self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                             match_attributes={"length": -1})
+                             match_attributes={"length": float("inf")})
 
             # We can also test against random strategies
             actions = [(C, D), (D, D), (D, C), (C, C)]
