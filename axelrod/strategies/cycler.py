@@ -49,11 +49,6 @@ class AntiCycler(Player):
             self.cycle_counter = 0
             return D
 
-    def reset(self):
-        super().reset()
-        self.cycle_length = 1
-        self.cycle_counter = 0
-        self.first_three = self._get_first_three()
 
 
 class Cycler(Player):
@@ -98,9 +93,6 @@ class Cycler(Player):
     def strategy(self, opponent: Player) -> Action:
         return next(self.cycle)
 
-    def reset(self):
-        super(Cycler, self).reset()
-        self.cycle = self.get_new_itertools_cycle()
 
 
 class CyclerDC(Cycler):

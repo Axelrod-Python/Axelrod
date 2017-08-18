@@ -83,12 +83,6 @@ class ForgetfulGrudger(Player):
             return D
         return C
 
-    def reset(self):
-        """Resets scores and history."""
-        super().reset()
-        self.grudged = False
-        self.grudge_memory = 0
-
 
 class OppositeGrudger(Player):
     """
@@ -189,12 +183,6 @@ class SoftGrudger(Player):
             self.grudged = True
             return D
         return C
-
-    def reset(self):
-        """Resets scores and history."""
-        super().reset()
-        self.grudged = False
-        self.grudge_memory = 0
 
 
 class GrudgerAlternator(Player):
@@ -324,12 +312,6 @@ class GeneralSoftGrudger(Player):
             return D
 
         return C
-
-    def reset(self):
-        """Resets scores and history."""
-        super().reset()
-        self.grudged = False
-        self.grudge_memory = 0
 
     def __repr__(self) -> str:
         return "%s: n=%s,d=%s,c=%s" % (self.name, self.n, self.d, self.c)

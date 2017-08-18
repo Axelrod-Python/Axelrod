@@ -42,7 +42,6 @@ class Grumpy(Player):
         """
         super().__init__()
         self.state = starting_state
-        self.starting_state = starting_state
         self.grumpy_threshold = grumpy_threshold
         self.nice_threshold = nice_threshold
 
@@ -68,9 +67,3 @@ class Grumpy(Player):
                 self.state = 'Nice'
                 return C
             return D
-
-    def reset(self):
-        """Resets score, history and state for the next round of the
-        tournament."""
-        super().reset()
-        self.state = self.starting_state

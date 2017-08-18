@@ -150,11 +150,6 @@ class HMMPlayer(Player):
             self.state = self.hmm.state
             return action
 
-    def reset(self) -> None:
-        super().reset()
-        self.hmm.state = self.initial_state
-        self.state = self.hmm.state
-
 
 class EvolvedHMM5(HMMPlayer):
     """

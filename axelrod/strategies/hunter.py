@@ -97,10 +97,6 @@ class AlternatorHunter(Player):
             return D
         return C
 
-    def reset(self):
-        super().reset()
-        self.is_alt = False
-
 
 class CycleHunter(Player):
     """Hunts strategies that play cyclically, like any of the Cyclers,
@@ -135,10 +131,6 @@ class CycleHunter(Player):
                 self.cycle = cycle
                 return D
         return C
-
-    def reset(self):
-        super().reset()
-        self.cycle = None
 
 
 class EventualCycleHunter(CycleHunter):
@@ -256,8 +248,3 @@ class RandomHunter(Player):
             if probabilities and all([abs(p - 0.5) < 0.25 for p in probabilities]):
                 return D
         return C
-
-    def reset(self):
-        self.countCC = 0
-        self.countDD = 0
-        super().reset()

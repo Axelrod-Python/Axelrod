@@ -111,20 +111,6 @@ class DBS(Player):
             (D, D): ([0], [1])
         }
 
-    def reset(self):
-        """Reset instance properties."""
-        super().reset()
-        self.Rd = create_policy(1, 1, 0, 0)
-        self.Rc = {}
-        self.Pi = self.Rd   # policy used by move_gen
-        self.violation_counts = {}
-        self.v = 0
-        self.history_by_cond = {
-            (C, C): ([1], [1]),
-            (C, D): ([1], [1]),
-            (D, C): ([0], [1]),
-            (D, D): ([0], [1])
-        }
 
     def should_promote(self, r_plus, promotion_threshold=3):
         """
