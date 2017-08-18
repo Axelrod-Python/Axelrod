@@ -247,13 +247,9 @@ class Player(object):
         This method is called at the beginning of each match (between a pair
         of players) to reset a player's state to its initial starting point.
         It ensures that no 'memory' of previous matches is carried forward.
-
-        The default method resets a player's history, cooperations, defections
-        and state_distribution. Players which have further attributes need to
-        override this method and ensure those additional attributes are also
-        reset.
         """
         self.history = []
         self.cooperations = 0
         self.defections = 0
         self.state_distribution = defaultdict(int)
+        self.__init__(**self.init_kwargs)

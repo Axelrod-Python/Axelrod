@@ -50,7 +50,3 @@ class Calculator(Player):
         else:
             # TFT
             return D if opponent.history[-1:] == [D] else C
-
-    def reset(self):
-        super().reset()
-        self.joss_instance = Joss()

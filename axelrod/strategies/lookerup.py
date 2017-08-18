@@ -349,9 +349,6 @@ class LookerUp(Player):
                                 opponent_last_n_plays,
                                 opponent_initial_plays)
 
-    def reset(self) -> None:
-        super(LookerUp, self).reset()
-        self._initial_actions_pool = list(self.initial_actions)
 
     @property
     def lookup_dict(self):

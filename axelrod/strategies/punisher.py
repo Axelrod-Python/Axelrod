@@ -60,15 +60,6 @@ class Punisher(Player):
 
         return C
 
-    def reset(self):
-        """
-        Resets scores and history
-        """
-        super().reset()
-        self.grudged = False
-        self.grudge_memory = 1
-        self.mem_length = 1
-
 
 class InversePunisher(Player):
     """
@@ -122,12 +113,6 @@ class InversePunisher(Player):
             return D
         return C
 
-    def reset(self):
-        """Resets internal variables and history"""
-        super().reset()
-        self.grudged = False
-        self.grudge_memory = 1
-        self.mem_length = 1
 
 class LevelPunisher(Player):
     """

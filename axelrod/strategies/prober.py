@@ -209,12 +209,6 @@ class Prober4(Player):
                 return C
             return D if opponent.history[-1] == D else C
 
-    def reset(self):
-        super().reset()
-        self.just_Ds = 0
-        self.unjust_Ds = 0
-        self.turned_defector = False
-
 
 class HardProber(Player):
     """
@@ -349,7 +343,3 @@ class RemorsefulProber(NaiveProber):
 
         self.probing = True
         return D
-
-    def reset(self):
-        super().reset()
-        self.probing = False

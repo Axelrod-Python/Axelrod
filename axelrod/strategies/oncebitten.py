@@ -52,11 +52,6 @@ class OnceBitten(Player):
             return D
         return C
 
-    def reset(self):
-        """Resets grudge memory and history."""
-        super().reset()
-        self.grudged = False
-        self.grudge_memory = 0
 
 
 class FoolMeOnce(Player):

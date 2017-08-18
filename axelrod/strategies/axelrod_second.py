@@ -144,10 +144,6 @@ class Tester(Player):
             # Alternate C and D
             return self.history[-1].flip()
 
-    def reset(self):
-        super().reset()
-        self.is_TFT = False
-
 
 class Gladstein(Player):
     """
@@ -203,7 +199,3 @@ class Gladstein(Player):
         else:
             # Play TFT
             return opponent.history[-1]
-
-    def reset(self):
-        super().reset()
-        self.patsy = True

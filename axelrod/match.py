@@ -132,6 +132,7 @@ class Match(object):
         if self._stochastic or (cache_key not in self._cache):
             for p in self.players:
                 p.reset()
+                p.set_match_attributes(**self.match_attributes)
             for _ in range(turns):
                 self.players[0].play(self.players[1], self.noise)
             result = list(

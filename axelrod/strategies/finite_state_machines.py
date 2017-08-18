@@ -94,10 +94,6 @@ class FSMPlayer(Player):
             action = self.fsm.move(opponent.history[-1])
             return action
 
-    def reset(self) -> None:
-        super().reset()
-        self.fsm.state = self.initial_state
-
 
 class Fortress3(FSMPlayer):
     """Finite state machine player specified in http://DOI.org/10.1109/CEC.2006.1688322.

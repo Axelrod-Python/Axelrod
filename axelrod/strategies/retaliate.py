@@ -51,10 +51,6 @@ class Retaliate(Player):
                 return D
         return C
 
-    def reset(self):
-        super().reset()
-        self.play_counts = defaultdict(int)
-
 
 class Retaliate2(Retaliate):
     """
@@ -154,12 +150,6 @@ class LimitedRetaliate(Player):
                 self.retaliating = False
 
         return C
-
-    def reset(self):
-        super().reset()
-        self.play_counts = defaultdict(int)
-        self.retaliating = False
-        self.retaliation_count = 0
 
 
 class LimitedRetaliate2(LimitedRetaliate):

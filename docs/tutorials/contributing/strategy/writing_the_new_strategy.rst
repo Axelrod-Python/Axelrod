@@ -117,10 +117,6 @@ opponent.history[-1]`)::
 
 The variables :code:`C` and :code:`D` represent the cooperate and defect actions respectively.
 
-If your strategy creates any particular attribute along the way you need to make
-sure that there is a :code:`reset` method that takes account of it.  An example
-of this is the :code:`ForgetfulGrudger` strategy.
-
 You can also modify the name of the strategy with the :code:`__repr__` method,
 which is invoked when :code:`str` is applied to a player instance. For example,
 the :code:`Random` strategy takes a parameter :code:`p` for how often it
@@ -143,7 +139,7 @@ Now we have separate names for different instantiations::
 This helps distinguish players in tournaments that have multiple instances of the
 same strategy. If you modify the :code:`__repr__` method of player, be sure to
 add an appropriate test.
-    
+
 There are various examples of helpful functions and properties that make
 writing strategies easier. Do not hesitate to get in touch with the
 Axelrod-Python team for guidance.
