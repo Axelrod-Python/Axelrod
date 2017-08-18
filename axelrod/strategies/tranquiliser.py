@@ -10,7 +10,7 @@ C, D = Action.C, Action.D
 dict = {C: 0, D: 1}
 
 
-class Tranquilizer(Player):
+class Tranquiliser(Player):
     '''
 A player that uses two ratios (which are dependent on the number of cooperations
 defections of player and the opponent) to decide the next move to play.
@@ -18,25 +18,28 @@ The player can be present in three states(denoted FD): 0, 1 or 2 each causing a 
 dependent on the value of FD. Value of FD is dependent on the aforementioned ratios.
 '''
 
-    name = 'Tranquilizer'
+    name = 'Tranquiliser'
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
+        'makes_use_of': {"game"},
         'long_run_time': False,
         'inspects_source': False,
+        'manipulates_source': False,
         'manipulates_state': False
     }
 
     # Initialised atributes
     def __init__(self):
+        super().__init__()
         self.FD = 0
-        self.consecutiveDefections = 0
+        self.consecutive_defections = 0
         self.ratioFD1 = 5
         self.ratioFD2 = 0
         self.ratioFD1_count = 0
         self.ratioFD2_count = 0
         self.score = None
-        self.P = int
+        self.P = 1
         self.current_score = 0
 
     def update_stateFD(self,
@@ -60,7 +63,7 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
                 dict[opponent.history[-1]] / 4)
                 self.score = "good"
             elif (self.current_score[0] / (len(self.history)) + 1) >= 1.75:
-                self.P = .25 + opponent.cooperations / (len(self.history)) - (self.consecutiveDefections * .25) + (
+                self.P = .25 + opponent.cooperations / (len(self.history)) - (self.consecutive_defections * .25) + (
                                                                                                                   self.current_score[
                                                                                                                       0] -
                                                                                                                   self.current_score[
@@ -79,7 +82,7 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
         if len(self.history) == 0:  # Assumes opponent will cooperate, hence, Tranquiliser cooperates
             return C
         else:  # If round number != 0, exectue the stateFD(self, opponent) function
-            Tranquilizer.update_stateFD(self, opponent)
+            Tranquiliser.update_stateFD(self, opponent)
         if opponent.history[-1] == D:  # Calculates number of consecutive defections
             self.consecutive_defections += 1
         else:
@@ -94,7 +97,7 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
             return opponent.history[-1]  # "If you can't beat them join'em"
         else:
             if (randomValue < self.P):  # Comapares randomValue to that of the calculated variable 'P'
-                if self.consecutiveDefections == 0:  # Decides what to return (based on previous move), give randomValue < 'P'
+                if self.consecutive_defections == 0:  # Decides what to return (based on previous move), give randomValue < 'P'
                     return C
                 else:
                     return self.history[-1]
@@ -108,15 +111,12 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
     def reset(self):  # Reset attributes ready for next game
         super().reset()
         self.FD = 0
-        self.consecutiveDefections = 0
+        self.consecutive_defections = 0
         self.ratioFD1 = 5
         self.ratioFD2 = 0
         self.ratioFD1_count = 0
         self.ratioFD2_count = 0
-        self.P = int
+        self.P = 1
         self.current_score = 0
 
 
-match = axl.Match((Tranquilizer(), axl.DefectorHunter()), turns=1000)
-match.play()
-print(match.cooperation())

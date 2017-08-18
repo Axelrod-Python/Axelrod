@@ -77,6 +77,7 @@ from .titfortat import (
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, AdaptiveTitForTat,
     SpitefulTitForTat, SlowTitForTwoTats2, Alexei, EugineNier, DynamicTwoTitsForTat, NTitsForMTats, Michaelos)
+from .tranquiliser import Tranquiliser
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
@@ -253,6 +254,7 @@ all_strategies = [
     TidemanAndChieruzzi,
     TitForTat,
     TitFor2Tats,
+    Tranquiliser,
     TrickyCooperator,
     TrickyDefector,
     Tullock,
