@@ -1,6 +1,6 @@
 import unittest
 
-from hypothesis import given, example
+from hypothesis import given, example, settings
 from hypothesis.strategies import floats, integers
 
 import axelrod
@@ -147,6 +147,7 @@ class TestMatchGenerator(unittest.TestCase):
         self.assertEqual(match.match_attributes, {"length": float('inf')})
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions))
+    @settings(max_examples=5, max_iterations=20)
     @example(repetitions=test_repetitions)
     def test_build_match_chunks(self, repetitions):
         rr = axelrod.MatchGenerator(players=self.players,
@@ -163,6 +164,7 @@ class TestMatchGenerator(unittest.TestCase):
                          sorted(expected_match_definitions))
 
     @given(repetitions=integers(min_value=1, max_value=test_repetitions))
+    @settings(max_examples=5, max_iterations=20)
     @example(repetitions=test_repetitions)
     def test_spatial_build_match_chunks(self, repetitions):
         cycle = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 1)]

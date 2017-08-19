@@ -2,7 +2,7 @@ import os
 from tempfile import mkstemp
 import unittest
 from unittest.mock import patch
-from hypothesis import given
+from hypothesis import given, settings
 import axelrod as axl
 from axelrod.fingerprint import (create_points, create_jossann, create_probes,
                                  create_edges, generate_data, reshape_data,
@@ -373,6 +373,7 @@ class TestFingerprint(unittest.TestCase):
             self.assertAlmostEqual(value, test_data[key], places=2)
 
     @given(strategy_pair=strategy_lists(min_size=2, max_size=2))
+    @settings(max_examples=5, max_iterations=20)
     def test_pair_fingerprints(self, strategy_pair):
         """
         A test to check that we can fingerprint

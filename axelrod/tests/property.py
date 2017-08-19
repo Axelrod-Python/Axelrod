@@ -1,7 +1,11 @@
 """
 A module for creating hypothesis based strategies for property based testing
 """
-from axelrod import strategies, Match, Game, Tournament
+from axelrod import (short_run_time_strategies,
+                     strategies,
+                     Match,
+                     Game,
+                     Tournament)
 from hypothesis.strategies import (composite, sampled_from, integers,
                                    floats, lists)
 
@@ -9,7 +13,7 @@ import itertools
 
 
 @composite
-def strategy_lists(draw, strategies=strategies, min_size=1,
+def strategy_lists(draw, strategies=short_run_time_strategies, min_size=1,
                    max_size=len(strategies)):
     """
     A hypothesis decorator to return a list of strategies
@@ -27,7 +31,7 @@ def strategy_lists(draw, strategies=strategies, min_size=1,
 
 
 @composite
-def matches(draw, strategies=strategies,
+def matches(draw, strategies=short_run_time_strategies,
             min_turns=1, max_turns=200,
             min_noise=0, max_noise=1):
     """
@@ -59,7 +63,7 @@ def matches(draw, strategies=strategies,
 
 
 @composite
-def tournaments(draw, strategies=strategies,
+def tournaments(draw, strategies=short_run_time_strategies,
                 min_size=1, max_size=10,
                 min_turns=1, max_turns=200,
                 min_noise=0, max_noise=1,
@@ -101,7 +105,7 @@ def tournaments(draw, strategies=strategies,
 
 
 @composite
-def prob_end_tournaments(draw, strategies=strategies,
+def prob_end_tournaments(draw, strategies=short_run_time_strategies,
                          min_size=1, max_size=10,
                          min_prob_end=0, max_prob_end=1,
                          min_noise=0, max_noise=1,
@@ -143,7 +147,7 @@ def prob_end_tournaments(draw, strategies=strategies,
 
 
 @composite
-def spatial_tournaments(draw, strategies=strategies,
+def spatial_tournaments(draw, strategies=short_run_time_strategies,
                         min_size=1, max_size=10,
                         min_turns=1, max_turns=200,
                         min_noise=0, max_noise=1,
@@ -201,7 +205,7 @@ def spatial_tournaments(draw, strategies=strategies,
 
 
 @composite
-def prob_end_spatial_tournaments(draw, strategies=strategies,
+def prob_end_spatial_tournaments(draw, strategies=short_run_time_strategies,
                                 min_size=1, max_size=10,
                                 min_prob_end=0, max_prob_end=1,
                                 min_noise=0, max_noise=1,

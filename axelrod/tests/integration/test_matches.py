@@ -2,15 +2,15 @@
 import unittest
 import axelrod
 
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis.strategies import integers
 from axelrod.tests.property import strategy_lists
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
-deterministic_strategies = [s for s in axelrod.strategies
+deterministic_strategies = [s for s in axelrod.short_run_time_strategies
                             if not s().classifier['stochastic']]
-stochastic_strategies = [s for s in axelrod.strategies
+stochastic_strategies = [s for s in axelrod.short_run_time_strategies
                          if s().classifier['stochastic']]
 
 
@@ -19,6 +19,7 @@ class TestMatchOutcomes(unittest.TestCase):
     @given(strategies=strategy_lists(strategies=deterministic_strategies,
                                      min_size=2, max_size=2),
            turns=integers(min_value=1, max_value=20))
+    @settings(max_examples=5, max_iterations=20)
     def test_outcome_repeats(self, strategies, turns):
         """A test that if we repeat 3 matches with deterministic and well
         behaved strategies then we get the same result"""
@@ -31,6 +32,7 @@ class TestMatchOutcomes(unittest.TestCase):
                                      min_size=2, max_size=2),
            turns=integers(min_value=1, max_value=20),
            seed=integers(min_value=0, max_value=4294967295))
+    @settings(max_examples=5, max_iterations=20)
     def test_outcome_repeats_stochastic(self, strategies, turns, seed):
         """a test to check that if a seed is set stochastic strategies give the
         same result"""

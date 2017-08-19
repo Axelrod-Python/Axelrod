@@ -271,7 +271,7 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(mp.winning_strategy_name, str(axelrod.Defector()))
 
     @given(strategies=strategy_lists(min_size=2, max_size=4))
-    @settings(max_examples=5, timeout=0)  # Very low number of examples
+    @settings(max_examples=5, max_iterations=20)
 
     # Two specific examples relating to cloning of strategies
     @example(strategies=[axelrod.BackStabber, axelrod.MindReader])
