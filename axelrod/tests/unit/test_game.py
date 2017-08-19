@@ -1,5 +1,5 @@
 import unittest
-from hypothesis import given
+from hypothesis import given, settings
 
 import axelrod
 from axelrod.tests.property import *
@@ -42,6 +42,7 @@ class TestGame(unittest.TestCase):
         self.assertNotEqual(Game(), 'wrong class')
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
+    @settings(max_examples=5, max_iterations=20)
     def test_property_init(self, r, p, s, t):
         """Use the hypothesis library to test init"""
         expected_scores = {(C, D): (s, t), (D, C): (t, s),
@@ -50,12 +51,14 @@ class TestGame(unittest.TestCase):
         self.assertEqual(game.scores, expected_scores)
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
+    @settings(max_examples=5, max_iterations=20)
     def test_property_RPST(self, r, p, s, t):
         """Use the hypothesis library to test RPST"""
         game = axelrod.Game(r, s, t, p)
         self.assertEqual(game.RPST(), (r, p, s, t))
 
     @given(r=integers(), p=integers(), s=integers(), t=integers())
+    @settings(max_examples=5, max_iterations=20)
     def test_property_score(self, r, p, s, t):
         """Use the hypothesis library to test score"""
         game = axelrod.Game(r, s, t, p)
@@ -65,6 +68,7 @@ class TestGame(unittest.TestCase):
         self.assertEqual(game.score((D, C)), (t, s))
 
     @given(game=games())
+    @settings(max_examples=5, max_iterations=20)
     def test_repr(self, game):
         expected_repr = "Axelrod game: (R,P,S,T) = {}".format(game.RPST())
         self.assertEqual(expected_repr, game.__repr__())

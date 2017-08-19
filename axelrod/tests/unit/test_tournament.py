@@ -37,7 +37,7 @@ test_prob_end = .5
 
 test_edges = [(0, 1), (1, 2), (3, 4)]
 
-deterministic_strategies = [s for s in axelrod.strategies
+deterministic_strategies = [s for s in axelrod.short_run_time_strategies
                             if not s().classifier['stochastic']]
 
 
@@ -238,9 +238,10 @@ class TestTournament(unittest.TestCase):
 
     def test_get_file_object_with_filename(self):
         self.test_tournament.filename = self.filename
-        file, writer = self.test_tournament._get_file_objects()
-        self.assertIsInstance(file, io.TextIOWrapper)
+        file_object, writer = self.test_tournament._get_file_objects()
+        self.assertIsInstance(file_object, io.TextIOWrapper)
         self.assertEqual(writer.__class__.__name__, 'writer')
+        file_object.close()
 
     def test_get_progress_bar(self):
         self.test_tournament.use_progress_bar = False
@@ -406,9 +407,9 @@ class TestTournament(unittest.TestCase):
         self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
     @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
-                                  max_turns=10, min_repetitions=2,
+                                  max_turns=5, min_repetitions=2,
                                   max_repetitions=4))
-    @settings(max_examples=10, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     @example(tournament=axelrod.Tournament(players=[s() for s in
         test_strategies], turns=test_turns, repetitions=test_repetitions)
         )
@@ -628,6 +629,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(turns=integers(min_value=1, max_value=200))
+    @settings(max_examples=5, max_iterations=20)
     @example(turns=3)
     @example(turns=axelrod.DEFAULT_TURNS)
     def test_play_matches(self, turns):
@@ -783,7 +785,7 @@ class TestProbEndTournament(unittest.TestCase):
                                            max_prob_end=.9,
                                            min_repetitions=2,
                                            max_repetitions=4))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     @example(tournament=
         axelrod.Tournament(players=[s() for s in test_strategies],
                            prob_end=.2, repetitions=test_repetitions))
@@ -844,7 +846,7 @@ class TestSpatialTournament(unittest.TestCase):
            repetitions=integers(min_value=1, max_value=5),
            noise=floats(min_value=0, max_value=1),
            seed=integers(min_value=0, max_value=4294967295))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_complete_tournament(self, strategies, turns, repetitions,
                                  noise, seed):
         """
@@ -946,7 +948,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
            prob_end=floats(min_value=.1, max_value=.9),
            reps=integers(min_value=1, max_value=3),
            seed=integers(min_value=0, max_value=4294967295))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_complete_tournament(self, strategies, prob_end,
                                  seed, reps):
         """
@@ -983,7 +985,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
                                           max_turns=1, max_noise=0,
                                           max_repetitions=3),
            seed=integers(min_value=0, max_value=4294967295))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_one_turn_tournament(self, tournament, seed):
         """
         Tests that gives same result as the corresponding spatial round robin

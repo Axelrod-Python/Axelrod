@@ -4,7 +4,7 @@ import unittest
 
 import axelrod
 
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis.strategies import sampled_from, lists, integers
 
 from axelrod import Action
@@ -17,6 +17,7 @@ class TestDetectCycle(unittest.TestCase):
     """Test the detect cycle function"""
     @given(cycle=lists(sampled_from([C, D]), min_size=2, max_size=10),
            period=integers(min_value=3, max_value=10))
+    @settings(max_examples=5, max_iterations=20)
     def test_finds_cycle(self, cycle, period):
         history = cycle * period
         self.assertIsNotNone(detect_cycle(history))
