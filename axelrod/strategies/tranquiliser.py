@@ -39,7 +39,7 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
         self.ratioFD1_count = 0
         self.ratioFD2_count = 0
         self.score = None
-        self.P = 1
+        self.P = int
         self.current_score = 0
 
     def update_stateFD(self,
@@ -116,7 +116,8 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
         self.ratioFD2 = 0
         self.ratioFD1_count = 0
         self.ratioFD2_count = 0
-        self.P = 1
+        self.score = None
+        self.P = int
         self.current_score = 0
 
 
