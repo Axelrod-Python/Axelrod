@@ -80,17 +80,19 @@ The scores in each round::
 We can plot the results of a Moran process with `mp.populations_plot()`. Let's
 use a larger population to get a bit more data::
 
-   >>> import random
-   >>> import matplotlib.pyplot as plt
-   >>> axl.seed(15)  # for reproducible example
-   >>> N = 10
-   >>> players = [random.choice(axl.demo_strategies)() for i in range(N)]
-   >>> mp = axl.MoranProcess(players=players, turns=200)
-   >>> populations = mp.play()
-   >>> mp.winning_strategy_name
-   'Defector'
-   >>> ax = mp.populations_plot()
-   >>> plt.show()  #doctest: +SKIP
+    >>> import random
+    >>> import matplotlib.pyplot as plt
+    >>> axl.seed(15)  # for reproducible example
+    >>> players = [axl.Defector(), axl.Defector(), axl.Defector(),
+    ...        axl.Cooperator(), axl.Cooperator(), axl.Cooperator(),
+    ...        axl.TitForTat(), axl.TitForTat(), axl.TitForTat(),
+    ...        axl.Random()]
+    >>> mp = axl.MoranProcess(players=players, turns=200)
+    >>> populations = mp.play()
+    >>> mp.winning_strategy_name
+    'Cooperator'
+    >>> ax = mp.populations_plot()
+    >>> plt.show()  #doctest: +SKIP
 
 
 .. image:: _static/getting_started/moran_example.svg
@@ -105,7 +107,7 @@ function like :code:`takewhile` from :code:`itertools`)::
     >>> import axelrod as axl
     >>> axl.seed(4)  # for reproducible example
     >>> players = [axl.Cooperator(), axl.Defector(),
-    ...               axl.TitForTat(), axl.Grudger()]
+    ...            axl.TitForTat(), axl.Grudger()]
     >>> mp = axl.MoranProcess(players, mutation_rate=0.1)
     >>> for _ in mp:
     ...     if len(mp.population_distribution()) == 1:
