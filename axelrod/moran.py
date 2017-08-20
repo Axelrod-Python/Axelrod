@@ -3,6 +3,7 @@
 from collections import Counter
 import random
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from axelrod import DEFAULT_TURNS, Player
@@ -384,6 +385,28 @@ class MoranProcess(object):
             The length of the Moran process: the number of populations
         """
         return len(self.populations)
+
+    def populations_plot(self, ax=None):
+        player_names = self.populations[0].keys()
+        if ax is None:
+            _, ax = plt.subplots()
+        else:
+            ax = ax
+
+        plot_data = []
+        labels = []
+        for name in player_names:
+            labels.append(name)
+            values = [counter[name] for counter in self.populations]
+            plot_data.append(values)
+            domain = range(len(values))
+
+        ax.stackplot(domain, plot_data, labels=labels)
+        ax.set_title("Moran Process Population by Iteration")
+        ax.set_xlabel("Iteration")
+        ax.set_ylabel("Number of Individuals")
+        ax.legend()
+        return ax
 
 
 class ApproximateMoranProcess(MoranProcess):

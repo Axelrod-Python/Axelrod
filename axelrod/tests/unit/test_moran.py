@@ -4,9 +4,10 @@ import random
 import unittest
 
 from hypothesis import given, example, settings
+import matplotlib.pyplot as plt
 
 import axelrod
-from axelrod import Match, MoranProcess, ApproximateMoranProcess, Pdf
+from axelrod import MoranProcess, ApproximateMoranProcess, Pdf
 from axelrod.moran import fitness_proportionate_selection
 from axelrod.tests.property import strategy_lists
 
@@ -329,6 +330,21 @@ class TestMoranProcess(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         mp = MoranProcess((p1, p2))
         self.assertEqual(mp.__iter__(), mp)
+
+
+    def test_population_plot(self):
+        # Test that can plot on a given matplotlib axes
+        axelrod.seed(15)
+        N = 5
+        players = [random.choice(axelrod.basic_strategies)() for _ in range(N)]
+        mp = axelrod.MoranProcess(players=players, turns=200)
+        mp.play()
+        fig, axarr = plt.subplots(2, 2)
+        ax = axarr[1, 0]
+        mp.populations_plot(ax=ax)
+
+        self.assertEqual(ax.get_xlim(), (-0.8, 16.8))
+        self.assertEqual(ax.get_ylim(), (0, 5.25))
 
 
 class GraphMoranProcess(unittest.TestCase):

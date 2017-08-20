@@ -261,10 +261,9 @@ class TestPlot(unittest.TestCase):
         self.assertNotEqual(axarr[0, 1].get_xlim(), (0, 1))
 
         # Plot on another axes with a title
-        plot.stackplot(eco ,title="dummy title", ax=axarr[1, 0])
+        plot.stackplot(eco, title="dummy title", ax=axarr[1, 0])
         self.assertNotEqual(axarr[1, 0].get_xlim(), (0, 1))
         self.assertEqual(axarr[1, 0].get_title(), "dummy title")
-
 
     def test_all_plots(self):
         plot = axelrod.Plot(self.test_result_set)

@@ -1,4 +1,3 @@
-import warnings
 from distutils.version import LooseVersion
 
 from .result_set import ResultSet
@@ -10,7 +9,6 @@ from typing import List, Union
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 titleType = List[str]
 namesType = List[str]
