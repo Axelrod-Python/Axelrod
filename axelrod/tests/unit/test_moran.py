@@ -314,7 +314,6 @@ class TestMoranProcess(unittest.TestCase):
         winners = Counter(winners)
         self.assertEqual(winners["Defector"], 88)
 
-
     def test_cache(self):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         mp = MoranProcess((p1, p2))
@@ -334,16 +333,17 @@ class TestMoranProcess(unittest.TestCase):
     def test_population_plot(self):
         # Test that can plot on a given matplotlib axes
         axelrod.seed(15)
-        N = 5
-        players = [random.choice(axelrod.basic_strategies)() for _ in range(N)]
-        mp = axelrod.MoranProcess(players=players, turns=200)
+        players = [random.choice(axelrod.demo_strategies)() for _ in range(5)]
+        mp = axelrod.MoranProcess(players=players, turns=30)
         mp.play()
         fig, axarr = plt.subplots(2, 2)
         ax = axarr[1, 0]
         mp.populations_plot(ax=ax)
-
         self.assertEqual(ax.get_xlim(), (-0.8, 16.8))
         self.assertEqual(ax.get_ylim(), (0, 5.25))
+
+        # Run with a give axis
+        mp.populations_plot()
 
 
 class GraphMoranProcess(unittest.TestCase):

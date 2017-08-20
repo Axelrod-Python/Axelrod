@@ -84,12 +84,12 @@ use a larger population to get a bit more data::
    >>> import matplotlib.pyplot as plt
    >>> axl.seed(15)  # for reproducible example
    >>> N = 10
-   >>> players = [random.choice(axl.basic_strategies)() for i in range(N)]
+   >>> players = [random.choice(axl.demo_strategies)() for i in range(N)]
    >>> mp = axl.MoranProcess(players=players, turns=200)
    >>> populations = mp.play()
    >>> mp.winning_strategy_name
-   'Tit For Tat'
-    >>> ax = mp.populations_plot()
+   'Defector'
+   >>> ax = mp.populations_plot()
    >>> plt.show()  #doctest: +SKIP
 
 

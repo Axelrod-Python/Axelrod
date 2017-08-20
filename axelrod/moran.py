@@ -387,6 +387,21 @@ class MoranProcess(object):
         return len(self.populations)
 
     def populations_plot(self, ax=None):
+        """
+        Create a stackplot of the population distributions at each iteration of
+        the Moran process.
+
+        Parameters
+        ----------------
+        ax: matplotlib axis
+            Allows the plot to be written to a given matplotlib axis.
+            Default is None.
+
+        Returns
+        -----------
+        A matplotlib axis object
+
+        """
         player_names = self.populations[0].keys()
         if ax is None:
             _, ax = plt.subplots()
