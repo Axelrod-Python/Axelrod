@@ -4,6 +4,7 @@ import random
 import unittest
 
 from hypothesis import given, example, settings
+import matplotlib
 import matplotlib.pyplot as plt
 
 import axelrod
@@ -341,9 +342,10 @@ class TestMoranProcess(unittest.TestCase):
         mp.populations_plot(ax=ax)
         self.assertEqual(ax.get_xlim(), (-0.8, 16.8))
         self.assertEqual(ax.get_ylim(), (0, 5.25))
-
-        # Run with a give axis
-        mp.populations_plot()
+        # Run without a given axis
+        ax = mp.populations_plot()
+        self.assertEqual(ax.get_xlim(), (-0.8, 16.8))
+        self.assertEqual(ax.get_ylim(), (0, 5.25))
 
 
 class GraphMoranProcess(unittest.TestCase):
@@ -406,12 +408,12 @@ class GraphMoranProcess(unittest.TestCase):
         for seed, outcome in seeds:
             axelrod.seed(seed)
             mp = MoranProcess(players, interaction_graph=graph1,
-                            reproduction_graph=graph2)
+                              reproduction_graph=graph2)
             mp.play()
             winner = mp.winning_strategy_name
             axelrod.seed(seed)
             mp = MoranProcess(players, interaction_graph=graph2,
-                            reproduction_graph=graph1)
+                              reproduction_graph=graph1)
             mp.play()
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)
