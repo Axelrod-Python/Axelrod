@@ -43,7 +43,7 @@ class TestMatch(unittest.TestCase):
                                                 Counter({((C, C), D): 1})],
                                                None]
 
-    sparklines = [ '█ \n █', '  \n██', '██\n█ ', None ]
+    sparklines = ['█ \n █', '  \n██', '██\n█ ', None ]
 
     def test_compute_scores(self):
         for inter, score in zip(self.interactions, self.scores):

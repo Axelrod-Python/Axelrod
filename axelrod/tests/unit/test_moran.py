@@ -331,7 +331,6 @@ class TestMoranProcess(unittest.TestCase):
         mp = MoranProcess((p1, p2))
         self.assertEqual(mp.__iter__(), mp)
 
-
     def test_population_plot(self):
         # Test that can plot on a given matplotlib axes
         axelrod.seed(15)

@@ -1,4 +1,3 @@
-import operator
 import unittest
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers
