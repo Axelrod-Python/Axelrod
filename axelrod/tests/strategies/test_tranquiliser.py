@@ -81,31 +81,57 @@ class TestTranquiliser(TestPlayer):
         
         # If score is between 1.75 and 2.25, probability of defection is always atleast than .25
     
-        actions = [(C, D)]                      
-        
+        actions = [(C, D)]     
+
         actions += [(D, D)] * 7
 
         actions += [(D, C)]
 
         actions += [(C, C)] * 4
     
-        actions += ([(C, D)])    # average_score_per_turn = 1.875, with probability of each action being .75 and .25 respectively
+        actions += ([(C, D)])   # average_score_per_turn = 1.875, with probability of each action being .75 and .25 respectively
 
-        self.versus_test(opponent = axelrod.MockPlayer(actions = [D] * 8 + [C] * 5 + [D]), expected_actions = actions, seed = 1)
+        self.versus_test(opponent = axelrod.MockPlayer(actions = [D] * 8 + [C] * 5 + [D]), expected_actions=actions, seed=1)
+
+
         
+
+        actions = [(C, D)]     
+
+        actions += [(D, D)] * 7
+
+        actions += [(D, C)]
+
+        actions += [(C, C)] * 3
+    
+        actions += ([(D, D)])    # average_score_per_turn = 1.875, with probability of each action being .75 and .25 respectively
+        
+        self.versus_test(opponent = axelrod.MockPlayer(actions = [D] * 8 + [C] * 4 + [D]), 
+                        expected_actions=actions, seed=10, attrs = {"P" : .891025641025641})
+
+
+
         # If score is greater than 2.25 either cooperate or defect, if turn number <= 4; cooperate.
         
         actions = [(C, C)] * 4 
         
-        actions += [(C, C) or (C, D)]
+        actions += [(C, C)]
         
-        actions += ([(C, D) or (D, D)]) 
-        
-        actions += ([(C, C) or (D, C)]) * 15
-        
-        actions += ([(C, D) or (D, D)])
+        self.versus_test(opponent = axelrod.MockPlayer(actions = [C] * 5), expected_actions = actions, seed = 1)
 
-        self.versus_test(opponent = axelrod.MockPlayer(actions = [C] * 5 + [D]  + [C] * 15 + [D]), expected_actions = actions, seed = 1)
+        actions = [(C, C)] * 4 
+        
+        actions += [(C, C)]
+
+        self.versus_test(opponent = axelrod.MockPlayer(actions = [C] * 5), expected_actions = actions, seed = 69)
+
+
+
+
+
+
+
+
 
     def test_consecutive_defections(self):
         
