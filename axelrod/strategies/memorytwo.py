@@ -61,11 +61,3 @@ class MEM2(Player):
                 self.play_as = "ALLD"
                 self.alld_counter += 1
         return self.players[self.play_as].strategy(opponent)
-
-    def reset(self):
-        super().reset()
-        for v in self.players.values():
-            v.reset()
-        self.play_as = "TFT"
-        self.shift_counter = 3
-        self.alld_counter = 0

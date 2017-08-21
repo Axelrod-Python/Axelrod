@@ -140,15 +140,6 @@ class RevisedDowning(Player):
             move = D
         return move
 
-    def reset(self):
-        super().reset()
-        self.good = 1.0
-        self.bad = 0.0
-        self.nice1 = 0
-        self.nice2 = 0
-        self.total_C = 0 # not the same as self.cooperations
-        self.total_D = 0 # not the same as self.defections
-
 
 class Feld(Player):
     """
@@ -430,12 +421,6 @@ class Shubik(Player):
             return D
         return C
 
-    def reset(self):
-        super().reset()
-        self.is_retaliating = False
-        self.retaliation_length = 0
-        self.retaliation_remaining = 0
-
 
 class Tullock(Player):
     """
@@ -586,9 +571,6 @@ class SteinAndRapoport(Player):
         else:  # TitForTat if opponent plays not randomly
             return opponent.history[-1]
 
-    def reset(self):
-        super().reset()
-        self.opponent_is_random = False
 
 
 class TidemanAndChieruzzi(Player):
@@ -712,13 +694,3 @@ class TidemanAndChieruzzi(Player):
             return D
 
         return C
-
-    def reset(self):
-        super().reset()
-        self.is_retaliating = False
-        self.retaliation_length = 0
-        self.retaliation_remaining = 0
-        self.current_score = 0
-        self.opponent_score = 0
-        self.last_fresh_start = 0
-        self.fresh_start = False

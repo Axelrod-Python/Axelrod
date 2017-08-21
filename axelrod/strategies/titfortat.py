@@ -377,10 +377,6 @@ class OmegaTFT(Player):
                     self.deadlock_counter = 0
         return move
 
-    def reset(self):
-        super().reset()
-        self.randomness_counter = 0
-        self.deadlock_counter = 0
 
 
 class Gradual(Player):
@@ -437,12 +433,6 @@ class Gradual(Player):
 
         return C
 
-    def reset(self):
-        super().reset()
-        self.calming = False
-        self.punishing = False
-        self.punishment_count = 0
-        self.punishment_limit = 0
 
 
 @TrackHistoryTransformer(name_prefix=None)
@@ -491,10 +481,6 @@ class ContriteTitForTat(Player):
 
         return opponent.history[-1]
 
-    def reset(self):
-        super().reset()
-        self.contrite = False
-        self._recorded_history = []
 
 
 class AdaptiveTitForTat(Player):
@@ -544,7 +530,8 @@ class AdaptiveTitForTat(Player):
 
     def __init__(self, rate: float = 0.5) -> None:
         super().__init__()
-        self.rate, self.starting_rate = rate, rate
+        self.rate = rate
+        self.world = rate
 
     def strategy(self, opponent: Player) -> Action:
 
@@ -561,11 +548,6 @@ class AdaptiveTitForTat(Player):
 
         return D
 
-    def reset(self):
-
-        super().reset()
-        self.world = 0.5
-        self.rate = self.starting_rate
 
 
 class SpitefulTitForTat(Player):
@@ -610,9 +592,6 @@ class SpitefulTitForTat(Player):
                 return D
             return C
 
-    def reset(self):
-        super().reset()
-        self.retaliating = False
 
 
 class SlowTitForTwoTats2(Player):
@@ -715,9 +694,6 @@ class EugineNier(Player):
             return D
         return opponent.history[-1]
 
-    def reset(self):
-        super().reset()
-        self.is_defector = False
 
 
 class NTitsForMTats(Player):
@@ -775,9 +751,6 @@ class NTitsForMTats(Player):
             return D
         return C
 
-    def reset(self):
-        super().reset()
-        self.retaliate_count = 0
 
 
 @FinalTransformer((D,), name_prefix=None)
@@ -823,7 +796,3 @@ class Michaelos(Player):
                 return D
 
         return opponent.history[-1]
-
-    def reset(self):
-        super().reset()
-        self.is_defector = False

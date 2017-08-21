@@ -1,18 +1,24 @@
 """Tests for the main tournament class."""
 
 import csv
+import io
 import logging
 from multiprocessing import Queue, cpu_count
+import os
+import pickle
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 import warnings
 
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers, floats
+from tqdm import tqdm
+
 from axelrod.tests.property import (tournaments,
                                     prob_end_tournaments,
                                     spatial_tournaments,
                                     strategy_lists)
+from axelrod.tournament import _close_objects
 
 import axelrod
 
@@ -31,8 +37,23 @@ test_prob_end = .5
 
 test_edges = [(0, 1), (1, 2), (3, 4)]
 
-deterministic_strategies = [s for s in axelrod.strategies
+deterministic_strategies = [s for s in axelrod.short_run_time_strategies
                             if not s().classifier['stochastic']]
+
+
+class RecordedTQDM(tqdm):
+    """This is a tqdm.tqdm that keeps a record of every RecordedTQDM created.
+    It is used to test that progress bars were correctly created and then
+    closed."""
+    record = []
+
+    def __init__(self, *args, **kwargs):
+        super(RecordedTQDM, self).__init__(*args, **kwargs)
+        RecordedTQDM.record.append(self)
+
+    @classmethod
+    def reset_record(cls):
+        cls.record = []
 
 
 class TestTournament(unittest.TestCase):
@@ -60,6 +81,15 @@ class TestTournament(unittest.TestCase):
             [200, 200, 1, 200, 200]]
 
         cls.filename = "test_outputs/test_tournament.csv"
+
+    def setUp(self):
+        self.test_tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=2,
+            repetitions=1
+        )
 
     def test_init(self):
         tournament = axelrod.Tournament(
@@ -110,6 +140,130 @@ class TestTournament(unittest.TestCase):
                             filename=self.filename, progress_bar=False)
             self.assertEqual(len(w), 0)
 
+    def test_setup_output_in_memory_overrides_filename(self):
+        self.assertIsNone(self.test_tournament.filename)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+        self.assertFalse(hasattr(self.test_tournament, 'interactions_dict'))
+
+        self.test_tournament.setup_output(self.filename, in_memory=True)
+
+        self.assertIsNone(self.test_tournament.filename)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+        self.assertEqual(self.test_tournament.interactions_dict, {})
+
+    def test_setup_output_with_filename(self):
+
+        self.test_tournament.setup_output(self.filename, in_memory=False)
+
+        self.assertEqual(self.test_tournament.filename, self.filename)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+        self.assertFalse(hasattr(self.test_tournament, 'interactions_dict'))
+
+    def test_setup_output_no_filename_no_in_memory(self):
+        self.test_tournament.setup_output()
+
+        self.assertIsInstance(self.test_tournament.filename, str)
+        self.assertIsInstance(self.test_tournament._temp_file_descriptor, int)
+        self.assertFalse(hasattr(self.test_tournament, 'interactions_dict'))
+
+        os.close(self.test_tournament._temp_file_descriptor)
+        os.remove(self.test_tournament.filename)
+
+    def test_play_resets_num_interactions(self):
+        self.assertEqual(self.test_tournament.num_interactions, 0)
+        self.test_tournament.play(progress_bar=False)
+        self.assertEqual(self.test_tournament.num_interactions, 15)
+
+        self.test_tournament.play(progress_bar=False)
+        self.assertEqual(self.test_tournament.num_interactions, 15)
+
+    def test_play_changes_use_progress_bar(self):
+        self.assertTrue(self.test_tournament.use_progress_bar)
+
+        self.test_tournament.play(progress_bar=False)
+        self.assertFalse(self.test_tournament.use_progress_bar)
+
+        self.test_tournament.play(progress_bar=True)
+        self.assertTrue(self.test_tournament.use_progress_bar)
+
+    def test_play_changes_temp_file_descriptor(self):
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+
+        # No file descriptor for a named file.
+        self.test_tournament.play(filename=self.filename, in_memory=False,
+                                  progress_bar=False)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+
+        # No file descriptor for in_memory.
+        self.test_tournament.play(filename=None, in_memory=True,
+                                  progress_bar=False)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+
+        # Temp file creates file descriptor.
+        self.test_tournament.play(filename=None, in_memory=False,
+                                  progress_bar=False)
+        self.assertIsInstance(self.test_tournament._temp_file_descriptor, int)
+
+    def test_play_tempfile_removed(self):
+        self.test_tournament.play(filename=None, in_memory=False,
+                                  progress_bar=False)
+
+        self.assertFalse(os.path.isfile(self.test_tournament.filename))
+
+    def test_play_resets_filename_and_temp_file_descriptor_each_time(self):
+        self.test_tournament.play(progress_bar=False)
+        self.assertIsInstance(self.test_tournament._temp_file_descriptor, int)
+        self.assertIsInstance(self.test_tournament.filename, str)
+        old_filename = self.test_tournament.filename
+
+        self.test_tournament.play(filename=self.filename, progress_bar=False)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+        self.assertEqual(self.test_tournament.filename, self.filename)
+        self.assertNotEqual(old_filename, self.test_tournament.filename)
+
+        self.test_tournament.play(progress_bar=False)
+        self.assertIsInstance(self.test_tournament._temp_file_descriptor, int)
+        self.assertIsInstance(self.test_tournament.filename, str)
+        self.assertNotEqual(old_filename, self.test_tournament.filename)
+        self.assertNotEqual(self.test_tournament.filename, self.filename)
+
+        self.test_tournament.play(in_memory=True, progress_bar=False)
+        self.assertIsNone(self.test_tournament._temp_file_descriptor)
+        self.assertIsNone(self.test_tournament.filename)
+
+    def test_get_file_objects_no_filename(self):
+        file, writer = self.test_tournament._get_file_objects()
+        self.assertIsNone(file)
+        self.assertIsNone(writer)
+
+    def test_get_file_object_with_filename(self):
+        self.test_tournament.filename = self.filename
+        file_object, writer = self.test_tournament._get_file_objects()
+        self.assertIsInstance(file_object, io.TextIOWrapper)
+        self.assertEqual(writer.__class__.__name__, 'writer')
+        file_object.close()
+
+    def test_get_progress_bar(self):
+        self.test_tournament.use_progress_bar = False
+        pbar = self.test_tournament._get_progress_bar()
+        self.assertIsNone(pbar)
+
+        self.test_tournament.use_progress_bar = True
+        pbar = self.test_tournament._get_progress_bar()
+        self.assertIsInstance(pbar, tqdm)
+        self.assertEqual(pbar.desc, 'Playing matches: ')
+        self.assertEqual(pbar.n, 0)
+        self.assertEqual(pbar.total, self.test_tournament.match_generator.size)
+
+        new_edges = [(0, 1), (1, 2), (2, 3), (3, 4)]
+        new_tournament = axelrod.Tournament(players=self.players,
+                                            edges=new_edges)
+        new_tournament.use_progress_bar = True
+        pbar = new_tournament._get_progress_bar()
+        self.assertEqual(pbar.desc, 'Playing matches: ')
+        self.assertEqual(pbar.n, 0)
+        self.assertEqual(pbar.total, len(new_edges))
+
     def test_serial_play(self):
         # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
@@ -143,6 +297,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(progress_bar=False)
         self.assertEqual(results.game.RPST(), (-1, -1, -1, -1))
 
+    @patch('tqdm.tqdm', RecordedTQDM)
     def test_no_progress_bar_play(self):
         """Test that progress bar is not created for progress_bar=False"""
         tournament = axelrod.Tournament(
@@ -154,20 +309,30 @@ class TestTournament(unittest.TestCase):
 
 
         # Test with build results
+        RecordedTQDM.reset_record()
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
-        # Check that no progress bar was created
-        call_progress_bar = lambda: tournament.progress_bar.total
-        self.assertRaises(AttributeError, call_progress_bar)
+        # Check that no progress bar was created.
+        self.assertEqual(RecordedTQDM.record, [])
+
 
         # Test without build results
+        RecordedTQDM.reset_record()
         results = tournament.play(progress_bar=False, build_results=False,
                                   filename=self.filename)
         self.assertIsNone(results)
+        self.assertEqual(RecordedTQDM.record, [])
+
         results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertRaises(AttributeError, call_progress_bar)
 
+    def assert_play_pbar_correct_total_and_finished(self, pbar, total):
+        self.assertEqual(pbar.desc, 'Playing matches: ')
+        self.assertEqual(pbar.total, total)
+        self.assertEqual(pbar.n, total)
+        self.assertTrue(pbar.disable, True)
+
+    @patch('tqdm.tqdm', RecordedTQDM)
     def test_progress_bar_play(self):
         """Test that progress bar is created by default and with True argument"""
         tournament = axelrod.Tournament(
@@ -177,33 +342,39 @@ class TestTournament(unittest.TestCase):
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
+        RecordedTQDM.reset_record()
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(tournament.progress_bar.total, 15)
-        self.assertEqual(tournament.progress_bar.total,
-                         tournament.progress_bar.n)
+        # Check that progress bar was created, updated and closed.
+        self.assertEqual(len(RecordedTQDM.record), 3)
+        play_pbar = RecordedTQDM.record[0]
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
+        # Check all progress bars are closed.
+        self.assertTrue(all(pbar.disable for pbar in RecordedTQDM.record))
 
+        RecordedTQDM.reset_record()
         results = tournament.play(progress_bar=True)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(tournament.progress_bar.total, 15)
-        self.assertEqual(tournament.progress_bar.total,
-                         tournament.progress_bar.n)
+        self.assertEqual(len(RecordedTQDM.record), 3)
+        play_pbar = RecordedTQDM.record[0]
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
         # Test without build results
+        RecordedTQDM.reset_record()
         results = tournament.play(progress_bar=True, build_results=False,
                                   filename=self.filename)
         self.assertIsNone(results)
+        self.assertEqual(len(RecordedTQDM.record), 1)
+        play_pbar = RecordedTQDM.record[0]
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
+
         results = axelrod.ResultSetFromFile(self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(tournament.progress_bar.total, 15)
-        self.assertEqual(tournament.progress_bar.total,
-                         tournament.progress_bar.n)
 
-    @unittest.skipIf(axelrod.on_windows,
-                     "Parallel processing not supported on Windows")
+    @patch('tqdm.tqdm', RecordedTQDM)
     def test_progress_bar_play_parallel(self):
         """Test that tournament plays when asking for progress bar for parallel
-        tournament"""
+        tournament and that progress bar is created."""
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -211,16 +382,34 @@ class TestTournament(unittest.TestCase):
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
+        # progress_bar = False
+        RecordedTQDM.reset_record()
+        results = tournament.play(progress_bar=False, processes=2)
+        self.assertEqual(RecordedTQDM.record, [])
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        # progress_bar = True
+        RecordedTQDM.reset_record()
+        results = tournament.play(progress_bar=True, processes=2)
+        self.assertIsInstance(results, axelrod.ResultSet)
+
+        self.assertEqual(len(RecordedTQDM.record), 3)
+        play_pbar = RecordedTQDM.record[0]
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
+
+        # progress_bar is default
+        RecordedTQDM.reset_record()
         results = tournament.play(processes=2)
         self.assertIsInstance(results, axelrod.ResultSet)
 
-        results = tournament.play(progress_bar=True)
-        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(len(RecordedTQDM.record), 3)
+        play_pbar = RecordedTQDM.record[0]
+        self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
     @given(tournament=tournaments(min_size=2, max_size=5, min_turns=2,
-                                  max_turns=10, min_repetitions=2,
+                                  max_turns=5, min_repetitions=2,
                                   max_repetitions=4))
-    @settings(max_examples=10, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     @example(tournament=axelrod.Tournament(players=[s() for s in
         test_strategies], turns=test_turns, repetitions=test_repetitions)
         )
@@ -246,8 +435,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(results.nplayers, len(tournament.players))
         self.assertEqual(results.players, [str(p) for p in tournament.players])
 
-    @unittest.skipIf(axelrod.on_windows,
-                     "Parallel processing not supported on Windows")
     def test_parallel_play(self):
         # Test that we get an instance of ResultSet
         tournament = axelrod.Tournament(
@@ -273,6 +460,19 @@ class TestTournament(unittest.TestCase):
         scores = tournament.play(processes=2, progress_bar=False).scores
         self.assertEqual(len(scores), len(players))
 
+    def test_parallel_play_with_writing_to_file(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=axelrod.DEFAULT_TURNS,
+            repetitions=self.test_repetitions)
+
+        results = tournament.play(processes=2, progress_bar=False,
+                                  filename=self.filename)
+        self.assertIsInstance(results, axelrod.ResultSet)
+        self.assertEqual(tournament.num_interactions, 75)
+
     def test_run_serial(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -288,25 +488,33 @@ class TestTournament(unittest.TestCase):
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
 
-    @unittest.skipIf(axelrod.on_windows,
-                     "Parallel processing not supported on Windows")
     def test_run_parallel(self):
+        class PickleableMock(MagicMock):
+            def __reduce__(self):
+                return MagicMock, ()
+
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
-        tournament._write_interactions = MagicMock(
+        tournament._write_interactions = PickleableMock(
                     name='_write_interactions')
+
+        # For test coverage purposes. This confirms PickleableMock can be
+        # pickled exactly once. Windows multi-processing must pickle this Mock
+        # exactly once during testing.
+        pickled = pickle.loads(pickle.dumps(tournament))
+        self.assertIsInstance(pickled._write_interactions, MagicMock)
+        self.assertRaises(pickle.PicklingError, pickle.dumps, pickled)
+
         self.assertTrue(tournament._run_parallel())
 
         # Get the calls made to write_interactions
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
 
-    @unittest.skipIf(axelrod.on_windows,
-                     "Parallel processing not supported on Windows")
     def test_n_workers(self):
         max_processes = cpu_count()
 
@@ -327,8 +535,6 @@ class TestTournament(unittest.TestCase):
         self.assertEqual(tournament._n_workers(processes=max_processes+2),
                                                max_processes)
 
-    @unittest.skipIf(axelrod.on_windows,
-                     "Parallel processing not supported on Windows")
     @unittest.skipIf(
         cpu_count() < 2,
         "not supported on single processor machines")
@@ -344,8 +550,6 @@ class TestTournament(unittest.TestCase):
             repetitions=self.test_repetitions,)
         self.assertEqual(tournament._n_workers(processes=2), 2)
 
-    @unittest.skipIf(axelrod.on_windows,
-                     "Parallel processing not supported on Windows")
     def test_start_workers(self):
         workers = 2
         work_queue = Queue()
@@ -368,8 +572,6 @@ class TestTournament(unittest.TestCase):
                 stops += 1
         self.assertEqual(stops, workers)
 
-    @unittest.skipIf(axelrod.on_windows,
-                     "Parallel processing not supported on Windows")
     def test_worker(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -427,6 +629,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
 
     @given(turns=integers(min_value=1, max_value=200))
+    @settings(max_examples=5, max_iterations=20)
     @example(turns=3)
     @example(turns=axelrod.DEFAULT_TURNS)
     def test_play_matches(self, turns):
@@ -493,7 +696,6 @@ class TestTournament(unittest.TestCase):
         tournament._build_result_set = MagicMock(name='_build_result_set')
         self.assertTrue(tournament.play(filename=self.filename,
                                         progress_bar=False))
-        tournament.outputfile.close()  # Normally closed by `build_result_set`
 
         # Get the calls made to write_interactions
         calls = tournament._write_interactions.call_args_list
@@ -507,7 +709,6 @@ class TestTournament(unittest.TestCase):
         # Get the calls made to write_interactions
         calls = tournament._write_interactions.call_args_list
         self.assertEqual(len(calls), 15)
-        tournament.outputfile.close()  # Normally closed by `write_interactions`
 
     def test_write_to_csv(self):
         tournament = axelrod.Tournament(
@@ -584,7 +785,7 @@ class TestProbEndTournament(unittest.TestCase):
                                            max_prob_end=.9,
                                            min_repetitions=2,
                                            max_repetitions=4))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     @example(tournament=
         axelrod.Tournament(players=[s() for s in test_strategies],
                            prob_end=.2, repetitions=test_repetitions))
@@ -645,7 +846,7 @@ class TestSpatialTournament(unittest.TestCase):
            repetitions=integers(min_value=1, max_value=5),
            noise=floats(min_value=0, max_value=1),
            seed=integers(min_value=0, max_value=4294967295))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_complete_tournament(self, strategies, turns, repetitions,
                                  noise, seed):
         """
@@ -747,7 +948,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
            prob_end=floats(min_value=.1, max_value=.9),
            reps=integers(min_value=1, max_value=3),
            seed=integers(min_value=0, max_value=4294967295))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_complete_tournament(self, strategies, prob_end,
                                  seed, reps):
         """
@@ -784,7 +985,7 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
                                           max_turns=1, max_noise=0,
                                           max_repetitions=3),
            seed=integers(min_value=0, max_value=4294967295))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_one_turn_tournament(self, tournament, seed):
         """
         Tests that gives same result as the corresponding spatial round robin
@@ -804,3 +1005,51 @@ class TestProbEndingSpatialTournament(unittest.TestCase):
                          one_turn_results.wins)
         self.assertEqual(prob_end_results.cooperation,
                          one_turn_results.cooperation)
+
+
+class TestHelperFunctions(unittest.TestCase):
+    def test_close_objects_with_none(self):
+        self.assertIsNone(_close_objects(None, None))
+
+    def test_close_objects_with_file_objs(self):
+        f1 = open('to_delete_1', 'w')
+        f2 = open('to_delete_2', 'w')
+        f2.close()
+        f2 = open('to_delete_2', 'r')
+
+        self.assertFalse(f1.closed)
+        self.assertFalse(f2.closed)
+
+        _close_objects(f1, f2)
+
+        self.assertTrue(f1.closed)
+        self.assertTrue(f2.closed)
+
+        os.remove('to_delete_1')
+        os.remove('to_delete_2')
+
+    def test_close_objects_with_tqdm(self):
+        pbar_1 = tqdm(range(5))
+        pbar_2 = tqdm(total=10, desc='hi', file=io.StringIO())
+
+        self.assertFalse(pbar_1.disable)
+        self.assertFalse(pbar_2.disable)
+
+        _close_objects(pbar_1, pbar_2)
+
+        self.assertTrue(pbar_1.disable)
+        self.assertTrue(pbar_2.disable)
+
+    def test_close_objects_with_different_objects(self):
+        file = open('to_delete_1', 'w')
+        pbar = tqdm(range(5))
+        num = 5
+        empty = None
+        word = 'hi'
+
+        _close_objects(file, pbar, num, empty, word)
+
+        self.assertTrue(pbar.disable)
+        self.assertTrue(file.closed)
+
+        os.remove('to_delete_1')

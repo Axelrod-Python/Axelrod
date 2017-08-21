@@ -114,17 +114,6 @@ class RiskyQLearner(Player):
             opp_prev_action = opponent.history[-1]
         return self.payoff_matrix[self.prev_action][opp_prev_action]
 
-    def reset(self):
-        """
-        Resets scores and history
-        """
-        super().reset()
-
-        self.Qs = {'': {C: 0, D: 0}}
-        self.Vs = {'': 0}
-        self.prev_state = ''
-        self.prev_action = None
-        self.original_prev_action = None
 
 
 class ArrogantQLearner(RiskyQLearner):

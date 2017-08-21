@@ -39,10 +39,6 @@ class SequencePlayer(Player):
         for s in self.sequence_generator:
             return self.meta_strategy(s)
 
-    def reset(self):
-        # Be sure to reset the sequence generator
-        super().reset()
-        self.sequence_generator = self.generator_function(*self.generator_args)
 
     def __getstate__(self):
         return_dict = self.__dict__.copy()

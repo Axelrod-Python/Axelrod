@@ -79,7 +79,3 @@ class Stalker(Player):
             return D
 
         return random_choice()
-
-    def reset(self):
-        super().reset()
-        self.current_score = 0

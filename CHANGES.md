@@ -1,3 +1,18 @@
+# v3.5.0, 2017-08-19
+
+Parallel processing now supported on Windows, a new strategy and some minor
+improvements.
+
+- Parallel processing now supported on Windows
+  https://github.com/Axelrod-Python/Axelrod/pull/1117
+- New strategy TidemanAndChieruzzi:
+  https://github.com/Axelrod-Python/Axelrod/pull/1118
+- Minor change to some tests
+  https://github.com/Axelrod-Python/Axelrod/pull/1120
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.5.0...v3.4.0
+
 # v3.4.0, 2017-08-06
 
 A new strategy, internal improvement relevant for pickling, better testing and

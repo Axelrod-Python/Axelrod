@@ -49,7 +49,7 @@ class MetaPlayer(Player):
         self.team = [t for t in self.team if not issubclass(t, MetaPlayer)]
         self.nteam = len(self.team)
 
-        # Initiate all the player in out team.
+        # Initiate all the player in our team.
         self.team = [t() for t in self.team]
 
         # This player inherits the classifiers of its team.
@@ -83,12 +83,6 @@ class MetaPlayer(Player):
         """Determine the meta result based on results of all players.
         Override this function in child classes."""
         return C
-
-    def reset(self):
-        super().reset()
-        # Reset each player as well
-        for player in self.team:
-            player.reset()
 
 
 class MetaMajority(MetaPlayer):
@@ -167,10 +161,6 @@ class MetaWinner(MetaPlayer):
         bestproposals = [results[i] for i in beststrategies]
         bestresult = C if C in bestproposals else D
         return bestresult
-
-    def reset(self):
-        super().reset()
-        self.scores = [0] * len(self.team)
 
 
 NiceMetaWinner = NiceTransformer()(MetaWinner)

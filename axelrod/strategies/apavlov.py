@@ -67,10 +67,6 @@ class APavlov2006(Player):
                 return D
         return C
 
-    def reset(self):
-        super().reset()
-        self.opponent_class = None
-
 
 class APavlov2011(Player):
     """
@@ -122,7 +118,3 @@ class APavlov2011(Player):
         if self.opponent_class == "Cooperative":
             # TFT
             return D if opponent.history[-1:] == [D] else C
-
-    def reset(self):
-        super().reset()
-        self.opponent_class = None

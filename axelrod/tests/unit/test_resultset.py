@@ -640,7 +640,7 @@ class TestResultSetFromFile(unittest.TestCase):
                                   max_turns=5,
                                   max_noise=0,
                                   max_repetitions=3))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_equality_with_round_robin(self, tournament):
         filename = "test_outputs/test_results.csv"
         tournament.play(filename=filename, progress_bar=False,
@@ -664,7 +664,7 @@ class TestResultSetFromFile(unittest.TestCase):
     @given(tournament=prob_end_tournaments(max_size=5,
                                            min_prob_end=.7,
                                            max_repetitions=3))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_equality_with_prob_end(self, tournament):
         filename = "test_outputs/test_results.csv"
         tournament.play(filename=filename, progress_bar=False,
@@ -1424,7 +1424,7 @@ class TestSummary(unittest.TestCase):
     @given(tournament=tournaments(max_size=5,
                                   max_turns=5,
                                   max_repetitions=3))
-    @settings(max_examples=50, timeout=0)
+    @settings(max_examples=5, max_iterations=20)
     def test_summarise_without_failure(self, tournament):
         results = tournament.play(progress_bar=False)
         sd = results.summarise()

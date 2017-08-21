@@ -53,7 +53,3 @@ class Adaptive(Player):
         if self.scores[C] > self.scores[D]:
             return C
         return D
-
-    def reset(self):
-        super().reset()
-        self.scores = {C: 0, D: 0}
