@@ -25,15 +25,97 @@ class TestTranquiliser(TestPlayer):
     }
 
 
+    # test for initalised variables
 
-    def test_strategy(self):
+    def test_init(self):
+        
 
         player = axelrod.Tranquiliser()
 
+        self.assertEqual(player.P, 1.1)
+        self.assertEqual(player.FD, 0)
+        self.assertEqual(player.consecutive_defections, 0)
+        self.assertEqual(player.ratioFD1, 5)
+        self.assertEqual(player.ratioFD2, 0)
+        self.assertEqual(player.ratioFD1_count, 0)
+        self.assertEqual(player.ratioFD2_count, 0)
+        self.assertEqual(player.score, None)
+
+
+    def test_score_response(self):
+
+        player = axelrod.Tranquiliser()        
+
         opponent = axelrod.Defector()
+
         actions = [(C, D)] + [(D, D)] * 20
+
         self.versus_test(opponent = opponent, expected_actions=actions)
 
-        opponent = axelrod.Cooperator()
-        actions = [(C, C)] * 5 + ([(C, C)]) * 20
-        self.versus_test(opponent, expected_actions=actions)
+        opponent = axelrod.MockPlayer([C] * 2 + [D] * 3 + [C] + [D] + [D] + [D] + [C] )
+        
+                             # Score
+
+        actions = [(C, C)]   # N/A
+        
+        actions += [(C, C)]  # 3
+        
+        actions += [(C, D)]  # 3
+
+        actions += [(C, D)]  # 2
+
+        actions += [(D, D)]  # 1.5   - Copied
+
+        actions += [(D, C)]  # 1.4   - Copied
+
+        actions += [(C, D)]  # 2
+
+        actions += [(D, D)]  # 1.714 - Copied
+
+        actions += [(D, D)]  # 1.625   - Copied
+
+        actions += [(D, C)]  # 1.55   - Copied
+
+        self.versus_test(opponent = opponent, expected_actions=actions)
+        
+        
+        # If score is between 1.75 and 2.25, probability of defection is always atleast than .25
+    
+        actions = [(C, D)]                      
+        
+        actions += [(D, D)] * 7
+
+        actions += [(D, C)]
+
+        actions += [(C, C)] * 4
+    
+        actions += ([(C, D)])    # average_score_per_turn = 1.875, with probability of each action being .75 and .25 respectively
+
+        self.versus_test(opponent = axelrod.MockPlayer(actions = [D] * 8 + [C] * 5 + [D]), expected_actions = actions, seed = 1)
+        
+        # If score is greater than 2.25 either cooperate or defect, if turn number <= 4; cooperate.
+        
+        actions = [(C, C)] * 4 
+        
+        actions += [(C, C) or (C, D)]
+        
+        actions += ([(C, D) or (D, D)]) 
+        
+        actions += ([(C, C) or (D, C)]) * 15
+        
+        actions += ([(C, D) or (D, D)])
+
+        self.versus_test(opponent = axelrod.MockPlayer(actions = [C] * 5 + [D]  + [C] * 15 + [D]), expected_actions = actions, seed = 1)
+
+    def test_consecutive_defections(self):
+        
+        player = axelrod.Tranquiliser()        
+        
+        actions = [(C, D)] + [(D, D)] * 19
+
+        opponent = axelrod.Defector()
+
+        player.play(opponent)
+
+        print(player.consecutive_defections)
+        

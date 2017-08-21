@@ -39,7 +39,7 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
         self.ratioFD1_count = 0
         self.ratioFD2_count = 0
         self.score = None
-        self.P = int
+        self.P = 1.1
         self.current_score = 0
 
     def update_stateFD(self,
@@ -58,11 +58,11 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
                 self.history[-1]] - dict[opponent.history[-1]] * dict[self.history[-1]]) / (self.ratioFD1_count + 1)
             self.ratioFD1_count += 1
         else:
-            if (self.current_score[0] / (len(self.history)) + 1) >= 2.25:
+            if (self.current_score[0] / (len(self.history))) >= 2.25:
                 self.P = .95 - ((self.ratioFD1) + (self.ratioFD2) - 5) / 15 + 1 / (len(self.history) + 1) ** 2 - (
                 dict[opponent.history[-1]] / 4)
                 self.score = "good"
-            elif (self.current_score[0] / (len(self.history)) + 1) >= 1.75:
+            elif (self.current_score[0] / (len(self.history))) >= 1.75:
                 self.P = .25 + opponent.cooperations / (len(self.history)) - (self.consecutive_defections * .25) + (
                                                                                                                   self.current_score[
                                                                                                                       0] -
@@ -93,7 +93,7 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
                 return C
             else:
                 return D
-        elif (self.current_score[0] / (len(self.history)) + 1) < 1.75:  # If score is too low, copy opponent
+        elif (self.current_score[0] / (len(self.history))) < 1.75:  # If score is too low, copy opponent
             return opponent.history[-1]  # "If you can't beat them join'em"
         else:
             if (randomValue < self.P):  # Comapares randomValue to that of the calculated variable 'P'
@@ -117,7 +117,7 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
         self.ratioFD1_count = 0
         self.ratioFD2_count = 0
         self.score = None
-        self.P = int
+        self.P = 1.1
         self.current_score = 0
 
 
