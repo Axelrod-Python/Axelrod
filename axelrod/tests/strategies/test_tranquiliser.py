@@ -113,24 +113,17 @@ class TestTranquiliser(TestPlayer):
 
         # If score is greater than 2.25 either cooperate or defect, if turn number <= 4; cooperate.
         
-        actions = [(C, C)] * 4 
+        opponent = axelrod.MockPlayer(actions = [C] * 5)
         
-        actions += [(C, C)]
+        actions = [(C, C)] * 4 + [(C, C)]
         
-        self.versus_test(opponent = axelrod.MockPlayer(actions = [C] * 5), expected_actions = actions, seed = 1)
+        self.versus_test(opponent, expected_actions = actions, seed = 1)
 
-        actions = [(C, C)] * 4 
-        
-        actions += [(C, C)]
+        opponent
 
-        self.versus_test(opponent = axelrod.MockPlayer(actions = [C] * 5), expected_actions = actions, seed = 69)
+        actions = [(C, C)] * 4 + [(D, C)]
 
-
-
-
-
-
-
+        self.versus_test(opponent = axelrod.MockPlayer(actions = [C] * 5), expected_actions = actions, seed = 70)
 
 
     def test_consecutive_defections(self):
@@ -139,9 +132,5 @@ class TestTranquiliser(TestPlayer):
         
         actions = [(C, D)] + [(D, D)] * 19
 
-        opponent = axelrod.Defector()
 
-        player.play(opponent)
-
-        print(player.consecutive_defections)
         
