@@ -34,10 +34,10 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
         super().__init__()
         self.FD = 0
         self.consecutive_defections = 0
-        self.ratioFD1 = 5
-        self.ratioFD2 = 0
-        self.ratioFD1_count = 0
-        self.ratioFD2_count = 0
+        self.ratio_FD1 = 5
+        self.ratio_FD2 = 0
+        self.ratio_FD1_count = 0
+        self.ratio_FD2_count = 0
         self.score = None
         self.P = 1.1
         self.current_score = 0
@@ -49,17 +49,17 @@ dependent on the value of FD. Value of FD is dependent on the aforementioned rat
 
         if self.FD == 2:
             self.FD = 0
-            self.ratioFD2 = ((self.ratioFD2 * self.ratioFD2_count + 3 - 3 * dict[opponent.history[-1]]) + 2 * dict[
-                self.history[-1]] - dict[opponent.history[-1]] * dict[self.history[-1]]) / (self.ratioFD2_count + 1)
-            self.ratioFD2_count += 1
+            self.ratio_FD2 = ((self.ratio_FD2 * self.ratio_FD2_count + 3 - 3 * dict[opponent.history[-1]]) + 2 * dict[
+                self.history[-1]] - dict[opponent.history[-1]] * dict[self.history[-1]]) / (self.ratio_FD2_count + 1)
+            self.ratio_FD2_count += 1
         elif self.FD == 1:
             self.FD = 2
-            self.ratioFD1 = ((self.ratioFD1 * self.ratioFD1_count + 3 - 3 * dict[opponent.history[-1]]) + 2 * dict[
-                self.history[-1]] - dict[opponent.history[-1]] * dict[self.history[-1]]) / (self.ratioFD1_count + 1)
-            self.ratioFD1_count += 1
+            self.ratio_FD1 = ((self.ratio_FD1 * self.ratio_FD1_count + 3 - 3 * dict[opponent.history[-1]]) + 2 * dict[
+                self.history[-1]] - dict[opponent.history[-1]] * dict[self.history[-1]]) / (self.ratio_FD1_count + 1)
+            self.ratio_FD1_count += 1
         else:
             if (self.current_score[0] / (len(self.history))) >= 2.25:
-                self.P = .95 - ((self.ratioFD1) + (self.ratioFD2) - 5) / 15 + 1 / (len(self.history) + 1) ** 2 - (
+                self.P = .95 - ((self.ratio_FD1) + (self.ratio_FD2) - 5) / 15 + 1 / (len(self.history) + 1) ** 2 - (
                 dict[opponent.history[-1]] / 4)
                 self.score = "good"
             elif (self.current_score[0] / (len(self.history))) >= 1.75:
