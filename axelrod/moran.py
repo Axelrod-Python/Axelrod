@@ -5,7 +5,7 @@ import random
 
 import numpy as np
 
-from axelrod import DEFAULT_TURNS, Player
+from axelrod import DEFAULT_TURNS, Player, Game
 from .deterministic_cache import DeterministicCache
 from .graph import complete_graph, Graph
 from .match import Match
@@ -39,6 +39,7 @@ def fitness_proportionate_selection(scores: List) -> int:
 class MoranProcess(object):
     def __init__(self, players: List[Player], turns: int = DEFAULT_TURNS,
                  prob_end: float = None, noise: float = 0,
+                 game: Game = None,
                  deterministic_cache: DeterministicCache = None,
                  mutation_rate: float = 0., mode: str = 'bd',
                  interaction_graph: Graph = None,
@@ -93,6 +94,7 @@ class MoranProcess(object):
         """
         self.turns = turns
         self.prob_end = prob_end
+        self.game = game
         self.noise = noise
         self.initial_players = players  # save initial population
         self.players = []  # type: List
@@ -321,6 +323,7 @@ class MoranProcess(object):
             match = Match((player1, player2),
                           turns=self.turns, prob_end=self.prob_end,
                           noise=self.noise,
+                          game=self.game,
                           deterministic_cache=self.deterministic_cache)
             match.play()
             match_scores = match.final_score_per_turn()

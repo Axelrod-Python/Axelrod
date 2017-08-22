@@ -20,6 +20,7 @@ class TestMoranProcess(unittest.TestCase):
         mp = MoranProcess(players)
         self.assertEqual(mp.turns, axelrod.DEFAULT_TURNS)
         self.assertIsNone(mp.prob_end)
+        self.assertIsNone(mp.game)
         self.assertEqual(mp.noise, 0)
         self.assertEqual(mp.initial_players, players)
         self.assertEqual(mp.players, list(players))
@@ -162,6 +163,15 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(len(mp), 4)
         self.assertEqual(len(populations), 4)
         self.assertEqual(populations, mp.populations)
+        self.assertEqual(mp.winning_strategy_name, str(p1))
+
+    def test_different_game(self):
+        # Possible for Cooperator to become fixed when using a different game
+        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
+        axelrod.seed(0)
+        game = axelrod.Game(r=4, p=2, s=1, t=6)
+        mp = MoranProcess((p1, p2), turns=5, game=game)
+        populations = mp.play()
         self.assertEqual(mp.winning_strategy_name, str(p1))
 
     def test_death_birth(self):
