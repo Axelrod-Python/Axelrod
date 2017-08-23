@@ -1,9 +1,12 @@
-from collections import namedtuple
+import csv
 import os
+from collections import namedtuple
 from tempfile import mkstemp
+
 import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import axelrod as axl
 from axelrod import Player
@@ -378,4 +381,179 @@ class AshlockFingerprint(object):
 
         if title is not None:
             plt.title(title)
+        return fig
+
+
+class TransitiveFingerprint(object):
+    def __init__(self, strategy, opponents=None, number_opponents=50):
+        """
+        Parameters
+        ----------
+        strategy : class or instance
+            A class that must be descended from axelrod.Player or an instance of
+            axelrod.Player.
+        opponents : list of class or instance
+            A list that contains a list of opponents
+            Default: A spectrum of Random  players
+        number_opponents: integer
+            An integer that defines the number of Random opponents
+            Default: 50
+        """
+        self.strategy = strategy
+
+        if opponents is None:
+            self.opponents = [axl.Random(p) for p in
+                                            np.linspace(0, 1, number_opponents)]
+        else:
+            self.opponents = opponents
+
+    def fingerprint(self, turns: int = 50, repetitions: int = 10,
+                    noise: float = None, processes: int = None,
+                    filename: str = None,
+                    progress_bar: bool = True) -> np.array:
+        """Build and play the spatial tournament.
+
+        Creates the opponents and their edges then builds a spatial tournament.
+
+        Parameters
+        ----------
+        turns : integer, optional
+            The number of turns per match
+        repetitions : integer, optional
+            The number of times the round robin should be repeated
+        processes : integer, optional
+            The number of processes to be used for parallel processing
+        filename: string, optional
+            The name of the file for self.spatial_tournament's interactions.
+            if None and in_memory=False, will auto-generate a filename.
+        progress_bar : bool
+            Whether or not to create a progress bar which will be updated
+
+        Returns
+        ----------
+        self.data : np.array
+            A numpy array containing the mean cooperation rate against each
+            opponent in each turn. The ith row corresponds to the ith opponent
+            and the jth columns the jth turn.
+        """
+
+        if isinstance(self.strategy, axl.Player):
+            players = [self.strategy] + self.opponents
+        else:
+            players = [self.strategy()] + self.opponents
+
+        temp_file_descriptor = None
+        if filename is None:
+            temp_file_descriptor, filename = mkstemp()
+
+        edges = [(0, k + 1) for k in range(len(self.opponents))]
+        tournament = axl.Tournament(players=players,
+                                    edges=edges, turns=turns, noise=noise,
+                                    repetitions=repetitions)
+        tournament.play(filename=filename, build_results=False,
+                        progress_bar=progress_bar, processes=processes)
+
+        self.data = self.analyse_cooperation_ratio(filename)
+
+        if temp_file_descriptor is not None:
+            os.close(temp_file_descriptor)
+            os.remove(filename)
+
+        return self.data
+
+    @staticmethod
+    def analyse_cooperation_ratio(filename):
+        """Generates the data used from the tournament
+
+        Return an M by N array where M is the number of opponents and N is the
+        number of turns.
+
+        Parameters
+        ----------
+        filename : str
+            The filename of the interactions
+
+        Returns
+        ----------
+        self.data : np.array
+            A numpy array containing the mean cooperation rate against each
+            opponent in each turn. The ith row corresponds to the ith opponent
+            and the jth columns the jth turn.
+        """
+        did_c = np.vectorize(lambda action: int(action == 'C'))
+
+        cooperation_rates = {}
+        with open(filename, "r") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                opponent_index, player_history = int(row[1]), list(row[4])
+                if opponent_index in cooperation_rates:
+                    cooperation_rates[opponent_index].append(did_c(player_history))
+                else:
+                    cooperation_rates[opponent_index] = [did_c(player_history)]
+
+        for index, rates in cooperation_rates.items():
+            cooperation_rates[index] = np.mean(rates, axis=0)
+
+        return np.array([cooperation_rates[index]
+                         for index in cooperation_rates])
+
+    def plot(self, cmap: str = 'viridis', interpolation: str = 'none',
+             title: str = None, colorbar: bool = True, labels: bool = True,
+             display_names: bool = False) -> plt.Figure:
+        """Plot the results of the spatial tournament.
+
+        Parameters
+        ----------
+        cmap : str, optional
+            A matplotlib colour map, full list can be found at
+            http://matplotlib.org/examples/color/colormaps_reference.html
+        interpolation : str, optional
+            A matplotlib interpolation, full list can be found at
+            http://matplotlib.org/examples/images_contours_and_fields/interpolation_methods.html
+        title : str, optional
+            A title for the plot
+        colorbar : bool, optional
+            Choose whether the colorbar should be included or not
+        labels : bool, optional
+            Choose whether the axis labels and ticks should be included
+        display_name : bool, optional
+            Choose whether to display the names of the strategies
+
+        Returns
+        ----------
+        figure : matplotlib figure
+            A heat plot of the results of the spatial tournament
+        """
+
+        fig, ax = plt.subplots()
+        mat = ax.imshow(self.data, cmap=cmap, interpolation=interpolation)
+
+        width = len(self.data) / 2
+        height = width
+        fig.set_size_inches(width, height)
+
+        plt.xlabel('turns')
+        ax.tick_params(axis='both', which='both', length=0)
+
+        if display_names:
+            plt.yticks(range(len(self.opponents)), [str(player) for player in
+                                                    self.opponents])
+
+        if not labels:
+            plt.axis('off')
+
+        if title is not None:
+            plt.title(title)
+
+        if colorbar:
+            max_score = 0
+            min_score = 1
+            ticks = [min_score, 1 / 2, max_score]
+
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes("right", size="5%", pad=0.2)
+            cbar = fig.colorbar(mat, cax=cax, ticks=ticks)
+
+        plt.tight_layout()
         return fig
