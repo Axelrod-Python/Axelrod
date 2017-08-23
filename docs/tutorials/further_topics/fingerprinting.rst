@@ -80,7 +80,7 @@ This allows for the fingerprinting of parametrized strategies::
     >>> data[(0, 0)]
     4.4...
 
-Transitive Fingerprints
+Transitive Fingerprint
 -----------------------
 
 Another implemented fingerprint is the transitive fingerprint. The
