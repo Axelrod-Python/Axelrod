@@ -219,7 +219,7 @@ class MoreGrofman(Player):
         once in the last 7 rounds, defect
 
     Names:
-    - (?)
+    - Grofman's strategy: [Axelrod1980b]_
     '''
     name = ''
     classifier = {

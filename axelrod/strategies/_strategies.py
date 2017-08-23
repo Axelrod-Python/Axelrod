@@ -197,6 +197,7 @@ all_strategies = [
     MindReader,
     MindWarper,
     MirrorMindReader,
+    MoreGrofman,
     Negation,
     NiceAverageCopier,
     NTitsForMTats,
