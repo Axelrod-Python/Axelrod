@@ -13,8 +13,6 @@ from axelrod.interaction_utils import compute_final_score
 
 C, D = Action.C, Action.D
 
-dict = {C: 0, D: 1}
-
 
 class Champion(Player):
     """
@@ -205,17 +203,14 @@ class Gladstein(Player):
             # Play TFT
             return opponent.history[-1]
 
-dict = {C: 0, D: 1}
-
-
-class Tranquiliser(Player):
+class Tranquilizer(Player):
    
     """
     Submitted to Axelrod's second tournament by Craig Feathers
 
     This strategy is based on the reverse engineering of the 
     Fortran strategy K67R from Axelrod's second tournament.
-    Reversed engineered by: Owen Campbell, Will Guo and Mansour Hakem
+    Reversed engineered by: Owen Campbell, Will Guo and Mansour Hakem.
 
 
     Description given in Axelrod's "More Effective Choice in the Prisoner's Dilemma" 
@@ -223,26 +218,62 @@ class Tranquiliser(Player):
     defects too often. Thus the rule tends to cooperate for the first dozen 
     or two moves if the other player is cooperating, but then it throws in a 
     defection. If the other player continues to cooperate, then defections 
-    become more frequent. But as long as Tranquiliser is maintaining an 
+    become more frequent. But as long as Tranquilizer is maintaining an 
     average payoff of at least 2.25 points per move, it will never defect 
     twice in succession and it will not defect more than one-quarter of the time.
 
     
+    Has a variable, 'FD' which can be 0, 1 or 2. It has an initial value of 0
+    Has a variable 'S', which counts the consecutive number of times the opponent has played D (i.e. it is reset to 0 if the opponent plays C). It has an initial value of 0.
+    Has a variable, 'C', which counts the number of times the opponent Cooperates
+    Has a variable 'AK' which increases each time a move is played whilst in state FD = 1. It has an initial value of 1.
+    Has a variable 'NK' which increases each time a move is played whilst in state FD = 2. It has an initial value of 1.
+    Has a variable 'AD' with an initial value of 5
+    Has a variable 'NO with an initial value of 0
+    When FD = 0:
+        If the opponent's last move (JA) was Cooperate, increase the value of C by 1
+        If Score (K) < 1.75 * Move Number (M), play opponent's last move
+        If (1.75 * M) <= K < (2.25 * M):
+            Calculate Probability P:
+            P = 0.25 + C/M - 0.25*S + (K - L)/100 + 4/M
+            Where L is the opponent's score so far
+            If Random (R) <= P:
+                Cooperate
+            Else:
+                Defect
+        If K >= (2.25 * M):
+            Calculate probability P:
+            P = 0.95 - (AD + NO - 5)/15 + 1/M**2 - J/4
+            Where J is the opponent's last move
+            If Random (R) <= P:
+                Cooperate
+            Else:
+                Set FD = 1
+                Defect
+    When FD = 1:
+        Set FD = 2
+        Set the variable 'AD':
+        AD = ((AD * AK) + 3 - (3 * J) + (2 * JA) - (JA * J)) / (AK + 1)
+        Where JA is the strategy's last move and J is the opponent's last move (C = 0, D = 1)
+        Increase the value of AK by 1
+        Cooperate
+    When FD = 2:
+        Set FD = 0
+        Set the variable 'NO':
+        NO = ((NO * NK) + 3 - (3 * J) + (2 * JA) - (JA * J) / (NK + 1)
+        Where JA the strategy's last move and J is the opponent's last move (C = 0, D = 1)
+        Increase the value of NK by 1
+        Cooperate
     
-    
-    
-    
-
-
-    Tranquiliser came in 27th place in Axelrod's second torunament.
+    Tranquilizer came in 27th place in Axelrod's second torunament.
 
     Names:
 
     - Craig Feathers: [Axelrod1980]_
-    - Tranquiliser: [Axelrod1980]_
+    - Tranquilizer: [Axelrod1980]_
     """
 
-    name = 'Tranquiliser'
+    name = 'Tranquilizer'
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
@@ -297,10 +328,10 @@ class Tranquiliser(Player):
 
         current_score = compute_final_score(zip(self.history, opponent.history))  # Calculates current score
 
-        if len(self.history) == 0:  # Assumes opponent will cooperate, hence, Tranquiliser cooperates
+        if len(self.history) == 0:  # Assumes opponent will cooperate, hence, Tranquilizer cooperates
             return C
         else:  # If round number != 0, exectue the stateFD(self, opponent) function
-            Tranquiliser.update_stateFD(self, opponent)
+            Tranquilizer.update_stateFD(self, opponent)
         if opponent.history[-1] == D:  # Calculates number of consecutive defections
             self.consecutive_defections += 1
         else:
@@ -325,3 +356,4 @@ class Tranquiliser(Player):
                 else:  # If score is greater than 1.75, but lower than 2.25 while randomValue > P, defect
                     pass
                 return D
+            

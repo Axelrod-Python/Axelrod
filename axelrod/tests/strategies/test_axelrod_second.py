@@ -162,10 +162,10 @@ class TestGladstein(TestPlayer):
                          attrs={'patsy': False})
 
 
-class TestTranquiliser(TestPlayer):
+class TestTranquilizer(TestPlayer):
 
-    name = "Tranquiliser"
-    player = axelrod.Tranquiliser
+    name = "Tranquilizer"
+    player = axelrod.Tranquilizer
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
@@ -181,7 +181,7 @@ class TestTranquiliser(TestPlayer):
 
     def test_init(self):
 
-        player = axelrod.Tranquiliser()
+        player = axelrod.Tranquilizer()
 
         self.assertEqual(player.P, 1.1)
         self.assertEqual(player.FD, 0)
@@ -234,7 +234,7 @@ class TestTranquiliser(TestPlayer):
         self.versus_test(opponent, expected_actions=actions, seed=70,  attrs={"P": 0.99, "FD":1, "consecutive_defections":0, "ratio_FD1":5, 
                                                                                 "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})
 
-        # Given score per turn is greater than 2.25, Tranquiliser will never defect twice in a row
+        # Given score per turn is greater than 2.25, Tranquilizer will never defect twice in a row
         
         opponent = axelrod.MockPlayer(actions = [C] * 5)
         actions = [(C, C)] * 4 + [(D, C)]
