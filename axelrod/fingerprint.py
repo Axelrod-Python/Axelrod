@@ -434,7 +434,7 @@ class TransitiveFingerprint(object):
         self.data : np.array
             A numpy array containing the mean cooperation rate against each
             opponent in each turn. The ith row corresponds to the ith opponent
-            and the jth columns the jth turn.
+            and the jth column the jth turn.
         """
 
         if isinstance(self.strategy, axl.Player):
@@ -478,7 +478,7 @@ class TransitiveFingerprint(object):
         self.data : np.array
             A numpy array containing the mean cooperation rate against each
             opponent in each turn. The ith row corresponds to the ith opponent
-            and the jth columns the jth turn.
+            and the jth column the jth turn.
         """
         did_c = np.vectorize(lambda action: int(action == 'C'))
 

@@ -83,8 +83,8 @@ This allows for the fingerprinting of parametrized strategies::
 Transitive Fingerprints
 -----------------------
 
-Another implemented fingerprint is the transitive fingerprints. The
-transitive fingerprints represents the cooperation rate of a strategy against a
+Another implemented fingerprint is the transitive fingerprint. The
+transitive fingerprint represents the cooperation rate of a strategy against a
 set of opponents over a number of turns.
 
 By default the set of opponents consists of :code:`50` Random players that
