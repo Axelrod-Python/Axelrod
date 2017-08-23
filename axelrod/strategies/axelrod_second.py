@@ -199,3 +199,53 @@ class Gladstein(Player):
         else:
             # Play TFT
             return opponent.history[-1]
+
+class MoreGrofman(Player):
+    '''
+    Submitted to Axelrod's second tournament by Bernard Grofman.
+
+    This strategy has 3 phases:
+      1. First it cooperates on the first two rounds
+      2. For rounds 3-7 inclusive, it plays the same as the opponent's last move
+      3. Thereafter, it applies the following logic
+          - If its own previous move was C and the opponent has defected less than twice in the last 7 rounds, cooperate
+          - If its own previous move was C and the opponent has defected twice or more in the last 7 rounds, defect
+          - If its own previous move was D and the opponent has defected only once or not at all in the last 7 rounds, cooperate
+          - If its own previous move was D and the opponent has defected more than once in the last 7 rounds, defect
+    
+    Names:
+    - (?)
+    '''
+    name = ''
+    classifier = {
+        'memory_depth': 7,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+    def __init__(self) -> None:
+        super().__init__()
+
+    def strategy(self, opponent: Player) -> Action:
+        # Cooperate on the first two moves
+        if not self.history or len(self.history) in [1]:
+            return C
+        # For rounds 3-7, play the opponent's last move
+        elif 2 <= len(self.history) <= 6:
+            return opponent.history[-1]
+        # Logic for the rest of the game
+        else:
+            opponent_defections_last_7_rounds = sum([1 if action == D else 0 for action in opponent.history[-7:]])
+            if self.history[-1] == C:
+                if opponent_defections_last_7_rounds < 2:
+                    return C
+                else:
+                    return D
+            else:
+                if opponent_defections_last_7_rounds in [0, 1]:
+                    return C
+                else:
+                    return D
