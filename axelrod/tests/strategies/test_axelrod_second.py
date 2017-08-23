@@ -199,71 +199,126 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 20
-        self.versus_test(opponent, expected_actions=actions, attrs={"P":1.1, "FD":0, "consecutive_defections":20, "ratio_FD1":5, 
-                                                                    "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})
+        self.versus_test(opponent, expected_actions=actions, attrs={"P": 1.1, 
+                                                                    "FD": 0, 
+                                                                    "consecutive_defections": 20, 
+                                                                    "ratio_FD1": 5, 
+                                                                    "ratio_FD2": 0, 
+                                                                    "ratio_FD1_count": 1, 
+                                                                    "ratio_FD2_count": 1})
 
         opponent = axelrod.MockPlayer([C] * 2 + [D] * 9 + [C] * 4 )
         actions = [(C, C)] + [(C, C)] + [(C, D)] * 2 + [(D, D)] * 7 + [(D, C)] + [(C, C)] * 3  
-        self.versus_test(opponent = opponent, expected_actions=actions, attrs={"P":1.8667, "FD":0, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})
+        self.versus_test(opponent = opponent, expected_actions=actions, attrs={"P": 1.8667, 
+                                                                               "FD": 0, 
+                                                                               "consecutive_defections": 0, 
+                                                                               "ratio_FD1": 5, 
+                                                                                "ratio_FD2": 0, 
+                                                                                "ratio_FD1_count": 1, 
+                                                                                "ratio_FD2_count": 1})
 
         # If score is between 1.75 and 2.25, may cooperate or defect
         opponent = axelrod.MockPlayer(actions=[D] * 8 + [C] * 5 + [D])
         actions = [(C, D)] + [(D, D)] * 7 + [(D, C)] + [(C, C)] * 4
         # average_score_per_turn = 1.875
         actions += ([(C, D)]) # <-- Random
-        self.versus_test(opponent, expected_actions=actions, seed=1, attrs={"P": 0.9203, "FD":0, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})
+        self.versus_test(opponent, expected_actions=actions, seed=1, attrs={"P": 0.9203, 
+                                                                            "FD": 0, 
+                                                                            "consecutive_defections": 0, 
+                                                                            "ratio_FD1": 5, 
+                                                                            "ratio_FD2": 0, 
+                                                                            "ratio_FD1_count": 1, 
+                                                                            "ratio_FD2_count": 1})
 
         opponent = axelrod.MockPlayer(actions=[D] * 8 + [C] * 4 + [D])
         actions = [(C, D)] + [(D, D)] * 7 + [(D, C)] + [(C, C)] * 3         
         # average_score_per_turn = 1.875
         actions += [(D, D)] # <-- Random
-        self.versus_test(opponent, expected_actions=actions, seed=10, attrs={"P": 0.891, "FD":0, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})
+        self.versus_test(opponent, expected_actions=actions, seed=10, attrs={"P": 0.891, 
+                                                                             "FD": 0, 
+                                                                             "consecutive_defections": 0, 
+                                                                             "ratio_FD1": 5, 
+                                                                             "ratio_FD2": 0, 
+                                                                             "ratio_FD1_count": 1, 
+                                                                             "ratio_FD2_count": 1})
 
         # If score is greater than 2.25 either cooperate or defect, if turn number <= 4; cooperate
         
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(C, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=1, attrs={"P": 0.99, "FD":0, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})
+        self.versus_test(opponent, expected_actions=actions, seed=1, attrs={"P": 0.99, 
+                                                                            "FD": 0, 
+                                                                            "consecutive_defections": 0, 
+                                                                            "ratio_FD1": 5, 
+                                                                            "ratio_FD2": 0, 
+                                                                            "ratio_FD1_count": 1, 
+                                                                            "ratio_FD2_count": 1})
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70,  attrs={"P": 0.99, "FD":1, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})
+        self.versus_test(opponent, expected_actions=actions, seed=70,  attrs={"P": 0.99, 
+                                                                              "FD": 1,
+                                                                              "consecutive_defections": 0, 
+                                                                              "ratio_FD1": 5, 
+                                                                              "ratio_FD2": 0, 
+                                                                              "ratio_FD1_count": 1, 
+                                                                              "ratio_FD2_count": 1})
 
         # Given score per turn is greater than 2.25, Tranquilizer will never defect twice in a row
         
-        opponent = axelrod.MockPlayer(actions = [C] * 5)
-        actions = [(C, C)] * 4 + [(D, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"P": 0.99, "FD":1, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})
+        opponent = axelrod.MockPlayer(actions = [C] * 6)
+        actions = [(C, C)] * 4 + [(D, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"P": 0.99, 
+                                                                             "FD": 2, 
+                                                                             "consecutive_defections": 0, 
+                                                                             "ratio_FD1": 5, 
+                                                                             "ratio_FD2": 0, 
+                                                                             "ratio_FD1_count": 2, 
+                                                                             "ratio_FD2_count": 1})
         # Tests defection probability if score == good
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"P": 0.99, "FD":1, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1})        
+        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"P": 0.99, 
+                                                                             "FD": 1, 
+                                                                             "consecutive_defections": 0, 
+                                                                             "ratio_FD1": 5, 
+                                                                             "ratio_FD2": 0, 
+                                                                             "ratio_FD1_count": 1, 
+                                                                             "ratio_FD2_count": 1})        
        
        # Ensures FD1 values are calculated
 
         opponent = axelrod.MockPlayer(actions=[C] * 6)
-        actions = [(C, C)] * 4 + [(D, C)] + [(C, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"P": 0.99, "FD":2, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":0, "ratio_FD1_count":2, "ratio_FD2_count":1})
+        actions = [(C, C)] * 4 + [(D, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"P": 0.99, 
+                                                                             "FD": 2, 
+                                                                             "consecutive_defections": 0, 
+                                                                             "ratio_FD1": 5, 
+                                                                             "ratio_FD2": 0, 
+                                                                             "ratio_FD1_count": 2, 
+                                                                             "ratio_FD2_count": 1})
         
         # Ensures FD2 values are calculated
         
         opponent = axelrod.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C)] + [(C, C)] + [(C, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70,  attrs={"P": 0.99, "FD":0, "consecutive_defections":0, "ratio_FD1":5, 
-                                                                                "ratio_FD2":1.5, "ratio_FD1_count":2, "ratio_FD2_count":2})
+        self.versus_test(opponent, expected_actions=actions, seed=70,  attrs={"P": 0.99, 
+                                                                              "FD": 0, 
+                                                                              "consecutive_defections": 0, 
+                                                                              "ratio_FD1": 5, 
+                                                                              "ratio_FD2": 1.5, 
+                                                                              "ratio_FD1_count": 2, 
+                                                                              "ratio_FD2_count": 2})
         
         # Ensures scores are being counted
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 19
-        self.versus_test(opponent, expected_actions=actions, attrs={"P": 1.1, "FD":0, "consecutive_defections":19, "ratio_FD1":5, 
-                                                                    "ratio_FD2":0, "ratio_FD1_count":1, "ratio_FD2_count":1}) # Check
+        self.versus_test(opponent, expected_actions=actions, attrs={"P": 1.1, 
+                                                                    "FD": 0, 
+                                                                    "consecutive_defections": 19, 
+                                                                    "ratio_FD1": 5, 
+                                                                    "ratio_FD2": 0, 
+                                                                    "ratio_FD1_count": 1, 
+                                                                    "ratio_FD2_count": 1}) 
