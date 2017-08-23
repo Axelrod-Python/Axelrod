@@ -539,6 +539,9 @@ class TransitiveFingerprint(object):
         if display_names:
             plt.yticks(range(len(self.opponents)), [str(player) for player in
                                                     self.opponents])
+        else:
+            plt.yticks([0, len(self.opponents) - 1], [0, 1])
+            plt.ylabel("Probability of cooperation")
 
         if not labels:
             plt.axis('off')
