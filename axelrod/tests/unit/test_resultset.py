@@ -12,6 +12,7 @@ from axelrod.tests.property import tournaments, prob_end_tournaments
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
+
 class TestResultSet(unittest.TestCase):
 
     @classmethod
@@ -23,14 +24,14 @@ class TestResultSet(unittest.TestCase):
                        axelrod.Defector()]
         cls.turns = 5
         cls.matches = {
-                        (0,1): [axelrod.Match((cls.players[0], cls.players[1]),
-                        turns=cls.turns) for _ in range(3)],
-                        (0,2): [axelrod.Match((cls.players[0], cls.players[2]),
-                        turns=cls.turns) for _ in range(3)],
-                        (1,2): [axelrod.Match((cls.players[1], cls.players[2]),
-                        turns=cls.turns) for _ in range(3)]}
-                          # This would not actually be a round robin tournament
-                           # (no cloned matches)
+            (0, 1): [axelrod.Match((cls.players[0], cls.players[1]),
+                                   turns=cls.turns) for _ in range(3)],
+            (0, 2): [axelrod.Match((cls.players[0], cls.players[2]),
+                                   turns=cls.turns) for _ in range(3)],
+            (1, 2): [axelrod.Match((cls.players[1], cls.players[2]),
+                                   turns=cls.turns) for _ in range(3)]}
+        # This would not actually be a round robin tournament
+        # (no cloned matches)
 
         cls.interactions = {}
         for index_pair, matches in cls.matches.items():
@@ -41,32 +42,33 @@ class TestResultSet(unittest.TestCase):
                 except KeyError:
                     cls.interactions[index_pair] = [match.result]
 
-        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)] + cls.matches[(0, 2)],
-                                               1: cls.matches[(0, 1)] + cls.matches[(1, 2)],
-                                               2: cls.matches[(1, 2)] + cls.matches[(0, 2)]}
+        cls.expected_players_to_match_dicts = {
+            0: cls.matches[(0, 1)] + cls.matches[(0, 2)],
+            1: cls.matches[(0, 1)] + cls.matches[(1, 2)],
+            2: cls.matches[(1, 2)] + cls.matches[(0, 2)]}
 
-        cls.expected_match_lengths =[
-               [[0, 5, 5], [5, 0, 5], [5, 5, 0]]
-               for _ in range(3)
-                ]
+        cls.expected_match_lengths = [
+           [[0, 5, 5], [5, 0, 5], [5, 5, 0]]
+           for _ in range(3)
+        ]
 
-        cls.expected_scores =[
-               [15, 15, 15],
-               [17, 17, 17],
-               [26, 26, 26]
-                ]
+        cls.expected_scores = [
+           [15, 15, 15],
+           [17, 17, 17],
+           [26, 26, 26]
+        ]
 
-        cls.expected_wins =[
-               [0, 0, 0],
-               [0, 0, 0],
-               [2, 2, 2]
-                ]
+        cls.expected_wins = [
+           [0, 0, 0],
+           [0, 0, 0],
+           [2, 2, 2]
+        ]
 
-        cls.expected_normalised_scores =[
-               [3 / 2 for _ in range(3)],
-               [(13 / 5 + 4 / 5) / 2 for _ in range(3)],
-               [(17 / 5 + 9 / 5) / 2 for _ in range(3)],
-                ]
+        cls.expected_normalised_scores = [
+           [3 / 2 for _ in range(3)],
+           [(13 / 5 + 4 / 5) / 2 for _ in range(3)],
+           [(17 / 5 + 9 / 5) / 2 for _ in range(3)],
+        ]
 
         cls.expected_ranking = [2, 1, 0]
 
@@ -116,104 +118,105 @@ class TestResultSet(unittest.TestCase):
         ]
 
         cls.expected_cooperation = [
-                [0, 9, 9],
-                [9, 0, 3],
-                [0, 0, 0],
-            ]
+            [0, 9, 9],
+            [9, 0, 3],
+            [0, 0, 0],
+        ]
 
         cls.expected_initial_cooperation_count = [6, 6, 0]
         cls.expected_initial_cooperation_rate = [1, 1, 0]
 
         cls.expected_normalised_cooperation = [
-                [0, mean([3 / 5 for _ in range(3)]), mean([3 / 5 for _ in range(3)])],
-                [mean([3 / 5 for _ in range(3)]), 0, mean([1 / 5 for _ in range(3)])],
-                [0, 0, 0],
-            ]
+            [0, mean([3 / 5 for _ in range(3)]),
+             mean([3 / 5 for _ in range(3)])],
+            [mean([3 / 5 for _ in range(3)]), 0,
+             mean([1 / 5 for _ in range(3)])],
+            [0, 0, 0],
+        ]
 
         cls.expected_state_distribution = [
-                [Counter(),
-                 Counter({(D, C): 6, (C, D): 6, (C, C): 3}),
-                 Counter({(C, D): 9, (D, D): 6})],
-                [Counter({(D, C): 6, (C, D): 6, (C, C): 3}),
-                 Counter(),
-                 Counter({(D, D): 12, (C, D): 3})],
-                [Counter({(D, C): 9, (D, D): 6}),
-                 Counter({(D, D): 12, (D, C): 3}),
-                 Counter()]
-            ]
+            [Counter(),
+             Counter({(D, C): 6, (C, D): 6, (C, C): 3}),
+             Counter({(C, D): 9, (D, D): 6})],
+            [Counter({(D, C): 6, (C, D): 6, (C, C): 3}),
+             Counter(),
+             Counter({(D, D): 12, (C, D): 3})],
+            [Counter({(D, C): 9, (D, D): 6}),
+             Counter({(D, D): 12, (D, C): 3}),
+             Counter()]
+        ]
 
         cls.expected_normalised_state_distribution = [
-                [Counter(),
-                 Counter({(D, C): 0.4, (C, D): 0.4, (C, C): 0.2}),
-                 Counter({(C, D): 0.6, (D, D): 0.4})],
-                [Counter({(D, C): 0.4, (C, D): 0.4, (C, C): 0.2}),
-                 Counter(),
-                 Counter({(D, D): 0.8, (C, D): 0.2})],
-                [Counter({(D, C): 0.6, (D, D): 0.4}),
-                 Counter({(D, D): 0.8, (D, C): 0.2}),
-                 Counter()]
-            ]
+            [Counter(),
+             Counter({(D, C): 0.4, (C, D): 0.4, (C, C): 0.2}),
+             Counter({(C, D): 0.6, (D, D): 0.4})],
+            [Counter({(D, C): 0.4, (C, D): 0.4, (C, C): 0.2}),
+             Counter(),
+             Counter({(D, D): 0.8, (C, D): 0.2})],
+            [Counter({(D, C): 0.6, (D, D): 0.4}),
+             Counter({(D, D): 0.8, (D, C): 0.2}),
+             Counter()]
+        ]
 
         cls.expected_state_to_action_distribution = [
-             [Counter(),
-              Counter({((C, C), D): 3, ((C, D), D): 3,
-			   		((D, C), C): 6}),
-              Counter({((C, D), D): 6, ((D, D), C): 6})],
-             [Counter({((C, C), C): 3, ((D, C), C): 3,
-			   		((C, D), D): 6}),
-              Counter(),
-              Counter({((C, D), D): 3, ((D, D), D): 9})],
-             [Counter({((D, C), D): 6, ((D, D), D): 6}),
-              Counter({((D, C), D): 3, ((D, D), D): 9}),
-              Counter()]
-             ]
+         [Counter(),
+          Counter({((C, C), D): 3, ((C, D), D): 3, ((D, C), C): 6}),
+          Counter({((C, D), D): 6, ((D, D), C): 6})],
+         [Counter({((C, C), C): 3, ((D, C), C): 3, ((C, D), D): 6}),
+          Counter(),
+          Counter({((C, D), D): 3, ((D, D), D): 9})],
+         [Counter({((D, C), D): 6, ((D, D), D): 6}),
+          Counter({((D, C), D): 3, ((D, D), D): 9}),
+          Counter()]
+         ]
 
         cls.expected_normalised_state_to_action_distribution = [
-             [Counter(),
-              Counter({((C, C), D): 1, ((C, D), D): 1,
-			   		((D, C), C): 1}),
-              Counter({((C, D), D): 1, ((D, D), C): 1})],
-             [Counter({((C, C), C): 1, ((D, C), C): 1,
-			   		   ((C, D), D): 1}),
-              Counter(),
-              Counter({((C, D), D): 1, ((D, D), D): 1})],
-             [Counter({((D, C), D): 1, ((D, D), D): 1}),
-              Counter({((D, C), D): 1, ((D, D), D): 1}),
-              Counter()]
-             ]
+         [Counter(),
+          Counter({((C, C), D): 1, ((C, D), D): 1,
+                   ((D, C), C): 1}),
+          Counter({((C, D), D): 1, ((D, D), C): 1})],
+         [Counter({((C, C), C): 1, ((D, C), C): 1,
+                   ((C, D), D): 1}),
+          Counter(),
+          Counter({((C, D), D): 1, ((D, D), D): 1})],
+         [Counter({((D, C), D): 1, ((D, D), D): 1}),
+          Counter({((D, C), D): 1, ((D, D), D): 1}),
+          Counter()]
+         ]
 
-        cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
-                                   for row in cls.expected_normalised_cooperation]
+        cls.expected_vengeful_cooperation = [
+            [2 * element - 1 for element in row]
+            for row in cls.expected_normalised_cooperation]
 
         cls.expected_cooperating_rating = [
-                18 / 30,
-                12 / 30,
-                0
-            ]
+            18 / 30,
+            12 / 30,
+            0
+        ]
 
         cls.expected_good_partner_matrix = [
-                [0, 3, 3],
-                [3, 0, 3],
-                [0, 0, 0]
-            ]
+            [0, 3, 3],
+            [3, 0, 3],
+            [0, 0, 0]
+        ]
 
         cls.expected_good_partner_rating = [
-                1.0,
-                1.0,
-                0
-            ]
+            1.0,
+            1.0,
+            0
+        ]
 
         cls.expected_eigenjesus_rating = [
-                0.5547001962252291,
-                0.8320502943378436,
-                0.0
-            ]
+            0.5547001962252291,
+            0.8320502943378436,
+            0.0
+        ]
 
         cls.expected_eigenmoses_rating = [
-                -0.4578520302117101,
-                0.7311328098872432,
-                0.5057828909101213
-            ]
+            -0.4578520302117101,
+            0.7311328098872432,
+            0.5057828909101213
+        ]
 
     def test_init(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
@@ -429,7 +432,6 @@ class TestResultSet(unittest.TestCase):
                          rs.nplayers)
         self.assertEqual(rs.normalised_state_to_action_distribution,
                          self.expected_normalised_state_to_action_distribution)
-
 
     def test_vengeful_cooperation(self):
         rs = axelrod.ResultSet(self.players, self.interactions,
@@ -796,7 +798,8 @@ class TestResultSetFromFile(unittest.TestCase):
 class TestDecorator(unittest.TestCase):
     def test_update_progress_bar(self):
         method = lambda x: None
-        self.assertEqual(axelrod.result_set.update_progress_bar(method)(1), None)
+        self.assertEqual(axelrod.result_set.update_progress_bar(method)(1),
+                         None)
 
 
 class TestResultSetSpatialStructure(TestResultSet):
@@ -810,10 +813,11 @@ class TestResultSetSpatialStructure(TestResultSet):
                        axelrod.Defector()]
         cls.turns = 5
         cls.edges = [(0, 1), (0, 2)]
-        cls.matches = { (0,1): [axelrod.Match((cls.players[0], cls.players[1]),
-                        turns=cls.turns) for _ in range(3)],
-                        (0,2): [axelrod.Match((cls.players[0], cls.players[2]),
-                        turns=cls.turns) for _ in range(3)]}
+        cls.matches = {
+            (0, 1): [axelrod.Match((cls.players[0], cls.players[1]),
+                                   turns=cls.turns) for _ in range(3)],
+            (0, 2): [axelrod.Match((cls.players[0], cls.players[2]),
+                                   turns=cls.turns) for _ in range(3)]}
 
         cls.interactions = {}
         for index_pair, matches in cls.matches.items():
@@ -824,32 +828,33 @@ class TestResultSetSpatialStructure(TestResultSet):
                 except KeyError:
                     cls.interactions[index_pair] = [match.result]
 
-        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)] + cls.matches[(0, 2)],
-                                               1: cls.matches[(0, 1)] ,
-                                               2: cls.matches[(0, 2)]}
+        cls.expected_players_to_match_dicts = {
+            0: cls.matches[(0, 1)] + cls.matches[(0, 2)],
+            1: cls.matches[(0, 1)],
+            2: cls.matches[(0, 2)]}
 
-        cls.expected_match_lengths =[
-               [[0, 5, 5], [5, 0, 0], [5, 0, 0]]
-               for _ in range(3)
-                ]
+        cls.expected_match_lengths = [
+           [[0, 5, 5], [5, 0, 0], [5, 0, 0]]
+           for _ in range(3)
+        ]
 
-        cls.expected_scores =[
-               [15, 15, 15],
-               [13, 13, 13],
-               [17, 17, 17]
-                ]
+        cls.expected_scores = [
+           [15, 15, 15],
+           [13, 13, 13],
+           [17, 17, 17]
+        ]
 
-        cls.expected_wins =[
-               [0, 0, 0],
-               [0, 0, 0],
-               [1, 1, 1]
-                ]
+        cls.expected_wins = [
+           [0, 0, 0],
+           [0, 0, 0],
+           [1, 1, 1]
+        ]
 
-        cls.expected_normalised_scores =[
-               [3 / 2 for _ in range(3)],
-               [(13 / 5 )  for _ in range(3)],
-               [(17 / 5 )  for _ in range(3)],
-                ]
+        cls.expected_normalised_scores = [
+           [3 / 2 for _ in range(3)],
+           [(13 / 5) for _ in range(3)],
+           [(17 / 5) for _ in range(3)],
+        ]
 
         cls.expected_ranking = [2, 1, 0]
 
@@ -899,72 +904,74 @@ class TestResultSetSpatialStructure(TestResultSet):
         ]
 
         cls.expected_cooperation = [
-                [0, 9, 9],
-                [9, 0, 0],
-                [0, 0, 0],
-            ]
+            [0, 9, 9],
+            [9, 0, 0],
+            [0, 0, 0],
+        ]
 
         cls.expected_normalised_cooperation = [
-            [0, mean([3 / 5 for _ in range(3)]), mean([3 / 5 for _ in range(3)])],
-            [mean([3 / 5 for _ in range(3)]), 0, 0 ],
+            [0, mean([3 / 5 for _ in range(3)]),
+             mean([3 / 5 for _ in range(3)])],
+            [mean([3 / 5 for _ in range(3)]), 0, 0],
             [0, 0, 0],
-            ]
+        ]
 
         cls.expected_initial_cooperation_count = [6, 3, 0]
         cls.expected_initial_cooperation_rate = [1, 1, 0]
 
-        cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
-                                   for row in cls.expected_normalised_cooperation]
+        cls.expected_vengeful_cooperation = [
+            [2 * element - 1 for element in row]
+            for row in cls.expected_normalised_cooperation]
 
         cls.expected_cooperating_rating = [
-                18 / 30,
-                9 / 15,
-                0
-            ]
+            18 / 30,
+            9 / 15,
+            0
+        ]
 
         cls.expected_good_partner_matrix = [
-                [0, 3, 3],
-                [3, 0, 0],
-                [0, 0, 0]
-            ]
+            [0, 3, 3],
+            [3, 0, 0],
+            [0, 0, 0]
+        ]
 
         cls.expected_good_partner_rating = [
-                1.0,
-                1.0,
-                0.0
-            ]
+            1.0,
+            1.0,
+            0.0
+        ]
 
         cls.expected_eigenjesus_rating = [
-                0.447213595499958,
-                0.894427190999916,
-                0.0
-            ]
+            0.447213595499958,
+            0.894427190999916,
+            0.0
+        ]
 
         cls.expected_eigenmoses_rating = [
-               -0.32929277996907086,
-                0.7683498199278325,
-                0.5488212999484519
-            ]
+            -0.32929277996907086,
+            0.7683498199278325,
+            0.5488212999484519
+        ]
 
         cls.expected_state_distribution = [
-              [Counter(),
-               Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
-               Counter({(C, D): 9, (D, D): 6})],
-              [Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
-               Counter(),
-               Counter()],
-              [Counter({(D, C): 9, (D, D): 6}), Counter(), Counter()]
-            ]
+          [Counter(),
+           Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
+           Counter({(C, D): 9, (D, D): 6})],
+          [Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
+           Counter(),
+           Counter()],
+          [Counter({(D, C): 9, (D, D): 6}), Counter(), Counter()]
+        ]
 
         cls.expected_normalised_state_distribution = [
-              [Counter(),
-               Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
-               Counter({(C, D): 0.6, (D, D): 0.4})],
-              [Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
-               Counter(),
-               Counter()],
-              [Counter({(D, C): 0.6, (D, D): 0.4}), Counter(), Counter()]
-            ]
+          [Counter(),
+           Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
+           Counter({(C, D): 0.6, (D, D): 0.4})],
+          [Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
+           Counter(),
+           Counter()],
+          [Counter({(D, C): 0.6, (D, D): 0.4}), Counter(), Counter()]
+        ]
 
         cls.expected_state_to_action_distribution = [
             [Counter(),
@@ -976,7 +983,8 @@ class TestResultSetSpatialStructure(TestResultSet):
             [Counter({((C, C), C): 3, ((D, C), C): 3,
                       ((C, D), D): 6}), Counter(), Counter()],
             [Counter({((D, C), D): 6, ((D, D), D): 6}),
-             Counter(), Counter()]]
+             Counter(), Counter()]
+        ]
 
         cls.expected_normalised_state_to_action_distribution = [
             [Counter(),
@@ -987,7 +995,8 @@ class TestResultSetSpatialStructure(TestResultSet):
                       ((C, D), D): 1.0}),
              Counter(), Counter()],
             [Counter({((D, C), D): 1.0, ((D, D), D): 1.0}),
-             Counter(), Counter()]]
+             Counter(), Counter()]
+        ]
 
     def test_match_lengths(self):
         """
@@ -1035,9 +1044,9 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                        axelrod.Defector(), axelrod.Cooperator()]
         cls.turns = 5
         cls.edges = [(0, 1), (2, 3)]
-        cls.matches = { (0,1): [axelrod.Match((cls.players[0], cls.players[1]),
+        cls.matches = {(0, 1): [axelrod.Match((cls.players[0], cls.players[1]),
                         turns=cls.turns) for _ in range(3)],
-                        (2,3): [axelrod.Match((cls.players[2], cls.players[3]),
+                        (2, 3): [axelrod.Match((cls.players[2], cls.players[3]),
                         turns=cls.turns) for _ in range(3)]}
 
         cls.interactions = {}
@@ -1049,41 +1058,41 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                 except KeyError:
                     cls.interactions[index_pair] = [match.result]
 
-        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)] ,
-                                               1: cls.matches[(0, 1)] ,
+        cls.expected_players_to_match_dicts = {0: cls.matches[(0, 1)],
+                                               1: cls.matches[(0, 1)],
                                                2: cls.matches[(2, 3)],
                                                3: cls.matches[(2, 3)]}
 
-        cls.expected_match_lengths =[
-               [[0, 5, 0, 0], [5, 0, 0, 0], [0, 0, 0, 5], [0, 0, 5, 0]]
-               for _ in range(3)
-                ]
+        cls.expected_match_lengths = [
+           [[0, 5, 0, 0], [5, 0, 0, 0], [0, 0, 0, 5], [0, 0, 5, 0]]
+           for _ in range(3)
+        ]
 
-        cls.expected_scores =[
-               [ 13.0 for _ in range(3)],
-               [ 13.0 for _ in range(3)],
-               [ 25.0 for _ in range(3)],
-               [ 0  for _ in range(3)]
-                ]
+        cls.expected_scores = [
+           [13.0 for _ in range(3)],
+           [13.0 for _ in range(3)],
+           [25.0 for _ in range(3)],
+           [0 for _ in range(3)]
+        ]
 
-        cls.expected_wins =[
-               [0, 0, 0],
-               [0, 0, 0],
-               [1, 1, 1],
-               [0, 0, 0]
-                ]
+        cls.expected_wins = [
+           [0, 0, 0],
+           [0, 0, 0],
+           [1, 1, 1],
+           [0, 0, 0]
+        ]
 
-        cls.expected_normalised_scores =[
-               [(13 / 5 )  for _ in range(3)],
-               [(13 / 5 )  for _ in range(3)],
-               [(25 / 5 )  for _ in range(3)],
-               [0  for _ in range(3)]
-                ]
+        cls.expected_normalised_scores = [
+           [(13 / 5) for _ in range(3)],
+           [(13 / 5) for _ in range(3)],
+           [(25 / 5) for _ in range(3)],
+           [0 for _ in range(3)]
+        ]
 
         cls.expected_ranking = [2, 0, 1, 3]
 
-        cls.expected_ranked_names = ['Defector','Alternator',
-                                     'Tit For Tat','Cooperator']
+        cls.expected_ranked_names = ['Defector', 'Alternator',
+                                     'Tit For Tat', 'Cooperator']
 
         cls.expected_null_results_matrix = [
             [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
@@ -1140,85 +1149,86 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
         ]
 
         cls.expected_cooperation = [
-                [0, 9, 0, 0],
-                [9, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 15, 0]
-            ]
+            [0, 9, 0, 0],
+            [9, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 15, 0]
+        ]
 
         cls.expected_normalised_cooperation = [
-                [0.0, mean([3 / 5 for _ in range(3)]), 0.0, 0.0],
-                [mean([3 / 5 for _ in range(3)]), 0.0, 0.0, 0.0],
-                [0.0, 0.0, 0.0, 0.0],
-                [0.0, 0.0, mean([5 / 5 for _ in range(3)]), 0.0]
-                ]
+            [0.0, mean([3 / 5 for _ in range(3)]), 0.0, 0.0],
+            [mean([3 / 5 for _ in range(3)]), 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, mean([5 / 5 for _ in range(3)]), 0.0]
+        ]
 
         cls.expected_initial_cooperation_count = [3.0, 3.0, 0, 3.0]
         cls.expected_initial_cooperation_rate = [1.0, 1.0, 0, 1.0]
 
-        cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
-                                   for row in cls.expected_normalised_cooperation]
+        cls.expected_vengeful_cooperation = [
+            [2 * element - 1 for element in row]
+            for row in cls.expected_normalised_cooperation]
 
         cls.expected_cooperating_rating = [
-                18 / 30,
-                18 / 30,
-                0.0,
-                30 / 30
-            ]
+            18 / 30,
+            18 / 30,
+            0.0,
+            30 / 30
+        ]
 
         cls.expected_good_partner_matrix = [
-                [0, 3, 0, 0],
-                [3, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 3, 0]
-            ]
+            [0, 3, 0, 0],
+            [3, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 3, 0]
+        ]
 
         cls.expected_good_partner_rating = [
-                1.0,
-                1.0,
-                0.0,
-                1.0
-            ]
+            1.0,
+            1.0,
+            0.0,
+            1.0
+        ]
 
         cls.expected_eigenjesus_rating = [
-                0.7071067811865476,
-                0.7071067811865476,
-                0.0,
-                0.0,
-            ]
+            0.7071067811865476,
+            0.7071067811865476,
+            0.0,
+            0.0,
+        ]
 
         cls.expected_eigenmoses_rating = [
-                0.48505781033492573,
-                0.48505781033492573,
-                0.7090603855860735,
-                0.1633132292825755
-            ]
+            0.48505781033492573,
+            0.48505781033492573,
+            0.7090603855860735,
+            0.1633132292825755
+        ]
 
         cls.expected_state_distribution = [
-               [Counter(),
-                Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
-                Counter(),
-                Counter()],
-               [Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
-                Counter(),
-                Counter(),
-                Counter()],
-               [Counter(), Counter(), Counter(), Counter({(D, C): 15})],
-               [Counter(), Counter(), Counter({(C, D): 15}), Counter()]
-            ]
+           [Counter(),
+            Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
+            Counter(),
+            Counter()],
+           [Counter({(C, C): 3, (C, D): 6, (D, C): 6}),
+            Counter(),
+            Counter(),
+            Counter()],
+           [Counter(), Counter(), Counter(), Counter({(D, C): 15})],
+           [Counter(), Counter(), Counter({(C, D): 15}), Counter()]
+        ]
 
         cls.expected_normalised_state_distribution = [
-               [Counter(),
-                Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
-                Counter(),
-                Counter()],
-               [Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
-                Counter(),
-                Counter(),
-                Counter()],
-               [Counter(), Counter(), Counter(), Counter({(D, C): 1.0})],
-               [Counter(), Counter(), Counter({(C, D): 1.0}), Counter()]
-            ]
+           [Counter(),
+            Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
+            Counter(),
+            Counter()],
+           [Counter({(C, C): 0.2, (C, D): 0.4, (D, C): 0.4}),
+            Counter(),
+            Counter(),
+            Counter()],
+           [Counter(), Counter(), Counter(), Counter({(D, C): 1.0})],
+           [Counter(), Counter(), Counter({(C, D): 1.0}), Counter()]
+        ]
 
         cls.expected_state_to_action_distribution = [
             [Counter(),
@@ -1229,7 +1239,8 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                       ((C, D), D): 6}),
              Counter(), Counter(), Counter()],
             [Counter(), Counter(), Counter(), Counter({((D, C), D): 12})],
-            [Counter(), Counter(), Counter({((C, D), C): 12}), Counter()]]
+            [Counter(), Counter(), Counter({((C, D), C): 12}), Counter()]
+        ]
 
         cls.expected_normalised_state_to_action_distribution = [
             [Counter(),
@@ -1240,8 +1251,8 @@ class TestResultSetSpatialStructureTwo(TestResultSetSpatialStructure):
                       ((C, D), D): 1.0}),
              Counter(), Counter(), Counter()],
             [Counter(), Counter(), Counter(), Counter({((D, C), D): 1.0})],
-            [Counter(), Counter(), Counter({((C, D), C): 1.0}), Counter()]]
-
+            [Counter(), Counter(), Counter({((C, D), C): 1.0}), Counter()]
+        ]
 
 
 class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
@@ -1253,9 +1264,8 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
                        axelrod.Defector(), axelrod.Cooperator()]
         cls.turns = 5
         cls.edges = [(0, 0), (1, 1), (2, 2), (3, 3)]
-        cls.matches = {(i, i): [axelrod.Match((cls.players[i],
-                                                cls.players[i].clone()),
-                                                turns=cls.turns)
+        cls.matches = {(i, i): [axelrod.Match(
+            (cls.players[i], cls.players[i].clone()), turns=cls.turns)
                         for _ in range(3)] for i in range(4)}
 
         cls.interactions = {}
@@ -1292,7 +1302,8 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
         cls.expected_ranking = [0, 1, 2, 3]
 
-        cls.expected_ranked_names = ['Alternator','Tit For Tat','Defector','Cooperator']
+        cls.expected_ranked_names = ['Alternator', 'Tit For Tat',
+                                     'Defector', 'Cooperator']
 
         cls.expected_null_results_matrix = [
             [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
@@ -1332,60 +1343,61 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
 
         cls.expected_cooperation = [
             [0.0 for _ in range(4)] for _ in range(4)
-            ]
+        ]
 
         cls.expected_normalised_cooperation = [
-                [mean([3 / 5 for _ in range(3)]), 0.0, 0.0, 0.0],
-                [0.0, mean([5 / 5 for _ in range(3)]), 0.0, 0.0],
-                [0.0, 0.0, 0.0, 0.0],
-                [0.0, 0.0, 0.0, mean([5 / 5 for _ in range(3)])]
-                ]
+            [mean([3 / 5 for _ in range(3)]), 0.0, 0.0, 0.0],
+            [0.0, mean([5 / 5 for _ in range(3)]), 0.0, 0.0],
+            [0.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, mean([5 / 5 for _ in range(3)])]
+        ]
 
         cls.expected_initial_cooperation_count = [0, 0, 0, 0]
         cls.expected_initial_cooperation_rate = [0, 0, 0, 0]
 
-        cls.expected_vengeful_cooperation = [[2 * element - 1 for element in row]
-                                   for row in cls.expected_normalised_cooperation]
+        cls.expected_vengeful_cooperation = [
+            [2 * element - 1 for element in row]
+            for row in cls.expected_normalised_cooperation]
 
         cls.expected_cooperating_rating = [
-                0.0 for _ in range(4)
-            ]
+            0.0 for _ in range(4)
+        ]
 
         cls.expected_good_partner_matrix = [
             [0.0 for _ in range(4)] for _ in range(4)
-            ]
+        ]
 
         cls.expected_good_partner_rating = [
-                0.0 for _ in range(4)
-            ]
+            0.0 for _ in range(4)
+        ]
 
         cls.expected_eigenjesus_rating = [
-                0.0009235301367282831,
-                0.7071064796379986,
-                0.0,
-                0.7071064796379986,
-            ]
+            0.0009235301367282831,
+            0.7071064796379986,
+            0.0,
+            0.7071064796379986,
+        ]
 
         cls.expected_eigenmoses_rating = [
-                0.4765940316018446,
-                0.3985944056208427,
-                0.6746133178770147,
-                0.3985944056208427
-            ]
+            0.4765940316018446,
+            0.3985944056208427,
+            0.6746133178770147,
+            0.3985944056208427
+        ]
 
         cls.expected_state_distribution = [
-                [Counter(), Counter(), Counter(), Counter()],
-                [Counter(), Counter(), Counter(), Counter()],
-                [Counter(), Counter(), Counter(), Counter()],
-                [Counter(), Counter(), Counter(), Counter()]
-            ]
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()]
+        ]
 
         cls.expected_normalised_state_distribution = [
-                [Counter(), Counter(), Counter(), Counter()],
-                [Counter(), Counter(), Counter(), Counter()],
-                [Counter(), Counter(), Counter(), Counter()],
-                [Counter(), Counter(), Counter(), Counter()]
-            ]
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()],
+            [Counter(), Counter(), Counter(), Counter()]
+        ]
 
         cls.expected_state_to_action_distribution = [
             [Counter(), Counter(), Counter(), Counter()],
@@ -1400,7 +1412,6 @@ class TestResultSetSpatialStructureThree(TestResultSetSpatialStructure):
             [Counter(), Counter(), Counter(), Counter()],
             [Counter(), Counter(), Counter(), Counter()]
            ]
-
 
     def test_equality(self):
         """Overwriting for this particular case"""

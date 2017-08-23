@@ -94,7 +94,6 @@ class TestGraph(unittest.TestCase):
                          [(0, 1), (1, 0), (0, 2), (2, 0), (1, 2),
                           (2, 1), (0, 0), (1, 1), (2, 2)])
 
-
     def test_out_dict(self):
         # Undirected graph with vertices and unweighted edges
         g = graph.Graph(edges=[[1, 2], [2, 3]])
