@@ -221,7 +221,7 @@ class MoreGrofman(Player):
     Names:
     - Grofman's strategy: [Axelrod1980b]_
     '''
-    name = ''
+    name = 'MoreGrofman'
     classifier = {
         'memory_depth': 7,
         'stochastic': False,

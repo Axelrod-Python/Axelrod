@@ -158,3 +158,56 @@ class TestGladstein(TestPlayer):
         actions = [(D, C), (C, C), (C, D), (C, D), (D, D)]
         self.versus_test(opponent, expected_actions=actions,
                          attrs={'patsy': False})
+
+
+class TestMoreGrofman(TestPlayer):
+
+    name = "MoreGrofman"
+    player = axelrod.MoreGrofman
+    expected_classifier = {
+        'memory_depth': 7,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Cooperate for the first two rounds
+        actions = [(C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        # Cooperate for the first two rounds, then play tit for tat for 3-7
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        # Demonstrate MoreGrofman Logic
+        # Own previous move was C, opponent defected less than twice in last 7
+        moregrofman_actions = [C] * 7 + [C]
+        opponent_actions = [C] * 6 + [D] * 2
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = list(zip(moregrofman_actions, opponent_actions))
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Own previous move was C, opponent defected more than twice in last 7
+        moregrofman_actions = ([C] * 3 + [D] * 3 + [C]) + [D]
+        opponent_actions = ([C] * 2 + [D] * 3 + [C] * 2) + [D]
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = list(zip(moregrofman_actions, opponent_actions))
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Own previous move was D, opponent defected once in last 7
+        moregrofman_actions = ([C] * 6 + [D]) + [C]
+        opponent_actions = ([C] * 5 + [D] * 1 + [C]) + [D]
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = list(zip(moregrofman_actions, opponent_actions))
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Own previous move was D, opponent defected more than twice in last 7
+        moregrofman_actions = ([C] * 2 + [D] * 5) + [D]
+        opponent_actions = ([D] * 7) + [D]
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = list(zip(moregrofman_actions, opponent_actions))
+        self.versus_test(opponent, expected_actions=actions)
