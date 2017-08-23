@@ -7,7 +7,7 @@ from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
     Davis, RevisedDowning, Feld, Grofman, Nydegger, Joss, Shubik, Tullock,
     UnnamedStrategy, SteinAndRapoport, TidemanAndChieruzzi)
-from .axelrod_second import Champion, Eatherley, Tester, Gladstein
+from .axelrod_second import Champion, Eatherley, Tester, Gladstein, Tranquiliser
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
 from .calculator import Calculator
@@ -77,7 +77,6 @@ from .titfortat import (
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, AdaptiveTitForTat,
     SpitefulTitForTat, SlowTitForTwoTats2, Alexei, EugineNier, DynamicTwoTitsForTat, NTitsForMTats, Michaelos)
-from .tranquiliser import Tranquiliser
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)

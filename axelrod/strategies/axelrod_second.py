@@ -8,7 +8,12 @@ from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
+from axelrod.interaction_utils import compute_final_score
+
+
 C, D = Action.C, Action.D
+
+dict = {C: 0, D: 1}
 
 
 class Champion(Player):
@@ -199,3 +204,124 @@ class Gladstein(Player):
         else:
             # Play TFT
             return opponent.history[-1]
+
+dict = {C: 0, D: 1}
+
+
+class Tranquiliser(Player):
+   
+    """
+    Submitted to Axelrod's second tournament by Craig Feathers
+
+    This strategy is based on the reverse engineering of the 
+    Fortran strategy K67R from Axelrod's second tournament.
+    Reversed engineered by: Owen Campbell, Will Guo and Mansour Hakem
+
+
+    Description given in Axelrod's "More Effective Choice in the Prisoner's Dilemma" 
+    paper: The rule normally cooperates but is ready to defect if the other player 
+    defects too often. Thus the rule tends to cooperate for the first dozen 
+    or two moves if the other player is cooperating, but then it throws in a 
+    defection. If the other player continues to cooperate, then defections 
+    become more frequent. But as long as Tranquiliser is maintaining an 
+    average payoff of at least 2.25 points per move, it will never defect 
+    twice in succession and it will not defect more than one-quarter of the time.
+
+    
+    
+    
+    
+    
+
+
+    Tranquiliser came in 27th place in Axelrod's second torunament.
+
+    Names:
+
+    - Craig Feathers: [Axelrod1980]_
+    - Tranquiliser: [Axelrod1980]_
+    """
+
+    name = 'Tranquiliser'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': {"game"},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    # Initialised atributes
+    def __init__(self):
+        super().__init__()
+        self.FD = 0
+        self.consecutive_defections = 0
+        self.ratio_FD1 = 5
+        self.ratio_FD2 = 0
+        self.ratio_FD1_count = 1
+        self.ratio_FD2_count = 1
+        self.score = None
+        self.P = 1.1
+        self.current_score = 0
+        self.dict = {C: 0, D: 1}
+
+
+    def update_stateFD(self, opponent):  # Calculates the ratioFD values and P values, as well as sets the states of FD at the start of each turn
+
+        self.current_score = compute_final_score(zip(self.history, opponent.history))
+
+        if self.FD == 2:
+            self.FD = 0
+            self.ratio_FD2 = ((self.ratio_FD2 * self.ratio_FD2_count + 3 - 3 * self.dict[opponent.history[-1]]) + 2 * self.dict[
+                self.history[-1]] - self.dict[opponent.history[-1]] * self.dict[self.history[-1]]) / (self.ratio_FD2_count + 1)
+            self.ratio_FD2_count += 1
+        elif self.FD == 1:
+            self.FD = 2
+            self.ratio_FD1 = ((self.ratio_FD1 * self.ratio_FD1_count + 3 - 3 * self.dict[opponent.history[-1]]) + 2 * self.dict[self.history[-1]] - self.dict[opponent.history[-1]] * self.dict[self.history[-1]]) / (self.ratio_FD1_count + 1)
+            self.ratio_FD1_count += 1
+        else:
+            if (self.current_score[0] / (len(self.history))) >= 2.25:
+                self.P = .95 - ((self.ratio_FD1) + (self.ratio_FD2) - 5) / 15 + 1 / (len(self.history) + 1) ** 2 - (self.dict[opponent.history[-1]] / 4)
+                self.P = round(self.P, 4)
+                self.score = "good"
+            elif (self.current_score[0] / (len(self.history))) >= 1.75:
+                self.P = .25 + opponent.cooperations / (len(self.history)) - (self.consecutive_defections * .25) + (self.current_score[0] - self.current_score[1]) / 100 + (4 / (len(self.history) + 1))
+                self.P = round(self.P, 4)
+                self.score = "average"
+
+    def strategy(self, opponent: Player) -> Action:
+
+        randomValue = random.random()  # Random float between 0 and 1 to decide whether the player should defect or not
+
+        current_score = compute_final_score(zip(self.history, opponent.history))  # Calculates current score
+
+        if len(self.history) == 0:  # Assumes opponent will cooperate, hence, Tranquiliser cooperates
+            return C
+        else:  # If round number != 0, exectue the stateFD(self, opponent) function
+            Tranquiliser.update_stateFD(self, opponent)
+        if opponent.history[-1] == D:  # Calculates number of consecutive defections
+            self.consecutive_defections += 1
+        else:
+            self.consecutive_defections = 0
+
+        if self.FD != 0:  # If FD != 0, then return value dependant on number of consecutive defections
+            if self.consecutive_defections == 0:
+                return C
+            else:
+                return D
+        elif (self.current_score[0] / (len(self.history))) < 1.75:  # If score is too low, copy opponent
+            return opponent.history[-1]  # "If you can't beat them join'em"
+        else:
+            if (randomValue < self.P):  # Comapares randomValue to that of the calculated variable 'P'
+                if self.consecutive_defections == 0:  # Decides what to return (based on previous move), give randomValue < 'P'
+                    return C
+                else:
+                    return self.history[-1]
+            else:
+                if self.score == "good":  # If score is above 2.25 && randomValue > P, set FD = 1, and defect
+                    self.FD = 1
+                else:  # If score is greater than 1.75, but lower than 2.25 while randomValue > P, defect
+                    pass
+                return D
