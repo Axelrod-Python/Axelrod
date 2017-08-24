@@ -500,7 +500,8 @@ class TransitiveFingerprint(object):
 
     def plot(self, cmap: str = 'viridis', interpolation: str = 'none',
              title: str = None, colorbar: bool = True, labels: bool = True,
-             display_names: bool = False) -> plt.Figure:
+             display_names: bool = False,
+             ax: plt.Figure = None) -> plt.Figure:
         """Plot the results of the spatial tournament.
 
         Parameters
@@ -519,14 +520,21 @@ class TransitiveFingerprint(object):
             Choose whether the axis labels and ticks should be included
         display_name : bool, optional
             Choose whether to display the names of the strategies
+        ax: matplotlib axis
+            Allows the plot to be written to a given matplotlib axis.
+            Default is None.
 
         Returns
         ----------
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
+        if ax is None:
+            fig, ax = plt.subplots()
+        else:
+            ax = ax
 
-        fig, ax = plt.subplots()
+        fig = ax.get_figure()
         mat = ax.imshow(self.data, cmap=cmap, interpolation=interpolation)
 
         width = len(self.data) / 2
