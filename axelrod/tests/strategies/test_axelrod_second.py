@@ -211,3 +211,23 @@ class TestMoreGrofman(TestPlayer):
         opponent = axelrod.MockPlayer(actions=opponent_actions)
         actions = list(zip(moregrofman_actions, opponent_actions))
         self.versus_test(opponent, expected_actions=actions)
+
+        # Test to make sure logic matches Fortran (discrepancy found 8/23/2017)
+        opponent = axelrod.AntiTitForTat()
+        # Actions come from a match run by Axelrod Fortran using Player('k86r')
+        actions = [(C, C),
+                (C, D),
+                (D, D),
+                (D, C),
+                (C, C),
+                (C, D),
+                (D, D),
+                (D, C),
+                (D, C),
+                (D, C),
+                (D, C),
+                (D, C),
+                (D, C),
+                (D, C),
+                (C, C)]
+        self.versus_test(opponent, expected_actions=actions)
