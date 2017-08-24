@@ -157,7 +157,7 @@ def generate_data(interactions: dict, points: list, edges: list) -> dict:
 
     Parameters
     ----------
-    interactions : dictionary
+    interactions : dict
         A dictionary mapping edges to the corresponding interactions of
         those players.
     points : list
@@ -169,7 +169,7 @@ def generate_data(interactions: dict, points: list, edges: list) -> dict:
 
     Returns
     ----------
-    point_scores : dictionary
+    point_scores : dict
         A dictionary where the keys are Points of the form (x, y) and
         the values are the mean score for the corresponding interactions.
     """
@@ -279,16 +279,16 @@ class AshlockFingerprint(object):
 
         Parameters
         ----------
-        turns : integer, optional
+        turns : int, optional
             The number of turns per match
-        repetitions : integer, optional
+        repetitions : int, optional
             The number of times the round robin should be repeated
         step : float, optional
             The separation between each Point. Smaller steps will
             produce more Points that will be closer together.
-        processes : integer, optional
+        processes : int, optional
             The number of processes to be used for parallel processing
-        filename: string, optional
+        filename: str, optional
             The name of the file for self.spatial_tournament's interactions.
             if None and in_memory=False, will auto-generate a filename.
         in_memory: bool
@@ -299,7 +299,7 @@ class AshlockFingerprint(object):
 
         Returns
         ----------
-        self.data : dictionary
+        self.data : dict
             A dictionary where the keys are coordinates of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
@@ -395,7 +395,7 @@ class TransitiveFingerprint(object):
         opponents : list of instances
             A list that contains a list of opponents
             Default: A spectrum of Random  players
-        number_opponents: integer
+        number_opponents: int
             The number of Random opponents
             Default: 50
         """
@@ -418,15 +418,15 @@ class TransitiveFingerprint(object):
 
         Parameters
         ----------
-        turns : integer, optional
+        turns : int, optional
             The number of turns per match
-        repetitions : integer, optional
+        repetitions : int, optional
             The number of times the round robin should be repeated
         noise : float, optional
             The probability that a player's intended action should be flipped
-        processes : integer, optional
+        processes : int, optional
             The number of processes to be used for parallel processing
-        filename: string, optional
+        filename: str, optional
             The name of the file for spatial tournament's interactions.
             if None, a filename will be generated.
         progress_bar : bool
