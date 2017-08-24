@@ -5,7 +5,6 @@ import random
 import axelrod
 from .test_player import TestPlayer
 
-from axelrod.interaction_utils import compute_final_score
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
