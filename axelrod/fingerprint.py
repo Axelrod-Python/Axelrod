@@ -385,7 +385,7 @@ class AshlockFingerprint(object):
 
 
 class TransitiveFingerprint(object):
-    def __init__(self, strategy, opponents=None, number_opponents=50):
+    def __init__(self, strategy, opponents=None, number_of_opponents=50):
         """
         Parameters
         ----------
@@ -395,7 +395,7 @@ class TransitiveFingerprint(object):
         opponents : list of instances
             A list that contains a list of opponents
             Default: A spectrum of Random  players
-        number_opponents: int
+        number_of_opponents: int
             The number of Random opponents
             Default: 50
         """
@@ -403,7 +403,7 @@ class TransitiveFingerprint(object):
 
         if opponents is None:
             self.opponents = [axl.Random(p) for p in
-                              np.linspace(0, 1, number_opponents)]
+                              np.linspace(0, 1, number_of_opponents)]
         else:
             self.opponents = opponents
 
