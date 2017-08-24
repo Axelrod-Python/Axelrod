@@ -345,15 +345,9 @@ class Tranquilizer(Player):
         elif self.FD == 1:
             self.FD = 2
             self.ratio_FD1 = (self.ratio_FD1 * self.ratio_FD1_count)
-<<<<<<< HEAD
             self.ratio_FD1 += (3 - (3 * self.dict[opponent.history[-1]])) 
             self.ratio_FD1 += (2 * self.dict[self.history[-1]]) 
             self.ratio_FD1 -= (self.dict[opponent.history[-1]] * self.dict[self.history[-1]])
-=======
-            self.ratio_FD1 += 3 - (3 * self.dict[opponent.history[-1]]) 
-            self.ratio_FD1 += 2 * self.dict[self.history[-1]] 
-            self.ratio_FD1 -= self.dict[opponent.history[-1]] * self.dict[self.history[-1]]
->>>>>>> f7018cc78d8c4c1b7ccc779bb1c45794e2bd6251
             self.ratio_FD1 /= (self.ratio_FD1_count + 1)
             self.ratio_FD1_count += 1
         else:
