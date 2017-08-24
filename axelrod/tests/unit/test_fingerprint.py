@@ -416,9 +416,9 @@ class TestTransitiveFingerprint(unittest.TestCase):
 
     def test_init_with_not_default_number(self):
         player = axl.TitForTat()
-        number_opponents = 10
+        number_of_opponents = 10
         fingerprint = axl.TransitiveFingerprint(strategy=player,
-                                                number_opponents=number_opponents)
+                                                number_of_opponents=number_of_opponents)
         self.assertEqual(fingerprint.strategy, player)
         self.assertEqual(fingerprint.opponents, [axl.Random(p) for p in
                                                  np.linspace(0, 1, 10)])
@@ -487,3 +487,11 @@ class TestTransitiveFingerprint(unittest.TestCase):
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
         p = tf.plot(display_names=True)
         self.assertIsInstance(p, matplotlib.pyplot.Figure)
+
+    def test_plot_with_axis(self):
+        fig, axarr = matplotlib.pyplot.subplots(2, 2)
+        tf = TransitiveFingerprint(axl.TitForTat)
+        tf.fingerprint(turns=10, repetitions=2, progress_bar=False)
+        p = tf.plot(ax=axarr[0, 0])
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+

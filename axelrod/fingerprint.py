@@ -268,7 +268,7 @@ class AshlockFingerprint(object):
         self, turns: int = 50, repetitions: int = 10, step: float = 0.01,
         processes: int=None, filename: str = None, in_memory: bool = False,
         progress_bar: bool = True
-    ) -> dict:
+) -> dict:
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
@@ -413,8 +413,8 @@ class TransitiveFingerprint(object):
                     progress_bar: bool = True) -> np.array:
         """Creates a spatial tournament to run the necessary matches to obtain 
         fingerprint data.
-
-        Creates the opponents and their edges then builds a spatial tournament.
+        
+          Creates the opponents and their edges then builds a spatial tournament.
 
         Parameters
         ----------
@@ -503,9 +503,9 @@ class TransitiveFingerprint(object):
 
     def plot(self, cmap: str = 'viridis', interpolation: str = 'none',
              title: str = None, colorbar: bool = True, labels: bool = True,
-             display_names: bool = False) -> plt.Figure:
+             display_names: bool = False,
+             ax: plt.Figure = None) -> plt.Figure:
         """Plot the results of the spatial tournament.
-
         Parameters
         ----------
         cmap : str, optional
@@ -520,16 +520,22 @@ class TransitiveFingerprint(object):
             Choose whether the colorbar should be included or not
         labels : bool, optional
             Choose whether the axis labels and ticks should be included
-        display_name : bool, optional
+        display_names : bool, optional
             Choose whether to display the names of the strategies
-
+        ax: matplotlib axis
+            Allows the plot to be written to a given matplotlib axis.
+            Default is None.
         Returns
         ----------
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
+        if ax is None:
+            fig, ax = plt.subplots()
+        else:
+            ax = ax
 
-        fig, ax = plt.subplots()
+        fig = ax.get_figure()
         mat = ax.imshow(self.data, cmap=cmap, interpolation=interpolation)
 
         width = len(self.data) / 2
