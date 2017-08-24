@@ -229,15 +229,54 @@ class TestMoreGrofman(TestPlayer):
             (D, C),
             (D, C),
             (D, C),
-            (D, C), # element 13
+            (D, C),
             (C, C)
             ]
         self.versus_test(opponent, expected_actions=actions)
 
         # Test to match the Fortran implementation for 30 rounds
-        # opponent = axelrod.AntiTitForTat()
-        # actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
-        #     (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C),
-        #     (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (D, C), (D, C),
-        #     (D, C), (D, C), (D, C), (D, C), (C, C), (C, D), (C, D)]
-        # self.versus_test(opponent, expected_actions=actions)
+        opponent = axelrod.AntiTitForTat()
+        actions = [(C, C),
+            (C, D),
+            (D, D),
+            (D, C),
+            (C, C),
+            (C, D),
+            (D, D),
+            (D, C), 
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, D),
+            (C, D),
+            (C, D),
+            (D, D),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (D, C),
+            (C, C),
+            (C, D),
+            (C, D)
+            ]
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Test to match the Fortran implementation for 60 rounds
+        opponent = axelrod.AntiTitForTat()
+        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
+            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C),
+            (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (D, C), (D, C),
+            (D, C), (D, C), (D, C), (D, C), (C, C), (C, D), (C, D), (C, D),
+            (C, D), (D, D), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C),
+            (D, C), (C, C), (C, D), (C, D), (C, D), (C, D), (D, D), (D, C),
+            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C), (C, D),
+            (C, D), (C, D), (C, D), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)

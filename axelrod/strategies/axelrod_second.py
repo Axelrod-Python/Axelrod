@@ -245,7 +245,7 @@ class MoreGrofman(Player):
             return opponent.history[-1]
         # Logic for the rest of the game
         else:
-            opponent_defections_last_7_rounds = opponent.history[-8:].count(D) # (-7:) fails at 13, (-7:-1), (-8:), (-8:-1), (-6:), (-6:-1)
+            opponent_defections_last_7_rounds = opponent.history[-8:-1].count(D) # (-7:) fails at 13, (-7:-1), (-8:), (-8:-1), (-6:), (-6:-1)
             if self.history[-1] == C:
                 if opponent_defections_last_7_rounds <= 2:
                     return C
