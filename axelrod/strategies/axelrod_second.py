@@ -202,13 +202,14 @@ class Gladstein(Player):
 
 
 class MoreGrofman(Player):
-    '''
+    """
     Submitted to Axelrod's second tournament by Bernard Grofman.
 
     This strategy has 3 phases:
     1. First it cooperates on the first two rounds
     2. For rounds 3-7 inclusive, it plays the same as the opponent's last move
     3. Thereafter, it applies the following logic
+
       - If its own previous move was C and the opponent has defected less than
         twice in the last 7 rounds, cooperate
       - If its own previous move was C and the opponent has defected twice or
@@ -220,8 +221,8 @@ class MoreGrofman(Player):
 
     Names:
     - Grofman's strategy: [Axelrod1980b]_
-    '''
-    name = 'MoreGrofman'
+    """
+    name = "MoreGrofman"
     classifier = {
         'memory_depth': 7,
         'stochastic': False,
@@ -244,10 +245,7 @@ class MoreGrofman(Player):
             return opponent.history[-1]
         # Logic for the rest of the game
         else:
-            opponent_defections_last_7_rounds = 0
-            for action in opponent.history[-7:]:
-                if action == D:
-                    opponent_defections_last_7_rounds += 1
+            opponent_defections_last_7_rounds = opponent.history[-7:].count(D)
             if self.history[-1] == C:
                 if opponent_defections_last_7_rounds < 2:
                     return C
