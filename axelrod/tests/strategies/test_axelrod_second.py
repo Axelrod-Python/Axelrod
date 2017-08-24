@@ -5,7 +5,6 @@ import random
 import axelrod
 from .test_player import TestPlayer
 
-from axelrod.interaction_utils import compute_final_score
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
@@ -193,7 +192,7 @@ class TestTranquilizer(TestPlayer):
         self.assertEqual(player.score, None)
         self.current_score = 0
 
-    def test_score_bad(self):
+    def test_strategy(self):
 
         # Tests whether TitForTat is played given score is below 1.75
 
