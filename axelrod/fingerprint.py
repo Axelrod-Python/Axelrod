@@ -392,18 +392,18 @@ class TransitiveFingerprint(object):
         strategy : class or instance
             A class that must be descended from axelrod.Player or an instance of
             axelrod.Player.
-        opponents : list of class or instance
+        opponents : list of instances
             A list that contains a list of opponents
             Default: A spectrum of Random  players
         number_opponents: integer
-            An integer that defines the number of Random opponents
+            The number of Random opponents
             Default: 50
         """
         self.strategy = strategy
 
         if opponents is None:
             self.opponents = [axl.Random(p) for p in
-                                            np.linspace(0, 1, number_opponents)]
+                              np.linspace(0, 1, number_opponents)]
         else:
             self.opponents = opponents
 
@@ -411,7 +411,8 @@ class TransitiveFingerprint(object):
                     noise: float = None, processes: int = None,
                     filename: str = None,
                     progress_bar: bool = True) -> np.array:
-        """Build and play the spatial tournament.
+        """Creates a spatial tournament to run the necessary matches to obtain 
+        fingerprint data.
 
         Creates the opponents and their edges then builds a spatial tournament.
 
@@ -421,11 +422,13 @@ class TransitiveFingerprint(object):
             The number of turns per match
         repetitions : integer, optional
             The number of times the round robin should be repeated
+        noise : float, optional
+            The probability that a player's intended action should be flipped
         processes : integer, optional
             The number of processes to be used for parallel processing
         filename: string, optional
-            The name of the file for self.spatial_tournament's interactions.
-            if None and in_memory=False, will auto-generate a filename.
+            The name of the file for spatial tournament's interactions.
+            if None, a filename will be generated.
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
 
