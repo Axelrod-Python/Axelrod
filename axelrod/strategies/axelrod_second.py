@@ -344,23 +344,23 @@ class Tranquilizer(Player):
             self.ratio_FD2_count += 1
         elif self.FD == 1:
             self.FD = 2
-            self.ratio_FD1 = self.ratio_FD1 * self.ratio_FD1_count
-            self.ratio_FD1 += 3 - (3 * self.dict[opponent.history[-1]]) 
-            self.ratio_FD1 += 2 * self.dict[self.history[-1]] 
-            self.ratio_FD1 -= self.dict[opponent.history[-1]] * self.dict[self.history[-1]]
+            self.ratio_FD1 = (self.ratio_FD1 * self.ratio_FD1_count)
+            self.ratio_FD1 += (3 - (3 * self.dict[opponent.history[-1]])) 
+            self.ratio_FD1 += (2 * self.dict[self.history[-1]]) 
+            self.ratio_FD1 -= (self.dict[opponent.history[-1]] * self.dict[self.history[-1]])
             self.ratio_FD1 /= (self.ratio_FD1_count + 1)
             self.ratio_FD1_count += 1
         else:
             if (self.current_score[0] / (len(self.history))) >= 2.25:
-                self.P = .95 - ((self.ratio_FD1) + (self.ratio_FD2) - 5) / 15 
-                self.P += 1 / (len(self.history) + 1 ** 2) 
+                self.P = (.95 - (((self.ratio_FD1) + (self.ratio_FD2) - 5) / 15)) 
+                self.P += (1 / ((len(self.history) + 1) ** 2)) 
                 self.P -= (self.dict[opponent.history[-1]] / 4)
                 self.P = round(self.P, 4)
                 self.score = "good"
             elif (self.current_score[0] / (len(self.history))) >= 1.75:
                 self.P = .25 + opponent.cooperations / (len(self.history)) 
                 self.P -= (self.consecutive_defections * .25) 
-                self.P += (self.current_score[0] - self.current_score[1]) / 100 
+                self.P += ((self.current_score[0] - self.current_score[1]) / 100) 
                 self.P += (4 / (len(self.history) + 1))
                 self.P = round(self.P, 4)
                 self.score = "average"
