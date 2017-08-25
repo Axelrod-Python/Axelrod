@@ -3,6 +3,9 @@
 Fingerprinting
 ==============
 
+Ashlock Fingerprints
+--------------------
+
 In [Ashlock2008]_, [Ashlock2009]_ a methodology for obtaining visual
 representation of a strategy's behaviour is described.  The basic method is to
 play the strategy against a probe strategy with varying noise parameters.
@@ -77,5 +80,49 @@ This allows for the fingerprinting of parametrized strategies::
     >>> data[(0, 0)]
     4.4...
 
-Ashlock's fingerprint is currently the only fingerprint implemented in the
-library.
+Transitive Fingerprint
+-----------------------
+
+Another implemented fingerprint is the transitive fingerprint. The
+transitive fingerprint represents the cooperation rate of a strategy against a
+set of opponents over a number of turns.
+
+By default the set of opponents consists of :code:`50` Random players that
+cooperate with increasing probability. This is how to obtain the transitive
+fingerprint for :code:`TitForTat`::
+
+     >>> axl.seed(0)
+     >>> player = axl.TitForTat()
+     >>> tf = axl.TransitiveFingerprint(player)
+     >>> data = tf.fingerprint(turns=40)
+
+The data produced is a :code:`numpy` array showing the cooperation rate against
+a given opponent (row) in a given turn (column)::
+
+     >>> data.shape
+     (50, 40)
+
+It is also possible to visualise the fingerprint::
+
+    >>> p = tf.plot()
+    >>> p.show()
+
+.. image:: _static/fingerprinting/transitive_TFT.png
+     :width: 100%
+     :align: center
+
+It is also possible to fingerprint against a given set of opponents::
+
+     >>> axl.seed(1)
+     >>> opponents = [s() for s in axl.demo_strategies]
+     >>> tf = axl.TransitiveFingerprint(player, opponents=opponents)
+     >>> data = tf.fingerprint(turns=5, repetitions=10)
+
+The name of the opponents can be displayed in the plot::
+
+     >>> p = tf.plot(display_names=True)
+     >>> p.show()
+
+.. image:: _static/fingerprinting/transitive_TFT_against_demo.png
+     :width: 70%
+     :align: center

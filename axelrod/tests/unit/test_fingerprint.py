@@ -1,21 +1,17 @@
 import os
-from tempfile import mkstemp
 import unittest
+from tempfile import mkstemp
 from unittest.mock import patch
+
+import numpy as np
+import matplotlib.pyplot
 from hypothesis import given, settings
+
 import axelrod as axl
 from axelrod.fingerprint import (create_points, create_jossann, create_probes,
                                  create_edges, generate_data, reshape_data,
-                                 AshlockFingerprint, Point)
+                                 AshlockFingerprint, Point, TransitiveFingerprint)
 from axelrod.tests.property import strategy_lists
-
-
-matplotlib_installed = True
-try:
-    import matplotlib.pyplot
-except ImportError:  # pragma: no cover
-    matplotlib_installed = False
-
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -399,3 +395,103 @@ class TestFingerprint(unittest.TestCase):
         data = af.fingerprint(turns=2, repetitions=2, step=0.5,
                               progress_bar=False)
         self.assertIsInstance(data, dict)
+
+
+class TestTransitiveFingerprint(unittest.TestCase):
+
+    def test_init(self):
+        player = axl.TitForTat()
+        fingerprint = axl.TransitiveFingerprint(strategy=player)
+        self.assertEqual(fingerprint.strategy, player)
+        self.assertEqual(fingerprint.opponents, [axl.Random(p) for p in
+                                                 np.linspace(0, 1, 50)])
+
+    def test_init_with_opponents(self):
+        player = axl.TitForTat()
+        opponents = [s() for s in axl.demo_strategies]
+        fingerprint = axl.TransitiveFingerprint(strategy=player,
+                                                opponents=opponents)
+        self.assertEqual(fingerprint.strategy, player)
+        self.assertEqual(fingerprint.opponents, opponents)
+
+    def test_init_with_not_default_number(self):
+        player = axl.TitForTat()
+        number_of_opponents = 10
+        fingerprint = axl.TransitiveFingerprint(strategy=player,
+                                                number_of_opponents=number_of_opponents)
+        self.assertEqual(fingerprint.strategy, player)
+        self.assertEqual(fingerprint.opponents, [axl.Random(p) for p in
+                                                 np.linspace(0, 1, 10)])
+
+    def test_fingerprint_with_filename(self):
+        filename = "test_outputs/test_fingerprint.csv"
+        strategy = axl.TitForTat()
+        tf = TransitiveFingerprint(strategy)
+        tf.fingerprint(turns=1, repetitions=1, progress_bar=False,
+                       filename=filename)
+        with open(filename, 'r') as out:
+            data = out.read()
+            self.assertEqual(len(data.split("\n")), 50 + 1)
+
+    def test_serial_fingerprint(self):
+        strategy = axl.TitForTat()
+        tf = TransitiveFingerprint(strategy)
+        tf.fingerprint(repetitions=1, progress_bar=False,
+                       filename='test_outputs/tran_fin.csv')
+        self.assertEqual(tf.data.shape, (50, 50))
+
+    def test_parallel_fingerprint(self):
+        strategy = axl.TitForTat()
+        tf = TransitiveFingerprint(strategy)
+        tf.fingerprint(repetitions=1, progress_bar=False, processes=2)
+
+        self.assertEqual(tf.data.shape, (50, 50))
+
+    def test_analyse_cooperation_ratio(self):
+        tf = TransitiveFingerprint(axl.TitForTat)
+        filename = "test_outputs/test_fingerprint.csv"
+        with open(filename, "w") as f:
+            f.write(
+"""0,1,Player0,Player1,CCC,DDD
+0,1,Player0,Player1,CCC,DDD
+0,2,Player0,Player2,CCD,DDD
+0,2,Player0,Player2,CCC,DDD
+0,3,Player0,Player3,CCD,DDD
+0,3,Player0,Player3,DCC,DDD
+0,4,Player0,Player3,DDD,DDD
+0,4,Player0,Player3,DDD,DDD""")
+        data = tf.analyse_cooperation_ratio(filename)
+        expected_data = np.array([[1, 1, 1],
+                                  [1, 1, 1 / 2],
+                                  [1 / 2, 1, 1 / 2],
+                                  [0, 0, 0]])
+        self.assertTrue(np.array_equal(data, expected_data))
+
+    def test_plot(self):
+        """
+        Test that plot is created with various arguments.
+        """
+        tf = TransitiveFingerprint(axl.TitForTat)
+        tf.fingerprint(turns=10, repetitions=2, progress_bar=False)
+        p = tf.plot()
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+        p = tf.plot(cmap="jet")
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+        p = tf.plot(interpolation='bicubic')
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+        p = tf.plot(title="Title")
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+        p = tf.plot(colorbar=False)
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+        p = tf.plot(labels=False)
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+        p = tf.plot(display_names=True)
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+
+    def test_plot_with_axis(self):
+        fig, axarr = matplotlib.pyplot.subplots(2, 2)
+        tf = TransitiveFingerprint(axl.TitForTat)
+        tf.fingerprint(turns=10, repetitions=2, progress_bar=False)
+        p = tf.plot(ax=axarr[0, 0])
+        self.assertIsInstance(p, matplotlib.pyplot.Figure)
+
