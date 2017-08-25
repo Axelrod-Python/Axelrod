@@ -217,7 +217,7 @@ class Tranquilizer(Player):
     Prisoner's Dilemma" paper: The rule normally cooperates but 
     is ready to defect if the other player defects too often. 
     Thus the rule tends to cooperate for the first dozen or two moves
-     if the other player is cooperating, but then it throws in a 
+    if the other player is cooperating, but then it throws in a 
     defection. If the other player continues to cooperate, then defections 
     become more frequent. But as long as Tranquilizer is maintaining an 
     average payoff of at least 2.25 points per move, it will never defect 
@@ -227,17 +227,16 @@ class Tranquilizer(Player):
     
     - Has a variable, 'FD' which can be 0, 1 or 2. It has an initial value of 0
     - Has a variable 'S', which counts the consecutive number of 
-    times the opponent has played D (i.e. it is reset to 0 if the opponent 
-    plays C). It has an initial value of 0.
+     times the opponent has played D (i.e. it is reset to 0 if the opponent 
+     plays C). It has an initial value of 0.
     - Has a variable, 'C', which counts the number of times the opponent Cooperates
     - Has a variable 'AK' which increases each time a move is played whilst in state
-    FD = 1. It has an initial value of 1.
+     FD = 1. It has an initial value of 1.
     - Has a variable 'NK' which increases each time a move is 
-    played whilst in state FD = 2. It has an initial value of 1.
+     played whilst in state FD = 2. It has an initial value of 1.
     - Has a variable 'AD' with an initial value of 5
     - Has a variable 'NO with an initial value of 0
-    
-     Has a variable 'NO with an initial value of 0                                                                                                                                                                                                                       
+    - Has a variable 'NO with an initial value of 0                                                                                                                                                                                                                       
                                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                         
     The strategy follows the following algorithm::                                                                                                                                                                                                                      
