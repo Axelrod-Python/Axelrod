@@ -157,7 +157,7 @@ def generate_data(interactions: dict, points: list, edges: list) -> dict:
 
     Parameters
     ----------
-    interactions : dictionary
+    interactions : dict
         A dictionary mapping edges to the corresponding interactions of
         those players.
     points : list
@@ -169,7 +169,7 @@ def generate_data(interactions: dict, points: list, edges: list) -> dict:
 
     Returns
     ----------
-    point_scores : dictionary
+    point_scores : dict
         A dictionary where the keys are Points of the form (x, y) and
         the values are the mean score for the corresponding interactions.
     """
@@ -268,7 +268,7 @@ class AshlockFingerprint(object):
         self, turns: int = 50, repetitions: int = 10, step: float = 0.01,
         processes: int=None, filename: str = None, in_memory: bool = False,
         progress_bar: bool = True
-    ) -> dict:
+) -> dict:
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
@@ -279,16 +279,16 @@ class AshlockFingerprint(object):
 
         Parameters
         ----------
-        turns : integer, optional
+        turns : int, optional
             The number of turns per match
-        repetitions : integer, optional
+        repetitions : int, optional
             The number of times the round robin should be repeated
         step : float, optional
             The separation between each Point. Smaller steps will
             produce more Points that will be closer together.
-        processes : integer, optional
+        processes : int, optional
             The number of processes to be used for parallel processing
-        filename: string, optional
+        filename: str, optional
             The name of the file for self.spatial_tournament's interactions.
             if None and in_memory=False, will auto-generate a filename.
         in_memory: bool
@@ -299,7 +299,7 @@ class AshlockFingerprint(object):
 
         Returns
         ----------
-        self.data : dictionary
+        self.data : dict
             A dictionary where the keys are coordinates of the form (x, y) and
             the values are the mean score for the corresponding interactions.
         """
@@ -385,25 +385,25 @@ class AshlockFingerprint(object):
 
 
 class TransitiveFingerprint(object):
-    def __init__(self, strategy, opponents=None, number_opponents=50):
+    def __init__(self, strategy, opponents=None, number_of_opponents=50):
         """
         Parameters
         ----------
         strategy : class or instance
             A class that must be descended from axelrod.Player or an instance of
             axelrod.Player.
-        opponents : list of class or instance
+        opponents : list of instances
             A list that contains a list of opponents
             Default: A spectrum of Random  players
-        number_opponents: integer
-            An integer that defines the number of Random opponents
+        number_of_opponents: int
+            The number of Random opponents
             Default: 50
         """
         self.strategy = strategy
 
         if opponents is None:
             self.opponents = [axl.Random(p) for p in
-                                            np.linspace(0, 1, number_opponents)]
+                              np.linspace(0, 1, number_of_opponents)]
         else:
             self.opponents = opponents
 
@@ -411,21 +411,24 @@ class TransitiveFingerprint(object):
                     noise: float = None, processes: int = None,
                     filename: str = None,
                     progress_bar: bool = True) -> np.array:
-        """Build and play the spatial tournament.
-
-        Creates the opponents and their edges then builds a spatial tournament.
+        """Creates a spatial tournament to run the necessary matches to obtain 
+        fingerprint data.
+        
+          Creates the opponents and their edges then builds a spatial tournament.
 
         Parameters
         ----------
-        turns : integer, optional
+        turns : int, optional
             The number of turns per match
-        repetitions : integer, optional
+        repetitions : int, optional
             The number of times the round robin should be repeated
-        processes : integer, optional
+        noise : float, optional
+            The probability that a player's intended action should be flipped
+        processes : int, optional
             The number of processes to be used for parallel processing
-        filename: string, optional
-            The name of the file for self.spatial_tournament's interactions.
-            if None and in_memory=False, will auto-generate a filename.
+        filename: str, optional
+            The name of the file for spatial tournament's interactions.
+            if None, a filename will be generated.
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
 
@@ -500,9 +503,9 @@ class TransitiveFingerprint(object):
 
     def plot(self, cmap: str = 'viridis', interpolation: str = 'none',
              title: str = None, colorbar: bool = True, labels: bool = True,
-             display_names: bool = False) -> plt.Figure:
+             display_names: bool = False,
+             ax: plt.Figure = None) -> plt.Figure:
         """Plot the results of the spatial tournament.
-
         Parameters
         ----------
         cmap : str, optional
@@ -517,16 +520,22 @@ class TransitiveFingerprint(object):
             Choose whether the colorbar should be included or not
         labels : bool, optional
             Choose whether the axis labels and ticks should be included
-        display_name : bool, optional
+        display_names : bool, optional
             Choose whether to display the names of the strategies
-
+        ax: matplotlib axis
+            Allows the plot to be written to a given matplotlib axis.
+            Default is None.
         Returns
         ----------
         figure : matplotlib figure
             A heat plot of the results of the spatial tournament
         """
+        if ax is None:
+            fig, ax = plt.subplots()
+        else:
+            ax = ax
 
-        fig, ax = plt.subplots()
+        fig = ax.get_figure()
         mat = ax.imshow(self.data, cmap=cmap, interpolation=interpolation)
 
         width = len(self.data) / 2
