@@ -407,7 +407,7 @@ class TransitiveFingerprint(object):
         else:
             self.opponents = opponents
 
-    def fingerprint(self, turns: int = 50, repetitions: int = 10,
+    def fingerprint(self, turns: int = 50, repetitions: int = 1000,
                     noise: float = None, processes: int = None,
                     filename: str = None,
                     progress_bar: bool = True) -> np.array:
