@@ -165,7 +165,7 @@ class TestMoreGrofman(TestPlayer):
     name = "MoreGrofman"
     player = axelrod.MoreGrofman
     expected_classifier = {
-        'memory_depth': 7,
+        'memory_depth': 8,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
