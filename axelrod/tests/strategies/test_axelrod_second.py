@@ -182,7 +182,7 @@ class TestTranquilizer(TestPlayer):
 
         player = axelrod.Tranquilizer()
 
-        self.assertEqual(player.probability, 1.1)
+        self.assertEqual(player.probability, float)
         self.assertEqual(player.num_turns_after_good_defection, 0)
         self.assertEqual(player.consecutive_defections, 0)
         self.assertEqual(player.one_turn_after_good_defection_ratio, 5)
@@ -198,7 +198,7 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 20
-        self.versus_test(opponent, expected_actions=actions, attrs={"probability": 1.1, 
+        self.versus_test(opponent, expected_actions=actions, attrs={"probability": float, 
                                                                     "num_turns_after_good_defection": 0, 
                                                                     "consecutive_defections": 20, 
                                                                     "one_turn_after_good_defection_ratio": 5, 
@@ -233,7 +233,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, D)] + [(D, D)] * 6 + [(D, C)] + [(C, C)] * 4       
         # average_score_per_turn = 1.85
         actions += [(D, D)] # <-- Random
-        self.versus_test(opponent, expected_actions=actions, seed=10, attrs={"probability": 0.9423, 
+        self.versus_test(opponent, expected_actions=actions, seed=2, attrs={"probability": 0.9423, 
                                                                              "num_turns_after_good_defection": 0, 
                                                                              "consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
@@ -255,7 +255,7 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"probability": 0.99, 
+        self.versus_test(opponent, expected_actions=actions, seed=89, attrs={"probability": 0.99, 
                                                                              "num_turns_after_good_defection": 1,
                                                                              "consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
@@ -267,7 +267,7 @@ class TestTranquilizer(TestPlayer):
         
         opponent = axelrod.MockPlayer(actions = [C] * 6)
         actions = [(C, C)] * 4 + [(D, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"probability": 0.99, 
+        self.versus_test(opponent, expected_actions=actions, seed=89, attrs={"probability": 0.99, 
                                                                              "num_turns_after_good_defection": 2, 
                                                                              "consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
@@ -279,7 +279,7 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"probability": 0.99, 
+        self.versus_test(opponent, expected_actions=actions, seed=89, attrs={"probability": 0.99, 
                                                                              "num_turns_after_good_defection": 1, 
                                                                              "consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
@@ -291,7 +291,7 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70, attrs={"probability": 0.99, 
+        self.versus_test(opponent, expected_actions=actions, seed=89, attrs={"probability": 0.99, 
                                                                              "num_turns_after_good_defection": 2, 
                                                                              "consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
@@ -303,7 +303,7 @@ class TestTranquilizer(TestPlayer):
         
         opponent = axelrod.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C), (C, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions, seed=70,  attrs={"probability": 0.99, 
+        self.versus_test(opponent, expected_actions=actions, seed=89,  attrs={"probability": 0.99, 
                                                                               "num_turns_after_good_defection": 0, 
                                                                               "consecutive_defections": 0, 
                                                                               "one_turn_after_good_defection_ratio": 5, 
@@ -315,7 +315,7 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 19
-        self.versus_test(opponent, expected_actions=actions, attrs={"probability": 1.1, 
+        self.versus_test(opponent, expected_actions=actions, attrs={"probability": float, 
                                                                     "num_turns_after_good_defection": 0, 
                                                                     "consecutive_defections": 19, 
                                                                     "one_turn_after_good_defection_ratio": 5, 

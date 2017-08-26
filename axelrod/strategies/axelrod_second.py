@@ -309,18 +309,16 @@ class Tranquilizer(Player):
         'manipulates_state': False
     }
 
-
-    # Initialised atributes
     def __init__(self):
         super().__init__()
-        self.num_turns_after_good_defection = 0
+        self.num_turns_after_good_defection = 0 # equal to FD variable in Fortran code
         self.consecutive_defections = 0
         self.one_turn_after_good_defection_ratio= 5
         self.two_turns_after_good_defection_ratio= 0
         self.one_turn_after_good_defection_ratio_count = 1
         self.two_turns_after_good_defection_ratio_count = 1
         self.score = None
-        self.probability = 1.1
+        self.probability = float
         self.current_score = 0
         self.dict = {C: 0, D: 1}
 
@@ -328,58 +326,58 @@ class Tranquilizer(Player):
     def update_state(self, opponent):  
         
         """
-        Calculates the ratioFD values and P values, as well as sets the 
-        states of FD at the start of each turn
+        Calculates the ratio values for the one_turn_after_good_defection_ratio,
+        two_turns_after_good_defection_ratio and the probability values, 
+        as well as sets the value of num_turns_after_good_defection.
         """
         self.current_score = compute_final_score(zip(self.history, opponent.history))
 
         if self.num_turns_after_good_defection == 2:
             self.num_turns_after_good_defection = 0
             self.two_turns_after_good_defection_ratio = (
-            ((self.two_turns_after_good_defection_ratio 
-            * self.two_turns_after_good_defection_ratio_count) 
-            + (3 - (3 * self.dict[opponent.history[-1]])) 
-            + (2 * self.dict[self.history[-1]]) 
-            - ((self.dict[opponent.history[-1]] 
-            * self.dict[self.history[-1]]))) 
-            / (self.two_turns_after_good_defection_ratio_count + 1)
-            )
+                ((self.two_turns_after_good_defection_ratio 
+                * self.two_turns_after_good_defection_ratio_count) 
+                + (3 - (3 * self.dict[opponent.history[-1]])) 
+                + (2 * self.dict[self.history[-1]]) 
+                - ((self.dict[opponent.history[-1]] 
+                * self.dict[self.history[-1]]))) 
+                / (self.two_turns_after_good_defection_ratio_count + 1)
+                )
             self.two_turns_after_good_defection_ratio_count += 1
         elif self.num_turns_after_good_defection == 1:
             self.num_turns_after_good_defection = 2
             self.one_turn_after_good_defection_ratio = (
-            ((self.one_turn_after_good_defection_ratio 
-            * self.one_turn_after_good_defection_ratio_count)
-            + (3 - (3 * self.dict[opponent.history[-1]])) 
-            + (2 * self.dict[self.history[-1]]) 
-            - (self.dict[opponent.history[-1]] 
-            * self.dict[self.history[-1]])) 
-            / (self.one_turn_after_good_defection_ratio_count + 1)
-            )
+                ((self.one_turn_after_good_defection_ratio 
+                * self.one_turn_after_good_defection_ratio_count)
+                + (3 - (3 * self.dict[opponent.history[-1]])) 
+                + (2 * self.dict[self.history[-1]]) 
+                - (self.dict[opponent.history[-1]] 
+                * self.dict[self.history[-1]])) 
+                / (self.one_turn_after_good_defection_ratio_count + 1)
+                )
             self.one_turn_after_good_defection_ratio_count += 1
         else:
             if (self.current_score[0] / ((len(self.history)) + 1)) >= 2.25:
                 self.probability = (
-                (.95 - (((self.one_turn_after_good_defection_ratio)
-                + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
-                + (1 / (((len(self.history))+1) ** 2))
-                - (self.dict[opponent.history[-1]] / 4)
-                )
+                    (.95 - (((self.one_turn_after_good_defection_ratio)
+                    + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
+                    + (1 / (((len(self.history))+1) ** 2))
+                    - (self.dict[opponent.history[-1]] / 4)
+                    )
                 self.probability = round(self.probability, 4)
                 self.score = "good"
             elif (self.current_score[0] / ((len(self.history)) + 1)) >= 1.75:
                 self.probability = (
-                (.25 + (opponent.cooperations / ((len(self.history)) + 1)))
-                - (self.consecutive_defections * .25) 
-                + ((self.current_score[0] 
-                - self.current_score[1]) / 100) 
-                + (4 / ((len(self.history)) + 1)))
+                    (.25 + (opponent.cooperations / ((len(self.history)) + 1)))
+                    - (self.consecutive_defections * .25) 
+                    + ((self.current_score[0] 
+                    - self.current_score[1]) / 100) 
+                    + (4 / ((len(self.history)) + 1))
+                    )
                 self.probability = round(self.probability, 4)
                 self.score = "average"
 
     def strategy(self, opponent: Player) -> Action:
-
-        randomValue = random.random()
 
         current_score = compute_final_score(zip(self.history, opponent.history))
 
@@ -400,7 +398,7 @@ class Tranquilizer(Player):
         elif (self.current_score[0] / ((len(self.history)) + 1)) < 1.75: 
             return opponent.history[-1]  # "If you can't beat them join'em"
         else:
-            if (randomValue <= self.probability):  
+            if (random.random() <= self.probability):  
                 if self.consecutive_defections == 0:
                     return C
                 else:
@@ -409,5 +407,3 @@ class Tranquilizer(Player):
                 if self.score == "good": 
                     self.num_turns_after_good_defection = 1
                 return D
-
-            
