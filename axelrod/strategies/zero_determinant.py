@@ -44,8 +44,7 @@ class LRPlayer(MemoryOnePlayer):
         self.l = l
         super().__init__()
 
-    def receive_match_attributes(self, phi: float = None, s: float = None,
-                                 l: float = None):
+    def receive_match_attributes(self):
         """
         Parameters
 
@@ -54,13 +53,10 @@ class LRPlayer(MemoryOnePlayer):
             parameterization of the strategies below.
         """
 
-        (R, P, S, T) = self.match_attributes["game"].RPST()
-        if phi is None:
-            phi = self.phi
-        if s is None:
-            s = self.s
-        if l is None:
-            l = self.l
+        R, P, S, T = self.match_attributes["game"].RPST()
+        l = self.l
+        phi = self.phi
+        s = self.s
 
         # Check parameters
         s_min = - min((T - l) / (l - S), (l - S) / (T - l))
@@ -109,7 +105,7 @@ class ZDExtort2(LRPlayer):
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
         self.l = P
-        super().receive_match_attributes(self.phi, self.s, self.l)
+        super().receive_match_attributes()
 
 
 class ZDExtort2v2(LRPlayer):
@@ -196,7 +192,7 @@ class ZDGTFT2(LRPlayer):
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
         self.l = R
-        super().receive_match_attributes(self.phi, self.s, self.l)
+        super().receive_match_attributes()
 
 
 class ZDMischief(LRPlayer):
