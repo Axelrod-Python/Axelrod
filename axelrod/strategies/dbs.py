@@ -111,7 +111,6 @@ class DBS(Player):
             (D, D): ([0], [1])
         }
 
-
     def should_promote(self, r_plus, promotion_threshold=3):
         """
         This function determines if the move r_plus is a deterministic

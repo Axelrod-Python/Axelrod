@@ -39,7 +39,6 @@ class SequencePlayer(Player):
         for s in self.sequence_generator:
             return self.meta_strategy(s)
 
-
     def __getstate__(self):
         return_dict = self.__dict__.copy()
         del return_dict['sequence_generator']

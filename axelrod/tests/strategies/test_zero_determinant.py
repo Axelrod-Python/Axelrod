@@ -3,6 +3,7 @@
 import unittest
 
 import axelrod
+from axelrod.game import DefaultGame
 from axelrod.strategies.zero_determinant import LRPlayer
 from .test_player import TestPlayer, test_four_vector
 
@@ -15,6 +16,14 @@ class TestLRPlayer(unittest.TestCase):
         player = LRPlayer()
         with self.assertRaises(ValueError):
             player.receive_match_attributes(0, 0, -float("inf"))
+
+    def test_receive_match_attributes(self):
+        player = LRPlayer()
+        player.set_match_attributes(0, 0, 0)
+        self.assertEqual(player.set_four_vector, [0, 0, 0, 0])
+        self.assertEqual(player.phi, 0)
+        self.assertEqual(player.s, 0)
+        self.assertEqual(player.l, 0)
 
 
 class TestZDExtortion(TestPlayer):
@@ -64,6 +73,12 @@ class TestZDExtort2(TestPlayer):
         expected_dictionary = {(C, C): 8/9, (C, D): 0.5, (D, C): 1/3,
                                (D, D): 0.}
         test_four_vector(self, expected_dictionary)
+
+    def test_receive_match_attributes(self):
+        player = LRPlayer()
+        R, P, S, T = DefaultGame().RPST()
+        self.assertEqual(player.l, P)
+
 
     def test_strategy(self):
         actions = [(C, C), (D, D), (D, C), (D, D), (D, C), (C, D)]
@@ -226,6 +241,11 @@ class TestZDGTFT2(TestPlayer):
         expected_dictionary = {(C, C): 1., (C, D): 1/8, (D, C): 1.,
                                (D, D): 0.25}
         test_four_vector(self, expected_dictionary)
+
+    def test_receive_match_attributes(self):
+        player = LRPlayer()
+        R, P, S, T = DefaultGame().RPST()
+        self.assertEqual(player.l, R)
 
     def test_strategy(self):
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)]

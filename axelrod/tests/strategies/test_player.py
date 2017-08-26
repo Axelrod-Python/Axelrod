@@ -1,7 +1,8 @@
-import random
-import unittest
-import types
 import itertools
+import random
+import types
+import unittest
+
 import numpy as np
 
 import axelrod

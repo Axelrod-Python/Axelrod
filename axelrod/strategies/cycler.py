@@ -50,7 +50,6 @@ class AntiCycler(Player):
             return D
 
 
-
 class Cycler(Player):
     """
     A player that repeats a given sequence indefinitely.
@@ -92,7 +91,6 @@ class Cycler(Player):
 
     def strategy(self, opponent: Player) -> Action:
         return next(self.cycle)
-
 
 
 class CyclerDC(Cycler):

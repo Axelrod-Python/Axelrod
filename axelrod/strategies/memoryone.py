@@ -5,8 +5,7 @@ from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 
-from typing import List, Tuple, Union
-
+from typing import Tuple
 
 
 C, D = Action.C, Action.D

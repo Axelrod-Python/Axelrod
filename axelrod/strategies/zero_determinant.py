@@ -31,7 +31,20 @@ class LRPlayer(MemoryOnePlayer):
         'manipulates_state': False
     }
 
-    def receive_match_attributes(self, phi: float = 0, s: float = None,
+    def __init__(self, phi: float = 0.2, s: float = 0.1,
+                 l: float = 1) -> None:
+        """
+        Parameters
+
+        phi, s, l: floats
+            Parameters determining the four_vector of the LR player.
+        """
+        self.phi = phi
+        self.s = s
+        self.l = l
+        super().__init__()
+
+    def receive_match_attributes(self, phi: float = None, s: float = None,
                                  l: float = None):
         """
         Parameters
@@ -42,10 +55,12 @@ class LRPlayer(MemoryOnePlayer):
         """
 
         (R, P, S, T) = self.match_attributes["game"].RPST()
+        if phi is None:
+            phi = self.phi
         if s is None:
-            s = 1
+            s = self.s
         if l is None:
-            l = R
+            l = self.l
 
         # Check parameters
         s_min = - min((T - l) / (l - S), (l - S) / (T - l))
@@ -72,22 +87,8 @@ class ZDExtortion(LRPlayer):
 
     name = 'ZD-Extortion'
 
-    def __init__(self, phi: float = 0.2, s: float = 0.1,
-                 l: float = 1) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        self.l = l
-        super().__init__()
-
-    def receive_match_attributes(self):
-        super().receive_match_attributes(self.phi, self.s, self.l)
+    def __init__(self, phi: float = 0.2, s: float = 0.1, l: float = 1) -> None:
+        super().__init__(phi, s, l)
 
 
 class ZDExtort2(LRPlayer):
@@ -102,16 +103,8 @@ class ZDExtort2(LRPlayer):
     name = 'ZD-Extort-2'
 
     def __init__(self, phi: float = 1/9, s: float = 0.5) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        super().__init__()
+        # l = P will be set by receive_match_attributes
+        super().__init__(phi, s, None)
 
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
@@ -132,20 +125,7 @@ class ZDExtort2v2(LRPlayer):
     name = 'ZD-Extort-2 v2'
 
     def __init__(self, phi: float = 1/8, s: float = 0.5, l: float = 1) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        self.l = l
-        super().__init__()
-
-    def receive_match_attributes(self):
-        super().receive_match_attributes(self.phi, self.s, self.l)
+        super().__init__(phi, s, l)
 
 
 class ZDExtort3(LRPlayer):
@@ -163,20 +143,7 @@ class ZDExtort3(LRPlayer):
 
     def __init__(self, phi: float = 3 / 26, s: float = 1 / 3,
                  l: float = 1) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        self.l = l
-        super().__init__()
-
-    def receive_match_attributes(self):
-        super().receive_match_attributes(self.phi, self.s, self.l)
+        super().__init__(phi, s, l)
 
 
 class ZDExtort4(LRPlayer):
@@ -193,20 +160,7 @@ class ZDExtort4(LRPlayer):
     name = 'ZD-Extort-4'
 
     def __init__(self, phi: float = 4/17, s: float = 0.25, l: float = 1) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        self.l = l
-        super().__init__()
-
-    def receive_match_attributes(self):
-        super().receive_match_attributes(self.phi, self.s, self.l)
+        super().__init__(phi, s, l)
 
 
 class ZDGen2(LRPlayer):
@@ -221,20 +175,7 @@ class ZDGen2(LRPlayer):
     name = 'ZD-GEN-2'
 
     def __init__(self, phi: float = 1/8, s: float = 0.5, l: float = 3) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        self.l = l
-        super().__init__()
-
-    def receive_match_attributes(self):
-        super().receive_match_attributes(self.phi, self.s, self.l)
+        super().__init__(phi, s, l)
 
 
 class ZDGTFT2(LRPlayer):
@@ -249,16 +190,8 @@ class ZDGTFT2(LRPlayer):
     name = 'ZD-GTFT-2'
 
     def __init__(self, phi: float = 0.25, s: float = 0.5) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        super().__init__()
+        # l = R will be set by receive_match_attributes
+        super().__init__(phi, s, None)
 
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
@@ -278,20 +211,7 @@ class ZDMischief(LRPlayer):
     name = 'ZD-Mischief'
 
     def __init__(self, phi: float = 0.1, s: float = 0., l: float = 1) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        self.l = l
-        super().__init__()
-
-    def receive_match_attributes(self):
-        super().receive_match_attributes(self.phi, self.s, self.l)
+        super().__init__(phi, s, l)
 
 
 class ZDSet2(LRPlayer):
@@ -306,17 +226,4 @@ class ZDSet2(LRPlayer):
     name = 'ZD-SET-2'
 
     def __init__(self, phi: float = 1/4, s: float = 0., l: float = 2) -> None:
-        """
-        Parameters
-
-        phi, s: floats
-            Parameters passed through to LRPlayer to determine
-            the four vector.
-        """
-        self.phi = phi
-        self.s = s
-        self.l = l
-        super().__init__()
-
-    def receive_match_attributes(self):
-        super().receive_match_attributes(self.phi, self.s, self.l)
+        super().__init__(phi, s, l)
