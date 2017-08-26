@@ -256,10 +256,8 @@ class MoreGrofman(Player):
             if self.history[-1] == C:
                 if opponent_defections_last_8_rounds <= 2:
                     return C
-                else:
-                    return D
+                return D
             else:
                 if opponent_defections_last_8_rounds <= 1:
                     return C
-                else:
-                    return D
+                return D
