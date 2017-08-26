@@ -184,28 +184,28 @@ class TestMoreGrofman(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         # Demonstrate MoreGrofman Logic
-        # Own previous move was C, opponent defected less than twice in last 7
+        # Own previous move was C, opponent defected less than 3 times in last 7
         moregrofman_actions = [C] * 7 + [C]
         opponent_actions = [C] * 6 + [D] * 2
         opponent = axelrod.MockPlayer(actions=opponent_actions)
         actions = list(zip(moregrofman_actions, opponent_actions))
         self.versus_test(opponent, expected_actions=actions)
 
-        # Own previous move was C, opponent defected more than twice in last 7
+        # Own previous move was C, opponent defected 3 or more times in last 7
         moregrofman_actions = ([C] * 3 + [D] * 3 + [C]) + [D]
         opponent_actions = ([C] * 2 + [D] * 3 + [C] * 2) + [D]
         opponent = axelrod.MockPlayer(actions=opponent_actions)
         actions = list(zip(moregrofman_actions, opponent_actions))
         self.versus_test(opponent, expected_actions=actions)
 
-        # Own previous move was D, opponent defected once in last 7
+        # Own previous move was D, opponent defected once or less in last 7
         moregrofman_actions = ([C] * 6 + [D]) + [C]
         opponent_actions = ([C] * 5 + [D] * 1 + [C]) + [D]
         opponent = axelrod.MockPlayer(actions=opponent_actions)
         actions = list(zip(moregrofman_actions, opponent_actions))
         self.versus_test(opponent, expected_actions=actions)
 
-        # Own previous move was D, opponent defected more than twice in last 7
+        # Own previous move was D, opponent defected more than once in last 7
         moregrofman_actions = ([C] * 2 + [D] * 5) + [D]
         opponent_actions = ([D] * 7) + [D]
         opponent = axelrod.MockPlayer(actions=opponent_actions)

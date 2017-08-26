@@ -211,9 +211,9 @@ class MoreGrofman(Player):
     3. Thereafter, it applies the following logic
 
       - If its own previous move was C and the opponent has defected less than
-        twice in the last 7 rounds, cooperate
-      - If its own previous move was C and the opponent has defected twice or
-        more in the last 7 rounds, defect
+        3 times in the last 7 rounds, cooperate
+      - If its own previous move was C and the opponent has defected 3 or
+        more times in the last 7 rounds, defect
       - If its own previous move was D and the opponent has defected only once
         or not at all in the last 7 rounds, cooperate
       - If its own previous move was D and the opponent has defected more than
@@ -245,7 +245,7 @@ class MoreGrofman(Player):
             return opponent.history[-1]
         # Logic for the rest of the game
         else:
-            opponent_defections_last_7_rounds = opponent.history[-8:-1].count(D) # (-7:) fails at 13, (-7:-1), (-8:), (-8:-1), (-6:), (-6:-1)
+            opponent_defections_last_7_rounds = opponent.history[-8:-1].count(D)
             if self.history[-1] == C:
                 if opponent_defections_last_7_rounds <= 2:
                     return C
