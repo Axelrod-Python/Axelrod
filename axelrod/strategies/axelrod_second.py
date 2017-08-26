@@ -208,23 +208,27 @@ class MoreGrofman(Player):
     This strategy has 3 phases:
     1. First it cooperates on the first two rounds
     2. For rounds 3-7 inclusive, it plays the same as the opponent's last move
-    3. Thereafter, it applies the following logic
+    3. Thereafter, it applies the following logic, looking at its memory of the
+       last 8\* rounds (ignoring the most recent round).
 
       - If its own previous move was C and the opponent has defected less than
-        3 times in the last 7 rounds, cooperate
+        3 times in the last 8\* rounds, cooperate
       - If its own previous move was C and the opponent has defected 3 or
-        more times in the last 7 rounds, defect
+        more times in the last 8\* rounds, defect
       - If its own previous move was D and the opponent has defected only once
-        or not at all in the last 7 rounds, cooperate
+        or not at all in the last 8\* rounds, cooperate
       - If its own previous move was D and the opponent has defected more than
-        once in the last 7 rounds, defect
+        once in the last 8\* rounds, defect
+
+    \* The code looks at the first 7 of the last 8 rounds, ignoring the most
+    recent round.
 
     Names:
     - Grofman's strategy: [Axelrod1980b]_
     """
     name = "MoreGrofman"
     classifier = {
-        'memory_depth': 7,
+        'memory_depth': 8,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -245,14 +249,17 @@ class MoreGrofman(Player):
             return opponent.history[-1]
         # Logic for the rest of the game
         else:
-            opponent_defections_last_7_rounds = opponent.history[-8:-1].count(D)
+            # Note: the Fortran code behavior ignores the opponent behavior
+            #   in the last round and instead looks at the first 7 of the last
+            #   8 rounds.
+            opponent_defections_last_8_rounds = opponent.history[-8:-1].count(D)
             if self.history[-1] == C:
-                if opponent_defections_last_7_rounds <= 2:
+                if opponent_defections_last_8_rounds <= 2:
                     return C
                 else:
                     return D
             else:
-                if opponent_defections_last_7_rounds <= 1:
+                if opponent_defections_last_8_rounds <= 1:
                     return C
                 else:
                     return D
