@@ -318,7 +318,7 @@ class Tranquilizer(Player):
         self.one_turn_after_good_defection_ratio_count = 1
         self.two_turns_after_good_defection_ratio_count = 1
         self.score = None
-        self.probability = float
+        self.probability = None
         self.current_score = 0
         self.dict = {C: 0, D: 1}
 

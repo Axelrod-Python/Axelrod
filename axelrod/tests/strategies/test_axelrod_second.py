@@ -182,7 +182,7 @@ class TestTranquilizer(TestPlayer):
 
         player = axelrod.Tranquilizer()
 
-        self.assertEqual(player.probability, float)
+        self.assertEqual(player.probability, None)
         self.assertEqual(player.num_turns_after_good_defection, 0)
         self.assertEqual(player.consecutive_defections, 0)
         self.assertEqual(player.one_turn_after_good_defection_ratio, 5)
@@ -190,7 +190,6 @@ class TestTranquilizer(TestPlayer):
         self.assertEqual(player.one_turn_after_good_defection_ratio_count, 1)
         self.assertEqual(player.two_turns_after_good_defection_ratio_count, 1)
         self.assertEqual(player.score, None)
-        self.current_score = 0
 
     def test_strategy(self):
 
@@ -198,7 +197,7 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 20
-        self.versus_test(opponent, expected_actions=actions, attrs={"probability": float, 
+        self.versus_test(opponent, expected_actions=actions, attrs={"probability": None, 
                                                                     "num_turns_after_good_defection": 0, 
                                                                     "consecutive_defections": 20, 
                                                                     "one_turn_after_good_defection_ratio": 5, 
@@ -315,10 +314,11 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 19
-        self.versus_test(opponent, expected_actions=actions, attrs={"probability": float, 
+        self.versus_test(opponent, expected_actions=actions, attrs={"probability": None, 
                                                                     "num_turns_after_good_defection": 0, 
                                                                     "consecutive_defections": 19, 
                                                                     "one_turn_after_good_defection_ratio": 5, 
                                                                     "two_turns_after_good_defection_ratio": 0, 
                                                                     "one_turn_after_good_defection_ratio_count": 1, 
                                                                     "two_turns_after_good_defection_ratio_count": 1}) 
+                                                                    
