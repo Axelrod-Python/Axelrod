@@ -1,3 +1,17 @@
+# v3.6.0, 2017-08-26
+
+A new fingerprint mechanism, internal improvements.
+
+- Transitive fingerprints:
+  https://github.com/Axelrod-Python/Axelrod/pull/1125
+- Add ability to pass game to Moran process
+  https://github.com/Axelrod-Python/Axelrod/pull/1122
+- Implement a global reset method
+  https://github.com/Axelrod-Python/Axelrod/pull/1123
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.6.0...v3.5.0
+
 # v3.5.0, 2017-08-19
 
 Parallel processing now supported on Windows, a new strategy and some minor
