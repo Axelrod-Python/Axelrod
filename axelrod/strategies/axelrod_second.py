@@ -206,6 +206,7 @@ class MoreGrofman(Player):
     Submitted to Axelrod's second tournament by Bernard Grofman.
 
     This strategy has 3 phases:
+
     1. First it cooperates on the first two rounds
     2. For rounds 3-7 inclusive, it plays the same as the opponent's last move
     3. Thereafter, it applies the following logic, looking at its memory of the
