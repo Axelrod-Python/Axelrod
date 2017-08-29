@@ -323,14 +323,13 @@ class Tranquilizer(Player):
         self.dict = {C: 0, D: 1}
 
 
-    def update_state(self, opponent):  
+    def update_cooperative_state(self, opponent):  
         
         """
         Calculates the ratio values for the one_turn_after_good_defection_ratio,
         two_turns_after_good_defection_ratio and the probability values, 
         as well as sets the value of num_turns_after_good_defection.
         """
-        self.current_score = compute_final_score(zip(self.history, opponent.history))
 
         if self.num_turns_after_good_defection == 2:
             self.num_turns_after_good_defection = 0
@@ -356,8 +355,10 @@ class Tranquilizer(Player):
                 / (self.one_turn_after_good_defection_ratio_count + 1)
                 )
             self.one_turn_after_good_defection_ratio_count += 1
-        else:
-            if (self.current_score[0] / ((len(self.history)) + 1)) >= 2.25:
+   
+    def update_stochastic_state(self, opponent):
+            
+        if (self.current_score[0] / ((len(self.history)) + 1)) >= 2.25:
                 self.probability = (
                     (.95 - (((self.one_turn_after_good_defection_ratio)
                     + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
@@ -366,9 +367,9 @@ class Tranquilizer(Player):
                     )
                 self.probability = round(self.probability, 4)
                 self.score = "good"
-            elif (self.current_score[0] / ((len(self.history)) + 1)) >= 1.75:
+        elif (self.current_score[0] / ((len(self.history)) + 1)) >= 1.75:
                 self.probability = (
-                    (.25 + (opponent.cooperations / ((len(self.history)) + 1)))
+                    (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
                     - (self.opponent_consecutive_defections * .25) 
                     + ((self.current_score[0] 
                     - self.current_score[1]) / 100) 
@@ -379,16 +380,17 @@ class Tranquilizer(Player):
 
     def strategy(self, opponent: Player) -> Action:
 
-        current_score = compute_final_score(zip(self.history, opponent.history))
-
+        self.current_score = compute_final_score(zip(self.history, opponent.history))
+        
         if len(self.history) == 0:
             return C
         else: 
-            Tranquilizer.update_state(self, opponent)
-        if opponent.history[-1] == D: 
-            self.opponent_consecutive_defections += 1
-        else:
-            self.opponent_consecutive_defections = 0
+            self.update_cooperative_state(opponent)
+            if opponent.history[-1] == D: 
+                self.opponent_consecutive_defections += 1
+            else:
+                self.opponent_consecutive_defections = 0
+            self.update_stochastic_state(opponent)
 
         if self.num_turns_after_good_defection != 0: 
             if self.opponent_consecutive_defections == 0:
