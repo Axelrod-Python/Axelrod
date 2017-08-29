@@ -312,7 +312,7 @@ class Tranquilizer(Player):
     def __init__(self):
         super().__init__()
         self.num_turns_after_good_defection = 0 # equal to FD variable in Fortran code
-        self.consecutive_defections = 0
+        self.opponent_consecutive_defections = 0
         self.one_turn_after_good_defection_ratio= 5
         self.two_turns_after_good_defection_ratio= 0
         self.one_turn_after_good_defection_ratio_count = 1
@@ -369,7 +369,7 @@ class Tranquilizer(Player):
             elif (self.current_score[0] / ((len(self.history)) + 1)) >= 1.75:
                 self.probability = (
                     (.25 + (opponent.cooperations / ((len(self.history)) + 1)))
-                    - (self.consecutive_defections * .25) 
+                    - (self.opponent_consecutive_defections * .25) 
                     + ((self.current_score[0] 
                     - self.current_score[1]) / 100) 
                     + (4 / ((len(self.history)) + 1))
@@ -386,12 +386,12 @@ class Tranquilizer(Player):
         else: 
             Tranquilizer.update_state(self, opponent)
         if opponent.history[-1] == D: 
-            self.consecutive_defections += 1
+            self.opponent_consecutive_defections += 1
         else:
-            self.consecutive_defections = 0
+            self.opponent_consecutive_defections = 0
 
         if self.num_turns_after_good_defection != 0: 
-            if self.consecutive_defections == 0:
+            if self.opponent_consecutive_defections == 0:
                 return C
             else:
                 return D
@@ -399,7 +399,7 @@ class Tranquilizer(Player):
             return opponent.history[-1]  # "If you can't beat them join'em"
         else:
             if (random.random() <= self.probability):  
-                if self.consecutive_defections == 0:
+                if self.opponent_consecutive_defections == 0:
                     return C
                 else:
                     return self.history[-1]

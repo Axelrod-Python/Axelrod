@@ -184,7 +184,7 @@ class TestTranquilizer(TestPlayer):
 
         self.assertEqual(player.probability, None)
         self.assertEqual(player.num_turns_after_good_defection, 0)
-        self.assertEqual(player.consecutive_defections, 0)
+        self.assertEqual(player.opponent_consecutive_defections, 0)
         self.assertEqual(player.one_turn_after_good_defection_ratio, 5)
         self.assertEqual(player.two_turns_after_good_defection_ratio, 0)
         self.assertEqual(player.one_turn_after_good_defection_ratio_count, 1)
@@ -199,7 +199,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, D)] + [(D, D)] * 20
         self.versus_test(opponent, expected_actions=actions, attrs={"probability": None, 
                                                                     "num_turns_after_good_defection": 0, 
-                                                                    "consecutive_defections": 20, 
+                                                                    "opponent_consecutive_defections": 20, 
                                                                     "one_turn_after_good_defection_ratio": 5, 
                                                                     "two_turns_after_good_defection_ratio": 0, 
                                                                     "one_turn_after_good_defection_ratio_count": 1, 
@@ -209,7 +209,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, C)] + [(C, C)] + [(C, D)] + [(D, D)] * 7 + [(D, C)] + [(C, C)] * 3  
         self.versus_test(opponent = opponent, expected_actions=actions, attrs={"probability": 2.25, 
                                                                                "num_turns_after_good_defection": 0, 
-                                                                               "consecutive_defections": 0, 
+                                                                               "opponent_consecutive_defections": 0, 
                                                                                "one_turn_after_good_defection_ratio": 5, 
                                                                                "two_turns_after_good_defection_ratio": 0, 
                                                                                "one_turn_after_good_defection_ratio_count": 1, 
@@ -222,7 +222,7 @@ class TestTranquilizer(TestPlayer):
         actions += ([(C, D)]) # <-- Random
         self.versus_test(opponent, expected_actions=actions, seed=1, attrs={"probability": 0.9423, 
                                                                             "num_turns_after_good_defection": 0, 
-                                                                            "consecutive_defections": 0, 
+                                                                            "opponent_consecutive_defections": 0, 
                                                                             "one_turn_after_good_defection_ratio": 5, 
                                                                             "two_turns_after_good_defection_ratio": 0, 
                                                                             "one_turn_after_good_defection_ratio_count": 1, 
@@ -234,7 +234,7 @@ class TestTranquilizer(TestPlayer):
         actions += [(D, D)] # <-- Random
         self.versus_test(opponent, expected_actions=actions, seed=2, attrs={"probability": 0.9423, 
                                                                              "num_turns_after_good_defection": 0, 
-                                                                             "consecutive_defections": 0, 
+                                                                             "opponent_consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
                                                                              "two_turns_after_good_defection_ratio": 0, 
                                                                              "one_turn_after_good_defection_ratio_count": 1, 
@@ -246,7 +246,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, C)] * 5
         self.versus_test(opponent, expected_actions=actions, seed=1, attrs={"probability": 0.99, 
                                                                             "num_turns_after_good_defection": 0, 
-                                                                            "consecutive_defections": 0, 
+                                                                            "opponent_consecutive_defections": 0, 
                                                                             "one_turn_after_good_defection_ratio": 5, 
                                                                             "two_turns_after_good_defection_ratio": 0, 
                                                                             "one_turn_after_good_defection_ratio_count": 1, 
@@ -256,7 +256,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, C)] * 4 + [(D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=89, attrs={"probability": 0.99, 
                                                                              "num_turns_after_good_defection": 1,
-                                                                             "consecutive_defections": 0, 
+                                                                             "opponent_consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
                                                                              "two_turns_after_good_defection_ratio": 0, 
                                                                              "one_turn_after_good_defection_ratio_count": 1, 
@@ -268,7 +268,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, C)] * 4 + [(D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=89, attrs={"probability": 0.99, 
                                                                              "num_turns_after_good_defection": 2, 
-                                                                             "consecutive_defections": 0, 
+                                                                             "opponent_consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
                                                                              "two_turns_after_good_defection_ratio": 0, 
                                                                              "one_turn_after_good_defection_ratio_count": 2, 
@@ -280,7 +280,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, C)] * 4 + [(D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=89, attrs={"probability": 0.99, 
                                                                              "num_turns_after_good_defection": 1, 
-                                                                             "consecutive_defections": 0, 
+                                                                             "opponent_consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
                                                                              "two_turns_after_good_defection_ratio": 0, 
                                                                              "one_turn_after_good_defection_ratio_count": 1, 
@@ -292,7 +292,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, C)] * 4 + [(D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=89, attrs={"probability": 0.99, 
                                                                              "num_turns_after_good_defection": 2, 
-                                                                             "consecutive_defections": 0, 
+                                                                             "opponent_consecutive_defections": 0, 
                                                                              "one_turn_after_good_defection_ratio": 5, 
                                                                              "two_turns_after_good_defection_ratio": 0, 
                                                                              "one_turn_after_good_defection_ratio_count": 2, 
@@ -304,7 +304,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, C)] * 4 + [(D, C), (C, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=89,  attrs={"probability": 0.99, 
                                                                               "num_turns_after_good_defection": 0, 
-                                                                              "consecutive_defections": 0, 
+                                                                              "opponent_consecutive_defections": 0, 
                                                                               "one_turn_after_good_defection_ratio": 5, 
                                                                               "two_turns_after_good_defection_ratio": 1.5, 
                                                                               "one_turn_after_good_defection_ratio_count": 2, 
@@ -316,7 +316,7 @@ class TestTranquilizer(TestPlayer):
         actions = [(C, D)] + [(D, D)] * 19
         self.versus_test(opponent, expected_actions=actions, attrs={"probability": None, 
                                                                     "num_turns_after_good_defection": 0, 
-                                                                    "consecutive_defections": 19, 
+                                                                    "opponent_consecutive_defections": 19, 
                                                                     "one_turn_after_good_defection_ratio": 5, 
                                                                     "two_turns_after_good_defection_ratio": 0, 
                                                                     "one_turn_after_good_defection_ratio_count": 1, 
