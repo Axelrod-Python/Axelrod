@@ -208,7 +208,18 @@ class Tranquilizer(Player):
     """
     Submitted to Axelrod's second tournament by Craig Feathers
 
-    This strategy is based on the reverse engineering of the 
+    Description given in Axelrod's "More Effective Choice in the 
+    Prisoner's Dilemma" paper: The rule normally cooperates but 
+    is ready to defect if the other player defects too often. 
+    Thus the rule tends to cooperate for the first dozen or two moves
+    if the other player is cooperating, but then it throws in a 
+    defection. If the other player continues to cooperate, then defections 
+    become more frequent. But as long as Tranquilizer is maintaining an 
+    average payoff of at least 2.25 points per move, it will never defect 
+    twice in succession and it will not defect more than 
+    one-quarter of the time.
+
+    This implementation is based on the reverse engineering of the 
     Fortran strategy K67R from Axelrod's second tournament.
     Reversed engineered by: Owen Campbell, Will Guo and Mansour Hakem.
 
@@ -218,12 +229,49 @@ class Tranquilizer(Player):
 
     - It counts the number of consecutive defections by the opponent.
     - If it was in state 2 it moves to state 0 and calculates the 
-    following quantities two_turns_after_good_defection_ratio and
-    two_turns_after_good_defection_ratio_count.
-    - If it was in state 1 it moves to state 2 and calculates the 
-    following quantities one_turn_after_good_defection_ratio and 
-    one_turn_after_good_defection_ratio_count.
+      following quantities two_turns_after_good_defection_ratio and
+      two_turns_after_good_defection_ratio_count.
+      
+      Formula for:
+      
+      two_turns_after_good_defection_ratio:
 
+      self.two_turns_after_good_defection_ratio = (
+      ((self.two_turns_after_good_defection_ratio 
+      * self.two_turns_after_good_defection_ratio_count) 
+      + (3 - (3 * self.dict[opponent.history[-1]])) 
+      + (2 * self.dict[self.history[-1]]) 
+      - ((self.dict[opponent.history[-1]] 
+      * self.dict[self.history[-1]]))) 
+      / (self.two_turns_after_good_defection_ratio_count + 1)
+      )
+
+      two_turns_after_good_defection_ratio_count =
+      two_turns_after_good_defection_ratio + 1
+
+    - If it was in state 1 it moves to state 2 and calculates the 
+      following quantities one_turn_after_good_defection_ratio and 
+      one_turn_after_good_defection_ratio_count.
+
+      Formula for:
+      
+      one_turn_after_good_defection_ratio:
+
+      self.one_turn_after_good_defection_ratio = (
+      ((self.one_turn_after_good_defection_ratio 
+      * self.one_turn_after_good_defection_ratio_count)
+      + (3 - (3 * self.dict[opponent.history[-1]])) 
+      + (2 * self.dict[self.history[-1]]) 
+      - (self.dict[opponent.history[-1]] 
+      * self.dict[self.history[-1]])) 
+      / (self.one_turn_after_good_defection_ratio_count + 1)
+      )
+
+      one_turn_after_good_defection_ratio_count:
+
+      one_turn_after_good_defection_ratio_count =
+      one_turn_after_good_defection_ratio + 1
+ 
     If after this it is in state 1 or 2 then it cooperates.
 
     If it is in state 0 it will potentially perform 1 of the 2 
@@ -257,60 +305,8 @@ class Tranquilizer(Player):
     and will cooperate if a random sampled number is less than that value of 
     probability. If not, it defects.
 
-    If none of the above holds the player simply plays tit for tat.                                                                                                                                                                                                                       
-                                                                                                                                                                                                                                                                         
-                                                                                                                                                                                                                                                                        
-    The strategy follows the following algorithm::                                                                                                                                                                                                                      
-                                                                                                                                                                                                                                                                        
-        When FD = 0:                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                        
-            If the opponent's last move (JA) was Cooperate, increase the value of C by 1                                                                                                                                                                                
-            If Score (K) < 1.75 * Move Number (M), play opponent's last move                                                                                                                                                                                            
-            If (1.75 * M) <= K < (2.25 * M):                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                        
-                Calculate Probability P:                                                                                                                                                                                                                                
-                P = 0.25 + C/M - 0.25*S + (K - L)/100 + 4/M                                                                                                                                                                                                             
-                Where L is the opponent's score so far                                                                                                                                                                                                                  
-                If Random (R) <= P:                                                                                                                                                                                                                                     
-                                                                                                                                                                                                                                                                        
-                    Cooperate                                                                                                                                                                                                                                           
-                Else:                                                                                                                                                                                                                                                   
-                                                                                                                                                                                                                                                                        
-                    Defect                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                        
-            If K >= (2.25 * M):                                                                                                                                                                                                                                         
-                                                                                                                                                                                                                                                                        
-                Calculate probability P:                                                                                                                                                                                                                                
-                P = 0.95 - (AD + NO - 5)/15 + 1/M**2 - J/4                                                                                                                                                                                                              
-                Where J is the opponent's last move                                                                                                                                                                                                                     
-                                                                                                                                                                                                                                                                        
-                If Random (R) <= P:                                                                                                                                                                                                                                     
-                                                                                                                                                                                                                                                                        
-                    Cooperate                                                                                                                                                                                                                                           
-                                                                                                                                                                                                                                                                        
-                Else:                                                                                                                                                                                                                                                   
-                                                                                                                                                                                                                                                                        
-                    Set FD = 1                                                                                                                                                                                                                                          
-                    Defect                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                        
-        When FD = 1:                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                        
-            Set FD = 2                                                                                                                                                                                                                                                  
-            Set the variable 'AD':                                                                                                                                                                                                                                      
-            AD = ((AD * AK) + 3 - (3 * J) + (2 * JA) - (JA * J)) / (AK + 1)                                                                                                                                                                                             
-            Where JA and J are the last moves of the strategy and the opponent (C=0, D=1)                                                                                                                                                                       
-            Increase the value of AK by 1                                                                                                                                                                                                                               
-            Cooperate                                                                                                                                                                                                                                                   
-                                                                                                                                                                                                                                                                        
-        When FD = 2:                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                        
-            Set FD = 0                                                                                                                                                                                                                                                  
-            Set the variable 'NO':                                                                                                                                                                                                                                      
-            NO = ((NO * NK) + 3 - (3 * J) + (2 * JA) - (JA * J) / (NK + 1)                                                                                                                                                                                              
-            Where JA and J are the last moves of the strategy and the opponent (C=0, D=1)                                                                                                                                                                       
-            Increase the value of NK by 1                                                                                                                                                                                                                               
-            Cooperate                                                                                                                                                                                                                                                   
-                                                                                                                                                                                                                                                                        
+    If none of the above holds the player simply plays tit for tat.
+
     Tranquilizer came in 27th place in Axelrod's second torunament. 
    
 
@@ -332,13 +328,14 @@ class Tranquilizer(Player):
 
     def __init__(self):
         super().__init__()
-        self.num_turns_after_good_defection = 0 # equal to FD variable in Fortran code
-        self.opponent_consecutive_defections = 0
-        self.one_turn_after_good_defection_ratio= 5
-        self.two_turns_after_good_defection_ratio= 0
-        self.one_turn_after_good_defection_ratio_count = 1
-        self.two_turns_after_good_defection_ratio_count = 1
-        self.dict = {C: 0, D: 1}
+        self.num_turns_after_good_defection = 0 # equal to FD variable
+        self.opponent_consecutive_defections = 0 # equal to S variable
+        self.one_turn_after_good_defection_ratio= 5 # equal to AD variable
+        self.two_turns_after_good_defection_ratio= 0 # equal to NO variable
+        self.one_turn_after_good_defection_ratio_count = 1 # equal to AK variable
+        self.two_turns_after_good_defection_ratio_count = 1 # equal to NK variable
+        # All above variables correspond to those in original Fotran Code
+        self.dict = {C: 0, D: 1} 
 
 
     def update_state(self, opponent):  
@@ -401,7 +398,7 @@ class Tranquilizer(Player):
                 return C
             self.num_turns_after_good_defection = 1
             return D
-        elif (current_score[0] / ((len(self.history)) + 1)) >= 1.75:
+        if (current_score[0] / ((len(self.history)) + 1)) >= 1.75:
             probability = (
                 (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
                 - (self.opponent_consecutive_defections * .25) 
