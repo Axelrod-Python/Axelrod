@@ -317,8 +317,6 @@ class Tranquilizer(Player):
         self.two_turns_after_good_defection_ratio= 0
         self.one_turn_after_good_defection_ratio_count = 1
         self.two_turns_after_good_defection_ratio_count = 1
-        self.score = None
-        self.probability = None
         self.current_score = 0
         self.dict = {C: 0, D: 1}
 
@@ -330,6 +328,10 @@ class Tranquilizer(Player):
         two_turns_after_good_defection_ratio and the probability values, 
         as well as sets the value of num_turns_after_good_defection.
         """
+        if opponent.history[-1] == D: 
+            self.opponent_consecutive_defections += 1
+        else:
+            self.opponent_consecutive_defections = 0
 
         if self.num_turns_after_good_defection == 2:
             self.num_turns_after_good_defection = 0
@@ -356,56 +358,38 @@ class Tranquilizer(Player):
                 )
             self.one_turn_after_good_defection_ratio_count += 1
    
-    def update_stochastic_state(self, opponent):
-            
-        if (self.current_score[0] / ((len(self.history)) + 1)) >= 2.25:
-                self.probability = (
-                    (.95 - (((self.one_turn_after_good_defection_ratio)
-                    + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
-                    + (1 / (((len(self.history))+1) ** 2))
-                    - (self.dict[opponent.history[-1]] / 4)
-                    )
-                self.probability = round(self.probability, 4)
-                self.score = "good"
-        elif (self.current_score[0] / ((len(self.history)) + 1)) >= 1.75:
-                self.probability = (
-                    (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
-                    - (self.opponent_consecutive_defections * .25) 
-                    + ((self.current_score[0] 
-                    - self.current_score[1]) / 100) 
-                    + (4 / ((len(self.history)) + 1))
-                    )
-                self.probability = round(self.probability, 4)
-                self.score = "average"
-
     def strategy(self, opponent: Player) -> Action:
 
-        self.current_score = compute_final_score(zip(self.history, opponent.history))
-        
         if len(self.history) == 0:
             return C
-        else: 
-            self.update_cooperative_state(opponent)
-            if opponent.history[-1] == D: 
-                self.opponent_consecutive_defections += 1
-            else:
-                self.opponent_consecutive_defections = 0
-            self.update_stochastic_state(opponent)
 
-        if self.num_turns_after_good_defection != 0: 
-            if self.opponent_consecutive_defections == 0:
+        self.current_score = compute_final_score(zip(self.history, opponent.history))
+       
+        self.update_cooperative_state(opponent)
+        if  self.num_turns_after_good_defection in [1, 2]:
+            return C        
+        
+        if (self.current_score[0] / ((len(self.history)) + 1)) >= 2.25:
+            probability = (
+                (.95 - (((self.one_turn_after_good_defection_ratio)
+                + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
+                + (1 / (((len(self.history))+1) ** 2))
+                - (self.dict[opponent.history[-1]] / 4)
+                )
+            if random.random() <= probability: 
                 return C
-            else:
-                return D
-        elif (self.current_score[0] / ((len(self.history)) + 1)) < 1.75: 
-            return opponent.history[-1]  # "If you can't beat them join'em"
-        else:
-            if (random.random() <= self.probability):  
-                if self.opponent_consecutive_defections == 0:
-                    return C
-                else:
-                    return self.history[-1]
-            else:
-                if self.score == "good": 
-                    self.num_turns_after_good_defection = 1
-                return D
+            self.num_turns_after_good_defection = 1
+            return D
+        elif (self.current_score[0] / ((len(self.history)) + 1)) >= 1.75:
+            probability = (
+                (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
+                - (self.opponent_consecutive_defections * .25) 
+                + ((self.current_score[0] 
+                - self.current_score[1]) / 100) 
+                + (4 / ((len(self.history)) + 1))
+                )
+            if random.random() <= probability:
+                return C
+            self.num_turns_after_good_defection = 1
+            return D
+        return opponent.history[-1]
