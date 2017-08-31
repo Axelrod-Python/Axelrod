@@ -42,9 +42,8 @@ class Stalker(Player):
         'manipulates_state': False
     }
 
-    def __init__(self) -> None:
-        super().__init__()
-        R, P, S, T  = self.match_attributes["game"].RPST()
+    def receive_match_attributes(self):
+        R, P, S, T = self.match_attributes["game"].RPST()
         self.very_good_score = R
         self.very_bad_score = P
         self.wish_score = (R + P) / 2
@@ -68,14 +67,11 @@ class Stalker(Player):
 
         if current_average_score > self.very_good_score:
             return D
-
-        elif (current_average_score > self.wish_score) and (current_average_score < self.very_good_score):
+        if (current_average_score > self.wish_score) and \
+            (current_average_score < self.very_good_score):
             return C
-
-        elif current_average_score > 2:
+        if current_average_score > 2:
             return C
-
-        elif (current_average_score < 2) and (current_average_score > 1):
+        if (current_average_score < 2) and (current_average_score > 1):
             return D
-
         return random_choice()

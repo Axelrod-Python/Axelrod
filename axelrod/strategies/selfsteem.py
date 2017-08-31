@@ -40,7 +40,7 @@ class SelfSteem(Player):
 
     def strategy(self, opponent: Player) -> Action:
         turns_number = len(self.history)
-        sine_value =  sin(2 * pi * turns_number / 10)
+        sine_value = sin(2 * pi * turns_number / 10)
 
         if sine_value > 0.95:
             return D
