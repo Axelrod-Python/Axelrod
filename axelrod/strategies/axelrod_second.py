@@ -212,31 +212,52 @@ class Tranquilizer(Player):
     Fortran strategy K67R from Axelrod's second tournament.
     Reversed engineered by: Owen Campbell, Will Guo and Mansour Hakem.
 
+    The strategy starts by cooperating this strategy has 3 states.
 
-    Description given in Axelrod's "More Effective Choice in the 
-    Prisoner's Dilemma" paper: The rule normally cooperates but 
-    is ready to defect if the other player defects too often. 
-    Thus the rule tends to cooperate for the first dozen or two moves
-    if the other player is cooperating, but then it throws in a 
-    defection. If the other player continues to cooperate, then defections 
-    become more frequent. But as long as Tranquilizer is maintaining an 
-    average payoff of at least 2.25 points per move, it will never defect 
-    twice in succession and it will not defect more than 
-    one-quarter of the time.
+    At the start of the strategy it updates it's states:
 
+    - It counts the number of consecutive defections by the opponent.
+    - If it was in state 2 it moves to state 0 and calculates the 
+    following quantities two_turns_after_good_defection_ratio and
+    two_turns_after_good_defection_ratio_count.
+    - If it was in state 1 it moves to state 2 and calculates the 
+    following quantities one_turn_after_good_defection_ratio and 
+    one_turn_after_good_defection_ratio_count.
+
+    If after this it is in state 1 or 2 then it cooperates.
+
+    If it is in state 0 it will potentially perform 1 of the 2 
+    following stochastic tests:
+
+    1. If average score per turn is greater than 2.25 then it calculates a  
+    value of probability:
     
-    - Has a variable, 'FD' which can be 0, 1 or 2. It has an initial value of 0
-    - Has a variable 'S', which counts the consecutive number of 
-      times the opponent has played D (i.e. it is reset to 0 if the opponent 
-      plays C). It has an initial value of 0.
-    - Has a variable, 'C', which counts the number of times the opponent Cooperates
-    - Has a variable 'AK' which increases each time a move is played whilst in state
-      FD = 1. It has an initial value of 1.
-    - Has a variable 'NK' which increases each time a move is 
-      played whilst in state FD = 2. It has an initial value of 1.
-    - Has a variable 'AD' with an initial value of 5
-    - Has a variable 'NO with an initial value of 0
-    - Has a variable 'NO with an initial value of 0                                                                                                                                                                                                                       
+    probability = (
+    (.95 - (((self.one_turn_after_good_defection_ratio)
+    + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
+    + (1 / (((len(self.history))+1) ** 2))
+    - (self.dict[opponent.history[-1]] / 4)
+    ) 
+
+    and will cooperate if a random sampled number is less than that value of 
+    probability. If it does not cooperate then the strategy moves to state 1 
+    and defects.
+    
+    2. If average score per turn is greater than 1.75 but less than 2.25 
+    then it calculates a value of probability:
+
+    probability = (
+    (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
+    - (self.opponent_consecutive_defections * .25) 
+    + ((current_score[0] 
+    - current_score[1]) / 100) 
+    + (4 / ((len(self.history)) + 1))
+    )
+
+    and will cooperate if a random sampled number is less than that value of 
+    probability. If not, it defects.
+
+    If none of the above holds the player simply plays tit for tat.                                                                                                                                                                                                                       
                                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                         
     The strategy follows the following algorithm::                                                                                                                                                                                                                      
@@ -317,11 +338,10 @@ class Tranquilizer(Player):
         self.two_turns_after_good_defection_ratio= 0
         self.one_turn_after_good_defection_ratio_count = 1
         self.two_turns_after_good_defection_ratio_count = 1
-        self.current_score = 0
         self.dict = {C: 0, D: 1}
 
 
-    def update_cooperative_state(self, opponent):  
+    def update_state(self, opponent):  
         
         """
         Calculates the ratio values for the one_turn_after_good_defection_ratio,
@@ -363,13 +383,14 @@ class Tranquilizer(Player):
         if len(self.history) == 0:
             return C
 
-        self.current_score = compute_final_score(zip(self.history, opponent.history))
        
-        self.update_cooperative_state(opponent)
+        self.update_state(opponent)
         if  self.num_turns_after_good_defection in [1, 2]:
             return C        
-        
-        if (self.current_score[0] / ((len(self.history)) + 1)) >= 2.25:
+
+        current_score = compute_final_score(zip(self.history, opponent.history))
+
+        if (current_score[0] / ((len(self.history)) + 1)) >= 2.25:
             probability = (
                 (.95 - (((self.one_turn_after_good_defection_ratio)
                 + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
@@ -380,16 +401,15 @@ class Tranquilizer(Player):
                 return C
             self.num_turns_after_good_defection = 1
             return D
-        elif (self.current_score[0] / ((len(self.history)) + 1)) >= 1.75:
+        elif (current_score[0] / ((len(self.history)) + 1)) >= 1.75:
             probability = (
                 (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
                 - (self.opponent_consecutive_defections * .25) 
-                + ((self.current_score[0] 
-                - self.current_score[1]) / 100) 
+                + ((current_score[0] 
+                - current_score[1]) / 100) 
                 + (4 / ((len(self.history)) + 1))
                 )
             if random.random() <= probability:
                 return C
-            self.num_turns_after_good_defection = 1
             return D
         return opponent.history[-1]

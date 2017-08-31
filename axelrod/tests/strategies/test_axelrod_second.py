@@ -226,7 +226,7 @@ class TestTranquilizer(TestPlayer):
         opponent = axelrod.MockPlayer(actions=[D] * 3 + [C] * 4 + [D] * 2)
         actions = [(C, D)] + [(D, D)] * 2 + [(D, C)] + [(C, C)] * 3 + [(C, D)]
         actions += ([(D, D)]) # <-- Random
-        self.versus_test(opponent, expected_actions=actions, seed=17,  attrs={"num_turns_after_good_defection": 1, 
+        self.versus_test(opponent, expected_actions=actions, seed=17,  attrs={"num_turns_after_good_defection": 0, 
                                                                               "one_turn_after_good_defection_ratio": 5, 
                                                                               "two_turns_after_good_defection_ratio": 0, 
                                                                               "one_turn_after_good_defection_ratio_count": 1, 
@@ -262,7 +262,7 @@ class TestTranquilizer(TestPlayer):
                                                                              "one_turn_after_good_defection_ratio_count": 2, 
                                                                              "two_turns_after_good_defection_ratio_count": 1})
         
-        # Tests cooperation after update_cooperatiove_state
+        # Tests cooperation after update_state
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)] + [(C, C)]
