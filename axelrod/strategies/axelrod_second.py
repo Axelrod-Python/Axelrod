@@ -223,9 +223,9 @@ class Tranquilizer(Player):
     Fortran strategy K67R from Axelrod's second tournament.
     Reversed engineered by: Owen Campbell, Will Guo and Mansour Hakem.
 
-    The strategy starts by cooperating this strategy has 3 states.
+    The strategy starts by cooperating and has 3 states.
 
-    At the start of the strategy it updates it's states:
+    At the start of the strategy it updates its states:
 
     - It counts the number of consecutive defections by the opponent.
     - If it was in state 2 it moves to state 0 and calculates the 
@@ -343,7 +343,7 @@ class Tranquilizer(Player):
         """
         Calculates the ratio values for the one_turn_after_good_defection_ratio,
         two_turns_after_good_defection_ratio and the probability values, 
-        as well as sets the value of num_turns_after_good_defection.
+        and sets the value of num_turns_after_good_defection.
         """
         if opponent.history[-1] == D: 
             self.opponent_consecutive_defections += 1
@@ -377,7 +377,7 @@ class Tranquilizer(Player):
    
     def strategy(self, opponent: Player) -> Action:
 
-        if len(self.history) == 0:
+        if not self.history:
             return C
 
        
