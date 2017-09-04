@@ -121,9 +121,11 @@ The variables :code:`C` and :code:`D` represent the cooperate and defect actions
 respectively.
 
 Some strategies make specific use of the variables of a match to create their
-own attributes, in this case the :code:`receive_match_attributes` method must be
-defined. Here is how this is done for
-:class:`Stalker <axelrod.strategies.stalker.Stalker>`::
+own attributes. In principle these attributes could change throughout a match
+or tournament if the match properties (like the game matrix) change, so we
+require that this logic live in the :code:`receive_match_attributes` method for
+correct dynamic updating. Here is how this is done for :class:`Stalker
+<axelrod.strategies.stalker.Stalker>`::
 
     def receive_match_attributes(self)
         R, P, S, T = self.match_attributes["game"].RPST()
