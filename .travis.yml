@@ -24,7 +24,7 @@ script:
   - cd docs; make html
   # Run the test suit with coverage
   - cd ..
-  - travis_wait 30 coverage run --source=axelrod -m unittest discover
+  - travis_wait 60 coverage run --source=axelrod -m unittest discover
   - coverage report -m
   # Run the doctests
   - python doctests.py
