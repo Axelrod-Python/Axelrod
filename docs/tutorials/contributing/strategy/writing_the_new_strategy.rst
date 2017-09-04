@@ -22,7 +22,8 @@ The code
 --------
 
 There are a couple of things that need to be created in a strategy.py file.  Let
-us take a look at the :code:`TitForTat` class (located in the
+us take a look at the :class:`TitForTat
+<axelrod.strategies.titfortat.TitForTat>` class (located in the
 :code:`axelrod/strategies/titfortat.py` file)::
 
     class TitForTat(Player):
@@ -101,7 +102,8 @@ This helps classify the strategy as described in
 :ref:`classification-of-strategies`.
 
 After that the only thing required is to write the :code:`strategy` method
-which takes an opponent as an argument. In the case of :code:`TitForTat` the
+which takes an opponent as an argument. In the case of
+:class:`TitForTat <axelrod.strategies.titfortat.TitForTat>` the
 strategy checks if it has any history (:code:`if len(self.history) == 0`). If
 it does not (ie this is the first play of the match) then it returns :code:`C`.
 If not, the strategy simply repeats the opponent's last move (:code:`return
@@ -115,30 +117,19 @@ opponent.history[-1]`)::
         # Repeat the opponent's last move
         return opponent.history[-1]
 
-The variables :code:`C` and :code:`D` represent the cooperate and defect actions respectively.
+The variables :code:`C` and :code:`D` represent the cooperate and defect actions
+respectively.
 
-You can also modify the name of the strategy with the :code:`__repr__` method,
-which is invoked when :code:`str` is applied to a player instance. For example,
-the :code:`Random` strategy takes a parameter :code:`p` for how often it
-cooperates, and the :code:`__repr__` method adds the value of this parameter to
-the name::
+Some strategies make specific use of the variables of a match to create their
+own attributes, in this case the :code:`receive_match_attributes` method must be
+defined. Here is how this is done for
+:class:`Stalker <axelrod.strategies.stalker.Stalker>`::
 
-    def __repr__(self):
-        return "%s: %s" % (self.name, round(self.p, 2))
-
-Now we have separate names for different instantiations::
-
-    >>> import axelrod
-    >>> player1 = axelrod.Random(p=0.5)
-    >>> player2 = axelrod.Random(p=0.1)
-    >>> player1
-    Random: 0.5
-    >>> player2
-    Random: 0.1
-
-This helps distinguish players in tournaments that have multiple instances of the
-same strategy. If you modify the :code:`__repr__` method of player, be sure to
-add an appropriate test.
+    def receive_match_attributes(self)
+        R, P, S, T = self.match_attributes["game"].RPST()
+        self.very_good_score = R
+        self.very_bad_score = P
+        self.wish_score = (R + P) / 2
 
 There are various examples of helpful functions and properties that make
 writing strategies easier. Do not hesitate to get in touch with the
