@@ -226,6 +226,7 @@ class MoreGrofman(Player):
 
     Names:
     - Grofman's strategy: [Axelrod1980b]_
+    - K86R: [Axelrod1980b]_
     """
     name = "MoreGrofman"
     classifier = {
@@ -238,27 +239,20 @@ class MoreGrofman(Player):
         'manipulates_state': False
     }
 
-    def __init__(self) -> None:
-        super().__init__()
-
     def strategy(self, opponent: Player) -> Action:
         # Cooperate on the first two moves
-        if not self.history or len(self.history) in [1]:
+        if len(self.history) < 2:
             return C
         # For rounds 3-7, play the opponent's last move
         elif 2 <= len(self.history) <= 6:
             return opponent.history[-1]
-        # Logic for the rest of the game
         else:
             # Note: the Fortran code behavior ignores the opponent behavior
             #   in the last round and instead looks at the first 7 of the last
             #   8 rounds.
             opponent_defections_last_8_rounds = opponent.history[-8:-1].count(D)
-            if self.history[-1] == C:
-                if opponent_defections_last_8_rounds <= 2:
-                    return C
-                return D
-            else:
-                if opponent_defections_last_8_rounds <= 1:
-                    return C
-                return D
+            if self.history[-1] == C and opponent_defections_last_8_rounds <= 2:
+                return C
+            if self.history[-1] == D and opponent_defections_last_8_rounds <= 1:
+                return C
+            return D
