@@ -215,58 +215,16 @@ class TestMoreGrofman(TestPlayer):
         # Test to make sure logic matches Fortran (discrepancy found 8/23/2017)
         opponent = axelrod.AntiTitForTat()
         # Actions come from a match run by Axelrod Fortran using Player('k86r')
-        actions = [
-            (C, C),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, C),
-            (C, D),
-            (D, D),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (C, C)
-            ]
+        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
+            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions)
 
         # Test to match the Fortran implementation for 30 rounds
         opponent = axelrod.AntiTitForTat()
-        actions = [(C, C),
-            (C, D),
-            (D, D),
-            (D, C),
-            (C, C),
-            (C, D),
-            (D, D),
-            (D, C), 
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (C, C),
-            (C, D),
-            (C, D),
-            (C, D),
-            (C, D),
-            (D, D),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (D, C),
-            (C, C),
-            (C, D),
-            (C, D)
-            ]
+        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
+            (D, C),  (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C),
+            (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (D, C), (D, C),
+            (D, C), (D, C), (D, C), (D, C), (C, C), (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions)
 
         # Test to match the Fortran implementation for 60 rounds
