@@ -4,9 +4,11 @@ import random
 import unittest
 
 from hypothesis import given, example, settings
+import matplotlib
+import matplotlib.pyplot as plt
 
 import axelrod
-from axelrod import Match, MoranProcess, ApproximateMoranProcess, Pdf
+from axelrod import MoranProcess, ApproximateMoranProcess, Pdf
 from axelrod.moran import fitness_proportionate_selection
 from axelrod.tests.property import strategy_lists
 
@@ -20,6 +22,7 @@ class TestMoranProcess(unittest.TestCase):
         mp = MoranProcess(players)
         self.assertEqual(mp.turns, axelrod.DEFAULT_TURNS)
         self.assertIsNone(mp.prob_end)
+        self.assertIsNone(mp.game)
         self.assertEqual(mp.noise, 0)
         self.assertEqual(mp.initial_players, players)
         self.assertEqual(mp.players, list(players))
@@ -162,6 +165,15 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(len(mp), 4)
         self.assertEqual(len(populations), 4)
         self.assertEqual(populations, mp.populations)
+        self.assertEqual(mp.winning_strategy_name, str(p1))
+
+    def test_different_game(self):
+        # Possible for Cooperator to become fixed when using a different game
+        p1, p2 = axelrod.Cooperator(), axelrod.Defector()
+        axelrod.seed(0)
+        game = axelrod.Game(r=4, p=2, s=1, t=6)
+        mp = MoranProcess((p1, p2), turns=5, game=game)
+        populations = mp.play()
         self.assertEqual(mp.winning_strategy_name, str(p1))
 
     def test_death_birth(self):
@@ -313,7 +325,6 @@ class TestMoranProcess(unittest.TestCase):
         winners = Counter(winners)
         self.assertEqual(winners["Defector"], 88)
 
-
     def test_cache(self):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         mp = MoranProcess((p1, p2))
@@ -329,6 +340,22 @@ class TestMoranProcess(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         mp = MoranProcess((p1, p2))
         self.assertEqual(mp.__iter__(), mp)
+
+    def test_population_plot(self):
+        # Test that can plot on a given matplotlib axes
+        axelrod.seed(15)
+        players = [random.choice(axelrod.demo_strategies)() for _ in range(5)]
+        mp = axelrod.MoranProcess(players=players, turns=30)
+        mp.play()
+        fig, axarr = plt.subplots(2, 2)
+        ax = axarr[1, 0]
+        mp.populations_plot(ax=ax)
+        self.assertEqual(ax.get_xlim(), (-0.8, 16.8))
+        self.assertEqual(ax.get_ylim(), (0, 5.25))
+        # Run without a given axis
+        ax = mp.populations_plot()
+        self.assertEqual(ax.get_xlim(), (-0.8, 16.8))
+        self.assertEqual(ax.get_ylim(), (0, 5.25))
 
 
 class GraphMoranProcess(unittest.TestCase):
@@ -391,12 +418,12 @@ class GraphMoranProcess(unittest.TestCase):
         for seed, outcome in seeds:
             axelrod.seed(seed)
             mp = MoranProcess(players, interaction_graph=graph1,
-                            reproduction_graph=graph2)
+                              reproduction_graph=graph2)
             mp.play()
             winner = mp.winning_strategy_name
             axelrod.seed(seed)
             mp = MoranProcess(players, interaction_graph=graph2,
-                            reproduction_graph=graph1)
+                              reproduction_graph=graph1)
             mp.play()
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)

@@ -1,3 +1,30 @@
+# v3.7.0, 2017-09-05
+
+A new strategy, contributor documentation and internal fixes.
+
+- New strategy Tranqulizer from Axelrod's second tournament:
+  https://github.com/Axelrod-Python/Axelrod/pull/1126
+- Improved use of `pass_default_arguments` and documentation:
+  https://github.com/Axelrod-Python/Axelrod/pull/1127
+  https://github.com/Axelrod-Python/Axelrod/pull/1128
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.7.0...v3.6.0
+
+# v3.6.0, 2017-08-26
+
+A new fingerprint mechanism, internal improvements.
+
+- Transitive fingerprints:
+  https://github.com/Axelrod-Python/Axelrod/pull/1125
+- Add ability to pass game to Moran process
+  https://github.com/Axelrod-Python/Axelrod/pull/1122
+- Implement a global reset method
+  https://github.com/Axelrod-Python/Axelrod/pull/1123
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.6.0...v3.5.0
+
 # v3.5.0, 2017-08-19
 
 Parallel processing now supported on Windows, a new strategy and some minor

@@ -105,7 +105,8 @@ class LimitedRetaliate(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, retaliation_threshold: float = 0.1, retaliation_limit: int = 20) -> None:
+    def __init__(self, retaliation_threshold: float = 0.1,
+                 retaliation_limit: int = 20) -> None:
         """
         Parameters
         ----------

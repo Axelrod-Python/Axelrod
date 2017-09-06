@@ -137,7 +137,7 @@ repository.
    "K64R_", "Brian Yamachi", "Not Implemented"
    "K65R_", "Mark F Batell", "Not Implemented"
    "K66R_", "Ray Mikkelson", "Not Implemented"
-   "K67R_", "Craig Feathers", "Not Implemented"
+   "K67R_", "Craig Feathers", ":class:`Tranquilizer <axelrod.strategies.axelrod_second.Tranquilizer>`"
    "K68R_", "Fransois Leyvraz", "Not Implemented"
    "K69R_", "Johann Joss", "Not Implemented"
    "K70R_", "Robert Pebly", "Not Implemented"

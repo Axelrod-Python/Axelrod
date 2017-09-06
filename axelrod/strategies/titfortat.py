@@ -346,7 +346,7 @@ class OmegaTFT(Player):
             return opponent.history[-1]
 
         # Are we deadlocked? (in a CD -> DC loop)
-        if (self.deadlock_counter >= self.deadlock_threshold):
+        if self.deadlock_counter >= self.deadlock_threshold:
             move = C
             if self.deadlock_counter == self.deadlock_threshold:
                 self.deadlock_counter = self.deadlock_threshold + 1
@@ -434,7 +434,6 @@ class Gradual(Player):
         return C
 
 
-
 @TrackHistoryTransformer(name_prefix=None)
 class ContriteTitForTat(Player):
     """
@@ -480,7 +479,6 @@ class ContriteTitForTat(Player):
                 self.contrite = True
 
         return opponent.history[-1]
-
 
 
 class AdaptiveTitForTat(Player):
@@ -549,7 +547,6 @@ class AdaptiveTitForTat(Player):
         return D
 
 
-
 class SpitefulTitForTat(Player):
     """
     A player starts by cooperating and then mimics the previous action of the
@@ -591,7 +588,6 @@ class SpitefulTitForTat(Player):
             if opponent.history[-1] == D:
                 return D
             return C
-
 
 
 class SlowTitForTwoTats2(Player):
@@ -695,7 +691,6 @@ class EugineNier(Player):
         return opponent.history[-1]
 
 
-
 class NTitsForMTats(Player):
     """
     A parameterizable Tit-for-Tat,
@@ -750,7 +745,6 @@ class NTitsForMTats(Player):
             self.retaliate_count -= 1
             return D
         return C
-
 
 
 @FinalTransformer((D,), name_prefix=None)

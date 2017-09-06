@@ -169,9 +169,8 @@ class Player(object):
 
             # Code for a strange edge case where each strategy points at each
             # other
-            elif (value is other and other_value is self):
+            elif value is other and other_value is self:
                 pass
-
             else:
                 if value != other_value:
                     return False

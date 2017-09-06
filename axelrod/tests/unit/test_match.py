@@ -1,5 +1,5 @@
-import unittest
 from collections import Counter
+import unittest
 
 from hypothesis import given, example
 from hypothesis.strategies import integers, floats, assume

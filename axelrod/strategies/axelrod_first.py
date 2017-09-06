@@ -158,7 +158,7 @@ class Feld(Player):
 
     name = "Feld"
     classifier = {
-        'memory_depth': 200, # Varies actually, eventually becomes depth 1
+        'memory_depth': 200,  # Varies actually, eventually becomes depth 1
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -331,7 +331,7 @@ class Nydegger(Player):
 
     @staticmethod
     def score_history(my_history: List[Action], opponent_history: List[Action],
-        score_map: Dict[Tuple[Action, Action], int]) -> int:
+                      score_map: Dict[Tuple[Action, Action], int]) -> int:
 
         """Implements the Nydegger formula A = 16 a_1 + 4 a_2 + a_3"""
         a = 0
@@ -570,7 +570,6 @@ class SteinAndRapoport(Player):
             return D
         else:  # TitForTat if opponent plays not randomly
             return opponent.history[-1]
-
 
 
 class TidemanAndChieruzzi(Player):

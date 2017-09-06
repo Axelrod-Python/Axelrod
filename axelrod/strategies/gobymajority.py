@@ -160,7 +160,7 @@ class HardGoByMajority(GoByMajority):
     An optional memory attribute will limit the number of turns remembered (by
     default this is 0)
 
-	Names:
+    Names:
 
     - Hard Majority: [Mittal2009]_
     """

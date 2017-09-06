@@ -1,10 +1,10 @@
 """Tests for the Stalker strategy."""
 
 import axelrod as axl
-import random
 from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D
+
 
 class TestStalker(TestPlayer):
 
@@ -62,3 +62,12 @@ class TestStalker(TestPlayer):
         self.versus_test(opponent=axl.Cooperator(),
                          expected_actions=actions,
                          match_attributes={"length": 4})
+
+    def test_reset(self):
+        axl.seed(0)
+        player = axl.Stalker()
+        m = axl.Match((player, axl.Alternator()))
+        m.play()
+        self.assertNotEqual(player.current_score, 0)
+        player.reset()
+        self.assertEqual(player.current_score, 0)
