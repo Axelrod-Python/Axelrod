@@ -410,3 +410,60 @@ class Tranquilizer(Player):
                 return C
             return D
         return opponent.history[-1]
+
+
+class MoreGrofman(Player):
+    """
+    Submitted to Axelrod's second tournament by Bernard Grofman.
+
+    This strategy has 3 phases:
+
+    1. First it cooperates on the first two rounds
+    2. For rounds 3-7 inclusive, it plays the same as the opponent's last move
+    3. Thereafter, it applies the following logic, looking at its memory of the
+       last 8\* rounds (ignoring the most recent round).
+
+      - If its own previous move was C and the opponent has defected less than
+        3 times in the last 8\* rounds, cooperate
+      - If its own previous move was C and the opponent has defected 3 or
+        more times in the last 8\* rounds, defect
+      - If its own previous move was D and the opponent has defected only once
+        or not at all in the last 8\* rounds, cooperate
+      - If its own previous move was D and the opponent has defected more than
+        once in the last 8\* rounds, defect
+
+    \* The code looks at the first 7 of the last 8 rounds, ignoring the most
+    recent round.
+
+    Names:
+    - Grofman's strategy: [Axelrod1980b]_
+    - K86R: [Axelrod1980b]_
+    """
+    name = "MoreGrofman"
+    classifier = {
+        'memory_depth': 8,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        # Cooperate on the first two moves
+        if len(self.history) < 2:
+            return C
+        # For rounds 3-7, play the opponent's last move
+        elif 2 <= len(self.history) <= 6:
+            return opponent.history[-1]
+        else:
+            # Note: the Fortran code behavior ignores the opponent behavior
+            #   in the last round and instead looks at the first 7 of the last
+            #   8 rounds.
+            opponent_defections_last_8_rounds = opponent.history[-8:-1].count(D)
+            if self.history[-1] == C and opponent_defections_last_8_rounds <= 2:
+                return C
+            if self.history[-1] == D and opponent_defections_last_8_rounds <= 1:
+                return C
+            return D

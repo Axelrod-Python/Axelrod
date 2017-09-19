@@ -160,7 +160,6 @@ class TestGladstein(TestPlayer):
         self.versus_test(opponent, expected_actions=actions,
                          attrs={'patsy': False})
 
-
 class TestTranquilizer(TestPlayer):
 
     name = "Tranquilizer"
@@ -174,7 +173,6 @@ class TestTranquilizer(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
 
     # test for initalised variables
 
@@ -330,3 +328,83 @@ class TestTranquilizer(TestPlayer):
                 "two_turns_after_good_defection_ratio_count": 1}
         self.versus_test(opponent, expected_actions=actions, 
                          attrs=expected_attrs)
+
+
+class TestMoreGrofman(TestPlayer):
+
+    name = "MoreGrofman"
+    player = axelrod.MoreGrofman
+    expected_classifier = {
+        'memory_depth': 8,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Cooperate for the first two rounds
+        actions = [(C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        # Cooperate for the first two rounds, then play tit for tat for 3-7
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        # Demonstrate MoreGrofman Logic
+        # Own previous move was C, opponent defected less than 3 times in last 8
+        moregrofman_actions = [C] * 7 + [C]
+        opponent_actions = [C] * 6 + [D] * 2
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = list(zip(moregrofman_actions, opponent_actions))
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Own previous move was C, opponent defected 3 or more times in last 8
+        moregrofman_actions = ([C] * 3 + [D] * 3 + [C]) + [D]
+        opponent_actions = ([C] * 2 + [D] * 3 + [C] * 2) + [D]
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = list(zip(moregrofman_actions, opponent_actions))
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Own previous move was D, opponent defected once or less in last 8
+        moregrofman_actions = ([C] * 6 + [D]) + [C]
+        opponent_actions = ([C] * 5 + [D] * 1 + [C]) + [D]
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = list(zip(moregrofman_actions, opponent_actions))
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Own previous move was D, opponent defected more than once in last 8
+        moregrofman_actions = ([C] * 2 + [D] * 5) + [D]
+        opponent_actions = ([D] * 7) + [D]
+        opponent = axelrod.MockPlayer(actions=opponent_actions)
+        actions = list(zip(moregrofman_actions, opponent_actions))
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Test to make sure logic matches Fortran (discrepancy found 8/23/2017)
+        opponent = axelrod.AntiTitForTat()
+        # Actions come from a match run by Axelrod Fortran using Player('k86r')
+        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
+            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Test to match the Fortran implementation for 30 rounds
+        opponent = axelrod.AntiTitForTat()
+        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
+            (D, C),  (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C),
+            (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (D, C), (D, C),
+            (D, C), (D, C), (D, C), (D, C), (C, C), (C, D), (C, D)]
+        self.versus_test(opponent, expected_actions=actions)
+
+        # Test to match the Fortran implementation for 60 rounds
+        opponent = axelrod.AntiTitForTat()
+        actions = [(C, C), (C, D), (D, D), (D, C), (C, C), (C, D), (D, D),
+            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C),
+            (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (D, C), (D, C),
+            (D, C), (D, C), (D, C), (D, C), (C, C), (C, D), (C, D), (C, D),
+            (C, D), (D, D), (D, C), (D, C), (D, C), (D, C), (D, C), (D, C),
+            (D, C), (C, C), (C, D), (C, D), (C, D), (C, D), (D, D), (D, C),
+            (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C), (C, D),
+            (C, D), (C, D), (C, D), (D, D), (D, C)]
+        self.versus_test(opponent, expected_actions=actions)
