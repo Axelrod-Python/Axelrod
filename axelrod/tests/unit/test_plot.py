@@ -70,6 +70,12 @@ class TestPlot(unittest.TestCase):
             [[2, 2, 2], [0, 0, 0], [0, 0, 0]],
             ['Defector', 'Tit For Tat', 'Alternator'])
 
+        cls.expected_sdvplot_dataset = (
+            [[3, 3, 3, 1, 1, 1, 0, 0, 0],
+             [0, 0, 0, 0, 0, 0, -1, -1, -1],
+             [0, 0, 0, 0, 0, 0, -3, -3, -3]],
+            ['Defector', 'Tit For Tat', 'Alternator'])
+
     def test_default_cmap(self):
         cmap = axelrod.plot.default_cmap('0.0')
         self.assertEqual(cmap, 'YlGnBu')
@@ -172,6 +178,12 @@ class TestPlot(unittest.TestCase):
         fig = plot.winplot()
         self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
+
+    def test_sdvplot_dataset(self):
+        plot = axelrod.Plot(self.test_result_set)
+        self.assertSequenceEqual(
+            plot._sdv_plot_dataset,
+            self.expected_sdvplot_dataset)
 
     def test_sdvplot(self):
         plot = axelrod.Plot(self.test_result_set)

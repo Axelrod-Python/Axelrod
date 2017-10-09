@@ -112,7 +112,8 @@ class Plot(object):
     @property
     def _sdv_plot_dataset(self):
         ordering = self._sd_ordering
-        diffs = self.result_set.score_diffs
+        diffs = [[diff for repetition in diffs for diff in repetition]
+                 for diffs in self.result_set.score_diffs]
         # Reorder and grab names
         diffs = [diffs[i] for i in ordering]
         ranked_names = [str(self.players[i]) for i in ordering]
