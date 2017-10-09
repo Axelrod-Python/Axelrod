@@ -255,8 +255,8 @@ class Tournament(object):
         """
         # At first sight, it might seem simpler to use the multiprocessing Pool
         # Class rather than Processes and Queues. However, this way is faster.
-        work_queue = Queue()
-        done_queue = Queue()
+        work_queue = Queue() # type: Queue
+        done_queue = Queue() # type: Queue
         workers = self._n_workers(processes=processes)
 
         chunks = self.match_generator.build_match_chunks()
