@@ -1,3 +1,15 @@
+# v3.8.0, 2017-10-10
+
+A new strategy and some bug fixes due to dependency updates
+
+- New strategy MoreGrofman from Axelrod's second tournament
+  https://github.com/Axelrod-Python/Axelrod/pull/1124
+- Bug fixes due to dependency updates
+  https://github.com/Axelrod-Python/Axelrod/pull/1130
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.8.0...v3.7.0
+
 # v3.7.0, 2017-09-05
 
 A new strategy, contributor documentation and internal fixes.
