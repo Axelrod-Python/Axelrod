@@ -15,7 +15,7 @@ class TestChampion(TestPlayer):
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
-        'makes_use_of': set(["length"]),
+        'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -23,29 +23,27 @@ class TestChampion(TestPlayer):
     }
 
     def test_strategy(self):
-        # Cooperates for num_rounds / 20 (10 by default)
+        # Cooperates for first 10 rounds
 
         actions = [(C, C), (C, D)] * 5  # Cooperate for ten rounds
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         match_attributes={"length": 200})
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         # Mirror partner for next phase
         actions += [(D, C), (C, D)] * 7  # Mirror opponent afterwards
-        self.versus_test(axelrod.Alternator(), expected_actions=actions,
-                         match_attributes={"length": 200})
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         # Cooperate unless the opponent defected, has defected at least 40% of
         actions_1 = actions + [(D, C), (C, D), (C, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions_1,
-                         match_attributes={"length": 200}, seed=0)
+                         seed=0)
 
         actions_2 = actions + [(D, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions_2,
-                         match_attributes={"length": 200}, seed=1)
+                         seed=1)
 
         actions_3 = actions + [(D, C), (C, D), (C, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions_3,
-                         match_attributes={"length": 200}, seed=2)
+                         seed=2)
 
 
 class TestEatherley(TestPlayer):
@@ -191,34 +189,34 @@ class TestTranquilizer(TestPlayer):
 
         opponent = axelrod.Bully()
         actions = [(C, D), (D, D), (D, C), (C, C), (C, D), (D, D), (D, C), (C, C)]
-        expected_attrs={"num_turns_after_good_defection": 0,  
-                        "one_turn_after_good_defection_ratio": 5, 
-                        "two_turns_after_good_defection_ratio": 0, 
-                        "one_turn_after_good_defection_ratio_count": 1, 
+        expected_attrs={"num_turns_after_good_defection": 0,
+                        "one_turn_after_good_defection_ratio": 5,
+                        "two_turns_after_good_defection_ratio": 0,
+                        "one_turn_after_good_defection_ratio_count": 1,
                         "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, 
+        self.versus_test(opponent, expected_actions=actions,
                          attrs=expected_attrs)
 
         # Tests whether TitForTat is played given score is below 1.75
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 20
-        expected_attrs={"num_turns_after_good_defection": 0,  
-                        "one_turn_after_good_defection_ratio": 5, 
-                        "two_turns_after_good_defection_ratio": 0, 
-                        "one_turn_after_good_defection_ratio_count": 1, 
+        expected_attrs={"num_turns_after_good_defection": 0,
+                        "one_turn_after_good_defection_ratio": 5,
+                        "two_turns_after_good_defection_ratio": 0,
+                        "one_turn_after_good_defection_ratio_count": 1,
                         "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, 
+        self.versus_test(opponent, expected_actions=actions,
                          attrs=expected_attrs)
 
         opponent = axelrod.MockPlayer([C] * 2 + [D] * 8 + [C] * 4 )
-        actions = [(C, C), (C, C)] + [(C, D)] + [(D, D)] * 7 + [(D, C)] + [(C, C)] * 3  
-        expected_attrs={"num_turns_after_good_defection": 0, 
-                        "one_turn_after_good_defection_ratio": 5, 
-                        "two_turns_after_good_defection_ratio": 0, 
-                        "one_turn_after_good_defection_ratio_count": 1, 
+        actions = [(C, C), (C, C)] + [(C, D)] + [(D, D)] * 7 + [(D, C)] + [(C, C)] * 3
+        expected_attrs={"num_turns_after_good_defection": 0,
+                        "one_turn_after_good_defection_ratio": 5,
+                        "two_turns_after_good_defection_ratio": 0,
+                        "one_turn_after_good_defection_ratio_count": 1,
                         "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, 
+        self.versus_test(opponent, expected_actions=actions,
                          attrs=expected_attrs)
 
         # If score is between 1.75 and 2.25, may cooperate or defect
@@ -226,107 +224,107 @@ class TestTranquilizer(TestPlayer):
         opponent = axelrod.MockPlayer(actions=[D] * 3 + [C] * 4 + [D] * 2)
         actions = [(C, D)] + [(D, D)] * 2 + [(D, C)] + [(C, C)] * 3 + [(C, D)]
         actions += ([(C, D)]) # <-- Random
-        expected_attrs={"num_turns_after_good_defection": 0, 
-               "one_turn_after_good_defection_ratio": 5, 
-               "two_turns_after_good_defection_ratio": 0, 
-               "one_turn_after_good_defection_ratio_count": 1, 
+        expected_attrs={"num_turns_after_good_defection": 0,
+               "one_turn_after_good_defection_ratio": 5,
+               "two_turns_after_good_defection_ratio": 0,
+               "one_turn_after_good_defection_ratio_count": 1,
                "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=0, 
+        self.versus_test(opponent, expected_actions=actions, seed=0,
                          attrs=expected_attrs)
 
         opponent = axelrod.MockPlayer(actions=[D] * 3 + [C] * 4 + [D] * 2)
         actions = [(C, D)] + [(D, D)] * 2 + [(D, C)] + [(C, C)] * 3 + [(C, D)]
         actions += ([(D, D)]) # <-- Random
-        expected_attrs={"num_turns_after_good_defection": 0, 
-                  "one_turn_after_good_defection_ratio": 5, 
-                  "two_turns_after_good_defection_ratio": 0, 
-                  "one_turn_after_good_defection_ratio_count": 1, 
+        expected_attrs={"num_turns_after_good_defection": 0,
+                  "one_turn_after_good_defection_ratio": 5,
+                  "two_turns_after_good_defection_ratio": 0,
+                  "one_turn_after_good_defection_ratio_count": 1,
                   "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=17, 
+        self.versus_test(opponent, expected_actions=actions, seed=17,
                          attrs=expected_attrs)
 
-        """If score is greater than 2.25 either cooperate or defect, 
+        """If score is greater than 2.25 either cooperate or defect,
            if turn number <= 5; cooperate"""
-        
+
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 5
-        expected_attrs={"num_turns_after_good_defection": 0, 
-                "one_turn_after_good_defection_ratio": 5, 
-                "two_turns_after_good_defection_ratio": 0, 
-                "one_turn_after_good_defection_ratio_count": 1, 
+        expected_attrs={"num_turns_after_good_defection": 0,
+                "one_turn_after_good_defection_ratio": 5,
+                "two_turns_after_good_defection_ratio": 0,
+                "one_turn_after_good_defection_ratio_count": 1,
                 "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=1, 
+        self.versus_test(opponent, expected_actions=actions, seed=1,
                          attrs=expected_attrs)
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)]
         expected_attrs={"num_turns_after_good_defection": 1,
-                "one_turn_after_good_defection_ratio": 5, 
-                "two_turns_after_good_defection_ratio": 0, 
-                "one_turn_after_good_defection_ratio_count": 1, 
+                "one_turn_after_good_defection_ratio": 5,
+                "two_turns_after_good_defection_ratio": 0,
+                "one_turn_after_good_defection_ratio_count": 1,
                 "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=89, 
+        self.versus_test(opponent, expected_actions=actions, seed=89,
                          attrs=expected_attrs)
 
-        """ Given score per turn is greater than 2.25, 
+        """ Given score per turn is greater than 2.25,
             Tranquilizer will never defect twice in a row"""
-        
+
         opponent = axelrod.MockPlayer(actions = [C] * 6)
         actions = [(C, C)] * 4 + [(D, C), (C, C)]
-        expected_attrs={"num_turns_after_good_defection": 2, 
-                 "one_turn_after_good_defection_ratio": 5, 
-                 "two_turns_after_good_defection_ratio": 0, 
-                 "one_turn_after_good_defection_ratio_count": 2, 
+        expected_attrs={"num_turns_after_good_defection": 2,
+                 "one_turn_after_good_defection_ratio": 5,
+                 "two_turns_after_good_defection_ratio": 0,
+                 "one_turn_after_good_defection_ratio_count": 2,
                  "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=89, 
+        self.versus_test(opponent, expected_actions=actions, seed=89,
                          attrs=expected_attrs)
-        
+
         # Tests cooperation after update_state
 
         opponent = axelrod.MockPlayer(actions=[C] * 5)
         actions = [(C, C)] * 4 + [(D, C)] + [(C, C)]
-        expected_attrs={"num_turns_after_good_defection": 2, 
-                "one_turn_after_good_defection_ratio": 5, 
-                "two_turns_after_good_defection_ratio": 0, 
-                "one_turn_after_good_defection_ratio_count": 2, 
-                "two_turns_after_good_defection_ratio_count": 1}        
-        self.versus_test(opponent, expected_actions=actions, seed=89, 
+        expected_attrs={"num_turns_after_good_defection": 2,
+                "one_turn_after_good_defection_ratio": 5,
+                "two_turns_after_good_defection_ratio": 0,
+                "one_turn_after_good_defection_ratio_count": 2,
+                "two_turns_after_good_defection_ratio_count": 1}
+        self.versus_test(opponent, expected_actions=actions, seed=89,
                          attrs=expected_attrs)
-       
+
        # Ensures FD1 values are calculated
 
         opponent = axelrod.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C), (C, C)]
-        expected_attrs={"num_turns_after_good_defection": 2, 
-                "one_turn_after_good_defection_ratio": 5, 
-                "two_turns_after_good_defection_ratio": 0, 
-                "one_turn_after_good_defection_ratio_count": 2, 
+        expected_attrs={"num_turns_after_good_defection": 2,
+                "one_turn_after_good_defection_ratio": 5,
+                "two_turns_after_good_defection_ratio": 0,
+                "one_turn_after_good_defection_ratio_count": 2,
                 "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, seed=89, 
+        self.versus_test(opponent, expected_actions=actions, seed=89,
                          attrs=expected_attrs)
 
         # Ensures FD2 values are calculated
-        
+
         opponent = axelrod.MockPlayer(actions=[C] * 6)
         actions = [(C, C)] * 4 + [(D, C)] + [(C, C)] * 2
-        expected_attrs={"num_turns_after_good_defection": 0, 
-                 "one_turn_after_good_defection_ratio": 5, 
-                 "two_turns_after_good_defection_ratio": 1.5, 
-                 "one_turn_after_good_defection_ratio_count": 2, 
+        expected_attrs={"num_turns_after_good_defection": 0,
+                 "one_turn_after_good_defection_ratio": 5,
+                 "two_turns_after_good_defection_ratio": 1.5,
+                 "one_turn_after_good_defection_ratio_count": 2,
                  "two_turns_after_good_defection_ratio_count": 2}
-        self.versus_test(opponent, expected_actions=actions, seed=89, 
+        self.versus_test(opponent, expected_actions=actions, seed=89,
                          attrs=expected_attrs)
 
         # Ensures scores are being counted
 
         opponent = axelrod.Defector()
         actions = [(C, D)] + [(D, D)] * 19
-        expected_attrs={"num_turns_after_good_defection": 0, 
-                "one_turn_after_good_defection_ratio": 5, 
-                "two_turns_after_good_defection_ratio": 0, 
-                "one_turn_after_good_defection_ratio_count": 1, 
+        expected_attrs={"num_turns_after_good_defection": 0,
+                "one_turn_after_good_defection_ratio": 5,
+                "two_turns_after_good_defection_ratio": 0,
+                "one_turn_after_good_defection_ratio_count": 1,
                 "two_turns_after_good_defection_ratio_count": 1}
-        self.versus_test(opponent, expected_actions=actions, 
+        self.versus_test(opponent, expected_actions=actions,
                          attrs=expected_attrs)
 
 
