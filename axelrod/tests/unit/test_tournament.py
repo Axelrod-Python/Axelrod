@@ -251,7 +251,7 @@ class TestTournament(unittest.TestCase):
         self.test_tournament.use_progress_bar = True
         pbar = self.test_tournament._get_progress_bar()
         self.assertIsInstance(pbar, tqdm)
-        self.assertEqual(pbar.desc, 'Playing matches: ')
+        self.assertEqual(pbar.desc, 'Playing matches')
         self.assertEqual(pbar.n, 0)
         self.assertEqual(pbar.total, self.test_tournament.match_generator.size)
 
@@ -260,7 +260,7 @@ class TestTournament(unittest.TestCase):
                                             edges=new_edges)
         new_tournament.use_progress_bar = True
         pbar = new_tournament._get_progress_bar()
-        self.assertEqual(pbar.desc, 'Playing matches: ')
+        self.assertEqual(pbar.desc, 'Playing matches')
         self.assertEqual(pbar.n, 0)
         self.assertEqual(pbar.total, len(new_edges))
 
@@ -327,7 +327,7 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(results, axelrod.ResultSet)
 
     def assert_play_pbar_correct_total_and_finished(self, pbar, total):
-        self.assertEqual(pbar.desc, 'Playing matches: ')
+        self.assertEqual(pbar.desc, 'Playing matches')
         self.assertEqual(pbar.total, total)
         self.assertEqual(pbar.n, total)
         self.assertTrue(pbar.disable, True)
