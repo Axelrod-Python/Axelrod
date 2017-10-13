@@ -33,7 +33,7 @@ class Champion(Player):
     classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,
-        'makes_use_of': set(["length"]),
+        'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
         'manipulates_source': False,
@@ -42,14 +42,13 @@ class Champion(Player):
 
     def strategy(self, opponent: Player) -> Action:
         current_round = len(self.history)
-        expected_length = self.match_attributes['length']
-        # Cooperate for the first 1/20-th of the game
+        # Cooperate for the first 10 turns
         if current_round == 0:
             return C
-        if current_round < expected_length / 20:
+        if current_round < 10:
             return C
         # Mirror partner for the next phase
-        if current_round < expected_length * 5 / 40:
+        if current_round < 25:
             return opponent.history[-1]
         # Now cooperate unless all of the necessary conditions are true
         defection_prop = opponent.defections / len(opponent.history)
@@ -204,22 +203,22 @@ class Gladstein(Player):
             return opponent.history[-1]
 
 class Tranquilizer(Player):
-   
+
     """
     Submitted to Axelrod's second tournament by Craig Feathers
 
-    Description given in Axelrod's "More Effective Choice in the 
-    Prisoner's Dilemma" paper: The rule normally cooperates but 
-    is ready to defect if the other player defects too often. 
+    Description given in Axelrod's "More Effective Choice in the
+    Prisoner's Dilemma" paper: The rule normally cooperates but
+    is ready to defect if the other player defects too often.
     Thus the rule tends to cooperate for the first dozen or two moves
-    if the other player is cooperating, but then it throws in a 
-    defection. If the other player continues to cooperate, then defections 
-    become more frequent. But as long as Tranquilizer is maintaining an 
-    average payoff of at least 2.25 points per move, it will never defect 
-    twice in succession and it will not defect more than 
+    if the other player is cooperating, but then it throws in a
+    defection. If the other player continues to cooperate, then defections
+    become more frequent. But as long as Tranquilizer is maintaining an
+    average payoff of at least 2.25 points per move, it will never defect
+    twice in succession and it will not defect more than
     one-quarter of the time.
 
-    This implementation is based on the reverse engineering of the 
+    This implementation is based on the reverse engineering of the
     Fortran strategy K67R from Axelrod's second tournament.
     Reversed engineered by: Owen Campbell, Will Guo and Mansour Hakem.
 
@@ -228,42 +227,42 @@ class Tranquilizer(Player):
     At the start of the strategy it updates its states:
 
     - It counts the number of consecutive defections by the opponent.
-    - If it was in state 2 it moves to state 0 and calculates the 
+    - If it was in state 2 it moves to state 0 and calculates the
       following quantities two_turns_after_good_defection_ratio and
       two_turns_after_good_defection_ratio_count.
-      
+
       Formula for:
-      
+
       two_turns_after_good_defection_ratio:
 
       self.two_turns_after_good_defection_ratio = (
-      ((self.two_turns_after_good_defection_ratio 
-      * self.two_turns_after_good_defection_ratio_count) 
-      + (3 - (3 * self.dict[opponent.history[-1]])) 
-      + (2 * self.dict[self.history[-1]]) 
-      - ((self.dict[opponent.history[-1]] 
-      * self.dict[self.history[-1]]))) 
+      ((self.two_turns_after_good_defection_ratio
+      * self.two_turns_after_good_defection_ratio_count)
+      + (3 - (3 * self.dict[opponent.history[-1]]))
+      + (2 * self.dict[self.history[-1]])
+      - ((self.dict[opponent.history[-1]]
+      * self.dict[self.history[-1]])))
       / (self.two_turns_after_good_defection_ratio_count + 1)
       )
 
       two_turns_after_good_defection_ratio_count =
       two_turns_after_good_defection_ratio + 1
 
-    - If it was in state 1 it moves to state 2 and calculates the 
-      following quantities one_turn_after_good_defection_ratio and 
+    - If it was in state 1 it moves to state 2 and calculates the
+      following quantities one_turn_after_good_defection_ratio and
       one_turn_after_good_defection_ratio_count.
 
       Formula for:
-      
+
       one_turn_after_good_defection_ratio:
 
       self.one_turn_after_good_defection_ratio = (
-      ((self.one_turn_after_good_defection_ratio 
+      ((self.one_turn_after_good_defection_ratio
       * self.one_turn_after_good_defection_ratio_count)
-      + (3 - (3 * self.dict[opponent.history[-1]])) 
-      + (2 * self.dict[self.history[-1]]) 
-      - (self.dict[opponent.history[-1]] 
-      * self.dict[self.history[-1]])) 
+      + (3 - (3 * self.dict[opponent.history[-1]]))
+      + (2 * self.dict[self.history[-1]])
+      - (self.dict[opponent.history[-1]]
+      * self.dict[self.history[-1]]))
       / (self.one_turn_after_good_defection_ratio_count + 1)
       )
 
@@ -271,44 +270,44 @@ class Tranquilizer(Player):
 
       one_turn_after_good_defection_ratio_count =
       one_turn_after_good_defection_ratio + 1
- 
+
     If after this it is in state 1 or 2 then it cooperates.
 
-    If it is in state 0 it will potentially perform 1 of the 2 
+    If it is in state 0 it will potentially perform 1 of the 2
     following stochastic tests:
 
-    1. If average score per turn is greater than 2.25 then it calculates a  
+    1. If average score per turn is greater than 2.25 then it calculates a
     value of probability:
-    
+
     probability = (
     (.95 - (((self.one_turn_after_good_defection_ratio)
-    + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
+    + (self.two_turns_after_good_defection_ratio) - 5) / 15))
     + (1 / (((len(self.history))+1) ** 2))
     - (self.dict[opponent.history[-1]] / 4)
-    ) 
+    )
 
-    and will cooperate if a random sampled number is less than that value of 
-    probability. If it does not cooperate then the strategy moves to state 1 
+    and will cooperate if a random sampled number is less than that value of
+    probability. If it does not cooperate then the strategy moves to state 1
     and defects.
-    
-    2. If average score per turn is greater than 1.75 but less than 2.25 
+
+    2. If average score per turn is greater than 1.75 but less than 2.25
     then it calculates a value of probability:
 
     probability = (
     (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
-    - (self.opponent_consecutive_defections * .25) 
-    + ((current_score[0] 
-    - current_score[1]) / 100) 
+    - (self.opponent_consecutive_defections * .25)
+    + ((current_score[0]
+    - current_score[1]) / 100)
     + (4 / ((len(self.history)) + 1))
     )
 
-    and will cooperate if a random sampled number is less than that value of 
+    and will cooperate if a random sampled number is less than that value of
     probability. If not, it defects.
 
     If none of the above holds the player simply plays tit for tat.
 
-    Tranquilizer came in 27th place in Axelrod's second torunament. 
-   
+    Tranquilizer came in 27th place in Axelrod's second torunament.
+
 
     Names:
 
@@ -335,17 +334,17 @@ class Tranquilizer(Player):
         self.one_turn_after_good_defection_ratio_count = 1 # equal to AK variable
         self.two_turns_after_good_defection_ratio_count = 1 # equal to NK variable
         # All above variables correspond to those in original Fotran Code
-        self.dict = {C: 0, D: 1} 
+        self.dict = {C: 0, D: 1}
 
 
-    def update_state(self, opponent):  
-        
+    def update_state(self, opponent):
+
         """
         Calculates the ratio values for the one_turn_after_good_defection_ratio,
-        two_turns_after_good_defection_ratio and the probability values, 
+        two_turns_after_good_defection_ratio and the probability values,
         and sets the value of num_turns_after_good_defection.
         """
-        if opponent.history[-1] == D: 
+        if opponent.history[-1] == D:
             self.opponent_consecutive_defections += 1
         else:
             self.opponent_consecutive_defections = 0
@@ -353,57 +352,57 @@ class Tranquilizer(Player):
         if self.num_turns_after_good_defection == 2:
             self.num_turns_after_good_defection = 0
             self.two_turns_after_good_defection_ratio = (
-                ((self.two_turns_after_good_defection_ratio 
-                * self.two_turns_after_good_defection_ratio_count) 
-                + (3 - (3 * self.dict[opponent.history[-1]])) 
-                + (2 * self.dict[self.history[-1]]) 
-                - ((self.dict[opponent.history[-1]] 
-                * self.dict[self.history[-1]]))) 
+                ((self.two_turns_after_good_defection_ratio
+                * self.two_turns_after_good_defection_ratio_count)
+                + (3 - (3 * self.dict[opponent.history[-1]]))
+                + (2 * self.dict[self.history[-1]])
+                - ((self.dict[opponent.history[-1]]
+                * self.dict[self.history[-1]])))
                 / (self.two_turns_after_good_defection_ratio_count + 1)
                 )
             self.two_turns_after_good_defection_ratio_count += 1
         elif self.num_turns_after_good_defection == 1:
             self.num_turns_after_good_defection = 2
             self.one_turn_after_good_defection_ratio = (
-                ((self.one_turn_after_good_defection_ratio 
+                ((self.one_turn_after_good_defection_ratio
                 * self.one_turn_after_good_defection_ratio_count)
-                + (3 - (3 * self.dict[opponent.history[-1]])) 
-                + (2 * self.dict[self.history[-1]]) 
-                - (self.dict[opponent.history[-1]] 
-                * self.dict[self.history[-1]])) 
+                + (3 - (3 * self.dict[opponent.history[-1]]))
+                + (2 * self.dict[self.history[-1]])
+                - (self.dict[opponent.history[-1]]
+                * self.dict[self.history[-1]]))
                 / (self.one_turn_after_good_defection_ratio_count + 1)
                 )
             self.one_turn_after_good_defection_ratio_count += 1
-   
+
     def strategy(self, opponent: Player) -> Action:
 
         if not self.history:
             return C
 
-       
+
         self.update_state(opponent)
         if  self.num_turns_after_good_defection in [1, 2]:
-            return C        
+            return C
 
         current_score = compute_final_score(zip(self.history, opponent.history))
 
         if (current_score[0] / ((len(self.history)) + 1)) >= 2.25:
             probability = (
                 (.95 - (((self.one_turn_after_good_defection_ratio)
-                + (self.two_turns_after_good_defection_ratio) - 5) / 15)) 
+                + (self.two_turns_after_good_defection_ratio) - 5) / 15))
                 + (1 / (((len(self.history))+1) ** 2))
                 - (self.dict[opponent.history[-1]] / 4)
                 )
-            if random.random() <= probability: 
+            if random.random() <= probability:
                 return C
             self.num_turns_after_good_defection = 1
             return D
         if (current_score[0] / ((len(self.history)) + 1)) >= 1.75:
             probability = (
                 (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
-                - (self.opponent_consecutive_defections * .25) 
-                + ((current_score[0] 
-                - current_score[1]) / 100) 
+                - (self.opponent_consecutive_defections * .25)
+                + ((current_score[0]
+                - current_score[1]) / 100)
                 + (4 / ((len(self.history)) + 1))
                 )
             if random.random() <= probability:
