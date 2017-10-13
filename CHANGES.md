@@ -1,3 +1,13 @@
+# v3.8.1, 2017-10-13
+
+Minor change to behaviour of Champion
+
+- This is more in line with the original description of Champion
+  https://github.com/Axelrod-Python/Axelrod/pull/1131
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.8.1...v3.8.0
+
 # v3.8.0, 2017-10-10
 
 A new strategy and some bug fixes due to dependency updates
