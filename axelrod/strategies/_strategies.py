@@ -10,7 +10,7 @@ from .axelrod_first import (
 from .axelrod_second import Champion, Eatherley, Tester, Gladstein, Tranquilizer, MoreGrofman
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
-from .bm import BM
+from .bush_mosteller import BushMosteller
 from .calculator import Calculator
 from .cooperator import Cooperator, TrickyCooperator
 from .cycler import (
@@ -106,6 +106,7 @@ all_strategies = [
     BetterAndBetter,
     BackStabber,
     Bully,
+    BushMosteller,
     Calculator,
     CautiousQLearner,
     Champion,
