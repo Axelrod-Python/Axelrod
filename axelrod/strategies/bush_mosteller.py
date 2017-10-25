@@ -39,7 +39,7 @@ class BushMosteller(Player):
                  learning_rate: float = 0.5) -> None:
         """
         Parameters
-        ----------
+
         c_prob: float, 0.5
            Probability to play C , is modified during the match
         d_prob: float, 0.5
@@ -57,7 +57,6 @@ class BushMosteller(Player):
         _init_c_prob , _init_d_prob : float
         	Values used to properly set up reset(),
             set to original probabilities
-        ---------
         """
         super().__init__()
         self._c_prob , self._d_prob = c_prob , d_prob
@@ -74,7 +73,7 @@ class BushMosteller(Player):
         the strategy.
 
         Parameters
-        ----------
+
         opponent : axelrod.Player
             The current opponent
         """
