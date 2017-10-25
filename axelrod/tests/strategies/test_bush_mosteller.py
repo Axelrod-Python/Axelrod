@@ -8,7 +8,7 @@ class TestBushMostellar(TestPlayer):
     name = "Bush Mosteller: 0.5, 0.5, 3.0, 0.5"
     player = axelrod.BushMosteller
     expected_classifier = {
-        'memory_depth': 1,  # Updates stimulus using last round
+        'memory_depth': float("inf"),
         'stochastic': True,
         'makes_use_of': set(["game"]),
         'long_run_time': False,

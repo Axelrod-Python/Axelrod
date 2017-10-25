@@ -36,7 +36,7 @@ Here are the docstrings of all the strategies in the library.
 .. automodule:: axelrod.strategies.better_and_better
    :members:
    :undoc-members:
-.. automodule:: axelrod.strategies.bm
+.. automodule:: axelrod.strategies.bush_mosteller
    :members:
    :undoc-members:
 .. automodule:: axelrod.strategies.calculator

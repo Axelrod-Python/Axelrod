@@ -24,7 +24,7 @@ class BushMosteller(Player):
 
     name = 'Bush Mosteller'
     classifier = {
-        'memory_depth': 1,  # Updates stimulus using last round
+        'memory_depth': float('inf'),
         'stochastic': True,
         'makes_use_of': set(["game"]),
         'long_run_time': False,
@@ -64,9 +64,9 @@ class BushMosteller(Player):
         self._init_c_prob , self._init_d_prob = c_prob , d_prob
         self._aspiration_level = abs((max(self.match_attributes["game"].RPST())
                                      / aspiration_level_divider))
+
         self._stimulus = 0.0
         self._learning_rate = learning_rate
-
 
     def stimulus_update(self, opponent: Player):
         """
