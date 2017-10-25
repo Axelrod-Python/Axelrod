@@ -34,7 +34,9 @@ class BushMosteller(Player):
     }
 
 
-    def __init__(self, c_prob: float = 0.5, d_prob: float = 0.5, aspiration_level_divider: float = 3.0, learning_rate: float = 0.5) -> None:
+    def __init__(self, c_prob: float = 0.5, d_prob: float = 0.5,
+                 aspiration_level_divider: float = 3.0,
+                 learning_rate: float = 0.5) -> None:
         """
         Parameters
         ----------
@@ -43,7 +45,8 @@ class BushMosteller(Player):
         d_prob: float, 0.5
            Probability to play D , is modified during the match
         aspiration_level_divider: float, 3.0
-            Value that regulates the aspiration level, isn't modified during match
+            Value that regulates the aspiration level,
+            isn't modified during match
 		learning rate [0 , 1]
 			Percentage of learning speed
         Variables / Constants
@@ -52,13 +55,15 @@ class BushMosteller(Player):
         _aspiration_level: float
             Value that impacts the stimulus changes, isn't modified during match
         _init_c_prob , _init_d_prob : float
-        	Values used to properly set up reset(), set to original probabilities
+        	Values used to properly set up reset(),
+            set to original probabilities
         ---------
         """
         super().__init__()
         self._c_prob , self._d_prob = c_prob , d_prob
         self._init_c_prob , self._init_d_prob = c_prob , d_prob
-        self._aspiration_level = abs((max(self.match_attributes["game"].RPST()) / aspiration_level_divider))
+        self._aspiration_level = abs((max(self.match_attributes["game"].RPST())
+                                     / aspiration_level_divider))
         self._stimulus = 0.0
         self._learning_rate = learning_rate
 
@@ -81,7 +86,9 @@ class BushMosteller(Player):
 
         previous_play = scores[0]
 
-        self._stimulus = ((previous_play - self._aspiration_level) / abs((max(self.match_attributes["game"].RPST()) - self._aspiration_level)))
+        self._stimulus = ((previous_play - self._aspiration_level) /
+                          abs((max(self.match_attributes["game"].RPST()) -
+                                   self._aspiration_level)))
         # Lowest range for stimulus
         # Highest doesn't need to be tested since it is divided by the highest
         # reward possible
@@ -92,18 +99,22 @@ class BushMosteller(Player):
         if self.history[-1] == C:
 
             if self._stimulus >= 0:
-                self._c_prob = self._c_prob + self._learning_rate * self._stimulus * (1 - self._c_prob)
+                self._c_prob += (self._learning_rate * self._stimulus *
+                                 (1 - self._c_prob))
 
             elif self._stimulus < 0:
-                self._c_prob = self._c_prob + self._learning_rate * self._stimulus * self._c_prob
+                self._c_prob += (self._learning_rate * self._stimulus *
+                                 self._c_prob)
 
         # Updates probability following previous choice D
         if self.history[-1] == D:
             if self._stimulus >= 0:
-                self._d_prob = self._d_prob + self._learning_rate * self._stimulus * (1 - self._d_prob)
+                self._d_prob += (self._learning_rate * self._stimulus *
+                                 (1 - self._d_prob))
 
             elif self._stimulus < 0:
-                self._d_prob = self._d_prob + self._learning_rate * self._stimulus * self._d_prob
+                self._d_prob += (self._learning_rate * self._stimulus *
+                                 self._d_prob)
 
 
     def strategy(self, opponent: Player) -> Action:
