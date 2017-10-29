@@ -130,3 +130,46 @@ class TestLevelPunisher(TestPlayer):
         opponent = axelrod.MockPlayer([C] * 4 + [D] + [C] * 4 + [D])
         actions = [(C, C)] * 4 + [(C, D)] + [(C, C)] * 4 + [(C, D), (C, C)]
         self.versus_test(opponent=opponent, expected_actions=actions)
+
+
+class TestTrickyLevelPunisher(TestPlayer):
+
+    name = "Level Punisher"
+    player = axelrod.LevelPunisher
+    expected_classifier = {
+        'memory_depth': float('inf'),  # Long memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Cooperates if the turns played are less than 10.
+        actions = [(C, C)] * 9
+        self.versus_test(opponent=axelrod.Cooperator(),
+                         expected_actions=actions)
+
+        # After 10 rounds
+        # Check if number of defections by opponent is greater than 20%
+        opponent = axelrod.MockPlayer([C] * 4 + [D] * 2 + [C] * 3 + [D])
+        actions = [(C, C)] * 4 + [(C, D)] * 2 + [(C, C)] * 3 + [(C, D), (D, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+        # Check if number of defections by opponent is greater than 10%
+        opponent = axelrod.MockPlayer([C] * 4 + [D] + [C] * 4 + [D])
+        actions = [(C, C)] * 4 + [(C, D)] + [(C, C)] * 4 + [(C, D), (C, C)]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+        # After 10 rounds
+        # Check if number of defections by opponent is greater than 5%
+        opponent = axelrod.MockPlayer([C] * 4 + [D] + [C] * 5)
+        actions = [(C, C)] * 4 + [(C, D)] + [(C, C)] * 5]
+        self.versus_test(opponent=opponent, expected_actions=actions)
+
+        # Check if number of defections by opponent is less than 5%
+        opponent = axelrod.MockPlayer([C]*10)
+        actions = [(C, C)] * 5
+        self.versus_test(opponent=opponent, expected_actions=actions)

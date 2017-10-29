@@ -61,7 +61,7 @@ from .negation import Negation
 from .oncebitten import OnceBitten, FoolMeOnce, ForgetfulFoolMeOnce, FoolMeForever
 from .prober import (CollectiveStrategy, Prober, Prober2, Prober3, Prober4,
                      HardProber, NaiveProber, RemorsefulProber)
-from .punisher import Punisher, InversePunisher, LevelPunisher
+from .punisher import Punisher, InversePunisher, LevelPunisher, TrickyLevelPunisher
 from .qlearner import (
     RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner)
 from .rand import Random
@@ -259,6 +259,7 @@ all_strategies = [
     Tranquilizer,
     TrickyCooperator,
     TrickyDefector,
+    TrickyLevelPunisher
     Tullock,
     TwoTitsForTat,
     VeryBad,
