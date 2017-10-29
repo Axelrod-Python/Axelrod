@@ -178,7 +178,7 @@ class TrickyLevelPunisher(Player):
             return D
         elif len(opponent.history) < 100:
             return C
-        elif len((len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.05:
+        elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.05:
             return D
         else:
             return C
