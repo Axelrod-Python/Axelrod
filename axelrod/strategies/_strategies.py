@@ -279,7 +279,7 @@ all_strategies = [
     Tranquilizer,
     TrickyCooperator,
     TrickyDefector,
-    TrickyLevelPunisher
+    TrickyLevelPunisher,
     Tullock,
     TwoTitsForTat,
     VeryBad,
