@@ -166,7 +166,7 @@ class TestTrickyLevelPunisher(TestPlayer):
         # After 10 rounds
         # Check if number of defections by opponent is greater than 5%
         opponent = axelrod.MockPlayer([C] * 4 + [D] + [C] * 5)
-        actions = [(C, C)] * 4 + [(C, D)] + [(C, C)] * 5]
+        actions = [(C, C)] * 4 + [(C, D)] + [(C, C)] * 5
         self.versus_test(opponent=opponent, expected_actions=actions)
 
         # Check if number of defections by opponent is less than 5%
