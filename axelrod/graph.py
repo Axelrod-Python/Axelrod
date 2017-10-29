@@ -6,7 +6,11 @@ https://github.com/marcharper/stationary/blob/master/stationary/utils/graph.py
 """
 
 from collections import defaultdict
+from typing import List, Dict, Hashable, Tuple
+from numbers import Number
 
+Vertice = Hashable
+Edge = Tuple[Vertice, Vertice]
 
 class Graph(object):
     """Weighted and directed graph object intended for the graph associated to a
@@ -23,7 +27,7 @@ class Graph(object):
     opposite edge (t, s).
     """
 
-    def __init__(self, edges=None, directed=False):
+    def __init__(self, edges: List[Edge] = None, directed: bool = False) -> None:
         self.directed = directed
         self.original_edges = edges
         self.out_mapping = defaultdict(lambda: defaultdict(float))
@@ -32,7 +36,7 @@ class Graph(object):
         if edges:
             self.add_edges(edges)
 
-    def add_edge(self, source, target, weight=None):
+    def add_edge(self, source: Vertice, target: Vertice, weight: Number = None):
         if (source, target) not in self._edges:
             self._edges.append((source, target))
             self.out_mapping[source][target] = weight
@@ -43,7 +47,7 @@ class Graph(object):
             self.out_mapping[target][source] = weight
             self.in_mapping[source][target] = weight
 
-    def add_edges(self, edges):
+    def add_edges(self, edges: List[Edge]):
         for edge in edges:
             self.add_edge(*edge)
 
@@ -53,27 +57,27 @@ class Graph(object):
         """
         self.add_edges((i, i) for i, _ in enumerate(self.vertices()))
 
-    def edges(self):
+    def edges(self) -> List[Edge]:
         return self._edges
 
-    def vertices(self):
+    def vertices(self) -> List[Vertice]:
         """Returns the set of vertices of the graph."""
         return list(self.out_mapping.keys())
 
-    def out_dict(self, source):
+    def out_dict(self, source: Vertice) -> Dict[Edge, Number]:
         """Returns a dictionary of the outgoing edges of source with weights."""
         return self.out_mapping[source]
 
-    def out_vertices(self, source):
+    def out_vertices(self, source: Vertice) -> List[Vertice]:
         """Returns a list of the outgoing vertices."""
         return list(self.out_mapping[source].keys())
 
-    def in_dict(self, target):
+    def in_dict(self, target: Vertice) -> Dict[Edge, Number]:
         """Returns a dictionary of the incoming edges of source with weights."""
         return self.in_mapping[target]
 
-    def in_vertices(self, source):
-        """Returns a list of the outgoing vertices."""
+    def in_vertices(self, source: Vertice) -> List[Vertice]:
+        """Returns a list of the incoming vertices."""
         return list(self.in_mapping[source].keys())
 
     def __repr__(self):
@@ -84,7 +88,7 @@ class Graph(object):
 # Example Graphs
 
 
-def cycle(length, directed=False):
+def cycle(length: int, directed: bool = False) -> Graph:
     """
     Produces a cycle of length `length`.
     Parameters
@@ -107,7 +111,7 @@ def cycle(length, directed=False):
     return graph
 
 
-def complete_graph(length, loops=True):
+def complete_graph(length: int, loops: bool = True) -> Graph:
     """
     Produces a complete graph of size `length`, with loops.
     https://en.wikipedia.org/wiki/Complete_graph
