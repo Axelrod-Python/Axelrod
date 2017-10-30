@@ -85,35 +85,6 @@ class TestEatherley(TestPlayer):
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
 
-class TestGrisell(TestPlayer):
-    name = "Grisell"
-    player = axelrod.Grisell
-    expected_classifier = {
-            'memory_depth': float("inf"),
-            'stochastic': False,
-            'makes_use_of': set(),
-            'long_run_time': False,
-            'inspects_source': False,
-            'manipulates_source': False,
-            'manipulates_state': False
-            }
-
-    def test_strategy(self):
-        # If the ratio of opponent defections to matches is less than 0.5 then cooporate
-        opponent = axelrod.Cooperator()
-        actions = [(C, C)] * 20
-        self.versus_test(opponent, expected_actions=actions)
-
-        opponent = axelrod.Defector()
-        actions = [(C, D), (D, D)]
-        self.versus_test(opponent, expected_actions=actions)
-
-        opponent_actions = (D, D, D, D, C, C, C, C, C, C)
-        opponent = axelrod.MockPlayer(actions=opponent_actions)
-        actions = [(C, D), (D, D), (D, D), (D, D), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions)
-
-
 class TestTester(TestPlayer):
 
     name = "Tester"
