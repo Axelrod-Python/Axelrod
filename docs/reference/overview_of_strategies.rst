@@ -116,7 +116,7 @@ repository.
    "K43R_", "R D Anderson", "Not Implemented"
    "K44R_", "William Adams", "Not Implemented"
    "K45R_", "Michael F McGurrin", "Not Implemented"
-   "K46R_", "Graham J Eatherley", "Not Implemented"
+   "K46R_", "Graham J Eatherley", ":class:`Eatherley <axelrod.strategies.axelrod_second.Eatherley>`"
    "K47R_", "Richard Hufford", "Not Implemented"
    "K48R_", "George Hufford", "Not Implemented"
    "K49R_", "Rob Cave", "Not Implemented"
