@@ -98,6 +98,40 @@ class Eatherley(Player):
         return random_choice(1 - defection_prop)
 
 
+class Grisell(Player):
+    """
+    Submitted to Axelrod's second tournament by Gail Grisell.  It came 23rd was written in 10 lines of BASIC.
+
+    This is a player who's behaviour changes depending on the ratio of previous opponent defections.
+
+    If the ratio of the number of opponent defections to number of matches is less than 0.5, this player
+    will cooporate.  If the ratio is 0.5 or larger then the player will defect.
+
+    Names:
+
+    - Grisell: [Axelrod1980b]_
+    """
+    name = 'Grisell'
+    classifier = {
+        'memory_depth': float("inf"),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        if not self.history:
+            return C
+        defect_rate = opponent.defections / len(self.history)
+        if defect_rate < 0.5:
+            return C
+        else:
+            return D
+
+
 class Tester(Player):
     """
     Submitted to Axelrod's second tournament by David Gladstein.
