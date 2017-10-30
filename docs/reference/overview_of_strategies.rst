@@ -101,7 +101,7 @@ repository.
    :header: "Original Code", "Author", "Axelrod Library Name"
 
    "GRASR_", "Unknown", "Not Implemented"
-   "K31R_", "Gail Grisell", "Not Implemented"
+   "K31R_", "Gail Grisell", ":class:`HardGoByMajority <axelrod.strategies.gobymajority.HardGoByMajority>`"
    "K32R_", "Charles Kluepfel", "Not Implemented"
    "K33R_", "Harold Rabbie", "Not Implemented"
    "K34R_", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"

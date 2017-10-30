@@ -153,7 +153,10 @@ class GoByMajority5(GoByMajority):
 
 
 class HardGoByMajority(GoByMajority):
-    """A player examines the history of the opponent: if the opponent has more
+    """Submitted to Axelrod's second tournament by Gail Grisell.  It came 23rd
+    and was written in 10 lines of BASIC.
+
+    A player examines the history of the opponent: if the opponent has more
     defections than cooperations then the player defects. In case of equal
     number of defections and cooperations this player will Defect.
 
