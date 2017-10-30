@@ -102,10 +102,10 @@ class Grisell(Player):
     """
     Submitted to Axelrod's second tournament by Gail Grisell.  It came 23rd was written in 10 lines of BASIC.
 
-    This is a player whose behaviour changes depending on the ratio of previous opponent defections.
+    This is a player who's behaviour changes depending on the ratio of previous opponent defections.
 
     If the ratio of the number of opponent defections to number of matches is less than 0.5, this player
-    will co-operate.  If the ratio is 0.5 or larger then the player will defect.
+    will cooporate.  If the ratio is 0.5 or larger then the player will defect.
 
     Names:
 
