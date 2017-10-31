@@ -26,6 +26,7 @@ class GoByMajority(Player):
     Names:
 
     - Go By Majority: [Axelrod1984]_
+    - Grisell: [Axelrod1980b]_
     - Soft Majority: [Mittal2009]_
     """
 
