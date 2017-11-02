@@ -49,6 +49,7 @@ from .lookerup import (LookerUp,
     EvolvedLookerUp1_1_1, EvolvedLookerUp2_2_2,
     Winner12, Winner21)
 from .mathematicalconstants import Golden, Pi, e
+from .memory_decay import MemoryDecay
 from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
     StochasticCooperator, StochasticWSLS, WinStayLoseShift, WinShiftLoseStay,
@@ -193,7 +194,7 @@ all_strategies = [
     MathConstantHunter,
     NaiveProber,
     MEM2,
-    Michaelos,
+    MemoryDecay,
     MindBender,
     MindController,
     MindReader,
