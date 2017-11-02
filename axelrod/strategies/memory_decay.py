@@ -30,7 +30,7 @@ class MemoryDecay(Player):
 
     def __init__(self, p_memory_delete: float = 0.03, p_memory_alter: float = 0.1,
                  loss_value: float = -2, gain_value: float = 1,
-                 memory: list = []):
+                 memory: list = [], start_strategy_duration = int: 15):
         super().__init__()
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
@@ -54,7 +54,7 @@ class MemoryDecay(Player):
             self.memory.append(opponent.history[-1])
         except IndexError:
             pass
-        if len(self.history) < 15:
+        if len(self.history) < self.start_strategy_duration:
             return TitForTat().strategy(opponent)
         else:
             if random() <= self.p_memory_alter:
