@@ -23,7 +23,7 @@ argument :code:`seed` (useful and necessary for stochastic strategies,
                      expected_actions=[(D, C), (C, D), (C, C)], seed=None)
 
 In this case the player is tested against an opponent that will cycle through
-:code:`C, D`. The :code:`expected_actions` are the actions player by both
+:code:`C, D`. The :code:`expected_actions` are the actions played by both
 the tested player and the opponent in the match. In this case we see that the
 player is expected to play :code:`D, C, C` against :code:`C, D, C`.
 
