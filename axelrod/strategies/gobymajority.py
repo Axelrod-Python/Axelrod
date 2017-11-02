@@ -9,7 +9,10 @@ C, D = Action.C, Action.D
 
 
 class GoByMajority(Player):
-    """A player examines the history of the opponent: if the opponent has more
+    """Submitted to Axelrod's second tournament by Gail Grisell.  It came 23rd
+    and was written in 10 lines of BASIC.
+
+    A player examines the history of the opponent: if the opponent has more
     defections than cooperations then the player defects.
 
     In case of equal
@@ -23,6 +26,7 @@ class GoByMajority(Player):
     Names:
 
     - Go By Majority: [Axelrod1984]_
+    - Grisell: [Axelrod1980b]_
     - Soft Majority: [Mittal2009]_
     """
 
