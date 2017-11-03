@@ -52,7 +52,7 @@ assumes that players do not know the length of the match::
 
 The function :code:`versus_test` also accepts a dictionary parameter of
 keyword arguments that dictate how the player is initiated. For example this
-test how the player plays when initialised with :code:`p=1`::
+tests how the player plays when initialised with :code:`p=1`::
 
      actions = [(C, C), (C, D), (C, C), (C, D)]
      self.versus_test(axelrod.Alternator(), expected_actions=actions,
