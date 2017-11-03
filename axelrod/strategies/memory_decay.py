@@ -31,9 +31,10 @@ class MemoryDecay(Player):
         'manipulates_state' : False
     }
 
-    def __init__(self, p_memory_delete: float = 0.03, p_memory_alter: float = 0.1,
+    def __init__(self, p_memory_delete: float = 0.1, p_memory_alter: float = 0.03,
                  loss_value: float = -2, gain_value: float = 1,
-                 memory: list = None, start_strategy_duration: int = 15):
+                 memory: list = None, start_strategy: str = 'TFT',
+                 start_strategy_duration: int = 15):
         super().__init__()
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
@@ -41,6 +42,8 @@ class MemoryDecay(Player):
         self.gain_value = gain_value
         self.memory = [] if memory == None else memory
         self.start_strategy_duration = start_strategy_duration
+        self.strategies = {'TFT' : TitForTat()}
+        self.start_strategy = start_strategy
 
     def gain_loss_tr(self):
         self.gloss_values = [*map(lambda x: self.loss_value if x == D else
@@ -59,7 +62,7 @@ class MemoryDecay(Player):
         except IndexError:
             pass
         if len(self.history) < self.start_strategy_duration:
-            return TitForTat().strategy(opponent)
+            return self.strategies[self.start_strategy].strategy(opponent)
         else:
             if random() <= self.p_memory_alter:
                 self.mem_alter()
