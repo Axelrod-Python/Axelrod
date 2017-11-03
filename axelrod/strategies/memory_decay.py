@@ -1,11 +1,11 @@
 from axelrod.action import Action
-from axelrod.player import Player
-from .titfortat import TitForTat
 from random import random,choice
+from axelrod.strategies.meta import MetaPlayer
+import re
 
 C, D = Action.C, Action.D
 
-class MemoryDecay(Player):
+class MemoryDecay(MetaPlayer):
     """
     A player utilizes the Tit for Tat stretegy for the first (default) 15 turns,
     at the same time memorizing the opponent's decisions. After the 15 turns have
@@ -33,7 +33,7 @@ class MemoryDecay(Player):
 
     def __init__(self, p_memory_delete: float = 0.1, p_memory_alter: float = 0.03,
                  loss_value: float = -2, gain_value: float = 1,
-                 memory: list = None, start_strategy: str = 'TFT',
+                 memory: list = None, start_strategy: str = '^Tit For Tat$',
                  start_strategy_duration: int = 15):
         super().__init__()
         self.p_memory_delete = p_memory_delete
@@ -42,8 +42,16 @@ class MemoryDecay(Player):
         self.gain_value = gain_value
         self.memory = [] if memory == None else memory
         self.start_strategy_duration = start_strategy_duration
-        self.strategies = {'TFT' : TitForTat()}
-        self.start_strategy = start_strategy
+
+        self.strategy_search = start_strategy
+        strats_list = [str(strategy) for strategy in self.team]
+        found_strats_match = [re.match(self.strategy_search, x) for strategy in strats_list]
+        found_strats_str = [found.group(0) if found is not None else None
+                            for found in found_strats]
+        found_strats = [[i, strategy] for i, strategy in enumerate(found_strats_str)
+                        if strategy is not None]
+        if len(found_strats) > 1:
+            pass #de napravi nešto
 
     def gain_loss_tr(self):
         self.gloss_values = [*map(lambda x: self.loss_value if x == D else
