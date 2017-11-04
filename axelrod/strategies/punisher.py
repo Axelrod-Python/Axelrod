@@ -153,10 +153,10 @@ class TrickyLevelPunisher(Player):
 
     Names:
 
-    - Level Punisher: [Eckhart2015]_
+    - Tricky Level Punisher: [Eckhart2015]_
     """
 
-    name = 'Level Punisher'
+    name = 'Tricky Level Punisher'
     classifier = {
         'memory_depth': float('inf'), # Long Memory
         'stochastic': False,
