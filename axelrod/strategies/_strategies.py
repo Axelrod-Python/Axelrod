@@ -65,6 +65,7 @@ from .punisher import Punisher, InversePunisher, LevelPunisher
 from .qlearner import (
     RiskyQLearner, ArrogantQLearner, HesitantQLearner, CautiousQLearner)
 from .rand import Random
+from .rand_titfortat import RandomTitForTat
 from .resurrection import Resurrection, DoubleResurrection
 from .retaliate import (
     Retaliate, Retaliate2, Retaliate3, LimitedRetaliate, LimitedRetaliate2,
@@ -223,6 +224,7 @@ all_strategies = [
     Raider,
     Random,
     RandomHunter,
+    RandomTitForTat,
     RemorsefulProber,
     Resurrection,
     Retaliate,
