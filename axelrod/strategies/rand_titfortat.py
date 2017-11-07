@@ -7,7 +7,7 @@ from axelrod.strategy_transformers import (
 C, D = Action.C, Action.D
 
 
-class RandTitForTat(Player):
+class RandomTitForTat(Player):
     """
     A player starts random, then copies its opponent, then switches
     between random and tit for tat every other iteration.
@@ -18,7 +18,7 @@ class RandTitForTat(Player):
     """
 
     # These are various properties for the strategy
-    name = 'Bipoler Random Tit for Tat'
+    name = 'Random Tit for Tat'
     classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
         'stochastic': False,
@@ -29,17 +29,24 @@ class RandTitForTat(Player):
         'manipulates_state': False
     }
 
+    def __init__(self) -> None:
+        """Upon initialization of RandomTitForTat define probability for random function."""
+        super().__init__()
+        # self.p = float(0.5)
+
+
     def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""
+        # import pdb; pdb.set_trace()
         # First move
         if not self.history:
-            return random_choice(p: float=0.5)
+            return random_choice(0.5)
 
         # check if even number of moves
-        if len(opponent.history) % 2 == 0:
+        if len(opponent.history) % 2 != 0:
             # React to the opponent's last move
             if opponent.history[-1] == D:
                 return D
             return C
         else:
-            return random_choice(p: float=0.5)
+            return random_choice(0.5)
