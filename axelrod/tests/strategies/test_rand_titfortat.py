@@ -47,6 +47,10 @@ class TestRandomTitForTat(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          seed=2)
 
+        actions = [(C, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         seed=1)
+
     def test_deterministic_classification(self):
         """
         Test classification when probability input is 0 or 1.
