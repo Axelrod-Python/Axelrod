@@ -25,7 +25,6 @@ class Random(Player):
         'manipulates_state': False
     }
 
-
     def __init__(self, p: float=0.5) -> None:
         """
         Parameters
