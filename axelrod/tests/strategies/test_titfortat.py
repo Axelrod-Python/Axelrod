@@ -807,11 +807,11 @@ class TestRandomTitForTat(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions,
                          init_kwargs={"p": 1})
 
-        actions = [(D, C), (C, C)]
+        actions = [(D, C), (C, C), (D, C), (C, C), (C, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          seed=2)
 
-        actions = [(C, D), (D, D)]
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions,
                          seed=1)
 
@@ -824,5 +824,4 @@ class TestRandomTitForTat(TestPlayer):
         """
         for p in [0, 1]:
             player = axelrod.RandomTitForTat(p=p)
-            # import pdb; pdb.set_trace()
             self.assertFalse(player.classifier['stochastic'])

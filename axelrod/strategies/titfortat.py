@@ -822,10 +822,6 @@ class RandomTitForTat(Player):
         p, float
             The probability to cooperate
 
-        Special Cases
-        -------------
-        Random(0) is equivalent to Defector
-        Random(1) is equivalent to Cooperator
         """
         super().__init__()
         self.p = p
