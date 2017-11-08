@@ -21,7 +21,7 @@ class RandomTitForTat(Player):
     name = 'Random Tit for Tat'
     classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
-        'stochastic': False,
+        'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
@@ -29,10 +29,23 @@ class RandomTitForTat(Player):
         'manipulates_state': False
     }
 
-    def __init__(self) -> None:
-        """Upon initialization of RandomTitForTat define probability for random function."""
+
+    def __init__(self, p: float=0.5) -> None:
+        """
+        Parameters
+        ----------
+        p, float
+            The probability to cooperate
+
+        Special Cases
+        -------------
+        Random(0) is equivalent to Defector
+        Random(1) is equivalent to Cooperator
+        """
         super().__init__()
-        # self.p = float(0.5)
+        self.p = p
+        if p in [0, 1]:
+            self.classifier['stochastic'] = False
 
 
     def strategy(self, opponent: Player) -> Action:
@@ -40,13 +53,12 @@ class RandomTitForTat(Player):
         # import pdb; pdb.set_trace()
         # First move
         if not self.history:
-            return random_choice(0.5)
-
+            return random_choice(self.p)
         # check if even number of moves
-        if len(opponent.history) % 2 != 0:
+        if len(opponent.history) % 2 == 0:
+            return random_choice(self.p)
+        else:
             # React to the opponent's last move
             if opponent.history[-1] == D:
                 return D
             return C
-        else:
-            return random_choice(0.5)

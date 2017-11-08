@@ -9,7 +9,7 @@ C, D = axelrod.Action.C, axelrod.Action.D
 class TestRandomTitForTat(TestPlayer):
     """Tests for random tit for tat strategy."""
 
-    name = "Random Tit for Tat"
+    name = "Random Tit for Tat: 0.5"
     player = axelrod.RandomTitForTat
     expected_classifier = {
         'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
@@ -22,19 +22,20 @@ class TestRandomTitForTat(TestPlayer):
     }
 
     def test_strategy(self):
-        """Test that strategy is randomly picked (not affected by history)."""
-        opponent = axelrod.MockPlayer()
-        actions = [(C, C), (D, C), (D, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions)
-
-        opponent = axelrod.MockPlayer()
-        actions = [(D, C), (D, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions)
-
-        opponent = axelrod.MockPlayer()
-        actions = [(D, C), (D, C), (D, C)]
-        self.versus_test(opponent, expected_actions=actions)
-
-        opponent = axelrod.MockPlayer()
+        """Test that strategy reacts to opponent, and also acts randomly."""
         actions = [(C, C), (C, C), (C, C)]
-        self.versus_test(opponent, expected_actions=actions)
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions,
+                         init_kwargs={"p": 1})
+
+        actions = [(D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions,
+                         init_kwargs={"p": 0})
+
+        actions = [(D, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, seed=2)
+
+    def test_deterministic_classification(self):
+        """Test classification when p is 0 or 1"""
+        for p in [0, 1]:
+            player = axelrod.RandomTitForTat(p=p)
+            self.assertFalse(player.classifier['stochastic'])
