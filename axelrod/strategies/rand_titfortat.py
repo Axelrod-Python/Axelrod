@@ -14,13 +14,13 @@ class RandomTitForTat(Player):
 
     Name:
 
-    - Bipoler Random TitForTat: [Axelrod1980]_
+    - Bipoler Random TitForTat: Original name by Zachary M. Taylor
     """
 
     # These are various properties for the strategy
     name = 'Random Tit for Tat'
     classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
+        'memory_depth': 1,
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
