@@ -567,7 +567,7 @@ class MemoryDecay(MetaPlayer):
     def __init__(self, p_memory_delete: float = 0.1, p_memory_alter: float = 0.03,
                  loss_value: float = -2, gain_value: float = 1,
                  memory: list = None, start_strategy: str = 'Tit For Tat',
-                 start_strategy_duration: int = 15, team=None):
+                 start_strategy_duration: int = 15):
         super().__init__()
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
@@ -611,7 +611,7 @@ class MemoryDecay(MetaPlayer):
             self.memory.append(opponent.history[-1])
         except IndexError:
             pass
-        if len(self.history) <= self.start_strategy_duration:
+        if len(self.history) < self.start_strategy_duration:
             play = self.start_strategy.strategy(opponent)
             self.start_strategy.history.append(play)
             return play

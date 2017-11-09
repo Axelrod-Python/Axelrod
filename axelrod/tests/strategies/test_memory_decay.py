@@ -65,8 +65,14 @@ class TestMemoryDecay(TestPlayer):
         self.versus_test(opponent, expected_actions = actions, seed = 1,
                          init_kwargs = {'memory' : [D] * 5 + [C] * 10})
 
-        # nešto ne valja
         opponent = axe.Cooperator()
-        actions = [(C, C)] * 15 + [(D, C)]
+        actions = [(C, C)] * 15 + [(C, C)]
         self.versus_test(opponent, expected_actions = actions, seed = 1,
-                         init_kwargs = {'memory' : [D] * 6 + [C] * 9})
+                         init_kwargs = {'memory' : [D] * 4 + [C] * 11})
+
+        opponent = axe.Defector()
+        actions = [(C, D)] * 7 + [((D, D))]
+        self.versus_test(opponent, expected_actions = actions, seed = 4,
+                         init_kwargs = {'memory' : [C] * 12,
+                                        'start_strategy' : 'Defector',
+                                        'start_strategy_duration' : 0})
