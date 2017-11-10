@@ -193,6 +193,7 @@ all_strategies = [
     MathConstantHunter,
     NaiveProber,
     MEM2,
+    Michaelos,
     MindBender,
     MindController,
     MindReader,

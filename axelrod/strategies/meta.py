@@ -1,5 +1,5 @@
 from numpy.random import choice
-from random import random,choice
+import random
 
 from axelrod.action import Action
 from axelrod.player import Player, obey_axelrod
@@ -537,14 +537,14 @@ class NMWEMemoryOne(NiceMetaWinnerEnsemble):
 
 class MemoryDecay(MetaPlayer):
     """
-    A player utilizes the (default) Tit for Tat stretegy for the first (default) 15 turns,
+    A player utilizes the (default) Tit for Tat strategy for the first (default) 15 turns,
     at the same time memorizing the opponent's decisions. After the 15 turns have
     passed, the player calculates a 'net cooperation score' (NCS) for his opponent,
     weighing decisions to Cooperate as (default) 1, and to Defect as (default)
-    -2. If the opponent's NCS is below 0, the player Defects; otherwise,
-    he Cooperates.
+    -2. If the opponent's NCS is below 0, the play defects; otherwise,
+    they cooperate.
 
-    The player's memories of his opponent's decisions have a random chance to be
+    The player's memories of the opponent's decisions have a random chance to be
     altered (i.e., a C decision becomes D or vice versa; default probability
     is 0.03) or deleted (default probability is 0.1).
 
@@ -558,7 +558,7 @@ class MemoryDecay(MetaPlayer):
         'memory_depth' : float('inf'),
         'long_run_time' : False,
         'stochastic' : True,
-        'makes_use_of' : set(),
+        'makes_use_of' : set([]),
         'inspects_source' : False,
         'manipulates_source' : False,
         'manipulates_state' : False
@@ -577,6 +577,8 @@ class MemoryDecay(MetaPlayer):
         self.start_strategy_duration = start_strategy_duration
 
         # searches for the specified start_strategy
+        #self.team = [start_strategy()]
+
         self.strategy_search = start_strategy
         strats_list = [str(strategy) for strategy in self.team]
         if self.strategy_search != 'Tit For Tat':
@@ -616,9 +618,9 @@ class MemoryDecay(MetaPlayer):
             self.start_strategy.history.append(play)
             return play
         else:
-            if random() <= self.p_memory_alter:
+            if random.random() <= self.p_memory_alter:
                 self.mem_alter()
-            if random() <= self.p_memory_delete:
+            if random.random() <= self.p_memory_delete:
                 self.mem_delete()
             self.gain_loss_tr()
             if sum(self.gloss_values) < 0:
