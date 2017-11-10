@@ -591,7 +591,7 @@ class TestNMWEMemoryOne(TestMetaPlayer):
 class TestMemoryDecay(TestPlayer):
 
     name = 'MemoryDecay'
-    player = axelrod.MemoryDecay
+    player = axelrod.meta.MemoryDecay
     expected_classifier = {
         'memory_depth': float('inf'),
         'stochastic': True,

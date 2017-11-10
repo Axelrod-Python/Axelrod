@@ -1,6 +1,7 @@
 from numpy.random import choice
 import random
 
+from axelrod.strategies import TitForTat
 from axelrod.action import Action
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategy_transformers import NiceTransformer
@@ -566,7 +567,7 @@ class MemoryDecay(MetaPlayer):
 
     def __init__(self, p_memory_delete: float = 0.1, p_memory_alter: float = 0.03,
                  loss_value: float = -2, gain_value: float = 1,
-                 memory: list = None, start_strategy: str = 'Tit For Tat',
+                 memory: list = None, start_strategy: Player = TitForTat,
                  start_strategy_duration: int = 15):
         super().__init__()
         self.p_memory_delete = p_memory_delete
@@ -575,23 +576,7 @@ class MemoryDecay(MetaPlayer):
         self.gain_value = gain_value
         self.memory = [] if memory == None else memory
         self.start_strategy_duration = start_strategy_duration
-
-        # searches for the specified start_strategy
-        #self.team = [start_strategy()]
-
-        self.strategy_search = start_strategy
-        strats_list = [str(strategy) for strategy in self.team]
-        if self.strategy_search != 'Tit For Tat':
-            try:
-                self.strat_ind = strats_list.index(self.strategy_search)
-                self.start_strategy = self.team[self.strat_ind]
-            except:
-                print('Strategy not found. Starting strategy set to Tit For Tat.')
-                self.strat_ind = strats_list.index('Tit For Tat')
-                self.start_strategy = self.team[self.strat_ind]
-        else:
-            self.strat_ind = strats_list.index('Tit For Tat')
-            self.start_strategy = self.team[self.strat_ind]
+        self.team = start_strategy()
 
     # translates the actions (D and C) to numeric values (loss_value and
     # gain_value)
@@ -614,8 +599,8 @@ class MemoryDecay(MetaPlayer):
         except IndexError:
             pass
         if len(self.history) < self.start_strategy_duration:
-            play = self.start_strategy.strategy(opponent)
-            self.start_strategy.history.append(play)
+            play = self.team.strategy(opponent)
+            self.team.history.append(play)
             return play
         else:
             if random.random() <= self.p_memory_alter:
