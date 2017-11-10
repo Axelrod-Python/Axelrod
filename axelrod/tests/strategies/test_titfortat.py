@@ -795,11 +795,11 @@ class TestRandomTitForTat(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          init_kwargs={"p": 1})
 
-        actions = [(D, D), (D, D), (D, D)]
+        actions = [(C, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions,
                          init_kwargs={"p": 0})
 
-        actions = [(D, C), (C, C), (D, C), (C, C)]
+        actions = [(C, C), (C, C), (D, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          init_kwargs={"p": 0})
 
@@ -807,11 +807,11 @@ class TestRandomTitForTat(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions,
                          init_kwargs={"p": 1})
 
-        actions = [(D, C), (C, C), (D, C), (C, C), (C, C), (C, C)]
+        actions = [(C, C), (C, C), (D, C), (C, C), (D, C), (C, C)]
         self.versus_test(axelrod.Cooperator(), expected_actions=actions,
                          seed=2)
 
-        actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, D)]
+        actions = [(C, D), (D, D), (C, D), (D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions,
                          seed=1)
 

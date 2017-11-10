@@ -794,8 +794,10 @@ class Michaelos(Player):
 
 class RandomTitForTat(Player):
     """
-    A player starts random, then copies its opponent, then switches
-    between random and tit for tat every other iteration.
+    A player starts by cooperating and then follows by copying its
+    opponent (tit for tat style).  From then on the player
+    will switch between copying its opponent and randomly
+    responding every other iteration.
 
     Name:
 
@@ -831,10 +833,8 @@ class RandomTitForTat(Player):
 
     def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""
-        # First move
         if not self.history:
-            return random_choice(self.p)
-        # Return random/tit for tat every other turn
+            return C
         if len(opponent.history) % 2 == 0:
             return random_choice(self.p)
         return opponent.history[-1]
