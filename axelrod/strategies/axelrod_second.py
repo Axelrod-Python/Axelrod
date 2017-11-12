@@ -466,3 +466,107 @@ class MoreGrofman(Player):
             if self.history[-1] == D and opponent_defections_last_8_rounds <= 1:
                 return C
             return D
+
+class Kluepfel(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Charles Kluepfel
+    (K32R).
+
+    This player keeps track of the the opponent's responses to own behavior:
+
+                      I did:
+                    Def    Coop
+    She does: Coop   C1  |  C3
+                   -------------
+              Def    C2  |  C4
+    
+    After 26 turns, the player then tries to detect a random player.  The
+    player decides that the opponent is random if
+    C1 >= (C1+C2)/2 - 1.5*sqrt(C1+C2)/2  AND
+    C4 >= (C3+C4)/2 - 1.5*sqrt(C3+C4)/2.
+    If the player decides that she is playing against a random player, then
+    she will always defect.
+
+    Otherwise, she will use a straight-forward set of rules:
+    - If opponent's last three choices are the same, then respond in kind.
+    - If opponent's last two choices are the same, then respond in kind with
+    probability 90%.
+    - Otherwise if opponent's last action was to cooperate, then cooperate
+    with probability 70%.
+    - Otherwise if opponent's last action was to defect, then defect
+    with probability 60%.
+
+    Names:
+    - Kluepfel: [Axelrod1980b]_
+    """
+
+    name = "Kluepfel"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.C1, self.C2, self.C3, self.C4 = 0, 0, 0, 0
+        # These are defined by opponent's reaction to player (me) according to:
+            #                   I did:
+            #                 Def    Coop
+            # She does: Coop   C1  |  C3
+            #                -------------
+            #           Def    C2  |  C4
+
+    def strategy(self, opponent: Player) -> Action:
+        # First update the response matrix.
+        if len(self.history) >= 2:
+            if self.history[-2] == D:
+                if opponent.history[-1] == C:
+                    self.C1 += 1
+                else:
+                    self.C2 += 1
+            else:
+                if opponent.history[-1] == C:
+                    self.C3 += 1
+                else:
+                    self.C4 += 1
+
+        # Check for randomness
+        if len(self.history) > 26:
+            if self.C1 >= (self.C1+self.C2)/2 - 1.5*np.sqrt(self.C1+self.C2)/2 and \
+                self.C4 >= (self.C3+self.C4)/2 - 1.5*np.sqrt(self.C3+self.C4)/2:
+                return D
+
+        # Otherwise, straight-forward strategy
+        r = random.random() # Will use later
+
+        # Use the defaults from Python
+        one_move_ago, two_moves_ago, three_moves_ago = C, C, C
+        if len(opponent.history) >= 1:
+            one_move_ago = opponent.history[-1]
+        if len(opponent.history) >= 2:
+            two_moves_ago = opponent.history[-2]
+        if len(opponent.history) >= 3:
+            three_moves_ago = opponent.history[-3]
+
+        if one_move_ago == two_moves_ago and two_moves_ago == three_moves_ago:
+            return one_move_ago
+        if one_move_ago == two_moves_ago:
+            if r < 0.9:
+                return one_move_ago
+            else:
+                return one_move_ago.flip()
+        if one_move_ago == C:
+            if r < 0.7:
+                return one_move_ago
+            else:
+                return one_move_ago.flip()
+        if one_move_ago == D:
+            if r < 0.6:
+                return one_move_ago
+            else:
+                return one_move_ago.flip()
