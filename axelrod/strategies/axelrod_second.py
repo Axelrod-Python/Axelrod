@@ -474,30 +474,29 @@ class Kluepfel(Player):
     (K32R).
 
     This player keeps track of the the opponent's responses to own behavior:
-
-                      I did:
-                    Def    Coop
-    She does: Coop   C1  |  C3
-                   -------------
-              Def    C2  |  C4
+    - `cd_count` counts: Opponent cooperates as response to player defecting.
+    - `dd_count` counts: Opponent defects as response to player defecting.
+    - `cc_count` counts: Opponent cooperates as response to player cooperating.
+    - `dc_count` counts: Opponent defects as response to player cooperating.
     
     After 26 turns, the player then tries to detect a random player.  The
     player decides that the opponent is random if
     C1 >= (C1+C2)/2 - 1.5*sqrt(C1+C2)/2  AND
     C4 >= (C3+C4)/2 - 1.5*sqrt(C3+C4)/2.
-    If the player decides that she is playing against a random player, then
-    she will always defect.
+    If the player decides that they are playing against a random player, then
+    they will always defect.
 
-    Otherwise, she will use a straight-forward set of rules:
+    Otherwise respond to recent history using the following set of rules:
     - If opponent's last three choices are the same, then respond in kind.
     - If opponent's last two choices are the same, then respond in kind with
-    probability 90%.
+      probability 90%.
     - Otherwise if opponent's last action was to cooperate, then cooperate
-    with probability 70%.
+      with probability 70%.
     - Otherwise if opponent's last action was to defect, then defect
-    with probability 60%.
+      with probability 60%.
 
     Names:
+    
     - Kluepfel: [Axelrod1980b]_
     """
 
@@ -514,36 +513,29 @@ class Kluepfel(Player):
 
     def __init__(self):
         super().__init__()
-        self.C1, self.C2, self.C3, self.C4 = 0, 0, 0, 0
-        # These are defined by opponent's reaction to player (me) according to:
-            #                   I did:
-            #                 Def    Coop
-            # She does: Coop   C1  |  C3
-            #                -------------
-            #           Def    C2  |  C4
+        self.cd_counts, self.dd_counts, self.dc_counts, self.cc_counts = 0, 0, 0, 0
 
     def strategy(self, opponent: Player) -> Action:
         # First update the response matrix.
         if len(self.history) >= 2:
             if self.history[-2] == D:
                 if opponent.history[-1] == C:
-                    self.C1 += 1
+                    self.cd_counts += 1
                 else:
-                    self.C2 += 1
+                    self.dd_counts += 1
             else:
                 if opponent.history[-1] == C:
-                    self.C3 += 1
+                    self.dc_counts += 1
                 else:
-                    self.C4 += 1
+                    self.cc_counts += 1
 
         # Check for randomness
         if len(self.history) > 26:
-            if self.C1 >= (self.C1+self.C2)/2 - 1.5*np.sqrt(self.C1+self.C2)/2 and \
-                self.C4 >= (self.C3+self.C4)/2 - 1.5*np.sqrt(self.C3+self.C4)/2:
+            if self.cd_counts >= (self.cd_counts+self.dd_counts)/2 - 1.5*np.sqrt(self.cd_counts+self.dd_counts)/2 and \
+                self.cc_counts >= (self.dc_counts+self.cc_counts)/2 - 1.5*np.sqrt(self.dc_counts+self.cc_counts)/2:
                 return D
 
-        # Otherwise, straight-forward strategy
-        r = random.random() # Will use later
+        # Otherwise respond to recent history
 
         # Use the defaults from Python
         one_move_ago, two_moves_ago, three_moves_ago = C, C, C
@@ -556,6 +548,8 @@ class Kluepfel(Player):
 
         if one_move_ago == two_moves_ago and two_moves_ago == three_moves_ago:
             return one_move_ago
+        
+        r = random.random() # Everything following is stochastic
         if one_move_ago == two_moves_ago:
             if r < 0.9:
                 return one_move_ago
