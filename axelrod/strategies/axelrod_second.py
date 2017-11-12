@@ -3,6 +3,7 @@ Additional strategies from Axelrod's second tournament.
 """
 
 import random
+import numpy as np
 
 from axelrod.action import Action
 from axelrod.player import Player
