@@ -3,6 +3,7 @@ Additional strategies from Axelrod's second tournament.
 """
 
 import random
+import numpy
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -480,8 +481,8 @@ class Kluepfel(Player):
     
     After 26 turns, the player then tries to detect a random player.  The
     player decides that the opponent is random if
-    C1 >= (C1+C2)/2 - 1.5*sqrt(C1+C2)/2  AND
-    C4 >= (C3+C4)/2 - 1.5*sqrt(C3+C4)/2.
+    cd_counts >= (cd_counts+dd_counts)/2 - 0.75*sqrt(cd_counts+dd_counts) AND
+    cc_counts >= (dc_counts+cc_counts)/2 - 0.75*sqrt(dc_counts+cc_counts).
     If the player decides that they are playing against a random player, then
     they will always defect.
 
@@ -530,8 +531,8 @@ class Kluepfel(Player):
 
         # Check for randomness
         if len(self.history) > 26:
-            if self.cd_counts >= (self.cd_counts+self.dd_counts)/2 - 0.75*(self.cd_counts+self.dd_counts)**0.5 and \
-                self.cc_counts >= (self.dc_counts+self.cc_counts)/2 - 0.75*(self.dc_counts+self.cc_counts)**0.5:
+            if self.cd_counts >= (self.cd_counts+self.dd_counts)/2 - 0.75*np.sqrt(self.cd_counts+self.dd_counts) and \
+                self.cc_counts >= (self.dc_counts+self.cc_counts)/2 - 0.75*np.sqrt(self.dc_counts+self.cc_counts):
                 return D
 
         # Otherwise respond to recent history
