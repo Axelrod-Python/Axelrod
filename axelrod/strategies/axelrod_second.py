@@ -3,7 +3,6 @@ Additional strategies from Axelrod's second tournament.
 """
 
 import random
-import numpy as np
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -531,8 +530,8 @@ class Kluepfel(Player):
 
         # Check for randomness
         if len(self.history) > 26:
-            if self.cd_counts >= (self.cd_counts+self.dd_counts)/2 - 1.5*np.sqrt(self.cd_counts+self.dd_counts)/2 and \
-                self.cc_counts >= (self.dc_counts+self.cc_counts)/2 - 1.5*np.sqrt(self.dc_counts+self.cc_counts)/2:
+            if self.cd_counts >= (self.cd_counts+self.dd_counts)/2 - 0.75*(self.cd_counts+self.dd_counts)**0.5 and \
+                self.cc_counts >= (self.dc_counts+self.cc_counts)/2 - 0.75*(self.dc_counts+self.cc_counts)**0.5:
                 return D
 
         # Otherwise respond to recent history
