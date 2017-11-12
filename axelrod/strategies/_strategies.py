@@ -7,7 +7,7 @@ from .averagecopier import AverageCopier, NiceAverageCopier
 from .axelrod_first import (
     Davis, RevisedDowning, Feld, Grofman, Nydegger, Joss, Shubik, Tullock,
     UnnamedStrategy, SteinAndRapoport, TidemanAndChieruzzi)
-from .axelrod_second import Champion, Eatherley, Tester, Gladstein, Tranquilizer, MoreGrofman
+from .axelrod_second import Champion, Eatherley, Tester, Gladstein, Tranquilizer, MoreGrofman, Kluepfel
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
 from .bush_mosteller import BushMosteller
@@ -185,6 +185,7 @@ all_strategies = [
     Inverse,
     InversePunisher,
     Joss,
+    Kluepfel,
     KnowledgeableWorseAndWorse,
     LevelPunisher,
     LimitedRetaliate,
