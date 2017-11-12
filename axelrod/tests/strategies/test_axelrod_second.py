@@ -429,67 +429,26 @@ class TestKluepfel(TestPlayer):
         actions = [(C, C),
                     (C, D), # Views first three as the same.
                     # A random gets used in each of the first two.
-                    (C, C), (C, D), (D, C), (C, D)]
+                    (D, C), (D, D), (C, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=1)
 
         actions = [(C, C), (C, D),
-                    (D, C), (C, D), (C, C), (D, D)]
+                    (C, C), (D, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
 
         actions = [(C, C), (C, D),
-                    (D, C), (C, D), (C, C), (C, D)]
+                    (D, C), (C, D), (D, C), (C, D), (C, C)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=3)
 
         # Now we have to test the detect-random logic, which doesn't pick up
-        # until after 26 trips.  So we need a big sample.
-        actions = [(C, C),
-                    (C, C),
-                    (C, D),
-                    (C, C),
-                    (C, C),
-                    (C, D),
-                    (C, C),
-                    (D, D),
-                    (D, C),
-                    (C, C),
-                    (C, D),
-                    (D, D),
-                    (C, D),
-                    (D, C),
-                    (C, C),
-                    (D, C),
-                    (C, D),
-                    (D, D),
-                    (D, C),
-                    (C, D),
-                    (D, C),
-                    (C, C),
-                    (C, D),
-                    (C, D),
-                    (D, C),
-                    (C, C),
-                    (C, C),
-                    (D, D), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, D), #Detected random oppenent
-                    (D, D), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, D), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, D), #Detected random oppenent
-                    (D, D), #Detected random oppenent
-                    (D, D), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, C), #Detected random oppenent
-                    (D, D), #Detected random oppenent
-                    (D, C)] #Detected random oppenent
+        # until after 26 turns.  So we need a big sample.
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, C), (C, C), (C, D), 
+                    (C, C), (D, D), (D, C), (C, C), (C, D), (D, D), (C, D), (D, D), 
+                    (D, C), (C, C), (D, C), (C, C), (C, D), (D, D), (D, C), (C, D), 
+                    (D, C), (C, C), (C, D), 
+                    # Success detect random opponent for remaining turns.
+                    (D, D),(D, D),(D, D),(D, C),(D, D),(D, C),(D, D),(D, C),(D, D),
+                    (D, C),(D, C),(D, D),(D, D),(D, C),(D, C),(D, C),(D, C),(D, D),
+                    (D, C),(D, C),(D, C),(D, C),(D, D)]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10)
+        
