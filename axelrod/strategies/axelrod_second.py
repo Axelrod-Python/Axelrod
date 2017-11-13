@@ -474,6 +474,7 @@ class Kluepfel(Player):
     (K32R).
 
     This player keeps track of the the opponent's responses to own behavior:
+
     - `cd_count` counts: Opponent cooperates as response to player defecting.
     - `dd_count` counts: Opponent defects as response to player defecting.
     - `cc_count` counts: Opponent cooperates as response to player cooperating.
@@ -487,6 +488,7 @@ class Kluepfel(Player):
     they will always defect.
 
     Otherwise respond to recent history using the following set of rules:
+
     - If opponent's last three choices are the same, then respond in kind.
     - If opponent's last two choices are the same, then respond in kind with
       probability 90%.
