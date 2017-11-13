@@ -3,7 +3,7 @@ Additional strategies from Axelrod's second tournament.
 """
 
 import random
-import numpy
+import numpy as np
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -478,7 +478,7 @@ class Kluepfel(Player):
     - `dd_count` counts: Opponent defects as response to player defecting.
     - `cc_count` counts: Opponent cooperates as response to player cooperating.
     - `dc_count` counts: Opponent defects as response to player cooperating.
-    
+
     After 26 turns, the player then tries to detect a random player.  The
     player decides that the opponent is random if
     cd_counts >= (cd_counts+dd_counts)/2 - 0.75*sqrt(cd_counts+dd_counts) AND
@@ -496,7 +496,7 @@ class Kluepfel(Player):
       with probability 60%.
 
     Names:
-    
+
     - Kluepfel: [Axelrod1980b]_
     """
 
