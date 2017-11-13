@@ -559,7 +559,7 @@ class MemoryDecay(MetaPlayer):
         'memory_depth' : float('inf'),
         'long_run_time' : False,
         'stochastic' : True,
-        'makes_use_of' : set([]),
+        'makes_use_of' : set(),
         'inspects_source' : False,
         'manipulates_source' : False,
         'manipulates_state' : False
@@ -576,7 +576,7 @@ class MemoryDecay(MetaPlayer):
         self.gain_value = gain_value
         self.memory = [] if memory == None else memory
         self.start_strategy_duration = start_strategy_duration
-        self.team = start_strategy()
+        self.team = [start_strategy()]
 
     # translates the actions (D and C) to numeric values (loss_value and
     # gain_value)
@@ -599,8 +599,8 @@ class MemoryDecay(MetaPlayer):
         except IndexError:
             pass
         if len(self.history) < self.start_strategy_duration:
-            play = self.team.strategy(opponent)
-            self.team.history.append(play)
+            play = self.team[0].strategy(opponent)
+            self.team[0].history.append(play)
             return play
         else:
             if random.random() <= self.p_memory_alter:
