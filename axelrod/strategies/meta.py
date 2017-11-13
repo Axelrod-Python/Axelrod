@@ -558,7 +558,7 @@ class MemoryDecay(MetaPlayer):
     classifier = {
         'memory_depth' : float('inf'),
         'long_run_time' : False,
-        'stochastic' : True,
+        'stochastic' : False,
         'makes_use_of' : set(),
         'inspects_source' : False,
         'manipulates_source' : False,
@@ -569,14 +569,16 @@ class MemoryDecay(MetaPlayer):
                  loss_value: float = -2, gain_value: float = 1,
                  memory: list = None, start_strategy: Player = TitForTat,
                  start_strategy_duration: int = 15):
-        super().__init__()
+        super().__init__(team = [start_strategy])
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
         self.loss_value = loss_value
         self.gain_value = gain_value
         self.memory = [] if memory == None else memory
         self.start_strategy_duration = start_strategy_duration
-        self.team = [start_strategy()]
+
+    def __repr__(self):
+        return Player.__repr__(self)
 
     # translates the actions (D and C) to numeric values (loss_value and
     # gain_value)

@@ -7,7 +7,7 @@ from ._filters import passes_filterset
 # because it creates circular dependencies
 
 from .meta import (
-    MetaHunter, MetaHunterAggressive, MetaPlayer, MetaMajority,
+    MemoryDecay, MetaHunter, MetaHunterAggressive, MetaPlayer, MetaMajority,
     MetaMajorityMemoryOne, MetaMajorityFiniteMemory, MetaMajorityLongMemory,
     MetaMinority, MetaMixer, MetaWinner, MetaWinnerDeterministic,
     MetaWinnerEnsemble, MetaWinnerMemoryOne, MetaWinnerFiniteMemory,

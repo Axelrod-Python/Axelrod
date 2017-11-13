@@ -588,15 +588,15 @@ class TestNMWEMemoryOne(TestMetaPlayer):
 
 """Tests for the Memory Decay strategy"""
 
-class TestMemoryDecay(TestPlayer):
+class TestMemoryDecayDefParam(TestPlayer):
 
-    name = 'MemoryDecay'
-    player = axelrod.meta.MemoryDecay
+    name = "Memory Decay: 0.1, 0.03, -2, 1, <class 'axelrod.strategies.titfortat.TitForTat'>, 15"
+    player = axelrod.MemoryDecay
     expected_classifier = {
         'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set([]),
         'long_run_time': False,
+        'stochastic': False,
+        'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,
         'manipulates_state': False
@@ -626,22 +626,6 @@ class TestMemoryDecay(TestPlayer):
         actions = [(C, D), (D, D), (D, C), (C, C), (C, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions, seed=0)
 
-        #Test alternative starting strategies
-        opponent = axelrod.Cooperator()
-        actions = list([(D, C)]) * 15
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs = {'start_strategy': 'Defector'})
-
-        opponent = axelrod.Cooperator()
-        actions = list([(C, C)]) * 15
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs = {'start_strategy': 'Cooperator'})
-
-        opponent = axelrod.Cooperator()
-        actions = [(C, C)] + list([(D, C), (C, C)]) * 7
-        self.versus_test(opponent, expected_actions=actions,
-                         init_kwargs = {'start_strategy': 'Alternator'})
-
         #Test net-cooperation-score (NCS) based decisions in subsequent turns
         opponent = axelrod.Cooperator()
         actions = [(C, C)] * 15 + [(C, C)]
@@ -653,9 +637,25 @@ class TestMemoryDecay(TestPlayer):
         self.versus_test(opponent, expected_actions=actions, seed=1,
                          init_kwargs = {'memory': [D] * 4 + [C] * 11})
 
+        #Test alternative starting strategies
+        opponent = axelrod.Cooperator()
+        actions = list([(D, C)]) * 15
+        self.versus_test(opponent, expected_actions=actions,
+                        init_kwargs = {'start_strategy': axelrod.Defector})
+
+        opponent = axelrod.Cooperator()
+        actions = list([(C, C)]) * 15
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs = {'start_strategy': axelrod.Cooperator})
+
+        opponent = axelrod.Cooperator()
+        actions = [(C, C)] + list([(D, C), (C, C)]) * 7
+        self.versus_test(opponent, expected_actions=actions,
+                         init_kwargs = {'start_strategy': axelrod.Alternator})
+
         opponent = axelrod.Defector()
         actions = [(C, D)] * 7 + [((D, D))]
         self.versus_test(opponent, expected_actions=actions, seed=4,
                          init_kwargs = {'memory': [C] * 12,
-                                        'start_strategy': 'Defector',
+                                        'start_strategy': axelrod.Defector,
                                         'start_strategy_duration': 0})
