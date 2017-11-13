@@ -102,7 +102,7 @@ repository.
 
    "GRASR_", "Unknown", "Not Implemented"
    "K31R_", "Gail Grisell", ":class:`GoByMajority <axelrod.strategies.gobymajority.GoByMajority>`"
-   "K32R_", "Charles Kluepfel", "Not Implemented"
+   "K32R_", "Charles Kluepfel", ":class:`Kluepfel <axelrod.strategies.axelrod_second.Kluepfel>`"
    "K33R_", "Harold Rabbie", "Not Implemented"
    "K34R_", "James W Friedman", ":class:`Grudger <axelrod.strategies.grudger.Grudger>`"
    "K35R_", "Abraham Getzler", "Not Implemented"

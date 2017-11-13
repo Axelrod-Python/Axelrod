@@ -406,3 +406,49 @@ class TestMoreGrofman(TestPlayer):
             (D, C), (D, C), (D, C), (D, C), (D, C), (D, C), (C, C), (C, D),
             (C, D), (C, D), (C, D), (D, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
+
+class TestKluepfel(TestPlayer):
+    name = "Kluepfel"
+    player = axelrod.Kluepfel
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100  # Cooperate forever
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        # Since never two in a row, will respond in kind with 70% if
+        # coop and 60% otherwise, after first couple
+        actions = [(C, C),
+                    (C, D), # Views first three as the same.
+                    # A random gets used in each of the first two.
+                    (D, C), (D, D), (C, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=1)
+
+        actions = [(C, C), (C, D),
+                    (C, C), (D, D), (D, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
+
+        actions = [(C, C), (C, D),
+                    (D, C), (C, D), (D, C), (C, D), (C, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=3)
+
+        # Now we have to test the detect-random logic, which doesn't pick up
+        # until after 26 turns.  So we need a big sample.
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, C), (C, C), (C, D), 
+                    (C, C), (D, D), (D, C), (C, C), (C, D), (D, D), (C, D), (D, D), 
+                    (D, C), (C, C), (D, C), (C, C), (C, D), (D, D), (D, C), (C, D), 
+                    (D, C), (C, C), (C, D), 
+                    # Success detect random opponent for remaining turns.
+                    (D, D),(D, D),(D, D),(D, C),(D, D),(D, C),(D, D),(D, C),(D, D),
+                    (D, C),(D, C),(D, D),(D, D),(D, C),(D, C),(D, C),(D, C),(D, D),
+                    (D, C),(D, C),(D, C),(D, C),(D, D)]
+        self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10)
+        
