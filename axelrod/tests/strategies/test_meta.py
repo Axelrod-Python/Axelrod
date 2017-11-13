@@ -590,12 +590,12 @@ class TestNMWEMemoryOne(TestMetaPlayer):
 
 class TestMemoryDecay(TestPlayer):
 
-    name = "Memory Decay: 0.1, 0.03, -2, 1, <class 'axelrod.strategies.titfortat.TitForTat'>, 15"
+    name = "Memory Decay: 0.1, 0.03, -2, 1, Tit For Tat, 15"
     player = axelrod.MemoryDecay
     expected_classifier = {
         'memory_depth': float('inf'),
         'long_run_time': False,
-        'stochastic': False,
+        'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,
         'manipulates_source': False,

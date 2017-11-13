@@ -558,7 +558,7 @@ class MemoryDecay(MetaPlayer):
     classifier = {
         'memory_depth' : float('inf'),
         'long_run_time' : False,
-        'stochastic' : False,
+        'stochastic' : True,
         'makes_use_of' : set(),
         'inspects_source' : False,
         'manipulates_source' : False,
@@ -570,6 +570,7 @@ class MemoryDecay(MetaPlayer):
                  memory: list = None, start_strategy: Player = TitForTat,
                  start_strategy_duration: int = 15):
         super().__init__(team = [start_strategy])
+        self.classifier["stochastic"] = True
         self.p_memory_delete = p_memory_delete
         self.p_memory_alter = p_memory_alter
         self.loss_value = loss_value

@@ -199,6 +199,11 @@ class Player(object):
         prefix = ': '
         gen = (value for value in self.init_kwargs.values() if value is not None)
         for value in gen:
+            try:
+                if issubclass(value, Player):
+                    value = value.name
+            except TypeError:
+                pass
             name = ''.join([name, prefix, str(value)])
             prefix = ', '
         return name
