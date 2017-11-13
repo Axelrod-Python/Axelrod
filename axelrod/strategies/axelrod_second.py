@@ -539,7 +539,6 @@ class Kluepfel(Player):
 
         # Otherwise respond to recent history
 
-        # Use the defaults from Python
         one_move_ago, two_moves_ago, three_moves_ago = C, C, C
         if len(opponent.history) >= 1:
             one_move_ago = opponent.history[-1]
