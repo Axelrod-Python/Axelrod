@@ -588,7 +588,7 @@ class TestNMWEMemoryOne(TestMetaPlayer):
 
 """Tests for the Memory Decay strategy"""
 
-class TestMemoryDecayDefParam(TestPlayer):
+class TestMemoryDecay(TestPlayer):
 
     name = "Memory Decay: 0.1, 0.03, -2, 1, <class 'axelrod.strategies.titfortat.TitForTat'>, 15"
     player = axelrod.MemoryDecay
