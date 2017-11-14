@@ -1,5 +1,7 @@
 from numpy.random import choice
+import random
 
+from axelrod.strategies import TitForTat
 from axelrod.action import Action
 from axelrod.player import Player, obey_axelrod
 from axelrod.strategy_transformers import NiceTransformer
@@ -533,3 +535,92 @@ class NMWEMemoryOne(NiceMetaWinnerEnsemble):
                 <= 1]
         super().__init__(team=team)
         self.classifier["long_run_time"] = False
+
+class MemoryDecay(MetaPlayer):
+    """
+    A player utilizes the (default) Tit for Tat strategy for the first (default) 15 turns,
+    at the same time memorizing the opponent's decisions. After the 15 turns have
+    passed, the player calculates a 'net cooperation score' (NCS) for their opponent,
+    weighing decisions to Cooperate as (default) 1, and to Defect as (default)
+    -2. If the opponent's NCS is below 0, the player defects; otherwise,
+    they cooperate.
+
+    The player's memories of the opponent's decisions have a random chance to be
+    altered (i.e., a C decision becomes D or vice versa; default probability
+    is 0.03) or deleted (default probability is 0.1).
+
+    It is possible to pass a different axelrod player class to change the inital
+    player behavior.
+
+    Name: Memory Decay
+    """
+    name = 'Memory Decay'
+    classifier = {
+        'memory_depth' : float('inf'),
+        'long_run_time' : False,
+        'stochastic' : True,
+        'makes_use_of' : set(),
+        'inspects_source' : False,
+        'manipulates_source' : False,
+        'manipulates_state' : False
+    }
+
+    def __init__(self, p_memory_delete: float = 0.1, p_memory_alter: float = 0.03,
+                 loss_value: float = -2, gain_value: float = 1,
+                 memory: list = None, start_strategy: Player = TitForTat,
+                 start_strategy_duration: int = 15):
+        super().__init__(team = [start_strategy])
+        self.classifier["stochastic"] = True
+        self.p_memory_delete = p_memory_delete
+        self.p_memory_alter = p_memory_alter
+        self.loss_value = loss_value
+        self.gain_value = gain_value
+        self.memory = [] if memory == None else memory
+        self.start_strategy_duration = start_strategy_duration
+
+    def __repr__(self):
+        return Player.__repr__(self)
+
+    def gain_loss_translate(self):
+        """
+        Translates the actions (D and C) to numeric values (loss_value and
+        gain_value).
+        """
+        values = {
+            C: self.gain_value,
+            D: self.loss_value
+        }
+        self.gloss_values = [values[action] for action in self.memory]
+
+    def memory_alter(self):
+        """
+        Alters memory entry, i.e. puts C if there's a D and vice versa.
+        """
+        alter = choice(range(0, len(self.memory)))
+        self.memory[alter] = self.memory[alter].flip()
+
+    def memory_delete(self):
+        """
+        Deletes memory entry.
+        """
+        self.memory.pop(choice(range(0, len(self.memory))))
+
+    def strategy(self, opponent):
+        try:
+            self.memory.append(opponent.history[-1])
+        except IndexError:
+            pass
+        if len(self.history) < self.start_strategy_duration:
+            play = self.team[0].strategy(opponent)
+            self.team[0].history.append(play)
+            return play
+        else:
+            if random.random() <= self.p_memory_alter:
+                self.memory_alter()
+            if random.random() <= self.p_memory_delete:
+                self.memory_delete()
+            self.gain_loss_translate()
+            if sum(self.gloss_values) < 0:
+                return D
+            else:
+                return C
