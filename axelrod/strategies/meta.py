@@ -540,17 +540,17 @@ class MemoryDecay(MetaPlayer):
     """
     A player utilizes the (default) Tit for Tat strategy for the first (default) 15 turns,
     at the same time memorizing the opponent's decisions. After the 15 turns have
-    passed, the player calculates a 'net cooperation score' (NCS) for his opponent,
+    passed, the player calculates a 'net cooperation score' (NCS) for their opponent,
     weighing decisions to Cooperate as (default) 1, and to Defect as (default)
-    -2. If the opponent's NCS is below 0, the play defects; otherwise,
+    -2. If the opponent's NCS is below 0, the player defects; otherwise,
     they cooperate.
 
     The player's memories of the opponent's decisions have a random chance to be
     altered (i.e., a C decision becomes D or vice versa; default probability
     is 0.03) or deleted (default probability is 0.1).
 
-    It's necessary to specify EXACT name of the starting strategy if changing
-    the default. Possible strategies can be accessed with the .team attribute.
+    It is possible to pass a different axelrod player class to change the inital
+    player behavior.
 
     Name: Memory Decay
     """
@@ -581,19 +581,29 @@ class MemoryDecay(MetaPlayer):
     def __repr__(self):
         return Player.__repr__(self)
 
-    # translates the actions (D and C) to numeric values (loss_value and
-    # gain_value)
-    def gain_loss_tr(self):
-        self.gloss_values = [*map(lambda x: self.loss_value if x == D else
-                                         self.gain_value, self.memory)]
+    def gain_loss_translate(self):
+        """
+        Translates the actions (D and C) to numeric values (loss_value and
+        gain_value).
+        """
+        self.gloss_values = []
+        for action in self.memory:
+            if action == D:
+                self.gloss_values.append(self.loss_value)
+            else:
+                self.gloss_values.append(self.gain_value)
 
-    # alters memory entry, i.e. puts C if there's a D and vice versa
-    def mem_alter(self):
+    def memory_alter(self):
+        """
+        Alters memory entry, i.e. puts C if there's a D and vice versa.
+        """
         alter = choice(range(0, len(self.memory)))
         self.memory[alter] = self.memory[alter].flip()
 
-    # deletes memory entry
-    def mem_delete(self):
+    def memory_delete(self):
+        """
+        Deletes memory entry.
+        """
         self.memory.pop(choice(range(0, len(self.memory))))
 
     def strategy(self, opponent):
@@ -607,10 +617,10 @@ class MemoryDecay(MetaPlayer):
             return play
         else:
             if random.random() <= self.p_memory_alter:
-                self.mem_alter()
+                self.memory_alter()
             if random.random() <= self.p_memory_delete:
-                self.mem_delete()
-            self.gain_loss_tr()
+                self.memory_delete()
+            self.gain_loss_translate()
             if sum(self.gloss_values) < 0:
                 return D
             else:
