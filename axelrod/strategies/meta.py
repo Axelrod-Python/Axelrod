@@ -586,12 +586,11 @@ class MemoryDecay(MetaPlayer):
         Translates the actions (D and C) to numeric values (loss_value and
         gain_value).
         """
-        self.gloss_values = []
-        for action in self.memory:
-            if action == D:
-                self.gloss_values.append(self.loss_value)
-            else:
-                self.gloss_values.append(self.gain_value)
+        values = {
+            C: self.gain_value,
+            D: self.loss_value
+        }
+        self.gloss_values = [values[action] for action in self.memory]
 
     def memory_alter(self):
         """
