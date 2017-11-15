@@ -3,6 +3,7 @@ Additional strategies from Axelrod's second tournament.
 """
 
 import random
+import numpy as np
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -466,3 +467,102 @@ class MoreGrofman(Player):
             if self.history[-1] == D and opponent_defections_last_8_rounds <= 1:
                 return C
             return D
+
+class Kluepfel(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Charles Kluepfel
+    (K32R).
+
+    This player keeps track of the the opponent's responses to own behavior:
+
+    - `cd_count` counts: Opponent cooperates as response to player defecting.
+    - `dd_count` counts: Opponent defects as response to player defecting.
+    - `cc_count` counts: Opponent cooperates as response to player cooperating.
+    - `dc_count` counts: Opponent defects as response to player cooperating.
+
+    After 26 turns, the player then tries to detect a random player.  The
+    player decides that the opponent is random if
+    cd_counts >= (cd_counts+dd_counts)/2 - 0.75*sqrt(cd_counts+dd_counts) AND
+    cc_counts >= (dc_counts+cc_counts)/2 - 0.75*sqrt(dc_counts+cc_counts).
+    If the player decides that they are playing against a random player, then
+    they will always defect.
+
+    Otherwise respond to recent history using the following set of rules:
+
+    - If opponent's last three choices are the same, then respond in kind.
+    - If opponent's last two choices are the same, then respond in kind with
+      probability 90%.
+    - Otherwise if opponent's last action was to cooperate, then cooperate
+      with probability 70%.
+    - Otherwise if opponent's last action was to defect, then defect
+      with probability 60%.
+
+    Names:
+
+    - Kluepfel: [Axelrod1980b]_
+    """
+
+    name = "Kluepfel"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.cd_counts, self.dd_counts, self.dc_counts, self.cc_counts = 0, 0, 0, 0
+
+    def strategy(self, opponent: Player) -> Action:
+        # First update the response matrix.
+        if len(self.history) >= 2:
+            if self.history[-2] == D:
+                if opponent.history[-1] == C:
+                    self.cd_counts += 1
+                else:
+                    self.dd_counts += 1
+            else:
+                if opponent.history[-1] == C:
+                    self.dc_counts += 1
+                else:
+                    self.cc_counts += 1
+
+        # Check for randomness
+        if len(self.history) > 26:
+            if self.cd_counts >= (self.cd_counts+self.dd_counts)/2 - 0.75*np.sqrt(self.cd_counts+self.dd_counts) and \
+                self.cc_counts >= (self.dc_counts+self.cc_counts)/2 - 0.75*np.sqrt(self.dc_counts+self.cc_counts):
+                return D
+
+        # Otherwise respond to recent history
+
+        one_move_ago, two_moves_ago, three_moves_ago = C, C, C
+        if len(opponent.history) >= 1:
+            one_move_ago = opponent.history[-1]
+        if len(opponent.history) >= 2:
+            two_moves_ago = opponent.history[-2]
+        if len(opponent.history) >= 3:
+            three_moves_ago = opponent.history[-3]
+
+        if one_move_ago == two_moves_ago and two_moves_ago == three_moves_ago:
+            return one_move_ago
+        
+        r = random.random() # Everything following is stochastic
+        if one_move_ago == two_moves_ago:
+            if r < 0.9:
+                return one_move_ago
+            else:
+                return one_move_ago.flip()
+        if one_move_ago == C:
+            if r < 0.7:
+                return one_move_ago
+            else:
+                return one_move_ago.flip()
+        if one_move_ago == D:
+            if r < 0.6:
+                return one_move_ago
+            else:
+                return one_move_ago.flip()
