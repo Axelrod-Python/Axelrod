@@ -77,7 +77,8 @@ from .titfortat import (
     TitForTat, TitFor2Tats, TwoTitsForTat, Bully, SneakyTitForTat,
     SuspiciousTitForTat, AntiTitForTat, HardTitForTat, HardTitFor2Tats,
     OmegaTFT, Gradual, ContriteTitForTat, AdaptiveTitForTat,
-    SpitefulTitForTat, SlowTitForTwoTats2, Alexei, EugineNier, DynamicTwoTitsForTat, NTitsForMTats, Michaelos)
+    SpitefulTitForTat, SlowTitForTwoTats2, Alexei, EugineNier,
+    DynamicTwoTitsForTat, NTitsForMTats, Michaelos, RandomTitForTat)
 from .verybad import VeryBad
 from .worse_and_worse import (WorseAndWorse, KnowledgeableWorseAndWorse,
                               WorseAndWorse2, WorseAndWorse3)
@@ -224,6 +225,7 @@ all_strategies = [
     Raider,
     Random,
     RandomHunter,
+    RandomTitForTat,
     RemorsefulProber,
     Resurrection,
     Retaliate,
