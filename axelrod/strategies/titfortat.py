@@ -823,7 +823,6 @@ class RandomTitForTat(Player):
         ----------
         p, float
             The probability to cooperate
-
         """
         super().__init__()
         self.p = p
