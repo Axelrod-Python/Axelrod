@@ -331,11 +331,11 @@ class TestMetaMajorityLongMemory(TestMetaPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=0)
 
-        actions = [(C, C), (C, D), (C, C), (C, D), (D, C)]
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C)]
         self.versus_test(opponent=axelrod.Alternator(),
                          expected_actions=actions, seed=1)
 
