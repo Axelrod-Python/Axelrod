@@ -644,7 +644,6 @@ class Borufsen(Player):
     def strategy(self, opponent: Player) -> Action:
         turn = len(self.history) + 1
 
-        # Nip this case in the bud.
         if turn == 1:
             return C
 
@@ -657,7 +656,7 @@ class Borufsen(Player):
                     self.cd_counts += 1
 
         # Check if it's time for a mode change.
-        if turn > 2 and turn%25 == 2:
+        if turn > 2 and turn % 25 == 2:
             coming_from_defect = False
             if self.mode == "Defect":
                 coming_from_defect = True
@@ -670,7 +669,7 @@ class Borufsen(Player):
                 self.mode = "Defect"
 
             # Check for a random strategy
-            if (coops>=8 and coops<=17) and self.cc_counts*1.0/coops < 0.7:
+            if (coops >= 8 and coops <= 17) and self.cc_counts/coops < 0.7:
                 self.mode = "Defect"
 
             self.cd_counts, self.cc_counts = 0, 0
