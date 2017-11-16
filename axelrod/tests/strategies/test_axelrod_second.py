@@ -451,4 +451,42 @@ class TestKluepfel(TestPlayer):
                     (D, C),(D, C),(D, D),(D, D),(D, C),(D, C),(D, C),(D, C),(D, D),
                     (D, C),(D, C),(D, C),(D, C),(D, D)]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10)
-        
+
+class TestBorufsen(TestPlayer):
+    name = "Borufsen"
+    player = axelrod.Borufsen
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100  # Cooperate forever
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        # Tries to cooperate every third time until detecting defective
+        actions = [(C, D), (D, D), (D, D), (D, D)] * 6 + \
+                    [(C, D), (D, D)] + [(D, D)] * 100
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        # Alternates with additional coop, every sixth turn
+        # Won't be labeled as random, since 2/3 of opponent's C follow player's C
+        # `flip_next_defect` will get set on the sixth turn, which changes the seventh action
+        # Note that the first two turns of each period of six aren't
+        #  marked as echoes, and the third isn't marked that way until the fourth turn.
+        actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)] * 20
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        # Basically does tit-for-tat against Win-Shift, Lose-Stay D
+        # After 26 turns, will detect random since half of opponent's C follow Cs
+        # Coming out of it, there will be new pattern.  Then random is detected again.
+        actions = [(C, D), (D, C), (C, C)] * 8 + \
+                    [(C, D), (D, C)] + [(D, C)] * 25 + \
+                    [(D, C)] + [(C, C), (C, D), (D, C)] * 8 + \
+                    [(D, C)] * 25
+        self.versus_test(axelrod.WinShiftLoseStay(D), expected_actions=actions)
