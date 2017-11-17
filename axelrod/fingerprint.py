@@ -411,9 +411,9 @@ class TransitiveFingerprint(object):
                     noise: float = None, processes: int = None,
                     filename: str = None,
                     progress_bar: bool = True) -> np.array:
-        """Creates a spatial tournament to run the necessary matches to obtain 
+        """Creates a spatial tournament to run the necessary matches to obtain
         fingerprint data.
-        
+
           Creates the opponents and their edges then builds a spatial tournament.
 
         Parameters
@@ -499,7 +499,7 @@ class TransitiveFingerprint(object):
             cooperation_rates[index] = np.mean(rates, axis=0)
 
         return np.array([cooperation_rates[index]
-                         for index in cooperation_rates])
+                         for index in sorted(cooperation_rates)])
 
     def plot(self, cmap: str = 'viridis', interpolation: str = 'none',
              title: str = None, colorbar: bool = True, labels: bool = True,
