@@ -112,7 +112,7 @@ repository.
    "K39R_", "Tom Almy", "Not Implemented"
    "K40R_", "Robert Adams", "Not Implemented"
    "K41R_", "Herb Weiner", "Not Implemented"
-   "K42R_", "Otto Borufsen", "Not Implemented"
+   "K42R_", "Otto Borufsen", ":class:`Borufsen <axelrod.strategies.axelrod_second.Borufsen>`"
    "K43R_", "R D Anderson", "Not Implemented"
    "K44R_", "William Adams", "Not Implemented"
    "K45R_", "Michael F McGurrin", "Not Implemented"
