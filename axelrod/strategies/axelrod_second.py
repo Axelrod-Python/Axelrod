@@ -757,7 +757,7 @@ class Cave(Player):
 
         did_d = np.vectorize(lambda action: float(action == D))
         number_defects = np.sum(did_d(opponent.history))
-        perc_defects = np.average(did_d(opponent.history))
+        perc_defects = number_defects / turn # Size of numerator is smaller than denomator -- How it was in the Fortran.
         
         # If overly defect or appears random
         if turn > 39 and perc_defects > 0.39: return D
