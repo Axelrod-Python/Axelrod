@@ -1,3 +1,28 @@
+# v3.9.0, 2017-10-13
+
+New strategies, a minor bug fix and a small documentation improvement.
+
+- Add the Bush Mosteller strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1002
+- Add k42r from Fortran code
+  https://github.com/Axelrod-Python/Axelrod/pull/1135
+- Add MemoryDecay
+  https://github.com/Axelrod-Python/Axelrod/pull/1137
+- Add k32r from Fortran code
+  https://github.com/Axelrod-Python/Axelrod/pull/1138
+- Add Random Tit For Tat
+  https://github.com/Axelrod-Python/Axelrod/pull/1136
+- Add k42r from Fortran code
+  https://github.com/Axelrod-Python/Axelrod/pull/1139
+- Add reference to documentation
+  https://github.com/Axelrod-Python/Axelrod/pull/1134
+- Fix minor bug in the fingerprints
+  https://github.com/Axelrod-Python/Axelrod/pull/1140
+
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.9.0...v3.8.1
+
 # v3.8.1, 2017-10-13
 
 Minor change to behaviour of Champion
