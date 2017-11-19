@@ -519,14 +519,14 @@ class TestCave(TestPlayer):
 
         # Highly-defective opponent
         # It will take until turn 20 to respond decide to repond D to C
-        opponent_actions = [D] * 16 + [C, C, C, C, C]
+        opponent_actions = [D] * 17 + [C, C, C, C]
         almost_defector = axelrod.MockPlayer(actions=opponent_actions)
 
         random.seed(1)
         actions = [(C, D)]
         actions += [(C, D), (D, D), (D, D), (C, D), (C, D), (C, D), (D, D),
                     (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, D),
-                    (C, D), (D, C), (C, C)] # Randomly choose
+                    (C, D), (D, D), (C, C)] # Randomly choose
         actions += [(C, C)] # Coop for a minute
         actions += [(D, C), (D, C)]
         self.versus_test(almost_defector, expected_actions=actions)
