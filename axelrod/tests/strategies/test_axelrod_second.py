@@ -490,3 +490,52 @@ class TestBorufsen(TestPlayer):
                     [(D, C)] + [(C, C), (C, D), (D, C)] * 8 + \
                     [(D, C)] * 25
         self.versus_test(axelrod.WinShiftLoseStay(D), expected_actions=actions)
+
+class TestCave(TestPlayer):
+    name = "Cave"
+    player = axelrod.Cave
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100 
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        # It will take until turn 18 to respond decide to repond D->D
+        actions = [(C, D)]
+        actions += [(C, D), (D, D), (D, D), (C, D), (C, D), (C, D), (D, D),
+                    (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, D),
+                    (C, D), (D, D), (C, D)] # Randomly choose
+        actions += [(D, D)] * 30 # Defect
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
+
+        # Highly-defective opponent
+        # It will take until turn 20 to respond decide to repond D to C
+        opponent_actions = [D] * 17 + [C, C, C, C]
+        almost_defector = axelrod.MockPlayer(actions=opponent_actions)
+
+        actions = [(C, D)]
+        actions += [(C, D), (D, D), (D, D), (C, D), (C, D), (C, D), (D, D),
+                    (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, D),
+                    (C, D), (D, D), (C, C)] # Randomly choose
+        actions += [(C, C)] # Coop for a minute
+        actions += [(D, C), (D, C)]
+        self.versus_test(almost_defector, expected_actions=actions, seed=1)
+
+        #Here it will take until turn 40 to detect random and defect
+        actions = [(C, C)]
+        actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C), (C, D), 
+                    (C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C), 
+                    (C, D), (C, C), (C, D), (D, C), (C, D), (D, C), (C, D), 
+                    (D, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), 
+                    (C, D), (D, C), (C, D), (D, C), (C, D), (D, C), (C, D)] #Randomly choose 
+        actions += [(D, C), (C, D), (D, C)] # 17 D have come, so tit for tat for a while
+        actions += [(D, D), (D, C)] * 100 # Random finally detected
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)

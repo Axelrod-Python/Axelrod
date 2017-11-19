@@ -718,3 +718,56 @@ class Borufsen(Player):
 
             # Tit-for-tat
             return self.try_return(opponent.history[-1])
+
+class Cave(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Rob Cave (K49R), and
+    came in fourth in that tournament.
+
+    First look for overly-defective or apparently random opponents, and defect
+    if found.  That is any opponent meeting one of:
+
+    - turn > 39 and percent defects > 0.39
+    - turn > 29 and percent defects > 0.65
+    - turn > 19 and percent defects > 0.79
+
+    Otherwise, respond to cooperation with cooperation.  And respond to defcts
+    with either a defect (if opponent has defected at least 18 times) or with
+    a random (50/50) choice.  [Cooperate on first.]
+
+    Names:
+
+    - Cave: [Axelrod1980b]_
+    """
+
+    name = "Cave"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+        if turn == 1: return C
+
+        did_d = np.vectorize(lambda action: float(action == D))
+        number_defects = np.sum(did_d(opponent.history))
+        perc_defects = number_defects / turn # Size of numerator is smaller than denomator -- How it was in the Fortran.
+        
+        # If overly defect or appears random
+        if turn > 39 and perc_defects > 0.39: return D
+        if turn > 29 and perc_defects > 0.65: return D
+        if turn > 19 and perc_defects > 0.79: return D
+
+        if opponent.history[-1] == D:
+            if number_defects > 17:
+                return D
+            else:
+                return random_choice(0.5)
+        else:
+            return C
