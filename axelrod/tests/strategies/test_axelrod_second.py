@@ -542,3 +542,39 @@ class TestCave(TestPlayer):
         actions += [(D, C), (C, D), (D, C)] # 17 D have come, so tit for tat for a while
         actions += [(D, D), (D, C)] * 100 # Random finally detected
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+class TestCave(TestPlayer):
+    name = "WmAdams"
+    player = axelrod.WmAdams
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100  # Cooperate forever
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        # Will ignore the first four defects
+        opponent_actions = [D] * 4 + [C] * 100
+        defect_four = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D)] * 4 + [(C, C)] * 100
+        self.versus_test(defect_four, expected_actions=actions)
+
+        actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
+        actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (D, D), (D, D), (C, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
+
+        # After responding to the 11th D (counted as 10 D), just start cooperating
+        opponent_actions = [D] * 11 + [C] * 100
+        changed_man = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, C)]
+        actions += [(C,C)] * 99
+        self.versus_test(changed_man, expected_actions=actions, seed=1)
+
