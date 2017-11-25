@@ -509,30 +509,27 @@ class TestCave(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         # It will take until turn 18 to respond decide to repond D->D
-        random.seed(1)
         actions = [(C, D)]
         actions += [(C, D), (D, D), (D, D), (C, D), (C, D), (C, D), (D, D),
                     (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, D),
                     (C, D), (D, D), (C, D)] # Randomly choose
         actions += [(D, D)] * 30 # Defect
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
 
         # Highly-defective opponent
         # It will take until turn 20 to respond decide to repond D to C
         opponent_actions = [D] * 17 + [C, C, C, C]
         almost_defector = axelrod.MockPlayer(actions=opponent_actions)
 
-        random.seed(1)
         actions = [(C, D)]
         actions += [(C, D), (D, D), (D, D), (C, D), (C, D), (C, D), (D, D),
                     (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, D),
                     (C, D), (D, D), (C, C)] # Randomly choose
         actions += [(C, C)] # Coop for a minute
         actions += [(D, C), (D, C)]
-        self.versus_test(almost_defector, expected_actions=actions)
+        self.versus_test(almost_defector, expected_actions=actions, seed=1)
 
         #Here it will take until turn 40 to detect random and defect
-        random.seed(2)
         actions = [(C, C)]
         actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C), (C, D), 
                     (C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C), 
@@ -541,7 +538,7 @@ class TestCave(TestPlayer):
                     (C, D), (D, C), (C, D), (D, C), (C, D), (D, C), (C, D)] #Randomly choose 
         actions += [(D, C), (C, D), (D, C)] # 17 D have come, so tit for tat for a while
         actions += [(D, D), (D, C)] * 100 # Random finally detected
-        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
 
 class TestCave(TestPlayer):
     name = "WmAdams"
@@ -577,4 +574,3 @@ class TestCave(TestPlayer):
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D), (C, D), (D, D), (C, D), (D, D), (C, C)]
         actions += [(C,C)] * 99
         self.versus_test(changed_man, expected_actions=actions, seed=1)
-

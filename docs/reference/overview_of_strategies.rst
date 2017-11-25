@@ -119,7 +119,7 @@ repository.
    "K46R_", "Graham J Eatherley", ":class:`Eatherley <axelrod.strategies.axelrod_second.Eatherley>`"
    "K47R_", "Richard Hufford", "Not Implemented"
    "K48R_", "George Hufford", "Not Implemented"
-   "K49R_", "Rob Cave", "Not Implemented"
+   "K49R_", "Rob Cave", ":class:`Cave <axelrod.strategies.axelrod_second.Cave>`"
    "K50R_", "Rik Smoody", "Not Implemented"
    "K51R_", "John Willaim Colbert", "Not Implemented"
    "K52R_", "David A Smith", "Not Implemented"
