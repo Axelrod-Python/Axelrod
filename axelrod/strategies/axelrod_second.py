@@ -802,6 +802,8 @@ class WmAdams(Player):
         if len(self.history) <= 1:
             return C
         number_defects = opponent.defections
+        if opponent.history[0] == D:
+            number_defects -= 1
 
         if number_defects in [4, 7, 9]: return D
         if number_defects > 9 and opponent.history[-1] == D:
