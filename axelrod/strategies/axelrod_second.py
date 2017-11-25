@@ -777,9 +777,9 @@ class WmAdams(Player):
     Strategy submitted to Axelrod's second tournament by William Adams (K44R),
     and came in fifth in that tournament.
 
-    Count the number of opponent defections after their first move, call 
+    Count the number of opponent defections after their first move, call
     `c_defect`.  Defect if c_defect equals 4, 7, or 9.  If c_defect > 9,
-    then defect immediately after opponent defects with probability = 
+    then defect immediately after opponent defects with probability =
     (0.5)^(c_defect-1).  Otherwise cooperate.
 
     Names:

@@ -442,14 +442,15 @@ class TestKluepfel(TestPlayer):
 
         # Now we have to test the detect-random logic, which doesn't pick up
         # until after 26 turns.  So we need a big sample.
-        actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, C), (C, C), (C, D), 
-                    (C, C), (D, D), (D, C), (C, C), (C, D), (D, D), (C, D), (D, D), 
-                    (D, C), (C, C), (D, C), (C, C), (C, D), (D, D), (D, C), (C, D), 
-                    (D, C), (C, C), (C, D), 
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D), (D, C), (C, C),
+                   (C, D), (C, C), (D, D), (D, C), (C, C), (C, D), (D, D),
+                   (C, D), (D, D), (D, C), (C, C), (D, C), (C, C), (C, D),
+                   (D, D), (D, C), (C, D), (D, C), (C, C), (C, D),
                     # Success detect random opponent for remaining turns.
-                    (D, D),(D, D),(D, D),(D, C),(D, D),(D, C),(D, D),(D, C),(D, D),
-                    (D, C),(D, C),(D, D),(D, D),(D, C),(D, C),(D, C),(D, C),(D, D),
-                    (D, C),(D, C),(D, C),(D, C),(D, D)]
+                   (D, D), (D, D), (D, D), (D, C), (D, D), (D, C), (D, D),
+                   (D, C), (D, D), (D, C), (D, C), (D, D), (D, D), (D, C),
+                   (D, C), (D, C), (D, C), (D, D), (D, C), (D, C), (D, C),
+                   (D, C), (D, D)]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10)
 
 class TestBorufsen(TestPlayer):
@@ -475,16 +476,21 @@ class TestBorufsen(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
         # Alternates with additional coop, every sixth turn
-        # Won't be labeled as random, since 2/3 of opponent's C follow player's C
-        # `flip_next_defect` will get set on the sixth turn, which changes the seventh action
+        # Won't be labeled as random, since 2/3 of opponent's C follow
+        # player's C
+        # `flip_next_defect` will get set on the sixth turn, which changes the
+        # seventh action
         # Note that the first two turns of each period of six aren't
-        #  marked as echoes, and the third isn't marked that way until the fourth turn.
+        #  marked as echoes, and the third isn't marked that way until the
+        # fourth turn.
         actions = [(C, C), (C, D), (D, C), (C, D), (D, C), (C, D)] * 20
         self.versus_test(axelrod.Alternator(), expected_actions=actions)
 
         # Basically does tit-for-tat against Win-Shift, Lose-Stay D
-        # After 26 turns, will detect random since half of opponent's C follow Cs
-        # Coming out of it, there will be new pattern.  Then random is detected again.
+        # After 26 turns, will detect random since half of opponent's C follow
+        # Cs
+        # Coming out of it, there will be new pattern.  Then random is detected
+        # again.
         actions = [(C, D), (D, C), (C, C)] * 8 + \
                     [(C, D), (D, C)] + [(D, C)] * 25 + \
                     [(D, C)] + [(C, C), (C, D), (D, C)] * 8 + \
@@ -505,7 +511,7 @@ class TestCave(TestPlayer):
     }
 
     def test_strategy(self):
-        actions = [(C, C)] * 100 
+        actions = [(C, C)] * 100
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
         # It will take until turn 18 to respond decide to repond D->D
@@ -531,16 +537,16 @@ class TestCave(TestPlayer):
 
         #Here it will take until turn 40 to detect random and defect
         actions = [(C, C)]
-        actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C), (C, D), 
-                    (C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C), 
-                    (C, D), (C, C), (C, D), (D, C), (C, D), (D, C), (C, D), 
-                    (D, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C), 
-                    (C, D), (D, C), (C, D), (D, C), (C, D), (D, C), (C, D)] #Randomly choose 
+        actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C), (C, D),
+                    (C, C), (C, D), (D, C), (C, D), (D, C), (C, D), (D, C),
+                    (C, D), (C, C), (C, D), (D, C), (C, D), (D, C), (C, D),
+                    (D, C), (C, D), (C, C), (C, D), (C, C), (C, D), (C, C),
+                    (C, D), (D, C), (C, D), (D, C), (C, D), (D, C), (C, D)] #Randomly choose
         actions += [(D, C), (C, D), (D, C)] # 17 D have come, so tit for tat for a while
         actions += [(D, D), (D, C)] * 100 # Random finally detected
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
 
-class TestCave(TestPlayer):
+class TestWmAdams(TestPlayer):
     name = "WmAdams"
     player = axelrod.WmAdams
     expected_classifier = {
@@ -564,18 +570,18 @@ class TestCave(TestPlayer):
         self.versus_test(defect_four, expected_actions=actions)
 
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D),
-                    (C, D), (D, D), (C, D), (D, D), (C, D), (D, D), (D, D),
-                    (D, D), (D, D)]
+                   (C, D), (D, D), (C, D), (D, D), (C, D), (D, D), (D, D),
+                   (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D),
-                    (C, D), (D, D), (C, D), (D, D), (D, D), (D, D), (C, D),
-                    (D, D), (D, D)]
+                   (C, D), (D, D), (C, D), (D, D), (D, D), (D, D), (C, D),
+                   (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
 
         # After responding to the 11th D (counted as 10 D), just start cooperating
         opponent_actions = [D] * 11 + [C] * 100
         changed_man = axelrod.MockPlayer(actions=opponent_actions)
         actions = [(C, D), (C, D), (C, D), (C, D), (C, D), (D, D), (C, D),
-                    (C, D), (D, D), (C, D), (D, D), (C, C)]
-        actions += [(C,C)] * 99
+                   (C, D), (D, D), (C, D), (D, D), (C, C)]
+        actions += [(C, C)] * 99
         self.versus_test(changed_man, expected_actions=actions, seed=1)
