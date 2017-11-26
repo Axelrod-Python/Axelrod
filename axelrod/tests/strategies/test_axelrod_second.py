@@ -585,3 +585,39 @@ class TestWmAdams(TestPlayer):
                    (C, D), (D, D), (C, D), (D, D), (C, C)]
         actions += [(C, C)] * 99
         self.versus_test(changed_man, expected_actions=actions, seed=1)
+
+class Test(TestPlayer):
+    name = "GraaskampKatzen"
+    player = axelrod.GraaskampKatzen
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(["game"]),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100  # Cooperate forever
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        # GK does not great against
+        opponent_actions = [C, D, D] * 100
+        GK_Foil = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C), (C, D), (D, D)]
+        actions += [(D, C), (C, D), (D, D)] * 2
+        actions += [(D, C)]
+        actions += [(D, D), (D, D), (D, C)] * 20 # Defect here on
+        self.versus_test(GK_Foil, expected_actions=actions)
+
+        # Fail on second checkpoint
+        opponent_actions = [C] * 10 + [C, D, D] * 100
+        Delayed_GK_Foil = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C)] * 10
+        actions += [(C, C), (C, D), (D, D)]
+        actions += [(D, C), (C, D), (D, D)] * 2
+        actions += [(D, C)]
+        actions += [(D, D), (D, D), (D, C)] * 20 # Defect here on
+        self.versus_test(Delayed_GK_Foil, expected_actions=actions)

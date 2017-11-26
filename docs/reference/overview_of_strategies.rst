@@ -130,7 +130,7 @@ repository.
    "K57R_", "Rudy Nydegger", "Not Implemented"
    "K58R_", "Glen Rowsam", "Not Implemented"
    "K59R_", "Leslie Downing", "Not Implemented"
-   "K60R_", "Jim Graaskamp and Ken Katzen", "Not Implemented"
+   "K60R_", "Jim Graaskamp and Ken Katzen", ":class:`GraaskampKatzen <axelrod.strategies.axelrod_second.GraaskampKatzen>`"
    "K61R_", "Danny C Champion", ":class:`Champion <axelrod.strategies.axelrod_second.Champion>`"
    "K62R_", "Howard R Hollander", "Not Implemented"
    "K63R_", "George Duisman", "Not Implemented"

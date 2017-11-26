@@ -809,3 +809,65 @@ class WmAdams(Player):
         if number_defects > 9 and opponent.history[-1] == D:
             return random_choice((0.5) ** (number_defects - 9))
         return C
+
+class GraaskampKatzen(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Jim Graaskamp and Ken
+    Katzen (K60R), and came in sixth in that tournament.
+
+    Play Tit-for-Tat at first, and track own score.  At select checkpoints,
+    check for a high score.  Switch to Default Mode if:
+
+    - On move 11, score < 23
+    - On move 21, score < 53
+    - On move 31, score < 83
+    - On move 41, score < 113
+    - On move 51, score < 143
+    - On move 101, score < 293
+
+    Once in Defect Mode, defect forever.
+
+    Names:
+
+    - GraaskampKatzen: [Axelrod1980b]_
+    """
+
+    name = "GraaskampKatzen"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(['game']),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.own_score = 0
+        self.mode = "Normal"
+
+    def update_score(self, opponent: Player):
+        game = self.match_attributes["game"]
+        last_round = (self.history[-1], opponent.history[-1])
+        self.own_score += game.score(last_round)[0]
+
+    def strategy(self, opponent: Player) -> Action:
+        if self.mode == "Defect": return D
+
+        turn = len(self.history) + 1
+        if turn == 1: return C
+
+        self.update_score(opponent)
+
+        if turn == 11 and self.own_score < 23 or \
+           turn == 21 and self.own_score < 53 or \
+           turn == 31 and self.own_score < 83 or \
+           turn == 41 and self.own_score < 113 or \
+           turn == 51 and self.own_score < 143 or \
+           turn == 101 and self.own_score < 293:
+            self.mode = "Defect"
+            return D
+
+        return opponent.history[-1] # Tit-for-Tat
