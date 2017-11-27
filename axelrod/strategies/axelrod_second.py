@@ -755,9 +755,9 @@ class Cave(Player):
         turn = len(self.history) + 1
         if turn == 1: return C
 
-        did_d = np.vectorize(lambda action: float(action == D))
-        number_defects = np.sum(did_d(opponent.history))
-        perc_defects = number_defects / turn # Size of numerator is smaller than denomator -- How it was in the Fortran.
+        number_defects = opponent.defections
+        # Size of numerator is smaller than denomator -- How it was in the Fortran.
+        perc_defects = number_defects / turn
         
         # If overly defect or appears random
         if turn > 39 and perc_defects > 0.39: return D
@@ -771,3 +771,41 @@ class Cave(Player):
                 return random_choice(0.5)
         else:
             return C
+
+class WmAdams(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by William Adams (K44R),
+    and came in fifth in that tournament.
+
+    Count the number of opponent defections after their first move, call
+    `c_defect`.  Defect if c_defect equals 4, 7, or 9.  If c_defect > 9,
+    then defect immediately after opponent defects with probability =
+    (0.5)^(c_defect-1).  Otherwise cooperate.
+
+    Names:
+
+    - WmAdams: [Axelrod1980b]_
+    """
+
+    name = "WmAdams"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        if len(self.history) <= 1:
+            return C
+        number_defects = opponent.defections
+        if opponent.history[0] == D:
+            number_defects -= 1
+
+        if number_defects in [4, 7, 9]: return D
+        if number_defects > 9 and opponent.history[-1] == D:
+            return random_choice((0.5) ** (number_defects - 9))
+        return C
