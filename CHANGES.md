@@ -1,4 +1,14 @@
-# v3.9.0, 2017-10-13
+# v3.10.0, 2017-11-27
+
+One new strategy
+
+- Add the WmAdams strategy:
+  https://github.com/Axelrod-Python/Axelrod/pull/1142
+
+Here are all the commits for this PR:
+https://github.com/Axelrod-Python/Axelrod/compare/v3.10.0...v3.9.0
+
+# v3.9.0, 2017-11-19
 
 New strategies, a minor bug fix and a small documentation improvement.
 
