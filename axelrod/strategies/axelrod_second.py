@@ -760,10 +760,6 @@ class Cave(Player):
         if turn == 1: return C
 
         number_defects = opponent.defections
-<<<<<<< HEAD
-=======
-        # Size of numerator is smaller than denomator -- How it was in the Fortran.
->>>>>>> 3ea83307c177a472ddd174295ee32f5ba2ca7ffa
         perc_defects = number_defects / turn
         
         # If overly defect or appears random
@@ -782,10 +778,7 @@ class Cave(Player):
         else:
             return C
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 3ea83307c177a472ddd174295ee32f5ba2ca7ffa
 class WmAdams(Player):
     """
     Strategy submitted to Axelrod's second tournament by William Adams (K44R),
