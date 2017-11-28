@@ -586,7 +586,7 @@ class TestWmAdams(TestPlayer):
         actions += [(C, C)] * 99
         self.versus_test(changed_man, expected_actions=actions, seed=1)
 
-class Test(TestPlayer):
+class TestGraaskampKatzen(TestPlayer):
     name = "GraaskampKatzen"
     player = axelrod.GraaskampKatzen
     expected_classifier = {
