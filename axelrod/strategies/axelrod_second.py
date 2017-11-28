@@ -203,6 +203,7 @@ class Gladstein(Player):
             # Play TFT
             return opponent.history[-1]
 
+
 class Tranquilizer(Player):
 
     """
@@ -468,6 +469,7 @@ class MoreGrofman(Player):
                 return C
             return D
 
+
 class Kluepfel(Player):
     """
     Strategy submitted to Axelrod's second tournament by Charles Kluepfel
@@ -549,7 +551,7 @@ class Kluepfel(Player):
 
         if one_move_ago == two_moves_ago and two_moves_ago == three_moves_ago:
             return one_move_ago
-        
+
         r = random.random() # Everything following is stochastic
         if one_move_ago == two_moves_ago:
             if r < 0.9:
@@ -566,6 +568,7 @@ class Kluepfel(Player):
                 return one_move_ago
             else:
                 return one_move_ago.flip()
+
 
 class Borufsen(Player):
     """
@@ -588,8 +591,8 @@ class Borufsen(Player):
        cooperate.  (Doesn't block third rule.)
     3. Otherwise, do tit-for-tat.
 
-    Start in normal mode, but every 25 turns starting with the 27th turn, 
-    re-evaluate the mode.  Enter defect mode if any of the following 
+    Start in normal mode, but every 25 turns starting with the 27th turn,
+    re-evaluate the mode.  Enter defect mode if any of the following
     conditions hold:
 
     - Detected random:  Opponent cooperated 7-18 times since last mode 
@@ -689,7 +692,7 @@ class Borufsen(Player):
             return D
         else:
             assert self.mode == "Normal"
-            
+
             # Look for mutual defects
             if self.history[-1] == D and opponent.history[-1] == D:
                 self.mutual_defect_streak += 1
@@ -699,7 +702,7 @@ class Borufsen(Player):
                 self.mutual_defect_streak = 0
                 self.echo_streak = 0 # Reset both streaks.
                 return self.try_return(C)
-            
+
             # Look for echoes
             # Fortran code defaults two turns back to C if only second turn
             my_two_back, opp_two_back = C, C
@@ -718,6 +721,7 @@ class Borufsen(Player):
 
             # Tit-for-tat
             return self.try_return(opponent.history[-1])
+
 
 class Cave(Player):
     """
@@ -756,13 +760,15 @@ class Cave(Player):
         if turn == 1: return C
 
         number_defects = opponent.defections
-        # Size of numerator is smaller than denomator -- How it was in the Fortran.
         perc_defects = number_defects / turn
         
         # If overly defect or appears random
-        if turn > 39 and perc_defects > 0.39: return D
-        if turn > 29 and perc_defects > 0.65: return D
-        if turn > 19 and perc_defects > 0.79: return D
+        if turn > 39 and perc_defects > 0.39:
+            return D
+        if turn > 29 and perc_defects > 0.65:
+            return D
+        if turn > 19 and perc_defects > 0.79:
+            return D
 
         if opponent.history[-1] == D:
             if number_defects > 17:
@@ -771,6 +777,7 @@ class Cave(Player):
                 return random_choice(0.5)
         else:
             return C
+
 
 class WmAdams(Player):
     """
@@ -809,3 +816,67 @@ class WmAdams(Player):
         if number_defects > 9 and opponent.history[-1] == D:
             return random_choice((0.5) ** (number_defects - 9))
         return C
+
+class GraaskampKatzen(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Jim Graaskamp and Ken
+    Katzen (K60R), and came in sixth in that tournament.
+
+    Play Tit-for-Tat at first, and track own score.  At select checkpoints,
+    check for a high score.  Switch to Default Mode if:
+
+    - On move 11, score < 23
+    - On move 21, score < 53
+    - On move 31, score < 83
+    - On move 41, score < 113
+    - On move 51, score < 143
+    - On move 101, score < 293
+
+    Once in Defect Mode, defect forever.
+
+    Names:
+
+    - GraaskampKatzen: [Axelrod1980b]_
+    """
+
+    name = "GraaskampKatzen"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(['game']),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.own_score = 0
+        self.mode = "Normal"
+
+    def update_score(self, opponent: Player):
+        game = self.match_attributes["game"]
+        last_round = (self.history[-1], opponent.history[-1])
+        self.own_score += game.score(last_round)[0]
+
+    def strategy(self, opponent: Player) -> Action:
+        if self.mode == "Defect":
+            return D
+
+        turn = len(self.history) + 1
+        if turn == 1:
+            return C
+
+        self.update_score(opponent)
+
+        if turn == 11 and self.own_score < 23 or \
+           turn == 21 and self.own_score < 53 or \
+           turn == 31 and self.own_score < 83 or \
+           turn == 41 and self.own_score < 113 or \
+           turn == 51 and self.own_score < 143 or \
+           turn == 101 and self.own_score < 293:
+            self.mode = "Defect"
+            return D
+
+        return opponent.history[-1] # Tit-for-Tat
