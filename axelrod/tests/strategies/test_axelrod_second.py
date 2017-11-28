@@ -407,6 +407,7 @@ class TestMoreGrofman(TestPlayer):
             (C, D), (C, D), (C, D), (D, D), (D, C)]
         self.versus_test(opponent, expected_actions=actions)
 
+
 class TestKluepfel(TestPlayer):
     name = "Kluepfel"
     player = axelrod.Kluepfel
@@ -453,6 +454,7 @@ class TestKluepfel(TestPlayer):
                    (D, C), (D, D)]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10)
 
+
 class TestBorufsen(TestPlayer):
     name = "Borufsen"
     player = axelrod.Borufsen
@@ -496,6 +498,7 @@ class TestBorufsen(TestPlayer):
                     [(D, C)] + [(C, C), (C, D), (D, C)] * 8 + \
                     [(D, C)] * 25
         self.versus_test(axelrod.WinShiftLoseStay(D), expected_actions=actions)
+
 
 class TestCave(TestPlayer):
     name = "Cave"
@@ -546,6 +549,7 @@ class TestCave(TestPlayer):
         actions += [(D, D), (D, C)] * 100 # Random finally detected
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
 
+
 class TestWmAdams(TestPlayer):
     name = "WmAdams"
     player = axelrod.WmAdams
@@ -586,6 +590,7 @@ class TestWmAdams(TestPlayer):
         actions += [(C, C)] * 99
         self.versus_test(changed_man, expected_actions=actions, seed=1)
 
+
 class TestGraaskampKatzen(TestPlayer):
     name = "GraaskampKatzen"
     player = axelrod.GraaskampKatzen
@@ -621,3 +626,71 @@ class TestGraaskampKatzen(TestPlayer):
         actions += [(D, C)]
         actions += [(D, D), (D, D), (D, C)] * 20 # Defect here on
         self.versus_test(Delayed_GK_Foil, expected_actions=actions)
+
+
+class TestWeiner(TestPlayer):
+    name = "Weiner"
+    player = axelrod.Weiner
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100  # Cooperate forever
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, C)]
+        actions += [(C, D), (D, C)] # Tit-for-Tat
+        # Opponent's last move was a C with 1 D between
+        actions += [(C, D)] # Tit-for-Tat. Raise forgiveness flag.
+        actions += [(C, C)] # Tit-for-Tat. Use forgiveness flag.
+        # Opponent's last move was a C, but defect_padding counted as 0.
+        actions += [(C, D), (D, C)] # Tit-for-Tat
+        # Opponent's last move was a C with 1 D between
+        actions += [(C, D)] # Tit-for-Tat. Raise forgiveness flag.
+        actions += [(D, C)] # Tit-for-Tat. Try forgiveness flag.
+        # This time grudge=20, so the forgiveness flag doesn't work.
+        actions += [(C, D)] # Tit-for-Tat.
+        # This is the 5th opponent defect, won't be counted for 2 turns
+        actions += [(D, C)] # Tit-for-Tat.
+        actions += [(D, D), (D, C)] * 100 # Defect now on.
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        # Build an opponent that will cause a wasted flag.
+        opponent_actions = [C, D, C, C, C, C, D, D]
+        Flag_Waster_1 = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C), (C, D), (D, C)]
+        actions += [(C, C)] # Raise flag, like in Alternator
+        actions += [(C, C)] # Use flag, but don't change outcome
+        actions += [(C, C)]
+        actions += [(C, D)] # Don't raise flag
+        actions += [(D, D)] # Don't use flag
+        self.versus_test(Flag_Waster_1, expected_actions=actions)
+
+        # Demonstrate that grudge is not incremented on wasted flag.
+        opponent_actions = [C, D, C, C, C, C, D, C, D, C]
+        Flag_Waster_2 = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C), (C, D), (D, C)]
+        actions += [(C, C)] # Raise flag, like in Alternator
+        actions += [(C, C)] # Use flag, but don't change outcome
+        actions += [(C, C), (C, D), (D, C)]
+        actions += [(C, D)] # Raise flag
+        actions += [(C, C)] # Use flag to change outcome
+        self.versus_test(Flag_Waster_2, expected_actions=actions)
+
+        # Show grudge passing over time
+        opponent_actions = [C, D, C, D, C] + [C] * 11 + [C, D, C, D, C]
+        Time_Passer = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C), (C, D), (D, C)]
+        actions += [(C, D)] # Raise flag
+        actions += [(C, C)] # Use flag to change outcome
+        actions += [(C, C)] * 11
+        actions += [(C, C), (C, D), (D, C)]
+        actions += [(C, D)] # Raise flag
+        actions += [(C, C)] # Use flag to change outcome

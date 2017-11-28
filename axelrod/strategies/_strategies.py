@@ -9,7 +9,7 @@ from .axelrod_first import (
     UnnamedStrategy, SteinAndRapoport, TidemanAndChieruzzi)
 from .axelrod_second import (
     Champion, Eatherley, Tester, Gladstein, Tranquilizer, MoreGrofman,
-    Kluepfel, Borufsen, Cave, WmAdams, GraaskampKatzen)
+    Kluepfel, Borufsen, Cave, WmAdams, GraaskampKatzen, Weiner)
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
 from .bush_mosteller import BushMosteller
@@ -270,6 +270,7 @@ all_strategies = [
     Tullock,
     TwoTitsForTat,
     VeryBad,
+    Weiner,
     Willing,
     Winner12,
     Winner21,
