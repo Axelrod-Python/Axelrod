@@ -763,7 +763,7 @@ class Cave(Player):
         number_defects = opponent.defections
         perc_defects = number_defects / turn
 
-        # If overly defect or appears random
+        # Defect if the opponent has defected often or appears random.
         if turn > 39 and perc_defects > 0.39:
             return D
         if turn > 29 and perc_defects > 0.65:
