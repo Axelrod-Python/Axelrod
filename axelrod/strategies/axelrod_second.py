@@ -595,7 +595,7 @@ class Borufsen(Player):
     re-evaluate the mode.  Enter defect mode if any of the following
     conditions hold:
 
-    - Detected random:  Opponent cooperated 7-18 times since last mode 
+    - Detected random:  Opponent cooperated 7-18 times since last mode
       evaluation (or start) AND less than 70% of opponent cooperation was in
       response to player's cooperation, i.e.
       cc_count / (cc_count+cd_count) < 0.7
@@ -757,12 +757,12 @@ class Cave(Player):
 
     def strategy(self, opponent: Player) -> Action:
         turn = len(self.history) + 1
-        if turn == 1: return C
+        if turn == 1:
+            return C
 
         number_defects = opponent.defections
         perc_defects = number_defects / turn
-        
-        # If overly defect or appears random
+        # Defect if the opponent has defected often or appears random.
         if turn > 39 and perc_defects > 0.39:
             return D
         if turn > 29 and perc_defects > 0.65:
