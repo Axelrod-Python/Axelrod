@@ -762,6 +762,7 @@ class Cave(Player):
 
         number_defects = opponent.defections
         perc_defects = number_defects / turn
+
         # Defect if the opponent has defected often or appears random.
         if turn > 39 and perc_defects > 0.39:
             return D
@@ -812,10 +813,12 @@ class WmAdams(Player):
         if opponent.history[0] == D:
             number_defects -= 1
 
-        if number_defects in [4, 7, 9]: return D
+        if number_defects in [4, 7, 9]:
+            return D
         if number_defects > 9 and opponent.history[-1] == D:
             return random_choice((0.5) ** (number_defects - 9))
         return C
+
 
 class GraaskampKatzen(Player):
     """
@@ -880,3 +883,95 @@ class GraaskampKatzen(Player):
             return D
 
         return opponent.history[-1] # Tit-for-Tat
+
+
+class Weiner(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Herb Weiner (K41R),
+    and came in seventh in that tournament.
+
+    Play Tit-for-Tat with a chance for forgiveness and a defective override.
+
+    The chance for forgiveness happens only if `forgive_flag` is raised
+    (flag discussed below).  If raised and `turn` is greater than `grudge`,
+    then override Tit-for-Tat with Cooperation.  `grudge` is a variable that
+    starts at 0 and increments 20 with each forgiven Defect (a Defect that is
+    overriden through the forgiveness logic).  `forgive_flag` is lower whether
+    logic is overriden or not.
+
+    The variable `defect_padding` increments with each opponent Defect, but
+    resets to zero with each opponent Cooperate (or `forgive_flag` lowering) so
+    that it roughly counts Defects between Cooperates.  Whenever the opponent
+    Cooperates, if `defect_padding` (before reseting) is odd, then we raise
+    `forgive_flag` for next turn.
+
+    Finally a defective override is assessed after forgiveness.  If five or
+    more of the opponent's last twelve actions are Defects, then Defect.  This
+    will overrule a forgiveness, but doesn't undo the lowering of
+    `forgiveness_flag`.  Note that "last twelve actions" doesn't count the most
+    recent action.  Actually the original code updates history after checking
+    for defect override.
+
+    Names:
+
+    - Weiner: [Axelrod1980b]_
+    """
+
+    name = "Weiner"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.forgive_flag = False
+        self.grudge = 0
+        self.defect_padding = 0
+        self.last_twelve = [0] * 12
+        self.lt_index = 0 # Circles around last_twelve
+
+    def try_return(self, to_return):
+        """
+        We put the logic here to check for the defective override.
+        """
+
+        if np.sum(self.last_twelve) >= 5:
+            return D
+        return to_return
+
+    def strategy(self, opponent: Player) -> Action:
+        if len(opponent.history) == 0:
+            return C
+
+        # Update history, lag 1.
+        if len(opponent.history) >= 2:
+            self.last_twelve[self.lt_index] = 0
+            if opponent.history[-2] == D:
+                self.last_twelve[self.lt_index] = 1
+            self.lt_index = (self.lt_index + 1) % 12
+
+        if self.forgive_flag:
+            self.forgive_flag = False
+            self.defect_padding = 0
+            if self.grudge < len(self.history) + 1 and opponent.history[-1] == D:
+                # Then override
+                self.grudge += 20
+                return self.try_return(C)
+            else:
+                return self.try_return(opponent.history[-1])
+        else:
+            # See if forgive_flag should be raised
+            if opponent.history[-1] == D:
+                self.defect_padding += 1
+            else:
+                if self.defect_padding % 2 == 1:
+                    self.forgive_flag = True
+                self.defect_padding = 0
+
+            return self.try_return(opponent.history[-1])

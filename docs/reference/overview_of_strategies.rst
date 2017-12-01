@@ -111,7 +111,7 @@ repository.
    "K38R_", "Nelson Weiderman", "Not Implemented"
    "K39R_", "Tom Almy", "Not Implemented"
    "K40R_", "Robert Adams", "Not Implemented"
-   "K41R_", "Herb Weiner", "Not Implemented"
+   "K41R_", "Herb Weiner", ":class:`Weiner <axelrod.strategies.axelrod_second.Weiner>`"
    "K42R_", "Otto Borufsen", ":class:`Borufsen <axelrod.strategies.axelrod_second.Borufsen>`"
    "K43R_", "R D Anderson", "Not Implemented"
    "K44R_", "William Adams", ":class:`WmAdams <axelrod.strategies.axelrod_second.WmAdams>`"
