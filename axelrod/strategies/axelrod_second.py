@@ -1025,13 +1025,13 @@ class Harrington(Player):
     2. Check if cooperations are scheduled.
     3. Otherwise,
 
-       - If turn < 37, Tit-for-Tat.
-       - If turn = 37, defect, mark this move as generous, and schedule two
-         more cooperations**.
-       - If turn > 37, then if `burned` flag is raised, then Tit-for-Tat.
-         Otherwise, Tit-for-Tat with probability 1 - `prob`.  And with
-         probability `prob`, defect, schedule two cooperations, mark this move
-         as generous, and increase `prob` by 5%.
+    - If turn < 37, Tit-for-Tat.
+    - If turn = 37, defect, mark this move as generous, and schedule two
+      more cooperations**.
+    - If turn > 37, then if `burned` flag is raised, then Tit-for-Tat.
+      Otherwise, Tit-for-Tat with probability 1 - `prob`.  And with
+      probability `prob`, defect, schedule two cooperations, mark this move
+      as generous, and increase `prob` by 5%.
 
     ** Scheduling two cooperations means to set `more_coop` flag to two.  If in
     Normal mode and no streaks are detected, then the player will cooperate and
