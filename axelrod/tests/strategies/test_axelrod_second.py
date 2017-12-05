@@ -717,7 +717,7 @@ class TestHarrington(TestPlayer):
         Defect37 = axelrod.MockPlayer(actions=opponent_actions)
         # Activate the Fair-weather flag
         actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
-        self.versus_test(Defect37, expected_actions=actions)
+        self.versus_test(Defect37, expected_actions=actions, attrs={"mode": "Fair-weather"})
 
         # Defect on 37th turn to activate Fair-weather, then later defect to
         # exit Fair-weather
@@ -727,12 +727,12 @@ class TestHarrington(TestPlayer):
         actions += [(C, D)]
         #Immediately exit Fair-weather
         actions += [(D, C), (C, C), (D, C), (C, C)]
-        self.versus_test(Defect37_big, expected_actions=actions, seed=2)
+        self.versus_test(Defect37_big, expected_actions=actions, seed=2, attrs={"mode": "Normal"})
         actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
         actions += [(C, D)]
         #Immediately exit Fair-weather
         actions += [(D, C), (C, C), (C, C), (C, C)]
-        self.versus_test(Defect37_big, expected_actions=actions, seed=1)
+        self.versus_test(Defect37_big, expected_actions=actions, seed=1, attrs={"mode": "Normal"})
 
         # Opponent defects on 1st turn
         opponent_actions = [D] + [C] * 46
@@ -767,7 +767,7 @@ class TestHarrington(TestPlayer):
         actions += [(C, D), (C, C)]
         # TFT from then on, since burned
         actions += [(C, C)] * 8
-        self.versus_test(Defect1_38, expected_actions=actions, seed=2)
+        self.versus_test(Defect1_38, expected_actions=actions, seed=2, attrs={"burned": True})
 
         # Use alternator to test parity flags.
         actions = [(C, C), (C, D)]
@@ -804,7 +804,7 @@ class TestHarrington(TestPlayer):
         actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
         # Now hit thi limit sooner
         actions += [(C, D), (D, C), (C, D), (C, C)] * 5
-        self.versus_test(AsyncAlternator, expected_actions=actions)
+        self.versus_test(AsyncAlternator, expected_actions=actions, attrs={"parity_limit": 3})
 
         # Use a Defector to test the 20-defect streak
         actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
@@ -812,10 +812,10 @@ class TestHarrington(TestPlayer):
         actions += [(C, D), (C, D)]
         # Repeat
         actions += [(D, D), (D, D), (D, D), (D, D), (C, D), (C, D)] * 2
-        actions += [(D, D)]
-        # 20 D have passed
+        actions += [(D, D), (D, D)]
+        # 20 D have passed (first isn't record)
         actions += [(D, D)] * 100
         # The defect streak will always be detected from here on, because it
         # doesn't reset.  This logic comes before parity streaks or the turn-
         # based logic.
-        self.versus_test(axelrod.Defector(), expected_actions=actions)
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"recorded_defects": 119})
