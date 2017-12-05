@@ -979,10 +979,11 @@ class Weiner(Player):
 
 class Harrington(Player):
     """
-    Strategy submitted to Axelrod's second tournament by Paul Harringtn (K75R),
+    Strategy submitted to Axelrod's second tournament by Paul Harrington (K75R)
     and came in eighth in that tournament.
 
-    This strategy has three modes:  Normal, and Fair-weather, Defect.
+    This strategy has three modes:  Normal, Fair-weather, and Defect.  These
+    mode names were not present in Harrington's submission.
 
     In Normal and Fair-weather modes, the strategy begins by:
 
@@ -1013,13 +1014,17 @@ class Harrington(Player):
     The player mostly plays Tit-for-Tat for the first 36 moves, then defects on
     the 37th move.  If the opponent cooperates on the first 36 moves, and
     defects on the 37th move also, then enter Fair-weather mode and cooperate
-    this turn.
+    this turn.  Entering Fair-weather mode is extremely rare, since this can
+    only happen if the opponent cooperates for the first 36 then defects
+    unprovoked on the 37th.  (That is, this player's first 36 moves are also
+    Cooperations, so there's nothing really to trigger an opponent Defection.)
 
     Next in Normal Mode:
 
     1. Check for defect and parity streaks.
     2. Check if cooperations are scheduled.
     3. Otherwise,
+
        - If turn < 37, Tit-for-Tat.
        - If turn = 37, defect, mark this move as generous, and schedule two
          more cooperations**.
@@ -1224,10 +1229,6 @@ class Harrington(Player):
 
         if turn == 38 and opponent.history[-1] == D and opponent.cooperations == 36:
             self.mode = "Fair-weather"
-            # These flags would already be set from turn == 37 logic below.
-            # Just take care to not lower this turn.
-            # self.more_coop = 2
-            # self.generous_n_turns_ago = 1 # 1 turn ago since this turn is ending.
             return self.try_return(to_return=C, lower_flags=False)
 
 
@@ -1256,13 +1257,12 @@ class Harrington(Player):
 
         if turn < 37:
             return self.try_return(opponent.history[-1], inc_parity=True)
-        elif turn == 37:
+        if turn == 37:
             self.more_coop, self.generous_n_turns_ago = 2, 1
             return self.try_return(D, lower_flags=False)
+        if self.burned or random.random() > self.prob:
+            return self.try_return(opponent.history[-1], inc_parity=True)
         else:
-            if self.burned or random.random() > self.prob:
-                return self.try_return(opponent.history[-1], inc_parity=True)
-            else:
-                self.prob += 0.05
-                self.more_coop, self.generous_n_turns_ago = 2, 1
-                return self.try_return(D, lower_flags=False)
+            self.prob += 0.05
+            self.more_coop, self.generous_n_turns_ago = 2, 1
+            return self.try_return(D, lower_flags=False)
