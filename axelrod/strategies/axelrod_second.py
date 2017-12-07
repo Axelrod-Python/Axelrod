@@ -1094,6 +1094,7 @@ class Harrington(Player):
         self.prob = 0.25
 
         self.move_history = np.zeros([4, 2])
+        self.chi_squared = None
         self.history_row = 0
 
         self.more_coop = 0
@@ -1154,6 +1155,8 @@ class Harrington(Player):
                 expct = expected_matrix[i, j] / denom
                 if expct > 1.0:
                     chi_squared += (expct - self.move_history[i, j]) ** 2 / expct
+
+        self.chi_squared = round(chi_squared, 3) # For testing
 
         if chi_squared > 3:
             return False

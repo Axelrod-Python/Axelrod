@@ -1,6 +1,7 @@
 """Tests for the Second Axelrod strategies."""
 
 import random
+import numpy as np
 
 import axelrod
 from .test_player import TestPlayer
@@ -819,3 +820,32 @@ class TestHarrington(TestPlayer):
         # doesn't reset.  This logic comes before parity streaks or the turn-
         # based logic.
         self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"recorded_defects": 119})
+
+        # Detect random
+        actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, D),
+                   (D, C), (C, D), (D, C), (C, C), (C, D), (D, D), (D, C),
+                   (C, D), (D, D), (D, C), (C, C), (C, D), (D, C), (C, D),
+                   (D, D), (D, C), (C, D), (D, D), (D, D), (C, D), (D, C),
+                   (C, C)]
+        # Enter defect mode.
+        actions += [(D, C)]
+        self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10, attrs={"chi_squared": 2.395})
+        # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
+
+        # Come back out of defect mode
+        opponent_actions = [D, C, D, C, D, D, D, C, D, C, C, D, D, C, D, D, C,
+                            C, D, C, D, D, C, D, D, D, D, C, C, C]
+        opponent_actions += [D] * 16
+        Rand_Then_Def = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, D),
+                   (D, C), (C, D), (D, C), (C, C), (C, D), (D, D), (D, C),
+                   (C, D), (D, D), (D, C), (C, C), (C, D), (D, C), (C, D),
+                   (D, D), (D, C), (C, D), (D, D), (D, D), (C, D), (D, C),
+                   (C, C)]
+        actions += [(D, C)]
+        # Enter defect mode.
+        actions += [(D, D)] * 14
+        # Mutual defect for a while, then exit Defect mode with two coops
+        actions += [(C, D)] * 2
+        self.versus_test(Rand_Then_Def, expected_actions=actions, seed=10, \
+                        attrs={"mode": "Normal", "was_defective": True})
