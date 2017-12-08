@@ -1094,7 +1094,6 @@ class Harrington(Player):
         self.move_history = np.zeros([4, 2])
         # Will cache value only for testing purposes, not used otherwise
         self.chi_squared = None
-        self.history_row = 0
 
         self.more_coop = 0  # This schedules cooperation for future turns
         # Initial last_generous_n_turns_ago to 3 because this counts up and
@@ -1231,24 +1230,26 @@ class Harrington(Player):
         # If not Defect mode, proceed to update history and check for random,
         # check if burned, and check if opponent's fairweather.
 
-        # History only gets updated outside of Defect mode.
-        if turn > 2:
-            if opponent.history[-1] == D:
-                self.recorded_defects += 1
-            opp_col = 1 if opponent.history[-1] == D else 0
-            self.move_history[self.history_row, opp_col] += 1
+        # If we haven't yet entered Defect mode
+        if not self.was_defective:
+            if turn > 2:
+                if opponent.history[-1] == D:
+                    self.recorded_defects += 1
 
-        # Detect random
-        if turn % 15 == 0 and turn > 15 and not self.was_defective:
-            if self.detect_random(turn):
-                self.mode = "Defect"
-                return self.try_return(D, lower_flags=False) # Lower_flags not used here.
+                # Column decided by opponent's last turn
+                history_col = 1 if opponent.history[-1] == D else 0
+                # Row is decided by opponent's move two turns ago and our move
+                # two turns ago.
+                history_row = 1 if opponent.history[-2] == D else 0
+                if self.history[-2] == D:
+                    history_row += 2
+                self.move_history[history_row, history_col] += 1
 
-        # history_row only gets updated if not in Defect mode AND not entering
-        # Defect mode.
-        self.history_row = 1 if opponent.history[-1] == D else 0
-        if self.history[-1] == D:
-            self.history_row += 2
+            # Try to detect random opponent
+            if turn % 15 == 0 and turn > 15:
+                if self.detect_random(turn):
+                    self.mode = "Defect"
+                    return self.try_return(D, lower_flags=False)  # Lower_flags not used here.
 
         # If generous 2 turns ago and opponent defected last turn
         if self.last_generous_n_turns_ago == 2 and opponent.history[-1] == D:
