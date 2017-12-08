@@ -988,18 +988,16 @@ class Harrington(Player):
     In Normal and Fair-weather modes, the strategy begins by:
 
     - Update history
-    - Detects random if turn is multiple of 15 and >=30.
+    - Try to detect random opponent if turn is multiple of 15 and >=30.
     - Check if `burned` flag should be raised.
     - Check for Fair-weather opponent if turn is 38.
 
     Updating history means to increment the correct cell of the `move_history`.
     `move_history` is a matrix where the columns are the opponent's previous
-    move and rows are indexed by the combo of this player and the opponent's
-    moves two turns ago*.  [The upper-left cell must be all cooperations, but
-    otherwise order doesn't matter.]   * If the player is exiting Defect mode,
-    then the history to determine the row is taken from before the turn that
-    the player entered Defect mode.  (That is, the turn that started in Normal
-    mode, but ended in Defect mode.)
+    move and the rows are indexed by the combo of this player's and the
+    opponent's moves two turns ago.  [The upper-left cell must be all
+    Cooperations, but otherwise order doesn't matter.]  After we enter Defect
+    mode, `move_history` won't be used again.
 
     If the turn is a multiple of 15 and >=30, then attempt to detect random.
     If random is detected, enter Defect mode and defect immediately.  If the
@@ -1046,10 +1044,10 @@ class Harrington(Player):
     parity streak that we're pointing to.  If the parity streak that we're
     pointing to is then greater than `parity_limit` then reset the streak and
     cooperate immediately.  `parity_limit` is initially set to five, but after
-    its been hit eight times, it decreases to three.  The parity streak that
-    we're pointing to also gets incremented if in normal mode and WE defect but
-    not on turn 38, unless the result of a defect streak.  Note that the parity
-    streaks reset but the defect streak doesn't.
+    it has been hit eight times, it decreases to three.  The parity streak that
+    we're pointing to also gets incremented if in normal mode and we defect but
+    not on turn 38, unless we are defecting as the result of a defect streak.
+    Note that the parity streaks resets but the defect streak doesn't.
 
     If `more_coop` >= 1, then we cooperate and lower that flag here, in Normal
     mode after checking streaks.  Still lower this flag if cooperating as the
@@ -1086,33 +1084,46 @@ class Harrington(Player):
     def __init__(self):
         super().__init__()
         self.mode = "Normal"
-        self.recorded_defects = 0
-        self.exit_defect_meter = 0
-        self.coops_in_first_36 = None
-        self.was_defective = False
+        self.recorded_defects = 0  # Count opponent defects after turn 1
+        self.exit_defect_meter = 0  # When >= 11, then exit defect mode.
+        self.coops_in_first_36 = None  # On turn 37, count cooperations in first 36
+        self.was_defective = False  # Previously in Defect mode
 
-        self.prob = 0.25
+        self.prob = 0.25  # After turn 37, probability that we'll defect
 
         self.move_history = np.zeros([4, 2])
+        # Will cache value only for testing purposes, not used otherwise
         self.chi_squared = None
         self.history_row = 0
 
-        self.more_coop = 0
-        self.generous_n_turns_ago = 3
+        self.more_coop = 0  # This schedules cooperation for future turns
+        # Initial last_generous_n_turns_ago to 3 because this counts up and
+        # triggers a strategy change at 2.
+        self.last_generous_n_turns_ago = 3  # How many tuns ago was a "generous" move
         self.burned = False
 
         self.defect_streak = 0
-        self.parity_streak = [0, 0]
-        self.parity_bit = 0
-        self.parity_limit = 5
-        self.parity_hits = 0
+        self.parity_streak = [0, 0]  # Counters that get (almost) alternatively incremented.
+        self.parity_bit = 0  # Which parity_streak to increment
+        self.parity_limit = 5  # When a parity streak hits this limit, alter strategy.
+        self.parity_hits = 0  # Counts how many times a parity_limit was hit.
+        # After hitting parity_hits 8 times, lower parity_limit to 3.
 
     def try_return(self, to_return, lower_flags=True, inc_parity=False):
+        """
+        This will return to_return, with some end-of-turn logic.
+        """
+
         if lower_flags and to_return == C:
+            # In most cases when Cooperating, we want to reduce the number that
+            # are scheduled.
             self.more_coop -= 1
-            self.generous_n_turns_ago += 1
+            self.last_generous_n_turns_ago += 1
 
         if inc_parity and to_return == D:
+            # In some cases we increment the `parity_streak` that we're on when
+            # we return a Defection.  In detect_parity_streak, `parity_streak`
+            # counts opponent's Defections.
             self.parity_streak[self.parity_bit] += 1
 
         return to_return
@@ -1131,9 +1142,6 @@ class Harrington(Player):
         We say this is modified because it differs from a usual Chi-Squared
         test in that:
 
-        - It divides by turns minus 2 to get expected, whereas usually we'd
-          divide by matrix total.  Total equals turns minus 1, unless Defect
-          mode has been entered at any point.
         - Terms where expected counts are less than 1 get excluded.
         - There's a check at the beginning on the first cell of the matrix.
         - There's a check at the beginning for the recorded number of defects.
@@ -1146,17 +1154,21 @@ class Harrington(Player):
         if self.recorded_defects / denom < 0.25 or self.recorded_defects / denom > 0.75:
             return False
 
-        expected_matrix = np.outer(self.move_history.sum(axis=1), \
-                                    self.move_history.sum(axis=0))
+        # In each cell, we expect (for an independent distribution) the total
+        # number of recorded turns times the portion in that row times the
+        # portion in that column
+        expected_matrix = np.outer(self.move_history.sum(axis=1),
+                                   self.move_history.sum(axis=0)) / denom
 
         chi_squared = 0.0
         for i in range(4):
             for j in range(2):
-                expct = expected_matrix[i, j] / denom
-                if expct > 1.0:
-                    chi_squared += (expct - self.move_history[i, j]) ** 2 / expct
+                expect = expected_matrix[i, j]
+                if expect > 1.0:
+                    chi_squared += (expect - self.move_history[i, j]) ** 2 / expect
 
-        self.chi_squared = round(chi_squared, 3) # For testing
+        # Caching value only for testing purposes, not used otherwise
+        self.chi_squared = round(chi_squared, 3)
 
         if chi_squared > 3:
             return False
@@ -1164,7 +1176,7 @@ class Harrington(Player):
 
     def detect_streak(self, last_move):
         """
-        Return if and only if the opponent's last twenty moves are defects.
+        Return true if and only if the opponent's last twenty moves are defects.
         """
 
         if last_move == D:
@@ -1176,7 +1188,17 @@ class Harrington(Player):
         return False
 
     def detect_parity_streak(self, last_move):
-        self.parity_bit = 1 - self.parity_bit # Flip bit
+        """
+        Switch which `parity_streak` we're pointing to and incerement if the
+        opponent's last move was a Defection.  Otherwise reset the flag.  Then
+        return true if and only if the `parity_streak` is at least
+        `parity_limit`.
+
+        This is similar to detect_streak with alternating streaks, except that
+        these streaks get incremented elsewhere as well.
+        """
+
+        self.parity_bit = 1 - self.parity_bit  # Flip bit
         if last_move == D:
             self.parity_streak[self.parity_bit] += 1
         else:
@@ -1191,10 +1213,12 @@ class Harrington(Player):
             return C
 
         if self.mode == "Defect":
+            # There's a chance to exit Defect mode.
             if opponent.history[-1] == D:
                 self.exit_defect_meter += 1
             else:
                 self.exit_defect_meter -= 3
+            # If opponent has been mostly defecting.
             if self.exit_defect_meter >= 11:
                 self.mode = "Normal"
                 self.was_defective = True
@@ -1226,10 +1250,12 @@ class Harrington(Player):
         if self.history[-1] == D:
             self.history_row += 2
 
-        # If generous 2 turn ago and opponent defected last turn
-        if self.generous_n_turns_ago == 2 and opponent.history[-1] == D:
+        # If generous 2 turns ago and opponent defected last turn
+        if self.last_generous_n_turns_ago == 2 and opponent.history[-1] == D:
             self.burned = True
 
+        # Only enter Fair-weather mode if the opponent Cooperated the first 37
+        # turns then Defected on the 38th.
         if turn == 38 and opponent.history[-1] == D and opponent.cooperations == 36:
             self.mode = "Fair-weather"
             return self.try_return(to_return=C, lower_flags=False)
@@ -1237,8 +1263,8 @@ class Harrington(Player):
 
         if self.mode == "Fair-weather":
             if opponent.history[-1] == D:
-                self.mode = "Normal" # Post-Defect is not possible
-                #Continue below
+                self.mode = "Normal"  # Post-Defect is not possible
+                # Proceed with Normal mode this turn.
             else:
                 # Never defect against a fair-weather opponent
                 return self.try_return(C)
@@ -1249,23 +1275,28 @@ class Harrington(Player):
         if self.detect_streak(opponent.history[-1]):
             return self.try_return(D, inc_parity=True)
         if self.detect_parity_streak(opponent.history[-1]):
-            self.parity_streak[self.parity_bit] = 0
-            self.parity_hits += 1
-            if self.parity_hits >= 8:
+            self.parity_streak[self.parity_bit] = 0  # Reset `parity_streak` when we hit the limit.
+            self.parity_hits += 1  # Keep track of how many times we hit the limit.
+            if self.parity_hits >= 8:  # After 8 times, lower the limit.
                 self.parity_limit = 3
-            return self.try_return(C, inc_parity=True) # Inc parity won't get used here.
+            return self.try_return(C, inc_parity=True)  # Inc parity won't get used here.
 
+        # If we have Cooperations scheduled, then Cooperate here.
         if self.more_coop >= 1:
-            return self.try_return(C, inc_parity=True)
+            return self.try_return(C, lower_flags=True, inc_parity=True)
 
         if turn < 37:
+            # Tit-for-Tat
             return self.try_return(opponent.history[-1], inc_parity=True)
         if turn == 37:
-            self.more_coop, self.generous_n_turns_ago = 2, 1
+            # Defect once on turn 37 (if no streaks)
+            self.more_coop, self.last_generous_n_turns_ago = 2, 1
             return self.try_return(D, lower_flags=False)
         if self.burned or random.random() > self.prob:
+            # Tit-for-Tat with probability 1-`prob`
             return self.try_return(opponent.history[-1], inc_parity=True)
         else:
+            # Otherwise Defect, Cooperate, Cooperate, and increase `prob`
             self.prob += 0.05
-            self.more_coop, self.generous_n_turns_ago = 2, 1
+            self.more_coop, self.last_generous_n_turns_ago = 2, 1
             return self.try_return(D, lower_flags=False)
