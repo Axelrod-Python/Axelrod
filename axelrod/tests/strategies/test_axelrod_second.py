@@ -835,7 +835,7 @@ class TestHarrington(TestPlayer):
         # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
         actions = match.play()
         self.assertEqual(actions, expected_actions)  # Just to be consistant with the current test.
-        self.assertAlmostEqual(player.calculate_chi_squared(len(expected_actions)), 2.395, places=4)
+        self.assertAlmostEqual(player.calculate_chi_squared(len(expected_actions)), 2.395, places=3)
 
         # Come back out of defect mode
         opponent_actions = [D, C, D, C, D, D, D, C, D, C, C, D, D, C, D, D, C,
