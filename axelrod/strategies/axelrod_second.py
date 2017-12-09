@@ -1092,8 +1092,6 @@ class Harrington(Player):
         self.prob = 0.25  # After turn 37, probability that we'll defect
 
         self.move_history = np.zeros([4, 2])
-        # Will cache value only for testing purposes, not used otherwise
-        self.chi_squared = None
 
         self.more_coop = 0  # This schedules cooperation for future turns
         # Initial last_generous_n_turns_ago to 3 because this counts up and
@@ -1127,35 +1125,21 @@ class Harrington(Player):
 
         return to_return
 
-    def detect_random(self, turn):
+    def calculate_chi_squared(self, turn):
         """
-        Calculates a modified Pearson's Chi Squared statistic on self.history,
-        and returns True (is random) if and only if the statistic is less than
-        or equal to 3.
-
         Pearson's Chi Squared statistic = sum[ (E_i-O_i)^2 / E_i ], where O_i
         are the observed matrix values, and E_i is calculated as number (of
         defects) in the row times the number in the column over (total number
-        in the matrix minus 1).
+        in the matrix minus 1).  Equivalently, we expect we expect (for an
+        independent distribution) the total number of recorded turns times the
+        portion in that row times the portion in that column.
 
-        We say this is modified because it differs from a usual Chi-Squared
-        test in that:
-
-        - Terms where expected counts are less than 1 get excluded.
-        - There's a check at the beginning on the first cell of the matrix.
-        - There's a check at the beginning for the recorded number of defects.
-
+        In this function, the statistic is non-standard in that it excludes
+        summands where E_i <= 1.
         """
+        
         denom = turn - 2
 
-        if self.move_history[0, 0] / denom >= 0.8:
-            return False
-        if self.recorded_defects / denom < 0.25 or self.recorded_defects / denom > 0.75:
-            return False
-
-        # In each cell, we expect (for an independent distribution) the total
-        # number of recorded turns times the portion in that row times the
-        # portion in that column
         expected_matrix = np.outer(self.move_history.sum(axis=1),
                                    self.move_history.sum(axis=0)) / denom
 
@@ -1166,10 +1150,30 @@ class Harrington(Player):
                 if expect > 1.0:
                     chi_squared += (expect - self.move_history[i, j]) ** 2 / expect
 
-        # Caching value only for testing purposes, not used otherwise
-        self.chi_squared = round(chi_squared, 3)
+        return chi_squared
 
-        if chi_squared > 3:
+    def detect_random(self, turn):
+        """
+        We check if the top-left cell of the matrix (corresponding to all
+        Cooperations) has over 80% of the turns.  In which case, we label
+        non-random.
+
+        Then we check if over 75% or under 25% of the opponent's turns are
+        Defections.  If so, then we label as non-random.
+
+        Otherwise we calculates a modified Pearson's Chi Squared statistic on
+        self.history, and returns True (is random) if and only if the statistic
+        is less than or equal to 3.
+        """
+        
+        denom = turn - 2
+
+        if self.move_history[0, 0] / denom >= 0.8:
+            return False
+        if self.recorded_defects / denom < 0.25 or self.recorded_defects / denom > 0.75:
+            return False
+
+        if self.calculate_chi_squared(turn) > 3:
             return False
         return True
 

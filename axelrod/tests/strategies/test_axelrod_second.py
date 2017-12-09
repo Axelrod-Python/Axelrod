@@ -822,15 +822,20 @@ class TestHarrington(TestPlayer):
         self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"recorded_defects": 119})
 
         # Detect random
-        actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, D),
+        expected_actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, D),
                    (D, C), (C, D), (D, C), (C, C), (C, D), (D, D), (D, C),
                    (C, D), (D, D), (D, C), (C, C), (C, D), (D, C), (C, D),
                    (D, D), (D, C), (C, D), (D, D), (D, D), (C, D), (D, C),
                    (C, C)]
         # Enter defect mode.
-        actions += [(D, C)]
-        self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=10, attrs={"chi_squared": 2.395})
+        expected_actions += [(D, C)]
+        random.seed(10)
+        player = self.player()
+        match = axelrod.Match((player, axelrod.Random()), turns=len(expected_actions))
         # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
+        actions = match.play()
+        self.assertEqual(actions, expected_actions)  # Just to be consistant with the current test.
+        self.assertEqual(round(player.calculate_chi_squared(len(expected_actions)),3), 2.395)
 
         # Come back out of defect mode
         opponent_actions = [D, C, D, C, D, D, D, C, D, C, C, D, D, C, D, D, C,
