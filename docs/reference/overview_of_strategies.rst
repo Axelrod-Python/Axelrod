@@ -36,8 +36,6 @@ An indication is given as to whether or not this strategy is implemented in the
 Tideman and Chieruzzi
 ^^^^^^^^^^^^^^^^^^^^^
 
-**Not implemented yet**
-
 This strategy begins by playing Tit For Tat and then things get slightly
 complicated:
 

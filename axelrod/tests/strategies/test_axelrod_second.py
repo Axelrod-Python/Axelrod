@@ -835,7 +835,7 @@ class TestHarrington(TestPlayer):
         # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
         actions = match.play()
         self.assertEqual(actions, expected_actions)  # Just to be consistant with the current test.
-        self.assertEqual(player.calculate_chi_squared(len(expected_actions)), 2.395, places=3)
+        self.assertAlmostEqual(player.calculate_chi_squared(len(expected_actions)), 2.395, places=3)
 
         # Come back out of defect mode
         opponent_actions = [D, C, D, C, D, D, D, C, D, C, C, D, D, C, D, D, C,
@@ -854,3 +854,55 @@ class TestHarrington(TestPlayer):
         actions += [(C, D)] * 2
         self.versus_test(Rand_Then_Def, expected_actions=actions, seed=10,
                         attrs={"mode": "Normal", "was_defective": True})
+
+
+class TestMoreTidemanAndChieruzzi(TestPlayer):
+    name = 'More Tideman and Chieruzzi'
+    player = axelrod.MoreTidemanAndChieruzzi
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': {"game"},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D)] + [(D, D)] * 8
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"score_to_beat_inc": 5})
+
+        actions = [(C, D)] + [(D, D)] * 8
+        # On tenth turn, try a fresh start
+        actions += [(C, D), (C, D)] + [(D, D)] * 2
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"last_fresh_start": 11})
+
+        actions = [(C, C), (C, D)]
+        # Scores and score_to_beat variables are a turn behind
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"current_score": 3, "opponent_score": 3, "score_to_beat": 0, "score_to_beat_inc": 0})
+        actions += [(D, C), (C, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"current_score": 8, "opponent_score": 8, "score_to_beat": 0, "score_to_beat_inc": 5})
+        actions += [(D, C), (D, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"current_score": 13, "opponent_score": 13, "score_to_beat": 5, "score_to_beat_inc": 10})
+        actions += [(D, C), (D, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"current_score": 19, "opponent_score": 14, "score_to_beat": 15, "score_to_beat_inc": 15})
+        actions += [(D, C), (D, D)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions,
+                         attrs={"current_score": 25, "opponent_score": 15, "score_to_beat": 30, "score_to_beat_inc": 20})
+
+        # Build an opponent who will cause us to consider a Fresh Start, but
+        # will fail the binomial test.
+        opponent_actions = [C] * 5 + [D] * 5
+        C5D5_Player = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C)] * 5 + [(C, D)] + [(D, D)] * 3
+        actions += [(D, D)] # No Defection here means no Fresh Start.
+        self.versus_test(C5D5_Player, expected_actions=actions)
+
