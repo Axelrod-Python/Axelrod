@@ -742,10 +742,10 @@ class TestHarrington(TestPlayer):
         actions = [(C, D), (D, C)] + [(C, C)] * 34 + [(D, C)]
         # Two cooperations scheduled after the 37-turn defection
         actions += [(C, C)] * 2
-        # TFT twice, then low-random # yields a DCC combo.
+        # TFT twice, then random number yields a DCC combo.
         actions += [(C, C)] * 2
         actions += [(D, C), (C, C), (C, C)]
-        # Don't draw next random # until now.  Again DCC.
+        # Don't draw next random number until now.  Again DCC.
         actions += [(D, C), (C, C), (C, C)]
         self.versus_test(Defect1, expected_actions=actions, seed=2)
 
@@ -803,7 +803,7 @@ class TestHarrington(TestPlayer):
         actions += [(D, C), (C, D), (D, C), (C, D), (C, C)]
         # This is the seventh time we've hit the limit.  So do it once more.
         actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
-        # Now hit thi limit sooner
+        # Now hit the limit sooner
         actions += [(C, D), (D, C), (C, D), (C, C)] * 5
         self.versus_test(AsyncAlternator, expected_actions=actions, attrs={"parity_limit": 3})
 
@@ -835,7 +835,7 @@ class TestHarrington(TestPlayer):
         # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
         actions = match.play()
         self.assertEqual(actions, expected_actions)  # Just to be consistant with the current test.
-        self.assertEqual(round(player.calculate_chi_squared(len(expected_actions)),3), 2.395)
+        self.assertEqual(player.calculate_chi_squared(len(expected_actions)), 2.395, places=3)
 
         # Come back out of defect mode
         opponent_actions = [D, C, D, C, D, D, D, C, D, C, C, D, D, C, D, D, C,
@@ -852,5 +852,5 @@ class TestHarrington(TestPlayer):
         actions += [(D, D)] * 14
         # Mutual defect for a while, then exit Defect mode with two coops
         actions += [(C, D)] * 2
-        self.versus_test(Rand_Then_Def, expected_actions=actions, seed=10, \
+        self.versus_test(Rand_Then_Def, expected_actions=actions, seed=10,
                         attrs={"mode": "Normal", "was_defective": True})
