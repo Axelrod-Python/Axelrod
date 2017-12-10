@@ -975,3 +975,333 @@ class Weiner(Player):
                 self.defect_padding = 0
 
             return self.try_return(opponent.history[-1])
+
+
+class Harrington(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Paul Harrington (K75R)
+    and came in eighth in that tournament.
+
+    This strategy has three modes:  Normal, Fair-weather, and Defect.  These
+    mode names were not present in Harrington's submission.
+
+    In Normal and Fair-weather modes, the strategy begins by:
+
+    - Update history
+    - Try to detect random opponent if turn is multiple of 15 and >=30.
+    - Check if `burned` flag should be raised.
+    - Check for Fair-weather opponent if turn is 38.
+
+    Updating history means to increment the correct cell of the `move_history`.
+    `move_history` is a matrix where the columns are the opponent's previous
+    move and the rows are indexed by the combo of this player's and the
+    opponent's moves two turns ago.  [The upper-left cell must be all
+    Cooperations, but otherwise order doesn't matter.]  After we enter Defect
+    mode, `move_history` won't be used again.
+
+    If the turn is a multiple of 15 and >=30, then attempt to detect random.
+    If random is detected, enter Defect mode and defect immediately.  If the
+    player was previously in Defect mode, then do not re-enter.  The random
+    detection logic is a modified Pearson's Chi Squared test, with some
+    additional checks.  [More details in `detect_random` docstrings.]
+
+    Some of this player's moves are marked as "generous."  If this player made
+    a generous move two turns ago and the opponent replied with a Defect, then
+    raise the `burned` flag.  This will stop certain generous moves later.
+
+    The player mostly plays Tit-for-Tat for the first 36 moves, then defects on
+    the 37th move.  If the opponent cooperates on the first 36 moves, and
+    defects on the 37th move also, then enter Fair-weather mode and cooperate
+    this turn.  Entering Fair-weather mode is extremely rare, since this can
+    only happen if the opponent cooperates for the first 36 then defects
+    unprovoked on the 37th.  (That is, this player's first 36 moves are also
+    Cooperations, so there's nothing really to trigger an opponent Defection.)
+
+    Next in Normal Mode:
+
+    1. Check for defect and parity streaks.
+    2. Check if cooperations are scheduled.
+    3. Otherwise,
+
+    - If turn < 37, Tit-for-Tat.
+    - If turn = 37, defect, mark this move as generous, and schedule two
+      more cooperations**.
+    - If turn > 37, then if `burned` flag is raised, then Tit-for-Tat.
+      Otherwise, Tit-for-Tat with probability 1 - `prob`.  And with
+      probability `prob`, defect, schedule two cooperations, mark this move
+      as generous, and increase `prob` by 5%.
+
+    ** Scheduling two cooperations means to set `more_coop` flag to two.  If in
+    Normal mode and no streaks are detected, then the player will cooperate and
+    lower this flag, until hitting zero.  It's possible that the flag can be
+    overwritten.  Notable on the 37th turn defect, this is set to two, but the
+    38th turn Fair-weather check will set this.
+
+    If the opponent's last twenty moves were defections, then defect this turn.
+    Then check for a parity streak, by flipping the parity bit (there are two
+    streaks that get tracked which are something like odd and even turns, but
+    this flip bit logic doesn't get run every turn), then incrementing the
+    parity streak that we're pointing to.  If the parity streak that we're
+    pointing to is then greater than `parity_limit` then reset the streak and
+    cooperate immediately.  `parity_limit` is initially set to five, but after
+    it has been hit eight times, it decreases to three.  The parity streak that
+    we're pointing to also gets incremented if in normal mode and we defect but
+    not on turn 38, unless we are defecting as the result of a defect streak.
+    Note that the parity streaks resets but the defect streak doesn't.
+
+    If `more_coop` >= 1, then we cooperate and lower that flag here, in Normal
+    mode after checking streaks.  Still lower this flag if cooperating as the
+    result of a parity streak or in Fair-weather mode.
+
+    Then use the logic based on turn from above.
+
+    In Fair-Weather mode after running the code from above, check if opponent
+    defected last turn.  If so, exit Fair-Weather mode, and proceed THIS TURN
+    with Normal mode.  Otherwise cooperate.
+
+    In Defect mode, update the `exit_defect_meter` (originally zero) by
+    incrementing if opponent defected last turn and decreasing by three
+    otherwise.  If `exit_defect_meter` is then 11, then set mode to Normal (for
+    future turns), cooperate and schedule two more cooperations.  [Note that
+    this move is not marked generous.]
+
+    Names:
+
+    - Harrington: [Axelrod1980b]_
+    """
+
+    name = "Harrington"
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.mode = "Normal"
+        self.recorded_defects = 0  # Count opponent defects after turn 1
+        self.exit_defect_meter = 0  # When >= 11, then exit defect mode.
+        self.coops_in_first_36 = None  # On turn 37, count cooperations in first 36
+        self.was_defective = False  # Previously in Defect mode
+
+        self.prob = 0.25  # After turn 37, probability that we'll defect
+
+        self.move_history = np.zeros([4, 2])
+
+        self.more_coop = 0  # This schedules cooperation for future turns
+        # Initial last_generous_n_turns_ago to 3 because this counts up and
+        # triggers a strategy change at 2.
+        self.last_generous_n_turns_ago = 3  # How many tuns ago was a "generous" move
+        self.burned = False
+
+        self.defect_streak = 0
+        self.parity_streak = [0, 0]  # Counters that get (almost) alternatively incremented.
+        self.parity_bit = 0  # Which parity_streak to increment
+        self.parity_limit = 5  # When a parity streak hits this limit, alter strategy.
+        self.parity_hits = 0  # Counts how many times a parity_limit was hit.
+        # After hitting parity_hits 8 times, lower parity_limit to 3.
+
+    def try_return(self, to_return, lower_flags=True, inc_parity=False):
+        """
+        This will return to_return, with some end-of-turn logic.
+        """
+
+        if lower_flags and to_return == C:
+            # In most cases when Cooperating, we want to reduce the number that
+            # are scheduled.
+            self.more_coop -= 1
+            self.last_generous_n_turns_ago += 1
+
+        if inc_parity and to_return == D:
+            # In some cases we increment the `parity_streak` that we're on when
+            # we return a Defection.  In detect_parity_streak, `parity_streak`
+            # counts opponent's Defections.
+            self.parity_streak[self.parity_bit] += 1
+
+        return to_return
+
+    def calculate_chi_squared(self, turn):
+        """
+        Pearson's Chi Squared statistic = sum[ (E_i-O_i)^2 / E_i ], where O_i
+        are the observed matrix values, and E_i is calculated as number (of
+        defects) in the row times the number in the column over (total number
+        in the matrix minus 1).  Equivalently, we expect we expect (for an
+        independent distribution) the total number of recorded turns times the
+        portion in that row times the portion in that column.
+
+        In this function, the statistic is non-standard in that it excludes
+        summands where E_i <= 1.
+        """
+        
+        denom = turn - 2
+
+        expected_matrix = np.outer(self.move_history.sum(axis=1),
+                                   self.move_history.sum(axis=0)) / denom
+
+        chi_squared = 0.0
+        for i in range(4):
+            for j in range(2):
+                expect = expected_matrix[i, j]
+                if expect > 1.0:
+                    chi_squared += (expect - self.move_history[i, j]) ** 2 / expect
+
+        return chi_squared
+
+    def detect_random(self, turn):
+        """
+        We check if the top-left cell of the matrix (corresponding to all
+        Cooperations) has over 80% of the turns.  In which case, we label
+        non-random.
+
+        Then we check if over 75% or under 25% of the opponent's turns are
+        Defections.  If so, then we label as non-random.
+
+        Otherwise we calculates a modified Pearson's Chi Squared statistic on
+        self.history, and returns True (is random) if and only if the statistic
+        is less than or equal to 3.
+        """
+        
+        denom = turn - 2
+
+        if self.move_history[0, 0] / denom >= 0.8:
+            return False
+        if self.recorded_defects / denom < 0.25 or self.recorded_defects / denom > 0.75:
+            return False
+
+        if self.calculate_chi_squared(turn) > 3:
+            return False
+        return True
+
+    def detect_streak(self, last_move):
+        """
+        Return true if and only if the opponent's last twenty moves are defects.
+        """
+
+        if last_move == D:
+            self.defect_streak += 1
+        else:
+            self.defect_streak = 0
+        if self.defect_streak >= 20:
+            return True
+        return False
+
+    def detect_parity_streak(self, last_move):
+        """
+        Switch which `parity_streak` we're pointing to and incerement if the
+        opponent's last move was a Defection.  Otherwise reset the flag.  Then
+        return true if and only if the `parity_streak` is at least
+        `parity_limit`.
+
+        This is similar to detect_streak with alternating streaks, except that
+        these streaks get incremented elsewhere as well.
+        """
+
+        self.parity_bit = 1 - self.parity_bit  # Flip bit
+        if last_move == D:
+            self.parity_streak[self.parity_bit] += 1
+        else:
+            self.parity_streak[self.parity_bit] = 0
+        if self.parity_streak[self.parity_bit] >= self.parity_limit:
+            return True
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+
+        if turn == 1:
+            return C
+
+        if self.mode == "Defect":
+            # There's a chance to exit Defect mode.
+            if opponent.history[-1] == D:
+                self.exit_defect_meter += 1
+            else:
+                self.exit_defect_meter -= 3
+            # If opponent has been mostly defecting.
+            if self.exit_defect_meter >= 11:
+                self.mode = "Normal"
+                self.was_defective = True
+                self.more_coop = 2
+                return self.try_return(to_return=C, lower_flags=False)
+
+            return self.try_return(D)
+
+
+        # If not Defect mode, proceed to update history and check for random,
+        # check if burned, and check if opponent's fairweather.
+
+        # If we haven't yet entered Defect mode
+        if not self.was_defective:
+            if turn > 2:
+                if opponent.history[-1] == D:
+                    self.recorded_defects += 1
+
+                # Column decided by opponent's last turn
+                history_col = 1 if opponent.history[-1] == D else 0
+                # Row is decided by opponent's move two turns ago and our move
+                # two turns ago.
+                history_row = 1 if opponent.history[-2] == D else 0
+                if self.history[-2] == D:
+                    history_row += 2
+                self.move_history[history_row, history_col] += 1
+
+            # Try to detect random opponent
+            if turn % 15 == 0 and turn > 15:
+                if self.detect_random(turn):
+                    self.mode = "Defect"
+                    return self.try_return(D, lower_flags=False)  # Lower_flags not used here.
+
+        # If generous 2 turns ago and opponent defected last turn
+        if self.last_generous_n_turns_ago == 2 and opponent.history[-1] == D:
+            self.burned = True
+
+        # Only enter Fair-weather mode if the opponent Cooperated the first 37
+        # turns then Defected on the 38th.
+        if turn == 38 and opponent.history[-1] == D and opponent.cooperations == 36:
+            self.mode = "Fair-weather"
+            return self.try_return(to_return=C, lower_flags=False)
+
+
+        if self.mode == "Fair-weather":
+            if opponent.history[-1] == D:
+                self.mode = "Normal"  # Post-Defect is not possible
+                # Proceed with Normal mode this turn.
+            else:
+                # Never defect against a fair-weather opponent
+                return self.try_return(C)
+
+        # Continue with Normal mode
+
+        # Check for streaks
+        if self.detect_streak(opponent.history[-1]):
+            return self.try_return(D, inc_parity=True)
+        if self.detect_parity_streak(opponent.history[-1]):
+            self.parity_streak[self.parity_bit] = 0  # Reset `parity_streak` when we hit the limit.
+            self.parity_hits += 1  # Keep track of how many times we hit the limit.
+            if self.parity_hits >= 8:  # After 8 times, lower the limit.
+                self.parity_limit = 3
+            return self.try_return(C, inc_parity=True)  # Inc parity won't get used here.
+
+        # If we have Cooperations scheduled, then Cooperate here.
+        if self.more_coop >= 1:
+            return self.try_return(C, lower_flags=True, inc_parity=True)
+
+        if turn < 37:
+            # Tit-for-Tat
+            return self.try_return(opponent.history[-1], inc_parity=True)
+        if turn == 37:
+            # Defect once on turn 37 (if no streaks)
+            self.more_coop, self.last_generous_n_turns_ago = 2, 1
+            return self.try_return(D, lower_flags=False)
+        if self.burned or random.random() > self.prob:
+            # Tit-for-Tat with probability 1-`prob`
+            return self.try_return(opponent.history[-1], inc_parity=True)
+        else:
+            # Otherwise Defect, Cooperate, Cooperate, and increase `prob`
+            self.prob += 0.05
+            self.more_coop, self.last_generous_n_turns_ago = 2, 1
+            return self.try_return(D, lower_flags=False)

@@ -146,7 +146,7 @@ repository.
    "K73R_", "George Zimmerman", "Not Implemented"
    "K74R_", "Edward Friedland", "Not Implemented"
    "K74RXX_", "Edward Friedland", "Not Implemented"
-   "K75R_", "Paul D Harrington", "Not Implemented"
+   "K75R_", "Paul D Harrington", ":class:`Harrington <axelrod.strategies.axelrod_second.Harrington>`"
    "K76R_", "David Gladstein", ":class:`Gladstein <axelrod.strategies.axelrod_second.Gladstein>`"
    "K77R_", "Scott Feld", "Not Implemented"
    "K78R_", "Fred Mauk", "Not Implemented"

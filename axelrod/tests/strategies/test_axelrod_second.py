@@ -1,6 +1,7 @@
 """Tests for the Second Axelrod strategies."""
 
 import random
+import numpy as np
 
 import axelrod
 from .test_player import TestPlayer
@@ -694,3 +695,162 @@ class TestWeiner(TestPlayer):
         actions += [(C, C), (C, D), (D, C)]
         actions += [(C, D)] # Raise flag
         actions += [(C, C)] # Use flag to change outcome
+        self.versus_test(Time_Passer, expected_actions=actions)
+
+
+class TestHarrington(TestPlayer):
+    name = "Harrington"
+    player = axelrod.Harrington
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        # Build an opponent that will cooperate the first 36 turns and
+        # defect on the 37th turn
+        opponent_actions = [C] * 36 + [D] + [C] * 100
+        Defect37 = axelrod.MockPlayer(actions=opponent_actions)
+        # Activate the Fair-weather flag
+        actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
+        self.versus_test(Defect37, expected_actions=actions, attrs={"mode": "Fair-weather"})
+
+        # Defect on 37th turn to activate Fair-weather, then later defect to
+        # exit Fair-weather
+        opponent_actions = [C] * 36 + [D] + [C] * 100 + [D] + [C] * 4
+        Defect37_big = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
+        actions += [(C, D)]
+        #Immediately exit Fair-weather
+        actions += [(D, C), (C, C), (D, C), (C, C)]
+        self.versus_test(Defect37_big, expected_actions=actions, seed=2, attrs={"mode": "Normal"})
+        actions = [(C, C)] * 36 + [(D, D)] + [(C, C)] * 100
+        actions += [(C, D)]
+        #Immediately exit Fair-weather
+        actions += [(D, C), (C, C), (C, C), (C, C)]
+        self.versus_test(Defect37_big, expected_actions=actions, seed=1, attrs={"mode": "Normal"})
+
+        # Opponent defects on 1st turn
+        opponent_actions = [D] + [C] * 46
+        Defect1 = axelrod.MockPlayer(actions=opponent_actions)
+        # Tit-for-Tat on the first, but no streaks, no Fair-weather flag.
+        actions = [(C, D), (D, C)] + [(C, C)] * 34 + [(D, C)]
+        # Two cooperations scheduled after the 37-turn defection
+        actions += [(C, C)] * 2
+        # TFT twice, then random number yields a DCC combo.
+        actions += [(C, C)] * 2
+        actions += [(D, C), (C, C), (C, C)]
+        # Don't draw next random number until now.  Again DCC.
+        actions += [(D, C), (C, C), (C, C)]
+        self.versus_test(Defect1, expected_actions=actions, seed=2)
+
+        # Defection on turn 37 by opponent doesn't have an effect here
+        opponent_actions = [D] + [C] * 35 + [D] + [C] * 10
+        Defect1_37 = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D), (D, C)] + [(C, C)] * 34 + [(D, D)]
+        actions += [(C, C)] * 2
+        actions += [(C, C)] * 2
+        actions += [(D, C), (C, C), (C, C)]
+        actions += [(D, C), (C, C), (C, C)]
+        self.versus_test(Defect1_37, expected_actions=actions, seed=2)
+
+        # However a defect on turn 38 would be considered a burn.
+        opponent_actions = [D] + [C] * 36 + [D] + [C] * 9
+        Defect1_38 = axelrod.MockPlayer(actions=opponent_actions)
+        # Tit-for-Tat on the first, but no streaks, no Fair-weather flag.
+        actions = [(C, D), (D, C)] + [(C, C)] * 34 + [(D, C)]
+        # Two cooperations scheduled after the 37-turn defection
+        actions += [(C, D), (C, C)]
+        # TFT from then on, since burned
+        actions += [(C, C)] * 8
+        self.versus_test(Defect1_38, expected_actions=actions, seed=2, attrs={"burned": True})
+
+        # Use alternator to test parity flags.
+        actions = [(C, C), (C, D)]
+        # Even streak is set to 2, one for the opponent's defect and one for
+        # our defect.
+        actions += [(D, C)]
+        actions += [(C, D)]
+        # Even streak is increased two more.
+        actions += [(D, C)]
+        actions += [(C, D)]
+        # Opponent's defect increments even streak to 5, so we cooperate.
+        actions += [(C, C)]
+        actions += [(C, D), (D, C), (C, D), (D, C), (C, D)]
+        # Another 5 streak
+        actions += [(C, C)]
+        # Repeat
+        actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)] * 3
+        # Repeat.  Notice that the last turn is the 37th move, but we do not
+        # defect.
+        actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        # Test for parity limit shortening.
+        opponent_actions = [D, C] * 1000
+        AsyncAlternator = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)] * 6
+        # Defect on 37th move
+        actions += [(D, D)]
+        actions += [(C, C)]
+        # This triggers the burned flag.  We should just Tit-for-Tat from here.
+        actions += [(C, D)]
+        actions += [(D, C), (C, D), (D, C), (C, D), (C, C)]
+        # This is the seventh time we've hit the limit.  So do it once more.
+        actions += [(C, D), (D, C), (C, D), (D, C), (C, D), (C, C)]
+        # Now hit the limit sooner
+        actions += [(C, D), (D, C), (C, D), (C, C)] * 5
+        self.versus_test(AsyncAlternator, expected_actions=actions, attrs={"parity_limit": 3})
+
+        # Use a Defector to test the 20-defect streak
+        actions = [(C, D), (D, D), (D, D), (D, D), (D, D)]
+        # Now the two parity flags are used
+        actions += [(C, D), (C, D)]
+        # Repeat
+        actions += [(D, D), (D, D), (D, D), (D, D), (C, D), (C, D)] * 2
+        actions += [(D, D), (D, D)]
+        # 20 D have passed (first isn't record)
+        actions += [(D, D)] * 100
+        # The defect streak will always be detected from here on, because it
+        # doesn't reset.  This logic comes before parity streaks or the turn-
+        # based logic.
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"recorded_defects": 119})
+
+        # Detect random
+        expected_actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, D),
+                   (D, C), (C, D), (D, C), (C, C), (C, D), (D, D), (D, C),
+                   (C, D), (D, D), (D, C), (C, C), (C, D), (D, C), (C, D),
+                   (D, D), (D, C), (C, D), (D, D), (D, D), (C, D), (D, C),
+                   (C, C)]
+        # Enter defect mode.
+        expected_actions += [(D, C)]
+        random.seed(10)
+        player = self.player()
+        match = axelrod.Match((player, axelrod.Random()), turns=len(expected_actions))
+        # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
+        actions = match.play()
+        self.assertEqual(actions, expected_actions)
+        self.assertAlmostEqual(player.calculate_chi_squared(len(expected_actions)), 2.395, places=3)
+
+        # Come back out of defect mode
+        opponent_actions = [D, C, D, C, D, D, D, C, D, C, C, D, D, C, D, D, C,
+                            C, D, C, D, D, C, D, D, D, D, C, C, C]
+        opponent_actions += [D] * 16
+        Rand_Then_Def = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, D), (D, C), (C, D), (D, C), (C, D), (C, D), (D, D),
+                   (D, C), (C, D), (D, C), (C, C), (C, D), (D, D), (D, C),
+                   (C, D), (D, D), (D, C), (C, C), (C, D), (D, C), (C, D),
+                   (D, D), (D, C), (C, D), (D, D), (D, D), (C, D), (D, C),
+                   (C, C)]
+        actions += [(D, C)]
+        # Enter defect mode.
+        actions += [(D, D)] * 14
+        # Mutual defect for a while, then exit Defect mode with two coops
+        actions += [(C, D)] * 2
+        self.versus_test(Rand_Then_Def, expected_actions=actions, seed=10,
+                        attrs={"mode": "Normal", "was_defective": True})
