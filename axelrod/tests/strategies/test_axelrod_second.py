@@ -834,7 +834,7 @@ class TestHarrington(TestPlayer):
         match = axelrod.Match((player, axelrod.Random()), turns=len(expected_actions))
         # The history matrix will be [[0, 2], [5, 6], [3, 6], [4, 2]]
         actions = match.play()
-        self.assertEqual(actions, expected_actions)  # Just to be consistant with the current test.
+        self.assertEqual(actions, expected_actions)
         self.assertAlmostEqual(player.calculate_chi_squared(len(expected_actions)), 2.395, places=3)
 
         # Come back out of defect mode
