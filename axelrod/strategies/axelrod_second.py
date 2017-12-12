@@ -1312,7 +1312,7 @@ class MoreTidemanAndChieruzzi(Player):
     Strategy submitted to Axelrod's second tournament by T. Nicolaus Tideman
     and Paula Chieruzzi (K84R) and came in ninth in that tournament.
 
-    This strategy Cooperates if this player's socre exceeds the opponent's
+    This strategy Cooperates if this player's score exceeds the opponent's
     score by at least `score_to_beat`.  `score_to_beat` starts at zero and
     increases by `score_to_beat_inc` every time the opponent's last two moves
     are a Cooperation and Defection in that order.  `score_to_beat_inc` itself
