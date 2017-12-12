@@ -120,8 +120,14 @@ You can find helpful instructions about contributing in the
 documentation:
 http://axelrod.readthedocs.org/en/latest/tutorials/contributing/index.html
 
+Publications
+------------
 
-Contributors
+* Marc Harper, Vincent Knight, Martin Jones, Georgios Koutsovoulos, Nikoleta E. Glynatsi, Owen Campbell. `Reinforcement learning produces dominant strategies for the Iterated Prisoner’s Dilemma. <http://journals.plos.org/plosone/article/metrics?id=10.1371/journal.pone.0188046>`_. Plos One (2017). (`ArXiv Preprint <https://arxiv.org/abs/1707.06307>`_)
+* Knight, Vincent, Owen Campbell, Marc Harper, Karol Langner et al. `An Open Framework for the Reproducible Study of the Iterated Prisoner’s Dilemma. <https://openresearchsoftware.metajnl.com/articles/10.5334/jors.125/>`_ Journal of Open Research Software 4, no. 1 (2016). (`ArXiv Preprint <https://arxiv.org/abs/1604.00896>`_)
+
+
+Contributors 
 ------------
 
 The library has had many awesome contributions from many `great
