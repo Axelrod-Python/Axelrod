@@ -1305,3 +1305,114 @@ class Harrington(Player):
             self.prob += 0.05
             self.more_coop, self.last_generous_n_turns_ago = 2, 1
             return self.try_return(D, lower_flags=False)
+
+
+class MoreTidemanAndChieruzzi(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by T. Nicolaus Tideman
+    and Paula Chieruzzi (K84R) and came in ninth in that tournament.
+
+    This strategy Cooperates if this player's score exceeds the opponent's
+    score by at least `score_to_beat`.  `score_to_beat` starts at zero and
+    increases by `score_to_beat_inc` every time the opponent's last two moves
+    are a Cooperation and Defection in that order.  `score_to_beat_inc` itself
+    increase by 5 every time the opponent's last two moves are a Cooperation
+    and Defection in that order.
+
+    Additionally, the strategy executes a "fresh start" if the following hold:
+
+    - The strategy would Defect by score (difference less than `score_to_beat`)
+    - The opponent did not Cooperate and Defect (in order) in the last two
+      turns.
+    - It's been at least 10 turns since the last fresh start.  Or since the
+      match started if there hasn't been a fresh start yet.
+
+    A "fresh start" entails two Cooperations and resetting scores,
+    `scores_to_beat` and `scores_to_beat_inc`.
+
+    Names:
+
+    - MoreTidemanAndChieruzzi: [Axelrod1980b]_
+    """
+
+    name = 'More Tideman and Chieruzzi'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': {"game"},
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.current_score = 0
+        self.opponent_score = 0
+        self.last_fresh_start = 0
+        self.fresh_start = False
+        self.score_to_beat = 0
+        self.score_to_beat_inc = 0
+
+    def _fresh_start(self):
+        """Give the opponent a fresh start by forgetting the past"""
+        self.current_score = 0
+        self.opponent_score = 0
+        self.score_to_beat = 0
+        self.score_to_beat_inc = 0
+
+    def _score_last_round(self, opponent: Player):
+        """Updates the scores for each player."""
+        # Load the default game if not supplied by a tournament.
+        game = self.match_attributes["game"]
+        last_round = (self.history[-1], opponent.history[-1])
+        scores = game.score(last_round)
+        self.current_score += scores[0]
+        self.opponent_score += scores[1]
+
+    def strategy(self, opponent: Player) -> Action:
+        current_round = len(self.history) + 1
+
+        if current_round == 1:
+            return C
+
+        # Calculate the scores.
+        self._score_last_round(opponent)
+
+        # Check if we have recently given the strategy a fresh start.
+        if self.fresh_start:
+            self._fresh_start()
+            self.last_fresh_start = current_round
+            self.fresh_start = False
+            return C  # Second cooperation
+
+        opponent_CDd = False
+
+        opponent_two_turns_ago = C # Default value for second turn.
+        if len(opponent.history) >= 2:
+            opponent_two_turns_ago = opponent.history[-2]
+        # If opponent's last two turns are C and D in that order.
+        if opponent_two_turns_ago == C and opponent.history[-1] == D:
+            opponent_CDd = True
+            self.score_to_beat += self.score_to_beat_inc
+            self.score_to_beat_inc += 5
+
+        # Cooperate if we're beating opponent by at least `score_to_beat`
+        if self.current_score - self.opponent_score >= self.score_to_beat:
+            return C
+
+        # Wait at least ten turns for another fresh start.
+        if (not opponent_CDd) and current_round - self.last_fresh_start >= 10:
+            # 50-50 split is based off the binomial distribution.
+            N = opponent.cooperations + opponent.defections
+            # std_dev = sqrt(N*p*(1-p)) where p is 1 / 2.
+            std_deviation = (N ** (1 / 2)) / 2
+            lower = N / 2 - 3 * std_deviation
+            upper = N / 2 + 3 * std_deviation
+            if opponent.defections <= lower or opponent.defections >= upper:
+                # Opponent deserves a fresh start
+                self.fresh_start = True
+                return C  # First cooperation
+
+        return D
