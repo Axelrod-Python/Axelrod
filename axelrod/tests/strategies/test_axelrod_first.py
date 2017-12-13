@@ -523,4 +523,18 @@ class TestTidemanAndChieruzzi(TestPlayer):
         self.versus_test(opponent, expected_actions=actions,
                          attrs={'fresh_start': False})
 
+        # check the fresh start condition: least 20 rounds since the last ‘fresh start’
+        opponent = axelrod.Cycler('CCCCD') 
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (D, C), (C, C), 
+                   (C, C), (C, C), (C, D), (D, C), (D, C), (C, C), (C, C), 
+                   (C, D), (D, C), (D, C), (D, C), (C, C), (C, D), (D, C), 
+                   (D, C), (D, C), (C, C), (C, D), (D, C), (C, C), (C, C), 
+                   (C, C), (C, D), (D, C), (D, C), (C, C), (C, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         match_attributes={'length': 35},
+                         attrs={'current_score': 108, 'opponent_score': 78,
+                                'last_fresh_start': 24,
+                                'retaliation_length': 2,
+                                'retaliation_remaining': 0})
+
 
