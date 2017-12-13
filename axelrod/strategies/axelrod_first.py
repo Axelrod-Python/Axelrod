@@ -673,7 +673,7 @@ class TidemanAndChieruzzi(Player):
                 std_deviation = (N ** (1 / 2)) / 2
                 lower = N / 2 - 3 * std_deviation
                 upper = N / 2 + 3 * std_deviation
-                if self.defections <= lower or self.defections >= upper:
+                if opponent.defections <= lower or opponent.defections >= upper:
                     # Opponent deserves a fresh start
                     self.last_fresh_start = current_round
                     self._fresh_start()

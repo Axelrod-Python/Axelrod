@@ -473,33 +473,34 @@ class TestTidemanAndChieruzzi(TestPlayer):
                                 'retaliation_length': 4,
                                 'retaliation_remaining': 3})
 
-        # A fresh starts occurs on round 14.
         opponent = axelrod.Cycler('DDCDD')
         actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
                    (D, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (C, D), (C, D),
-                   (D, D), (D, D), (D, C), (C, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
                    (D, D), (D, D), (D, C), (D, D), (D, D)]
-
         self.versus_test(opponent, expected_actions=actions,
-                         attrs={'current_score': 40, 'opponent_score': 35,
-                                'last_fresh_start': 14,
-                                'retaliation_length': 4,
-                                'retaliation_remaining': 1})
+                         attrs={'current_score': 34, 'opponent_score': 19,
+                                'last_fresh_start': 0,
+                                'retaliation_length': 6,
+                                'retaliation_remaining': 2})
 
         # When the length is given this strategy will not give a fresh start
         opponent = axelrod.Cycler('DDCDD')
-        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (D, D), (D, D)]
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D), (D, D), (D, D),
+                   (D, C), (D, D), (D, D), (D, D), (D, D), (D, C), (D, D),
+                   (D, D), (D, D), (D, D), (D, C), (D, D), (D, D), (D, D),
+                   (D, D), (D, C), (D, D), (D, D), (D, D), (D, D), (D, C),
+                   (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions,
-                         match_attributes={'length': 15})
+                         match_attributes={'length': 50})
 
         # When the length is not given this strategy will give a fresh start.
         opponent = axelrod.Cycler('DDCDD')
-        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (C, D), (C, D)]
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D), (D, D), (D, D),
+                   (D, C), (D, D), (D, D), (D, D), (D, D), (D, C), (D, D),
+                   (D, D), (D, D), (D, D), (D, C), (D, D), (D, D), (D, D),
+                   (D, D), (D, C), (D, D), (D, D), (D, D), (D, D), (D, C),
+                   (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions,
                          match_attributes={'length': float('inf')})
 
