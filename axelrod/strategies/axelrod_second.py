@@ -1450,7 +1450,7 @@ class Getzler(Player):
         if not opponent.history:
             return C
 
-        self.flack += 1 if opponent.history[-1]==D else 0
+        self.flack += 1 if opponent.history[-1] == D else 0
         self.flack *= 0.5  # Defections have half-life of one round
 
         return random_choice(1.0-self.flack)
