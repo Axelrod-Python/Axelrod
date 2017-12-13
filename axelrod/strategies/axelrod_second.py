@@ -1444,7 +1444,7 @@ class Getzler(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.flack = 0  # The relative untrustworthiness of opponent
+        self.flack = 0.0  # The relative untrustworthiness of opponent
 
     def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
