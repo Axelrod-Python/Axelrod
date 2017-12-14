@@ -1505,4 +1505,6 @@ class Leyvraz(Player):
             if len(opponent.history) >= go_back:
                 recent_history[-go_back] = opponent.history[-go_back]
 
-        return random_choice(self.prob_coop[tuple(recent_history)])
+        return random_choice(self.prob_coop[(recent_history[-3],
+                                             recent_history[-2],
+                                             recent_history[-1])])
