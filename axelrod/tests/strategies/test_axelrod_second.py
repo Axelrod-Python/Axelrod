@@ -930,3 +930,33 @@ class TestGetzler(TestPlayer):
         actions = [(C, C), (C, D), (C, C), (C, D), (D, C), (C, D)]
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=4, attrs={"flack": 5./16.})
 
+
+class TestLeyvraz(TestPlayer):
+    name = 'Leyvraz'
+    player = axelrod.Leyvraz
+    expected_classifier = {
+        'memory_depth': 3,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D), (C, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
+        actions = [(C, D), (D, D), (D, D), (C, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=2)
+
+        actions = [(C, D), (C, C), (D, C), (C, D), (D, C), (D, D), (C, D), (D, C), (C, D)]
+        self.versus_test(axelrod.SuspiciousTitForTat(), expected_actions=actions, seed=1)
+
+        actions = [(C, C), (C, D), (D, C)] + [(D, D), (C, C)] * 3
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
+        actions = [(C, C), (C, D), (C, C)] + [(D, D), (C, C)] * 3
+        self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=3)

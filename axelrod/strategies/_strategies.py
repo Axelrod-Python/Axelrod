@@ -10,7 +10,7 @@ from .axelrod_first import (
 from .axelrod_second import (
     Champion, Eatherley, Tester, Gladstein, Tranquilizer, MoreGrofman,
     Kluepfel, Borufsen, Cave, WmAdams, GraaskampKatzen, Weiner, Harrington,
-    MoreTidemanAndChieruzzi, Getzler)
+    MoreTidemanAndChieruzzi, Getzler, Leyvraz)
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
 from .bush_mosteller import BushMosteller
@@ -197,6 +197,7 @@ all_strategies = [
     Kluepfel,
     KnowledgeableWorseAndWorse,
     LevelPunisher,
+    Leyvraz,
     LimitedRetaliate,
     LimitedRetaliate2,
     LimitedRetaliate3,
