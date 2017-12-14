@@ -1416,3 +1416,41 @@ class MoreTidemanAndChieruzzi(Player):
                 return C  # First cooperation
 
         return D
+
+
+class Getzler(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Abraham Getzler (K35R)
+    and came in tenth in that tournament.
+
+    Strategy Defects with probability `flack`, where `flack` is calculated as
+    the sum over opponent Defections of 0.5 ^ (turns ago Defection happened).
+
+    Names:
+
+    - Getzler: [Axelrod1980b]_
+    """
+
+    name = 'Getzler'
+    classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.flack = 0.0  # The relative untrustworthiness of opponent
+
+    def strategy(self, opponent: Player) -> Action:
+        if not opponent.history:
+            return C
+
+        self.flack += 1 if opponent.history[-1] == D else 0
+        self.flack *= 0.5  # Defections have half-life of one round
+
+        return random_choice(1.0 - self.flack)

@@ -10,7 +10,7 @@ from .axelrod_first import (
 from .axelrod_second import (
     Champion, Eatherley, Tester, Gladstein, Tranquilizer, MoreGrofman,
     Kluepfel, Borufsen, Cave, WmAdams, GraaskampKatzen, Weiner, Harrington,
-    MoreTidemanAndChieruzzi)
+    MoreTidemanAndChieruzzi, Getzler)
 from .backstabber import BackStabber, DoubleCrosser
 from .better_and_better import BetterAndBetter
 from .bush_mosteller import BushMosteller
@@ -164,6 +164,7 @@ all_strategies = [
     GellerCooperator,
     GellerDefector,
     GeneralSoftGrudger,
+    Getzler,
     Gladstein,
     GoByMajority,
     GoByMajority10,
