@@ -1300,11 +1300,11 @@ class Harrington(Player):
         if self.burned or random.random() > self.prob:
             # Tit-for-Tat with probability 1-`prob`
             return self.try_return(opponent.history[-1], inc_parity=True)
-        else:
-            # Otherwise Defect, Cooperate, Cooperate, and increase `prob`
-            self.prob += 0.05
-            self.more_coop, self.last_generous_n_turns_ago = 2, 1
-            return self.try_return(D, lower_flags=False)
+        
+        # Otherwise Defect, Cooperate, Cooperate, and increase `prob`
+        self.prob += 0.05
+        self.more_coop, self.last_generous_n_turns_ago = 2, 1
+        return self.try_return(D, lower_flags=False)
 
 
 class MoreTidemanAndChieruzzi(Player):
@@ -1454,3 +1454,50 @@ class Getzler(Player):
         self.flack *= 0.5  # Defections have half-life of one round
 
         return random_choice(1.0 - self.flack)
+
+
+class Leyvraz(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Fransois Leyvraz
+    (K68R) and came in eleventh in that tournament.
+
+    The strategy uses the opponent's last three moves to decide on an action
+    based on the following ordered rules.
+
+    1. If opponent Defected last two turns, then Defect with prob 75%.
+    2. If opponent Defected three turns ago, then Cooperate.
+    3a. If opponent Defected two turns ago, then Defect.
+    3b. If opponent Defected last turn, then Defect with prob 50%.
+    4. Otherwise (all Coopertaions), then Cooperate.
+
+    Names:
+
+    - Leyvraz: [Axelrod1980b]_
+    """
+
+    name = 'Leyvraz'
+    classifier = {
+        'memory_depth': 3,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        recent_history = [C, C, C]  # Default to C.
+        for go_back in range(1, 4):
+            if len(opponent.history) >= go_back:
+                recent_history[-go_back] = opponent.history[-go_back]
+
+        if recent_history[-1] == D and recent_history[-2] == D:
+            return random_choice(0.25)
+        if recent_history[-3] == D:
+            return C
+        if recent_history[-2] == D:
+            return D
+        if recent_history[-1] == D:
+            return random_choice(0.5)
+        return C  # recent_history == [C, C, C]
