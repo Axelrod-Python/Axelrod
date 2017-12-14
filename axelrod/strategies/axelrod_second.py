@@ -1468,7 +1468,7 @@ class Leyvraz(Player):
     2. If opponent Defected three turns ago, then Cooperate.
     3. If opponent Defected two turns ago, then Defect.
     4. If opponent Defected last turn, then Defect with prob 50%.
-    5. Otherwise (all Coopertaions), then Cooperate.
+    5. Otherwise (all Cooperations), then Cooperate.
 
     Names:
 
