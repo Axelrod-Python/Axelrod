@@ -1486,18 +1486,23 @@ class Leyvraz(Player):
         'manipulates_state': False
     }
 
+    def __init__(self) -> None:
+        super().__init__()
+        self.prob_coop = {
+            (C, C, C): 1.0,
+            (C, C, D): 0.5,
+            (C, D, C): 0.0,
+            (C, D, D): 0.25,
+            (D, C, C): 1.0,
+            (D, C, D): 1.0,
+            (D, D, C): 1.0,
+            (D, D, D): 0.5
+        }
+
     def strategy(self, opponent: Player) -> Action:
         recent_history = [C, C, C]  # Default to C.
         for go_back in range(1, 4):
             if len(opponent.history) >= go_back:
                 recent_history[-go_back] = opponent.history[-go_back]
 
-        if recent_history[-1] == D and recent_history[-2] == D:
-            return random_choice(0.25)
-        if recent_history[-3] == D:
-            return C
-        if recent_history[-2] == D:
-            return D
-        if recent_history[-1] == D:
-            return random_choice(0.5)
-        return C  # recent_history == [C, C, C]
+        return random_choice(self.prob_coop[tuple(recent_history)])
