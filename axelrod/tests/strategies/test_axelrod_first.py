@@ -473,33 +473,34 @@ class TestTidemanAndChieruzzi(TestPlayer):
                                 'retaliation_length': 4,
                                 'retaliation_remaining': 3})
 
-        # A fresh starts occurs on round 14.
         opponent = axelrod.Cycler('DDCDD')
         actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
                    (D, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (C, D), (C, D),
-                   (D, D), (D, D), (D, C), (C, D), (D, D),
+                   (D, D), (D, D), (D, C), (D, D), (D, D),
                    (D, D), (D, D), (D, C), (D, D), (D, D)]
-
         self.versus_test(opponent, expected_actions=actions,
-                         attrs={'current_score': 40, 'opponent_score': 35,
-                                'last_fresh_start': 14,
-                                'retaliation_length': 4,
-                                'retaliation_remaining': 1})
+                         attrs={'current_score': 34, 'opponent_score': 19,
+                                'last_fresh_start': 0,
+                                'retaliation_length': 6,
+                                'retaliation_remaining': 2})
 
         # When the length is given this strategy will not give a fresh start
         opponent = axelrod.Cycler('DDCDD')
-        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (D, D), (D, D)]
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D), (D, D), (D, D),
+                   (D, C), (D, D), (D, D), (D, D), (D, D), (D, C), (D, D),
+                   (D, D), (D, D), (D, D), (D, C), (D, D), (D, D), (D, D),
+                   (D, D), (D, C), (D, D), (D, D), (D, D), (D, D), (D, C),
+                   (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions,
-                         match_attributes={'length': 15})
+                         match_attributes={'length': 50})
 
         # When the length is not given this strategy will give a fresh start.
         opponent = axelrod.Cycler('DDCDD')
-        actions = [(C, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (D, D), (D, D),
-                   (D, D), (D, D), (D, C), (C, D), (C, D)]
+        actions = [(C, D), (D, D), (D, C), (D, D), (D, D), (D, D), (D, D),
+                   (D, C), (D, D), (D, D), (D, D), (D, D), (D, C), (D, D),
+                   (D, D), (D, D), (D, D), (D, C), (D, D), (D, D), (D, D),
+                   (D, D), (D, C), (D, D), (D, D), (D, D), (D, D), (D, C),
+                   (C, D), (C, D)]
         self.versus_test(opponent, expected_actions=actions,
                          match_attributes={'length': float('inf')})
 
@@ -521,5 +522,19 @@ class TestTidemanAndChieruzzi(TestPlayer):
         actions = [(C, C), (C, C), (C, C), (C, C)]
         self.versus_test(opponent, expected_actions=actions,
                          attrs={'fresh_start': False})
+
+        # check the fresh start condition: least 20 rounds since the last ‘fresh start’
+        opponent = axelrod.Cycler('CCCCD') 
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (D, C), (C, C), 
+                   (C, C), (C, C), (C, D), (D, C), (D, C), (C, C), (C, C), 
+                   (C, D), (D, C), (D, C), (D, C), (C, C), (C, D), (D, C), 
+                   (D, C), (D, C), (C, C), (C, D), (D, C), (C, C), (C, C), 
+                   (C, C), (C, D), (D, C), (D, C), (C, C), (C, C), (C, D)]
+        self.versus_test(opponent, expected_actions=actions,
+                         match_attributes={'length': 35},
+                         attrs={'current_score': 108, 'opponent_score': 78,
+                                'last_fresh_start': 24,
+                                'retaliation_length': 2,
+                                'retaliation_remaining': 0})
 
 
