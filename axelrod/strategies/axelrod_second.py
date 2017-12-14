@@ -1490,13 +1490,13 @@ class Leyvraz(Player):
         super().__init__()
         self.prob_coop = {
             (C, C, C): 1.0,
-            (C, C, D): 0.5,
-            (C, D, C): 0.0,
-            (C, D, D): 0.25,
-            (D, C, C): 1.0,
-            (D, C, D): 1.0,
-            (D, D, C): 1.0,
-            (D, D, D): 0.5
+            (C, C, D): 0.5,  # Rule 4
+            (C, D, C): 0.0,  # Rule 3
+            (C, D, D): 0.25,  # Rule 1
+            (D, C, C): 1.0,  # Rule 2
+            (D, C, D): 1.0,  # Rule 2
+            (D, D, C): 1.0,  # Rule 2
+            (D, D, D): 0.25  # Rule 1
         }
 
     def strategy(self, opponent: Player) -> Action:
