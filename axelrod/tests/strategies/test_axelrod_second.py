@@ -960,3 +960,34 @@ class TestLeyvraz(TestPlayer):
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=2)
         actions = [(C, C), (C, D), (C, C)] + [(D, D), (C, C)] * 3
         self.versus_test(axelrod.Alternator(), expected_actions=actions, seed=3)
+
+
+class TestWhite(TestPlayer):
+    name = 'White'
+    player = axelrod.White
+    expected_classifier = {
+        'memory_depth': float("inf"),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 30
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D)] * 10 + [(D, D)] * 20
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        actions = [(C, D), (C, D), (C, C), (C, C), (C, C), (C, D), (C, C),
+                   (C, D), (C, C), (C, D), (C, C), (C, D), (C, D), (D, C),
+                   (C, D), (D, D), (D, C), (C, D), (D, D), (D, C)]
+        self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=6)
+        actions = [(C, C), (C, D), (C, D), (C, C), (C, C), (C, C), (C, C),
+                   (C, D), (C, D), (C, D), (C, D), (D, D), (D, C), (C, C),
+                   (C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
+        self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=12)
+

@@ -140,7 +140,7 @@ repository.
    "K69R_", "Johann Joss", "Not Implemented"
    "K70R_", "Robert Pebly", "Not Implemented"
    "K71R_", "James E Hall", "Not Implemented"
-   "K72R_", "Edward C White Jr", "Not Implemented"
+   "K72R_", "Edward C White Jr", ":class:`White <axelrod.strategies.axelrod_second.White>`"
    "K73R_", "George Zimmerman", "Not Implemented"
    "K74R_", "Edward Friedland", "Not Implemented"
    "K74RXX_", "Edward Friedland", "Not Implemented"
