@@ -1421,7 +1421,7 @@ class MoreTidemanAndChieruzzi(Player):
 class Getzler(Player):
     """
     Strategy submitted to Axelrod's second tournament by Abraham Getzler (K35R)
-    and came in tenth in that tournament.
+    and came in eleventh in that tournament.
 
     Strategy Defects with probability `flack`, where `flack` is calculated as
     the sum over opponent Defections of 0.5 ^ (turns ago Defection happened).
@@ -1459,7 +1459,7 @@ class Getzler(Player):
 class Leyvraz(Player):
     """
     Strategy submitted to Axelrod's second tournament by Fransois Leyvraz
-    (K68R) and came in eleventh in that tournament.
+    (K68R) and came in twelfth in that tournament.
 
     The strategy uses the opponent's last three moves to decide on an action
     based on the following ordered rules.
@@ -1513,7 +1513,7 @@ class Leyvraz(Player):
 class White(Player):
     """
     Strategy submitted to Axelrod's second tournament by Edward C Whtie (K72R)
-    and came in twelfth in that tournament.
+    and came in thirteenth in that tournament.
 
     If the opponent Cooperated last turn or in the first ten turns, then
     Cooperate.
