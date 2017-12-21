@@ -1137,7 +1137,7 @@ class Harrington(Player):
         In this function, the statistic is non-standard in that it excludes
         summands where E_i <= 1.
         """
-        
+
         denom = turn - 2
 
         expected_matrix = np.outer(self.move_history.sum(axis=1),
@@ -1165,7 +1165,7 @@ class Harrington(Player):
         self.history, and returns True (is random) if and only if the statistic
         is less than or equal to 3.
         """
-        
+
         denom = turn - 2
 
         if self.move_history[0, 0] / denom >= 0.8:
@@ -1300,7 +1300,7 @@ class Harrington(Player):
         if self.burned or random.random() > self.prob:
             # Tit-for-Tat with probability 1-`prob`
             return self.try_return(opponent.history[-1], inc_parity=True)
-        
+
         # Otherwise Defect, Cooperate, Cooperate, and increase `prob`
         self.prob += 0.05
         self.more_coop, self.last_generous_n_turns_ago = 2, 1
@@ -1421,7 +1421,7 @@ class MoreTidemanAndChieruzzi(Player):
 class Getzler(Player):
     """
     Strategy submitted to Axelrod's second tournament by Abraham Getzler (K35R)
-    and came in tenth in that tournament.
+    and came in eleventh in that tournament.
 
     Strategy Defects with probability `flack`, where `flack` is calculated as
     the sum over opponent Defections of 0.5 ^ (turns ago Defection happened).
@@ -1459,7 +1459,7 @@ class Getzler(Player):
 class Leyvraz(Player):
     """
     Strategy submitted to Axelrod's second tournament by Fransois Leyvraz
-    (K68R) and came in eleventh in that tournament.
+    (K68R) and came in twelfth in that tournament.
 
     The strategy uses the opponent's last three moves to decide on an action
     based on the following ordered rules.
@@ -1508,3 +1508,40 @@ class Leyvraz(Player):
         return random_choice(self.prob_coop[(recent_history[-3],
                                              recent_history[-2],
                                              recent_history[-1])])
+
+
+class White(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Edward C White (K72R)
+    and came in thirteenth in that tournament.
+
+    * If the opponent Cooperated last turn or in the first ten turns, then
+      Cooperate.
+    * Otherwise Defect if and only if:
+        floor(log(turn)) * opponent Defections >= turn
+
+    Names:
+
+    - White: [Axelrod1980b]_
+    """
+
+    name = 'White'
+    classifier = {
+        'memory_depth': float("inf"),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+
+        if turn <= 10 or opponent.history[-1] == C:
+            return C
+
+        if np.floor(np.log(turn)) * opponent.defections >= turn:
+            return D
+        return C
