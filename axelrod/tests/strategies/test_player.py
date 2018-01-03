@@ -593,19 +593,16 @@ def test_four_vector(test_class, expected_dictionary):
             player1._four_vector[key], expected_dictionary[key])
 
 
-def test_memory(player, opponent, memory_length, seed=None, turns=10):
+def test_memory(player, opponent, memory_length, seed=0, turns=10):
     """
     Checks if a player reacts to the plays of an opponent in the same way if
     only the given amount of memory is used.
     """
-    if seed is not None:
-        axelrod.seed(seed)
-
+    axelrod.seed(seed)
     match = axelrod.Match((player, opponent), turns=turns)
     expected_results = match.play()
 
-    if seed is not None:
-        axelrod.seed(seed)
+    axelrod.seed(seed)
     player.reset()
     opponent.reset()
 
