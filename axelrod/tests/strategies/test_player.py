@@ -4,13 +4,19 @@ import types
 import unittest
 
 import numpy as np
+from hypothesis import given, settings
+from hypothesis.strategies import integers
 
 import axelrod
 from axelrod import DefaultGame, Player
 from axelrod.player import get_state_distribution_from_history, update_history
+from axelrod.tests.property import strategy_lists
 
 
 C, D = axelrod.Action.C, axelrod.Action.D
+
+short_run_time_short_mem = [s for s in axelrod.short_run_time_strategies
+                             if s().classifier["memory_depth"] <= 1]
 
 
 # Generic strategy functions for testing
@@ -446,6 +452,27 @@ class TestPlayer(unittest.TestCase):
             self.assertEqual(len(player1.history), turns)
             self.assertEqual(player1.history, player2.history)
 
+    @given(strategies=strategy_lists(max_size=5,
+                                    strategies=short_run_time_short_mem),
+           seed=integers(min_value=1, max_value=200),
+           turns=integers(min_value=1, max_value=200))
+    @settings(max_examples=1, max_iterations=1)
+    def test_memory_depth_upper_bound(self, strategies, seed, turns):
+        """
+        Test that the memory depth is indeed an upper bound.
+        """
+        player = self.player()
+        memory = player.classifier["memory_depth"]
+        if memory < float("inf"):
+            for strategy in strategies:
+                opponent = strategy()
+                self.assertTrue(test_memory(player=player,
+                                            opponent=opponent,
+                                            seed=seed,
+                                            turns=turns,
+                                            memory_length=memory),
+                    msg="Failed for seed={} and opponent={}".format(seed, opponent))
+
     def versus_test(self, opponent, expected_actions,
                     noise=None, seed=None, turns=10,
                     match_attributes=None, attrs=None,
@@ -564,3 +591,50 @@ def test_four_vector(test_class, expected_dictionary):
     for key in sorted(expected_dictionary.keys(), key=str):
         test_class.assertAlmostEqual(
             player1._four_vector[key], expected_dictionary[key])
+
+
+def test_memory(player, opponent, memory_length, seed=None, turns=10):
+    """
+    Checks if a player reacts to the plays of an opponent in the same way if
+    only the given amount of memory is used.
+    """
+    if seed is not None:
+        axelrod.seed(seed)
+
+    match = axelrod.Match((player, opponent), turns=turns)
+    expected_results = match.play()
+
+    if seed is not None:
+        axelrod.seed(seed)
+    player.reset()
+    opponent.reset()
+
+    results = []
+    for _ in range(turns):
+        player.history = player.history[-memory_length:]
+        opponent.history = opponent.history[-memory_length:]
+        player.play(opponent)
+        results.append(player.history[-1])
+    return results == [interactions[0] for interactions in expected_results]
+
+class TestMemoryTest(unittest.TestCase):
+    """
+    Test for the memory test function.
+    """
+    def test_passes(self):
+        """
+        The memory test function returns True in this case as the correct mem
+        length is used
+        """
+        player = axelrod.TitFor2Tats()
+        opponent = axelrod.Defector()
+        self.assertTrue(test_memory(player, opponent, memory_length=2))
+
+    def test_failures(self):
+        """
+        The memory test function returns False in this case as the incorrect mem
+        length is used
+        """
+        player = axelrod.TitFor2Tats()
+        opponent = axelrod.Defector()
+        self.assertFalse(test_memory(player, opponent, memory_length=1))
