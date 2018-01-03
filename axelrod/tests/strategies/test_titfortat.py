@@ -124,7 +124,7 @@ class TestDynamicTwoTitsForTat(TestPlayer):
     name = 'Dynamic Two Tits For Tat'
     player = axelrod.DynamicTwoTitsForTat
     expected_classifier = {
-        'memory_depth': 2,
+        'memory_depth': float("inf"),
         'stochastic': True,
         'makes_use_of': set(),
         'inspects_source': False,

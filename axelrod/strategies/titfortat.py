@@ -114,7 +114,7 @@ class DynamicTwoTitsForTat(Player):
 
     name = 'Dynamic Two Tits For Tat'
     classifier = {
-        'memory_depth': 2,  # Long memory, memory-2
+        'memory_depth': float("inf"),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -127,7 +127,7 @@ class DynamicTwoTitsForTat(Player):
     def strategy(opponent):
         # First move
         if not opponent.history:
-            # Make sure we cooporate first turn
+            # Make sure we cooperate first turn
             return C
         if D in opponent.history[-2:]:
             # Probability of cooperating regardless
