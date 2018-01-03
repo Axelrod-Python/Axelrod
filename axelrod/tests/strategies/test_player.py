@@ -600,7 +600,7 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
     """
     axelrod.seed(seed)
     match = axelrod.Match((player, opponent), turns=turns)
-    expected_results = match.play()
+    expected_results = [turn[0] for turn in match.play()]
 
     axelrod.seed(seed)
     player.reset()
@@ -612,7 +612,7 @@ def test_memory(player, opponent, memory_length, seed=0, turns=10):
         opponent.history = opponent.history[-memory_length:]
         player.play(opponent)
         results.append(player.history[-1])
-    return results == [interactions[0] for interactions in expected_results]
+    return results == expected_results
 
 class TestMemoryTest(unittest.TestCase):
     """
