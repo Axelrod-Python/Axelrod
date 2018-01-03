@@ -826,6 +826,7 @@ class RandomTitForTat(Player):
         """
         super().__init__()
         self.p = p
+        self.act_random = False
         if p in [0, 1]:
             self.classifier['stochastic'] = False
 
@@ -834,6 +835,10 @@ class RandomTitForTat(Player):
         """This is the actual strategy"""
         if not self.history:
             return C
-        if len(opponent.history) % 2 == 0:
+
+        if self.act_random:
+            self.act_random = False
             return random_choice(self.p)
+
+        self.act_random = True
         return opponent.history[-1]
