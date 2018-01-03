@@ -40,7 +40,7 @@ class Geller(Player):
 
     name = 'Geller'
     classifier = {
-        'memory_depth': -1,
+        'memory_depth': float("inf"),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -74,7 +74,7 @@ class GellerCooperator(Geller):
     """
     name = 'Geller Cooperator'
     classifier = {
-        'memory_depth': -1,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -101,7 +101,7 @@ class GellerDefector(Geller):
     """
     name = 'Geller Defector'
     classifier = {
-        'memory_depth': -1,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

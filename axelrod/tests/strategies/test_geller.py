@@ -11,7 +11,7 @@ class TestGeller(TestPlayer):
     name = "Geller"
     player = axelrod.Geller
     expected_classifier = {
-        'memory_depth': -1,
+        'memory_depth': float("inf"),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -59,7 +59,7 @@ class TestGellerCooperator(TestGeller):
     name = "Geller Cooperator"
     player = axelrod.GellerCooperator
     expected_classifier = {
-        'memory_depth': -1,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -85,7 +85,7 @@ class TestGellerDefector(TestGeller):
     name = "Geller Defector"
     player = axelrod.GellerDefector
     expected_classifier = {
-        'memory_depth': -1,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
