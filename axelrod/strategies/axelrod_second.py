@@ -1512,15 +1512,13 @@ class Leyvraz(Player):
 
 class White(Player):
     """
-    Strategy submitted to Axelrod's second tournament by Edward C Whtie (K72R)
+    Strategy submitted to Axelrod's second tournament by Edward C White (K72R)
     and came in thirteenth in that tournament.
 
-    If the opponent Cooperated last turn or in the first ten turns, then
-    Cooperate.
-
-    Otherwise Defect if and only if:
-
-    floor(log(turn)) * opponent Defections >= turn
+    * If the opponent Cooperated last turn or in the first ten turns, then
+      Cooperate.
+    * Otherwise Defect if and only if:
+        floor(log(turn)) * opponent Defections >= turn
 
     Names:
 
