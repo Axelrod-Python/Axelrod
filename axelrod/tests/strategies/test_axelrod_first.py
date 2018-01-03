@@ -370,7 +370,7 @@ class TestSteinAndRapoport(TestPlayer):
     name = "Stein and Rapoport: 0.05: (D, D)"
     player = axelrod.SteinAndRapoport
     expected_classifier = {
-        'memory_depth': 15,
+        'memory_depth': float("inf"),
         'long_run_time': False,
         'stochastic': False,
         'makes_use_of': {'length'},
@@ -524,11 +524,11 @@ class TestTidemanAndChieruzzi(TestPlayer):
                          attrs={'fresh_start': False})
 
         # check the fresh start condition: least 20 rounds since the last ‘fresh start’
-        opponent = axelrod.Cycler('CCCCD') 
-        actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (D, C), (C, C), 
-                   (C, C), (C, C), (C, D), (D, C), (D, C), (C, C), (C, C), 
-                   (C, D), (D, C), (D, C), (D, C), (C, C), (C, D), (D, C), 
-                   (D, C), (D, C), (C, C), (C, D), (D, C), (C, C), (C, C), 
+        opponent = axelrod.Cycler('CCCCD')
+        actions = [(C, C), (C, C), (C, C), (C, C), (C, D), (D, C), (C, C),
+                   (C, C), (C, C), (C, D), (D, C), (D, C), (C, C), (C, C),
+                   (C, D), (D, C), (D, C), (D, C), (C, C), (C, D), (D, C),
+                   (D, C), (D, C), (C, C), (C, D), (D, C), (C, C), (C, C),
                    (C, C), (C, D), (D, C), (D, C), (C, C), (C, C), (C, D)]
         self.versus_test(opponent, expected_actions=actions,
                          match_attributes={'length': 35},
