@@ -1554,9 +1554,9 @@ class Black(Player):
 
     The strategy Cooperates for the first five turns.  Then it calculates the
     number of opponent defects in the last five moves and Cooperates with
-    probability 'prob_coop'[`number_defects`], where:
+    probability `prob_coop`[`number_defects`], where:
 
-    'prob_coop'[`number_defects`] = 1 - (`number_defects`^2 - 1) / 25
+    prob_coop[number_defects] = 1 - (number_defects^ 2 - 1) / 25
 
     Names:
 
