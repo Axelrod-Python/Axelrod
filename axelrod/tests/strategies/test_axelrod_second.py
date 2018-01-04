@@ -991,3 +991,29 @@ class TestWhite(TestPlayer):
                    (C, C), (C, D), (C, C), (C, D), (C, C), (C, D)]
         self.versus_test(axelrod.Random(0.5), expected_actions=actions, seed=12)
 
+
+class TestBlack(TestPlayer):
+    name = 'Black'
+    player = axelrod.Black
+    expected_classifier = {
+        'memory_depth': 5,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 30
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D)] * 5
+        actions += [(D, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D), (D, D), (C, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=1)
+
+        actions = [(C, D)] * 5
+        actions += [(D, D), (C, D), (D, D), (D, D), (D, D), (C, D), (D, D), (D, D), (D, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, seed=15)
+

@@ -1545,3 +1545,55 @@ class White(Player):
         if np.floor(np.log(turn)) * opponent.defections >= turn:
             return D
         return C
+
+
+class Black(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Paul E Black (K83R)
+    and came in fourteenth in that tournament.
+
+    The strategy Cooperates for the first five turns.  Then it calculates the
+    number of opponent defects in the last five moves and Cooperates with
+    probability `prob_coop`[`number_defects`], where:
+
+    prob_coop[number_defects] = 1 - (number_defects^ 2 - 1) / 25
+
+    Names:
+
+    - Black: [Axelrod1980b]_
+    """
+
+    name = 'Black'
+    classifier = {
+        'memory_depth': 5,
+        'stochastic': True,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        # Maps number of opponent defects from last five moves to own
+        # Cooperation probability
+        self.prob_coop = {
+            0: 1.0,
+            1: 1.0,
+            2: 0.88,
+            3: 0.68,
+            4: 0.4,
+            5: 0.04
+        }
+
+    def strategy(self, opponent: Player) -> Action:
+        if len(opponent.history) < 5:
+            return C
+
+        recent_history = opponent.history[-5:]
+
+        did_d = np.vectorize(lambda action: int(action == D))
+        number_defects = np.sum(did_d(recent_history))
+
+        return random_choice(self.prob_coop[number_defects])

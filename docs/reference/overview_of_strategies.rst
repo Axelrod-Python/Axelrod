@@ -152,7 +152,7 @@ repository.
    "K80R_", "Robyn M Dawes and Mark Batell", Not Implemented
    "K81R_", "Martyn Jones", "Not Implemented"
    "K82R_", "Robert A Leyland", "Not Implemented"
-   "K83R_", "Paul E Black", "Not Implemented"
+   "K83R_", "Paul E Black", ":class:`White <axelrod.strategies.axelrod_second.White>`"
    "K84R_", "T Nicolaus Tideman and Paula Chieruzzi", ":class:`More Tideman And Chieruzzi <axelrod.strategies.axelrod_second.MoreTidemanAndChieruzzi>`"
    "K85R_", "Robert B Falk and James M Langsted", "Not Implemented"
    "K86R_", "Bernard Grofman", "Not Implemented"
