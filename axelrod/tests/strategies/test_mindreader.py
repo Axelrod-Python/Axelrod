@@ -13,7 +13,7 @@ class TestMindReader(TestPlayer):
     name = "Mind Reader"
     player = axelrod.MindReader
     expected_classifier = {
-        'memory_depth': -10,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -104,7 +104,7 @@ class TestProtectedMindReader(TestPlayer):
     name = "Protected Mind Reader"
     player = axelrod.ProtectedMindReader
     expected_classifier = {
-        'memory_depth': -10,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -148,7 +148,7 @@ class TestMirrorMindReader(TestPlayer):
     name = 'Mirror Mind Reader'
     player = axelrod.MirrorMindReader
     expected_classifier = {
-        'memory_depth': -10,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

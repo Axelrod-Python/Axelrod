@@ -22,7 +22,7 @@ class MindReader(Player):
 
     name = 'Mind Reader'
     classifier = {
-        'memory_depth': -10,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -60,7 +60,7 @@ class ProtectedMindReader(MindReader):
 
     name = 'Protected Mind Reader'
     classifier = {
-        'memory_depth': -10,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -90,7 +90,7 @@ class MirrorMindReader(ProtectedMindReader):
     name = 'Mirror Mind Reader'
 
     classifier = {
-        'memory_depth': -10,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

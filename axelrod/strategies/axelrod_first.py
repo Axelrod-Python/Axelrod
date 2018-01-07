@@ -529,7 +529,7 @@ class SteinAndRapoport(Player):
 
     name = 'Stein and Rapoport'
     classifier = {
-        'memory_depth': 15,
+        'memory_depth': float("inf"),
         'stochastic': False,
         'makes_use_of': {"length"},
         'long_run_time': False,
