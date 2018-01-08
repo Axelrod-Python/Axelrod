@@ -74,7 +74,7 @@ a peer reviewed paper introducing the library (22 authors).
 Installation
 ------------
 
-The library requires Python 3.4 or greater. It will not run on Python 2.
+The library requires Python 3.5 or greater.
 
 The simplest way to install is::
 
@@ -127,7 +127,7 @@ Publications
 * Vincent Knight, Owen Campbell, Marc Harper, Karol Langner et al. `An Open Framework for the Reproducible Study of the Iterated Prisoner’s Dilemma. <https://openresearchsoftware.metajnl.com/articles/10.5334/jors.125/>`_ Journal of Open Research Software 4, no. 1 (2016). (`ArXiv Preprint <https://arxiv.org/abs/1604.00896>`_)
 
 
-Contributors 
+Contributors
 ------------
 
 The library has had many awesome contributions from many `great
