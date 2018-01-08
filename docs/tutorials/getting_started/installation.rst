@@ -3,7 +3,7 @@
 Installation
 ============
 
-The library requires Python 3.4 or greater. It will not run on Python 2.
+The library requires Python 3.5.
 
 The simplest way to install the package is to obtain it from the PyPi
 repository::
