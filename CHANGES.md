@@ -31,7 +31,6 @@ minor documentation changes.
   https://github.com/Axelrod-Python/Axelrod/pull/1148
   https://github.com/Axelrod-Python/Axelrod/pull/1150
 
-Here are all the commits for this PR:
 https://github.com/Axelrod-Python/Axelrod/compare/v3.11.0...v3.10.0
 
 # v3.10.0, 2017-11-27
