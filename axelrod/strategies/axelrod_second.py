@@ -1550,7 +1550,7 @@ class White(Player):
 class Black(Player):
     """
     Strategy submitted to Axelrod's second tournament by Paul E Black (K83R)
-    and came in fourteenth in that tournament.
+    and came in fifteenth in that tournament.
 
     The strategy Cooperates for the first five turns.  Then it calculates the
     number of opponent defects in the last five moves and Cooperates with
