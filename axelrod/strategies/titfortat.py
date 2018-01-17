@@ -114,7 +114,7 @@ class DynamicTwoTitsForTat(Player):
 
     name = 'Dynamic Two Tits For Tat'
     classifier = {
-        'memory_depth': 2,  # Long memory, memory-2
+        'memory_depth': float("inf"),
         'stochastic': True,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -127,7 +127,7 @@ class DynamicTwoTitsForTat(Player):
     def strategy(opponent):
         # First move
         if not opponent.history:
-            # Make sure we cooporate first turn
+            # Make sure we cooperate first turn
             return C
         if D in opponent.history[-2:]:
             # Probability of cooperating regardless
@@ -826,6 +826,7 @@ class RandomTitForTat(Player):
         """
         super().__init__()
         self.p = p
+        self.act_random = False
         if p in [0, 1]:
             self.classifier['stochastic'] = False
 
@@ -834,6 +835,10 @@ class RandomTitForTat(Player):
         """This is the actual strategy"""
         if not self.history:
             return C
-        if len(opponent.history) % 2 == 0:
+
+        if self.act_random:
+            self.act_random = False
             return random_choice(self.p)
+
+        self.act_random = True
         return opponent.history[-1]

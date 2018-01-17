@@ -1,3 +1,38 @@
+# v3.11.0, 2018-01-09
+
+A number of strategies from Axelrod's original second tournament, new tests and
+minor documentation changes.
+
+- Implemented GraaskampKatzen (k60r)
+  https://github.com/Axelrod-Python/Axelrod/pull/1144
+- Implemented Weiner (k41r)
+  https://github.com/Axelrod-Python/Axelrod/pull/1145
+- Implemented Harrington (k75r)
+  https://github.com/Axelrod-Python/Axelrod/pull/1146
+- Implemented MoreTidemanAndChieruzzi (k84r)
+  https://github.com/Axelrod-Python/Axelrod/pull/1147
+- Implemented Getzler (k35r) strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1151
+- Implemented Leyvraz (k86r) strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1153
+- Implemented White (k72r) strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1154
+- Implemented Black (k83r) strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1155
+- Add a test for memory depth
+  https://github.com/Axelrod-Python/Axelrod/pull/1157
+- Fix implementation of TidemanAndChieruzzi
+  https://github.com/Axelrod-Python/Axelrod/pull/1152
+- Modify implementation of strategy
+  https://github.com/Axelrod-Python/Axelrod/pull/1143
+- Update python version requirements
+  https://github.com/Axelrod-Python/Axelrod/pull/1158
+- Add citations section to README
+  https://github.com/Axelrod-Python/Axelrod/pull/1148
+  https://github.com/Axelrod-Python/Axelrod/pull/1150
+
+https://github.com/Axelrod-Python/Axelrod/compare/v3.11.0...v3.10.0
+
 # v3.10.0, 2017-11-27
 
 One new strategy
