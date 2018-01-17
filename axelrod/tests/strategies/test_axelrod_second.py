@@ -1017,3 +1017,41 @@ class TestBlack(TestPlayer):
         actions += [(D, D), (C, D), (D, D), (D, D), (D, D), (C, D), (D, D), (D, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions, seed=15)
 
+
+class TestRichardHufford(TestPlayer):
+    name = 'RichardHufford'
+    player = axelrod.RichardHufford
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 19 + [(D, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, attrs={"streak_needed": 14})
+
+        actions = [(C, C)] * 19 + [(D, C), (C, C)]
+        actions += [(C, C)]  # This is the first Cooperation that gets counted on the new streak
+        actions += [(C, C)] * 13 + [(D, C), (C, C), (C, C)]
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, attrs={"streak_needed": 11})
+
+        opponent_actions = [C] * 20 + [D]
+        BoredCooperator = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C)] * 19 + [(D, C), (C, D), (C, C)]
+        self.versus_test(BoredCooperator, expected_actions=actions, attrs={"streak_needed": 31})
+
+        actions = [(C, D)]  # "Disagreement"
+        actions += [(D, C)]  # TFT.  Disagreement
+        actions += [(C, C)]  # TFT.
+        actions += [(C, D)]  # TFT.  Disagreement
+        actions += [(D, C)]  # Three of last four are disagreements.
+        actions += [(C, C)]  # TFT.  Disagreement
+        actions += [(D, D)]  # Three of last four are disagreements.  Disagreement
+        actions += [(D, D)]  # Three of last four are disagreements.
+        actions += [(D, D)]  # Now there are 5/9 disagreements, so Defect.
+        self.versus_test(axelrod.WinShiftLoseStay(), expected_actions=actions, attrs={"num_agreements": 5})

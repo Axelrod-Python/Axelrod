@@ -115,7 +115,7 @@ repository.
    "K44R_", "William Adams", ":class:`WmAdams <axelrod.strategies.axelrod_second.WmAdams>`"
    "K45R_", "Michael F McGurrin", "Not Implemented"
    "K46R_", "Graham J Eatherley", ":class:`Eatherley <axelrod.strategies.axelrod_second.Eatherley>`"
-   "K47R_", "Richard Hufford", "Not Implemented"
+   "K47R_", "Richard Hufford", ":class:`RichardHufford <axelrod.strategies.axelrod_second.RichardHufford>`"
    "K48R_", "George Hufford", "Not Implemented"
    "K49R_", "Rob Cave", ":class:`Cave <axelrod.strategies.axelrod_second.Cave>`"
    "K50R_", "Rik Smoody", "Not Implemented"
