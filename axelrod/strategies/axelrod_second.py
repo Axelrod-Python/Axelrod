@@ -1604,7 +1604,7 @@ class RichardHufford(Player):
     Strategy submitted to Axelrod's second tournament by Richard Hufford (K47R)
     and came in sixteenth in that tournament.
 
-    The strategy tracks opponent "agreements," that is whenever the opponent's
+    The strategy tracks opponent "agreements", that is whenever the opponent's
     previous move is the some as this player's move two turns ago.  If the
     opponent's first move is a Defection, this is counted as a disagreement,
     and otherwise an agreement.  From the agreement counts, two measures are
@@ -1625,7 +1625,7 @@ class RichardHufford(Player):
 
     However, if the opponent has Cooperated the last `streak_needed` turns,
     then the strategy deviates from the usual strategy, and instead Defects.
-    (We call such deviation an "aberration.")  In the turn immediately after an
+    (We call such deviation an "aberration".)  In the turn immediately after an
     aberration, the strategy doesn't override, even if there's a streak of
     Cooperations.  Two turns after an aberration, the strategy:  Restarts the
     Cooperation streak (never looking before this turn); Cooperates; and
@@ -1662,8 +1662,8 @@ class RichardHufford(Player):
         self.streak_needed = 21
         self.current_streak = 2
         self.last_aberration = float("inf")
-        self.num_abb_coop = 2
-        self.num_abb_def = 2
+        self.coop_after_ab_count = 2
+        self.def_after_ab_count = 2
 
     def strategy(self, opponent: Player) -> Action:
         turn = len(self.history) + 1
@@ -1681,7 +1681,7 @@ class RichardHufford(Player):
         else:
             self.last_four_agreements[self.last_four_index] = 0
 
-        # Check is last_aberration is infinite.
+        # Check if last_aberration is infinite.
         # i.e Not an aberration in last two turns.
         if turn < self.last_aberration:
             if opponent.history[-1] == C:
@@ -1695,10 +1695,10 @@ class RichardHufford(Player):
         elif turn == self.last_aberration + 2:
             self.last_aberration = float("inf")
             if opponent.history[-1] == C:
-                self.num_abb_coop += 1
+                self.coop_after_ab_count += 1
             else:
-                self.num_abb_def += 1
-            self.streak_needed = np.floor(20.0 * self.num_abb_def / self.num_abb_coop) + 1
+                self.def_after_ab_count += 1
+            self.streak_needed = np.floor(20.0 * self.def_after_ab_count / self.coop_after_ab_count) + 1
             self.current_streak = 0
             return C
 
@@ -1708,5 +1708,4 @@ class RichardHufford(Player):
             return C
         elif proportion_agree >= 0.625 and last_four_num >= 2:
             return opponent.history[-1]
-        else:
-            return D
+        return D
