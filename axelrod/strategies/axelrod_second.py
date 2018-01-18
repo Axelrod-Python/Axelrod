@@ -1550,7 +1550,7 @@ class White(Player):
 class Black(Player):
     """
     Strategy submitted to Axelrod's second tournament by Paul E Black (K83R)
-    and came in fourteenth in that tournament.
+    and came in fifteenth in that tournament.
 
     The strategy Cooperates for the first five turns.  Then it calculates the
     number of opponent defects in the last five moves and Cooperates with
@@ -1597,3 +1597,115 @@ class Black(Player):
         number_defects = np.sum(did_d(recent_history))
 
         return random_choice(self.prob_coop[number_defects])
+
+
+class RichardHufford(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Richard Hufford (K47R)
+    and came in sixteenth in that tournament.
+
+    The strategy tracks opponent "agreements", that is whenever the opponent's
+    previous move is the some as this player's move two turns ago.  If the
+    opponent's first move is a Defection, this is counted as a disagreement,
+    and otherwise an agreement.  From the agreement counts, two measures are
+    calculated:
+
+    - `proportion_agree`:  This is the number of agreements (through opponent's
+      last turn) + 2 divided by the current turn number.
+    - `last_four_num`:  The number of agreements in the last four turns.  If
+      there have been fewer than four previous turns, then this is number of
+      agreement + (4 - number of past turns).
+
+    We then use these measures to decide how to play, using these rules:
+
+    1. If `proportion_agree` > 0.9 and `last_four_num` >= 4, then Cooperate.
+    2. Otherwise if `proportion_agree` >= 0.625 and `last_four_num` >= 2, then
+       Tit-for-Tat.
+    3. Otherwise, Defect.
+
+    However, if the opponent has Cooperated the last `streak_needed` turns,
+    then the strategy deviates from the usual strategy, and instead Defects.
+    (We call such deviation an "aberration".)  In the turn immediately after an
+    aberration, the strategy doesn't override, even if there's a streak of
+    Cooperations.  Two turns after an aberration, the strategy:  Restarts the
+    Cooperation streak (never looking before this turn); Cooperates; and
+    changes `streak_needed` to:
+
+    floor(20.0 * `num_abb_def` / `num_abb_coop`) + 1
+
+    Here `num_abb_def` is 2 + the number of times that the opponent Defected in
+    the turn after an aberration, and `num_abb_coop` is 2 + the number of times
+    that the opponent Cooperated in response to an aberration.
+
+    Names:
+
+    - RichardHufford: [Axelrod1980b]_
+    """
+
+    name = 'RichardHufford'
+    classifier = {
+        'memory_depth': float("inf"),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.num_agreements = 2
+        self.last_four_agreements = [1] * 4
+        self.last_four_index = 0
+
+        self.streak_needed = 21
+        self.current_streak = 2
+        self.last_aberration = float("inf")
+        self.coop_after_ab_count = 2
+        self.def_after_ab_count = 2
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+        if turn == 1:
+            return C
+
+        # Check if opponent agreed with us.
+        self.last_four_index = (self.last_four_index + 1) % 4
+        me_two_moves_ago = C
+        if turn > 2:
+            me_two_moves_ago = self.history[-2]
+        if me_two_moves_ago == opponent.history[-1]:
+            self.num_agreements += 1
+            self.last_four_agreements[self.last_four_index] = 1
+        else:
+            self.last_four_agreements[self.last_four_index] = 0
+
+        # Check if last_aberration is infinite.
+        # i.e Not an aberration in last two turns.
+        if turn < self.last_aberration:
+            if opponent.history[-1] == C:
+                self.current_streak += 1
+            else:
+                self.current_streak = 0
+            if self.current_streak >= self.streak_needed:
+                self.last_aberration = turn
+                if self.current_streak == self.streak_needed:
+                    return D
+        elif turn == self.last_aberration + 2:
+            self.last_aberration = float("inf")
+            if opponent.history[-1] == C:
+                self.coop_after_ab_count += 1
+            else:
+                self.def_after_ab_count += 1
+            self.streak_needed = np.floor(20.0 * self.def_after_ab_count / self.coop_after_ab_count) + 1
+            self.current_streak = 0
+            return C
+
+        proportion_agree = self.num_agreements / turn
+        last_four_num = np.sum(self.last_four_agreements)
+        if proportion_agree > 0.9 and last_four_num >= 4:
+            return C
+        elif proportion_agree >= 0.625 and last_four_num >= 2:
+            return opponent.history[-1]
+        return D
