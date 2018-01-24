@@ -117,17 +117,3 @@ within the library. Note that you can supply `build_results=False` as a keyword
 argument to `tournament.play()` to prevent keeping or loading interactions in
 memory, since the total memory footprint can be large for various combinations
 of parameters. The memory usage scales as :math:`O(\text{players}^2 * \text{turns} * \text{repetitions})`.
-
-It is also possible to generate a standard result set from a datafile::
-
-    >>> results = axl.ResultSetFromFile(filename="basic_tournament.csv")
-    >>> results.ranked_names  # doctest: +SKIP
-    ['Defector',
-     'Bully',
-     'Suspicious Tit For Tat',
-     'Alternator',
-     'Tit For Tat',
-     'Anti Tit For Tat',
-     'Win-Stay Lose-Shift',
-     'Cooperator']
-

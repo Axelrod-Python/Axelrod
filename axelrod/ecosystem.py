@@ -12,7 +12,7 @@ class Ecosystem(object):
                  population: List[int] = None) -> None:
 
         self.results = results
-        self.nplayers = self.results.nplayers
+        self.num_players = self.results.num_players
         self.payoff_matrix = self.results.payoff_matrix
         self.payoff_stddevs = self.results.payoff_stddevs
 
@@ -27,7 +27,7 @@ class Ecosystem(object):
             if min(population) < 0:
                 raise TypeError(
                     "Minimum value of population vector must be non-negative")
-            elif len(population) != self.nplayers:
+            elif len(population) != self.num_players:
                 raise TypeError(
                     "Population vector must be same size as number of players")
             else:
@@ -35,7 +35,7 @@ class Ecosystem(object):
                 self.population_sizes = [[p / norm for p in population]]
         else:
             self.population_sizes = [
-                [1 / self.nplayers for _ in range(self.nplayers)]]
+                [1 / self.num_players for _ in range(self.num_players)]]
 
         # This function is quite arbitrary and probably only influences the
         # kinetics for the current code.
@@ -47,7 +47,7 @@ class Ecosystem(object):
     def reproduce(self, turns: int):
 
         for iturn in range(turns):
-            plist = list(range(self.nplayers))
+            plist = list(range(self.num_players))
             pops = self.population_sizes[-1]
 
             # The unit payoff for each player in this turn is the sum of the

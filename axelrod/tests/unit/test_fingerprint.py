@@ -187,19 +187,11 @@ class TestFingerprint(unittest.TestCase):
         af = AshlockFingerprint(self.strategy, self.probe)
         filename = "test_outputs/test_fingerprint.csv"
 
-        # No temp file is created.
-        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
-                       in_memory=True)
-        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
-                       in_memory=True, filename=filename)
-        af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
-                       in_memory=False, filename=filename)
-
         self.assertEqual(RecordedMksTemp.record, [])
 
         # Temp file is created and destroyed.
         af.fingerprint(turns=1, repetitions=1, step=0.5, progress_bar=False,
-                       in_memory=False, filename=None)
+                       filename=None)
 
         self.assertEqual(len(RecordedMksTemp.record), 1)
         filename = RecordedMksTemp.record[0][1]
@@ -214,19 +206,7 @@ class TestFingerprint(unittest.TestCase):
                        filename=filename)
         with open(filename, 'r') as out:
             data = out.read()
-            self.assertEqual(len(data.split("\n")), 10)
-
-    def test_in_memory_fingerprint(self):
-        af = AshlockFingerprint(self.strategy, self.probe)
-        af.fingerprint(turns=10, repetitions=2, step=0.5, progress_bar=False,
-                       in_memory=True)
-        edge_keys = sorted(list(af.interactions.keys()))
-        coord_keys = sorted(list(af.data.keys()))
-        self.assertEqual(af.step, 0.5)
-        self.assertEqual(af.spatial_tournament.interactions_dict,
-                         af.interactions)
-        self.assertEqual(edge_keys, self.expected_edges)
-        self.assertEqual(coord_keys, self.expected_points)
+            self.assertEqual(len(data.split("\n")), 20)
 
     def test_serial_fingerprint(self):
         af = AshlockFingerprint(self.strategy, self.probe)
@@ -431,7 +411,7 @@ class TestTransitiveFingerprint(unittest.TestCase):
                        filename=filename)
         with open(filename, 'r') as out:
             data = out.read()
-            self.assertEqual(len(data.split("\n")), 50 + 1)
+            self.assertEqual(len(data.split("\n")), 102)
 
     def test_serial_fingerprint(self):
         strategy = axl.TitForTat()
@@ -452,14 +432,23 @@ class TestTransitiveFingerprint(unittest.TestCase):
         filename = "test_outputs/test_fingerprint.csv"
         with open(filename, "w") as f:
             f.write(
-"""0,1,Player0,Player1,CCC,DDD
-0,1,Player0,Player1,CCC,DDD
-0,2,Player0,Player2,CCD,DDD
-0,2,Player0,Player2,CCC,DDD
-0,3,Player0,Player3,CCD,DDD
-0,3,Player0,Player3,DCC,DDD
-0,4,Player0,Player3,DDD,DDD
-0,4,Player0,Player3,DDD,DDD""")
+"""Interaction index,Player index,Opponent index,Repetition,Player name,Opponent name,Actions
+0,0,1,0,Player0,Player1,CCC
+0,1,0,0,Player1,Player0,DDD
+1,0,1,1,Player0,Player1,CCC
+1,1,0,1,Player1,Player0,DDD
+2,0,2,0,Player0,Player2,CCD
+2,2,0,0,Player2,Player0,DDD
+3,0,2,1,Player0,Player2,CCC
+3,2,0,1,Player2,Player0,DDD
+4,0,3,0,Player0,Player3,CCD
+4,3,0,0,Player3,Player0,DDD
+5,0,3,1,Player0,Player3,DCC
+5,3,0,1,Player3,Player0,DDD
+6,0,4,2,Player0,Player4,DDD
+6,4,0,2,Player4,Player0,DDD
+7,0,4,3,Player0,Player4,DDD
+7,4,0,3,Player4,Player0,DDD""")
         data = tf.analyse_cooperation_ratio(filename)
         expected_data = np.array([[1, 1, 1],
                                   [1, 1, 1 / 2],

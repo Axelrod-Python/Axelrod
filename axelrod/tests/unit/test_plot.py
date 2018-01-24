@@ -12,33 +12,21 @@ class TestPlot(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.players = (
-            axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector())
+        cls.filename = "test_outputs/test_results.csv"
+
+        cls.players = [axelrod.Alternator(), axelrod.TitForTat(),
+                       axelrod.Defector()]
+        cls.repetitions = 3
         cls.turns = 5
-        cls.matches = {
-            (0, 1): [axelrod.Match(
-                (cls.players[0], cls.players[1]), turns=cls.turns)
-                for _ in range(3)],
-            (0, 2): [axelrod.Match(
-                (cls.players[0], cls.players[2]), turns=cls.turns)
-                for _ in range(3)],
-            (1, 2): [axelrod.Match(
-                (cls.players[1], cls.players[2]), turns=cls.turns)
-                for _ in range(3)]
-        }
-        # This would not actually be a round robin tournament
-        # (no cloned matches)
 
-        cls.interactions = {}
-        for index_pair, matches in cls.matches.items():
-            for match in matches:
-                match.play()
-                try:
-                    cls.interactions[index_pair].append(match.result)
-                except KeyError:
-                    cls.interactions[index_pair] = [match.result]
+        cls.test_result_set = axelrod.ResultSet(cls.filename,
+                                                cls.players,
+                                                cls.repetitions,
+                                                progress_bar=False)
 
-        cls.test_result_set = axelrod.ResultSet(cls.players, cls.interactions,
+        cls.test_result_set = axelrod.ResultSet(cls.filename,
+                                                cls.players,
+                                                cls.repetitions,
                                                 progress_bar=False)
         cls.expected_boxplot_dataset = [
             [(17 / 5 + 9 / 5) / 2 for _ in range(3)],
@@ -110,15 +98,16 @@ class TestPlot(unittest.TestCase):
 
     def test_init_from_resulsetfromfile(self):
         tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        players=[axelrod.Cooperator(),
+                 axelrod.TitForTat(),
+                 axelrod.Defector()]
         tournament = axelrod.Tournament(
-            players=[axelrod.Cooperator(),
-                     axelrod.TitForTat(),
-                     axelrod.Defector()],
+            players=players,
             turns=2,
             repetitions=2)
         tournament.play(filename=tmp_file.name, progress_bar=False)
         tmp_file.close()
-        rs = axelrod.ResultSetFromFile(tmp_file.name, progress_bar=False)
+        rs = axelrod.ResultSet(tmp_file.name, players, 2, progress_bar=False)
 
         plot = axelrod.Plot(rs)
         self.assertEqual(plot.result_set, rs)

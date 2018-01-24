@@ -4,7 +4,7 @@ cache.txt
 test.csv
 summary.csv
 basic_tournament.csv
-test_outputs/*csv
+test_outputs/*csv.summary
 test_outputs/*svg
 test_outputs/*cache
 
@@ -118,3 +118,12 @@ docker-compose.yml
 
 # Mypy files
 .mypy_cache/
+
+test_outputs/stochastic_tournament_0.csv
+test_outputs/stochastic_tournament_1.csv
+test_outputs/test_fingerprint.csv
+test_outputs/test_fingerprint_tmp.csv
+test_outputs/test_results_from_file.csv
+test_outputs/test_results_from_file_tmp.csv
+test_outputs/test_tournament.csv
+test_outputs/tran_fin.csv
