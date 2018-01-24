@@ -38,7 +38,7 @@ least as much as its opponent::
 Each of the metrics described in Tyler's paper is available as follows (here they are rounded to 2 digits)::
 
     >>> [round(ele, 2) for ele in results.cooperating_rating]
-    [1.0, 0.0, 0.67, 0.67]
+    [1.0, 0.0, 0.67..., 0.67...]
     >>> [round(ele, 2) for ele in results.good_partner_rating]
     [1.0, 0.0, 1.0, 1.0]
     >>> [round(ele, 2) for ele in results.eigenjesus_rating]

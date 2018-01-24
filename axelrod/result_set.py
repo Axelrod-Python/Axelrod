@@ -1,8 +1,13 @@
 from collections import namedtuple, Counter
+from multiprocessing import cpu_count
 import csv
+import itertools
 
-from numpy import mean, nanmedian, std
+from numpy import mean, nanmedian, std, array, nan_to_num
 import tqdm
+
+import dask as da
+import dask.dataframe as dd
 
 from axelrod.action import Action, str_to_actions
 import axelrod.interaction_utils as iu
@@ -28,120 +33,405 @@ def update_progress_bar(method):
     return wrapper
 
 
-class ResultSet(object):
-    """A class to hold the results of a tournament."""
+class ResultSet():
+    """
+    A class to hold the results of a tournament. Reads in a CSV file produced
+    by the tournament class.
+    """
 
-    def __init__(self, players, interactions, repetitions=False,
-                 progress_bar=True, game=None):
+    def __init__(self, filename,
+                 players, repetitions,
+                 processes=None, progress_bar=True):
         """
         Parameters
         ----------
+            filename : string
+                the file from which to read the interactions
             players : list
-                a list of player objects.
-            interactions : dict
-                a dictionary mapping tuples of player indices to
-                interactions (1 for each repetition)
+                A list of the names of players. If not known will be efficiently
+                read from file.
             repetitions : int
-                The number of repetitions
-            game : axlerod.game
-                The particular game used.
-            progress_bar : bool
-                Whether or not to create a progress bar which will be updated
+                The number of repetitions of each match. If not know will be
+                efficiently read from file.
+            processes : integer
+                The number of processes to be used for parallel processing
         """
-        if game is None:
-            self.game = Game()
-        else:
-            self.game = game
+        self.filename = filename
+        self.players, self.repetitions = players, repetitions
+        self.num_players = len(self.players)
 
-        self.interactions = interactions
-        self.players = players
-        self.num_matches = len(interactions)
+        if progress_bar:
+            self.progress_bar = tqdm.tqdm(total=25,
+                                          desc="Analysing")
 
-        if not players or not repetitions:
-            self.players, self.repetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
-        else:
-            self.players, self.repetitions = players, repetitions
+        df = dd.read_csv(filename)
+        dask_tasks = self._build_tasks(df)
 
-        self.nplayers = len(self.players)
+        if processes == 0:
+            processes = cpu_count()
 
-        self._build_empty_metrics()
-        self._build_score_related_metrics(progress_bar=progress_bar)
+        out = self._compute_tasks(tasks=dask_tasks, processes=processes)
 
-    def create_progress_bar(self, desc=None):
+        self._reshape_out(out)
+
+        if progress_bar:
+            self.progress_bar.close()
+
+    def _reshape_out(self, out):
         """
-        Create a progress bar for a read through of the data file.
+        Reshape the various pandas series objects to be of the required form and
+        set the corresponding attributes.
+        """
 
+        (mean_per_reps_player_opponent_df,
+         sum_per_player_opponent_df,
+         sum_per_player_repetition_df,
+         normalised_scores_series,
+         initial_cooperation_count_series,
+         interactions_count_series) = out
+
+        self.payoffs = self._build_payoffs(mean_per_reps_player_opponent_df["Score per turn"])
+        self.score_diffs = self._build_score_diffs(mean_per_reps_player_opponent_df["Score difference per turn"])
+        self.match_lengths = self._build_match_lengths(mean_per_reps_player_opponent_df["Turns"])
+
+        self.wins = self._build_wins(sum_per_player_repetition_df["Win"])
+        self.scores = self._build_scores(sum_per_player_repetition_df["Score"])
+        self.normalised_scores = self._build_normalised_scores(normalised_scores_series)
+        self.cooperation = self._build_cooperation(sum_per_player_opponent_df["Cooperation count"])
+        self.good_partner_matrix = self._build_good_partner_matrix(sum_per_player_opponent_df["Good partner"])
+
+        columns = ["CC count", "CD count", "DC count", "DD count"]
+        self.state_distribution = self._build_state_distribution(sum_per_player_opponent_df[columns])
+        self.normalised_state_distribution = self._build_normalised_state_distribution()
+
+        columns = ["CC to C count",
+                   "CC to D count",
+                   "CD to C count",
+                   "CD to D count",
+                   "DC to C count",
+                   "DC to D count",
+                   "DD to C count",
+                   "DD to D count"]
+        self.state_to_action_distribution = self._build_state_to_action_distribution(sum_per_player_opponent_df[columns])
+        self.normalised_state_to_action_distribution = self._build_normalised_state_to_action_distribution()
+
+        self.initial_cooperation_count = self._build_initial_cooperation_count(initial_cooperation_count_series)
+        self.initial_cooperation_rate = self._build_initial_cooperation_rate(interactions_count_series)
+        self.good_partner_rating = self._build_good_partner_rating(interactions_count_series)
+
+        self.normalised_cooperation = self._build_normalised_cooperation()
+        self.ranking = self._build_ranking()
+        self.ranked_names = self._build_ranked_names()
+        self.payoff_matrix = self._build_payoff_matrix()
+        self.payoff_stddevs = self._build_payoff_stddevs()
+        self.payoff_diffs_means = self._build_payoff_diffs_means()
+        self.cooperating_rating = self._build_cooperating_rating()
+        self.vengeful_cooperation = self._build_vengeful_cooperation()
+        self.eigenjesus_rating = self._build_eigenjesus_rating()
+        self.eigenmoses_rating = self._build_eigenmoses_rating()
+
+    @update_progress_bar
+    def _build_payoffs(self, payoffs_series):
+        """
         Parameters
         ----------
-            desc : string
-                A description.
-        """
-        return tqdm.tqdm(total=self.num_matches, desc=desc)
 
-    def _update_players(self, index_pair, players):
-        """
-        During a read of the data, update the internal players dictionary
+            payoffs_series : pandas.Series
 
+        Returns:
+        --------
+            The mean of per turn payoffs.
+            List of the form:
+            [ML1, ML2, ML3..., MLn]
+            Where n is the number of players and MLi is a list of the form:
+            [pi1, pi2, pi3, ..., pim]
+            Where m is the number of players and pij is a list of the form:
+            [uij1, uij2, ..., uijk]
+            Where k is the number of repetitions and u is the mean utility (over
+            all repetitions) obtained by player i against player j.
+        """
+        payoffs_dict = dict(payoffs_series)
+        payoffs = []
+        for player_index in range(self.num_players):
+            matrix = []
+            for opponent_index in range(self.num_players):
+                row = []
+                for repetition in range(self.repetitions):
+                    key = (repetition, player_index, opponent_index)
+                    if key in payoffs_dict:
+                        row.append(payoffs_dict[key])
+                matrix.append(row)
+            payoffs.append(matrix)
+        return payoffs
+
+    @update_progress_bar
+    def _build_score_diffs(self, payoff_diffs_series):
+        """
         Parameters
         ----------
 
-            index_pair : tuple
-                A tuple of player indices
-            players : tuple
-                A tuple of player names
+            payoffs_diffs_series : pandas.Series
+
+        Returns:
+        --------
+            The mean of per turn payoff differences
+            List of the form:
+            [ML1, ML2, ML3..., MLn]
+            Where n is the number of players and MLi is a list of the form:
+            [pi1, pi2, pi3, ..., pim]
+            Where m is the number of players and pij is a list of the form:
+            [uij1, uij2, ..., uijk]
+            Where k is the number of repetitions and u is the mean utility
+            difference (over all repetitions) obtained by player i against
+            player j.
         """
-        for index, player in zip(index_pair, players):
-            if index not in self.players_d:
-                self.players_d[index] = player
 
-    def _update_repetitions(self, index_pair, nbr=1):
+        payoff_diffs_dict = payoff_diffs_series.to_dict()
+        score_diffs = []
+        for player_index in range(self.num_players):
+            matrix = []
+            for opponent_index in range(self.num_players):
+                row = []
+                for repetition in range(self.repetitions):
+                    row.append(payoff_diffs_dict.get((repetition,
+                                                      player_index,
+                                                      opponent_index,
+                                                      ), 0))
+                matrix.append(row)
+            score_diffs.append(matrix)
+        return score_diffs
+
+    @update_progress_bar
+    def _build_match_lengths(self, length_series):
+        length_dict = dict(length_series)
+        match_lengths = []
+        for repetition in range(self.repetitions):
+            matrix = []
+            for player_index in range(self.num_players):
+                row = []
+                for opponent_index in range(self.num_players):
+                    row.append(length_dict.get((repetition,
+                                                player_index,
+                                                opponent_index), 0))
+                matrix.append(row)
+            match_lengths.append(matrix)
+        return match_lengths
+
+    @update_progress_bar
+    def _build_wins(self, wins_series):
+        wins_dict = wins_series.to_dict()
+        wins = [[wins_dict.get((player_index, repetition), 0)
+                  for repetition in range(self.repetitions)]
+                 for player_index in range(self.num_players)]
+        return wins
+
+    @update_progress_bar
+    def _build_scores(self, scores_series):
+        scores_dict = scores_series.to_dict()
+        scores = [[scores_series.get((player_index, repetition), 0)
+                   for repetition in range(self.repetitions)]
+                  for player_index in range(self.num_players)]
+        return scores
+
+    @update_progress_bar
+    def _build_normalised_scores(self, normalised_scores_series):
+        normalised_scores_dict = normalised_scores_series.to_dict()
+        normalised_scores = [[normalised_scores_series.get((player_index,
+                                                            repetition), 0)
+                              for repetition in range(self.repetitions)]
+                             for player_index in range(self.num_players)]
+        return normalised_scores
+
+    @update_progress_bar
+    def _build_cooperation(self, cooperation_series):
+        cooperation_dict = cooperation_series.to_dict()
+        cooperation = []
+        for player_index in range(self.num_players):
+            row = []
+            for opponent_index in range(self.num_players):
+                count = cooperation_dict.get((player_index, opponent_index),0)
+                if player_index == opponent_index:
+					# Address double count
+                    count = int(count / 2)
+                row.append(count)
+            cooperation.append(row)
+        return cooperation
+
+    @update_progress_bar
+    def _build_good_partner_matrix(self, good_partner_series):
+        good_partner_dict = dict(good_partner_series)
+        good_partner_matrix = []
+        for player_index in range(self.num_players):
+            row = []
+            for opponent_index in range(self.num_players):
+                if player_index == opponent_index:
+                    # The reduce operation implies a double count of self
+                    # interactions.
+                    row.append(0)
+                else:
+                    row.append(good_partner_dict.get((player_index,
+                                                      opponent_index), 0))
+            good_partner_matrix.append(row)
+        return good_partner_matrix
+
+
+    @update_progress_bar
+    def _build_payoff_matrix(self):
+        payoff_matrix = [[0 for opponent_index in range(self.num_players)]
+                         for player_index in range(self.num_players)]
+
+        pairs = itertools.product(range(self.num_players), repeat=2)
+
+        for player_index, opponent_index in pairs:
+            utilities = self.payoffs[player_index][opponent_index]
+            if utilities:
+                payoff_matrix[player_index][opponent_index] = mean(utilities)
+
+        return payoff_matrix
+
+    @update_progress_bar
+    def _build_payoff_stddevs(self):
+        payoff_stddevs = [[0 for opponent_index in range(self.num_players)]
+                          for player_index in range(self.num_players)]
+
+        pairs = itertools.product(range(self.num_players), repeat=2)
+
+        for player_index, opponent_index in pairs:
+            utilities = self.payoffs[player_index][opponent_index]
+            if utilities:
+                payoff_stddevs[player_index][opponent_index] = std(utilities)
+
+        return payoff_stddevs
+
+
+    @update_progress_bar
+    def _build_payoff_diffs_means(self):
+        payoff_diffs_means = [[mean(diff) for diff in player]
+                               for player in self.score_diffs]
+
+        return payoff_diffs_means
+
+    @update_progress_bar
+    def _build_state_distribution(self, state_distribution_series):
+        state_key_map = {'CC count': (C, C),
+                         'CD count': (C, D),
+                         'DC count': (D, C),
+                         'DD count': (D, D)}
+        state_distribution = [[create_counter_dict(state_distribution_series,
+                                                   player_index,
+                                                   opponent_index,
+                                                   state_key_map)
+                               for opponent_index in range(self.num_players)]
+                              for player_index in range(self.num_players)]
+        return state_distribution
+
+    @update_progress_bar
+    def _build_normalised_state_distribution(self):
         """
-        During a read of the data, update the internal repetitions dictionary
+        Returns:
+        --------
+            norm : list
 
-        Parameters
-        ----------
+            Normalised state distribution. A list of lists of counter objects:
 
-            index_pair : tuple
-                A tuple of player indices
-            nbr : integer
-                The number of repetitions
+            Dictionary where the keys are the states and the values are a
+            normalized counts of the number of times that state occurs.
         """
-        try:
-            self.repetitions_d[index_pair] += nbr
-        except KeyError:
-            self.repetitions_d[index_pair] = nbr
+        normalised_state_distribution = []
+        for player in self.state_distribution:
+            counters = []
+            for counter in player:
+                total = sum(counter.values())
+                counters.append(Counter({key: value / total for
+                                         key, value in counter.items()}))
+            normalised_state_distribution.append(counters)
+        return normalised_state_distribution
 
-    def _build_repetitions(self):
+    @update_progress_bar
+    def _build_state_to_action_distribution(self,
+                                            state_to_action_distribution_series):
+        state_to_action_key_map = {"CC to C count": ((C, C), C),
+                                   "CC to D count": ((C, C), D),
+                                   "CD to C count": ((C, D), C),
+                                   "CD to D count": ((C, D), D),
+                                   "DC to C count": ((D, C), C),
+                                   "DC to D count": ((D, C), D),
+                                   "DD to C count": ((D, D), C),
+                                   "DD to D count": ((D, D), D)}
+        state_to_action_distribution = [[
+                create_counter_dict(state_to_action_distribution_series,
+                                    player_index,
+                                    opponent_index,
+                                    state_to_action_key_map)
+                                 for opponent_index in range(self.num_players)]
+                                for player_index in range(self.num_players)]
+        return state_to_action_distribution
+
+    @update_progress_bar
+    def _build_normalised_state_to_action_distribution(self):
         """
-        Count the number of repetitions
+        Returns:
+        --------
+            norm : list
 
-        Returns
-        -------
+            A list of lists of counter objects.
 
-            repetitions : int
-                The number of repetitions
+            Dictionary where the keys are the states and the values are a
+            normalized counts of the number of times that state goes to a given
+            action.
         """
-        repetitions = max(self.repetitions_d.values())
+        normalised_state_to_action_distribution = []
+        for player in self.state_to_action_distribution:
+            counters = []
+            for counter in player:
+                norm_counter = Counter()
+                for state in [(C, C), (C, D), (D, C), (D, D)]:
+                    total = counter[(state, C)] + counter[(state, D)]
+                    if total > 0:
+                        for action in [C, D]:
+                            if counter[(state, action)] > 0:
+                                norm_counter[(state, action)] = counter[(state, action)] / total
+                counters.append(norm_counter)
+            normalised_state_to_action_distribution.append(counters)
+        return normalised_state_to_action_distribution
 
-        del self.repetitions_d  # Manual garbage collection
-        return repetitions
+    @update_progress_bar
+    def _build_initial_cooperation_count(self, initial_cooperation_count_series):
+        initial_cooperation_count_dict = initial_cooperation_count_series.to_dict()
+        initial_cooperation_count = [
+                initial_cooperation_count_dict.get(player_index, 0)
+                                        for player_index in
+                                        range(self.num_players)]
+        return initial_cooperation_count
 
-    def _build_players(self):
-        """
-        List the players
+    @update_progress_bar
+    def _build_normalised_cooperation(self):
+        normalised_cooperation = [list(nan_to_num(row))
+                                  for row in array(self.cooperation) /
+                                  sum(map(array, self.match_lengths))]
+        return normalised_cooperation
 
-        Returns
-        -------
+    @update_progress_bar
+    def _build_initial_cooperation_rate(self, interactions_series):
+        interactions_dict = interactions_series.to_dict()
+        interactions_array = array([interactions_series.get(player_index, 0)
+                                    for player_index in range(self.num_players)])
+        initial_cooperation_rate = list(
+           nan_to_num(array(self.initial_cooperation_count) /
+                            interactions_array))
+        return initial_cooperation_rate
 
-            players : list
-                An ordered list of players
-        """
-        players = []
-        for i in range(len(self.players_d)):
-            players.append(self.players_d[i])
+    @update_progress_bar
+    def _build_ranking(self):
+        ranking = sorted(
+                range(self.num_players),
+                key=lambda i: -nanmedian(self.normalised_scores[i]))
+        return ranking
 
-        del self.players_d  # Manual garbage collection
-        return players
+    @update_progress_bar
+    def _build_ranked_names(self):
+        ranked_names = [str(self.players[i]) for i in self.ranking]
+        return ranked_names
 
     @update_progress_bar
     def _build_eigenmoses_rating(self):
@@ -191,16 +481,19 @@ class ResultSet(object):
             player j.
         """
 
-        plist = list(range(self.nplayers))
+        plist = list(range(self.num_players))
         total_length_v_opponent = [zip(*[rep[player_index] for
                                          rep in self.match_lengths])
                                    for player_index in plist]
         lengths = [[sum(e) for j, e in enumerate(row) if i != j] for i, row in
                    enumerate(total_length_v_opponent)]
 
+        cooperation = [[col for j, col in enumerate(row) if i != j]
+                       for i, row in enumerate(self.cooperation)]
         # Max is to deal with edge cases of matches that have no turns
-        return [sum(cs) / max(1, sum(ls)) for cs, ls
-                in zip(self.cooperation, lengths)]
+        cooperating_rating = [sum(cs) / max(1, sum(ls))
+                              for cs, ls in zip(cooperation, lengths)]
+        return cooperating_rating
 
     @update_progress_bar
     def _build_vengeful_cooperation(self):
@@ -213,556 +506,77 @@ class ResultSet(object):
 
                 Dij = 2(Cij - 0.5)
         """
-        return [[2 * (element - 0.5) for element in row]
-                for row in self.normalised_cooperation]
+        vengeful_cooperation = [[2 * (element - 0.5) for element in row]
+                                for row in self.normalised_cooperation]
+        return vengeful_cooperation
 
     @update_progress_bar
-    def _build_payoff_diffs_means(self):
-        """
-        Returns:
-        --------
-
-            The score differences between players.
-            List of the form:
-
-            [ML1, ML2, ML3..., MLn]
-
-            Where n is the number of players and MLi is a list of the form:
-
-            [pi1, pi2, pi3, ..., pim]
-
-            Where pij is the mean difference of the
-            scores per turn between player i and j in repetition m.
-        """
-        payoff_diffs_means = [[mean(diff) for diff in player]
-                              for player in self.score_diffs]
-        return payoff_diffs_means
-
-    @update_progress_bar
-    def _build_payoff_stddevs(self):
-        """
-        Returns:
-        --------
-
-            The mean of per turn payoffs.
-            List of the form:
-
-            [ML1, ML2, ML3..., MLn]
-
-            Where n is the number of players and MLi is a list of the form:
-
-            [pi1, pi2, pi3, ..., pim]
-
-            Where m is the number of players and pij is a list of the form:
-
-            [uij1, uij2, ..., uijk]
-
-            Where k is the number of repetitions and u is the standard
-            deviation of the utility (over all repetitions) obtained by player
-            i against player j.
-        """
-        plist = list(range(self.nplayers))
-        payoff_stddevs = [[[0] for opponent in plist] for player in plist]
-
-        for player in plist:
-            for opponent in plist:
-                utilities = self.payoffs[player][opponent]
-
-                if utilities:
-                    payoff_stddevs[player][opponent] = std(utilities)
-                else:
-                    payoff_stddevs[player][opponent] = 0
-
-        return payoff_stddevs
-
-    @update_progress_bar
-    def _build_payoff_matrix(self):
-        """
-        Returns:
-        --------
-            The mean of per turn payoffs.
-            List of the form:
-
-            [ML1, ML2, ML3..., MLn]
-
-            Where n is the number of players and MLi is a list of the form:
-
-            [pi1, pi2, pi3, ..., pim]
-
-            Where m is the number of players and pij is a list of the form:
-
-            [uij1, uij2, ..., uijk]
-
-            Where k is the number of repetitions and u is the mean utility (over
-            all repetitions) obtained by player i against player j.
-        """
-        plist = list(range(self.nplayers))
-        payoff_matrix = [[[] for opponent in plist] for player in plist]
-
-        for player in plist:
-            for opponent in plist:
-                utilities = self.payoffs[player][opponent]
-
-                if utilities:
-                    payoff_matrix[player][opponent] = mean(utilities)
-                else:
-                    payoff_matrix[player][opponent] = 0
-
-        return payoff_matrix
-
-    @update_progress_bar
-    def _build_ranked_names(self):
-        """
-        Returns:
-        --------
-            Returns the ranked names. A list of names as calculated by
-            self.ranking.
-        """
-
-        return [str(self.players[i]) for i in self.ranking]
-
-    @update_progress_bar
-    def _build_ranking(self):
-        """
-        Returns:
-        --------
-
-            The ranking. List of the form:
-
-            [R1, R2, R3..., Rn]
-
-            Where n is the number of players and Rj is the rank of the jth player
-            (based on median normalised score).
-        """
-        return sorted(range(self.nplayers),
-                      key=lambda i: -nanmedian(self.normalised_scores[i]))
-
-    @update_progress_bar
-    def _build_normalised_state_distribution(self):
-        """
-        Returns:
-        --------
-            norm : list
-
-            Normalised state distribution. A list of lists of counter objects:
-
-            Dictionary where the keys are the states and the values are a
-            normalized counts of the number of times that state occurs.
-        """
-        norm = []
-        for player in self.state_distribution:
-            counters = []
-            for counter in player:
-                total = sum(counter.values())
-                counters.append(Counter({key: value / total for
-                                         key, value in counter.items()}))
-            norm.append(counters)
-        return norm
-
-    @update_progress_bar
-    def _build_normalised_state_to_action_distribution(self):
-        """
-        Returns:
-        --------
-            norm : list
-
-            A list of lists of counter objects.
-
-            Dictionary where the keys are the states and the values are a
-            normalized counts of the number of times that state goes to a given
-            action.
-        """
-        norm = []
-        for player in self.state_to_action_distribution:
-            counters = []
-            for counter in player:
-                norm_counter = Counter()
-                for state in [(C, C), (C, D), (D, C), (D, D)]:
-                    total = counter[(state, C)] + counter[(state, D)]
-                    if total > 0:
-                        for action in [C, D]:
-                            if counter[(state, action)] > 0:
-                                norm_counter[(state, action)] = counter[(state, action)] / total
-                counters.append(norm_counter)
-            norm.append(counters)
-        return norm
-
-    def _build_empty_metrics(self, keep_interactions=False):
-        """
-        Creates the various empty metrics ready to be updated as the data is
-        read.
-
-        Parameters
-        ----------
-
-            keep_interactions : bool
-                Whether or not to load the interactions in to memory
-        """
-        plist = range(self.nplayers)
-        replist = range(self.repetitions)
-        self.match_lengths = [[[0 for opponent in plist] for player in plist]
-                              for _ in replist]
-        self.wins = [[0 for _ in replist] for player in plist]
-        self.scores = [[0 for _ in replist] for player in plist]
-        self.normalised_scores = [[[] for _ in replist] for player in plist]
-        self.payoffs = [[[] for opponent in plist] for player in plist]
-        self.score_diffs = [[[0] * self.repetitions for opponent in plist]
-                            for player in plist]
-        self.cooperation = [[0 for opponent in plist] for player in plist]
-        self.normalised_cooperation = [[[] for opponent in plist]
-                                       for player in plist]
-        self.initial_cooperation_count = [0 for player in plist]
-        self.state_distribution = [[Counter() for opponent in plist]
-                                   for player in plist]
-        self.state_to_action_distribution = [[Counter() for opponent in plist]
-                                             for player in plist]
-        self.good_partner_matrix = [[0 for opponent in plist]
-                                    for player in plist]
-
-        self.total_interactions = [0 for player in plist]
-        self.good_partner_rating = [0 for player in plist]
-
-        if keep_interactions:
-            self.interactions = {}
-
-    def _update_match_lengths(self, repetition, p1, p2, interaction):
-        """
-        During a read of the data, update the match lengths attribute
-
-        Parameters
-        ----------
-
-            repetition : int
-                The index of the repetition
-            p1, p2 : int
-                The indices of the first and second player
-            interaction : list
-                A list of tuples of interactions
-        """
-        self.match_lengths[repetition][p1][p2] = len(interaction)
-
-    def _update_payoffs(self, p1, p2, scores_per_turn):
-        """
-        During a read of the data, update the payoffs attribute
-
-        Parameters
-        ----------
-
-            p1, p2 : int
-                The indices of the first and second player
-            scores_per_turn : tuples
-                A 2-tuple of the scores per turn for a given match
-        """
-        self.payoffs[p1][p2].append(scores_per_turn[0])
-        if p1 != p2:
-            self.payoffs[p2][p1].append(scores_per_turn[1])
-
-    def _update_score_diffs(self, repetition, p1, p2, scores_per_turn):
-        """
-        During a read of the data, update the score diffs attribute
-
-        Parameters
-        ----------
-
-            p1, p2 : int
-                The indices of the first and second player
-            scores_per_turn : tuples
-                A 2-tuple of the scores per turn for a given match
-        """
-        diff = scores_per_turn[0] - scores_per_turn[1]
-        self.score_diffs[p1][p2][repetition] = diff
-        self.score_diffs[p2][p1][repetition] = -diff
-
-    def _update_normalised_cooperation(self, p1, p2, interaction):
-        """
-        During a read of the data, update the normalised cooperation attribute
-
-        Parameters
-        ----------
-
-            p1, p2 : int
-                The indices of the first and second player
-            interaction : list of tuples
-                A list of interactions
-        """
-        normalised_cooperations = iu.compute_normalised_cooperation(interaction)
-
-        self.normalised_cooperation[p1][p2].append(normalised_cooperations[0])
-        self.normalised_cooperation[p2][p1].append(normalised_cooperations[1])
-
-    def _update_wins(self, repetition, p1, p2, interaction):
-        """
-        During a read of the data, update the wins attribute
-
-        Parameters
-        ----------
-
-            repetition : int
-                The index of a repetition
-            p1, p2 : int
-                The indices of the first and second player
-            interaction : list of tuples
-                A list of interactions
-        """
-        match_winner_index = iu.compute_winner_index(interaction,
-                                                     game=self.game)
-        index_pair = [p1, p2]
-        if match_winner_index is not False:
-            winner_index = index_pair[match_winner_index]
-            self.wins[winner_index][repetition] += 1
-
-    def _update_scores(self, repetition, p1, p2, interaction):
-        """
-        During a read of the data, update the scores attribute
-
-        Parameters
-        ----------
-
-            repetition : int
-                The index of a repetition
-            p1, p2 : int
-                The indices of the first and second player
-            interaction : list of tuples
-                A list of interactions
-        """
-        final_scores = iu.compute_final_score(interaction, game=self.game)
-        for index, player in enumerate([p1, p2]):
-            player_score = final_scores[index]
-            self.scores[player][repetition] += player_score
-
-    def _update_normalised_scores(self, repetition, p1, p2, scores_per_turn):
-        """
-        During a read of the data, update the normalised scores attribute
-
-        Parameters
-        ----------
-
-            repetition : int
-                The index of a repetition
-            p1, p2 : int
-                The indices of the first and second player
-            scores_per_turn : tuple
-                A 2 tuple with the scores per turn of each player
-        """
-        for index, player in enumerate([p1, p2]):
-            score_per_turn = scores_per_turn[index]
-            self.normalised_scores[player][repetition].append(score_per_turn)
-
-    def _update_cooperation(self, p1, p2, cooperations):
-        """
-        During a read of the data, update the cooperation attribute
-
-        Parameters
-        ----------
-
-            p1, p2 : int
-                The indices of the first and second player
-            cooperations : tuple
-                A 2 tuple with the count of cooperation each player
-        """
-        self.cooperation[p1][p2] += cooperations[0]
-        self.cooperation[p2][p1] += cooperations[1]
-
-    def _update_initial_cooperation_count(self, p1, p2, initial_cooperations):
-        """
-        During a read of the data, update the initial cooperation count
-        attribute
-
-        Parameters
-        ----------
-
-            p1, p2 : int
-                The indices of the first and second player
-            initial_cooperations : tuple
-                A 2 tuple with a 0 or 1 indicating if the initial move of each
-                player was Cooperation (0) or Defection (1), e.g. (0, 1) for a
-                round (C, D)
-        """
-        self.initial_cooperation_count[p1] += initial_cooperations[0]
-        self.initial_cooperation_count[p2] += initial_cooperations[1]
-
-    def _update_state_distribution(self, p1, p2, counter):
-        """
-        During a read of the data, update the state_distribution attribute
-
-        Parameters
-        ----------
-
-            p1, p2 : int
-                The indices of the first and second player
-            counter : collections.Counter
-                A counter object for the states of a match
-        """
-        self.state_distribution[p1][p2] += counter
-
-        counter[(C, D)], counter[(D, C)] = counter[(D, C)], counter[(C, D)]
-        self.state_distribution[p2][p1] += counter
-
-    def _update_state_to_action_distribution(self, p1, p2, counter_list):
-        """
-        During a read of the data, update the state_distribution attribute
-
-        Parameters
-        ----------
-
-            p1, p2 : int
-                The indices of the first and second player
-            counter_list : list of collections.Counter
-                A list of counter objects for the states to action of a match
-        """
-        counter = counter_list[0]
-        self.state_to_action_distribution[p1][p2] += counter
-
-        counter = counter_list[1]
-        for act in [C, D]:
-            counter[((C, D), act)], counter[((D, C), act)] = counter[((D, C), act)], counter[((C, D), act)]
-        self.state_to_action_distribution[p2][p1] += counter
-
-    def _update_good_partner_matrix(self, p1, p2, cooperations):
-        """
-        During a read of the data, update the good partner matrix attribute
-
-        Parameters
-        ----------
-
-            p1, p2 : int
-                The indices of the first and second player
-            cooperations : tuple
-                A 2 tuple with the count of cooperation each player
-        """
-        if cooperations[0] >= cooperations[1]:
-            self.good_partner_matrix[p1][p2] += 1
-        if cooperations[1] >= cooperations[0]:
-            self.good_partner_matrix[p2][p1] += 1
-
-    def _summarise_normalised_scores(self):
-        """
-        At the end of a read of the data, finalise the normalised scores
-        """
-        for i, rep in enumerate(self.normalised_scores):
-            for j, player_scores in enumerate(rep):
-                if player_scores != []:
-                    self.normalised_scores[i][j] = mean(player_scores)
-                else:
-                    self.normalised_scores[i][j] = 0
-            try:
-                self.progress_bar.update()
-            except AttributeError:
-                pass
-
-    def _summarise_normalised_cooperation(self):
-        """
-        At the end of a read of the data, finalise the normalised cooperation
-        """
-        for i, rep in enumerate(self.normalised_cooperation):
-            for j, cooperation in enumerate(rep):
-                if cooperation != []:
-                    self.normalised_cooperation[i][j] = mean(cooperation)
-                else:
-                    self.normalised_cooperation[i][j] = 0
-            try:
-                self.progress_bar.update()
-            except AttributeError:
-                pass
-
-    @update_progress_bar
-    def _build_good_partner_rating(self):
+    def _build_good_partner_rating(self, interactions_series):
         """
         At the end of a read of the data, build the good partner rating
         attribute
         """
-        return [sum(self.good_partner_matrix[player]) /
-                max(1, self.total_interactions[player])
-                for player in range(self.nplayers)]
+        interactions_dict = interactions_series.to_dict()
+        good_partner_rating = [sum(self.good_partner_matrix[player]) /
+                               max(1, interactions_dict.get(player, 0))
+                               for player in range(self.num_players)]
+        return good_partner_rating
 
-    @update_progress_bar
-    def _build_initial_cooperation_rate(self):
+    def _compute_tasks(self, tasks, processes):
         """
-        At the end of a read of the data, build the normalised initial
-        cooperation rate attribute
+        Compute all dask tasks
         """
-        return [self.initial_cooperation_count[player] /
-                max(1, self.total_interactions[player])
-                for player in range(self.nplayers)]
+        if processes is None:
+            out = da.compute(*tasks, get=da.get)
+        else:
+            out = da.compute(*tasks, num_workers=processes)
+        return out
 
-    def _build_score_related_metrics(self, progress_bar=False,
-                                     keep_interactions=False):
+    def _build_tasks(self, df):
         """
-        Read the data and carry out all relevant calculations.
-
-        Parameters
-        ----------
-            progress_bar : bool
-                Whether or not to display a progress bar
-            keep_interactions : bool
-                Whether or not to lad the interactions in to memory
+        Returns a tuple of dask tasks
         """
-        match_chunks = self.read_match_chunks(progress_bar)
+        groups = ["Repetition", "Player index", "Opponent index"]
+        columns = ["Turns", "Score per turn", "Score difference per turn"]
+        mean_per_reps_player_opponent_task = df.groupby(groups)[columns].mean()
 
-        for match in match_chunks:
-            p1, p2 = int(match[0][0]), int(match[0][1])
+        groups = ["Player index", "Opponent index"]
+        columns = ["Cooperation count",
+                   "CC count",
+                   "CD count",
+                   "DC count",
+                   "DD count",
+                   "CC to C count",
+                   "CC to D count",
+                   "CD to C count",
+                   "CD to D count",
+                   "DC to C count",
+                   "DC to D count",
+                   "DD to C count",
+                   "DD to D count",
+                   "Good partner"]
+        sum_per_player_opponent_task = df.groupby(groups)[columns].sum()
 
-            for repetition, record in enumerate(match):
-                interaction = record[4:]
+        ignore_self_interactions_task = df["Player index"] != df["Opponent index"]
+        adf = df[ignore_self_interactions_task]
 
-                if keep_interactions:
-                    try:
-                        self.interactions[(p1, p2)].append(interaction)
-                    except KeyError:
-                        self.interactions[(p1, p2)] = [interaction]
+        groups = ["Player index", "Repetition"]
+        columns = ["Win", "Score"]
+        sum_per_player_repetition_task = adf.groupby(groups)[columns].sum()
 
-                scores_per_turn = iu.compute_final_score_per_turn(interaction,
-                                                                 game=self.game)
-                cooperations = iu.compute_cooperations(interaction)
-                state_counter = iu.compute_state_distribution(interaction)
+        normalised_scores_task = adf.groupby(["Player index",
+                                              "Repetition"]
+                                            )["Score per turn"].mean()
+        initial_cooperation_count_task = adf.groupby(["Player index"])["Initial cooperation"].sum()
+        interactions_count_task = adf.groupby("Player index")["Player index"].count()
 
-                self._update_match_lengths(repetition, p1, p2, interaction)
-                self._update_payoffs(p1, p2, scores_per_turn)
-                self._update_score_diffs(repetition, p1, p2, scores_per_turn)
-                self._update_normalised_cooperation(p1, p2, interaction)
 
-                if p1 != p2:  # Anything that ignores self interactions
-                    state_to_actions = iu.compute_state_to_action_distribution(interaction)
-
-                    for player in [p1, p2]:
-                        self.total_interactions[player] += 1
-
-                    self._update_match_lengths(repetition, p2, p1, interaction)
-                    self._update_wins(repetition, p1, p2, interaction)
-                    self._update_scores(repetition, p1, p2, interaction)
-                    self._update_normalised_scores(repetition, p1, p2,
-                                                   scores_per_turn)
-                    self._update_cooperation(p1, p2, cooperations)
-                    initial_coops = iu.compute_cooperations(interaction[:1])
-                    self._update_initial_cooperation_count(p1, p2,
-                                                           initial_coops)
-                    self._update_state_distribution(p1, p2, state_counter)
-                    self._update_state_to_action_distribution(p1, p2,
-                                                              state_to_actions)
-                    self._update_good_partner_matrix(p1, p2, cooperations)
-
-        if progress_bar:
-            self.progress_bar = tqdm.tqdm(total=13 + 2 * self.nplayers,
-                                          desc="Finishing")
-        self._summarise_normalised_scores()
-        self._summarise_normalised_cooperation()
-
-        self.ranking = self._build_ranking()
-        self.normalised_state_distribution = self._build_normalised_state_distribution()
-        self.normalised_state_to_action_distribution = self._build_normalised_state_to_action_distribution()
-        self.ranked_names = self._build_ranked_names()
-        self.payoff_matrix = self._build_payoff_matrix()
-        self.payoff_stddevs = self._build_payoff_stddevs()
-        self.payoff_diffs_means = self._build_payoff_diffs_means()
-        self.vengeful_cooperation = self._build_vengeful_cooperation()
-        self.cooperating_rating = self._build_cooperating_rating()
-        self.initial_cooperation_rate = self._build_initial_cooperation_rate()
-        self.good_partner_rating = self._build_good_partner_rating()
-        self.eigenjesus_rating = self._build_eigenjesus_rating()
-        self.eigenmoses_rating = self._build_eigenmoses_rating()
-
-        if progress_bar:
-            self.progress_bar.close()
+        return (mean_per_reps_player_opponent_task,
+                sum_per_player_opponent_task,
+                sum_per_player_repetition_task,
+                normalised_scores_task,
+                initial_cooperation_count_task,
+                interactions_count_task)
 
     def __eq__(self, other):
         """
@@ -888,204 +702,29 @@ class ResultSet(object):
             for player in summary_data:
                 writer.writerow(player)
 
-    def read_match_chunks(self, progress_bar=False):
-        """
-        A generator to return a given repetitions of matches
 
-        Parameters
-        ----------
-
-            progress_bar : bool
-                whether or not to display a progress bar
-
-        Yields
-        ------
-            repetitions : list
-                A list of lists include index pairs, player pairs and
-                repetitions. All repetitions for a given pair are yielded
-                together.
-        """
-
-        if progress_bar:
-            progress_bar = self.create_progress_bar(desc="Analysing")
-
-        for match_pair, interactions in self.interactions.items():
-            players_pair = [self.players[i] for i in match_pair]
-            repetitions = [list(match_pair) + players_pair + rep for rep in
-                           interactions]
-            if progress_bar:
-                progress_bar.update()
-            yield repetitions
-
-        if progress_bar:
-            progress_bar.close()
-
-    def _read_players_and_repetition_numbers(self, progress_bar=False):
-        """
-        Read the players and the repetitions numbers
-
-        Parameters
-        ----------
-            progress_bar : bool
-                Whether or not to display a progress bar
-        """
-
-        if progress_bar:
-            progress_bar = self.create_progress_bar(desc="Counting")
-
-        self.players_d = {}
-        self.repetitions_d = {}
-        for index_pair, interactions in self.interactions.items():
-            players = [self.players[i] for i in index_pair]
-            self._update_repetitions(index_pair, len(interactions))
-            self._update_players(index_pair, players)
-            if progress_bar:
-                progress_bar.update()
-
-        if progress_bar:
-            progress_bar.close()
-
-        repetitions = self._build_repetitions()
-        players = self._build_players()
-
-        return players, repetitions
-
-
-class ResultSetFromFile(ResultSet):
+def create_counter_dict(df, player_index, opponent_index, key_map):
     """
-    A class to hold the results of a tournament. Reads in a CSV file produced
-    by the tournament class.
+    Create a Counter object mapping states (corresponding to columns of df) for
+    players given by player_index, opponent_index. Renaming the variables with
+    `key_map`. Used by `ResultSet._reshape_out`
+
+    Parameters
+    ----------
+        df : a multiindex pandas df
+        player_index: int
+        opponent_index: int
+        key_map : a dict
+            maps cols of df to strings
+
+    Returns
+    -------
+        A counter dictionary
     """
-
-    def __init__(self, filename, progress_bar=True,
-                 num_interactions=False, players=False, repetitions=False,
-                 game=None, keep_interactions=False):
-        """
-        Parameters
-        ----------
-            filename : string
-                the file from which to read the interactions
-            progress_bar : bool
-                Whether or not to create a progress bar which will be updated
-            num_interactions : int
-                The number of interactions in the file. Used for the progress
-                bar. If not known but progress_bar is true, will be efficiently
-                read from file.
-            players : list
-                A list of the names of players. If not known will be efficiently
-                read from file.
-            repetitions : int
-                The number of repetitions of each match. If not know will be
-                efficiently read from file.
-            game : axelrod.Game
-                The particular game that should be used to calculate the scores.
-            keep_interactions : bool
-                Whether or not to load the interactions in to memory. WARNING:
-                for large tournaments this drastically increases the memory
-                required.
-        """
-        if game is None:
-            self.game = Game()
-        else:
-            self.game = game
-
-        self.filename = filename
-        self.num_interactions = num_interactions
-
-        if not players and not repetitions:
-            self.players, self.repetitions = self._read_players_and_repetition_numbers(progress_bar=progress_bar)
-        else:
-            self.players, self.repetitions = players, repetitions
-        self.nplayers = len(self.players)
-
-        self._build_empty_metrics(keep_interactions=keep_interactions)
-        self._build_score_related_metrics(progress_bar=progress_bar,
-                                          keep_interactions=keep_interactions)
-
-    def create_progress_bar(self, desc=None):
-        """
-        Create a progress bar for a read through of the data file.
-
-        Parameters
-        ----------
-            desc : string
-                A description.
-        """
-        if not self.num_interactions:
-            with open(self.filename) as f:
-                self.num_interactions = sum(1 for line in f)
-        return tqdm.tqdm(total=self.num_interactions, desc=desc)
-
-    def _read_players_and_repetition_numbers(self, progress_bar=False):
-        """
-        Read the players and the repetitions numbers
-
-        Parameters
-        ----------
-            progress_bar : bool
-                Whether or not to display a progress bar
-        """
-
-        if progress_bar:
-            progress_bar = self.create_progress_bar(desc="Counting")
-
-        self.players_d = {}
-        self.repetitions_d = {}
-        with open(self.filename, 'r') as f:
-            for row in csv.reader(f):
-                index_pair = (int(row[0]), int(row[1]))
-                players = (row[2], row[3])
-                self._update_repetitions(index_pair)
-                self._update_players(index_pair, players)
-                if progress_bar:
-                    progress_bar.update()
-
-        if progress_bar:
-            progress_bar.close()
-
-        repetitions = self._build_repetitions()
-        players = self._build_players()
-
-        return players, repetitions
-
-    def read_match_chunks(self, progress_bar=False):
-        """
-        A generator to return a given repetitions of matches
-
-        Parameters
-        ----------
-
-            progress_bar : bool
-                whether or not to display a progress bar
-
-        Yields
-        ------
-            repetitions : list
-                A list of lists include index pairs, player pairs and
-                repetitions. All repetitions for a given pair are yielded
-                together.
-        """
-
-        if progress_bar:
-            progress_bar = self.create_progress_bar(desc="Analysing")
-
-        with open(self.filename, 'r') as f:
-            csv_reader = csv.reader(f)
-            repetitions = []
-            count = 0
-            for row in csv_reader:
-                index_and_names = row[:4]
-                p1_actions = str_to_actions(row[4])
-                p2_actions = str_to_actions(row[5])
-                interactions = list(zip(p1_actions, p2_actions))
-                repetitions.append(index_and_names + interactions)
-                count += 1
-                if progress_bar:
-                    progress_bar.update()
-                if count == self.repetitions:
-                    yield repetitions
-                    repetitions = []
-                    count = 0
-
-        if progress_bar:
-            progress_bar.close()
+    counter = Counter()
+    if player_index != opponent_index:
+        if (player_index, opponent_index) in df.index:
+            for key, value in df.loc[player_index, opponent_index].items():
+                if value > 0:
+                    counter[key_map[key]] = value
+    return counter

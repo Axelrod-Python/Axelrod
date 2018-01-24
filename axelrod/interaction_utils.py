@@ -10,6 +10,7 @@ interactions.
 from collections import Counter
 import csv
 import tqdm
+import pandas as pd
 
 from axelrod.action import Action, str_to_actions
 from .game import Game
@@ -239,36 +240,27 @@ def compute_sparklines(interactions, c_symbol='█', d_symbol=' '):
         sparkline(histories[1], c_symbol, d_symbol))
 
 
-def read_interactions_from_file(filename, progress_bar=True,
-                                num_interactions=False):
+def read_interactions_from_file(filename,
+                                progress_bar=True,
+                                ):
     """
     Reads a file and returns a dictionary mapping tuples of player pairs to
     lists of interactions
     """
+    df = pd.read_csv(filename)[["Interaction index", "Player index",
+                                "Opponent index", "Actions"]]
+    groupby = df.groupby("Interaction index")
     if progress_bar:
-        if not num_interactions:
-            with open(filename) as f:
-                num_interactions = sum(1 for line in f)
-        progress_bar = tqdm.tqdm(total=num_interactions, desc="Loading")
+        groupby = tqdm.tqdm(groupby)
 
     pairs_to_interactions = {}
-    with open(filename, 'r') as f:
-        for row in csv.reader(f):
-            index_pair = (int(row[0]), int(row[1]))
-            p1_actions = str_to_actions(row[4])
-            p2_actions = str_to_actions(row[5])
-            interaction = list(zip(p1_actions, p2_actions))
-
-            try:
-                pairs_to_interactions[index_pair].append(interaction)
-            except KeyError:
-                pairs_to_interactions[index_pair] = [interaction]
-
-            if progress_bar:
-                progress_bar.update()
-
-    if progress_bar:
-        progress_bar.close()
+    for _, d in tqdm.tqdm(groupby):
+        key = tuple(d[["Player index", "Opponent index"]].iloc[0])
+        value = list(map(str_to_actions, zip(*d["Actions"])))
+        try:
+            pairs_to_interactions[key].append(value)
+        except KeyError:
+            pairs_to_interactions[key] = [value]
     return pairs_to_interactions
 
 
