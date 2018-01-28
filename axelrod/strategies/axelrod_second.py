@@ -4,6 +4,7 @@ Additional strategies from Axelrod's second tournament.
 
 import random
 import numpy as np
+from typing import List
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -1758,7 +1759,7 @@ class Yamachi(Player):
                                    (D, C, D): 0,
                                    (D, D, C): 0,
                                    (D, D, D): 0}
-        self.mod_history = list()
+        self.mod_history = list() # type: List[Action]
 
     def try_return(self, to_return, opp_def):
         """
