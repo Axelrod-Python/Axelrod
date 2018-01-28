@@ -1055,3 +1055,109 @@ class TestRichardHufford(TestPlayer):
         actions += [(D, D)]  # Three of last four are disagreements.
         actions += [(D, D)]  # Now there are 5/9 disagreements, so Defect.
         self.versus_test(axelrod.WinShiftLoseStay(), expected_actions=actions, attrs={"num_agreements": 5})
+
+
+class TestYamachi(TestPlayer):
+    name = 'Yamachi'
+    player = axelrod.Yamachi
+    expected_classifier = {
+        'memory_depth': float('inf'),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 100
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D)] * 2  # Also Cooperate in first two moves (until we update `count_them_us_them`.)
+        actions += [(C, D)]  # them_three_ago defaults to C, so that (C, C, *) gets updated, then (D, C, *) get checked.
+                             # It's actually impossible to Defect on the third move.
+        actions += [(D, D)]  # (D, C, *) gets updated, then checked.
+        actions += [(C, D)]  # (D, C, *) gets updated, but (D, D, *) checked.
+        actions += [(D, D)] * 30  # (D, D, *) gets updated and checked from here on.
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        actions = [(C, C), (C, D)]
+        actions += [(C, C)]  # Increment (C, C, C).  Check (C, C, *).  Cooperate.
+                             # Reminder that first C is default value and last C is opponent's first move.
+        actions += [(C, D)]  # Increment (C, C, D).  Check (D, C, *) = 0.  Cooperate.
+        actions += [(C, C)]  # Increment (D, C, C).  Check (C, C, *) = 0.  Cooperate.
+                             # There is one Defection and one Cooperation in this scenario,
+                             # but the Cooperation was due to a default value only.  We can see where this is going.
+        actions += [(C, D)]  # Increment (C, C, D).  Check (D, C, *) = 1.  Cooperate.
+        actions += [(D, C)]  # Increment (D, C, C).  Check (C, C, *) = -1.  Defect.
+        actions += [(C, D)]  # Increment (C, C, D).  Check (D, D, *) = 0 (New).  Cooperate.
+        actions += [(D, C)]  # Increment (D, D, C).  Check (C, C, *) < 0.  Defect.
+        actions += [(C, D)]  # Increment (C, C, D).  Check (D, D, *) > 0.  Cooperate.
+        actions += [(D, C), (C, D)] * 15  # This pattern continues for a while.
+        actions += [(D, C), (D, D)] * 30  # Defect from turn 41 on, since near 50% Defections.
+        self.versus_test(axelrod.Alternator(), expected_actions=actions)
+
+        # Rip-off is the most interesting interaction.
+        actions = [(C, D),
+                   (C, C),
+                   (C, D),
+                   (D, C),
+                   (C, C),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C),
+                   (C, D),
+                   (D, C)]
+        my_dict = {(C, C, C): 1,
+                   (C, C, D): 18,
+                   (C, D, C): 1,
+                   (C, D, D): 0,
+                   (D, C, C): 1,
+                   (D, C, D): 0,
+                   (D, D, C): 17,
+                   (D, D, D): 0}
+        RipoffPlayer = axelrod.Ripoff()
+        self.versus_test(RipoffPlayer, expected_actions=actions, attrs={"count_them_us_them": my_dict})
+        self.assertEqual(RipoffPlayer.defections, 19)  # Next turn, `portion_defect` = 0.4756
+
+        # The pattern (C, D), (D, C) will continue indefintely unless overriden.
+        actions += [(D, D)]  # Next turn, `portion_defect` = 0.4881
+        actions += [(D, D)]  # Next turn, `portion_defect` = 0.5
+        actions += [(D, D)]  # Next turn, `portion_defect` = 0.5114
+        actions += [(D, D)]  # Next turn, `portion_defect` = 0.5222
+        actions += [(D, D)]  # Next turn, `portion_defect` = 0.5326
+        actions += [(D, D)]  # Next turn, `portion_defect` = 0.5426
+        actions += [(D, D)]  # Next turn, `portion_defect` = 0.5521
+        actions += [(D, D), (C, D), (D, C), (C, D)]  # Takes a turn to fall back into the cycle.
+        self.versus_test(axelrod.Ripoff(), expected_actions=actions)

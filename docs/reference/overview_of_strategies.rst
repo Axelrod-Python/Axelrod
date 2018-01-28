@@ -132,7 +132,7 @@ repository.
    "K61R_", "Danny C Champion", ":class:`Champion <axelrod.strategies.axelrod_second.Champion>`"
    "K62R_", "Howard R Hollander", "Not Implemented"
    "K63R_", "George Duisman", "Not Implemented"
-   "K64R_", "Brian Yamachi", "Not Implemented"
+   "K64R_", "Brian Yamachi", ":class:`Yamachi <axelrod.strategies.axelrod_second.Yamachi>`"
    "K65R_", "Mark F Batell", "Not Implemented"
    "K66R_", "Ray Mikkelson", "Not Implemented"
    "K67R_", "Craig Feathers", ":class:`Tranquilizer <axelrod.strategies.axelrod_second.Tranquilizer>`"
