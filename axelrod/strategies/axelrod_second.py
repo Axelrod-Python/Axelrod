@@ -4,6 +4,7 @@ Additional strategies from Axelrod's second tournament.
 
 import random
 import numpy as np
+from typing import List
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -1709,3 +1710,96 @@ class RichardHufford(Player):
         elif proportion_agree >= 0.625 and last_four_num >= 2:
             return opponent.history[-1]
         return D
+
+
+class Yamachi(Player):
+    """
+    Strategy submitted to Axelrod's second tournament by Brian Yamachi (K64R)
+    and came in seventeenth in that tournament.
+
+    The strategy keeps track of play history through a variable called
+    `count_them_us_them`, which is a dict indexed by (X, Y, Z), where X is an
+    opponent's move and Y and Z are the following moves by this player and the
+    opponent, respectively.  Each turn, we look at our opponent's move two
+    turns ago, call X, and our move last turn, call Y.  If (X, Y, C) has
+    occurred more often (or as often) as (X, Y, D), then Cooperate.  Otherwise
+    Defect.  [Note that this reflects likelihood of Cooperations or Defections
+    in opponent's previous move; we don't update `count_them_us_them` with
+    previous move until next turn.]
+
+    Starting with the 41st turn, there's a possibility to override this
+    behavior.  If `portion_defect` is between 45% and 55% (exclusive), then
+    Defect, where `portion_defect` equals number of opponent defects plus 0.5
+    divided by the turn number (indexed by 1).  When overriding this way, still
+    record `count_them_us_them` as though the strategy didn't override.
+
+    Names:
+
+    - Yamachi: [Axelrod1980b]_
+    """
+
+    name = 'Yamachi'
+    classifier = {
+        'memory_depth': float("inf"),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.count_them_us_them = {(C, C, C): 0,
+                                   (C, C, D): 0,
+                                   (C, D, C): 0,
+                                   (C, D, D): 0,
+                                   (D, C, C): 0,
+                                   (D, C, D): 0,
+                                   (D, D, C): 0,
+                                   (D, D, D): 0}
+        self.mod_history = list() # type: List[Action]
+
+    def try_return(self, to_return, opp_def):
+        """
+        Return `to_return`, unless the turn is greater than 40 AND
+        `portion_defect` is between 45% and 55%.
+
+        In this case, still record the history as `to_return` so that the
+        modified behavior doesn't affect the calculation of `count_us_them_us`.
+        """
+        turn = len(self.history) + 1
+
+        self.mod_history.append(to_return)
+
+        # In later turns, check if the opponent is close to 50/50
+        # If so, then override
+        if turn > 40:
+            portion_defect = (opp_def + 0.5) / turn
+            if 0.45 < portion_defect and portion_defect < 0.55:
+                return D
+
+        return to_return
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+        if turn == 1:
+            return self.try_return(C, 0)
+
+        us_last = self.mod_history[-1]
+        them_two_ago, us_two_ago, them_three_ago = C, C, C
+        if turn >= 3:
+            them_two_ago = opponent.history[-2]
+            us_two_ago = self.mod_history[-2]
+        if turn >= 4:
+            them_three_ago = opponent.history[-3]
+
+        # Update history
+        if turn >= 3:
+            self.count_them_us_them[(them_three_ago, us_two_ago, them_two_ago)] += 1
+
+        if self.count_them_us_them[(them_two_ago, us_last, C)] >= \
+           self.count_them_us_them[(them_two_ago, us_last, D)]:
+            return self.try_return(C, opponent.defections)
+        return self.try_return(D, opponent.defections)
