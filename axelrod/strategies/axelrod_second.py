@@ -9,6 +9,7 @@ from typing import List
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
+from axelrod.strategies.finite_state_machines import FSMPlayer
 
 from axelrod.interaction_utils import compute_final_score
 
@@ -1803,3 +1804,50 @@ class Yamachi(Player):
            self.count_them_us_them[(them_two_ago, us_last, D)]:
             return self.try_return(C, opponent.defections)
         return self.try_return(D, opponent.defections)
+
+
+class Colbert(FSMPlayer):
+    """
+    Strategy submitted to Axelrod's second tournament by William Colbert (K51R)
+    and came in eighteenth in that tournament.
+
+    In the first eight turns, this strategy Coopearates on all but the sixth
+    turn, in which it Defects.  After that, the strategy responds to an
+    opponent Cooperation with a single Cooperation, and responds to a Defection
+    with a chain of responses:  Defect, Defect, Cooperate, Cooperate.  During
+    this chain, the strategy ignores opponent's moves.
+
+    Names:
+
+    - Colbert: [Axelrod1980b]_
+    """
+
+    name = "Colbert"
+    classifier = {
+        'memory_depth': 4,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        transitions = (
+            (0, C, 1, C), (0, D, 1, C),  # First 8 turns are special
+            (1, C, 2, C), (1, D, 2, C),
+            (2, C, 3, C), (2, D, 3, C),
+            (3, C, 4, C), (3, D, 4, C),
+            (4, C, 5, D), (4, D, 5, D),  # Defect on 6th turn.
+            (5, C, 6, C), (5, D, 6, C),
+            (6, C, 7, C), (6, D, 7, C),
+
+            (7, C, 7, C), (7, D, 8, D),
+            (8, C, 9, D), (8, D, 9, D),
+            (9, C, 10, C), (9, D, 10, C),
+            (10, C, 7, C), (10, D, 7, C)
+        )
+
+        super().__init__(transitions=transitions, initial_state=0,
+                         initial_action=C)
