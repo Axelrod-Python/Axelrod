@@ -1161,3 +1161,31 @@ class TestYamachi(TestPlayer):
         actions += [(D, D)]  # Next turn, `portion_defect` = 0.5521
         actions += [(D, D), (C, D), (D, C), (C, D)]  # Takes a turn to fall back into the cycle.
         self.versus_test(axelrod.Ripoff(), expected_actions=actions)
+
+
+class TestColbert(TestPlayer):
+    name = 'Colbert'
+    player = axelrod.Colbert
+    expected_classifier = {
+        'memory_depth': 4,
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 5 + [(D, C)] + [(C, C)] * 30
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions)
+
+        actions = [(C, D)] * 5 + [(D, D)] + [(C, D)] * 2
+        actions += [(D, D), (D, D), (C, D), (C, D)] * 20
+        self.versus_test(axelrod.Defector(), expected_actions=actions)
+
+        opponent_actions = [C] * 8 + [C, C, D, C, C, C, C, C]
+        OddBall = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C)] * 5 + [(D, C)] + [(C, C)] * 4
+        actions += [(C, D)] + [(D, C), (D, C), (C, C), (C, C)] + [(C, C)]
+        self.versus_test(OddBall, expected_actions=actions)
