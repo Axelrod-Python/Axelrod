@@ -686,7 +686,8 @@ class TestTournament(unittest.TestCase):
             repetitions=2)
         tournament.play(filename=self.filename, progress_bar=False)
         self.assertTrue(filecmp.cmp(self.filename,
-                        "test_outputs/expected_test_tournament.csv"))
+                        "test_outputs/expected_test_tournament.csv",
+                        shallow=False))
 
     def test_write_to_csv_without_results(self):
         tournament = axelrod.Tournament(
@@ -698,7 +699,8 @@ class TestTournament(unittest.TestCase):
         tournament.play(filename=self.filename, progress_bar=False,
                         build_results=False)
         self.assertTrue(filecmp.cmp(self.filename,
-                        "test_outputs/expected_test_tournament_no_results.csv"))
+                        "test_outputs/expected_test_tournament_no_results.csv",
+                        shallow=False))
 
 
 class TestProbEndTournament(unittest.TestCase):
