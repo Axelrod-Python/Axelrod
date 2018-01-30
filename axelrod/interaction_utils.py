@@ -7,7 +7,7 @@ form:
 This is used by both the Match class and the ResultSet class which analyse
 interactions.
 """
-from collections import Counter
+from collections import Counter, defaultdict
 import csv
 import tqdm
 import pandas as pd
@@ -251,14 +251,11 @@ def read_interactions_from_file(filename, progress_bar=True):
     if progress_bar:
         groupby = tqdm.tqdm(groupby)
 
-    pairs_to_interactions = {}
+    pairs_to_interactions = defaultdict(list)
     for _, d in tqdm.tqdm(groupby):
         key = tuple(d[["Player index", "Opponent index"]].iloc[0])
         value = list(map(str_to_actions, zip(*d["Actions"])))
-        try:
-            pairs_to_interactions[key].append(value)
-        except KeyError:
-            pairs_to_interactions[key] = [value]
+        pairs_to_interactions[key].append(value)
     return pairs_to_interactions
 
 
