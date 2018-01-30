@@ -15,6 +15,7 @@ from hypothesis import given, example, settings
 from hypothesis.strategies import integers, floats
 from tqdm import tqdm
 import numpy as np
+import pandas as pd
 
 from axelrod.tests.property import (tournaments,
                                     prob_end_tournaments,
@@ -685,9 +686,9 @@ class TestTournament(unittest.TestCase):
             turns=2,
             repetitions=2)
         tournament.play(filename=self.filename, progress_bar=False)
-        self.assertTrue(filecmp.cmp(self.filename,
-                        "test_outputs/expected_test_tournament.csv",
-                        shallow=False))
+        df = pd.read_csv(self.filename)
+        expected_df = pd.read_csv("test_outputs/expected_test_tournament.csv")
+        self.assertTrue(df.equals(expected_df))
 
     def test_write_to_csv_without_results(self):
         tournament = axelrod.Tournament(
@@ -698,9 +699,9 @@ class TestTournament(unittest.TestCase):
             repetitions=2)
         tournament.play(filename=self.filename, progress_bar=False,
                         build_results=False)
-        self.assertTrue(filecmp.cmp(self.filename,
-                        "test_outputs/expected_test_tournament_no_results.csv",
-                        shallow=False))
+        df = pd.read_csv(self.filename)
+        expected_df = pd.read_csv("test_outputs/expected_test_tournament_no_results.csv")
+        self.assertTrue(df.equals(expected_df))
 
 
 class TestProbEndTournament(unittest.TestCase):
