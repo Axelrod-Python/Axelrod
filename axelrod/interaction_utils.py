@@ -240,9 +240,7 @@ def compute_sparklines(interactions, c_symbol='█', d_symbol=' '):
         sparkline(histories[1], c_symbol, d_symbol))
 
 
-def read_interactions_from_file(filename,
-                                progress_bar=True,
-                                ):
+def read_interactions_from_file(filename, progress_bar=True):
     """
     Reads a file and returns a dictionary mapping tuples of player pairs to
     lists of interactions
