@@ -484,6 +484,8 @@ class TransitiveFingerprint(object):
 
         cooperation_rates = {}
         df = dd.read_csv(filename)
+        # We ignore the actions of all opponents. So we filter the dataframe to
+        # only include the results of the player with index `0`.
         df = df[df["Player index"] == 0][["Opponent index", "Actions"]]
 
         for _, row in df.iterrows():
