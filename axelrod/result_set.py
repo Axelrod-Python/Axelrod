@@ -20,9 +20,9 @@ C, D = Action.C, Action.D
 
 def update_progress_bar(method):
     """A decorator to update a progress bar if it exists"""
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
         """Run the method and update the progress bar if it exists"""
-        output = method(*args)
+        output = method(*args, **kwargs)
 
         try:
             args[0].progress_bar.update(1)
@@ -89,13 +89,32 @@ class ResultSet():
         set the corresponding attributes.
         """
 
-        self.payoffs = self._build_payoffs(mean_per_reps_player_opponent_df["Score per turn"])
-        self.score_diffs = self._build_score_diffs(mean_per_reps_player_opponent_df["Score difference per turn"])
-        self.match_lengths = self._build_match_lengths(mean_per_reps_player_opponent_df["Turns"])
+        self.payoffs = self._reshape_three_dim_list(
+                mean_per_reps_player_opponent_df["Score per turn"],
+                first_dimension=range(self.num_players),
+                second_dimension=range(self.num_players),
+                third_dimension=range(self.repetitions),
+                key_order=[2, 0, 1])
 
-        self.wins = self._build_wins(sum_per_player_repetition_df["Win"])
-        self.scores = self._build_scores(sum_per_player_repetition_df["Score"])
-        self.normalised_scores = self._build_normalised_scores(normalised_scores_series)
+        self.score_diffs = self._reshape_three_dim_list(
+                mean_per_reps_player_opponent_df["Score difference per turn"],
+                first_dimension=range(self.num_players),
+                second_dimension=range(self.num_players),
+                third_dimension=range(self.repetitions),
+                key_order=[2, 0, 1],
+                alternative=0)
+
+        self.match_lengths = self._reshape_three_dim_list(
+                mean_per_reps_player_opponent_df["Turns"],
+                first_dimension=range(self.repetitions),
+                second_dimension=range(self.num_players),
+                third_dimension=range(self.num_players),
+                alternative=0)
+
+        self.wins = self._reshape_two_dim_list(sum_per_player_repetition_df["Win"])
+        self.scores = self._reshape_two_dim_list(sum_per_player_repetition_df["Score"])
+        self.normalised_scores = self._reshape_two_dim_list(normalised_scores_series)
+
         self.cooperation = self._build_cooperation(sum_per_player_opponent_df["Cooperation count"])
         self.good_partner_matrix = self._build_good_partner_matrix(sum_per_player_opponent_df["Good partner"])
 
@@ -121,8 +140,11 @@ class ResultSet():
         self.normalised_cooperation = self._build_normalised_cooperation()
         self.ranking = self._build_ranking()
         self.ranked_names = self._build_ranked_names()
-        self.payoff_matrix = self._build_payoff_matrix()
-        self.payoff_stddevs = self._build_payoff_stddevs()
+
+        self.payoff_matrix = self._build_summary_matrix(self.payoffs)
+        self.payoff_stddevs = self._build_summary_matrix(self.payoffs,
+                                                         func=np.std)
+
         self.payoff_diffs_means = self._build_payoff_diffs_means()
         self.cooperating_rating = self._build_cooperating_rating()
         self.vengeful_cooperation = self._build_vengeful_cooperation()
@@ -130,116 +152,64 @@ class ResultSet():
         self.eigenmoses_rating = self._build_eigenmoses_rating()
 
     @update_progress_bar
-    def _build_payoffs(self, payoffs_series):
+    def _reshape_three_dim_list(self, series,
+                                first_dimension,
+                                second_dimension,
+                                third_dimension,
+                                alternative=None,
+                                key_order=[0, 1, 2]):
         """
         Parameters
         ----------
 
             payoffs_series : pandas.Series
+            first_dimension : iterable
+            second_dimension : iterable
+            third_dimension : iterable
+            alternative : int
+                What to do if there is no entry at given position
+            key_order : list
+                Indices re-ording the dimensions to the correct keys in the
+                series
 
         Returns:
         --------
-            The mean of per turn payoffs.
-            List of the form:
-            [ML1, ML2, ML3..., MLn]
-            Where n is the number of players and MLi is a list of the form:
-            [pi1, pi2, pi3, ..., pim]
-            Where m is the number of players and pij is a list of the form:
-            [uij1, uij2, ..., uijk]
-            Where k is the number of repetitions and u is the mean utility (over
-            all repetitions) obtained by player i against player j.
+            A three dimensional list across the three dimensions
         """
-        payoffs_dict = dict(payoffs_series)
-        payoffs = []
-        for player_index in range(self.num_players):
+        series_dict = series.to_dict()
+        output = []
+        for first_index in first_dimension:
             matrix = []
-            for opponent_index in range(self.num_players):
+            for second_index in second_dimension:
                 row = []
-                for repetition in range(self.repetitions):
-                    key = (repetition, player_index, opponent_index)
-                    if key in payoffs_dict:
-                        row.append(payoffs_dict[key])
+                for third_index in third_dimension:
+                    key = (first_index, second_index, third_index)
+                    key = tuple([key[order] for order in key_order])
+                    if key in series_dict:
+                        row.append(series_dict[key])
+                    elif alternative is not None:
+                        row.append(alternative)
                 matrix.append(row)
-            payoffs.append(matrix)
-        return payoffs
+            output.append(matrix)
+        return output
 
     @update_progress_bar
-    def _build_score_diffs(self, payoff_diffs_series):
+    def _reshape_two_dim_list(self, series):
         """
         Parameters
         ----------
 
-            payoffs_diffs_series : pandas.Series
+            series : pandas.Series
 
         Returns:
         --------
-            The mean of per turn payoff differences
-            List of the form:
-            [ML1, ML2, ML3..., MLn]
-            Where n is the number of players and MLi is a list of the form:
-            [pi1, pi2, pi3, ..., pim]
-            Where m is the number of players and pij is a list of the form:
-            [uij1, uij2, ..., uijk]
-            Where k is the number of repetitions and u is the mean utility
-            difference (over all repetitions) obtained by player i against
-            player j.
+            A two dimensional list across repetitions and opponents
         """
-
-        payoff_diffs_dict = payoff_diffs_series.to_dict()
-        score_diffs = []
-        for player_index in range(self.num_players):
-            matrix = []
-            for opponent_index in range(self.num_players):
-                row = []
-                for repetition in range(self.repetitions):
-                    row.append(payoff_diffs_dict.get((repetition,
-                                                      player_index,
-                                                      opponent_index,
-                                                      ), 0))
-                matrix.append(row)
-            score_diffs.append(matrix)
-        return score_diffs
-
-    @update_progress_bar
-    def _build_match_lengths(self, length_series):
-        length_dict = dict(length_series)
-        match_lengths = []
-        for repetition in range(self.repetitions):
-            matrix = []
-            for player_index in range(self.num_players):
-                row = []
-                for opponent_index in range(self.num_players):
-                    row.append(length_dict.get((repetition,
-                                                player_index,
-                                                opponent_index), 0))
-                matrix.append(row)
-            match_lengths.append(matrix)
-        return match_lengths
-
-    @update_progress_bar
-    def _build_wins(self, wins_series):
-        wins_dict = wins_series.to_dict()
-        wins = [[wins_dict.get((player_index, repetition), 0)
+        series_dict = series.to_dict()
+        out = [[series_dict.get((player_index, repetition), 0)
                   for repetition in range(self.repetitions)]
                  for player_index in range(self.num_players)]
-        return wins
-
-    @update_progress_bar
-    def _build_scores(self, scores_series):
-        scores_dict = scores_series.to_dict()
-        scores = [[scores_series.get((player_index, repetition), 0)
-                   for repetition in range(self.repetitions)]
-                  for player_index in range(self.num_players)]
-        return scores
-
-    @update_progress_bar
-    def _build_normalised_scores(self, normalised_scores_series):
-        normalised_scores_dict = normalised_scores_series.to_dict()
-        normalised_scores = [[normalised_scores_series.get((player_index,
-                                                            repetition), 0)
-                              for repetition in range(self.repetitions)]
-                             for player_index in range(self.num_players)]
-        return normalised_scores
+        return out
 
     @update_progress_bar
     def _build_cooperation(self, cooperation_series):
@@ -258,7 +228,7 @@ class ResultSet():
 
     @update_progress_bar
     def _build_good_partner_matrix(self, good_partner_series):
-        good_partner_dict = dict(good_partner_series)
+        good_partner_dict = good_partner_series.to_dict()
         good_partner_matrix = []
         for player_index in range(self.num_players):
             row = []
@@ -273,35 +243,19 @@ class ResultSet():
             good_partner_matrix.append(row)
         return good_partner_matrix
 
-
     @update_progress_bar
-    def _build_payoff_matrix(self):
-        payoff_matrix = [[0 for opponent_index in range(self.num_players)]
-                         for player_index in range(self.num_players)]
+    def _build_summary_matrix(self, attribute, func=np.mean):
+        matrix = [[0 for opponent_index in range(self.num_players)]
+                  for player_index in range(self.num_players)]
 
         pairs = itertools.product(range(self.num_players), repeat=2)
 
         for player_index, opponent_index in pairs:
-            utilities = self.payoffs[player_index][opponent_index]
+            utilities = attribute[player_index][opponent_index]
             if utilities:
-                payoff_matrix[player_index][opponent_index] = np.mean(utilities)
+                matrix[player_index][opponent_index] = func(utilities)
 
-        return payoff_matrix
-
-    @update_progress_bar
-    def _build_payoff_stddevs(self):
-        payoff_stddevs = [[0 for opponent_index in range(self.num_players)]
-                          for player_index in range(self.num_players)]
-
-        pairs = itertools.product(range(self.num_players), repeat=2)
-
-        for player_index, opponent_index in pairs:
-            utilities = self.payoffs[player_index][opponent_index]
-            if utilities:
-                payoff_stddevs[player_index][opponent_index] = np.std(utilities)
-
-        return payoff_stddevs
-
+        return matrix
 
     @update_progress_bar
     def _build_payoff_diffs_means(self):
