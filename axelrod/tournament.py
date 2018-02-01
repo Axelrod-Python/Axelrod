@@ -136,8 +136,7 @@ class Tournament(object):
 
         result_set = None
         if build_results:
-            result_set = ResultSet(
-                                   filename=self.filename,
+            result_set = ResultSet(filename=self.filename,
                                    players=[str(p) for p in self.players],
                                    repetitions=self.repetitions,
                                    processes=processes,
