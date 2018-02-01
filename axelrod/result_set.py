@@ -72,23 +72,22 @@ class ResultSet():
 
         out = self._compute_tasks(tasks=dask_tasks, processes=processes)
 
-        self._reshape_out(out)
+        self._reshape_out(*out)
 
         if progress_bar:
             self.progress_bar.close()
 
-    def _reshape_out(self, out):
+    def _reshape_out(self,
+                     mean_per_reps_player_opponent_df,
+                     sum_per_player_opponent_df,
+                     sum_per_player_repetition_df,
+                     normalised_scores_series,
+                     initial_cooperation_count_series,
+                     interactions_count_series):
         """
         Reshape the various pandas series objects to be of the required form and
         set the corresponding attributes.
         """
-
-        (mean_per_reps_player_opponent_df,
-         sum_per_player_opponent_df,
-         sum_per_player_repetition_df,
-         normalised_scores_series,
-         initial_cooperation_count_series,
-         interactions_count_series) = out
 
         self.payoffs = self._build_payoffs(mean_per_reps_player_opponent_df["Score per turn"])
         self.score_diffs = self._build_score_diffs(mean_per_reps_player_opponent_df["Score difference per turn"])
@@ -269,8 +268,8 @@ class ResultSet():
                     # interactions.
                     row.append(0)
                 else:
-                    row.append(good_partner_dict.get((player_index,
-                                                      opponent_index), 0))
+                    row.append(good_partner_dict.get(
+                        (player_index, opponent_index), 0))
             good_partner_matrix.append(row)
         return good_partner_matrix
 
@@ -398,10 +397,9 @@ class ResultSet():
     @update_progress_bar
     def _build_initial_cooperation_count(self, initial_cooperation_count_series):
         initial_cooperation_count_dict = initial_cooperation_count_series.to_dict()
-        initial_cooperation_count = [
-                initial_cooperation_count_dict.get(player_index, 0)
-                                        for player_index in
-                                        range(self.num_players)]
+        initial_cooperation_count = [initial_cooperation_count_dict.get(player_index, 0)
+                                     for player_index in
+                                     range(self.num_players)]
         return initial_cooperation_count
 
     @update_progress_bar
@@ -564,10 +562,14 @@ class ResultSet():
         columns = ["Win", "Score"]
         sum_per_player_repetition_task = adf.groupby(groups)[columns].sum()
 
-        normalised_scores_task = adf.groupby(["Player index",
-                                              "Repetition"]
-                                            )["Score per turn"].mean()
-        initial_cooperation_count_task = adf.groupby(["Player index"])["Initial cooperation"].sum()
+        groups = ["Player index", "Repetition"]
+        column = "Score per turn"
+        normalised_scores_task = adf.groupby(groups)[column].mean()
+
+
+        groups = ["Player index"]
+        column = "Initial cooperation"
+        initial_cooperation_count_task = adf.groupby(groups)[column].sum()
         interactions_count_task = adf.groupby("Player index")["Player index"].count()
 
 
