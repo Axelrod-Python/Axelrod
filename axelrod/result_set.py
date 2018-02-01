@@ -3,7 +3,7 @@ from multiprocessing import cpu_count
 import csv
 import itertools
 
-from numpy import mean, nanmedian, std, array, nan_to_num
+import numpy as np
 import tqdm
 
 import dask as da
@@ -284,7 +284,7 @@ class ResultSet():
         for player_index, opponent_index in pairs:
             utilities = self.payoffs[player_index][opponent_index]
             if utilities:
-                payoff_matrix[player_index][opponent_index] = mean(utilities)
+                payoff_matrix[player_index][opponent_index] = np.mean(utilities)
 
         return payoff_matrix
 
@@ -298,14 +298,14 @@ class ResultSet():
         for player_index, opponent_index in pairs:
             utilities = self.payoffs[player_index][opponent_index]
             if utilities:
-                payoff_stddevs[player_index][opponent_index] = std(utilities)
+                payoff_stddevs[player_index][opponent_index] = np.std(utilities)
 
         return payoff_stddevs
 
 
     @update_progress_bar
     def _build_payoff_diffs_means(self):
-        payoff_diffs_means = [[mean(diff) for diff in player]
+        payoff_diffs_means = [[np.mean(diff) for diff in player]
                                for player in self.score_diffs]
 
         return payoff_diffs_means
@@ -404,26 +404,26 @@ class ResultSet():
 
     @update_progress_bar
     def _build_normalised_cooperation(self):
-        normalised_cooperation = [list(nan_to_num(row))
-                                  for row in array(self.cooperation) /
-                                  sum(map(array, self.match_lengths))]
+        normalised_cooperation = [list(np.nan_to_num(row))
+                                  for row in np.array(self.cooperation) /
+                                  sum(map(np.array, self.match_lengths))]
         return normalised_cooperation
 
     @update_progress_bar
     def _build_initial_cooperation_rate(self, interactions_series):
         interactions_dict = interactions_series.to_dict()
-        interactions_array = array([interactions_series.get(player_index, 0)
-                                    for player_index in range(self.num_players)])
+        interactions_array = np.array([interactions_series.get(player_index, 0)
+                                       for player_index in range(self.num_players)])
         initial_cooperation_rate = list(
-           nan_to_num(array(self.initial_cooperation_count) /
-                            interactions_array))
+           np.nan_to_num(np.array(self.initial_cooperation_count) /
+                                  interactions_array))
         return initial_cooperation_rate
 
     @update_progress_bar
     def _build_ranking(self):
         ranking = sorted(
                 range(self.num_players),
-                key=lambda i: -nanmedian(self.normalised_scores[i]))
+                key=lambda i: -np.nanmedian(self.normalised_scores[i]))
         return ranking
 
     @update_progress_bar
@@ -637,8 +637,8 @@ class ResultSet():
 
         """
 
-        median_scores = map(nanmedian, self.normalised_scores)
-        median_wins = map(nanmedian, self.wins)
+        median_scores = map(np.nanmedian, self.normalised_scores)
+        median_wins = map(np.nanmedian, self.wins)
 
         self.player = namedtuple("Player", ["Rank", "Name", "Median_score",
                                             "Cooperation_rating", "Wins",
@@ -668,7 +668,7 @@ class ResultSet():
                           if counter[(state, C)] > 0]
 
                 if len(counts) > 0:
-                    rate = mean(counts)
+                    rate = np.mean(counts)
                 else:
                     rate = 0
 
