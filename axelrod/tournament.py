@@ -252,13 +252,11 @@ class Tournament(object):
                         row.append(cooperations[index])
 
                         states = [(C, C), (C, D), (D, C), (D, D)]
+                        if index == 1:
+                            states = [s[::-1] for s in states]
                         for state in states:
-                            if index == 1:
-                                state = state[::-1]
                             row.append(state_distribution[state])
                         for state in states:
-                            if index == 1:
-                                state = state[::-1]
                             row.append(state_to_action_distributions[index][(state, C)])
                             row.append(state_to_action_distributions[index][(state, D)])
 
