@@ -1,0 +1,25 @@
+Interaction index,Player index,Opponent index,Repetition,Player name,Opponent name,Actions,Score,Score difference,Turns,Score per turn,Score difference per turn,Win,Initial cooperation,Cooperation count,CC count,CD count,DC count,DD count,CC to C count,CC to D count,CD to C count,CD to D count,DC to C count,DC to D count,DD to C count,DD to D count,Good partner
+0,0,0,0,Alternator,Alternator,CDCDC,11,0,5,2.2,0.0,0,True,3,3,0,0,2,0,2,0,0,0,0,2,0,1
+0,0,0,0,Alternator,Alternator,CDCDC,11,0,5,2.2,0.0,0,True,3,3,0,0,2,0,2,0,0,0,0,2,0,1
+1,0,0,1,Alternator,Alternator,CDCDC,11,0,5,2.2,0.0,0,True,3,3,0,0,2,0,2,0,0,0,0,2,0,1
+1,0,0,1,Alternator,Alternator,CDCDC,11,0,5,2.2,0.0,0,True,3,3,0,0,2,0,2,0,0,0,0,2,0,1
+2,0,0,2,Alternator,Alternator,CDCDC,11,0,5,2.2,0.0,0,True,3,3,0,0,2,0,2,0,0,0,0,2,0,1
+2,0,0,2,Alternator,Alternator,CDCDC,11,0,5,2.2,0.0,0,True,3,3,0,0,2,0,2,0,0,0,0,2,0,1
+3,1,1,0,Tit For Tat,Tit For Tat,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+3,1,1,0,Tit For Tat,Tit For Tat,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+4,1,1,1,Tit For Tat,Tit For Tat,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+4,1,1,1,Tit For Tat,Tit For Tat,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+5,1,1,2,Tit For Tat,Tit For Tat,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+5,1,1,2,Tit For Tat,Tit For Tat,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+6,2,2,0,Defector,Defector,DDDDD,5,0,5,1.0,0.0,0,False,0,0,0,0,5,0,0,0,0,0,0,0,4,1
+6,2,2,0,Defector,Defector,DDDDD,5,0,5,1.0,0.0,0,False,0,0,0,0,5,0,0,0,0,0,0,0,4,1
+7,2,2,1,Defector,Defector,DDDDD,5,0,5,1.0,0.0,0,False,0,0,0,0,5,0,0,0,0,0,0,0,4,1
+7,2,2,1,Defector,Defector,DDDDD,5,0,5,1.0,0.0,0,False,0,0,0,0,5,0,0,0,0,0,0,0,4,1
+8,2,2,2,Defector,Defector,DDDDD,5,0,5,1.0,0.0,0,False,0,0,0,0,5,0,0,0,0,0,0,0,4,1
+8,2,2,2,Defector,Defector,DDDDD,5,0,5,1.0,0.0,0,False,0,0,0,0,5,0,0,0,0,0,0,0,4,1
+9,3,3,0,Cooperator,Cooperator,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+9,3,3,0,Cooperator,Cooperator,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+10,3,3,1,Cooperator,Cooperator,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+10,3,3,1,Cooperator,Cooperator,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+11,3,3,2,Cooperator,Cooperator,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1
+11,3,3,2,Cooperator,Cooperator,CCCCC,15,0,5,3.0,0.0,0,True,5,5,0,0,0,4,0,0,0,0,0,0,0,1

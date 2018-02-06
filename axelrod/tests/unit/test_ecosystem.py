@@ -30,7 +30,7 @@ class TestEcosystem(unittest.TestCase):
         # By default create populations of equal size
         eco = axelrod.Ecosystem(self.res_cooperators)
         pops = eco.population_sizes
-        self.assertEqual(eco.nplayers, 4)
+        self.assertEqual(eco.num_players, 4)
         self.assertEqual(len(pops), 1)
         self.assertEqual(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)
@@ -39,7 +39,7 @@ class TestEcosystem(unittest.TestCase):
         # Can pass list of initial population distributions
         eco = axelrod.Ecosystem(self.res_cooperators, population=[.7, .25, .03, .02])
         pops = eco.population_sizes
-        self.assertEqual(eco.nplayers, 4)
+        self.assertEqual(eco.num_players, 4)
         self.assertEqual(len(pops), 1)
         self.assertEqual(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)
@@ -48,7 +48,7 @@ class TestEcosystem(unittest.TestCase):
         # Distribution will automatically normalise
         eco = axelrod.Ecosystem(self.res_cooperators, population=[70, 25, 3, 2])
         pops = eco.population_sizes
-        self.assertEqual(eco.nplayers, 4)
+        self.assertEqual(eco.num_players, 4)
         self.assertEqual(len(pops), 1)
         self.assertEqual(len(pops[0]), 4)
         self.assertAlmostEqual(sum(pops[0]), 1.0)

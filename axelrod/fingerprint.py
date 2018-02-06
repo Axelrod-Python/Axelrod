@@ -6,6 +6,8 @@ from tempfile import mkstemp
 import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
+import dask.dataframe as dd
+import dask as da
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import axelrod as axl
@@ -266,7 +268,7 @@ class AshlockFingerprint(object):
 
     def fingerprint(
         self, turns: int = 50, repetitions: int = 10, step: float = 0.01,
-        processes: int=None, filename: str = None, in_memory: bool = False,
+        processes: int=None, filename: str = None,
         progress_bar: bool = True
 ) -> dict:
         """Build and play the spatial tournament.
@@ -290,10 +292,7 @@ class AshlockFingerprint(object):
             The number of processes to be used for parallel processing
         filename: str, optional
             The name of the file for self.spatial_tournament's interactions.
-            if None and in_memory=False, will auto-generate a filename.
-        in_memory: bool
-            Whether self.spatial_tournament keeps interactions_dict in memory or
-            in a file.
+            if None, will auto-generate a filename.
         progress_bar : bool
             Whether or not to create a progress bar which will be updated
 
@@ -305,7 +304,7 @@ class AshlockFingerprint(object):
         """
 
         temp_file_descriptor = None
-        if not in_memory and filename is None:
+        if filename is None:
             temp_file_descriptor, filename = mkstemp()
 
         edges, tourn_players = self.construct_tournament_elements(
@@ -318,13 +317,10 @@ class AshlockFingerprint(object):
         self.spatial_tournament.play(build_results=False,
                                      filename=filename,
                                      processes=processes,
-                                     in_memory=in_memory,
                                      progress_bar=progress_bar)
-        if in_memory:
-            self.interactions = self.spatial_tournament.interactions_dict
-        else:
-            self.interactions = read_interactions_from_file(
-                filename, progress_bar=progress_bar)
+
+        self.interactions = read_interactions_from_file(
+            filename, progress_bar=progress_bar)
 
         if temp_file_descriptor is not None:
             os.close(temp_file_descriptor)
@@ -483,17 +479,21 @@ class TransitiveFingerprint(object):
             opponent in each turn. The ith row corresponds to the ith opponent
             and the jth column the jth turn.
         """
-        did_c = np.vectorize(lambda action: int(action == 'C'))
+        did_c = np.vectorize(lambda actions: [int(action == 'C')
+                                              for action in actions])
 
         cooperation_rates = {}
-        with open(filename, "r") as f:
-            reader = csv.reader(f)
-            for row in reader:
-                opponent_index, player_history = int(row[1]), list(row[4])
-                if opponent_index in cooperation_rates:
-                    cooperation_rates[opponent_index].append(did_c(player_history))
-                else:
-                    cooperation_rates[opponent_index] = [did_c(player_history)]
+        df = dd.read_csv(filename)
+        # We ignore the actions of all opponents. So we filter the dataframe to
+        # only include the results of the player with index `0`.
+        df = df[df["Player index"] == 0][["Opponent index", "Actions"]]
+
+        for _, row in df.iterrows():
+            opponent_index, player_history = row["Opponent index"], row["Actions"]
+            if opponent_index in cooperation_rates:
+                cooperation_rates[opponent_index].append(did_c(player_history))
+            else:
+                cooperation_rates[opponent_index] = [did_c(player_history)]
 
         for index, rates in cooperation_rates.items():
             cooperation_rates[index] = np.mean(rates, axis=0)

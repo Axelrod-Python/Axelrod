@@ -13,7 +13,6 @@ Contents:
    match.rst
    tournament.rst
    summarising_tournaments.rst
-   interactions.rst
    visualising_results.rst
    moran.rst
    human_interaction.rst
