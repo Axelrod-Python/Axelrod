@@ -1851,3 +1851,67 @@ class Colbert(FSMPlayer):
 
         super().__init__(transitions=transitions, initial_state=0,
                          initial_action=C)
+
+
+class Mikkelson(FSMPlayer):
+    """
+    Strategy submitted to Axelrod's second tournament by Ray Mikkelson (K66R)
+    and came in twentieth in that tournament.
+
+    The strategy keeps track of a variable called `credit`, which determines if
+    the strategy will Cooperate, in the sense that if `credit` is positive,
+    then the strategy Cooperates.  `credit` is initialized to 7.  After the
+    first turn, `credit` increments if the opponent Cooperated last turn, and
+    decreases by two otherwise.  `credit` is capped above by 8 and below by -7.
+    [`credit` is assessed as postive or negative, after increasing based on
+    opponent's last turn.]
+
+    If `credit` is non-positive within the first ten turns, then the strategy
+    Defects and `credit` is set to 4.  If `credit` is non-positive later, then
+    the strategy Defects if and only if (total # opponent Defections) / (turn#)
+    is at least 15%.  [Turn # starts at 1.]
+
+    Names:
+
+    - Mikkelson: [Axelrod1980b]_
+    """
+
+    name = 'Mikkelson'
+    classifier = {
+        'memory_depth': float("inf"),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.credit = 7
+
+    def strategy(self, opponent: Player) -> Action:
+        turn = len(self.history) + 1
+        if turn == 1:
+            return C
+
+        if opponent.history[-1] == C:
+            self.credit += 1
+            if self.credit > 8:
+                self.credit = 8
+        else:
+            self.credit -= 2
+            if self.credit < -7:
+                self.credit = -7
+
+        if turn == 2:
+            return C
+        if self.credit > 0:
+            return C
+        if turn <= 10:
+            self.credit = 4
+            return D
+        if opponent.defections / turn >= 0.15:
+            return D
+        return C
