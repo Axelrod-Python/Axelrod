@@ -1,3 +1,18 @@
+# v4.0.0, 2018-02-07
+
+More efficient tournament result analysis, and 2 new strategies.
+
+- Implemented RichardHufford (k47r)
+  https://github.com/Axelrod-Python/Axelrod/pull/1162
+- Implemented Yamachi (k64r)
+  https://github.com/Axelrod-Python/Axelrod/pull/1163
+- Implemented Colbert (k51r)
+  https://github.com/Axelrod-Python/Axelrod/pull/1164
+- Re write the result set
+  https://github.com/Axelrod-Python/Axelrod/pull/1166
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.0.0...v3.11.0
+
 # v3.11.0, 2018-01-09
 
 A number of strategies from Axelrod's original second tournament, new tests and

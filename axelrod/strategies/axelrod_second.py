@@ -1851,6 +1851,7 @@ class Colbert(FSMPlayer):
 
         super().__init__(transitions=transitions, initial_state=0,
                          initial_action=C)
+<<<<<<< HEAD
 
 
 class Mikkelson(FSMPlayer):
@@ -1915,3 +1916,5 @@ class Mikkelson(FSMPlayer):
         if opponent.defections / turn >= 0.15:
             return D
         return C
+=======
+>>>>>>> 5ff131c1fb742deb01bb20cbda791c5d0f7346a1

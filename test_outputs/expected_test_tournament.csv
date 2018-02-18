@@ -1,0 +1,61 @@
+Interaction index,Player index,Opponent index,Repetition,Player name,Opponent name,Actions,Score,Score difference,Turns,Score per turn,Score difference per turn,Win,Initial cooperation,Cooperation count,CC count,CD count,DC count,DD count,CC to C count,CC to D count,CD to C count,CD to D count,DC to C count,DC to D count,DD to C count,DD to D count,Good partner
+0,0,0,0,Cooperator,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+0,0,0,0,Cooperator,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+1,0,0,1,Cooperator,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+1,0,0,1,Cooperator,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+2,0,1,0,Cooperator,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+2,1,0,0,Tit For Tat,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+3,0,1,1,Cooperator,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+3,1,0,1,Tit For Tat,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+4,0,2,0,Cooperator,Defector,CC,0,-10,2,0.0,-5.0,0,True,2,0,2,0,0,0,0,1,0,0,0,0,0,1
+4,2,0,0,Defector,Cooperator,DD,10,10,2,5.0,5.0,1,False,0,0,0,2,0,0,0,0,0,0,1,0,0,0
+5,0,2,1,Cooperator,Defector,CC,0,-10,2,0.0,-5.0,0,True,2,0,2,0,0,0,0,1,0,0,0,0,0,1
+5,2,0,1,Defector,Cooperator,DD,10,10,2,5.0,5.0,1,False,0,0,0,2,0,0,0,0,0,0,1,0,0,0
+6,0,3,0,Cooperator,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+6,3,0,0,Grudger,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+7,0,3,1,Cooperator,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+7,3,0,1,Grudger,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+8,0,4,0,Cooperator,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+8,4,0,0,Soft Go By Majority,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+9,0,4,1,Cooperator,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+9,4,0,1,Soft Go By Majority,Cooperator,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+10,1,1,0,Tit For Tat,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+10,1,1,0,Tit For Tat,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+11,1,1,1,Tit For Tat,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+11,1,1,1,Tit For Tat,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+12,1,2,0,Tit For Tat,Defector,CD,1,-5,2,0.5,-2.5,0,True,1,0,1,0,1,0,0,0,1,0,0,0,0,1
+12,2,1,0,Defector,Tit For Tat,DD,6,5,2,3.0,2.5,1,False,0,0,0,1,1,0,0,0,0,0,1,0,0,0
+13,1,2,1,Tit For Tat,Defector,CD,1,-5,2,0.5,-2.5,0,True,1,0,1,0,1,0,0,0,1,0,0,0,0,1
+13,2,1,1,Defector,Tit For Tat,DD,6,5,2,3.0,2.5,1,False,0,0,0,1,1,0,0,0,0,0,1,0,0,0
+14,1,3,0,Tit For Tat,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+14,3,1,0,Grudger,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+15,1,3,1,Tit For Tat,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+15,3,1,1,Grudger,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+16,1,4,0,Tit For Tat,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+16,4,1,0,Soft Go By Majority,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+17,1,4,1,Tit For Tat,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+17,4,1,1,Soft Go By Majority,Tit For Tat,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+18,2,2,0,Defector,Defector,DD,2,0,2,1.0,0.0,0,False,0,0,0,0,2,0,0,0,0,0,0,0,1,1
+18,2,2,0,Defector,Defector,DD,2,0,2,1.0,0.0,0,False,0,0,0,0,2,0,0,0,0,0,0,0,1,1
+19,2,2,1,Defector,Defector,DD,2,0,2,1.0,0.0,0,False,0,0,0,0,2,0,0,0,0,0,0,0,1,1
+19,2,2,1,Defector,Defector,DD,2,0,2,1.0,0.0,0,False,0,0,0,0,2,0,0,0,0,0,0,0,1,1
+20,2,3,0,Defector,Grudger,DD,6,5,2,3.0,2.5,1,False,0,0,0,1,1,0,0,0,0,0,1,0,0,0
+20,3,2,0,Grudger,Defector,CD,1,-5,2,0.5,-2.5,0,True,1,0,1,0,1,0,0,0,1,0,0,0,0,1
+21,2,3,1,Defector,Grudger,DD,6,5,2,3.0,2.5,1,False,0,0,0,1,1,0,0,0,0,0,1,0,0,0
+21,3,2,1,Grudger,Defector,CD,1,-5,2,0.5,-2.5,0,True,1,0,1,0,1,0,0,0,1,0,0,0,0,1
+22,2,4,0,Defector,Soft Go By Majority,DD,6,5,2,3.0,2.5,1,False,0,0,0,1,1,0,0,0,0,0,1,0,0,0
+22,4,2,0,Soft Go By Majority,Defector,CD,1,-5,2,0.5,-2.5,0,True,1,0,1,0,1,0,0,0,1,0,0,0,0,1
+23,2,4,1,Defector,Soft Go By Majority,DD,6,5,2,3.0,2.5,1,False,0,0,0,1,1,0,0,0,0,0,1,0,0,0
+23,4,2,1,Soft Go By Majority,Defector,CD,1,-5,2,0.5,-2.5,0,True,1,0,1,0,1,0,0,0,1,0,0,0,0,1
+24,3,3,0,Grudger,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+24,3,3,0,Grudger,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+25,3,3,1,Grudger,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+25,3,3,1,Grudger,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+26,3,4,0,Grudger,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+26,4,3,0,Soft Go By Majority,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+27,3,4,1,Grudger,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+27,4,3,1,Soft Go By Majority,Grudger,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+28,4,4,0,Soft Go By Majority,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+28,4,4,0,Soft Go By Majority,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+29,4,4,1,Soft Go By Majority,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1
+29,4,4,1,Soft Go By Majority,Soft Go By Majority,CC,6,0,2,3.0,0.0,0,True,2,2,0,0,0,1,0,0,0,0,0,0,0,1

@@ -9,10 +9,13 @@ import pickle
 import unittest
 from unittest.mock import MagicMock, patch
 import warnings
+import filecmp
 
 from hypothesis import given, example, settings
 from hypothesis.strategies import integers, floats
 from tqdm import tqdm
+import numpy as np
+import pandas as pd
 
 from axelrod.tests.property import (tournaments,
                                     prob_end_tournaments,
@@ -140,26 +143,15 @@ class TestTournament(unittest.TestCase):
                             filename=self.filename, progress_bar=False)
             self.assertEqual(len(w), 0)
 
-    def test_setup_output_in_memory_overrides_filename(self):
-        self.assertIsNone(self.test_tournament.filename)
-        self.assertIsNone(self.test_tournament._temp_file_descriptor)
-        self.assertFalse(hasattr(self.test_tournament, 'interactions_dict'))
-
-        self.test_tournament.setup_output(self.filename, in_memory=True)
-
-        self.assertIsNone(self.test_tournament.filename)
-        self.assertIsNone(self.test_tournament._temp_file_descriptor)
-        self.assertEqual(self.test_tournament.interactions_dict, {})
-
     def test_setup_output_with_filename(self):
 
-        self.test_tournament.setup_output(self.filename, in_memory=False)
+        self.test_tournament.setup_output(self.filename)
 
         self.assertEqual(self.test_tournament.filename, self.filename)
         self.assertIsNone(self.test_tournament._temp_file_descriptor)
         self.assertFalse(hasattr(self.test_tournament, 'interactions_dict'))
 
-    def test_setup_output_no_filename_no_in_memory(self):
+    def test_setup_output_no_filename(self):
         self.test_tournament.setup_output()
 
         self.assertIsInstance(self.test_tournament.filename, str)
@@ -190,22 +182,17 @@ class TestTournament(unittest.TestCase):
         self.assertIsNone(self.test_tournament._temp_file_descriptor)
 
         # No file descriptor for a named file.
-        self.test_tournament.play(filename=self.filename, in_memory=False,
-                                  progress_bar=False)
-        self.assertIsNone(self.test_tournament._temp_file_descriptor)
-
-        # No file descriptor for in_memory.
-        self.test_tournament.play(filename=None, in_memory=True,
+        self.test_tournament.play(filename=self.filename,
                                   progress_bar=False)
         self.assertIsNone(self.test_tournament._temp_file_descriptor)
 
         # Temp file creates file descriptor.
-        self.test_tournament.play(filename=None, in_memory=False,
+        self.test_tournament.play(filename=None,
                                   progress_bar=False)
         self.assertIsInstance(self.test_tournament._temp_file_descriptor, int)
 
     def test_play_tempfile_removed(self):
-        self.test_tournament.play(filename=None, in_memory=False,
+        self.test_tournament.play(filename=None,
                                   progress_bar=False)
 
         self.assertFalse(os.path.isfile(self.test_tournament.filename))
@@ -226,10 +213,6 @@ class TestTournament(unittest.TestCase):
         self.assertIsInstance(self.test_tournament.filename, str)
         self.assertNotEqual(old_filename, self.test_tournament.filename)
         self.assertNotEqual(self.test_tournament.filename, self.filename)
-
-        self.test_tournament.play(in_memory=True, progress_bar=False)
-        self.assertIsNone(self.test_tournament._temp_file_descriptor)
-        self.assertIsNone(self.test_tournament.filename)
 
     def test_get_file_objects_no_filename(self):
         file, writer = self.test_tournament._get_file_objects()
@@ -295,7 +278,7 @@ class TestTournament(unittest.TestCase):
             turns=1,
             repetitions=1)
         results = tournament.play(progress_bar=False)
-        self.assertEqual(results.game.RPST(), (-1, -1, -1, -1))
+        self.assertLessEqual(np.max(results.scores), 0)
 
     @patch('tqdm.tqdm', RecordedTQDM)
     def test_no_progress_bar_play(self):
@@ -323,9 +306,6 @@ class TestTournament(unittest.TestCase):
         self.assertIsNone(results)
         self.assertEqual(RecordedTQDM.record, [])
 
-        results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
-        self.assertIsInstance(results, axelrod.ResultSet)
-
     def assert_play_pbar_correct_total_and_finished(self, pbar, total):
         self.assertEqual(pbar.desc, 'Playing matches')
         self.assertEqual(pbar.total, total)
@@ -346,7 +326,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play()
         self.assertIsInstance(results, axelrod.ResultSet)
         # Check that progress bar was created, updated and closed.
-        self.assertEqual(len(RecordedTQDM.record), 3)
+        self.assertEqual(len(RecordedTQDM.record), 2)
         play_pbar = RecordedTQDM.record[0]
         self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
         # Check all progress bars are closed.
@@ -355,7 +335,7 @@ class TestTournament(unittest.TestCase):
         RecordedTQDM.reset_record()
         results = tournament.play(progress_bar=True)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(len(RecordedTQDM.record), 3)
+        self.assertEqual(len(RecordedTQDM.record), 2)
         play_pbar = RecordedTQDM.record[0]
         self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
@@ -368,8 +348,6 @@ class TestTournament(unittest.TestCase):
         play_pbar = RecordedTQDM.record[0]
         self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
-        results = axelrod.ResultSetFromFile(self.filename)
-        self.assertIsInstance(results, axelrod.ResultSet)
 
     @patch('tqdm.tqdm', RecordedTQDM)
     def test_progress_bar_play_parallel(self):
@@ -393,7 +371,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(progress_bar=True, processes=2)
         self.assertIsInstance(results, axelrod.ResultSet)
 
-        self.assertEqual(len(RecordedTQDM.record), 3)
+        self.assertEqual(len(RecordedTQDM.record), 2)
         play_pbar = RecordedTQDM.record[0]
         self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
@@ -402,7 +380,7 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(processes=2)
         self.assertIsInstance(results, axelrod.ResultSet)
 
-        self.assertEqual(len(RecordedTQDM.record), 3)
+        self.assertEqual(len(RecordedTQDM.record), 2)
         play_pbar = RecordedTQDM.record[0]
         self.assert_play_pbar_correct_total_and_finished(play_pbar, total=15)
 
@@ -432,7 +410,7 @@ class TestTournament(unittest.TestCase):
         # Test that we get an instance of ResultSet
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(results.nplayers, len(tournament.players))
+        self.assertEqual(results.num_players, len(tournament.players))
         self.assertEqual(results.players, [str(p) for p in tournament.players])
 
     def test_parallel_play(self):
@@ -480,12 +458,12 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
-        tournament._write_interactions = MagicMock(
-                    name='_write_interactions')
+        tournament._write_interactions_to_file = MagicMock(
+                    name='_write_interactions_to_file')
         self.assertTrue(tournament._run_serial())
 
         # Get the calls made to write_interactions
-        calls = tournament._write_interactions.call_args_list
+        calls = tournament._write_interactions_to_file.call_args_list
         self.assertEqual(len(calls), 15)
 
     def test_run_parallel(self):
@@ -499,20 +477,20 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
-        tournament._write_interactions = PickleableMock(
-                    name='_write_interactions')
+        tournament._write_interactions_to_file = PickleableMock(
+                    name='_write_interactions_to_file')
 
         # For test coverage purposes. This confirms PickleableMock can be
         # pickled exactly once. Windows multi-processing must pickle this Mock
         # exactly once during testing.
         pickled = pickle.loads(pickle.dumps(tournament))
-        self.assertIsInstance(pickled._write_interactions, MagicMock)
+        self.assertIsInstance(pickled._write_interactions_to_file, MagicMock)
         self.assertRaises(pickle.PicklingError, pickle.dumps, pickled)
 
         self.assertTrue(tournament._run_parallel())
 
         # Get the calls made to write_interactions
-        calls = tournament._write_interactions.call_args_list
+        calls = tournament._write_interactions_to_file.call_args_list
         self.assertEqual(len(calls), 15)
 
     def test_n_workers(self):
@@ -608,10 +586,6 @@ class TestTournament(unittest.TestCase):
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
 
-        # Test in memory
-        results = tournament.play(progress_bar=False, in_memory=True)
-        self.assertIsInstance(results, axelrod.ResultSet)
-
     def test_no_build_result_set(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
@@ -620,13 +594,15 @@ class TestTournament(unittest.TestCase):
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
 
-        results = tournament.play(build_results=False, filename=self.filename,
-                                  progress_bar=False)
-        self.assertIsNone(results)
+        tournament._calculate_results = MagicMock(name='_calculate_results')
+        # Mocking this as it is called by play
+        self.assertIsNone(tournament.play(filename=self.filename,
+                                          progress_bar=False,
+                                          build_results=False))
 
-        # Checking that results were written properly
-        results = axelrod.ResultSetFromFile(self.filename, progress_bar=False)
-        self.assertIsInstance(results, axelrod.ResultSet)
+        # Get the calls made to write_interactions
+        calls = tournament._calculate_results.call_args_list
+        self.assertEqual(len(calls), 0)
 
     @given(turns=integers(min_value=1, max_value=200))
     @settings(max_examples=5, max_iterations=20)
@@ -663,8 +639,9 @@ class TestTournament(unittest.TestCase):
                 # Check that have the expected number of repetitions
                 self.assertEqual(len(plays), self.test_repetitions)
                 for repetition in plays:
-                    # Check that have the correct length for each rep
-                    self.assertEqual(len(repetition), turns)
+                    actions, results = repetition
+                    self.assertEqual(len(actions), turns)
+                    self.assertEqual(len(results), 10)
 
         # Check that matches no longer exist
         self.assertEqual((len(list(chunk_generator))), 0)
@@ -691,26 +668,17 @@ class TestTournament(unittest.TestCase):
             game=self.game,
             turns=2,
             repetitions=2)
-        tournament._write_interactions = MagicMock(name='_write_interactions')
+        tournament._write_interactions_to_file = MagicMock(name='_write_interactions_to_file')
         # Mocking this as it is called by play
-        tournament._build_result_set = MagicMock(name='_build_result_set')
-        self.assertTrue(tournament.play(filename=self.filename,
-                                        progress_bar=False))
+        self.assertIsNone(tournament.play(filename=self.filename,
+                                          progress_bar=False,
+                                          build_results=False))
 
         # Get the calls made to write_interactions
-        calls = tournament._write_interactions.call_args_list
+        calls = tournament._write_interactions_to_file.call_args_list
         self.assertEqual(len(calls), 15)
 
-        # Test when running in memory
-        tournament._write_interactions = MagicMock(name='_write_interactions')
-        self.assertTrue(tournament.play(filename=self.filename,
-                                        progress_bar=False,
-                                        in_memory=False))
-        # Get the calls made to write_interactions
-        calls = tournament._write_interactions.call_args_list
-        self.assertEqual(len(calls), 15)
-
-    def test_write_to_csv(self):
+    def test_write_to_csv_with_results(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
@@ -718,39 +686,22 @@ class TestTournament(unittest.TestCase):
             turns=2,
             repetitions=2)
         tournament.play(filename=self.filename, progress_bar=False)
-        with open(self.filename, 'r') as f:
-            written_data = [[int(r[0]), int(r[1])] + r[2:] for r in csv.reader(f)]
-            expected_data = [[0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
-                             [0, 1, 'Cooperator', 'Tit For Tat', 'CC', 'CC'],
-                             [1, 2, 'Tit For Tat', 'Defector', 'CD', 'DD'],
-                             [1, 2, 'Tit For Tat', 'Defector', 'CD', 'DD'],
-                             [0, 0, 'Cooperator', 'Cooperator', 'CC', 'CC'],
-                             [0, 0, 'Cooperator', 'Cooperator', 'CC', 'CC'],
-                             [3, 3, 'Grudger', 'Grudger', 'CC', 'CC'],
-                             [3, 3, 'Grudger', 'Grudger', 'CC', 'CC'],
-                             [2, 2, 'Defector', 'Defector', 'DD', 'DD'],
-                             [2, 2, 'Defector', 'Defector', 'DD', 'DD'],
-                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CC', 'CC'],
-                             [4, 4, 'Soft Go By Majority', 'Soft Go By Majority', 'CC', 'CC'],
-                             [1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CC', 'CC'],
-                             [1, 4, 'Tit For Tat', 'Soft Go By Majority', 'CC', 'CC'],
-                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CC', 'CC'],
-                             [1, 1, 'Tit For Tat', 'Tit For Tat', 'CC', 'CC'],
-                             [1, 3, 'Tit For Tat', 'Grudger', 'CC', 'CC'],
-                             [1, 3, 'Tit For Tat', 'Grudger', 'CC', 'CC'],
-                             [2, 3, 'Defector', 'Grudger', 'DD', 'CD'],
-                             [2, 3, 'Defector', 'Grudger', 'DD', 'CD'],
-                             [0, 4, 'Cooperator', 'Soft Go By Majority', 'CC', 'CC'],
-                             [0, 4, 'Cooperator', 'Soft Go By Majority', 'CC', 'CC'],
-                             [2, 4, 'Defector', 'Soft Go By Majority', 'DD', 'CD'],
-                             [2, 4, 'Defector', 'Soft Go By Majority', 'DD', 'CD'],
-                             [0, 3, 'Cooperator', 'Grudger', 'CC', 'CC'],
-                             [0, 3, 'Cooperator', 'Grudger', 'CC', 'CC'],
-                             [3, 4, 'Grudger', 'Soft Go By Majority', 'CC', 'CC'],
-                             [3, 4, 'Grudger', 'Soft Go By Majority', 'CC', 'CC'],
-                             [0, 2, 'Cooperator', 'Defector', 'CC', 'DD'],
-                             [0, 2, 'Cooperator', 'Defector', 'CC', 'DD']]
-            self.assertEqual(sorted(written_data), sorted(expected_data))
+        df = pd.read_csv(self.filename)
+        expected_df = pd.read_csv("test_outputs/expected_test_tournament.csv")
+        self.assertTrue(df.equals(expected_df))
+
+    def test_write_to_csv_without_results(self):
+        tournament = axelrod.Tournament(
+            name=self.test_name,
+            players=self.players,
+            game=self.game,
+            turns=2,
+            repetitions=2)
+        tournament.play(filename=self.filename, progress_bar=False,
+                        build_results=False)
+        df = pd.read_csv(self.filename)
+        expected_df = pd.read_csv("test_outputs/expected_test_tournament_no_results.csv")
+        self.assertTrue(df.equals(expected_df))
 
 
 class TestProbEndTournament(unittest.TestCase):
@@ -806,7 +757,7 @@ class TestProbEndTournament(unittest.TestCase):
         # Test that we get an instance of ResultSet
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(results.nplayers, len(tournament.players))
+        self.assertEqual(results.num_players, len(tournament.players))
         self.assertEqual(results.players, [str(p) for p in tournament.players])
 
 
@@ -877,7 +828,7 @@ class TestSpatialTournament(unittest.TestCase):
         spatial_results = spatial_tournament.play(progress_bar=False)
 
         self.assertEqual(results.ranked_names, spatial_results.ranked_names)
-        self.assertEqual(results.nplayers, spatial_results.nplayers)
+        self.assertEqual(results.num_players, spatial_results.num_players)
         self.assertEqual(results.repetitions, spatial_results.repetitions)
         self.assertEqual(results.payoff_diffs_means,
                          spatial_results.payoff_diffs_means)

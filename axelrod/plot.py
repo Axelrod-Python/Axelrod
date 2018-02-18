@@ -25,7 +25,7 @@ def default_cmap(version: str = "2.0") -> str:
 class Plot(object):
     def __init__(self, result_set: ResultSet) -> None:
         self.result_set = result_set
-        self.nplayers = self.result_set.nplayers
+        self.num_players = self.result_set.num_players
         self.players = self.result_set.players
 
     def _violinplot(
@@ -40,16 +40,16 @@ class Plot(object):
             ax = ax
 
         figure = ax.get_figure()
-        width = max(self.nplayers / 3, 12)
+        width = max(self.num_players / 3, 12)
         height = width / 2
         spacing = 4
-        positions = spacing * arange(1, self.nplayers + 1, 1)
+        positions = spacing * arange(1, self.num_players + 1, 1)
         figure.set_size_inches(width, height)
         ax.violinplot(data, positions=positions, widths=spacing / 2,
                       showmedians=True, showextrema=False)
         ax.set_xticks(positions)
         ax.set_xticklabels(names, rotation=90)
-        ax.set_xlim([0, spacing * (self.nplayers + 1)])
+        ax.set_xlim([0, spacing * (self.num_players + 1)])
         ax.tick_params(axis='both', which='both', labelsize=8)
         if title:
             ax.set_title(title)
@@ -175,14 +175,14 @@ class Plot(object):
             ax = ax
 
         figure = ax.get_figure()
-        width = max(self.nplayers / 4, 12)
+        width = max(self.num_players / 4, 12)
         height = width
         figure.set_size_inches(width, height)
         matplotlib_version = matplotlib.__version__
         cmap = default_cmap(matplotlib_version)
         mat = ax.matshow(data, cmap=cmap)
-        ax.set_xticks(range(self.result_set.nplayers))
-        ax.set_yticks(range(self.result_set.nplayers))
+        ax.set_xticks(range(self.result_set.num_players))
+        ax.set_yticks(range(self.result_set.num_players))
         ax.set_xticklabels(names, rotation=90)
         ax.set_yticklabels(names)
         ax.tick_params(axis='both', which='both', labelsize=16)
@@ -246,7 +246,7 @@ class Plot(object):
         ticks = []
         for i, n in enumerate(self.result_set.ranked_names):
             x = -0.01
-            y = (i + 0.5) * 1 / self.result_set.nplayers
+            y = (i + 0.5) * 1 / self.result_set.num_players
             ax.annotate(
                 n, xy=(x, y), xycoords=trans, clip_on=False, va='center',
                 ha='right', fontsize=5)

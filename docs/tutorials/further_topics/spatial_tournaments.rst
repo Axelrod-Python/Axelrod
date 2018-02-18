@@ -30,7 +30,7 @@ To create a spatial tournament you pass the :code:`edges` to the
 :code:`Tournament` class::
 
     >>> spatial_tournament = axl.Tournament(players, edges=edges)
-    >>> results = spatial_tournament.play(keep_interactions=True)
+    >>> results = spatial_tournament.play()
 
 We can plot the results::
 
@@ -47,33 +47,23 @@ We can, like any other tournament, obtain the ranks for our players::
    >>> results.ranked_names
    ['Cooperator', 'Tit For Tat', 'Grudger', 'Defector']
 
-Let's run a small tournament of 2 :code:`turns` and 5 :code:`repetitions`
+Let's run a small tournament of 2 :code:`turns` and 2 :code:`repetitions`
 and obtain the interactions::
 
     >>> spatial_tournament = axl.Tournament(players ,turns=2, repetitions=2, edges=edges)
-    >>> results = spatial_tournament.play(keep_interactions=True)
-    >>> for index_pair, interaction in sorted(results.interactions.items()):
-    ...     player1 = spatial_tournament.players[index_pair[0]]
-    ...     player2 = spatial_tournament.players[index_pair[1]]
-    ...     print('%s vs %s: %s' % (player1, player2, interaction))
-    Cooperator vs Tit For Tat: [[(C, C), (C, C)], [(C, C), (C, C)]]
-    Cooperator vs Grudger: [[(C, C), (C, C)], [(C, C), (C, C)]]
-    Defector vs Tit For Tat: [[(D, C), (D, D)], [(D, C), (D, D)]]
-    Defector vs Grudger: [[(D, C), (D, D)], [(D, C), (D, D)]]
+    >>> results = spatial_tournament.play()
+    >>> results.payoffs
+    [[[], [], [3.0, 3.0], [3.0, 3.0]], [[], [], [3.0, 3.0], [3.0, 3.0]], [[3.0, 3.0], [0.5, 0.5], [], []], [[3.0, 3.0], [0.5, 0.5], [], []]]
 
-As anticipated  :code:`Cooperator` does not interact with :code:`Defector` neither
-:code:`TitForTat` with :code:`Grudger`.
+As anticipated not all players interact with each other.
 
 It is also possible to create a probabilistic ending spatial tournament::
 
     >>> prob_end_spatial_tournament = axl.Tournament(players, edges=edges, prob_end=.1, repetitions=1)
-    >>> prob_end_results = prob_end_spatial_tournament.play(keep_interactions=True)
+    >>> axl.seed(0)
+    >>> prob_end_results = prob_end_spatial_tournament.play()
 
 We see that the match lengths are no longer all equal::
 
-    >>> axl.seed(0)
-    >>> lengths = []
-    >>> for interaction in prob_end_results.interactions.values():
-    ...     lengths.append(len(interaction[0]))
-    >>> min(lengths) != max(lengths)
-    True
+    >>> prob_end_results.match_lengths
+    [[[0, 0, 18.0, 14.0], [0, 0, 6.0, 3.0], [18.0, 6.0, 0, 0], [14.0, 3.0, 0, 0]]]

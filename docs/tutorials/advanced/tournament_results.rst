@@ -65,9 +65,19 @@ This gives the length of the matches played by each player::
 
     >>> import pprint  # Nicer formatting of output
     >>> pprint.pprint(results.match_lengths)
-    [[[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]],
-     [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]],
-     [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]]]
+    [[[10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0]],
+     [[10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0]],
+     [[10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0],
+      [10.0, 10.0, 10.0, 10.0]]]
+
 
 Every player plays 10 turns against every other player (including themselves)
 for every repetition of the tournament.
@@ -119,7 +129,7 @@ Payoffs
 This gives for each player, against each opponent every payoff received for
 each repetition::
 
-    >>> pprint.pprint(results.payoffs)
+    >>> pprint.pprint(results.payoffs)  # doctest: +SKIP
     [[[3.0, 3.0, 3.0], [0.0, 0.0, 0.0], [3.0, 3.0, 3.0], [3.0, 3.0, 3.0]],
      [[5.0, 5.0, 5.0], [1.0, 1.0, 1.0], [1.4, 1.4, 1.4], [1.4, 1.4, 1.4]],
      [[3.0, 3.0, 3.0], [0.9, 0.9, 0.9], [3.0, 3.0, 3.0], [3.0, 3.0, 3.0]],
@@ -202,7 +212,7 @@ Cooperation counts
 This gives a total count of cooperation for each player against each opponent::
 
     >>> results.cooperation
-    [[0, 30, 30, 30], [0, 0, 0, 0], [30, 3, 0, 30], [30, 3, 30, 0]]
+    [[30, 30, 30, 30], [0, 0, 0, 0], [30, 3, 30, 30], [30, 3, 30, 30]]
 
 Normalised cooperation
 ----------------------
@@ -262,14 +272,14 @@ the second the action of the opponent::
       Counter({(C, C): 1.0})],
      [Counter({(D, C): 1.0}),
       Counter(),
-      Counter({(D, D): 0.9, (D, C): 0.1}),
-      Counter({(D, D): 0.9, (D, C): 0.1})],
+      Counter({(D, D): 0.9..., (D, C): 0.1...}),
+      Counter({(D, D): 0.9..., (D, C): 0.1...})],
      [Counter({(C, C): 1.0}),
-      Counter({(D, D): 0.9, (C, D): 0.1}),
+      Counter({(D, D): 0.9..., (C, D): 0.1...}),
       Counter(),
       Counter({(C, C): 1.0})],
      [Counter({(C, C): 1.0}),
-      Counter({(D, D): 0.9, (C, D): 0.1}),
+      Counter({(D, D): 0.9..., (C, D): 0.1...}),
       Counter({(C, C): 1.0}),
       Counter()]]
 
@@ -333,7 +343,7 @@ This gives the count of cooperations made by each player during the first turn
 of every match::
 
     >>> results.initial_cooperation_count
-    [9, 0, 9, 9]
+    [9.0, 0.0, 9.0, 9.0]
 
 Each player plays an opponent a total of 9 times (3 opponents and 3
 repetitions). Apart from the :code:`Defector`, they all cooperate on the first
@@ -353,7 +363,7 @@ Morality Metrics
 The following morality metrics are available, they are calculated as a function
 of the cooperation rating::
 
-    >>> results.cooperating_rating
+    >>> results.cooperating_rating  # doctest: +SKIP
     [1.0, 0.0, 0.7, 0.7]
     >>> pprint.pprint(results.vengeful_cooperation)  # doctest: +SKIP
     [[1.0, 1.0, 1.0, 1.0],
