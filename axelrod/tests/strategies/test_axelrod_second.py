@@ -1189,7 +1189,6 @@ class TestColbert(TestPlayer):
         actions = [(C, C)] * 5 + [(D, C)] + [(C, C)] * 4
         actions += [(C, D)] + [(D, C), (D, C), (C, C), (C, C)] + [(C, C)]
         self.versus_test(OddBall, expected_actions=actions)
-<<<<<<< HEAD
 
 
 class TestMikkelson(TestPlayer):
@@ -1244,5 +1243,3 @@ class TestMikkelson(TestPlayer):
         actions += [(C, D)] * 2
         self.versus_test(Change_of_Heart, expected_actions=actions, attrs={"credit": -2})
         # Still Cooperate, because Defect rate is low
-=======
->>>>>>> 5ff131c1fb742deb01bb20cbda791c5d0f7346a1
