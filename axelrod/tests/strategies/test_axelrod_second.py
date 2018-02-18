@@ -1189,3 +1189,57 @@ class TestColbert(TestPlayer):
         actions = [(C, C)] * 5 + [(D, C)] + [(C, C)] * 4
         actions += [(C, D)] + [(D, C), (D, C), (C, C), (C, C)] + [(C, C)]
         self.versus_test(OddBall, expected_actions=actions)
+
+
+class TestMikkelson(TestPlayer):
+    name = 'Mikkelson'
+    player = axelrod.Mikkelson
+    expected_classifier = {
+        'memory_depth': float("inf"),
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def test_strategy(self):
+        actions = [(C, C)] * 30
+        self.versus_test(axelrod.Cooperator(), expected_actions=actions, attrs={"credit": 8})
+
+        actions = [(C, D), (C, D), (C, D), (C, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": 1})
+        # Defect then reset to 4
+        actions += [(D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": 4})
+        # Repeat
+        actions += [(C, D), (D, D)] * 2
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": 4})
+        # With ten turns passed, keep defecting now
+        actions += [(C, D), (D, D)]
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": 0})
+        # With ten turns passed, keep defecting now
+        actions += [(D, D)] * 30
+        self.versus_test(axelrod.Defector(), expected_actions=actions, attrs={"credit": -7})
+
+
+        actions = [(C, D), (C, D), (C, C)]
+        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 3})
+        actions += [(C, D), (C, D)]
+        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 2})
+        actions += [(D, C)]
+        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 4})
+        actions += [(C, D)]
+        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 5})
+        actions += [(C, D)]
+        self.versus_test(axelrod.Cycler("DDC"), expected_actions=actions, attrs={"credit": 3})
+
+        opponent_actions = [C] * 100 + [D] * 10
+        Change_of_Heart = axelrod.MockPlayer(actions=opponent_actions)
+        actions = [(C, C)] * 100 + [(C, D)] * 4
+        self.versus_test(Change_of_Heart, expected_actions=actions, attrs={"credit": 2})
+        Change_of_Heart = axelrod.MockPlayer(actions=opponent_actions)
+        actions += [(C, D)] * 2
+        self.versus_test(Change_of_Heart, expected_actions=actions, attrs={"credit": -2})
+        # Still Cooperate, because Defect rate is low
