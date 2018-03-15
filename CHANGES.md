@@ -1,3 +1,12 @@
+# v4.1.0, 2018-02-07
+
+New strategy
+
+- Implemented Mikkelson (k66r)
+  https://github.com/Axelrod-Python/Axelrod/pull/1167
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.1.0...v4.0.0
+
 # v4.0.0, 2018-02-07
 
 More efficient tournament result analysis, and 2 new strategies.
