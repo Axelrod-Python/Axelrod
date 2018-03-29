@@ -1,6 +1,8 @@
 """Memory One strategies. Note that there are Memory One strategies in other
 files, including titfortat.py and zero_determinant.py"""
 
+import warnings
+
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
@@ -14,7 +16,8 @@ C, D = Action.C, Action.D
 class MemoryOnePlayer(Player):
     """
     Uses a four-vector for strategies based on the last round of play,
-    (P(C|CC), P(C|CD), P(C|DC), P(C|DD)), defaults to Win-Stay Lose-Shift.
+    (P(C|CC), P(C|CD), P(C|DC), P(C|DD)). Win-Stay Lose-Shift is set as
+    the default player if four_vector is not given.
     Intended to be used as an abstract base class or to at least be supplied
     with a initializing four_vector.
 
@@ -38,32 +41,41 @@ class MemoryOnePlayer(Player):
                  initial: Action = C) -> None:
         """
         Parameters
+        ----------
 
-        fourvector, list or tuple of floats of length 4
-            The response probabilities to the preceeding round of play
+        fourvector: list or tuple of floats of length 4
+            The response probabilities to the preceding round of play
             ( P(C|CC), P(C|CD), P(C|DC), P(C|DD) )
-        initial, C or D
+        initial: C or D
             The initial move
 
         Special Cases
+        -------------
 
         Alternator is equivalent to MemoryOnePlayer((0, 0, 1, 1), C)
         Cooperator is equivalent to MemoryOnePlayer((1, 1, 1, 1), C)
         Defector   is equivalent to MemoryOnePlayer((0, 0, 0, 0), C)
         Random     is equivalent to MemoryOnePlayer((0.5, 0.5, 0.5, 0.5))
-           (with a random choice for the initial state)
+        (with a random choice for the initial state)
         TitForTat  is equivalent to MemoryOnePlayer((1, 0, 1, 0), C)
         WinStayLoseShift is equivalent to MemoryOnePlayer((1, 0, 0, 1), C)
+
         See also: The remaining strategies in this file
                   Multiple strategies in titfortat.py
                   Grofman, Joss in axelrod_tournaments.py
         """
         super().__init__()
         self._initial = initial
-        if four_vector is not None:
-            self.set_four_vector(four_vector)
-            if self.name == 'Generic Memory One Player':
-                self.name = "%s: %s" % (self.name, four_vector)
+        self.set_initial_four_vector(four_vector)
+
+    def set_initial_four_vector(self, four_vector):
+        if four_vector is None:
+            four_vector = (1, 0, 0, 1)
+            warnings.warn("Memory one player is set to default (1, 0, 0, 1).")
+
+        self.set_four_vector(four_vector)
+        if self.name == 'Generic Memory One Player':
+            self.name = "%s: %s" % (self.name, four_vector)
 
     def set_four_vector(self, four_vector: Tuple[float, float, float, float]):
         if not all(0 <= p <= 1 for p in four_vector):
@@ -108,8 +120,8 @@ class WinStayLoseShift(MemoryOnePlayer):
     }
 
     def __init__(self, initial: Action = C) -> None:
-        super().__init__()
-        self.set_four_vector((1, 0, 0, 1))
+        four_vector = (1, 0, 0, 1)
+        super().__init__(four_vector)
         self._initial = initial
 
 
@@ -133,8 +145,8 @@ class WinShiftLoseStay(MemoryOnePlayer):
     }
 
     def __init__(self, initial: Action = D) -> None:
-        super().__init__()
-        self.set_four_vector((0, 1, 1, 0))
+        four_vector = (0, 1, 1, 0)
+        super().__init__(four_vector)
         self._initial = initial
 
 
@@ -172,6 +184,9 @@ class GTFT(MemoryOnePlayer):
         """
         self.p = p
         super().__init__()
+
+    def set_initial_four_vector(self, four_vector):
+        pass
 
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
