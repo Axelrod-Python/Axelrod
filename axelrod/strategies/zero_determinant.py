@@ -44,6 +44,9 @@ class LRPlayer(MemoryOnePlayer):
         self.l = l
         super().__init__()
 
+    def set_initial_four_vector(self, four_vector):
+        pass
+
     def receive_match_attributes(self):
         """
         Parameters

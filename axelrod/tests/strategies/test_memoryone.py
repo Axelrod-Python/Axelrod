@@ -222,11 +222,10 @@ class TestStochasticWSLS(TestPlayer):
 
 class TestMemoryOnePlayer(unittest.TestCase):
 
-    def test_exception_if_four_vector_not_set(self):
+    def test_default_if_four_vector_not_set(self):
         player = MemoryOnePlayer()
-        opponent = axelrod.Player()
-        with self.assertRaises(ValueError):
-            player.strategy(opponent)
+        self.assertEqual(player._four_vector, {(C, C): 1.0, (C, D): 0.0,
+                                               (D, C): 0.0, (D, D): 1.0})
 
     def test_exception_if_probability_vector_outside_valid_values(self):
         player = MemoryOnePlayer()
