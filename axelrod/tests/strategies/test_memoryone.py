@@ -1,6 +1,7 @@
 """Tests for the Memoryone strategies."""
 
 import unittest
+import warnings
 
 import axelrod
 from axelrod import Game
@@ -226,6 +227,16 @@ class TestMemoryOnePlayer(unittest.TestCase):
         player = MemoryOnePlayer()
         self.assertEqual(player._four_vector, {(C, C): 1.0, (C, D): 0.0,
                                                (D, C): 0.0, (D, D): 1.0})
+
+    def test_exception_if_four_vector_not_set(self):
+        with warnings.catch_warnings(record=True) as warning:
+            warnings.simplefilter("always")
+            player = MemoryOnePlayer()
+
+            self.assertEqual(len(warning), 1)
+            self.assertEqual(warning[-1].category, UserWarning)
+            self.assertEqual(str(warning[-1].message),
+                              "Memory one player is set to default (1, 0, 0, 1).")
 
     def test_exception_if_probability_vector_outside_valid_values(self):
         player = MemoryOnePlayer()
