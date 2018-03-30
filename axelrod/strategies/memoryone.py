@@ -87,8 +87,6 @@ class MemoryOnePlayer(Player):
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent: Player) -> Action:
-        if not hasattr(self, "_four_vector"):
-            raise ValueError("_four_vector not yet set")
         if len(opponent.history) == 0:
             return self._initial
         # Determine which probability to use
