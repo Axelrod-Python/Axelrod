@@ -61,7 +61,7 @@ class TestMemoryTwoPlayer(unittest.TestCase):
 
 class TestAON2(TestPlayer):
 
-    name = "AON 2: C"
+    name = "AON2"
     player = axelrod.AON2
     expected_classifier = {
         'memory_depth': 2,
@@ -106,7 +106,7 @@ class TestAON2(TestPlayer):
 
 class TestDelayedAON1(TestPlayer):
 
-    name = "Delayed AON1: C"
+    name = "Delayed AON1"
     player = axelrod.DelayedAON1
     expected_classifier = {
         'memory_depth': 2,

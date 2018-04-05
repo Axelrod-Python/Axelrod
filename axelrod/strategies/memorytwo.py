@@ -140,7 +140,7 @@ class AON2(MemoryTwoPlayer):
     - AON2: [Hilbe2017]_
     """
 
-    name = 'AON 2'
+    name = 'AON2'
     classifier = {
         'memory_depth': 2,  # Memory-one Four-Vector
         'stochastic': False,
@@ -151,10 +151,9 @@ class AON2(MemoryTwoPlayer):
         'manipulates_state': False
     }
 
-    def __init__(self, initial: Action = C) -> None:
+    def __init__(self) -> None:
         sixteen_vector = (1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
         super().__init__(sixteen_vector)
-        self._initial = initial
 
 
 class DelayedAON1(MemoryTwoPlayer):
@@ -194,10 +193,9 @@ class DelayedAON1(MemoryTwoPlayer):
         'manipulates_state': False
     }
 
-    def __init__(self, initial: Action = C) -> None:
+    def __init__(self) -> None:
         sixteen_vector = (1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1)
         super().__init__(sixteen_vector)
-        self._initial = initial
 
 
 class MEM2(Player):
