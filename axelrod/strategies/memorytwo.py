@@ -120,8 +120,22 @@ class AON2(MemoryTwoPlayer):
     rounds in which the focal player cooperated while at least one coplayer defected,
     the strategy responds by defecting the following k rounds.
 
-    In essence is a strategy that starts of by cooperating and will cooperate
-    again only after the states (CC, CC), (CD, CD), (DC, DC), (DD, DD).
+    In [Hilbe2017]_ the following vectors are reported as equivalent to AON2
+    with their respective self cooperation rate:
+    
+    1. [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], self cooperation
+    rate: 0.952
+    2. [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], self cooperation
+    rate: 0.951
+    3. [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], self cooperation
+    rate:  0.951
+    4. [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1], self cooperation
+    rate: 0.952
+
+    AON2 is implemented using vector 1 due it's self cooperation rate.
+
+    In essence is a strategy that starts of by cooperating and will cooperate again
+    only after the states (CC, CC), (CD, CD), (DC, DC), (DD, DD).
 
     Names:
 
@@ -149,6 +163,18 @@ class DelayedAON1(MemoryTwoPlayer):
     """
     Delayed AON1 a memory two strategy also introduced in [Hilbe2017]_ and belongs to the
     AONk family. Note that AON1 is equivalent to Win Stay Lose Swift.
+
+    In [Hilbe2017]_ the following vectors are reported as equivalent to Delayed
+    AON1 with their respective self cooperation rate:
+
+    1. [1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1], self cooperation
+    rate: 0.952
+    2. [1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1], self cooperation
+    rate: 0.970
+    3. [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1], self cooperation
+    rate: 0.971
+
+    Delayed AON1 is implemented using vector 3 due it's self cooperation rate.
 
     In essence is a strategy that starts of by cooperating and will cooperate
     again only after the states (CC, CC), (CD, CD), (CD, DD), (DD, CD),
