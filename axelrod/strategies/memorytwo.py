@@ -2,6 +2,7 @@
 
 import itertools
 import warnings
+from typing import Tuple, Dict
 
 from axelrod.action import Action
 from axelrod.player import Player
@@ -9,7 +10,6 @@ from axelrod.random_ import random_choice
 from .titfortat import TitForTat, TitFor2Tats
 from .defector import Defector
 
-from typing import Tuple
 
 C, D = Action.C, Action.D
 
@@ -78,17 +78,15 @@ class MemoryTwoPlayer(Player):
         if self.name == 'Generic Memory Two Player':
             self.name = "%s: %s" % (self.name, sixteen_vector)
 
-    def set_sixteen_vector(self, sixteen_vector: Tuple[float, float, float, float,
-                                                       float, float, float, float,
-                                                       float, float, float, float,
-                                                       float, float, float, float]):
+    def set_sixteen_vector(self, sixteen_vector: Tuple):
         if not all(0 <= p <= 1 for p in sixteen_vector):
             raise ValueError("An element in the probability vector, {}, is not "
                              "between 0 and 1.".format(str(sixteen_vector)))
 
-        states = [(hist[:2], hist[2:]) for hist in list(itertools.product((C, D), repeat=4))]
+        states = [(hist[:2], hist[2:])
+                  for hist in list(itertools.product((C, D), repeat=4))]
 
-        self._sixteen_vector = dict(zip(states, map(float, sixteen_vector)))
+        self._sixteen_vector = dict(zip(states, sixteen_vector)) # type: Dict[tuple, float]
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(sixteen_vector))
 
     def strategy(self, opponent: Player) -> Action:
