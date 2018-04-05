@@ -16,16 +16,28 @@ class TestGenericPlayerTwo(unittest.TestCase):
                                          0, 0, 0, 0, 0, 0, 0, 0))
     p2 = MemoryTwoPlayer(sixteen_vector=(1, 0, 1, 0, 1, 0, 1, 0,
                                          1, 0, 1, 0, 1, 0, 1, 0))
+    p3 = MemoryTwoPlayer(sixteen_vector=(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+                                         0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5))
+    p4 = MemoryTwoPlayer(sixteen_vector=(0.1, 0, 0.2, 0, 0.3, 0, 0.4, 0,
+                                         0.5, 0, 0.6, 0, 0.7, 0, 0.8, 0))
 
     def test_name(self):
         self.assertEqual(self.p1.name,
                          "Generic Memory Two Player: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)")
         self.assertEqual(self.p2.name,
                          "Generic Memory Two Player: (1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0)")
+        self.assertEqual(self.p3.name,
+                         "Generic Memory Two Player: (0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5)")
+        self.assertEqual(self.p4.name,
+                         "Generic Memory Two Player: (0.1, 0, 0.2, 0, 0.3, 0, 0.4, 0, 0.5, 0, 0.6, 0, 0.7, 0, 0.8, 0)")
 
-    def test_stochastic_classification(self):
+    def test_deterministic_classification(self):
         self.assertFalse(self.p1.classifier['stochastic'])
         self.assertFalse(self.p2.classifier['stochastic'])
+
+    def test_stochastic_classification(self):
+        self.assertTrue(self.p3.classifier['stochastic'])
+        self.assertTrue(self.p4.classifier['stochastic'])
 
 class TestMemoryTwoPlayer(unittest.TestCase):
 
