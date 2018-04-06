@@ -57,7 +57,7 @@ from .memoryone import (
     MemoryOnePlayer, ALLCorALLD, FirmButFair, GTFT, SoftJoss,
     StochasticCooperator, StochasticWSLS, WinStayLoseShift, WinShiftLoseStay,
     ReactivePlayer)
-from .memorytwo import MEM2
+from .memorytwo import MemoryTwoPlayer, AON2, DelayedAON1, MEM2
 from .mindcontrol import MindController, MindWarper, MindBender
 from .mindreader import MindReader, ProtectedMindReader, MirrorMindReader
 from .mutual import Desperate, Hopeless, Willing
@@ -103,6 +103,7 @@ all_strategies = [
     AlternatorHunter,
     AntiCycler,
     AntiTitForTat,
+    AON2,
     APavlov2006,
     APavlov2011,
     Appeaser,
@@ -136,6 +137,7 @@ all_strategies = [
     Defector,
     DefectorHunter,
     Desperate,
+    DelayedAON1,
     DoubleCrosser,
     Doubler,
     DoubleResurrection,
