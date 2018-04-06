@@ -16,7 +16,10 @@ C, D = Action.C, Action.D
 
 class MemoryTwoPlayer(Player):
     """
-    Uses a sixteen-vector for strategies based on the last two rounds of play,
+    Uses a sixteen-vector for strategies based on the 16 conditional probabilities
+    P(X | I,J,K,L) where X, I, J, K, L in [C, D] and I, J are the players last
+    two moves and K, L are the opponents last two moves. These conditional
+    probabilities are the following:
     1.  P(C|CC, CC)
     2.  P(C|CC, CD)
     3.  P(C|CC, DC)
@@ -42,7 +45,7 @@ class MemoryTwoPlayer(Player):
 
     name = 'Generic Memory Two Player'
     classifier = {
-        'memory_depth': 2,  # Memory-two Sixteen-Vector
+        'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -51,10 +54,7 @@ class MemoryTwoPlayer(Player):
         'manipulates_state': False
     }
 
-    def __init__(self, sixteen_vector: Tuple[float, float, float, float,
-                                             float, float, float, float,
-                                             float, float, float, float,
-                                             float, float, float, float] = None,
+    def __init__(self, sixteen_vector: Tuple[float, ...] = None,
                  initial: Action = C) -> None:
         """
         Parameters
@@ -71,7 +71,7 @@ class MemoryTwoPlayer(Player):
 
     def set_initial_sixteen_vector(self, sixteen_vector):
         if sixteen_vector is None:
-            sixteen_vector = (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+            sixteen_vector = tuple([1] * 16)
             warnings.warn("Memory two player is set to default, Cooperator.")
 
         self.set_sixteen_vector(sixteen_vector)
@@ -110,30 +110,30 @@ class AON2(MemoryTwoPlayer):
     to cooperate after rounds with mutual cooperation (provided the last k actions
     of the focal player were actually consistent).
 
-    2.Error correcting. A strategy is error correcting after at most k rounds if,
+    2. Error correcting. A strategy is error correcting after at most k rounds if,
     after any history, it generally takes a group of players at most k + 1 rounds
-    to re establish mutual cooperation.
+    to re-establish mutual cooperation.
 
     3. Retaliating. A strategy is retaliating for at least k rounds if, after
-    rounds in which the focal player cooperated while at least one coplayer defected,
+    rounds in which the focal player cooperated while the coplayer defected,
     the strategy responds by defecting the following k rounds.
 
     In [Hilbe2017]_ the following vectors are reported as "equivalent" to AON2
-    with their respective self cooperation rate (note that these a not the same):
+    with their respective self-cooperation rate (note that these are not the same):
     
-    1. [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], self cooperation
+    1. [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], self-cooperation
     rate: 0.952
-    2. [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], self cooperation
+    2. [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], self-cooperation
     rate: 0.951
-    3. [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], self cooperation
+    3. [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], self-cooperation
     rate:  0.951
-    4. [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1], self cooperation
+    4. [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1], self-cooperation
     rate: 0.952
 
-    AON2 is implemented using vector 1 due it's self cooperation rate.
+    AON2 is implemented using vector 1 due its self-cooperation rate.
 
-    In essence is a strategy that starts of by cooperating and will cooperate again
-    only after the states (CC, CC), (CD, CD), (DC, DC), (DD, DD).
+    In essence it is a strategy that starts off by cooperating and will cooperate
+    again only after the states (CC, CC), (CD, CD), (DC, DC), (DD, DD).
 
     Names:
 
@@ -142,7 +142,7 @@ class AON2(MemoryTwoPlayer):
 
     name = 'AON2'
     classifier = {
-        'memory_depth': 2,  # Memory-one Four-Vector
+        'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
@@ -158,22 +158,23 @@ class AON2(MemoryTwoPlayer):
 
 class DelayedAON1(MemoryTwoPlayer):
     """
-    Delayed AON1 a memory two strategy also introduced in [Hilbe2017]_ and belongs to the
-    AONk family. Note that AON1 is equivalent to Win Stay Lose Swift.
+    Delayed AON1 a memory two strategy also introduced in [Hilbe2017]_ and belongs
+    to the AONk family. Note that AON1 is equivalent to Win Stay Lose Shift.
 
     In [Hilbe2017]_ the following vectors are reported as "equivalent" to Delayed
-    AON1 with their respective self cooperation rate (note that these a not the same):
+    AON1 with their respective self-cooperation rate (note that these are not the
+    same):
 
-    1. [1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1], self cooperation
+    1. [1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1], self-cooperation
     rate: 0.952
-    2. [1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1], self cooperation
+    2. [1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1], self-cooperation
     rate: 0.970
-    3. [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1], self cooperation
+    3. [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1], self-cooperation
     rate: 0.971
 
-    Delayed AON1 is implemented using vector 3 due it's self cooperation rate.
+    Delayed AON1 is implemented using vector 3 due its self-cooperation rate.
 
-    In essence is a strategy that starts of by cooperating and will cooperate
+    In essence it is a strategy that starts off by cooperating and will cooperate
     again only after the states (CC, CC), (CD, CD), (CD, DD), (DD, CD),
     (DC, DC) and (DD, DD).
 
@@ -184,7 +185,7 @@ class DelayedAON1(MemoryTwoPlayer):
 
     name = 'Delayed AON1'
     classifier = {
-        'memory_depth': 2,  # Memory-one Four-Vector
+        'memory_depth': 2,
         'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,

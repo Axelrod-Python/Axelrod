@@ -62,7 +62,7 @@ class TestMemoryTwoPlayer(unittest.TestCase):
             self.assertEqual(len(warning), 1)
             self.assertEqual(warning[-1].category, UserWarning)
             self.assertEqual(str(warning[-1].message),
-                              "Memory two player is set to default, Cooperator.")
+                             "Memory two player is set to default, Cooperator.")
 
     def test_exception_if_probability_vector_outside_valid_values(self):
         player = MemoryTwoPlayer()
@@ -124,9 +124,6 @@ class TestAON2(TestPlayer):
         'manipulates_state': False
     }
 
-    def test_class_classification(self):
-        self.assertEqual(self.player.classifier,
-                         self.expected_classifier)
 
     def test_strategy(self):
         # tests states 2, 7, 14 and 15
@@ -168,10 +165,6 @@ class TestDelayedAON1(TestPlayer):
         'manipulates_source': False,
         'manipulates_state': False
     }
-
-    def test_class_classification(self):
-        self.assertEqual(self.player.classifier,
-                         self.expected_classifier)
 
     def test_strategy_mutually_cooperative(self):
         # tests states 2, 7, 14 and 11
