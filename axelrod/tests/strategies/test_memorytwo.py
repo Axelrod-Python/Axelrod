@@ -1,5 +1,6 @@
 """Tests for the Memorytwo strategies."""
 
+import random
 import unittest
 import warnings
 
@@ -70,6 +71,44 @@ class TestMemoryTwoPlayer(unittest.TestCase):
             player.set_sixteen_vector([0.1, x, 0.5, 0.1, 0.1, 0.2,
                                        0.5, 0.1, 0.1, 0.2, 0.5, 0.1,
                                        0.2, 0.5, 0.1, 0.2, 0.5, 0.2,])
+
+
+class TestMemoryStochastic(TestPlayer):
+    name = 'Generic Memory Two Player: (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1): C'
+    player = axelrod.MemoryTwoPlayer
+    expected_classifier = {
+        'memory_depth': 2,  # Memory-two Sixteen-Vector
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+    def test_strategy(self):
+        axelrod.seed(0)
+        vector = [random.random() for _ in range(16)]
+
+        actions = [(C, C), (C, C), (D, D), (D, C), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.CyclerCCD(),
+                         expected_actions=actions, seed=0,
+                         init_kwargs={'sixteen_vector': vector})
+
+        actions = [(C, C), (C, C), (C, D), (D, C), (C, C), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.CyclerCCD(),
+                         expected_actions=actions, seed=1,
+                         init_kwargs={'sixteen_vector': vector})
+
+        actions = [(C, C), (C, C), (D, C), (D, D), (C, D), (C, C), (D, C)]
+        self.versus_test(opponent=axelrod.TitForTat(),
+                         expected_actions=actions, seed=0,
+                         init_kwargs={'sixteen_vector': vector})
+
+        actions = [(C, C), (C, C), (C, C), (D, C), (D, D), (C, D), (C, C)]
+        self.versus_test(opponent=axelrod.TitForTat(),
+                         expected_actions=actions, seed=1,
+                         init_kwargs={'sixteen_vector': vector})
+
 
 class TestAON2(TestPlayer):
 

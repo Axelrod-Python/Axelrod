@@ -43,7 +43,7 @@ class MemoryTwoPlayer(Player):
     name = 'Generic Memory Two Player'
     classifier = {
         'memory_depth': 2,  # Memory-two Sixteen-Vector
-        'stochastic': True,
+        'stochastic': False,
         'makes_use_of': set(),
         'long_run_time': False,
         'inspects_source': False,
