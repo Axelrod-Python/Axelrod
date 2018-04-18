@@ -82,8 +82,7 @@ class MemoryOnePlayer(Player):
             raise ValueError("An element in the probability vector, {}, is not "
                              "between 0 and 1.".format(str(four_vector)))
 
-        self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)],
-                                     map(float, four_vector)))
+        self._four_vector = dict(zip([(C, C), (C, D), (D, C), (D, D)], four_vector))
         self.classifier['stochastic'] = any(0 < x < 1 for x in set(four_vector))
 
     def strategy(self, opponent: Player) -> Action:
