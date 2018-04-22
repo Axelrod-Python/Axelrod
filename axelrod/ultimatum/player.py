@@ -5,16 +5,6 @@ Ultimatum Game .
 from scipy import stats
 
 
-def play(player, coplayer):
-    offer = player.offer()
-    decision = coplayer.consider(offer)
-    # If the offer is accepted, return the split. Otherwise both players
-    # receive nothing.
-    if decision:
-        return 1. - offer, offer
-    return 0., 0.
-
-
 class UltimatumPlayer(object):
     """A generic abstract player of the ultimatum game."""
 
@@ -28,6 +18,15 @@ class UltimatumPlayer(object):
     def consider(self, offer: float) -> bool:
         """Decision rule for whether to accept the offer."""
         raise NotImplementedError
+
+    def play(self, coplayer):
+        offer = self.offer()
+        decision = coplayer.consider(offer)
+        # If the offer is accepted, return the split. Otherwise both players
+        # receive nothing.
+        if decision:
+            return 1. - offer, offer
+        return 0., 0.
 
 
 class SimpleThresholdPlayer(UltimatumPlayer):
