@@ -1,6 +1,6 @@
 import unittest
 
-from axelrod.ultimatum import DoubleThresholdPlayer, SimpleThresholdPlayer, play
+from axelrod.ultimatum import DoubleThresholdPlayer, SimpleThresholdPlayer
 
 
 class TestSimpleThresholdPlayer(unittest.TestCase):
@@ -33,14 +33,14 @@ class TestPlay(unittest.TestCase):
     def test_result(self):
         player = SimpleThresholdPlayer(0.6, 0.4)
         coplayer = SimpleThresholdPlayer(0.5, 0.5)
-        result = play(player, coplayer)
+        result = player.play(coplayer)
         self.assertEqual(result, (0.4, 0.6))
-        result = play(coplayer, player)
+        result = coplayer.play(player)
         self.assertEqual(result, (0.5, 0.5))
         player = SimpleThresholdPlayer(0.4, 0.6)
-        result = play(player, coplayer)
+        result = player.play(coplayer)
         self.assertEqual(result, (0.0, 0.0))
-        result = play(coplayer, player)
+        result = coplayer.play(player)
         self.assertEqual(result, (0.0, 0.0))
 
 
