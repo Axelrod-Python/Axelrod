@@ -30,7 +30,8 @@ class UltimatumPlayer(object):
 
 
 class SimpleThresholdPlayer(UltimatumPlayer):
-    """A """
+    """A simple Ultimatum game player with a fixed acceptance threshold and
+    offer proportion."""
 
     name = "Simple Threshold Player"
 
@@ -50,7 +51,8 @@ class SimpleThresholdPlayer(UltimatumPlayer):
 
 
 class DoubleThresholdPlayer(UltimatumPlayer):
-    """A generic player of the ultimatum game."""
+    """A simple Ultimatum game player with fixed acceptance thresholds (upper
+    and lower) and a fixed offer proportion."""
 
     name = "Double Threshold Player"
 
@@ -74,9 +76,9 @@ class DoubleThresholdPlayer(UltimatumPlayer):
 
 
 class DistributionPlayer(UltimatumPlayer):
-    """A generic player of the ultimatum game."""
+    """A stochastic player of the ultimatum game."""
 
-    name = "Distribution Threshold Player"
+    name = "Distribution Player"
 
     def __init__(self, offer_distribution: None, acceptance_distribution=None):
         if not offer_distribution:
