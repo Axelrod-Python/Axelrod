@@ -55,7 +55,7 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
         opponent_second_c = 0
         opponent_second_d = 0
         my_previous_c = 1 if player.history[-1] == C else 0
-        my_previous_d = 0 if player.history[-1] == D else 0
+        my_previous_d = 1 if player.history[-1] == D else 0
         my_previous2_c = 0
         my_previous2_d = 0
         opponent_previous_c = 1 if opponent.history[-1] == C else 0
@@ -69,7 +69,7 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
         opponent_second_c = 1 if opponent.history[1] == C else 0
         opponent_second_d = 1 if opponent.history[1] == D else 0
         my_previous_c = 1 if player.history[-1] == C else 0
-        my_previous_d = 0 if player.history[-1] == D else 0
+        my_previous_d = 1 if player.history[-1] == D else 0
         my_previous2_c = 1 if player.history[-2] == C else 0
         my_previous2_d = 1 if player.history[-2] == D else 0
         opponent_previous_c = 1 if opponent.history[-1] == C else 0
