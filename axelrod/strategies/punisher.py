@@ -168,14 +168,14 @@ class TrickyLevelPunisher(Player):
     }
 
     def strategy(self, opponent: Player) -> Action:
+        if len(opponent.history) == 0:
+            return C
         if len(opponent.history) < 10:
             if opponent.defections / len(opponent.history) > 0.2:
                 return D
-            return C
         if len(opponent.history) < 50:
             if opponent.defections / len(opponent.history) > 0.1:
                 return D
-            return C
         if len(opponent.history) < 100:
             if opponent.defections / len(opponent.history) > 0.05:
                 return D
