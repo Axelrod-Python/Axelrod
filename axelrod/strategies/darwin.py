@@ -8,6 +8,8 @@ from collections import defaultdict
 from axelrod.action import Action
 from axelrod.player import Player
 
+from typing import Optional
+
 C, D = Action.C, Action.D
 
 
@@ -48,7 +50,7 @@ class Darwin(Player):
     valid_callers = ["play"]    # What functions may invoke our strategy.
 
     def __init__(self) -> None:
-        self.outcomes = None  # type: dict
+        self.outcomes = None  # type: Optional[dict]
         self.response = Darwin.genome[0]
         super().__init__()
 
@@ -64,6 +66,7 @@ class Darwin(Player):
         trial = len(self.history)
 
         if trial > 0:
+            assert self.outcomes is not None
             outcome = self.outcomes[(self.history[-1], opponent.history[-1])]
             self.mutate(outcome, trial)
             # Update genome with selected response

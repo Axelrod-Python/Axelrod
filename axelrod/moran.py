@@ -12,7 +12,7 @@ from .graph import complete_graph, Graph
 from .match import Match
 from .random_ import randrange
 
-from typing import List, Tuple, Set
+from typing import List, Tuple, Set, Optional
 
 
 def fitness_proportionate_selection(scores: List) -> int:
@@ -102,7 +102,7 @@ class MoranProcess(object):
         self.populations = []  # type: List
         self.set_players()
         self.score_history = []  # type: List
-        self.winning_strategy_name = None  # type: str
+        self.winning_strategy_name = None  # type: Optional[str]
         self.mutation_rate = mutation_rate
         assert (mutation_rate >= 0) and (mutation_rate <= 1)
         assert (noise >= 0) and (noise <= 1)
@@ -184,7 +184,7 @@ class MoranProcess(object):
         index:
             The index of the player to be removed
         """
-        if self.mode == "db":
+        if index is None:
             # Select a player to be replaced globally
             i = randrange(0, len(self.players))
             # Record internally for use in _matchup_indices
@@ -207,7 +207,7 @@ class MoranProcess(object):
         """
         # Compute necessary fitnesses.
         scores = self.score_all()
-        if self.mode == "db":
+        if index is not None:
             # Death has already occurred, so remove the dead player from the
             # possible choices
             scores.pop(index)
