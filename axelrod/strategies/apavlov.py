@@ -1,6 +1,8 @@
 from axelrod.action import Action
 from axelrod.player import Player
 
+from typing import Optional
+
 C, D = Action.C, Action.D
 
 
@@ -29,7 +31,7 @@ class APavlov2006(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.opponent_class = None  # type: str
+        self.opponent_class = None  # type: Optional[str]
 
     def strategy(self, opponent: Player) -> Action:
         # TFT for six rounds
@@ -93,7 +95,7 @@ class APavlov2011(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.opponent_class = None # type: str
+        self.opponent_class = None  # type: Optional[str]
 
     def strategy(self, opponent: Player) -> Action:
         # TFT for six rounds

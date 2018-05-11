@@ -21,7 +21,7 @@ import axelrod.interaction_utils as iu
 
 C, D = Action.C, Action.D
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 
 class Tournament(object):
@@ -83,8 +83,8 @@ class Tournament(object):
         self._logger = logging.getLogger(__name__)
 
         self.use_progress_bar = True
-        self.filename = None  # type: str
-        self._temp_file_descriptor = None  # type: int
+        self.filename = None  # type: Optional[str]
+        self._temp_file_descriptor = None  # type: Optional[int]
 
     def setup_output(self, filename=None):
         """assign/create `filename` to `self`. If file should be deleted once
@@ -142,6 +142,7 @@ class Tournament(object):
                                    processes=processes,
                                    progress_bar=progress_bar)
         if self._temp_file_descriptor is not None:
+            assert self.filename is not None
             os.close(self._temp_file_descriptor)
             os.remove(self.filename)
 

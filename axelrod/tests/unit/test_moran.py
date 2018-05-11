@@ -77,13 +77,13 @@ class TestMoranProcess(unittest.TestCase):
         players = axelrod.Cooperator(), axelrod.Defector(), axelrod.TitForTat()
         mp = MoranProcess(players, mutation_rate=0.5, mode="db")
         axelrod.seed(1)
-        self.assertEqual(mp.death(0), 0)
+        self.assertEqual(mp.death(), 0)
         self.assertEqual(mp.dead, 0)
         axelrod.seed(5)
-        self.assertEqual(mp.death(0), 1)
+        self.assertEqual(mp.death(), 1)
         self.assertEqual(mp.dead, 1)
         axelrod.seed(2)
-        self.assertEqual(mp.death(0), 2)
+        self.assertEqual(mp.death(), 2)
         self.assertEqual(mp.dead, 2)
 
     def test_death_in_bd(self):
@@ -102,14 +102,14 @@ class TestMoranProcess(unittest.TestCase):
         players = axelrod.Cooperator(), axelrod.Defector(), axelrod.TitForTat()
         mp = MoranProcess(players, mode="db")
         axelrod.seed(1)
-        self.assertEqual(mp.death(0), 0)
+        self.assertEqual(mp.death(), 0)
         self.assertEqual(mp.birth(0), 2)
 
     def test_birth_in_bd(self):
         players = axelrod.Cooperator(), axelrod.Defector(), axelrod.TitForTat()
         mp = MoranProcess(players, mode="bd")
         axelrod.seed(1)
-        self.assertEqual(mp.birth(0), 0)
+        self.assertEqual(mp.birth(), 0)
 
     def test_fixation_check(self):
         players = axelrod.Cooperator(), axelrod.Cooperator()
