@@ -143,3 +143,40 @@ class LevelPunisher(Player):
             return D
         else:
             return C
+
+
+class TrickyLevelPunisher(Player):
+    """
+    A player starts by cooperating however, after 10, 50 and 100 rounds
+    will defect if at any point the percentage of defections
+    by an opponent is greater than 20%, 10% and 5% respectively.
+
+    Names:
+
+    - Tricky Level Punisher: [Eckhart2015]_
+    """
+
+    name = 'Tricky Level Punisher'
+    classifier = {
+        'memory_depth': float('inf'), # Long Memory
+        'stochastic': False,
+        'makes_use_of': set(),
+        'long_run_time': False,
+        'inspects_source': False,
+        'manipulates_source': False,
+        'manipulates_state': False
+    }
+
+    def strategy(self, opponent: Player) -> Action:
+        if len(opponent.history) < 10:
+            if opponent.defections / len(opponent.history) > 0.2:
+                return D
+            return C
+        if len(opponent.history) < 50:
+            if opponent.defections / len(opponent.history) > 0.1:
+                return D
+            return C
+        if len(opponent.history) < 100:
+            if opponent.defections / len(opponent.history) > 0.05:
+                return D
+        return C
