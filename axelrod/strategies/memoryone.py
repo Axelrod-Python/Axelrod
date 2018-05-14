@@ -193,6 +193,7 @@ class GTFT(MemoryOnePlayer):
         self.set_four_vector(four_vector)
 
     def __repr__(self) -> str:
+        assert self.p is not None
         return "%s: %s" % (self.name, round(self.p, 2))
 
 

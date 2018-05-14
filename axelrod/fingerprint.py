@@ -268,7 +268,7 @@ class AshlockFingerprint(object):
 
     def fingerprint(
         self, turns: int = 50, repetitions: int = 10, step: float = 0.01,
-        processes: int=None, filename: str = None,
+        processes: int = None, filename: str = None,
         progress_bar: bool = True
 ) -> dict:
         """Build and play the spatial tournament.
@@ -305,7 +305,7 @@ class AshlockFingerprint(object):
 
         temp_file_descriptor = None
         if filename is None:
-            temp_file_descriptor, filename = mkstemp()
+            temp_file_descriptor, filename = mkstemp()  # type: ignore
 
         edges, tourn_players = self.construct_tournament_elements(
             step, progress_bar=progress_bar)
@@ -323,6 +323,7 @@ class AshlockFingerprint(object):
             filename, progress_bar=progress_bar)
 
         if temp_file_descriptor is not None:
+            assert filename is not None
             os.close(temp_file_descriptor)
             os.remove(filename)
 
@@ -443,7 +444,7 @@ class TransitiveFingerprint(object):
 
         temp_file_descriptor = None
         if filename is None:
-            temp_file_descriptor, filename = mkstemp()
+            temp_file_descriptor, filename = mkstemp()  # type: ignore
 
         edges = [(0, k + 1) for k in range(len(self.opponents))]
         tournament = axl.Tournament(players=players,
@@ -455,6 +456,7 @@ class TransitiveFingerprint(object):
         self.data = self.analyse_cooperation_ratio(filename)
 
         if temp_file_descriptor is not None:
+            assert filename is not None
             os.close(temp_file_descriptor)
             os.remove(filename)
 

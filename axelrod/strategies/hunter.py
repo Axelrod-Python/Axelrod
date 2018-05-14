@@ -2,7 +2,7 @@ from axelrod.action import Action
 from axelrod.player import Player
 from axelrod._strategy_utils import detect_cycle
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 C, D = Action.C, Action.D
 
@@ -120,7 +120,7 @@ class CycleHunter(Player):
 
     def __init__(self) -> None:
         super().__init__()
-        self.cycle = None # type: Tuple[Action]
+        self.cycle = None  # type: Optional[Tuple[Action]]
 
     def strategy(self, opponent: Player) -> Action:
         if self.cycle:
