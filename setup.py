@@ -7,6 +7,10 @@ with open('requirements.txt') as f:
         if "hypothesis" not in library:  # Skip: used only for dev
             requirements.append(library)
 
+# Read in long description
+with open("README.rst", "r") as f:
+    long_description = f.read()
+
 # Read in the version number
 exec(open('axelrod/version.py', 'r').read())
 
@@ -20,6 +24,8 @@ setup(
     url='http://axelrod.readthedocs.org/',
     license='The MIT License (MIT)',
     description='Reproduce the Axelrod iterated prisoners dilemma tournament',
+    long_description=long_description,
+    long_description_content_type='text/x-rst',
     include_package_data=True,
     package_data={
         '': ['axelrod/data/*.csv'],
