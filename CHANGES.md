@@ -1,3 +1,18 @@
+# v4.2.0, 2018-05-25
+
+New strategies and minor internal fixes.
+
+- Add implementation of generic memory 2 strategy and 2 new strategies
+  https://github.com/Axelrod-Python/Axelrod/pull/1171
+- Add Tricky Level Punisher
+  https://github.com/Axelrod-Python/Axelrod/pull/1178
+- Remove unneeded code
+  https://github.com/Axelrod-Python/Axelrod/pull/1173
+- Fix type hints to work with mypy 2.1
+  https://github.com/Axelrod-Python/Axelrod/pull/1177
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.2.0...v4.1.0
+
 # v4.1.0, 2018-03-13
 
 New strategy
