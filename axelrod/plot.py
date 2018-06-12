@@ -1,14 +1,14 @@
 from distutils.version import LooseVersion
 
 from .result_set import ResultSet
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.transforms as transforms
 from numpy import arange, median, nan_to_num
 import tqdm
 
 from typing import List, Union
 
-import matplotlib
-import matplotlib.pyplot as plt
-import matplotlib.transforms as transforms
 
 titleType = List[str]
 namesType = List[str]

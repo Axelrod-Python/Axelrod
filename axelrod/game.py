@@ -9,7 +9,8 @@ Score = Union[int, float]
 class Game(object):
     """A class to hold the game matrix and to score a game accordingly."""
 
-    def __init__(self, r: Score=3, s: Score=0, t: Score=5, p: Score=1) -> None:
+    def __init__(self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1
+                 )-> None:
         self.scores = {
             (C, C): (r, r),
             (D, D): (p, p),

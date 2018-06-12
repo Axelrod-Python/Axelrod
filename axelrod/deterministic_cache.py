@@ -35,7 +35,7 @@ class DeterministicCache(UserDict):
     methods to save/load the cache to/from a file.
     """
 
-    def __init__(self, file_name: str=None) -> None:
+    def __init__(self, file_name: str = None) -> None:
         """
         Parameters
         ----------
@@ -44,6 +44,7 @@ class DeterministicCache(UserDict):
         """
         super().__init__()
         self.mutable = True
+        self.data = None
         if file_name is not None:
             self.load(file_name)
 
@@ -133,7 +134,6 @@ class DeterministicCache(UserDict):
         # The value should be a list
         if not isinstance(value, list):
             return False
-
         return True
 
     def save(self, file_name: str) -> bool:

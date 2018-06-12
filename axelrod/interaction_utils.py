@@ -8,7 +8,6 @@ This is used by both the Match class and the ResultSet class which analyse
 interactions.
 """
 from collections import Counter, defaultdict
-import csv
 import tqdm
 import pandas as pd
 

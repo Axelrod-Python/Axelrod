@@ -1,20 +1,18 @@
-import csv
-import os
 from collections import namedtuple
+import os
 from tempfile import mkstemp
 
+import dask.dataframe as dd
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 import tqdm
-import dask.dataframe as dd
-import dask as da
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import axelrod as axl
 from axelrod import Player
-from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 from axelrod.interaction_utils import (
     compute_final_score_per_turn, read_interactions_from_file)
+from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 
 from typing import List, Any, Union
 
@@ -44,16 +42,14 @@ def create_points(step: float, progress_bar: bool = True) -> List[Point]:
     num = int((1 / step) // 1) + 1
 
     if progress_bar:
-        p_bar = tqdm.tqdm(total=num ** 2, desc="Generating points")
+        p_bar = tqdm.tqdm(total=num**2, desc="Generating points")
 
     points = []
     for x in np.linspace(0, 1, num):
         for y in np.linspace(0, 1, num):
             points.append(Point(x, y))
-
             if progress_bar:
                 p_bar.update()
-
     if progress_bar:
         p_bar.close()
 
@@ -266,11 +262,10 @@ class AshlockFingerprint(object):
 
         return edges, tournament_players
 
-    def fingerprint(
-        self, turns: int = 50, repetitions: int = 10, step: float = 0.01,
-        processes: int = None, filename: str = None,
-        progress_bar: bool = True
-) -> dict:
+    def fingerprint(self, turns: int = 50, repetitions: int = 10,
+                    step: float = 0.01,
+                    processes: int = None, filename: str = None,
+                    progress_bar: bool = True) -> dict:
         """Build and play the spatial tournament.
 
         Creates the probes and their edges then builds a spatial tournament.
@@ -311,9 +306,8 @@ class AshlockFingerprint(object):
             step, progress_bar=progress_bar)
 
         self.step = step
-        self.spatial_tournament = axl.Tournament(tourn_players, turns=turns,
-                                                 repetitions=repetitions,
-                                                 edges=edges)
+        self.spatial_tournament = axl.Tournament(
+            tourn_players, turns=turns, repetitions=repetitions, edges=edges)
         self.spatial_tournament.play(build_results=False,
                                      filename=filename,
                                      processes=processes,
