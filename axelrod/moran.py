@@ -106,9 +106,8 @@ class MoranProcess(object):
         self.mutation_rate = mutation_rate
         assert (mutation_rate >= 0) and (mutation_rate <= 1)
         assert (noise >= 0) and (noise <= 1)
-        mode = mode.lower()
-        assert mode in ['bd', 'db']
-        self.mode = mode
+        assert mode.lower() in ['bd', 'db']
+        self.mode = mode.lower()
         if deterministic_cache is not None:
             self.deterministic_cache = deterministic_cache
         else:

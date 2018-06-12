@@ -7,7 +7,7 @@ import random
 import numpy as np
 
 from axelrod.action import Action
-from .game import DefaultGame
+from axelrod.game import DefaultGame
 
 import types
 from typing import Dict, Any

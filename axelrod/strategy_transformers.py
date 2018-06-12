@@ -10,11 +10,12 @@ import copy
 from importlib import import_module
 import inspect
 import random
-from typing import Any
 from numpy.random import choice
 from .action import Action
 from .random_ import random_choice
 from .player import defaultdict, Player
+
+from typing import Any
 
 
 C, D = Action.C, Action.D
@@ -376,11 +377,13 @@ def noisy_wrapper(player, opponent, action, noise=0.05):
         return action.flip()
     return action
 
+
 def noisy_reclassifier(original_classifier, noise):
     """Function to reclassify the strategy"""
     if noise not in (0, 1):
         original_classifier["stochastic"] = True
     return original_classifier
+
 
 NoisyTransformer = StrategyTransformerFactory(
     noisy_wrapper, name_prefix="Noisy", reclassifier=noisy_reclassifier)
@@ -393,11 +396,13 @@ def forgiver_wrapper(player, opponent, action, p):
         return random_choice(p)
     return C
 
+
 def forgiver_reclassifier(original_classifier, p):
     """Function to reclassify the strategy"""
     if p not in (0, 1):
         original_classifier["stochastic"] = True
     return original_classifier
+
 
 ForgiverTransformer = StrategyTransformerFactory(
     forgiver_wrapper, name_prefix="Forgiving",
@@ -426,6 +431,7 @@ def initial_sequence(player, opponent, action, initial_seq):
         return initial_seq[index]
     return action
 
+
 def initial_reclassifier(original_classifier, initial_seq):
     """
     If needed this extends the memory depth to be the length of the initial
@@ -436,9 +442,10 @@ def initial_reclassifier(original_classifier, initial_seq):
     return original_classifier
 
 
-InitialTransformer = StrategyTransformerFactory(initial_sequence,
-                                            name_prefix="Initial",
-                                            reclassifier=initial_reclassifier)
+InitialTransformer = StrategyTransformerFactory(
+    initial_sequence,
+    name_prefix="Initial",
+    reclassifier=initial_reclassifier)
 
 
 def final_sequence(player, opponent, action, seq):
@@ -460,6 +467,7 @@ def final_sequence(player, opponent, action, seq):
     if index <= len(seq):
         return seq[-index]
     return action
+
 
 def final_reclassifier(original_classifier, seq):
     """Reclassify the strategy"""
@@ -566,6 +574,7 @@ def mixed_wrapper(player, opponent, action, probability, m_player):
 
     return action
 
+
 def mixed_reclassifier(original_classifier, probability, m_player):
     """Function to reclassify the strategy"""
     # If a single probability, player is passed
@@ -584,6 +593,8 @@ def mixed_reclassifier(original_classifier, probability, m_player):
     # Otherwise: stochastic.
     original_classifier["stochastic"] = True
     return original_classifier
+
+
 
 MixedTransformer = StrategyTransformerFactory(
     mixed_wrapper, name_prefix="Mutated", reclassifier=mixed_reclassifier)
@@ -623,6 +634,7 @@ def joss_ann_wrapper(player, opponent, proposed_action, probability):
     action = choice(options, p=probability)
     return action
 
+
 def jossann_reclassifier(original_classifier, probability):
     """
     Reclassify: note that if probabilities are (0, 1) or (1, 0) then we override
@@ -644,7 +656,6 @@ JossAnnTransformer = StrategyTransformerFactory(
 
 
 # Strategy wrappers as classes
-
 
 class RetaliationWrapper(object):
     """Retaliates `retaliations` times after a defection (cumulative)."""

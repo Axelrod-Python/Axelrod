@@ -1,9 +1,10 @@
 """
 Defines the core actions for the Prisoner's Dilemma:
-* Cooperate
-* Defect
+* Cooperate (C)
+* Defect (D)
+using the enumeration Action.C and Action.D.
 
-Uses the enumeration, Action.C and Action.D. For convenience you can use:
+For convenience you can use:
 
 from axelrod import Action
 C, D = Action.C, Action.D

@@ -1,8 +1,8 @@
-import numpy as np
-
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.load_data_ import load_weights
+
+import numpy as np
 
 from typing import List, Tuple
 
@@ -104,7 +104,8 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
     ]
 
 
-def activate(bias: List[float], hidden: List[float], output: List[float], inputs: List[int]) -> float:
+def activate(bias: List[float], hidden: List[float], output: List[float],
+             inputs: List[int]) -> float:
     """
     Compute the output of the neural network:
         output = relu(inputs * hidden_weights + bias) * output_weights
@@ -116,7 +117,8 @@ def activate(bias: List[float], hidden: List[float], output: List[float], inputs
     return output_value
 
 
-def split_weights(weights: List[float], num_features: int, num_hidden: int) -> Tuple[List[List[float]], List[float], List[float]]:
+def split_weights(weights: List[float], num_features: int, num_hidden: int
+                  ) ->Tuple[List[List[float]], List[float], List[float]]:
     """Splits the input vector into the the NN bias weights and layer
     parameters."""
     # Check weights is the right length

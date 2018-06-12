@@ -1,18 +1,15 @@
 from collections import namedtuple, Counter
-from multiprocessing import cpu_count
 import csv
 import itertools
-
-import numpy as np
-import tqdm
+from multiprocessing import cpu_count
 
 import dask as da
 import dask.dataframe as dd
+import numpy as np
+import tqdm
 
-from axelrod.action import Action, str_to_actions
-import axelrod.interaction_utils as iu
+from axelrod.action import Action
 from . import eigen
-from .game import Game
 
 
 C, D = Action.C, Action.D
@@ -33,7 +30,7 @@ def update_progress_bar(method):
     return wrapper
 
 
-class ResultSet():
+class ResultSet(object):
     """
     A class to hold the results of a tournament. Reads in a CSV file produced
     by the tournament class.
@@ -220,7 +217,7 @@ class ResultSet():
             for opponent_index in range(self.num_players):
                 count = cooperation_dict.get((player_index, opponent_index),0)
                 if player_index == opponent_index:
-					# Address double count
+                    # Address double count
                     count = int(count / 2)
                 row.append(count)
             cooperation.append(row)
@@ -520,12 +517,10 @@ class ResultSet():
         column = "Score per turn"
         normalised_scores_task = adf.groupby(groups)[column].mean()
 
-
         groups = ["Player index"]
         column = "Initial cooperation"
         initial_cooperation_count_task = adf.groupby(groups)[column].sum()
         interactions_count_task = adf.groupby("Player index")["Player index"].count()
-
 
         return (mean_per_reps_player_opponent_task,
                 sum_per_player_opponent_task,

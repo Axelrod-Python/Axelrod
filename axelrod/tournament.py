@@ -2,22 +2,22 @@ from collections import defaultdict
 import csv
 import logging
 from multiprocessing import Process, Queue, cpu_count
+import os
 from tempfile import mkstemp
 import warnings
-import os
 
 import tqdm
 
 from axelrod import DEFAULT_TURNS
 from axelrod.player import Player
 from axelrod.action import actions_to_str
-from .game import Game
-from .match import Match
-from .match_generator import MatchGenerator
-from .result_set import ResultSet
-from axelrod.action import Action, str_to_actions
-
+from axelrod.game import Game
 import axelrod.interaction_utils as iu
+from axelrod.match import Match
+from axelrod.match_generator import MatchGenerator
+from axelrod.result_set import ResultSet
+from axelrod.action import Action
+
 
 C, D = Action.C, Action.D
 
@@ -96,7 +96,6 @@ class Tournament(object):
         self.filename = filename
         self._temp_file_descriptor = temp_file_descriptor
 
-
     def play(self, build_results: bool = True, filename: str = None,
              processes: int = None, progress_bar: bool = True,
              ) -> ResultSet:
@@ -147,7 +146,6 @@ class Tournament(object):
             os.remove(self.filename)
 
         return result_set
-
 
     def _run_serial(self, build_results: bool=True) -> bool:
         """Run all matches in serial."""
@@ -291,7 +289,8 @@ class Tournament(object):
 
         return True
 
-    def _n_workers(self, processes: int = 2) -> int:
+    @staticmethod
+    def _n_workers(processes: int = 2) -> int:
         """
         Determines the number of parallel processes to use.
 
@@ -327,7 +326,7 @@ class Tournament(object):
         return True
 
     def _process_done_queue(self, workers: int, done_queue: Queue,
-                            build_results: bool=True):
+                            build_results: bool = True):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -356,7 +355,7 @@ class Tournament(object):
         return True
 
     def _worker(self, work_queue: Queue, done_queue: Queue,
-                build_results: bool=True):
+                build_results: bool = True):
         """
         The work for each parallel sub-process to execute.
 
