@@ -479,7 +479,7 @@ class ResultSet():
         Compute all dask tasks
         """
         if processes is None:
-            out = da.compute(*tasks, get=da.get)
+            out = da.compute(*tasks, scheduler='single-threaded')
         else:
             out = da.compute(*tasks, num_workers=processes)
         return out
