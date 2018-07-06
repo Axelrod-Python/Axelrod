@@ -244,8 +244,8 @@ class EvolvedANNNoise05(ANN):
      - Evolved ANN Noise 05: Original name by Marc Harper.
     """
 
-    name = "Evolved ANN 5 Noise 05"
+    name = "Evolved ANN 10 Noise 05"
 
     def __init__(self) -> None:
-        num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
+        num_features, num_hidden, weights = nn_weights["Evolved ANN 10 Noise 05"]
         super().__init__(weights, num_features, num_hidden)
