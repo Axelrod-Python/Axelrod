@@ -206,7 +206,7 @@ class EvolvedANN(ANN):
     hidden layer of size 10.
 
     Trained using the `axelrod_dojo` version: 0.0.8
-    Training data is archived at doi.org/10.5281/zenodo.1306598
+    Training data is archived at doi.org/10.5281/zenodo.1306926
 
     Names:
 
@@ -226,7 +226,7 @@ class EvolvedANN5(ANN):
     hidden layer of size 5.
 
     Trained using the `axelrod_dojo` version: 0.0.8
-    Training data is archived at doi.org/10.5281/zenodo.1306598
+    Training data is archived at doi.org/10.5281/zenodo.1306931
 
     Names:
 
@@ -243,18 +243,18 @@ class EvolvedANN5(ANN):
 class EvolvedANNNoise05(ANN):
     """
     A strategy based on a pre-trained neural network with a hidden layer of
-    size 10, trained with noise=0.05.
+    size 5, trained with noise=0.05.
 
     Trained using the `axelrod_dojo` version: 0.0.8
-    Training data is archived at doi.org/10.5281/zenodo.1306598
+    # TODO Archive training data again
 
     Names:
 
-     - Evolved ANN Noise 05: Original name by Marc Harper.
+     - Evolved ANN Noise 5: Original name by Marc Harper.
     """
 
-    name = "Evolved ANN 10 Noise 05"
+    name = "Evolved ANN 5 Noise 05"
 
     def __init__(self) -> None:
-        num_features, num_hidden, weights = nn_weights["Evolved ANN 10 Noise 05"]
+        num_features, num_hidden, weights = nn_weights["Evolved ANN 5 Noise 05"]
         super().__init__(weights, num_features, num_hidden)
