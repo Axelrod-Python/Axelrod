@@ -1,3 +1,14 @@
+# v4.2.1, 2018-07-09
+
+Minor internal fixes.
+
+- Add an upper bound for a dependency version
+  https://github.com/Axelrod-Python/Axelrod/pull/1184
+- Add a long markdown description for pypi
+  https://github.com/Axelrod-Python/Axelrod/pull/1179
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.2.1...v4.2.0
+
 # v4.2.0, 2018-05-25
 
 New strategies and minor internal fixes.
