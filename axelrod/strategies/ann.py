@@ -246,7 +246,7 @@ class EvolvedANNNoise05(ANN):
     size 5, trained with noise=0.05.
 
     Trained using the `axelrod_dojo` version: 0.0.8
-    # TODO Archive training data again
+    Training data i archived at doi.org/10.5281/zenodo.1314247.
 
     Names:
 
