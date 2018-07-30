@@ -1,3 +1,12 @@
+# v4.2.2, 2018-07-30
+
+Update of training weights for neural network strategy
+
+- Add an upper bound for a dependency version
+  https://github.com/Axelrod-Python/Axelrod/pull/1182
+
+https://github.com/Axelrod-Python/Axelrod/compare/v4.2.2...v4.2.1
+
 # v4.2.1, 2018-07-09
 
 Minor internal fixes.
