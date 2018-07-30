@@ -1,5 +1,5 @@
 cloudpickle>=0.2.1
-dask>=0.11.0
+dask>=0.18.1
 hypothesis==3.2
 matplotlib>=1.4.2
 numpy>=1.9.2

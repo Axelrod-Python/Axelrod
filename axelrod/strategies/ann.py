@@ -55,7 +55,7 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
         opponent_second_c = 0
         opponent_second_d = 0
         my_previous_c = 1 if player.history[-1] == C else 0
-        my_previous_d = 0 if player.history[-1] == D else 0
+        my_previous_d = 1 if player.history[-1] == D else 0
         my_previous2_c = 0
         my_previous2_d = 0
         opponent_previous_c = 1 if opponent.history[-1] == C else 0
@@ -69,7 +69,7 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
         opponent_second_c = 1 if opponent.history[1] == C else 0
         opponent_second_d = 1 if opponent.history[1] == D else 0
         my_previous_c = 1 if player.history[-1] == C else 0
-        my_previous_d = 0 if player.history[-1] == D else 0
+        my_previous_d = 1 if player.history[-1] == D else 0
         my_previous2_c = 1 if player.history[-2] == C else 0
         my_previous2_d = 1 if player.history[-2] == D else 0
         opponent_previous_c = 1 if opponent.history[-1] == C else 0
@@ -205,6 +205,9 @@ class EvolvedANN(ANN):
     A strategy based on a pre-trained neural network with 17 features and a
     hidden layer of size 10.
 
+    Trained using the `axelrod_dojo` version: 0.0.8
+    Training data is archived at doi.org/10.5281/zenodo.1306926
+
     Names:
 
      - Evolved ANN: Original name by Martin Jones.
@@ -222,6 +225,9 @@ class EvolvedANN5(ANN):
     A strategy based on a pre-trained neural network with 17 features and a
     hidden layer of size 5.
 
+    Trained using the `axelrod_dojo` version: 0.0.8
+    Training data is archived at doi.org/10.5281/zenodo.1306931
+
     Names:
 
      - Evolved ANN 5: Original name by Marc Harper.
@@ -237,11 +243,14 @@ class EvolvedANN5(ANN):
 class EvolvedANNNoise05(ANN):
     """
     A strategy based on a pre-trained neural network with a hidden layer of
-    size 10, trained with noise=0.05.
+    size 5, trained with noise=0.05.
+
+    Trained using the `axelrod_dojo` version: 0.0.8
+    Training data i archived at doi.org/10.5281/zenodo.1314247.
 
     Names:
 
-     - Evolved ANN Noise 05: Original name by Marc Harper.
+     - Evolved ANN Noise 5: Original name by Marc Harper.
     """
 
     name = "Evolved ANN 5 Noise 05"

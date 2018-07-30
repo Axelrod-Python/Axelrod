@@ -61,7 +61,7 @@ class TestEvolvedANN5(TestPlayer):
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-        actions = [(C, D)] * 4 + [(D, D)]
+        actions = [(C, D)] + [(D, D)] * 4
         self.versus_test(axelrod.Defector(), expected_actions=actions)
 
 
@@ -83,5 +83,5 @@ class TestEvolvedANNNoise05(TestPlayer):
         actions = [(C, C)] * 5
         self.versus_test(axelrod.Cooperator(), expected_actions=actions)
 
-        actions = [(C, D), (D, D), (C, D)]
+        actions = [(C, D), (D, D), (D, D)]
         self.versus_test(axelrod.Defector(), expected_actions=actions)
