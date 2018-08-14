@@ -334,8 +334,9 @@ class LookerUp(Player):
         return initial_actions[:table_depth]
 
     def strategy(self, opponent: Player) -> Reaction:
-        while self._initial_actions_pool:
-            return self._initial_actions_pool.pop(0)
+        turn_index =  len(opponent.history)
+        while turn_index < len(self._initial_actions_pool):
+            return self._initial_actions_pool[turn_index]
 
         player_last_n_plays = get_last_n_plays(player=self,
                                                depth=self._lookup.player_depth)
