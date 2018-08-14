@@ -49,9 +49,9 @@ class Graph(object):
 
     def add_loops(self):
         """
-        Add all loops to edges
+        Add all loops to edges.
         """
-        self.add_edges((i, i) for i, _ in enumerate(self.vertices()))
+        self.add_edges((x, x) for x in self.vertices())
 
     def edges(self):
         return self._edges

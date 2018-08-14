@@ -90,9 +90,23 @@ class TestGraph(unittest.TestCase):
         edges = [(0, 1), (0, 2), (1, 2)]
         g = graph.Graph(edges)
         g.add_loops()
-        self.assertEqual(g._edges,
-                         [(0, 1), (1, 0), (0, 2), (2, 0), (1, 2),
-                          (2, 1), (0, 0), (1, 1), (2, 2)])
+        self.assertEqual(
+            list(sorted(g._edges)),
+            list(sorted([(0, 1), (1, 0), (0, 2), (2, 0), (1, 2),
+                         (2, 1), (0, 0), (1, 1), (2, 2)]))
+        )
+
+    def test_add_loops2(self):
+        """In this case there is already a loop present; also uses
+        strings instead of integers as the hashable."""
+        edges = [('a', 'b'), ('b', 'a'), ('c', 'c')]
+        g = graph.Graph(edges)
+        g.add_loops()
+        self.assertEqual(
+            list(sorted(g._edges)),
+            list(sorted(
+                [('a', 'b'), ('b', 'a'), ('c', 'c'), ('a', 'a'), ('b', 'b')]))
+        )
 
     def test_out_dict(self):
         # Undirected graph with vertices and unweighted edges
