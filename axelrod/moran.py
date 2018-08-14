@@ -56,6 +56,7 @@ class MoranProcess(object):
         interaction_graph: Graph = None,
         reproduction_graph: Graph = None,
         fitness_transformation: Callable = None,
+        mutation_method="transition"
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
@@ -120,6 +121,11 @@ class MoranProcess(object):
         self.score_history = []  # type: List
         self.winning_strategy_name = None  # type: Optional[str]
         self.mutation_rate = mutation_rate
+        m = mutation_method.lower()
+        if m in ["atomic", "transition"]:
+            self.mutation_method = m
+        else:
+            raise ValueError("Invalid mutation method {}".format(mutation_method))
         assert (mutation_rate >= 0) and (mutation_rate <= 1)
         assert (noise >= 0) and (noise <= 1)
         mode = mode.lower()
@@ -176,6 +182,12 @@ class MoranProcess(object):
         index:
             The index of the player to be mutated
         """
+
+        if self.mutation_method == "atomic":
+            mutant = self.players[index].clone()
+            mutant.mutate()
+            return mutant
+
         # Choose another strategy at random from the initial population
         r = random.random()
         if r < self.mutation_rate:
