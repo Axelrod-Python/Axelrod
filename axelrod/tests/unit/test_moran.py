@@ -46,8 +46,8 @@ class TestMoranProcess(unittest.TestCase):
         graph = axelrod.graph.Graph(edges, directed=True)
         mp = MoranProcess(players, interaction_graph=graph)
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (2, 0), (1, 2)])
-        self.assertEqual(mp.reproduction_graph._edges,
-                         [(0, 1), (2, 0), (1, 2), (0, 0), (1, 1), (2, 2)])
+        self.assertEqual(sorted(mp.reproduction_graph._edges),
+                         sorted([(0, 1), (2, 0), (1, 2), (0, 0), (1, 1), (2, 2)]))
 
         mp = MoranProcess(players, interaction_graph=graph,
                           reproduction_graph=graph)
