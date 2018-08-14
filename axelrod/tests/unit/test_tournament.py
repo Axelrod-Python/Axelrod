@@ -33,8 +33,8 @@ test_strategies = [axelrod.Cooperator,
                    axelrod.Defector,
                    axelrod.Grudger,
                    axelrod.GoByMajority]
-test_repetitions = 5
-test_turns = 100
+test_repetitions = 3
+test_turns = 10
 
 test_prob_end = .5
 
@@ -90,8 +90,8 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=2,
-            repetitions=1
+            turns=self.test_turns,
+            repetitions=self.test_repetitions,
         )
 
     def test_init(self):
@@ -127,7 +127,7 @@ class TestTournament(unittest.TestCase):
         tournament = axelrod.Tournament(name=self.test_name,
                                         players=self.players,
                                         game=self.game,
-                                        turns=10,
+                                        turns=self.test_turns,
                                         repetitions=1)
         with warnings.catch_warnings(record=True) as w:
             # Check that a warning is raised if no results set is built and no
@@ -164,10 +164,10 @@ class TestTournament(unittest.TestCase):
     def test_play_resets_num_interactions(self):
         self.assertEqual(self.test_tournament.num_interactions, 0)
         self.test_tournament.play(progress_bar=False)
-        self.assertEqual(self.test_tournament.num_interactions, 15)
+        self.assertEqual(self.test_tournament.num_interactions, 45)
 
         self.test_tournament.play(progress_bar=False)
-        self.assertEqual(self.test_tournament.num_interactions, 15)
+        self.assertEqual(self.test_tournament.num_interactions, 45)
 
     def test_play_changes_use_progress_bar(self):
         self.assertTrue(self.test_tournament.use_progress_bar)
@@ -266,7 +266,7 @@ class TestTournament(unittest.TestCase):
             turns=axelrod.DEFAULT_TURNS,
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
-        self.assertEqual(tournament.num_interactions, 75)
+        self.assertEqual(tournament.num_interactions, 45)
 
     def test_serial_play_with_different_game(self):
         # Test that a non default game is passed to the result set
@@ -287,7 +287,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
 
 
@@ -319,7 +319,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
 
         RecordedTQDM.reset_record()
@@ -357,7 +357,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
 
         # progress_bar = False
@@ -419,11 +419,11 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
         results = tournament.play(processes=2, progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(tournament.num_interactions, 75)
+        self.assertEqual(tournament.num_interactions, 45)
 
         # The following relates to #516
         players = [axelrod.Cooperator(), axelrod.Defector(),
@@ -443,20 +443,20 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
 
         results = tournament.play(processes=2, progress_bar=False,
                                   filename=self.filename)
         self.assertIsInstance(results, axelrod.ResultSet)
-        self.assertEqual(tournament.num_interactions, 75)
+        self.assertEqual(tournament.num_interactions, 45)
 
     def test_run_serial(self):
         tournament = axelrod.Tournament(
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
         tournament._write_interactions_to_file = MagicMock(
                     name='_write_interactions_to_file')
@@ -475,7 +475,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
         tournament._write_interactions_to_file = PickleableMock(
                     name='_write_interactions_to_file')
@@ -500,7 +500,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
         self.assertEqual(tournament._n_workers(processes=1), max_processes)
 
@@ -508,7 +508,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
         self.assertEqual(tournament._n_workers(processes=max_processes+2),
                                                max_processes)
@@ -524,7 +524,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions,)
         self.assertEqual(tournament._n_workers(processes=2), 2)
 
@@ -536,7 +536,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
         chunks = tournament.match_generator.build_match_chunks()
         for chunk in chunks:
@@ -555,7 +555,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
 
         work_queue = Queue()
@@ -581,7 +581,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
         results = tournament.play(progress_bar=False)
         self.assertIsInstance(results, axelrod.ResultSet)
@@ -591,7 +591,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=axelrod.DEFAULT_TURNS,
+            turns=self.test_turns,
             repetitions=self.test_repetitions)
 
         tournament._calculate_results = MagicMock(name='_calculate_results')
@@ -655,7 +655,7 @@ class TestTournament(unittest.TestCase):
         FakeRandom.classifier["stochastic"] = False
         p1 = FakeRandom()
         p2 = FakeRandom()
-        tournament = axelrod.Tournament((p1, p2), turns=5, repetitions=2)
+        tournament = axelrod.Tournament((p1, p2), turns=self.test_turns, repetitions=2)
         results = tournament.play(progress_bar=False)
         for player_scores in results.scores:
             self.assertEqual(player_scores[0], player_scores[1])
@@ -666,7 +666,7 @@ class TestTournament(unittest.TestCase):
             name=self.test_name,
             players=self.players,
             game=self.game,
-            turns=2,
+            turns=self.test_turns,
             repetitions=2)
         tournament._write_interactions_to_file = MagicMock(name='_write_interactions_to_file')
         # Mocking this as it is called by play
@@ -782,7 +782,7 @@ class TestSpatialTournament(unittest.TestCase):
         self.assertEqual(tournament.match_generator.edges, tournament.edges)
         self.assertEqual(len(tournament.players), len(test_strategies))
         self.assertEqual(tournament.game.score((C, C)), (3, 3))
-        self.assertEqual(tournament.turns, 100)
+        self.assertEqual(tournament.turns, 10)
         self.assertEqual(tournament.repetitions, 10)
         self.assertEqual(tournament.name, 'test')
         self.assertIsInstance(tournament._logger, logging.Logger)
