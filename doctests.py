@@ -3,6 +3,9 @@ import os
 import unittest
 import warnings
 
+import matplotlib
+matplotlib.use("agg")
+
 
 # Note loader and ignore are required arguments for unittest even if unused.
 def load_tests(loader, tests, ignore):

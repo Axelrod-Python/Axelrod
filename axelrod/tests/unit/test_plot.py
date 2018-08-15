@@ -4,8 +4,10 @@ import axelrod
 from numpy import mean
 import tempfile
 
-import matplotlib.pyplot
-plt = matplotlib.pyplot
+import matplotlib
+matplotlib.use("agg")
+
+import matplotlib.pyplot as plt
 
 
 class TestPlot(unittest.TestCase):
