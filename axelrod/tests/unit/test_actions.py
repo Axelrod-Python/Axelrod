@@ -38,6 +38,7 @@ class TestAction(unittest.TestCase):
         self.assertRaises(UnknownActionError, Action.from_char, 'c')
         self.assertRaises(UnknownActionError, Action.from_char, 'd')
         self.assertRaises(UnknownActionError, Action.from_char, 'A')
+        self.assertRaises(UnknownActionError, Action.from_char, 'CC')
 
     def test_str_to_actions(self):
         self.assertEqual(str_to_actions(''), ())
@@ -49,6 +50,7 @@ class TestAction(unittest.TestCase):
 
     def test_actions_to_str(self):
         self.assertEqual(actions_to_str([]), "")
+        self.assertEqual(actions_to_str([C]), "C")
         self.assertEqual(actions_to_str([C, D, C]), "CDC")
         self.assertEqual(actions_to_str((C, C, D)), "CCD")
 

@@ -1,9 +1,6 @@
-"""
-Defines the core actions for the Prisoner's Dilemma:
-* Cooperate
-* Defect
+"""Actions for the Prisoner's Dilemma and related utilities.
 
-Uses the enumeration, Action.C and Action.D. For convenience you can use:
+For convenience in other modules you can alias the actions:
 
 from axelrod import Action
 C, D = Action.C, Action.D
@@ -14,14 +11,20 @@ from typing import Iterable
 
 
 class UnknownActionError(ValueError):
+    """Error indicating an unknown action was used."""
     def __init__(self, *args):
         super(UnknownActionError, self).__init__(*args)
 
 
 class Action(Enum):
+    """Core actions in the Prisoner's Dilemna.
+    
+    There are only two possible actions, namely Cooperate or Defect,
+    which are called C and D for convenience.
+    """
 
-    C = 1
-    D = 0
+    C = 1  # Cooperate
+    D = 0  # Defect
 
     def __bool__(self):
         return bool(self.value)
@@ -33,7 +36,7 @@ class Action(Enum):
         return '{}'.format(self.name)
 
     def flip(self):
-        """Returns the opposite Action. """
+        """Returns the opposite Action."""
         if self == Action.C:
             return Action.D
         if self == Action.D:
@@ -41,24 +44,57 @@ class Action(Enum):
 
     @classmethod
     def from_char(cls, character):
-        """Converts a single character into an Action. `Action.from_char('C')`
-        returns `Action.C`. `Action.from_char('CC')` raises an error. Use
-        `str_to_actions` instead."""
+        """Converts a single character into an Action.
+        
+        Parameters
+        ----------
+        character: a string of length one
+
+        Returns
+        -------
+        Action
+            The action corresponding to the input character
+
+
+        Raises
+        ------
+        UnknownActionError
+            If the input string is not 'C' or 'D'
+        """
         if character == 'C':
             return cls.C
-        elif character == 'D':
+        if character == 'D':
             return cls.D
-        else:
-            raise UnknownActionError('Character must be "C" or "D".')
+        raise UnknownActionError('Character must be "C" or "D".')
 
 
 def str_to_actions(actions: str) -> tuple:
-    """Takes a string like 'CCDD' and returns a tuple of the appropriate
-    actions."""
+    """Converts a string to a tuple of actions.
+
+    Parameters
+    ----------
+    actions: string consisting of 'C's and 'D's
+
+    Returns
+    -------
+    tuple
+        Each element corresponds to a letter from the input string.
+    """
     return tuple(Action.from_char(element) for element in actions)
 
 
 def actions_to_str(actions: Iterable[Action]) -> str:
-    """Takes any iterable of Action and returns a string of 'C's
-    and 'D's.  ex: (D, D, C) -> 'DDC' """
+    """Converts an iterable of actions into a string.
+
+    Example: (D, D, C) would be converted to 'DDC'
+
+    Paramteters
+    -----------
+    actions: iterable of Action
+
+    Returns
+    -------
+    str
+        A string of 'C's and 'D's.
+    """
     return "".join(map(repr, actions))
