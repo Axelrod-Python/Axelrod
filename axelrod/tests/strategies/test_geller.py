@@ -44,6 +44,17 @@ class TestGeller(TestPlayer):
         self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5)
         self.versus_test(axelrod.Alternator(), expected_actions=[(C, C), (D, D)] * 5)
 
+
+    def test_strategy_against_lookerup_players(self):
+        """
+        Regression test for a bug discussed in
+        https://github.com/Axelrod-Python/Axelrod/issues/1185
+        """
+        self.versus_test(axelrod.EvolvedLookerUp1_1_1(),
+                         expected_actions=[(C, C), (C, C)])
+        self.versus_test(axelrod.EvolvedLookerUp2_2_2(),
+                         expected_actions=[(C, C), (C, C)])
+
     def test_returns_foil_inspection_strategy_of_opponent(self):
         seed = 2
         # each Geller type returns the other's foil_inspection_strategy
