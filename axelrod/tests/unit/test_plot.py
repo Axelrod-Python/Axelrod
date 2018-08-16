@@ -1,12 +1,12 @@
 import tempfile
 import unittest
 
+import matplotlib
 import matplotlib.pyplot as plt
 from numpy import mean
 
 import axelrod
 
-import matplotlib
 
 class TestPlot(unittest.TestCase):
 
