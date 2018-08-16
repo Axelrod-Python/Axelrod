@@ -5,12 +5,6 @@ import unittest
 
 from hypothesis import given, example, settings
 
-import matplotlib  # isort: skip
-matplotlib.use("agg")  # This line need to be before `import axelrod` and
-                       # `import matplotlib.pyplot` for CI to work consistently
-                       # See
-                       # https://github.com/Axelrod-Python/Axelrod/issues/1187
-
 import matplotlib.pyplot as plt
 
 import axelrod
