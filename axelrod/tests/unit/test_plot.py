@@ -6,6 +6,11 @@ from numpy import mean
 
 import axelrod
 
+import matplotlib
+
+# TODO Remove this
+assert matplotlib.get_backend() == "agg"
+
 class TestPlot(unittest.TestCase):
 
     @classmethod
