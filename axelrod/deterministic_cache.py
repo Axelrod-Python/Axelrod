@@ -1,3 +1,17 @@
+"""Tools for caching the results of deterministic matches.
+
+The cache, in most cases, can simply be treated as a dictionary:
+
+cache = DeterministicCache()
+cache[key1] = result1
+cache[key2] = result2
+...
+if some_key in cache:
+    do_something(cache[some_key])
+else:
+    ...
+"""
+
 from collections import UserDict
 import pickle
 
@@ -8,6 +22,63 @@ from typing import List, Tuple
 
 CachePlayerKey = Tuple[Player, Player, int]
 CacheKey = Tuple[str, str, int]
+
+
+def _key_transform(key: CachePlayerKey) -> CacheKey:
+    """Convert a CachePlayerKey to a CacheKey
+
+    Parameters
+    ----------
+    key: tuple
+        A 3-tuple: (player instance, player instance, match length)
+    """
+    return key[0].name, key[1].name, key[2]
+
+
+def _is_valid_key(key: CachePlayerKey) -> bool:
+    """Validate a deterministic cache player key.
+
+    The key should always be a 3-tuple, with a pair of axelrod.Player
+    instances and one integer. Both players should be deterministic.
+
+    Parameters
+    ----------
+    key : object
+
+    Returns
+    -------
+    Boolean indicating if the key is valid
+    """
+    if not isinstance(key, tuple) or len(key) != 3:
+        return False
+
+    if not (
+        isinstance(key[0], Player) and
+        isinstance(key[1], Player) and
+        isinstance(key[2], int)
+    ):
+        return False
+
+    if key[0].classifier['stochastic'] or key[1].classifier['stochastic']:
+        return False
+
+    return True
+
+
+def _is_valid_value(value: List) -> bool:
+    """Validate a deterministic cache value.
+
+    The value just needs to be a list, with any contents.
+
+    Parameters
+    ----------
+    value : object
+
+    Returns
+    -------
+    Boolean indicating if the value is valid
+    """
+    return isinstance(value, list)
 
 
 class DeterministicCache(UserDict):
@@ -36,7 +107,8 @@ class DeterministicCache(UserDict):
     """
 
     def __init__(self, file_name: str=None) -> None:
-        """
+        """Initialize a new cache.
+
         Parameters
         ----------
         file_name : string
@@ -47,94 +119,30 @@ class DeterministicCache(UserDict):
         if file_name is not None:
             self.load(file_name)
 
-    @staticmethod
-    def _key_transform(key: CachePlayerKey) -> CacheKey:
-        """
-        Parameters
-        ----------
-        key: tuple
-            A 3-tuple: (player instance, player instance, match length)
-        """
-        return key[0].name, key[1].name, key[2]
-
     def __delitem__(self, key: CachePlayerKey):
-        return super().__delitem__(self._key_transform(key))
+        return super().__delitem__(_key_transform(key))
 
     def __getitem__(self, key: CachePlayerKey) -> List[Tuple[Action, Action]]:
-        return super().__getitem__(self._key_transform(key))
+        return super().__getitem__(_key_transform(key))
 
     def __contains__(self, key):
-        return super().__contains__(self._key_transform(key))
+        return super().__contains__(_key_transform(key))
 
     def __setitem__(self, key: CachePlayerKey, value):
-        """Overrides the UserDict.__setitem__ method in order to validate
-        the key/value and also to set the turns attribute"""
+        """Validate the key and value before setting them."""
         if not self.mutable:
             raise ValueError('Cannot update cache unless mutable is True.')
 
-        if not self._is_valid_key(key):
+        if not _is_valid_key(key):
             raise ValueError(
                 "Key must be a tuple of 2 deterministic axelrod Player classes "
                 "and an integer")
 
-        if not self._is_valid_value(value):
+        if not _is_valid_value(value):
             raise ValueError(
                 'Value must be a list with length equal to turns attribute')
 
-        super().__setitem__(self._key_transform(key), value)
-
-    @staticmethod
-    def _is_valid_key(key: CachePlayerKey) -> bool:
-        """Validate a proposed dictionary key.
-
-        Parameters
-        ----------
-        key : object
-
-        Returns
-        -------
-        boolean
-        """
-        # The key should be a tuple
-        if not isinstance(key, tuple):
-            return False
-
-        # The tuple should be a triplet
-        if len(key) != 3:
-            return False
-
-        # The triplet should be a pair of axelrod.Player instances and an
-        # integer
-        if not (
-            isinstance(key[0], Player) and
-            isinstance(key[1], Player) and
-            isinstance(key[2], int)
-        ):
-            return False
-
-        # Each Player should be deterministic
-        if key[0].classifier['stochastic'] or key[1].classifier['stochastic']:
-            return False
-
-        return True
-
-    @staticmethod
-    def _is_valid_value(value: List) -> bool:
-        """Validate a proposed dictionary value.
-
-        Parameters
-        ----------
-        value : object
-
-        Returns
-        -------
-        boolean
-        """
-        # The value should be a list
-        if not isinstance(value, list):
-            return False
-
-        return True
+        super().__setitem__(_key_transform(key), value)
 
     def save(self, file_name: str) -> bool:
         """Serialise the cache dictionary to a file.

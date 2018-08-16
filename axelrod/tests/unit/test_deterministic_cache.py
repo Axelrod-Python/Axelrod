@@ -1,6 +1,7 @@
 import pickle
 import os
 import unittest
+
 from axelrod import Action, Defector, DeterministicCache, Random, TitForTat
 
 C, D = Action.C, Action.D
@@ -27,6 +28,9 @@ class TestDeterministicCache(unittest.TestCase):
         os.remove(cls.test_save_file)
         os.remove(cls.test_load_file)
 
+    def setUp(self):
+        self.cache = DeterministicCache()
+
     def test_basic_init(self):
         cache = DeterministicCache()
         self.assertTrue(cache.mutable)
@@ -40,46 +44,58 @@ class TestDeterministicCache(unittest.TestCase):
         cache[self.test_key] = self.test_value
         self.assertEqual(cache[self.test_key], self.test_value)
 
-    def test_setitem_invalid_key(self):
-        cache = DeterministicCache()
-        invalid_key = (1, 2, 3, 4)
+    def test_setitem_invalid_key_not_tuple(self):
+        invalid_key = 'test'
         with self.assertRaises(ValueError):
-            cache[invalid_key] = 3
+            self.cache[invalid_key] = self.test_value
 
-    def test_setitem_invalid_value(self):
+    def test_setitem_invalid_key_too_short(self):
+        invalid_key = self.test_key + (4,)
+        with self.assertRaises(ValueError):
+            self.cache[invalid_key] = self.test_value
+
+    def test_setitem_invalid_key_too_long(self):
+        invalid_key = self.test_key[:2]
+        with self.assertRaises(ValueError):
+            self.cache[invalid_key] = self.test_value
+
+    def test_setitem_invalid_key_first_two_elements_not_player(self):
+        invalid_key = ('test', 'test', 2)
+        with self.assertRaises(ValueError):
+            self.cache[invalid_key] = self.test_value
+
+        invalid_key = (TitForTat(), 'test', 2)
+        with self.assertRaises(ValueError):
+            self.cache[invalid_key] = self.test_value
+
+        invalid_key = ('test', TitForTat(), 2)
+        with self.assertRaises(ValueError):
+            self.cache[invalid_key] = self.test_value
+
+    def test_setitem_invalid_key_last_element_not_integer(self):
+        invalid_key = (TitForTat(), TitForTat(), TitForTat())
+        with self.assertRaises(ValueError):
+            self.cache[invalid_key] = self.test_value
+
+    def test_setitem_invalid_key_stochastic_player(self):
+        invalid_key = (Random(), TitForTat(), 2)
+        with self.assertRaises(ValueError):
+            self.cache[invalid_key] = self.test_value
+
+        invalid_key = (TitForTat(), Random(), 2)
+        with self.assertRaises(ValueError):
+            self.cache[invalid_key] = self.test_value        
+
+    def test_setitem_invalid_value_not_list(self):
         cache = DeterministicCache()
         with self.assertRaises(ValueError):
             cache[self.test_key] = 5
 
-    def test_set_immutable_cache(self):
+    def test_setitem_with_immutable_cache(self):
         cache = DeterministicCache()
         cache.mutable = False
         with self.assertRaises(ValueError):
             cache[self.test_key] = self.test_value
-
-    def test_is_valid_key(self):
-        cache = DeterministicCache()
-        self.assertTrue(cache._is_valid_key(self.test_key))
-        # Should return false if key is not a tuple
-        self.assertFalse(cache._is_valid_key('test'))
-        # Should return false if tuple is not a triplet
-        self.assertFalse(cache._is_valid_key(('test', 'test')))
-        # Should return false if contents of tuple are not axelrod Players
-        # and an integer
-        self.assertFalse(cache._is_valid_key(('test', 'test', 'test')))
-        self.assertFalse(cache._is_valid_key((TitForTat(), 'test', 2)))
-        self.assertFalse(cache._is_valid_key(('test', TitForTat(), 2)))
-        self.assertFalse(cache._is_valid_key(
-            (TitForTat(), TitForTat(), TitForTat())))
-        # Should return false if either player class is stochastic
-        self.assertFalse(cache._is_valid_key((Random(), TitForTat(), 2)))
-        self.assertFalse(cache._is_valid_key((TitForTat(), Random(), 2)))
-
-    def test_is_valid_value(self):
-        cache = DeterministicCache()
-        self.assertTrue(cache._is_valid_value(self.test_value))
-        # Should return false if value is not a list
-        self.assertFalse(cache._is_valid_value('test'))
 
     def test_save(self):
         cache = DeterministicCache()
