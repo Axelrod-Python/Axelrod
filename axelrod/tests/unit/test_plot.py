@@ -1,13 +1,18 @@
-import unittest
-import axelrod
-
-from numpy import mean
 import tempfile
+import unittest
 
-import matplotlib
-matplotlib.use("agg")
+import matplotlib  # isort: skip
+matplotlib.use("agg")  # This line need to be before `import axelrod` and
+                       # `import matplotlib.pyplot` for CI to work consistently
+                       # See
+                       # https://github.com/Axelrod-Python/Axelrod/issues/1187
 
 import matplotlib.pyplot as plt
+from numpy import mean
+
+import axelrod
+
+
 
 
 class TestPlot(unittest.TestCase):
