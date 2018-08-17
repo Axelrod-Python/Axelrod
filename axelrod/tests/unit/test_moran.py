@@ -4,7 +4,7 @@ import random
 import unittest
 
 from hypothesis import given, example, settings
-import matplotlib
+
 import matplotlib.pyplot as plt
 
 import axelrod

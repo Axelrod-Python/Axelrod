@@ -1,13 +1,11 @@
-import unittest
-import axelrod
-
-from numpy import mean
 import tempfile
+import unittest
 
 import matplotlib
-matplotlib.use("agg")
-
 import matplotlib.pyplot as plt
+from numpy import mean
+
+import axelrod
 
 
 class TestPlot(unittest.TestCase):

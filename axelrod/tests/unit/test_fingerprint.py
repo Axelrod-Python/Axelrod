@@ -4,6 +4,7 @@ from tempfile import mkstemp
 from unittest.mock import patch
 
 import numpy as np
+
 import matplotlib.pyplot
 from hypothesis import given, settings
 
