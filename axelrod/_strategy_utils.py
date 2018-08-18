@@ -171,7 +171,7 @@ def look_ahead(player_1, player_2, game, rounds=10):
         simulate_match(player, opponent_, action, rounds)
         results[action] = _calculate_scores(player, opponent_, game)
 
-    return C if results[C] >= results[D] else D
+    return C if results[C] > results[D] else D
 
 
 @lru_cache()
