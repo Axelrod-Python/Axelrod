@@ -7,20 +7,24 @@ import axelrod
 from hypothesis import given, settings
 from hypothesis.strategies import sampled_from, lists, integers
 
-from axelrod import Action
-from axelrod._strategy_utils import detect_cycle, inspect_strategy
+from axelrod import Action, Game, Player
+from axelrod._strategy_utils import detect_cycle, inspect_strategy, look_ahead, \
+                                    recursive_thue_morse, simulate_match, thue_morse_generator
 
 C, D = Action.C, Action.D
 
 
 class TestDetectCycle(unittest.TestCase):
-    """Test the detect cycle function"""
+
     @given(cycle=lists(sampled_from([C, D]), min_size=2, max_size=10),
            period=integers(min_value=3, max_value=10))
-    @settings(max_examples=5, max_iterations=20)
+    @settings(max_examples=5)
     def test_finds_cycle(self, cycle, period):
         history = cycle * period
-        self.assertIsNotNone(detect_cycle(history))
+        detected = detect_cycle(history)
+        self.assertIsNotNone(detected)
+        self.assertIn(''.join(map(str, detected)),
+                      ''.join(map(str, (cycle))))
 
     def test_no_cycle(self):
         history = [C, D, C, C]
@@ -74,3 +78,68 @@ class TestInspectStrategy(unittest.TestCase):
 
         self.assertEqual(inspect_strategy(inspector=inspector, opponent=d_geller), D)
         self.assertEqual(d_geller.strategy(inspector), C)
+
+
+class TestSimulateMatch(unittest.TestCase):
+
+    def test_tft_reacts_to_cooperation(self):
+        tft = axelrod.TitForTat()
+        inspector = axelrod.Alternator()
+
+        simulate_match(inspector, tft, C, 5)
+        self.assertEqual(inspector.history, [C, C, C, C, C])
+        self.assertEqual(tft.history, [C, C, C, C, C])
+
+    def test_tft_reacts_to_defection(self):
+        tft = axelrod.TitForTat()
+        inspector = axelrod.Alternator()
+
+        simulate_match(inspector, tft, D, 5)
+        self.assertEqual(inspector.history, [D, D, D, D, D])
+        self.assertEqual(tft.history, [C, D, D, D, D])
+
+
+class TestLookAhead(unittest.TestCase):
+
+    def setUp(self):
+        self.inspector = Player()
+        self.game = Game()
+
+    def test_cooperator(self):
+        tft = axelrod.Cooperator()
+        # It always makes sense to defect here.
+        self.assertEqual(look_ahead(self.inspector, tft, self.game, 1), D)
+        self.assertEqual(look_ahead(self.inspector, tft, self.game, 2), D)
+        self.assertEqual(look_ahead(self.inspector, tft, self.game, 5), D)
+
+
+    def test_tit_for_tat(self):
+        tft = axelrod.TitForTat()
+        # Cooperation should be chosen if we look ahead further than one move.
+        self.assertEqual(look_ahead(self.inspector, tft, self.game, 1), D)
+        self.assertEqual(look_ahead(self.inspector, tft, self.game, 2), C)
+        self.assertEqual(look_ahead(self.inspector, tft, self.game, 5), C)
+
+
+class TestRecursiveThueMorse(unittest.TestCase):
+
+    def test_initial_values(self):
+        self.assertEqual(recursive_thue_morse(0), 0)
+        self.assertEqual(recursive_thue_morse(1), 1)
+        self.assertEqual(recursive_thue_morse(2), 1)
+        self.assertEqual(recursive_thue_morse(3), 0)
+        self.assertEqual(recursive_thue_morse(4), 1)
+
+
+class TestThueMorseGenerator(unittest.TestCase):
+
+    def test_initial_values(self):
+        generator = thue_morse_generator()
+        values = [next(generator) for i in range(5)]
+        self.assertEqual(values, [0, 1, 1, 0, 1])
+
+    def test_with_offset(self):
+        generator = thue_morse_generator(start=2)
+        values = [next(generator) for i in range(5)]
+        self.assertEqual(values, [1, 0, 1, 0, 0])
+
