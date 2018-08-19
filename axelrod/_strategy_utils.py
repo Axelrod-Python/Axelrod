@@ -1,5 +1,7 @@
-"""Utilities used by various strategies"""
+"""Utilities used by various strategies."""
+
 import itertools
+
 from functools import lru_cache
 
 from axelrod.player import update_history
@@ -23,8 +25,14 @@ def detect_cycle(history, min_size=1, max_size=12, offset=0):
     min_size: int, 1
         The minimum length of the cycle
     max_size: int, 12
+        The maximum length of the cycle
     offset: int, 0
         The amount of history to skip initially
+
+    Returns
+    -------
+    Tuple of C and D
+        The cycle detected in the input history
     """
     history_tail = history[offset:]
     new_max_size = min(len(history_tail) // 2, max_size)
@@ -41,31 +49,89 @@ def detect_cycle(history, min_size=1, max_size=12, offset=0):
 
 
 def inspect_strategy(inspector, opponent):
-    """Simulate one round vs opponent unless opponent has an inspection countermeasure."""
+    """Inspects the strategy of an opponent.
+    
+    Simulate one round of play with an opponent, unless the opponent has
+    an inspection countermeasure.
+
+    Parameters
+    ----------
+    inspector: Player
+        The player doing the inspecting
+    oponnent: Player
+        The player being inspected
+
+    Returns
+    -------
+    Action
+        The action that would be taken by the opponent.
+    """
     if hasattr(opponent, 'foil_strategy_inspection'):
         return opponent.foil_strategy_inspection()
     else:
         return opponent.strategy(inspector)
 
 
-def limited_simulate_play(player_1, player_2, h1):
-    """Here we want to replay player_1's history to player_2, allowing
-    player_2's strategy method to set any internal variables as needed. If you
-    need a more complete simulation, see `simulate_play` in player.py. This
-    function is specifically designed for the needs of MindReader."""
+def _limited_simulate_play(player_1, player_2, h1):
+    """Simulates a player's move.
+    
+    After inspecting player_2's next move (allowing player_2's strategy
+    method to set any internal variables as needed), update histories
+    for both players. Note that player_1's move is an argument.
+
+    If you need a more complete simulation, see `simulate_play` in
+    player.py. This function is specifically designed for the needs
+    of MindReader.
+
+    Parameters
+    ----------
+    player_1: Player
+        The player whose move is already known.
+    player_2: Player
+        The player the we want to inspect.
+    h1: Action
+        The next action for first player.
+    """
     h2 = inspect_strategy(player_1, player_2)
     update_history(player_1, h1)
     update_history(player_2, h2)
 
 
 def simulate_match(player_1, player_2, strategy, rounds=10):
-    """Simulates a number of matches."""
+    """Simulates a number of rounds with a constant strategy.
+
+    Parameters
+    ----------
+    player_1: Player
+        The player that will have a constant strategy.
+    player_2: Player
+        The player we want to simulate.
+    strategy: Action
+        The constant strategy to use for first player.
+    rounds: int
+        The number of rounds to play.
+    """
     for match in range(rounds):
-        limited_simulate_play(player_1, player_2, strategy)
+        _limited_simulate_play(player_1, player_2, strategy)
 
 
-def calculate_scores(p1, p2, game):
-    """Calculates the score for two players based their history"""
+def _calculate_scores(p1, p2, game):
+    """Calculates the scores for two players based their history.
+
+    Parameters
+    ----------
+    p1: Player
+        The first player.
+    p2: Player
+        The second player.
+    game: Game
+        Game object used to score rounds in the players' histories.
+
+    Returns
+    -------
+    int, int
+        The scores for the two input players.
+    """
     s1, s2 = 0, 0
     for pair in zip(p1.history, p2.history):
         score = game.score(pair)
@@ -75,28 +141,46 @@ def calculate_scores(p1, p2, game):
 
 
 def look_ahead(player_1, player_2, game, rounds=10):
-    """Looks ahead for `rounds` and selects the next strategy appropriately."""
-    results = []
-    # Simulate plays for `rounds` rounds
-    players = {C: Cooperator(), D: Defector()}
-    strategies = [C, D]
-    for strategy in strategies:
-        # Instead of a deepcopy, create a new opponent and play out the history
+    """Returns an constant action that maximizes score by looking ahead.
+
+    Parameters
+    ----------
+    player_1: Player
+        The player that will look ahead.
+    player_2: Player
+        The oppponent that will be inspected.
+    game: Game
+        The Game object used to score rounds.
+    rounds: int
+        The number of rounds to look ahead.
+
+    Returns
+    -------
+    Action
+        The action that maximized score if it is played constantly.
+    """
+    results = {}
+    possible_strategies = {C: Cooperator(), D: Defector()}
+    for action, player in possible_strategies.items():
+        # Instead of a deepcopy, create a new opponent and replay the history to it.
         opponent_ = player_2.clone()
-        player_ = players[strategy]
-        for h1 in player_1.history:
-            limited_simulate_play(player_, opponent_, h1)
+        for h in player_1.history:
+            _limited_simulate_play(player, opponent_, h)
 
-        simulate_match(player_, opponent_, strategy, rounds)
-        results.append(calculate_scores(player_, opponent_, game))
+        # Now play forward with the constant strategy.
+        simulate_match(player, opponent_, action, rounds)
+        results[action] = _calculate_scores(player, opponent_, game)
 
-    return strategies[results.index(max(results))]
+    return C if results[C] > results[D] else D
 
 
 @lru_cache()
 def recursive_thue_morse(n):
-    """The recursive definition of the Thue-Morse sequence. The first few terms
-    of the Thue-Morse sequence are: 0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . ."""
+    """The recursive definition of the Thue-Morse sequence.
+    
+    The first few terms of the Thue-Morse sequence are:
+        0 1 1 0 1 0 0 1 1 0 0 1 0 1 1 0 . . .
+    """
 
     if n == 0:
         return 0
