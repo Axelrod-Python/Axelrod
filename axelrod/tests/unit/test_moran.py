@@ -358,8 +358,8 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(ax.get_xlim(), (-0.8, 16.8))
         self.assertEqual(ax.get_ylim(), (0, 5.25))
 
-    def test_fitness_to_moran(self):
-        axelrod.seed(0)
+    def test_cooperator_can_win_with_fitness_function(self):
+        axelrod.seed(689)
         players = (axelrod.Cooperator(), axelrod.Defector(),
                    axelrod.Defector(), axelrod.Defector())
         w = 0.95
