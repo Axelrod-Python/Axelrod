@@ -1,22 +1,24 @@
 """Implementation of the Moran process on Graphs."""
 
-from collections import Counter
 import random
+from collections import Counter
+from types import FunctionType
+from typing import List, Optional, Set, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from axelrod import DEFAULT_TURNS, Player, Game
+from axelrod import DEFAULT_TURNS, Game, Player
+
 from .deterministic_cache import DeterministicCache
-from .graph import complete_graph, Graph
+from .graph import Graph, complete_graph
 from .match import Match
 from .random_ import randrange
 
-from typing import List, Tuple, Set, Optional
-from types import FunctionType
 
-
-def fitness_proportionate_selection(scores: List, fitness_function: FunctionType = None) -> int:
+def fitness_proportionate_selection(
+    scores: List, fitness_function: FunctionType = None
+) -> int:
     """Randomly selects an individual proportionally to score.
 
     Parameters
@@ -42,14 +44,20 @@ def fitness_proportionate_selection(scores: List, fitness_function: FunctionType
 
 
 class MoranProcess(object):
-    def __init__(self, players: List[Player], turns: int = DEFAULT_TURNS,
-                 prob_end: float = None, noise: float = 0,
-                 game: Game = None,
-                 deterministic_cache: DeterministicCache = None,
-                 mutation_rate: float = 0., mode: str = 'bd',
-                 interaction_graph: Graph = None,
-                 reproduction_graph: Graph = None,
-                 fitness_function: FunctionType = None) -> None:
+    def __init__(
+        self,
+        players: List[Player],
+        turns: int = DEFAULT_TURNS,
+        prob_end: float = None,
+        noise: float = 0,
+        game: Game = None,
+        deterministic_cache: DeterministicCache = None,
+        mutation_rate: float = 0.,
+        mode: str = "bd",
+        interaction_graph: Graph = None,
+        reproduction_graph: Graph = None,
+        fitness_function: FunctionType = None,
+    ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
         Match with each other player. Players are assigned a fitness score by
@@ -112,7 +120,7 @@ class MoranProcess(object):
         assert (mutation_rate >= 0) and (mutation_rate <= 1)
         assert (noise >= 0) and (noise <= 1)
         mode = mode.lower()
-        assert mode in ['bd', 'db']
+        assert mode in ["bd", "db"]
         self.mode = mode
         if deterministic_cache is not None:
             self.deterministic_cache = deterministic_cache
@@ -128,14 +136,17 @@ class MoranProcess(object):
             d[str(p)] = p
         mutation_targets = dict()
         for key in sorted(keys):
-            mutation_targets[key] = [v for (k, v) in sorted(d.items()) if k != key]
+            mutation_targets[key] = [
+                v for (k, v) in sorted(d.items()) if k != key
+            ]
         self.mutation_targets = mutation_targets
 
         if interaction_graph is None:
             interaction_graph = complete_graph(len(players), loops=False)
         if reproduction_graph is None:
-            reproduction_graph = Graph(interaction_graph.edges(),
-                                       directed=interaction_graph.directed)
+            reproduction_graph = Graph(
+                interaction_graph.edges(), directed=interaction_graph.directed
+            )
             reproduction_graph.add_loops()
         # Check equal vertices
         v1 = interaction_graph.vertices()
@@ -146,8 +157,9 @@ class MoranProcess(object):
         self.fitness_function = fitness_function
         # Map players to graph vertices
         self.locations = sorted(interaction_graph.vertices())
-        self.index = dict(zip(sorted(interaction_graph.vertices()),
-                              range(len(players))))
+        self.index = dict(
+            zip(sorted(interaction_graph.vertices()), range(len(players)))
+        )
 
     def set_players(self) -> None:
         """Copy the initial players into the first population."""
@@ -198,8 +210,11 @@ class MoranProcess(object):
         else:
             # Select locally
             # index is not None in this case
-            vertex = random.choice(sorted(
-                self.reproduction_graph.out_vertices(self.locations[index])))
+            vertex = random.choice(
+                sorted(
+                    self.reproduction_graph.out_vertices(self.locations[index])
+                )
+            )
             i = self.index[vertex]
         return i
 
@@ -218,11 +233,15 @@ class MoranProcess(object):
             # possible choices
             scores.pop(index)
             # Make sure to get the correct index post-pop
-            j = fitness_proportionate_selection(scores, fitness_function=self.fitness_function)
+            j = fitness_proportionate_selection(
+                scores, fitness_function=self.fitness_function
+            )
             if j >= index:
                 j += 1
         else:
-            j = fitness_proportionate_selection(scores, fitness_function=self.fitness_function)
+            j = fitness_proportionate_selection(
+                scores, fitness_function=self.fitness_function
+            )
         return j
 
     def fixation_check(self) -> bool:
@@ -327,11 +346,14 @@ class MoranProcess(object):
         for i, j in self._matchup_indices():
             player1 = self.players[i]
             player2 = self.players[j]
-            match = Match((player1, player2),
-                          turns=self.turns, prob_end=self.prob_end,
-                          noise=self.noise,
-                          game=self.game,
-                          deterministic_cache=self.deterministic_cache)
+            match = Match(
+                (player1, player2),
+                turns=self.turns,
+                prob_end=self.prob_end,
+                noise=self.noise,
+                game=self.game,
+                deterministic_cache=self.deterministic_cache,
+            )
             match.play()
             match_scores = match.final_score_per_turn()
             scores[i] += match_scores[0]
@@ -379,7 +401,8 @@ class MoranProcess(object):
         if self.mutation_rate != 0:
             raise ValueError(
                 "MoranProcess.play() will never exit if mutation_rate is"
-                "nonzero. Use iteration instead.")
+                "nonzero. Use iteration instead."
+            )
         while True:
             try:
                 self.__next__()
@@ -441,8 +464,13 @@ class ApproximateMoranProcess(MoranProcess):
     Instead of playing the matches, the result is sampled
     from a dictionary of player tuples to distribution of match outcomes
     """
-    def __init__(self, players: List[Player], cached_outcomes: dict,
-                 mutation_rate: float = 0) -> None:
+
+    def __init__(
+        self,
+        players: List[Player],
+        cached_outcomes: dict,
+        mutation_rate: float = 0,
+    ) -> None:
         """
         Parameters
         ----------
@@ -454,8 +482,12 @@ class ApproximateMoranProcess(MoranProcess):
             probability `mutation_rate`
         """
         super(ApproximateMoranProcess, self).__init__(
-            players, turns=0, noise=0, deterministic_cache=None,
-            mutation_rate=mutation_rate)
+            players,
+            turns=0,
+            noise=0,
+            deterministic_cache=None,
+            mutation_rate=mutation_rate,
+        )
         self.cached_outcomes = cached_outcomes
 
     def score_all(self) -> List:
@@ -472,8 +504,9 @@ class ApproximateMoranProcess(MoranProcess):
         scores = [0] * N
         for i in range(N):
             for j in range(i + 1, N):
-                player_names = tuple([str(self.players[i]),
-                                      str(self.players[j])])
+                player_names = tuple(
+                    [str(self.players[i]), str(self.players[j])]
+                )
 
                 cached_score = self._get_scores_from_cache(player_names)
                 scores[i] += cached_score[0]

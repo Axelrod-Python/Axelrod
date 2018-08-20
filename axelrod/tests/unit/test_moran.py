@@ -1,22 +1,20 @@
-from collections import Counter
 import itertools
 import random
 import unittest
-
-from hypothesis import given, example, settings
+from collections import Counter
 
 import matplotlib.pyplot as plt
 
 import axelrod
-from axelrod import MoranProcess, ApproximateMoranProcess, Pdf
+from axelrod import ApproximateMoranProcess, MoranProcess, Pdf
 from axelrod.moran import fitness_proportionate_selection
 from axelrod.tests.property import strategy_lists
+from hypothesis import example, given, settings
 
 C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestMoranProcess(unittest.TestCase):
-
     def test_init(self):
         players = axelrod.Cooperator(), axelrod.Defector()
         mp = MoranProcess(players)
@@ -26,17 +24,21 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(mp.noise, 0)
         self.assertEqual(mp.initial_players, players)
         self.assertEqual(mp.players, list(players))
-        self.assertEqual(mp.populations,
-                         [Counter({'Cooperator': 1, 'Defector': 1})])
+        self.assertEqual(
+            mp.populations, [Counter({"Cooperator": 1, "Defector": 1})]
+        )
         self.assertIsNone(mp.winning_strategy_name)
         self.assertEqual(mp.mutation_rate, 0)
-        self.assertEqual(mp.mode, 'bd')
+        self.assertEqual(mp.mode, "bd")
         self.assertEqual(mp.deterministic_cache, axelrod.DeterministicCache())
-        self.assertEqual(mp.mutation_targets,
-                         {'Cooperator': [players[1]], 'Defector': [players[0]]})
+        self.assertEqual(
+            mp.mutation_targets,
+            {"Cooperator": [players[1]], "Defector": [players[0]]},
+        )
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (1, 0)])
-        self.assertEqual(mp.reproduction_graph._edges,
-                         [(0, 1), (1, 0), (0, 0), (1, 1)])
+        self.assertEqual(
+            mp.reproduction_graph._edges, [(0, 1), (1, 0), (0, 0), (1, 1)]
+        )
         self.assertEqual(mp.fitness_function, None)
         self.assertEqual(mp.locations, [0, 1])
         self.assertEqual(mp.index, {0: 0, 1: 1})
@@ -47,11 +49,14 @@ class TestMoranProcess(unittest.TestCase):
         graph = axelrod.graph.Graph(edges, directed=True)
         mp = MoranProcess(players, interaction_graph=graph)
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (2, 0), (1, 2)])
-        self.assertEqual(sorted(mp.reproduction_graph._edges),
-                         sorted([(0, 1), (2, 0), (1, 2), (0, 0), (1, 1), (2, 2)]))
+        self.assertEqual(
+            sorted(mp.reproduction_graph._edges),
+            sorted([(0, 1), (2, 0), (1, 2), (0, 0), (1, 1), (2, 2)]),
+        )
 
-        mp = MoranProcess(players, interaction_graph=graph,
-                          reproduction_graph=graph)
+        mp = MoranProcess(
+            players, interaction_graph=graph, reproduction_graph=graph
+        )
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (2, 0), (1, 2)])
         self.assertEqual(mp.reproduction_graph._edges, [(0, 1), (2, 0), (1, 2)])
 
@@ -183,7 +188,7 @@ class TestMoranProcess(unittest.TestCase):
         seeds = range(0, 20)
         for seed in seeds:
             axelrod.seed(seed)
-            mp = MoranProcess((p1, p2), mode='db')
+            mp = MoranProcess((p1, p2), mode="db")
             next(mp)
             self.assertIsNotNone(mp.winning_strategy_name)
 
@@ -198,11 +203,11 @@ class TestMoranProcess(unittest.TestCase):
             players.append(axelrod.Defector())
         for seed, outcome in seeds:
             axelrod.seed(seed)
-            mp = MoranProcess(players, mode='bd')
+            mp = MoranProcess(players, mode="bd")
             mp.play()
             winner = mp.winning_strategy_name
             axelrod.seed(seed)
-            mp = MoranProcess(players, mode='db')
+            mp = MoranProcess(players, mode="db")
             mp.play()
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)
@@ -221,18 +226,21 @@ class TestMoranProcess(unittest.TestCase):
         p1, p2 = axelrod.Cooperator(), axelrod.Defector()
         axelrod.seed(5)
         mp = MoranProcess((p1, p2), mutation_rate=0.2)
-        self.assertDictEqual(mp.mutation_targets,
-                             {str(p1): [p2], str(p2): [p1]})
+        self.assertDictEqual(
+            mp.mutation_targets, {str(p1): [p2], str(p2): [p1]}
+        )
         # Test that mutation causes the population to alternate between
         # fixations
         counters = [
-            Counter({'Cooperator': 2}),
-            Counter({'Defector': 2}),
-            Counter({'Cooperator': 2}),
-            Counter({'Defector': 2})
+            Counter({"Cooperator": 2}),
+            Counter({"Defector": 2}),
+            Counter({"Cooperator": 2}),
+            Counter({"Defector": 2}),
         ]
         for counter in counters:
-            for _ in itertools.takewhile(lambda x: x.population_distribution() != counter, mp):
+            for _ in itertools.takewhile(
+                lambda x: x.population_distribution() != counter, mp
+            ):
                 pass
             self.assertEqual(mp.population_distribution(), counter)
 
@@ -243,8 +251,11 @@ class TestMoranProcess(unittest.TestCase):
             mp.play()
 
     def test_three_players(self):
-        players = [axelrod.Cooperator(), axelrod.Cooperator(),
-                   axelrod.Defector()]
+        players = [
+            axelrod.Cooperator(),
+            axelrod.Cooperator(),
+            axelrod.Defector(),
+        ]
         axelrod.seed(11)
         mp = MoranProcess(players)
         populations = mp.play()
@@ -259,16 +270,17 @@ class TestMoranProcess(unittest.TestCase):
         p3 = axelrod.Defector()
         players = [p1, p2, p3]
         mp = MoranProcess(players, mutation_rate=0.2)
-        self.assertDictEqual(mp.mutation_targets, {
-            str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]})
+        self.assertDictEqual(
+            mp.mutation_targets,
+            {str(p1): [p3, p2], str(p2): [p1, p3], str(p3): [p1, p2]},
+        )
         # Test that mutation causes the population to alternate between
         # fixations
-        counters = [
-            Counter({'Cooperator': 3}),
-            Counter({'Defector': 3}),
-        ]
+        counters = [Counter({"Cooperator": 3}), Counter({"Defector": 3})]
         for counter in counters:
-            for _ in itertools.takewhile(lambda x: x.population_distribution() != counter, mp):
+            for _ in itertools.takewhile(
+                lambda x: x.population_distribution() != counter, mp
+            ):
                 pass
             self.assertEqual(mp.population_distribution(), counter)
 
@@ -315,8 +327,12 @@ class TestMoranProcess(unittest.TestCase):
     def test_constant_fitness_case(self):
         # Scores between an Alternator and Defector will be: (1,  6)
         axelrod.seed(0)
-        players = (axelrod.Alternator(), axelrod.Alternator(),
-                   axelrod.Defector(), axelrod.Defector())
+        players = (
+            axelrod.Alternator(),
+            axelrod.Alternator(),
+            axelrod.Defector(),
+            axelrod.Defector(),
+        )
         mp = MoranProcess(players, turns=2)
         winners = []
         for _ in range(100):
@@ -360,17 +376,20 @@ class TestMoranProcess(unittest.TestCase):
 
     def test_cooperator_can_win_with_fitness_function(self):
         axelrod.seed(689)
-        players = (axelrod.Cooperator(), axelrod.Defector(),
-                   axelrod.Defector(), axelrod.Defector())
+        players = (
+            axelrod.Cooperator(),
+            axelrod.Defector(),
+            axelrod.Defector(),
+            axelrod.Defector(),
+        )
         w = 0.95
         fitness_function = lambda score: 1 - w + w * score
         mp = MoranProcess(players, turns=10, fitness_function=fitness_function)
         populations = mp.play()
-        self.assertEqual(mp.winning_strategy_name, 'Cooperator')
+        self.assertEqual(mp.winning_strategy_name, "Cooperator")
 
 
 class GraphMoranProcess(unittest.TestCase):
-
     def test_complete(self):
         """A complete graph should produce the same results as the default
         case."""
@@ -428,13 +447,15 @@ class GraphMoranProcess(unittest.TestCase):
             players.append(axelrod.Defector())
         for seed, outcome in seeds:
             axelrod.seed(seed)
-            mp = MoranProcess(players, interaction_graph=graph1,
-                              reproduction_graph=graph2)
+            mp = MoranProcess(
+                players, interaction_graph=graph1, reproduction_graph=graph2
+            )
             mp.play()
             winner = mp.winning_strategy_name
             axelrod.seed(seed)
-            mp = MoranProcess(players, interaction_graph=graph2,
-                              reproduction_graph=graph1)
+            mp = MoranProcess(
+                players, interaction_graph=graph2, reproduction_graph=graph1
+            )
             mp.play()
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)
@@ -452,11 +473,11 @@ class GraphMoranProcess(unittest.TestCase):
             players.append(axelrod.Defector())
         for seed, outcome in seeds:
             axelrod.seed(seed)
-            mp = MoranProcess(players, interaction_graph=graph, mode='bd')
+            mp = MoranProcess(players, interaction_graph=graph, mode="bd")
             mp.play()
             winner = mp.winning_strategy_name
             axelrod.seed(seed)
-            mp = MoranProcess(players, interaction_graph=graph, mode='db')
+            mp = MoranProcess(players, interaction_graph=graph, mode="db")
             mp.play()
             winner2 = mp.winning_strategy_name
             self.assertEqual((winner == winner2), outcome)
@@ -464,29 +485,36 @@ class GraphMoranProcess(unittest.TestCase):
 
 class TestApproximateMoranProcess(unittest.TestCase):
     """A suite of tests for the ApproximateMoranProcess"""
+
     players = [axelrod.Cooperator(), axelrod.Defector()]
     cached_outcomes = {}
 
     counter = Counter([(0, 5)])
     pdf = Pdf(counter)
-    cached_outcomes[('Cooperator', 'Defector')] = pdf
+    cached_outcomes[("Cooperator", "Defector")] = pdf
 
     counter = Counter([(3, 3)])
     pdf = Pdf(counter)
-    cached_outcomes[('Cooperator', 'Cooperator')] = pdf
+    cached_outcomes[("Cooperator", "Cooperator")] = pdf
 
     counter = Counter([(1, 1)])
     pdf = Pdf(counter)
-    cached_outcomes[('Defector', 'Defector')] = pdf
+    cached_outcomes[("Defector", "Defector")] = pdf
 
     amp = ApproximateMoranProcess(players, cached_outcomes)
 
     def test_init(self):
         """Test the initialisation process"""
-        self.assertEqual(set(self.amp.cached_outcomes.keys()),
-                         set([('Cooperator', 'Defector'),
-                              ('Cooperator', 'Cooperator'),
-                              ('Defector', 'Defector')]))
+        self.assertEqual(
+            set(self.amp.cached_outcomes.keys()),
+            set(
+                [
+                    ("Cooperator", "Defector"),
+                    ("Cooperator", "Cooperator"),
+                    ("Defector", "Defector"),
+                ]
+            ),
+        )
         self.assertEqual(self.amp.players, self.players)
         self.assertEqual(self.amp.turns, 0)
         self.assertEqual(self.amp.noise, 0)
