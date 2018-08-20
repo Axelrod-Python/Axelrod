@@ -13,9 +13,10 @@ from .match import Match
 from .random_ import randrange
 
 from typing import List, Tuple, Set, Optional
+from types import FunctionType
 
 
-def fitness_proportionate_selection(scores: List) -> int:
+def fitness_proportionate_selection(scores: List, fitness_function: FunctionType = None) -> int:
     """Randomly selects an individual proportionally to score.
 
     Parameters
@@ -27,7 +28,10 @@ def fitness_proportionate_selection(scores: List) -> int:
     An index of the above list selected at random proportionally to the list
     element divided by the total.
     """
-    csums = np.cumsum(scores)
+    if fitness_function is None:
+        csums = np.cumsum(scores)
+    else:
+        csums = np.cumsum([fitness_function(s) for s in scores])
     total = csums[-1]
     r = random.random() * total
 
@@ -44,7 +48,8 @@ class MoranProcess(object):
                  deterministic_cache: DeterministicCache = None,
                  mutation_rate: float = 0., mode: str = 'bd',
                  interaction_graph: Graph = None,
-                 reproduction_graph: Graph = None) -> None:
+                 reproduction_graph: Graph = None,
+                 fitness_function: FunctionType = None) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
         Match with each other player. Players are assigned a fitness score by
@@ -138,6 +143,7 @@ class MoranProcess(object):
         assert list(v1) == list(v2)
         self.interaction_graph = interaction_graph
         self.reproduction_graph = reproduction_graph
+        self.fitness_function = fitness_function
         # Map players to graph vertices
         self.locations = sorted(interaction_graph.vertices())
         self.index = dict(zip(sorted(interaction_graph.vertices()),
@@ -212,11 +218,11 @@ class MoranProcess(object):
             # possible choices
             scores.pop(index)
             # Make sure to get the correct index post-pop
-            j = fitness_proportionate_selection(scores)
+            j = fitness_proportionate_selection(scores, fitness_function=self.fitness_function)
             if j >= index:
                 j += 1
         else:
-            j = fitness_proportionate_selection(scores)
+            j = fitness_proportionate_selection(scores, fitness_function=self.fitness_function)
         return j
 
     def fixation_check(self) -> bool:
