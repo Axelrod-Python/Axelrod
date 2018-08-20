@@ -24,6 +24,7 @@ def fitness_proportionate_selection(
     Parameters
     ----------
     scores: Any sequence of real numbers
+    fitness_function: A function mapping a score to a (non-negative) float
 
     Returns
     -------
@@ -105,6 +106,8 @@ class MoranProcess(object):
         reproduction_graph: Axelrod.graph.Graph
             The reproduction graph, set equal to the interaction graph if not
             given
+        fitness_function:
+            A function mapping a score to a (non-negative) float
         """
         self.turns = turns
         self.prob_end = prob_end
