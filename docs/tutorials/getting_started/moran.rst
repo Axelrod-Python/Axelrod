@@ -115,6 +115,19 @@ function like :code:`takewhile` from :code:`itertools`)::
     >>> mp.population_distribution()
     Counter({'Grudger': 4})
 
+It is possible to pass a fitness function that scales the utility values. A common one
+used in the literature, [Ohtsuki2006]_, is :math:`f(s) = 1 - w + ws` where :math:`w`
+denotes the intensity of selection::
+
+    >>> axl.seed(689)
+    >>> players = (axl.Cooperator(), axl.Defector(), axl.Defector(), axl.Defector())
+    >>> w = 0.95
+    >>> fitness_function = lambda score: 1 - w + w * score
+    >>> mp = axl.MoranProcess(players, turns=10, fitness_function=fitness_function)
+    >>> populations = mp.play()
+    >>> mp.winning_strategy_name
+    'Cooperator'
+
 Other types of implemented Moran processes:
 
 - :ref:`moran-process-on-graphs`
