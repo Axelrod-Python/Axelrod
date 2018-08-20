@@ -37,6 +37,7 @@ class TestMoranProcess(unittest.TestCase):
         self.assertEqual(mp.interaction_graph._edges, [(0, 1), (1, 0)])
         self.assertEqual(mp.reproduction_graph._edges,
                          [(0, 1), (1, 0), (0, 0), (1, 1)])
+        self.assertEqual(mp.fitness_function, None)
         self.assertEqual(mp.locations, [0, 1])
         self.assertEqual(mp.index, {0: 0, 1: 1})
 
@@ -356,6 +357,16 @@ class TestMoranProcess(unittest.TestCase):
         ax = mp.populations_plot()
         self.assertEqual(ax.get_xlim(), (-0.8, 16.8))
         self.assertEqual(ax.get_ylim(), (0, 5.25))
+
+    def test_fitness_to_moran(self):
+        axelrod.seed(0)
+        players = (axelrod.Cooperator(), axelrod.Defector(),
+                   axelrod.Defector(), axelrod.Defector())
+        w = 0.95
+        fitness_function = lambda score: 1 - w + w * score
+        mp = MoranProcess(players, turns=10, fitness_function=fitness_function)
+        populations = mp.play()
+        self.assertEqual(mp.winning_strategy_name, 'Cooperator')
 
 
 class GraphMoranProcess(unittest.TestCase):
