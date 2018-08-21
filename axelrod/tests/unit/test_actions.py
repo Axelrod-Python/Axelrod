@@ -11,6 +11,10 @@ class TestAction(unittest.TestCase):
         self.assertEqual(C, C)
         self.assertEqual(D, D)
 
+    def test_hash(self):
+        self.assertEqual(hash(C), 1)
+        self.assertEqual(hash(D), 0)
+
     def test_lt(self):
         self.assertLess(D, C)
 

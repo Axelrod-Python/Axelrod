@@ -34,6 +34,9 @@ class Action(Enum):
     def __eq__(self, other):
         return self.value == other.value
 
+    def __hash__(self):
+        return hash(self.value)
+
     def __lt__(self, other):
         return self.value < other.value
 
