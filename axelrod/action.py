@@ -7,6 +7,7 @@ C, D = Action.C, Action.D
 """
 
 from enum import Enum
+from functools import total_ordering
 from typing import Iterable
 
 
@@ -16,6 +17,7 @@ class UnknownActionError(ValueError):
         super(UnknownActionError, self).__init__(*args)
 
 
+@total_ordering
 class Action(Enum):
     """Core actions in the Prisoner's Dilemna.
     
@@ -28,6 +30,12 @@ class Action(Enum):
 
     def __bool__(self):
         return bool(self.value)
+
+    def __eq__(self, other):
+        return self.value == other.value
+
+    def __lt__(self, other):
+        return self.value < other.value
 
     def __repr__(self):
         return '{}'.format(self.name)
