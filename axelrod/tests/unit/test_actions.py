@@ -12,7 +12,7 @@ class TestAction(unittest.TestCase):
         self.assertEqual(D, D)
 
     def test_lt(self):
-        self.assertLess(C, D)
+        self.assertLess(D, C)
 
     def test_repr(self):
         self.assertEqual(repr(C), 'C')
