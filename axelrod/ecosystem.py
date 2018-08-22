@@ -1,15 +1,47 @@
+"""Tools for simulating population dynamics of immutable players.
+
+An ecosystem runs in the context of a previous tournament, and takes the
+results as input. That means no matches are run by the ecosystem, and a
+tournament needs to happen before it is created. For example:
+
+players = [axelrod.Cooperator(), axlerod.Defector()]
+tournament = axelrod.Tournament(players=players)
+results = tournament.play()
+ecosystem = axelrod.Ecosystem(results)
+ecosystem.reproduce(100)
+"""
+
 import random
-from axelrod.result_set import ResultSet
+
 from typing import List, Callable
+
+from axelrod.result_set import ResultSet
 
 
 class Ecosystem(object):
-    """Create an ecosystem based on the payoff matrix from an Axelrod
-    tournament."""
+    """An ecosystem based on the payoff matrix from a tournament.
+
+    Attributes
+    ----------
+    num_players: int
+        The number of players
+    """
 
     def __init__(self, results: ResultSet,
                  fitness: Callable[[float], float] = None,
                  population: List[int] = None) -> None:
+        """Create a new ecosystem.
+        
+        Parameters
+        ----------
+        results: ResultSet
+            The results of the tournament run beforehand to use.
+        fitness: List of callables
+            The reproduction rate at which populations reproduce.
+        population: List of ints.
+            The initial populations of the players, corresponding to the
+            payoff matrix in results.
+        """
 
         self.results = results
         self.num_players = self.results.num_players
@@ -45,7 +77,13 @@ class Ecosystem(object):
             self.fitness = lambda p: p
 
     def reproduce(self, turns: int):
-
+        """Reproduce populations according to the payoff matrix.
+        
+        Parameters
+        ----------
+        turns: int
+            The number of turns to run.
+        """
         for iturn in range(turns):
             plist = list(range(self.num_players))
             pops = self.population_sizes[-1]
