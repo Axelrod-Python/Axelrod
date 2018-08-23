@@ -2,8 +2,7 @@
 
 import random
 from collections import Counter
-from types import FunctionType
-from typing import List, Optional, Set, Tuple
+from typing import Callable, List, Optional, Set, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,7 +16,7 @@ from .random_ import randrange
 
 
 def fitness_proportionate_selection(
-    scores: List, fitness_function: FunctionType = None
+    scores: List, fitness_function: Callable = None
 ) -> int:
     """Randomly selects an individual proportionally to score.
 
@@ -57,7 +56,7 @@ class MoranProcess(object):
         mode: str = "bd",
         interaction_graph: Graph = None,
         reproduction_graph: Graph = None,
-        fitness_function: FunctionType = None,
+        fitness_function: Callable = None,
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
