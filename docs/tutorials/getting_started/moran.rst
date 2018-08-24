@@ -122,8 +122,8 @@ denotes the intensity of selection::
     >>> axl.seed(689)
     >>> players = (axl.Cooperator(), axl.Defector(), axl.Defector(), axl.Defector())
     >>> w = 0.95
-    >>> fitness_function = lambda score: 1 - w + w * score
-    >>> mp = axl.MoranProcess(players, turns=10, fitness_function=fitness_function)
+    >>> fitness_transformation = lambda score: 1 - w + w * score
+    >>> mp = axl.MoranProcess(players, turns=10, fitness_transformation=fitness_transformation)
     >>> populations = mp.play()
     >>> mp.winning_strategy_name
     'Cooperator'

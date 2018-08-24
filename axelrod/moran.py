@@ -16,24 +16,24 @@ from .random_ import randrange
 
 
 def fitness_proportionate_selection(
-    scores: List, fitness_function: Callable = None
+    scores: List, fitness_transformation: Callable = None
 ) -> int:
     """Randomly selects an individual proportionally to score.
 
     Parameters
     ----------
     scores: Any sequence of real numbers
-    fitness_function: A function mapping a score to a (non-negative) float
+    fitness_transformation: A function mapping a score to a (non-negative) float
 
     Returns
     -------
     An index of the above list selected at random proportionally to the list
     element divided by the total.
     """
-    if fitness_function is None:
+    if fitness_transformation is None:
         csums = np.cumsum(scores)
     else:
-        csums = np.cumsum([fitness_function(s) for s in scores])
+        csums = np.cumsum([fitness_transformation(s) for s in scores])
     total = csums[-1]
     r = random.random() * total
 
@@ -56,7 +56,7 @@ class MoranProcess(object):
         mode: str = "bd",
         interaction_graph: Graph = None,
         reproduction_graph: Graph = None,
-        fitness_function: Callable = None,
+        fitness_transformation: Callable = None,
     ) -> None:
         """
         An agent based Moran process class. In each round, each player plays a
@@ -105,7 +105,7 @@ class MoranProcess(object):
         reproduction_graph: Axelrod.graph.Graph
             The reproduction graph, set equal to the interaction graph if not
             given
-        fitness_function:
+        fitness_transformation:
             A function mapping a score to a (non-negative) float
         """
         self.turns = turns
@@ -138,9 +138,7 @@ class MoranProcess(object):
             d[str(p)] = p
         mutation_targets = dict()
         for key in sorted(keys):
-            mutation_targets[key] = [
-                v for (k, v) in sorted(d.items()) if k != key
-            ]
+            mutation_targets[key] = [v for (k, v) in sorted(d.items()) if k != key]
         self.mutation_targets = mutation_targets
 
         if interaction_graph is None:
@@ -156,7 +154,7 @@ class MoranProcess(object):
         assert list(v1) == list(v2)
         self.interaction_graph = interaction_graph
         self.reproduction_graph = reproduction_graph
-        self.fitness_function = fitness_function
+        self.fitness_transformation = fitness_transformation
         # Map players to graph vertices
         self.locations = sorted(interaction_graph.vertices())
         self.index = dict(
@@ -213,9 +211,7 @@ class MoranProcess(object):
             # Select locally
             # index is not None in this case
             vertex = random.choice(
-                sorted(
-                    self.reproduction_graph.out_vertices(self.locations[index])
-                )
+                sorted(self.reproduction_graph.out_vertices(self.locations[index]))
             )
             i = self.index[vertex]
         return i
@@ -236,13 +232,13 @@ class MoranProcess(object):
             scores.pop(index)
             # Make sure to get the correct index post-pop
             j = fitness_proportionate_selection(
-                scores, fitness_function=self.fitness_function
+                scores, fitness_transformation=self.fitness_transformation
             )
             if j >= index:
                 j += 1
         else:
             j = fitness_proportionate_selection(
-                scores, fitness_function=self.fitness_function
+                scores, fitness_transformation=self.fitness_transformation
             )
         return j
 
@@ -468,10 +464,7 @@ class ApproximateMoranProcess(MoranProcess):
     """
 
     def __init__(
-        self,
-        players: List[Player],
-        cached_outcomes: dict,
-        mutation_rate: float = 0,
+        self, players: List[Player], cached_outcomes: dict, mutation_rate: float = 0
     ) -> None:
         """
         Parameters
@@ -506,9 +499,7 @@ class ApproximateMoranProcess(MoranProcess):
         scores = [0] * N
         for i in range(N):
             for j in range(i + 1, N):
-                player_names = tuple(
-                    [str(self.players[i]), str(self.players[j])]
-                )
+                player_names = tuple([str(self.players[i]), str(self.players[j])])
 
                 cached_score = self._get_scores_from_cache(player_names)
                 scores[i] += cached_score[0]
