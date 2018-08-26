@@ -1,12 +1,12 @@
-from math import ceil, log
 import random
+from math import ceil, log
 
+import axelrod.interaction_utils as iu
+from axelrod import DEFAULT_TURNS
 from axelrod.action import Action
 from axelrod.game import Game
-from axelrod import DEFAULT_TURNS
-import axelrod.interaction_utils as iu
-from .deterministic_cache import DeterministicCache
 
+from .deterministic_cache import DeterministicCache
 
 C, D = Action.C, Action.D
 

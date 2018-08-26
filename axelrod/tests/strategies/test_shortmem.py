@@ -1,6 +1,7 @@
 """Tests for the ShortMem strategy."""
 
 import axelrod
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D

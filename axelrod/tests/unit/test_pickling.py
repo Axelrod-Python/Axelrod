@@ -4,7 +4,6 @@ import unittest
 import axelrod as axl
 import axelrod.strategy_transformers as st
 
-
 C, D = axl.Action.C, axl.Action.D
 
 

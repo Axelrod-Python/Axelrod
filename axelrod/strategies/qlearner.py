@@ -1,11 +1,10 @@
-from collections import OrderedDict
 import random
+from collections import OrderedDict
+from typing import Dict, List, Union
 
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-
-from typing import List, Dict, Union
 
 Score = Union[int, float]
 

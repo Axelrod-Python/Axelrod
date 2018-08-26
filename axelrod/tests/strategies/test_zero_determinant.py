@@ -5,6 +5,7 @@ import unittest
 import axelrod
 from axelrod.game import DefaultGame
 from axelrod.strategies.zero_determinant import LRPlayer
+
 from .test_player import TestPlayer, test_four_vector
 
 C, D = axelrod.Action.C, axelrod.Action.D

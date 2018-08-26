@@ -5,8 +5,9 @@ See also numpy.linalg.eig which calculates all the eigenvalues and
 eigenvectors.
 """
 
-import numpy
 from typing import Tuple
+
+import numpy
 
 
 def _normalise(nvec: numpy.ndarray) -> numpy.ndarray:

@@ -1,8 +1,10 @@
 """Tests DBS strategy."""
 
 import unittest
+
 import axelrod
 from axelrod.strategies import dbs
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D

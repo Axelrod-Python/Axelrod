@@ -1,6 +1,7 @@
 """Tests for the First Axelrod strategies."""
 
 import axelrod
+
 from .test_player import TestPlayer, test_four_vector
 
 C, D = axelrod.Action.C, axelrod.Action.D

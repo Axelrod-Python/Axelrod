@@ -1,5 +1,5 @@
-from collections import namedtuple
 import operator
+from collections import namedtuple
 
 
 def passes_operator_filter(player, classifier_key, value, operator):

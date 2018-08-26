@@ -1,15 +1,12 @@
 import unittest
-from hypothesis import given, settings
+
 import axelrod
-from axelrod.tests.property import (
-    strategy_lists,
-    matches,
-    tournaments,
-    prob_end_tournaments,
-    spatial_tournaments,
-    prob_end_spatial_tournaments,
-    games,
-)
+from axelrod.tests.property import (games, matches,
+                                    prob_end_spatial_tournaments,
+                                    prob_end_tournaments, spatial_tournaments,
+                                    strategy_lists, tournaments)
+
+from hypothesis import given, settings
 
 stochastic_strategies = [s for s in axelrod.strategies if s().classifier["stochastic"]]
 

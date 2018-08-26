@@ -2,14 +2,14 @@
 
 import itertools
 import warnings
-from typing import Tuple, Dict
+from typing import Dict, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from .titfortat import TitForTat, TitFor2Tats
-from .defector import Defector
 
+from .defector import Defector
+from .titfortat import TitFor2Tats, TitForTat
 
 C, D = Action.C, Action.D
 

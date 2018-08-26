@@ -1,18 +1,15 @@
 """Test for the Looker Up strategy."""
-import unittest
 import copy
+import unittest
 
 import axelrod
-from axelrod.strategies.lookerup import (
-    get_last_n_plays,
-    make_keys_into_plays,
-    create_lookup_table_keys,
-    Plays,
-    LookupTable,
-)
-from .test_player import TestPlayer
-
 from axelrod.action import str_to_actions
+from axelrod.strategies.lookerup import (LookupTable, Plays,
+                                         create_lookup_table_keys,
+                                         get_last_n_plays,
+                                         make_keys_into_plays)
+
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

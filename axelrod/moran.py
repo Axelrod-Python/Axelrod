@@ -6,7 +6,6 @@ from typing import Callable, List, Optional, Set, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-
 from axelrod import DEFAULT_TURNS, Game, Player
 
 from .deterministic_cache import DeterministicCache

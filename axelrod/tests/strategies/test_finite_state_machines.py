@@ -2,9 +2,9 @@
 import unittest
 
 import axelrod
-from .test_player import TestPlayer
 from axelrod.strategies.finite_state_machines import SimpleFSM
 
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

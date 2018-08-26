@@ -1,5 +1,6 @@
+from typing import Dict, List, Tuple
+
 import pkg_resources
-from typing import List, Dict, Tuple
 
 
 def load_file(filename: str, directory: str) -> List[List[str]]:

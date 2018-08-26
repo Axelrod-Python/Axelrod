@@ -2,8 +2,8 @@ import unittest
 
 import axelrod
 from axelrod.strategy_transformers import *
-from axelrod.tests.strategies.test_titfortat import TestTitForTat
 from axelrod.tests.strategies.test_cooperator import TestCooperator
+from axelrod.tests.strategies.test_titfortat import TestTitForTat
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

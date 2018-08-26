@@ -1,6 +1,7 @@
 """Tests for the Stalker strategy."""
 
 import axelrod as axl
+
 from .test_player import TestPlayer
 
 C, D = axl.Action.C, axl.Action.D

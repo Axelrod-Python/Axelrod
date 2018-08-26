@@ -1,21 +1,15 @@
-from numpy.random import choice
 import random
 
-from axelrod.strategies import TitForTat
 from axelrod.action import Action
 from axelrod.player import Player, obey_axelrod
+from axelrod.strategies import TitForTat
 from axelrod.strategy_transformers import NiceTransformer
-from ._strategies import all_strategies
-from .hunter import (
-    AlternatorHunter,
-    CooperatorHunter,
-    CycleHunter,
-    DefectorHunter,
-    EventualCycleHunter,
-    MathConstantHunter,
-    RandomHunter,
-)
+from numpy.random import choice
 
+from ._strategies import all_strategies
+from .hunter import (AlternatorHunter, CooperatorHunter, CycleHunter,
+                     DefectorHunter, EventualCycleHunter, MathConstantHunter,
+                     RandomHunter)
 
 # Needs to be computed manually to prevent circular dependency
 ordinary_strategies = [s for s in all_strategies if obey_axelrod(s)]

@@ -1,4 +1,5 @@
 import random
+
 import numpy
 from axelrod.action import Action
 

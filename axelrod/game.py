@@ -1,5 +1,6 @@
-from .action import Action
 from typing import Tuple, Union
+
+from .action import Action
 
 C, D = Action.C, Action.D
 

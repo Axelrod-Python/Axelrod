@@ -1,9 +1,8 @@
 from itertools import cycle
+from typing import List
 
 from axelrod.action import Action
 from axelrod.player import Player
-
-from typing import List
 
 C, D = Action.C, Action.D
 
