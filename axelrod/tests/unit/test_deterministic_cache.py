@@ -1,5 +1,5 @@
-import pickle
 import os
+import pickle
 import unittest
 
 from axelrod import Action, Defector, DeterministicCache, Random, TitForTat

@@ -1,7 +1,7 @@
-import unittest
-import axelrod
 import filecmp
+import unittest
 
+import axelrod
 from axelrod.strategy_transformers import FinalTransformer
 
 

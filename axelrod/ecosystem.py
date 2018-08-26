@@ -12,8 +12,7 @@ ecosystem.reproduce(100)
 """
 
 import random
-
-from typing import List, Callable
+from typing import Callable, List
 
 from axelrod.result_set import ResultSet
 

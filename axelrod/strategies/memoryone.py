@@ -2,13 +2,11 @@
 files, including titfortat.py and zero_determinant.py"""
 
 import warnings
+from typing import Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-
-from typing import Tuple
-
 
 C, D = Action.C, Action.D
 

@@ -1,16 +1,15 @@
-from collections import defaultdict
 import copy
 import inspect
 import itertools
 import random
+import types
+from collections import defaultdict
+from typing import Any, Dict
 
 import numpy as np
-
 from axelrod.action import Action
-from .game import DefaultGame
 
-import types
-from typing import Dict, Any
+from .game import DefaultGame
 
 C, D = Action.C, Action.D
 

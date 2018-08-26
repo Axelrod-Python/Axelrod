@@ -1,14 +1,12 @@
 """Utilities used by various strategies."""
 
 import itertools
-
 from functools import lru_cache
 
-from axelrod.player import update_history
 from axelrod.action import Action
+from axelrod.player import update_history
 from axelrod.strategies.cooperator import Cooperator
 from axelrod.strategies.defector import Defector
-
 
 C, D = Action.C, Action.D
 

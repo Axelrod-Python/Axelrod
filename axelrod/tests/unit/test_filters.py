@@ -1,8 +1,10 @@
 import unittest
-from hypothesis import given, example, settings
-from hypothesis.strategies import integers
-from axelrod.strategies._filters import *
+
 from axelrod import filtered_strategies
+from axelrod.strategies._filters import *
+
+from hypothesis import example, given, settings
+from hypothesis.strategies import integers
 
 
 class TestFilters(unittest.TestCase):

@@ -3,8 +3,8 @@ import unittest
 
 import axelrod
 from axelrod.strategies.ann import split_weights
-from .test_player import TestMatch, TestPlayer
 
+from .test_player import TestMatch, TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

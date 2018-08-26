@@ -1,11 +1,11 @@
 """Tests for the Second Axelrod strategies."""
 
 import random
-import numpy as np
 
 import axelrod
-from .test_player import TestPlayer
+import numpy as np
 
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

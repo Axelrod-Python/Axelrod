@@ -2,8 +2,9 @@
 import unittest
 
 import axelrod
-from .test_player import TestMatch, TestPlayer
 from axelrod.strategies.hmm import SimpleHMM, is_stochastic_matrix
+
+from .test_player import TestMatch, TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

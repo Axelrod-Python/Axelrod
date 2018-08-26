@@ -1,4 +1,5 @@
 from axelrod.action import Action
+
 from .memoryone import MemoryOnePlayer
 
 C, D = Action.C, Action.D

@@ -3,24 +3,16 @@ import unittest
 from tempfile import mkstemp
 from unittest.mock import patch
 
-import numpy as np
-
-import matplotlib.pyplot
-from hypothesis import given, settings
-
 import axelrod as axl
-from axelrod.fingerprint import (
-    create_points,
-    create_jossann,
-    create_probes,
-    create_edges,
-    generate_data,
-    reshape_data,
-    AshlockFingerprint,
-    Point,
-    TransitiveFingerprint,
-)
+import matplotlib.pyplot
+import numpy as np
+from axelrod.fingerprint import (AshlockFingerprint, Point,
+                                 TransitiveFingerprint, create_edges,
+                                 create_jossann, create_points, create_probes,
+                                 generate_data, reshape_data)
 from axelrod.tests.property import strategy_lists
+
+from hypothesis import given, settings
 
 C, D = axl.Action.C, axl.Action.D
 

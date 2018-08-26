@@ -1,7 +1,7 @@
+from typing import Optional
+
 from axelrod.action import Action
 from axelrod.player import Player
-
-from typing import Optional
 
 C, D = Action.C, Action.D
 

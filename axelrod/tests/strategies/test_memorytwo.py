@@ -5,8 +5,9 @@ import unittest
 import warnings
 
 import axelrod
-from .test_player import TestPlayer
 from axelrod.strategies.memorytwo import MemoryTwoPlayer
+
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

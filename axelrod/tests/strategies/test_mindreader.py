@@ -2,8 +2,8 @@
 
 import axelrod
 from axelrod._strategy_utils import simulate_match
-from .test_player import TestPlayer
 
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

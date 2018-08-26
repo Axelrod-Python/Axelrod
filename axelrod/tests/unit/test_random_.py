@@ -1,9 +1,10 @@
 """Tests for the random functions."""
-from collections import Counter
 import random
 import unittest
+from collections import Counter
+
 import numpy
-from axelrod import random_choice, seed, Action, Pdf
+from axelrod import Action, Pdf, random_choice, seed
 
 C, D = Action.C, Action.D
 

@@ -9,8 +9,8 @@ from axelrod.action import Action
 from axelrod.load_data_ import load_pso_tables
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from .lookerup import LookerUp, Plays
 
+from .lookerup import LookerUp, Plays
 
 C, D = Action.C, Action.D
 tables = load_pso_tables("pso_gambler.csv", directory="data")

@@ -1,8 +1,8 @@
+from typing import List, Optional, Tuple
+
+from axelrod._strategy_utils import detect_cycle
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod._strategy_utils import detect_cycle
-
-from typing import List, Tuple, Optional
 
 C, D = Action.C, Action.D
 

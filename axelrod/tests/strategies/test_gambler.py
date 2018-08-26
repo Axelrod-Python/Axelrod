@@ -5,8 +5,9 @@ Most tests come form the LookerUp test suite.
 import copy
 
 import axelrod
-from .test_player import TestPlayer
+
 from .test_lookerup import convert_original_to_current
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

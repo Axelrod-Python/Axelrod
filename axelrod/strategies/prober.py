@@ -1,11 +1,12 @@
+import random
+from typing import List
+
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from typing import List
 
 Vector = List[float]
 
-import random
 
 C, D = Action.C, Action.D
 

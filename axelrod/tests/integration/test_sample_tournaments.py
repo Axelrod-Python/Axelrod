@@ -1,4 +1,5 @@
 import unittest
+
 import axelrod
 
 C, D = axelrod.Action.C, axelrod.Action.D

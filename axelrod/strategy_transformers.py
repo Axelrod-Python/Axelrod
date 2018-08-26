@@ -7,15 +7,16 @@ See the various Meta strategies for another type of transformation.
 
 import collections
 import copy
-from importlib import import_module
 import inspect
 import random
+from importlib import import_module
 from typing import Any
-from numpy.random import choice
-from .action import Action
-from .random_ import random_choice
-from .player import defaultdict, Player
 
+from numpy.random import choice
+
+from .action import Action
+from .player import Player, defaultdict
+from .random_ import random_choice
 
 C, D = Action.C, Action.D
 

@@ -3,15 +3,14 @@ import random
 import types
 import unittest
 
-import numpy as np
-from hypothesis import given, settings
-from hypothesis.strategies import integers
-
 import axelrod
+import numpy as np
 from axelrod import DefaultGame, Player
 from axelrod.player import get_state_distribution_from_history, update_history
 from axelrod.tests.property import strategy_lists
 
+from hypothesis import given, settings
+from hypothesis.strategies import integers
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

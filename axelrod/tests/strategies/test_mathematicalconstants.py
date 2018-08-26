@@ -1,6 +1,7 @@
 """Tests for the golden and other mathematical strategies."""
 
 import axelrod
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D

@@ -1,7 +1,8 @@
 """Tests for the retaliate strategy."""
 
 import axelrod
-from .test_player import TestPlayer, TestOpponent
+
+from .test_player import TestOpponent, TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

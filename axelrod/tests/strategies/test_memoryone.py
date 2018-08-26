@@ -6,6 +6,7 @@ import warnings
 import axelrod
 from axelrod import Game
 from axelrod.strategies.memoryone import MemoryOnePlayer
+
 from .test_player import TestPlayer, test_four_vector
 
 C, D = axelrod.Action.C, axelrod.Action.D

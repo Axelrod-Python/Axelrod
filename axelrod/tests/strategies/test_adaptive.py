@@ -1,6 +1,7 @@
 """Tests for the Adaptive strategy."""
 
 import axelrod
+
 from .test_player import TestMatch, TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D

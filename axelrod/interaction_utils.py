@@ -7,14 +7,14 @@ form:
 This is used by both the Match class and the ResultSet class which analyse
 interactions.
 """
-from collections import Counter, defaultdict
 import csv
-import tqdm
+from collections import Counter, defaultdict
+
 import pandas as pd
-
+import tqdm
 from axelrod.action import Action, str_to_actions
-from .game import Game
 
+from .game import Game
 
 C, D = Action.C, Action.D
 

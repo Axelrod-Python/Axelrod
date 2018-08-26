@@ -3,16 +3,14 @@ Additional strategies from Axelrod's second tournament.
 """
 
 import random
-import numpy as np
 from typing import List
 
+import numpy as np
 from axelrod.action import Action
+from axelrod.interaction_utils import compute_final_score
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategies.finite_state_machines import FSMPlayer
-
-from axelrod.interaction_utils import compute_final_score
-
 
 C, D = Action.C, Action.D
 
