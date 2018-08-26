@@ -3,10 +3,9 @@ The player classes in this module do not obey standard rules of the IPD (as
 indicated by their classifier). We do not recommend putting a lot of time in to
 optimising them.
 """
+from axelrod._strategy_utils import inspect_strategy, look_ahead
 from axelrod.action import Action
 from axelrod.player import Player
-from axelrod._strategy_utils import look_ahead, inspect_strategy
-
 
 C, D = Action.C, Action.D
 

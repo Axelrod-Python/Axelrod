@@ -1,14 +1,15 @@
 """Tests for the tit for tat strategies."""
 
+import copy
 import random
 
-import copy
-from hypothesis import given
-from hypothesis.strategies import integers
 import axelrod
 from axelrod.tests.property import strategy_lists
-from .test_player import TestMatch, TestPlayer
 
+from hypothesis import given
+from hypothesis.strategies import integers
+
+from .test_player import TestMatch, TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

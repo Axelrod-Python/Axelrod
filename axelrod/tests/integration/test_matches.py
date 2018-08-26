@@ -1,10 +1,11 @@
 """Tests for some expected match behaviours"""
 import unittest
+
 import axelrod
+from axelrod.tests.property import strategy_lists
 
 from hypothesis import given, settings
 from hypothesis.strategies import integers
-from axelrod.tests.property import strategy_lists
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

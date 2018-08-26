@@ -1,4 +1,5 @@
 import unittest
+
 import axelrod
 from axelrod import MockPlayer, update_history
 from axelrod.tests.strategies.test_player import TestOpponent

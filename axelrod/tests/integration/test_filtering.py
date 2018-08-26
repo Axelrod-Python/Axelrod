@@ -1,7 +1,9 @@
 import unittest
-from hypothesis import given, example, settings
-from hypothesis.strategies import integers
+
 from axelrod import all_strategies, filtered_strategies, seed
+
+from hypothesis import example, given, settings
+from hypothesis.strategies import integers
 
 
 class TestFiltersAgainstComprehensions(unittest.TestCase):

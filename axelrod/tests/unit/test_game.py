@@ -1,9 +1,9 @@
 import unittest
-from hypothesis import given, settings
 
 import axelrod
 from axelrod.tests.property import *
 
+from hypothesis import given, settings
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

@@ -1,9 +1,9 @@
-from axelrod.action import Action
-from axelrod.player import Player
-from axelrod._strategy_utils import thue_morse_generator
-
 from types import FunctionType
 from typing import Tuple
+
+from axelrod._strategy_utils import thue_morse_generator
+from axelrod.action import Action
+from axelrod.player import Player
 
 C, D = Action.C, Action.D
 

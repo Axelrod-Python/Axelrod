@@ -1,17 +1,16 @@
 import csv
-from collections import Counter
 import unittest
-
-from hypothesis import given, settings
-from numpy import mean, std, nanmedian
-from dask.dataframe.core import DataFrame
-import pandas as pd
+from collections import Counter
 
 import axelrod
 import axelrod.interaction_utils as iu
+import pandas as pd
 from axelrod.result_set import create_counter_dict
-from axelrod.tests.property import tournaments, prob_end_tournaments
+from axelrod.tests.property import prob_end_tournaments, tournaments
+from numpy import mean, nanmedian, std
 
+from dask.dataframe.core import DataFrame
+from hypothesis import given, settings
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

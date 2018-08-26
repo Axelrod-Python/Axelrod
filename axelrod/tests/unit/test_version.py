@@ -1,5 +1,6 @@
 """Tests the version number."""
 import unittest
+
 from axelrod import __version__
 
 

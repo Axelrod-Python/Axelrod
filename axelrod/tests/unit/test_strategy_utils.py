@@ -3,19 +3,13 @@
 import unittest
 
 import axelrod
+from axelrod import Action, Game, Player
+from axelrod._strategy_utils import (detect_cycle, inspect_strategy,
+                                     look_ahead, recursive_thue_morse,
+                                     simulate_match, thue_morse_generator)
 
 from hypothesis import given, settings
-from hypothesis.strategies import sampled_from, lists, integers
-
-from axelrod import Action, Game, Player
-from axelrod._strategy_utils import (
-    detect_cycle,
-    inspect_strategy,
-    look_ahead,
-    recursive_thue_morse,
-    simulate_match,
-    thue_morse_generator,
-)
+from hypothesis.strategies import integers, lists, sampled_from
 
 C, D = Action.C, Action.D
 

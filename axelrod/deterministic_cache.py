@@ -12,13 +12,12 @@ else:
     ...
 """
 
-from collections import UserDict
 import pickle
+from collections import UserDict
+from typing import List, Tuple
 
 from .action import Action
 from .player import Player
-
-from typing import List, Tuple
 
 CachePlayerKey = Tuple[Player, Player, int]
 CacheKey = Tuple[str, str, int]

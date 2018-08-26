@@ -1,11 +1,10 @@
 import unittest
 
-from hypothesis import given, example, settings
-from hypothesis.strategies import floats, integers
-
 import axelrod
 from axelrod.match_generator import graph_is_connected
 
+from hypothesis import example, given, settings
+from hypothesis.strategies import floats, integers
 
 test_strategies = [
     axelrod.Cooperator,

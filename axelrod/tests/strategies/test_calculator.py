@@ -1,8 +1,9 @@
 """Tests for Calculator strategy."""
 
 import axelrod
-from .test_player import TestPlayer
 from axelrod._strategy_utils import detect_cycle
+
+from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

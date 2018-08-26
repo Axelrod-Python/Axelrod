@@ -3,16 +3,15 @@ Additional strategies from Axelrod's first tournament.
 """
 
 import random
+from typing import Dict, List, Tuple
 
 from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from axelrod.strategy_transformers import FinalTransformer
-from .memoryone import MemoryOnePlayer
-
 from scipy.stats import chisquare
 
-from typing import List, Dict, Tuple
+from .memoryone import MemoryOnePlayer
 
 C, D = Action.C, Action.D
 

@@ -1,6 +1,7 @@
 """Tests APavlov strategies."""
 
 import axelrod
+
 from .test_player import TestPlayer
 
 C, D = axelrod.Action.C, axelrod.Action.D

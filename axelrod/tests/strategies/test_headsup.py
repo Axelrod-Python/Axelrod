@@ -1,6 +1,7 @@
 """Strategy match tests."""
 
 import axelrod
+
 from .test_player import TestMatch
 
 C, D = axelrod.Action.C, axelrod.Action.D

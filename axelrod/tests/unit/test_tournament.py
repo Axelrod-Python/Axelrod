@@ -1,32 +1,26 @@
 """Tests for the main tournament class."""
 
 import csv
+import filecmp
 import io
 import logging
-from multiprocessing import Queue, cpu_count
 import os
 import pickle
 import unittest
-from unittest.mock import MagicMock, patch
 import warnings
-import filecmp
-
-from hypothesis import given, example, settings
-from hypothesis.strategies import integers, floats
-from tqdm import tqdm
-import numpy as np
-import pandas as pd
-
-from axelrod.tests.property import (
-    tournaments,
-    prob_end_tournaments,
-    spatial_tournaments,
-    strategy_lists,
-)
-from axelrod.tournament import _close_objects
+from multiprocessing import Queue, cpu_count
+from unittest.mock import MagicMock, patch
 
 import axelrod
+import numpy as np
+import pandas as pd
+from axelrod.tests.property import (prob_end_tournaments, spatial_tournaments,
+                                    strategy_lists, tournaments)
+from axelrod.tournament import _close_objects
+from tqdm import tqdm
 
+from hypothesis import example, given, settings
+from hypothesis.strategies import floats, integers
 
 C, D = axelrod.Action.C, axelrod.Action.D
 

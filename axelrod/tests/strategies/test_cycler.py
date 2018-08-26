@@ -1,11 +1,13 @@
 """Tests for the Cycler strategies."""
 
 import itertools
+
 import axelrod
-from axelrod.action import Action, str_to_actions
-from .test_player import TestPlayer
-from axelrod import Cycler, AntiCycler
+from axelrod import AntiCycler, Cycler
 from axelrod._strategy_utils import detect_cycle
+from axelrod.action import Action, str_to_actions
+
+from .test_player import TestPlayer
 
 C, D = Action.C, Action.D
 

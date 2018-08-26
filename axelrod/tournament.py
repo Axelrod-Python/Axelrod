@@ -1,27 +1,25 @@
-from collections import defaultdict
 import csv
 import logging
+import os
+import warnings
+from collections import defaultdict
 from multiprocessing import Process, Queue, cpu_count
 from tempfile import mkstemp
-import warnings
-import os
+from typing import List, Optional, Tuple
 
+import axelrod.interaction_utils as iu
 import tqdm
-
 from axelrod import DEFAULT_TURNS
+from axelrod.action import Action, actions_to_str, str_to_actions
 from axelrod.player import Player
-from axelrod.action import actions_to_str
+
 from .game import Game
 from .match import Match
 from .match_generator import MatchGenerator
 from .result_set import ResultSet
-from axelrod.action import Action, str_to_actions
-
-import axelrod.interaction_utils as iu
 
 C, D = Action.C, Action.D
 
-from typing import List, Tuple, Optional
 
 
 class Tournament(object):

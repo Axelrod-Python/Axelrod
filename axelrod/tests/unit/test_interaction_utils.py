@@ -1,11 +1,10 @@
-from collections import Counter
 import tempfile
 import unittest
+from collections import Counter
 
 import axelrod
-from axelrod import Action
 import axelrod.interaction_utils as iu
-
+from axelrod import Action
 
 C, D = Action.C, Action.D
 

@@ -1,6 +1,7 @@
 """Tests for the classification."""
 
 import unittest
+
 import axelrod as axl
 
 

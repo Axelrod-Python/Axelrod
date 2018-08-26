@@ -1,11 +1,12 @@
 from os import linesep
 from unittest import TestCase
 from unittest.mock import patch
-from prompt_toolkit.validation import ValidationError
-from axelrod import Action, Player, Cooperator
-from axelrod.strategies.human import Human, ActionValidator
-from .test_player import TestPlayer
 
+from axelrod import Action, Cooperator, Player
+from axelrod.strategies.human import ActionValidator, Human
+from prompt_toolkit.validation import ValidationError
+
+from .test_player import TestPlayer
 
 C, D = Action.C, Action.D
 

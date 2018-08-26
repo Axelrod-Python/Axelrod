@@ -2,23 +2,20 @@ import csv
 import os
 from collections import namedtuple
 from tempfile import mkstemp
+from typing import Any, List, Union
 
+import axelrod as axl
 import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
-import dask.dataframe as dd
-import dask as da
+from axelrod import Player
+from axelrod.interaction_utils import (compute_final_score_per_turn,
+                                       read_interactions_from_file)
+from axelrod.strategy_transformers import DualTransformer, JossAnnTransformer
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-import axelrod as axl
-from axelrod import Player
-from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
-from axelrod.interaction_utils import (
-    compute_final_score_per_turn,
-    read_interactions_from_file,
-)
-
-from typing import List, Any, Union
+import dask as da
+import dask.dataframe as dd
 
 Point = namedtuple("Point", "x y")
 

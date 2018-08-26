@@ -1,19 +1,18 @@
-from collections import namedtuple, Counter
-from multiprocessing import cpu_count
 import csv
 import itertools
+from collections import Counter, namedtuple
+from multiprocessing import cpu_count
 
+import axelrod.interaction_utils as iu
 import numpy as np
 import tqdm
+from axelrod.action import Action, str_to_actions
 
 import dask as da
 import dask.dataframe as dd
 
-from axelrod.action import Action, str_to_actions
-import axelrod.interaction_utils as iu
 from . import eigen
 from .game import Game
-
 
 C, D = Action.C, Action.D
 
