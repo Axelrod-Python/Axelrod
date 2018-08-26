@@ -21,19 +21,25 @@ class DBS(Player):
     """
 
     # These are various properties for the strategy
-    name = 'DBS'
+    name = "DBS"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': True,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": True,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, discount_factor=.75, promotion_threshold=3,
-                 violation_threshold=4, reject_threshold=3, tree_depth=5):
+    def __init__(
+        self,
+        discount_factor=.75,
+        promotion_threshold=3,
+        violation_threshold=4,
+        reject_threshold=3,
+        tree_depth=5,
+    ):
         """
         Parameters
 
@@ -108,7 +114,7 @@ class DBS(Player):
             (C, C): ([1], [1]),
             (C, D): ([1], [1]),
             (D, C): ([0], [1]),
-            (D, D): ([0], [1])
+            (D, D): ([0], [1]),
         }
 
     def should_promote(self, r_plus, promotion_threshold=3):
@@ -142,10 +148,10 @@ class DBS(Player):
         # We iterate on the history, while we do not encounter
         # counter-examples of r_plus, i.e. while we do not encounter
         # r_minus
-        while(
-            k < len(self.history_by_cond[r_plus[0]][0]) and not
-            (self.history_by_cond[r_plus[0]][0][1:][-k] == opposite_action and
-             self.history_by_cond[r_plus[0]][1][1:][-k] == 1)):
+        while k < len(self.history_by_cond[r_plus[0]][0]) and not (
+            self.history_by_cond[r_plus[0]][0][1:][-k] == opposite_action
+            and self.history_by_cond[r_plus[0]][1][1:][-k] == 1
+        ):
             # We count every occurrence of r_plus in history
             if self.history_by_cond[r_plus[0]][1][1:][-k] == 1:
                 count += 1
@@ -229,7 +235,7 @@ class DBS(Player):
 
             # If r+ or r- in Rc
             if r_plus[0] in self.Rc.keys():
-                to_check = (C if self.Rc[r_plus[0]] == 1 else D)
+                to_check = C if self.Rc[r_plus[0]] == 1 else D
                 # (if r+ in Rc)
                 if r_plus[1] == to_check:
                     # Set the violation count of r+ to 0.
@@ -249,22 +255,19 @@ class DBS(Player):
                         self.violation_counts.clear()
                         self.v = 0
             # r+ in Rc.
-            r_plus_in_Rc = (
-                r_plus[0] in self.Rc.keys() and
-                self.Rc[r_plus[0]] == action_to_int(r_plus[1])
-            )
+            r_plus_in_Rc = r_plus[0] in self.Rc.keys() and self.Rc[
+                r_plus[0]
+            ] == action_to_int(r_plus[1])
             # r- in Rd
-            r_minus_in_Rd = (
-                r_minus[0] in self.Rd.keys() and
-                self.Rd[r_minus[0]] == action_to_int(r_minus[1])
-            )
+            r_minus_in_Rd = r_minus[0] in self.Rd.keys() and self.Rd[
+                r_minus[0]
+            ] == action_to_int(r_minus[1])
 
             # Increment number of violations of Rd rules.
             if r_minus_in_Rd:
                 self.v += 1
             # If the number of violations is superior to a threshold, clean Rd.
-            if (self.v > self.reject_threshold) or (
-                    r_plus_in_Rc and r_minus_in_Rd):
+            if (self.v > self.reject_threshold) or (r_plus_in_Rc and r_minus_in_Rd):
                 self.Rd.clear()
                 self.v = 0
 
@@ -272,8 +275,7 @@ class DBS(Player):
             Rp = {}
             all_cond = [(C, C), (C, D), (D, C), (D, D)]
             for outcome in all_cond:
-                if (outcome not in self.Rc.keys()) and (
-                        outcome not in self.Rd.keys()):
+                if (outcome not in self.Rc.keys()) and (outcome not in self.Rd.keys()):
                     # Compute opponent's C answer probability.
                     Rp[outcome] = self.compute_prob_rule(outcome, self.alpha)
 
@@ -286,8 +288,11 @@ class DBS(Player):
             self.Pi.update(Rp)
 
         # React to the opponent's last move
-        return move_gen((self.history[-1], opponent.history[-1]), self.Pi,
-                        depth_search_tree=self.tree_depth)
+        return move_gen(
+            (self.history[-1], opponent.history[-1]),
+            self.Pi,
+            depth_search_tree=self.tree_depth,
+        )
 
 
 class Node(object):
@@ -299,11 +304,11 @@ class Node(object):
 
     # abstract method
     def get_siblings(self):
-        raise NotImplementedError('subclasses must override get_siblings()!')
+        raise NotImplementedError("subclasses must override get_siblings()!")
 
     # abstract method
     def is_stochastic(self):
-        raise NotImplementedError('subclasses must override is_stochastic()!')
+        raise NotImplementedError("subclasses must override is_stochastic()!")
 
 
 class StochasticNode(Node):
@@ -323,8 +328,8 @@ class StochasticNode(Node):
         siblings which are DeterministicNodes, their depth is equal to current
         node depth's + 1.
         """
-        opponent_c_choice = DeterministicNode(self.own_action, C, self.depth+1)
-        opponent_d_choice = DeterministicNode(self.own_action, D, self.depth+1)
+        opponent_c_choice = DeterministicNode(self.own_action, C, self.depth + 1)
+        opponent_d_choice = DeterministicNode(self.own_action, D, self.depth + 1)
         return opponent_c_choice, opponent_d_choice
 
     def is_stochastic(self):
@@ -350,10 +355,8 @@ class DeterministicNode(Node):
         of the same depth as the current node. Their probabilities pC are
         defined by the policy argument.
         """
-        c_choice = StochasticNode(
-            C, policy[(self.action1, self.action2)], self.depth)
-        d_choice = StochasticNode(
-            D, policy[(self.action1, self.action2)], self.depth)
+        c_choice = StochasticNode(C, policy[(self.action1, self.action2)], self.depth)
+        d_choice = StochasticNode(D, policy[(self.action1, self.action2)], self.depth)
         return c_choice, d_choice
 
     def is_stochastic(self):
@@ -361,12 +364,7 @@ class DeterministicNode(Node):
         return False
 
     def get_value(self):
-        values = {
-            (C, C): 3,
-            (C, D): 0,
-            (D, C): 5,
-            (D, D): 1
-        }
+        values = {(C, C): 3, (C, D): 0, (D, C): 5, (D, D): 1}
         return values[(self.action1, self.action2)]
 
 
@@ -402,12 +400,11 @@ def minimax_tree_search(begin_node, policy, max_depth):
         # hence there is no need to check that its depth is < max_depth.
         siblings = begin_node.get_siblings()
         # The stochastic node value is the expected value of siblings.
-        node_value = (
-            begin_node.pC * minimax_tree_search(siblings[0], policy, max_depth)
-            + (1 - begin_node.pC) * minimax_tree_search(
-                siblings[1], policy, max_depth))
+        node_value = begin_node.pC * minimax_tree_search(
+            siblings[0], policy, max_depth
+        ) + (1 - begin_node.pC) * minimax_tree_search(siblings[1], policy, max_depth)
         return node_value
-    else:   # Deterministic node
+    else:  # Deterministic node
         if begin_node.depth == max_depth:
             # This is an end node, we just return its outcome value.
             return begin_node.get_value()
@@ -415,10 +412,12 @@ def minimax_tree_search(begin_node, policy, max_depth):
             siblings = begin_node.get_siblings(policy)
             # This returns the two max expected values, for choice C or D,
             # as a tuple.
-            return (minimax_tree_search(siblings[0], policy, max_depth)
-                    + begin_node.get_value(),
-                    minimax_tree_search(siblings[1], policy, max_depth)
-                    + begin_node.get_value())
+            return (
+                minimax_tree_search(siblings[0], policy, max_depth)
+                + begin_node.get_value(),
+                minimax_tree_search(siblings[1], policy, max_depth)
+                + begin_node.get_value(),
+            )
         elif begin_node.depth < max_depth:
             siblings = begin_node.get_siblings(policy)
             # The deterministic node value is the max of both siblings values
@@ -435,8 +434,7 @@ def move_gen(outcome, policy, depth_search_tree=5):
     using tree-search procedure.
     """
     current_node = DeterministicNode(outcome[0], outcome[1], depth=0)
-    values_of_choices = minimax_tree_search(
-            current_node, policy, depth_search_tree)
+    values_of_choices = minimax_tree_search(current_node, policy, depth_search_tree)
     # Returns the Action which correspond to the best choice in terms of
     # expected value. In case value(C) == value(D), returns C.
     actions_tuple = (C, D)

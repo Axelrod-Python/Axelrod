@@ -34,13 +34,13 @@ class Champion(Player):
 
     name = "Champion"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -78,13 +78,13 @@ class Eatherley(Player):
 
     name = "Eatherley"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -119,13 +119,13 @@ class Tester(Player):
 
     name = "Tester"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -172,13 +172,13 @@ class Gladstein(Player):
 
     name = "Gladstein"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -318,28 +318,27 @@ class Tranquilizer(Player):
     - Tranquilizer: [Axelrod1980]_
     """
 
-    name = 'Tranquilizer'
+    name = "Tranquilizer"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': {"game"},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": {"game"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
         super().__init__()
-        self.num_turns_after_good_defection = 0 # equal to FD variable
-        self.opponent_consecutive_defections = 0 # equal to S variable
-        self.one_turn_after_good_defection_ratio= 5 # equal to AD variable
-        self.two_turns_after_good_defection_ratio= 0 # equal to NO variable
-        self.one_turn_after_good_defection_ratio_count = 1 # equal to AK variable
-        self.two_turns_after_good_defection_ratio_count = 1 # equal to NK variable
+        self.num_turns_after_good_defection = 0  # equal to FD variable
+        self.opponent_consecutive_defections = 0  # equal to S variable
+        self.one_turn_after_good_defection_ratio = 5  # equal to AD variable
+        self.two_turns_after_good_defection_ratio = 0  # equal to NO variable
+        self.one_turn_after_good_defection_ratio_count = 1  # equal to AK variable
+        self.two_turns_after_good_defection_ratio_count = 1  # equal to NK variable
         # All above variables correspond to those in original Fotran Code
         self.dict = {C: 0, D: 1}
-
 
     def update_state(self, opponent):
 
@@ -356,26 +355,26 @@ class Tranquilizer(Player):
         if self.num_turns_after_good_defection == 2:
             self.num_turns_after_good_defection = 0
             self.two_turns_after_good_defection_ratio = (
-                ((self.two_turns_after_good_defection_ratio
-                * self.two_turns_after_good_defection_ratio_count)
+                (
+                    self.two_turns_after_good_defection_ratio
+                    * self.two_turns_after_good_defection_ratio_count
+                )
                 + (3 - (3 * self.dict[opponent.history[-1]]))
                 + (2 * self.dict[self.history[-1]])
-                - ((self.dict[opponent.history[-1]]
-                * self.dict[self.history[-1]])))
-                / (self.two_turns_after_good_defection_ratio_count + 1)
-                )
+                - ((self.dict[opponent.history[-1]] * self.dict[self.history[-1]]))
+            ) / (self.two_turns_after_good_defection_ratio_count + 1)
             self.two_turns_after_good_defection_ratio_count += 1
         elif self.num_turns_after_good_defection == 1:
             self.num_turns_after_good_defection = 2
             self.one_turn_after_good_defection_ratio = (
-                ((self.one_turn_after_good_defection_ratio
-                * self.one_turn_after_good_defection_ratio_count)
+                (
+                    self.one_turn_after_good_defection_ratio
+                    * self.one_turn_after_good_defection_ratio_count
+                )
                 + (3 - (3 * self.dict[opponent.history[-1]]))
                 + (2 * self.dict[self.history[-1]])
-                - (self.dict[opponent.history[-1]]
-                * self.dict[self.history[-1]]))
-                / (self.one_turn_after_good_defection_ratio_count + 1)
-                )
+                - (self.dict[opponent.history[-1]] * self.dict[self.history[-1]])
+            ) / (self.one_turn_after_good_defection_ratio_count + 1)
             self.one_turn_after_good_defection_ratio_count += 1
 
     def strategy(self, opponent: Player) -> Action:
@@ -383,20 +382,28 @@ class Tranquilizer(Player):
         if not self.history:
             return C
 
-
         self.update_state(opponent)
-        if  self.num_turns_after_good_defection in [1, 2]:
+        if self.num_turns_after_good_defection in [1, 2]:
             return C
 
         current_score = compute_final_score(zip(self.history, opponent.history))
 
         if (current_score[0] / ((len(self.history)) + 1)) >= 2.25:
             probability = (
-                (.95 - (((self.one_turn_after_good_defection_ratio)
-                + (self.two_turns_after_good_defection_ratio) - 5) / 15))
-                + (1 / (((len(self.history))+1) ** 2))
-                - (self.dict[opponent.history[-1]] / 4)
+                (
+                    .95
+                    - (
+                        (
+                            (self.one_turn_after_good_defection_ratio)
+                            + (self.two_turns_after_good_defection_ratio)
+                            - 5
+                        )
+                        / 15
+                    )
                 )
+                + (1 / (((len(self.history)) + 1) ** 2))
+                - (self.dict[opponent.history[-1]] / 4)
+            )
             if random.random() <= probability:
                 return C
             self.num_turns_after_good_defection = 1
@@ -405,10 +412,9 @@ class Tranquilizer(Player):
             probability = (
                 (.25 + ((opponent.cooperations + 1) / ((len(self.history)) + 1)))
                 - (self.opponent_consecutive_defections * .25)
-                + ((current_score[0]
-                - current_score[1]) / 100)
+                + ((current_score[0] - current_score[1]) / 100)
                 + (4 / ((len(self.history)) + 1))
-                )
+            )
             if random.random() <= probability:
                 return C
             return D
@@ -442,15 +448,16 @@ class MoreGrofman(Player):
     - Grofman's strategy: [Axelrod1980b]_
     - K86R: [Axelrod1980b]_
     """
+
     name = "MoreGrofman"
     classifier = {
-        'memory_depth': 8,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 8,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -508,13 +515,13 @@ class Kluepfel(Player):
 
     name = "Kluepfel"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
@@ -537,8 +544,13 @@ class Kluepfel(Player):
 
         # Check for randomness
         if len(self.history) > 26:
-            if self.cd_counts >= (self.cd_counts+self.dd_counts)/2 - 0.75*np.sqrt(self.cd_counts+self.dd_counts) and \
-                self.cc_counts >= (self.dc_counts+self.cc_counts)/2 - 0.75*np.sqrt(self.dc_counts+self.cc_counts):
+            if self.cd_counts >= (self.cd_counts + self.dd_counts) / 2 - 0.75 * np.sqrt(
+                self.cd_counts + self.dd_counts
+            ) and self.cc_counts >= (
+                self.dc_counts + self.cc_counts
+            ) / 2 - 0.75 * np.sqrt(
+                self.dc_counts + self.cc_counts
+            ):
                 return D
 
         # Otherwise respond to recent history
@@ -554,7 +566,7 @@ class Kluepfel(Player):
         if one_move_ago == two_moves_ago and two_moves_ago == three_moves_ago:
             return one_move_ago
 
-        r = random.random() # Everything following is stochastic
+        r = random.random()  # Everything following is stochastic
         if one_move_ago == two_moves_ago:
             if r < 0.9:
                 return one_move_ago
@@ -615,13 +627,13 @@ class Borufsen(Player):
 
     name = "Borufsen"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
@@ -674,7 +686,7 @@ class Borufsen(Player):
                 self.mode = "Defect"
 
             # Check for a random strategy
-            if (coops >= 8 and coops <= 17) and self.cc_counts/coops < 0.7:
+            if (coops >= 8 and coops <= 17) and self.cc_counts / coops < 0.7:
                 self.mode = "Defect"
 
             self.cd_counts, self.cc_counts = 0, 0
@@ -702,7 +714,7 @@ class Borufsen(Player):
                 self.mutual_defect_streak = 0
             if self.mutual_defect_streak >= 3:
                 self.mutual_defect_streak = 0
-                self.echo_streak = 0 # Reset both streaks.
+                self.echo_streak = 0  # Reset both streaks.
                 return self.try_return(C)
 
             # Look for echoes
@@ -711,13 +723,16 @@ class Borufsen(Player):
             if turn >= 3:
                 my_two_back = self.history[-2]
                 opp_two_back = opponent.history[-2]
-            if self.history[-1] != opponent.history[-1] and \
-                self.history[-1] == opp_two_back and opponent.history[-1] == my_two_back:
+            if (
+                self.history[-1] != opponent.history[-1]
+                and self.history[-1] == opp_two_back
+                and opponent.history[-1] == my_two_back
+            ):
                 self.echo_streak += 1
             else:
                 self.echo_streak = 0
             if self.echo_streak >= 3:
-                self.mutual_defect_streak = 0 # Reset both streaks.
+                self.mutual_defect_streak = 0  # Reset both streaks.
                 self.echo_streak = 0
                 self.flip_next_defect = True
 
@@ -748,13 +763,13 @@ class Cave(Player):
 
     name = "Cave"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -799,13 +814,13 @@ class WmAdams(Player):
 
     name = "WmAdams"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -846,13 +861,13 @@ class GraaskampKatzen(Player):
 
     name = "GraaskampKatzen"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(['game']),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(["game"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
@@ -875,16 +890,24 @@ class GraaskampKatzen(Player):
 
         self.update_score(opponent)
 
-        if turn == 11 and self.own_score < 23 or \
-           turn == 21 and self.own_score < 53 or \
-           turn == 31 and self.own_score < 83 or \
-           turn == 41 and self.own_score < 113 or \
-           turn == 51 and self.own_score < 143 or \
-           turn == 101 and self.own_score < 293:
+        if (
+            turn == 11
+            and self.own_score < 23
+            or turn == 21
+            and self.own_score < 53
+            or turn == 31
+            and self.own_score < 83
+            or turn == 41
+            and self.own_score < 113
+            or turn == 51
+            and self.own_score < 143
+            or turn == 101
+            and self.own_score < 293
+        ):
             self.mode = "Defect"
             return D
 
-        return opponent.history[-1] # Tit-for-Tat
+        return opponent.history[-1]  # Tit-for-Tat
 
 
 class Weiner(Player):
@@ -921,13 +944,13 @@ class Weiner(Player):
 
     name = "Weiner"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
@@ -936,7 +959,7 @@ class Weiner(Player):
         self.grudge = 0
         self.defect_padding = 0
         self.last_twelve = [0] * 12
-        self.lt_index = 0 # Circles around last_twelve
+        self.lt_index = 0  # Circles around last_twelve
 
     def try_return(self, to_return):
         """
@@ -1074,13 +1097,13 @@ class Harrington(Player):
 
     name = "Harrington"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
@@ -1102,7 +1125,10 @@ class Harrington(Player):
         self.burned = False
 
         self.defect_streak = 0
-        self.parity_streak = [0, 0]  # Counters that get (almost) alternatively incremented.
+        self.parity_streak = [
+            0,
+            0,
+        ]  # Counters that get (almost) alternatively incremented.
         self.parity_bit = 0  # Which parity_streak to increment
         self.parity_limit = 5  # When a parity streak hits this limit, alter strategy.
         self.parity_hits = 0  # Counts how many times a parity_limit was hit.
@@ -1142,8 +1168,10 @@ class Harrington(Player):
 
         denom = turn - 2
 
-        expected_matrix = np.outer(self.move_history.sum(axis=1),
-                                   self.move_history.sum(axis=0)) / denom
+        expected_matrix = (
+            np.outer(self.move_history.sum(axis=1), self.move_history.sum(axis=0))
+            / denom
+        )
 
         chi_squared = 0.0
         for i in range(4):
@@ -1232,7 +1260,6 @@ class Harrington(Player):
 
             return self.try_return(D)
 
-
         # If not Defect mode, proceed to update history and check for random,
         # check if burned, and check if opponent's fairweather.
 
@@ -1255,7 +1282,9 @@ class Harrington(Player):
             if turn % 15 == 0 and turn > 15:
                 if self.detect_random(turn):
                     self.mode = "Defect"
-                    return self.try_return(D, lower_flags=False)  # Lower_flags not used here.
+                    return self.try_return(
+                        D, lower_flags=False
+                    )  # Lower_flags not used here.
 
         # If generous 2 turns ago and opponent defected last turn
         if self.last_generous_n_turns_ago == 2 and opponent.history[-1] == D:
@@ -1266,7 +1295,6 @@ class Harrington(Player):
         if turn == 38 and opponent.history[-1] == D and opponent.cooperations == 36:
             self.mode = "Fair-weather"
             return self.try_return(to_return=C, lower_flags=False)
-
 
         if self.mode == "Fair-weather":
             if opponent.history[-1] == D:
@@ -1282,11 +1310,15 @@ class Harrington(Player):
         if self.detect_streak(opponent.history[-1]):
             return self.try_return(D, inc_parity=True)
         if self.detect_parity_streak(opponent.history[-1]):
-            self.parity_streak[self.parity_bit] = 0  # Reset `parity_streak` when we hit the limit.
+            self.parity_streak[
+                self.parity_bit
+            ] = 0  # Reset `parity_streak` when we hit the limit.
             self.parity_hits += 1  # Keep track of how many times we hit the limit.
             if self.parity_hits >= 8:  # After 8 times, lower the limit.
                 self.parity_limit = 3
-            return self.try_return(C, inc_parity=True)  # Inc parity won't get used here.
+            return self.try_return(
+                C, inc_parity=True
+            )  # Inc parity won't get used here.
 
         # If we have Cooperations scheduled, then Cooperate here.
         if self.more_coop >= 1:
@@ -1337,15 +1369,15 @@ class MoreTidemanAndChieruzzi(Player):
     - MoreTidemanAndChieruzzi: [Axelrod1980b]_
     """
 
-    name = 'More Tideman and Chieruzzi'
+    name = "More Tideman and Chieruzzi"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': {"game"},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": {"game"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -1391,7 +1423,7 @@ class MoreTidemanAndChieruzzi(Player):
 
         opponent_CDd = False
 
-        opponent_two_turns_ago = C # Default value for second turn.
+        opponent_two_turns_ago = C  # Default value for second turn.
         if len(opponent.history) >= 2:
             opponent_two_turns_ago = opponent.history[-2]
         # If opponent's last two turns are C and D in that order.
@@ -1433,15 +1465,15 @@ class Getzler(Player):
     - Getzler: [Axelrod1980b]_
     """
 
-    name = 'Getzler'
+    name = "Getzler"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -1477,15 +1509,15 @@ class Leyvraz(Player):
     - Leyvraz: [Axelrod1980b]_
     """
 
-    name = 'Leyvraz'
+    name = "Leyvraz"
     classifier = {
-        'memory_depth': 3,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -1498,7 +1530,7 @@ class Leyvraz(Player):
             (D, C, C): 1.0,  # Rule 2
             (D, C, D): 1.0,  # Rule 2
             (D, D, C): 1.0,  # Rule 2
-            (D, D, D): 0.25  # Rule 1
+            (D, D, D): 0.25,  # Rule 1
         }
 
     def strategy(self, opponent: Player) -> Action:
@@ -1507,9 +1539,9 @@ class Leyvraz(Player):
             if len(opponent.history) >= go_back:
                 recent_history[-go_back] = opponent.history[-go_back]
 
-        return random_choice(self.prob_coop[(recent_history[-3],
-                                             recent_history[-2],
-                                             recent_history[-1])])
+        return random_choice(
+            self.prob_coop[(recent_history[-3], recent_history[-2], recent_history[-1])]
+        )
 
 
 class White(Player):
@@ -1527,15 +1559,15 @@ class White(Player):
     - White: [Axelrod1980b]_
     """
 
-    name = 'White'
+    name = "White"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -1565,29 +1597,22 @@ class Black(Player):
     - Black: [Axelrod1980b]_
     """
 
-    name = 'Black'
+    name = "Black"
     classifier = {
-        'memory_depth': 5,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 5,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         super().__init__()
         # Maps number of opponent defects from last five moves to own
         # Cooperation probability
-        self.prob_coop = {
-            0: 1.0,
-            1: 1.0,
-            2: 0.88,
-            3: 0.68,
-            4: 0.4,
-            5: 0.04
-        }
+        self.prob_coop = {0: 1.0, 1: 1.0, 2: 0.88, 3: 0.68, 4: 0.4, 5: 0.04}
 
     def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) < 5:
@@ -1644,15 +1669,15 @@ class RichardHufford(Player):
     - RichardHufford: [Axelrod1980b]_
     """
 
-    name = 'RichardHufford'
+    name = "RichardHufford"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -1700,7 +1725,9 @@ class RichardHufford(Player):
                 self.coop_after_ab_count += 1
             else:
                 self.def_after_ab_count += 1
-            self.streak_needed = np.floor(20.0 * self.def_after_ab_count / self.coop_after_ab_count) + 1
+            self.streak_needed = (
+                np.floor(20.0 * self.def_after_ab_count / self.coop_after_ab_count) + 1
+            )
             self.current_streak = 0
             return C
 
@@ -1739,28 +1766,30 @@ class Yamachi(Player):
     - Yamachi: [Axelrod1980b]_
     """
 
-    name = 'Yamachi'
+    name = "Yamachi"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         super().__init__()
-        self.count_them_us_them = {(C, C, C): 0,
-                                   (C, C, D): 0,
-                                   (C, D, C): 0,
-                                   (C, D, D): 0,
-                                   (D, C, C): 0,
-                                   (D, C, D): 0,
-                                   (D, D, C): 0,
-                                   (D, D, D): 0}
-        self.mod_history = list() # type: List[Action]
+        self.count_them_us_them = {
+            (C, C, C): 0,
+            (C, C, D): 0,
+            (C, D, C): 0,
+            (C, D, D): 0,
+            (D, C, C): 0,
+            (D, C, D): 0,
+            (D, D, C): 0,
+            (D, D, D): 0,
+        }
+        self.mod_history = list()  # type: List[Action]
 
     def try_return(self, to_return, opp_def):
         """
@@ -1800,8 +1829,10 @@ class Yamachi(Player):
         if turn >= 3:
             self.count_them_us_them[(them_three_ago, us_two_ago, them_two_ago)] += 1
 
-        if self.count_them_us_them[(them_two_ago, us_last, C)] >= \
-           self.count_them_us_them[(them_two_ago, us_last, D)]:
+        if (
+            self.count_them_us_them[(them_two_ago, us_last, C)]
+            >= self.count_them_us_them[(them_two_ago, us_last, D)]
+        ):
             return self.try_return(C, opponent.defections)
         return self.try_return(D, opponent.defections)
 
@@ -1824,33 +1855,42 @@ class Colbert(FSMPlayer):
 
     name = "Colbert"
     classifier = {
-        'memory_depth': 4,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 4,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         transitions = (
-            (0, C, 1, C), (0, D, 1, C),  # First 8 turns are special
-            (1, C, 2, C), (1, D, 2, C),
-            (2, C, 3, C), (2, D, 3, C),
-            (3, C, 4, C), (3, D, 4, C),
-            (4, C, 5, D), (4, D, 5, D),  # Defect on 6th turn.
-            (5, C, 6, C), (5, D, 6, C),
-            (6, C, 7, C), (6, D, 7, C),
-
-            (7, C, 7, C), (7, D, 8, D),
-            (8, C, 9, D), (8, D, 9, D),
-            (9, C, 10, C), (9, D, 10, C),
-            (10, C, 7, C), (10, D, 7, C)
+            (0, C, 1, C),
+            (0, D, 1, C),  # First 8 turns are special
+            (1, C, 2, C),
+            (1, D, 2, C),
+            (2, C, 3, C),
+            (2, D, 3, C),
+            (3, C, 4, C),
+            (3, D, 4, C),
+            (4, C, 5, D),
+            (4, D, 5, D),  # Defect on 6th turn.
+            (5, C, 6, C),
+            (5, D, 6, C),
+            (6, C, 7, C),
+            (6, D, 7, C),
+            (7, C, 7, C),
+            (7, D, 8, D),
+            (8, C, 9, D),
+            (8, D, 9, D),
+            (9, C, 10, C),
+            (9, D, 10, C),
+            (10, C, 7, C),
+            (10, D, 7, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0,
-                         initial_action=C)
+        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
 
 
 class Mikkelson(FSMPlayer):
@@ -1876,15 +1916,15 @@ class Mikkelson(FSMPlayer):
     - Mikkelson: [Axelrod1980b]_
     """
 
-    name = 'Mikkelson'
+    name = "Mikkelson"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:

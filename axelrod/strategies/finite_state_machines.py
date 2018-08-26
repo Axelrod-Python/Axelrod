@@ -22,8 +22,10 @@ class SimpleFSM(object):
 
         """
         self._state = initial_state
-        self._state_transitions = {(current_state, input_action): (next_state, output_action) for
-                                   current_state, input_action, next_state, output_action in transitions}  # type: dict
+        self._state_transitions = {
+            (current_state, input_action): (next_state, output_action)
+            for current_state, input_action, next_state, output_action in transitions
+        }  # type: dict
 
         self._raise_error_for_bad_input()
 
@@ -34,8 +36,13 @@ class SimpleFSM(object):
             self._raise_error_for_bad_state(state)
 
     def _raise_error_for_bad_state(self, state: int):
-        if (state, C) not in self._state_transitions or (state, D) not in self._state_transitions:
-            raise ValueError('state: {} does not have values for both C and D'.format(state))
+        if (state, C) not in self._state_transitions or (
+            state,
+            D,
+        ) not in self._state_transitions:
+            raise ValueError(
+                "state: {} does not have values for both C and D".format(state)
+            )
 
     @property
     def state(self) -> int:
@@ -52,7 +59,9 @@ class SimpleFSM(object):
 
     def move(self, opponent_action: Action) -> Action:
         """Computes the response move and changes state."""
-        next_state, next_action = self._state_transitions[(self._state, opponent_action)]
+        next_state, next_action = self._state_transitions[
+            (self._state, opponent_action)
+        ]
         self._state = next_state
         return next_action
 
@@ -60,7 +69,10 @@ class SimpleFSM(object):
         """Equality of two FSMs"""
         if not isinstance(other, SimpleFSM):
             return False
-        return (self._state, self._state_transitions) == (other.state, other.state_transitions)
+        return (self._state, self._state_transitions) == (
+            other.state,
+            other.state_transitions,
+        )
 
 
 class FSMPlayer(Player):
@@ -69,18 +81,21 @@ class FSMPlayer(Player):
     name = "FSM Player"
 
     classifier = {
-        'memory_depth': 1,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, transitions: tuple = ((1, C, 1, C), (1, D, 1, D)),
-                 initial_state: int = 1,
-                 initial_action: Action = C) -> None:
+    def __init__(
+        self,
+        transitions: tuple = ((1, C, 1, C), (1, D, 1, D)),
+        initial_state: int = 1,
+        initial_action: Action = C,
+    ) -> None:
 
         super().__init__()
         self.initial_state = initial_state
@@ -107,15 +122,15 @@ class Fortress3(FSMPlayer):
     - Fortress 3: [Ashlock2006b]_
     """
 
-    name = 'Fortress3'
+    name = "Fortress3"
     classifier = {
-        'memory_depth': 3,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -125,7 +140,7 @@ class Fortress3(FSMPlayer):
             (2, C, 1, D),
             (2, D, 3, C),
             (3, C, 3, C),
-            (3, D, 1, D)
+            (3, D, 1, D),
         )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
@@ -144,15 +159,15 @@ class Fortress4(FSMPlayer):
     - Fortress 4: [Ashlock2006b]_
     """
 
-    name = 'Fortress4'
+    name = "Fortress4"
     classifier = {
-        'memory_depth': 4,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 4,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -164,7 +179,7 @@ class Fortress4(FSMPlayer):
             (3, C, 1, D),
             (3, D, 4, C),
             (4, C, 4, C),
-            (4, D, 1, D)
+            (4, D, 1, D),
         )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
@@ -180,15 +195,15 @@ class Predator(FSMPlayer):
     - Predator: [Ashlock2006b]_
     """
 
-    name = 'Predator'
+    name = "Predator"
     classifier = {
-        'memory_depth': 9,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 9,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -210,7 +225,7 @@ class Predator(FSMPlayer):
             (7, C, 8, D),
             (7, D, 7, D),
             (8, C, 8, D),
-            (8, D, 6, D)
+            (8, D, 6, D),
         )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
@@ -224,24 +239,19 @@ class Pun1(FSMPlayer):
     - Pun1: [Ashlock2006]_
     """
 
-    name = 'Pun1'
+    name = "Pun1"
     classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
-        transitions = (
-            (1, C, 2, C),
-            (1, D, 2, C),
-            (2, C, 1, C),
-            (2, D, 1, D)
-        )
+        transitions = ((1, C, 2, C), (1, D, 2, C), (2, C, 1, C), (2, D, 1, D))
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
 
@@ -256,15 +266,15 @@ class Raider(FSMPlayer):
     - Raider: [Ashlock2014]_
     """
 
-    name = 'Raider'
+    name = "Raider"
     classifier = {
-        'memory_depth': 3,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -276,7 +286,7 @@ class Raider(FSMPlayer):
             (2, C, 0, D),
             (2, D, 3, C),
             (3, C, 0, D),
-            (3, D, 1, C)
+            (3, D, 1, C),
         )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=D)
@@ -291,15 +301,15 @@ class Ripoff(FSMPlayer):
     - Ripoff: [Ashlock2008]_
     """
 
-    name = 'Ripoff'
+    name = "Ripoff"
     classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -309,7 +319,7 @@ class Ripoff(FSMPlayer):
             (2, C, 1, D),
             (2, D, 3, C),
             (3, C, 3, C),  # Note that it's TFT in state 3
-            (3, D, 3, D)
+            (3, D, 3, D),
         )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
@@ -324,15 +334,15 @@ class SolutionB1(FSMPlayer):
     - Solution B1: [Ashlock2015]_
     """
 
-    name = 'SolutionB1'
+    name = "SolutionB1"
     classifier = {
-        'memory_depth': 3,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -342,7 +352,7 @@ class SolutionB1(FSMPlayer):
             (2, C, 2, C),
             (2, D, 3, C),
             (3, C, 3, C),
-            (3, D, 3, C)
+            (3, D, 3, C),
         )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
@@ -358,15 +368,15 @@ class SolutionB5(FSMPlayer):
     - Solution B5: [Ashlock2015]_
     """
 
-    name = 'SolutionB5'
+    name = "SolutionB5"
     classifier = {
-        'memory_depth': 5,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 5,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -382,7 +392,7 @@ class SolutionB5(FSMPlayer):
             (5, C, 5, D),
             (5, D, 4, D),
             (6, C, 3, C),
-            (6, D, 5, D)
+            (6, D, 5, D),
         )
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=D)
@@ -397,24 +407,19 @@ class Thumper(FSMPlayer):
     - Thumper: [Ashlock2008]_
     """
 
-    name = 'Thumper'
+    name = "Thumper"
     classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
-        transitions = (
-            (1, C, 1, C),
-            (1, D, 2, D),
-            (2, C, 1, D),
-            (2, D, 1, D)
-        )
+        transitions = ((1, C, 1, C), (1, D, 2, D), (2, C, 1, D), (2, D, 1, D))
 
         super().__init__(transitions=transitions, initial_state=1, initial_action=C)
 
@@ -430,13 +435,13 @@ class EvolvedFSM4(FSMPlayer):
 
     name = "Evolved FSM 4"
     classifier = {
-        'memory_depth': 4,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 4,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -448,7 +453,7 @@ class EvolvedFSM4(FSMPlayer):
             (2, C, 2, D),
             (2, D, 1, C),
             (3, C, 3, D),
-            (3, D, 1, D)
+            (3, D, 1, D),
         )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
@@ -466,13 +471,13 @@ class EvolvedFSM16(FSMPlayer):
 
     name = "Evolved FSM 16"
     classifier = {
-        'memory_depth': 16,  # At most
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 16,  # At most
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -485,7 +490,6 @@ class EvolvedFSM16(FSMPlayer):
             (2, D, 14, D),
             (3, C, 3, D),
             (3, D, 3, D),
-
             (5, C, 12, D),
             (5, D, 10, D),
             (6, C, 5, C),
@@ -494,7 +498,6 @@ class EvolvedFSM16(FSMPlayer):
             (7, D, 1, C),
             (8, C, 5, C),
             (8, D, 5, C),
-
             (10, C, 11, D),
             (10, D, 8, C),
             (11, C, 15, D),
@@ -506,7 +509,7 @@ class EvolvedFSM16(FSMPlayer):
             (14, C, 13, D),
             (14, D, 13, D),
             (15, C, 15, D),
-            (15, D, 2, C)
+            (15, D, 2, C),
         )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
@@ -524,13 +527,13 @@ class EvolvedFSM16Noise05(FSMPlayer):
 
     name = "Evolved FSM 16 Noise 05"
     classifier = {
-        'memory_depth': 16,  # At most
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 16,  # At most
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -549,10 +552,8 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (5, D, 10, D),
             (6, C, 8, C),
             (6, D, 6, D),
-
             (8, C, 2, C),
             (8, D, 4, D),
-
             (10, C, 4, D),
             (10, D, 1, D),
             (11, C, 14, D),
@@ -564,7 +565,7 @@ class EvolvedFSM16Noise05(FSMPlayer):
             (14, C, 3, D),
             (14, D, 13, D),
             (15, C, 5, D),
-            (15, D, 11, C)
+            (15, D, 11, C),
         )
 
         super().__init__(transitions=transitions, initial_state=0, initial_action=C)
@@ -584,37 +585,52 @@ class TF1(FSMPlayer):
 
     name = "TF1"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         transitions = (
-            (0, C, 7, C), (0, D, 1, C),
-            (1, C, 11, D), (1, D, 11, D),
-            (2, C, 8, D), (2, D, 8, C),
-            (3, C, 3, C), (3, D, 12, D),
-            (4, C, 6, C), (4, D, 3, C),
-            (5, C, 11, C), (5, D, 8, D),
-            (6, C, 13, D), (6, D, 14, C),
-            (7, C, 4, D), (7, D, 2, D),
-            (8, C, 14, D), (8, D, 8, D),
-            (9, C, 0, C), (9, D, 10, D),
-            (10, C, 8, C), (10, D, 15, C),
-            (11, C, 6, D), (11, D, 5, D),
-            (12, C, 6, D), (12, D, 9, D),
-            (13, C, 9, D), (13, D, 8, D),
-            (14, C, 8, D), (14, D, 13, D),
-            (15, C, 4, C), (15, D, 5, C)
+            (0, C, 7, C),
+            (0, D, 1, C),
+            (1, C, 11, D),
+            (1, D, 11, D),
+            (2, C, 8, D),
+            (2, D, 8, C),
+            (3, C, 3, C),
+            (3, D, 12, D),
+            (4, C, 6, C),
+            (4, D, 3, C),
+            (5, C, 11, C),
+            (5, D, 8, D),
+            (6, C, 13, D),
+            (6, D, 14, C),
+            (7, C, 4, D),
+            (7, D, 2, D),
+            (8, C, 14, D),
+            (8, D, 8, D),
+            (9, C, 0, C),
+            (9, D, 10, D),
+            (10, C, 8, C),
+            (10, D, 15, C),
+            (11, C, 6, D),
+            (11, D, 5, D),
+            (12, C, 6, D),
+            (12, D, 9, D),
+            (13, C, 9, D),
+            (13, D, 8, D),
+            (14, C, 8, D),
+            (14, D, 13, D),
+            (15, C, 4, C),
+            (15, D, 5, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0,
-                         initial_action=C)
+        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
 
 
 class TF2(FSMPlayer):
@@ -628,35 +644,48 @@ class TF2(FSMPlayer):
 
     name = "TF2"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         transitions = (
-            (0, C, 13, D), (0, D, 12, D),
-            (1, C, 3, D), (1, D, 4, D),
-            (2, C, 14, D), (2, D, 9, D),
-            (3, C, 0, C), (3, D, 1, D),
-            (4, C, 1, D), (4, D, 2, D),
-            (7, C, 12, D), (7, D, 2, D),
-            (8, C, 7, D), (8, D, 9, D),
-            (9, C, 8, D), (9, D, 0, D),
-            (10, C, 2, C), (10, D, 15, C),
-            (11, C, 7, D), (11, D, 13, D),
-            (12, C, 3, C), (12, D, 8, D),
-            (13, C, 7, C), (13, D, 10, D),
-            (14, C, 10, D), (14, D, 7, D),
-            (15, C, 15, C), (15, D, 11, D)
+            (0, C, 13, D),
+            (0, D, 12, D),
+            (1, C, 3, D),
+            (1, D, 4, D),
+            (2, C, 14, D),
+            (2, D, 9, D),
+            (3, C, 0, C),
+            (3, D, 1, D),
+            (4, C, 1, D),
+            (4, D, 2, D),
+            (7, C, 12, D),
+            (7, D, 2, D),
+            (8, C, 7, D),
+            (8, D, 9, D),
+            (9, C, 8, D),
+            (9, D, 0, D),
+            (10, C, 2, C),
+            (10, D, 15, C),
+            (11, C, 7, D),
+            (11, D, 13, D),
+            (12, C, 3, C),
+            (12, D, 8, D),
+            (13, C, 7, C),
+            (13, D, 10, D),
+            (14, C, 10, D),
+            (14, D, 7, D),
+            (15, C, 15, C),
+            (15, D, 11, D),
         )
 
-        super().__init__(transitions=transitions, initial_state=0,
-                         initial_action=C)
+        super().__init__(transitions=transitions, initial_state=0, initial_action=C)
 
 
 class TF3(FSMPlayer):
@@ -670,26 +699,33 @@ class TF3(FSMPlayer):
 
     name = "TF3"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         transitions = (
-            (0, C, 0, C), (0, D, 3, C),
-            (1, C, 5, D), (1, D, 0, C),
-            (2, C, 3, C), (2, D, 2, D),
-            (3, C, 4, D), (3, D, 6, D),
-            (4, C, 3, C), (4, D, 1, D),
-            (5, C, 6, C), (5, D, 3, D),
-            (6, C, 6, D), (6, D, 6, D),
-            (7, C, 7, D), (7, D, 5, C)
+            (0, C, 0, C),
+            (0, D, 3, C),
+            (1, C, 5, D),
+            (1, D, 0, C),
+            (2, C, 3, C),
+            (2, D, 2, D),
+            (3, C, 4, D),
+            (3, D, 6, D),
+            (4, C, 3, C),
+            (4, D, 1, D),
+            (5, C, 6, C),
+            (5, D, 3, D),
+            (6, C, 6, D),
+            (6, D, 6, D),
+            (7, C, 7, D),
+            (7, D, 5, C),
         )
 
-        super().__init__(transitions=transitions, initial_state=0,
-                         initial_action=C)
+        super().__init__(transitions=transitions, initial_state=0, initial_action=C)

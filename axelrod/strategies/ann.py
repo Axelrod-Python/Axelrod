@@ -100,11 +100,13 @@ def compute_features(player: Player, opponent: Player) -> List[int]:
         total_opponent_d,
         total_player_c,
         total_player_d,
-        len(player.history)
+        len(player.history),
     ]
 
 
-def activate(bias: List[float], hidden: List[float], output: List[float], inputs: List[int]) -> float:
+def activate(
+    bias: List[float], hidden: List[float], output: List[float], inputs: List[int]
+) -> float:
     """
     Compute the output of the neural network:
         output = relu(inputs * hidden_weights + bias) * output_weights
@@ -116,7 +118,9 @@ def activate(bias: List[float], hidden: List[float], output: List[float], inputs
     return output_value
 
 
-def split_weights(weights: List[float], num_features: int, num_hidden: int) -> Tuple[List[List[float]], List[float], List[float]]:
+def split_weights(
+    weights: List[float], num_features: int, num_hidden: int
+) -> Tuple[List[List[float]], List[float], List[float]]:
     """Splits the input vector into the the NN bias weights and layer
     parameters."""
     # Check weights is the right length
@@ -129,12 +133,12 @@ def split_weights(weights: List[float], num_features: int, num_hidden: int) -> T
 
     input2hidden = []
     for i in range(0, number_of_input_to_hidden_weights, num_features):
-        input2hidden.append(weights[i:i + num_features])
+        input2hidden.append(weights[i : i + num_features])
 
     start = number_of_input_to_hidden_weights
     end = number_of_input_to_hidden_weights + number_of_hidden_to_output_weights
 
-    hidden2output = weights[start: end]
+    hidden2output = weights[start:end]
     bias = weights[end:]
     return (input2hidden, hidden2output, bias)
 
@@ -169,19 +173,21 @@ class ANN(Player):
 
     - Artificial Neural Network based strategy: Original name by Martin Jones
     """
-    name = 'ANN'
+
+    name = "ANN"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'inspects_source': False,
-        'makes_use_of': set(),
-        'manipulates_source': False,
-        'manipulates_state': False,
-        'long_run_time': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "inspects_source": False,
+        "makes_use_of": set(),
+        "manipulates_source": False,
+        "manipulates_state": False,
+        "long_run_time": False,
     }
 
-    def __init__(self, weights: List[float], num_features: int,
-                 num_hidden: int) -> None:
+    def __init__(
+        self, weights: List[float], num_features: int, num_hidden: int
+    ) -> None:
         super().__init__()
         (i2h, h2o, bias) = split_weights(weights, num_features, num_hidden)
         self.input_to_hidden_layer_weights = np.matrix(i2h)
@@ -190,10 +196,12 @@ class ANN(Player):
 
     def strategy(self, opponent: Player) -> Action:
         features = compute_features(self, opponent)
-        output = activate(self.bias_weights,
-                          self.input_to_hidden_layer_weights,
-                          self.hidden_to_output_layer_weights,
-                          features)
+        output = activate(
+            self.bias_weights,
+            self.input_to_hidden_layer_weights,
+            self.hidden_to_output_layer_weights,
+            features,
+        )
         if output > 0:
             return C
         else:

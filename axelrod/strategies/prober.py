@@ -2,6 +2,7 @@ from axelrod.action import Action
 from axelrod.player import Player
 from axelrod.random_ import random_choice
 from typing import List
+
 Vector = List[float]
 
 import random
@@ -24,13 +25,13 @@ class CollectiveStrategy(Player):
     name = "CollectiveStrategy"
 
     classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),  # Long memory
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "stochastic": False,
+        "memory_depth": float("inf"),  # Long memory
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -56,15 +57,15 @@ class Prober(Player):
     - Prober: [Li2011]_
     """
 
-    name = 'Prober'
+    name = "Prober"
     classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),  # Long memory
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "stochastic": False,
+        "memory_depth": float("inf"),  # Long memory
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -76,7 +77,7 @@ class Prober(Player):
         if turn == 2:
             return C
         if turn > 2:
-            if opponent.history[1: 3] == [C, C]:
+            if opponent.history[1:3] == [C, C]:
                 return D
             else:
                 # TFT
@@ -93,15 +94,15 @@ class Prober2(Player):
     - Prober 2: [Prison1998]_
     """
 
-    name = 'Prober 2'
+    name = "Prober 2"
     classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),  # Long memory
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "stochastic": False,
+        "memory_depth": float("inf"),  # Long memory
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -113,7 +114,7 @@ class Prober2(Player):
         if turn == 2:
             return C
         if turn > 2:
-            if opponent.history[1: 3] == [D, C]:
+            if opponent.history[1:3] == [D, C]:
                 return C
             else:
                 # TFT
@@ -130,15 +131,15 @@ class Prober3(Player):
     - Prober 3: [Prison1998]_
     """
 
-    name = 'Prober 3'
+    name = "Prober 3"
     classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),  # Long memory
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "stochastic": False,
+        "memory_depth": float("inf"),  # Long memory
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -168,21 +169,40 @@ class Prober4(Player):
     - Prober 4: [Prison1998]_
     """
 
-    name = 'Prober 4'
+    name = "Prober 4"
     classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "stochastic": False,
+        "memory_depth": float("inf"),
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         super().__init__()
         self.init_sequence = [
-            C, C, D, C, D, D, D, C, C, D, C, D, C, C, D, C, D, D, C, D
+            C,
+            C,
+            D,
+            C,
+            D,
+            D,
+            D,
+            C,
+            C,
+            D,
+            C,
+            D,
+            C,
+            C,
+            D,
+            C,
+            D,
+            D,
+            C,
+            D,
         ]
         self.just_Ds = 0
         self.unjust_Ds = 0
@@ -201,7 +221,7 @@ class Prober4(Player):
             return self.init_sequence[turn]
         if turn == len(self.init_sequence):
             diff_in_Ds = abs(self.just_Ds - self.unjust_Ds)
-            self.turned_defector = (diff_in_Ds <= 2)
+            self.turned_defector = diff_in_Ds <= 2
         if self.turned_defector:
             return D
         if not self.turned_defector:
@@ -220,15 +240,15 @@ class HardProber(Player):
     - Hard Prober: [Prison1998]_
     """
 
-    name = 'Hard Prober'
+    name = "Hard Prober"
     classifier = {
-        'stochastic': False,
-        'memory_depth': float('inf'),  # Long memory
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "stochastic": False,
+        "memory_depth": float("inf"),  # Long memory
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -242,7 +262,7 @@ class HardProber(Player):
         if turn == 3:
             return C
         if turn > 3:
-            if opponent.history[1: 3] == [C, C]:
+            if opponent.history[1:3] == [C, C]:
                 return D
             else:
                 # TFT
@@ -258,18 +278,18 @@ class NaiveProber(Player):
     - Naive Prober: [Li2011]_
     """
 
-    name = 'Naive Prober'
+    name = "Naive Prober"
     classifier = {
-        'memory_depth': 1,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, p: float=0.1) -> None:
+    def __init__(self, p: float = 0.1) -> None:
         """
         Parameters
         ----------
@@ -279,7 +299,7 @@ class NaiveProber(Player):
         super().__init__()
         self.p = p
         if (self.p == 0) or (self.p == 1):
-            self.classifier['stochastic'] = False
+            self.classifier["stochastic"] = False
 
     def strategy(self, opponent: Player) -> Action:
         # First move
@@ -310,18 +330,18 @@ class RemorsefulProber(NaiveProber):
     - Remorseful Prober: [Li2011]_
     """
 
-    name = 'Remorseful Prober'
+    name = "Remorseful Prober"
     classifier = {
-        'memory_depth': 2,  # It remembers if its previous move was random
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,  # It remembers if its previous move was random
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, p: float=0.1) -> None:
+    def __init__(self, p: float = 0.1) -> None:
         super().__init__(p)
         self.probing = False
 

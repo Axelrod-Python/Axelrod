@@ -37,8 +37,11 @@ class Graph(object):
             self._edges.append((source, target))
             self.out_mapping[source][target] = weight
             self.in_mapping[target][source] = weight
-        if not self.directed and (source != target) and \
-                (target, source) not in self._edges:
+        if (
+            not self.directed
+            and (source != target)
+            and (target, source) not in self._edges
+        ):
             self._edges.append((target, source))
             self.out_mapping[target][source] = weight
             self.in_mapping[source][target] = weight

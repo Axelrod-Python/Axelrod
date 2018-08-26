@@ -15,18 +15,18 @@ class Handshake(Player):
     - Handshake: [Robson1990]_
     """
 
-    name = 'Handshake'
+    name = "Handshake"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, initial_plays: List[Action]=None) -> None:
+    def __init__(self, initial_plays: List[Action] = None) -> None:
         super().__init__()
         if not initial_plays:
             initial_plays = [C, D]
@@ -39,6 +39,6 @@ class Handshake(Player):
             return self.initial_plays[index]
         # If our opponent played [C, D] on the first two moves, cooperate
         # forever. Otherwise defect forever.
-        if opponent.history[0: len(self.initial_plays)] == self.initial_plays:
+        if opponent.history[0 : len(self.initial_plays)] == self.initial_plays:
             return C
         return D

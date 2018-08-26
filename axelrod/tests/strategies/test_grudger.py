@@ -11,13 +11,13 @@ class TestGrudger(TestPlayer):
     name = "Grudger"
     player = axl.Grudger
     expected_classifier = {
-        'memory_depth': 1,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -41,13 +41,13 @@ class TestForgetfulGrudger(TestPlayer):
     name = "Forgetful Grudger"
     player = axl.ForgetfulGrudger
     expected_classifier = {
-        'memory_depth': 10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -55,20 +55,20 @@ class TestForgetfulGrudger(TestPlayer):
         # D ten times and then continue to check for defections.
         opponent = axl.Cooperator()
         actions = [(C, C)] * 20
-        attrs = {'grudged': False, 'mem_length': 10, 'grudge_memory': 0}
+        attrs = {"grudged": False, "mem_length": 10, "grudge_memory": 0}
         self.versus_test(opponent, expected_actions=actions, attrs=attrs)
 
         for i in range(1, 15):
             opponent = axl.Defector()
             actions = [(C, D)] + [(D, D)] * i
             memory = i if i <= 10 else i - 10
-            attrs = {'grudged': True, 'mem_length': 10, 'grudge_memory': memory}
+            attrs = {"grudged": True, "mem_length": 10, "grudge_memory": memory}
             self.versus_test(opponent, expected_actions=actions, attrs=attrs)
 
         opponent_actions = [C] * 2 + [D] + [C] * 10
         opponent = axl.MockPlayer(actions=opponent_actions)
         actions = ([(C, C)] * 2 + [(C, D)] + [(D, C)] * 10) * 3 + [(C, C)]
-        attrs = {'grudged': False, 'mem_length': 10, 'grudge_memory': 0}
+        attrs = {"grudged": False, "mem_length": 10, "grudge_memory": 0}
         self.versus_test(opponent, expected_actions=actions, attrs=attrs)
 
     def test_reset_method(self):
@@ -84,16 +84,16 @@ class TestForgetfulGrudger(TestPlayer):
 
 class TestOppositeGrudger(TestPlayer):
 
-    name = 'Opposite Grudger'
+    name = "Opposite Grudger"
     player = axl.OppositeGrudger
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -118,13 +118,13 @@ class TestAggravater(TestPlayer):
     name = "Aggravater"
     player = axl.Aggravater
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -149,13 +149,13 @@ class TestSoftGrudger(TestPlayer):
     name = "Soft Grudger"
     player = axl.SoftGrudger
     expected_classifier = {
-        'memory_depth': 6,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 6,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -193,13 +193,13 @@ class TestGrudgerAlternator(TestPlayer):
     name = "GrudgerAlternator"
     player = axl.GrudgerAlternator
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -223,13 +223,13 @@ class TestEasyGo(TestPlayer):
     name = "EasyGo"
     player = axl.EasyGo
     expected_classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -254,34 +254,34 @@ class TestGeneralSoftGrudger(TestPlayer):
     name = "General Soft Grudger: n=1,d=4,c=2"
     player = axl.GeneralSoftGrudger
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
         """Test strategy with multiple initial parameters"""
 
         # Testing default parameters of n=1, d=4, c=2 (same as Soft Grudger)
-        actions = [(C, D), (D, D), (D, C), (D, C), (D, D), (C, D),
-                   (C, C), (C, C)]
-        self.versus_test(axl.MockPlayer(actions=[D, D, C, C]),
-                         expected_actions=actions)
+        actions = [(C, D), (D, D), (D, C), (D, C), (D, D), (C, D), (C, C), (C, C)]
+        self.versus_test(axl.MockPlayer(actions=[D, D, C, C]), expected_actions=actions)
 
         # Testing n=2, d=4, c=2
-        actions = [(C, D), (C, D), (D, C), (D, C), (D, D), (D, D),
-                   (C, C), (C, C)]
-        self.versus_test(axl.MockPlayer(actions=[D, D, C, C]),
-                         expected_actions=actions,
-                         init_kwargs={"n": 2})
+        actions = [(C, D), (C, D), (D, C), (D, C), (D, D), (D, D), (C, C), (C, C)]
+        self.versus_test(
+            axl.MockPlayer(actions=[D, D, C, C]),
+            expected_actions=actions,
+            init_kwargs={"n": 2},
+        )
 
         # Testing n=1, d=1, c=1
-        actions = [(C, D), (D, D), (C, C), (C, C), (C, D), (D, D),
-                   (C, C), (C, C)]
-        self.versus_test(axl.MockPlayer(actions=[D, D, C, C]),
-                         expected_actions=actions,
-                         init_kwargs={"n": 1, "d": 1, "c": 1})
+        actions = [(C, D), (D, D), (C, C), (C, C), (C, D), (D, D), (C, C), (C, C)]
+        self.versus_test(
+            axl.MockPlayer(actions=[D, D, C, C]),
+            expected_actions=actions,
+            init_kwargs={"n": 1, "d": 1, "c": 1},
+        )

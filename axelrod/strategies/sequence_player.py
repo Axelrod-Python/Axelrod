@@ -17,8 +17,9 @@ class SequencePlayer(Player):
     - Sequence Player: Original name by Marc Harper
     """
 
-    def __init__(self, generator_function: FunctionType,
-                 generator_args: Tuple = ()) -> None:
+    def __init__(
+        self, generator_function: FunctionType, generator_args: Tuple = ()
+    ) -> None:
         super().__init__()
         # Initialize the sequence generator
         self.generator_function = generator_function
@@ -41,13 +42,14 @@ class SequencePlayer(Player):
 
     def __getstate__(self):
         return_dict = self.__dict__.copy()
-        del return_dict['sequence_generator']
+        del return_dict["sequence_generator"]
         return return_dict
 
     def __setstate__(self, state):
         self.__dict__.update(state)
-        self.__dict__['sequence_generator'] = self.generator_function(
-            *self.generator_args)
+        self.__dict__["sequence_generator"] = self.generator_function(
+            *self.generator_args
+        )
         for turn in self.history:
             next(self.sequence_generator)
 
@@ -65,15 +67,15 @@ class ThueMorse(SequencePlayer):
     - Thue Morse: Original name by Geraint Palmer
     """
 
-    name = 'ThueMorse'
+    name = "ThueMorse"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -88,15 +90,15 @@ class ThueMorseInverse(ThueMorse):
     - Inverse Thue Morse: Original name by Geraint Palmer
     """
 
-    name = 'ThueMorseInverse'
+    name = "ThueMorseInverse"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:

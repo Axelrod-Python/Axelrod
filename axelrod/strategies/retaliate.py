@@ -16,15 +16,15 @@ class Retaliate(Player):
     - Retaliate: Original name by Owen Campbell
     """
 
-    name = 'Retaliate'
+    name = "Retaliate"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'inspects_source': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "inspects_source": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, retaliation_threshold: float = 0.1) -> None:
@@ -34,7 +34,7 @@ class Retaliate(Player):
         """
         super().__init__()
         self.retaliation_threshold = retaliation_threshold
-        self.play_counts = defaultdict(int) # type: defaultdict
+        self.play_counts = defaultdict(int)  # type: defaultdict
 
     def strategy(self, opponent: Player) -> Action:
         """
@@ -48,7 +48,7 @@ class Retaliate(Player):
         CD_count = self.play_counts[(C, D)]
         DC_count = self.play_counts[(D, C)]
         if CD_count > DC_count * self.retaliation_threshold:
-                return D
+            return D
         return C
 
 
@@ -61,7 +61,7 @@ class Retaliate2(Retaliate):
     - Retaliate 2: Original name by Owen Campbell
     """
 
-    name = 'Retaliate 2'
+    name = "Retaliate 2"
 
     def __init__(self, retaliation_threshold: float = 0.08) -> None:
         super().__init__(retaliation_threshold=retaliation_threshold)
@@ -76,7 +76,7 @@ class Retaliate3(Retaliate):
     - Retaliate 3: Original name by Owen Campbell
     """
 
-    name = 'Retaliate 3'
+    name = "Retaliate 3"
 
     def __init__(self, retaliation_threshold: float = 0.05) -> None:
         super().__init__(retaliation_threshold=retaliation_threshold)
@@ -94,19 +94,20 @@ class LimitedRetaliate(Player):
     - Limited Retaliate: Original name by Owen Campbell
     """
 
-    name = 'Limited Retaliate'
+    name = "Limited Retaliate"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, retaliation_threshold: float = 0.1,
-                 retaliation_limit: int = 20) -> None:
+    def __init__(
+        self, retaliation_threshold: float = 0.1, retaliation_limit: int = 20
+    ) -> None:
         """
         Parameters
         ----------
@@ -122,7 +123,7 @@ class LimitedRetaliate(Player):
         self.retaliation_count = 0
         self.retaliation_threshold = retaliation_threshold
         self.retaliation_limit = retaliation_limit
-        self.play_counts = defaultdict(int) # type: defaultdict
+        self.play_counts = defaultdict(int)  # type: defaultdict
 
     def strategy(self, opponent: Player) -> Action:
         """
@@ -163,13 +164,15 @@ class LimitedRetaliate2(LimitedRetaliate):
     - Limited Retaliate 2: Original name by Owen Campbell
     """
 
-    name = 'Limited Retaliate 2'
+    name = "Limited Retaliate 2"
 
-    def __init__(self, retaliation_threshold: float = 0.08,
-                 retaliation_limit: int = 15) -> None:
+    def __init__(
+        self, retaliation_threshold: float = 0.08, retaliation_limit: int = 15
+    ) -> None:
         super().__init__(
             retaliation_threshold=retaliation_threshold,
-            retaliation_limit=retaliation_limit)
+            retaliation_limit=retaliation_limit,
+        )
 
 
 class LimitedRetaliate3(LimitedRetaliate):
@@ -182,10 +185,12 @@ class LimitedRetaliate3(LimitedRetaliate):
     - Limited Retaliate 3: Original name by Owen Campbell
     """
 
-    name = 'Limited Retaliate 3'
+    name = "Limited Retaliate 3"
 
-    def __init__(self, retaliation_threshold: float = 0.05,
-                 retaliation_limit: int = 20) -> None:
+    def __init__(
+        self, retaliation_threshold: float = 0.05, retaliation_limit: int = 20
+    ) -> None:
         super().__init__(
             retaliation_threshold=retaliation_threshold,
-            retaliation_limit=retaliation_limit)
+            retaliation_limit=retaliation_limit,
+        )

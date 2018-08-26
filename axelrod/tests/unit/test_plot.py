@@ -9,33 +9,28 @@ import axelrod
 
 
 class TestPlot(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.filename = "test_outputs/test_results.csv"
 
-        cls.players = [axelrod.Alternator(), axelrod.TitForTat(),
-                       axelrod.Defector()]
+        cls.players = [axelrod.Alternator(), axelrod.TitForTat(), axelrod.Defector()]
         cls.repetitions = 3
         cls.turns = 5
 
-        cls.test_result_set = axelrod.ResultSet(cls.filename,
-                                                cls.players,
-                                                cls.repetitions,
-                                                progress_bar=False)
+        cls.test_result_set = axelrod.ResultSet(
+            cls.filename, cls.players, cls.repetitions, progress_bar=False
+        )
 
-        cls.test_result_set = axelrod.ResultSet(cls.filename,
-                                                cls.players,
-                                                cls.repetitions,
-                                                progress_bar=False)
+        cls.test_result_set = axelrod.ResultSet(
+            cls.filename, cls.players, cls.repetitions, progress_bar=False
+        )
         cls.expected_boxplot_dataset = [
             [(17 / 5 + 9 / 5) / 2 for _ in range(3)],
             [(13 / 5 + 4 / 5) / 2 for _ in range(3)],
-            [3 / 2 for _ in range(3)]
+            [3 / 2 for _ in range(3)],
         ]
         cls.expected_boxplot_xticks_locations = [1, 2, 3, 4]
-        cls.expected_boxplot_xticks_labels = [
-            'Defector', 'Tit For Tat', 'Alternator']
+        cls.expected_boxplot_xticks_labels = ["Defector", "Tit For Tat", "Alternator"]
 
         cls.expected_lengthplot_dataset = [
             [cls.turns for _ in range(3)],
@@ -44,67 +39,60 @@ class TestPlot(unittest.TestCase):
         ]
 
         cls.expected_payoff_dataset = [
-            [0, mean(
-                [9 / 5 for _ in range(3)]),
-                mean([17 / 5 for _ in range(3)])],
-            [mean(
-                [4 / 5 for _ in range(3)]), 0,
-                mean([13 / 5 for _ in range(3)])],
-            [mean(
-                [2 / 5 for _ in range(3)]),
-                mean([13 / 5 for _ in range(3)]), 0]
+            [0, mean([9 / 5 for _ in range(3)]), mean([17 / 5 for _ in range(3)])],
+            [mean([4 / 5 for _ in range(3)]), 0, mean([13 / 5 for _ in range(3)])],
+            [mean([2 / 5 for _ in range(3)]), mean([13 / 5 for _ in range(3)]), 0],
         ]
         cls.expected_winplot_dataset = (
             [[2, 2, 2], [0, 0, 0], [0, 0, 0]],
-            ['Defector', 'Tit For Tat', 'Alternator'])
+            ["Defector", "Tit For Tat", "Alternator"],
+        )
 
         cls.expected_sdvplot_dataset = (
-            [[3, 3, 3, 1, 1, 1, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, -1, -1, -1],
-             [0, 0, 0, 0, 0, 0, -3, -3, -3]],
-            ['Defector', 'Tit For Tat', 'Alternator'])
+            [
+                [3, 3, 3, 1, 1, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, -1, -1, -1],
+                [0, 0, 0, 0, 0, 0, -3, -3, -3],
+            ],
+            ["Defector", "Tit For Tat", "Alternator"],
+        )
 
     def test_default_cmap(self):
-        cmap = axelrod.plot.default_cmap('0.0')
-        self.assertEqual(cmap, 'YlGnBu')
+        cmap = axelrod.plot.default_cmap("0.0")
+        self.assertEqual(cmap, "YlGnBu")
 
-        cmap = axelrod.plot.default_cmap('1.3alpha')
-        self.assertEqual(cmap, 'YlGnBu')
+        cmap = axelrod.plot.default_cmap("1.3alpha")
+        self.assertEqual(cmap, "YlGnBu")
 
-        cmap = axelrod.plot.default_cmap('1.4.99')
-        self.assertEqual(cmap, 'YlGnBu')
+        cmap = axelrod.plot.default_cmap("1.4.99")
+        self.assertEqual(cmap, "YlGnBu")
 
-        cmap = axelrod.plot.default_cmap('1.4')
-        self.assertEqual(cmap, 'YlGnBu')
+        cmap = axelrod.plot.default_cmap("1.4")
+        self.assertEqual(cmap, "YlGnBu")
 
         cmap = axelrod.plot.default_cmap()
-        self.assertEqual(cmap, 'viridis')
+        self.assertEqual(cmap, "viridis")
 
-        cmap = axelrod.plot.default_cmap('1.5')
-        self.assertEqual(cmap, 'viridis')
+        cmap = axelrod.plot.default_cmap("1.5")
+        self.assertEqual(cmap, "viridis")
 
-        cmap = axelrod.plot.default_cmap('1.5beta')
-        self.assertEqual(cmap, 'viridis')
+        cmap = axelrod.plot.default_cmap("1.5beta")
+        self.assertEqual(cmap, "viridis")
 
-        cmap = axelrod.plot.default_cmap('1.7')
-        self.assertEqual(cmap, 'viridis')
+        cmap = axelrod.plot.default_cmap("1.7")
+        self.assertEqual(cmap, "viridis")
 
-        cmap = axelrod.plot.default_cmap('2.0')
-        self.assertEqual(cmap, 'viridis')
+        cmap = axelrod.plot.default_cmap("2.0")
+        self.assertEqual(cmap, "viridis")
 
     def test_init(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(plot.result_set, self.test_result_set)
 
     def test_init_from_resulsetfromfile(self):
-        tmp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        players=[axelrod.Cooperator(),
-                 axelrod.TitForTat(),
-                 axelrod.Defector()]
-        tournament = axelrod.Tournament(
-            players=players,
-            turns=2,
-            repetitions=2)
+        tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=False)
+        players = [axelrod.Cooperator(), axelrod.TitForTat(), axelrod.Defector()]
+        tournament = axelrod.Tournament(players=players, turns=2, repetitions=2)
         tournament.play(filename=tmp_file.name, progress_bar=False)
         tmp_file.close()
         rs = axelrod.ResultSet(tmp_file.name, players, 2, progress_bar=False)
@@ -114,21 +102,19 @@ class TestPlot(unittest.TestCase):
 
     def test_boxplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._boxplot_dataset,
-            self.expected_boxplot_dataset)
+        self.assertSequenceEqual(plot._boxplot_dataset, self.expected_boxplot_dataset)
 
     def test_boxplot_xticks_locations(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(
-            plot._boxplot_xticks_locations,
-            self.expected_boxplot_xticks_locations)
+            plot._boxplot_xticks_locations, self.expected_boxplot_xticks_locations
+        )
 
     def test_boxplot_xticks_labels(self):
         plot = axelrod.Plot(self.test_result_set)
         self.assertEqual(
-            plot._boxplot_xticks_labels,
-            self.expected_boxplot_xticks_labels)
+            plot._boxplot_xticks_labels, self.expected_boxplot_xticks_labels
+        )
 
     def test_boxplot(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -152,15 +138,12 @@ class TestPlot(unittest.TestCase):
     def test_boxplot_with_title(self):
         plot = axelrod.Plot(self.test_result_set)
         fig = plot.boxplot(title="title")
-        self.assertIsInstance(fig,
-                              matplotlib.pyplot.Figure)
+        self.assertIsInstance(fig, matplotlib.pyplot.Figure)
         plt.close(fig)
 
     def test_winplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._winplot_dataset,
-            self.expected_winplot_dataset)
+        self.assertSequenceEqual(plot._winplot_dataset, self.expected_winplot_dataset)
 
     def test_winplot(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -170,9 +153,7 @@ class TestPlot(unittest.TestCase):
 
     def test_sdvplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._sdv_plot_dataset,
-            self.expected_sdvplot_dataset)
+        self.assertSequenceEqual(plot._sdv_plot_dataset, self.expected_sdvplot_dataset)
 
     def test_sdvplot(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -182,9 +163,7 @@ class TestPlot(unittest.TestCase):
 
     def test_lengthplot_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._winplot_dataset,
-            self.expected_winplot_dataset)
+        self.assertSequenceEqual(plot._winplot_dataset, self.expected_winplot_dataset)
 
     def test_lengthplot(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -200,9 +179,7 @@ class TestPlot(unittest.TestCase):
 
     def test_payoff_dataset(self):
         plot = axelrod.Plot(self.test_result_set)
-        self.assertSequenceEqual(
-            plot._payoff_dataset,
-            self.expected_payoff_dataset)
+        self.assertSequenceEqual(plot._payoff_dataset, self.expected_payoff_dataset)
 
     def test_payoff(self):
         plot = axelrod.Plot(self.test_result_set)
@@ -226,8 +203,11 @@ class TestPlot(unittest.TestCase):
         # Ensure color bar draw at same location as boxplot
         color_bar_bbox = fig.axes[-1].get_position().get_points()
         payoff_bbox_coord = fig.axes[1].get_position().get_points()
-        self.assertEqual(color_bar_bbox[1, 1], payoff_bbox_coord[1, 1],
-                         msg="Color bar is not in correct location.")
+        self.assertEqual(
+            color_bar_bbox[1, 1],
+            payoff_bbox_coord[1, 1],
+            msg="Color bar is not in correct location.",
+        )
 
         # Plot on another axes with a title
         plot.payoff(title="dummy title", ax=axarr[1, 0])
@@ -270,9 +250,10 @@ class TestPlot(unittest.TestCase):
         plot = axelrod.Plot(self.test_result_set)
         # Test that this method does not crash.
         self.assertIsNone(
-            plot.save_all_plots(prefix="test_outputs/",
-                                progress_bar=False))
+            plot.save_all_plots(prefix="test_outputs/", progress_bar=False)
+        )
         self.assertIsNone(
-            plot.save_all_plots(prefix="test_outputs/",
-                                title_prefix="A prefix",
-                                progress_bar=True))
+            plot.save_all_plots(
+                prefix="test_outputs/", title_prefix="A prefix", progress_bar=True
+            )
+        )

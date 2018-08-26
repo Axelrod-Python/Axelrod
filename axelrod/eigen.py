@@ -11,7 +11,7 @@ from typing import Tuple
 
 def _normalise(nvec: numpy.ndarray) -> numpy.ndarray:
     """Normalises the given numpy array."""
-    with numpy.errstate(invalid='ignore'):
+    with numpy.errstate(invalid="ignore"):
         result = nvec / numpy.sqrt(numpy.dot(nvec, nvec))
     return result
 
@@ -45,8 +45,9 @@ def _power_iteration(mat: numpy.matrix, initial: numpy.ndarray) -> numpy.ndarray
         yield vec
 
 
-def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000,
-                          max_error=1e-3) -> Tuple[numpy.ndarray, float]:
+def principal_eigenvector(
+    mat: numpy.matrix, maximum_iterations=1000, max_error=1e-3
+) -> Tuple[numpy.ndarray, float]:
     """
     Computes the (normalised) principal eigenvector of the given matrix.
 
@@ -75,7 +76,7 @@ def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000,
 
     # Power iteration
     if not maximum_iterations:
-        maximum_iterations = float('inf')
+        maximum_iterations = float("inf")
     last = initial
     for i, vector in enumerate(_power_iteration(mat, initial=initial)):
         if i > maximum_iterations:
@@ -84,8 +85,7 @@ def principal_eigenvector(mat: numpy.matrix, maximum_iterations=1000,
             break
         last = vector
     # Compute the eigenvalue (Rayleigh quotient)
-    eigenvalue = numpy.dot(
-        numpy.dot(mat_, vector), vector) / numpy.dot(vector, vector)
+    eigenvalue = numpy.dot(numpy.dot(mat_, vector), vector) / numpy.dot(vector, vector)
     # Liberate the eigenvalue from numpy
     eigenvalue = float(eigenvalue)
     return vector, eigenvalue

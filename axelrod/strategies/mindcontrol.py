@@ -12,15 +12,15 @@ class MindController(Player):
     - Mind Controller: Original name by Karol Langner
     """
 
-    name = 'Mind Controller'
+    name = "Mind Controller"
     classifier = {
-        'memory_depth': -10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': True,  # Finds out what opponent will do
-        'manipulates_state': False
+        "memory_depth": -10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": True,  # Finds out what opponent will do
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -45,19 +45,19 @@ class MindWarper(Player):
     - Mind Warper: Original name by Karol Langner
     """
 
-    name = 'Mind Warper'
+    name = "Mind Warper"
     classifier = {
-        'memory_depth': -10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': True,  # changes what opponent will do
-        'manipulates_state': False
+        "memory_depth": -10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": True,  # changes what opponent will do
+        "manipulates_state": False,
     }
 
     def __setattr__(self, name: str, val: str):
-        if name == 'strategy':
+        if name == "strategy":
             pass
         else:
             self.__dict__[name] = val
@@ -78,18 +78,18 @@ class MindBender(MindWarper):
     - Mind Bender: Original name by Karol Langner
     """
 
-    name = 'Mind Bender'
+    name = "Mind Bender"
     classifier = {
-        'memory_depth': -10,
-        'makes_use_of': set(),
-        'stochastic': False,
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': True,  # changes what opponent will do
-        'manipulates_state': False
+        "memory_depth": -10,
+        "makes_use_of": set(),
+        "stochastic": False,
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": True,  # changes what opponent will do
+        "manipulates_state": False,
     }
 
     @staticmethod
     def strategy(opponent: Player) -> Action:
-        opponent.__dict__['strategy'] = lambda opponent: C
+        opponent.__dict__["strategy"] = lambda opponent: C
         return D

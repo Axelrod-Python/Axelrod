@@ -32,8 +32,9 @@ def compute_final_score(interactions, game=None):
     if len(scores) == 0:
         return None
 
-    final_score = tuple(sum([score[player_index] for score in scores])
-                        for player_index in [0, 1])
+    final_score = tuple(
+        sum([score[player_index] for score in scores]) for player_index in [0, 1]
+    )
     return final_score
 
 
@@ -47,7 +48,8 @@ def compute_final_score_per_turn(interactions, game=None):
 
     final_score_per_turn = tuple(
         sum([score[player_index] for score in scores]) / num_turns
-        for player_index in [0, 1])
+        for player_index in [0, 1]
+    )
     return final_score_per_turn
 
 
@@ -69,8 +71,10 @@ def compute_cooperations(interactions):
     if len(interactions) == 0:
         return None
 
-    cooperation = tuple(sum([play[player_index] == C for play in interactions])
-                        for player_index in [0, 1])
+    cooperation = tuple(
+        sum([play[player_index] == C for play in interactions])
+        for player_index in [0, 1]
+    )
     return cooperation
 
 
@@ -131,8 +135,9 @@ def compute_normalised_state_distribution(interactions):
     interactions_count = Counter(interactions)
     total = sum(interactions_count.values(), 0)
 
-    normalized_count = Counter({key: value / total for key, value in
-                                interactions_count.items()})
+    normalized_count = Counter(
+        {key: value / total for key, value in interactions_count.items()}
+    )
     return normalized_count
 
 
@@ -168,9 +173,15 @@ def compute_state_to_action_distribution(interactions):
     if not interactions:
         return None
 
-    distributions = [Counter([(state, outcome[j])
-                     for state, outcome in zip(interactions, interactions[1:])])
-                     for j in range(2)]
+    distributions = [
+        Counter(
+            [
+                (state, outcome[j])
+                for state, outcome in zip(interactions, interactions[1:])
+            ]
+        )
+        for j in range(2)
+    ]
     return distributions
 
 
@@ -223,21 +234,21 @@ def compute_normalised_state_to_action_distribution(interactions):
     return normalized_distribution
 
 
-def sparkline(actions, c_symbol='█', d_symbol=' '):
-    return ''.join([
-        c_symbol if play == C else d_symbol for play in actions])
+def sparkline(actions, c_symbol="█", d_symbol=" "):
+    return "".join([c_symbol if play == C else d_symbol for play in actions])
 
 
-def compute_sparklines(interactions, c_symbol='█', d_symbol=' '):
+def compute_sparklines(interactions, c_symbol="█", d_symbol=" "):
     """Returns the sparklines for a set of interactions"""
     if len(interactions) == 0:
         return None
 
     histories = list(zip(*interactions))
     return (
-        sparkline(histories[0], c_symbol, d_symbol) +
-        '\n' +
-        sparkline(histories[1], c_symbol, d_symbol))
+        sparkline(histories[0], c_symbol, d_symbol)
+        + "\n"
+        + sparkline(histories[1], c_symbol, d_symbol)
+    )
 
 
 def read_interactions_from_file(filename, progress_bar=True):
@@ -245,8 +256,9 @@ def read_interactions_from_file(filename, progress_bar=True):
     Reads a file and returns a dictionary mapping tuples of player pairs to
     lists of interactions
     """
-    df = pd.read_csv(filename)[["Interaction index", "Player index",
-                                "Opponent index", "Actions"]]
+    df = pd.read_csv(filename)[
+        ["Interaction index", "Player index", "Opponent index", "Actions"]
+    ]
     groupby = df.groupby("Interaction index")
     if progress_bar:
         groupby = tqdm.tqdm(groupby)

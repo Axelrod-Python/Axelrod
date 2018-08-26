@@ -14,15 +14,15 @@ class Inverse(Player):
     - Inverse: Original Name by Karol Langner
     """
 
-    name = 'Inverse'
+    name = "Inverse"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -33,9 +33,14 @@ class Inverse(Player):
         """
 
         # calculate how many turns ago the opponent defected
-        index = next((index for index, value in
-                      enumerate(opponent.history[::-1], start=1)
-                      if value == D), None)
+        index = next(
+            (
+                index
+                for index, value in enumerate(opponent.history[::-1], start=1)
+                if value == D
+            ),
+            None,
+        )
 
         if index is None:
             return C

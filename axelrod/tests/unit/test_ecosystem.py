@@ -6,21 +6,24 @@ import axelrod
 
 
 class TestEcosystem(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
-        cooperators = axelrod.Tournament(players=[
-            axelrod.Cooperator(),
-            axelrod.Cooperator(),
-            axelrod.Cooperator(),
-            axelrod.Cooperator(),
-        ])
-        defector_wins = axelrod.Tournament(players=[
-            axelrod.Cooperator(),
-            axelrod.Cooperator(),
-            axelrod.Cooperator(),
-            axelrod.Defector(),
-        ])
+        cooperators = axelrod.Tournament(
+            players=[
+                axelrod.Cooperator(),
+                axelrod.Cooperator(),
+                axelrod.Cooperator(),
+                axelrod.Cooperator(),
+            ]
+        )
+        defector_wins = axelrod.Tournament(
+            players=[
+                axelrod.Cooperator(),
+                axelrod.Cooperator(),
+                axelrod.Cooperator(),
+                axelrod.Defector(),
+            ]
+        )
         cls.res_cooperators = cooperators.play()
         cls.res_defector_wins = defector_wins.play()
 
@@ -52,12 +55,20 @@ class TestEcosystem(unittest.TestCase):
         self.assertEqual(pops[0], [.7, .25, .03, .02])
 
     def test_results_and_population_of_different_sizes(self):
-        self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators,
-                          population=[.7, .2, .03, .1, .1])
+        self.assertRaises(
+            TypeError,
+            axelrod.Ecosystem,
+            self.res_cooperators,
+            population=[.7, .2, .03, .1, .1],
+        )
 
     def test_negative_populations(self):
-        self.assertRaises(TypeError, axelrod.Ecosystem, self.res_cooperators,
-                          population=[.7, -.2, .03, .2])
+        self.assertRaises(
+            TypeError,
+            axelrod.Ecosystem,
+            self.res_cooperators,
+            population=[.7, -.2, .03, .2],
+        )
 
     def test_fitness_function(self):
         fitness = lambda p: 2 * p

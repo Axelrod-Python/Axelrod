@@ -10,13 +10,13 @@ class TestDesperate(TestPlayer):
     name = "Desperate"
     player = axelrod.Desperate
     expected_classifier = {
-        'memory_depth': 1,
-        'long_run_time': False,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "long_run_time": False,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -51,18 +51,19 @@ class TestDesperate(TestPlayer):
         actions = [(D, C), (D, D), (C, C), (D, D), (C, C)]
         self.versus_test(opponent, expected_actions=actions, seed=2)
 
+
 class TestHopeless(TestPlayer):
 
     name = "Hopeless"
     player = axelrod.Hopeless
     expected_classifier = {
-        'memory_depth': 1,
-        'long_run_time': False,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "long_run_time": False,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):
@@ -103,13 +104,13 @@ class TestWilling(TestPlayer):
     name = "Willing"
     player = axelrod.Willing
     expected_classifier = {
-        'memory_depth': 1,
-        'long_run_time': False,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "long_run_time": False,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_strategy(self):

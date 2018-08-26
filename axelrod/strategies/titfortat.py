@@ -1,8 +1,7 @@
 from axelrod.action import Action, actions_to_str
 from axelrod.player import Player
 from axelrod.random_ import random_choice
-from axelrod.strategy_transformers import (
-    TrackHistoryTransformer, FinalTransformer)
+from axelrod.strategy_transformers import TrackHistoryTransformer, FinalTransformer
 
 C, D = Action.C, Action.D
 
@@ -26,15 +25,15 @@ class TitForTat(Player):
     """
 
     # These are various properties for the strategy
-    name = 'Tit For Tat'
+    name = "Tit For Tat"
     classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -60,13 +59,13 @@ class TitFor2Tats(Player):
 
     name = "Tit For 2 Tats"
     classifier = {
-        'memory_depth': 2,  # Long memory, memory-2
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,  # Long memory, memory-2
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -85,13 +84,13 @@ class TwoTitsForTat(Player):
 
     name = "Two Tits For Tat"
     classifier = {
-        'memory_depth': 2,  # Long memory, memory-2
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,  # Long memory, memory-2
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -112,15 +111,15 @@ class DynamicTwoTitsForTat(Player):
      - Dynamic Two Tits For Tat: Original name by Grant Garrett-Grossman.
     """
 
-    name = 'Dynamic Two Tits For Tat'
+    name = "Dynamic Two Tits For Tat"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -151,13 +150,13 @@ class Bully(Player):
 
     name = "Bully"
     classifier = {
-        'memory_depth': 1,   # Four-Vector = (0, 1, 0, 1)
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Four-Vector = (0, 1, 0, 1)
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -175,13 +174,13 @@ class SneakyTitForTat(Player):
 
     name = "Sneaky Tit For Tat"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -205,13 +204,13 @@ class SuspiciousTitForTat(Player):
 
     name = "Suspicious Tit For Tat"
     classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -228,15 +227,15 @@ class AntiTitForTat(Player):
     - Anti Tit For Tat: [Hilbe2013]_
     """
 
-    name = 'Anti Tit For Tat'
+    name = "Anti Tit For Tat"
     classifier = {
-        'memory_depth': 1,  # Four-Vector = (1.,0.,1.,0.)
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Four-Vector = (1.,0.,1.,0.)
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -252,15 +251,15 @@ class HardTitForTat(Player):
     - Hard Tit For Tat: [PD2017]_
     """
 
-    name = 'Hard Tit For Tat'
+    name = "Hard Tit For Tat"
     classifier = {
-        'memory_depth': 3,  # memory-three
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,  # memory-three
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -286,13 +285,13 @@ class HardTitFor2Tats(Player):
 
     name = "Hard Tit For 2 Tats"
     classifier = {
-        'memory_depth': 3,  # memory-three
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,  # memory-three
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -302,7 +301,7 @@ class HardTitFor2Tats(Player):
             return C
         # Defects if two consecutive D in the opponent's last three moves
         history_string = actions_to_str(opponent.history[-3:])
-        if 'DD' in history_string:
+        if "DD" in history_string:
             return D
         # Otherwise cooperates
         return C
@@ -321,16 +320,18 @@ class OmegaTFT(Player):
 
     name = "Omega TFT"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, deadlock_threshold: int = 3, randomness_threshold: int = 8) -> None:
+    def __init__(
+        self, deadlock_threshold: int = 3, randomness_threshold: int = 8
+    ) -> None:
         super().__init__()
         self.deadlock_threshold = deadlock_threshold
         self.randomness_threshold = randomness_threshold
@@ -378,7 +379,6 @@ class OmegaTFT(Player):
         return move
 
 
-
 class Gradual(Player):
     """
     A player that punishes defections with a growing number of defections
@@ -392,13 +392,13 @@ class Gradual(Player):
 
     name = "Gradual"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -449,13 +449,13 @@ class ContriteTitForTat(Player):
 
     name = "Contrite Tit For Tat"
     classifier = {
-        'memory_depth': 3,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
@@ -514,15 +514,15 @@ class AdaptiveTitForTat(Player):
     - Adaptive Tit For Tat: [Tzafestas2000]_
     """
 
-    name = 'Adaptive Tit For Tat'
+    name = "Adaptive Tit For Tat"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
     world = 0.5
 
@@ -558,15 +558,15 @@ class SpitefulTitForTat(Player):
     - Spiteful Tit For Tat: [Prison1998]_
     """
 
-    name = 'Spiteful Tit For Tat'
+    name = "Spiteful Tit For Tat"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -600,15 +600,15 @@ class SlowTitForTwoTats2(Player):
     - Slow Tit For Tat: [Prison1998]_
     """
 
-    name = 'Slow Tit For Two Tats 2'
+    name = "Slow Tit For Two Tats 2"
     classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -635,15 +635,15 @@ class Alexei(Player):
     - Alexei: [LessWrong2011]_
     """
 
-    name = 'Alexei'
+    name = "Alexei"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': {'length'},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": {"length"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -666,15 +666,15 @@ class EugineNier(Player):
     - Eugine Nier: [LessWrong2011]_
     """
 
-    name = 'EugineNier'
+    name = "EugineNier"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': {'length'},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": {"length"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
@@ -703,18 +703,18 @@ class NTitsForMTats(Player):
     - N Tit(s) For M Tat(s): Original name by Marc Harper
     """
 
-    name = 'N Tit(s) For M Tat(s)'
+    name = "N Tit(s) For M Tat(s)"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, N: int=3, M: int=2) -> None:
+    def __init__(self, N: int = 3, M: int = 2) -> None:
         """
         Parameters
         ----------
@@ -734,12 +734,12 @@ class NTitsForMTats(Player):
         super().__init__()
         self.N = N
         self.M = M
-        self.classifier['memory_depth'] = max([M, N])
+        self.classifier["memory_depth"] = max([M, N])
         self.retaliate_count = 0
 
     def strategy(self, opponent: Player) -> Action:
         # if opponent defected consecutively M times, start the retaliation
-        if not self.M or opponent.history[-self.M:].count(D) == self.M:
+        if not self.M or opponent.history[-self.M :].count(D) == self.M:
             self.retaliate_count = self.N
         if self.retaliate_count:
             self.retaliate_count -= 1
@@ -761,15 +761,15 @@ class Michaelos(Player):
     - Michaelos: [LessWrong2011]_
     """
 
-    name = 'Michaelos'
+    name = "Michaelos"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': {'length'},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": {"length"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self):
@@ -805,19 +805,18 @@ class RandomTitForTat(Player):
     """
 
     # These are various properties for the strategy
-    name = 'Random Tit for Tat'
+    name = "Random Tit for Tat"
     classifier = {
-        'memory_depth': 1,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-
-    def __init__(self, p: float=0.5) -> None:
+    def __init__(self, p: float = 0.5) -> None:
         """
         Parameters
         ----------
@@ -828,8 +827,7 @@ class RandomTitForTat(Player):
         self.p = p
         self.act_random = False
         if p in [0, 1]:
-            self.classifier['stochastic'] = False
-
+            self.classifier["stochastic"] = False
 
     def strategy(self, opponent: Player) -> Action:
         """This is the actual strategy"""

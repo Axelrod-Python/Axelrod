@@ -1,8 +1,15 @@
-
 class MatchGenerator(object):
-
-    def __init__(self, players, repetitions, turns=None, game=None, noise=0,
-                 prob_end=None, edges=None, match_attributes=None):
+    def __init__(
+        self,
+        players,
+        repetitions,
+        turns=None,
+        game=None,
+        noise=0,
+        prob_end=None,
+        edges=None,
+        match_attributes=None,
+    ):
         """
         A class to generate matches. This is used by the Tournament class which
         is in charge of playing the matches and collecting the results.
@@ -72,9 +79,13 @@ class MatchGenerator(object):
         """
         Creates a single set of match parameters.
         """
-        return {"turns": self.turns, "game": self.game,
-                "noise": self.noise, "prob_end": self.prob_end,
-                "match_attributes": self.match_attributes}
+        return {
+            "turns": self.turns,
+            "game": self.game,
+            "noise": self.noise,
+            "prob_end": self.prob_end,
+            "match_attributes": self.match_attributes,
+        }
 
 
 def complete_graph(players):

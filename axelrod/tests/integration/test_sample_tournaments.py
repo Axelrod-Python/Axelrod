@@ -5,7 +5,6 @@ C, D = axelrod.Action.C, axelrod.Action.D
 
 
 class TestSampleTournaments(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.game = axelrod.Game()
@@ -20,7 +19,8 @@ class TestSampleTournaments(unittest.TestCase):
 
         # Play the tournament and build the actual outcome tuples.
         tournament = axelrod.Tournament(
-            players=players, game=cls.game, turns=turns, repetitions=1)
+            players=players, game=cls.game, turns=turns, repetitions=1
+        )
         results = tournament.play(progress_bar=False)
         scores = [score[0] for score in results.scores]
         outcome = zip(names, scores)
@@ -30,39 +30,41 @@ class TestSampleTournaments(unittest.TestCase):
 
     def test_defector_v_cooperator(self):
         """Test: the defector viciously punishes the cooperator."""
-        outcome = [('Cooperator', 0), ('Defector', 50)]
+        outcome = [("Cooperator", 0), ("Defector", 50)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_defector_v_titfortat(self):
         """Test: the defector does well against tit for tat."""
-        outcome = [('TitForTat', 9), ('Defector', 14)]
+        outcome = [("TitForTat", 9), ("Defector", 14)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_cooperator_v_titfortat(self):
         """Test: the cooperator does very well WITH tit for tat."""
-        outcome = [('Cooperator', 30), ('TitForTat', 30)]
+        outcome = [("Cooperator", 30), ("TitForTat", 30)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_cooperator_v_titfortat_v_defector(self):
         """Test: the defector dominates in this population."""
-        outcome = [('Cooperator', 30), ('TitForTat', 39), ('Defector', 64)]
+        outcome = [("Cooperator", 30), ("TitForTat", 39), ("Defector", 64)]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_cooperator_v_titfortat_v_defector_v_grudger(self):
         """Test: tit for tat does better this time around."""
         outcome = [
-            ('Cooperator', 60),
-            ('TitForTat', 69),
-            ('Grudger', 69),
-            ('Defector', 78)]
+            ("Cooperator", 60),
+            ("TitForTat", 69),
+            ("Grudger", 69),
+            ("Defector", 78),
+        ]
         self.assertEqual(self.get_test_outcome(outcome), outcome)
 
     def test_cooperator_v_titfortat_v_defector_v_grudger_v_go_by_majority(self):
         """Test: Tit for tat is doing a lot better."""
         outcome = [
-            ('Cooperator', 90),
-            ('Defector', 92),
-            ('Grudger', 99),
-            ('GoByMajority', 99),
-            ('TitForTat', 99)]
+            ("Cooperator", 90),
+            ("Defector", 92),
+            ("Grudger", 99),
+            ("GoByMajority", 99),
+            ("TitForTat", 99),
+        ]
         self.assertEqual(self.get_test_outcome(outcome), outcome)

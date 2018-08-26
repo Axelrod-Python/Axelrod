@@ -43,19 +43,20 @@ class MemoryTwoPlayer(Player):
     - Memory Two: [Hilbe2017]_
     """
 
-    name = 'Generic Memory Two Player'
+    name = "Generic Memory Two Player"
     classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, sixteen_vector: Tuple[float, ...] = None,
-                 initial: Action = C) -> None:
+    def __init__(
+        self, sixteen_vector: Tuple[float, ...] = None, initial: Action = C
+    ) -> None:
         """
         Parameters
         ----------
@@ -75,26 +76,32 @@ class MemoryTwoPlayer(Player):
             warnings.warn("Memory two player is set to default, Cooperator.")
 
         self.set_sixteen_vector(sixteen_vector)
-        if self.name == 'Generic Memory Two Player':
+        if self.name == "Generic Memory Two Player":
             self.name = "%s: %s" % (self.name, sixteen_vector)
 
     def set_sixteen_vector(self, sixteen_vector: Tuple):
         if not all(0 <= p <= 1 for p in sixteen_vector):
-            raise ValueError("An element in the probability vector, {}, is not "
-                             "between 0 and 1.".format(str(sixteen_vector)))
+            raise ValueError(
+                "An element in the probability vector, {}, is not "
+                "between 0 and 1.".format(str(sixteen_vector))
+            )
 
-        states = [(hist[:2], hist[2:])
-                  for hist in list(itertools.product((C, D), repeat=4))]
+        states = [
+            (hist[:2], hist[2:]) for hist in list(itertools.product((C, D), repeat=4))
+        ]
 
-        self._sixteen_vector = dict(zip(states, sixteen_vector)) # type: Dict[tuple, float]
-        self.classifier['stochastic'] = any(0 < x < 1 for x in set(sixteen_vector))
+        self._sixteen_vector = dict(
+            zip(states, sixteen_vector)
+        )  # type: Dict[tuple, float]
+        self.classifier["stochastic"] = any(0 < x < 1 for x in set(sixteen_vector))
 
     def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) <= 1:
             return self._initial
         # Determine which probability to use
-        p = self._sixteen_vector[(tuple(self.history[-2:]),
-                                  tuple(opponent.history[-2:]))]
+        p = self._sixteen_vector[
+            (tuple(self.history[-2:]), tuple(opponent.history[-2:]))
+        ]
         # Draw a random number in [0, 1] to decide
         return random_choice(p)
 
@@ -140,15 +147,15 @@ class AON2(MemoryTwoPlayer):
     - AON2: [Hilbe2017]_
     """
 
-    name = 'AON2'
+    name = "AON2"
     classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -183,15 +190,15 @@ class DelayedAON1(MemoryTwoPlayer):
     - Delayed AON1: [Hilbe2017]_
     """
 
-    name = 'Delayed AON1'
+    name = "Delayed AON1"
     classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -212,24 +219,20 @@ class MEM2(Player):
     - MEM2: [Li2014]_
     """
 
-    name = 'MEM2'
+    name = "MEM2"
     classifier = {
-        'memory_depth': float('inf'),
-        'long_run_time': False,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "long_run_time": False,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         super().__init__()
-        self.players = {
-            "TFT" : TitForTat(),
-            "TFTT": TitFor2Tats(),
-            "ALLD": Defector()
-        }
+        self.players = {"TFT": TitForTat(), "TFTT": TitFor2Tats(), "ALLD": Defector()}
         self.play_as = "TFT"
         self.shift_counter = 3
         self.alld_counter = 0

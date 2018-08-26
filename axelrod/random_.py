@@ -46,6 +46,7 @@ def seed(seed_):
 
 class Pdf(object):
     """A class for a probability distribution"""
+
     def __init__(self, counter):
         """Take as an instance of collections.counter"""
         self.sample_space, self.counts = zip(*counter.items())

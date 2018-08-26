@@ -15,13 +15,13 @@ class TestAntiCycler(TestPlayer):
     name = "AntiCycler"
     player = axelrod.AntiCycler
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_has_no_cycles(self):
@@ -36,7 +36,31 @@ class TestAntiCycler(TestPlayer):
 
     def test_strategy(self):
         """Rounds are CDD  CD  CCD CCCD CCCCD ..."""
-        anticycler_rounds = [C, D, D, C, D, C, C, D, C, C, C, D, C, C, C, C, D, C, C, C, C, C, D]
+        anticycler_rounds = [
+            C,
+            D,
+            D,
+            C,
+            D,
+            C,
+            C,
+            D,
+            C,
+            C,
+            C,
+            D,
+            C,
+            C,
+            C,
+            C,
+            D,
+            C,
+            C,
+            C,
+            C,
+            C,
+            D,
+        ]
         num_elements = len(anticycler_rounds)
         against_defector = list(zip(anticycler_rounds, [D] * num_elements))
         against_cooperator = list(zip(anticycler_rounds, [C] * num_elements))
@@ -49,46 +73,46 @@ class TestBasicCycler(TestPlayer):
     name = "Cycler: CCD"
     player = Cycler
     expected_classifier = {
-        'memory_depth': 2,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 2,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_memory_depth_is_len_cycle_minus_one(self):
-        len_ten = 'DCDCDDCDCD'
-        len_five = 'DCDDC'
+        len_ten = "DCDCDDCDCD"
+        len_five = "DCDDC"
         depth_nine = Cycler(cycle=len_ten)
         depth_four = Cycler(cycle=len_five)
-        self.assertEqual(depth_nine.classifier['memory_depth'], 9)
-        self.assertEqual(depth_four.classifier['memory_depth'], 4)
+        self.assertEqual(depth_nine.classifier["memory_depth"], 9)
+        self.assertEqual(depth_four.classifier["memory_depth"], 4)
 
     def test_cycler_works_as_expected(self):
         expected = [(C, D), (D, D), (D, D), (C, D)] * 2
-        self.versus_test(axelrod.Defector(), expected_actions=expected,
-                         init_kwargs={'cycle': 'CDDC'})
+        self.versus_test(
+            axelrod.Defector(), expected_actions=expected, init_kwargs={"cycle": "CDDC"}
+        )
 
     def test_cycle_raises_value_error_on_bad_cycle_str(self):
-        self.assertRaises(ValueError, Cycler, cycle='CdDC')
+        self.assertRaises(ValueError, Cycler, cycle="CdDC")
 
 
 def test_cycler_factory(cycle_str):
-
     class TestCyclerChild(TestPlayer):
 
         name = "Cycler %s" % cycle_str
-        player = getattr(axelrod, 'Cycler%s' % cycle_str)
+        player = getattr(axelrod, "Cycler%s" % cycle_str)
         expected_classifier = {
-            'memory_depth': len(cycle_str) - 1,
-            'stochastic': False,
-            'makes_use_of': set(),
-            'long_run_time': False,
-            'inspects_source': False,
-            'manipulates_source': False,
-            'manipulates_state': False
+            "memory_depth": len(cycle_str) - 1,
+            "stochastic": False,
+            "makes_use_of": set(),
+            "long_run_time": False,
+            "inspects_source": False,
+            "manipulates_source": False,
+            "manipulates_state": False,
         }
 
         def test_strategy(self):

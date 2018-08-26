@@ -14,13 +14,13 @@ class Desperate(Player):
 
     name = "Desperate"
     classifier = {
-        'memory_depth': 1,
-        'long_run_time': False,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "long_run_time": False,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -40,13 +40,13 @@ class Hopeless(Player):
 
     name = "Hopeless"
     classifier = {
-        'memory_depth': 1,
-        'long_run_time': False,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "long_run_time": False,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -66,13 +66,13 @@ class Willing(Player):
 
     name = "Willing"
     classifier = {
-        'memory_depth': 1,
-        'long_run_time': False,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,
+        "long_run_time": False,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:

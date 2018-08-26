@@ -7,14 +7,31 @@ from ._filters import passes_filterset
 # because it creates circular dependencies
 
 from .meta import (
-    MemoryDecay, MetaHunter, MetaHunterAggressive, MetaPlayer, MetaMajority,
-    MetaMajorityMemoryOne, MetaMajorityFiniteMemory, MetaMajorityLongMemory,
-    MetaMinority, MetaMixer, MetaWinner, MetaWinnerDeterministic,
-    MetaWinnerEnsemble, MetaWinnerMemoryOne, MetaWinnerFiniteMemory,
-    MetaWinnerLongMemory, MetaWinnerStochastic, NMWEDeterministic,
-    NMWEFiniteMemory, NMWELongMemory, NMWEMemoryOne, NMWEStochastic,
-    NiceMetaWinner, NiceMetaWinnerEnsemble,
-    )
+    MemoryDecay,
+    MetaHunter,
+    MetaHunterAggressive,
+    MetaPlayer,
+    MetaMajority,
+    MetaMajorityMemoryOne,
+    MetaMajorityFiniteMemory,
+    MetaMajorityLongMemory,
+    MetaMinority,
+    MetaMixer,
+    MetaWinner,
+    MetaWinnerDeterministic,
+    MetaWinnerEnsemble,
+    MetaWinnerMemoryOne,
+    MetaWinnerFiniteMemory,
+    MetaWinnerLongMemory,
+    MetaWinnerStochastic,
+    NMWEDeterministic,
+    NMWEFiniteMemory,
+    NMWELongMemory,
+    NMWEMemoryOne,
+    NMWEStochastic,
+    NiceMetaWinner,
+    NiceMetaWinnerEnsemble,
+)
 
 all_strategies += [
     MetaHunter,
@@ -38,7 +55,7 @@ all_strategies += [
     NMWEMemoryOne,
     NMWEStochastic,
     NiceMetaWinner,
-    NiceMetaWinnerEnsemble
+    NiceMetaWinnerEnsemble,
 ]
 
 
@@ -48,10 +65,12 @@ demo_strategies = [Cooperator, Defector, TitForTat, Grudger, Random]
 basic_strategies = [s for s in all_strategies if is_basic(s())]
 strategies = [s for s in all_strategies if obey_axelrod(s())]
 
-long_run_time_strategies = [s for s in all_strategies if
-                            s().classifier['long_run_time']]
-short_run_time_strategies = [s for s in strategies if not
-                             s().classifier['long_run_time']]
+long_run_time_strategies = [
+    s for s in all_strategies if s().classifier["long_run_time"]
+]
+short_run_time_strategies = [
+    s for s in strategies if not s().classifier["long_run_time"]
+]
 cheating_strategies = [s for s in all_strategies if not obey_axelrod(s())]
 
 ordinary_strategies = strategies  # This is a legacy and will be removed
@@ -93,6 +112,4 @@ def filtered_strategies(filterset, strategies=all_strategies):
         of subclasses of axelrod.Player
 
     """
-    return [
-        s for s in strategies
-        if passes_filterset(s, filterset)]
+    return [s for s in strategies if passes_filterset(s, filterset)]
