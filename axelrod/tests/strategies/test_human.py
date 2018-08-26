@@ -20,15 +20,13 @@ class TestDocument(object):
 
 
 class TestActionValidator(TestCase):
-
     def test_validator(self):
-        test_documents = [TestDocument(x) for x in ['C', 'c', 'D', 'd']]
+        test_documents = [TestDocument(x) for x in ["C", "c", "D", "d"]]
         for test_document in test_documents:
             ActionValidator().validate(test_document)
 
-        test_document = TestDocument('E')
-        self.assertRaises(
-            ValidationError, ActionValidator().validate, test_document)
+        test_document = TestDocument("E")
+        self.assertRaises(ValidationError, ActionValidator().validate, test_document)
 
 
 class TestHumanClass(TestPlayer):
@@ -36,23 +34,23 @@ class TestHumanClass(TestPlayer):
     name = "Human: human, C, D"
     player = Human
     expected_classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(['length', 'game']),
-        'long_run_time': True,
-        'inspects_source': True,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(["length", "game"]),
+        "long_run_time": True,
+        "inspects_source": True,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def test_init(self):
-        human = Human(name='test human', c_symbol='X', d_symbol='Y')
-        self.assertEqual(human.human_name, 'test human')
-        self.assertEqual(human.symbols, {C: 'X', D: 'Y'})
+        human = Human(name="test human", c_symbol="X", d_symbol="Y")
+        self.assertEqual(human.human_name, "test human")
+        self.assertEqual(human.symbols, {C: "X", D: "Y"})
 
     def test_history_toolbar(self):
         human = Human()
-        expected_content = ''
+        expected_content = ""
         actual_content = human._history_toolbar(None)[0][1]
         self.assertEqual(actual_content, expected_content)
 
@@ -65,48 +63,52 @@ class TestHumanClass(TestPlayer):
     def test_status_messages(self):
         human = Human()
         expected_messages = {
-            'toolbar': None,
-            'print': '{}Starting new match'.format(linesep)
+            "toolbar": None,
+            "print": "{}Starting new match".format(linesep),
         }
         actual_messages = human._status_messages()
         self.assertEqual(actual_messages, expected_messages)
 
         human.history = [C]
         human.opponent_history = [C]
-        expected_print_message = (
-            '{}Turn 1: human played C, opponent played C'.format(linesep)
+        expected_print_message = "{}Turn 1: human played C, opponent played C".format(
+            linesep
         )
         actual_messages = human._status_messages()
-        self.assertEqual(actual_messages['print'], expected_print_message)
-        self.assertIsNotNone(actual_messages['toolbar'])
+        self.assertEqual(actual_messages["print"], expected_print_message)
+        self.assertIsNotNone(actual_messages["toolbar"])
 
     def test_get_human_input_c(self):
-        with patch('axelrod.human.prompt', return_value='c') as prompt_:
+        with patch("axelrod.human.prompt", return_value="c") as prompt_:
             actions = [(C, C)] * 5
             self.versus_test(Cooperator(), expected_actions=actions)
-            self.assertEqual(prompt_.call_args[0],
-                             ('Turn 5 action [C or D] for human: ',))
+            self.assertEqual(
+                prompt_.call_args[0], ("Turn 5 action [C or D] for human: ",)
+            )
 
     def test_get_human_input_C(self):
-        with patch('axelrod.human.prompt', return_value='C') as prompt_:
+        with patch("axelrod.human.prompt", return_value="C") as prompt_:
             actions = [(C, C)] * 5
             self.versus_test(Cooperator(), expected_actions=actions)
-            self.assertEqual(prompt_.call_args[0],
-                             ('Turn 5 action [C or D] for human: ',))
+            self.assertEqual(
+                prompt_.call_args[0], ("Turn 5 action [C or D] for human: ",)
+            )
 
     def test_get_human_input_d(self):
-        with patch('axelrod.human.prompt', return_value='d') as prompt_:
+        with patch("axelrod.human.prompt", return_value="d") as prompt_:
             actions = [(D, C)] * 5
             self.versus_test(Cooperator(), expected_actions=actions)
-            self.assertEqual(prompt_.call_args[0],
-                             ('Turn 5 action [C or D] for human: ',))
+            self.assertEqual(
+                prompt_.call_args[0], ("Turn 5 action [C or D] for human: ",)
+            )
 
     def test_get_human_input_D(self):
-        with patch('axelrod.human.prompt', return_value='D') as prompt_:
+        with patch("axelrod.human.prompt", return_value="D") as prompt_:
             actions = [(D, C)] * 5
             self.versus_test(Cooperator(), expected_actions=actions)
-            self.assertEqual(prompt_.call_args[0],
-                             ('Turn 5 action [C or D] for human: ',))
+            self.assertEqual(
+                prompt_.call_args[0], ("Turn 5 action [C or D] for human: ",)
+            )
 
     def test_strategy(self):
         human = Human()

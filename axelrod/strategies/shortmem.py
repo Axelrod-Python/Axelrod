@@ -20,15 +20,15 @@ class ShortMem(Player):
     - ShortMem: [Andre2013]_
     """
 
-    name = 'ShortMem'
+    name = "ShortMem"
     classifier = {
-        'memory_depth': 10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod

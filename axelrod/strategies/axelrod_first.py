@@ -31,15 +31,15 @@ class Davis(Player):
     - Davis: [Axelrod1980]_
     """
 
-    name = 'Davis'
+    name = "Davis"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, rounds_to_cooperate: int = 10) -> None:
@@ -84,13 +84,13 @@ class RevisedDowning(Player):
     name = "Revised Downing"
 
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, revised: bool = True) -> None:
@@ -132,7 +132,7 @@ class RevisedDowning(Player):
         # Make a decision based on the accrued counts
         c = 6.0 * self.good - 8.0 * self.bad - 2
         alt = 4.0 * self.good - 5.0 * self.bad - 1
-        if (c >= 0 and c >= alt):
+        if c >= 0 and c >= alt:
             move = C
         elif (c >= 0 and c < alt) or (alt >= 0):
             move = self.history[-1].flip()
@@ -158,17 +158,21 @@ class Feld(Player):
 
     name = "Feld"
     classifier = {
-        'memory_depth': 200,  # Varies actually, eventually becomes depth 1
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 200,  # Varies actually, eventually becomes depth 1
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, start_coop_prob: float = 1.0, end_coop_prob: float = 0.5,
-                 rounds_of_decay: int = 200) -> None:
+    def __init__(
+        self,
+        start_coop_prob: float = 1.0,
+        end_coop_prob: float = 0.5,
+        rounds_of_decay: int = 200,
+    ) -> None:
         """
         Parameters
         ----------
@@ -189,11 +193,10 @@ class Feld(Player):
         """It's not clear what the interpolating function is, so we'll do
         something simple that decreases monotonically from 1.0 to 0.5 over
         200 rounds."""
-        diff = (self._end_coop_prob - self._start_coop_prob)
+        diff = self._end_coop_prob - self._start_coop_prob
         slope = diff / self._rounds_of_decay
         rounds = len(self.history)
-        return max(self._start_coop_prob + slope * rounds,
-                   self._end_coop_prob)
+        return max(self._start_coop_prob + slope * rounds, self._end_coop_prob)
 
     def strategy(self, opponent: Player) -> Action:
         if not opponent.history:
@@ -222,13 +225,13 @@ class Grofman(Player):
 
     name = "Grofman"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -311,27 +314,26 @@ class Nydegger(Player):
 
     name = "Nydegger"
     classifier = {
-        'memory_depth': 3,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 3,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
-        self.As = [1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 54, 55,
-                   58, 61]
-        self.score_map = {(C, C): 0,
-                          (C, D): 2,
-                          (D, C): 1,
-                          (D, D): 3}
+        self.As = [1, 6, 7, 17, 22, 23, 26, 29, 30, 31, 33, 38, 39, 45, 54, 55, 58, 61]
+        self.score_map = {(C, C): 0, (C, D): 2, (D, C): 1, (D, D): 3}
         super().__init__()
 
     @staticmethod
-    def score_history(my_history: List[Action], opponent_history: List[Action],
-                      score_map: Dict[Tuple[Action, Action], int]) -> int:
+    def score_history(
+        my_history: List[Action],
+        opponent_history: List[Action],
+        score_map: Dict[Tuple[Action, Action], int],
+    ) -> int:
 
         """Implements the Nydegger formula A = 16 a_1 + 4 a_2 + a_3"""
         a = 0
@@ -347,13 +349,12 @@ class Nydegger(Player):
             # TFT
             return D if opponent.history[-1] == D else C
         if len(self.history) == 2:
-            if opponent.history[0: 2] == [D, C]:
+            if opponent.history[0:2] == [D, C]:
                 return D
             else:
                 # TFT
                 return D if opponent.history[-1] == D else C
-        A = self.score_history(self.history[-3:], opponent.history[-3:],
-                               self.score_map)
+        A = self.score_history(self.history[-3:], opponent.history[-3:], self.score_map)
         if A in self.As:
             return D
         return C
@@ -373,15 +374,15 @@ class Shubik(Player):
     - Shubik: [Axelrod1980]_
     """
 
-    name = 'Shubik'
+    name = "Shubik"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -403,7 +404,7 @@ class Shubik(Player):
             return C
         if opponent.history[-1] == D:
             # Retaliate against defections
-            if self.history[-1] == C: # it's on now!
+            if self.history[-1] == C:  # it's on now!
                 # Lengthen the retaliation period
                 self.is_retaliating = True
                 self.retaliation_length += 1
@@ -438,13 +439,13 @@ class Tullock(Player):
 
     name = "Tullock"
     classifier = {
-        'memory_depth': 11, # long memory, modified by init
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 11,  # long memory, modified by init
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, rounds_to_cooperate: int = 11) -> None:
@@ -495,13 +496,13 @@ class UnnamedStrategy(Player):
 
     name = "Unnamed Strategy"
     classifier = {
-        'memory_depth': 0,
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 0,
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -527,18 +528,18 @@ class SteinAndRapoport(Player):
     - SteinAndRapoport: [Axelrod1980]_
     """
 
-    name = 'Stein and Rapoport'
+    name = "Stein and Rapoport"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': False,
-        'makes_use_of': {"length"},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": {"length"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, alpha: float=0.05) -> None:
+    def __init__(self, alpha: float = 0.05) -> None:
         """
         Parameters
         ----------
@@ -561,8 +562,7 @@ class SteinAndRapoport(Player):
             return opponent.history[-1]
 
         if round_number % 15 == 0:
-            p_value = chisquare([opponent.cooperations,
-                                 opponent.defections]).pvalue
+            p_value = chisquare([opponent.cooperations, opponent.defections]).pvalue
             self.opponent_is_random = p_value >= self.alpha
 
         if self.opponent_is_random:
@@ -598,15 +598,15 @@ class TidemanAndChieruzzi(Player):
     - TidemanAndChieruzzi: [Axelrod1980]_
     """
 
-    name = 'Tideman and Chieruzzi'
+    name = "Tideman and Chieruzzi"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': False,
-        'makes_use_of': {"game", "length"},
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": False,
+        "makes_use_of": {"game", "length"},
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -664,7 +664,7 @@ class TidemanAndChieruzzi(Player):
 
         if valid_fresh_start:
             valid_points = self.current_score - self.opponent_score >= 10
-            valid_rounds = self.match_attributes['length'] - current_round >= 10
+            valid_rounds = self.match_attributes["length"] - current_round >= 10
             opponent_is_cooperating = opponent.history[-1] == C
             if valid_points and valid_rounds and opponent_is_cooperating:
                 # 50-50 split is based off the binomial distribution.

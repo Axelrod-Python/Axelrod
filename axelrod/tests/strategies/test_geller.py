@@ -42,9 +42,7 @@ class TestGeller(TestPlayer):
         """Should cooperate against cooperators and defect against defectors."""
         self.versus_test(axelrod.Defector(), expected_actions=[(D, D)] * 5)
         self.versus_test(axelrod.Cooperator(), expected_actions=[(C, C)] * 5)
-        self.versus_test(
-            axelrod.Alternator(), expected_actions=[(C, C), (D, D)] * 5
-        )
+        self.versus_test(axelrod.Alternator(), expected_actions=[(C, C), (D, D)] * 5)
 
     def test_strategy_against_lookerup_players(self):
         """
@@ -65,14 +63,10 @@ class TestGeller(TestPlayer):
             seed=2,
         )
 
-        self.versus_test(
-            axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)]
-        )
+        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
         self.versus_test(
-            axelrod.MindReader(),
-            expected_actions=[(D, D), (D, D), (D, D)],
-            seed=1,
+            axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)], seed=1
         )
 
 
@@ -96,13 +90,10 @@ class TestGellerCooperator(TestGeller):
 
     def test_returns_foil_inspection_strategy_of_opponent(self):
         self.versus_test(
-            axelrod.GellerDefector(),
-            expected_actions=[(D, C), (D, C), (D, C), (D, C)],
+            axelrod.GellerDefector(), expected_actions=[(D, C), (D, C), (D, C), (D, C)]
         )
 
-        self.versus_test(
-            axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)]
-        )
+        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
         self.versus_test(
             axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]
@@ -130,13 +121,10 @@ class TestGellerDefector(TestGeller):
     def test_returns_foil_inspection_strategy_of_opponent(self):
 
         self.versus_test(
-            axelrod.GellerDefector(),
-            expected_actions=[(D, D), (D, D), (D, D), (D, D)],
+            axelrod.GellerDefector(), expected_actions=[(D, D), (D, D), (D, D), (D, D)]
         )
 
-        self.versus_test(
-            axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)]
-        )
+        self.versus_test(axelrod.Darwin(), expected_actions=[(C, C), (C, C), (C, C)])
 
         self.versus_test(
             axelrod.MindReader(), expected_actions=[(D, D), (D, D), (D, D)]

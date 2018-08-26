@@ -138,62 +138,46 @@ def passes_filterset(strategy, filterset):
         filterset, otherwise false.
 
     """
-    FilterFunction = namedtuple('FilterFunction', 'function kwargs')
+    FilterFunction = namedtuple("FilterFunction", "function kwargs")
 
     # A dictionary mapping filter name (from the supplied filterset) to
     # the relevant function and arguments for that filter.
     filter_functions = {
-        'stochastic': FilterFunction(
+        "stochastic": FilterFunction(
             function=passes_operator_filter,
-            kwargs={
-                'classifier_key': 'stochastic',
-                'operator': operator.eq
-            }),
-        'long_run_time': FilterFunction(
+            kwargs={"classifier_key": "stochastic", "operator": operator.eq},
+        ),
+        "long_run_time": FilterFunction(
             function=passes_operator_filter,
-            kwargs={
-                'classifier_key': 'long_run_time',
-                'operator': operator.eq
-            }),
-        'manipulates_state': FilterFunction(
+            kwargs={"classifier_key": "long_run_time", "operator": operator.eq},
+        ),
+        "manipulates_state": FilterFunction(
             function=passes_operator_filter,
-            kwargs={
-                'classifier_key': 'manipulates_state',
-                'operator': operator.eq
-            }),
-        'manipulates_source': FilterFunction(
+            kwargs={"classifier_key": "manipulates_state", "operator": operator.eq},
+        ),
+        "manipulates_source": FilterFunction(
             function=passes_operator_filter,
-            kwargs={
-                'classifier_key': 'manipulates_source',
-                'operator': operator.eq
-            }),
-        'inspects_source': FilterFunction(
+            kwargs={"classifier_key": "manipulates_source", "operator": operator.eq},
+        ),
+        "inspects_source": FilterFunction(
             function=passes_operator_filter,
-            kwargs={
-                'classifier_key': 'inspects_source',
-                'operator': operator.eq
-            }),
-        'memory_depth': FilterFunction(
+            kwargs={"classifier_key": "inspects_source", "operator": operator.eq},
+        ),
+        "memory_depth": FilterFunction(
             function=passes_operator_filter,
-            kwargs={
-                'classifier_key': 'memory_depth',
-                'operator': operator.eq
-            }),
-        'min_memory_depth': FilterFunction(
+            kwargs={"classifier_key": "memory_depth", "operator": operator.eq},
+        ),
+        "min_memory_depth": FilterFunction(
             function=passes_operator_filter,
-            kwargs={
-                'classifier_key': 'memory_depth',
-                'operator': operator.ge
-            }),
-        'max_memory_depth': FilterFunction(
+            kwargs={"classifier_key": "memory_depth", "operator": operator.ge},
+        ),
+        "max_memory_depth": FilterFunction(
             function=passes_operator_filter,
-            kwargs={
-                'classifier_key': 'memory_depth',
-                'operator': operator.le
-            }),
-        'makes_use_of': FilterFunction(
-            function=passes_in_list_filter,
-            kwargs={'classifier_key': 'makes_use_of'})
+            kwargs={"classifier_key": "memory_depth", "operator": operator.le},
+        ),
+        "makes_use_of": FilterFunction(
+            function=passes_in_list_filter, kwargs={"classifier_key": "makes_use_of"}
+        ),
     }
 
     # A list of boolean values to record whether the strategy passed or failed
@@ -207,8 +191,8 @@ def passes_filterset(strategy, filterset):
 
         if filterset.get(_filter, None) is not None:
             kwargs = filter_function.kwargs
-            kwargs['player'] = strategy()
-            kwargs['value'] = filterset[_filter]
+            kwargs["player"] = strategy()
+            kwargs["value"] = filterset[_filter]
             passes_filters.append(filter_function.function(**kwargs))
 
     # Return True if the strategy passed all the supplied filters

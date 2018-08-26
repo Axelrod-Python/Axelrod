@@ -66,7 +66,7 @@ def inspect_strategy(inspector, opponent):
     Action
         The action that would be taken by the opponent.
     """
-    if hasattr(opponent, 'foil_strategy_inspection'):
+    if hasattr(opponent, "foil_strategy_inspection"):
         return opponent.foil_strategy_inspection()
     else:
         return opponent.strategy(inspector)

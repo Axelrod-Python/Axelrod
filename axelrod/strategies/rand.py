@@ -14,18 +14,18 @@ class Random(Player):
     - Lunatic: [Tzafestas2000]_
     """
 
-    name = 'Random'
+    name = "Random"
     classifier = {
-        'memory_depth': 0,  # Memory-one Four-Vector = (p, p, p, p)
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 0,  # Memory-one Four-Vector = (p, p, p, p)
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, p: float=0.5) -> None:
+    def __init__(self, p: float = 0.5) -> None:
         """
         Parameters
         ----------
@@ -40,7 +40,7 @@ class Random(Player):
         super().__init__()
         self.p = p
         if p in [0, 1]:
-            self.classifier['stochastic'] = False
+            self.classifier["stochastic"] = False
 
     def strategy(self, opponent: Player) -> Action:
         return random_choice(self.p)

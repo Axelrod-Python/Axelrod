@@ -15,15 +15,15 @@ class AverageCopier(Player):
     - Average Copier: Original name by Geraint Palmer
     """
 
-    name = 'Average Copier'
+    name = "Average Copier"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
@@ -43,15 +43,15 @@ class NiceAverageCopier(Player):
     - Average Copier: Original name by Owen Campbell
     """
 
-    name = 'Nice Average Copier'
+    name = "Nice Average Copier"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:

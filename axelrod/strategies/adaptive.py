@@ -16,15 +16,15 @@ class Adaptive(Player):
 
     """
 
-    name = 'Adaptive'
+    name = "Adaptive"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(["game"]),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(["game"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self, initial_plays: List[Action] = None) -> None:
@@ -42,7 +42,7 @@ class Adaptive(Player):
             scores = game.score(last_round)
             self.scores[last_round[0]] += scores[0]
 
-    def strategy(self, opponent: Player)-> Action:
+    def strategy(self, opponent: Player) -> Action:
         # Update scores from the last play
         self.score_last_round(opponent)
         # Begin by playing the sequence C,C,C,C,C,C,D,D,D,D,D

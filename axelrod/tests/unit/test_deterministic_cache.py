@@ -8,19 +8,16 @@ C, D = Action.C, Action.D
 
 
 class TestDeterministicCache(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.test_key = (TitForTat(), Defector(), 3)
         cls.test_value = [(C, D), (D, D), (D, D)]
-        cls.test_save_file = 'test_cache_save.txt'
-        cls.test_load_file = 'test_cache_load.txt'
-        test_data_to_pickle = {
-            ('Tit For Tat', 'Defector', 3): [(C, D), (D, D), (D, D)]
-        }
+        cls.test_save_file = "test_cache_save.txt"
+        cls.test_load_file = "test_cache_load.txt"
+        test_data_to_pickle = {("Tit For Tat", "Defector", 3): [(C, D), (D, D), (D, D)]}
         cls.test_pickle = pickle.dumps(test_data_to_pickle)
 
-        with open(cls.test_load_file, 'wb') as f:
+        with open(cls.test_load_file, "wb") as f:
             f.write(cls.test_pickle)
 
     @classmethod
@@ -43,7 +40,7 @@ class TestDeterministicCache(unittest.TestCase):
         self.assertEqual(self.cache[self.test_key], self.test_value)
 
     def test_setitem_invalid_key_not_tuple(self):
-        invalid_key = 'test'
+        invalid_key = "test"
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
@@ -58,15 +55,15 @@ class TestDeterministicCache(unittest.TestCase):
             self.cache[invalid_key] = self.test_value
 
     def test_setitem_invalid_key_first_two_elements_not_player(self):
-        invalid_key = ('test', 'test', 2)
+        invalid_key = ("test", "test", 2)
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
-        invalid_key = (TitForTat(), 'test', 2)
+        invalid_key = (TitForTat(), "test", 2)
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
-        invalid_key = ('test', TitForTat(), 2)
+        invalid_key = ("test", TitForTat(), 2)
         with self.assertRaises(ValueError):
             self.cache[invalid_key] = self.test_value
 
@@ -82,7 +79,7 @@ class TestDeterministicCache(unittest.TestCase):
 
         invalid_key = (TitForTat(), Random(), 2)
         with self.assertRaises(ValueError):
-            self.cache[invalid_key] = self.test_value        
+            self.cache[invalid_key] = self.test_value
 
     def test_setitem_invalid_value_not_list(self):
         with self.assertRaises(ValueError):
@@ -96,7 +93,7 @@ class TestDeterministicCache(unittest.TestCase):
     def test_save(self):
         self.cache[self.test_key] = self.test_value
         self.cache.save(self.test_save_file)
-        with open(self.test_save_file, 'rb') as f:
+        with open(self.test_save_file, "rb") as f:
             text = f.read()
         self.assertEqual(text, self.test_pickle)
 
@@ -106,7 +103,7 @@ class TestDeterministicCache(unittest.TestCase):
 
     def test_load_error_for_inccorect_format(self):
         filename = "test_outputs/test.cache"
-        with open(filename, 'wb') as io:
+        with open(filename, "wb") as io:
             pickle.dump(range(5), io)
 
         with self.assertRaises(ValueError):

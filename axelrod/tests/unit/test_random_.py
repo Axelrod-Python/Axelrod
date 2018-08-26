@@ -9,7 +9,6 @@ C, D = Action.C, Action.D
 
 
 class TestRandom_(unittest.TestCase):
-
     def test_return_values(self):
         self.assertEqual(random_choice(1), C)
         self.assertEqual(random_choice(0), D)
@@ -44,8 +43,8 @@ class TestRandom_(unittest.TestCase):
 
 class TestPdf(unittest.TestCase):
     """A suite of tests for the Pdf class"""
-    observations = [(C, D)] * 4 + [(C, C)] * 12 + \
-                   [(D, C)] * 2 + [(D, D)] * 15
+
+    observations = [(C, D)] * 4 + [(C, C)] * 12 + [(D, C)] * 2 + [(D, D)] * 15
     counter = Counter(observations)
     pdf = Pdf(counter)
 

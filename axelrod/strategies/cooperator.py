@@ -14,15 +14,15 @@ class Cooperator(Player):
     - Always cooperate: [Mittal2009]_
     """
 
-    name = 'Cooperator'
+    name = "Cooperator"
     classifier = {
-        'memory_depth': 0,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 0,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     @staticmethod
@@ -41,13 +41,13 @@ class TrickyCooperator(Player):
 
     name = "Tricky Cooperator"
     classifier = {
-        'memory_depth': 10,
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 10,
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     _min_history_required_to_try_trickiness = 3
@@ -61,8 +61,9 @@ class TrickyCooperator(Player):
         After 3 rounds, if opponent has not defected to a max history depth of
         10, defect.
         """
-        if (self._has_played_enough_rounds_to_be_tricky() and
-                self._opponents_has_cooperated_enough_to_be_tricky(opponent)):
+        if self._has_played_enough_rounds_to_be_tricky() and self._opponents_has_cooperated_enough_to_be_tricky(
+            opponent
+        ):
             return D
         return C
 
@@ -71,5 +72,6 @@ class TrickyCooperator(Player):
 
     def _opponents_has_cooperated_enough_to_be_tricky(self, opponent):
         rounds_to_be_checked = opponent.history[
-                               self._max_history_depth_for_trickiness:]
+            self._max_history_depth_for_trickiness :
+        ]
         return D not in rounds_to_be_checked

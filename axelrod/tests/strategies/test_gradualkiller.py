@@ -11,12 +11,12 @@ class TestGradualKiller(TestPlayer):
     name = "Gradual Killer: (D, D, D, D, D, C, C)"
     player = axl.GradualKiller
     expected_classifier = {
-        'memory_depth': float('Inf'),
-        'stochastic': False,
-        'makes_use_of': set(),
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("Inf"),
+        "stochastic": False,
+        "makes_use_of": set(),
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     first_seven = [D, D, D, D, D, C, C]

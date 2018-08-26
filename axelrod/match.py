@@ -14,15 +14,22 @@ C, D = Action.C, Action.D
 def is_stochastic(players, noise):
     """Determines if a match is stochastic -- true if there is noise or if any
     of the players involved is stochastic."""
-    return (noise or any(p.classifier['stochastic'] for p in players))
+    return noise or any(p.classifier["stochastic"] for p in players)
 
 
 class Match(object):
     """The Match class conducts matches between two players."""
 
-    def __init__(self, players, turns=None, prob_end=None,
-                 game=None, deterministic_cache=None,
-                 noise=0, match_attributes=None):
+    def __init__(
+        self,
+        players,
+        turns=None,
+        prob_end=None,
+        game=None,
+        deterministic_cache=None,
+        noise=0,
+        match_attributes=None,
+    ):
         """
         Parameters
         ----------
@@ -44,10 +51,12 @@ class Match(object):
             but these can be overridden if desired.
         """
 
-        defaults = {(True, True): (DEFAULT_TURNS, 0),
-                    (True, False): (float('inf'), prob_end),
-                    (False, True): (turns, 0),
-                    (False, False): (turns, prob_end)}
+        defaults = {
+            (True, True): (DEFAULT_TURNS, 0),
+            (True, False): (float("inf"), prob_end),
+            (False, True): (turns, 0),
+            (False, False): (turns, prob_end),
+        }
         self.turns, self.prob_end = defaults[(turns is None, prob_end is None)]
 
         self.result = []
@@ -64,11 +73,11 @@ class Match(object):
             self._cache = deterministic_cache
 
         if match_attributes is None:
-            known_turns = self.turns if prob_end is None else float('inf')
+            known_turns = self.turns if prob_end is None else float("inf")
             self.match_attributes = {
-                'length': known_turns,
-                'game': self.game,
-                'noise': self.noise
+                "length": known_turns,
+                "game": self.game,
+                "noise": self.noise,
             }
         else:
             self.match_attributes = match_attributes
@@ -102,10 +111,9 @@ class Match(object):
         A boolean to show whether the deterministic cache should be updated.
         """
         return (
-            not self.noise and
-            self._cache.mutable and not (
-                any(p.classifier['stochastic'] for p in self.players)
-            )
+            not self.noise
+            and self._cache.mutable
+            and not (any(p.classifier["stochastic"] for p in self.players))
         )
 
     def play(self):
@@ -135,8 +143,7 @@ class Match(object):
                 p.set_match_attributes(**self.match_attributes)
             for _ in range(turns):
                 self.players[0].play(self.players[1], self.noise)
-            result = list(
-                zip(self.players[0].history, self.players[1].history))
+            result = list(zip(self.players[0].history, self.players[1].history))
 
             if self._cache_update_required:
                 self._cache[cache_key] = result
@@ -187,7 +194,7 @@ class Match(object):
         """
         return iu.compute_normalised_state_distribution(self.result)
 
-    def sparklines(self, c_symbol='█', d_symbol=' '):
+    def sparklines(self, c_symbol="█", d_symbol=" "):
         return iu.compute_sparklines(self.result, c_symbol, d_symbol)
 
     def __len__(self):

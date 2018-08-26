@@ -27,15 +27,15 @@ class SelfSteem(Player):
     - SelfSteem: [Andre2013]_
     """
 
-    name = 'SelfSteem'
+    name = "SelfSteem"
     classifier = {
-        'memory_depth': float("inf"),
-        'stochastic': True,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:

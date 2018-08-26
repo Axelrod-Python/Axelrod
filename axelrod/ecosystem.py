@@ -27,9 +27,12 @@ class Ecosystem(object):
         The number of players
     """
 
-    def __init__(self, results: ResultSet,
-                 fitness: Callable[[float], float] = None,
-                 population: List[int] = None) -> None:
+    def __init__(
+        self,
+        results: ResultSet,
+        fitness: Callable[[float], float] = None,
+        population: List[int] = None,
+    ) -> None:
         """Create a new ecosystem.
         
         Parameters
@@ -58,16 +61,19 @@ class Ecosystem(object):
         if population:
             if min(population) < 0:
                 raise TypeError(
-                    "Minimum value of population vector must be non-negative")
+                    "Minimum value of population vector must be non-negative"
+                )
             elif len(population) != self.num_players:
                 raise TypeError(
-                    "Population vector must be same size as number of players")
+                    "Population vector must be same size as number of players"
+                )
             else:
                 norm = sum(population)
                 self.population_sizes = [[p / norm for p in population]]
         else:
             self.population_sizes = [
-                [1 / self.num_players for _ in range(self.num_players)]]
+                [1 / self.num_players for _ in range(self.num_players)]
+            ]
 
         # This function is quite arbitrary and probably only influences the
         # kinetics for the current code.

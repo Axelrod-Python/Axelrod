@@ -22,21 +22,24 @@ class BushMosteller(Player):
     - Bush Mosteller: [Luis2008]_
     """
 
-    name = 'Bush Mosteller'
+    name = "Bush Mosteller"
     classifier = {
-        'memory_depth': float('inf'),
-        'stochastic': True,
-        'makes_use_of': set(["game"]),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),
+        "stochastic": True,
+        "makes_use_of": set(["game"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-
-    def __init__(self, c_prob: float = 0.5, d_prob: float = 0.5,
-                 aspiration_level_divider: float = 3.0,
-                 learning_rate: float = 0.5) -> None:
+    def __init__(
+        self,
+        c_prob: float = 0.5,
+        d_prob: float = 0.5,
+        aspiration_level_divider: float = 3.0,
+        learning_rate: float = 0.5,
+    ) -> None:
         """
         Parameters
 
@@ -59,10 +62,11 @@ class BushMosteller(Player):
             set to original probabilities
         """
         super().__init__()
-        self._c_prob , self._d_prob = c_prob , d_prob
-        self._init_c_prob , self._init_d_prob = c_prob , d_prob
-        self._aspiration_level = abs((max(self.match_attributes["game"].RPST())
-                                     / aspiration_level_divider))
+        self._c_prob, self._d_prob = c_prob, d_prob
+        self._init_c_prob, self._init_d_prob = c_prob, d_prob
+        self._aspiration_level = abs(
+            (max(self.match_attributes["game"].RPST()) / aspiration_level_divider)
+        )
 
         self._stimulus = 0.0
         self._learning_rate = learning_rate
@@ -85,9 +89,9 @@ class BushMosteller(Player):
 
         previous_play = scores[0]
 
-        self._stimulus = ((previous_play - self._aspiration_level) /
-                          abs((max(self.match_attributes["game"].RPST()) -
-                                   self._aspiration_level)))
+        self._stimulus = (previous_play - self._aspiration_level) / abs(
+            (max(self.match_attributes["game"].RPST()) - self._aspiration_level)
+        )
         # Lowest range for stimulus
         # Highest doesn't need to be tested since it is divided by the highest
         # reward possible
@@ -98,23 +102,22 @@ class BushMosteller(Player):
         if self.history[-1] == C:
 
             if self._stimulus >= 0:
-                self._c_prob += (self._learning_rate * self._stimulus *
-                                 (1 - self._c_prob))
+                self._c_prob += (
+                    self._learning_rate * self._stimulus * (1 - self._c_prob)
+                )
 
             elif self._stimulus < 0:
-                self._c_prob += (self._learning_rate * self._stimulus *
-                                 self._c_prob)
+                self._c_prob += self._learning_rate * self._stimulus * self._c_prob
 
         # Updates probability following previous choice D
         if self.history[-1] == D:
             if self._stimulus >= 0:
-                self._d_prob += (self._learning_rate * self._stimulus *
-                                 (1 - self._d_prob))
+                self._d_prob += (
+                    self._learning_rate * self._stimulus * (1 - self._d_prob)
+                )
 
             elif self._stimulus < 0:
-                self._d_prob += (self._learning_rate * self._stimulus *
-                                 self._d_prob)
-
+                self._d_prob += self._learning_rate * self._stimulus * self._d_prob
 
     def strategy(self, opponent: Player) -> Action:
 

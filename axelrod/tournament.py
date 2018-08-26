@@ -25,12 +25,18 @@ from typing import List, Tuple, Optional
 
 
 class Tournament(object):
-
-    def __init__(self, players: List[Player],
-                 name: str = 'axelrod', game: Game = None, turns: int = None,
-                 prob_end: float = None, repetitions: int = 10,
-                 noise: float = 0, edges: List[Tuple] = None,
-                 match_attributes: dict = None) -> None:
+    def __init__(
+        self,
+        players: List[Player],
+        name: str = "axelrod",
+        game: Game = None,
+        turns: int = None,
+        prob_end: float = None,
+        repetitions: int = 10,
+        noise: float = 0,
+        edges: List[Tuple] = None,
+        match_attributes: dict = None,
+    ) -> None:
         """
         Parameters
         ----------
@@ -73,13 +79,16 @@ class Tournament(object):
 
         self.turns = turns
         self.prob_end = prob_end
-        self.match_generator = MatchGenerator(players=players, turns=turns,
-                                              game=self.game,
-                                              repetitions=self.repetitions,
-                                              prob_end=prob_end,
-                                              noise=self.noise,
-                                              edges=edges,
-                                              match_attributes=match_attributes)
+        self.match_generator = MatchGenerator(
+            players=players,
+            turns=turns,
+            game=self.game,
+            repetitions=self.repetitions,
+            prob_end=prob_end,
+            noise=self.noise,
+            edges=edges,
+            match_attributes=match_attributes,
+        )
         self._logger = logging.getLogger(__name__)
 
         self.use_progress_bar = True
@@ -96,10 +105,13 @@ class Tournament(object):
         self.filename = filename
         self._temp_file_descriptor = temp_file_descriptor
 
-
-    def play(self, build_results: bool = True, filename: str = None,
-             processes: int = None, progress_bar: bool = True,
-             ) -> ResultSet:
+    def play(
+        self,
+        build_results: bool = True,
+        filename: str = None,
+        processes: int = None,
+        progress_bar: bool = True,
+    ) -> ResultSet:
         """
         Plays the tournament and passes the results to the ResultSet class
 
@@ -127,7 +139,8 @@ class Tournament(object):
         if not build_results and not filename:
             warnings.warn(
                 "Tournament results will not be accessible since "
-                "build_results=False and no filename was supplied.")
+                "build_results=False and no filename was supplied."
+            )
 
         if processes is None:
             self._run_serial(build_results=build_results)
@@ -136,11 +149,13 @@ class Tournament(object):
 
         result_set = None
         if build_results:
-            result_set = ResultSet(filename=self.filename,
-                                   players=[str(p) for p in self.players],
-                                   repetitions=self.repetitions,
-                                   processes=processes,
-                                   progress_bar=progress_bar)
+            result_set = ResultSet(
+                filename=self.filename,
+                players=[str(p) for p in self.players],
+                repetitions=self.repetitions,
+                processes=processes,
+                progress_bar=progress_bar,
+            )
         if self._temp_file_descriptor is not None:
             assert self.filename is not None
             os.close(self._temp_file_descriptor)
@@ -148,8 +163,7 @@ class Tournament(object):
 
         return result_set
 
-
-    def _run_serial(self, build_results: bool=True) -> bool:
+    def _run_serial(self, build_results: bool = True) -> bool:
         """Run all matches in serial."""
 
         chunks = self.match_generator.build_match_chunks()
@@ -174,46 +188,51 @@ class Tournament(object):
         file_obj = None
         writer = None
         if self.filename is not None:
-            file_obj = open(self.filename, 'w')
-            writer = csv.writer(file_obj, lineterminator='\n')
+            file_obj = open(self.filename, "w")
+            writer = csv.writer(file_obj, lineterminator="\n")
 
-            header = ["Interaction index",
-                      "Player index",
-                      "Opponent index",
-                      "Repetition",
-                      "Player name",
-                      "Opponent name",
-                      "Actions"]
+            header = [
+                "Interaction index",
+                "Player index",
+                "Opponent index",
+                "Repetition",
+                "Player name",
+                "Opponent name",
+                "Actions",
+            ]
             if build_results:
-                header.extend(["Score",
-                               "Score difference",
-                               "Turns",
-                               "Score per turn",
-                               "Score difference per turn",
-                               "Win",
-                               "Initial cooperation",
-                               "Cooperation count",
-                               "CC count",
-                               "CD count",
-                               "DC count",
-                               "DD count",
-                               "CC to C count",
-                               "CC to D count",
-                               "CD to C count",
-                               "CD to D count",
-                               "DC to C count",
-                               "DC to D count",
-                               "DD to C count",
-                               "DD to D count",
-                               "Good partner"])
+                header.extend(
+                    [
+                        "Score",
+                        "Score difference",
+                        "Turns",
+                        "Score per turn",
+                        "Score difference per turn",
+                        "Win",
+                        "Initial cooperation",
+                        "Cooperation count",
+                        "CC count",
+                        "CD count",
+                        "DC count",
+                        "DD count",
+                        "CC to C count",
+                        "CC to D count",
+                        "CD to C count",
+                        "CD to D count",
+                        "DC to C count",
+                        "DC to D count",
+                        "DD to C count",
+                        "DD to D count",
+                        "Good partner",
+                    ]
+                )
 
             writer.writerow(header)
         return file_obj, writer
 
     def _get_progress_bar(self):
         if self.use_progress_bar:
-            return tqdm.tqdm(total=self.match_generator.size,
-                             desc="Playing matches")
+            return tqdm.tqdm(total=self.match_generator.size, desc="Playing matches")
         return None
 
     def _write_interactions_to_file(self, results, writer):
@@ -223,19 +242,26 @@ class Tournament(object):
             for interaction, results in interactions:
 
                 if results is not None:
-                    (scores,
-                     score_diffs,
-                     turns, score_per_turns,
-                     score_diffs_per_turns,
-                     initial_cooperation,
-                     cooperations,
-                     state_distribution,
-                     state_to_action_distributions,
-                     winner_index) = results
+                    (
+                        scores,
+                        score_diffs,
+                        turns,
+                        score_per_turns,
+                        score_diffs_per_turns,
+                        initial_cooperation,
+                        cooperations,
+                        state_distribution,
+                        state_to_action_distributions,
+                        winner_index,
+                    ) = results
                 for index, player_index in enumerate(index_pair):
                     opponent_index = index_pair[index - 1]
-                    row = [self.num_interactions, player_index, opponent_index,
-                           repetition]
+                    row = [
+                        self.num_interactions,
+                        player_index,
+                        opponent_index,
+                        repetition,
+                    ]
                     row.append(str(self.players[player_index]))
                     row.append(str(self.players[opponent_index]))
                     history = actions_to_str([i[index] for i in interaction])
@@ -266,7 +292,7 @@ class Tournament(object):
                 repetition += 1
                 self.num_interactions += 1
 
-    def _run_parallel(self, processes: int=2, build_results: bool=True) -> bool:
+    def _run_parallel(self, processes: int = 2, build_results: bool = True) -> bool:
         """
         Run all matches in parallel
 
@@ -299,14 +325,19 @@ class Tournament(object):
         -------
         integer
         """
-        if (2 <= processes <= cpu_count()):
+        if 2 <= processes <= cpu_count():
             n_workers = processes
         else:
             n_workers = cpu_count()
         return n_workers
 
-    def _start_workers(self, workers: int, work_queue: Queue,
-                       done_queue: Queue, build_results: bool=True) -> bool:
+    def _start_workers(
+        self,
+        workers: int,
+        work_queue: Queue,
+        done_queue: Queue,
+        build_results: bool = True,
+    ) -> bool:
         """
         Initiates the sub-processes to carry out parallel processing.
 
@@ -321,13 +352,15 @@ class Tournament(object):
         """
         for worker in range(workers):
             process = Process(
-                target=self._worker, args=(work_queue, done_queue, build_results))
-            work_queue.put('STOP')
+                target=self._worker, args=(work_queue, done_queue, build_results)
+            )
+            work_queue.put("STOP")
             process.start()
         return True
 
-    def _process_done_queue(self, workers: int, done_queue: Queue,
-                            build_results: bool=True):
+    def _process_done_queue(
+        self, workers: int, done_queue: Queue, build_results: bool = True
+    ):
         """
         Retrieves the matches from the parallel sub-processes
 
@@ -344,7 +377,7 @@ class Tournament(object):
         stops = 0
         while stops < workers:
             results = done_queue.get()
-            if results == 'STOP':
+            if results == "STOP":
                 stops += 1
             else:
                 self._write_interactions_to_file(results, writer)
@@ -355,8 +388,7 @@ class Tournament(object):
         _close_objects(out_file, progress_bar)
         return True
 
-    def _worker(self, work_queue: Queue, done_queue: Queue,
-                build_results: bool=True):
+    def _worker(self, work_queue: Queue, done_queue: Queue, build_results: bool = True):
         """
         The work for each parallel sub-process to execute.
 
@@ -367,10 +399,10 @@ class Tournament(object):
         done_queue : multiprocessing.Queue
             A queue containing the output dictionaries from each round robin
         """
-        for chunk in iter(work_queue.get, 'STOP'):
+        for chunk in iter(work_queue.get, "STOP"):
             interactions = self._play_matches(chunk, build_results)
             done_queue.put(interactions)
-        done_queue.put('STOP')
+        done_queue.put("STOP")
         return True
 
     def _play_matches(self, chunk, build_results=True):
@@ -419,16 +451,13 @@ class Tournament(object):
         turns = len(interactions)
         results.append(turns)
 
-        score_per_turns = iu.compute_final_score_per_turn(interactions,
-                                                          self.game)
+        score_per_turns = iu.compute_final_score_per_turn(interactions, self.game)
         results.append(score_per_turns)
 
         score_diffs_per_turns = score_diffs[0] / turns, score_diffs[1] / turns
         results.append(score_diffs_per_turns)
 
-        initial_coops = tuple(map(
-                                bool,
-                                iu.compute_cooperations(interactions[:1])))
+        initial_coops = tuple(map(bool, iu.compute_cooperations(interactions[:1])))
         results.append(initial_coops)
 
         cooperations = iu.compute_cooperations(interactions)
@@ -437,7 +466,9 @@ class Tournament(object):
         state_distribution = iu.compute_state_distribution(interactions)
         results.append(state_distribution)
 
-        state_to_action_distributions = iu.compute_state_to_action_distribution(interactions)
+        state_to_action_distributions = iu.compute_state_to_action_distribution(
+            interactions
+        )
         results.append(state_to_action_distributions)
 
         winner_index = iu.compute_winner_index(interactions, self.game)
@@ -449,5 +480,5 @@ class Tournament(object):
 def _close_objects(*objs):
     """If the objects have a `close` method, closes them."""
     for obj in objs:
-        if hasattr(obj, 'close'):
+        if hasattr(obj, "close"):
             obj.close()

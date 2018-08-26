@@ -24,15 +24,15 @@ class RiskyQLearner(Player):
     - Risky Q Learner: Original name by Geraint Palmer
     """
 
-    name = 'Risky QLearner'
+    name = "Risky QLearner"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': True,
-        'makes_use_of': set(["game"]),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": True,
+        "makes_use_of": set(["game"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
     learning_rate = 0.9
     discount_rate = 0.9
@@ -46,15 +46,15 @@ class RiskyQLearner(Player):
 
         # Set this explicitely, since the constructor of super will not pick it up
         # for any subclasses that do not override methods using random calls.
-        self.classifier['stochastic'] = True
+        self.classifier["stochastic"] = True
 
-        self.prev_action = None # type: Action
-        self.original_prev_action = None # type: Action
-        self.history = [] # type: List[Action]
+        self.prev_action = None  # type: Action
+        self.original_prev_action = None  # type: Action
+        self.history = []  # type: List[Action]
         self.score = 0
-        self.Qs = OrderedDict({'':  OrderedDict(zip([C, D], [0, 0]))})
-        self.Vs = OrderedDict({'': 0})
-        self.prev_state = ''
+        self.Qs = OrderedDict({"": OrderedDict(zip([C, D], [0, 0]))})
+        self.Vs = OrderedDict({"": 0})
+        self.prev_state = ""
 
     def receive_match_attributes(self):
         (R, P, S, T) = self.match_attributes["game"].RPST()
@@ -91,16 +91,17 @@ class RiskyQLearner(Player):
         Finds the my_state (the opponents last n moves +
         its previous proportion of playing C) as a hashable state
         """
-        prob = '{:.1f}'.format(opponent.cooperations)
-        action_str = actions_to_str(
-            opponent.history[-self.memory_length:])
+        prob = "{:.1f}".format(opponent.cooperations)
+        action_str = actions_to_str(opponent.history[-self.memory_length :])
         return action_str + prob
 
     def perform_q_learning(self, prev_state: str, state: str, action: Action, reward):
         """
         Performs the qlearning algorithm
         """
-        self.Qs[prev_state][action] = (1.-self.learning_rate)*self.Qs[prev_state][action] + self.learning_rate*(reward + self.discount_rate*self.Vs[state])
+        self.Qs[prev_state][action] = (1. - self.learning_rate) * self.Qs[prev_state][
+            action
+        ] + self.learning_rate * (reward + self.discount_rate * self.Vs[state])
         self.Vs[prev_state] = max(self.Qs[prev_state].values())
 
     def find_reward(self, opponent: Player) -> Dict[Action, Dict[Action, Score]]:
@@ -115,7 +116,6 @@ class RiskyQLearner(Player):
         return self.payoff_matrix[self.prev_action][opp_prev_action]
 
 
-
 class ArrogantQLearner(RiskyQLearner):
     """A player who learns the best strategies through the q-learning
     algorithm.
@@ -127,7 +127,7 @@ class ArrogantQLearner(RiskyQLearner):
     - Arrogant Q Learner: Original name by Geraint Palmer
     """
 
-    name = 'Arrogant QLearner'
+    name = "Arrogant QLearner"
     learning_rate = 0.9
     discount_rate = 0.1
 
@@ -142,7 +142,7 @@ class HesitantQLearner(RiskyQLearner):
     - Hesitant Q Learner: Original name by Geraint Palmer
     """
 
-    name = 'Hesitant QLearner'
+    name = "Hesitant QLearner"
     learning_rate = 0.1
     discount_rate = 0.9
 
@@ -158,6 +158,6 @@ class CautiousQLearner(RiskyQLearner):
     - Cautious Q Learner: Original name by Geraint Palmer
     """
 
-    name = 'Cautious QLearner'
+    name = "Cautious QLearner"
     learning_rate = 0.1
     discount_rate = 0.1

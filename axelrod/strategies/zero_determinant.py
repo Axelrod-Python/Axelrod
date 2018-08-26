@@ -20,19 +20,18 @@ class LRPlayer(MemoryOnePlayer):
     - Linear Relation player: [Hilbe2013]_
     """
 
-    name = 'LinearRelation'
+    name = "LinearRelation"
     classifier = {
-        'memory_depth': 1,  # Memory-one Four-Vector
-        'stochastic': True,
-        'makes_use_of': set(["game"]),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": 1,  # Memory-one Four-Vector
+        "stochastic": True,
+        "makes_use_of": set(["game"]),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
-    def __init__(self, phi: float = 0.2, s: float = 0.1,
-                 l: float = 1) -> None:
+    def __init__(self, phi: float = 0.2, s: float = 0.1, l: float = 1) -> None:
         """
         Parameters
 
@@ -62,7 +61,7 @@ class LRPlayer(MemoryOnePlayer):
         s = self.s
 
         # Check parameters
-        s_min = - min((T - l) / (l - S), (l - S) / (T - l))
+        s_min = -min((T - l) / (l - S), (l - S) / (T - l))
         if (l < P) or (l > R) or (s > 1) or (s < s_min):
             raise ValueError
 
@@ -84,7 +83,7 @@ class ZDExtortion(LRPlayer):
     - ZDExtortion: [Roemheld2013]_
     """
 
-    name = 'ZD-Extortion'
+    name = "ZD-Extortion"
 
     def __init__(self, phi: float = 0.2, s: float = 0.1, l: float = 1) -> None:
         super().__init__(phi, s, l)
@@ -99,9 +98,9 @@ class ZDExtort2(LRPlayer):
     - Extort-2: [Stewart2012]_
     """
 
-    name = 'ZD-Extort-2'
+    name = "ZD-Extort-2"
 
-    def __init__(self, phi: float = 1/9, s: float = 0.5) -> None:
+    def __init__(self, phi: float = 1 / 9, s: float = 0.5) -> None:
         # l = P will be set by receive_match_attributes
         super().__init__(phi, s, None)
 
@@ -121,9 +120,9 @@ class ZDExtort2v2(LRPlayer):
     - EXTORT2: [Kuhn2017]_
     """
 
-    name = 'ZD-Extort-2 v2'
+    name = "ZD-Extort-2 v2"
 
-    def __init__(self, phi: float = 1/8, s: float = 0.5, l: float = 1) -> None:
+    def __init__(self, phi: float = 1 / 8, s: float = 0.5, l: float = 1) -> None:
         super().__init__(phi, s, l)
 
 
@@ -138,10 +137,9 @@ class ZDExtort3(LRPlayer):
     - Unnamed: [Press2012]_
     """
 
-    name = 'ZD-Extort3'
+    name = "ZD-Extort3"
 
-    def __init__(self, phi: float = 3 / 26, s: float = 1 / 3,
-                 l: float = 1) -> None:
+    def __init__(self, phi: float = 3 / 26, s: float = 1 / 3, l: float = 1) -> None:
         super().__init__(phi, s, l)
 
 
@@ -156,9 +154,9 @@ class ZDExtort4(LRPlayer):
     - Extort 4: Original name by Marc Harper
     """
 
-    name = 'ZD-Extort-4'
+    name = "ZD-Extort-4"
 
-    def __init__(self, phi: float = 4/17, s: float = 0.25, l: float = 1) -> None:
+    def __init__(self, phi: float = 4 / 17, s: float = 0.25, l: float = 1) -> None:
         super().__init__(phi, s, l)
 
 
@@ -171,9 +169,9 @@ class ZDGen2(LRPlayer):
     - GEN2: [Kuhn2017]_
     """
 
-    name = 'ZD-GEN-2'
+    name = "ZD-GEN-2"
 
-    def __init__(self, phi: float = 1/8, s: float = 0.5, l: float = 3) -> None:
+    def __init__(self, phi: float = 1 / 8, s: float = 0.5, l: float = 3) -> None:
         super().__init__(phi, s, l)
 
 
@@ -186,7 +184,7 @@ class ZDGTFT2(LRPlayer):
     - ZDGTFT-2: [Stewart2012]_
     """
 
-    name = 'ZD-GTFT-2'
+    name = "ZD-GTFT-2"
 
     def __init__(self, phi: float = 0.25, s: float = 0.5) -> None:
         # l = R will be set by receive_match_attributes
@@ -207,7 +205,7 @@ class ZDMischief(LRPlayer):
     - ZDMischief: [Roemheld2013]_
     """
 
-    name = 'ZD-Mischief'
+    name = "ZD-Mischief"
 
     def __init__(self, phi: float = 0.1, s: float = 0., l: float = 1) -> None:
         super().__init__(phi, s, l)
@@ -222,7 +220,7 @@ class ZDSet2(LRPlayer):
     - SET2: [Kuhn2017]_
     """
 
-    name = 'ZD-SET-2'
+    name = "ZD-SET-2"
 
-    def __init__(self, phi: float = 1/4, s: float = 0., l: float = 2) -> None:
+    def __init__(self, phi: float = 1 / 4, s: float = 0., l: float = 2) -> None:
         super().__init__(phi, s, l)

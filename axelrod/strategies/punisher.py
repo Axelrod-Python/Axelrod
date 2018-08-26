@@ -18,15 +18,15 @@ class Punisher(Player):
     - Punisher: Original name by Geraint Palmer
     """
 
-    name = 'Punisher'
+    name = "Punisher"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
@@ -73,20 +73,20 @@ class InversePunisher(Player):
     - Inverse Punisher: Original name by Geraint Palmer
     """
 
-    name = 'Inverse Punisher'
+    name = "Inverse Punisher"
     classifier = {
-        'memory_depth': float('inf'),  # Long memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def __init__(self) -> None:
         super().__init__()
-        self.history = [] # type: List[Action]
+        self.history = []  # type: List[Action]
         self.mem_length = 1
         self.grudged = False
         self.grudge_memory = 1
@@ -125,21 +125,23 @@ class LevelPunisher(Player):
     - Level Punisher: [Eckhart2015]_
     """
 
-    name = 'Level Punisher'
+    name = "Level Punisher"
     classifier = {
-        'memory_depth': float('inf'), # Long Memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long Memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
         if len(opponent.history) < 10:
             return C
-        elif (len(opponent.history) - opponent.cooperations) / len(opponent.history) > 0.2:
+        elif (len(opponent.history) - opponent.cooperations) / len(
+            opponent.history
+        ) > 0.2:
             return D
         else:
             return C
@@ -156,15 +158,15 @@ class TrickyLevelPunisher(Player):
     - Tricky Level Punisher: [Eckhart2015]_
     """
 
-    name = 'Tricky Level Punisher'
+    name = "Tricky Level Punisher"
     classifier = {
-        'memory_depth': float('inf'), # Long Memory
-        'stochastic': False,
-        'makes_use_of': set(),
-        'long_run_time': False,
-        'inspects_source': False,
-        'manipulates_source': False,
-        'manipulates_state': False
+        "memory_depth": float("inf"),  # Long Memory
+        "stochastic": False,
+        "makes_use_of": set(),
+        "long_run_time": False,
+        "inspects_source": False,
+        "manipulates_source": False,
+        "manipulates_state": False,
     }
 
     def strategy(self, opponent: Player) -> Action:
