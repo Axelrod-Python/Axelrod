@@ -7,6 +7,17 @@ C, D = Action.C, Action.D
 
 
 class TestAction(unittest.TestCase):
+    def test_eq(self):
+        self.assertEqual(C, C)
+        self.assertEqual(D, D)
+
+    def test_hash(self):
+        self.assertEqual(hash(C), 1)
+        self.assertEqual(hash(D), 0)
+
+    def test_lt(self):
+        self.assertLess(D, C)
+
     def test_repr(self):
         self.assertEqual(repr(C), "C")
         self.assertEqual(repr(D), "D")
